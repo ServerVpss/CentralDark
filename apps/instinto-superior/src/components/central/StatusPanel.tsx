@@ -80,6 +80,7 @@ export function StatusPanel() {
     { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
     { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
     { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
+    { nome: "Supabase · One Heart", estado: d?.supabaseSignals ?? unknown, detalhe: "Edge Functions " + (d?.supabaseEdgeOnline ?? "?") + "/" + (d?.supabaseEdgeTotal ?? "?") + " · Radar " + (d?.supabaseRadarSources ?? "?") + " · API /heartbeat", icon: Database },
     { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: comMotivo(`HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, d?.receipts ?? unknown, d?.receiptsErro), icon: Database },
   ];
 

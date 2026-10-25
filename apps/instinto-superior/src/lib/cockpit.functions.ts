@@ -76,6 +76,10 @@ export type EstadoCentralDark = {
   apiHealthHttp: number | null;
   heartbeatHttp: number | null;
   heartbeatSelf: string | null;
+  supabaseSignals: Estado;
+  supabaseEdgeOnline: number | null;
+  supabaseEdgeTotal: number | null;
+  supabaseRadarSources: number | null;
   omniModelsHttp: number | null;
   receiptsHttp: number | null;
   casaSiteHttp: number | null;
@@ -528,6 +532,13 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
+    // Um fio de leitura: Cockpit consome exclusivamente API /heartbeat, sem consultar Supabase de novo.
+    const supabaseRaw = objetoJson(heartbeatRaw.dados?.["supabase"]) ? heartbeatRaw.dados["supabase"] : null;
+    const edgeRaw = objetoJson(supabaseRaw?.["edge_functions"]) ? supabaseRaw["edge_functions"] : null;
+    const radarRaw = objetoJson(supabaseRaw?.["radar"]) ? supabaseRaw["radar"] : null;
+    const sinalBruto = texto(supabaseRaw?.["state"]);
+    const supabaseSignals: Estado = heartbeat.estado === "PASS" && (sinalBruto === "PASS" || sinalBruto === "FAIL")
+      ? sinalBruto : "UNKNOWN";
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
@@ -580,6 +591,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       apiHealthHttp: apiHealth.httpStatus,
       heartbeatHttp: heartbeat.httpStatus,
       heartbeatSelf,
+      supabaseSignals,
+      supabaseEdgeOnline: typeof edgeRaw?.["online"] === "number" ? edgeRaw["online"] : null,
+      supabaseEdgeTotal: typeof edgeRaw?.["total"] === "number" ? edgeRaw["total"] : null,
+      supabaseRadarSources: typeof radarRaw?.["sources_fresh"] === "number" ? radarRaw["sources_fresh"] : null,
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
