@@ -540,3 +540,19 @@ test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
   assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
   assert.match(cockpit, /harnessVisivel && gaveta === null/);
 });
+
+test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
+  const loop = read("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md");
+  assert.match(cockpit, /function JornadaEvolutiva/);
+  assert.match(cockpit, /TabsTrigger value="jornada"/);
+  assert.match(cockpit, /TabsContent value="jornada"/);
+  assert.match(cockpit, /data-cd-flow="instinto.CockpitShell.jornada-evolutiva"/);
+  assert.match(cockpit, /!KAIZEN/);
+  assert.match(cockpit, /!MULTIBUSSOLA/);
+  assert.match(cockpit, /Nível 06 · marco narrativo/);
+  assert.match(cockpit, /abrirDestino\("recibos"\)/);
+  assert.match(cockpit, /abrirDestino\("forja"\)/);
+  assert.match(loop, /Projecao didatica no Cockpit/);
+  const bloco = cockpit.split("function JornadaEvolutiva")[1].split("function MenuVisualCentralDark")[0];
+  assert.doesNotMatch(bloco, /fetch\(|execSync\(|localStorage/);
+});

@@ -33,6 +33,20 @@ function legacyJsonResult(payload) {
   try { return asObject(JSON.parse(text)); } catch { return {}; }
 }
 
+// Resultado semantico: o dispatcher devolve bloqueios como texto JSON
+// ({ ok:false, executionStatus:"blocked" }) sem isError. A auditoria usa isto
+// para nao registrar PASS quando a operacao interna foi bloqueada ou falhou.
+export function semanticOutcome(payload) {
+  const data = legacyJsonResult(asObject(payload));
+  const blocked = data.executionStatus === "blocked";
+  const failed = data.ok === false;
+  return {
+    ok: !blocked && !failed,
+    blocked,
+    status: typeof data.status === "string" ? data.status.slice(0, 80) : null,
+  };
+}
+
 // Read *reported* causal references only. The outer envelope cannot validate
 // the runtime receipt and must never turn a completed tool call into a PASS.
 function continuityFromPayload(payload, toolName) {

@@ -11,6 +11,93 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
 
+
+## Navegação operacional — Casa, Forja 1, GitHub e VPS
+
+> **Mapa físico dos diretórios do `K:\` (25/10/2026).** Presença de arquivo ≠ execução, skill carregada ou sincronização comprovada. Preservar contratos e histórico nas seções seguintes.
+
+### Por onde uma IA deve começar
+
+| Ordem | Fonte | Por quê |
+|---|---|---|
+| 1 | [`LEIA-ME-IA.md`](LEIA-ME-IA.md) e [`AGENTS.md`](AGENTS.md) | Boot, autoridade, intenção e segurança. |
+| 2 | [Método operacional](.agents/skills/centraldark-operational-method/SKILL.md) | Owner, execução, evidência, contraprova e continuidade. |
+| 3 | [Kimetsu](.agents/skills/kimetsu-brainstorm/SKILL.md) | Classificação e técnica antes de agir. |
+| 4 | [Hermes](.agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md) e [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) | Reutilizar executor e procedimentos. |
+| 5 | [Skill Synchronization](.agents/skills/skill-synchronization/SKILL.md) | Skills opt-in, locks, hashes, proteção contra drift. |
+| 6 | [Arquitetura](docs/ARQUITETURA/) e [Memória](docs/CONSCIENCIA/) | Conhecimento, decisões, histórico e receipts. |
+
+**ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE.** Não duplicar Hermes, MCP, gateway, cockpit, skill-mãe, catálogo ou sincronizador.
+
+### Estrutura atual: pastas principais da Casa
+
+```text
+K:\                                      # Raiz CentralDark / Casa
+├── README.md                             # Índice humano e para IAs
+├── LEIA-ME-IA.md                         # Porta de boot canônica
+├── AGENTS.md                             # Contrato do workspace
+├── .agents\skills\
+│   ├── centraldark-operational-method\   # Método e referências
+│   ├── kimetsu-brainstorm\               # Técnicas e gates
+│   ├── skill-synchronization\            # Sync de skills
+│   └── autonomous-ai-agents\hermes-agent\ # Contrato Hermes
+├── apps\
+│   ├── instinto-superior\                # Admin/Cockpit
+│   └── modulos\
+│       ├── HERMES-CORE\                  # Núcleo tipado executor
+│       └── mcp\                          # Barramento MCP
+├── docs\
+│   ├── ARQUITETURA\                      # Contratos
+│   ├── BRAIN\                            # Memória canônica versionável
+│   ├── CONSCIENCIA\                      # Aprendizados, lembranças e provas
+│   └── HUD\                              # Visualização e observabilidade
+├── scripts\
+│   ├── casa\                             # Casa, Obsidian e sync
+│   └── vps\                              # VPS, sync e deploy
+├── WSL\openKylin\                        # Forja 1 / WSL2, disco K:
+├── .obsidian\                            # Configuração local Obsidian
+├── infra\                                # Infraestrutura
+├── tests\                                # Testes
+└── skills\                               # Skills portáteis
+```
+
+Índice **selecionado e verificado**; outras pastas, backups, caches, dados privados e segredos existem, mas não são automaticamente publicáveis ou sincronizáveis.
+
+### Fluxo operacional: Casa ↔ GitHub ↔ VPS
+
+```text
+CHEFE / Windows — autoridade e aceite
+         ↕
+openKylin / FORJA 1 — WSL2 no K: ↔ Obsidian / BRAIN
+         │ HERMES-CORE + scripts tipados + MCP
+         │ POMBO/checksum, testes, receipts, contraprova
+         ▼ somente o delta aprovado
+Git/GitHub main — CRISTAL (código, documentos, aprendizados)
+         ↕ sincronização bidirecional reconciliada
+openKylin / VPS — mesmas receitas, readback no destino
+```
+
+**Objetivo:** sync automático bidirecional disciplinado, não cópia indiscriminada. Obsidian guarda memória editável da Casa; GitHub mantém cristal versionado após aceite; a VPS executa o que foi efetivamente promovido. Alterações conflitantes conservam ambos os lados; não publicar brutos privados, segredos ou tokens. Checksum prova identidade de bytes; resultado real exige contraprova. A presença dos scripts abaixo **não prova que o sync E2E está rodando agora**.
+
+| Função | Owner existente |
+|---|---|
+| Golden Capsule / Casa e VPS | [Matriz bidirecional](docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md) |
+| Obsidian ↔ BRAIN | [Contrato](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md) · [script](scripts/casa/sync-hermes-obsidian.ps1) |
+| Skills da main ↔ Hermes runtime | [Skill sync](.agents/skills/skill-synchronization/SKILL.md) · [script](scripts/skill-sync-check.sh) |
+| VPS ↔ `origin/main` | [Auto-sync VPS](scripts/vps/auto-sync-main.sh) |
+| POMBO com checksum / rastro | [Verificador](scripts/verify_pombo_evolution.py) · [Lei do Rastro](docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md) |
+| Executor tipado | [HERMES-CORE](apps/modulos/HERMES-CORE/) · [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) |
+
+`SOURCE_PRESENT != RUNNING` · `SYNCED != LOADED` · `COMMIT != DEPLOY` · `UNKNOWN != PASS`.
+
+### Pacote de skills e referência em português
+
+- **Nosso pacote:** [`K:\.agents\skills\centraldark-operational-method\`](.agents/skills/centraldark-operational-method/), junto com Kimetsu e o owner de sincronização.
+- **Complemento externo:** [Hermes Brasil](https://github.com/Hermes-brasil/hermes-brasil) contém `skills/`, `guides/`, README e CONTRIBUTING em português. É fonte de estudo; não substitui o Hermes ou o método da CentralDark.
+- **Ciclo de qualquer agente:** boot → intenção → descoberta do owner → estado vivo → menor delta → testes → recibo/contraprova → aceite quando promover → readback Casa/GitHub/VPS.
+
+---
+
 ## 🏛️ Mapa de responsabilidades — Instinto Superior primeiro
 
 ```text
