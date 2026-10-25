@@ -12,6 +12,14 @@ oracle_review_on_change: true
 
 O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
 
+## 🍒 Histórico canônico de builds Desktop (25/10/2026)
+
+- **Único owner:** o Desktop existente em apps/modulos/Bolt/source. **Receita viva:** apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs e **livro de builds:** apps/modulos/Bolt/source/resources/build-history.json. O mesmo Cockpit exibe o cartão Builders CentralDark, contagem de builds PASS, versão, horário Bahia, hash, commit e botão Rebuild Windows; sem segundo painel, executor ou Skill Mãe.
+- **Primeiro builder registrado:** 1.0.0, commit 9051151, instalador + exe gerados no Windows Casa em 25/10/2026, BUILD_RC=0 e smoke local "Server build loaded successfully". A prova, hashes e ressalvas estão em docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-PRIMEIRO-BUILDER-CENTRALDARK.md. Primeira entrada **deste catálogo**, não afirmar primeiro build absoluto sem inventário anterior.
+- **Contador/versão:** n=quantidade de entradas com build_status PASS; avança 1.0.0 → 1.0.1 → 1.0.2 apenas após build exit 0, artefatos novos e SHA256 válido. Sem build válido, não contar nem avançar. Smoke, instalação externa e deploy são status separados; BUILD_PASS != APP_EXECUTED != DEPLOYED.
+- **Rebuild autorizado:** confirmação do usuário + renderer Electron validado + worktree limpa e exclusiva + pnpm install --frozen-lockfile --prod=false com NODE_ENV=development + comando original pnpm centraldark:build:win; rollback da versão em caso de falha; sem push/merge/deploy automático. Abas web sem bridge mostram indisponibilidade, não fingem execução.
+- **Aprendizado imutável:** anexar evidências por versão e manter última data de sucesso, sem apagar recibos/IDs. Não transformar um único smoke em Fixed Point global. PR histórica é trilha, não merge nem instalação. Se o Cockpit instalado ainda não contiver o delta, SOURCE_READY != UI_DEPLOYED.
+
 ## Entrada canonica do catalogo integrado (2026-10-24)
 
 - Catálogo canônico descritivo: [catalogo/CATALOGO.md](catalogo/CATALOGO.md).
