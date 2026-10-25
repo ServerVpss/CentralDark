@@ -68,7 +68,7 @@ Capturas fornecidas pelo CHEFE nesta sessão mostram:
 
 ```text
 GEMINI_CLI_VERSION_SCREEN=0.58.0
-WORKSPACE_SCREEN=E:\CentralDark\Pivete\CentralDark
+WORKSPACE_SCREEN=K:\
 BRANCH_SCREEN=main
 SANDBOX_SCREEN=no sandbox
 MODEL_SCREEN=Auto
@@ -182,7 +182,7 @@ CURRENT_INTENT_REQUIRES_CONTAINER
 A captura mostra o arquivo aberto em caminho semelhante a:
 
 ```text
-E:\CentralDark\workspace\sol\01-FONTES\APPCENTRALDARK-EVOLUIR\sidecar\node_modules\@overclock-app\catalog\test\fixtures\catalog-home\.gemini\config\mcp_config.json
+K:\workspace\sol\01-FONTES\APPCENTRALDARK-EVOLUIR\sidecar\node_modules\@overclock-app\catalog\test\fixtures\catalog-home\.gemini\config\mcp_config.json
 ```
 
 O conteúdo visível usa valor de fixture como:

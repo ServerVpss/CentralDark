@@ -252,7 +252,7 @@ function Refresh-Scripts {
 }
 # AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
-$script:ABHudFile = 'K:\CentralDark\HUD.html'
+$script:ABHudFile = 'K:\HUD.html'
 $script:ABFeedFile = Join-Path (Split-Path -Parent $script:ABHudFile) 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'
 $script:ABLastLog = [datetime]::MinValue

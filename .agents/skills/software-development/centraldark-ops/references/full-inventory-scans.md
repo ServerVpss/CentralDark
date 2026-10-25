@@ -5,7 +5,7 @@ Use this when the user asks for a full map, dedupe, C/E comparison, or proof tha
 ## Contract
 
 - Treat `full` literally: discover every directory under the requested roots. Do not globally skip `.git`, `node_modules`, `dist`, `build`, `.cache`, or generated trees during discovery; mark expensive content as deferred only after the path exists in inventory.
-- Keep the scan database and checkpoints in Hermes scratch, never under `C:\CentralDark` or `E:\CentralDark`; the target roots stay read-only until a later explicit execution manifest.
+- Keep the scan database and checkpoints in Hermes scratch, never under `C:\CentralDark` or `K:\`; the target roots stay read-only until a later explicit execution manifest.
 - A timeout is not a reduced-scope success. Save a checkpoint and return `PARTIAL_NOT_PASS` with `NEXT_CURSOR`, then resume from that cursor instead of restarting.
 - `sample`, `SIZE_ONLY`, equal path, or equal size are not content identity. Prove dedupe by full SHA-256 and byte equality where necessary.
 - Do not classify repos or deltas as active/stale/generated from origin URL or folder name alone. Classify after evidence: git graph, worktree relationship, tracked/untracked state, content hash, owner, and consumer.

@@ -1,0 +1,119 @@
+═══════════════════════════════════════════════════════════════════════════════
+  🎯 CENTRALDARK DESKTOP COMMANDER — PRs RELACIONADAS
+═══════════════════════════════════════════════════════════════════════════════
+
+PROCURA: "desktop-commander"
+RESULTADO: 6 PRs principais
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ MERGED (Implementadas):
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ PR #1867 (MERGED - 2026-10-19)
+   🪬 FIX: DESKTOP COMMANDER OPCIONAL NO LAUNCHER REMOTO
+   (ACP + TAILSCALE INDEPENDENTES)
+   
+   📍 https://github.com/ServerVpss/CentralDark/pull/1867
+   
+   O QUE FAZ:
+   └─ Torna desktop-commander OPCIONAL no launcher remoto
+   └─ ACP (fallback) e Tailscale operadores INDEPENDENTES
+   └─ Rota principal: Tailscale/SSH
+   └─ Fallback: desktop-commander (se principal falhar)
+
+
+2️⃣ PR #1902 (MERGED - 2026-10-23)
+   🧿 FIX(CASA): TAILSCALE/MCP AUTOMÁTICO COMO ROTA PRINCIPAL
+   DESKTOP COMMANDER FALLBACK
+   
+   📍 https://github.com/ServerVpss/CentralDark/pull/1902
+   
+   O QUE FAZ:
+   └─ Prioridade: Tailscale + MCP automático
+   └─ desktop-commander apenas se Tailscale falhar
+   └─ Hermes ACP como fallback 2º nível
+
+
+3️⃣ PR #1555 (MERGED)
+   🛠️ FIX(REMOTE): VALIDAR CONJUNTO CANÔNICO DE PIDS
+   DO DESKTOP COMMANDER
+   
+   📍 https://github.com/ServerVpss/CentralDark/pull/1555
+   
+   O QUE FAZ:
+   └─ Valida PIDs de processos do desktop-commander
+   └─ Garante prova de execução com PID correto
+   └─ Medição em tempo real
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🟠 OPEN (Ainda em desenvolvimento):
+─────────────────────────────────────────────────────────────────────────────
+
+1️⃣ PR #1842 (MERGED - Antes)
+   🪬 ZENDRIVE: SSH NATIVO + FALLBACK MCP TAILSCALE
+   SEM DESKTOP COMMANDER
+   
+   📍 https://github.com/ServerVpss/CentralDark/pull/1842
+   
+   O QUE FAZ:
+   └─ SSH nativo como rota primária
+   └─ MCP Tailscale como fallback
+   └─ desktop-commander REMOVIDO da rota padrão
+
+
+2️⃣ PR #1880 (OPEN)
+   🪬 MCP CENTRALDARK ↔ VS CODE REMOTO:
+   DISPOSITIVO PAREADO, MESMO PID E READBACK
+   
+   📍 https://github.com/ServerVpss/CentralDark/pull/1880
+   
+   O QUE FAZ:
+   └─ Integração MCP com VS Code remoto
+   └─ Device pareado com PID tracking
+   └─ Readback para prova de execução
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 RESUMO:
+─────────────────────────────────────────────────────────────────────────────
+
+Desktop Commander foi GRADUALMENTE REMOVIDO como rota principal:
+
+1. Antes (PR #1555): Validação de PID (quando ainda era primário)
+2. Depois (PR #1867): Tornado OPCIONAL (alternativa)
+3. Hoje (PR #1902): FALLBACK ONLY (última opção)
+4. Futuro (PR #1842): REMOVIDO completamente (SSH + MCP)
+
+ROTA ATUAL (2026-10-24):
+  1️⃣ Tailscale/SSH (primária)
+  2️⃣ MCP Hybrid (secundária)
+  3️⃣ desktop-commander (fallback, se 1+2 falham)
+  4️⃣ Hermes ACP (último recurso)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+INFORMAÇÃO CANÔNICA:
+─────────────────────────────────────────────────────────────────────────────
+
+Docs de referência:
+  📍 docs/CONSCIENCIA/04-MCP-E-CONECTORES/EXECUTOR-CENTRALDARK-CHATGPT.md
+  📍 docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md
+  📍 docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md
+
+Regra vigente:
+  "DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false"
+  → Não chamar nem recomendar conector mcp.desktopcommander.app
+  → Preservar como histórico (fallback)
+  → Control plane único: MCP CentralDark OAuth
+  → Transporte: Tailscale + SSH
+  → Execução: Casa via executor nativo ou Hermes ACP
+
+
+═══════════════════════════════════════════════════════════════════════════════
+Gerado: 2026-10-24
+═══════════════════════════════════════════════════════════════════════════════

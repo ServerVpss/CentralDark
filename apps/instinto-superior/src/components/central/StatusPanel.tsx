@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Activity, Eye, Github, House, Monitor, RefreshCw, Server } from "lucide-react";
+import { Activity, Eye, Github, House, Monitor, RefreshCw, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 
@@ -70,6 +70,10 @@ export function StatusPanel() {
     { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: d?.mainSha?.slice(0, 12) ?? "SHA não medido", icon: Github },
     { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: `HTTP ${d?.apiHealthHttp ?? "?"} · /health`, icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: `HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, icon: GitBranch },
+    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: `HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, icon: Cpu },
+    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: `HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, icon: HeartPulse },
+    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: `HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, icon: Database },
   ];
 
   const rotas = [
@@ -79,6 +83,10 @@ export function StatusPanel() {
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
     { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
+    { id: "grafo-vivo", owner: "Live Fabric", estado: d?.grafoVivo ?? unknown, fonte: d?.liveFabricFonte ?? "API /api/live-fabric/graph" },
+    { id: "omni-router", owner: "Omni Router", estado: d?.omniRouter ?? unknown, fonte: "API /api/omni/status · somente rota medida" },
+    { id: "heartbeat", owner: "Heartbeat MCP", estado: d?.heartbeat ?? unknown, fonte: "MCP /heartbeat · self=" + (d?.heartbeatSelf ?? "?") },
+    { id: "receipts", owner: "Receipts Microdeploy", estado: d?.receipts ?? unknown, fonte: "API /api/microdeploy/receipts/index.json" },
   ] as const;
   const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");
 
