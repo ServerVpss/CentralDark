@@ -1,7 +1,7 @@
 ---
 title: "Gabarito Determinístico do Recibo Telegram"
 status: "CANONICAL_TEMPLATE"
-updated: 2026-09-25
+updated: 2026-10-23
 owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/"
 authority: "SEGREDO/CHEFE"
 complements: "REGRA-EMOJI-RICO-GRAMATICA-LIMPA.md"
@@ -175,4 +175,31 @@ endpoint, PR ou `UNKNOWN` explícito.
 
 ```text
 🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
+```
+
+
+## 10. Evidência com endereço — presença e ausência
+
+Toda afirmação factual de descoberta deve permitir que outra pessoa repita a conferência.
+
+- **Presença:** informar repositório (`owner/repo`), branch, caminho do arquivo e
+  número da linha ou trecho identificável. Registrar SHA/commit quando disponível;
+  se não estiver acessível, declarar explicitamente essa limitação.
+- **Ausência:** informar repositório, branch, caminho/escopo consultado e resultado
+  da busca. Quando houver busca textual, registrar consulta e contagem/resultado
+  (inclusive zero). Busca parcial não prova inexistência.
+- **Acesso insuficiente:** escrever `UNKNOWN` e nomear a fonte, permissão ou etapa
+  que faltou. Falha de acesso nunca equivale a inexistência.
+- **Ordem obrigatória:** observar a intenção/artefato → localizar o owner oficial →
+  conferir o gate de aceitação → agir com o menor delta → testar e contraprovar.
+
+Exemplos:
+
+```text
+Achei: ServerVpss/CentralDark, branch main,
+arquivo scripts/verify_recibo_telegram_gabarito.py, linha 42,
+SHA: 927bc671a4f3c1db0b071c335d272dd3d1f59d1d.
+
+Não encontrei: ServerVpss/CentralDark, branch main,
+escopo scripts/tests/, consulta: "verify_receipt", resultado: zero resultados.
 ```
