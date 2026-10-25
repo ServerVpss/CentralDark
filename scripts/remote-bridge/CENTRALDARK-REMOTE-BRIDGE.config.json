@@ -6,7 +6,8 @@
   "primary_control_plane": "centraldark_mcp",
   "centraldark_mcp": "https://mcp.centralldark.com/mcp",
   "centraldark_mcp_auth": "oauth2_pkce_admin_password_or_persisted_bearer",
-  "remote_mcp": "https://mcp.desktopcommander.app/mcp",
+  "remote_mcp": null,
+  "local_commander": "CentralDark Casa Commander - MIT engine stdio",
   "legacy_remote_enabled_by_default": false,
   "github_default": "ServerVpss/CentralDark",
   "github_auth_mode": "gh-keyring-local",
@@ -23,7 +24,7 @@
         "name": "mcp-local",
         "protocol": "tcp",
         "public_port": 9100,
-        "target": "127.0.0.1:9100",
+        "target": "127.0.0.1:9101",
         "human_purpose": "Expor o MCP local da Casa/VPS para a tailnet sem jogar token em arquivo."
       },
       {

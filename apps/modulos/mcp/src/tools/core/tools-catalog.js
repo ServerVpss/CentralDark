@@ -23,6 +23,7 @@ import { reuseHornTools } from "../aprendizado/reuse-horn.js";
 import { skillTools } from "../skills/skill.js";
 import { supabaseTools } from "../supabase/supabase.js";
 import { mcpAdminTools } from "./mcp-admin.js";
+import { casaPrivateTools } from "../casa/casa-private.js";
 import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
 import { mcpPolicyTools } from "./mcp-policy.js";
 import { integrationsTools } from "../integrations.js";
@@ -56,7 +57,8 @@ const TOOL_GROUPS = [
     ["deploy", deployTools, "hermes", "hybrid"],
     ["supabase", supabaseTools, "supabase", "hybrid"],
     ["admin-providers", mcpAdminTools, "cloudflare|contabo|tailscale|hermes", "hybrid"],
-    ["mcp-diagnostics", mcpDiagnosticsTools, "hermes", "deterministic"],
+        ["casa-private", casaPrivateTools, "casa|tailscale|centraldark", "hybrid"],
+        ["mcp-diagnostics", mcpDiagnosticsTools, "hermes", "deterministic"],
     ["mcp-policy", mcpPolicyTools, "hermes", "deterministic"],
     ["integrations", integrationsTools, "multi-provider", "hybrid"],
     ["painel", painelTools, "hermes", "deterministic"],
