@@ -2,7 +2,7 @@
 # ============================================================
 # limpeza-autonoma.sh — Limpeza de logs + relatório Telegram
 # Cron real: */15 * * * *; caches limitados a um ciclo diário
-# Linha canônica (VPS): flock -n /run/lock/limpeza-autonoma.lock ... --clean-selected journal,gz,pip-cache,npm-cache,runner-work
+# Linha canônica (VPS): flock -n /run/lock/limpeza-autonoma.lock ... --clean-selected journal,gz,pip-cache,npm-cache,quarantine-verified
 # ============================================================
 set -uo pipefail   # sem -e: evita abort em checks condicionais
 
@@ -15,10 +15,10 @@ SELECTED=""
 
 usage() {
   cat <<'EOF'
-Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated,pip-cache,npm-cache,runner-work>]
+Uso: scripts/limpeza-autonoma.sh [--map-disk | --clean-selected <journal,gz,rotated,pip-cache,npm-cache,runner-work,quarantine-verified>]
 
   --map-disk                 somente mede o disco; não limpa nem notifica
-  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated,pip-cache,npm-cache,runner-work
+  --clean-selected LIST      limpa somente categorias explícitas: journal,gz,rotated,pip-cache,npm-cache,runner-work,quarantine-verified
   --help                     mostra esta ajuda
 
 Sem argumentos, preserva o modo periódico existente.
@@ -61,6 +61,7 @@ if [ "$MODE" = "map" ]; then
   echo "PIP_CACHE_KB"; du -sk /root/.cache/pip 2>/dev/null || true
   echo "NPM_CACHE_KB"; du -sk /root/.npm/_cacache 2>/dev/null || true
   echo "RUNNER_WORK_KB"; du -sk "${RUNNER_ROOT:-/root/actions-runners}"/*/_work 2>/dev/null || true
+  echo "QUARANTINE_KB"; du -sk "${QUARANTINE_ROOT:-/root/_QUARANTINE}" 2>/dev/null || true
   echo "LOG_TREE_BYTES"
   du -x -B1 -d 2 /var/log 2>/dev/null | sort -n | tail -30 || true
   echo "KARE_CANDIDATE"
@@ -211,17 +212,63 @@ clean_runner_work() {
   echo "RUNNER_WORK_SUMMARY cleaned=$cleaned busy=$busy kept=$kept use_pct=$used"
 }
 
+# Lotes movidos para /root/_QUARANTINE/<data>/ por scripts de consolidação de
+# worktrees (ex.: 2026-10-08-um-lugar-so). Só remove um lote inteiro quando
+# seu MANIFEST.txt prova, linha a linha, que CADA entrada já estava limpa no
+# momento da quarentena (sujos=0 + commits_so_locais=0, ou o texto equivalente
+# "sem commit local, sem stash" usado pela variante de scratch). Uma linha sem
+# prova aborta o lote inteiro (fail-closed); nunca interpreta ausência de
+# prova como segurança. Período de carência evita apagar quarentena recente
+# antes de alguém revisar.
+clean_quarantine_verified() {
+  local root="${QUARANTINE_ROOT:-/root/_QUARANTINE}" min_age_days="${QUARANTINE_MIN_AGE_DAYS:-3}"
+  local batch="" name="" manifest="" total_lines=0 proven_lines=0 age_days=0
+  local cleaned=0 skipped_young=0 skipped_unproven=0 skipped_no_manifest=0 kb=0 before=0 after=0
+  if [ "$(id -u)" -ne 0 ] || [ ! -d "$root" ] || [ -L "$root" ]; then
+    echo "QUARANTINE=SKIP_OWNER_OR_ABSENT"; return 0
+  fi
+  for batch in "$root"/*/; do
+    [ -d "$batch" ] || continue
+    batch="${batch%/}"; name="$(basename -- "$batch")"
+    manifest="$batch/MANIFEST.txt"
+    if [ ! -f "$manifest" ]; then
+      echo "QUARANTINE_${name}=SKIP_NO_MANIFEST"; skipped_no_manifest=$((skipped_no_manifest + 1)); continue
+    fi
+    age_days=$(( ( $(date +%s) - $(stat -c %Y -- "$manifest" 2>/dev/null || echo "$(date +%s)") ) / 86400 ))
+    if [ "$age_days" -lt "$min_age_days" ]; then
+      echo "QUARANTINE_${name}=SKIP_TOO_RECENT age_days=$age_days"; skipped_young=$((skipped_young + 1)); continue
+    fi
+    total_lines=$(grep -c . -- "$manifest" 2>/dev/null || echo 0)
+    proven_lines=$(grep -Ec 'sujos=0.*commits_so_locais=0|sem commit local, sem stash' -- "$manifest" 2>/dev/null || echo 0)
+    if [ "$total_lines" -eq 0 ] || [ "$proven_lines" -ne "$total_lines" ]; then
+      echo "QUARANTINE_${name}=SKIP_UNPROVEN total=$total_lines proven=$proven_lines"
+      skipped_unproven=$((skipped_unproven + 1)); continue
+    fi
+    kb=$(du -sk -- "$batch" 2>/dev/null | awk 'NR==1{print $1}'); kb=$(printf '%s' "$kb" | tr -cd '0-9'); kb=${kb:-0}
+    before=$(df -B1 -P / | awk 'NR==2{print $4}')
+    if rm -rf -- "$batch"; then
+      command -v git >/dev/null 2>&1 && [ -d /root/CentralDark/.git ] && git -C /root/CentralDark worktree prune >/dev/null 2>&1 || true
+      after=$(df -B1 -P / | awk 'NR==2{print $4}')
+      echo "QUARANTINE_${name}=CLEANED kb=$kb lines_proven=$proven_lines relief_bytes=$((after-before))"
+      cleaned=$((cleaned + 1))
+    else
+      echo "QUARANTINE_${name}=FAILED"; return 1
+    fi
+  done
+  echo "QUARANTINE_SUMMARY cleaned=$cleaned skipped_young=$skipped_young skipped_unproven=$skipped_unproven skipped_no_manifest=$skipped_no_manifest"
+}
+
 if [ "$MODE" = "selected" ]; then
   IFS=',' read -r -a CATEGORIES <<< "$SELECTED"
   if [ "${#CATEGORIES[@]}" -eq 0 ] || [ -z "${CATEGORIES[0]:-}" ]; then
-    echo "Nenhuma categoria válida. Use journal,gz,rotated,pip-cache,npm-cache,runner-work." >&2
+    echo "Nenhuma categoria válida. Use journal,gz,rotated,pip-cache,npm-cache,runner-work,quarantine-verified." >&2
     exit 2
   fi
   for CATEGORY in "${CATEGORIES[@]}"; do
     case "$CATEGORY" in
-      journal|gz|rotated|pip-cache|npm-cache|runner-work) : ;;
+      journal|gz|rotated|pip-cache|npm-cache|runner-work|quarantine-verified) : ;;
       *)
-        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated,pip-cache,npm-cache,runner-work." >&2
+        echo "Categoria inválida: $CATEGORY. Use journal,gz,rotated,pip-cache,npm-cache,runner-work,quarantine-verified." >&2
         exit 2
         ;;
     esac
@@ -301,6 +348,9 @@ if [ "$MODE" = "selected" ]; then
   esac
   case ",${SELECTED}," in
     *,runner-work,*) clean_runner_work || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
+  esac
+  case ",${SELECTED}," in
+    *,quarantine-verified,*) clean_quarantine_verified || CLEAN_ERRORS=$((CLEAN_ERRORS + 1)) ;;
   esac
 
   DISCO_LIVRE_DEPOIS=$(df -B1 -P / | awk 'NR==2{print $4}')
