@@ -1179,3 +1179,13 @@ INTENCAO_CHEFE -> RECALL_GOAL/NEXT_CURSOR -> DESCOBERTA_CANDIDATA -> !MULTIBUSSO
 **NEXT_CURSOR:** no mesmo Goal, inventariar o consumo real de !KAIZEN/!MULTIBUSSOLA no motor/gatilhos existentes; corrigir somente eventual falta comprovada de normalizacao de voz ou exibicao no Cockpit e produzir receipt do mesmo SHA antes de desbloquear habilidade.
 
 <!-- /CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
+
+### 23.1 Projecao didatica no Cockpit - Jornada Evolutiva (25/10/2026)
+
+@code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx
+@last_updated: 2026-10-25T12:00:00Z
+@escopo: interface interativa dentro da Sala de Controle existente.
+
+A aba "Jornada" e o atalho existente permitem navegar por oito etapas e alternar linguagem iniciante/engenharia. Botoes abrem Forja e Recibos atuais, sem novos coletores, endpoints, executores, banco de XP ou cockpit paralelo. Kaizen Vivo e Multibussola sao reusados conceitualmente dos owners canonicos, nao reimplementados. Nivel 06 e marco narrativo, nao prova de runtime. O chefao final solicita receipt do Reality Judge, sem premiacao automatica.
+
+A prova exige teste de fonte, build no mesmo SHA, readback autenticado e separacao de COMMIT/DEPLOY. NEXT_CURSOR: medir CI/build e visibilidade real no Cockpit antes do selo Michelin.
