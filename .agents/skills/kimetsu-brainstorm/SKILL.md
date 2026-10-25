@@ -30,6 +30,14 @@ Nunca: UNKNOWN = PASS
 
 Nunca: ACTION = PROOF
 
+### Acoplamento CentralDark — 17 Respirações operacionais
+
+Em qualquer execução material dentro da CentralDark, esta Remix deve ser carregada **junto** da referência canônica `../centraldark-operational-method/references/regenerative-self-refinement-engine.md`. Não duplicar a taxonomia: esta skill decide intenção, classe, design e transição; a referência de 17 slots fornece a política operacional específica.
+
+Selector compacto dos 17 slots: `1 Concentração Total` (foco/estado), `2 Sol` (meta-orquestração), `3 Lua` (contraprova), `4 Água` (adaptação), `5 Chamas` (execução sustentada), `6 Trovão` (movimento curto comprovado), `7 Vento` (exploração), `8 Pedra` (estabilidade), `9 Flor` (precisão), `10 Inseto` (mudança mínima), `11 Serpente` (rota indireta), `12 Amor` (integração), `13 Som` (sinais/telemetria), `14 Névoa` (ambiguidade), `15 Fera` (detecção de campo), `16 Regeneração Monotônica` (refinar sem perder verde) e `17 Continuar até Fixed Point` (parar apenas em critério objetivo).
+
+**Gatilho obrigatório de execução:** antes de mutar, delegar implementação, corrigir, integrar ou provar, declarar `CLASSIFICAÇÃO + INTENT + BREATH_ID/NAME + condição observada`. Depois executar o ciclo `VERSO → DECLARAÇÃO → EXECUÇÃO → EVIDÊNCIA → VEREDITO → TRANSIÇÃO`. Leituras puras podem terminar em Concentração/Lua/Som sem mutação. Uma nova evidência pode mudar a respiração; falhar não autoriza retry cego.
+
 ---
 
 ## 1. CLASSIFICAÇÃO INICIAL — O QUE É ISTO?
