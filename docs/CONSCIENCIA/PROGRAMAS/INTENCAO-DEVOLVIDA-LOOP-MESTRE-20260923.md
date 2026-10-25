@@ -1148,3 +1148,34 @@ A intenção do CHEFE acrescenta `🌟 !MICHELIN` ao **mesmo** `!CENTRALDARK` en
 4. Ligar validar-harness-casa-jea.test.mjs ao CI quando o workflow existente ganhar a trilha #OBSERVACOES#.
 5. Fora deste escopo e só com autorização: fechar a exposição na LAN (3389, 8080, 32052, 33000, 3030) e atualizar o termo PERMITO na documentação e no código.
 ```
+
+---
+
+## 23. Motor Evolutivo Deliberado Gamificado - Kaizen + Multibussola (25/10/2026)
+
+<!-- CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
+
+**Intencao vigente do CHEFE:** toda descoberta util de uma conversa pode virar capacidade verificavel na CentralDark, com progresso gamificado no Cockpit/Forja/Woner existentes. A conversa explora hipoteses; o nivel de engenharia e o nivel de habilidade comprovada sao coisas diferentes. Este item e DELTA do Loop Mestre, nao outro motor, sistema de memoria, writer ou Goal.
+
+**Metodo:** engenharia conversacional gamificada subordinada ao **Kaizen Vivo - Sistema Um** (sete batidas, mesmo Goal/NEXT_CURSOR) e a **Multibussola** (analise multidirecional, referenciais, contraprova e remedicao). !MICHELIN permanece o criterio de qualidade, e !CENTRALDARK permanece o gatilho mestre.
+
+**Gatilhos/owners canonicos ja existentes na main:**
+- !KAIZEN => .agents/skills/kaizen-sistema-um/SKILL.md; recupera intencao, compara estado, reusa prova, executa menor delta, aprende e continua.
+- !MULTIBUSSOLA => docs/CONSCIENCIA/MULTIBUSSOLA.md; observa e confronta os eixos materiais antes do fixed point.
+- !MICHELIN => RULES.md e MASTER-CYCLE.yml; selo so com evidencia pertinente.
+- Variantes de ditado nesta sessao (!kaizem, !muttibussula) indicam os conceitos acima, sem afirmar que parsers e runtimes ja aceitam esses aliases. Nao criar segundo protocolo por erro de transcricao.
+
+**Fluxo unico proposto:**
+INTENCAO_CHEFE -> RECALL_GOAL/NEXT_CURSOR -> DESCOBERTA_CANDIDATA -> !MULTIBUSSOLA (eixos pertinentes) -> !KAIZEN (reuse + menor delta) -> GATILHO/CONTRATO/OWNER/EXECUTOR_EXISTENTES -> IMPLEMENTACAO -> TESTE/CONTRAPROVA -> !MICHELIN/REALITY_JUDGE -> RECEIPT+SHA+READBACK -> HABILIDADE_COMPROVADA -> XP/NIVEL/HUD -> NEXT_CURSOR.
+
+**Estados distintos da habilidade:** IDEIA | CANDIDATA | DOCUMENTADA | IMPLEMENTADA | TESTADA | COMPROVADA | REUTILIZADA. O desbloqueio operacional ocorre somente em COMPROVADA, por efeito real e receipt do escopo; explorar uma hipotese pode evoluir o capitulo narrativo, mas nao produz falsa prova de runtime.
+
+**Interface-alvo:** reusar apps/instinto-superior/src/components/central/CockpitShell.tsx e as capacidades existentes do HUD/Forja; nenhum cockpit paralelo. O HUD mostra progresso, origem, owner, receipt, SHA e NEXT_CURSOR, sem inventar estado vivo. XP simbolico conserva o owner docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md; novo nivel nao confere autoridade.
+
+**Regra:** NEW_CONVERSATION != NEW_GOAL; DISCOVERY != EXECUTION; DOCUMENTED != IMPLEMENTED; IMPLEMENTED != PROVEN; XP_REQUIRES_RECEIPT; UNKNOWN != PASS; ONE_WRITER_PER_SCOPE=true.
+
+**Escopo desta batida:** somente contrato documental canonicamente versionado na main. Nenhum gatilho executavel, painel, teste CI, runtime Casa/VPS ou experiencia autenticada recebe PASS por causa deste texto.
+
+**NEXT_CURSOR:** no mesmo Goal, inventariar o consumo real de !KAIZEN/!MULTIBUSSOLA no motor/gatilhos existentes; corrigir somente eventual falta comprovada de normalizacao de voz ou exibicao no Cockpit e produzir receipt do mesmo SHA antes de desbloquear habilidade.
+
+<!-- /CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
