@@ -1,5 +1,6 @@
 // OAuth 2.1 do MCP CentralDark.
 import crypto from "node:crypto";
+import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
 
@@ -154,7 +155,7 @@ async function resolveClientRegistration(client_id, redirect_uri) {
     if (!metadata) {
         return undefined;
     }
-    if (!metadata.redirect_uris.includes(redirect_uri)) {
+    if (!redirectUriRegistered(metadata, redirect_uri)) {
         log.warn("oauth_client_metadata_redirect_rejected", { client_id, redirect_uri });
         return undefined;
     }
@@ -301,7 +302,7 @@ export async function handleAuthorize(req, res) {
             oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
             return;
         }
-        if (!client.redirect_uris.includes(redirect_uri)) {
+        if (!redirectUriRegistered(client, redirect_uri)) {
             oauthError(res, 400, "invalid_request", "redirect_uri não registrado pra esse client.");
             return;
         }

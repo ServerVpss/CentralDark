@@ -108,7 +108,6 @@ const HARNESS_DESTINOS = [
   { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
   { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
-  { id: "sync", titulo: "Build e Sync", icone: "🔄", privado: false },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
@@ -119,9 +118,88 @@ const HARNESS_DESTINOS = [
   { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
   { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
 ] as const;
-const HARNESS_DESTINOS = COCKPIT_ABAS;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
+/* #OBSERVACOES# | CENTRALDARK.COCKPIT.JORNADA_EVOLUTIVA_20261025
+ * @owner: apps/instinto-superior/src/components/central/CockpitShell.tsx
+ * @doc_ref: docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+ * @last_updated: 2026-10-25T12:00:00Z
+ * @implementado: interface didatica com etapas clicaveis, niveis e acesso a Forja/Recibos.
+ * @estado: UI_SOURCE, nao e prova de deploy ou desbloqueio funcional.
+ * @next_cursor: build/CI e readback autenticado no mesmo SHA.
+ */
+const JORNADA_PASSOS = [
+  { nome: "Intenção", icone: "👑", simples: "Você explica o que quer construir.", tecnico: "O CHEFE define o Goal e preserva o mesmo Loop Mestre.", gatilho: "INTENÇÃO" },
+  { nome: "Descoberta", icone: "💡", simples: "Surgiu uma possibilidade nova na conversa.", tecnico: "A hipótese é candidata: descoberta não é implementação.", gatilho: "DESCOBERTA" },
+  { nome: "Multibússola", icone: "🧭", simples: "Olhar a ideia por vários lados.", tecnico: "Analisar causa, efeito, dependências e contraprovas pertinentes.", gatilho: "!MULTIBUSSOLA" },
+  { nome: "Kaizen", icone: "♻️", simples: "Reaproveitar o que existe e melhorar um pedacinho.", tecnico: "Recuperar a intenção, reusar o owner e escolher o menor delta.", gatilho: "!KAIZEN" },
+  { nome: "Construção", icone: "🛠️", simples: "O executor instala a habilidade no sistema.", tecnico: "Gatilho, contrato, owner e executor existentes realizam a mudança.", gatilho: "HERMES / FORJA" },
+  { nome: "Prova real", icone: "🧪", simples: "Testar para ver se funciona de verdade.", tecnico: "Teste, contraprova e recibo vinculados ao mesmo SHA.", gatilho: "!MICHELIN" },
+  { nome: "Conquista", icone: "🏆", simples: "A habilidade só é desbloqueada depois da prova.", tecnico: "Reality Judge exige efeito e receipt; XP não equivale a autoridade.", gatilho: "RECEIPT + SHA" },
+  { nome: "Próximo nível", icone: "🚀", simples: "Guardar a lição e seguir de onde parou.", tecnico: "Continuar no mesmo Goal e NEXT_CURSOR, sem reiniciar.", gatilho: "NEXT_CURSOR" },
+] as const;
+
+function JornadaEvolutiva({ abrirDestino }: { abrirDestino: (destino: string) => void }) {
+  const [passoAtivo, definirPassoAtivo] = useState(0);
+  const [simples, definirSimples] = useState(true);
+  const passo = JORNADA_PASSOS[passoAtivo] ?? JORNADA_PASSOS[0];
+  return (
+    <section aria-labelledby="jornada-evolutiva-titulo" data-cd-flow="instinto.CockpitShell.jornada-evolutiva" className="overflow-hidden rounded-2xl border border-border bg-background/80">
+      <div className="border-b border-border bg-gradient-to-br from-neon-blue/10 via-background to-amber-500/10 p-5 sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-mono text-xs uppercase tracking-widest text-neon-blue">🪬 CentralDark · Evolução deliberada</p>
+          <span className="rounded-full border border-border bg-background/80 px-3 py-1 text-xs">🎮 Nível 06 · marco narrativo</span>
+        </div>
+        <h2 id="jornada-evolutiva-titulo" className="mt-3 text-2xl font-bold sm:text-3xl">Aprenda o sistema jogando</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">Descubra como uma ideia se transforma em habilidade real. Clique nas etapas e escolha explicações simples ou técnicas.</p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Button type="button" size="sm" variant={simples ? "default" : "outline"} aria-pressed={simples} onClick={() => definirSimples(true)}>🌱 Sou iniciante</Button>
+          <Button type="button" size="sm" variant={!simples ? "default" : "outline"} aria-pressed={!simples} onClick={() => definirSimples(false)}>⚙️ Ver engenharia</Button>
+          <Button type="button" size="sm" variant="outline" onClick={() => abrirDestino("recibos")}>📜 Ver provas reais</Button>
+        </div>
+      </div>
+      <div className="p-5 sm:p-8">
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4" aria-label="Etapas do Motor Evolutivo">
+          {JORNADA_PASSOS.map((etapa, indice) => (
+            <button key={etapa.nome} type="button" aria-pressed={passoAtivo === indice} onClick={() => definirPassoAtivo(indice)}
+              className={passoAtivo === indice ? "min-h-24 rounded-xl border border-neon-blue bg-neon-blue/10 p-3 text-left focus-visible:outline focus-visible:outline-2" : "min-h-24 rounded-xl border border-border bg-muted/20 p-3 text-left transition-colors hover:border-neon-blue/60 focus-visible:outline focus-visible:outline-2"}>
+              <span className="flex items-center justify-between gap-2"><span className="text-lg" aria-hidden="true">{etapa.icone}</span><span className="font-mono text-[10px] text-muted-foreground">{indice + 1} / 8</span></span>
+              <span className="mt-2 block text-sm font-semibold">{etapa.nome}</span>
+              <span className="mt-1 block text-[11px] text-muted-foreground">{etapa.gatilho}</span>
+            </button>
+          ))}
+        </div>
+        <div className="mt-5 rounded-xl border border-border bg-muted/20 p-5" aria-live="polite">
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">Etapa {passoAtivo + 1} · {passo.gatilho}</p>
+          <h3 className="mt-2 text-xl font-semibold">{passo.icone} {passo.nome}</h3>
+          <p className="mt-2 text-sm leading-relaxed">{simples ? passo.simples : passo.tecnico}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button type="button" size="sm" variant="outline" disabled={passoAtivo === 0} onClick={() => definirPassoAtivo((atual) => Math.max(0, atual - 1))}>← Anterior</Button>
+            <Button type="button" size="sm" disabled={passoAtivo === JORNADA_PASSOS.length - 1} onClick={() => definirPassoAtivo((atual) => Math.min(JORNADA_PASSOS.length - 1, atual + 1))}>Próxima etapa →</Button>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-2">
+          <article className="rounded-xl border border-border p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">🏆 Evolução registrada</p>
+            <h3 className="mt-2 font-semibold">Nível 04 → 05 → 06</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Memória entre chats → Loop Evolutivo → Kaizen + Multibússola. Esses níveis contam descobertas, não certificam runtime.</p>
+            <a href="https://github.com/ServerVpss/CentralDark/blob/0326698ce4b557ea4c8fda116edf2de26a0a42a1/docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md" target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex text-xs font-semibold text-neon-blue underline underline-offset-4">Ler contrato canônico na main</a>
+          </article>
+          <article className="rounded-xl border border-border p-4">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">👑 Chefão · prova da habilidade</p>
+            <h3 className="mt-2 font-semibold">Da hipótese ao funcionamento</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Desafio final: executar, testar, registrar recibo e verificar o efeito. A tela não concede XP operacional.</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Button type="button" size="sm" variant="outline" onClick={() => abrirDestino("forja")}>Abrir Forja</Button>
+              <Button type="button" size="sm" variant="outline" onClick={() => abrirDestino("recibos")}>Ver recibos</Button>
+            </div>
+          </article>
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground" role="status">Esta tela ensina o método. Habilidades só são comprovadas pelo Reality Judge, efeito real e recibo verificável. Documento não é deploy.</p>
+      </div>
+    </section>
+  );
+}
 function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
   const [selecionado, definirSelecionado] = useState(itens[0] ?? "");
   return (
@@ -395,6 +473,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => abrirDestino("claude-notifications")}><Bell className="size-4" /></Button>
         </nav>
       ) : null}
+      {/* Header Visual da Sala de Controle - marca CentralDark */}
+      <div className="relative border-b border-border bg-background/50 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+            <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+            <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
+          </span>
+        </div>
+      </div>
       {harnessVisivel ? (
         <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
@@ -475,7 +565,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => abrirDestino("aionui")}
               aria-expanded={estudioAberto}
               aria-controls="centraldark-estudio"
               onClick={abrirEstudio}
@@ -648,14 +737,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                   <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
                   <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "jornada" ? "default" : "ghost"} onClick={() => abrirDestino("jornada")}>🎮 Jornada</Button>
                   <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
                   <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
                 </div>
                 <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
-                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as 25 áreas ▾</summary>
+                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as áreas ▾</summary>
                   <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
                     <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
                 <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="jornada" data-cd-flow="instinto.CockpitShell.aba.jornada">🎮 Jornada</TabsTrigger>
                 <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
                 <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
                 <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
@@ -749,6 +840,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <Ledger compacto />
               <EstudoPorCriterios contexto="visao" />
             </TabsContent>
+            <TabsContent value="jornada" className="mt-8">
+              <JornadaEvolutiva abrirDestino={abrirDestino} />
+            </TabsContent>
             <TabsContent value="sync" className="mt-10">
               {dado ? <SyncCenter estado={dado} /> : <SyncCenter />}
             </TabsContent>
@@ -757,7 +851,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? (
               <TabsContent value="genesis" className="mt-10" id="centraldark-genesis-michelin">
-                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
+                {dado ? <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} /> : <HudDeterministico atualizar={() => void estado.refetch()} />}
               </TabsContent>
             ) : null}
             <TabsContent value="goals" className="mt-10">
