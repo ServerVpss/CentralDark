@@ -10,7 +10,7 @@ os.environ["CENTRALDARK_DEFAULT_ENGINE"] = requested_engine
 
 print(f"[LAUNCHER] CENTRALDARK_DEFAULT_ENGINE={os.environ.get('CENTRALDARK_DEFAULT_ENGINE')}")
 
-sys.path.insert(0, r"e:/CentralDark/Pivete/CentralDark/apps/modulos/elite-gateway/scripts")
+sys.path.insert(0, r"K:/apps/modulos/elite-gateway/scripts")
 from centraldark_omni_router import app
 
 if __name__ == "__main__":

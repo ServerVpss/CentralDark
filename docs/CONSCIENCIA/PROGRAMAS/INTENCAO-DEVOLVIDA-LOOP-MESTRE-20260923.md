@@ -1130,3 +1130,21 @@ GOAL_ID + INTENT_FIXED
 ### 🌟 !MICHELIN — seta de qualidade do Loop Mestre (2026-10-21)
 
 A intenção do CHEFE acrescenta `🌟 !MICHELIN` ao **mesmo** `!CENTRALDARK` entre contraprova/remedição/Reality Judge e `!FIXED_POINT`; todos os gatilhos visíveis usam `!` ou `#`. O Michelin não é motor separado: `RULES.md` continua sendo a regra de três níveis. A estrela somente pode ser atribuída com provas materiais do mesmo SHA. Sem CI, deploy autenticado, Casa/VPS/logs, o estado é `UNKNOWN`. Owner do fluxo `MASTER-CYCLE.yml`, resolver `centraldark_master_cycle.py`, inventário `ADM-GATILHOS-OPERACIONAIS.json` e diagrama `FLOW-REGISTRY.json` permanecem existentes. `DOCUMENTED != EXECUTED`; `NEXT_CURSOR=MICHELIN_TRIGGER_CI_SAME_HEAD`.
+
+---
+
+## 22. Rota Casa JEA (WinRM 5985) — Harness fechado VPS → Casa (22/10/2026)
+
+**Estado:** `casa-jea-winrm` está PROVEN e travado (🟢🔒) em VER, PEDIR, MEXER e allow. Registro estruturado: `apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm`. Sensor: `scripts/lupa/validar-harness-casa-jea.mjs`. Autorização: PERMITO SEGREDO, dado pelo CHEFE.
+
+`MERGED != DEPLOYED`: o card só aparece no Cockpit publicado depois do `build:vps` da VPS, que é decisão do CHEFE e está com o outro agente.
+
+### NEXT_CURSOR
+
+```text
+1. Rodar o sensor ao vivo (casa_jea.py suite → validar-harness-casa-jea.mjs --live) quando o Hermes precisar agir na Casa; ⚠️ mostra a causa e não rebaixa o PROVEN.
+2. CHEFE decide se entra serviço na allowlist (candidato: actions.runner.ServerVpss-CentralDark.centraldark-casa-1).
+3. Versionar a skill Hermes devops/centraldark-casa-jea pelo owner de sincronização de skills (hoje só existe na VPS).
+4. Ligar validar-harness-casa-jea.test.mjs ao CI quando o workflow existente ganhar a trilha #OBSERVACOES#.
+5. Fora deste escopo e só com autorização: fechar a exposição na LAN (3389, 8080, 32052, 33000, 3030) e atualizar o termo PERMITO na documentação e no código.
+```

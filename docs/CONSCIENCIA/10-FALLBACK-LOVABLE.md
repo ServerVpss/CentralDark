@@ -13,7 +13,7 @@ updated: 2026-06-29
 
 ## TL;DR pra agente em conta nova
 
-1. Confere se existe o secret `GITHUB_PAT_PERFIL` no projeto (`secrets--fetch_secrets`).
+1. Confere se existe o secret `<nome-de-segredo>` no projeto (`secrets--fetch_secrets`).
 2. Se existe → fallback está pronto, é só rodar quando o sync nativo falhar.
 3. Se NÃO existe → pede ao usuário pra cadastrar via Lovable Cloud → Secrets, com escopo `repo` no PAT.
 
@@ -28,10 +28,10 @@ updated: 2026-06-29
 
 ```bash
 # 1. Diagnóstico (não modifica nada)
-GITHUB_TOKEN=$GITHUB_PAT_PERFIL bash CentralDark/scripts/deploy/lovable-check.sh
+GITHUB_TOKEN=<variavel-segredo> bash CentralDark/scripts/deploy/lovable-check.sh
 
 # 2. Sincronizar (abre PR por padrão)
-GITHUB_TOKEN=$GITHUB_PAT_PERFIL bash CentralDark/scripts/deploy/lovable-sync-fallback.sh
+GITHUB_TOKEN=<variavel-segredo> bash CentralDark/scripts/deploy/lovable-sync-fallback.sh
 
 # 3. Ver último relatório
 bash CentralDark/scripts/deploy/lovable-report.sh
@@ -47,8 +47,8 @@ centraldark-lovable-report
 
 ## Camadas de fallback (na ordem que o script tenta)
 
-1. **PAT** via API do GitHub (`GITHUB_PAT_PERFIL`) — funciona no sandbox da Lovable. **Testada ✅**.
-2. **SSH** na VPS + `git push` (precisa `VPS_SSH_KEY_LOVABLE` + `setup-vps-ssh.sh`) — gancho implementado, push completo é fase 2.
+1. **PAT** via API do GitHub (`<nome-de-segredo>`) — funciona no sandbox da Lovable. **Testada ✅**.
+2. **SSH** na VPS + `git push` (precisa `<nome-de-segredo>` + `setup-vps-ssh.sh`) — gancho implementado, push completo é fase 2.
 3. **MCP CentralDark** — fase 2, quando MCP estabilizar.
 
 ## Variáveis (todas opcionais — defaults seguros)
@@ -81,18 +81,18 @@ CentralDark/scripts/deploy/
 Relatório de cada execução:
 
 ```
-/root/CentralDark/revisoes/YYYYMMDD-HHMMSS/sync-fallback-lovable/
+<caminho-vps>
 ├── resumo.md              ← humano-legível em PT-BR
 ├── logs-sanitizados.txt   ← log completo sem secrets
 ├── checks.json            ← estado detectado
 └── acoes-executadas.md    ← cada chamada + exit
 ```
 
-No sandbox da Lovable (sem `/root/CentralDark/`) cai em `/tmp/centraldark-revisoes/`.
+No sandbox da Lovable (sem `<caminho-vps>`) cai em `/tmp/centraldark-revisoes/`.
 
 ## Checklist pra agente em conta Lovable nova
 
-- [ ] `secrets--fetch_secrets` mostra `GITHUB_PAT_PERFIL`? Se sim, segue.
+- [ ] `secrets--fetch_secrets` mostra `<nome-de-segredo>`? Se sim, segue.
 - [ ] Arquivos `CentralDark/scripts/deploy/lovable-*.sh` existem no repo? Se sim, segue.
 - [ ] Roda `lovable-check.sh` — confere se `sha_remoto_main` vem preenchido (prova que o PAT tem acesso).
 - [ ] Quando o sync travar, dispara `lovable-sync-fallback.sh` — abre PR automaticamente.
@@ -103,9 +103,9 @@ No sandbox da Lovable (sem `/root/CentralDark/`) cai em `/tmp/centraldark-reviso
 
 Explica em PT-BR simples:
 
-> "Pra esse fallback funcionar nessa conta, preciso de um token pessoal do GitHub guardado nos secrets do Lovable Cloud com o nome `GITHUB_PAT_PERFIL`. Gera em github.com → Settings → Developer settings → Personal access tokens (escopo `repo`). Eu cadastro pra você quando confirmar."
+> "Pra esse fallback funcionar nessa conta, preciso de um token pessoal do GitHub guardado nos secrets do Lovable Cloud com o nome `<nome-de-segredo>`. Gera em github.com → Settings → Developer settings → Personal access tokens (escopo `repo`). Eu cadastro pra você quando confirmar."
 
-Aí usa `secrets--add_secret(["GITHUB_PAT_PERFIL"])` pra abrir o formulário seguro.
+Aí usa `secrets--add_secret(["<nome-de-segredo>"])` pra abrir o formulário seguro.
 
 ---
 
@@ -114,3 +114,24 @@ Aí usa `secrets--add_secret(["GITHUB_PAT_PERFIL"])` pra abrir o formulário seg
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+## Fluxo GitHub-first sem runner obrigatório (2026-10-24)
+
+Para tarefas de construção e edição de código, GitHub Actions runner não é pré-requisito. Reutilize a conexão GitHub autenticada da CentralDark para ler arquivos, escrever em branch, registrar commits e abrir PR pela API.
+
+### Caminho padrão
+
+1. Leia o estado atual e identifique o owner/documento existente antes de criar arquivos ou integrações.
+2. Faça a menor alteração em branch isolada; não grave diretamente em `main` para mudanças normais.
+3. Confira o arquivo e o commit no GitHub após a escrita; registre SHA e link do PR como evidência.
+4. Use CI/runner apenas quando a validação exigir execução remota ou workflow específico — não para editar arquivos e registrar commits.
+5. Use SSH/VPS somente quando a tarefa precisar executar ou inspecionar o runtime da VPS. Antes de conectar, valide a identidade do host com chave conhecida; não desabilite a verificação de host (`StrictHostKeyChecking=no`).
+6. Nunca coloque tokens, chaves privadas ou valores de secrets em arquivos, commits, logs ou respostas.
+
+### Fronteira de prova
+
+- Branch/commit criado != testes aprovados.
+- PR aberto != mergeado.
+- Mergeado != deploy concluído.
+- Ação solicitada != prova de execução.
+- Se o conector bloquear uma operação, registre o erro exato e tente uma rota autorizada existente; não declare sucesso nem altere `main` como atalho.

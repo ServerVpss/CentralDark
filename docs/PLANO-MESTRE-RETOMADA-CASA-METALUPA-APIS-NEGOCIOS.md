@@ -195,9 +195,9 @@ PIVETE DEFINE
 
 ```text
 C:\Users\danda\AppData\Local\hermes\profiles\pivete\
-E:\CentralDark\Pivete\CentralDark
-E:\CentralDark\Pivete\NUCLEO\
-E:\CentralDark\Pivete\NUCLEO\motor\
+K:\
+K:\NUCLEO\
+K:\NUCLEO\motor\
 ```
 
 Função:

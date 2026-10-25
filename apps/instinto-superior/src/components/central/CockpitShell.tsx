@@ -8,18 +8,20 @@
  */
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
+import { McpConsoleCentralDark } from "@/components/central/McpConsoleCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
+  Bell,
   Download,
   ExternalLink,
   Github,
@@ -83,6 +85,13 @@ function formatarTamanho(bytes: number) {
 }
 
 type UnigramLaunchStatus = "IDLE" | "PENDING" | "REQUESTED" | "UNAVAILABLE" | "ERROR";
+type NativeObsidianBridge = {
+  openObsidianDesktop?: () => Promise<{ status: "REQUESTED" | "UNAVAILABLE"; capability: "OBSIDIAN" }>;
+};
+function nativeObsidianBridge(): NativeObsidianBridge | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as Window & { centraldark?: NativeObsidianBridge }).centraldark;
+}
 type NativeUnigramBridge = {
   openUnigramDesktop?: () => Promise<{ status: "REQUESTED" | "UNAVAILABLE"; capability: "UNIGRAM" }>;
 };
@@ -91,7 +100,24 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
 }
 
-const HARNESS_DESTINOS = COCKPIT_ABAS;
+const HARNESS_DESTINOS = [
+  { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
+  { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
+  { id: "builder-bolt", titulo: "Builder Bolt", icone: "⚡", privado: false },
+  { id: "pr1873", titulo: "Mapa do PR #1873", icone: "📜", privado: false },
+  { id: "gram", titulo: "CentralDark Gram", icone: "✉️", privado: true },
+  { id: "goals", titulo: "Goals", icone: "🎯", privado: false },
+  { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
+  { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
+  { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
+  { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
+  { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
+  { id: "arquitetura", titulo: "Estrutura", icone: "📐", privado: false },
+  { id: "sistema", titulo: "Sistema", icone: "🖥️", privado: true },
+  { id: "admin", titulo: "Admin", icone: "🔒", privado: true },
+  { id: "downloads", titulo: "Downloads", icone: "📦", privado: false },
+] as const;
 
 /** UI-first: catálogo visual selecionável, sem fingir conexões ou criar outro painel. */
 function MenuVisualCentralDark({ titulo, descricao, itens }: { titulo: string; descricao: string; itens: string[] }) {
@@ -256,6 +282,21 @@ function dentroDaCascaAionUI(): boolean {
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const tabsScrollRef = useRef<HTMLDivElement>(null);
+  // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
+  // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
+  useEffect(() => {
+    const barra = tabsScrollRef.current;
+    if (!barra) return;
+    const rolarAbas = (evento: WheelEvent) => {
+      if (evento.ctrlKey || evento.shiftKey || Math.abs(evento.deltaY) <= Math.abs(evento.deltaX)) return;
+      if (barra.scrollWidth <= barra.clientWidth) return;
+      evento.preventDefault();
+      barra.scrollLeft += evento.deltaY;
+    };
+    barra.addEventListener("wheel", rolarAbas, { passive: false });
+    return () => barra.removeEventListener("wheel", rolarAbas);
+  }, []);
   const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
   const [versaoAdmin, definirVersaoAdmin] = useState(0);
   const [estudioAberto, definirEstudioAberto] = useState(false);
@@ -304,6 +345,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const queryClient = useQueryClient();
   const navegar = useNavigate();
   const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchStatus>("IDLE");
+  const [obsidianLaunch, setObsidianLaunch] = useState<UnigramLaunchStatus>("IDLE");
+  async function abrirObsidian() {
+    const bridge = nativeObsidianBridge();
+    if (!bridge?.openObsidianDesktop) { setObsidianLaunch("UNAVAILABLE"); return; }
+    setObsidianLaunch("PENDING");
+    try {
+      const result = await bridge.openObsidianDesktop();
+      setObsidianLaunch(result.status === "REQUESTED" ? "REQUESTED" : "UNAVAILABLE");
+    } catch { setObsidianLaunch("ERROR"); }
+  }
   async function abrirUnigram() {
     const bridge = nativeUnigramBridge();
     if (!bridge?.openUnigramDesktop) {
@@ -330,6 +381,30 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       data-pele-cockpit={pele}
       className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${pele === "default" ? "" : "cockpit-pele"}`}
     >
+      {harnessVisivel && gaveta === null ? (
+        <nav
+          aria-label="Harness flutuante superior"
+          data-cd-harness="top-floating"
+          className="fixed left-1/2 top-1 z-[60] hidden -translate-x-1/2 items-center gap-1 rounded-2xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur sm:flex"
+        >
+          <Button size="sm" variant="ghost" title="CentralDark" aria-label="CentralDark · visão geral" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
+          <Button size="icon" variant="ghost" title="Lupa · buscar ferramentas" aria-label="Lupa · buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
+          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("right")}><Layers3 className="size-4" /></Button>
+          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => abrirDestino("claude-notifications")}><Bell className="size-4" /></Button>
+        </nav>
+      ) : null}
+      {/* Header Visual da Sala de Controle - marca CentralDark */}
+      <div className="relative border-b border-border bg-background/50 px-4 py-4 sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+            <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+            <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
+          </span>
+        </div>
+      </div>
       {harnessVisivel ? (
         <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
@@ -366,7 +441,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         <Button type="button" className="fixed bottom-2 right-2 z-40" variant="outline" size="sm" onClick={() => definirHarnessVisivel(true)}>Mostrar Harness</Button>
       )}
       <Sheet open={gaveta !== null} onOpenChange={(aberto) => { if (!aberto) definirGaveta(null); }}>
-        <SheetContent side={gaveta ?? "left"} className={gaveta === "top" || gaveta === "bottom" ? "max-h-[80dvh] overflow-y-auto" : "overflow-y-auto"}>
+        <SheetContent
+          side={gaveta ?? "left"}
+          className={gaveta === "top" || gaveta === "bottom" ? "max-h-[80dvh] overflow-y-auto" : "overflow-y-auto"}
+          onOpenAutoFocus={(event) => {
+            if (gaveta === "top") {
+              event.preventDefault();
+              document.getElementById("busca-harness")?.focus();
+            }
+          }}
+        >
           <SheetHeader><SheetTitle>🧿 CentralDark · Harness</SheetTitle><SheetDescription>Uma casca, múltiplos sistemas. Acesso pela mesma Sala de Controle.</SheetDescription></SheetHeader>
           <div className="mt-6 space-y-4">
             <label htmlFor="busca-harness" className="block text-xs font-semibold">Encontrar ferramenta</label>
@@ -382,11 +466,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
-      <header className="border-b border-border bg-surface/85 px-4 py-4 backdrop-blur sm:px-6">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
-          <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
-            CentralDark
-          </Link>
+      <header className="sticky top-0 z-50 flex min-h-16 items-center border-b border-border bg-surface/95 px-4 py-3 backdrop-blur sm:px-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-2">
+            <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
+              CentralDark
+            </Link>
+            {harnessVisivel ? (
+              <Button size="icon" variant="ghost" title="Buscar ferramentas" aria-label="Buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
+            ) : null}
+          </div>
           <div className="flex items-center gap-2">
             <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
               {autenticado ? "COCKPIT AUTENTICADO" : "ENTRADA DO COCKPIT"}
@@ -595,6 +684,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? (
                   <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
+                <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
+                <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
+                <TabsTrigger value="unigram">Unigram</TabsTrigger>
+                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
+                <TabsTrigger value="downloads">Downloads</TabsTrigger>
                 <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
@@ -668,7 +766,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? (
               <TabsContent value="genesis" className="mt-10" id="centraldark-genesis-michelin">
-                <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />
+                {dado ? <HudDeterministico estado={dado} atualizar={() => void estado.refetch()} /> : <HudDeterministico atualizar={() => void estado.refetch()} />}
               </TabsContent>
             ) : null}
             <TabsContent value="goals" className="mt-10">
@@ -757,6 +855,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <TabsContent value="admin" className="mt-10">
                 <MenuVisualCentralDark titulo="🔐 Admin → Control Plane" descricao="Estrutura visual do HUB Credential Control Plane. Sem exposição de credenciais e sem ligação simulada." itens={["👥 Contas e permissões", "☁️ Cloudflare", "🔌 APIs e MCPs", "🔑 Cofre", "🤖 Bots", "🔗 Providers / OAuth", "📋 Auditoria", "🟡 Estado das conexões"]} />
                 <div className="mt-6"><PainelAdminCentralDark key={versaoAdmin} estado={dado} abaInicial={abaAdminInicial} /></div>
+                <McpConsoleCentralDark />
               </TabsContent>
             ) : null}
             {autenticado ? (
@@ -835,6 +934,73 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   </a>
                 </Button>
               </div>
+            </TabsContent>
+            <TabsContent value="aionui" className="mt-10">
+              <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">
+                <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">
+                  Aplicativo original · protótipo CentralDark já existente
+                </p>
+                <h2 id="centraldark-estudio-title" className="text-3xl font-semibold">🧩 CentralDark Estúdio</h2>
+                <p className="max-w-3xl text-sm text-muted-foreground">
+                  O AionUI completo já tem receita de build com identidade CentralDark, menus nativos,
+                  tarefas, AionCore e Hermes. Esta entrada reutiliza a superfície atual enquanto
+                  a versão Windows com o código completo e os dados no K: é validada.
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  <Button type="button" asChild>
+                    <a href="http://89.117.78.124:25808/" target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="size-4" /> Abrir AionUI atual
+                    </a>
+                  </Button>
+                  <Button type="button" variant="outline" asChild>
+                    <a href="https://github.com/ServerVpss/CentralDark/tree/main/experiments/aionui-centraldark-instinto-superior"
+                      target="_blank" rel="noopener noreferrer">
+                      Ver protótipo e receita original
+                    </a>
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  A versão web atual abre separadamente. O build Windows, o rebranding completo,
+                  a instalação no K: e a janela interna do Shell exigem testes próprios.
+                  Botão visível não comprova aplicativo instalado ou incorporado.
+                </p>
+              </section>
+            </TabsContent>
+            <TabsContent value="obsidian" className="mt-10">
+              <section className="panel space-y-5 p-6" aria-labelledby="obsidian-harness-heading">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">Aplicativo do Harness · memória da Forja</p>
+                  <h2 id="obsidian-harness-heading" className="mt-2 text-3xl font-semibold">💎 Obsidian</h2>
+                  <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
+                    Teu aplicativo original, com notas, pesquisa, plugins, Mermaid e Grafo Vivo.
+                    A CentralDark utiliza o vault existente em K: — não cria cópia da memória.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
+                  {nativeObsidianBridge()?.openObsidianDesktop ? (
+                    <Button type="button" onClick={() => void abrirObsidian()} disabled={obsidianLaunch === "PENDING"}>
+                      💎 {obsidianLaunch === "PENDING" ? "Abrindo Obsidian..." : "Abrir Obsidian original"}
+                    </Button>
+                  ) : (
+                    <a className="inline-flex min-h-10 items-center rounded-md border border-border px-4 text-sm font-semibold hover:bg-muted"
+                       href="obsidian://open?vault=BRAIN">💎 Abrir Obsidian no computador</a>
+                  )}
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("sistema")} disabled={!autenticado}>
+                    📚 Cofre e biblioteca
+                  </Button>
+                </div>
+                <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
+                  {obsidianLaunch === "REQUESTED" ? "Abertura solicitada ao Windows. A janela original continua independente." :
+                   obsidianLaunch === "ERROR" ? "Não foi possível solicitar a abertura. Verifique o aplicativo instalado." :
+                   obsidianLaunch === "UNAVAILABLE" ? "A abertura nativa requer o aplicativo CentralDark Desktop." :
+                   "No navegador, o botão usa o protocolo nativo do Obsidian. No Desktop, a ponte existente despacha a abertura autorizada."}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Acesso ao aplicativo inteiro ≠ incorporação da janela Win32 no navegador.
+                  Gerenciamento nativo da janela dentro do Shell e localização física do executável no K:
+                  exigem validação independente; nenhuma instalação ou movimentação foi feita por este módulo.
+                </p>
+              </section>
             </TabsContent>
             <TabsContent value="unigram" className="mt-10">
               <section className="panel p-6" aria-label="Unigram original como capacidade da CentralDark">

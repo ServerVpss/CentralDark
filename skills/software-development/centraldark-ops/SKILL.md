@@ -107,7 +107,7 @@ A interface deve separar os cartões por conta/origem quando houver mais de uma 
 
 Regras de velocidade sem perda de prova:
 
-- Use `K:/` como raiz operacional; nunca percorra `E:/CentralDark` ou outro checkout para o estado atual.
+- Use `K:/` como raiz operacional; nunca percorra `K:/` ou outro checkout para o estado atual.
 - Antes de editar, combine status, branch e diff do escopo no mesmo diagnóstico; não repita descoberta já medida.
 - Procure primeiro o símbolo, rota, import e consumidor real; documentação e nomes semelhantes ficam depois.
 - Batcher leituras independentes numa única chamada; serialize somente ações dependentes.

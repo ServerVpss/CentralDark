@@ -65,7 +65,7 @@ O mapa aponta **onde procurar**. Ele não transforma documentação antiga em es
 ## 🏠 Casa e histórico
 
 ```text
-E:\CentralDark = casa operacional local quando o claim for sobre a Casa Windows
+K:\ = casa operacional local quando o claim for sobre a Casa Windows
 C:\CentralDark = legado a reconciliar, não baseline por padrão
 GitHub main = fonte estrutural remota atual
 runtime = sempre remedir quando a afirmação depender de execução
