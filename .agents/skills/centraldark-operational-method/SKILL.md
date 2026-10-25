@@ -8,6 +8,15 @@ oracle_review_on_change: true
 
 # METODO OPERACIONAL CENTRALDARK
 
+## Gatilho operacional — SSH reverso Casa ↔ VPS e PIDs (2026-10-25)
+
+**ATIVAR POR INTENÇÃO**, quando o pedido disser `VPS → Casa`, `SSH reverso`, `PIDs/processos da Casa`, `sem Desktop Commander`, `Tailscale Casa/VPS` ou erros `Host key verification failed` / `Permission denied` nessa ponte. **Owner único já provado:** [one-shot da Casa](../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1). Antes de investigar do zero, recuperar a [lição causal](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md), a [lembrança verificável](../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md) e o [receipt original](../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md).
+
+**Executar sob demanda:** na Casa Windows, `powershell.exe -NoProfile -File K:\scripts\casa\CentralDark-VPS-Casa-PID-OneShot.ps1`. A receita conserva `segredo-vpss` → VPS e seleciona a chave **já existente** `/root/.ssh/segredo_vps_ed25519` no retorno; exigir `IdentitiesOnly=yes`, `BatchMode=yes`, `StrictHostKeyChecking=yes`, fingerprint e `whoami` antes de `Get-Process`. **Não instalar, criar chaves, expor senhas ou afrouxar SSH para fazer passar.** Host key não confiável exige pin verificado fora do canal; `Permission denied` após host pin exige conferir seleção da identidade antes de culpar firewall/Tailscale.
+
+**Evidência histórica, não garantia permanente:** na contraprova de 25/10/2026, `VPS_TO_CASA_SSH_AUTH=PASS`, `VPS_TO_CASA_PID=PASS COUNT=545` e `EXIT=0`; script/receipt foram lidos na Casa e na `main` com blob idêntico. Para nova rodada, exigir **saída atual** (Id e ProcessName), identidade correta, código 0, receipt e readback. `READ_PID_PASS != PROCESS_MUTATION_AUTHORIZED`; `SSH_CASA_VPS_PASS != SYNC_OBSIDIAN_GITHUB_VPS_PASS`. O resultado não autoriza encerrar/iniciar processos ou declarar automação remota irrestrita. Aplicar Kimetsu e `ONE_WRITER_PER_SCOPE` em cada ação material.
+
+
 ## Consulta oficial PowerShell sob demanda (2026-10-25)
 
 **Gatilho acionável ao agente observar erro PowerShell:** `Get-FileHash`, `CommandNotFoundException`, `ParserError`, `.ps1`, `powershell.exe`, `pwsh`, cmdlets, utility modules, PSScriptAnalyzer, SecretManagement, Crescendo, PlatyPS, DSC, Gallery, instalação/edições, SDK, VS Code, Windows management, Azure PowerShell/runbooks e remoting. Consultar PRIMEIRO [Microsoft Learn — PowerShell](https://learn.microsoft.com/en-us/powershell/) e rotear pelo [mapa oficial de gatilhos](references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md). Consultor acionável sob demanda: `scripts/Consultar-PowerShellDocs.ps1 -Mensagem "ERRO"`; `-SomenteRota` não acessa a rede. `NO_MATCH => NO_SEARCH`.
