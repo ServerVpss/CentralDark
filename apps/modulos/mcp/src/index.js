@@ -732,14 +732,14 @@ app.post("/api/mcp", (req, res) => {
 app.get("/api/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-app.get("/admin/catalog", authAdmin, async (req, res) => {
-    try {
-        const result = await getAdminCatalog(req);
-        res.json(result);
-    } catch (err) {
-        log.error("admin_catalog_error", { error: String(err) });
-        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
-    }
+// getAdminCatalog() nunca foi implementado/importado neste arquivo; esta rota
+// ficou com referencias indefinidas (authAdmin + getAdminCatalog) que
+// derrubavam o carregamento do modulo inteiro. Guard alinhado ao padrao
+// isAdmin() usado pelas demais rotas /admin/*; a rota fica 501 ate alguem
+// implementar e importar getAdminCatalog de verdade.
+app.get("/admin/catalog", (req, res) => {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false, error: "AUTH_REQUIRED" }); return; }
+    res.status(501).json({ ok: false, error: "admin_catalog_nao_implementado", cid: req.cid });
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
