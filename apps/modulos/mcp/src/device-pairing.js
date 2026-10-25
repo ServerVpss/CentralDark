@@ -172,8 +172,7 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, status, heartbeat, refresh, revoke, listDevices, registryPath };
-  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
@@ -188,7 +187,6 @@ export function createDevicePairingRouter(options = {}) {
   const authorized = (req) => isAdmin(req) || (
     req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
   );
-  const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
   const limiter = new Map();
   const allowStart = (req) => {
     const key = String(req.ip || req.socket?.remoteAddress || "unknown");
