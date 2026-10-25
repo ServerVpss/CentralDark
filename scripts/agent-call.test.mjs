@@ -77,6 +77,42 @@ const state = {
     fixed_point: false,
   },
 };
+const FIXED_POINT_HEADER_IDS = [
+  "OWNER_UNIQUE", "LOCKS_PRESERVED", "MCP_PUBLIC_HEALTH", "ONE_HEART_FRESH",
+  "SCREENPIPE_CURRENT", "AIONUI_STDIO_CURRENT", "LOG_PRIVACY_CURRENT",
+  "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT",
+];
+
+function makeExecutionHeader(agentId = "sol") {
+  const measuredAt = new Date().toISOString();
+  return {
+    schema: "centraldark.fixed-point.execution-header.v1",
+    evaluator: "scripts/lupa/horn-reuse-fixed-point.mjs",
+    agent_id: agentId,
+    mission_id: "M-1",
+    intent_id: "intent-test-1",
+    goal_fingerprint: "fingerprint-test-1",
+    observed_head: "abc123",
+    measured_at: measuredAt,
+    evaluation_ref: "test:fixed-point-evaluation",
+    execution_ref: "test:agent-call",
+    criteria: FIXED_POINT_HEADER_IDS.map((id) => ({
+      id,
+      evaluated: true,
+      status: "UNKNOWN",
+      source: "test-source:" + id,
+      attempt_ref: "test-attempt:" + id,
+      evaluated_at: measuredAt,
+      measured_at: measuredAt,
+      reason: "sensor not asserted in this unit fixture",
+      next_cursor: "VERIFY_" + id,
+    })),
+    verdict: "NEXT_DELTA",
+    next_cursor: "VERIFY_OWNER_UNIQUE",
+    goal_receipt: null,
+  };
+}
+
 const base = {
   call_id: "C-1",
   mission_id: "M-1",
@@ -88,7 +124,11 @@ const base = {
   scope: ["repo:read"],
   requested_action: "prove X",
   write_requested: false,
+  fixed_point_execution_header: makeExecutionHeader(),
 };
+
+// Both write ENTRY and deploy EXIT gates must carry the same measurable header.
+state.global_contract_entry.fixed_point_execution_header = makeExecutionHeader();
 
 let pass = 0;
 function check(actual, expected) {
@@ -96,7 +136,16 @@ function check(actual, expected) {
   pass += 1;
 }
 
-check(validateAgentCall(base, state).status, "ACCEPTED");
+const acceptedBaseReceipt = validateAgentCall(base, state);
+check(acceptedBaseReceipt.status, "ACCEPTED");
+check(acceptedBaseReceipt.fixed_point_header_usage, "USED_WITH_GAPS");
+check(acceptedBaseReceipt.fixed_point_execution_header.criteria_count, 10);
+check(validateAgentCall({ ...base, fixed_point_execution_header: undefined }, state).status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING");
+const noAttemptHeader = makeExecutionHeader();
+noAttemptHeader.criteria[7].attempt_ref = "";
+check(validateAgentCall({ ...base, fixed_point_execution_header: noAttemptHeader }, state).status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED");
 const logIncident = {
   source_endpoint: "/admin/api/logs",
   material: true,
@@ -146,6 +195,8 @@ check(deriveSelfGoal({ ...derivedSpec, material_delta: false }, state).status, "
 check(deriveSelfGoal({ ...derivedSpec, scope: ["prod"] }, state).status, "BLOCKED_CHILD_SCOPE_EXPANSION");
 
 check(validateGlobalContractGate(state.global_contract_entry, state, "ENTRY").status, "PASS_GLOBAL_CONTRACT_GATE");
+check(validateGlobalContractGate({ ...state.global_contract_entry, fixed_point_execution_header: undefined }, state, "ENTRY").status,
+  "BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING");
 
 check(validateGlobalContractGate({ ...state.global_contract_entry, child_contract: { ...childContract, root_goal_id: "RG-X" } }, state, "ENTRY").status, "BLOCKED_CHILD_ROOT_GOAL_CHANGE");
 check(validateGlobalContractGate({ ...state.global_contract_entry, tlc23_horn_gate: { ...tlc23HornPass, status: "UNKNOWN" } }, state, "ENTRY").status, "BLOCKED_GLOBAL_CONTRACT_TLC23_HORN_GATE");
@@ -167,6 +218,7 @@ const exitGate = {
   promotion_requested: false,
   fixed_point: false,
   next_cursor: "SAME_HEAD_CI",
+  fixed_point_execution_header: makeExecutionHeader(),
 };
 check(validateGlobalContractGate(exitGate, state, "EXIT").status, "PASS_GLOBAL_CONTRACT_GATE");
 check(validateGlobalContractGate({ ...exitGate, fixed_point: true, aggregate_fixed_point_pass: false }, state, "EXIT").status, "BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
@@ -240,7 +292,7 @@ check(validateAgentCall({ ...nested, depth: 0 }, state).status, "BLOCKED_INVALID
 check(validateAgentCall({ ...nested, to: "sol" }, state).status, "BLOCKED_SELF_DELEGATION");
 check(validateAgentCall({ ...nested, to: "hermes", requested_role: "EXECUTOR", write_requested: true }, state).status, "BLOCKED_NESTED_WRITE_WITHOUT_HANDOFF");
 check(validateAgentCall(nested, state).status, "ACCEPTED");
-check(validateAgentCall({ ...nested, call_id: "C-3", parent_call_id: "C-2", depth: 2, from: "debugger", to: "reviewer" }, state).status, "ACCEPTED");
+check(validateAgentCall({ ...nested, call_id: "C-3", parent_call_id: "C-2", depth: 2, from: "debugger", to: "reviewer", fixed_point_execution_header: makeExecutionHeader("debugger") }, state).status, "ACCEPTED");
 
 check(validateDelegationGate(state).status, "NOT_APPLICABLE_NO_DELEGABLE_FRONTIER");
 const frontierState = {
@@ -290,6 +342,7 @@ const subSubCall = validateAgentCall({
   from: "debugger",
   to: "reviewer",
   requested_role: "REVIEWER",
+  fixed_point_execution_header: makeExecutionHeader("debugger"),
 }, state);
 const subSubResult = validateDelegationResult({
   call_id: subSubCall.call_id,

@@ -32,6 +32,14 @@ O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não v
 
 - **Protocolo canônico aditivo:** [references/FOCUS-DELEGACAO-TELEMETRIA.md](references/FOCUS-DELEGACAO-TELEMETRIA.md). Reusa Edge UIAutomation + MCP Remote Desktop Commander, mede transições/foco/oi-apagar sem enviar, aceita envio real apenas com autorização e lê ACK por Browser. A Sala de Controle/Gaveta da Forja mostra somente eventos com readback e distingue ações UIA, cliques físicos não medidos e conexões MCP não comprovadas. Servidor fora da Casa exibe NO_LOCAL_SOURCE. Não criar gateway ou skill paralelos.
 
+## 🍒 Histórico canônico de builds Desktop (25/10/2026)
+
+- **Único owner:** o Desktop existente em apps/modulos/Bolt/source. **Receita viva:** apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs e **livro de builds:** apps/modulos/Bolt/source/resources/build-history.json. O mesmo Cockpit exibe o cartão Builders CentralDark, contagem de builds PASS, versão, horário Bahia, hash, commit e botão Rebuild Windows; sem segundo painel, executor ou Skill Mãe.
+- **Primeiro builder registrado:** 1.0.0, commit 9051151, instalador + exe gerados no Windows Casa em 25/10/2026, BUILD_RC=0 e smoke local "Server build loaded successfully". A prova, hashes e ressalvas estão em docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-PRIMEIRO-BUILDER-CENTRALDARK.md. Primeira entrada **deste catálogo**, não afirmar primeiro build absoluto sem inventário anterior.
+- **Contador/versão:** n=quantidade de entradas com build_status PASS; avança 1.0.0 → 1.0.1 → 1.0.2 apenas após build exit 0, artefatos novos e SHA256 válido. Sem build válido, não contar nem avançar. Smoke, instalação externa e deploy são status separados; BUILD_PASS != APP_EXECUTED != DEPLOYED.
+- **Rebuild autorizado:** confirmação do usuário + renderer Electron validado + worktree limpa e exclusiva + pnpm install --frozen-lockfile --prod=false com NODE_ENV=development + comando original pnpm centraldark:build:win; rollback da versão em caso de falha; sem push/merge/deploy automático. Abas web sem bridge mostram indisponibilidade, não fingem execução.
+- **Aprendizado imutável:** anexar evidências por versão e manter última data de sucesso, sem apagar recibos/IDs. Não transformar um único smoke em Fixed Point global. PR histórica é trilha, não merge nem instalação. Se o Cockpit instalado ainda não contiver o delta, SOURCE_READY != UI_DEPLOYED.
+
 ## Entrada canonica do catalogo integrado (2026-10-24)
 
 - Catálogo canônico descritivo: [catalogo/CATALOGO.md](catalogo/CATALOGO.md).
