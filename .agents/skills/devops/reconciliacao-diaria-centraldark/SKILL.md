@@ -132,7 +132,7 @@ Contrato: `ONE_HEART=true`; `HUD_CURRENT_OWNER=CentralDarkUnifiedHud`;
 
 Job registrado em 2026-09-23: `f052f0dc37ed`, nome "Reconciliacao Diaria
 CentralDark", schedule `0 8 * * *`, `--skill reconciliacao-diaria-centraldark`,
-workdir `E:\CentralDark\CentralDark`, `--deliver local`. Comando usado:
+workdir `K:\`, `--deliver local`. Comando usado:
 `hermes cron create "0 8 * * *" [prompt] --name ... --skill ... --workdir ... --deliver local`
 (atenção: o prompt posicional tem que vir logo depois do schedule, ANTES das
 flags — passar as flags primeiro faz o parser do Hermes rejeitar o prompt

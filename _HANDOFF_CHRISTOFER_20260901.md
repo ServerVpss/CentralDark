@@ -52,7 +52,7 @@ CURRENT_CANDIDATES: NÃO_FILTADO_AGORA (a triagem útil vs lixo não foi feita p
 FORMAT_VERIFIED: NÃO (sem acesso ao conteúdo para verificar formato da mineração)
 
 CURRENT_FACTS:
-  - repo local: E:\CentralDark\Pivete\CentralDark
+  - repo local: K:\
   - branch atual: pivete/work/pem-drift-rootcause
   - HEAD local: 7059ac3ef3c86fb83ebe33f026c0330877a996ef
   - dirty: M scripts/health_check.sh, ?? scripts/.hermes-tmp.fBUinD
@@ -99,11 +99,11 @@ OBSERVED_EVIDENCE:
   - outros serviços (:8099, :8787, :8797, :8080, :8090): sem resposta no probe curto — status pontual, não permanente
   - nota: os outros serviços foram Pontual (medição curta sem resposta); pode ser indisponível, pode ser configuração de probe — sem afirmar permanente
   - python funcional: /c/Users/danda/AppData/Local/hermes/hermes-agent/venv/Scripts/python (venv Hermes); python3 ausente
-  - classificacao_rastro_anterior (execução anterior, sem reprocessar agora): rastro_classificacao_summary.json em E:\CentralDark\Pivete\_RECONCILIADO\ com 14.252 itens, 8.790 SHAs únicos, 2.875 grupos duplicados, 8.337 linhas DUPLICATE, 62 SENSITIVE_QUARANTINE, 5.877 HISTORICAL_REFERENCE, CURRENT_CANDIDATE=0; hash SHA256 do summary: 514d4ce7ae4cd2a07c26fe910f1efa52122f6000da181d07c464e48716da2483
+  - classificacao_rastro_anterior (execução anterior, sem reprocessar agora): rastro_classificacao_summary.json em K:\_RECONCILIADO\ com 14.252 itens, 8.790 SHAs únicos, 2.875 grupos duplicados, 8.337 linhas DUPLICATE, 62 SENSITIVE_QUARANTINE, 5.877 HISTORICAL_REFERENCE, CURRENT_CANDIDATE=0; hash SHA256 do summary: 514d4ce7ae4cd2a07c26fe910f1efa52122f6000da181d07c464e48716da2483
   - OBS: esse número é proveniência de execução anterior; se usado, registrado como HISTORICAL ou revalidado, não CURRENT_LIVE
 
 SUPERSEDED_HISTORY:
-  - CENTRALDARK_HANDOFF.md (E:\CentralDark\Pivete\CentralDark\, data 2026-08-28): afirmações de Notepad LocalState (2 janelas, 30 abas, UNSAVED_TABS detectados, WINDOWS_FOUND=true, FORMAT_VERIFIED=SIM) — INVALIDADAS porque Notepad LocalState não existe mais nesse ambiente (mudança real de ambiente); "NENHUMA CONTRADIÇÃO ENCONTRADA" também invalidado → rebaixado para SUPERSEDED_HISTORY (contradição encontrada: Notepad LocalState não existe mais)
+  - CENTRALDARK_HANDOFF.md (K:\, data 2026-08-28): afirmações de Notepad LocalState (2 janelas, 30 abas, UNSAVED_TABS detectados, WINDOWS_FOUND=true, FORMAT_VERIFIED=SIM) — INVALIDADAS porque Notepad LocalState não existe mais nesse ambiente (mudança real de ambiente); "NENHUMA CONTRADIÇÃO ENCONTRADA" também invalidado → rebaixado para SUPERSEDED_HISTORY (contradição encontrada: Notepad LocalState não existe mais)
   - Notepad LocalState: handoff anterior (2026-08-28) afirma existia (2 janelas, 30 abas); medição agora NAO_EXISTE → SUPERSEDED_HISTORY/UNKNOWN (mudança real de ambiente, não contradição lógica; o handoff anterior reflete estado de época, não estado atual)
   - Screenpipe :3030: registros intermediários citavam 403 em alguma passagem; medição agora 200 → mudança de runtime (pontual, não permanente; registrar com timestamp)
   - Classificação do rastro: números são proveniência de execução anterior (provavelmente histórica); não reprocessado neste ciclo → se usado, deve ser tratado como HISTORICAL ou revalidado, não CURRENT_LIVE

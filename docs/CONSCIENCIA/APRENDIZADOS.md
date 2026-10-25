@@ -1902,6 +1902,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 ### 170. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=L171A`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=171`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=L171`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-09
 - **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
@@ -2002,6 +2004,8 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171A`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L172A`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
 
+### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L172`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CentralDark 2026-10-12: bloqueios externos de ferramenta nao sao observaveis pelo MCP interno; GitHub main e Casa via Remote Desktop Commander/SSH operaram como rotas autorizadas. Commit principal do scanner/pulso unificado 68b3fb235e6ba1ba9c801982439a1782fd606b21; patch de classificacao MCP 9f516fbe7842aa56b2be93a7f5021208cfc06b16. Build e deploy sao coisas distintas.
@@ -2019,6 +2023,13 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L172`; `PREV_GLOBAL_UID=L171`; `NEXT_GLOBAL_UID=L173`; `LEGACY_LEARNING_NUMBER=172`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** regra
+- **Data:** 2026-10-12
+- **Contexto:** Sessão CentralDark 2026-10-12→13: CHEFE conduziu 2 frentes MCP+Rebuilder e reconciliador, exigiu tentativas em rotas autorizadas Casa/SSH/MCP/GitHub, conferiu ferramentas, erros, SHA e testes, pediu pacote de replay integral, anunciou execução externa no VS Code, observou o próprio comportamento do agente, pediu repetição integral em ordem alfabética e nomeou o ciclo Human-Guided Compounding Reflexion / Metacognição operacional induzida por contraprova. Texto original de 374 linhas foi entregue como registro histórico; ordem dos acontecimentos e provas devem sobreviver ao chat.
+- **Aprendizado:** ENSINO: PAPAGAIO_ON só quando o CHEFE pedir replay/ensino/auditoria/registro, reproduzindo integralmente fonte e ordem, com proveniência; PAPAGAIO_OFF na execução, relatando apenas delta e erros úteis. RECUPERAÇÃO: antes da próxima missão, ler owner APRENDIZADOS e memória/receita pertinentes; REUSE_BEFORE_CREATE, uma intenção, um owner, um writer. CICLO: intenção → inspeção de CURRENT/main → rotas autorizadas → menor delta → teste → contraprova → receipt → receita → aprendizado → reutilização com revalidação. CONTRAPROVA: DOCUMENTED!=EXECUTED, MERGED!=DEPLOYED, UNKNOWN!=PASS; código Bash pode ter Python embutido com falha de indentação; substituição JS com $' e $$ exige callback ou edição exata e teste funcional. MCP atualizado na main não foi provado no runtime (MCP_NATIVE_FILESET_NOT_APPROVED). Reconciliador instalado e --scan exit 0; scan parcial; pulso real e HAKAI permanecem pendentes. TERMOS: Reflexion, Experience Distillation, Compounding Engineering, Agent Improvement Flywheel são conceitos associados; 'Human-Guided Compounding Reflexion' e 'Recursive Reflective Experience Distillation' são nomes descritivos nossos, não endosso oficial da OpenAI/Anthropic. REGISTRADO!=CONSUMIDO; demonstrar consumo do comportamento em agente/runtimes com prova separada.
+
+<!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 ## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
 
 ### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
@@ -2200,6 +2211,10 @@ O pacote registra que o agente:
 ✅ Identificou diferenças entre erro e restrição de segurança.
 ✅ Atualizou o código do MCP na `main`.
 ✅ Registrou o aprendizado #171.
+✅ Investigou os bloqueios.  
+✅ Identificou diferenças entre erro e restrição de segurança.  
+✅ Atualizou o código do MCP na `main`.  
+✅ Registrou o aprendizado #171.  
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -2212,6 +2227,10 @@ O pacote registra que o agente:
 ✅ Conferiu o código por SHA.
 ✅ Executou a varredura.
 ✅ Validou o JSON único.
+✅ Reuniu inventário e pulso no mesmo script.  
+✅ Conferiu o código por SHA.  
+✅ Executou a varredura.  
+✅ Validou o JSON único.  
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -2465,6 +2484,7 @@ ONE_ORGANISM=true
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173A`; `PREV_GLOBAL_UID=L172A`; `NEXT_GLOBAL_UID=L174A`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=173`; `PREV_LEARNING_REF=172`; `NEXT_LEARNING_REF=174`.
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173`; `PREV_GLOBAL_UID=L172`; `NEXT_GLOBAL_UID=L174`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CHEFE executou de fato o ZIP v1 na Casa PowerShell → Segredo-VPS → VPS. Auditoria mostrou 21 verificações, 29 alterações rastreadas, HEAD antigo vs main, Git/SSH/bash -n/JSON/PULSE_PLAN PASS, scanner partial (4224 scripts, bounded_scan=6), MCP runtime e pulso real UNKNOWN, HAKAI bloqueado corretamente. No Windows, CHEFE provou original '👑🧠 COMPOUNDING ENGINEERING.txt'=49226 bytes SHA256 43a9c12a2e4e288b596d555672f91980e8aa8d4c736a9488a70e2455c70fb219, e PAPAGAIO IRMAO.txt=36755 bytes. Resumo menor não preserva original integral.
@@ -2474,6 +2494,7 @@ ONE_ORGANISM=true
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174A`; `PREV_GLOBAL_UID=L173A`; `NEXT_GLOBAL_UID=L175A`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=174`; `PREV_LEARNING_REF=173`; `NEXT_LEARNING_REF=175`.
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174`; `PREV_GLOBAL_UID=L173`; `NEXT_GLOBAL_UID=L175`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
 - **Contexto:** CHEFE executou V2 ZIP na Casa PowerShell → Segredo-VPS, com eventos INTENT PASS, RECOVER PASS, OBSERVE PASS, RECONCILE PASS, VERIFY PASS e EXECUTE BLOCKED após 6 eventos, embora reconciliador já preservasse replay. No runtime VPS, código verificado: linha 376 if isinstance(old.get('replay'), dict):; linha 377 tem espaço inicial antes de v['replay']=old['replay']. ZIP V2 grep ^v exigia o v na coluna zero e acusava falso bloqueio. Usuário exige mesma organização de bolinhas e nomes de estado PASS PARTIAL UNKNOWN BLOCKED NOT_ACTIVE.
@@ -2483,6 +2504,7 @@ ONE_ORGANISM=true
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175A`; `PREV_GLOBAL_UID=L174A`; `NEXT_GLOBAL_UID=L176A`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=175`; `PREV_LEARNING_REF=174`; `NEXT_LEARNING_REF=176`.
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175`; `PREV_GLOBAL_UID=L174`; `NEXT_GLOBAL_UID=L176`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** comportamento operacional / memória procedural / segurança de conhecimento
 - **Data:** 2026-10-13
 - **Origem:** sequência real de diálogos e imagens do CHEFE sobre oito workflows ausentes da `main`, originais recuperados pelo histórico, falhas/reversões, janelas GPT em paralelo, experiência acumulativa, risco de papagaio falador e A–Z. Esta entrada descreve **método e limites**; não é prova de deploy, segredo nem benchmark.
@@ -2501,6 +2523,7 @@ ONE_ORGANISM=true
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176A`; `PREV_GLOBAL_UID=L175A`; `NEXT_GLOBAL_UID=L177A`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=176`; `PREV_LEARNING_REF=175`; `NEXT_LEARNING_REF=177`.
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176`; `PREV_GLOBAL_UID=L175`; `NEXT_GLOBAL_UID=L177`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Categoria:** descoberta metacognitiva do CHEFE / engenharia de critérios / remoção de burocracia excedente.
 - **Cena observada:** ao cumprir a ordem do CHEFE de registrar o aprendizado #175, o agente escolheu owners existentes, definiu dez checks de estrutura, atualizou seis arquivos e comunicou `10/10 PASS`. Posteriormente autodepreciou o resultado, dizendo que teria seguido melhor critérios próprios do que o objetivo humano. O CHEFE detectou que **não houve autorização para chamar os dez checks de insatisfatórios**: critérios escolhidos pela IA podem ser **perfeitamente adequados ao seu desejo**, desde que o desejo permaneça anexado e o resultado seja eficaz. O erro adicional foi tratar tarefas comuns (o caso dos oito emojis) com burocracia, alternativas e cautela excedentes, em vez de adaptar o mesmo motor eficiente.
@@ -2516,6 +2539,7 @@ ONE_ORGANISM=true
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178A`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=177`; `PREV_LEARNING_REF=176`; `NEXT_LEARNING_REF=178`.
 
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177`; `PREV_GLOBAL_UID=L176`; `NEXT_GLOBAL_UID=L178`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Categoria:** continuidade de intenção / orquestração multimodal humana / memória procedural / gestão de conhecimento / economia operacional.
 - **INTENÇÃO do CHEFE:** registrar o aprendizado desta sessão no owner que já existe e **não perder o fio original de `scripts/centraldark-inventory-reconcile.sh`** enquanto conversa sobre Papagaio, Hermes tipado, múltiplas janelas de GPT-6, VS Code, GitHub, Unigram, Telegram, conhecimento da humanidade e cognição animal. O CHEFE recuperou o assunto técnico com a âncora curta **"nosso SH"** depois de vários desvios criativos.
@@ -2531,6 +2555,7 @@ ONE_ORGANISM=true
 ### 178. Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178A`; `PREV_GLOBAL_UID=L177A`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=178`; `PREV_LEARNING_REF=177`; `NEXT_LEARNING_REF=179`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178`; `PREV_GLOBAL_UID=L177`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Categoria:** modo operacional / execução sem microburocracia / critérios autodefinidos / satisfação do CHEFE.
 - **Origem:** CHEFE determinou: “REGISTRA! O MODO OPERACIONAL DA CENTRAL DARK!”, após provar que o agente reproduz melhor resultados quando transforma o desejo humano em critérios técnicos próprios, verificáveis e proporcionais.
@@ -2546,6 +2571,7 @@ ONE_ORGANISM=true
 ### 179. Aceite 100% do CHEFE — gramática humana, Auréola e cores proporcionais
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178A`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=179`; `PREV_LEARNING_REF=178`; `NEXT_LEARNING_REF=180`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L179`; `PREV_GLOBAL_UID=L178`; `NEXT_GLOBAL_UID=L180`; `LEGACY_LEARNING_NUMBER=179`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13
 - **Cena concreta:** Na sessão de 13/10, o CHEFE declarou 100% de satisfação com a gramática e a reconciliação de duas janelas (commit 5974510). Conquista comprovada aparece primeiro; amarelo comunica qual ação falta; vermelho, apenas falha medida e localizada; cinza, item fora da missão. Baianês, humor e imagem bíblica são recursos expressivos contextuais: escolher significado antes do emoji, não vestir formulário genérico.
 - **Regra reutilizável:** ENTENDER_ANTES_DE_FALAR -> REFERENTE -> FATO -> SIGNIFICADO -> ACAO_SE_HOUVER -> CHEFE_SATISFEITO_STOP. O contrato antigo da Auréola prescreve formato fixo; o padrão de 13/10 é adaptativo. Harmonizar alcance por consumidor sem apagar a tradição. A satisfação fecha o escopo humano, não declara todo runtime verde.
@@ -2879,6 +2905,7 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 ### 191. Integração A–Z da sessão — gancho mental, Whis e conformidade com o desejo do CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L191`; `PREV_GLOBAL_UID=L190`; `NEXT_GLOBAL_UID=L192`; `LEGACY_LEARNING_NUMBER=191`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=191`; `PREV_LEARNING_REF=190`; `NEXT_LEARNING_REF=192`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L191`; `PREV_GLOBAL_UID=L190`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=191`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Data:** 2026-10-13. **Fonte:** diálogo, prints e comparações apresentados pelo CHEFE nesta sessão. **Escopo:** aprendizado humano-operacional; não é benchmark de inteligência, medição de eficácia universal, deploy ou novo cérebro.
 - **Relação com o existente:** #171–#190 já registram metacognição, reuso, reconciliação de janelas, gramática, contraprova, memória, Instinto Superior, limpeza e gratidão. Este registro liga esses eixos aos novos ganchos relacionais. Não inventar 26 números novos nem reabrir aceites.
 - **Índice integral A–Z:**
@@ -3248,6 +3275,65 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
 - **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
 
+<!-- CANARY_RECONCILIATION_PR1895_20261022: provisional branch lessons 211-214 remapped to canonical 218-221, while main 211-217 and original marker IDs are preserved. -->
+<!-- CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+### 218. Linguagem profissional brasileira do Harness — humano na tela, diagnóstico nos detalhes
+- **Categoria:** regra + correção de entendimento da intenção do CHEFE.
+- **Data:** 2026-10-21.
+- **Autoridade:** SEGREDO/CHEFE, após imagem do Mermaid `CHEFE → CentralDark → JARVIS/Hermes/Harness → estado operacional único → português natural/detalhes técnicos`.
+- **Erro aprendido:** exibir `áudio não comprovado`, `UNKNOWN` ou `receipt não consultado` como mensagem principal de um programa transforma linguagem de produto em log; recurso opcional desligado não é falha.
+- **Cristal:** `ESTADO_REAL → (TEXTO_PT_BR_ORIENTADO_A_ACAO, DETALHE_TECNICO_SOB_DEMANDA)`. Mesma realidade operacional, duas apresentações; nenhuma segunda memória, Harness, Hermes ou Cockpit.
+- **Exemplos condicionais:** `MIC_DISABLED → Ativar microfone`; `AUDIO_CAPTURE_ACTIVE → Ouvindo...`; `CONNECTION_FAILED → Conexão perdida · Reconectar`; `QUEUE_EMPTY` após leitura → `Nenhuma tarefa no momento`; fila não lida → `Consultar atividades`; `TASK_SUCCESS` provado → `Concluído`.
+- **Papéis sem renomeação técnica:** CHEFE é autoridade; JARVIS/SOL interpreta e coordena; Harness organiza; Hermes executa; Cockpit oferece superfície humana; Reality Judge e receipts preservam contraprova.
+- **Idioma:** textos estáticos simples, acessíveis e universais em pt-BR; JARVIS pode conversar com baianês espontâneo quando contextual.
+- **Travas:** `OFF != FAILURE`, `UNKNOWN != PASS`, `UI_RENDERED != EXECUTION_PASS` e `MERGED != DEPLOYED`. Não confundir animação da esfera com áudio ativo.
+- **Mermaids e mapa cognitivo:** [[MAPA-DO-CEREBRO]] seção `Linguagem de produto do Harness`; guia [[GUIA-COMUNICACAO-SEGREDO-CHEFE]]; memória de proveniência [[LEMBRANCAS]].
+- **Bibliografia oficial conferida:** GOV.BR linguagem simples; Microsoft Windows escrita e controles. Links no mapa.
+- **Owner/PR equivalente:** [#1895](https://github.com/ServerVpss/CentralDark/pull/1895), mesma superfície visual e mesmo owner de conhecimento. Não há novo app/scheduler/agente.
+- **CURRENT:** regra documentada em branch; mudanças no executável, build, sincronização com Obsidian Casa e deploy permanecem UNKNOWN até readback.
+- **NEXT_CURSOR:** `READBACK_DOCS_1895 → CHECKS_HEAD_EXATO → UI_OWNER_MICROCOPY → TESTES_DE_ESTADO_E_ACESSIBILIDADE → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+<!-- /CENTRALDARK_LEARNING_211_UX_PTBR_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+### 219. Observabilidade do Cockpit pelo browser conectado sem dependência de Desktop Commander
+- **Categoria:** descoberta de rota / correção de comportamento.
+- **Data:** 2026-10-21.
+- **Erro:** tratar status de um dispositivo Desktop Commander como condição necessária para observar o Cockpit.
+- **Prova:** conexão Browser listou dez abas, incluindo `Cockpit CentralDark — Sala de Controle` (`127.0.0.1:8080/sala-controle`), e `get_tab_context` retornou DOM textual, botões, abas, comandos da moldura, painéis e seus estados. Simultaneamente a ponte Tailscale reportou VPS/Casa online. **Nenhuma chamada Desktop Commander foi necessária para ler a UI aberta**.
+- **Cristal operacional:** `BROWSER_TABS_LISTED=true`; `CONNECTED_COCKPIT_TAB_CONTEXT_READ=true`; `DOM_CONTROLS_OBSERVABLE=true`; `DESKTOP_COMMANDER_PREREQUISITE_FOR_COCKPIT_DOM=false`. Preferir `Browser.list_tabs → Browser.get_tab_context(aba alvo) → comparar com owners do GitHub → receipt`; somente escalar para outra capacidade se o efeito buscado exceder observação de DOM. Listar abas ≠ comprovar execução do Windows; **comparações paralelas completas, captura visual nativa, edição da UI e ações remotas não foram demonstradas por essas duas leituras**.
+- **NEXT_CURSOR:** `BROWSER_CONNECTED_CHECK → TAB_CONTEXT → SOURCE_OWNER → READBACK → OPTIONAL_NATIVE_CHECK`.
+<!-- /CENTRALDARK_LEARNING_212_BROWSER_TABS_20261021 -->
+
+<!-- CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+### 220. Design Center: sete identidades distintas, quatro peles ativas e três prévias comparáveis sem fusão
+- **Categoria:** correção de interpretação + experimento visual controlado.
+- **Data:** 2026-10-21.
+- **Erro:** interpretar violeta/índigo de aplicativo de referência como nova paleta oficial do Cockpit. **Correção do CHEFE:** cores e design continuam os oficiais; referência externa é só ergonomia/funcionalidades.
+- **Prova de source:** `DesignCenter.tsx` contém `PeleCockpit = "default" | "ouro" | "ops" | "esmeralda"`, preferência `centraldark.cockpit.pele`; `apps/modulos/Bolt/source/app/lib/stores/theme.ts` mantém tema `emerald`, `operational`, `forge` no Shell; `app/styles/variables.scss` define seus tokens.
+- **Delta autorizado:** no PR #1895 a aba `Design Center → Temas globais · 3 prévias` mostra cartões lado a lado com tokens oficiais `emerald`, `operational`, `forge`, sem instalar/aplicar tema nem tocar no seletor de quatro peles e sem forçar fusão.
+- **Invariantes:** `FOUR_COCKPIT_SKINS_PRESERVED=true` é critério de código; `THREE_GLOBAL_THEME_PREVIEWS_SEPARATE=true` é critério de código; `APPLIED_TO_LIVE_CASA=UNKNOWN`, `MERGE_DECISION=PENDING_CHEFE`. Token em mockup não significa integração de theme runtime; build, navegador da Casa e persistência exigem medição.
+- **OWNER:** `apps/instinto-superior/src/components/central/DesignCenter.tsx`; regras `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`. Nenhuma mudança em `CockpitShell.tsx`, CSS global, processos ou segredos.
+- **NEXT_CURSOR:** `READBACK_COMMIT → BUILD_SAME_SHA → LIVE_DESIGN_CENTER → FOUR_SKINS_REGRESSION → CHEFE_COMPARE → DECIDE_MERGE_OR_KEEP`.
+<!-- /CENTRALDARK_LEARNING_213_GLOBAL_THEME_PREVIEWS_20261021 -->
+
+
+<!-- CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
+### 221. Jukebox A–Z / J001–J301 — capacidade indexada, consumível por fonte, sem segunda arquitetura
+- **Categoria:** descoberta ampliada / continuidade da sessão / roteamento de ferramentas.
+- **Data:** 2026-10-21.
+- **Intenção do CHEFE:** registro anterior #212 era curto, faltavam rotas alternativas, owners, fonte dos dados, distinções de prova, ferramentas existentes e um índice navegável completo por ordem alfabética **e** numérica. Criar uma Jukebox de navegação com reuso integral do cérebro existente, não outra IA/Hermes/MCP.
+- **Owner:** `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` (porta de entrada) e `docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md` (snapshot derivado de 301 fichas). Reusar `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`, `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `DesignCenter.tsx`, `apps/instinto-superior/config/harness-module-registry.json`, e fonte única do dispatcher `mcp_admin_catalog`. Não tocar no runtime para criar índice.
+- **Medição de catálogo nesta sessão:** `mcp_admin_catalog` retornou **141 nomes de ferramentas e 13 rotas**; `harness-module-registry.json` enumerou **18 módulos**; `CockpitShell.tsx` **27 abas**; `skill_listar` expôs **4 skills de `skills/`** — não representa inventário completo `.agents/skills/` nem 995 skills carregadas na sessão atual. As 301 fichas misturam **classes diferentes** (incluindo os botões e decisões); não somar como 301 ferramentas executáveis.
+- **Leitura real das abas:** `Browser.list_tabs` mostrou a aba `127.0.0.1:8080/sala-controle`; `Browser.get_tab_context` retornou árvore textual do DOM (menus, botões, abas, estados). Procedimento `BROWSER_TAB → GET_CONTEXT → SOURCE_OWNER → COMPARE → RECEIPT` elimina Desktop Commander como **pré-requisito da inspeção da UI**. A falta de Desktop Commander não impede a leitura da aba conectada. Captura visual ou interações que precisem de comando no Windows exigem prova distinta.
+- **Descoberta vs execução:** nome no MCP (`CATALOGED`) != schema invocado (`CALLED`) != alteração confirmada (`EFFECT_READBACK`). `RDC_DESKTOP_COMMANDER` pode continuar no catálogo legado; não deve ser pressuposto necessário. `TAILSCALE_PRIVATE_ROUTE` e ponte OAuth deram HTTP 200 com Casa online, enquanto `tailscale_status` da API administrativa permaneceu HTTP 401 — dois planos separados.
+- **Identidade visual mantida:** quatro peles do Cockpit (`default`, `ouro`, `ops`, `esmeralda`) e três prévias globais independentes (`emerald`, `operational`, `forge`) permanecem separadas até decisão explícita do CHEFE. Paleta violeta inferida da imagem Alethe está revogada.
+- **Fronteiras:** `SOURCE != LOADED`, `CATALOGED != EXECUTED`, `DOM != WIN32`, `BRIDGE_ONLINE != FILES_ACCESSIBLE`, `WEB_BUILD != WINDOWS_APP_BUILD`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`. As ferramentas de cofre são apenas identificadas por nome no inventário, sem ler ou registrar conteúdo.
+- **Critério de replay:** recuperar a ficha `JNNN`; identificar owner atual, descobrir rota permitida por capacidade e obter schema; avaliar evidência temporal, autorização, mínimo delta, ação e contraprova; registrar receipt **no mesmo owner**; atualizar snapshot derivado sem inventar duplicatas, números de missão ou arquivos secret.
+- **Proof:** Jukebox numerada 001–301 e índice A–Z criados e relidos na branch da PR #1895; todas as entradas possuem link de navegação. A integração visual na Casa/Obsidian, a execução de qualquer uma das 141 ferramentas e a cobertura completa do catálogo de skills permanecem `UNKNOWN` até testes causais.
+- **Gate obrigatório (21/10):** `scripts/trigger-fabric/verify_jukebox.py` foi ligado ao verificador canônico `scripts/trigger-fabric/verify_repo_contract.py`, já consumido por `.github/workflows/porta-de-entrada.yml`. Corrigidas **33 posições alfabéticas** da primeira versão; os IDs J001–J301 e seus títulos permanecem congelados pelo fingerprint `83f1dfa563d66705`. Conferir em PR/push: ordem A–Z, sequência J001–JNNN, duplicatas, links e títulos; se falhar, gate fail-closed. Adição válida inicia em J302 sem mudar antigos. `GATE_WIRED_IN_SOURCE=PASS`; `CI_SAME_HEAD=QUEUED` na verificação do commit `e158808fc45397cc7fccbb2efb71a4115f5bfca1`; `PRODUCTION=UNKNOWN`. Sem autopush, renumeração ou workflow novo.
+- **NEXT_CURSOR:** `JUKEBOX_AZ → JNNN → OWNER_CURRENT → CAPABILITY_SCHEMA → RUNTIME_PROOF → RECIPE_REUSE → DELTA → CONTRAPROVA → RECEIPT → ATUALIZAR_JUKEBOX`.
+<!-- /CENTRALDARK_LEARNING_214_JUKEBOX_20261021 -->
 ### 218. RED #003: PowerShell corrigido, workspace Casa sem checkout Git
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L218`; `PREV_GLOBAL_UID=L217`; `NEXT_GLOBAL_UID=L219`; `LEGACY_LEARNING_NUMBER=218`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=218`; `PREV_LEARNING_REF=217`; `NEXT_LEARNING_REF=219`.
@@ -3269,8 +3355,33 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
 - **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
 
+### 22/10/2026 — ROTA_CASA_JEA_WINRM: Harness VPS → Casa fechado com JEA
+
+- **O que funcionou:** reusar o WinRM 5985, que já estava vivo, fora da LAN (regra só nos perfis Domain e Private) e com autenticação Negotiate. Em vez de criar um executor novo, foi acrescentado um endpoint JEA (allowlist e transcrição) e uma skill no Hermes existente.
+- **Armadilhas medidas:**
+  - Funções definidas no JEA não carregam módulo sozinhas (faltava o `CimCmdlets` em `ModulesToImport`).
+  - O `Select-Object` do JEA é um proxy restrito.
+  - String com propriedades extras do PowerShell chega como `None` no pypsrp: é preciso converter para `[string]`.
+  - O `hermes` da VPS é um wrapper shell, então o Python certo vem do runtime em `/root/.hermes/tools`.
+  - Uma função de shell chamada `cut` sobrescreve o comando do sistema e gera prova falsa.
+- **Antes de mexer num processo, procure quem o ressuscita:** o Cockpit 8080 é mantido pela tarefa `CentralDark-Cockpit-8080`, um watchdog de 1 minuto. Religar "do mesmo jeito" é chamar essa tarefa, não subir o node à mão.
+- **Gates:** `PROVEN 🔒` e sessão ao vivo são camadas separadas, e falha do sensor não apaga fato provado. `UNKNOWN != PASS` e `MERGED != DEPLOYED`. Credencial entra só como caminho.
+- **NEXT_CURSOR:** ver a seção 22 do owner `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`.
+
 ### 220. GitHub-first sem runner obrigatório
 - **Categoria:** atalho
 - **Data:** 2026-10-24
 - **Contexto:** A tentativa inicial de criar branch pelo atalho que também tenta abrir PR retornou HTTP 422 no endpoint /pulls. O caminho de commit multi-arquivo da CentralDark conseguiu criar a branch, publicar o commit e, separadamente, abrir o PR.
 - **Aprendizado:** Para mudanças documentais isoladas, reutilizar o owner canônico e usar github_commit com branch + createBranchFrom=main; fazer readback antes de abrir PR separadamente. GitHub Contents API permite edição/commit sem runner. Não tratar PR aberto como merge ou deploy. Para SSH, exigir validação de host e nunca desabilitar StrictHostKeyChecking.
+
+### 222. KAIZEN/LOOP ÚNICO — autorização persistente já registrada; verificar PRs e CURRENT sem re-perguntar
+- **Categoria:** regra
+- **Data:** 2026-10-24
+- **Contexto:** Em 2026-10-24 CHEFE pediu verificar PR #1932/#1933 e fluxo mestre KAIZEN, recuperar cabeça externalizada e persistir regra já canônica. MCP GitHub mostrou ambos PRs abertos: #1932 head 25046d30 (docs GitHub-first sem runner); #1933 head f985712a (classificação somente-leitura e auditoria semântica). LEIA-ME-IA.md, docs/CONSCIENCIA/02-PERMISSOES.md e docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md §6.0 já registram intenção/autorização e loop único.
+- **Aprendizado:** Não criar nova lei ou memória paralela. Recuperar INTENT_ID/GOAL/OWNER/MAIN_SHA/PR_HEAD/ACTIVE_WRITER/STATUS/RECEIPT/NEXT_CURSOR do owner e medir CURRENT; executar ações dentro da intenção e delegação autenticada sem pedir permissão repetida. Um escritor por escopo; TESTE→CONTRAPROVA→CI mesmo SHA→merge somente elegível→readback main→runtime→receipt→NEXT_CURSOR. PR aberto não prova merge/deploy; testes declarados no PR não substituem readback. Ações sensíveis continuam submetidas aos gates reais aplicáveis.
+
+### 223. UI pública CentralDark: separar rota 25808 da SSR do cockpit 25812
+- **Categoria:** regra
+- **Data:** 2026-10-24
+- **Contexto:** Na verificação de 2026-10-24, o Caddyfile vivo aponta ui.centralldark.com e centralldark.com/app.centralldark.com para 127.0.0.1:25808. A unit centraldark-aionui-webui.service define AIONUI_PORT=25808; /proc/net/tcp mostra listener 0.0.0.0:64D0 (25808). Já admin.centralldark.com encaminha o fallback para 127.0.0.1:25812, da unit centraldark-instinto-superior-web.service. A sonda HTTP local ficou bloqueada pela confirmação administrativa do executor; a resposta externa da UI não foi comprovada.
+- **Aprendizado:** Ao diagnosticar a UI, usar 25808 como backend configurado e escutando para ui.centralldark.com / centralldark.com / app.centralldark.com. Tratar admin.centralldark.com:25812 como rota SSR distinta até prova de identidade de build/artefato. Não inferir indisponibilidade global por uma porta ou probe isolado; distinguir configuração, LISTEN e resposta HTTP. Não declarar a UI funcional externamente sem teste HTTP autorizado.

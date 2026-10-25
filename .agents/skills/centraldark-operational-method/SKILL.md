@@ -8,6 +8,39 @@ oracle_review_on_change: true
 
 # METODO OPERACIONAL CENTRALDARK
 
+## Regra canônica de identidade do Remote (2026-10-24)
+
+O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
+
+## Entrada canonica do catalogo integrado (2026-10-24)
+
+- Catálogo canônico descritivo: [catalogo/CATALOGO.md](catalogo/CATALOGO.md).
+- Índice navegável por intenção: [catalogo/INDICE-PESQUISA.md](catalogo/INDICE-PESQUISA.md).
+- **Inventário vivo** com todos os arquivos, datas de criação, modificação, referências e SHA-256: [catalogo/ARQUIVOS-VIVOS.json](catalogo/ARQUIVOS-VIVOS.json) + [catalogo/INDICE-VIVO.md](catalogo/INDICE-VIVO.md). O arquivo [catalogo/ARQUIVOS.json](catalogo/ARQUIVOS.json) é apenas o **snapshot histórico da importação inicial**.
+- **Autocura e atualização recursiva com prova:** [references/AUTO-MELHORIA-COM-PROVA.md](references/AUTO-MELHORIA-COM-PROVA.md). Atualizador único: `scripts/atualizar-catalogo-self-healing.ps1`; Agendador Windows `CentralDark-Skill-Catalogo-Autocura`, a cada 2 minutos com usuário da Casa conectado.
+- **Regra de escrita:** respeitar [https://agentskills.io/specification](https://agentskills.io/specification) e [manual Hermes Skills](https://hermes-agent.nousresearch.com/docs/user-guide/features/skills). Explicações, mudanças e aprendizados em **português**; manter termos técnicos quando necessários. Para cada modificação registrar `por_que_fazer`, `por_que_nao_fazer_outra_coisa`, `por_que_usar`, `por_que_modificar`, `o_que_mudou`, `prova`, `contraprova`, data/hora e referência.
+- **Promoção de prova real:** `scripts/registrar-prova-hermes-casa.ps1` confirma DONE + execução completada + resultado no destino e gera recibo; `atualizar-catalogo-self-healing.ps1` acrescenta o aprendizado validado a esta skill em bloco delimitado, sem remover o método já comprovado.
+- Pesquisa: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/pesquisar-catalogo.ps1 -Termo kanban`.
+- Uma entrada canonica e modulos especializados reutilizados, mantendo originais por compatibilidade.
+- **HANDOFF ENTRE AGENTES E CONTAS (CENTRALDARK-REMOTE, 24/10/2026):** ler [references/HANDOFF-CENTRALDARK-REMOTE-20261024.md](references/HANDOFF-CENTRALDARK-REMOTE-20261024.md) antes de retomar a migracao/pareamento Remote. Reaproveitar plano e provas, consultar estado vivo do cartao `t_5b386368`, nao competir com worker, nao confundir build, health 200 ou output PowerShell enorme com conexao E2E. Intencao unica do CHEFE, contas independentes; comunicar em HUD game FIXO V1 sem regressao.
+- **MISSÃO-MÃE ÚNICA DA CENTRALDARK (24/10/2026):** `t_911e17ff` = EXPANDIR CONHECIMENTO, ID permanente; permanece `blocked` SEM assignee como índice e não worker. Toda filha declara `ID_MAE=t_911e17ff` na intenção/corpo e `created_by=mae:t_911e17ff:<autor>`, owner e workspace absoluto, mantendo um escritor por alvo. **Não usar `--parent` no despacho enquanto a mãe estiver blocked**: no Hermes o parent é dependência, e impede a filha de executar. Depois da filha DONE com prova/readback, executar `hermes kanban link t_911e17ff <ID_FILHA>` e confirmar pais/filhos sem alterar o DONE. Hoje foram vinculadas filhas já DONE: `t_13f64ec8`, `t_928a8cbd`, `t_2805243c`, `t_26e02a16`. O Cockpit usa o Forja Executor existente + `lerMissoesMaeCentralDark` para status reais. GitHub guarda histórico verificado; Casa é teste primário, VPS exige readback próprio via canal autorizado. Continuar pelo handoff `K:\scripts\remote-bridge\canonical\HANDOFF-DELTA-CHATGPT-MAE-COCKPIT-20261024.md` e pelo aprendizado `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MISSAO-MAE-HERMES-COCKPIT-MVP.md`. Não criar arquitetura paralela; não inventar passos/fases/progresso.
+- **Receita universal obrigatoria antes de qualquer delegacao Hermes:** [references/HERMES-KANBAN-RECEITA-UNIVERSAL.md](references/HERMES-KANBAN-RECEITA-UNIVERSAL.md). Ler integralmente quando criar, atribuir, verificar ou depurar missoes.
+- **PREEXEC obrigatório — Kimetsu Remix + 17 Respirações:** antes de qualquer execução material (mutação, implementação, correção, integração, delegação executável ou prova), carregar `K:\.agents\skills\kimetsu-brainstorm\SKILL.md` e [references/regenerative-self-refinement-engine.md](references/regenerative-self-refinement-engine.md). A Remix classifica `SPIKE|BOUNDED|ARCHITECTURAL`, recupera intenção e seleciona/transiciona respirações; o engine canônico contém os **17 slots**. Registrar pelo menos `CLASSIFICACAO`, `INTENT`, `BREATH_ID/NAME`, condição observada, ação, evidência, veredito e `NEXT_BREATH`. Não basta citar a respiração. `TÉCNICA_DECLARADA != TÉCNICA_EXECUTADA`; `UNKNOWN != PASS`. Para leitura/diagnóstico sem mutação, Concentração/Lua/Som podem encerrar a rodada. Para mudança, preservar aprovação já dada, writer único e usar a menor respiração material adequada.
+- **Recuperação Kimetsu + delta contínuo (25/10/2026):** [references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md](references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md). Antes de retomar filhas falhas, distinguir cota, conectividade, contexto e workspace; preservar os IDs, provar duplicidade antes de arquivar (nunca usar `archive --rm` por rotina), usar `scheduled` para espera deliberada e liberar **uma execução por vez somente após tratar a causa**. Kimetsu existente não é MoA. Resultado histórico: 13 → 8 bloqueados, 5 em espera; isso **não prova** a entrega dessas filhas. O mesmo protocolo inclui abertura genérica de Explorer com readback. Não tocar modelos, runtime ou cartões por mera leitura desta skill. Aprendizado verificável: [registro Kimetsu no núcleo de Aprendizados](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md).
+- **HUD !michelin estilo game — CONTRATO VISUAL FIXO V1 (24/10/2026):** usuario aprovou expressamente o ultimo quadro monoespacado nesta conversa: moldura dupla, cabecalho CENTRALDARK/MICHELIN, missao, ambiente, placar, barra de progresso, indicadores de cada PASS, inventario, dois IDs Kanban, tres estrelas e rodape PONTO FIXO. Em todas as proximas respostas de HUD, manter exatamente esse desenho, um quadro unico, compacto, sem listas/tabelas expandidas; melhorias apenas aditivas e sem regressao. Valores 13/13, 68 arquivos, 12 skills e 100% sao snapshot historico: atualizar com prova atual ou marcar nao verificado. O contrato visual nao altera a receita Hermes nem equivale a prova tecnica. Esta regra deve ser lida por agentes que consultam a skill; nao presumir que outros agentes a receberam sem leitura.
+- **Gatilho `!michelin` / Michelin 3 estrelas:** carregar a [skill Michelin 3 Estrelas](catalogo/skills-integradas/michelin-3-estrelas/SKILL.md) e o [protocolo detalhado](references/MICHELIN-3-ESTRELAS-PROTOCOLO.md) JUNTO da receita da intencao. Procedimento: INTENT_FIRST, reuso, fases construir/integrar/provar, testes, contraprova e readback. **A skill foi extraida sem alterar o original** `docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md`; aprendizado em `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MICHELIN-3-ESTRELAS-SKILL-HERMES-CASA.md`. O metodo nao troca o CLI nem altera `hermes kanban create`. Selo escopado, nao Fixed Point global.
+- **INTENCAO PRIMEIRO**: escolher em tempo de execucao `AMBIENTE_ALVO`, `WORKSPACE_ALVO`, `TITULO`, `DESCRICAO`, `PERFIL`, `PROVEDOR`, `MODELO`, `CHAVE_IDEMPOTENCIA`, `ID_MISSAO`. Nenhum workspace e universal; `C:\root` foi somente destino de um teste passado.
+- **Casa Windows**: CLI local `C:\Users\Administrador\AppData\Local\hermes\bin\hermes.exe`. `default` foi o perfil comprovado nesta Casa (validar `kanban assignees`).
+- **VPS Linux**: CLI configurado em `/root/.hermes/hermes-agent/.hermes/bin/hermes`, conforme receita existente `scripts/vps/neurolink-gateway-dispatch.sh`; confirmar existencia e perfil no ambiente VPS antes de agir. Nunca confundir executores.
+- **Uma operacao de delegacao**: `hermes kanban create` para criar/cartao de qualquer missao; o verbo (criar, excluir, editar, testar) pertence exclusivamente a `DESCRICAO`, definido pela intencao atual. Nenhum comando paralelo de delecao.
+- **Assignee imediato**: usar `--assignee PERFIL` em `kanban create`. Se cartao existente veio `unassigned`, `hermes kanban assign ID PERFIL`. A variante com `--assignee default` foi testada na criacao de `t_26e02a16`.
+- **Cadeia free tier, modelo e reasoning Hermes (2026-10-25):** [references/HERMES-FREE-TIER-FALLBACK.md](references/HERMES-FREE-TIER-FALLBACK.md). Estado medido: primary `llamacpp` local, fallback chain VAZIA; inventário também registra `provider + model + reasoning_effort` por cartão e os melhores resultados **somente no escopo comprovado**. Regra fixa: para qualquer conclusão sobre Hermes Desktop/CLI/Kanban, consultar primeiro o GitHub/documentação oficial `NousResearch/hermes-agent`, depois confrontar `hermes --version`, help, config/schema e runtime da Casa. Não projetar upstream na instalação local. Valores recentes medidos: Opus 4.6=`minimal`, Haiku 4.5=`low`, Sonnet 4.5=`medium`; `NULL` no Kanban = herança do perfil, não `none`. CLI local `set-model` troca model/provider; reasoning é knob separado.
+- **Modelo por missao, nao fixo na skill**: `--model MODELO --provider PROVEDOR`. NVIDIA `nvidia/nemotron-3-ultra-550b-a55b` / `nvidia` foi aprovado no teste real da Casa; outros modelos podem funcionar quando efetivamente medidos. `jann`/custom falhou por indisponibilidade do endpoint nesse teste.
+- **Prova**: `hermes kanban show ID --json`, `hermes kanban runs ID`, efeito observado no host alvo; `READY != RUNNING != DONE` e `DONE` sozinho nao prova o arquivo.
+- **TESTES WINDOWS CASA PRESERVADOS**: `t_2805243c` (**CRIAR TXT=PASS**, `DONE` com conteúdo conferido) e `t_26e02a16` (**EXCLUIR TXT=PASS**, `DONE` e arquivo ausente em readback). Ambos pelo Hermes Kanban local, perfil `default`, provedor `nvidia`, modelo `nvidia/nemotron-3-ultra-550b-a55b`. Não alterar esse método validado para crescimento da skill; estender somente a intenção e validar cada novo efeito.
+- **Documentos de navegacao**: [catalogo/CATALOGO.md](catalogo/CATALOGO.md), [catalogo/INDICE-PESQUISA.md](catalogo/INDICE-PESQUISA.md). Preservar os originais, nao alterar GitHub/main, Cockpit ou VPS fora da intencao.
+
+
 ## Grafia de fala aprovada pelo CHEFE — teste de áudio (2026-10-19)
 
 Na resenha informal e em falas destinadas ao áudio, preferir **“Ôchente!”** (CH, circunflexo) à grafia “Oxente” ou “Ôxente”, porque o CHEFE testou a voz e aprovou a pronúncia. Usar baianês espontâneo, frases curtas, humor e palavrões leves/contextuais quando combinarem com a conversa, sem agressão dirigida. Exemplo de tom aprovado: **“Ôchente, pivetão! Agora o doce ficou no ponto dessa porra!”**. Preservar grafia convencional em documentação formal, nomes técnicos, citações e histórico. Preferência de comunicação não altera evidência, gates nem execução; não substituir retroativamente textos históricos.
@@ -1060,7 +1093,7 @@ O perfil reescreve invariantes com linguagem própria (`SINGLE_WRITER_PER_SCOPE=
 **DNA comum:** medir → normalizar nome → cruzar contra fonte canônica → marcar `DONO_CANONICO` → só escreve quem tem `GAP_PROVADO`. Mesmo método, 3 alvos.
 
 **PITFALL DE PERFORMANCE — `os.walk` no clone = timeout:**
-Mapear repo por `os.walk` em `E:\CentralDark\Pivete\CentralDark` estourou 180s (`.cache.zip` 1.5GB, node_modules, BACKUPS). **Corrigido:** `git -C <repo> ls-files` (working-tree) ou `git ls-tree -r origin/main` (remoto, sem rede se ref local presente). Substitui walk por índice git → O(1) barato.
+Mapear repo por `os.walk` em `K:\` estourou 180s (`.cache.zip` 1.5GB, node_modules, BACKUPS). **Corrigido:** `git -C <repo> ls-files` (working-tree) ou `git ls-tree -r origin/main` (remoto, sem rede se ref local presente). Substitui walk por índice git → O(1) barato.
 
 **Ordem obrigatória de absorção (CHEFE confirmou):** REMOTO PRIMEIRO. Clone local estava 78 commits atrás; só `origin/main` (ref local fast-forward) dá a verdade pra REUSE_BEFORE_CREATE em escala. Mapear remoto ANTES de abrir ZIP.
 
@@ -1075,7 +1108,7 @@ Mapear repo por `os.walk` em `E:\CentralDark\Pivete\CentralDark` estourou 180s (
 
 ### 15. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1254,7 +1287,7 @@ PARE SOMENTE SE (bloqueios materiais):
 
 ### 12. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1350,12 +1383,12 @@ curl http://localhost:9100/status.json # catálogo completo + conectores
 | Raiz | Papel | Autoridade |
 |------|-------|------------|
 | `C:\CentralDark` | Canonical Repo | Git, workflows, agents, docs, apps/modulos |
-| `E:\CentralDark\Pivete` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
+| `K:\` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
 | `C:\Users\danda` | Tool State | .codex, .claude, .hermes (runtime), .config, etc. |
 
 **Duplicatas resolvidas:**
-- `E:\CentralDark\.claude` → quarentena (não no git, sem consumidores)
-- `E:\CentralDark\_MAPA_CASA` → não existia (índice mestre em C:)
+- `K:\.claude` → quarentena (não no git, sem consumidores)
+- `K:\_MAPA_CASA` → não existia (índice mestre em C:)
 - SOUL.md + config.yaml → **DOCUMENTED_DIVERGENCE** (runtime lê UserProfile)
 
 **Legado congelado:**
@@ -1396,7 +1429,7 @@ WebUI/Telegram → hermes-webui (BFF) → RuntimeAdapter → Hermes Kanban → E
 
 ### 12. SOUL DIVERGENCE DOCUMENTATION — Runtime Block Pattern
 **Cenário:** Mesmo arquivo (SOUL.md, config.yaml) existe em dois caminhos:
-- **Canônico:** `E:\\CentralDark\\Pivete\\` (versão atual, HERMES-CASA)
+- **Canônico:** `K:\\` (versão atual, HERMES-CASA)
 - **Runtime Ativo:** `C:\\Users\\danda\\AppData\\Local\\hermes\\profiles\\pivete\\` (versão antiga, HERMES legacy)
 
 **Regra:** Se o **runtime Hermes lê ativamente** do caminho UserProfile (AppData\\Local\\hermes\\profiles\\pivete):
@@ -1492,12 +1525,12 @@ curl http://localhost:9100/status.json # catálogo completo + conectores
 | Raiz | Papel | Autoridade |
 |------|-------|------------|
 | `C:\CentralDark` | Canonical Repo | Git, workflows, agents, docs, apps/modulos |
-| `E:\CentralDark\Pivete` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
+| `K:\` | Operational Home | SOUL, config.yaml, NUCLEO, skills, cron, quarantine |
 | `C:\Users\danda` | Tool State | .codex, .claude, .hermes (runtime), .config, etc. |
 
 **Duplicatas resolvidas:**
-- `E:\CentralDark\.claude` → quarentena (não no git, sem consumidores)
-- `E:\CentralDark\_MAPA_CASA` → não existia (índice mestre em C:)
+- `K:\.claude` → quarentena (não no git, sem consumidores)
+- `K:\_MAPA_CASA` → não existia (índice mestre em C:)
 - SOUL.md + config.yaml → **DOCUMENTED_DIVERGENCE** (runtime lê UserProfile)
 
 **Legado congelado:**
@@ -1546,7 +1579,7 @@ WebUI/Telegram → hermes-webui (BFF) → RuntimeAdapter → Hermes Kanban → E
 // Detectar runtime e definir root apropriado
 const isWindows = process.platform === 'win32';
 const WORKTREE_ROOT = isWindows 
-  ? 'C:/CentralDark/worktrees'  // ou E:/CentralDark/Pivete/worktrees
+  ? 'C:/CentralDark/worktrees'  // ou K:/worktrees
   : '/root/CentralDark/worktrees';
 ```
 
@@ -1554,7 +1587,7 @@ const WORKTREE_ROOT = isWindows
 
 **Worktree dirs já existem:**
 - `C:\CentralDark\.worktrees\` (repo canonico)
-- `E:\CentralDark\Pivete\worktrees\` (casa)
+- `K:\worktrees\` (casa)
 
 ---
 
@@ -1670,13 +1703,13 @@ PATCH /api/kanban/tasks/{id}?board=default {"status":"done"}
 ```javascript
 const isWindows = process.platform === 'win32';
 const WORKTREE_ROOT = isWindows 
-  ? 'C:/CentralDark/worktrees'  // ou E:/CentralDark/Pivete/worktrees
+  ? 'C:/CentralDark/worktrees'  // ou K:/worktrees
   : '/root/CentralDark/worktrees';
 ```
 
 **Dirs já prontos:**
 - `C:\CentralDark\.worktrees\` (repo canonico)
-- `E:\CentralDark\Pivete\worktrees\` (casa)
+- `K:\worktrees\` (casa)
 
 **Teste local:** `git worktree list --porcelain` funciona no Windows Git Bash.
 
@@ -2027,7 +2060,7 @@ RUNTIME_GRAVA_AUTOMATICO=SIM
 ---
 
 ### 25. AUTO-DESTILADOR PATTERN — Watchdog + Cristalização Automática
-**Descoberta:** Sistema autônomo que monitora pastas de entrada (`E:\\CentralDark\\_MAPA_CASA\\Nova pasta*`), destila conteúdo, sintetiza, cristaliza e escreve **direto no NUCLEO/motor runtime** sem intervenção manual.
+**Descoberta:** Sistema autônomo que monitora pastas de entrada (`K:\\_MAPA_CASA\\Nova pasta*`), destila conteúdo, sintetiza, cristaliza e escreve **direto no NUCLEO/motor runtime** sem intervenção manual.
 
 **Fluxo completo validado (3/3 testes PASS):**
 ```
@@ -2160,14 +2193,14 @@ filepath = os.path.join(destino_abs, base_name)
 **Pedido do Chefe (2026-08-23):** localizar o "aplicativo CCROMIUM da CentralDark" com cockpit, conexão GitHub e workspace, em `C:\CentralDark` e `E:\`.
 
 **Descoberta:** é o diretório **`MOTOR-TESTE`** (package `omniroute` — AI router Electron/Chromium/PWA), espelhado em:
-- `E:\CentralDark\MOTOR-TESTE`  (primário)
+- `K:\MOTOR-TESTE`  (primário)
 - `C:\CentralDark\MOTOR-TESTE`  (mirror do repo canônico)
 
 **Provas:** `src/app/(dashboard)/dashboard/compression/studio/CompressionCockpit.tsx` (cockpit), `src/app/api/github-skills` (GitHub), `docker/vnc-browser/chromium`, `apps/modulos/Bolt/source/` (Electron).
 
 **Falsos positivos descartados:** `obsidian-app/` (Obsidian), `Pivete/MARKDOWN/APPCENTRALDARK EVOLUIR/` (Overclock IDE), `hermes-webui/` (BFF), `node_modules/chrome-launcher` (lib).
 
-**Técnica de busca validada (Windows multi-root, sem timeout):** `search_files` falha em paths com letra de drive (`E:\CentralDark` → IO error); `grep -r`/`find` no volume `E:\` inteiro estoura o timeout (180s+). Usar terminal Git Bash: `ls -la` para orientar, depois `cd /e/CentralDark && find . -path ./node_modules -prune -o \( -iname "*chromium*" -o -iname "*cockpit*" \) -print`. Nunca varrer `E:\` cru. Detalhe em `references/centraldark-app-inventory-search.md`.
+**Técnica de busca validada (Windows multi-root, sem timeout):** `search_files` falha em paths com letra de drive (`K:\` → IO error); `grep -r`/`find` no volume `E:\` inteiro estoura o timeout (180s+). Usar terminal Git Bash: `ls -la` para orientar, depois `cd /e/CentralDark && find . -path ./node_modules -prune -o \( -iname "*chromium*" -o -iname "*cockpit*" \) -print`. Nunca varrer `E:\` cru. Detalhe em `references/centraldark-app-inventory-search.md`.
 
 **Regra:** pedido de "Chromium/cockpit/GitHub app" da Casa → suspeitar de `MOTOR-TESTE`, não Obsidian/hermes-webui.
 
@@ -2182,18 +2215,18 @@ filepath = os.path.join(destino_abs, base_name)
 
 ## Skills absorvidas via Kimetsu/17 Respirações (2026-09-22)
 
-Esta seção registra o delta de absorção de skills locais (`E:\CentralDark\Pivete\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
+Esta seção registra o delta de absorção de skills locais (`K:\skills\`) na biblioteca canônica via `regenerative-self-refinement-engine.md` / método Kimetsu/17 Respirações. Regra de ouro: NÃO copiar pasta inteira por nome — comparar, absorver somente o delta útil, manter owner canônico existente.
 
 ### `screenpipe-hermes-integration` → `screenpipe-live-observer` (status: ABSORVIDO)
 - Classe: UNIQUE_DELTA (canônico cobre sensor/OCR/handoff; local traz procedimento prático de integração Screenpipe+Hermes via Omni Router não coberto pelo canônico)
 - O que foi absorvido: gatilhos de ativação, pré-requisitos, 6 passos de configuração do Omni Router + Screenpipe Provider, pitfalls, monitoração in-the-job, investigação forense (READ_ONLY/zero-mutation), status codes, leis não-negociáveis, o que não prova, Hermes Screenpipe Tool Gap
 - Onde: nova seção "Integração prática com Screenpipe + Hermes via Omni Router" inserida antes de "# Screenpipe Live Observer — sensor global da Casa" no presente arquivo
-- Proveniência preservada: skill local permanece em `E:\CentralDark\Pivete\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
+- Proveniência preservada: skill local permanece em `K:\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
 - Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
 
 ### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
 - Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
-- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `E:\CentralDark\Pivete\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
+- Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `K:\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
 
 ### `brain-vault-watcher` → `brain-memory` canônico (status: NÃO_ABSORVIDO — GAP_NAO_PROVADO)
 - Classe: NOVEL + GAP_A_PROVEAR (local = watcher de sync de MOCs/indexes do Obsidian vault, com triggers, deduplicação, cron; canônico = layer de prefs via `brain_feedback` + `apply-evidence`, read-only, owner SEGREDO/CHEFE)
@@ -3083,3 +3116,19 @@ Regras:
 - `!RASTRO` → owner de receipts/auditoria existente.
 
 **Descoberta no Hermes:** `skill-synchronization` documenta `skills.external_dirs` nativo para expor o catálogo canônico `.agents/skills` mesmo quando o gateway opera fora do checkout. Instalação/ativação/uso continuam etapas separadas, protegidas por writer e readback, sem importação automática das centenas de skills.
+
+<!-- AUTOCATALOGO:INICIO -->
+## Melhorias comprovadas e incorporadas sem regressao
+
+Registros aditivos comprovados no Windows Casa pelo script verificador. Nao substituem receitas anteriores. Cada registro preserva sua origem, razoes e contraprova.
+
+### t_26e02a16 — excluir
+- Criado em: 2026-10-24T19:46:48-03:00; destino: C:\root\HERMES-KANBAN-TESTE.txt
+- Por que fazer: Eliminar somente o TXT temporario criado no teste anterior autorizado.
+- Por que nao fazer outra coisa: Nao apagar a pasta nem recorrer a exclusao direta; somente o Hermes Kanban deveria executar a intencao.
+- Por que usar: Reutilizar o Hermes da Casa, perfil default e mesmo comando kanban create ja comprovados.
+- Por que modificar: Trocar a intencao de criar para excluir sem modificar o metodo de delegacao.
+- O que mudou: O arquivo do teste deixou de existir apos a segunda missao Hermes; o metodo de delegacao permaneceu intacto.
+- Contraprova: Kanban DONE isolado nao prova exclusao; Test-Path do alvo retornou falso no Windows Casa.
+- Resultado: PROVADO na operacao/alvo avaliados. Recibo: catalogo/comprovacoes/t_26e02a16.json
+<!-- AUTOCATALOGO:FIM -->

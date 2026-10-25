@@ -29,7 +29,7 @@ fonte_sha256: 5c5b28c775a91c68132b6d8c07d949927e09f00637dd3223ce7531bec5ae7fb5
 > [!NOTE] 🟢 Prova de extração
 > - sha256 HTML: `5c5b28c775a91c68132b6d8c07d949927e09f00637dd3223ce7531bec5ae7fb5`
 > - 38 turns do CHEFE / 34 do GPT
-> - extract: `E:\CentralDark\workspace\_garimpo_medida\chatgpt_turns.txt`
+> - extract: `K:\workspace\_garimpo_medida\chatgpt_turns.txt`
 
 > [!WARNING] 🔴 O GPT nesta página
 > - Descreveu arquitetura (orquestrador → agents → terminals) — **conceito**, não execução na Casa.

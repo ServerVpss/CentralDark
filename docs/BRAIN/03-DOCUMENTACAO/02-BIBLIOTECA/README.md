@@ -453,7 +453,7 @@ ARQUIVO REAL
 **Intenção:** CHEFE pediu reunir PDFs e comandos, destilar autoevolução/self-healing e preservar memória sem criar segundo cérebro. **Origem comprovada:** todos os quatro PDFs rastreados na árvore de `ServerVpss/CentralDark` no commit imutável `683edbf6f97646904af2a2ff377d981a5922f218`; releitura atual de main `2c24d02c7f5eb55135f63e217a29cda36b03ec67` preserva os mesmos quatro blobs (sem novos PDFs rastreados).
 
 ```text
-CASA_PACKAGE_ROOT=E:\CentralDark\_IMPORTS\CENTRALDARK-PDF-PACOTE-20261009
+CASA_PACKAGE_ROOT=K:\_IMPORTS\CENTRALDARK-PDF-PACOTE-20261009
 CASA_PRIVATE_ARCHIVE=CENTRALDARK-PDF-FONTES.zip
 CASA_MANIFEST=manifest.json
 CASA_RECIPE=RECEITA-CASA.md

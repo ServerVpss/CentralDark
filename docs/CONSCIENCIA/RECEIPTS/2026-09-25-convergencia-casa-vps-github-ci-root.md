@@ -5,7 +5,7 @@ CHEFE_INTENT: Executar agora a convergência Casa + VPS + GitHub no mesmo organi
 START_HEAD: f3693fda6b18a23436db5b34ab127f5240ea4c91
 END_HEAD: COMMIT_CONTAINING_THIS_RECEIPT (resolved after push as PR HEAD)
 OWNER: GitHub workflows + deploy guard + root contract validator
-WRITER_SCOPE: scratch E:/CentralDark/_WORKTREES/main-pinned-runtime-fastpath, branch a criar a partir de origin/main
+WRITER_SCOPE: scratch K:/_WORKTREES/main-pinned-runtime-fastpath, branch a criar a partir de origin/main
 
 FILES_CHANGED:
 - .github/workflows/inventario-casa.yml
@@ -41,7 +41,7 @@ TESTS:
 
 RUNTIME_PROOF:
 - GITHUB_CURRENT_MAIN medido por gh api: f3693fda6b18a23436db5b34ab127f5240ea4c91.
-- CASA local medida: repo E:/CentralDark presente, branch fix/mcp-health-telegram-owner-20260920 dirty; Screenpipe local 3030/3031 indisponível; Desktop Commander porta 3210 ativa; CentralDarkBridge process presente.
+- CASA local medida: repo K:/ presente, branch fix/mcp-health-telegram-owner-20260920 dirty; Screenpipe local 3030/3031 indisponível; Desktop Commander porta 3210 ativa; CentralDarkBridge process presente.
 - VPS medido por SSH: /root/CentralDark main em ce7d7053df197d437b9c740a3b9bede108ee8d23, origin/main local f3693fda6b18a23436db5b34ab127f5240ea4c91, behind 18, dirty_count=132; PM2 CentralDark-MCP online; Omni Router online; GraphPanel ocupa 127.0.0.1:3030; 3031 ausente; Screenpipe bloqueado por GLIBC_2.38/2.39 ausentes em Ubuntu GLIBC 2.35.
 
 COUNTERPROOF:
@@ -92,7 +92,7 @@ SNAPSHOT_2026-09-26T10:21Z:
 - PR #1698 OPEN + MERGEABLE, branch head `c7642b588b979306189e76e371107ad7e2f8532a`; checks do HEAD acionados, incluindo porta-de-entrada, permanecem QUEUED.
 - GitHub Actions runner inventory: `vmi3256920` (labels `self-hosted, Linux, X64, centraldark`) OFFLINE e `vmi3256920-centraldark` (labels `self-hosted, Linux, X64, centraldark-ci`) OFFLINE; ambos `busy=false`. Causa material para impossibilidade de executar os gates self-hosted enquanto offline.
 - VPS SSH via alias `segredo-vpss` resolve a `89.117.78.124:22`, user `root`, identity local configurada; probe BatchMode/ConnectTimeout=8 retornou `Connection timed out` (exit 255). SSH_CONFIG foi lido sem expor chave privada. Rota VPS indisponível a partir desta sessão; VPS/deploy/runtime permanece UNKNOWN, sem mutação.
-- CASA medida diretamente em `E:/CentralDark`: branch `fix/mcp-health-telegram-owner-20260920`, HEAD `375558fd59f4ea9e9b1cd59961b81c25d2e8d17d`, `git status --porcelain`=55 entradas (dirty não classificado; preservado), Node v26.7.0, npm 11.19.0; Hermes.exe e pycharm64.exe em execução. Portas Screenpipe 3030/3031 não aparecem em LISTEN; 3210 LISTEN em loopback (serviço separado, não presumido Screenpipe). Nenhuma alteração feita na Casa.
+- CASA medida diretamente em `K:/`: branch `fix/mcp-health-telegram-owner-20260920`, HEAD `375558fd59f4ea9e9b1cd59961b81c25d2e8d17d`, `git status --porcelain`=55 entradas (dirty não classificado; preservado), Node v26.7.0, npm 11.19.0; Hermes.exe e pycharm64.exe em execução. Portas Screenpipe 3030/3031 não aparecem em LISTEN; 3210 LISTEN em loopback (serviço separado, não presumido Screenpipe). Nenhuma alteração feita na Casa.
 - GitHub `main` re-medida: `f3693fda6b18a23436db5b34ab127f5240ea4c91`. PR-mãe #1562 OPEN e não mergeado. Registro de progresso publicado e re-lido: https://github.com/ServerVpss/CentralDark/pull/1562#issuecomment-5845438868.
 
 BLOCKER_EXACT: BOTH_SELF_HOSTED_RUNNERS_OFFLINE prevents queued CI jobs from starting; SSH_TCP_22_TIMEOUT_TO_89.117.78.124 prevents VPS readback/deploy diagnosis. No authorization to mutate server/runner or reset dirty Casa state. Recovery condition: at least one existing labeled runner online OR authorized alternate runner capacity; SSH transport reachable again (or another already-authorized proof channel), then resume at PR HEAD checks and VPS read-only reconciliation.

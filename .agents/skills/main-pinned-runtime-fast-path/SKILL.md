@@ -176,7 +176,7 @@ DIRTY_WORKTREE_FORBIDDEN_AT_HANDOFF=true
 
 Antes de qualquer reset/clean destrutivo, compare o realpath com o path canônico. Se divergir, STOP_AND_RECONCILE.
 
-Nunca execute `git reset --hard` ou `git clean -fdx` em `<caminho-vps>`, runtime vivo, Casa `E:\CentralDark` ou checkout principal.
+Nunca execute `git reset --hard` ou `git clean -fdx` em `<caminho-vps>`, runtime vivo, Casa `K:\` ou checkout principal.
 
 Sequência final:
 

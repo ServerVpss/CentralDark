@@ -189,6 +189,25 @@ function registerBridge() {
     return activateExistingUnigram();
   });
 
+  register('centraldark:obsidian:open', async (event) => {
+    // Mesmo gate de origem/janela do Unigram; alvo é constante, sem parâmetros do renderer.
+    const current = liveMainWindow();
+    const sourceUrl = event.senderFrame?.url ?? '';
+    let sameOrigin = false;
+    try { sameOrigin = new URL(sourceUrl).origin === new URL(rendererURL).origin; }
+    catch { /* origem inválida bloqueada */ }
+    if (!current || event.sender.id !== current.webContents.id || !sameOrigin) {
+      throw new Error('CENTRALDARK_OBSIDIAN_UNTRUSTED_RENDERER');
+    }
+    if (process.platform !== 'win32') {
+      return { status: 'UNAVAILABLE' as const, capability: 'OBSIDIAN' as const, reason: 'WINDOWS_ONLY' };
+    }
+    // Usa a associação obsidian:// já instalada. Não copia binário, vault, perfil ou plugins.
+    await electron.shell.openExternal('obsidian://open?vault=BRAIN');
+    // Solicitação é distinta de janela realmente aberta / aplicação incorporada.
+    return { status: 'REQUESTED' as const, capability: 'OBSIDIAN' as const };
+  });
+
   register('centraldark:intent:open', async (_event, rawIntent: unknown) => {
     const intent = typeof rawIntent === 'string' ? rawIntent.trim() : '';
     if (!intent || intent.length > 8000) throw new Error('CENTRALDARK_INTENT_INVALID');
