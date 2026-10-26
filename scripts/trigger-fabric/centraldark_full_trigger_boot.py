@@ -2,7 +2,7 @@
 # #OBSERVACOES# | CENTRALDARK.CLAIM.SEAL.GAIN
 # @owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
 # @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
-# @last_updated: 2026-10-16T10:44:52.397Z
+# @last_updated: 2026-10-26T21:03:44Z
 # @escopo: RESEAL_AFTER_MEASURED_GAIN; experimentation remains freely reversible.
 # @pendente: verify same-HEAD CI and actual target; self-attested CLI numbers != runtime proof.
 # @next_cursor: cross-validate gain reference and regression receipt before main promotion.
@@ -258,6 +258,58 @@ def require_files(repo: Path) -> dict[str, str]:
         if not p.exists():
             raise SystemExit(f"MISSING_CANONICAL_OWNER={rel.as_posix()}")
         result[rel.as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
+    return result
+
+
+
+def fixed_point_pack_state(repo: Path) -> dict:
+    """Read/hash 7 canonical references from MASTER; hash != semantic use or proof."""
+    result = {
+        "marker": "FIX_POINT_7_CANONICAL_REFS_V1",
+        "owner": MASTER.as_posix(),
+        "trigger": "!CENTRALDARK",
+        "status": "BLOCKED",
+        "reference_mode": "HASH_ALL_SELECT_PERTINENT_CONTENT",
+        "hud_presentation": "🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐",
+        "stars_awarded_from_header": 0,
+        "references": [],
+        "unknowns": [],
+    }
+    path = repo / MASTER
+    if not path.is_file():
+        result["unknowns"].append("MASTER_CYCLE_MISSING")
+        return result
+    content = path.read_text(encoding="utf-8")
+    scope = re.search(r"(?ms)^fix_point_reference_pack:\s*\n(.*?)(?=^[a-z][\w-]*:|\Z)", content)
+    if not scope or "marker: " + result["marker"] not in scope.group(1):
+        result["unknowns"].append("FIX_POINT_MARKER_MISSING")
+        return result
+    sources = re.search(r"(?m)^  sources:\s*\n((?:    - [^\r\n]+\r?\n)+)", scope.group(1))
+    if not sources:
+        result["unknowns"].append("FIX_POINT_SOURCES_MISSING")
+        return result
+    names = [line.strip().removeprefix("- ").strip()
+             for line in sources.group(1).splitlines()]
+    if len(names) != 7 or len(set(names)) != 7:
+        result["unknowns"].append("REQUIRE_SEVEN_UNIQUE_SOURCES")
+        return result
+    root = repo.resolve()
+    for name in names:
+        source = (root / name).resolve()
+        if not source.is_relative_to(root) or not source.is_file():
+            result["unknowns"].append("SOURCE_MISSING:" + name)
+            continue
+        data = source.read_bytes()
+        if not data.strip():
+            result["unknowns"].append("SOURCE_EMPTY:" + name)
+            continue
+        result["references"].append({
+            "path": name,
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "bytes": len(data),
+        })
+    if not result["unknowns"] and len(result["references"]) == 7:
+        result["status"] = "BOUND"
     return result
 
 
@@ -685,6 +737,13 @@ def cmd_boot(args: argparse.Namespace) -> int:
                           "hud_first": hud_first,
                           "boot_executed": False}, ensure_ascii=False, indent=2))
         return 16
+    fixed_point_pack = fixed_point_pack_state(repo)
+    if fixed_point_pack["status"] != "BOUND":
+        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
+                          "status": "FAIL_CLOSED",
+                          "fixed_point_pack": fixed_point_pack,
+                          "boot_executed": False}, ensure_ascii=False, indent=2))
+        return 17
     source_hashes = require_files(repo)
     registry = discover_registry(repo)
     bios = cognitive_bios_state(repo)
@@ -699,6 +758,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "load_full_registry": True,
         "execute_all_phases_blindly": False,
         "canonical_chain": CANONICAL_CHAIN,
+        "fixed_point_pack": fixed_point_pack,
         "discovered": registry,
         "source_sha256": source_hashes,
         "feedback": classify_realtime_feedback(args.input),
