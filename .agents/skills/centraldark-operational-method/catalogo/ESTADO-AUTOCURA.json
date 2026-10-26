@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-25T13:50:52-03:00",
+    "gerado_em":  "2026-10-26T18:18:17-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T12:56:51-03:00",
-                         "modificado_em":  "2026-10-25T12:56:51-03:00",
+                         "criado_em":  "2026-10-26T18:15:17-03:00",
+                         "modificado_em":  "2026-10-26T18:15:17-03:00",
                          "bytes":  10281,
                          "sha256":  "5b40a7fb5fd1c26b6b599a683487635a313efdb1cf9562814ac9e2bbac7e3c5a",
                          "descricao":  "",
@@ -140,8 +140,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T12:56:51-03:00",
-                         "modificado_em":  "2026-10-25T12:56:51-03:00",
+                         "criado_em":  "2026-10-26T18:15:17-03:00",
+                         "modificado_em":  "2026-10-26T18:15:17-03:00",
                          "bytes":  4890,
                          "sha256":  "439460f9a2b2cc9bb051d5b7fb23db076fd3565bc76f84bdff394108ddd6a23d",
                          "descricao":  "",
@@ -372,9 +372,9 @@
                          "caminho":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  6360,
-                         "sha256":  "d69cc0a16537149dd5a8771e436c572738cf3960d52942151ca75722d6cea1f7",
+                         "modificado_em":  "2026-10-26T16:35:50-03:00",
+                         "bytes":  8397,
+                         "sha256":  "1526367015083aa074a9e3ed565c7cbe30bc0dfebc47b830de6831bf8683add4",
                          "descricao":  "Método Michelin 3 Estrelas CentralDark. Ative com !michelin ou pedido de execução deliberada passo a passo, reuso, testes, contraprova e prova real. Trabalha junto da receita operacional existente e não a substitui.",
                          "referencias":  [
 
@@ -762,10 +762,10 @@
                      {
                          "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T07:38:06-03:00",
-                         "modificado_em":  "2026-10-25T07:50:30-03:00",
-                         "bytes":  15005,
-                         "sha256":  "48ef54f7e0357b391f235eb1036a244c5839268ee1aa1286385d3b869056d4c5",
+                         "criado_em":  "2026-10-26T12:47:12-03:00",
+                         "modificado_em":  "2026-10-26T12:47:12-03:00",
+                         "bytes":  17378,
+                         "sha256":  "8ee72899493adc8c625c8328660a7328ddeb9b7efcce70a300049ad89576e389",
                          "descricao":  "",
                          "referencias":  [
 
@@ -811,9 +811,9 @@
                          "caminho":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  8893,
-                         "sha256":  "4ae1b257ea4380811beebd10a67c3aae4f5adca2df5f138e2fb36e18a19760e4",
+                         "modificado_em":  "2026-10-26T16:17:59-03:00",
+                         "bytes":  12807,
+                         "sha256":  "5ffca46f168be61a1f47b123824532f9b4d2045c461113cfbafc10c766046ff2",
                          "descricao":  "",
                          "referencias":  [
                                              {
@@ -1009,6 +1009,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Identify-CentralDarkMonitors.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-26T12:47:12-03:00",
+                         "modificado_em":  "2026-10-26T12:47:12-03:00",
+                         "bytes":  3139,
+                         "sha256":  "7e7eb54a50f6ad1890ac3c2ccd6a7792335cbb04d7a3eb664c25e07269f0f447",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "scripts/integrar-skills-centraldark-20261024.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
@@ -1095,12 +1107,24 @@
                      {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-25T12:55:10-03:00",
-                         "modificado_em":  "2026-10-25T13:50:13-03:00",
-                         "bytes":  191978,
-                         "sha256":  "d79c87388a5f2af1195cbf4d372998d6bbde8881adda31c348590b778c537b91",
+                         "criado_em":  "2026-10-26T18:15:25-03:00",
+                         "modificado_em":  "2026-10-26T18:15:25-03:00",
+                         "bytes":  204595,
+                         "sha256":  "6504ec5f0ba25f834b4d77321b76b57402a43d557b5dbed7a65ec294e29bddc5",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
+                                             {
+                                                 "destino":  "docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../kaizen-sistema-um/SKILL.md",
+                                                 "existe":  true
+                                             },
                                              {
                                                  "destino":  "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
                                                  "existe":  true

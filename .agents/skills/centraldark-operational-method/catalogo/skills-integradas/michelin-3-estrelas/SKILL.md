@@ -76,6 +76,19 @@ Se delegar para Hermes, carregar também `../../../references/HERMES-KANBAN-RECE
 - Modelo usado: `nvidia/nemotron-3-ultra-550b-a55b` (`--provider nvidia`). Outros modelos podem funcionar após medição; o provedor custom `jann` falhou por conexão naquele teste.
 - Não trocar o método que deu PASS; para outros arquivos e intenções alterar somente descrição, alvo, workspace, título, chave e critério de aceite. A operação futura só vira PASS após prova própria.
 
+## Contrato de micro-passos — 50/50 como meta, nunca placar inventado (26/10/2026)
+
+O CHEFE definiu **50 micro-passos comprovados como objetivo**, não como contador já concluído. Para cada micro-passo autorizado, preservar no mesmo `TASK_ID/GOAL_ID`:
+- **⭐ CONSTRUIR:** mudança real no owner existente + readback do alvo.
+- **⭐⭐ INTEGRAR:** mesmo delta conectado à intenção, ao código, à Skill Mãe/receita pertinente e ao runtime quando aplicável.
+- **⭐⭐⭐ PROVAR:** teste/contraprova independentes e receipt real do resultado. Só promover o escopo observado, não o sistema inteiro.
+- **Checkpoint verde** exige `3_ESTRELAS + RECEIPT_VALIDO` no passo específico. `UNKNOWN/BLOCKED` não recebe estrela de prova e não vira `COMPLETED`.
+- Placar `N/50` só conta passos com `TASK_ID + OWNER + EFEITO + CONTRAPROVA + RECEIPT` únicos. Sem denominador auditável, `NOT_MEASURED`, jamais `100%`.
+
+**Casa primeiro, VPS indisponível:** a Casa pode desenvolver e testar o **mesmo código, scripts e configuração Linux portáveis** que serão aplicados posteriormente na VPS. Se a VPS estiver fora do ar, o teste nela fica `UNKNOWN/BLOCKED_VPS`; a frente local prossegue sem pânico e sem bloquear escopos independentes. `LOCAL_PASS != VPS_PASS`. Divergências de boot, kernel, driver, rede, discos e recursos exigem contraprova na VPS quando voltar. Não clonar uma segunda arquitetura ou mudar o serviço por causa da indisponibilidade.
+
+**Figma → Excalidraw:** usar somente o projeto Figma real com ID verificado e sua estrutura/artefatos autorizados. Primeiro localizar owner Figma/Excalidraw existente; conservar uma única intenção e evitar reconstrução paralela. O Excalidraw permite representar fluxos editáveis, mas não garante fidelidade pixel a pixel de todo Figma. `FIGMA_ID_UNKNOWN => REPRESENTACAO_PENDENTE`. Provar equivalência por comparação visual e inventário dos elementos necessários antes de afirmar fidelidade. Não gerar imagem ou diagrama especulativo sem a fonte.
+
 ## Saída curta e auditável
 
 **Intenção:** ...

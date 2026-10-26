@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import importlib.util
 import pathlib
 import sys
@@ -38,6 +39,49 @@ def traced_text(sha=FULL, path=PATH, readback="TRACE_PRESENT != TRACE_VALID", cu
 
 
 class RastroFiscalTests(unittest.TestCase):
+    @staticmethod
+    def valid_note(creation="2026-10-01T10:00:00-03:00"):
+        body = (
+            "---\n"
+            f"data_criacao: {creation}\n"
+            "ultima_atualizacao: 2026-10-26T13:10:00-03:00\n"
+            "ultima_modificacao: 2026-10-26T13:10:00-03:00\n"
+            "ultima_verificacao: 2026-10-26T13:11:00-03:00\n"
+            "fuso_horario: America/Sao_Paulo\n"
+            "hash_conteudo: \n"
+            "rastro: OWNER+RUN+READBACK\n"
+            "grupo_notas: GRUPO_05\n"
+            "relacionado_a: docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md\n"
+            "estado_evidencia: PASS\n"
+            "---\n"
+            "# Nota de teste\n"
+        )
+        digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
+        return body.replace("hash_conteudo: \n", f"hash_conteudo: sha256:{digest}\n")
+
+    def test_note_metadata_hash_and_group_pass(self):
+        text = self.valid_note()
+        r = M.verify_note_metadata(text, "notes/test.md")
+        self.assertEqual("PASS", r["verdict"])
+        self.assertFalse(r["modified_note"])
+        self.assertEqual("GRUPO_05", r["grupo_notas"])
+        self.assertEqual(text, self.valid_note())
+
+    def test_note_changed_without_hash_refresh_fails(self):
+        r = M.verify_note_metadata(self.valid_note() + "mudanca nao reconciliada")
+        self.assertEqual("FAIL", r["verdict"])
+        self.assertTrue(any(c["name"] == "note_hash" and c["verdict"] == "FAIL" for c in r["checks"]))
+
+    def test_note_without_required_metadata_fails(self):
+        r = M.verify_note_metadata("---\ntitle: legado\n---\n# Conteudo")
+        self.assertEqual("FAIL", r["verdict"])
+        self.assertIn("ultima_verificacao", r["missing_fields"])
+
+    def test_note_unknown_creation_is_not_fake_pass(self):
+        r = M.verify_note_metadata(self.valid_note(creation="UNKNOWN"))
+        self.assertEqual("UNKNOWN", r["verdict"])
+        self.assertTrue(any(c["name"] == "note_creation_provenance" for c in r["checks"]))
+
     def test_true_complete_trace_passes(self):
         r = M.verify_text(traced_text(), REPO, backend())
         self.assertEqual("PASS", r.verdict)

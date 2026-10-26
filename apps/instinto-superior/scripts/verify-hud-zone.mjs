@@ -556,3 +556,39 @@ test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
   const bloco = cockpit.split("function JornadaEvolutiva")[1].split("function MenuVisualCentralDark")[0];
   assert.doesNotMatch(bloco, /fetch\(|execSync\(|localStorage/);
 });
+
+test("Sync Center usa provas SSH autenticadas no Supabase sem inventar sync ou deploy", () => {
+  const center = read("apps/instinto-superior/src/components/central/SyncCenter.tsx");
+  const proof = read("apps/instinto-superior/src/components/central/SshBridgeProof.ts");
+  assert.match(center, /useSshBridgeProof/);
+  assert.match(center, /data-cd-flow="instinto.SyncCenter.ssh-bidirecional-supabase"/);
+  assert.match(center, /provasAtuais\[id\]/);
+  assert.match(center, /ssh\.rotas\["casa-vps"\]/);
+  assert.match(center, /ssh\.rotas\["vps-casa"\]/);
+  assert.match(proof, /supabase\.auth\.getSession/);
+  assert.match(proof, /\/rest\/v1\/agent_events/);
+  assert.match(proof, /area: "eq\.sync-center-ssh"/);
+  assert.match(proof, /proof_run_ended_at/);
+  assert.match(proof, /ttl_seconds/);
+  assert.match(proof, /"AUTH_REQUIRED"/);
+  assert.match(proof, /Nao comprova sincronizacao nem deploy|Não prova sincronização nem deploy/);
+  assert.doesNotMatch(proof, /service_role|SERVICE_ROLE|SUPABASE_SECRET_KEY/);
+});
+
+test("feed vivo de eventos e missoes reutiliza o SyncCenter, Supabase RLS e Realtime", () => {
+  const center = read("apps/instinto-superior/src/components/central/SyncCenter.tsx");
+  const feed = read("apps/instinto-superior/src/components/central/FeedVivoCentralDark.tsx");
+  const recipe = read("docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md");
+  assert.match(center, /<FeedVivoCentralDark \/>/);
+  assert.match(feed, /data-cd-flow="instinto.SyncCenter.feed-vivo"/);
+  assert.match(feed, /supabase\.auth\.getSession\(\)/);
+  assert.match(feed, /agent_events/);
+  assert.match(feed, /hub_mission_events/);
+  assert.match(feed, /postgres_changes/);
+  assert.match(feed, /event: "INSERT"/);
+  assert.match(feed, /invalidateQueries/);
+  assert.match(feed, /refetchInterval: 60_000/);
+  assert.match(feed, /status === "STREAM_ON"/);
+  assert.match(recipe, /IDENTIFICAR|Identificar/);
+  assert.doesNotMatch(feed, /SERVICE_ROLE|service_role/);
+});
