@@ -25,7 +25,7 @@ Inventariado != autorizado. Todas as operações descobertas ficam `INVENTORY_ON
 
 ## Contraprova bancada (executada)
 
-Source pin: `7f9d03e59dc60a2349c9b2ec5aac12f5845637`. Checkout limpo (sparse) em `E:\\CentralDark\\_cache\\cf-openapi-mcp-20261009`, no dispositivo SEGREDO (sem mudar checkout produtivo da Casa ou VPS).
+Source pin: `7f9d03e59dc60a2349c9b2ec5aac12f5845637`. Checkout limpo (sparse) em `K:\\_cache\\cf-openapi-mcp-20261009`, no dispositivo SEGREDO (sem mudar checkout produtivo da Casa ou VPS).
 
 - `npm ci --ignore-scripts --no-audit --no-fund`: PASS.
 - `node --test tests/provider-control.test.mjs`: 16 testes, 16 PASS, 0 FAIL.

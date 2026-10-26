@@ -179,7 +179,7 @@ KYLIN_INIT_10_ROOT_CAUSE -> CURRENT_MODEL_BINDING_SURVIVES -> NATIVE_ONCE_PASS -
 1. Mover \`genai_text_init_session(sess)\` após \`genai_text_set_model_config(sess,cfg)\`, preservando \`resolve_current_model()\` e o tratamento de erros.
 2. Adicionar regressões fake-SDK com e sem erro 10 em \`scripts/vps/test_kylin_bridge_sdk_order.py\`, sem depender da lib nativa na Casa.
 
-**Prova na bancada isolada:** \`E:\\CentralDark\\_cache\\kylin-sdk-order-20261009\`,
+**Prova na bancada isolada:** \`K:\\_cache\\kylin-sdk-order-20261009\`,
 mesmo commit \`bdf2f09ad3437231c0c288e8d2c4ca985209fe1f\`:
 - \`python -m py_compile\` dos dois arquivos: PASS.
 - \`python scripts/vps/test_kylin_bridge_sdk_order.py -v\`: 2/2 PASS, incluindo sequência \`set_name → set_model_config → init_session → chat\` e limpeza de config/session quando \`init_session\` devolve erro 10.

@@ -1,14 +1,14 @@
 @echo off
-rem CentralDark Desktop (apps/modulos/Bolt/source) - build Windows 100%% no disco E:
+rem CentralDark Desktop - fonte canonica K:\apps\modulos\Bolt\source; logs em F:
 rem Uso: BUILD-CENTRALDARK-DESKTOP.cmd [install|build|all]   (padrao: all)
 setlocal
-set "ROOT=K:\_worktrees\bolt-desktop"
-set "SRC=%ROOT%\apps\modulos\Bolt\source"
+set "ROOT=K:\"
+set "SRC=K:\apps\modulos\Bolt\source"
 set "CACHE=K:\_cache"
-set "LOG=%ROOT%\build-logs"
+set "LOG=F:\logs\builder-bolt"
 if not exist "%LOG%" mkdir "%LOG%"
 if not exist "%CACHE%\tmp" mkdir "%CACHE%\tmp"
-rem Tudo que normalmente iria para o C: vai para o E:
+rem Cache temporario em K:\_cache; logs em F:\logs\builder-bolt
 set "TEMP=%CACHE%\tmp"
 set "TMP=%CACHE%\tmp"
 set "npm_config_cache=%CACHE%\npm"

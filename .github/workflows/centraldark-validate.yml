@@ -307,7 +307,7 @@ jobs:
           set -euo pipefail
           node --test tests/admin-guard.test.mjs
           node --test tests/hub-mission-consumer.test.mjs
-          node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs
+          node --test tests/provider-admin-bridge.test.mjs tests/provider-control-integration.test.mjs tests/provider-control.test.mjs tests/provider-secret-boundary.test.mjs tests/credential-metadata.test.mjs
           node --test tests/operational-telemetry.test.mjs
           node --test ../../../apps/bot-telegram/unified-bot-status.test.mjs
           node --test ../../../scripts/set-bot-profile.test.mjs

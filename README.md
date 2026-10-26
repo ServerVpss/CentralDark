@@ -11,6 +11,93 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
 
+
+## Navegação operacional — Casa, Forja 1, GitHub e VPS
+
+> **Mapa físico dos diretórios do `K:\` (25/10/2026).** Presença de arquivo ≠ execução, skill carregada ou sincronização comprovada. Preservar contratos e histórico nas seções seguintes.
+
+### Por onde uma IA deve começar
+
+| Ordem | Fonte | Por quê |
+|---|---|---|
+| 1 | [`LEIA-ME-IA.md`](LEIA-ME-IA.md) e [`AGENTS.md`](AGENTS.md) | Boot, autoridade, intenção e segurança. |
+| 2 | [Método operacional](.agents/skills/centraldark-operational-method/SKILL.md) | Owner, execução, evidência, contraprova e continuidade. |
+| 3 | [Kimetsu](.agents/skills/kimetsu-brainstorm/SKILL.md) | Classificação e técnica antes de agir. |
+| 4 | [Hermes](.agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md) e [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) | Reutilizar executor e procedimentos. |
+| 5 | [Skill Synchronization](.agents/skills/skill-synchronization/SKILL.md) | Skills opt-in, locks, hashes, proteção contra drift. |
+| 6 | [Arquitetura](docs/ARQUITETURA/) e [Memória](docs/CONSCIENCIA/) | Conhecimento, decisões, histórico e receipts. |
+
+**ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE.** Não duplicar Hermes, MCP, gateway, cockpit, skill-mãe, catálogo ou sincronizador.
+
+### Estrutura atual: pastas principais da Casa
+
+```text
+K:\                                      # Raiz CentralDark / Casa
+├── README.md                             # Índice humano e para IAs
+├── LEIA-ME-IA.md                         # Porta de boot canônica
+├── AGENTS.md                             # Contrato do workspace
+├── .agents\skills\
+│   ├── centraldark-operational-method\   # Método e referências
+│   ├── kimetsu-brainstorm\               # Técnicas e gates
+│   ├── skill-synchronization\            # Sync de skills
+│   └── autonomous-ai-agents\hermes-agent\ # Contrato Hermes
+├── apps\
+│   ├── instinto-superior\                # Admin/Cockpit
+│   └── modulos\
+│       ├── HERMES-CORE\                  # Núcleo tipado executor
+│       └── mcp\                          # Barramento MCP
+├── docs\
+│   ├── ARQUITETURA\                      # Contratos
+│   ├── BRAIN\                            # Memória canônica versionável
+│   ├── CONSCIENCIA\                      # Aprendizados, lembranças e provas
+│   └── HUD\                              # Visualização e observabilidade
+├── scripts\
+│   ├── casa\                             # Casa, Obsidian e sync
+│   └── vps\                              # VPS, sync e deploy
+├── WSL\openKylin\                        # Forja 1 / WSL2, disco K:
+├── .obsidian\                            # Configuração local Obsidian
+├── infra\                                # Infraestrutura
+├── tests\                                # Testes
+└── skills\                               # Skills portáteis
+```
+
+Índice **selecionado e verificado**; outras pastas, backups, caches, dados privados e segredos existem, mas não são automaticamente publicáveis ou sincronizáveis.
+
+### Fluxo operacional: Casa ↔ GitHub ↔ VPS
+
+```text
+CHEFE / Windows — autoridade e aceite
+         ↕
+openKylin / FORJA 1 — WSL2 no K: ↔ Obsidian / BRAIN
+         │ HERMES-CORE + scripts tipados + MCP
+         │ POMBO/checksum, testes, receipts, contraprova
+         ▼ somente o delta aprovado
+Git/GitHub main — CRISTAL (código, documentos, aprendizados)
+         ↕ sincronização bidirecional reconciliada
+openKylin / VPS — mesmas receitas, readback no destino
+```
+
+**Objetivo:** sync automático bidirecional disciplinado, não cópia indiscriminada. Obsidian guarda memória editável da Casa; GitHub mantém cristal versionado após aceite; a VPS executa o que foi efetivamente promovido. Alterações conflitantes conservam ambos os lados; não publicar brutos privados, segredos ou tokens. Checksum prova identidade de bytes; resultado real exige contraprova. A presença dos scripts abaixo **não prova que o sync E2E está rodando agora**.
+
+| Função | Owner existente |
+|---|---|
+| Golden Capsule / Casa e VPS | [Matriz bidirecional](docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md) |
+| Obsidian ↔ BRAIN | [Contrato](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md) · [script](scripts/casa/sync-hermes-obsidian.ps1) |
+| Skills da main ↔ Hermes runtime | [Skill sync](.agents/skills/skill-synchronization/SKILL.md) · [script](scripts/skill-sync-check.sh) |
+| VPS ↔ `origin/main` | [Auto-sync VPS](scripts/vps/auto-sync-main.sh) |
+| POMBO com checksum / rastro | [Verificador](scripts/verify_pombo_evolution.py) · [Lei do Rastro](docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md) |
+| Executor tipado | [HERMES-CORE](apps/modulos/HERMES-CORE/) · [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) |
+
+`SOURCE_PRESENT != RUNNING` · `SYNCED != LOADED` · `COMMIT != DEPLOY` · `UNKNOWN != PASS`.
+
+### Pacote de skills e referência em português
+
+- **Nosso pacote:** [`K:\.agents\skills\centraldark-operational-method\`](.agents/skills/centraldark-operational-method/), junto com Kimetsu e o owner de sincronização.
+- **Complemento externo:** [Hermes Brasil](https://github.com/Hermes-brasil/hermes-brasil) contém `skills/`, `guides/`, README e CONTRIBUTING em português. É fonte de estudo; não substitui o Hermes ou o método da CentralDark.
+- **Ciclo de qualquer agente:** boot → intenção → descoberta do owner → estado vivo → menor delta → testes → recibo/contraprova → aceite quando promover → readback Casa/GitHub/VPS.
+
+---
+
 ## 🏛️ Mapa de responsabilidades — Instinto Superior primeiro
 
 ```text
@@ -70,13 +157,13 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 ### 🧿 Casa e missões do HUD — atualização de evidências (11/10/2026)
 
-> **Rota CURRENT aferida na Casa (11/10/2026, 22:17 BRT):** o vault está em `K:\CentralDark` no SSD, com `K:\CentralDark\.obsidian` presente e `K:\CentralDark\HUD.html` lido diretamente (309.368 bytes; SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`). O leitor do **CORPO ÚNICO** em `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` foi corrigido para esse caminho e a GUI confirmou `[HUD] PASS` + `[PROVA / ARQUIVO] PASS` no log local. **Isso comprova a rota e o monitor da Casa, não o término integral da migração `F:` → `K:`, o sync do GitHub/Obsidian, nem deploy na VPS.** Endereços antigos `C:\Users\Administrador\Documents\Obsidian Vault`, `F:` e `E:` são legados, não a rota de leitura do HUD. `C:` pessoal preservado.
-> **Contraprova técnica:** backup do BAT anterior em `K:\CentralDark\scripts\_backups\CENTRALDARK-CORPO-UNICO-HUD-LOGS.before-k-hud-route-20261012.bat`; leitura física do arquivo, parser PowerShell e reinício de uma única janela PASS; log 11/10 22:17:44 BRT. Código local ainda **não** equivale a checkout `main` sincronizado. Este registro na `main` documenta a correção, não transfere o BAT nem sobrescreve o HUD dourado `docs/HUD/HUD.html`.
+> **Rota CURRENT aferida na Casa (11/10/2026, 22:17 BRT):** o vault está em `K:\` no SSD, com `K:\.obsidian` presente e `K:\HUD.html` lido diretamente (309.368 bytes; SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`). O leitor do **CORPO ÚNICO** em `K:\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` foi corrigido para esse caminho e a GUI confirmou `[HUD] PASS` + `[PROVA / ARQUIVO] PASS` no log local. **Isso comprova a rota e o monitor da Casa, não o término integral da migração `F:` → `K:`, o sync do GitHub/Obsidian, nem deploy na VPS.** Endereços antigos `C:\Users\Administrador\Documents\Obsidian Vault`, `F:` e `E:` são legados, não a rota de leitura do HUD. `C:` pessoal preservado.
+> **Contraprova técnica:** backup do BAT anterior em `K:\scripts\_backups\CENTRALDARK-CORPO-UNICO-HUD-LOGS.before-k-hud-route-20261012.bat`; leitura física do arquivo, parser PowerShell e reinício de uma única janela PASS; log 11/10 22:17:44 BRT. Código local ainda **não** equivale a checkout `main` sincronizado. Este registro na `main` documenta a correção, não transfere o BAT nem sobrescreve o HUD dourado `docs/HUD/HUD.html`.
 
 A seção **Missões — clica, copia, cola** do único owner [docs/HUD/HUD.html](docs/HUD/HUD.html) foi reconciliada com o README e a leitura física da Casa. **As sete missões continuam abertas por suas cláusulas finais**, mas fatos já comprovados não devem reaparecer como decisões em branco.
 
-- **Casa, scripts e HUD físico:** `K:\CentralDark\scripts\` é a pasta corrente do launcher `CENTRALDARK-ABRIR-TUDO.bat` e do monitor `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; a GUI única agora resolve `K:\CentralDark\HUD.html` e loga esse caminho. O antigo `F:\scripts` e `Downloads\CRISTAL LOGICA\scripts` não devem ser usados como rota corrente. O receipt Corpo Único T3 permanece **histórico**: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
-- **Casa, perfis e garimpo:** `F:\UnifiedRuntime` preserva perfis Segredo/Fulano, com `Fulanoo` físico observado; nenhum perfil foi migrado automaticamente. `E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE` não foi encontrado no caminho testado. `F:\_MAPA_CASA` existe, com `chefe-gabinete`, mas a coleção Garimpo precisa de localização própria; não inferir realocação só pelo nome do disco.
+- **Casa, scripts e HUD físico:** `K:\scripts\` é a pasta corrente do launcher `CENTRALDARK-ABRIR-TUDO.bat` e do monitor `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; a GUI única agora resolve `K:\HUD.html` e loga esse caminho. O antigo `F:\scripts` e `Downloads\CRISTAL LOGICA\scripts` não devem ser usados como rota corrente. O receipt Corpo Único T3 permanece **histórico**: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
+- **Casa, perfis e garimpo:** `F:\UnifiedRuntime` preserva perfis Segredo/Fulano, com `Fulanoo` físico observado; nenhum perfil foi migrado automaticamente. `K:\_MAPA_CASA\GARIMPO-CHEFE` não foi encontrado no caminho testado. `F:\_MAPA_CASA` existe, com `chefe-gabinete`, mas a coleção Garimpo precisa de localização própria; não inferir realocação só pelo nome do disco.
 - **Obsidian:** a decisão já está no owner [HERMES-CASA-OBSIDIAN-SYNC.md](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md): cofre privado separado + espelho canônico `docs/BRAIN` por hashes e preservação de conflitos. Implementação no caminho físico/current e sincronização E2E continuam provas independentes.
 - **Admin versus produtos:** os endereços e responsabilidades já constam deste README; a missão restante não é redescobrir cockpit, mas **comprovar login/autorização Lovable**. Identidade visual e escolha futura de `centraldark.exe` não são requisito automático para o Admin web funcionar; TelePainel/CRM/Multizap/bot exigem comparação funcional por owner.
 

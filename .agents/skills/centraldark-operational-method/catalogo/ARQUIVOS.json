@@ -1,0 +1,122 @@
+﻿[
+    {
+        "skill":  "centraldark-autonomous-conflict-costura",
+        "original":  "K:\\.agents\\skills\\centraldark-autonomous-conflict-costura\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-autonomous-conflict-costura\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "6B85B31D4B9D8BA81A56A28C74BC11F5D54601D3B2C50D9AC53782438DAC0D39",
+        "bytes":  8201
+    },
+    {
+        "skill":  "centraldark-auto-sync-vscode",
+        "original":  "K:\\.agents\\skills\\centraldark-auto-sync-vscode\\package.json",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-auto-sync-vscode\\package.json",
+        "relativo":  "package.json",
+        "sha256":  "72DF3DBEDB785967B5BA50D740BCE8202FAD7A644B30C570CE024FDE8BFC2E3C",
+        "bytes":  2088
+    },
+    {
+        "skill":  "centraldark-boot",
+        "original":  "K:\\.agents\\skills\\centraldark-boot\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-boot\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "FD2C8D2532815F88F210C6554EBE16CECAA3D85B4AEA07D112FE3160DE119C29",
+        "bytes":  6011
+    },
+    {
+        "skill":  "centraldark-boot",
+        "original":  "K:\\.agents\\skills\\centraldark-boot\\references\\example-boot-output.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-boot\\references\\example-boot-output.md",
+        "relativo":  "references\\example-boot-output.md",
+        "sha256":  "ACF78BEA4B627FD342A002F48B537EE8F7C6AA35FFC281307158B8E42E17491A",
+        "bytes":  1052
+    },
+    {
+        "skill":  "centraldark-capability-hud",
+        "original":  "K:\\.agents\\skills\\centraldark-capability-hud\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-capability-hud\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "028C33C362FDAB2B5C76BB7045B20F0A94314A340103C234D9404892D8C1F772",
+        "bytes":  3091
+    },
+    {
+        "skill":  "centraldark-esteira-motor",
+        "original":  "K:\\.agents\\skills\\centraldark-esteira-motor\\INTERLIGADOS.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-esteira-motor\\INTERLIGADOS.md",
+        "relativo":  "INTERLIGADOS.md",
+        "sha256":  "B3C73CBC4065EE89EB7868D415D95341DF2253862C564F324F78EFE04589F77A",
+        "bytes":  770
+    },
+    {
+        "skill":  "centraldark-esteira-motor",
+        "original":  "K:\\.agents\\skills\\centraldark-esteira-motor\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-esteira-motor\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "49745155400EE5B98825DCB60405D3BBBB28E6E38325813CB585C832190D5E5D",
+        "bytes":  18027
+    },
+    {
+        "skill":  "centraldark-esteira-motor",
+        "original":  "K:\\.agents\\skills\\centraldark-esteira-motor\\references\\sessao-erros-reais.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-esteira-motor\\references\\sessao-erros-reais.md",
+        "relativo":  "references\\sessao-erros-reais.md",
+        "sha256":  "DC23825F47023C4CCDFF0A9D637BD9595D4262AFD9B9A99D279B2E76B93876AB",
+        "bytes":  1217
+    },
+    {
+        "skill":  "centraldark-hub-credential-control-plane",
+        "original":  "K:\\.agents\\skills\\centraldark-hub-credential-control-plane\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-hub-credential-control-plane\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "F907162E7819DE04DAFD29C69660E0454D01C9CCCE04AB9E4C26F71D987C181E",
+        "bytes":  2403
+    },
+    {
+        "skill":  "centraldark-intent-deploy-router",
+        "original":  "K:\\.agents\\skills\\centraldark-intent-deploy-router\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-intent-deploy-router\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "FF847288DD610DD6C062FAADF8D05231915224C035BD80F7BE2AF4B3EB986681",
+        "bytes":  5628
+    },
+    {
+        "skill":  "centraldark-live-editing-fabric",
+        "original":  "K:\\.agents\\skills\\centraldark-live-editing-fabric\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-live-editing-fabric\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "17C1445D216C745C0A1E9486BFF22C2F662ED0A3D44E4ECA249B1AE7E241F304",
+        "bytes":  4490
+    },
+    {
+        "skill":  "centraldark-reuse-runtime",
+        "original":  "K:\\.agents\\skills\\centraldark-reuse-runtime\\runtime-binding.desired.json",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-reuse-runtime\\runtime-binding.desired.json",
+        "relativo":  "runtime-binding.desired.json",
+        "sha256":  "2CAD2DCC353AE81EC9D0B87767AFDD623356BFA1CC9E39E5DD76998FEB69737D",
+        "bytes":  471
+    },
+    {
+        "skill":  "centraldark-reuse-runtime",
+        "original":  "K:\\.agents\\skills\\centraldark-reuse-runtime\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-reuse-runtime\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "7BE3491476069A245F5943F0B341593E05B36A930EFD27505C06E22F14A1968E",
+        "bytes":  2074
+    },
+    {
+        "skill":  "centraldark-unified-surface-parity",
+        "original":  "K:\\.agents\\skills\\centraldark-unified-surface-parity\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-unified-surface-parity\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "A215679F7D5599163D4F797BA1DE07E7FF22E7FAF039F6B81FBB9245AEACAF18",
+        "bytes":  16610
+    },
+    {
+        "skill":  "centraldark-vscode-log-bridge",
+        "original":  "K:\\.agents\\skills\\centraldark-vscode-log-bridge\\SKILL.md",
+        "canonico":  "K:\\.agents\\skills\\centraldark-operational-method\\catalogo\\skills-integradas\\centraldark-vscode-log-bridge\\SKILL.md",
+        "relativo":  "SKILL.md",
+        "sha256":  "D28DB794B3A1564ED9D65CAF2E7448AAC53A634357F052907B53766538C620AB",
+        "bytes":  14645
+    }
+]

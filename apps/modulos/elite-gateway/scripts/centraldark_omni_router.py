@@ -645,7 +645,7 @@ def get_nous_token() -> str:
     if direct:
         return direct
     try:
-        auth_path = os.getenv("NOUS_AUTH_JSON", r"E:\CentralDark\Pivete\auth.json")
+        auth_path = os.getenv("NOUS_AUTH_JSON", r"K:\auth.json")
         with open(auth_path, "r", encoding="utf-8") as fh:
             data = json.load(fh)
         return str(data.get("providers", {}).get("nous", {}).get("access_token", "")).strip()

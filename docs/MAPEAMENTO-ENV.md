@@ -142,4 +142,4 @@ Regra do CHEFE: chave é descartável; guarda-se **onde** fica e **qual** nome, 
 | `%LOCALAPPDATA%\CentralDark\UnifiedRuntime\profiles\{Segredo,Fulano}\auth\` | sessão da ponte (OAuth + DPAPI) → refazer login pela `CentralDarkBridge` |
 | GitHub / Supabase CLI / Claude / Desktop Commander | `gh auth login`, `supabase login`, login dos apps, `desktop-commander remote` (novo device) |
 
-`E:\CentralDark\vault` **não é cofre de chave**: é vault Obsidian; a nota de ideia foi preservada no ramo `preservacao/casa-arquivos-20260926`.
+`K:\vault` **não é cofre de chave**: é vault Obsidian; a nota de ideia foi preservada no ramo `preservacao/casa-arquivos-20260926`.

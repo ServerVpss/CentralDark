@@ -397,6 +397,159 @@ NO_DEDICATED_PM2_SSH_DOCKER_NAMESPACE → CENTRALDARK/RDC no corpo autorizado + 
 PROVIDER_NAMESPACE_ABSENT → API/MCP/provider adapter existente; depois RDC/VPS se aplicável; senão UNKNOWN
 ```
 
+## 6.3 Cockpit como superfície viva (Sala de Controle)
+
+O Cockpit `/sala-controle` é a superfície onde o CHEFE vê, em tempo real, o efeito do que o agente muda na CentralDark. Não é canal novo: reutiliza o navegador já logado, o servidor de desenvolvimento da Forja e o ledger `notifications_log` existente.
+
+```text
+COCKPIT_IS_LIVE_SURFACE=true
+REUSE_LOGGED_BROWSER_SESSION=true
+NEVER_TYPE_CHEFE_PASSWORD=true
+DEV_SERVER_HMR != BUILD != DEPLOY
+EVENT_WRITTEN != CARD_VISIBLE
+CARD_VISIBLE_REQUIRES_READBACK=true
+```
+
+Rota provada em 2026-10-21:
+
+```text
+1. ABRIR    → Chrome de uso do CHEFE (sessão já logada) via extensão Claude in Chrome
+              (list_connected_browsers → tabs_context_mcp → navigate http://127.0.0.1:8080/sala-controle)
+              Navegador de testes/automação isolado NÃO tem a sessão: cai em /auth. Não logar por ele.
+2. MUDAR    → código em K:\apps\instinto-superior (owner real dos cards)
+              Vite dev server (`vite --port 8080`, servido do K:) recarrega o card sozinho (HMR).
+3. EMITIR   → evento no ledger existente public.notifications_log (projeto Supabase do Cockpit),
+              origem=claude_code, event_key único para dedupe; o hub 🔔 Claude escuta por Realtime.
+              metadata.owner e metadata.proof_state são os campos que o hub exibe
+              (sem proof_state o card mostra "prova: UNKNOWN").
+              Antes do primeiro insert numa sessão: conferir triggers da tabela e se linhas recentes
+              ficam sent_ok=false (nenhum envio automático ao Telegram). Nunca forjar sent_ok.
+4. LER      → readback no próprio Cockpit (find/get_page_text na aba certa: 🔔 Claude, Visão geral…)
+5. FECHAR   → só dizer "mudou no Cockpit" depois do readback; senão UNKNOWN.
+```
+
+Capability, não ferramenta. Qualquer agente com navegador repete a mesma rota:
+
+```text
+CAPABILITY = LOGGED_CHEFE_BROWSER_SESSION + READ_PAGE + CLICK/TYPE + LEDGER_WRITE
+AGENT_AGNOSTIC=true      # Claude, Hermes, ChatGPT agent, browser-use, computer-use
+```
+
+| Passo | Claude Code (provado 2026-10-21) | Equivalente em outro agente |
+|---|---|---|
+| Conectar ao Chrome logado | extensão Claude in Chrome: `list_connected_browsers` → `tabs_context_mcp` | browser-use/Playwright com o perfil do Chrome do CHEFE (contexto persistente), ou CDP no Chrome de uso |
+| Abrir Cockpit | `navigate` → `http://127.0.0.1:8080/sala-controle` | `goto` na mesma URL |
+| Ler card | `find` / `get_page_text` | leitura do DOM / árvore de acessibilidade |
+| Clicar / digitar | `computer` (`left_click`, `type`, `key`) ou `browser_batch` | click/fill do driver; computer-use por screenshot como último recurso |
+| Emitir evento | Supabase `execute_sql` → `insert` em `public.notifications_log` | mesma tabela, via MCP CentralDark/Supabase autorizado |
+| Readback | `find` do título do evento na aba 🔔 Claude | mesma leitura no DOM |
+
+Multi-tela: o mesmo grupo de abas pode conter Cockpit e outra superfície (ex.: conversa do ChatGPT no projeto CentralDark). O agente só enxerga abas dentro do grupo de automação; abas fora dele não são visíveis.
+
+```text
+TEST_BROWSER_WITHOUT_SESSION = /auth = NOT_A_ROUTE   # Chrome for Testing / DevTools isolado
+ONLY_TABS_IN_AUTOMATION_GROUP_ARE_VISIBLE=true
+
+Teste real 2026-10-21 (Chrome, 8080): listar aba → ler DOM (título, 6 abas, 67 botões) → clicar "🎯 Goals" (inofensivo) → aba ativa virou "🎯 Goals" e "Goals Vigentes" apareceu. PASS.
+VSCODE_NATIVE_BROWSER_CONTROL=UNKNOWN   # workbench.browser.enableChatTools ligado no settings.json (backup feito); sem clique na UI do VS Code e sem log de carga da ferramenta: não comprovado
+```
+
+Limites:
+
+```text
+HMR_PROVES_DEV_ONLY=true            # card mudou no 8080 local, não em produção
+PRODUCTION_REQUIRES_BUILD_AND_DEPLOY_RECEIPT=true
+CARD_TEXT_HARDCODED_DOES_NOT_LISTEN=true   # card fixo só muda editando o owner do componente
+EVENT_WITHOUT_PROOF_FIELD_SHOWS_PROOF_UNKNOWN=true
+```
+
+## 6.4 Ciclo de integração: delegar, vigiar, conferir, subir
+
+Usado quando o executor de main é outro agente (ex.: ChatGPT no PR) e a Casa só confere e integra.
+
+```text
+DELEGAR   → pedido com intenção já decidida, arquivos exatos, critério de aceite e formato de resposta (SHA)
+VIGIAR    → Monitor de fundo que consulta o PR a cada ~45 s e avisa só quando o head muda
+CONFERIR  → fetch do head novo, git show do que mudou, diff contra a última versão validada na Casa
+VALIDAR   → worktree isolado no F:, vite build, carregar 8080, conferir no navegador
+SUBIR     → commit por cima do head atual, push fast-forward (sem force); aborta se o PR andou
+REGISTRAR → evento no notifications_log com proof_state e SHA
+```
+
+Regras aprendidas (2026-10-21):
+
+```text
+ONE_WRITER_PER_FILE=true               # quem mexe num arquivo avisa antes; o outro não reescreve
+DELEGATE_CONTENT_NOT_DISK=true         # o outro agente trabalha no PR; a Casa não sobe trabalho alheio sem conferir
+MONITOR_STOPS_ON_EXPIRY=30min          # re-armar após cada disparo; sem re-armar a integração para em silêncio
+CHECK_PR_HEAD_BEFORE_PUSH=true         # push só se origin/pr == HEAD local; senão PR_MOVED e nada sobe
+DO_NOT_FORCE_PUSH=true
+PORT_8080_HANDOVER=explicit            # derrubar o 8080 antigo só com autorização do CHEFE; confirmar porta livre antes de subir
+ENV_FILES_COPY_IGNORED=true            # .env.local não vai no Git: copiar do K: sem mostrar valor e confirmar git check-ignore
+MOCK_UI_DETECTION=true                 # hub com texto fixo ("abc123", "0 erros") é demonstração, não ledger: procurar useNotificationsLog
+BYTE_COMPARE_BEFORE_ACCEPT=true        # arquivo de outro agente aceito só depois de diff contra a versão validada
+REFERENCE_ELEMENT_WHEN_ASKING_CHATGPT=true   # ao falar com o ChatGPT sobre a tela, citar o elemento exato (ex.: div.h-full da barra) e não só descrever
+GLOW_ON_PROGRESS_BAR=subtle            # brilho neon leve, color-mix(oklab, --neon-blue 45%), sem mudar a lógica da barra
+INVALID_TAILWIND_CLASS_CHECK=true      # classes tipo bg-x-500/100/15 não existem; conferir no build e no DOM
+```
+
+Vigia padrão (um disparo por mudança, sem spam):
+
+```text
+base=<SHA atual>
+while true; do
+  sha=$(gh pr view <N> --repo <repo> --json headRefOid --jq .headRefOid)
+  [ "$sha" != "$base" ] && { echo "NOVO_SHA=$sha"; exit 0; }
+  sleep 45
+done
+```
+
+Evento de vigia: `Vigia armado` ao iniciar, `Vigia disparou` com o SHA novo; um card por transição, nunca um card por consulta.
+
+## 6.5 Lei da evolução contínua da automação
+
+Referência: a receita de cada capacidade vive no owner de `skill-workshop` (`UPDATE_EXISTING_RECIPE_RECORD`). Esta lei aplica essa regra às automações de superfície e integração.
+
+```text
+LEI_EVOLUCAO_AUTOMACAO=true
+EVERY_PROVEN_CONQUEST_EVOLVES_SAME_SKILL=true     # toda conquista provada atualiza ESTA skill, sem skill nova
+NO_NEW_SKILL_PER_WIN=true                          # novo caso = novo passo/tabela/regra aqui, não arquivo paralelo
+SELF_PROVISIONING_REQUIRED=true                    # a skill registra a própria evolução com prova
+PROVEN_ONLY_ENTERS_SKILL=true                      # só o que passou validação real (build, navegador, receipt) entra
+UNKNOWN_STAYS_OUT_OF_SKILL=true                    # hipótese fica como CANDIDATE, não como regra
+REMOVE_STALE_RULE_WITH_PROOF=true                  # regra contradita por prova nova é reescrita ou removida, não acumulada
+```
+
+Ciclo obrigatório após cada conquista:
+
+```text
+CONQUISTA_PROVADA
+→ SAME_SKILL?                  # mesma capacidade: estende esta skill; outra: reusa o owner existente
+→ COMPARE_EXISTING_RULE        # já existe? então só o delta
+→ WRITE_DELTA_TO_THIS_FILE     # seção, tabela ou linha de cadeado com o SHA e a prova
+→ CHECK_NO_DUPLICATE_SKILL     # grep por skill parecida antes de criar qualquer coisa
+→ EVENT_SKILL_EVOLVED          # notifications_log: proof_state + SHA da skill
+→ NEXT_CONQUEST_STARTS_FROM_HERE
+```
+
+Registro de evolução (append, nunca apagar histórico):
+
+```text
+EVOLUCAO_LOG:
+- 2026-10-21 | 6.3 cockpit vivo (qualquer agente com navegador) | prova: leitura de card no 8080
+- 2026-10-21 | 6.4 ciclo delegar-vigiar-conferir-subir | prova: PR #1895 20d57208 → 433e854c → b3427c9d conferidos
+- 2026-10-21 | 6.5 esta lei | prova: skill editada no K:, evento no ledger
+```
+
+Ciclo de evolução: o método de medir baseline, executar delta, reproduzir falha, contraprova e preservar o verde é o da seção "♻️ Self-Evolution e XP comprovado" de `.agents/skills/meta-lupa/SKILL.md`. Esta lei não o repete; apenas aponta para ele.
+
+Evidência por etapa em interface: o padrão de percorrer telas com prova em cada passo está em `autonomous-ai-agents/ai-andarilho` (existe na VPS, em `/root/.hermes/skills/`, não no K:). Esta skill usa o mesmo padrão no Cockpit (6.3).
+
+Componente reutilizável (plugin de UI): `apps/instinto-superior/src/components/central/BarraNeon.tsx`.
+Uso: `<BarraNeon percentual={n} rotulo="..." />`. Props opcionais: `altura` (sm|md), `corInicio`, `corFim`, `corParticula` (RGB), `densidade`, `velocidade`, `particulas` (false desliga o canvas), `className`. Respeita `prefers-reduced-motion`, tem `role="progressbar"` e aria-valuenow. Qualquer barra de progresso nova do Cockpit usa este componente em vez de copiar o estilo.
+
+Limite honesto: esta lei é regra escrita, não auto-edição mágica. A evolução acontece quando um executor (Claude, Hermes ou outro) segue o ciclo acima e grava o delta aqui. O que a torna automática é o evento `EVENT_SKILL_EVOLVED` e o vigia de fundo, não a skill se reescrever sozinha.
+
 ## 7. Estratégia de execução
 
 ```text

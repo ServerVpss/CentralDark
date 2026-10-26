@@ -520,3 +520,39 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
   assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
 });
+
+test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
+  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
+  // volta a capsula flutuante superior (sem criar segundo shell/executor).
+  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
+  assert.match(cockpit, /data-cd-harness="top-floating"/);
+  for (const control of [
+    'aria-label="CentralDark · visão geral"',
+    'aria-label="Lupa · buscar ferramentas"',
+    'aria-label="Mapa dos sistemas"',
+    'aria-label="Notificações"',
+  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+  assert.match(cockpit, /className="sticky top-0 z-50/);
+  assert.match(cockpit, /className="fixed inset-x-0 top-16/);
+  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
+  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
+  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
+  assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
+  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+});
+
+test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
+  const loop = read("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md");
+  assert.match(cockpit, /function JornadaEvolutiva/);
+  assert.match(cockpit, /TabsTrigger value="jornada"/);
+  assert.match(cockpit, /TabsContent value="jornada"/);
+  assert.match(cockpit, /data-cd-flow="instinto.CockpitShell.jornada-evolutiva"/);
+  assert.match(cockpit, /!KAIZEN/);
+  assert.match(cockpit, /!MULTIBUSSOLA/);
+  assert.match(cockpit, /Nível 06 · marco narrativo/);
+  assert.match(cockpit, /abrirDestino\("recibos"\)/);
+  assert.match(cockpit, /abrirDestino\("forja"\)/);
+  assert.match(loop, /Projecao didatica no Cockpit/);
+  const bloco = cockpit.split("function JornadaEvolutiva")[1].split("function MenuVisualCentralDark")[0];
+  assert.doesNotMatch(bloco, /fetch\(|execSync\(|localStorage/);
+});

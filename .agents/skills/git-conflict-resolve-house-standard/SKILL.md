@@ -194,6 +194,39 @@ REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
 
 `SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
 
+
+## Primary-source-first — contrato executável da COSTURA
+
+```text
+PRIMARY_SOURCE_REQUIRED_BEFORE_RESOLUTION=true
+PRIMARY_SOURCE_SCOPE=CONFLICTED_FILE_HISTORY
+PRIMARY_SOURCE_PR=git_log_PR_HEAD_for_conflicted_path
+PRIMARY_SOURCE_MAIN=git_log_MAIN_HEAD_for_conflicted_path
+REGISTRY_PROVENANCE=SOURCE_REF_PLUS_PRESERVE_RULE
+UNKNOWN_INTENT_OR_MISSING_HUNK=YELLOW_NO_PUSH
+TRADEOFF_REQUIRED_FOR_CURRENT_OR_INCOMING=true
+PROJECT_BEHAVIOR_TESTS_REQUIRE_SAME_HEAD_CI=true
+TRUSTED_HELPERS_AND_REGISTRY_FROM_RESOLVER_CHECKOUT=true
+```
+
+O motor usa os commits de cada lado como fonte primária mínima, registrando
+`PR_HEAD`, `MAIN_SHA`, `MERGE_BASE`, mensagens e quantidade de hunks **antes**
+de aplicar a estratégia. Para padrões conhecidos exige `SOURCE_REF` e
+`PRESERVE_RULE` no registry. Quando a intenção não estiver sustentada por
+histórico verificável, ou o conflito não for textual, a resolução fica
+**YELLOW, sem push**. A evidência por arquivo não equivale a prova semântica
+por hunk: conflitos novos ou incompatíveis precisam de discriminante e replay.
+
+`CURRENT`/`INCOMING` registram explicitamente qual lado foi descartado;
+`BOTH`/`STRUCTURED` só são permitidos por política homologada. Não inventar
+comportamento para acomodar conflito. Nunca tratar sintaxe verde como testes
+comportamentais verdes: os testes do projeto rodam no CI sem privilégios no
+**novo HEAD**, não dentro do job privilegiado `pull_request_target`.
+
+A regra externa “nunca abortar” não se aplica cegamente aqui: o trabalho é
+feito num worktree efêmero; quando faltar prova, abortar **somente esse merge
+isolado**, descartar o worktree e impedir push é a fronteira segura.
+
 ## Fluxo canônico
 
 ```text

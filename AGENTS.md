@@ -1865,7 +1865,7 @@ PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=K:\
-# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior E:\CentralDark\Pivete\CentralDark permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior K:\ permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
 
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
@@ -2531,3 +2531,20 @@ A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo
 
  Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
  <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+
+## 🔒 Cabeçalho de execução obrigatório — FIX POINT
+
+FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
+FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
+FIXED_POINT_TEN_EVALUATOR=scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+FIXED_POINT_HEADER_PHASES=ENTRY|MATERIAL_DELTA|EXIT
+FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT
+FIXED_POINT_HEADER_MISSING=INVALID
+FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED
+FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS
+FIXED_POINT_HEADER_ALL_TEN_PASS_AND_GOAL_RECEIPT=USED_AND_FIXED_POINT
+HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
