@@ -3203,3 +3203,20 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-10-21
 - **Contexto:** Cline tenda marcar tarefa concluída apenas por código compilar; nova regra exige contraprova visual e funcional na interface de operação
 - **Aprendizado:** Não basta o código funcionar; a experiência do usuário precisa funcionar na mesma interface em que ele vai operar. Mudanças que afetam o cockpit exigem contraprova visual/funcional dos controles relacionados ao escopo alterado.
+
+### 218. RED #003: PowerShell corrigido, workspace Casa sem checkout Git
+- **Categoria:** erro-correcao
+- **Data:** 2026-10-22
+- **Contexto:** A verificação na sessão Casa/VS Code executou um comando PowerShell mínimo com exit 0, mas C:\root\CentralDark não continha .git e git rev-parse falhou com not a git repository. Não foram encontrados marcadores de checkout até profundidade 4.
+- **Aprendizado:** Separar a prova em duas condições: PowerShell pode estar PASS isoladamente, mas VERIFY_GIT_WORKTREE_AND_POWERSHELL_COMMAND_EXIT_0 só pode ser PASS quando o caminho resolvido for um checkout Git válido. Não criar, mover, resetar ou limpar um repositório para mascarar a ausência do checkout; emitir FAIL_OBSERVED/UNKNOWN e pedir a bridge ou workspace autorizado.
+
+
+### 219. Lembrança operacional ZENDRIVE — recuperar PR #1842 antes de agir
+- **Categoria:** continuidade, inventário, memória entre agentes, contraprova
+- **Data:** 2026-10-22
+- **Contexto:** CHEFE confirmou intenção: "Tu registrou? Pra não ficar esquecido todos têm que lembrar." A PR #1842 foi **MERGED** em 18/10/2026, e a `main` contém `docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md` (inventário ZENDRIVE e tabela completa de 31 ferramentas RDC) e `apps/modulos/mcp/src/tools/core/mcp-admin.js` (14 rotas no SOURCE e `RDC_EQUIVALENCE_MATRIX`). O recibo histórico é `https://github.com/ServerVpss/CentralDark/pull/1842#issuecomment-6245057178`. Na época do primeiro teste a VPS anunciava 13 rotas; a informação é snapshot, não verdade permanente.
+- **Aprendizado:** registrar em PR e código não faz todos os agentes se lembrarem automaticamente. Conectar o conhecimento ao **entrypoint canônico `LEIA-ME-IA.md`** usando recuperação por pertinência: qualquer SOL/JARVIS/Hermes/Claude/Codex/Cline/Cockpit que consumir esta entrada e atuar sobre Remote-SSH, Casa↔VPS, terminal VS Code, ferramentas RDC ou MCP deve consultar primeiro o owner, a matriz e o último checkpoint; remedir CURRENT na superfície adequada; preservar a intenção e writer único; emitir recibo e NEXT_CURSOR. Se loader/contexto remoto não demonstrou leitura: `CONSUMPTION_UNKNOWN`, nunca "todos aprenderam".
+- **Correção de precedência:** decisão mais nova de 21/10/2026, item 216: `DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false`. A matriz das 31 ferramentas é **mapa de migração/paridade**, não obrigação de usar fornecedor externo. Reutilizar MCP CentralDark, SSH/Tailscale e Hermes/executor nativo com autenticação real; preservar história sem restaurar dependência.
+- **Gates permanentes:** `SOURCE != RUNTIME`; `MERGED != DEPLOYED`; `SSH_CASA_VPS != SHELL_VPS_CASA`; `VSIX_INSTALLED != VSCODE_TERMINAL_EXEC_ACK`; `HTTP200 != HEALTH_PASS`; `UNKNOWN != PASS`. Para afirmar lembrança compartilhada, cada consumer deve carregar a referência e devolver ACK/identidade/versão/receipt; memória não autoriza operações nem acesso por si só.
+- **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
+- **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
