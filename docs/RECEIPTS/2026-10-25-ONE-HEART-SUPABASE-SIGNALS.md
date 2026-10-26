@@ -26,3 +26,17 @@ OWNER interface: apps/instinto-superior/src/lib/cockpit.functions.ts e component
 
 ## ESTADO / NEXT_CURSOR
 Prova local de fonte e interface apenas. COMMIT != CI != MERGED != DEPLOYED. Validar gates e readback da API em producao no mesmo SHA. Em Supabase, verificar frescor de edge_function_health/module_health_status e emissao dos 12 radar_pulses; ate haver sinais reais o cartao e UNKNOWN. Pareamento continua na PR #1957 isoladamente.
+
+## CONTRAPROVA AO VIVO — 2026-10-26 08:52 UTC
+
+Leitura read-only pelo conector Supabase direto; projeto `CentralDark` (`lyoigsqluyktoclwdaft`), região `sa-east-1`, estado da plataforma `ACTIVE_HEALTHY`. Não houve escrita no banco.
+
+| Fonte existente | Linhas | Último sinal | Sinais nos últimos 5 min | Leitura conservadora |
+|---|---:|---|---:|---|
+| `public.edge_function_health` | 79 | 2026-07-02 18:30:11 UTC | 0 | STALE |
+| `public.module_health_status` | 95 | 2026-10-26 08:37:39 UTC | 0 | STALE para a janela de 5 min |
+| `public.radar_pulses` | 0 | nenhum | 0 | MISSING |
+
+**Veredito para o cartão One Heart:** `UNKNOWN`, nunca verde. O requisito descrito acima — Edge Functions frescas, módulos frescos e os 12 pulsos de Radar frescos/PASS — não está satisfeito no readback atual. A ausência de pulsos e a idade de `edge_function_health` impedem declarar integração operacional, mesmo com o projeto Supabase saudável.
+
+**Limite de sincronização:** a chamada do atualizador CentralDark pelo MCP não pôde ser usada nesta sessão porque o endpoint SSE configurado respondeu 404; por isso, este recibo foi anexado ao owner desta PR via GitHub. Não foi feito deploy, alteração de tabela, Edge Function ou promoção de estado no Cockpit.
