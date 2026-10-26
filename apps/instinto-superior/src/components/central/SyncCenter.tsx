@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { MinhaOficina } from "@/components/central/MinhaOficina";
+import { useSshBridgeProof } from "@/components/central/SshBridgeProof";
+import { FeedVivoCentralDark } from "@/components/central/FeedVivoCentralDark";
 import {
   Activity,
   GitCommit,
@@ -70,14 +72,14 @@ const PROVAS_FLUXO: Record<string, ConexaoFluxo> = {
     origem: "VPS",
     destino: "Casa",
     status: "SEM_PROVA",
-    detalhe: "tailscale ping da VPS para a Casa não encontrou peer; isso prova apenas essa tentativa, não uma falha geral da rota.",
+    detalhe: "Sem prova SSH recente; confira o sensor Supabase.",
   },
   "casa-vps": {
     id: "casa-vps",
     origem: "Casa",
     destino: "VPS",
-    status: "LEITURA_OK",
-    detalhe: "SSH Segredo-VPS respondeu; NÃO prova sync ou escrita.",
+    status: "SEM_PROVA",
+    detalhe: "Sem prova SSH recente; confira o sensor Supabase.",
   },
   "vps-github": {
     id: "vps-github",
@@ -172,14 +174,20 @@ function DominioDoLoop() {
   );
   const [gavetaAberta, definirGavetaAberta] = useState<"fluxo" | "rota" | "modelos" | null>(null);
   const [rotaSelecionada, definirRotaSelecionada] = useState<string | null>(null);
-  const rotaDetalhe = rotaSelecionada ? PROVAS_FLUXO[rotaSelecionada] : null;
+  const ssh = useSshBridgeProof();
+  const provasAtuais: Record<string, ConexaoFluxo> = {
+    ...PROVAS_FLUXO,
+    "casa-vps": { ...PROVAS_FLUXO["casa-vps"], ...ssh.rotas["casa-vps"] },
+    "vps-casa": { ...PROVAS_FLUXO["vps-casa"], ...ssh.rotas["vps-casa"] },
+  };
+  const rotaDetalhe = rotaSelecionada ? provasAtuais[rotaSelecionada] : null;
   const principais: string[] = [...ROTAS_FLUXO[percurso]];
   const verificadas = duasVias
     ? [...new Set([...principais, ...principais.map((id) => REVERSOS[id] ?? id)])]
     : principais;
-  const leituras = verificadas.filter((id) => PROVAS_FLUXO[id]?.status === "LEITURA_OK").length;
-  const lacunas = verificadas.filter((id) => PROVAS_FLUXO[id]?.status === "SEM_PROVA").length;
-  const falhas = verificadas.filter((id) => PROVAS_FLUXO[id]?.status === "ROTA_FALHOU").length;
+  const leituras = verificadas.filter((id) => provasAtuais[id]?.status === "LEITURA_OK").length;
+  const lacunas = verificadas.filter((id) => provasAtuais[id]?.status === "SEM_PROVA").length;
+  const falhas = verificadas.filter((id) => provasAtuais[id]?.status === "ROTA_FALHOU").length;
   const cobertura = Math.round((leituras / verificadas.length) * 100);
   const caminho =
     percurso === "github" ? ["Casa", "GitHub", "VPS", "Casa"] : ["Casa", "VPS", "GitHub", "Casa"];
@@ -274,6 +282,14 @@ function DominioDoLoop() {
           </button>
         ))}
       </div>
+      <div data-cd-flow="instinto.SyncCenter.ssh-bidirecional-supabase"
+        className="mt-4 rounded-md border border-border bg-background/40 p-4 text-xs">
+        <h4 className="font-semibold">🔗 Casa ⇄ VPS · autenticação e leitura SSH</h4>
+        <p className="mt-1 text-muted-foreground">{ssh.informacao}</p>
+        <p className="mt-1 text-muted-foreground">
+          Provas com horário e validade; SSH nos dois sentidos não é sincronização de arquivos nem deploy.
+        </p>
+      </div>
       {visao === "circuito" ? (
         <div className="mt-4 space-y-4" role="tabpanel">
           <div className="flex flex-wrap items-center justify-center gap-2 rounded-md border border-border bg-background/40 p-4">
@@ -290,7 +306,7 @@ function DominioDoLoop() {
           </div>
           <div className="grid gap-2 md:grid-cols-3">
             {verificadas.map((id) => {
-              const elo = PROVAS_FLUXO[id];
+              const elo = provasAtuais[id];
               if (!elo) return null;
               return (
                 <div key={id} className="rounded-md border border-border/70 bg-background/30 p-3">
@@ -330,14 +346,14 @@ function DominioDoLoop() {
             className={`rounded-md border p-4 ${percurso === "github" ? "border-neon-blue" : "border-border"}`}
           >
             <h4 className="font-semibold text-sm">
-              🐙 GitHub primeiro · 1/3 (33,3%) leituras do ciclo
+              🐙 GitHub primeiro · {ROTAS_FLUXO.github.filter((id) => provasAtuais[id]?.status === "LEITURA_OK").length}/3 leituras do ciclo
             </h4>
             <p className="mt-2 text-xs text-emerald-500">
               Ganho: revisão, versionamento e checks antes do deploy, quando implementados e
               comprovados.
             </p>
             <p className="mt-2 text-xs text-amber-500">
-              Perda: depende de comprovar GitHub → VPS; retorno VPS → Casa via Tailscale permanece sem prova.
+              Perda: depende de comprovar GitHub → VPS; retorno VPS → Casa tem prova recente de SSH somente leitura no Supabase; deploy permanece sem prova.
             </p>
             <p className="mt-3 text-xs text-muted-foreground">
               Trilho recomendado de publicação. Ainda não autorizado a publicar.
@@ -347,7 +363,7 @@ function DominioDoLoop() {
             className={`rounded-md border p-4 ${percurso === "vps" ? "border-neon-blue" : "border-border"}`}
           >
             <h4 className="font-semibold text-sm">
-              🖥️ VPS primeiro · 2/3 (66,7%) leituras do ciclo
+              🖥️ VPS primeiro · {ROTAS_FLUXO.vps.filter((id) => provasAtuais[id]?.status === "LEITURA_OK").length}/3 leituras do ciclo
             </h4>
             <p className="mt-2 text-xs text-emerald-500">
               Ganho: Casa → VPS (SSH) e VPS → GitHub (leitura) tiveram resposta nesta amostra.
@@ -524,7 +540,7 @@ function DominioDoLoop() {
         </div>
         <p className="mt-2 text-[11px] text-muted-foreground">
           <ShieldAlert className="mr-1 inline size-3" /> Placar gamificado de evidências, NÃO
-          porcentagem de sincronização ou ganho financeiro. Snapshot: {SNAPSHOT_FLUXO}. Só uma nova
+          porcentagem de sincronização ou ganho financeiro. Snapshot das outras rotas: {SNAPSHOT_FLUXO}. Casa/VPS: Supabase com TTL. Só uma nova
           medição autoriza atualizar os selos.
         </p>
       </div>
@@ -722,6 +738,7 @@ export function SyncCenter({ estado }: { estado?: EstadoCentralDark }) {
       </div>
       <MinhaOficina />
       <DominioDoLoop />
+      <FeedVivoCentralDark />
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <BlocoEstado
           titulo="Main oficial"

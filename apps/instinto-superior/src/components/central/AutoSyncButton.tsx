@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
+import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
 import { supabase } from '@/integrations/supabase/client'
+import { SyncLoopIcon } from '@/components/central/SyncLoopIcon'
+import { SyncActionButton } from '@/components/central/SyncActionButton'
 
 interface SyncStatus {
   timestamp: string | null
   status: 'idle' | 'syncing' | 'success' | 'failed' | 'conflict'
   human_readable: string
   target?: string
+  details?: string
 }
 
 /**
@@ -86,7 +89,7 @@ export const AutoSyncButton: React.FC = () => {
   const getStatusIcon = () => {
     switch (syncStatus.status) {
       case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />
-      case 'syncing': return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />
+      case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
       default: return <Clock className="w-5 h-5 text-gray-500" />
@@ -112,6 +115,11 @@ export const AutoSyncButton: React.FC = () => {
             <div>
               <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
               <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
+              {syncStatus.details && syncStatus.status !== 'idle' && (
+                <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
+                  {syncStatus.details}
+                </p>
+              )}
             </div>
           </div>
 
@@ -125,10 +133,14 @@ export const AutoSyncButton: React.FC = () => {
             <Button onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
               VPS
             </Button>
-            <Button onClick={() => handleSync('all')} disabled={isSyncing} size="sm" className="gap-2">
-              <RefreshCw className="w-4 h-4" />
-              {isSyncing ? 'Sincronizando...' : 'Sincronizar Tudo'}
-            </Button>
+            <SyncActionButton
+              label="Sincronizar Tudo"
+              onClick={() => handleSync('all')}
+              isFetching={isSyncing}
+              autoSyncEnabled
+              lastError={syncStatus.status === 'failed' ? syncStatus.human_readable : null}
+              variant="default"
+            />
           </div>
         </div>
       </Card>
