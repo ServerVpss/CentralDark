@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Activity, Eye, Github, House, Monitor, RefreshCw, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 type Luz = "verde" | "amarela" | "vermelha";
 const CORES: Record<Luz, string> = {
@@ -19,7 +20,7 @@ function luz(estado: Estado): Luz {
 }
 function etiqueta(estado: Estado, nome = "") {
   if (estado === "PASS") return "OPERACIONAL";
-  if (estado === "RUNNING") return nome.toLowerCase().includes("screenpipe") ? "DEGRADADO" : "EM EXECUÇÃO";
+  if (estado === "RUNNING") return "EM EXECUÇÃO";
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
@@ -33,6 +34,11 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
       <span className="font-mono text-[10px]">{etiqueta(valido, nome)}</span>
     </span>
   );
+}
+/** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
+function comMotivo(base: string, estado: Estado, motivo: string | null | undefined) {
+  if (estado === "PASS" || !motivo) return base;
+  return `${base} · MOTIVO: ${motivo.slice(0, 120)}`;
 }
 function DataHora({ iso }: { iso: string | null | undefined }) {
   if (!iso) return <>SEM MEDIÇÃO</>;
@@ -59,21 +65,22 @@ export function StatusPanel() {
     retry: false,
     refetchOnWindowFocus: true,
   });
-  const fresco = hidratado && Boolean(q.data) && !q.isError && (Date.now() - q.dataUpdatedAt < 45_000);
+  const agora = useRelogioVivo();
+  const fresco = hidratado && agora !== null && Boolean(q.data) && !q.isError && (agora - q.dataUpdatedAt < 45_000);
   const d = fresco ? q.data : null;
   const unknown: Estado = "UNKNOWN";
   const screen: Estado = d?.screenpipe ?? unknown;
   const remote: Estado = d?.desktop ?? unknown;
   const medidoEm = d?.atualizadoEm;
   const sinais = [
-    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: `HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, icon: House },
-    { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: d?.mainSha?.slice(0, 12) ?? "SHA não medido", icon: Github },
+    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, d?.casaSite ?? unknown, d?.casaSiteErro), icon: House },
+    { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: comMotivo(d?.mainSha?.slice(0, 12) ?? "SHA não medido", d?.github ?? unknown, d?.fonte), icon: Github },
     { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
-    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: `HTTP ${d?.apiHealthHttp ?? "?"} · /health`, icon: Activity },
-    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: `HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, icon: GitBranch },
-    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: `HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, icon: Cpu },
-    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: `HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, icon: HeartPulse },
-    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: `HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, icon: Database },
+    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiHealthHttp ?? "?"} · /health`, d?.apiHealth ?? unknown, d?.apiHealthErro), icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
+    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
+    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
+    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: comMotivo(`HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, d?.receipts ?? unknown, d?.receiptsErro), icon: Database },
   ];
 
   const rotas = [
@@ -120,9 +127,18 @@ export function StatusPanel() {
         </div>
         <div className="flex items-center gap-3">
           <span className="font-mono text-[10px] text-muted-foreground">POLÍTICA 15S</span>
-          <Button data-cd-flow="instinto.StatusPanel.botao-01" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            <RefreshCw className={`size-4 ${q.isFetching ? "animate-spin" : ""}`} /> Medir agora
-          </Button>
+          <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
+            ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
+          </span>
+          <SyncActionButton
+            data-cd-flow="instinto.StatusPanel.botao-01"
+            label="Medir agora"
+            onClick={() => void q.refetch()}
+            isFetching={q.isFetching}
+            autoSyncEnabled
+            lastSuccessAt={fresco ? medidoEm : null}
+            lastError={q.isError ? "falha de transporte no servidor" : null}
+          />
         </div>
       </header>
       <p className="font-mono text-[11px] text-muted-foreground" role="status" aria-live="polite">

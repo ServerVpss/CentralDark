@@ -15,7 +15,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { PainelConsumo } from "@/components/central/PainelConsumo";
 import { PainelAdminCentralDark } from "@/components/central/PainelAdminCentralDark";
 import { McpConsoleCentralDark } from "@/components/central/McpConsoleCentralDark";
+import { MenuContaCentralDark } from "@/components/central/MenuContaCentralDark";
+import { HermesOneWebLocal } from "@/components/central/HermesOneWebLocal";
+import { useModulosCockpit } from "@/lib/modulos-cockpit";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { SyncLoopIcon } from "@/components/central/SyncLoopIcon";
 import { PainelPR1873 } from "@/components/central/PainelPR1873";
 import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
@@ -39,7 +44,6 @@ import {
   Settings2,
   Layers3,
   Terminal,
-  RefreshCcw,
   MessageCircle,
   Wrench,
   Zap,
@@ -64,7 +68,6 @@ import { RaioXVivo } from "@/components/central/RaioXVivo";
 import { PapagaioHudMcp } from "@/components/central/PapagaioHudMcp";
 import { ReceiptsDashboard } from "@/components/central/ReceiptsDashboard";
 import { ForjaExecutor } from "@/components/central/ForjaExecutor";
-import { ClaudeNotificationsHub } from "@/components/central/ClaudeNotificationsHub";
 import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { GramPermissions } from "@/components/central/GramPermissions";
 import { Button } from "@/components/ui/button";
@@ -258,12 +261,8 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
           <p className="mt-1 text-xs text-muted-foreground">Interface própria ligada ao cadastro existente e ao serviço MTProto da VPS. Leitura do status protegida pelo servidor; envio de mensagens ainda não integrado.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button type="button" variant="outline" size="sm" onClick={() => void mtproto.refetch()} disabled={mtproto.isFetching}>
-            <RefreshCcw className={mtproto.isFetching ? "size-4 animate-spin" : "size-4"} /> Medir MTProto
-          </Button>
-          <Button type="button" variant="outline" size="sm" onClick={() => void consulta.refresh()} disabled={consulta.loading}>
-            <RefreshCcw className={consulta.loading ? "size-4 animate-spin" : "size-4"} /> Atualizar bots
-          </Button>
+          <SyncActionButton label="Medir MTProto" onClick={() => void mtproto.refetch()} isFetching={mtproto.isFetching} />
+          <SyncActionButton label="Atualizar bots" onClick={() => void consulta.refresh()} isFetching={consulta.loading} />
           <Button type="button" variant="outline" size="sm" onClick={abrirAdmin}>Admin dos bots</Button>
         </div>
       </div>
@@ -361,7 +360,9 @@ function dentroDaCascaAionUI(): boolean {
 
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
   const { pele, selecionar } = usePeleCockpit();
+  const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [hermesOneAberto, definirHermesOneAberto] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
   // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
   // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
@@ -394,6 +395,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     }
   }
   function abrirEstudio() {
+    if (modulos.aionui === "desativado") return;
+    definirHermesOneAberto(false);
     if (dentroDaCascaAionUI()) {
       // Dentro da casca, o Estúdio é a própria casca: pede ao host as funções originais (/guid) em vez de
       // abrir outro AionUI (iframe) dentro do cockpit, que fecharia o espelho. O host lê este parâmetro.
@@ -405,6 +408,13 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     definirEstudioAberto(true);
     void conferirEstudio();
     window.requestAnimationFrame(() => document.getElementById("centraldark-estudio")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+  function abrirHermesOne() {
+    // Somente a UI web local do Hermes, nunca a UI do AionUI ou novo gateway.
+    if (modulos.hermes === "desativado") return;
+    definirEstudioAberto(false);
+    definirHermesOneAberto(true);
+    abrirDestino("hermes");
   }
   const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
@@ -470,21 +480,68 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           <Button size="sm" variant="ghost" title="CentralDark" aria-label="CentralDark · visão geral" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           <Button size="icon" variant="ghost" title="Lupa · buscar ferramentas" aria-label="Lupa · buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("right")}><Layers3 className="size-4" /></Button>
-          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => abrirDestino("claude-notifications")}><Bell className="size-4" /></Button>
+          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => { definirAbaAdminInicial("notificacoes"); abrirDestino("admin"); }}><Bell className="size-4" /></Button>
         </nav>
       ) : null}
-      {/* Header Visual da Sala de Controle - marca CentralDark */}
-      <div className="relative border-b border-border bg-background/50 px-4 py-4 sm:px-6">
-        <div className="flex items-center gap-2.5">
-          <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
-            <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
-          </span>
-          <span className="flex flex-col leading-none">
-            <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
-            <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
-          </span>
+      {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
+      <header className="relative z-50 border-b border-border bg-background/95 px-4 py-3 sm:px-6">
+        <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
+              <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+            </span>
+            <span className="flex flex-col leading-none">
+              <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+              <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
+            </span>
+          </div>
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+            <Button
+              data-cd-flow="instinto.CockpitShell.botao-01"
+              type="button"
+              variant="outline"
+              size="sm"
+              aria-expanded={estudioAberto}
+              aria-controls="centraldark-estudio"
+              onClick={abrirEstudio}
+              disabled={modulos.aionui === "desativado"}
+            >
+              <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
+            </Button>
+            <Button
+              data-cd-flow="instinto.CockpitShell.hermes-one-topo"
+              type="button"
+              variant="outline"
+              size="sm"
+              title="Hermes ONE · abrir módulo no Cockpit"
+              aria-label="Hermes ONE · abrir módulo no Cockpit"
+              onClick={abrirHermesOne}
+              disabled={modulos.hermes === "desativado"}
+              className="gap-1.5"
+            >
+              <img
+                src="/brands/hermes-one.svg"
+                alt="Hermes ONE"
+                className="h-4 w-[88px] max-w-full object-contain"
+              />
+            </Button>
+            {!autenticado ? (
+              <Button data-cd-flow="instinto.CockpitShell.botao-02" asChild size="sm">
+                <Link to="/auth">Entrar</Link>
+              </Button>
+            ) : (
+              <MenuContaCentralDark
+                onPersonalizar={() => abrirDestino("design")}
+                onConfiguracoes={() => definirGaveta("bottom")}
+                onAdministracao={() => abrirDestino("admin")}
+                onBuscar={() => definirGaveta("top")}
+                onDownloads={() => abrirDestino("downloads")}
+                onSair={sair}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </header>
       {harnessVisivel ? (
         <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
@@ -513,7 +570,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       ) : null}
       {harnessVisivel ? (
         <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
-          <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><RefreshCcw className="mr-1 size-4" /> Sync</Button>
+          <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><SyncLoopIcon autoSyncEnabled={false} isFetching={false} size={16} className="mr-1" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
         </nav>
@@ -546,48 +603,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
-      <header className="sticky top-0 z-50 flex min-h-16 items-center border-b border-border bg-surface/95 px-4 py-3 backdrop-blur sm:px-6">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-2">
-            <Link to="/" className="font-mono text-xs tracking-[0.2em] text-gold uppercase">
-              CentralDark
-            </Link>
-            {harnessVisivel ? (
-              <Button size="icon" variant="ghost" title="Buscar ferramentas" aria-label="Buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
-            ) : null}
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden font-mono text-[10px] text-muted-foreground sm:block">
-              {autenticado ? "COCKPIT AUTENTICADO" : "ENTRADA DO COCKPIT"}
-            </span>
-            <Button
-              data-cd-flow="instinto.CockpitShell.botao-01"
-              type="button"
-              variant="outline"
-              size="sm"
-              aria-expanded={estudioAberto}
-              aria-controls="centraldark-estudio"
-              onClick={abrirEstudio}
-            >
-              <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
-            </Button>
-            {!autenticado ? (
-              <Button data-cd-flow="instinto.CockpitShell.botao-02" asChild size="sm">
-                <Link to="/auth">Entrar</Link>
-              </Button>
-            ) : (
-              <Button
-                data-cd-flow="instinto.CockpitShell.botao-03"
-                variant="outline"
-                size="sm"
-                onClick={sair}
-              >
-                Sair
-              </Button>
-            )}
-          </div>
-        </div>
-      </header>
 
       {estudioAberto ? (
         <section id="centraldark-estudio" aria-label="CentralDark Estúdio" className="scroll-mt-20 border-b border-border bg-surface/60 px-4 py-6 sm:px-6">
@@ -600,7 +615,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-verificar" onClick={() => void conferirEstudio()}>
-                  <RefreshCcw className="size-4" /> Verificar API
+                  <SyncLoopIcon autoSyncEnabled={false} isFetching={false} size={16} /> Verificar API
                 </Button>
                 <Button asChild type="button" size="sm" variant="outline" data-cd-flow="instinto.CockpitShell.estudio-externo">
                   <a href="https://ui.centralldark.com/" target="_blank" rel="noopener noreferrer">
@@ -755,7 +770,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
                 <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
                 {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="claude-notifications" data-cd-flow="instinto.CockpitShell.aba.claude-notifications">🔔 Claude</TabsTrigger>
                 <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
                 <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
                 <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
@@ -866,18 +880,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </div>
               <GoalsDashboard />
             </TabsContent>
-            <TabsContent value="claude-notifications" className="mt-10">
-              <div className="mb-8">
-                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
-                  Notificações em Tempo Real
-                </p>
-                <h2 className="mt-3 text-3xl font-semibold">🔔 Claude Notifications Hub</h2>
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Tudo que sai do Claude Code, PowerShell, Hermes e observabilidade • Modo ao vivo/pausado/rolagem • Destacável
-                </p>
-              </div>
-              <ClaudeNotificationsHub />
-            </TabsContent>
             <TabsContent value="dream-reviewer" className="mt-10">
               <div className="mb-8">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
@@ -953,6 +955,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </TabsContent>
             ) : null}
             <TabsContent value="hermes" className="mt-10">
+              <div className="mb-4 flex flex-wrap gap-2">
+                <Button type="button" size="sm" variant={hermesOneAberto ? "outline" : "default"}
+                  onClick={() => definirHermesOneAberto(false)}>Hermes Core · painel atual</Button>
+                <Button type="button" size="sm" variant={hermesOneAberto ? "default" : "outline"}
+                  disabled={modulos.hermes === "desativado"}
+                  onClick={() => { definirEstudioAberto(false); definirHermesOneAberto(true); }}>Hermes ONE · interface web</Button>
+              </div>
+              {hermesOneAberto ? <HermesOneWebLocal autenticado={autenticado} /> : (
+                <>
               <div className="mb-6">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
                   Controle compartilhado
@@ -1019,6 +1030,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   </a>
                 </Button>
               </div>
+                </>
+              )}
             </TabsContent>
             <TabsContent value="aionui" className="mt-10">
               <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">

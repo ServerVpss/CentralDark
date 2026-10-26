@@ -80,6 +80,45 @@ STALE_CURRENT_MAIN=FAIL
 O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
 
 
+## Metadados obrigatórios de nota (delta 2026-10-25)
+
+Extensão do contrato acima: além de `COMMIT_SHA|PATH|LINK|READBACK`, toda nota `.md` tocada no caminho de uma missão carrega estas propriedades. Não cria segundo owner, segundo fiscal nem segunda verdade — é o mesmo RASTRO, aplicado por arquivo.
+
+```text
+data_criacao=DATA_ORIGINAL_PRESERVADA_OU_DESCONHECIDA_ATE_PROVA
+ultima_atualizacao=DATA_HORA_DA_ULTIMA_ATUALIZACAO_REGISTRADA
+ultima_modificacao=DATA_HORA_DA_ULTIMA_MUDANCA_REAL_DE_CONTEUDO
+ultima_verificacao=DATA_HORA_DA_ULTIMA_CONFERENCIA_DO_ESTADO_ATUAL
+fuso_horario=FUSO_USADO_NOS_REGISTROS
+hash_conteudo=HASH_CALCULADO_DO_CONTEUDO_SALVO
+rastro=ORIGEM+EVIDENCIA+HISTORICO_DA_ALTERACAO
+grupo_notas=GRUPO_01_A_05_ABAIXO
+relacionado_a=LIGACAO_COM_LOOP_MESTRE_E_DOCUMENTOS_PERTINENTES
+estado_evidencia=PASS|FAIL|UNKNOWN|BLOCKED
+```
+
+Invariantes:
+
+```text
+VERIFICAR_SEM_ALTERAR_CONTEUDO_NAO_MUDA_ultima_modificacao=true
+ultima_verificacao_TEM_REGISTRO_PROPRIO=true
+data_criacao_SEM_PROVA_FICA_DESCONHECIDA_ATE_EVIDENCIA=true
+HASH_OU_DATA_INVENTADA=FAIL
+```
+
+Grupos de nota (classificação, não pasta nova — reusar estrutura existente antes de criar):
+
+```text
+GRUPO_01=CABECA_E_INTENCAO  # intenções, fragmentos, contexto, memória, origem da missão
+GRUPO_02=LOOP_MESTRE_E_EXECUCAO  # ciclo canônico, responsáveis, Casa, executores, estado operacional
+GRUPO_03=EVIDENCIAS_E_CONTRAPROVAS  # testes, hashes, commits, resultados, falhas, limites da prova
+GRUPO_04=PENDENCIAS_E_BLOQUEIOS  # itens desconhecidos, causas de bloqueio, responsáveis, próximos passos
+GRUPO_05=APRENDIZADOS_E_KAIZEN  # mudanças comprovadas, melhorias reutilizáveis, aprendizado incorporado
+```
+
+Owner continua este arquivo. Fiscal (`scripts/trigger-fabric/rastro_fiscal.py`) ainda não lê estes campos — consumo real pelo fiscal é delta pendente, não implementado nesta passada.
+
+
 ### Ledgers legados #1562/#1757 — lookup de provenance
 
 ```text

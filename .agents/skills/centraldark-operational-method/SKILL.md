@@ -28,6 +28,10 @@ oracle_review_on_change: true
 
 O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
 
+## Foco / delegação / telemetria de latência (2026-10-25)
+
+- **Protocolo canônico aditivo:** [references/FOCUS-DELEGACAO-TELEMETRIA.md](references/FOCUS-DELEGACAO-TELEMETRIA.md). Reusa Edge UIAutomation + MCP Remote Desktop Commander, mede transições/foco/oi-apagar sem enviar, aceita envio real apenas com autorização e lê ACK por Browser. A Sala de Controle/Gaveta da Forja mostra somente eventos com readback e distingue ações UIA, cliques físicos não medidos e conexões MCP não comprovadas. Servidor fora da Casa exibe NO_LOCAL_SOURCE. Não criar gateway ou skill paralelos.
+
 ## 🍒 Histórico canônico de builds Desktop (25/10/2026)
 
 - **Único owner:** o Desktop existente em apps/modulos/Bolt/source. **Receita viva:** apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs e **livro de builds:** apps/modulos/Bolt/source/resources/build-history.json. O mesmo Cockpit exibe o cartão Builders CentralDark, contagem de builds PASS, versão, horário Bahia, hash, commit e botão Rebuild Windows; sem segundo painel, executor ou Skill Mãe.

@@ -72,24 +72,24 @@ A skill Michelin abaixo é **nova operacionalização de uma Lembrança históri
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-25 01:48:52 -03:00. **Arquivos:** 72. **Skills:** 12.
+**Última sincronização (Casa):** 2026-10-25 13:50:52 -03:00. **Arquivos:** 76. **Skills:** 12.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
 | Skill | Criada em (Casa) | Modificada em (Casa) | SHA-256 (12) |
 |---|---|---|---|
-| `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-24T18:40:54-03:00 | 2026-10-12T02:29:56-03:00 | 6b85b31d4b9d |
-| `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-18T17:20:31-03:00 | fd2c8d253281 |
-| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | 028c33c362fd |
-| `catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | 49745155400e |
+| `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
+| `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | fd2c8d253281 |
+| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 028c33c362fd |
+| `catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
 | `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
-| `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | ff847288dd61 |
-| `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-24T15:44:48-03:00 | 17c1445d216c |
-| `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | 7be349147606 |
-| `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-24T15:44:48-03:00 | a215679f7d55 |
-| `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-18T17:20:31-03:00 | d28db794b3a1 |
-| `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-24T19:17:38-03:00 | 2026-10-24T19:17:38-03:00 | 203922432988 |
-| `SKILL.md` | 2026-10-25T01:27:11-03:00 | 2026-10-25T01:48:52-03:00 | 6b8dd871e6e6 |
+| `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
+| `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 17c1445d216c |
+| `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
+| `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a215679f7d55 |
+| `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
+| `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d69cc0a16537 |
+| `SKILL.md` | 2026-10-25T12:55:10-03:00 | 2026-10-25T13:50:13-03:00 | d79c87388a5f |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)

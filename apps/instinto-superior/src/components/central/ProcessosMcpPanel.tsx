@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 const screenshotRows = [
   { pid: "6616", nome: "codex-windows-sandbox-service.exe" },
@@ -13,11 +13,7 @@ function estadoClasse(estado: string) {
 }
 
 export function ProcessosMcpPanel() {
-  const [agora, setAgora] = useState(() => new Date());
-  useEffect(() => {
-    const timer = window.setInterval(() => setAgora(new Date()), 15_000);
-    return () => window.clearInterval(timer);
-  }, []);
+  const agora = useRelogioVivo();
 
   return (
     <section aria-labelledby="processos-mcp-title" className="mt-6 rounded-xl border border-border bg-card p-5">
@@ -44,7 +40,7 @@ export function ProcessosMcpPanel() {
           <div className="flex justify-between gap-3"><span className="text-muted-foreground">LIVE_HOUSE_MEASURED</span><strong className="text-amber-500">UNKNOWN</strong></div>
           <div className="flex justify-between gap-3"><span className="text-muted-foreground">VPS process scan</span><strong className="text-muted-foreground">separado</strong></div>
           <div className="flex justify-between gap-3"><span className="text-muted-foreground">Rota</span><strong className="font-mono text-xs">MCP_CASA_TO_VPS</strong></div>
-          <div className="flex justify-between gap-3"><span className="text-muted-foreground">Atualizado</span><strong className="font-mono text-xs">{agora.toLocaleString("pt-BR")}</strong></div>
+          <div className="flex justify-between gap-3"><span className="text-muted-foreground">Atualizado</span><strong className="font-mono text-xs">{agora === null ? "…" : new Date(agora).toLocaleString("pt-BR")}</strong></div>
           <p className="border-t border-border pt-3 text-xs text-muted-foreground">O PID SSR da VPS não entra nesta tabela. Sem sensor Casa ligado ao envelope de processos, a ausência de leitura permanece UNKNOWN.</p>
         </div>
       </div>

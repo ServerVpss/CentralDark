@@ -67,6 +67,12 @@ export type EstadoCentralDark = {
   omniHttp: number | null;
   nextCursor: string | null;
   erroLiveFabric: string | null;
+  casaSiteErro: string | null;
+  apiHealthErro: string | null;
+  grafoErro: string | null;
+  omniErro: string | null;
+  heartbeatErro: string | null;
+  receiptsErro: string | null;
   apiHealthHttp: number | null;
   heartbeatHttp: number | null;
   heartbeatSelf: string | null;
@@ -252,6 +258,17 @@ function screenpipeIdentificado(sonda: Probe): Probe {
 function saidaScreenpipe(sonda: Probe): string[] {
   const saida = [`GET /health → HTTP ${sonda.httpStatus ?? "sem resposta"} · ${sonda.estado}`];
   if (sonda.erro) saida.push(`SENSOR: ${sonda.erro.slice(0, 96)}`);
+  const mensagem = texto(sonda.dados?.["message"]);
+  if (mensagem && sonda.estado !== "PASS") saida.push(`MOTIVO: ${mensagem.slice(0, 160)}`);
+  const motivos = Array.isArray(sonda.dados?.["unhealthy_reasons"]) ? sonda.dados["unhealthy_reasons"] : null;
+  if (motivos) for (const motivo of motivos.slice(0, 5)) {
+    if (!objetoJson(motivo)) continue;
+    const subsistema = texto(motivo["subsystem"]);
+    const detalhe = texto(motivo["detail"]);
+    if (subsistema && /^[a-zA-Z0-9_-]{1,32}$/.test(subsistema)) {
+      saida.push(`⚠ ${subsistema}${detalhe ? `: ${detalhe.slice(0, 80)}` : ""}`);
+    }
+  }
   const deps = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
   if (deps) for (const [nome, valor] of Object.entries(deps).slice(0, 10)) {
     if (!/^[a-zA-Z0-9_-]{1,32}$/.test(nome) || !objetoJson(valor)) continue;
@@ -511,7 +528,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
-    return {
+    const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
       desktop: "UNKNOWN",
@@ -554,6 +571,12 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniHttp: omniRouter.httpStatus,
       nextCursor: texto(liveFabric.dados?.["next_cursor"]),
       erroLiveFabric: liveFabric.erro,
+      casaSiteErro: casaSite.erro,
+      apiHealthErro: apiHealth.erro,
+      grafoErro: grafoVivo.erro,
+      omniErro: omniRouter.erro,
+      heartbeatErro: heartbeat.erro,
+      receiptsErro: receipts.erro,
       apiHealthHttp: apiHealth.httpStatus,
       heartbeatHttp: heartbeat.httpStatus,
       heartbeatSelf,
@@ -579,6 +602,45 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
       desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
     };
+
+    // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
+    void (async () => {
+      try {
+        const { supabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
+        );
+        const host = hostname();
+        const pulsos = [
+          { source: "github", status: github.estado, http_code: null, error: null },
+          { source: "liveFabric", status: liveFabric.estado, http_code: liveFabric.httpStatus ?? null, error: liveFabric.erro ?? null },
+          { source: "grafoVivo", status: grafoVivo.estado, http_code: grafoVivo.httpStatus ?? null, error: grafoVivo.erro ?? null },
+          { source: "omniRouter", status: omniRouter.estado, http_code: omniRouter.httpStatus ?? null, error: omniRouter.erro ?? null },
+          { source: "apiHealth", status: apiHealth.estado, http_code: apiHealth.httpStatus ?? null, error: apiHealth.erro ?? null },
+          { source: "heartbeat", status: heartbeat.estado, http_code: heartbeat.httpStatus ?? null, error: heartbeat.erro ?? null },
+          { source: "omniModels", status: omniModels.estado, http_code: omniModels.httpStatus ?? null, error: null },
+          { source: "receipts", status: receipts.estado, http_code: receipts.httpStatus ?? null, error: receipts.erro ?? null },
+          { source: "casaSite", status: casaSite.estado, http_code: casaSite.httpStatus ?? null, error: casaSite.erro ?? null },
+          { source: "screenpipe", status: screenpipeCasa.estado, http_code: screenpipeCasa.httpStatus ?? null, error: null },
+          { source: "screenpipeVps", status: screenpipeVps.estado, http_code: screenpipeVps.httpStatus ?? null, error: null },
+          { source: "actions", status: actions.estado, http_code: null, error: actions.erro ?? null },
+        ];
+        const linhas = pulsos.map((p) => ({
+          source: p.source,
+          status: p.status,
+          http_code: p.http_code,
+          error: p.error,
+          false_green: false,
+          regression: false,
+          host,
+          ttl_seconds: 120,
+        }));
+        await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+      } catch (e) {
+        console.error("[radar-pulses] fire-and-forget falhou:", e);
+      }
+    })();
+
+    return resultado;
   },
 );
 

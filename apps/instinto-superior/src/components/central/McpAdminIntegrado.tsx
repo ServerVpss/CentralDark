@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { RefreshCw, Search, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Search, ShieldCheck } from "lucide-react";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { lerEstadoMcpIntegrado } from "@/lib/mcp-admin.functions";
 
 /**
@@ -43,11 +43,7 @@ export function McpAdminIntegrado() {
             sem outra página, senha textual ou segundo MCP.
           </p>
         </div>
-        <Button type="button" variant="outline" size="sm" disabled={q.isFetching}
-          onClick={() => void q.refetch()}>
-          <RefreshCw className={q.isFetching ? "mr-2 size-4 animate-spin" : "mr-2 size-4"} />
-          Atualizar MCP
-        </Button>
+        <SyncActionButton label="Atualizar MCP" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
