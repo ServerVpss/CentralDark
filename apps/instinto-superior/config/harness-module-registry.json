@@ -166,5 +166,389 @@
     "Prova de 14/10 e screenshots 17/10 é HISTORICAL, não CURRENT. Na última consulta 17/10, dispositivos RDC SEGREDO e CENTRALDARK-OS offline; isso não revoga SSH Tailscale previamente provado.",
     "Status do sensor só pode piscar verde com timestamp fresco e verificação de sessão/ACK do owner, não com texto estático do catálogo.",
     "A UI Instinto usa client VITE_SUPABASE_URL e o HUB tem client dedicado lyoigsqluyktoclwdaft. NÃO assumir sessão de autenticação compartilhada entre projetos; hub-command exige JWT de usuário do HUB + has_role admin, registra missão pending e não autoexecuta."
-  ]
+  ],
+  "cognitive_lexicon": {
+    "schema": "centraldark.cognitive-vocabulary.v1",
+    "source": "CHEFE / conversa 2026-10-18: A-Z + Michelin 3 Estrelas + docs como memória externa",
+    "purpose": "Inventário de linguagem/competência; não cria agentes, ferramentas, router, memória ou permissões.",
+    "evidence_policy": "Cadastrado != instalado != executado != PASS. Termos não atestam runtime.",
+    "distinctions": [
+      {
+        "label": "Capacidade aprendida",
+        "meaning": "Padrões disponíveis após treinamento; não provam estratégia aplicada nesta tarefa."
+      },
+      {
+        "label": "Estratégia utilizada",
+        "meaning": "Plano, síntese, revisão, delegação ou ferramenta escolhida/acionada no contexto; validar via evento quando afirmada."
+      },
+      {
+        "label": "Estado exibido",
+        "meaning": "Legenda da interface: pode representar processamento genérico ou evento verificável; não é prova por si."
+      }
+    ],
+    "flow": [
+      "Modelo escolhe/aplica estratégia",
+      "HARNESS coordena recursos e ferramentas",
+      "TRACE registra somente eventos observáveis",
+      "HUD traduz os estados em linguagem humana",
+      "REALIDADE valida resultado e eventual cristalização"
+    ],
+    "a_to_z": [
+      {
+        "name": "Administração",
+        "kind": "Técnica",
+        "description": "Coordenar tarefas, ferramentas e recursos.",
+        "owner": "apps/modulos/HERMES-CORE",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Agentes",
+        "kind": "Componente",
+        "description": "Executar funções especializadas sob autoridade e escopo definidos.",
+        "owner": "apps/modulos/HERMES-CORE",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Aprendizado",
+        "kind": "Processo",
+        "description": "Aproveitar resultados comprovados para melhorar decisões futuras.",
+        "owner": "docs/BRAIN",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Associação",
+        "kind": "Técnica",
+        "description": "Relacionar informações e recuperar conhecimento relevante.",
+        "owner": "scripts/trigger-fabric/spiral_traversal.py",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "BRAIN",
+        "kind": "Conhecimento",
+        "description": "Organizar memória e aprendizado acumulado.",
+        "owner": "docs/BRAIN",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Capability Router",
+        "kind": "Componente",
+        "description": "Selecionar capacidades necessárias a cada tarefa.",
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Capacidade aprendida",
+        "kind": "Conceito",
+        "description": "Padrões e habilidades adquiridos durante treinamento do modelo.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "CARACOL",
+        "kind": "Componente",
+        "description": "Navegar por metadados e recuperar contexto sem ser autoridade.",
+        "owner": "scripts/trigger-fabric/spiral_traversal.py",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "CentralDark",
+        "kind": "Sistema",
+        "description": "Unificar identidade, conhecimento, memória, ferramentas e motores.",
+        "owner": "apps/instinto-superior",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Conhecimento",
+        "kind": "Recurso",
+        "description": "Informações recuperáveis, com origem e contexto.",
+        "owner": "docs",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Contraprova",
+        "kind": "Técnica",
+        "description": "Buscar evidências que confirmem ou contestem um resultado.",
+        "owner": "apps/instinto-superior/src/components/central/ReceiptsDashboard.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Cozinhando",
+        "kind": "Estado visual",
+        "description": "Sinalizar processamento ou preparação sem afirmar técnica interna.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Cristalização",
+        "kind": "Processo",
+        "description": "Consolidar aprendizado único, rastreável e reutilizável.",
+        "owner": "docs/BRAIN",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Crítica",
+        "kind": "Técnica",
+        "description": "Identificar limitações, problemas e inconsistências.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Decomposição",
+        "kind": "Técnica",
+        "description": "Dividir problemas complexos em unidades tratáveis.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Delegação",
+        "kind": "Técnica",
+        "description": "Encaminhar tarefa ao agente ou ferramenta autorizados.",
+        "owner": "apps/modulos/HERMES-CORE",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "docs",
+        "kind": "Conhecimento",
+        "description": "Preservar conhecimento, memória externa, identidade e princípios.",
+        "owner": "docs",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Engenharia de agentes",
+        "kind": "Disciplina",
+        "description": "Combinar modelos, ferramentas, planejamento, revisão e execução.",
+        "owner": "apps/instinto-superior",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Escalando",
+        "kind": "Estado visual",
+        "description": "Representar encaminhamento somente quando houver despacho registrado.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Especialização",
+        "kind": "Técnica",
+        "description": "Distribuir trabalho conforme capacidades disponíveis.",
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Estado exibido",
+        "kind": "Interface",
+        "description": "Comunicar o que o sistema sabe, distinguindo sinal de prova.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Estratégia utilizada",
+        "kind": "Conceito",
+        "description": "Abordagem selecionada ou aplicada para uma tarefa.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Executando",
+        "kind": "Estado visual",
+        "description": "Indicar uma chamada ou operação efetivamente registrada.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Ferramentas",
+        "kind": "Recurso",
+        "description": "Permitir operações observáveis fora do próprio modelo.",
+        "owner": "apps/modulos/mcp",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "HARNESS",
+        "kind": "Componente",
+        "description": "Coordenar motores, recursos, ferramentas e fluxo de trabalho.",
+        "owner": "apps/instinto-superior",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Hermes",
+        "kind": "Executor",
+        "description": "Executar e dar continuidade a missões autorizadas.",
+        "owner": "apps/modulos/HERMES-CORE",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "HUD",
+        "kind": "Interface",
+        "description": "Projetar métricas, estados e provas de fontes existentes.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Identidade",
+        "kind": "Conceito",
+        "description": "Preservar continuidade entre modelos, sessões e interfaces.",
+        "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Memória",
+        "kind": "Recurso",
+        "description": "Conservar e recuperar informações relevantes com proveniência.",
+        "owner": "docs/BRAIN",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Modelos",
+        "kind": "Motor",
+        "description": "Fornecer raciocínio e geração sem assumir a identidade do sistema.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Orquestrando",
+        "kind": "Estado visual",
+        "description": "Mostrar coordenação quando uma operação de coordenação for registrada.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Pensando",
+        "kind": "Estado visual",
+        "description": "Indicar processamento de análise, sem afirmar etapas internas precisas.",
+        "owner": "apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Percepção",
+        "kind": "Capacidade",
+        "description": "Receber sinais do ambiente, respeitando a origem e o frescor.",
+        "owner": ".agents/skills/screenpipe-live-observer/SKILL.md",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Planejamento",
+        "kind": "Técnica",
+        "description": "Organizar tarefas e passos para atingir um objetivo.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Provando",
+        "kind": "Estado visual",
+        "description": "Indicar teste ou contraprova realmente executado.",
+        "owner": "apps/instinto-superior/src/components/central/ReceiptsDashboard.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Reality Judge",
+        "kind": "Componente",
+        "description": "Avaliar resultados contra evidências e critérios reais.",
+        "owner": "apps/instinto-superior/src/components/central/ReceiptsDashboard.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Revisão",
+        "kind": "Técnica",
+        "description": "Reexaminar e ajustar um resultado à luz das evidências.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Screenpipe",
+        "kind": "Sensor",
+        "description": "Fornecer observações visuais e de atividade como evidências candidatas.",
+        "owner": ".agents/skills/screenpipe-live-observer/SKILL.md",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Síntese",
+        "kind": "Técnica",
+        "description": "Combinar informações relevantes em uma solução.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "SOUL",
+        "kind": "Identidade",
+        "description": "Registrar os princípios e regras fundamentais da CentralDark.",
+        "owner": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Treinamento",
+        "kind": "Processo",
+        "description": "Desenvolver capacidades e tendências nos parâmetros dos modelos.",
+        "owner": "apps/instinto-superior/config/harness-module-registry.json",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      },
+      {
+        "name": "Verificação",
+        "kind": "Técnica",
+        "description": "Conferir resultados contra critérios explicitados.",
+        "owner": "apps/instinto-superior/src/components/central/ReceiptsDashboard.tsx",
+        "runtime_status": "NOT_ATTESTED_BY_VOCABULARY"
+      }
+    ],
+    "michelin_stages": [
+      {
+        "name": "Administrando",
+        "icon": "🎛️",
+        "meaning": "Coordenar recursos e tarefas",
+        "proof": "EVENT_REQUIRED"
+      },
+      {
+        "name": "Cozinhando",
+        "icon": "🥘",
+        "meaning": "Processamento em andamento; técnica interna não especificada",
+        "proof": "PROCESS_INDICATOR"
+      },
+      {
+        "name": "Cristalizando",
+        "icon": "💎",
+        "meaning": "Consolidar conhecimento reutilizável",
+        "proof": "RECEIPT_REQUIRED"
+      },
+      {
+        "name": "Escalando",
+        "icon": "🪜",
+        "meaning": "Delegação ou encaminhamento",
+        "proof": "EVENT_REQUIRED"
+      },
+      {
+        "name": "Executando",
+        "icon": "🔧",
+        "meaning": "Ferramenta ou operação acionada",
+        "proof": "EVENT_REQUIRED"
+      },
+      {
+        "name": "Orquestrando",
+        "icon": "🎛️",
+        "meaning": "Coordenação de agentes/capacidades",
+        "proof": "EVENT_REQUIRED"
+      },
+      {
+        "name": "Pensando",
+        "icon": "🧠",
+        "meaning": "Análise ou processamento, sem introspecção exata",
+        "proof": "PROCESS_INDICATOR"
+      },
+      {
+        "name": "Provando",
+        "icon": "🧪",
+        "meaning": "Teste ou contraprova realmente executado",
+        "proof": "EVENT_REQUIRED"
+      }
+    ],
+    "invariants": [
+      "CURRENT>HISTORY",
+      "UNKNOWN!=PASS",
+      "REUSE_BEFORE_CREATE",
+      "ONE_SYSTEM_ONLY",
+      "ONE_WRITER_PER_SCOPE",
+      "DOCUMENTED!=EXECUTED",
+      "MODEL_IS_REPLACEABLE",
+      "SURFACE_IS_NOT_IDENTITY",
+      "NO_PARALLEL_RUNTIME"
+    ]
+  }
 }

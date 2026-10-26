@@ -1,9 +1,11 @@
 # 📣 Receipt — REMEASURE 3 VPS CURRENT
 
+**Errata de dominio (2026-10-21):** os hostnames deste recibo foram normalizados para `centralldark.com` (dois Ls), segundo o contrato canonico. Esta mudanca e **somente documental**: respostas HTTP, afirmacoes de roteamento e estados abaixo sao historicos de 25/09/2026; **nao houve nova sondagem da VPS ou dos endpoints**. A grafia e o texto originais podem ser recuperados no historico Git.
+
 🟢 O QUE ANDOU
 - ✅ Medição real executada na VPS `vmi3256920` em `/root/CentralDark`.
 - ✅ Runtime Omni/Hermes/MCP revalidado com HTTP 200.
-- ✅ API canônica `api.centraldark.com/api/omni/*` revalidada com HTTP 200.
+- ✅ API canônica `api.centralldark.com/api/omni/*` revalidada com HTTP 200.
 - ✅ Admin Omni e receipts API revalidados com HTTP 200.
 - ✅ Receipts locais contados e runtime `runtime/microdeploy` presente.
 
@@ -38,10 +40,10 @@ http://127.0.0.1:8099/health -> 200
 http://127.0.0.1:8099/v1/models -> 200
 http://127.0.0.1:8899/health -> 200
 http://127.0.0.1:9100/health -> 200
-https://api.centraldark.com/api/omni/status -> 200
-https://api.centraldark.com/api/omni/models -> 200
-https://admin.centraldark.com/omni -> 200
-https://api.centraldark.com/api/microdeploy/receipts/index.json -> 200
+https://api.centralldark.com/api/omni/status -> 200
+https://api.centralldark.com/api/omni/models -> 200
+https://admin.centralldark.com/omni -> 200
+https://api.centralldark.com/api/microdeploy/receipts/index.json -> 200
 
 systemd centraldark-dc-remote@conta1 = enabled/active
 systemd centraldark-dc-remote@conta2 = enabled/active

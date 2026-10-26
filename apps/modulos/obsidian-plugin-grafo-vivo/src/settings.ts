@@ -163,7 +163,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
         .setDesc("Diretório local do repositório que contém infra/mcp/semantic_bridge.py. Vazio = usa CENTRALDARK_REPO_ROOT; não baixa modelo nem usa rede.")
         .addText((txt) =>
           txt
-            .setPlaceholder("E:/CentralDark ou /caminho/CentralDark")
+            .setPlaceholder("K:/ ou /caminho/CentralDark")
             .setValue(this.plugin.settings.semanticRepoRoot)
             .onChange(async (v) => {
               this.plugin.settings.semanticRepoRoot = v.trim();

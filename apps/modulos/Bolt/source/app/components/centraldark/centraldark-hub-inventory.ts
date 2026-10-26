@@ -40,6 +40,7 @@ export const canonicalVisualIdentity: Record<string, CanonicalVisualIdentity> = 
   FIGMA: { icon: 'i-ph:figma-logo' },
   ACCOUNTS_HUB: { icon: 'i-ph:key' },
   TELEGRAM: { icon: 'i-ph:paper-plane-tilt' },
+  UNIGRAM: { icon: 'i-ph:paper-plane-tilt' },
   CLOUDFLARE: { icon: 'i-ph:cloud' },
   CONTABO_VPS: { icon: 'i-ph:server' },
   LINEAR: { icon: 'i-ph:kanban' },
@@ -97,6 +98,13 @@ export const hubCapabilities: HubCapability[] = [
     state: 'RUNTIME_PROBE',
     owner: 'resources/runtime/manifest.json',
     detail: 'Sensor local opcional; health probe já existe sem virar autoridade.',
+  },
+  {
+    id: 'UNIGRAM',
+    label: 'Unigram Desktop original',
+    state: 'PARTIAL',
+    owner: 'electron/main/index.ts + electron/preload/index.ts',
+    detail: 'Ativação do pacote MSIX instalado no Windows por AppUserModelId fixo. REQUESTED não prova janela; fonte 13.0.1 em Downloads não é instalador, nem tem chats ou sessão copiados.',
   },
   {
     id: 'HERMES',

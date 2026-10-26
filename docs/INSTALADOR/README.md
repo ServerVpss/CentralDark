@@ -46,6 +46,7 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 | `24-rebuild-deterministico.md` | rebuild limpo e reproduzível |
 | `30-skill-consciencia.md` | skill da Consciência CentralDark |
 | `31-forja-total-drive-vps.md` | **Forja Total na VPS**: Drive auto-ingest + provenance + Memory Linker + Fixed Point heartbeat, reutilizando owners existentes |
+| `32-builder-multiplataforma-centraldark.md` | **Comandos canônicos do CHEFE:** reset AionUI, rebuild Web/Linux/Windows, Rakazo e plano de integração Unigram no builder único |
 
 ## Regra de ouro
 

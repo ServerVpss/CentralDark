@@ -1,7 +1,7 @@
 ---
 title: "🧾 CHECK-LIST DIARIO"
 obsidian: "obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96"
-vault_windows: "E:\\CentralDark\\Pivete\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md"
+vault_windows: "K:\\CASA-VAULT\\🧾CHECK-LIST DIARIO🤖.md"
 owner: docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md
 mirror_path: docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md
 sync: CASA-VAULT/00-CANONICO via scripts/casa/sync-hermes-obsidian.ps1

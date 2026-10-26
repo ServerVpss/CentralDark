@@ -516,3 +516,26 @@ Para qualquer capacidade marcada como VPS, o sentido inverso VPS → Casa contin
 Desligar, terminar processo, alterar configuracao, escrever arquivos e executar alteracoes requerem
 gates de autorizacao, idempotencia, dono, backup/rollback quando aplicavel e recibo no destino.
 Erro de autenticacao ou UI equivale a escopo UNKNOWN/BLOCKED, nao a permissao para burlar controle.
+
+## Atualização operacional — intenção única / três blocos (2026-10-21)
+
+**Prioridade deliberada:** `TAILSCALE_PRIVATE_ROUTE → MCP_REMOTE_OAUTH → HERMES_SHELL/SSH` para Casa Windows SEGREDO. Não transformar `TAILSCALE_BRIDGE_STATUS=PASS` em `SHELL_EXECUTED=PASS`: a prova da porta SSH/RDP não equivale à autenticação ou ao PID real. Prova atual observada: `tailscale_bridge_status` relatou Casa online e SSH 22/RDP 3389 abertos; `tailscale_devices_list` retornou 401; o conector Desktop Commander relatou device offline. Sem teste de execução autenticada no Windows nesta operação.
+
+**Bloco A — seleção sob demanda:** `scripts/ci/centraldark-connector-demand-router.mjs` seleciona `CentralDark_Casa_Tailscale` para intenção Casa/Windows/terminal. `Remote_Desktop_Commander` continua disponível no inventário de conectores, mas não é selecionado como principal nem acionado sem verificação. Contraprova: `scripts/ci/centraldark-connector-demand-router.test.mjs`.
+
+**Bloco B — catálogo unificado:** `apps/modulos/mcp/src/tools/core/mcp-admin.js` prioriza a rota `TAILSCALE_PRIVATE_ROUTE` no catálogo, mantém `MCP_REMOTE_OAUTH`, `HERMES_SHELL` e `RDC_DESKTOP_COMMANDER` catalogados, sinalizando `RDC_DESKTOP_COMMANDER.priority=FALLBACK_ONLY`. `apps/modulos/mcp/tests/tool-call-observability.test.mjs` verifica essa semântica; mapeamento `RDC_EQUIVALENCE_MATRIX` preservado. Catálogo é descoberta, não despacho remoto automático.
+
+**Bloco C — fallback e mapeamento:** o Desktop Commander poderá ser tentado **somente** após falha atual comprovada da rota principal, autenticação/autorização disponível e device realmente online. Caso contrário `FALLBACK=SKIPPED_OR_BLOCKED`, sem ciclo de retries ou falsa atribuição de FAIL global à Casa. `scripts/remote-bridge/CENTRALDARK-REMOTE-BRIDGE.config.json` já declara `primary_control_plane=centraldark_mcp` e `legacy_remote_enabled_by_default=false`; manter o arquivo intacto.
+
+**Outros arquivos com referência ao Desktop Commander, sem mexer nos históricos nem apagar ferramentas:**
+- `scripts/remote-bridge/CentralDark-Remote-Bridge.ps1`: arranque legado opcional por `-EnableLegacyRemote`.
+- `scripts/remote-bridge/canonical/engine/CentralDark-Remote-Tray.ps1`: bridge legada da bandeja; requer reconciliação de consumo real, não desligar às cegas.
+- `scripts/remote-bridge/CentralDark-Remote-One.go`: rotas antigas e rota MCP oficial.
+- `scripts/remote-bridge/CentralDark-Context-Sidecar.ps1`: referência histórica de endpoint remoto.
+- `apps/instinto-superior/src/components/central/InfraestruturaSistema.tsx`: card do terminal remoto com owner RDC.
+- `docs/HUD/HUD.html`, `apps/instinto-superior/scripts/verify-hud-zone.mjs`: representação e testes de inventário.
+- `scripts/trigger-fabric/verify_repo_contract.py`, `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs`: gates que pressupõem presença da rota no catálogo; mantidos.
+- `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md`, `CLAUDE.md`, `CHATGPT.md`: orientações e fallbacks legados a harmonizar sem apagar evidências.
+- `infra/systemd/centraldark-desktop-commander-*.service`, `infra/systemd/centraldark-desktop-commander-profile.sh`, `infra/systemd/centraldark-desktop-commander-watchdog.sh`: componentes da VPS existentes, **nenhum serviço alterado nesta operação**.
+
+**Critérios para atribuir PASS:** (1) CI mesmo HEAD dos scripts e catálogo, (2) erro da rota principal induzido/medido e fallback não executado cegamente, (3) tentativa real Casa→SSH autenticada, PID/readback e prova do cockpit se solicitada. `DOCUMENTED != EXECUTED`; `QUEUED != PASS`; `NEXT_CURSOR=CI_SAME_HEAD_THEN_CASA_AUTHENTICATED_READBACK`.

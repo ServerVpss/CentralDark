@@ -42,8 +42,8 @@ persistence_policy:
     - repo_child_pr: 1681
     - repo_recipe: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml
     - repo_lock: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
-    - vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
-    - vps_runtime_receipt_sha256: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.sha256
+    - vps_runtime_receipt: <caminho-vps>
+    - vps_runtime_receipt_sha256: <caminho-vps>
   forbidden_handoff:
     - ASK_CHEFE_TO_COPY_CRYSTAL_BLOCK
     - MAKE_HUMAN_CARRY_MACHINE_RECEIPT
@@ -218,7 +218,7 @@ known_session_proof:
   node_check_runner: PASS
   yaml_parse: PASS_4_OF_4
   persistence_test: FIXED_POINT_SEALED_TO_REUSE_PROOF_NO_REPEAT_TO_REVALIDATE_AFFECTED_CHAIN_ONLY
-  vps_runtime_receipt: /root/CentralDark/.artifacts/system-sentinel/receipts/proven-executable-recipe-session-current.json
+  vps_runtime_receipt: <caminho-vps>
   vps_runtime_receipt_sha256: f3284c33ded0227c3caec31deaaf2de2a93f39398b447c34bd817495f09f9843
   github_pr: 1681
   ci_same_head: UNKNOWN_UNTIL_COMPLETED
@@ -490,3 +490,44 @@ recipe_instances:
       - ONE_SYSTEM_ONLY
       - REUSE_BEFORE_CREATE
     next_cursor: SAME_HEAD_GITHUB_ARTIFACT_THEN_DOWNLOAD_AND_FRESH_COUNTERPROOF
+
+
+script_only_subagent_delegation:
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-DETERMINISTIC-LOCK.yml
+  creates_new_engine: false
+  existing_loader: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  entrypoint: scripts/trigger-fabric/proven_script_delegate.py
+  tests: scripts/trigger-fabric/test_proven_script_delegate.py
+  default: SCRIPT_FIRST_NO_MODEL
+  invariant: SAME_FINGERPRINT_REPLAYS_SEALED_SCRIPT_NOT_NEW_SUBAGENTS
+  steps:
+    - IDENTIFY_CLAIM_OWNER_AND_CAUSAL_FINGERPRINT
+    - CALL_EXISTING_REPLAY_FOR_PROOF_OF_SEAL
+    - IF_PASS_DELEGATE_EXISTING_REPLAY_RUN
+    - REPEAT_SAME_PROOF_AND_COMPARE_EFFECT
+    - IF_CHANGED_RETURN_DELTA_REQUIRED_WITHOUT_MODEL_CALL
+    - IF_UNKNOWN_FAIL_CLOSED
+  rules:
+    script_contains_llm_call: forbidden
+    script_spawns_subagents: forbidden
+    unsealed_recipe_execution: forbidden
+    identical_scan_reinterpretation_by_llm: forbidden
+    existing_script_overwrite_without_proof: forbidden
+    changed_input_revalidate_only_affected_cone: true
+    explicit_mutation_authorization_preserved: true
+    receipt_required_for_execution_claim: true
+    this_helper_does_not_configure_hermes_desktop_hooks: true
+    runtime_hook_requires_live_owner_binding: true
+  status:
+    repository_preflight: TESTABLE_WITH_UNITTTEST
+    hermes_or_nemotron_live_hook: UNKNOWN_UNTIL_CONSUMER_PROVEN
+
+  mermaid_source_note:
+    path: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-SCRIPT-DELEGATION.md
+    format: OBSIDIAN_MARKDOWN_MERMAID
+    source_commit: c132b8ce261b07efccbc1f0c09ca09ae29f935e2
+    equivalent_recipe_pr: 1681
+    ledger_mother_pr: 1562
+    creates_new_owner: false
+    sync_to_physical_vault: UNKNOWN_UNTIL_VAULT_ACCESSIBLE
+    proof_boundary: REPOSITORY_FILE_IS_NOT_OBSIDIAN_VAULT_READBACK

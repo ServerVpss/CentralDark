@@ -1,0 +1,295 @@
+{
+  "schema": "centraldark.figjam-observed.v1",
+  "figjam_url": "https://www.figma.com/board/eE4FS10ymxxlXDJAgWavCh",
+  "fileKey": "eE4FS10ymxxlXDJAgWavCh",
+  "pageId": "0:1",
+  "source_name": "Omni 8099 + Admin Dashboard",
+  "observed_at": "2026-10-26T20:05:20.483Z",
+  "status": "OBSERVED_FROM_FIGMA_CONNECTED_READ_ONLY",
+  "nodes": [
+    {
+      "id": "1:3",
+      "x": 544,
+      "y": 1127.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Ordem do Chefe"
+    },
+    {
+      "id": "1:6",
+      "x": 896,
+      "y": 1105.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Medir estado vivo"
+    },
+    {
+      "id": "1:9",
+      "x": 1248,
+      "y": 1069.8333740234375,
+      "width": 200,
+      "height": 200,
+      "kind": "DIAMOND",
+      "text": "PASS deterministico?"
+    },
+    {
+      "id": "1:12",
+      "x": 1960,
+      "y": 113.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Micro deploy do escopo afetado"
+    },
+    {
+      "id": "1:15",
+      "x": 1960,
+      "y": 1287.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "UNKNOWN ou FAIL separado"
+    },
+    {
+      "id": "1:18",
+      "x": 2312,
+      "y": -208.66665649414062,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Health ou prova runtime"
+    },
+    {
+      "id": "1:21",
+      "x": -616,
+      "y": 871.5001220703125,
+      "width": 200,
+      "height": 200,
+      "kind": "DIAMOND",
+      "text": "Prova confirma?"
+    },
+    {
+      "id": "1:24",
+      "x": -160,
+      "y": 903.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Receipt no PR-mae 1562"
+    },
+    {
+      "id": "1:27",
+      "x": 192,
+      "y": 903.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Main e ledger atualizados"
+    },
+    {
+      "id": "1:30",
+      "x": 544,
+      "y": 903.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "NEXT TIK TAK"
+    },
+    {
+      "id": "1:33",
+      "x": 2312,
+      "y": 1088.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Nao bloqueia rotas independentes provadas"
+    },
+    {
+      "id": "1:36",
+      "x": 1576,
+      "y": -334.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "MCP 9100 health PASS"
+    },
+    {
+      "id": "1:39",
+      "x": 1576,
+      "y": -110.16665649414062,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Hermes Core 8899 health PASS"
+    },
+    {
+      "id": "1:42",
+      "x": 1576,
+      "y": 113.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Hermes Serve 33733 socket PASS"
+    },
+    {
+      "id": "1:45",
+      "x": 1576,
+      "y": 337.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Desktop Commander conta1 PASS"
+    },
+    {
+      "id": "1:48",
+      "x": 1576,
+      "y": 561.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Desktop Commander conta2 PASS"
+    },
+    {
+      "id": "1:51",
+      "x": 1576,
+      "y": 785.8333740234375,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "tunnel client centraldark mcp PASS"
+    },
+    {
+      "id": "1:54",
+      "x": 1576,
+      "y": 1384.1666259765625,
+      "width": 224,
+      "height": 128,
+      "kind": "SQUARE",
+      "text": "Omni Router 8099 offline"
+    }
+  ],
+  "links": [
+    {
+      "id": "1:57",
+      "from": "1:3",
+      "to": "1:6",
+      "label": ""
+    },
+    {
+      "id": "1:61",
+      "from": "1:6",
+      "to": "1:9",
+      "label": ""
+    },
+    {
+      "id": "1:65",
+      "from": "1:9",
+      "to": "1:12",
+      "label": "Sim"
+    },
+    {
+      "id": "1:69",
+      "from": "1:9",
+      "to": "1:15",
+      "label": "Nao"
+    },
+    {
+      "id": "1:73",
+      "from": "1:12",
+      "to": "1:18",
+      "label": ""
+    },
+    {
+      "id": "1:77",
+      "from": "1:18",
+      "to": "1:21",
+      "label": ""
+    },
+    {
+      "id": "1:81",
+      "from": "1:21",
+      "to": "1:24",
+      "label": "Sim"
+    },
+    {
+      "id": "1:85",
+      "from": "1:24",
+      "to": "1:27",
+      "label": ""
+    },
+    {
+      "id": "1:89",
+      "from": "1:27",
+      "to": "1:30",
+      "label": ""
+    },
+    {
+      "id": "1:93",
+      "from": "1:21",
+      "to": "1:15",
+      "label": "Nao"
+    },
+    {
+      "id": "1:97",
+      "from": "1:15",
+      "to": "1:33",
+      "label": ""
+    },
+    {
+      "id": "1:101",
+      "from": "1:33",
+      "to": "1:30",
+      "label": ""
+    },
+    {
+      "id": "1:105",
+      "from": "1:36",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:109",
+      "from": "1:39",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:113",
+      "from": "1:42",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:117",
+      "from": "1:45",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:121",
+      "from": "1:48",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:125",
+      "from": "1:51",
+      "to": "1:12",
+      "label": ""
+    },
+    {
+      "id": "1:129",
+      "from": "1:54",
+      "to": "1:15",
+      "label": ""
+    },
+    {
+      "id": "1:133",
+      "from": "1:30",
+      "to": "1:6",
+      "label": ""
+    }
+  ]
+}
