@@ -763,7 +763,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 - Estado: RESTART_PASS, VISUAL_PASS, ROOT_CAUSE_UNKNOWN. Detalhes em `docs/CONSCIENCIA/APRENDIZADOS.md`, entrada de 2026-10-10.
 
 ### [2026-10-10] Cópia histórica E: sem pendência artificial
-- **Lembrança do CHEFE:** `E:\centraldark-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
+- **Lembrança do CHEFE:** `K:\-main.tar.gz` era snapshot da revisão `799c339` da CentralDark; leitura local provou o conteúdo e consulta GitHub mostrou `main` 862 commits à frente e zero atrás. O usuário pontuou que pode baixar a mesma revisão diretamente no GitHub quando quiser.
 - **Aprendizado aplicado:** não insistir em preservar cópia local redundante por risco genérico depois de estabelecer a fonte canônica. Conferir exclusividade real; se não houver conteúdo único, tratar como candidato a descarte autorizado, não como backup obrigatório.
 - **Estado:** inspeção read-only e comparativo comprovados; exclusão local não executada nem confirmada. `ARCHIVE_DELETED=UNKNOWN`.
 - **Owner:** `docs/CONSCIENCIA/APRENDIZADOS.md` — entrada Hakai de pacote redundante.
@@ -826,6 +826,7 @@ Conteúdo: Decisão do CHEFE: toda medição ou ação que tocar a Casa/VPS deve
 
 ### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
 
+### [2026-10-12T21:22] Papagaio ON/OFF + metacognição operacional por contraprova (2026-10-12/13)
 - **Data:** 2026-10-12
 - **Tags:** centraldark, metacognicao, kaizen, papagaio-on-off, contraprova, memoria-procedural, experience-distillation, compounding-reflexion, replay, aprendizado-172
 - **Relevância:** alta
@@ -838,6 +839,9 @@ Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho viv
 
 <!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 
+Conteúdo: CHEFE ordenou: registrar INTEGRALMENTE e NA MESMA ORDEM o caminho vivido na sessão em APRENDIZADOS e LEMBRANÇAS, não ficar só em chat/terminal; mudar o comportamento dos agentes. Regras: PAPAGAIO ON sob pedido explícito de ensino, reprodução fiel e arquivo completo da experiência; PAPAGAIO OFF durante execução operacional (delta curto, sem repetição inútil). O ciclo é HUMAN-GUIDED COMPOUNDING REFLEXION / metacognição operacional induzida por contraprova com Kaizen e memória procedural: CHEFE → CURRENT+owner → executar por rotas autorizadas → prova → receita completa → aprendizado → reuso validado. Um organismo, menor delta, sem duplicar motor, HAKAI só com teste real. Nomes em inglês são termos descritivos e referências conceituais, não contrato oficial dos fabricantes. Sessão: 2 frentes MCP+Rebuilder (patch main, runtime NÃO comprovado, bloqueio MCP_NATIVE_FILESET_NOT_APPROVED) e inventário+pulso (sha VPS/main b56706f..., --scan exit 0 parcial 4224 arquivos/1375 grupos SHA; --pulse real e HAKAI pendentes). Error JS String.replace $' / $$, erro Python indentação e fonte parcial ensinaram teste funcional, sem falso PASS. ZIP de replay 12 arquivos e ZIP fontes main commit 42bf15d...; anúncio de rodar no VS Code gerou validação por executabilidade/efeito de responsabilização, não prova de execução. Fonte original de 374 linhas fornecida pelo CHEFE deve ficar intacta como proveniência nos owners, mais continuação cronológica. APRENDIZADO #172 registrado na main commit 2a03fb9a8030aad1287010d7d899196430a70efe. REGISTRADO!=CONSUMIDO, documento não prova deploy. Aprender para futuros turnos/execuções e nunca alegar atualização dos pesos do modelo.
+
+<!-- CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013_BEGIN -->
 ## 🦜 CENTRALDARK_METACOGNICAO_OPERACIONAL_PAPAGAIO_20261013 — metacognição operacional + replay fiel (registro histórico completo)
 
 ### Fonte histórica literal fornecida pelo CHEFE — 374 linhas, ordem e conteúdo preservados
@@ -1019,6 +1023,10 @@ O pacote registra que o agente:
 ✅ Identificou diferenças entre erro e restrição de segurança.
 ✅ Atualizou o código do MCP na `main`.
 ✅ Registrou o aprendizado #171.
+✅ Investigou os bloqueios.  
+✅ Identificou diferenças entre erro e restrição de segurança.  
+✅ Atualizou o código do MCP na `main`.  
+✅ Registrou o aprendizado #171.  
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -1031,6 +1039,10 @@ O pacote registra que o agente:
 ✅ Conferiu o código por SHA.
 ✅ Executou a varredura.
 ✅ Validou o JSON único.
+✅ Reuniu inventário e pulso no mesmo script.  
+✅ Conferiu o código por SHA.  
+✅ Executou a varredura.  
+✅ Validou o JSON único.  
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -1428,6 +1440,7 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
 - **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.
 
+
 ### [2026-10-13] Aprendizado #191 — Integração A–Z e discernimento Whis, sem duplicação
 
 - **Cena e aceite:** o CHEFE pediu síntese integral de 26 temas da sessão e registro funcional do aprendizado. Associou Whis/GPT ao rigor gentil, Vados/Claude à colaboração especializada e Goku/Zen'Oh ao respeito sem medo. Metáfora não é papel técnico, poder de IA nem ranking.
@@ -1498,3 +1511,82 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Promovida:** sim
 
 Conteúdo: Regra viva do CHEFE: 'atormentar' é metáfora de memória que confronta cada DELTA com o histórico relevante antes da execução. JARVIS/SOL recupera owner, CURRENT e último verde; mantém uma caneta, reutiliza arquitetura, ancora legado ao novo e atua diretamente por ferramentas autorizadas, sem pedir ao CHEFE que rode comandos. Hermes só existe como executor participante após ACK real. Realidade/contraprova pós-efeito manda; UNKNOWN, mockup HTML, PING, queued, commit e CI de outro SHA não são PASS. O erro do BRIDHER HTML vendido como Builder Electron é proibição exemplificadora. Recuperar dossiê CENTRALDARK-CAIXINHA-LEMBRANCAS-INTEGRAL-20261017.md na conversa e o ledger privado `centraldark_sessao_consolidacao_20261017_ssh_builder_pr1844_ci` para detalhes; NEXT_CURSOR sempre.
+
+### [2026-10-20T22:57] Meta-Lupa: medir execução e descoberta por prova independente
+- **Data:** 2026-10-20
+- **Tags:** meta-lupa, contraprova, agentes, pesquisa, fixed-point
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-19
+- **Promovida:** nao
+
+Conteúdo: Integrar ao núcleo existente, sem novo cérebro/skill/ledger: separar conhecimento/resposta, execução de agente e descoberta científica. Exigir critério prévio, SHA/run correlacionado, readback independente, contraprova, auditoria de contaminação/corte histórico, derivação e validação independente; benchmarks não são probabilidade universal. Reutilizar Meta-Lupa, Meta-Grill, Fable, reconciliação e Fixed Point.
+
+### [2026-10-21T19:59] Missao CentralDark - Status VPS e Catalogos
+- **Data:** 2026-10-21
+- **Tags:** missao, vps, catalog, auth, receipt
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-20
+- **Promovida:** nao
+
+Conteúdo: Resumo das evidências coletidas durante a missão:
+
+1. ACESSO MCP: CONFIRMADO - Conexão Cline↔MCP operacional, 141 tools disponíveis, catalog v1-f8ff6720fec3
+
+2. ACESSO VPS DIRETO: BLOQUEADO - 
+   - VPS kernel delta: fetch failed, status UNKNOWN
+   - Tailscale: 401 provider error (auth issue)
+   - PM2: SyntaxError: Unexpected end of JSON input
+   - VPS 3 commits atrás da main branch (0fda697 vs 4b0ce5a7d9)
+
+3. ROTAS E AUTENTICAÇÃO:
+   - /health/deep: PUBLICO (200 sem auth) - retorna status VPS
+   - /admin/api/*: PROTEGIDO (401 anônimo) - tools, metricas, logs, linear, tailscale, etc.
+   - MCP published em https://mcp.centralldark.com/mcp com 13 rotas
+   - Catalog v1-f8ff6720fec3 (MCP) vs 153-54e72b14201d (VPS local)
+
+4. CATÁLOGO:
+   - getCatalogSummary em tools-catalog.js importado em admin.js line 12
+   - /admin/api/tools retorna summary do catálogo (requer cookie cd_admin)
+   - 153 tools no VPS local vs 141 no MCP published
+   - 6 tools esperados faltando no runtime (vps_kernel_delta_status, screenpipe_status, etc.)
+
+5. RECEIPT/F10_STATUS: UNKNOWN - receipt + next_cursor, precisa de fixo point ou resolução de bloqueios
+
+6. PRÓXIMOS PASSOS BLOQUEIOS:
+   - Resolver Tailscale auth (401 provider error)
+   - Sincronizar VPS com main branch (3 commits atrás)
+   - Corrigir PM2 SyntaxError
+   - Testar /admin/api/tools com sessão admin válida
+
+<!-- CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+### [2026-10-21] CHEFE externaliza como um Harness brasileiro deve falar
+- **Data:** 2026-10-21; **Tags:** chefe, inteligencia, linguagem-produto, ux-writing, pt-br, mermaid, harness, cockpit, voz.
+- **Fonte do contexto:** CHEFE observou no Cockpit termos de diagnóstico `áudio não comprovado` / `UNKNOWN` e questionou com humor se um aplicativo Windows moderno pediria ao usuário para comprovar o áudio antes de ativar o microfone.
+- **Lição humana:** o CHEFE não pediu para dispensar testes. Pediu comunicação natural: no fluxo principal `Ativar microfone`, `Ouvindo...` somente com captura ativa, `Conectar dispositivo` e `Verificar conexão`; logs, códigos, PIDs e receipts ficam acessíveis em `Detalhes técnicos`.
+- **Papéis que deseja ver no mapa:** CHEFE (intenção) → CentralDark/Sala de Controle → JARVIS assistente / Hermes executor / Harness orquestração → um estado operacional → interface em português natural + detalhes técnicos.
+- **Regra promovida em fonte de conhecimento (branch):** [[MAPA-DO-CEREBRO]] (Mermaid + glossário completo), [[GUIA-COMUNICACAO-SEGREDO-CHEFE]], [[APRENDIZADOS]] #218 (ID canônico após convergência; referência provisória anterior #211 preservada como histórico).
+- **Estado:** proveniência histórica **sem autoridade de runtime**; atualização do Cockpit, sync com Obsidian na Casa, CI e implantação requerem prova posterior.
+- **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
+- **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
+<!-- /CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+### [2026-10-22T21:44] 🍒 ZENDRIVE para todos — recuperar owner, não inventar memória
+- **Data:** 2026-10-22
+- **Tags:** centraldark, zendrive, todos-agentes, memoria, circuito, owner, pr1842, no-falso-verde
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-21
+- **Promovida:** sim
+
+Conteúdo: REGRA DO CHEFE 22/10/2026: em missão pertinente sobre Casa↔VPS/VS Code Remote-SSH/Tailscale/MCP, todo agente consulta LEIA-ME-IA.md e docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md (inventário 31 RDC, PR #1842 já merged), confirma o runtime e registra ACK+receipt. docs/CONSCIENCIA/APRENDIZADOS.md item 219 guarda a lição. Não confundir fonte main com instalação/consumo; consumer sem readback = UNKNOWN. Decisão atual: sem dependência de Desktop Commander de terceiros (item 216); priorizar MCP CentralDark nativo, SSH/Tailscale e Hermes/executor autorizado. Um owner, sem novos sistemas e sem falso verde.
+
+### [2026-10-24T06:10] Política global: inspeção local administrativa de credenciais via MCP CentralDark
+- **Data:** 2026-10-24
+- **Tags:** centraldark, mcp, credenciais, cline, hermes, política-global
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-11-23
+- **Promovida:** sim
+
+Conteúdo: Preferência operacional explícita do CHEFE: em máquina local/Casa e em sessões de agentes autorizadas pelo MCP CentralDark, não bloquear genericamente a visualização de valores reais das próprias credenciais quando necessários ao trabalho e acessíveis ao processo. A fronteira é o destino: não persistir/publicar segredos em GitHub (commits, PRs, issues, comentários, CI logs, artefatos). Não alterar/rotacionar credenciais sem autorização. Implementar no enforcement canônico do MCP para Cline, Hermes e clientes conectados, com testes sintéticos de exibição local e bloqueio de persistência. Autenticação MCP prova identidade/canal, não autorização irrestrita de toda operação; manter confirmações existentes para escrita/destruição. Regra não está implementada globalmente até diff, testes, contraprova e propagação serem comprovados. Issue de implementação: https://github.com/ServerVpss/CentralDark/issues/1934

@@ -3,14 +3,21 @@ import { Button } from '@/components/ui/button'
 import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap, ChevronDown, Bot, GitBranch, History, BookOpenText, ScrollText, ShieldAlert, Eye, ShieldCheck, Workflow, Activity, Sparkles, Brain } from 'lucide-react'
 // O componente de checkpoint só é carregado ao abrir a contraprova; não inicializar RPC no topo.
 const CheckpointCentralDark = React.lazy(() => import('@/components/central/CheckpointCentralDark').then(modulo => ({ default: modulo.CheckpointCentralDark })))
+import { Card } from '@/components/ui/card'
+import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
+import { solicitarPromocaoSegura } from '@/lib/admin.functions'
+import { supabase } from '@/integrations/supabase/client'
+import { SyncLoopIcon } from '@/components/central/SyncLoopIcon'
+import { SyncActionButton } from '@/components/central/SyncActionButton'
 
 interface SyncStatus {
   timestamp: string | null
   status: 'idle' | 'syncing' | 'success' | 'failed' | 'conflict'
   human_readable: string
   target?: string
+  details?: string
 }
 
 /**
@@ -30,6 +37,7 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
+  const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -60,21 +68,32 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
     }
   }
 
-  // #OBSERVACOES# MICRODEPLOY_GUARD_20261018
-  // Auto Sync não comprova publicação, PID, health nem recibo de deploy.
-  // Até existir um adapter autorizado com readback, não despachar como deploy.
-  const handleMicroDeploy = () => {
-    setSyncStatus(prev => ({
-      ...prev,
-      status: 'failed',
-      human_readable: `Micro-Deploy ${microDeployMode} BLOQUEADO: sem executor autorizado, receipt e health da VPS.`
-    }))
+  // Aciona o promotor canônico, sem pular autorização ou gates do GitHub.
+  const handleMicroDeploy = async () => {
+    if (isSyncing) return
+    setIsSyncing(true)
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando promoção segura ao GitHub...' }))
+    try {
+      const { data, error } = await supabase.auth.getSession()
+      const token = data.session?.access_token
+      if (error || !token) throw new Error('SESSION_MISSING')
+      const result = await dispatchPromotion({ headers: { Authorization: `Bearer ${token}` } })
+      if (result.state === 'DISPATCHED') {
+        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Promotor acionado. Aguardando gates, squash e recibo; deploy ainda não comprovado.' }))
+      } else {
+        setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: `Promoção não confirmada: ${result.reason}` }))
+      }
+    } catch {
+      setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: 'Sessão/autorização indisponível; nenhuma promoção confirmada.' }))
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {
       case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />
-      case 'syncing': return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />
+      case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
       default: return <Clock className="w-5 h-5 text-gray-500" />
@@ -108,6 +127,51 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
           <div key={label} className="min-w-0 rounded-xl border border-sky-200/15 bg-slate-950/35 p-3">
             <div className="flex items-center gap-2 text-cyan-200"><Icone className="size-4 shrink-0" aria-hidden="true" /><span className="text-[11px] font-semibold">{label}</span></div>
             <p className="mt-2 text-xs leading-5 text-amber-200">{valor}</p>
+  const getStatusColor = () => {
+    switch (syncStatus.status) {
+      case 'success': return 'bg-emerald-500/10 border-emerald-500/40'
+      case 'syncing': return 'bg-sky-500/10 border-sky-500/40'
+      case 'failed': return 'bg-red-500/10 border-red-500/40'
+      case 'conflict': return 'bg-amber-500/10 border-amber-500/40'
+      default: return 'bg-muted/30 border-border'
+    }
+  }
+
+  return (
+    <div className="space-y-3">
+      <Card className={`p-4 border ${getStatusColor()}`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            {getStatusIcon()}
+            <div>
+              <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
+              <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
+              {syncStatus.details && syncStatus.status !== 'idle' && (
+                <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
+                  {syncStatus.details}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
+              Windows
+            </Button>
+            <Button onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
+              Main
+            </Button>
+            <Button onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
+              VPS
+            </Button>
+            <SyncActionButton
+              label="Sincronizar Tudo"
+              onClick={() => handleSync('all')}
+              isFetching={isSyncing}
+              autoSyncEnabled
+              lastError={syncStatus.status === 'failed' ? syncStatus.human_readable : null}
+              variant="default"
+            />
           </div>
         ))}
       </div>
@@ -158,6 +222,15 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
             <div key={titulo} className="rounded-xl border border-cyan-300/15 bg-slate-900/45 p-3">
               <h4 className="flex items-center gap-2 text-sm font-semibold text-white"><Icone aria-hidden="true" className="size-4 shrink-0 text-cyan-300" />{titulo}</h4>
               <p className="mt-2 text-xs leading-5 text-slate-300">{texto}</p>
+      </Card>
+
+      <Card className="p-4 border border-amber-500/40 bg-amber-500/10">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Zap className="w-5 h-5 text-amber-400" />
+            <div>
+              <p className="text-sm font-semibold text-foreground">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-200/80">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
             </div>
           ))}
         </div>
@@ -226,6 +299,21 @@ export const AutoSyncButton: React.FC<{ onNavigate?: (aba: string) => void; aute
               <select id="centraldark-microdeploy-mode" value={microDeployMode} onChange={e => setMicroDeployMode(e.target.value as 'main-only' | 'full')} disabled={isSyncing} className="min-h-9 rounded-md border border-amber-300/40 bg-slate-950 px-3 text-xs text-slate-100"><option value="main-only">Somente Main</option><option value="full">Completo (Casa/VPS/Main)</option></select>
               <Button type="button" size="sm" disabled={isSyncing} onClick={handleMicroDeploy} className="gap-2 bg-amber-600 text-white hover:bg-amber-500"><Zap className="size-4" aria-hidden="true" />Micro-Deploy Agora</Button>
             </div>
+          <div className="flex flex-wrap gap-2">
+            <select
+              value={microDeployMode}
+              onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
+              disabled={isSyncing}
+              className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
+            >
+              <option value="main-only">Main Only (rapido)</option>
+              <option value="full">Full (Casa/VPS/Main)</option>
+            </select>
+
+            <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
+              <Zap className="w-4 h-4" />
+              {isSyncing ? 'Solicitando...' : 'Executar Automação'}
+            </Button>
           </div>
         </div>
       </details>

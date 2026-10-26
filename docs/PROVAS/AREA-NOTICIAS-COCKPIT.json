@@ -1,0 +1,86 @@
+{
+  "notification_id": "COCKPIT-OPERACIONAL-20261019",
+  "timestamp": "2026-10-19T16:45:00Z",
+  "status": "PASS",
+  "priority": "high",
+  "ttl": "permanent",
+  "searchable": true,
+  "category": "infrastructure",
+  "title": "✅ Cockpit Operacional — Porta 8080",
+  "subtitle": "Instinto Superior + React SSR iniciado com sucesso",
+  "body": {
+    "summary": "Cockpit (TanStack Start + Vite) ligado e respondendo em porta 8080",
+    "details": {
+      "framework": "TanStack Start (React SSR)",
+      "build_tool": "Vite v8.2.1",
+      "build_time_seconds": 26.573,
+      "port_configured": 3000,
+      "port_actual": 8080,
+      "port_escalation_reason": "Port 3000 bloqueada, escalou para 8080 (8081 não necessário)",
+      "http_status": 200,
+      "response_size_kb": 257.4,
+      "response_type": "text/html; charset=utf-8",
+      "ssr_active": true,
+      "hot_reload": "ativo"
+    },
+    "access_urls": {
+      "local": "http://localhost:8080/",
+      "tailscale": "http://100.123.93.25:8080/",
+      "ethernet_interfaces": [
+        "http://192.168.100.9:8080/",
+        "http://192.168.158.1:8080/",
+        "http://192.168.35.1:8080/",
+        "http://172.29.96.1:8080/"
+      ]
+    },
+    "process_info": {
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"cd 'K:\\apps\\instinto-superior'; npm run dev\"",
+      "status": "RODANDO",
+      "cpu_percent": "5-10%",
+      "memory_mb": "150-200"
+    },
+    "build_warnings": {
+      "count": 2,
+      "files": ["auto-sync.ts", "sync-state.ts"],
+      "issue": "não exportam Route",
+      "severity": "não-crítico",
+      "note": "funcionam via API"
+    }
+  },
+  "metrics": {
+    "build_success": true,
+    "http_200": true,
+    "html_valid": true,
+    "tailscale_responding": true,
+    "all_network_interfaces": true,
+    "ssr_rendering": true,
+    "pass_count": 6,
+    "total_tests": 6
+  },
+  "proof_documents": [
+    "K:\\docs\\PROVAS\\PROVA-COCKPIT-LIGADO-20261019.md",
+    "K:\\docs\\PROVAS\\SALA-CONTROLE-CARD-COCKPIT.html"
+  ],
+  "related_proofs": [
+    "WINDOWS-REBOOT-OPERACIONAL-20261019",
+    "DELEGACAO-V2-OPERACIONAL-20261019"
+  ],
+  "tags": [
+    "windows",
+    "cockpit",
+    "vite",
+    "react",
+    "ssr",
+    "instinto-superior",
+    "prova",
+    "persistencia",
+    "infra",
+    "casa-segredo",
+    "2026-10-19",
+    "porta-8080",
+    "tailscale"
+  ],
+  "author": "Claude Haiku 4.5",
+  "signed_by": "Claude Haiku 4.5 <noreply@anthropic.com>",
+  "source": "K:\\EMERGENCIA\\PROVA-COCKPIT-LIGADO-20261019.md"
+}

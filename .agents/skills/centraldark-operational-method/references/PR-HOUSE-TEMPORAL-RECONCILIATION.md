@@ -262,7 +262,7 @@ Falhas históricas observadas servem como fixtures de contraprova, não como est
 - PATH/CLI e bindings de autenticação devem ser medidos na sessão atual;
 - segredos nunca entram em PR, log, skill ou receipt em texto bruto.
 
-O snapshot estrutural `CentralDark-Arvores.zip`, gerado em 2026-08-22, prova historicamente que `E:\CentralDark\hermes-mcp-centraldark-fixed.bat` existia naquele snapshot (aprox. 3,01 KiB, modificado em 2026-08-20 14:02:20). O ZIP não contém os bytes desse BAT, portanto:
+O snapshot estrutural `CentralDark-Arvores.zip`, gerado em 2026-08-22, prova historicamente que `K:\hermes-mcp-centraldark-fixed.bat` existia naquele snapshot (aprox. 3,01 KiB, modificado em 2026-08-20 14:02:20). O ZIP não contém os bytes desse BAT, portanto:
 
 ```text
 HISTORICAL_PATH_EXISTENCE=PROVEN
@@ -290,7 +290,7 @@ SHA256=6b29c83c734cad95ef5a31484ed0d1bff24ee64eb38e5c461ac1ab87a42a9eb4
 
 ### 9.1 Árvore histórica = mapa de busca, não runtime atual
 
-O snapshot `CentralDark-Arvores.zip` declara `ROOT=E:\CentralDark` e `GENERATED=2026-08-22 20:50:54`. Ele mostra que já existiam, naquela data, owners/matéria relacionados a:
+O snapshot `CentralDark-Arvores.zip` declara `ROOT=K:\` e `GENERATED=2026-08-22 20:50:54`. Ele mostra que já existiam, naquela data, owners/matéria relacionados a:
 
 - `centraldark-operational-method`;
 - `hermes-regenerative-runtime.md`;
@@ -331,7 +331,7 @@ RECOVERY_PATH != MIGRATION_AUTHORIZATION
 
 Portanto:
 
-- `E:\CentralDark` é Casa/alvo de reconciliação, mas não licença para mover tudo para lá;
+- `K:\` é Casa/alvo de reconciliação, mas não licença para mover tudo para lá;
 - estado obrigatório de aplicativo pode permanecer em AppData/perfil quando o consumidor real exigir;
 - junction/symlink exige target provado antes de qualquer decisão;
 - descoberta não inclui `git pull`, `git push`, `git reset`, deploy, move ou delete;

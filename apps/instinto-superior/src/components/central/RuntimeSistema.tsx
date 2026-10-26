@@ -178,6 +178,38 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
         </article>
       </div>
 
+      <details className="panel mt-6 p-5" aria-label="Analytics de memória">
+        <summary className="cursor-pointer font-semibold">🧠 Analytics de memória</summary>
+        <div className="mt-4 grid gap-4 text-sm md:grid-cols-3">
+          <div>
+            <p className="text-xs text-muted-foreground">Memória da VPS</p>
+            <p className="mt-1 font-mono text-xl">
+              {m?.memoria.percentual != null ? `${m.memoria.percentual}%` : "UNKNOWN"}
+            </p>
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+              Fonte: lerMaquinaViva · {m ? "atualiza a cada 5s" : "UNKNOWN"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Memória física da Casa (Windows)</p>
+            <p className="mt-1 font-mono text-xl">SEM_FONTE</p>
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+              Sensor da Casa não autorizado neste owner. Nenhum número foi estimado.
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Processos CentralDark (PID)</p>
+            <p className="mt-1 font-mono text-xl">SEM_FONTE</p>
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+              Sem coletor autorizado. Consumo não é atribuído sem PID comprovado.
+            </p>
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          Histórico, gráfico, pico e média aguardam amostragem autorizada. Somente leitura: nada é encerrado por este painel.
+        </p>
+      </details>
+
       {maquina.isError ? (
         <p className="mt-4 text-xs text-destructive">
           A leitura da máquina foi negada ou falhou; o painel não assume estado.

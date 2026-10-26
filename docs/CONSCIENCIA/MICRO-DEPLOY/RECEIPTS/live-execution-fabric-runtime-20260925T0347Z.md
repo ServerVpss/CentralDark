@@ -1,9 +1,11 @@
 # Receipt — Live Execution Fabric runtime
 
+**Errata de dominio (2026-10-21):** os hostnames deste recibo foram normalizados para `centralldark.com` (dois Ls), segundo o contrato canonico. Esta mudanca e **somente documental**: respostas HTTP, afirmacoes de roteamento e estados abaixo sao historicos de 25/09/2026; **nao houve nova sondagem da VPS ou dos endpoints**. A grafia e o texto originais podem ser recuperados no historico Git.
+
 ```text
 TIME_LOCAL_BRT=2026-09-25T03:47-03:00
 AUTHORITY=SEGREDO/CHEFE
-SCOPE=admin.centraldark.com/omni + centraldark-omni-router + Caddy API routes
+SCOPE=admin.centralldark.com/omni + centraldark-omni-router + Caddy API routes
 SECRET_EXPOSED=false
 ```
 
@@ -17,7 +19,7 @@ SECRET_EXPOSED=false
   - `/api/live-fabric/status`
   - `/api/live-fabric/graph`
   - `/api/live-fabric/start`
-- `/etc/caddy/Caddyfile` recebeu as mesmas rotas para `api.centraldark.com`.
+- `/etc/caddy/Caddyfile` recebeu as mesmas rotas para `api.centralldark.com`.
 - `/var/www/centraldark-admin-omni/index.html` recebeu painel explicativo e botao:
   - `🌀 Hermes Loop — ate quebrar`
 
@@ -51,7 +53,7 @@ receipt_path=docs/CONSCIENCIA/MICRO-DEPLOY/RECEIPTS/live-fabric-20260925T034705Z
 
 ## Observacao de rede publica
 
-A validacao externa por `web.open` nao conseguiu acessar `https://admin.centraldark.com/omni` nem as rotas publicas. A validacao interna da VPS provou o backend e Caddy localmente; a verificacao publica fica como `EXTERNAL_WEB_TOOL_ACCESS_UNKNOWN`, nao como falha do runtime.
+A validacao externa por `web.open` nao conseguiu acessar `https://admin.centralldark.com/omni` nem as rotas publicas. A validacao interna da VPS provou o backend e Caddy localmente; a verificacao publica fica como `EXTERNAL_WEB_TOOL_ACCESS_UNKNOWN`, nao como falha do runtime.
 
 ## Estado medido pelo endpoint
 

@@ -48,11 +48,22 @@ test('repo and PR demand routes to GitHub only, not every connector', () => {
   assert.deepEqual(routed, ['GitHub']);
 });
 
-test('Casa local routes to Remote Desktop Commander, not site proof', () => {
+test('Casa uses native Tailscale/MCP; RDC is fallback only', () => {
   const routed = routeDemand('medir casa windows runtime local terminal');
-
-  assert.equal(routed.includes('Remote_Desktop_Commander'), true);
+  assert.deepEqual(routed, ['CentralDark_Casa_Tailscale']);
+  const plan = planConnectorActivation({ demand: 'medir casa windows runtime local terminal' });
+  assert.deepEqual(plan.casaRoute.primary, ['TAILSCALE_PRIVATE_ROUTE', 'MCP_REMOTE_OAUTH', 'HERMES_SHELL']);
+  assert.equal(plan.casaRoute.fallback, 'RDC_DESKTOP_COMMANDER');
+  assert.equal(plan.casaRoute.fallbackAutoExecuted, false);
+  assert.equal(plan.casaRoute.runtimeStatus, 'REMEASURE_AT_RUNTIME');
   assert.equal(routed.includes('GitHub'), false);
+});
+
+test('explicit mention of vendor does not silently start fallback', () => {
+  const plan = planConnectorActivation({ demand: 'remote desktop commander' });
+  assert.equal(plan.connectors[0].name, 'CentralDark_Casa_Tailscale');
+  assert.ok(!plan.connectors.some(item => item.name === 'Remote_Desktop_Commander'));
+  assert.equal(plan.casaRoute.fallbackActivation, 'ONLY_IF_PRIMARY_FAILED_AND_AUTHORIZED_AND_DEVICE_ONLINE');
 });
 
 test('attachments route to files connector', () => {

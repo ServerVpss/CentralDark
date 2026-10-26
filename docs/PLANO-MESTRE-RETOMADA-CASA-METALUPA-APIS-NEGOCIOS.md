@@ -195,9 +195,9 @@ PIVETE DEFINE
 
 ```text
 C:\Users\danda\AppData\Local\hermes\profiles\pivete\
-E:\CentralDark\Pivete\CentralDark
-E:\CentralDark\Pivete\NUCLEO\
-E:\CentralDark\Pivete\NUCLEO\motor\
+K:\
+K:\NUCLEO\
+K:\NUCLEO\motor\
 ```
 
 Função:
@@ -346,7 +346,7 @@ apps/modulos/Bolt/
 docker-compose.yml
 executor.mjs
 Elite Gateway
-api.centraldark.com
+api.centralldark.com
 proxy Anthropic
 integração OpenAI-compatible
 suporte a containers

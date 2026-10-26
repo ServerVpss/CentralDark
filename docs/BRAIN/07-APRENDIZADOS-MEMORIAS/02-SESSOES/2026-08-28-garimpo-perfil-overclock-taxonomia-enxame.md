@@ -85,7 +85,7 @@ Isso é alguém clicando "nova missão" repetidas vezes numa UI, não missão
 executada. `LIXO_PROVADO`.
 
 Sobra só um fiapo de proveniência em `workspaces.json`: o caminho antigo
-`E:\CentralDark\repo` já foi workspace — útil só como rastro histórico.
+`K:\repo` já foi workspace — útil só como rastro histórico.
 
 ## Fronteira respeitada
 

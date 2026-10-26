@@ -2,7 +2,8 @@
 import { createRequestHandler } from '@remix-run/node';
 import electron, { app, BrowserWindow, globalShortcut, ipcMain, protocol, session } from 'electron';
 import log from 'electron-log';
-import { existsSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import * as pkg from '../../package.json';
 import { setupAutoUpdater } from './utils/auto-update';
@@ -53,6 +54,87 @@ declare global {
 let mainWindow: BrowserWindow | null = null;
 let solWidget: BrowserWindow | null = null;
 let rendererURL = '';
+let builderBusy = false;
+let builderActivity: { status: string; version?: string; at?: string; error?: string } = { status: 'IDLE' };
+
+function builderWorkspace() {
+  // Caminho de FONTE autorizado pelo host; jamais aceitar path vindo do renderer.
+  const explicit = process.env.CENTRALDARK_BUILD_WORKSPACE;
+  return explicit && path.isAbsolute(explicit)
+    ? path.resolve(explicit)
+    : path.join(DEFAULT_HOUSE_ROOT, 'apps', 'modulos', 'Bolt', 'source');
+}
+
+function builderHistorySnapshot() {
+  const workspace = builderWorkspace();
+  const live = path.join(workspace, 'resources', 'build-history.json');
+  const embedded = path.join(app.getAppPath(), 'resources', 'build-history.json');
+  const source = existsSync(live) ? live : embedded;
+  const canRebuild = process.platform === 'win32'
+    && existsSync(path.join(workspace, 'scripts', 'centraldark-rebuild.mjs'))
+    && existsSync(path.join(workspace, 'package.json'));
+  if (!existsSync(source)) return {
+    status: 'UNKNOWN', count: null, entries: [], last_success: null,
+    can_rebuild: canRebuild, reason: 'BUILD_LEDGER_NOT_FOUND', activity: builderActivity,
+  };
+  try {
+    const data = JSON.parse(readFileSync(source, 'utf8')) as {
+      schema?: string; entries?: Array<Record<string, unknown>>;
+    };
+    if (data.schema !== 'centraldark.desktop-builder-ledger/v1' || !Array.isArray(data.entries)) {
+      throw new Error('BUILD_LEDGER_SCHEMA_INVALID');
+    }
+    const entries = data.entries;
+    return {
+      status: 'READY', count: entries.length, entries,
+      last_success: entries.length ? entries[entries.length - 1] : null,
+      can_rebuild: canRebuild, reason: canRebuild ? null : 'BUILD_SOURCE_NOT_AVAILABLE',
+      activity: builderActivity,
+    };
+  } catch (error) {
+    return {
+      status: 'UNKNOWN', count: null, entries: [], last_success: null,
+      can_rebuild: canRebuild,
+      reason: error instanceof Error ? error.message : 'BUILD_LEDGER_READ_FAILED',
+      activity: builderActivity,
+    };
+  }
+}
+
+function trustedBuilderCaller(event: { sender: { id: number }; senderFrame?: { url: string } | null }) {
+  const main = liveMainWindow();
+  let sameOrigin = false;
+  try { sameOrigin = new URL(event.senderFrame?.url ?? '').origin === new URL(rendererURL).origin; }
+  catch { /* recusar origem inválida */ }
+  return Boolean(main && event.sender.id === main.webContents.id && sameOrigin);
+}
+
+
+// Unigram remains an external Windows app, not a copied frontend or second runtime.
+// AUMID was observed via Get-StartApps and Get-AppxPackage on SEGREDO.
+const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D.UnigramPreview_g9c9v27vpyspw!App';
+type UnigramActivation = { status: 'REQUESTED' | 'UNAVAILABLE'; capability: 'UNIGRAM'; reason?: string };
+
+function activateExistingUnigram(): Promise<UnigramActivation> {
+  if (process.platform !== 'win32') {
+    return Promise.resolve({ status: 'UNAVAILABLE', capability: 'UNIGRAM', reason: 'WINDOWS_ONLY' });
+  }
+
+  return new Promise((resolve, reject) => {
+    // No shell: true, caller-controlled args, downloads, account access or new agent.
+    // Packaged-app activation normally reuses an existing app instance.
+    const explorer = path.join(process.env.WINDIR || 'C:\\Windows', 'explorer.exe');
+    const child = spawn(explorer, [`shell:AppsFolder\\${UNIGRAM_WINDOWS_APP_ID}`], {
+      shell: false, detached: true, windowsHide: true, stdio: 'ignore',
+    });
+    child.once('error', reject);
+    child.once('spawn', () => {
+      child.unref();
+      // DISPATCHED != WINDOW_VISIBLE != ACCOUNT_AUTHENTICATED
+      resolve({ status: 'REQUESTED', capability: 'UNIGRAM' });
+    });
+  });
+}
 
 function liveMainWindow() {
   return mainWindow && !mainWindow.isDestroyed() ? mainWindow : null;
@@ -125,6 +207,59 @@ function registerBridge() {
     one_router_only: true,
   }));
 
+  register('centraldark:builders:get', async (event) => {
+    if (!trustedBuilderCaller(event)) throw new Error('CENTRALDARK_BUILDERS_UNTRUSTED_RENDERER');
+    return builderHistorySnapshot();
+  });
+
+  register('centraldark:builders:rebuild', async (event) => {
+    if (!trustedBuilderCaller(event)) throw new Error('CENTRALDARK_BUILDERS_UNTRUSTED_RENDERER');
+    if (builderBusy) return { status: 'ALREADY_RUNNING' };
+    const snapshot = builderHistorySnapshot();
+    if (!snapshot.can_rebuild || snapshot.status !== 'READY') {
+      return { status: 'UNAVAILABLE', reason: snapshot.reason ?? 'BUILD_SOURCE_NOT_AVAILABLE' };
+    }
+    const workspace = builderWorkspace();
+    const recipe = path.join(workspace, 'scripts', 'centraldark-rebuild.mjs');
+    // Nenhum comando livre do renderer; somente a receita versionada no workspace configurado.
+    builderBusy = true;
+    builderActivity = { status: 'REQUESTED', at: new Date().toISOString() };
+    try {
+      const child = spawn('node.exe', [recipe, '--execute'], {
+        cwd: workspace, windowsHide: true, shell: false, stdio: ['ignore', 'pipe', 'pipe'],
+      });
+      let lastError = '';
+      child.stderr.on('data', (chunk: Buffer) => {
+        lastError = (lastError + String(chunk)).slice(-300);
+      });
+      child.stdout.on('data', (chunk: Buffer) => {
+        const line = String(chunk);
+        if (line.includes('BUILD_PASS_RUNTIME_PENDING')) {
+          builderActivity = { status: 'BUILD_PASS_RUNTIME_PENDING', at: new Date().toISOString() };
+        }
+      });
+      child.once('error', (error) => {
+        builderActivity = { status: 'ERROR', at: new Date().toISOString(), error: error.message };
+        builderBusy = false;
+      });
+      child.once('close', (code) => {
+        if (!builderBusy) return;
+        builderActivity = code === 0
+          ? { status: 'BUILD_PASS_RUNTIME_PENDING', at: new Date().toISOString() }
+          : { status: 'FAILED', at: new Date().toISOString(), error: lastError || 'BUILD_EXIT_' + code };
+        builderBusy = false;
+      });
+      return { status: 'REQUESTED', at: builderActivity.at };
+    } catch (error) {
+      builderBusy = false;
+      builderActivity = {
+        status: 'ERROR', at: new Date().toISOString(),
+        error: error instanceof Error ? error.message : 'BUILDER_START_FAILED',
+      };
+      return builderActivity;
+    }
+  });
+
   register('centraldark:omni:health', async () => probeHealth(OMNI_ROUTER_BASE_URL, ['/health', '/v1/models']));
 
   // Canal legado preservado para não quebrar consumidores antigos.
@@ -147,6 +282,38 @@ function registerBridge() {
   register('centraldark:widget:hide', async () => {
     liveWidget()?.hide();
     return { ok: true };
+  });
+
+  register('centraldark:unigram:open', async (event) => {
+    // Fixed capability with origin and native-window caller verification.
+    const current = liveMainWindow();
+    const sourceUrl = event.senderFrame?.url ?? '';
+    let sameOrigin = false;
+    try { sameOrigin = new URL(sourceUrl).origin === new URL(rendererURL).origin; }
+    catch { /* invalid origin is rejected */ }
+    if (!current || event.sender.id !== current.webContents.id || !sameOrigin) {
+      throw new Error('CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER');
+    }
+    return activateExistingUnigram();
+  });
+
+  register('centraldark:obsidian:open', async (event) => {
+    // Mesmo gate de origem/janela do Unigram; alvo é constante, sem parâmetros do renderer.
+    const current = liveMainWindow();
+    const sourceUrl = event.senderFrame?.url ?? '';
+    let sameOrigin = false;
+    try { sameOrigin = new URL(sourceUrl).origin === new URL(rendererURL).origin; }
+    catch { /* origem inválida bloqueada */ }
+    if (!current || event.sender.id !== current.webContents.id || !sameOrigin) {
+      throw new Error('CENTRALDARK_OBSIDIAN_UNTRUSTED_RENDERER');
+    }
+    if (process.platform !== 'win32') {
+      return { status: 'UNAVAILABLE' as const, capability: 'OBSIDIAN' as const, reason: 'WINDOWS_ONLY' };
+    }
+    // Usa a associação obsidian:// já instalada. Não copia binário, vault, perfil ou plugins.
+    await electron.shell.openExternal('obsidian://open?vault=BRAIN');
+    // Solicitação é distinta de janela realmente aberta / aplicação incorporada.
+    return { status: 'REQUESTED' as const, capability: 'OBSIDIAN' as const };
   });
 
   register('centraldark:intent:open', async (_event, rawIntent: unknown) => {

@@ -34,6 +34,10 @@ Esta skill não cria outro sistema: consulta e alimenta o que já existe.
 
 **TRIGGER:** nova resposta material `OR` resposta de ferramenta/Oracle `OR` imagem/arquivo novo `OR` erro/desvio `OR` retorno do `NEXT_CURSOR` → **PRE_RESPONSE_INTENT_RECALL**.
 
+**Gatilho explícito `!kaizen` — o mesmo Kaizen Vivo, sem segundo gatilho ou sistema:** ao receber `!kaizen` (ignorando maiúsculas/minúsculas), retomar o **mesmo Goal e Loop Mestre**, sem reiniciar a missão. Antes de responder: recuperar intenção atual do CHEFE, fonte da verdade (`LEIA-ME-IA.md`, SOUL/RULES/AGENTS e owner pertinente), aprendizados, lembranças, último receipt e estado vivo aplicáveis. Seguir o fluxo completo **lembrar → aproveitar o já comprovado → corrigir só o menor delta autorizado → verificar efeito e contraprova → aprender apenas se houver aprendizado novo → continuar do mesmo NEXT_CURSOR**. Não fabricar etapas, resultados, defeitos ou testes repetidos. Explicar em português natural, com ação e prova, sem jargão desnecessário.
+
+**Se a missão envolver VPS, `!kaizen` usa duas frentes da MESMA missão:** **Casa** confere arquivos, worktree, código, SHA e provas locais; **VPS** confere serviço, execução real, health, logs e receipts via transporte MCP/SSH existente. As duas podem **ler e testar seus próprios escopos em paralelo**, comparar `owner + SHA + fileset + efeito` e reunir uma só conclusão. **Um escritor por escopo**, sem escrita simultânea no mesmo alvo, sem novo runner, executor, projeto ou rota paralela; preservar o que funciona em ambos os lados. Ausência de leitura num lado só deixa **aquele lado** pendente; não inventar falha global nem repetição da outra frente. A correção e a prova continuam no mesmo Goal/receipt/NEXT_CURSOR, respeitando autorizações e limites atuais.
+
 1. **Reconhecer:** qual o título/tema da missão? Qual intenção humana vigente? Qual é a novidade da rodada? Quem é o owner efetivo? Qual superfície/modelo está falando? Não confundir nome da interface com executor ou autoridade.
 2. **Ancorar:** quando o Goal existir na evidência, herdar `GOAL_ID/PARENT_ID`, `LOOP_ID`, `INTENT_ID`, `NEXT_CURSOR`, `LAST_GOOD_STATE` e `RECEIPT_ID` pertinentes. Se um identificador não estiver disponível, **`UNKNOWN`**; nunca inventar, trocar ou reiniciar o Goal.
 3. **Confrontar:** resposta proposta, escopo e estado `CURRENT` versus intenção do CHEFE, cláusulas do Goal e receipt anterior. Classificar `SAME_INTENT_DELTA | INTENT_OVERRIDE_BY_CHEFE | INDEPENDENT_QUERY | CONTEXT_DRIFT | UNKNOWN`. `ORACLE_OUTPUT=CANDIDATE`; opinião/discordância justificada não é drift se continua respondendo à missão.
@@ -51,6 +55,22 @@ Esta skill não cria outro sistema: consulta e alimenta o que já existe.
 - Resposta casual/uma palavra → respeitar a intenção em silêncio; nenhum cabeçalho cerimonial obrigatório.
 
 `NEW_RESPONSE != NEW_INTENT` · `PRE_RESPONSE_INTENT_RECALL=true` · `SAME_GOAL_UNTIL_PROVEN_OR_CHEFE_OVERRIDE=true` · `DOCUMENTED != EXECUTED` · `UNKNOWN != PASS` · `ONE_WRITER_PER_SCOPE=true`
+
+## Cristalização Kaizen obrigatória — receita Kanban reutilizável (26/10/2026)
+
+**Uma intenção, um cartão existente, uma execução, uma prova, um aprendizado apenas se novo.** Aplicar a [Receita Universal Hermes, seção 8](../centraldark-operational-method/references/HERMES-KANBAN-RECEITA-UNIVERSAL.md) como **owner único do passo a passo**. Não copiar os comandos para outra skill nem criar outro fluxo. A [Skill Mãe](../centraldark-operational-method/SKILL.md) torna a consulta dessa receita obrigatória no processo CentralDark.
+
+**Regra Kaizen para qualquer nova tarefa ou retorno do CHEFE:**
+- **Relembrar:** obter intenção vigente, `TASK_ID`, `OWNER`, resultado anterior e `NEXT_CURSOR` pertinentes. Se existe cartão, reusar, inclusive se já está `DONE`.
+- **Economizar:** uma leitura do status. `DONE` → devolver resultado e parar; `RUNNING` → não executar outra vez. Somente autorização explícita desbloqueia um cartão bloqueado.
+- **Agir:** prévia `dry-run` e um despacho apenas para o alvo correto. Um writer por projeto, sem Claude/Hermes concorrentes sobre o mesmo owner.
+- **Provar:** um readback de run + efeito no alvo, com teste específico e contraprova quando necessário. Não misturar código compilado com instalação, execução, integração ou deploy.
+- **Aprender:** deduplicar lição pelo `intenção + owner + tarefa + tipo de efeito + receipt`. Se já foi aprendida, `REUSED_PROVEN_RECEIPT`, sem nota nova ou replay. Se o erro for novo, corrigir o menor delta, validar e incorporar ao owner existente.
+- **Responder:** português brasileiro claro (ASD-STE100 adaptado, 80%); prioridade para `ID | STATUS | PROVA | PRÓXIMO PASSO`; sem histórias repetidas nem jargão inútil. A prova não deve ser omitida para ganhar brevidade.
+
+**Cristal observado, não suposição:** em 26/10/2026, `hermes kanban stats` na Casa mostrou **11 cartões `DONE`**. O cartão `t_87d162cb` do **CentralDark Installer v3.0** passou de bloqueado para `DONE` e tinha **1 run `completed`**, com resumo de compilação CSC exit 0, parser PS1 0 erros, smoke de GUI e artefato .exe. O placar 11 é retrato daquele quadro, **não** onze provas independentes do mesmo procedimento. A receita é **reproduzível** porque tem entradas, comandos, condições de parada, critérios de aceitação e prova; **não garante** que a próxima execução termine com sucesso.
+
+**Princípio de melhoria contínua:** `REUSE_PROVEN_RECEIPT > NEW_AUDIT`; `NO_NEW_CAUSE => NO_NEW_TEST`; `DONE_CARD != ALL_REAL_WORLD_ACTIONS_DONE`; `CURRENT_OUTCOME != FUTURE_OUTCOME`. Só refazer medição quando mudança, expiração da prova ou contraprova concreta exigir.
 
 ## As sete batidas (ordem fixa) com os Seis Olhos
 1. Vive e experimenta — DOMÍNIO conserva intenção e contexto.
