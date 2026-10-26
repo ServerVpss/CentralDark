@@ -14,9 +14,7 @@
 name: 🤖 Dependabot — radar, compatibilidade e squash seguro
 
 on:
-  # Ciclo 24/7: reenfileirar radar canônico a cada 30 min, sem segundo resolvedor.
-  schedule:
-    - cron: '7,37 * * * *'
+  # Cadência de 30 min: relógio central trigger-fabric (17,47), registrado em WORKFLOW-FAMILIES.json. Sem schedule próprio.
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review, labeled, edited]
   workflow_dispatch:

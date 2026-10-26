@@ -1,13 +1,13 @@
 {
-    "gerado_em":  "2026-10-25T01:48:52-03:00",
+    "gerado_em":  "2026-10-26T18:18:17-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
                      {
                          "caminho":  "catalogo/ARQUIVOS.json",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-24T18:41:19-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  6888,
                          "sha256":  "0fe461d907152384c8f1ec876de9cccb3659f240fec2d5c1e86d975946b489a1",
                          "descricao":  "",
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T01:28:51-03:00",
-                         "modificado_em":  "2026-10-25T01:48:21-03:00",
+                         "criado_em":  "2026-10-26T18:15:17-03:00",
+                         "modificado_em":  "2026-10-26T18:15:17-03:00",
                          "bytes":  10281,
                          "sha256":  "5b40a7fb5fd1c26b6b599a683487635a313efdb1cf9562814ac9e2bbac7e3c5a",
                          "descricao":  "",
@@ -129,8 +129,8 @@
                      {
                          "caminho":  "catalogo/comprovacoes/t_26e02a16.json",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T19:46:48-03:00",
-                         "modificado_em":  "2026-10-24T19:46:48-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  1450,
                          "sha256":  "a469004099807fa6c7868cb6fa96db0b6e00c93db481057f2c21a613002a1576",
                          "descricao":  "",
@@ -141,8 +141,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T01:28:51-03:00",
-                         "modificado_em":  "2026-10-25T01:48:31-03:00",
+                         "criado_em":  "2026-10-26T18:15:17-03:00",
+                         "modificado_em":  "2026-10-26T18:15:17-03:00",
                          "bytes":  4890,
                          "sha256":  "439460f9a2b2cc9bb051d5b7fb23db076fd3565bc76f84bdff394108ddd6a23d",
                          "descricao":  "",
@@ -192,8 +192,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:40:54-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  8201,
                          "sha256":  "6b85b31d4b9d8ba81a56a28c74bc11f5d54601d3b2c50d9ac53782438dac0d39",
                          "descricao":  "Método reutilizável da CentralDark para resolução autônoma de conflitos Git/PR por intenção, com decisão CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW, sem invocação manual de agente por conflito.",
@@ -204,8 +204,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-15T17:25:52-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  2088,
                          "sha256":  "72df3dbedb785967b5ba50d740bce8202fad7a644b30c570ce024fde8bfc2e3c",
                          "descricao":  "",
@@ -216,8 +216,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  1052,
                          "sha256":  "acf78bea4b627fd342a002f48b537ee8f7c6aa35ffc281307158b8e42e17491a",
                          "descricao":  "",
@@ -228,8 +228,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-boot/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-18T17:20:31-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  6011,
                          "sha256":  "fd2c8d2532815f88f210c6554ebe16cecaa3d85b4aea07d112fe3160de119c29",
                          "descricao":  "Execute CentralDark boot to align and verify HUD.",
@@ -240,8 +240,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  3091,
                          "sha256":  "028c33c362fdab2b5c76bb7045b20f0a94314a340103c234d9404892d8c1f772",
                          "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
@@ -252,8 +252,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/INTERLIGADOS.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  770,
                          "sha256":  "b3c73cbc4065ee89eb7868d415d95341df2253862c564f324f78efe04589f77a",
                          "descricao":  "",
@@ -264,8 +264,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/references/sessao-erros-reais.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  1217,
                          "sha256":  "dc23825f47023c4ccdff0a9d637bd9595d4262afd9b9a99d279b2e76b93876ab",
                          "descricao":  "",
@@ -276,8 +276,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  18027,
                          "sha256":  "49745155400ee5b98825dcb60405d3bbbb28e6e38325813cb585c832190d5e5d",
                          "descricao":  "CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.",
@@ -300,8 +300,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  5628,
                          "sha256":  "ff847288dd610dd6c062faadf8d05231915224c035bd80f7be2af4b3eb986681",
                          "descricao":  "Router obrigatório de intenção, gatilhos, Capability HUD e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider, segredo temporário ou antes de alegar limitação de ferramenta.",
@@ -312,8 +312,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  4490,
                          "sha256":  "17c1445d216c745c0a1e9486bff22c2f662ed0a3d44e4eca249b1ae7e241f304",
                          "descricao":  "Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.",
@@ -324,8 +324,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/runtime-binding.desired.json",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  471,
                          "sha256":  "2cad2dcc353ae81ec9d0b87767afdd623356bfa1cc9e39e5dd76998feb69737d",
                          "descricao":  "",
@@ -336,8 +336,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  2074,
                          "sha256":  "7be3491476069a245f5943f0b341593e05b36a930efd27505c06e22f14a1968e",
                          "descricao":  "Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.",
@@ -348,8 +348,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  16610,
                          "sha256":  "a215679f7d5599163d4f797ba1de07e7ff22e7faf039f6b81fbb9245aeacaf18",
                          "descricao":  "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
@@ -360,8 +360,8 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-18T17:20:31-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  14645,
                          "sha256":  "d28db794b3a1564ed9d65caf2e7448aac53a634357f052907b53766538c620ab",
                          "descricao":  "Enviar sinais do VS Code Casa ao funil unico CentralDark via SSH/Tailscale, sem transportar texto bruto ou duplicar o owner.",
@@ -372,10 +372,10 @@
                      {
                          "caminho":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-24T19:17:38-03:00",
-                         "modificado_em":  "2026-10-24T19:17:38-03:00",
-                         "bytes":  6272,
-                         "sha256":  "203922432988f4b13a2722059a0cdff2b4709b0bf35b03153b36573518162fbc",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-26T16:35:50-03:00",
+                         "bytes":  8397,
+                         "sha256":  "1526367015083aa074a9e3ed565c7cbe30bc0dfebc47b830de6831bf8683add4",
                          "descricao":  "Método Michelin 3 Estrelas CentralDark. Ative com !michelin ou pedido de execução deliberada passo a passo, reuso, testes, contraprova e prova real. Trabalha junto da receita operacional existente e não a substitui.",
                          "referencias":  [
 
@@ -396,8 +396,8 @@
                      {
                          "caminho":  "INTERLIGADOS.md",
                          "tipo":  "arquivo",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-25T01:14:23-03:00",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
                          "bytes":  3624,
                          "sha256":  "b89e1a11e6657a058d563bf31f6ed0e8a2b25d526c2b520da8d3ae7d7e2aaf23",
                          "descricao":  "",
@@ -451,10 +451,10 @@
                      {
                          "caminho":  "references/2026-09-02-appcentraldark-evoluir-bridge-capability-reconciliation.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  12915,
-                         "sha256":  "63e590c59bedc7b6699009360a96adf64b09c88698344bf14789f777bd2a7926",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  12892,
+                         "sha256":  "e8ed8d9f1a935b42a8c7b5007afe2d287fa6d657f6fd24fa686fed16d4fc77fd",
                          "descricao":  "",
                          "referencias":  [
 
@@ -475,10 +475,10 @@
                      {
                          "caminho":  "references/2026-09-02-garimpo-visual-runtime-reconciliation.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  18447,
-                         "sha256":  "0e57023defa88bf147da3031a4667f8efbf303b1d9d7e09c8045d7e231a3af71",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  18382,
+                         "sha256":  "1aad27e2bb1e51803f8530709dfe795e345438383871cf16b09e39c1a7517164",
                          "descricao":  "",
                          "referencias":  [
 
@@ -487,10 +487,10 @@
                      {
                          "caminho":  "references/2026-09-02-gemini-cli-vscode-devcontainer-mcp-reconciliation.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  11932,
-                         "sha256":  "96905d4924af271d6505df41f825733659103fd75487c992d95ff87d903542d5",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  11890,
+                         "sha256":  "115f5ccfe34162f14c7e4736cfa90d4a1c6d0368c1b86d7045701814375a1543",
                          "descricao":  "",
                          "referencias":  [
 
@@ -535,10 +535,10 @@
                      {
                          "caminho":  "references/2026-09-02-session-hud-garimpo-mcp-reconciliation.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  13140,
-                         "sha256":  "99b5f47bdb8486746b76649b47fe6f3695924c8682bb1b27703fed0f043ac573",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  13110,
+                         "sha256":  "bf618c8191f8056a19c17931c7542d9c1a857b38115c70c2aafdebf733917beb",
                          "descricao":  "",
                          "referencias":  [
 
@@ -607,10 +607,10 @@
                      {
                          "caminho":  "references/2026-09-08-label-gate-delta-util-audit.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  2824,
-                         "sha256":  "d2d88b38d5cd87ce96e792bb97730819e2ec75507ca647a266747668450eec03",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  2805,
+                         "sha256":  "2b6d48e0d41cd97058f3d275ed68a67c170329ede6cf7a64f328a55783954153",
                          "descricao":  "",
                          "referencias":  [
 
@@ -703,10 +703,10 @@
                      {
                          "caminho":  "references/AUTO-MELHORIA-COM-PROVA.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T19:43:01-03:00",
-                         "modificado_em":  "2026-10-24T19:49:35-03:00",
-                         "bytes":  8851,
-                         "sha256":  "6af59d1c5e536e3360d41fa41cd03f004fb1d8f97ede8760944de932e876ed89",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  8940,
+                         "sha256":  "052c2907453b0b86ba67ffb4112cf2f1c4af7cd9d22fabd969c1f2072b3a28cc",
                          "descricao":  "",
                          "referencias":  [
 
@@ -727,10 +727,10 @@
                      {
                          "caminho":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T21:44:17-03:00",
-                         "modificado_em":  "2026-10-24T21:44:17-03:00",
-                         "bytes":  5917,
-                         "sha256":  "0cdc2ceb87b691d8ab649cdd64e27adb0f70e90281ba7b48769545e051736954",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  5980,
+                         "sha256":  "019ea63a941ec77690f015311e96edf9183929a2c9840bd3c78a85162f05c502",
                          "descricao":  "",
                          "referencias":  [
 
@@ -761,6 +761,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-26T12:47:12-03:00",
+                         "modificado_em":  "2026-10-26T12:47:12-03:00",
+                         "bytes":  17378,
+                         "sha256":  "8ee72899493adc8c625c8328660a7328ddeb9b7efcce70a300049ad89576e389",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "references/git-push-sequence.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-12T02:29:56-03:00",
@@ -775,10 +787,10 @@
                      {
                          "caminho":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T22:00:27-03:00",
-                         "modificado_em":  "2026-10-24T22:38:05-03:00",
-                         "bytes":  9009,
-                         "sha256":  "722d3bddee4b2cfbc99fed31f41a0b7e8f0e1d44ba1cf70a7b54ce2ad56a313a",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  9061,
+                         "sha256":  "025bec5dec9e6991064e482e81d4f951241619d5e0f0388a3d2b1f3e4088a012",
                          "descricao":  "",
                          "referencias":  [
 
@@ -787,10 +799,10 @@
                      {
                          "caminho":  "references/HERMES-FREE-TIER-FALLBACK.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T01:26:59-03:00",
-                         "modificado_em":  "2026-10-25T01:48:12-03:00",
-                         "bytes":  8945,
-                         "sha256":  "7e391295f4dbbdfe1b52a00f80defd462660a580071cdcf4709dcb5e43167841",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  9125,
+                         "sha256":  "d64e2826e70459595a250ffa68d2b260ee5ee7402631514fb9644020b1bde403",
                          "descricao":  "",
                          "referencias":  [
 
@@ -799,10 +811,10 @@
                      {
                          "caminho":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T19:02:18-03:00",
-                         "modificado_em":  "2026-10-25T01:14:27-03:00",
-                         "bytes":  8789,
-                         "sha256":  "835090e5a92d10a0c79e108ac5f7fddf7e52d1543b2bae1cd8986cdf9d0dfa98",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-26T16:17:59-03:00",
+                         "bytes":  12807,
+                         "sha256":  "5ffca46f168be61a1f47b123824532f9b4d2045c461113cfbafc10c766046ff2",
                          "descricao":  "",
                          "referencias":  [
                                              {
@@ -838,10 +850,10 @@
                      {
                          "caminho":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T01:13:54-03:00",
-                         "modificado_em":  "2026-10-25T01:19:45-03:00",
-                         "bytes":  10081,
-                         "sha256":  "489c180cae845b659c3bc2b5c159e8b0aa879328b600050c471e0491cec1018a",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  10169,
+                         "sha256":  "957cf5a0a417b503641d9696f066fb3c7994348d69430aa87b9ffc602dfb2082",
                          "descricao":  "",
                          "referencias":  [
                                              {
@@ -853,10 +865,10 @@
                      {
                          "caminho":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T19:15:02-03:00",
-                         "modificado_em":  "2026-10-24T19:15:02-03:00",
-                         "bytes":  5221,
-                         "sha256":  "15d163a0460ebb30f9a8f3aab1e7dd6b566d269e337dc883ca6ec5fd29ba4e69",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  5265,
+                         "sha256":  "cb1486df5e5d5efbd2803d6c44271705b9a6d3ef9e3c33aebe2be9b254c642db",
                          "descricao":  "",
                          "referencias":  [
 
@@ -875,12 +887,27 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-25T12:49:59-03:00",
+                         "modificado_em":  "2026-10-25T12:56:27-03:00",
+                         "bytes":  9385,
+                         "sha256":  "f1ab46e12c7650f675d6974c54664151588a408970908009511dfeea237d8736",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "../SKILL.md",
+                                                 "existe":  true
+                                             }
+                                         ]
+                     },
+                     {
                          "caminho":  "references/PR-HOUSE-TEMPORAL-RECONCILIATION.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  12684,
-                         "sha256":  "e2812c983c30ebaa4f0595250e4b5164348499e62d64d21065b7820e3ceaab37",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  12650,
+                         "sha256":  "a9bb55fd0a2e6f9b607eaa8bfc0d1adb74519186bb340ea3465d2d0558d28492",
                          "descricao":  "",
                          "referencias":  [
 
@@ -937,10 +964,10 @@
                      {
                          "caminho":  "scripts/absorver_pasta_trancada.py",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  5084,
-                         "sha256":  "43fd87e178b3543275a16849d51f108a2cec99fa3de7d3e577934a35a4aff34e",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  5036,
+                         "sha256":  "0e91b93aa4ec4a588bd16f8262c7dfed7754990c795eeeb12221d5b26606b12b",
                          "descricao":  "",
                          "referencias":  [
 
@@ -949,10 +976,10 @@
                      {
                          "caminho":  "scripts/atualizar-catalogo-self-healing.ps1",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T19:40:15-03:00",
-                         "modificado_em":  "2026-10-24T19:49:16-03:00",
-                         "bytes":  13835,
-                         "sha256":  "306e07f0d1a9a6342c53071700d40e3efe9b0b6b207028413d4f038953552bbe",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  14047,
+                         "sha256":  "ad7a295f81ad4d78f3d6bf2c9e5b2a146b4b47566e339914c2874bdb30233470",
                          "descricao":  "",
                          "referencias":  [
 
@@ -961,10 +988,34 @@
                      {
                          "caminho":  "scripts/casa_boot.py",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  7070,
-                         "sha256":  "9a98a9259220c0012d2a226ab5d16fe5067b687178af40e1cde853d239e67932",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  7022,
+                         "sha256":  "b5b807ed0fcb08d929ce8bd131bcdda526826b7eb3b0a912b39a54aaecc4733e",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "scripts/Consultar-PowerShellDocs.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-25T12:51:09-03:00",
+                         "modificado_em":  "2026-10-25T12:56:27-03:00",
+                         "bytes":  6267,
+                         "sha256":  "a573e07e42974d51e4377bfe3026dbefcac7afcf0627f5261d567fd9e1b9fcd4",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "scripts/Identify-CentralDarkMonitors.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-26T12:47:12-03:00",
+                         "modificado_em":  "2026-10-26T12:47:12-03:00",
+                         "bytes":  3139,
+                         "sha256":  "7e7eb54a50f6ad1890ac3c2ccd6a7792335cbb04d7a3eb664c25e07269f0f447",
                          "descricao":  "",
                          "referencias":  [
 
@@ -973,10 +1024,10 @@
                      {
                          "caminho":  "scripts/integrar-skills-centraldark-20261024.ps1",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T18:40:33-03:00",
-                         "modificado_em":  "2026-10-24T19:48:37-03:00",
-                         "bytes":  5170,
-                         "sha256":  "33bb5ec9953e4a299e0f761809c2c1c43ce2b2b67028db76ba848e448913fd19",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  5246,
+                         "sha256":  "79ea87cada3fec3f77a688373aed43e330ea8d7a5bc0afec2dd1cfc6f009135d",
                          "descricao":  "",
                          "referencias":  [
 
@@ -985,10 +1036,22 @@
                      {
                          "caminho":  "scripts/mapear_remoto.py",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T15:44:48-03:00",
-                         "modificado_em":  "2026-10-24T15:44:48-03:00",
-                         "bytes":  2885,
-                         "sha256":  "d9c693406ab2a7ec739aa96d7aea82094841062e17f1318697de01688468c47c",
+                         "criado_em":  "2026-10-25T04:01:30-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  2855,
+                         "sha256":  "b0ab2fb243d2f7c1ece2e195ec054145f0866f278e1f4b63028ce9967175938e",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "scripts/Measure-FocusWindow.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-25T07:31:31-03:00",
+                         "modificado_em":  "2026-10-25T07:46:45-03:00",
+                         "bytes":  6734,
+                         "sha256":  "31d23b1b006d6b6a1210b779ca908f36aba2fe2d64badfdca685bec1e8853d31",
                          "descricao":  "",
                          "referencias":  [
 
@@ -997,10 +1060,10 @@
                      {
                          "caminho":  "scripts/pesquisar-catalogo.ps1",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-24T18:41:19-03:00",
-                         "bytes":  473,
-                         "sha256":  "4dfbfa8f49571a50d2fc91d30d1ba45ee2343a3fcf77a2fd075f0a87d5a2aafd",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  476,
+                         "sha256":  "ce27ddc79c045236c731ac4d6856a192b0a2f3414bd31614d208be8237494392",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1009,10 +1072,10 @@
                      {
                          "caminho":  "scripts/registrar-prova-hermes-casa.ps1",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-24T19:45:36-03:00",
-                         "modificado_em":  "2026-10-24T19:45:36-03:00",
-                         "bytes":  4220,
-                         "sha256":  "0a745353cdffa21ad708c2135b1f60a08eee3baecefd4c060af63f33215464e2",
+                         "criado_em":  "2026-10-25T04:03:31-03:00",
+                         "modificado_em":  "2026-10-25T04:03:31-03:00",
+                         "bytes":  4302,
+                         "sha256":  "27e904b4a27d6e479e7cee5079a3a8fd2eb83cd6014b48a500707547f310bc59",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1045,14 +1108,50 @@
                      {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-25T01:27:11-03:00",
-                         "modificado_em":  "2026-10-25T01:48:52-03:00",
-                         "bytes":  185330,
-                         "sha256":  "6b8dd871e6e6a9684a0670158b62fcf66776a66ef32e928c876c8447c1b63bb4",
+                         "criado_em":  "2026-10-26T18:15:25-03:00",
+                         "modificado_em":  "2026-10-26T18:15:25-03:00",
+                         "bytes":  204595,
+                         "sha256":  "6504ec5f0ba25f834b4d77321b76b57402a43d557b5dbed7a65ec294e29bddc5",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
+                                                 "destino":  "docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../kaizen-sistema-um/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
+                                                 "existe":  true
+                                             },
+                                             {
                                                  "destino":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                                                  "existe":  true
                                              },
                                              {

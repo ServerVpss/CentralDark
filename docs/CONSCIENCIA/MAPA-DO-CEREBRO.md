@@ -988,6 +988,8 @@ A esfera do JARVIS pode estar animada em repouso. **Animação não comprova áu
 
 **Links Obsidian (sem duplicar memória):** [[GUIA-COMUNICACAO-SEGREDO-CHEFE]] · [[PADRAO-RESPOSTA-SEGREDO-CHEFE]] · [[APRENDIZADOS]] · [[LEMBRANCAS]]. Interface visual: PR [#1895](https://github.com/ServerVpss/CentralDark/pull/1895); os textos de tela pertencem a seus componentes já existentes.
 
+**Diagrama de rotas no Excalidraw do mesmo cofre:** [CENTRALDARK — FigJam Omni 8099 + rotas canônicas](../BRAIN/Excalidraw/CENTRALDARK-FIGJAM-ROTAS.excalidraw.md). Fonte FigJam [Omni 8099](https://www.figma.com/board/eE4FS10ymxxlXDJAgWavCh); projeção dos fluxos existentes de `FLOW-REGISTRY.json`, sem criar nova rota. A atualização usa o gate já existente: `node scripts/lupa/diagram-route-gate.mjs --sync-obsidian`. `--check-obsidian` detecta desatualização sem escrever. O FigJam original não foi alterado. A projeção da fonte FigJam usa a última leitura autorizada, não sincronização ao vivo do Figma. Grupo 02 — Loop Mestre e Execução; provas no Grupo 03.
+
 **CURRENT:** regra de linguagem documentada na branch; efeito no Cockpit, build, merge, deploy e sincronização do vault local = `UNKNOWN` até prova independente.
 
 **NEXT_CURSOR:** `GLOSSARIO_PTBR → INVENTARIO_UI_OWNER → TEXTOS_POR_ESTADO → TESTES → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.

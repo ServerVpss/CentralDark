@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { lerMcpRuntimeAoVivo } from "@/lib/cockpit.functions";
+import { FocusTelemetryPanel } from "@/components/central/FocusTelemetryPanel";
 import { BookOpen, Boxes, Gem, Lock } from "lucide-react";
 import gavetaCatalogo from "@/data/forja-gaveta.snapshot.json";
 import moduloCatalogo from "../../../config/harness-module-registry.json";
@@ -379,6 +380,8 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
           {" "}MAIN_SYNCED ≠ RUNTIME_LOADED.
         </p>
       </header>
+
+      <FocusTelemetryPanel />
 
       <section className="panel p-5" aria-labelledby="gaveta-inventario-fisico">
         <h5 id="gaveta-inventario-fisico" className="font-semibold">

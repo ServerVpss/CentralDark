@@ -6,11 +6,95 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+
+
 # METODO OPERACIONAL CENTRALDARK
+
+<!-- CENTRALDARK_KANBAN_EXECUCAO_DIRETA_20261026 -->
+## Execução direta de tarefa existente — método curto (26/10/2026)
+
+**MÉTODO OBRIGATÓRIO DA CENTRALDARK, a partir de 26/10/2026:** para **consultar, retomar, executar e fechar** tarefas Hermes Kanban, aplicar a [seção 8 da Receita Universal existente](references/HERMES-KANBAN-RECEITA-UNIVERSAL.md), sem criar outro método, skill ou dispatcher. O Kaizen Vivo [kaizen-sistema-um](../kaizen-sistema-um/SKILL.md) aprende com a mesma prova, sem duplicar o procedimento. **A instrução desta skill é requisito operacional, não prova automática de carga por todos os agentes.**
+
+**Intenção do CHEFE:** reduzir verificações repetidas e evitar complexidade quando ele pedir para executar, retomar ou consultar uma tarefa que já tem ID. **Aplicar à tarefa existente, nunca criar outra por rotina.** Preservar as verificações mínimas que comprovam estado e impedem dois escritores.
+
+**Fluxo enxuto:**
+1. Conectar uma única vez à Casa autorizada. Consultar o ID informado com `hermes kanban show <ID> --json`. Ler apenas `status`, `assignee`, `workspace_path`, `model_override`, `provider_override` e execução ativa. Se `done`, informar resultado com prova. Se `running`, **não despachar de novo**; comunicar execução ativa.
+2. Se `blocked` ou `scheduled` e o CHEFE autorizou expressamente **executar agora**, usar `hermes kanban unblock <ID>` no MESMO cartão. Não desbloquear a missão-mãe permanente `t_911e17ff` nem outras tarefas.
+3. Rodar **uma vez** `hermes kanban dispatch --dry-run --max 1 --json`; confirmar que a próxima execução é o ID requerido. Se for outra tarefa, **não disparar globalmente**. Corrigir apenas o alvo autorizado ou registrar bloqueio.
+4. Quando o alvo estiver confirmado, executar `hermes kanban dispatch --max 1 --json` **uma vez**. Não abrir simultaneamente Claude Code CLI e Hermes para escrever no mesmo projeto. O modelo `claude-opus-4-6` no cartão não é, por si, prova de execução pelo programa Claude Code CLI.
+5. Confirmar com **um readback**: `hermes kanban show <ID> --json` e `hermes kanban runs <ID>`. Reportar `RUNNING` apenas com `run_id`/worker real; reportar `DONE` apenas com conclusão e entrega verificada. Distinguir `DISPATCHED`, `RUNNING`, `REVIEW`, `DONE` e `BLOCKED`.
+6. Se houver falha, fazer diagnóstico **somente do erro concreto**. Não repetir consultas, reabrir inventário inteiro, testar tecnologias não envolvidas, mudar perfil/modelo, criar cartão, pasta, fila, automação ou processo paralelo sem necessidade.
+7. Preferir resposta curta ao CHEFE: `ID | STATUS | EXECUTOR | OWNER | PROVA | PRÓXIMO PASSO`. Registrar recibo ou comentário no próprio cartão apenas quando houver mudança material.
+
+**Aplicação já identificada:** `t_87d162cb` é o cartão do **CentralDark Installer**; workspace `E:\VMs\CentralDark-Installer`; modelo desejado Anthropic Opus 4.6. A missão de desenvolver o software não autoriza formatar/reparticionar o K:, instalar Linux, mudar boot/WSL ou iniciar VM. A tarefa-mãe `t_911e17ff` permanece índice `blocked`.
+
+**Limite:** verificações mínimas de integridade, ID, owner, concorrência e prova continuam obrigatórias; a otimização elimina redundância, não a validação necessária.
+<!-- /CENTRALDARK_KANBAN_EXECUCAO_DIRETA_20261026 -->
+
+## Gatilho operacional — SSH reverso Casa ↔ VPS e PIDs (2026-10-25)
+
+**ATIVAR POR INTENÇÃO**, quando o pedido disser `VPS → Casa`, `SSH reverso`, `PIDs/processos da Casa`, `sem Desktop Commander`, `Tailscale Casa/VPS` ou erros `Host key verification failed` / `Permission denied` nessa ponte. **Owner único já provado:** [one-shot da Casa](../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1). Antes de investigar do zero, recuperar a [lição causal](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md), a [lembrança verificável](../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md) e o [receipt original](../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md).
+
+**Executar sob demanda:** na Casa Windows, `powershell.exe -NoProfile -File K:\scripts\casa\CentralDark-VPS-Casa-PID-OneShot.ps1`. A receita conserva `segredo-vpss` → VPS e seleciona a chave **já existente** `/root/.ssh/segredo_vps_ed25519` no retorno; exigir `IdentitiesOnly=yes`, `BatchMode=yes`, `StrictHostKeyChecking=yes`, fingerprint e `whoami` antes de `Get-Process`. **Não instalar, criar chaves, expor senhas ou afrouxar SSH para fazer passar.** Host key não confiável exige pin verificado fora do canal; `Permission denied` após host pin exige conferir seleção da identidade antes de culpar firewall/Tailscale.
+
+**Evidência histórica, não garantia permanente:** na contraprova de 25/10/2026, `VPS_TO_CASA_SSH_AUTH=PASS`, `VPS_TO_CASA_PID=PASS COUNT=545` e `EXIT=0`; script/receipt foram lidos na Casa e na `main` com blob idêntico. Para nova rodada, exigir **saída atual** (Id e ProcessName), identidade correta, código 0, receipt e readback. `READ_PID_PASS != PROCESS_MUTATION_AUTHORIZED`; `SSH_CASA_VPS_PASS != SYNC_OBSIDIAN_GITHUB_VPS_PASS`. O resultado não autoriza encerrar/iniciar processos ou declarar automação remota irrestrita. Aplicar Kimetsu e `ONE_WRITER_PER_SCOPE` em cada ação material.
+
+
+## Consulta oficial PowerShell sob demanda (2026-10-25)
+
+**Gatilho acionável ao agente observar erro PowerShell:** `Get-FileHash`, `CommandNotFoundException`, `ParserError`, `.ps1`, `powershell.exe`, `pwsh`, cmdlets, utility modules, PSScriptAnalyzer, SecretManagement, Crescendo, PlatyPS, DSC, Gallery, instalação/edições, SDK, VS Code, Windows management, Azure PowerShell/runbooks e remoting. Consultar PRIMEIRO [Microsoft Learn — PowerShell](https://learn.microsoft.com/en-us/powershell/) e rotear pelo [mapa oficial de gatilhos](references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md). Consultor acionável sob demanda: `scripts/Consultar-PowerShellDocs.ps1 -Mensagem "ERRO"`; `-SomenteRota` não acessa a rede. `NO_MATCH => NO_SEARCH`.
+
+**Fluxo:** `PS_ERROR_MATCH → OFFICIAL_WEB_LOOKUP → HOST_VERSION_AND_EDITION → LOCAL_CAUSE → MIN_DELTA → TEST → READBACK`. Diagnóstico somente leitura; a correção é mutação distinta, sujeita à intenção, Kimetsu e owner único. `DOCS_FOUND != HOST_SUPPORTED != FIX_PROVED`. Não instalar módulos, atualizar runtime, mudar política ou alterar infra só por consultar. Contraprova: `Get-FileHash` ausente na Casa requer consultar `Microsoft.PowerShell.Utility` e verificar módulos/versão; `RemoteSigned` foi ajustado para CurrentUser com autorização explícita e não implica que o cmdlet esteja instalado. Se a web falhar, `DOC_FETCH_STATUS=UNAVAILABLE`. Ativação quando um agente carregado observa o erro, NÃO monitoramento global de processos.
+
 
 ## Regra canônica de identidade do Remote (2026-10-24)
 
 O nome público do produto, owner e capacidade é **CentralDark-Remote**. Não validar integração, saúde, pareamento, catálogo, tarefa ou cockpit pelo nome do antigo fornecedor. O pacote npm do motor open source pode aparecer apenas como dependência técnica interna/atribuição de origem, nunca como nome do produto ou rota de controle. Reutilizar OAuth2 PKCE, autenticação, catálogo, bridge e installer CentralDark existentes. A URL de controle é `https://mcp.centralldark.com/mcp`; referências históricas permanecem históricas e nunca são prova de estado atual. Estado exige tool-call real + readback + contraprova. Ver [regra e aceitação de nomenclatura](references/CENTRALDARK-REMOTE-NOMENCLATURA.md).
+
+## Foco / delegação / telemetria de latência (2026-10-25)
+
+- **Protocolo canônico aditivo:** [references/FOCUS-DELEGACAO-TELEMETRIA.md](references/FOCUS-DELEGACAO-TELEMETRIA.md). Reusa Edge UIAutomation + MCP Remote Desktop Commander, mede transições/foco/oi-apagar sem enviar, aceita envio real apenas com autorização e lê ACK por Browser. A Sala de Controle/Gaveta da Forja mostra somente eventos com readback e distingue ações UIA, cliques físicos não medidos e conexões MCP não comprovadas. Servidor fora da Casa exibe NO_LOCAL_SOURCE. Não criar gateway ou skill paralelos.
 
 ## 🍒 Histórico canônico de builds Desktop (25/10/2026)
 
@@ -511,6 +595,21 @@ Regras:
 - Default em missão mutável já autorizada: adquirir Writer do escopo exato e executar; READ_ONLY só quando não há intenção de mutação, há colisão real de Writer ou a capability atual não escreve
 - Handoff obrigatório antes de outro Writer atuar no mesmo escopo
 - Worktree é isolamento quando materialmente necessário; main direta é válida quando a intenção/autoridade e o estado do repositório permitirem. Não criar branch/worktree por ritual
+
+## 🔧 CHEFE_CURRENT — main direta e SSH condicional (sem CI como espera)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Owner: MASTER-CYCLE.yml#current_delivery_policy. Modo desta missão:
+REMEASURE_MAIN -> OWNER/ONE_WRITER -> MENOR_DELTA -> CHECK_LOCAL_APLICAVEL
+-> COUNTERPROOF -> DIRECT_COMMIT/PUSH_MAIN -> READBACK/RECEIPT.
+CI e squash/PR NÃO são uma condição obrigatória deste caminho. CI não
+executada não é "verificação pendente"; é NOT_APPLICABLE neste fluxo.
+Squash pertence somente à rota de PR autorizada. Um PR de mesmo escopo
+exige reconciliação de writer e delta antes de qualquer promoção.
+SSH direto VPS é caminho de execução quando o host responde; VPS offline
+suspende SOMENTE ações e verificação de runtime naquele host.
+Não usar "CI verde" nem "SSH offline" para conceder Michelin, FIXED_POINT
+ou XP. Conservar security diff-check, testes locais proporcionais e SHA.
 
 ## Lifecycle canônico de branch e PR
 
@@ -3140,3 +3239,19 @@ Registros aditivos comprovados no Windows Casa pelo script verificador. Nao subs
 - Contraprova: Kanban DONE isolado nao prova exclusao; Test-Path do alvo retornou falso no Windows Casa.
 - Resultado: PROVADO na operacao/alvo avaliados. Recibo: catalogo/comprovacoes/t_26e02a16.json
 <!-- AUTOCATALOGO:FIM -->
+
+## Hipótese física explícita para quedas de conexão e tela apagada — replay com fingerprint (2026-10-26)
+
+**REGRA DO CHEFE — NÃO DESCARTAR NEM CONFIRMAR A CAUSA PREMATURAMENTE.** Quando a tela do computador apagar, a GPU deixar de responder, houver suspeita de mau contato/encaixe, alimentação, cabo, monitor ou falha física interna, e em seguida aparecerem quedas de conexão Casa↔VPS, HTTP 523, timeout, peer offline ou testes interrompidos, registrar a hipótese física como **CANDIDATA NÃO CONFIRMADA** junto dos sintomas correlacionados. Não atribuir automaticamente tudo à rede, software, GPU ou hardware; correlação temporal é sinal, não prova causal.
+
+**Receita obrigatória de repetição e peneira:**
+1. Preservar a observação original, horário/fuso, host, tela/GPU, conectividade, serviços e resultados, sem substituir o registro anterior.
+2. Reexecutar a MESMA receita diagnóstica existente, com os mesmos alvos, comandos, ordem e critérios, sempre que for seguro; registrar versão/fingerprint da receita e condições de execução. Não criar outra receita por conveniência.
+3. Comparar o fingerprint e o resultado novo com o registro anterior: SAME_FINGERPRINT + SAME_SIGNATURE fortalece a identificação recorrente, mas não prova causa física; DIFFERENT_FINGERPRINT ou condições diferentes exigem marcar a comparação como não equivalente.
+4. Peneirar evidências discriminantes: horário da perda de vídeo, estado do host, Tailscale, SSH autenticado nos dois sentidos, health/readback local e público, logs/eventos de sistema e telemetria disponível. Distinguir causa observada, hipótese, sintoma correlacionado, ruído e dado ausente.
+5. Registrar no owner/receipt existente: hipótese, evidência favorável, contraprova, evidência ausente, fingerprint, número da repetição, resultado e próximo cursor. Não apagar nem sobrescrever histórico.
+6. Atualizar a conclusão apenas conforme a contraprova: CANDIDATE, SUPPORTED, REFUTED ou UNKNOWN. SCREEN_BLANK != GPU_CAUSE_PROVED; NETWORK_TIMEOUT != NETWORK_ROOT_CAUSE; TEMPORAL_CORRELATION != CAUSAL_PROOF; SAME_RECIPE != SAME_CAUSE sem evidência discriminante.
+
+**Aplicação ao incidente atual:** a hipótese de que uma carga anormal/instabilidade da GPU, tela apagada ou possível encaixe/conexão física tenha provocado a interrupção do computador e, por consequência, as falhas observadas de conectividade deve permanecer registrada como **CANDIDATA NÃO CONFIRMADA** até a repetição da receita e a comparação de fingerprints. Não tratar falhas observadas durante a possível queda como prova automática de defeito de software ou da rede.
+
+**Owner:** esta skill canônica centraldark-operational-method, com reaproveitamento do owner de MetaLupa/contraprova e dos receipts já existentes. Não criar skill, HUD, watcher, agente ou sistema paralelo para guardar esta regra. Registro nesta skill prova apenas que a regra foi documentada; consumo, correlação e diagnóstico continuam exigindo execução e readback reais.
