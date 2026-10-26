@@ -229,3 +229,18 @@ Comentários de #1562/#1757 não são superfície operacional nem store primári
 - CLEANUP: worktrees com commits ?nicos, altera??es, arquivos n?o rastreados ou estado UNKNOWN permanecem at? prova de descarte seguro; remover somente duplicatas comprovadamente inativas.
 - Testes do escopo: RASTRO 19 PASS; diagram-route-gate 19 PASS; Excalidraw UNCHANGED. Prova GitHub depende de SHA real p?s-push.
 - Grupo de notas: 03 Evid?ncias e Contraprovas; 04 Pend?ncias e Bloqueios; 05 Kaizen.
+
+### 2026-10-26 ? Follow-up comprovado: worktrees limpos e checkpoints F:
+
+- Data e fuso de confer?ncia: 2026-10-26T18:24:55-03:00
+- Main verificada na Casa e GitHub: fdf8b71b7aedf0e82b7dd6c9adc0f691b0109f72 (readback remoto no ciclo).
+- Checkpoint F One Heart: F:/_worktrees/sol-one-heart-supabase-20261025 | branch feat/one-heart-supabase-signal-20261025 | commit 2001da923808c71b171b2e13060348d9d71ae8ea | push e readback PASS | 3 arquivos de c?digo; execu??o em produto UNKNOWN.
+- Checkpoint F MCP: F:/_worktrees/mcp-api-cockpit-20261024 | branch feat/mcp-api-cockpit-only-20261024 | commit c40ff15920bbfa2fd150ddc2515bacea973dae49 | push e readback PASS | 3 scripts Python, AST PASS, execu??o real UNKNOWN.
+- Worktrees exclu?dos APENAS ap?s estado limpo, zero arquivos ignorados, HEAD ancestral de main e zero processos externos referentes aos diret?rios. Remo??o via git worktree remove SEM force. Branches e commits mantidos:
+  - F:/_worktrees/centraldark-builder-ledger-20261025 | feat/centraldark-builder-ledger-clean-20261025 | 93875507079cbf1473b47285b608ff33e7d5330c
+  - F:/_worktrees/sol-motor-evolutivo-20261025 | feat/cockpit-supabase-hub-20261025 | be6d855ec94bca960d493cb5731401752be27d61
+  - F:/_worktrees/sol-bidir-sync-20261026 | feat/sync-center-ssh-readback-20261026 | 9eec85c919a0dfe73ec99678b1497cf5a3a80a2e
+- Retidos deliberadamente: F:/_worktrees/centraldark-ssh-learning-20261025 (17132 dele??es rastreadas; UNKNOWN origem; NUNCA consolidar/remover sem reconcilia??o), F:/_worktrees/pr-1895, os dois F:/_worktrees/centraldark-pr1880-20261021-* e F:/TEMP/CentralDark/cd-wt-015 (dirty/untracked e/ou HEAD n?o incorporado), branches com commits n?o integrados, e worktrees K:/_worktrees com dele??o de skill.
+- Retido: F:/_worktrees/sol-centraldark-usina-20261026 (recentemente usado, apesar de HEAD j? ancestral de main).
+- Regra: branch commit WIP != merge main; exclus?o segura de checkout != exclus?o de branch; status UNKNOWN n?o ? PASS.
+- Grupo 03: provas SHA e checagens. Grupo 04: exclus?es incertas. Grupo 05: Kaizen reuso do gate original.
