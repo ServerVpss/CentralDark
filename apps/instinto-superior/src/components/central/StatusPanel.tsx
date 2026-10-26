@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
-import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { lerEstadoCentralDark, lerCircuitoPrivado, type CircuitoPrivado, type Estado } from "@/lib/cockpit.functions";
 import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 
@@ -51,13 +51,14 @@ function DataHora({ iso }: { iso: string | null | undefined }) {
  * O servidor do cockpit consulta os sensores a cada 15s; snapshots antigos
  * deixam de contar como prova, inclusive após erro de transporte.
  */
-export function StatusPanel() {
+export function StatusPanel({ autenticado = false }: { autenticado?: boolean }) {
   // 2026-10-16: SSR hydration guard. Date.now() and cache freshness must not
   // influence the server render vs the browser's first hydration render.
   // This is an incremental, fail-closed fix; post-mount reads stay measured.
   const [hidratado, definirHidratado] = useState(false);
   useEffect(() => { definirHidratado(true); }, []);
   const ler = useServerFn(lerEstadoCentralDark);
+  const lerCircuito = useServerFn(lerCircuitoPrivado);
   const q = useQuery({
     queryKey: ["centraldark", "estado-vivo"],
     queryFn: () => ler(),
@@ -65,30 +66,50 @@ export function StatusPanel() {
     retry: false,
     refetchOnWindowFocus: true,
   });
+  const qCircuito = useQuery({
+    queryKey: ["centraldark", "circuito-privado"],
+    queryFn: () => lerCircuito(),
+    enabled: autenticado,
+    refetchInterval: autenticado ? 60_000 : false,
+    retry: false,
+    refetchOnWindowFocus: true,
+  });
   const agora = useRelogioVivo();
   const fresco = hidratado && agora !== null && Boolean(q.data) && !q.isError && (agora - q.dataUpdatedAt < 45_000);
   const d = fresco ? q.data : null;
+  const circuitoFresco = autenticado && hidratado && agora !== null && Boolean(qCircuito.data) && !qCircuito.isError && (agora - qCircuito.dataUpdatedAt < 90_000);
+  const c: CircuitoPrivado | null = circuitoFresco ? qCircuito.data : null;
   const unknown: Estado = "UNKNOWN";
   const screen: Estado = d?.screenpipe ?? unknown;
-  const remote: Estado = d?.desktop ?? unknown;
+  const remote: Estado = d?.casaCommander ?? unknown;
   const medidoEm = d?.atualizadoEm;
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, d?.casaSite ?? unknown, d?.casaSiteErro), icon: House },
     { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: comMotivo(d?.mainSha?.slice(0, 12) ?? "SHA não medido", d?.github ?? unknown, d?.fonte), icon: Github },
     { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiHealthHttp ?? "?"} · /health`, d?.apiHealth ?? unknown, d?.apiHealthErro), icon: Activity },
+    { nome: "API /api", estado: d?.apiRoot ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiRootHttp ?? "?"} · /api`, d?.apiRoot ?? unknown, d?.apiRootErro), icon: Server },
     { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
     { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
-    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
-    { nome: "Supabase · One Heart", estado: d?.supabaseSignals ?? unknown, detalhe: "Edge Functions " + (d?.supabaseEdgeOnline ?? "?") + "/" + (d?.supabaseEdgeTotal ?? "?") + " · Radar " + (d?.supabaseRadarSources ?? "?") + " · API /heartbeat", icon: Database },
+    { nome: "Heartbeat MCP", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
+    { nome: "MCP público", estado: d?.mcpHealth ?? unknown, detalhe: `HTTP ${d?.mcpHealthHttp ?? "?"} · catálogo ${d?.mcpCatalogVersion ?? "?"}`, icon: Activity },
+    { nome: "Rotas MCP", estado: d?.mcpRouteHealth ?? unknown, detalhe: comMotivo(d?.mcpRouteHealthDetail ?? "Sem resumo de rotas", d?.mcpRouteHealth ?? unknown, d?.mcpRouteHealthErro), icon: GitBranch },
+    { nome: "MCP Status", estado: d?.mcpStatus ?? unknown, detalhe: comMotivo(`HTTP ${d?.mcpStatusHttp ?? "?"} · ok=${d?.mcpStatusOk ?? "?"}`, d?.mcpStatus ?? unknown, d?.mcpStatusErro), icon: Activity },
+    { nome: "Casa Commander", estado: d?.casaCommander ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaCommanderHttp ?? "?"} · engine_connected=${d?.casaCommanderEngine ?? "?"}`, d?.casaCommander ?? unknown, d?.casaCommanderErro), icon: Monitor },
+    { nome: "Supabase · One Heart", estado: d?.supabaseSignals ?? unknown, detalhe: "Edge Functions " + (d?.supabaseEdgeOnline ?? "?") + "/" + (d?.supabaseEdgeTotal ?? "?") + " · Radar " + (d?.supabaseRadarSources ?? "?") + " · MCP /heartbeat", icon: Database },
     { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: comMotivo(`HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, d?.receipts ?? unknown, d?.receiptsErro), icon: Database },
   ];
 
   const rotas = [
-    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Site local · HTTP 4175" },
+    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Sala de Controle local · HTTP 8080/sala-controle" },
     { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
     { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
+    { id: "api-root", owner: "API CentralDark /api", estado: d?.apiRoot ?? unknown, fonte: "GET https://api.centralldark.com/api" },
+    { id: "mcp-health", owner: "MCP CentralDark", estado: d?.mcpHealth ?? unknown, fonte: "GET https://mcp.centralldark.com/health" },
+    { id: "mcp-routes", owner: "MCP Route Health", estado: d?.mcpRouteHealth ?? unknown, fonte: d?.mcpRouteHealthDetail ?? "GET /health/routes" },
+    { id: "mcp-status", owner: "MCP status.json", estado: d?.mcpStatus ?? unknown, fonte: "GET /status.json · ok=false indica degradação" },
+    { id: "casa-commander", owner: "Casa Commander", estado: d?.casaCommander ?? unknown, fonte: d?.casaCommanderFonte ?? "Bridge /health" },
     { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
     { id: "grafo-vivo", owner: "Live Fabric", estado: d?.grafoVivo ?? unknown, fonte: d?.liveFabricFonte ?? "API /api/live-fabric/graph" },
@@ -106,14 +127,14 @@ export function StatusPanel() {
       nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
     },
     {
-      nome: "Desktop Commander", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
-      origem: d?.desktopFonte ?? "Adapter da sessão não conectado ao site",
+      nome: "Casa Commander · engine local", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
+      origem: d?.casaCommanderFonte ?? "Bridge sem medição atual",
       linhas: [
         `STATUS: ${remote}`,
-        "MCP do ChatGPT ≠ conexão comprovada do servidor do cockpit",
-        "Sem stream remoto autenticado neste runtime — não inferir ONLINE",
+        `HTTP ${d?.casaCommanderHttp ?? "?"} · engine_connected=${d?.casaCommanderEngine ?? "?"}`,
+        `FONTE: ${d?.casaCommanderFonte ?? "não medida"}`,
       ],
-      nota: "O plugin conectado nesta conversa não expõe automaticamente seus logs ao site. Exige ponte autorizada existente.",
+            nota: "HTTP 200 prova transporte; engine_connected=false mantém amarelo e não prova execução de ferramenta.",
     },
   ];
 
@@ -134,7 +155,7 @@ export function StatusPanel() {
           <SyncActionButton
             data-cd-flow="instinto.StatusPanel.botao-01"
             label="Medir agora"
-            onClick={() => void q.refetch()}
+            onClick={() => { void q.refetch(); if (autenticado) void qCircuito.refetch(); }}
             isFetching={q.isFetching}
             autoSyncEnabled
             lastSuccessAt={fresco ? medidoEm : null}
@@ -165,6 +186,22 @@ export function StatusPanel() {
           );
         })}
       </div>
+      {autenticado ? (
+        <section className="space-y-3 rounded-xl border border-border p-4" aria-label="Circuito privado Casa VPS">
+          <header>
+            <h4 className="font-semibold">🪬 Circuito Casa ↔ VPS</h4>
+            <p className="mt-1 text-xs text-muted-foreground">Leitura privada autenticada · host executor: {c?.hostRole ?? "UNKNOWN"} · <DataHora iso={c?.medidoEm} /></p>
+          </header>
+          {qCircuito.isError ? <p role="alert" className="text-xs text-destructive">Circuito privado indisponível: transporte/autorização não comprovados.</p> : null}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <article className="rounded-lg border border-border bg-background/40 p-3"><strong className="text-xs">Tailscale · Casa + VPS</strong><div className="mt-3"><LuzViva estado={c?.tailscale ?? unknown} nome="Tailscale Casa + VPS" fresco={circuitoFresco} /></div><p className="mt-2 font-mono text-[10px] text-muted-foreground">Casa={c?.tailscaleCasaOnline === null || c?.tailscaleCasaOnline === undefined ? "?" : c.tailscaleCasaOnline ? "online" : "offline"} · VPS={c?.tailscaleVpsOnline === null || c?.tailscaleVpsOnline === undefined ? "?" : c.tailscaleVpsOnline ? "online" : "offline"} · peers={c?.tailscalePeers ?? "?"}</p></article>
+            <article className="rounded-lg border border-border bg-background/40 p-3"><strong className="text-xs">Casa Commander</strong><div className="mt-3"><LuzViva estado={c?.casaCommander ?? unknown} nome="Casa Commander" fresco={circuitoFresco} /></div><p className="mt-2 font-mono text-[10px] text-muted-foreground">HTTP {c?.casaCommanderHttp ?? "?"} · engine_connected={c?.casaCommanderEngine ?? "?"}</p><p className="mt-1 text-[10px] text-muted-foreground">{c?.casaCommanderErro ?? "Sem erro reportado"}</p></article>
+            <article className="rounded-lg border border-border bg-background/40 p-3"><strong className="text-xs">VPS → Casa · ponte</strong><div className="mt-3"><LuzViva estado={c?.vpsToCasaBridge ?? unknown} nome="VPS para Casa bridge" fresco={circuitoFresco} /></div><p className="mt-2 font-mono text-[10px] text-muted-foreground">HTTP {c?.vpsToCasaBridgeHttp ?? "?"} · engine_connected={c?.vpsToCasaBridgeEngine ?? "?"}</p><p className="mt-1 text-[10px] text-muted-foreground">{c?.vpsToCasaBridgeErro ?? "Sem erro reportado"}</p></article>
+            <article className="rounded-lg border border-border bg-background/40 p-3"><strong className="text-xs">SSH reverso direto</strong><div className="mt-3"><LuzViva estado={c?.vpsToCasaSsh ?? unknown} nome="SSH reverso direto" fresco={circuitoFresco} /></div><p className="mt-2 text-[10px] text-muted-foreground">{c?.vpsToCasaSshErro ?? "Não medido"}</p></article>
+          </div>
+          <p className="text-[10px] text-muted-foreground">Tailscale online não prova execução autenticada. A ponte é transporte; só PASS de ferramenta exige resposta/recibo real. SSH não medido permanece UNKNOWN.</p>
+        </section>
+      ) : null}
       <details className="rounded-md border border-border p-3 text-xs">
         <summary className="cursor-pointer font-medium">
           🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem PASS atual

@@ -693,7 +693,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
           <AutoSyncButton />
           <div className="mt-4 space-y-4">
-            <StatusPanel />
+            <StatusPanel autenticado={autenticado} />
             <DailyReviewPanel />
           </div>
 
