@@ -72,7 +72,7 @@ A skill Michelin abaixo é **nova operacionalização de uma Lembrança históri
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-25 13:50:52 -03:00. **Arquivos:** 76. **Skills:** 12.
+**Última sincronização (Casa):** 2026-10-26 16:36:17 -03:00. **Arquivos:** 77. **Skills:** 12.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
@@ -88,8 +88,8 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 | `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
 | `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a215679f7d55 |
 | `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
-| `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d69cc0a16537 |
-| `SKILL.md` | 2026-10-25T12:55:10-03:00 | 2026-10-25T13:50:13-03:00 | d79c87388a5f |
+| `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
+| `SKILL.md` | 2026-10-26T12:47:13-03:00 | 2026-10-26T16:18:28-03:00 | d4d3290a16d8 |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)

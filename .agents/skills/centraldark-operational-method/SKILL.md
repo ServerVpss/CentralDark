@@ -25,6 +25,27 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 
 # METODO OPERACIONAL CENTRALDARK
 
+<!-- CENTRALDARK_KANBAN_EXECUCAO_DIRETA_20261026 -->
+## Execução direta de tarefa existente — método curto (26/10/2026)
+
+**MÉTODO OBRIGATÓRIO DA CENTRALDARK, a partir de 26/10/2026:** para **consultar, retomar, executar e fechar** tarefas Hermes Kanban, aplicar a [seção 8 da Receita Universal existente](references/HERMES-KANBAN-RECEITA-UNIVERSAL.md), sem criar outro método, skill ou dispatcher. O Kaizen Vivo [kaizen-sistema-um](../kaizen-sistema-um/SKILL.md) aprende com a mesma prova, sem duplicar o procedimento. **A instrução desta skill é requisito operacional, não prova automática de carga por todos os agentes.**
+
+**Intenção do CHEFE:** reduzir verificações repetidas e evitar complexidade quando ele pedir para executar, retomar ou consultar uma tarefa que já tem ID. **Aplicar à tarefa existente, nunca criar outra por rotina.** Preservar as verificações mínimas que comprovam estado e impedem dois escritores.
+
+**Fluxo enxuto:**
+1. Conectar uma única vez à Casa autorizada. Consultar o ID informado com `hermes kanban show <ID> --json`. Ler apenas `status`, `assignee`, `workspace_path`, `model_override`, `provider_override` e execução ativa. Se `done`, informar resultado com prova. Se `running`, **não despachar de novo**; comunicar execução ativa.
+2. Se `blocked` ou `scheduled` e o CHEFE autorizou expressamente **executar agora**, usar `hermes kanban unblock <ID>` no MESMO cartão. Não desbloquear a missão-mãe permanente `t_911e17ff` nem outras tarefas.
+3. Rodar **uma vez** `hermes kanban dispatch --dry-run --max 1 --json`; confirmar que a próxima execução é o ID requerido. Se for outra tarefa, **não disparar globalmente**. Corrigir apenas o alvo autorizado ou registrar bloqueio.
+4. Quando o alvo estiver confirmado, executar `hermes kanban dispatch --max 1 --json` **uma vez**. Não abrir simultaneamente Claude Code CLI e Hermes para escrever no mesmo projeto. O modelo `claude-opus-4-6` no cartão não é, por si, prova de execução pelo programa Claude Code CLI.
+5. Confirmar com **um readback**: `hermes kanban show <ID> --json` e `hermes kanban runs <ID>`. Reportar `RUNNING` apenas com `run_id`/worker real; reportar `DONE` apenas com conclusão e entrega verificada. Distinguir `DISPATCHED`, `RUNNING`, `REVIEW`, `DONE` e `BLOCKED`.
+6. Se houver falha, fazer diagnóstico **somente do erro concreto**. Não repetir consultas, reabrir inventário inteiro, testar tecnologias não envolvidas, mudar perfil/modelo, criar cartão, pasta, fila, automação ou processo paralelo sem necessidade.
+7. Preferir resposta curta ao CHEFE: `ID | STATUS | EXECUTOR | OWNER | PROVA | PRÓXIMO PASSO`. Registrar recibo ou comentário no próprio cartão apenas quando houver mudança material.
+
+**Aplicação já identificada:** `t_87d162cb` é o cartão do **CentralDark Installer**; workspace `E:\VMs\CentralDark-Installer`; modelo desejado Anthropic Opus 4.6. A missão de desenvolver o software não autoriza formatar/reparticionar o K:, instalar Linux, mudar boot/WSL ou iniciar VM. A tarefa-mãe `t_911e17ff` permanece índice `blocked`.
+
+**Limite:** verificações mínimas de integridade, ID, owner, concorrência e prova continuam obrigatórias; a otimização elimina redundância, não a validação necessária.
+<!-- /CENTRALDARK_KANBAN_EXECUCAO_DIRETA_20261026 -->
+
 ## Gatilho operacional — SSH reverso Casa ↔ VPS e PIDs (2026-10-25)
 
 **ATIVAR POR INTENÇÃO**, quando o pedido disser `VPS → Casa`, `SSH reverso`, `PIDs/processos da Casa`, `sem Desktop Commander`, `Tailscale Casa/VPS` ou erros `Host key verification failed` / `Permission denied` nessa ponte. **Owner único já provado:** [one-shot da Casa](../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1). Antes de investigar do zero, recuperar a [lição causal](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md), a [lembrança verificável](../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md) e o [receipt original](../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md).
@@ -3177,3 +3198,19 @@ Registros aditivos comprovados no Windows Casa pelo script verificador. Nao subs
 - Contraprova: Kanban DONE isolado nao prova exclusao; Test-Path do alvo retornou falso no Windows Casa.
 - Resultado: PROVADO na operacao/alvo avaliados. Recibo: catalogo/comprovacoes/t_26e02a16.json
 <!-- AUTOCATALOGO:FIM -->
+
+## Hipótese física explícita para quedas de conexão e tela apagada — replay com fingerprint (2026-10-26)
+
+**REGRA DO CHEFE — NÃO DESCARTAR NEM CONFIRMAR A CAUSA PREMATURAMENTE.** Quando a tela do computador apagar, a GPU deixar de responder, houver suspeita de mau contato/encaixe, alimentação, cabo, monitor ou falha física interna, e em seguida aparecerem quedas de conexão Casa↔VPS, HTTP 523, timeout, peer offline ou testes interrompidos, registrar a hipótese física como **CANDIDATA NÃO CONFIRMADA** junto dos sintomas correlacionados. Não atribuir automaticamente tudo à rede, software, GPU ou hardware; correlação temporal é sinal, não prova causal.
+
+**Receita obrigatória de repetição e peneira:**
+1. Preservar a observação original, horário/fuso, host, tela/GPU, conectividade, serviços e resultados, sem substituir o registro anterior.
+2. Reexecutar a MESMA receita diagnóstica existente, com os mesmos alvos, comandos, ordem e critérios, sempre que for seguro; registrar versão/fingerprint da receita e condições de execução. Não criar outra receita por conveniência.
+3. Comparar o fingerprint e o resultado novo com o registro anterior: SAME_FINGERPRINT + SAME_SIGNATURE fortalece a identificação recorrente, mas não prova causa física; DIFFERENT_FINGERPRINT ou condições diferentes exigem marcar a comparação como não equivalente.
+4. Peneirar evidências discriminantes: horário da perda de vídeo, estado do host, Tailscale, SSH autenticado nos dois sentidos, health/readback local e público, logs/eventos de sistema e telemetria disponível. Distinguir causa observada, hipótese, sintoma correlacionado, ruído e dado ausente.
+5. Registrar no owner/receipt existente: hipótese, evidência favorável, contraprova, evidência ausente, fingerprint, número da repetição, resultado e próximo cursor. Não apagar nem sobrescrever histórico.
+6. Atualizar a conclusão apenas conforme a contraprova: CANDIDATE, SUPPORTED, REFUTED ou UNKNOWN. SCREEN_BLANK != GPU_CAUSE_PROVED; NETWORK_TIMEOUT != NETWORK_ROOT_CAUSE; TEMPORAL_CORRELATION != CAUSAL_PROOF; SAME_RECIPE != SAME_CAUSE sem evidência discriminante.
+
+**Aplicação ao incidente atual:** a hipótese de que uma carga anormal/instabilidade da GPU, tela apagada ou possível encaixe/conexão física tenha provocado a interrupção do computador e, por consequência, as falhas observadas de conectividade deve permanecer registrada como **CANDIDATA NÃO CONFIRMADA** até a repetição da receita e a comparação de fingerprints. Não tratar falhas observadas durante a possível queda como prova automática de defeito de software ou da rede.
+
+**Owner:** esta skill canônica centraldark-operational-method, com reaproveitamento do owner de MetaLupa/contraprova e dos receipts já existentes. Não criar skill, HUD, watcher, agente ou sistema paralelo para guardar esta regra. Registro nesta skill prova apenas que a regra foi documentada; consumo, correlação e diagnóstico continuam exigindo execução e readback reais.

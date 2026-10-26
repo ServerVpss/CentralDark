@@ -113,6 +113,20 @@ fixed_point_execution_header:
     header_missing_blocks_agent_call: true
     preserve_same_intent_and_next_cursor: true
     no_new_owner_or_evaluator: true
+  canonical_navigation_header:
+    required_for: MATERIAL_FIXED_POINT_REPORT
+    role: SEVEN_CANONICAL_REFERENCES_NOT_A_REPLACEMENT_FOR_TEN_EXECUTION_CRITERIA
+    source_order_fixed: true
+    links:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+      - docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+      - docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md
+      - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md
+      - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+    links_are_navigation_not_runtime_proof: true
+    ten_horn_criteria_still_required: true
 
 aureola_visible_route_debugger:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
@@ -244,10 +258,27 @@ phase_contracts:
     required_output: [COMMIT_SHA, PATH, LINK, READBACK, MEMORY_LOCATION_WHEN_CLAIMED]
     response_without_trace: INVALID
     applies_to_all_engines: true
+    touched_note_reconciliation:
+      status: CONTRACT_AND_LOCAL_FISCAL_TESTED
+      scope: MD_FILES_TOUCHED_BY_AUTHORIZED_MISSION_ONLY
+      contract_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md
+      existing_fiscal: scripts/trigger-fabric/rastro_fiscal.py
+      existing_test: scripts/trigger-fabric/test_rastro_fiscal.py
+      command: python scripts/trigger-fabric/rastro_fiscal.py --note-file CAMINHO_DA_NOTA.md --pretty
+      fields: [data_criacao, ultima_atualizacao, ultima_modificacao, ultima_verificacao, fuso_horario, hash_conteudo, rastro, grupo_notas, relacionado_a, estado_evidencia]
+      groups: [GRUPO_01, GRUPO_02, GRUPO_03, GRUPO_04, GRUPO_05]
+      pass_scope: METADATA_FORMAT_AND_NORMALIZED_HASH_ONLY
+      preserve_original_creation: true
+      verification_does_not_modify_content: true
+      no_bulk_rewrite_or_new_note_folders: true
+      note_change_requires_authorized_owner_writer: true
+      runtime_all_agents_enforcement: UNKNOWN_UNTIL_INTEGRATION_PROVED
 
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
     owner: LEIA-ME-IA.md
+    canonical_boot_file: CENTRALDARK_AI_BOOT.yaml
+    boot_mode: REUSE_EXISTING_CENTRALDARK_BOOT
     runtime_restart_implied: false
 
 failure_discriminant:
