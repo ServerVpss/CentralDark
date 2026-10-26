@@ -9,7 +9,6 @@ import {
   Filter,
   Gauge,
   Network,
-  RefreshCw,
   Route as RouteIcon,
   ShieldCheck,
   Waypoints,
@@ -17,6 +16,7 @@ import {
 
 import { Header } from "@/components/central/Header";
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { SyncLoopIcon } from "@/components/central/SyncLoopIcon";
 
 type CapabilityState =
   | "NATIVE"
@@ -326,7 +326,7 @@ function RouterPage() {
                 aria-label={copy.refresh}
                 title={copy.refresh}
               >
-                <RefreshCw className={`size-4 ${liveState === "CHECKING" ? "animate-spin" : ""}`} />
+                <SyncLoopIcon autoSyncEnabled isFetching={liveState === "CHECKING"} size={16} />
               </button>
             </div>
 

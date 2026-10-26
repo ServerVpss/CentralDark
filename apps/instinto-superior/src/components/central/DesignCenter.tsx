@@ -67,6 +67,96 @@ const cores = [
 
 const estados = ["PASS", "RUNNING", "BLOCKED", "AUTH_REQUIRED", "UNKNOWN", "FAIL"] as const;
 
+/**
+ * CENTRALDARK_GLOBAL_THEME_PREVIEW_ONLY_20261021
+ * Amostras de: apps/modulos/Bolt/source/app/styles/variables.scss
+ * Comparação visual apenas, NÃO muda tema do Shell nem a pele do Cockpit.
+ */
+const temasGlobaisEmPrevia = [
+  {
+    id: "emerald", nome: "Emerald",
+    descricao: "Institucional · verde esmeralda em superfície clara",
+    fundo: "#f0fdf4", painel: "#ffffff", elevado: "#dcfce7",
+    borda: "rgba(16, 185, 129, 0.18)", texto: "#0a0a0a",
+    auxiliar: "#374151", acao: "hsl(152 65% 32%)",
+    botao: "rgba(16, 185, 129, 0.12)", perigo: "#dc2626",
+    artefato: "#ffffff", artefatoTexto: "#0a0a0a",
+  },
+  {
+    id: "operational", nome: "Operational",
+    descricao: "Operação · navy, ciano e vermelho de alerta",
+    fundo: "#05070d", painel: "#0b1420", elevado: "#0e1a2c",
+    borda: "rgba(79, 195, 255, 0.14)", texto: "#e9eef7",
+    auxiliar: "#7f96b6", acao: "#4fc3ff",
+    botao: "rgba(79, 195, 255, 0.12)", perigo: "#ff4b3e",
+    artefato: "#0b1420", artefatoTexto: "#e9eef7",
+  },
+  {
+    id: "forge", nome: "Forge",
+    descricao: "Forja · preto/marrom, bronze e painel pergaminho",
+    fundo: "#100d07", painel: "#1d1709", elevado: "#2b2415",
+    borda: "rgba(192, 144, 43, 0.22)", texto: "#f2db98",
+    auxiliar: "#9c8352", acao: "#c0902b",
+    botao: "rgba(192, 144, 43, 0.14)", perigo: "#e05a45",
+    artefato: "#ecdbae", artefatoTexto: "#2b1c08",
+  },
+] as const;
+
+function PreviaTemaGlobal({ tema }: { tema: (typeof temasGlobaisEmPrevia)[number] }) {
+  const amostras = [
+    ["Fundo", tema.fundo], ["Painel", tema.painel],
+    ["Elevado", tema.elevado], ["Ação", tema.acao],
+  ] as const;
+  return (
+    <article data-cd-theme-preview={tema.id}
+      aria-label={"Prévia isolada do tema " + tema.nome}
+      className="overflow-hidden rounded-xl border border-border">
+      <div className="border-b border-border bg-muted/20 p-4">
+        <h4 className="font-semibold">{tema.nome} <span className="font-mono text-xs text-muted-foreground">({tema.id})</span></h4>
+        <p className="mt-1 text-xs text-muted-foreground">{tema.descricao}</p>
+      </div>
+      <div className="min-h-64 p-4" style={{ backgroundColor: tema.fundo, color: tema.texto }}>
+        <div className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2"
+          style={{ backgroundColor: tema.painel, borderColor: tema.borda }}>
+          <span className="text-sm font-bold">🪬 CentralDark</span>
+          <span className="text-[10px]" style={{ color: tema.auxiliar }}>Harness</span>
+        </div>
+        <div className="mt-3 rounded-lg border p-3"
+          style={{ backgroundColor: tema.painel, borderColor: tema.borda }}>
+          <p className="text-[10px] uppercase tracking-widest" style={{ color: tema.acao }}>Sala de controle</p>
+          <h5 className="mt-1 text-lg font-semibold">O que vamos construir?</h5>
+          <p className="mt-1 text-xs" style={{ color: tema.auxiliar }}>Builder, agentes e projetos na mesma bancada.</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-md border px-3 py-2 font-semibold"
+              style={{ backgroundColor: tema.botao, borderColor: tema.acao, color: tema.acao }}>Novo projeto</span>
+            <span className="rounded-md border px-3 py-2"
+              style={{ backgroundColor: tema.elevado, borderColor: tema.borda }}>Ver terminais</span>
+          </div>
+        </div>
+        <div className="mt-3 rounded-lg border p-3 text-xs"
+          style={{ backgroundColor: tema.artefato, borderColor: tema.borda, color: tema.artefatoTexto }}>
+          <p className="font-semibold">Painel de trabalho</p>
+          <p className="mt-1">Abas • notas • processos</p>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="size-2 rounded-full" style={{ backgroundColor: tema.acao }} />
+            <span>Conectado (exemplo visual)</span>
+            <span className="ml-auto font-semibold" style={{ color: tema.perigo }}>Alerta</span>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-2 bg-muted/20 p-3">
+        {amostras.map(([nome, cor]) => (
+          <div key={nome} className="min-w-0">
+            <span className="block h-8 rounded border border-border" style={{ backgroundColor: cor }} />
+            <span className="mt-1 block truncate text-[10px] text-muted-foreground" title={nome}>{nome}</span>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+
 
 type AchadoDom = { tipo: "ID_DUPLICADO" | "ARIA_ALVO_AUSENTE" | "TRANSBORDO_HORIZONTAL" | "CONTROLE_ENCOBERTO"; alvo: string; detalhe: string };
 type LeituraDom = {
@@ -257,12 +347,32 @@ export function DesignCenter({
       <Tabs defaultValue={autenticado ? abaInicial : "tokens"} className="mt-8">
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="tokens">Tokens</TabsTrigger>
+          <TabsTrigger value="temas-globais">Temas globais · 3 prévias</TabsTrigger>
           <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
           {autenticado ? <TabsTrigger value="extensoes">Marketplace</TabsTrigger> : null}
           <TabsTrigger value="superficies">Superfícies</TabsTrigger>
           <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
           {autenticado ? <TabsTrigger value="dom-vivo">DOM Vivo</TabsTrigger> : null}
         </TabsList>
+
+        <TabsContent value="temas-globais" className="mt-6">
+          <section aria-labelledby="temas-globais-titulo" className="space-y-4">
+            <div>
+              <h3 id="temas-globais-titulo" className="font-semibold">Três temas globais · prévias independentes</h3>
+              <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+                Compare Emerald, Operational e Forge lado a lado. Amostras dos tokens oficiais do Shell/Bolt.
+                Não aplicam temas ao Cockpit, não alteram suas quatro peles nem salvam preferências.
+              </p>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {temasGlobaisEmPrevia.map((tema) => <PreviaTemaGlobal key={tema.id} tema={tema} />)}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Mostruário: os controles simulados não executam ações. A decisão de manter os temas separados
+              ou fundi-los fica pendente da comparação visual e da aprovação do CHEFE.
+            </p>
+          </section>
+        </TabsContent>
 
         <TabsContent value="tokens" className="mt-6">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
@@ -364,6 +474,38 @@ export function DesignCenter({
                 Inventário inicial: ZENDRIVE CLI. Demais capacidades ainda exigem
                 inventário e contraprova; não foram migradas nem reinstaladas.
               </p>
+
+              <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.conector-browser-tabs">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-wide text-neon-blue">
+                      Conector existente · ChatGPT Browser
+                    </p>
+                    <h4 className="mt-1 text-lg font-semibold">🌐 Browser Tab Discovery</h4>
+                  </div>
+                  <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                    PROVA HISTÓRICA · REVALIDAR AO VIVO
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  A leitura Browser.list_tabs encontrou abas abertas do cockpit CentralDark, GitHub
+                  e Tailscale em 20/10/2026. Browser.get_tab_context também leu o conteúdo
+                  do cockpit local. É descoberta e leitura de abas, não controle de processos.
+                </p>
+                <dl className="mt-4 grid gap-3 border-y border-border py-4 text-xs sm:grid-cols-2">
+                  <div><dt className="text-muted-foreground">Owner</dt><dd className="mt-1">ChatGPT Browser · conector externo</dd></div>
+                  <div><dt className="text-muted-foreground">Capacidade observada</dt><dd className="mt-1">Listar abas e ler páginas HTTP(S)</dd></div>
+                  <div><dt className="text-muted-foreground">PID Chrome / vínculo ACP</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Zendrive live / worker</dt><dd className="mt-1 font-mono">UNKNOWN</dd></div>
+                  <div><dt className="text-muted-foreground">Restrição comprovada</dt><dd className="mt-1">URL interna chrome:// bloqueada pela política do Browser</dd></div>
+                  <div><dt className="text-muted-foreground">Estado no cockpit</dt><dd className="mt-1 font-mono">SEM SENSOR AO VIVO · NÃO PROMOVER PASS</dd></div>
+                </dl>
+                <Button asChild size="sm" variant="outline" className="mt-4" data-cd-flow="instinto.DesignCenter.browser-tabs-receipt">
+                  <a href="https://github.com/ServerVpss/CentralDark/pull/1861#issuecomment-6283718112" target="_blank" rel="noopener noreferrer">
+                    Ver recibo da capacidade <ExternalLink />
+                  </a>
+                </Button>
+              </article>
 
               <article className="panel mt-6 p-6" data-cd-flow="instinto.DesignCenter.extensao-zendrive-cli">
                 <div className="flex flex-wrap items-start justify-between gap-4">

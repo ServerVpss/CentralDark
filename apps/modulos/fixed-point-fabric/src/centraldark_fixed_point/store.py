@@ -5,6 +5,7 @@ import json
 import os
 import sqlite3
 import time
+import uuid
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Iterator
@@ -287,16 +288,44 @@ class EventStore:
 
     @contextmanager
     def writer_lease(self, name: str = "fixed-point-writer", ttl_seconds: int = 120) -> Iterator[None]:
-        now = time.time()
-        holder = {"pid": os.getpid(), "expires_at": now + ttl_seconds}
-        current = self.get_state(f"lease:{name}")
-        if current and float(current.get("expires_at", 0)) > now and current.get("pid") != os.getpid():
-            raise RuntimeError(f"writer lease held by pid={current.get('pid')}")
-        self.set_state(f"lease:{name}", holder)
+        """Claim one SQLite-local writer atomically; callers must respect the TTL.
+
+        This is not a cross-host lease: Casa and VPS need a shared authoritative
+        coordinator and fencing before they may rely on this for distributed writes.
+        """
+        if ttl_seconds <= 0:
+            raise ValueError("writer lease ttl_seconds must be positive")
+        key = f"lease:{name}"
+        token = uuid.uuid4().hex
+        try:
+            self.db.execute("BEGIN IMMEDIATE")
+            now = time.time()
+            current = self.get_state(key)
+            if current is not None:
+                try:
+                    expires_at = float(current["expires_at"])
+                except (KeyError, TypeError, ValueError) as error:
+                    raise RuntimeError("writer lease state is invalid") from error
+                if expires_at > now:
+                    raise RuntimeError(f"writer lease held by pid={current.get('pid')}")
+            holder = {"pid": os.getpid(), "expires_at": now + ttl_seconds, "token": token}
+            self.db.execute(
+                "INSERT OR REPLACE INTO state(key,value) VALUES(?,?)",
+                (key, canonical_json(holder)),
+            )
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
         try:
             yield
         finally:
-            current = self.get_state(f"lease:{name}")
-            if current and current.get("pid") == os.getpid():
-                self.db.execute("DELETE FROM state WHERE key=?", (f"lease:{name}",))
+            try:
+                self.db.execute("BEGIN IMMEDIATE")
+                current = self.get_state(key)
+                if current and current.get("token") == token:
+                    self.db.execute("DELETE FROM state WHERE key=?", (key,))
                 self.db.commit()
+            except Exception:
+                self.db.rollback()
+                raise

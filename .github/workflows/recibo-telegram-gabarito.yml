@@ -5,12 +5,14 @@ on:
     paths:
       - 'docs/**/*.md'
       - 'scripts/verify_recibo_telegram_gabarito.py'
+      - 'tests/test_verify_recibo_telegram_gabarito.py'
       - '.github/workflows/recibo-telegram-gabarito.yml'
   push:
     branches: [ main ]
     paths:
       - 'docs/**/*.md'
       - 'scripts/verify_recibo_telegram_gabarito.py'
+      - 'tests/test_verify_recibo_telegram_gabarito.py'
       - '.github/workflows/recibo-telegram-gabarito.yml'
 
 jobs:
@@ -22,6 +24,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: 🧪 Test address rules (negative and positive cases)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s tests -p 'test_verify_recibo_telegram_gabarito.py' -v
 
       - name: 🔍 Select changed receipt-like markdown files
         id: changed
@@ -41,11 +49,14 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           candidates = []
+          canonical_gabarito = 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/GABARITO-RECIBO-TELEGRAM.md'
           for line in Path('/tmp/changed.txt').read_text().splitlines():
               p = Path(line)
               if p.suffix.lower() != '.md' or not p.exists():
                   continue
               s = str(p)
+              if s == canonical_gabarito:
+                  continue
               if not (s.startswith('docs/CONSCIENCIA/') or s.startswith('docs/NOTAS-SESSAO/')):
                   continue
               text = p.read_text(encoding='utf-8', errors='ignore')

@@ -84,7 +84,7 @@ CURRENT_ROUTE_PROOF=PARTIAL_STRONG
 ### Cadeia provada
 
 ```text
-E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
+K:\_MAPA_CASA\GARIMPO-CHEFE
 → CentralDark Remote Tray / Remote Bridge
 → npx @wonderwhy-er/desktop-commander remote
 → https://mcp.desktopcommander.app/mcp
@@ -99,7 +99,7 @@ E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
 ### Evidências locais recebidas do CHEFE
 
 - receipts de `remote-bridge` registram repetidamente `device_label/device = SEGREDO`;
-- os mesmos receipts registram `workdir = E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE`;
+- os mesmos receipts registram `workdir = K:\\_MAPA_CASA\\GARIMPO-CHEFE`;
 - logs `centraldark-remote-tray-*.log` registram `WORKDIR=...GARIMPO-CHEFE`, `REMOTE_MCP_CONNECT=https://mcp.desktopcommander.app/mcp` e inicialização do owner Remote MCP para `SEGREDO`;
 - logs `desktop-commander-*.log` registram conexão ao Remote MCP e `Device Name: SEGREDO`;
 - receipt antigo preserva um Device ID estável em múltiplas sessões antes das recriações posteriores;

@@ -11,11 +11,12 @@ import {
   Mail,
   Monitor,
   Radio,
-  RefreshCw,
   Server,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { ProcessosMcpPanel } from "@/components/central/ProcessosMcpPanel";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 import { lerConexoesCentralDark } from "@/lib/conexoes.functions";
 import {
@@ -84,10 +85,7 @@ function RastroSemanalMcp() {
           <BarChart3 className="size-5 text-neon-green" aria-hidden="true" />
           <h3 id="harness-weekly-title" className="font-semibold">Rastro de ferramentas · últimos 7 dias</h3>
         </div>
-        <Button size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-          <RefreshCw className={q.isFetching ? "size-4 animate-spin" : "size-4"} aria-hidden="true" />
-          Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </header>
       <p className="mt-2 text-xs text-muted-foreground">
         API MCP existente /admin/api/metricas · amostra de eventos instrumentados.
@@ -222,9 +220,7 @@ function ToolCallLensMcp() {
             onClick={() => definirModo(modo === "ao-vivo" ? "pausado" : "ao-vivo")}>
             {modo === "ao-vivo" ? "⏸ Pausar" : "▶ Ao vivo"}
           </Button>
-          <Button type="button" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            <RefreshCw className={q.isFetching ? "animate-spin" : ""} aria-hidden="true" /> Rever / Atualizar
-          </Button>
+          <SyncActionButton label="Rever / Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
           <Button type="button" size="sm" variant="outline" onClick={() => definirDetalhes(!detalhes)}>
             {detalhes ? "Recolher" : "Expandir"}
           </Button>
@@ -286,6 +282,106 @@ function ToolCallLensMcp() {
         Fonte: audit-logger.js → Admin /admin/api/logs. Pausar congela a leitura da UI;
         rever atualiza eventos registrados, sem reexecutar comandos.
       </p>
+    </section>
+  );
+}
+
+type LogSetor = "all" | "mcp" | "agents" | "hermes" | "vscode" | "system" | "control" | "consciencia";
+type EventoSetorizado = {
+  event_id: string; timestamp: string; sector: string; source: string;
+  actor: string; kind: string; level: string; badge: string; key: string;
+};
+const SETORES_LOG = [
+  ["all", "Todos"], ["mcp", "MCP"], ["agents", "Agentes"], ["hermes", "Hermes"],
+  ["vscode", "VS Code"], ["system", "Sistema"], ["control", "Controle"], ["consciencia", "Consciência"],
+] as const;
+
+function CentralDeLogsSetorizados() {
+  const [setor, definirSetor] = useState<LogSetor>("all");
+  const [aoVivo, definirAoVivo] = useState(true);
+  const [busca, definirBusca] = useState("");
+  // Mesmo Admin MCP autenticado e mesmo funil; nenhum novo coletor/serviço.
+  const q = useQuery({
+    queryKey: ["centraldark", "logs-setorizados", setor],
+    queryFn: async (): Promise<EventoSetorizado[]> => {
+      const params = new URLSearchParams({ sector: setor, limit: "100", since_minutes: "1440" });
+      const resposta = await fetch("https://api.centralldark.com/admin/api/logs?" + params, {
+        credentials: "include", cache: "no-store", headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (resposta.status === 401 || resposta.status === 403) throw new Error("AUTH_REQUIRED");
+      if (!resposta.ok) throw new Error("CENTRAL_LOGS_HTTP_" + resposta.status);
+      const dados = await resposta.json() as { schema?: string; logs?: EventoSetorizado[] };
+      if (dados.schema !== "centraldark.central-logs.sanitized.v1" || !Array.isArray(dados.logs)) {
+        throw new Error("CENTRAL_LOGS_SECTOR_API_NOT_DEPLOYED");
+      }
+      return dados.logs;
+    },
+    refetchInterval: aoVivo ? 15_000 : false,
+    retry: false,
+  });
+  const linhas = (q.data ?? []).filter(row =>
+    !busca.trim() || [row.kind, row.source, row.actor, row.key]
+      .some(campo => String(campo || "").toLowerCase().includes(busca.trim().toLowerCase())));
+  return (
+    <section className="mt-6 rounded-xl border border-border bg-surface-1/80 p-4 sm:p-5"
+      aria-labelledby="central-logs-setores-title">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 id="central-logs-setores-title" className="font-semibold">📜 Central de Logs · setores existentes</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Consulta sanitizada do funil MCP. Fonte histórica única; autenticação administrativa obrigatória.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button type="button" size="sm" variant="outline" onClick={() => definirAoVivo(!aoVivo)}>
+            {aoVivo ? "⏸ Pausar visão" : "▶ Ao vivo"}
+          </Button>
+          <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar logs por setor">
+        {SETORES_LOG.map(([id, titulo]) => (
+          <button key={id} type="button" aria-pressed={setor === id}
+            className={setor === id ? "rounded border border-neon-blue bg-neon-blue/10 px-2 py-1 text-xs" :
+              "rounded border border-border px-2 py-1 text-xs text-muted-foreground"}
+            onClick={() => definirSetor(id)}>{titulo}</button>
+        ))}
+        <label className="ml-auto text-xs">
+          Buscar <input value={busca} onChange={evento => definirBusca(evento.target.value)} maxLength={80}
+            className="ml-1 rounded border border-border bg-background p-1" />
+        </label>
+      </div>
+      <p className="mt-3 font-mono text-xs" role="status" aria-live="polite">
+        {q.isError ? (q.error instanceof Error ? q.error.message : "LOGS_UNKNOWN")
+          : q.isPending ? "CONSULTANDO" : aoVivo ? "AO VIVO · 15S" : "PAUSADO"}
+        {" · "}{q.data?.length ?? 0} eventos · {setor}
+        {q.dataUpdatedAt ? " · " + new Date(q.dataUpdatedAt).toLocaleTimeString("pt-BR") : ""}
+      </p>
+      <details className="mt-3 rounded-lg border border-border p-3">
+        <summary className="cursor-pointer text-sm font-semibold">Expandir rastro por setor</summary>
+        {q.isError ? <p className="mt-3 text-xs text-amber-500 motion-safe:animate-pulse motion-reduce:animate-none">
+          Fonte ainda não disponível nesta sessão; nenhum PASS sem prova.
+        </p> : null}
+        <div className="mt-3 max-h-80 space-y-2 overflow-y-auto" role="log" aria-label="Eventos sanitizados por setor">
+          {!linhas.length ? <p className="text-xs text-muted-foreground">Nenhum evento comprovado para este filtro.</p> : null}
+          {linhas.map((item, indice) => (
+            <div key={item.event_id || String(indice)} className="rounded border border-border/60 p-2 text-xs">
+              <p className="font-semibold">
+                <span className={item.level === "warn"
+                  ? "text-amber-500 motion-safe:animate-pulse motion-reduce:animate-none"
+                  : item.level === "error" ? "text-destructive" : "text-muted-foreground"}>
+                  {item.badge || "🧾"} {item.level || "UNKNOWN"}
+                </span>
+                {" · "}{item.sector} / {item.kind || "EVENT"}
+              </p>
+              <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">
+                {item.timestamp} · {item.source} · {item.actor} · {item.event_id}
+              </p>
+            </div>
+          ))}
+        </div>
+      </details>
     </section>
   );
 }
@@ -570,9 +666,7 @@ export function ObservabilidadeCentralDark() {
             UNKNOWN permanecem visíveis.
           </p>
         </div>
-        <Button variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-          <RefreshCw className={q.isFetching ? "animate-spin" : ""} /> Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </div>
 
       <div
@@ -599,6 +693,7 @@ export function ObservabilidadeCentralDark() {
 
       <RastroSemanalMcp />
       <ToolCallLensMcp />
+      <CentralDeLogsSetorizados />
       <div className="mt-6">
         <CartaoResponsabilidade
           id="oauth-broker-title"
