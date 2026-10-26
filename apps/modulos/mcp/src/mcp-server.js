@@ -14,7 +14,7 @@ import { isSafeReadOnlyExecuteCommand } from "./tools/vps/vps-lazy.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
-import { decorateToolResult } from "./tool-result-envelope.js";
+import { decorateToolResult, semanticOutcome } from "./tool-result-envelope.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
 function zodTypeToJsonSchema(schema) {
@@ -343,6 +343,10 @@ export function buildServer(options) {
                     : null,
                 ok: result?.structuredContent?.centraldark?.ok === true && result?.isError !== true,
                 status: result?.structuredContent?.centraldark?.state === "BLOCKED" ? "BLOCKED" : null,
+                ok: !(typeof result === "object" &&
+                    result !== null &&
+                    "isError" in result &&
+                    result.isError === true) && semanticOutcome(result).ok,
             });
             return result;
         }

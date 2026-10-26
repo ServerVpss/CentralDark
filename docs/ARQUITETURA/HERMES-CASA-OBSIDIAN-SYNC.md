@@ -2,14 +2,14 @@
 
 > **READBACK CURRENT do HUD na Casa (11/10/2026, 22:17 BRT):** `K:\CentralDark\HUD.html` (309.368 bytes, SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`) e `K:\CentralDark\.obsidian` presentes. O único monitor WinForms `K:\CentralDark\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` agora aponta diretamente ao HUD nesse SSD; readback em `C:\Users\Administrador\AppData\Local\CentralDark\Corpo-Unico-HUD-Logs.txt`: `[HUD] [PASS]` e `[PROVA / ARQUIVO] [PASS]` às 22:17:44 BRT. **Esta prova pertence ao monitor da Casa:** sincronização bidirecional com `docs/BRAIN`, integralidade da migração `F:` → `K:`, conteúdo do `docs/HUD/HUD.html` na VPS e deploy seguem separados/UNKNOWN. `C:\Users\Administrador\Documents\Obsidian Vault` é rota legada para este leitor; não mover nem resetar outros perfis por implicação.
 
-> **CURRENT da migração física (11/10/2026):** o CHEFE está movendo o acervo de `F:\` para `K:\CentralDark` (SSD). `K:\CentralDark\.obsidian` e `K:\CentralDark\HUD.html` foram encontrados durante a transferência. **Destino da migração e legado documental:** `K:\CentralDark`; **migração completa, sincronização e alteração de caminhos nos executores:** ainda NÃO comprovadas. Os endereços `E:\CentralDark\Pivete\CASA-VAULT` abaixo permanecem como **referência histórica/contrato anterior**, e não representam o destino atual pretendido. Não executar scripts com esses caminhos legados até readback por owner. 
+> **CURRENT da migração física (11/10/2026):** o CHEFE está movendo o acervo de `F:\` para `K:\CentralDark` (SSD). `K:\CentralDark\.obsidian` e `K:\CentralDark\HUD.html` foram encontrados durante a transferência. **Destino da migração e legado documental:** `K:\CentralDark`; **migração completa, sincronização e alteração de caminhos nos executores:** ainda NÃO comprovadas. Os endereços `K:\CASA-VAULT` abaixo permanecem como **referência histórica/contrato anterior**, e não representam o destino atual pretendido. Não executar scripts com esses caminhos legados até readback por owner. 
 
 ## Decisão
 
 A memória visual da Casa usa um cofre separado em:
 
 ```text
-E:\CentralDark\Pivete\CASA-VAULT
+K:\CASA-VAULT
 ```
 
 O repositório continua sendo a fonte da verdade do projeto. O Obsidian deixa de abrir a raiz inteira do repositório como cofre principal.
@@ -111,7 +111,7 @@ Sem duplicar cérebro, sem transformar o repositório inteiro em cofre e sem pub
 ## Check-list diário (fechamento)
 
 Owner Git: `docs/BRAIN/02-ENTRADA/CHECK-LIST-DIARIO.md`  
-Note Casa: `E:\CentralDark\Pivete\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`  
+Note Casa: `K:\CASA-VAULT\🧾CHECK-LIST DIARIO🤖.md`  
 URI: `obsidian://open?vault=CASA-VAULT&file=%F0%9F%A7%BECHECK-LIST%20DIARIO%F0%9F%A4%96`
 
 Hermes job existente `ec512c0295e2` (Daily Receipt) fecha o dia ~23:00, atualiza o owner Git e notifica o CHEFE. Sessão cristalizada = commit+push main do ouro; não deixar a VPS suja. O vault Windows recebe o delta pelo sync `00-CANONICO` — não criar segundo checklist.
@@ -173,17 +173,17 @@ Promoção física ao BAT original da Casa continua exigindo hash/readback do ar
 
 ## CURRENT Casa — cópia de worktrees para Kingston (2026-10-09)
 
-Por ordem do CHEFE, a árvore `E:\CentralDark\_worktrees` foi **copiada** para `K:\CentralDark\_worktrees` (Kingston SSD) na Casa `SEGREDO`, sem apagar nem alterar a origem. Operação `robocopy /E /COPY:DAT /DCOPY:DAT /R:1 /W:1 /XJ`: 131 diretórios, 664 arquivos, 10,98 MB, 0 falhas. Conferência após a cópia: 664 arquivos em cada lado e **0 divergências SHA-256** arquivo a arquivo. Destino é a cópia de trabalho escolhida pelo CHEFE; troca de processos ativos, vínculos Git e execução do cockpit a partir de K: **ainda não foram comprovadas** por esta cópia. O Hitachi (E:/F:/J:) permanece disponível para arquivos brutos sob demanda. Não criar segundo sistema nem confundir arquivo copiado com runtime validado.
+Por ordem do CHEFE, a árvore `K:\_worktrees` foi **copiada** para `K:\CentralDark\_worktrees` (Kingston SSD) na Casa `SEGREDO`, sem apagar nem alterar a origem. Operação `robocopy /E /COPY:DAT /DCOPY:DAT /R:1 /W:1 /XJ`: 131 diretórios, 664 arquivos, 10,98 MB, 0 falhas. Conferência após a cópia: 664 arquivos em cada lado e **0 divergências SHA-256** arquivo a arquivo. Destino é a cópia de trabalho escolhida pelo CHEFE; troca de processos ativos, vínculos Git e execução do cockpit a partir de K: **ainda não foram comprovadas** por esta cópia. O Hitachi (E:/F:/J:) permanece disponível para arquivos brutos sob demanda. Não criar segundo sistema nem confundir arquivo copiado com runtime validado.
 
 
 ## CURRENT Casa — transferência da árvore raiz para Kingston (2026-10-09)
 
-Após o recorte solicitado pelo CHEFE e executado na Casa, leitura remota de primeiro nível constatou a **árvore principal em `K:\CentralDark`**: `CentralDark/`, `OneDrive/`, `w-skills/`, `_IMPORTS/`, `_MAPA_CASA/`, `_QUARANTINE/`, `_cache/`, `_worktrees/` e arquivos de auditoria/receipts. Em `E:\CentralDark`, restaram apenas `_cache/` e `_worktrees/` no primeiro nível. Este é o CURRENT **observado**, não prova de integridade total dos conteúdos, de runtime já redirecionado ou de origem vazia. O registro anterior da cópia inicial de `_worktrees` permanece como histórico, sem ser reescrito. O Kingston foi escolhido como bancada mutável; a origem Hitachi fica para material bruto sob demanda. Não apagar os remanescentes sem confirmação de equivalência e uso. A migração física da árvore não equivale a renomear caminhos canônicos da aplicação no Git; atualizar referências somente com medição de cada consumidor afetado.
+Após o recorte solicitado pelo CHEFE e executado na Casa, leitura remota de primeiro nível constatou a **árvore principal em `K:\CentralDark`**: `CentralDark/`, `OneDrive/`, `w-skills/`, `_IMPORTS/`, `_MAPA_CASA/`, `_QUARANTINE/`, `_cache/`, `_worktrees/` e arquivos de auditoria/receipts. Em `K:\`, restaram apenas `_cache/` e `_worktrees/` no primeiro nível. Este é o CURRENT **observado**, não prova de integridade total dos conteúdos, de runtime já redirecionado ou de origem vazia. O registro anterior da cópia inicial de `_worktrees` permanece como histórico, sem ser reescrito. O Kingston foi escolhido como bancada mutável; a origem Hitachi fica para material bruto sob demanda. Não apagar os remanescentes sem confirmação de equivalência e uso. A migração física da árvore não equivale a renomear caminhos canônicos da aplicação no Git; atualizar referências somente com medição de cada consumidor afetado.
 
 
 ### Receipt de conclusão do recorte — 2026-10-09 (captura PowerShell do CHEFE)
 
-A captura do PowerShell 7 no Kingston `K:` comprova que o Robocopy **terminou** às 16:55 com `RESULTADO: 1` (êxito com itens copiados), `FALHA=0`, `Incompatibilidade=0`. Resumo mostrado: 6.535 diretórios copiados, 73.797 arquivos copiados, 664 ignorados, 1,559 GB copiados de 1,570 GB totais, 21 segundos de tempo efetivo de cópia reportado; o resumo também exibe duração total de 1h39m42s. Estado da **transferência reportada: DONE**, conforme saída real e captura da Casa. A leitura anterior já comprovava `K:\CentralDark` com a árvore de primeiro nível; `E:\CentralDark` ainda continha `_cache` e `_worktrees` na observação anterior. **Não confundir DONE da execução Robocopy com prova de exclusão integral da origem, integridade total ou runtime validado**: esses pontos permanecem não medidos após a captura. Registro factual, sem novo sistema e sem alterar scripts.
+A captura do PowerShell 7 no Kingston `K:` comprova que o Robocopy **terminou** às 16:55 com `RESULTADO: 1` (êxito com itens copiados), `FALHA=0`, `Incompatibilidade=0`. Resumo mostrado: 6.535 diretórios copiados, 73.797 arquivos copiados, 664 ignorados, 1,559 GB copiados de 1,570 GB totais, 21 segundos de tempo efetivo de cópia reportado; o resumo também exibe duração total de 1h39m42s. Estado da **transferência reportada: DONE**, conforme saída real e captura da Casa. A leitura anterior já comprovava `K:\CentralDark` com a árvore de primeiro nível; `K:\` ainda continha `_cache` e `_worktrees` na observação anterior. **Não confundir DONE da execução Robocopy com prova de exclusão integral da origem, integridade total ou runtime validado**: esses pontos permanecem não medidos após a captura. Registro factual, sem novo sistema e sem alterar scripts.
 
 <!-- PR1788_HUD_OBSIDIAN_DETERMINISTIC_SEAL_CONTINUITY_20261009 -->
 ## Manifesto de entrada e selo da Casa/Obsidian — mesmo HUD, mesma verdade (09/10/2026)

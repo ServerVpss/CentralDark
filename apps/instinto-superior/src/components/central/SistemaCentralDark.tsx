@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -9,6 +9,7 @@ import {
   Filter,
   Info,
   ListChecks,
+  Radar,
   Radio,
   Rocket,
   Route,
@@ -18,9 +19,12 @@ import {
 } from "lucide-react";
 
 import { BlocoEstado, SeloEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { RadarPanel } from "@/components/central/RadarPanel";
 import { useNotificationsLog, type NotifyTipo } from "@/hooks/useNotificationsLog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { Button } from "@/components/ui/button";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 import {
   Select,
   SelectContent,
@@ -67,10 +71,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
             sucesso automático.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={atualizar} disabled={atualizando}>
-          <Activity className={atualizando ? "animate-spin" : ""} />
-          {atualizando ? "Medindo…" : "Atualizar"}
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={atualizar} isFetching={atualizando} />
       </div>
 
       <div className="mt-7 grid gap-4 md:grid-cols-3">
@@ -155,9 +156,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
               notifications_log · Supabase com RLS admin · atualizações em tempo real · não equivale ao funil MCP completo
             </p>
           </div>
-          <Button variant="outline" size="sm" onClick={() => void notificacoes.refresh()} disabled={notificacoes.loading}>
-            <Activity className={notificacoes.loading ? "animate-spin" : ""} /> Conferir logs
-          </Button>
+          <SyncActionButton label="Conferir logs" onClick={() => void notificacoes.refresh()} isFetching={notificacoes.loading} />
         </div>
         {notificacoes.erro ? (
           <p className="px-4 py-4 text-sm text-destructive">LOGS: BLOCKED · {notificacoes.erro}</p>
@@ -222,13 +221,7 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
 // Microdeploy consulta apenas o HUD vivo; executar continua no owner scripts/micro_deploy.sh.
 // Ausência de leitura autenticada de runners, worktrees e rollback mantém o cadeado fechado.
 function MicroDeployReadiness({ estado, atualizando, atualizar }: SistemaCentralDarkProps) {
-  const [agora, definirAgora] = useState<number | null>(null);
-  useEffect(() => {
-    const atualizarRelogio = () => definirAgora(Date.now());
-    atualizarRelogio();
-    const id = setInterval(atualizarRelogio, 15_000);
-    return () => clearInterval(id);
-  }, []);
+  const agora = useRelogioVivo();
 
   const medidoEm = estado?.atualizadoEm ? Date.parse(estado.atualizadoEm) : Number.NaN;
   const idadeMs = agora !== null && Number.isFinite(medidoEm) ? agora - medidoEm : null;
@@ -360,10 +353,7 @@ function CentralStatus({ estado, atualizando, atualizar }: SistemaCentralDarkPro
             Saúde do código, serviços e publicação tratadas como estados separados.
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={atualizar} disabled={atualizando}>
-          <Activity className={atualizando ? "animate-spin" : ""} />
-          {atualizando ? "Medindo…" : "Remedir agora"}
-        </Button>
+        <SyncActionButton label="Remedir agora" onClick={atualizar} isFetching={atualizando} />
       </div>
       <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <BlocoEstado
@@ -471,6 +461,9 @@ export function SistemaCentralDark({ estado, atualizando, atualizar }: SistemaCe
           <TabsTrigger value="infra">
             <Server /> Infraestrutura
           </TabsTrigger>
+          <TabsTrigger value="radar">
+            <Radar /> Radar
+          </TabsTrigger>
         </TabsList>
       </div>
       <TabsContent value="mega-painel" className="mt-7">
@@ -484,6 +477,9 @@ export function SistemaCentralDark({ estado, atualizando, atualizar }: SistemaCe
       </TabsContent>
       <TabsContent value="infra" className="mt-7">
         <InfraestruturaSistema />
+      </TabsContent>
+      <TabsContent value="radar" className="mt-7">
+        <RadarPanel />
       </TabsContent>
     </Tabs>
   );

@@ -6,6 +6,7 @@ import { config } from "../../config.js";
 import { sanitize } from "./vps.js";
 import { log } from "../../log.js";
 import { auditLog } from "../../lib/audit.js";
+import { classifyReadOnlyCommand } from "../../lib/readonly-command.js";
 const DEFAULT_MAX_BYTES = 80_000;
 const DEFAULT_MAX_LINES = 500;
 const MAX_READ_BYTES = 500_000;
@@ -448,6 +449,17 @@ export const vpsLazyTools = [
         name: "execute_command",
         description: "Executa comando bash na VPS com stdout/stderr separados e timeout. O dispatcher admin só classifica comandos literais de uma allowlist restrita como leitura; todo o resto continua destrutivo.",
         annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Execute command" },
+        // Classificacao por invocacao: so uma linha PROVADA somente-leitura dispensa a
+        // confirmacao destrutiva no dispatcher. Qualquer duvida => confirmacao obrigatoria.
+        classifyInvocation: (input) => {
+            try {
+                const baseDir = resolvePath(input.cwd ?? ".", input.root ?? "project").abs;
+                return classifyReadOnlyCommand(input.command, { baseDir });
+            }
+            catch {
+                return { readOnly: false, reason: "cwd_unresolved" };
+            }
+        },
         inputSchema: z.object({
             command: z.string().min(1).max(8_000),
             cwd: z.string().optional(),

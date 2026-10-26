@@ -10,15 +10,15 @@
 
   Uso rápido:
     pwsh -ExecutionPolicy Bypass -File scripts/library/CentralDark-LocalOffline-Library-Ingest.ps1 `
-      -SourceRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\entrada" `
-      -OutputRoot "E:\CentralDark\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
+      -SourceRoot "K:\_BIBLIOTECA_OFFLINE\entrada" `
+      -OutputRoot "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
       -Recreate
 #>
 
 [CmdletBinding()]
 param(
-  [string]$SourceRoot = "E:\CentralDark\_BIBLIOTECA_OFFLINE\entrada",
-  [string]$OutputRoot = "E:\CentralDark\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS",
+  [string]$SourceRoot = "K:\_BIBLIOTECA_OFFLINE\entrada",
+  [string]$OutputRoot = "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS",
   [int]$ChunkChars = 3500,
   [int]$MaxTextFileMB = 80,
   [switch]$CloneMlJourney,

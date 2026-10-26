@@ -45,6 +45,18 @@ function applicationResult(payload) {
 function isBlockedApplicationResult(result) {
   if (result.executionStatus === "blocked" || result.executionStatus === "BLOCKED" || result.decision === "blocked") return true;
   return result.ok === false && /^(?:CONFIRMACAO_ADMIN_NECESSARIA|ESCOPO_ADMIN_NECESSARIO|CONTEXTO_ADMIN_INCOMPLETO|INDEPENDENT_APPROVAL_REQUIRED|DESTRUTIVA_EM_QUARENTENA|AUDITORIA_STARTUP_INDISPONIVEL|CANONICAL_RECIPE_READ_FAILED_LOCKED)$/i.test(String(result.status || ""));
+// Resultado semantico: o dispatcher devolve bloqueios como texto JSON
+// ({ ok:false, executionStatus:"blocked" }) sem isError. A auditoria usa isto
+// para nao registrar PASS quando a operacao interna foi bloqueada ou falhou.
+export function semanticOutcome(payload) {
+  const data = legacyJsonResult(asObject(payload));
+  const blocked = data.executionStatus === "blocked";
+  const failed = data.ok === false;
+  return {
+    ok: !blocked && !failed,
+    blocked,
+    status: typeof data.status === "string" ? data.status.slice(0, 80) : null,
+  };
 }
 
 // Read *reported* causal references only. The outer envelope cannot validate

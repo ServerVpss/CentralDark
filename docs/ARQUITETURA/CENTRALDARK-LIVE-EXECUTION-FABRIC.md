@@ -34,7 +34,7 @@ BOTAO_ADMIN_OU_HERMES
 
 ```text
 ADMIN_PANEL=https://admin.centralldark.com/omni
-HERMES_DESKTOP_CASA=E:\CentralDark
+HERMES_DESKTOP_CASA=K:\
 VPS_RUNTIME=/root/CentralDark
 GITHUB_REPO=ServerVpss/CentralDark
 MCP_RUNTIME=http://127.0.0.1:9100
@@ -66,7 +66,7 @@ flowchart LR
     GRAFO["🕸️ Grafo Vivo"]
     RECEIPTS["🧾 Receipts"]
     VPS["🖥️ VPS /root/CentralDark"]
-    CASA["🏠 CASA E:\\CentralDark"]
+    CASA["🏠 CASA K:\\"]
     GITHUB["🐙 GitHub"]
     TELEGRAM["✈️ Telegram / HubBot"]
 

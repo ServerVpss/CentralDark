@@ -360,6 +360,31 @@ PRESERVE_PROOF_UNKNOWN_AND_BLOCKERS=true
 HUMAN_OUTPUT_DEFAULT=RESULTADO_EVIDENCIA_PENDENCIA_REAL_PROXIMO_CURSOR
 ```
 
+## 🔒 CABEÇALHO DE EXECUÇÃO OBRIGATÓRIO — FIX POINT
+
+Antes de qualquer ação material e novamente após cada delta material, o agente deve emitir/atualizar o cabeçalho consumido pelo owner canônico, não uma lista decorativa.
+
+```text
+FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
+FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
+FIXED_POINT_TEN_EVALUATOR=scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+FIXED_POINT_HEADER_PHASES=ENTRY|MATERIAL_DELTA|EXIT
+FIXED_POINT_HEADER_REQUIRED_FIELDS=agent_id|mission_id|intent_id|goal_fingerprint|observed_head|measured_at|evaluator|evaluation_ref|criteria|verdict|next_cursor
+FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT
+FIXED_POINT_HEADER_STATUS_VOCAB=PASS|FAIL|UNKNOWN|STALE|BLOCKED
+FIXED_POINT_HEADER_MISSING=INVALID
+FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED
+FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS
+FIXED_POINT_HEADER_ALL_TEN_PASS_AND_GOAL_RECEIPT=USED_AND_FIXED_POINT
+HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
+```
+
+O registro acompanha o mesmo agente, missão, intent, fingerprint e HEAD. Cada um dos dez IDs precisa ter `evaluated=true`, `source`, `attempt_ref`, timestamp atual e estado explícito. `UNKNOWN` é permitido quando a tentativa está documentada e a fonte não prova o critério; ausência de tentativa é `NOT_USED`. `PASS` exige prova positiva e contraprova não refutada. O veredito final não é um dos dez: só pode ser `FIXED_POINT` com dez PASS, receipt Goal HORN fresco no mesmo HEAD e `next_cursor=FIXED_POINT`. Caso contrário, o cabeçalho exibe `NEXT_DELTA` e o cursor exato.
+
 ## Contrato de resposta operacional — mapa humano + prova
 
 Toda saída operacional relevante deve comprimir a execução sem apagar o estado material. O formato pode variar, mas a semântica abaixo é obrigatória:

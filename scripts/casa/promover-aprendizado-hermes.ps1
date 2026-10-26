@@ -11,7 +11,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-# O fluxo de promoção antigo dependia de defaults físicos E:\CentralDark\...
+# O fluxo de promoção antigo dependia de defaults físicos K:\...
 # ainda não medidos. Até a inspeção C:/E:, não mover candidato nem escrever
 # em docs/CONSCIENCIA/APRENDIZADOS.md a partir de caminho local presumido.
 

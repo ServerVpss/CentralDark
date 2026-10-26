@@ -45,7 +45,7 @@ if (playwrightProbe != null && (
     (playwrightProbe.process_count === 0 || playwrightProbe.cache_state !== "FILES_PRESENT")) ||
   (playwrightProbe.cache_state === "FILES_PRESENT" && playwrightProbe.revision == null)
 )) fail("invalid_playwright_probe");
-const allowedComponents = new Set(["vscode", "git", "copilot", "extension-host", "terminal", "mcp", "remote-ssh"]);
+const allowedComponents = new Set(["vscode", "git", "copilot", "extension-host", "terminal", "mcp", "remote-ssh", "goal"]);
 const allowedLevels = new Set(["debug", "info", "warn", "error"]);
 let state = cursor();
 if (state.epoch !== batch.epoch) state = { epoch: batch.epoch, offset: 0 };
@@ -69,6 +69,18 @@ for (const item of batch.signals) {
   last = end;
   saveCursor({ epoch: batch.epoch, offset: last });
   accepted++;
+  // Emit goal_receipt event if this is a goal signal
+  if (item.component === "goal") {
+    const goalId = createHash("sha256").update(batch.epoch + ":goal:" + end).digest("hex");
+    const goalResult = appendCentralEvent({
+      event_id: goalId, sector: "vscode", service: "vscode", source, actor: "casa",
+      kind: "goal_receipt", level: item.level, key: "goal:" + item.component,
+      tags: ["vscode", "goal", item.component, item.level],
+      message: item.component + " " + item.level + " receipt (goal accomplished)",
+      data: { line_sha256: item.hash, end_offset: end, epoch: batch.epoch, received: true },
+    });
+    if (!goalResult.ok) fail("goal_receipt_failed");
+  }
 }
 const linkState = batch.route === "tailscale" ? "OK" : "ATTENTION";
 const status = appendCentralEvent({

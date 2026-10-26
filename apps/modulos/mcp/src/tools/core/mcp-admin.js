@@ -464,6 +464,14 @@ export const mcpAdminTools = [
             const readOnlyOperation = (tool.annotations?.readOnlyHint === true && !declaredDestructive)
                 || (input.tool === "execute_command" && isSafeReadOnlyExecuteCommand(parsed.data?.command));
             const destructive = declaredDestructive && !readOnlyOperation;
+            // Tool destrutiva pode declarar classifyInvocation(input): somente uma invocacao
+            // PROVADA somente-leitura deixa de ser tratada como destrutiva. Erro => destrutiva.
+            let readOnlyInvocation = false;
+            if (declaredDestructive && typeof tool.classifyInvocation === "function") {
+                try { readOnlyInvocation = tool.classifyInvocation(parsed.data)?.readOnly === true; }
+                catch { readOnlyInvocation = false; }
+            }
+            const destructive = declaredDestructive && !readOnlyInvocation;
 
             // Mesmo dispatcher atende ChatGPT, Hermes, Hub e bridge OAuth:
             // consulta a receita no owner ANTES de qualquer handler.
