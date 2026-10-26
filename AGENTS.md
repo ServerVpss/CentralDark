@@ -563,6 +563,22 @@ SEGREDO/CHEFE
 
 Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
 
+## 🔧 Entrega CURRENT: main direta, sem espera de CI (decisão do CHEFE)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Para este escopo explicitamente autorizado, seguir MASTER-CYCLE.yml#current_delivery_policy:
+CURRENT_MAIN -> REUSAR_OWNER -> UM_WRITER -> MENOR_DELTA -> TESTE_LOCAL_PERTINENTE
+-> CONTRAPROVA -> COMMIT/PUSH DIRETO main -> READBACK_SHA -> RECEIPT.
+CI não é requisito nem status PENDING impeditivo; relatar NOT_APPLICABLE quando não
+for usado. Não abrir PR nem executar squash para commit direto na main. Squash
+continua válido SOMENTE em uma trilha de PR aplicável e autorizada; os blocos
+históricos de "Intenção autorizada -> squash main" se referem especificamente
+a esse caso, não à edição direta. Se houver PR saudável com o mesmo
+OWNER+SCOPE+CAPABILITY, reconciliar a colisão e a autorização explícita
+antes de editar; sem sobrescrever outro writer. VPS offline não impede
+editar GitHub: SSH da VPS e deploy/readback ficam PENDENTES, nunca PASS.
+Segurança mínima e sintaxe/testes locais pertinentes continuam obrigatórios.
+
 ## Modo atual de evolução — filho compatível obrigatório quando já existe
 
 ```text

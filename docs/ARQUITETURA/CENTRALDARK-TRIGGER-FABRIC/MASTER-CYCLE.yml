@@ -47,6 +47,25 @@ fix_point_reference_pack:
   consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#fixed_point_pack_state
   limits: [HASH_NOT_SEMANTIC_USE, NO_FALSE_GREEN, NO_BLIND_EXECUTION, REUSE_EXISTING_HUD]
 
+current_delivery_policy:
+  marker: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+  authority: SEGREDO_CHEFE_EXPLICIT_FOR_CURRENT_SCOPE
+  default_delivery: DIRECT_COMMIT_AND_PUSH_MAIN
+  github_role: VERSIONED_LEDGER_WITH_SHA_AND_READBACK
+  ci_required_to_edit_or_push: false
+  ci_pending_is_blocker: false
+  report_ci_when_not_required_as: NOT_APPLICABLE_NOT_PENDING
+  create_pr_for_direct_main: false
+  squash_for_direct_main: false
+  squash_only_when_pr_lane_explicitly_applies: true
+  vps_offline_blocks_repository_edit: false
+  ssh_vps_only_when_reachable_and_authorized: true
+  vps_unreachable_requires: REPORT_RUNTIME_READBACK_PENDING_WITHOUT_WAITING
+  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RECEIPT]
+  active_pr_collision: RECONCILE_OWNER_AND_SCOPE_BEFORE_WRITE
+  material_failures: DO_NOT_CLAIM_PASS_OR_FIXED_POINT
+  no_new_branch_or_workflow_by_default: true
+
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
   executable_master_trigger: "!CENTRALDARK"

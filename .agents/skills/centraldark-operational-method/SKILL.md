@@ -575,6 +575,21 @@ Regras:
 - Handoff obrigatório antes de outro Writer atuar no mesmo escopo
 - Worktree é isolamento quando materialmente necessário; main direta é válida quando a intenção/autoridade e o estado do repositório permitirem. Não criar branch/worktree por ritual
 
+## 🔧 CHEFE_CURRENT — main direta e SSH condicional (sem CI como espera)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Owner: MASTER-CYCLE.yml#current_delivery_policy. Modo desta missão:
+REMEASURE_MAIN -> OWNER/ONE_WRITER -> MENOR_DELTA -> CHECK_LOCAL_APLICAVEL
+-> COUNTERPROOF -> DIRECT_COMMIT/PUSH_MAIN -> READBACK/RECEIPT.
+CI e squash/PR NÃO são uma condição obrigatória deste caminho. CI não
+executada não é "verificação pendente"; é NOT_APPLICABLE neste fluxo.
+Squash pertence somente à rota de PR autorizada. Um PR de mesmo escopo
+exige reconciliação de writer e delta antes de qualquer promoção.
+SSH direto VPS é caminho de execução quando o host responde; VPS offline
+suspende SOMENTE ações e verificação de runtime naquele host.
+Não usar "CI verde" nem "SSH offline" para conceder Michelin, FIXED_POINT
+ou XP. Conservar security diff-check, testes locais proporcionais e SHA.
+
 ## Lifecycle canônico de branch e PR
 
 Branch remota é mecanismo de transporte/isolamento, não memória, owner, intenção nem estacionamento. A intenção do CHEFE deve convergir até `main` ou terminar em blocker explícito; não deve ficar esquecida porque um executor criou uma branch nova.
