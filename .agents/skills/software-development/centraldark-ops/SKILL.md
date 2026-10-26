@@ -13,8 +13,8 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 
 ## Always-on
 
-- Workspace operational = `E:\\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
-- Nested git root is usually `E:/CentralDark/CentralDark/CentralDark`. `E:\\CentralDark` itself is not the repo.
+- Workspace operational = `K:\\`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
+- Nested git root is usually `K:/`. `K:\\` itself is not the repo.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
 - Remote connector down is not a Casa blocker. Measure this machine directly.
@@ -44,7 +44,7 @@ A autorização vigente do CHEFE permite que Hermes conclua **sequências operac
   6. If a path has `.git` but is not in `.gitmodules`, not in `git worktree list`, and `git -C <path> rev-parse --show-toplevel` differs from the root, **then** investigate whether it is a distinct repo, legacy artifact, or symlink/junction.
 - Caddy: if live import already equals main, do not reload for ritual.
 - **Hermes Desktop browser automation**: `browser_exec` with `local=true` renders to the **right-hand preview rail**, not a separate window. The rail has hide/restore (preserves state) and detach (opens standalone window) controls. Timeout on `browser_exec local=true` means the preview engine is unavailable (can happen in headless/VPS environments or when Hermes Desktop is not running locally); fallback is manual browser open or text-based web extraction (`web_extract`).
-- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `E:\\CentralDark\\workspace\\temp` or the existing owner. Do not make C: the workspace. Do not ask the human to move pastes by hand.
+- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `K:\\workspace\\temp` or the existing owner. Do not make C: the workspace. Do not ask the human to move pastes by hand.
 - "Configura na VPS" is not a VPS mutation until measurement names a VPS owner. GitHub `action_required` with empty jobs is the autonomia owner, not PM2/Caddy/runner.
 - Code change while Casa git is dirty/behind: do not patch that tree. `git worktree add` from `origin/main` (or live main SHA) and write only the named owner files. See `references/autonomia-actions.md`.
 
@@ -156,7 +156,7 @@ REPORT_OLD != STATE_NOW
    - Confirm the named PR with `gh pr view N --repo ServerVpss/CentralDark --json number,state,mergedAt,mergeCommit,headRefOid`
    - Local `origin/main` can be stale; GitHub SHA is the promotion target.
 2. **Casa**
-   - `git -C E:/CentralDark/CentralDark/CentralDark status -sb` and `rev-parse HEAD`
+   - `git -C K:/ status -sb` and `rev-parse HEAD`
    - Record dirty/behind. Do not fetch-reset unless ordered.
    - Session binding: see `references/hermes-desktop-binding.md`.
 3. **VPS** via SSH host `segredo-vpss` (config in `~/.ssh/config`, user root).
@@ -171,7 +171,7 @@ REPORT_OLD != STATE_NOW
 7. **Prove compile/validate**: `python3 -m py_compile` for Python; `caddy validate --config /etc/caddy/Caddyfile` for Caddy.
 8. **Restart only if content changed** and only the owning process.
 9. **Counterproof** both stripped upstream and public prefixed URL. Capture PM2 restart deltas so you can assert no other process moved.
-10. **Receipt** under `E:\\CentralDark\\LOGS\\CASA\\...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Stop. Do not crystallize a dirty checkout as main.
+10. **Receipt** under `K:\\LOGS\\CASA\\...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Stop. Do not crystallize a dirty checkout as main.
 
 ## Hermes Desktop boot/update failure trigger
 

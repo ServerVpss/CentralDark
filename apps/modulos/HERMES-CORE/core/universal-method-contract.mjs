@@ -26,6 +26,9 @@ const FILES = {
   adminChecklist: 'docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md',
   tlc23: 'docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf',
   agentCall: 'scripts/agent-call.mjs',
+  fixedPointOwner: 'scripts/lupa/horn-reuse-fixed-point.mjs',
+  soul: 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
+  agentCallTests: 'scripts/agent-call.test.mjs',
   deployDispatcher: 'scripts/vps/deploy-guards-dispatcher.sh',
   centralDeploy: 'scripts/vps/centraldark-deploy.sh',
   operationalDeploy: 'scripts/vps/deploy-operational-guards.sh',
@@ -134,6 +137,9 @@ export function validateUniversalMethod() {
   const adminChecklist = read(FILES.adminChecklist);
 
   const agentCall = read(FILES.agentCall);
+  const fixedPointOwner = read(FILES.fixedPointOwner);
+  const soul = read(FILES.soul);
+  const agentCallTests = read(FILES.agentCallTests);
   const deployDispatcher = read(FILES.deployDispatcher);
   const centralDeploy = read(FILES.centralDeploy);
   const operationalDeploy = read(FILES.operationalDeploy);
@@ -1095,6 +1101,84 @@ export function validateUniversalMethod() {
   ], 'HERMES_KNOWLEDGE_COLLECTOR_RUNTIME');
 
 
+    requireTokens(master, [
+    'fixed_point_execution_header:',
+    'marker: FIXED_POINT_EXECUTION_HEADER_REQUIRED',
+    'applies_to: ALL_CURRENT_AND_FUTURE_AGENTS',
+    'owner: scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'exactly_ten_ids_required: true',
+    'ten_current_attempts_with_gaps: HEADER_USED_WITH_GAPS',
+    'ten_pass_plus_current_goal_receipt_same_head: HEADER_USED_AND_FIXED_POINT',
+  ], 'FIXED_POINT_EXECUTION_HEADER_MASTER');
+
+  requireTokens(hermesPrompt, [
+    'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
+    'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT',
+    'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_HERMES');
+
+  requireTokens(fixedPointOwner, [
+    'export const FIXED_POINT_TEN_CRITERIA',
+    'export function evaluateFixedPointTen',
+    'export function validateFixedPointExecutionHeader',
+    'export function buildFixedPointExecutionHeader',
+    '--build-execution-header-stdin',
+    '--validate-execution-header-stdin',
+    'FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED',
+    'USED_WITH_GAPS',
+    'USED_AND_FIXED_POINT',
+  ], 'FIXED_POINT_EXECUTION_HEADER_HORN_OWNER');
+
+  requireTokens(master, [
+    'builder: scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'header_is_execution_receipt_not_decoration: true',
+    'exactly_ten_ids_required: true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_MASTER');
+
+  requireTokens(hermesPrompt, [
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED',
+    'FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS',
+  ], 'FIXED_POINT_EXECUTION_HEADER_HERMES_BUILDER');
+
+  requireTokens(agentsGuide, [
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED',
+    'FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENTS_BUILDER');
+
+  requireTokens(agentCall, [
+    'validateFixedPointExecutionHeader',
+    'BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING',
+    'EMIT_CURRENT_TEN_CRITERION_HEADER',
+    'fixed_point_header_usage: fixedPointHeader.header_usage',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENT_GATE');
+
+  requireTokens(agentCallTests, [
+    'makeExecutionHeader()',
+    'fixed_point_execution_header: makeExecutionHeader()',
+    'BLOCKED_FIXED_POINT_EXECUTION_HEADER_CRITERION_NOT_ACTUALLY_MEASURED',
+    'fixed_point_header_usage, "USED_WITH_GAPS"',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENT_TESTS');
+
+  requireTokens(soul, [
+    'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
+    'HEADER_MISSING=INVALID',
+    'TEN_IDS_WITHOUT_TEN_CURRENT_ATTEMPT_REFS=NOT_USED',
+    'TEN_CURRENT_ATTEMPTS_WITH_UNKNOWN_GAPS=USED_WITH_GAPS',
+  ], 'FIXED_POINT_EXECUTION_HEADER_SOUL');
+
+  requireTokens(agentsGuide, [
+    'FIXED_POINT_EXECUTION_HEADER_REQUIRED=true',
+    'FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader',
+    'FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader',
+    'FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS',
+    'HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true',
+  ], 'FIXED_POINT_EXECUTION_HEADER_AGENTS');
+
   const engines = parseEngineNames(engine);
   return {
     schema: 'centraldark.universal-engine-method.self-test.v1',
@@ -1116,6 +1200,10 @@ export function validateUniversalMethod() {
     deterministic_reconciliation_before_new_architecture: true,
     persistent_operational_regime_contract: true,
     fixed_point_is_checkpoint: true,
+    fixed_point_execution_header_required: true,
+    fixed_point_execution_header_owner: FILES.fixedPointOwner,
+    fixed_point_execution_header_applies_to: 'ALL_CURRENT_AND_FUTURE_AGENTS',
+    fixed_point_execution_header_criteria_count: 10,
     fixed_point_is_end: false,
     fixed_point_is_learning_gate: false,
     continuous_hermes_capability_absorption: true,

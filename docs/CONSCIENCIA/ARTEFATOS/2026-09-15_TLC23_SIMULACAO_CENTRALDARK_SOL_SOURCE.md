@@ -218,7 +218,7 @@ A personalização seria derivada de `SOUL-SOL.md + CENTRALDARK_AI_BOOT.yaml + H
 
 E a dívida física que descobrimos entraria no mesmo ciclo:
 
-**Casa:** `E:\CentralDark` oficina; `_tmp` descartável; `cache` reconstruível; `C:\CentralDark` build/preview.
+**Casa:** `K:\` oficina; `_tmp` descartável; `cache` reconstruível; `C:\CentralDark` build/preview.
 
 **VPS:** mesma taxonomia conceitual, estado e paths Linux próprios.
 

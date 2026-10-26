@@ -1,0 +1,1 @@
+K:/scripts/remote-bridge/canonical/CentralDark-Casa-OneShot.ps1

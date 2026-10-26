@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CockpitRouteImport } from './routes/cockpit'
+import { Route as McpAutorizarRouteImport } from './routes/mcp-autorizar'
 import { Route as RepositorioRouteImport } from './routes/repositorio'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RoteadorRouteImport } from './routes/roteador'
@@ -36,6 +37,11 @@ const AuthRoute = AuthRouteImport.update({
 const CockpitRoute = CockpitRouteImport.update({
   id: '/cockpit',
   path: '/cockpit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpAutorizarRoute = McpAutorizarRouteImport.update({
+  id: '/mcp-autorizar',
+  path: '/mcp-autorizar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RepositorioRoute = RepositorioRouteImport.update({
@@ -69,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -79,6 +86,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -91,6 +99,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cockpit'
+    | '/mcp-autorizar'
     | '/repositorio'
     | '/reset-password'
     | '/roteador'
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/cockpit'
+    | '/mcp-autorizar'
     | '/repositorio'
     | '/reset-password'
     | '/roteador'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/cockpit'
+    | '/mcp-autorizar'
     | '/repositorio'
     | '/reset-password'
     | '/roteador'
@@ -136,6 +148,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
   CockpitRoute: typeof CockpitRoute
+  McpAutorizarRoute: typeof McpAutorizarRoute
   RepositorioRoute: typeof RepositorioRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RoteadorRoute: typeof RoteadorRoute
@@ -169,6 +182,13 @@ declare module '@tanstack/react-router' {
       path: '/cockpit'
       fullPath: '/cockpit'
       preLoaderRoute: typeof CockpitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp-autorizar': {
+      id: '/mcp-autorizar'
+      path: '/mcp-autorizar'
+      fullPath: '/mcp-autorizar'
+      preLoaderRoute: typeof McpAutorizarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/repositorio': {
@@ -235,6 +255,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
   CockpitRoute: CockpitRoute,
+  McpAutorizarRoute: McpAutorizarRoute,
   RepositorioRoute: RepositorioRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   RoteadorRoute: RoteadorRoute,

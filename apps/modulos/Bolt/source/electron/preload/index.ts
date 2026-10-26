@@ -15,6 +15,8 @@ const ipc = {
 
 const centraldark = Object.freeze({
   getRuntime: () => ipcRenderer.invoke('centraldark:runtime:get'),
+  getBuilderHistory: () => ipcRenderer.invoke('centraldark:builders:get'),
+  requestBuilderRebuild: () => ipcRenderer.invoke('centraldark:builders:rebuild'),
   getCentralHealth: () => ipcRenderer.invoke('centraldark:omni:health'),
   // Alias legado preservado: agora mede a porta única da CentralDark, não Hermes direto.
   getHermesHealth: () => ipcRenderer.invoke('centraldark:omni:health'),
@@ -23,6 +25,7 @@ const centraldark = Object.freeze({
   showMain: () => ipcRenderer.invoke('centraldark:main:show'),
   toggleWidget: () => ipcRenderer.invoke('centraldark:widget:toggle'),
   openUnigramDesktop: () => ipcRenderer.invoke('centraldark:unigram:open'),
+  openObsidianDesktop: () => ipcRenderer.invoke('centraldark:obsidian:open'),
   hideWidget: () => ipcRenderer.invoke('centraldark:widget:hide'),
 });
 

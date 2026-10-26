@@ -5,7 +5,6 @@ import {
   Loader2,
   Package,
   Plus,
-  RefreshCw,
   Save,
   ShieldCheck,
   Trash2,
@@ -15,9 +14,11 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { CatalogoCapacidadesMcp } from "@/components/central/CatalogoCapacidadesMcp";
+import { McpAdminIntegrado } from "@/components/central/McpAdminIntegrado";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -236,10 +237,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
             Administração absorvida do TelePainel para a sala autenticada do Instinto Superior.
           </p>
         </div>
-        <Button variant="outline" onClick={() => void carregar()} disabled={loading}>
-          <RefreshCw className={loading ? "animate-spin" : ""} />
-          Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void carregar()} isFetching={loading} />
       </div>
       {erro ? (
         <div className="mt-6 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
@@ -400,6 +398,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
           <ConexoesCentralDark />
         </TabsContent>
         <TabsContent value="catalogo" className="mt-6">
+          <McpAdminIntegrado />
           <CatalogoCapacidadesMcp />
         </TabsContent>
         <TabsContent value="hub-inventario" className="mt-6">
