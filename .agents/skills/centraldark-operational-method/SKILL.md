@@ -6,6 +6,32 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+
 <!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
 ## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
 

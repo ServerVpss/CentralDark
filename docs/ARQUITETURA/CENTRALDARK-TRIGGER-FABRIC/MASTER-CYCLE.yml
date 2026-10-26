@@ -21,6 +21,32 @@ pertinence_first: true
 minimum_sufficient_loop: true
 triggers_are_conditional_not_ritual: true
 
+fix_point_reference_pack:
+  marker: FIX_POINT_7_CANONICAL_REFS_V1
+  human_heading: "🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT"
+  trigger: "!CENTRALDARK"
+  aliases: ["!CENTRALDARK", "#CENTRALDARK"]
+  meaning: ONE_MASTER_CYCLE_SEVEN_CANONICAL_REFERENCE_OWNERS
+  source_resolution: BOOT_HASH_READ_ALL_SEVEN_THEN_SELECT_PERTINENT_SECTIONS
+  require_manual_header_repetition: false
+  no_parallel_loader: true
+  sources:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    - docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+    - docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md
+    - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
+    - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md
+    - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md
+    - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+  presentation:
+    compact_hud: "🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐"
+    show_for_active_master_session: true
+    stars_awarded_by_trigger: 0
+    quality_gate_owner: RULES.md
+    fixed_point_receipt_owner: scripts/lupa/horn-reuse-fixed-point.mjs
+  consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#fixed_point_pack_state
+  limits: [HASH_NOT_SEMANTIC_USE, NO_FALSE_GREEN, NO_BLIND_EXECUTION, REUSE_EXISTING_HUD]
+
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
   executable_master_trigger: "!CENTRALDARK"
