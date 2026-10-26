@@ -31,6 +31,19 @@ indisponível e nunca afirmar carregamento automático.
 Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
 <!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
 
+## 🔧 Política de entrega atual (CHEFE)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Neste escopo, a CentralDark usa commit e push diretamente na main,
+com testes locais pertinentes, readback SHA e receipt; sem aguardar CI
+ou squash de PR. SSH direto na VPS quando estiver online; VPS indisponível
+não bloqueia edição/versionamento na main. Os gates de PR/squash de
+documentos legados são condicionais à trilha de PR — não ao fast path.
+Owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+seção current_delivery_policy.
+
+
+
 <!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
 ## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
 
