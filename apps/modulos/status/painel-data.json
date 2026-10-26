@@ -1,7 +1,7 @@
 {
   "project": {
     "branch": "main",
-    "lastCommit": "feat(cockpit): add Genesis explainer and skill telemetry status",
+    "lastCommit": "docs(skill): cristalizar SSH reverso Casa VPS em aprendizados e lembrancas",
     "phase": "UNKNOWN — não medido neste push",
     "currentTask": "UNKNOWN — não medido neste push",
     "overallProgress": null,
@@ -10,6 +10,14 @@
   },
   "milestones": [],
   "events": [
+    {
+      "time": "2026-10-26T06:59:20.998Z",
+      "titulo": "Push na main · 42c0fa2080fe07afeb2e25d6584f13c958300ec8",
+      "detalhe": "docs(skill): cristalizar SSH reverso Casa VPS em aprendizados e lembrancas",
+      "area": "Repositório",
+      "sha": "42c0fa2",
+      "actor": "segredounlock"
+    },
     {
       "time": "2026-10-25T19:16:34.536Z",
       "titulo": "Push na main · d70875c8df285132d372f45734e383cbcf31dcac",
@@ -401,17 +409,16 @@
       "area": "Repositório",
       "sha": "6025de1",
       "actor": "segredounlock"
-    },
-    {
-      "time": "2026-10-12T20:42:58.640Z",
-      "titulo": "Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065",
-      "detalhe": "docs(boot): load existing single-intent continuity contract across windows",
-      "area": "Repositório",
-      "sha": "4a5a20a",
-      "actor": "segredounlock"
     }
   ],
   "iaTimeline": [
+    {
+      "time": "2026-10-26T06:59:20.998Z",
+      "ia": "@segredounlock",
+      "action": "📌 Push na main · 42c0fa2080fe07afeb2e25d6584f13c958300ec8 (42c0fa2)",
+      "area": "Repositório",
+      "status": "sucesso"
+    },
     {
       "time": "2026-10-25T19:16:34.536Z",
       "ia": "@segredounlock",
@@ -754,13 +761,6 @@
       "action": "📌 Push na main · 6025de12efa348c6293953df5a168b9ac61b3244 (6025de1)",
       "area": "Repositório",
       "status": "sucesso"
-    },
-    {
-      "time": "2026-10-12T20:42:58.640Z",
-      "ia": "@segredounlock",
-      "action": "📌 Push na main · 4a5a20a97d30a2e8270acb4da29325e36267a065 (4a5a20a)",
-      "area": "Repositório",
-      "status": "sucesso"
     }
   ],
   "centraldark_measurement": {
@@ -902,6 +902,6 @@
       }
     ]
   },
-  "updatedAt": "2026-10-25T19:16:34.536Z",
-  "updatedAtBR": "25/10/2026, 16:16:34 BRT"
+  "updatedAt": "2026-10-26T06:59:20.998Z",
+  "updatedAtBR": "26/10/2026, 03:59:20 BRT"
 }
