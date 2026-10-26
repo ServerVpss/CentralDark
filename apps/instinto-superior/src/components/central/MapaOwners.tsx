@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
-import { MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
+import { COCKPIT_ABAS, CAMINHOS_SIMPLES_INSTINTO, MAPA_OWNERS, type DonoVisual, CRISTAL } from "@/data/painel-unico";
+import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ChevronRight, Layers, CornerDownRight } from "lucide-react";
 
 const ORDEM: DonoVisual[] = ["Admin", "Sistema", "Hermes", "Downloads", "Design"];
@@ -12,7 +14,7 @@ const DESTINOS: Record<DonoVisual, string> = {
   Design: "design",
 };
 
-// Snapshot de auditoria: fonte histórica C:\\CentralDark (12/10) e comparação SHA-256 Casa (15/10).
+// Snapshot de 12/10 preservado no arquivo reconciliado do K: em 21/10, não leitura viva.
 // Métrica descreve evidência; NÃO converte divergência em falha nem substitui status vivo.
 const METRICAS_DIVERGENCIA = [
   {
@@ -20,7 +22,7 @@ const METRICAS_DIVERGENCIA = [
     nome: "Arquivos com SHA-256 diferente",
     quantidade: 5,
     total: 5,
-    fonte: "C:\\CentralDark × K:\\ · SHA-256 medido em 15/10/2026",
+    fonte: "Arquivo histórico K:\\_archive\\c-centraldark-reconciliado-20261021 × K:\\ · SHA-256 medido em 15/10/2026",
     pendencia: "Comparar comportamento e evolução sem restaurar versões antigas.",
   },
   {
@@ -55,8 +57,57 @@ export function MapaOwners({
   const [nivelDiagnostico, definirNivelDiagnostico] = useState<"resumo" | "detalhe" | "prova">(
     "resumo",
   );
+  const [conexoesAbertas, definirConexoesAbertas] = useState(false);
+  function abrirCaminhoSimples(item: (typeof CAMINHOS_SIMPLES_INSTINTO)[number]) {
+    if (item.privado && !autenticado) return;
+    if (item.id === "conexoes") {
+      // Reutiliza o componente do Admin com a mesma checagem RBAC do backend.
+      definirConexoesAbertas(true);
+      return;
+    }
+    onNavigate?.(item.aba);
+    if (item.id === "ao-vivo" && typeof window !== "undefined") {
+      // Sensores reais ficam acima das abas; RaioXVivo legado tem registros estaticos.
+      window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+    }
+  }
   return (
     <div className="mt-8 space-y-6">
+      <section className="panel p-5" aria-labelledby="instinto-fazer-acontecer">
+        <p className="font-mono text-[10px] uppercase tracking-widest text-neon-blue">Instinto Superior · Fazer acontecer</p>
+        <h3 id="instinto-fazer-acontecer" className="mt-2 text-xl font-semibold">O que você quer fazer hoje?</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Escolha uma área. Aproveitamos o que já existe; nenhuma ação é enviada só porque você abriu o menu.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          {CAMINHOS_SIMPLES_INSTINTO.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-label={item.rotulo.replace(/^[^ ]+ /, "")}
+              className="rounded-xl border border-border bg-background p-4 text-left transition-colors hover:border-neon-blue focus-visible:outline focus-visible:outline-2 focus-visible:outline-neon-blue disabled:opacity-50"
+              disabled={(item.privado && !autenticado) || (!onNavigate && item.id !== "conexoes")}
+              onClick={() => abrirCaminhoSimples(item)}
+            >
+              <strong className="block text-sm">{item.rotulo}</strong>
+              <span className="mt-2 block text-xs text-muted-foreground">{item.detalhe}</span>
+            </button>
+          ))}
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Criar abre a Forja em modo de rascunho. Ao vivo mostra as sondas da Visão geral.
+          Conexões utiliza o painel administrativo existente. Histórico não inventa resultados.
+        </p>
+      </section>
+      <Dialog open={conexoesAbertas} onOpenChange={definirConexoesAbertas}>
+        <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-5xl">
+          <DialogHeader>
+            <DialogTitle>🔗 Minhas conexões</DialogTitle>
+            <DialogDescription>Mesmas contas e autorizações do Admin CentralDark.</DialogDescription>
+          </DialogHeader>
+          {autenticado && conexoesAbertas ? <ConexoesCentralDark /> : null}
+        </DialogContent>
+      </Dialog>
       {/* #OBSERVACOES# @owner: MapaOwners.tsx @doc_ref: DELTA-CONTINUO.md
           @escopo: memoria visual Casa/Apps/Main/VPS e Claude
           @estado: snapshot historico; nao afirma migracao ou runtime atual
@@ -77,7 +128,7 @@ export function MapaOwners({
             { numero: "01", titulo: "Casa — Forja", caminho: "K:\\", resumo: "Código bruto, experimentos, aprendizados e testes." },
             { numero: "02", titulo: "Apps — Cristalização", caminho: "K:\\apps", resumo: "Owners, tipagem, contratos, testes e funcionalidades validadas." },
             { numero: "03", titulo: "GitHub — main", caminho: "ServerVpss/CentralDark", resumo: "Código aprovado e versionado, sem material privado." },
-            { numero: "04", titulo: "VPS — Execução", caminho: "/root/CentralDark", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
+            { numero: "04", titulo: "VPS — Execução", caminho: "<caminho-vps>", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
           ].map((etapa) => (
             <div key={etapa.numero} className="rounded-xl border border-white/15 bg-zinc-900/70 p-3">
               <div className="font-mono text-lg text-emerald-400">{etapa.numero}</div>
@@ -161,6 +212,45 @@ export function MapaOwners({
             <span className="text-xs">→ VPS (produção)</span>
           </div>
         </div>
+
+        {/* Cristal do CHEFE — intencao documentada, nao telemetria ao vivo. */}
+        <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+          <p className="text-xs font-semibold text-emerald-300">🎯 Cabeça externalizada · intenção do CHEFE · aprendizado #210</p>
+          <p className="mt-2 text-sm text-foreground">
+            A CentralDark pensa e trabalha no K:, descarrega o peso no F:, preserva o conhecimento
+            no Obsidian, cristaliza código no GitHub e continua funcionando independentemente
+            de qual IA esteja comandando a ferramenta.
+          </p>
+        </div>
+
+        <div className="mt-3 grid gap-2 sm:grid-cols-2 xl:grid-cols-3" aria-label="Forja, deposito, memoria e cristal">
+          {[
+            { titulo: "🏠 K:\\ · FORJA", corpo: "Raiz Git, Instinto Superior, harness, apps, scripts, skills e trabalho normal de todas as IAs." },
+            { titulo: "🔗 K: → F: · PESO", corpo: "Junctions seletivas preservam caminhos no K:, mas guardam bytes pesados no F:. K:\\_WORKER → F:\\_WORKER: prova histórica." },
+            { titulo: "⛏️ F:\\ · GARIMPO", corpo: "TEMP, caches, worktrees isoladas, testes, bruto único, QUARANTINE e GARIMPO-CHEFE: classes e retenção separadas." },
+            { titulo: "🧠 K:\\docs · OBSIDIAN", corpo: "Memória e owners canônicos; sessões privadas de cada IA não formam um segundo cérebro." },
+            { titulo: "💎 GITHUB MAIN", corpo: "Só código e conhecimento versionáveis após teste, contraprova, aprovação e receipt." },
+            { titulo: "⚙️ VPS · RUNTIME", corpo: "Somente serviços e componentes necessários; merge não comprova implantação." },
+          ].map((nodo) => (
+            <div key={nodo.titulo} className="rounded-lg border border-border/70 bg-background/50 p-3">
+              <p className="font-mono text-xs font-semibold text-foreground">{nodo.titulo}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{nodo.corpo}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 space-y-1 rounded-lg border border-amber-500/30 bg-amber-500/5 p-3 text-xs text-muted-foreground">
+          <p><span className="font-semibold text-amber-300">C:\\ = sem escritas intencionais da Forja.</span> Não alterar o TEMP global do Windows; bloquear ferramentas que exijam escrita não controlável em C:.</p>
+          <p><span className="font-semibold text-foreground">Worktrees Git ≠ cache.</span> Haiku relatou dois worktrees em C:\\Temp (21/10), mas limpeza, alterações e elegibilidade de migração continuam UNKNOWN até leitura autorizada. Nunca mover worktree ativo como se fosse pasta descartável.</p>
+          <p><span className="font-semibold text-foreground">Prova ≠ intenção.</span> Junction K:\\_WORKER → F:\\_WORKER medida em 19/10; demais links, automação 24h e deploy não foram comprovados por este mapa.</p>
+        </div>
+        <a
+          href="https://github.com/ServerVpss/CentralDark/pull/1873#issuecomment-6316911838"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-xs text-emerald-400 underline underline-offset-2"
+        >
+          Ler a intenção integral do CHEFE e o NEXT_CURSOR no receipt canônico ↗
+        </a>
       </div>
 
       {/* Status de Consolidação */}
@@ -186,7 +276,7 @@ export function MapaOwners({
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
           Prova delimitada · 19/10/2026: navegador conectado leu o DOM da aba Sala de Controle em
-          http://100.123.93.25:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
+          http://{"<servidor-publico>"}:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
           HTTP 200 e DOM lido comprovam esta superfície, não clique nas outras abas nem funcionamento
           de todas as capacidades. A navegação e contraprova visual autônomas pertencem ao Harness
           quando implementadas e medidas; HARNESS_UI_NAVIGATION = UNKNOWN.
@@ -204,7 +294,7 @@ export function MapaOwners({
               🧿 Divergências · métricas auditáveis
             </h4>
             <p className="mt-1 text-xs text-muted-foreground">
-              Snapshot fixado: pacote C:\\CentralDark (12/10) × Casa K:\\ (15/10). Não representa
+              Snapshot fixado: pacote K:\_archive\c-centraldark-reconciliado-20261021 (origem 12/10) × Casa K:\ (15/10). Não representa
               saúde em tempo real.
             </p>
           </div>
@@ -305,6 +395,25 @@ export function MapaOwners({
         ) : null}
       </section>
 
+      {/* #OBSERVACOES# @owner: MapaOwners @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md */}
+      <section aria-label="Mapa de áreas do cockpit" className="rounded-xl border border-border bg-surface/40 p-4">
+        <h4 className="text-base font-semibold">🧭 Áreas do cockpit → owners existentes</h4>
+        <p className="mt-2 text-xs text-muted-foreground">25 áreas do código. Clique de navegação não comprova a execução na API; efeito remoto exige readback.</p>
+        <div className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+          {COCKPIT_ABAS.filter(a => !a.privado || autenticado).map(a => (
+            <article key={a.id} className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-border/70 bg-background/60 p-3">
+              <div className="min-w-0">
+                <h5 className="text-sm font-semibold">{a.titulo}</h5>
+                <p className="mt-1 break-words font-mono text-[11px] text-muted-foreground">{a.owner}</p>
+              </div>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[10px] font-mono text-amber-500">{a.estado} · runtime UNKNOWN</span>
+                <button type="button" className="min-h-9 rounded border border-border px-3 py-1 text-xs font-semibold text-neon-blue hover:bg-muted disabled:opacity-50" disabled={!onNavigate} onClick={() => onNavigate?.(a.id)} aria-label={`Abrir ${a.titulo}`}>Abrir área →</button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
       {/* Tabela de Capacidades (original) */}
       <div>
         <h4 className="font-semibold text-sm mb-2">📋 Mapa de Capacidades por Dono</h4>

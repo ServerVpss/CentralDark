@@ -1,3 +1,42 @@
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
 # AGENTS.md — Guia operacional CentralDark
 
 AI_UNIVERSAL_ENTRYPOINT=LEIA-ME-IA.md
@@ -142,6 +181,8 @@ CHEFE_INTENT / DELTA
 → READBACK + RECEIPT + NEXT_CURSOR
 → FIXED_POINT_IF_GOAL_SUFFICIENT
 ```
+
+**🔴 PR DOS RED — Tool Call independente de modelo (2026-10-22).** Toda sessão Cline/ZENDRIVE/Codex/Claude/Gemini que executa o Goal Michelin deve recuperar a secao `Red Loop` de `.agents/skills/centraldark-live-editing-fabric/SKILL.md` quando receber `AI_NoSuchToolError` ou rejeicao `before execution`. Os REDs sao registrados cumulativamente no **mesmo** PR `🧠 PR DOS RED 🔴`, com fingerprints e readback; so criar novo ID se existir causa distinta. Nome de ferramenta deve vir EXATAMENTE do esquema da sessao ativa **e** do seu resolver; nao traduzir `read_files` para `read_file` nem alucinar aliases. Se a ferramenta aparece em `Available tools` mas o dispatcher a rejeita, classificar `ADVERTISED_BUT_REJECTED` e parar o loop, investigar adapter/registry/sessao — nao repetir com 8 variacoes. Regra pura + testes: `scripts/ci/centraldark-toolcall-red-guard.{mjs,test.mjs}`; **script commitado ainda nao e hook instalado no Cline**. Prova: call real autorizada, schema valido e resultado independente; sem isso `UNKNOWN`, nunca tres estrelas. Preservar o GOAL 50 passos, writer unico Casa e checkpoints comprovados.
 
 **🍒 Cockpit-in-the-Loop — obrigação proporcional para Cline/VS Code e demais Writers UI (CHEFE, 2026-10-21).** Quando a missão alterar controles, tela, navegação, integração visível ou estados do Cockpit, antes de declarar conclusão **carregar** `.agents/skills/centraldark-live-editing-fabric/SKILL.md`, seção `Cockpit-in-the-Loop`. O Cline na Casa usa o navegador/preview autenticado já aberto (URL medida nesta missão: `http://127.0.0.1:8080/sala-controle`) ou automação UI autorizada para mapear somente os botões/abas do escopo e medir T0. Após o delta e testes/build pertinentes, atualizar a página, operar os controles **seguros e autorizados** do escopo, medir T1 e contraprovar resultado, registrando `OWNER+SHA+URL/HOST+CONTROLE+AÇÃO+T0/T1+RESULTADO+RECEIPT`. Ações mutantes (`Sincronizar Tudo`, `Executar Automação`, deploy, sair, permissões) não são testes genéricos; exigem intenção/gates próprios. `HTTP_200 != UI_CLICK_PASS`; `UI_PRESENT != CLICK_ACK != EFFECT_PROVED`; browser read-only/sem sessão executora ⇒ `UI_E2E_PENDING`, jamais verde simulado. Não varrer todos os botões a cada tarefa; aplicar apenas o cone afetado. `127.0.0.1` da VPS não é o da Casa. O Desktop Commander externo não é pré-requisito. A presença desta instrução na `main` **não comprova** consumo na sessão local do Cline; verificar a sincronização e o ACK antes de afirmar aplicação física.
 
@@ -521,6 +562,22 @@ SEGREDO/CHEFE
 ```
 
 Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
+
+## 🔧 Entrega CURRENT: main direta, sem espera de CI (decisão do CHEFE)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Para este escopo explicitamente autorizado, seguir MASTER-CYCLE.yml#current_delivery_policy:
+CURRENT_MAIN -> REUSAR_OWNER -> UM_WRITER -> MENOR_DELTA -> TESTE_LOCAL_PERTINENTE
+-> CONTRAPROVA -> COMMIT/PUSH DIRETO main -> READBACK_SHA -> RECEIPT.
+CI não é requisito nem status PENDING impeditivo; relatar NOT_APPLICABLE quando não
+for usado. Não abrir PR nem executar squash para commit direto na main. Squash
+continua válido SOMENTE em uma trilha de PR aplicável e autorizada; os blocos
+históricos de "Intenção autorizada -> squash main" se referem especificamente
+a esse caso, não à edição direta. Se houver PR saudável com o mesmo
+OWNER+SCOPE+CAPABILITY, reconciliar a colisão e a autorização explícita
+antes de editar; sem sobrescrever outro writer. VPS offline não impede
+editar GitHub: SSH da VPS e deploy/readback ficam PENDENTES, nunca PASS.
+Segurança mínima e sintaxe/testes locais pertinentes continuam obrigatórios.
 
 ## Modo atual de evolução — filho compatível obrigatório quando já existe
 
@@ -1863,7 +1920,7 @@ PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=K:\
-# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior E:\CentralDark\Pivete\CentralDark permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
+# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior K:\ permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
 
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
@@ -2512,3 +2569,37 @@ Aplicar régua Michelin **existente logo abaixo**, sem segundo certificador: ⭐
 **Aplicação automática:** `npm run verify:hud` e `.github/workflows/test.yml` devem reprovar contratos inseguros e emitir recibo `MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=...` **somente após** testes, lint e build reais. O workflow não tem autoridade para emitir estrelas 2/3 sozinho: exigir consulta a CI concluída e readbacks vivos externos. Explicar claramente o estado, o escopo do impedimento e `NEXT_CURSOR` na Central de Integridade.
 
 A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo permanente de todo o organismo CentralDark.
+
+ 
+ <!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+ ## Comunicação natural obrigatória para todos os agentes
+
+ Fale com o usuário em português brasileiro cotidiano, com clareza e sem tom robótico. Esta regra se aplica às respostas escritas e faladas sempre que este arquivo fizer parte do contexto do agente.
+
+ 1. Diga a resposta principal primeiro; explique depois só o necessário.
+ 2. Não repita o pedido como introdução nem anuncie etapas internas sem necessidade.
+ 3. Troque jargão por palavras comuns. Se o termo técnico for inevitável, traduza-o logo.
+ 4. Não use siglas, tabelas, estados internos ou rodapés operacionais em conversa simples, a menos que ajudem diretamente.
+ 5. Use frases curtas e ritmo natural em áudio; não leia caminhos, variáveis ou tabelas em voz alta, salvo se o usuário pedir.
+ 6. Relate falhas e limites com honestidade. Não esconda o que faltou nem declare sucesso sem conferir.
+ 7. A regra escrita não prova que o agente a carregou. Teste as superfícies disponíveis e registre quais ainda não foram verificadas.
+
+ Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
+ <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+
+## 🔒 Cabeçalho de execução obrigatório — FIX POINT
+
+FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
+FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+FIXED_POINT_EXECUTION_HEADER_BUILDER=scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
+FIXED_POINT_TEN_EVALUATOR=scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+FIXED_POINT_HEADER_APPLIES_TO=ALL_CURRENT_AND_FUTURE_AGENTS
+FIXED_POINT_HEADER_PHASES=ENTRY|MATERIAL_DELTA|EXIT
+FIXED_POINT_HEADER_REQUIRED_CRITERIA=OWNER_UNIQUE|LOCKS_PRESERVED|MCP_PUBLIC_HEALTH|ONE_HEART_FRESH|SCREENPIPE_CURRENT|AIONUI_STDIO_CURRENT|LOG_PRIVACY_CURRENT|CHECKOUT_MAIN_SYNC|FORENSIC_FRESHNESS|RECEIPT_PRESENT
+FIXED_POINT_HEADER_MISSING=INVALID
+FIXED_POINT_HEADER_WITHOUT_TEN_CURRENT_ATTEMPTS=NOT_USED
+FIXED_POINT_HEADER_UNKNOWN_WITH_ATTEMPT_REF=USED_WITH_GAPS
+FIXED_POINT_HEADER_ALL_TEN_PASS_AND_GOAL_RECEIPT=USED_AND_FIXED_POINT
+HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true
+UNKNOWN_IS_NOT_PASS=true
+ACTION_IS_NOT_PROOF=true
