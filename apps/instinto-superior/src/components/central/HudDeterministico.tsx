@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { consultarRegressaoGenesis, dispararRegressaoGenesis } from "@/lib/admin.functions";
 import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
+import { lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
 import { GavetaForja } from "@/components/central/InfraestruturaSistema";
 import hudMigrationSnapshot from "@/data/hud-migration.snapshot.json";
 
@@ -133,6 +136,14 @@ const telepainelAdminCapabilities = [
 
 /** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
 export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentralDark; atualizar?: () => void }) {
+  const lerProvaMcp = useServerFn(lerSaudeInfraCentralDark);
+  // Mesma chave da aba Conexoes: uma medicao, duas superficies do cockpit.
+  const provaMcp = useQuery({
+    queryKey: ["centraldark", "saude-hub-mcp"],
+    queryFn: () => lerProvaMcp(),
+    refetchInterval: 60_000,
+    retry: false,
+  });
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -249,7 +260,8 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["Owner de observação", "cockpit.functions.ts", "Snapshot do mesmo cockpit"],
             ["Writer ativo", "UNKNOWN", "A leitura não informa lease de escrita"],
             ["Executor ativo", "UNKNOWN", "Não presumir Hermes/Claude sem recibo"],
-            ["Receita em uso", "UNKNOWN", "Contrato não prova execução"],
+            ["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN",
+              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "SEM_READBACK"}; STDIO/Hermes exigem contraprova separada`],
             ["Última evidência", estado?.atualizadoEm ?? "UNKNOWN", "Timestamp do snapshot, não do executor"],
             ["NEXT_CURSOR", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme owner medido"],
           ] as const).map(([rotulo, valor, ressalva]) => (

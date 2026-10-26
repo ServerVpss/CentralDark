@@ -67,6 +67,12 @@ export type EstadoCentralDark = {
   omniHttp: number | null;
   nextCursor: string | null;
   erroLiveFabric: string | null;
+  casaSiteErro: string | null;
+  apiHealthErro: string | null;
+  grafoErro: string | null;
+  omniErro: string | null;
+  heartbeatErro: string | null;
+  receiptsErro: string | null;
   apiHealthHttp: number | null;
   heartbeatHttp: number | null;
   heartbeatSelf: string | null;
@@ -163,10 +169,15 @@ async function medirApi(path: string): Promise<Probe> {
       };
     }
 
+    // O contrato vivo da API CentralDark usa status="ok" (não exige campo "ok").
+    // A prova se aplica somente à rota GET /health; não promove serviços internos.
+    const status = texto(candidato["status"])?.toLowerCase();
+    const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
+    const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
     return {
-      estado: candidato["ok"] === true ? "PASS" : candidato["ok"] === false ? "FAIL" : "RUNNING",
+      estado: falhou ? "FAIL" : saudavel ? "PASS" : "RUNNING",
       httpStatus: resposta.status,
-      erro: candidato["ok"] === undefined ? "Rota respondeu JSON sem campo ok" : null,
+      erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
   } catch (erro) {
@@ -228,15 +239,16 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
   }
 }
 
-// Saída operacional do próprio /health, com campos permitidos; não publica captura,
- // caminhos do host, stdout bruto, OCR, áudio ou informações pessoais.
+// Saúde da rota Screenpipe. Status explícito determina a cor; dependências
+// são detalhes opcionais, nunca requisito artificial para a rota responder.
 function screenpipeIdentificado(sonda: Probe): Probe {
   if (sonda.estado === "UNKNOWN") return sonda;
-  const dependencias = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
-  if (!dependencias || !objetoJson(dependencias["ffmpeg"])) {
-    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
-  }
+  if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  if (status === "healthy") return { ...sonda, estado: "PASS", erro: null };
+  if (status === "degraded") return { ...sonda, estado: "RUNNING", erro: null };
+  if (["fail", "failed", "error", "unhealthy"].includes(status ?? "")) return { ...sonda, estado: "FAIL" };
+  return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_STATUS_RECONHECIDO" };
   if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
   if (status === "healthy") return { ...sonda, estado: "PASS" };
   if (status === "degraded") return { ...sonda, estado: "RUNNING" };
@@ -246,6 +258,17 @@ function screenpipeIdentificado(sonda: Probe): Probe {
 function saidaScreenpipe(sonda: Probe): string[] {
   const saida = [`GET /health → HTTP ${sonda.httpStatus ?? "sem resposta"} · ${sonda.estado}`];
   if (sonda.erro) saida.push(`SENSOR: ${sonda.erro.slice(0, 96)}`);
+  const mensagem = texto(sonda.dados?.["message"]);
+  if (mensagem && sonda.estado !== "PASS") saida.push(`MOTIVO: ${mensagem.slice(0, 160)}`);
+  const motivos = Array.isArray(sonda.dados?.["unhealthy_reasons"]) ? sonda.dados["unhealthy_reasons"] : null;
+  if (motivos) for (const motivo of motivos.slice(0, 5)) {
+    if (!objetoJson(motivo)) continue;
+    const subsistema = texto(motivo["subsystem"]);
+    const detalhe = texto(motivo["detail"]);
+    if (subsistema && /^[a-zA-Z0-9_-]{1,32}$/.test(subsistema)) {
+      saida.push(`⚠ ${subsistema}${detalhe ? `: ${detalhe.slice(0, 80)}` : ""}`);
+    }
+  }
   const deps = objetoJson(sonda.dados?.["dependencies"]) ? sonda.dados["dependencies"] : null;
   if (deps) for (const [nome, valor] of Object.entries(deps).slice(0, 10)) {
     if (!/^[a-zA-Z0-9_-]{1,32}$/.test(nome) || !objetoJson(valor)) continue;
@@ -478,15 +501,16 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
-      ? "Casa Windows · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória"
+      ? "Casa Windows · Screenpipe 3030/health · HTTP e status real"
       : hostScreenpipe === "VPS"
-        ? "Casa Windows · Tailscale privado · porta 3030/health · medição remota com assinatura"
+        ? "Casa Windows · Tailscale privado · Screenpipe 3030/health · HTTP e status real"
         : "Casa Windows · sem adapter/medição remota neste servidor";
     const screenpipeVpsFonte = hostScreenpipe === "VPS"
-      ? "VPS CENTRALDARK-OS · 127.0.0.1:3030/health · assinatura Screenpipe obrigatória (porta pode ser Graph Panel)"
+      ? "VPS CENTRALDARK-OS · 3030/health · confirmar serviço da rota (pode ser Graph Panel)"
       : "VPS CENTRALDARK-OS · sem adapter/medição remota neste servidor";
     // API 200 só atesta esta rota. O body pode identificar serviço, não integrações internas.
     const apiServico = texto(apiHealth.dados?.["service"])
+      ?? texto(apiHealth.dados?.["servico"])
       ?? texto(apiHealth.dados?.["name"])
       ?? "Serviço não identificado pelo /health";
     const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
@@ -504,7 +528,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
-    return {
+    const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
       desktop: "UNKNOWN",
@@ -547,6 +571,12 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniHttp: omniRouter.httpStatus,
       nextCursor: texto(liveFabric.dados?.["next_cursor"]),
       erroLiveFabric: liveFabric.erro,
+      casaSiteErro: casaSite.erro,
+      apiHealthErro: apiHealth.erro,
+      grafoErro: grafoVivo.erro,
+      omniErro: omniRouter.erro,
+      heartbeatErro: heartbeat.erro,
+      receiptsErro: receipts.erro,
       apiHealthHttp: apiHealth.httpStatus,
       heartbeatHttp: heartbeat.httpStatus,
       heartbeatSelf,
@@ -572,6 +602,45 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
       desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
     };
+
+    // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
+    void (async () => {
+      try {
+        const { supabaseAdmin } = await import(
+          "@/integrations/supabase/client.server"
+        );
+        const host = hostname();
+        const pulsos = [
+          { source: "github", status: github.estado, http_code: null, error: null },
+          { source: "liveFabric", status: liveFabric.estado, http_code: liveFabric.httpStatus ?? null, error: liveFabric.erro ?? null },
+          { source: "grafoVivo", status: grafoVivo.estado, http_code: grafoVivo.httpStatus ?? null, error: grafoVivo.erro ?? null },
+          { source: "omniRouter", status: omniRouter.estado, http_code: omniRouter.httpStatus ?? null, error: omniRouter.erro ?? null },
+          { source: "apiHealth", status: apiHealth.estado, http_code: apiHealth.httpStatus ?? null, error: apiHealth.erro ?? null },
+          { source: "heartbeat", status: heartbeat.estado, http_code: heartbeat.httpStatus ?? null, error: heartbeat.erro ?? null },
+          { source: "omniModels", status: omniModels.estado, http_code: omniModels.httpStatus ?? null, error: null },
+          { source: "receipts", status: receipts.estado, http_code: receipts.httpStatus ?? null, error: receipts.erro ?? null },
+          { source: "casaSite", status: casaSite.estado, http_code: casaSite.httpStatus ?? null, error: casaSite.erro ?? null },
+          { source: "screenpipe", status: screenpipeCasa.estado, http_code: screenpipeCasa.httpStatus ?? null, error: null },
+          { source: "screenpipeVps", status: screenpipeVps.estado, http_code: screenpipeVps.httpStatus ?? null, error: null },
+          { source: "actions", status: actions.estado, http_code: null, error: actions.erro ?? null },
+        ];
+        const linhas = pulsos.map((p) => ({
+          source: p.source,
+          status: p.status,
+          http_code: p.http_code,
+          error: p.error,
+          false_green: false,
+          regression: false,
+          host,
+          ttl_seconds: 120,
+        }));
+        await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+      } catch (e) {
+        console.error("[radar-pulses] fire-and-forget falhou:", e);
+      }
+    })();
+
+    return resultado;
   },
 );
 

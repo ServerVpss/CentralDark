@@ -12,6 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { syncObsidian } from "./diagram-route-excalidraw.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, "../..");
@@ -687,6 +688,12 @@ export function runGate({ baseRef, headRef }) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  if (process.argv.includes("--sync-obsidian") || process.argv.includes("--check-obsidian")) {
+    const check = process.argv.includes("--check-obsidian");
+    const receipt = syncObsidian({check});
+    console.log(JSON.stringify(receipt, null, 2));
+    if (check && receipt.status === "STALE") process.exitCode = 1;
+  } else {
   function arg(name, fallback) {
     const index = process.argv.indexOf(name);
     return index >= 0 ? process.argv[index + 1] : fallback;
@@ -700,4 +707,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   console.log(JSON.stringify(report, null, 2));
   if (!report.ok) process.exit(1);
   console.log("DIAGRAM_ROUTE_GATE=PASS");
+  }
 }

@@ -477,11 +477,11 @@ PHASE_0_BOOT:
 
 PHASE_1_LIVE_CASA_READ_ONLY:
   roots_to_probe:
-    - E:\CentralDark
-    - E:\CentralDark\Pivete
-    - E:\CentralDark\_MAPA_CASA
-    - E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
-    - E:\CentralDark\sol-desktop-poc
+    - K:\
+    - K:\
+    - K:\_MAPA_CASA
+    - K:\_MAPA_CASA\GARIMPO-CHEFE
+    - K:\sol-desktop-poc
     - C:\Users\danda\hermes-vscode-router-provider
     - C:\Users\danda\AppData\Local\hermes
   inventory:

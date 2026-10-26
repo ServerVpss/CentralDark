@@ -70,3 +70,25 @@ BUILD_ARTIFACT_IS_PART_OF_RUNTIME_PROOF=true
 ```
 
 A correção compilou o MCP com o build oficial e promoveu também `dist/tools/core/mcp-admin.js`; o verifier passou a fiscalizar os dois lados.
+
+## Intake incremental — projetos MCP externos (2026-10-21)
+
+A pedido do CHEFE, seis fontes externas verificadas no GitHub foram **catalogadas como candidatos de capacidade** no owner existente `apps/modulos/mcp/src/tools/core/mcp-admin.js` e no artefato `dist` correspondente, sem segundo MCP, sem instalação de código externo e sem autorização implícita. São entradas `INVENTORY_ONLY_NOT_INSTALLED`, não ferramentas executáveis. Não entram na contagem das 141 tools internas do dispatcher.
+
+- `MCP_REGISTRY_DISCOVERY` — [modelcontextprotocol/registry](https://github.com/modelcontextprotocol/registry): Descobrir servidores MCP publicados; fonte de inventário, não instalador.
+- `MCP_REFERENCE_SERVERS` — [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers): Referências de implementação MCP para reaproveitar contratos; não são serviços de produção.
+- `PLAYWRIGHT_MCP_BROWSER` — [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp): Automação web por snapshots de acessibilidade; comparar com Zendrive e browser existentes antes de incorporar.
+- `PLAYWRIGHT_CLI_FASTPATH` — [microsoft/playwright-cli](https://github.com/microsoft/playwright-cli): Automação browser por CLI/skills para jobs com menor overhead de schemas; alternativa a medir, não substituição automática.
+- `CONTEXT7_DOCS_MCP` — [upstash/context7](https://github.com/upstash/context7): Consulta de documentação de bibliotecas por MCP/CLI; conexão e autorização próprias ainda não medidas.
+- `MARKITDOWN_MCP` — [microsoft/markitdown](https://github.com/microsoft/markitdown): Converter documentos e arquivos para Markdown; validar fronteira de arquivos/URLs antes de executar.
+
+```text
+EXTERNAL_PROJECT_DISCOVERED != CONNECTOR_INSTALLED
+CATALOG_ENTRY != TOOL_EXECUTION
+SOURCE_AND_DIST_UPDATED != VPS_RUNTIME_RELOADED
+NO_NEW_ROUTER=true
+ONE_MCP_CATALOG=true
+FAST_PATH_REUSE_BEFORE_NEW_INSTALL=true
+```
+
+O `catalogFingerprint` das rotas autorizadas não foi alterado: este delta é somente metadado de candidatos externos e não altera `AUTHORIZED_ROUTE_CATALOG` nem `ROUTE_LAWS`. Runtime atual medido antes deste delta: `141` tools, `13` rotas, fingerprint `80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7`. Fonte CURRENT declarava outro conjunto/fingerprint; a convergência do processo VPS requer readback próprio e não é inferida de Git.

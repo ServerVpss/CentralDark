@@ -4,7 +4,7 @@
 # Status: CRISTALIZADO — nao experimental; nao V2/V3; reusa router existente; nao paga; nao inventa schema
 
 # PRÉ-CONDIÇÕES (medir antes de rodar):
-- git rev-parse HEAD (repo E:/CentralDark/Pivete/CentralDark)
+- git rev-parse HEAD (repo K:/)
 - gh auth status + remote origin/head
 - router existente confirmado (scripts/launch_omni_router.py existe; nao criar segundo router)
 - FABLE LOOP skill criado: .agents/skills/fable-loop/SKILL.md (hash 685db0384a)

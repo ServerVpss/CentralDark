@@ -65,6 +65,20 @@ PRESERVE_RUNTIME_DELTA
 
 No human /memory approve or manual file copy is required when the applicable existing gates already prove alignment. UNKNOWN remains UNKNOWN.
 
+## Windows Casa (Git Bash)
+
+Provado em 2026-10-21 na Forja `K:\`:
+
+```text
+HERMES_HOME_WINDOWS=%LOCALAPPDATA%\hermes      # ~/.hermes não existe na Casa
+FLOCK_ABSENT_ON_GIT_BASH=true                   # script usa lock por mkdir atômico
+HASH_VIA_STDIN=true                             # sha256sum com caminho "\" prefixa "\" e gera drift falso
+APPLY_ON_STALE_CHECKOUT=FORBIDDEN               # --apply escreve arquivos rastreados do K:; alinhar main antes
+CLAUDE_SKILL_COPY = junction -> K:\.agents\skills\<skill>   # cópia em C:\Users\...\.claude\skills envelhece
+```
+
+Este script não comenta no PR #1562 nem usa `jq`; o receipt é a saída do próprio script.
+
 ## Modes
 
 --check = read-only classification.
