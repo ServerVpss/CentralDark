@@ -3,6 +3,9 @@
   "displayName": "CentralDark VS Code Restore",
   "description": "Restaura bancada e terminais; localiza PID e disponibiliza controle remoto autenticado, opt-in e privado por dispositivo.",
   "version": "0.1.6",
+  "displayName": "CentralDark · Vibe Coding",
+  "description": "CentralDark VS Code: OAuth CentralDark compartilhado, bancada e pareamento por codigo.",
+  "version": "0.2.1",
   "publisher": "centraldark",
   "private": true,
   "engines": {
@@ -76,6 +79,24 @@
       {
         "command": "centraldark.prepareAll",
         "title": "CentralDark: Preparar tudo (calibrar + compilar + instalar + conectar)"
+        "command": "centraldark.pairVsCode",
+        "title": "CentralDark: Parear este VS Code (SSH + MCP)"
+      },
+      {
+        "command": "centraldark.verifyVsCodePairing",
+        "title": "CentralDark: Verificar pareamento MCP"
+      },
+      {
+        "command": "centraldark.remoteTerminalPair",
+        "title": "CentralDark: Parear receptor de terminal remoto (opt-in)"
+      },
+      {
+        "command": "centraldark.remoteTerminalStatus",
+        "title": "CentralDark: Status receptor remoto e PIDs (somente leitura)"
+      },
+      {
+        "command": "centraldark.checkUpdates",
+        "title": "CentralDark: Checar atualizacao via API GitHub"
       }
     ],
     "configuration": {
@@ -100,6 +121,7 @@
           "type": "boolean",
           "default": false,
           "description": "Permite receptor local de comandos no terminal VS Code, apenas com pareamento e aprovacao explicita."
+          "description": "Habilita receptor privado em localhost somente apos pareamento e consentimento local."
         },
         "centraldark.restore.remoteTerminalPort": {
           "type": "integer",
@@ -107,6 +129,19 @@
           "maximum": 65535,
           "default": 8719,
           "description": "Porta HTTP em 127.0.0.1 para Tailscale Serve privado; nao abre interface publica."
+          "description": "Porta HTTP em 127.0.0.1 para uso privado; nao expoe diretamente na rede."
+        },
+        "centraldark.restore.autoUpdate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ativa verificacao de releases a cada 10 minutos, com prompt antes de instalar."
+        },
+        "centraldark.restore.autoUpdateIntervalMinutes": {
+          "type": "integer",
+          "default": 10,
+          "minimum": 5,
+          "maximum": 1440,
+          "description": "Intervalo de checagem, em minutos."
         }
       }
     },
@@ -116,6 +151,9 @@
           "type": "webview",
           "id": "centraldark.vibeCoding",
           "name": "🪬 CentralDark · Vibe Coding"
+          "id": "centraldarkVibeCoding",
+          "name": "CentralDark · Vibe Coding",
+          "type": "webview"
         }
       ]
     }

@@ -325,6 +325,21 @@ Não para na primeira correção e não exige perfeição global antes de tornar
 
 ---
 
+## Aprendizado automatico do Hermes (Self-improvement review)
+
+```text
+HERMES_memory.write_approval=false
+HERMES_skills.write_approval=false   # config.yaml da Casa; efeito nativo do Hermes
+AUTO_LEARNING=true
+REUSE_EXISTING_OWNER=true
+DETERMINISTIC_VALIDATION=true        # teste do owner decide; percentual de conformidade so ranqueia candidato
+HUMAN_APPROVAL=ONLY_WHEN_NEEDED
+REALITY_IS_JUDGE=true
+CONFORMANCE_PERCENT_IS_NOT_PASS=true # 98% com teste do owner falhando = sem PASS
+```
+
+Fluxo: Hermes aprende -> delta -> owner existente -> evidencia -> conformidade -> APROVADO absorve / DUVIDA fica pendente / REPROVADO rejeita -> receipt + rastro. O calculo de conformidade e extensao CentralDark, nao funcao oficial do Hermes.
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada

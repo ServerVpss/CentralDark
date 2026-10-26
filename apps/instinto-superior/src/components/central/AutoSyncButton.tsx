@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { RefreshCw, CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
+import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
 import { supabase } from '@/integrations/supabase/client'
+import { SyncLoopIcon } from '@/components/central/SyncLoopIcon'
+import { SyncActionButton } from '@/components/central/SyncActionButton'
 
 interface SyncStatus {
   timestamp: string | null
   status: 'idle' | 'syncing' | 'success' | 'failed' | 'conflict'
   human_readable: string
   target?: string
+  details?: string
 }
 
 /**
@@ -86,7 +89,7 @@ export const AutoSyncButton: React.FC = () => {
   const getStatusIcon = () => {
     switch (syncStatus.status) {
       case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />
-      case 'syncing': return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />
+      case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
       default: return <Clock className="w-5 h-5 text-gray-500" />
@@ -95,27 +98,32 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusColor = () => {
     switch (syncStatus.status) {
-      case 'success': return 'bg-green-50 border-green-200'
-      case 'syncing': return 'bg-blue-50 border-blue-200'
-      case 'failed': return 'bg-red-50 border-red-200'
-      case 'conflict': return 'bg-yellow-50 border-yellow-200'
-      default: return 'bg-gray-50 border-gray-200'
+      case 'success': return 'bg-emerald-500/10 border-emerald-500/40'
+      case 'syncing': return 'bg-sky-500/10 border-sky-500/40'
+      case 'failed': return 'bg-red-500/10 border-red-500/40'
+      case 'conflict': return 'bg-amber-500/10 border-amber-500/40'
+      default: return 'bg-muted/30 border-border'
     }
   }
 
   return (
     <div className="space-y-3">
       <Card className={`p-4 border ${getStatusColor()}`}>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-              <p className="text-sm font-semibold">Auto Sync: Casa / Main / VPS</p>
-              <p className="text-xs text-gray-600">{syncStatus.human_readable}</p>
+              <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
+              <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
+              {syncStatus.details && syncStatus.status !== 'idle' && (
+                <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
+                  {syncStatus.details}
+                </p>
+              )}
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Button onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
               Windows
             </Button>
@@ -125,30 +133,34 @@ export const AutoSyncButton: React.FC = () => {
             <Button onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
               VPS
             </Button>
-            <Button onClick={() => handleSync('all')} disabled={isSyncing} size="sm" className="gap-2">
-              <RefreshCw className="w-4 h-4" />
-              {isSyncing ? 'Sincronizando...' : 'Sincronizar Tudo'}
-            </Button>
+            <SyncActionButton
+              label="Sincronizar Tudo"
+              onClick={() => handleSync('all')}
+              isFetching={isSyncing}
+              autoSyncEnabled
+              lastError={syncStatus.status === 'failed' ? syncStatus.human_readable : null}
+              variant="default"
+            />
           </div>
         </div>
       </Card>
 
-      <Card className="p-4 border border-amber-200 bg-amber-50">
-        <div className="flex items-center justify-between">
+      <Card className="p-4 border border-amber-500/40 bg-amber-500/10">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-600" />
+            <Zap className="w-5 h-5 text-amber-400" />
             <div>
-              <p className="text-sm font-semibold">Automação CentralDark · execução segura</p>
-              <p className="text-xs text-amber-700">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
+              <p className="text-sm font-semibold text-foreground">Automação CentralDark · execução segura</p>
+              <p className="text-xs text-amber-200/80">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
             </div>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <select
               value={microDeployMode}
               onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
               disabled={isSyncing}
-              className="px-2 py-1 text-xs border border-amber-300 rounded bg-white"
+              className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
             >
               <option value="main-only">Main Only (rapido)</option>
               <option value="full">Full (Casa/VPS/Main)</option>

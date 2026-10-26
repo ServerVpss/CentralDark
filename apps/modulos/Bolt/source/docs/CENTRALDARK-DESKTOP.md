@@ -20,7 +20,7 @@ SEGREDO/CHEFE
 
 ## Casa local
 
-No Windows, `CENTRALDARK_HOME` ou `APP_PATH_ROOT` define a Casa. Quando nenhum deles existe e `E:\CentralDark` está presente, esse caminho é adotado. Se o disco não existir, o aplicativo preserva o diretório padrão do sistema em vez de falhar ou mover estado destrutivamente.
+No Windows, `CENTRALDARK_HOME` ou `APP_PATH_ROOT` define a Casa. Quando nenhum deles existe e `K:\` está presente, esse caminho é adotado. Se o disco não existir, o aplicativo preserva o diretório padrão do sistema em vez de falhar ou mover estado destrutivamente.
 
 ## Hermes
 

@@ -16,7 +16,7 @@ test('precompact checkpoint whitelists metadata and drops raw sensitive payloads
     custom_instructions: secret,
   };
   const observed = {
-    repoRoot: 'E:/CentralDark/workspace',
+    repoRoot: 'K:/workspace',
     rootName: 'workspace',
     branch: 'feature/example',
     head: '0123456789abcdef0123456789abcdef01234567',

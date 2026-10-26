@@ -17,6 +17,21 @@ test("snapshot é fail-closed sem receipt", () => {
   assert.equal(snap.patternAlignment.outsidePct, 80);
   assert.equal(snap.patternAlignment.marker, "RED");
   assert.equal(snap.patternAlignment.unknownCount, 2);
+  assert.equal(snap.fixedPointTen.schema, "centraldark.fixed-point.ten.v1");
+  assert.equal(snap.fixedPointTen.total, 10);
+  assert.equal(snap.fixedPointTen.criteria.length, 10);
+  assert.equal(snap.fixedPointTen.criteria_attempts_required, 10);
+  assert.equal(snap.fixedPointTen.criteria_attempts_current, 5);
+  assert.equal(snap.fixedPointTen.header_usage, "NOT_USED");
+  assert.equal(snap.fixedPointTen.fixedPoint, false);
+  assert.equal(snap.fixedPointTen.verdict, "NEXT_DELTA");
+  assert.equal(snap.fixedPointTen.next_cursor, "VERIFY_OWNER_UNIQUE");
+  assert.deepEqual(
+    snap.fixedPointTen.criteria.map((criterion) => criterion.id),
+    ["OWNER_UNIQUE", "LOCKS_PRESERVED", "MCP_PUBLIC_HEALTH", "ONE_HEART_FRESH",
+      "SCREENPIPE_CURRENT", "AIONUI_STDIO_CURRENT", "LOG_PRIVACY_CURRENT",
+      "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT"],
+  );
 });
 
 test("snapshot lê receipt sanitizado sem ler secrets", () => {
@@ -39,10 +54,37 @@ test("snapshot lê receipt sanitizado sem ler secrets", () => {
   }));
   const snap = getOperationalSnapshot({ root });
   assert.equal(snap.forensic.status, "OBSERVED");
+  assert.match(snap.forensic.observedAtIso, /^\\d{4}-\\d{2}-\\d{2}T.*Z$/);
+  assert.equal(snap.fixedPointTen.criteria.find((criterion) => criterion.id === "FORENSIC_FRESHNESS")?.status, "PASS");
+  assert.equal(snap.fixedPointTen.criteria.find((criterion) => criterion.id === "RECEIPT_PRESENT")?.status, "PASS");
+  assert.equal(snap.fixedPointTen.fixedPoint, false);
   assert.equal(snap.secretBoundary.githubAuthDetectorPresent, true);
   assert.equal(JSON.stringify(snap).includes("NUNCA_EXPOR"), false);
 });
 
+
+
+test("receipt forense com timestamp futuro não passa no critério de freshness", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-forensic-future-"));
+  const diag = path.join(root, "_DIAGNOSTICS");
+  fs.mkdirSync(diag, { recursive: true });
+  fs.writeFileSync(path.join(diag, "REPORT.txt"), "REPORT\\n");
+  fs.writeFileSync(path.join(diag, "archive.tar.gz"), "x");
+  const future = new Date(Date.now() + 60 * 60 * 1000)
+    .toISOString().replace(/[-:]/g, "").replace(/\\.\\d{3}Z$/, "Z");
+  fs.writeFileSync(path.join(diag, "FORENSIC-LATEST.json"), JSON.stringify({
+    observed_at: future,
+    mode: "READ_ONLY",
+    report: path.join(diag, "REPORT.txt"),
+    archive: path.join(diag, "archive.tar.gz"),
+    sha256: "b".repeat(64),
+    secrets_content_collected: false,
+  }));
+  const snap = getOperationalSnapshot({ root });
+  assert.equal(snap.forensic.status, "STALE");
+  assert.equal(snap.fixedPointTen.criteria.find((criterion) => criterion.id === "FORENSIC_FRESHNESS")?.status, "STALE");
+  assert.equal(snap.fixedPointTen.fixedPoint, false);
+});
 
 test("monitor do padrão fica verde quando os eixos mensuráveis estão aderentes", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-pattern-green-"));

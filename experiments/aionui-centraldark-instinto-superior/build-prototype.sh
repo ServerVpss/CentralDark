@@ -16,9 +16,17 @@ actual="$(git -C "$SOURCE" rev-parse HEAD)"
   exit 20
 }
 
-# Work from a clean exact v2.2.2 snapshot every time.
-git -C "$SOURCE" reset --hard "$EXPECTED_HEAD"
-git -C "$SOURCE" clean -fdx
+# Safety: never reset, clean, or overwrite an occupied checkout. The caller
+# must supply a fresh disposable staging directory on the approved F: storage.
+# If it exists and has data, we preserve it and stop instead of destroying work.
+if [[ -n "$(git -C "$SOURCE" status --porcelain --untracked-files=normal)" ]]; then
+  echo "BLOCKED AIONUI_STAGE_DIR_NOT_CLEAN source=$SOURCE"
+  exit 23
+fi
+if [[ "$TARGET" == "win" && "${CENTRALDARK_KF_STORAGE_VERIFIED:-}" != "true" ]]; then
+  echo "BLOCKED AIONUI_WINDOWS_STORAGE_UNVERIFIED: prove K: workspace and F: caches first"
+  exit 24
+fi
 
 python3 "$HERE/apply-overlay.py" "$SOURCE"
 

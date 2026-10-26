@@ -234,7 +234,7 @@ export const VAULT = {
     ordemEndpoints: [
       "?api",
       "localStorage",
-      "http://89.117.78.124:9100",
+      "http://<servidor-publico>:9100",
       "https://api.centralldark.com",
     ],
     frescorSeg: 15,
@@ -349,3 +349,43 @@ export const PAINEL_CENTRALDARK_FOTOS: Array<{
     ],
   },
 ];
+
+// #OBSERVACOES# @owner: painel-unico.ts @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// Camada de linguagem humana. Os 25 IDs de COCKPIT_ABAS permanecem intactos.
+// Este atalho NAVEGA ou ABRE owner existente: nunca confundir com despacho concluido.
+export const CAMINHOS_SIMPLES_INSTINTO = [
+  { id: "inicio", rotulo: "🏠 Início", aba: "visao", owner: "CockpitShell", modo: "NAVEGAR", privado: false, detalhe: "Veja onde estamos." },
+  { id: "criar", rotulo: "✨ Criar", aba: "forja", owner: "ForjaExecutor", modo: "RASCUNHO_SEM_DESPACHO", privado: false, detalhe: "Conte sua ideia na Forja. Envio automático ainda não comprovado." },
+  { id: "ao-vivo", rotulo: "👁️ Ao vivo", aba: "visao", owner: "StatusPanel/PapagaioHudMcp/cockpit.functions", modo: "SENSORES_DA_VISAO", privado: false, detalhe: "Consulte as medições atuais na Visão geral." },
+  { id: "conexoes", rotulo: "🔗 Conexões", aba: "admin", owner: "PainelAdminCentralDark/ConexoesCentralDark", modo: "ABRIR_OWNER_AUTENTICADO", privado: true, detalhe: "Veja as contas pelo painel existente, sem expor credenciais." },
+  { id: "historico", rotulo: "📖 Histórico", aba: "recibos", owner: "ReceiptsDashboard", modo: "LER_EVIDENCIAS", privado: false, detalhe: "Consulte o que foi comprovado." },
+] as const;
+
+// Contrato de navegação; não prova execução. Owners reutilizados, sem conector paralelo.
+export const COCKPIT_ABAS = [
+  { id: "visao", titulo: "Visão geral", owner: "CockpitShell / MapaOwners", privado: false, estado: "READ_ONLY" },
+  { id: "portal", titulo: "Portal", owner: "MenuVisualCentralDark", privado: false, estado: "UI_ONLY" },
+  { id: "builder-bolt", titulo: "Builder Bolt", owner: "MenuVisualCentralDark", privado: false, estado: "UI_ONLY" },
+  { id: "pr1873", titulo: "Mapa PR #1873", owner: "PainelPR1873", privado: false, estado: "READ_ONLY" },
+  { id: "gram", titulo: "CentralDark Gram", owner: "CentralDarkGram / MTProto", privado: true, estado: "PARTIAL" },
+  { id: "sync", titulo: "Minha Oficina", owner: "SyncCenter / MinhaOficina", privado: false, estado: "PARTIAL" },
+  { id: "design", titulo: "Design Center", owner: "DesignCenter", privado: false, estado: "NAVIGATION" },
+  { id: "goals", titulo: "Goals", owner: "GoalsDashboard", privado: false, estado: "READ_ONLY" },
+  { id: "genesis", titulo: "Gênesis · Michelin", owner: "HudDeterministico", privado: true, estado: "READ_ONLY" },
+  { id: "claude-notifications", titulo: "Claude", owner: "ClaudeNotificationsHub", privado: false, estado: "READ_ONLY" },
+  { id: "dream-reviewer", titulo: "Dream", owner: "DreamReviewer", privado: false, estado: "READ_ONLY" },
+  { id: "arquitetura", titulo: "Estrutura", owner: "ArchitectureVisualization", privado: false, estado: "HISTORICAL" },
+  { id: "raioxvivo", titulo: "Raio-X", owner: "RaioXVivo", privado: false, estado: "PARTIAL" },
+  { id: "recibos", titulo: "Recibos", owner: "ReceiptsDashboard", privado: false, estado: "READ_ONLY" },
+  { id: "forja", titulo: "Forja", owner: "ForjaExecutor", privado: false, estado: "PARTIAL" },
+  { id: "gram-permissions", titulo: "Permissões Forja", owner: "GramPermissions", privado: true, estado: "PARTIAL" },
+  { id: "admin", titulo: "Admin CentralDark", owner: "PainelAdminCentralDark / Supabase", privado: true, estado: "PARTIAL" },
+  { id: "sistema", titulo: "Sistema CentralDark", owner: "SistemaCentralDark", privado: true, estado: "PARTIAL" },
+  { id: "hermes", titulo: "Hermes", owner: "PainelHermes / HermesPet", privado: false, estado: "PARTIAL" },
+  { id: "unigram", titulo: "Unigram", owner: "CentralDark Desktop bridge", privado: false, estado: "PARTIAL" },
+  { id: "forja-regras", titulo: "Regras Forja", owner: "RULES.md / AGENTS.md", privado: false, estado: "READ_ONLY" },
+  { id: "forja-inventario", titulo: "Inventário", owner: "MapaOwners / SistemaCentralDark", privado: false, estado: "NAVIGATION" },
+  { id: "agent-mode", titulo: "Agent Mode", owner: "Agent Mode documentado", privado: false, estado: "HISTORICAL" },
+  { id: "html-consolidation", titulo: "HTML Consolidation", owner: "cockpit-unified / receipts", privado: false, estado: "HISTORICAL" },
+  { id: "downloads", titulo: "Downloads", owner: "Download Center", privado: false, estado: "PARTIAL" },
+] as const;

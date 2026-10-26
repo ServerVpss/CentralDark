@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Card } from "@/components/ui/card";
+import { useState } from "react";
+import { useNotificationsLog } from "@/hooks/useNotificationsLog";
 import { Maximize2, Minimize2, Pause, Play, RotateCcw, Zap, Terminal, MessageSquare, CheckCircle2 } from "lucide-react";
 
 /**
@@ -17,7 +17,7 @@ import { Maximize2, Minimize2, Pause, Play, RotateCcw, Zap, Terminal, MessageSqu
 
 interface NotificacaoClause {
   id: string;
-  tipo: "claude" | "powershell" | "hermes" | "dream";
+  tipo: "claude" | "powershell" | "hermes" | "dream" | "sistema";
   mensagem: string;
   timestamp: string;
   status: "novo" | "lido" | "acao";
@@ -30,37 +30,6 @@ interface EstadoHub {
   tamanho: { w: number; h: number };
 }
 
-const NOTIFICACOES_EXEMPLO: NotificacaoClause[] = [
-  {
-    id: "1",
-    tipo: "claude",
-    mensagem: "Raio-X Vivo integrado ao Cockpit ✅",
-    timestamp: new Date(Date.now() - 120000).toLocaleTimeString("pt-BR"),
-    status: "lido",
-  },
-  {
-    id: "2",
-    tipo: "powershell",
-    mensagem: "[Forja] Setor HERMES sincronizado (SHA: abc123)",
-    timestamp: new Date(Date.now() - 60000).toLocaleTimeString("pt-BR"),
-    status: "lido",
-  },
-  {
-    id: "3",
-    tipo: "hermes",
-    mensagem: "Dream Reviewer: +3 padrões detectados",
-    timestamp: new Date().toLocaleTimeString("pt-BR"),
-    status: "novo",
-  },
-  {
-    id: "4",
-    tipo: "powershell",
-    mensagem: "[Output] Build finalizado: 2.10s, 0 erros",
-    timestamp: new Date().toLocaleTimeString("pt-BR"),
-    status: "novo",
-  },
-];
-
 export function ClaudeNotificationsHub() {
   const [estado, setEstado] = useState<EstadoHub>({
     modo: "vivo",
@@ -69,8 +38,23 @@ export function ClaudeNotificationsHub() {
     tamanho: { w: 400, h: 600 },
   });
 
-  const [notificacoes, setNotificacoes] = useState<NotificacaoClause[]>(NOTIFICACOES_EXEMPLO);
-  const [filtro, setFiltro] = useState<"tudo" | "claude" | "powershell" | "hermes" | "dream">("tudo");
+  const { items, loading, erro, realtimeStatus } = useNotificationsLog("24h");
+  // Eventos reais do ledger unico; nenhuma mensagem de demonstracao.
+  const notificacoes: NotificacaoClause[] = items.map((evento) => {
+    const origem = evento.origem.toLowerCase();
+    const tipo: NotificacaoClause["tipo"] = origem.includes("claude") ? "claude"
+      : origem.includes("hermes") ? "hermes" : origem.includes("dream") ? "dream" : origem.includes("powershell") ? "powershell" : "sistema";
+    const owner = typeof evento.metadata?.["owner"] === "string"
+      ? evento.metadata["owner"] : evento.origem || "OWNER_UNKNOWN";
+    return {
+      id: evento.id,
+      tipo,
+      mensagem: evento.titulo + " · owner: " + owner + " · prova: " + String(evento.metadata?.["proof_state"] ?? "UNKNOWN"),
+      timestamp: new Date(evento.created_at).toLocaleTimeString("pt-BR"),
+      status: "lido",
+    };
+  });
+  const [filtro, setFiltro] = useState<"tudo" | "claude" | "powershell" | "hermes" | "dream" | "sistema">("tudo");
 
   const notificacoesFiltradas =
     filtro === "tudo" ? notificacoes : notificacoes.filter((n) => n.tipo === filtro);
@@ -164,7 +148,7 @@ export function ClaudeNotificationsHub() {
 
       {/* Filtros */}
       <div className="flex gap-2 p-3 border-b border-border/60 bg-muted/10 overflow-x-auto">
-        {["tudo", "claude", "powershell", "hermes", "dream"].map((f) => (
+        {["tudo", "claude", "powershell", "hermes", "dream", "sistema"].map((f) => (
           <button
             key={f}
             onClick={() => setFiltro(f as typeof filtro)}
@@ -174,16 +158,16 @@ export function ClaudeNotificationsHub() {
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
           >
-            {f === "tudo" ? "Tudo" : f === "claude" ? "Claude" : f === "powershell" ? "PowerShell" : f === "hermes" ? "Hermes" : "Dream"}
+            {f === "tudo" ? "Tudo" : f === "claude" ? "Claude" : f === "powershell" ? "PowerShell" : f === "hermes" ? "Hermes" : f === "dream" ? "Dream" : "Sistema"}
           </button>
         ))}
       </div>
 
       {/* Área de Notificações (scrollável) */}
       <div className="flex-1 overflow-y-auto space-y-2 p-3">
-        {notificacoesFiltradas.length === 0 ? (
+        {erro ? (<div role="alert" className="text-sm text-destructive">Falha no ledger · UNKNOWN</div>) : loading ? (<div className="text-sm text-muted-foreground">Consultando eventos reais...</div>) : notificacoesFiltradas.length === 0 ? (
           <div className="text-center text-muted-foreground text-sm py-8">
-            Nenhuma notificação neste filtro
+            Nenhuma notificação comprovada neste filtro
           </div>
         ) : (
           notificacoesFiltradas.map((notif) => (
@@ -214,7 +198,7 @@ export function ClaudeNotificationsHub() {
       <div className="p-3 border-t border-border/60 bg-muted/10 text-xs text-muted-foreground">
         <div className="flex items-center justify-between">
           <span>
-            Modo: <strong>{estado.modo === "vivo" ? "🟢 AO VIVO" : "⏸️ PAUSADO"}</strong>
+            Canal: <strong>{realtimeStatus === "LIVE" ? "SUBSCRIBED · entrega E2E UNKNOWN" : "UNKNOWN · consulta de recuperação"}</strong>
           </span>
           <span>
             Total: <strong>{notificacoes.length}</strong>

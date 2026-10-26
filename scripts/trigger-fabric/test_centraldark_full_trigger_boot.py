@@ -536,6 +536,24 @@ def test_reseal_does_not_unlock_without_material_gain_and_independent_counterpro
         assert mod.load_registry(reg)["claims"]["CLAIM_X"]["proven_path_replay"]["dependency_fingerprint"] == old_fp
 
 
+def test_fixed_point_seven_canonical_refs():
+    pack = mod.fixed_point_pack_state(REPO)
+    assert pack["status"] == "BOUND", pack
+    assert pack["marker"] == "FIX_POINT_7_CANONICAL_REFS_V1"
+    assert pack["trigger"] == "!CENTRALDARK"
+    assert pack["hud_presentation"] == "🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐"
+    assert pack["stars_awarded_from_header"] == 0
+    assert len(pack["references"]) == 7
+    assert all(len(ref["sha256"]) == 64 and ref["bytes"] > 0 for ref in pack["references"])
+
+
+def test_fixed_point_seven_sources_fail_closed():
+    with tempfile.TemporaryDirectory() as temp:
+        result = mod.fixed_point_pack_state(Path(temp))
+    assert result["status"] == "BLOCKED"
+    assert "MASTER_CYCLE_MISSING" in result["unknowns"]
+
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -567,6 +585,8 @@ if __name__ == "__main__":
         test_reseal_fingerprint_updates_same_claim_after_counterproof,
         test_reseal_does_not_unlock_without_material_gain_and_independent_counterproof,
         test_canonical_chain_contains_full_core_flow,
+        test_fixed_point_seven_canonical_refs,
+        test_fixed_point_seven_sources_fail_closed,
     ]
     for test in tests:
         test()

@@ -42,6 +42,7 @@
   ],
   "versaoFormato": 1,
   "revisadoEm": "2026-10-20",
+  "revisadoEm": "2026-10-23",
   "revisadoPor": "Chefe/SEGREDO via missao ADMIN_PROVIDER_CONTROL_PLANE_20260815",
   "geradoPor": "scripts/gerar-manifesto-destrutivas.mjs",
   "resumo": {
@@ -437,5 +438,14 @@
       "ultimoTeste": "SOURCE_ONLY: autenticacao e pacote ainda nao foram medidos no runtime Casa/VPS",
       "proximoExperimento": "compilar ambos owners em branch isolada, testar autorizacao negativa e client local; instalar VSIX no dispositivo, parear por SecretStorage, testar comando de leitura e recibo."
     }
-  ]
+  ],
+  "politicaCatalogo": {
+    "modo": "RECONHECER_20_POR_NOME_SEM_APROVACAO_AUTOMATICA",
+    "fonteUnica": "destrutivasAprovadas + destrutivasEmRevisao",
+    "revisaoEmQuarentenaPontual": true,
+    "novaDestrutivaDesconhecida": "BLOQUEADA",
+    "diferencaEntreAprovadasERuntimeNaoEBloqueioGlobal": true,
+    "confirmacaoAdminEAuditoriaContinuam": true,
+    "nota": "20 ferramentas conhecidas nao significa 20 executaveis. As 8 em revisao aguardam os gates declarados."
+  }
 }

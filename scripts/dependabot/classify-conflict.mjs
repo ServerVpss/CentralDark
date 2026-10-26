@@ -61,6 +61,8 @@ let conflictId = 'UNREGISTERED';
 let source = 'path-policy';
 let structuredStrategy = '';
 let semanticKey = '';
+let sourceRef = '';
+let preserveRule = '';
 
 if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].includes(base)) {
   action = 'CURRENT';
@@ -71,6 +73,8 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
   if (known) {
     conflictId = String(known.CONFLICT_ID || 'KNOWN');
     source = 'known-conflict-patterns.json';
+    sourceRef = String(known.SOURCE_REF || '');
+    preserveRule = String(known.PRESERVE_RULE || '');
     const policy = String(known.SAFE_RESOLUTION || '').toUpperCase();
     if (policy === 'USE_PR_SIDE') {
       action = 'CURRENT';
@@ -87,6 +91,10 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
       semanticKey = String(known.SEMANTIC_KEY || '');
       reason = structuredStrategy ? 'KNOWN_POLICY_STRUCTURED' : 'KNOWN_POLICY_STRUCTURED_MISSING_STRATEGY';
       if (!structuredStrategy) action = 'YELLOW';
+    }
+    if (action !== 'YELLOW' && (!sourceRef || !preserveRule)) {
+      action = 'YELLOW';
+      reason = 'KNOWN_POLICY_MISSING_PRIMARY_SOURCE_OR_PRESERVE_RULE';
     }
   }
 }
@@ -105,6 +113,8 @@ console.log(JSON.stringify({
   source,
   structured_strategy: structuredStrategy,
   semantic_key: semanticKey,
+  source_ref: sourceRef,
+  preserve_rule: preserveRule,
   current_means: 'PR_HEAD',
   incoming_means: 'MAIN',
   unknown_is_pass: false
