@@ -6,7 +6,7 @@ import express from "express";
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
 const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
-const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "/root/CentralDark/data/mcp-device-registry.json";
+const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "<caminho-vps>";
 
 const sha256 = (value) => createHash("sha256").update(String(value)).digest("hex");
 const safeEqual = (a, b) => {
@@ -52,9 +52,11 @@ export function createDevicePairingStore(options = {}) {
     prune();
     const pairId = randomUUID();
     const pairSecret = randomBytes(24).toString("base64url");
+    const consentNonce = randomBytes(24).toString("base64url");
     const item = {
       pairId,
       pairSecretHash: sha256(pairSecret),
+      consentNonce,
       code: makeCode(),
       createdAt: now(),
       expiresAt: now() + ttlMs,
@@ -70,6 +72,23 @@ export function createDevicePairingStore(options = {}) {
     };
     pending.set(pairId, item);
     return { pairId, pairSecret, code: item.code, expiresAt: item.expiresAt };
+  }
+  function pendingConsent(pairId) {
+    prune();
+    const item = pending.get(String(pairId || ""));
+    if (!item) return null;
+    return {
+      pairId: item.pairId, code: item.code, expiresAt: item.expiresAt,
+      deviceName: item.meta.deviceName, executor: item.meta.executor,
+      surface: item.meta.surface, nonce: item.consentNonce,
+      approved: Boolean(item.deviceId),
+    };
+  }
+  function approveWeb({ pairId, code, nonce }) {
+    const item = pendingConsent(pairId);
+    if (!item || item.approved) return { ok: false, error: "pair_expired_or_completed" };
+    if (!safeEqual(item.nonce, nonce)) return { ok: false, error: "pair_consent_invalid" };
+    return approve({ pairId, code });
   }
   function approve({ pairId, code, deviceName, executor, surface }) {
     prune();
@@ -136,6 +155,15 @@ export function createDevicePairingStore(options = {}) {
     writeRegistry(registry);
     return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
   }
+  function revoke({ deviceId }) {
+    if (!deviceId || typeof deviceId !== "string") return { ok: false, error: "device_id_required" };
+    const registry = readRegistry();
+    const before = registry.devices.length;
+    registry.devices = registry.devices.filter(entry => entry.device_id !== deviceId);
+    if (registry.devices.length === before) return { ok: false, error: "device_not_found" };
+    writeRegistry(registry);
+    return { ok: true, device_id: deviceId };
+  }
   function listDevices() {
     const registry = readRegistry();
     const t = now();
@@ -144,15 +172,35 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, status, heartbeat, refresh, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
   const router = express.Router();
   const store = options.store || createDevicePairingStore(options);
-  const isAdmin = options.isAdmin || ((req) => safeEqual(bearerFrom(req), process.env.CENTRALDARK_ADMIN_KEY || "__missing__"));
+  const isAdmin = options.isAdmin || ((req) => {
+    const expected = String(process.env.CENTRALDARK_ADMIN_KEY || "");
+    return expected.length > 0 && safeEqual(bearerFrom(req), expected);
+  });
+
+  const isCookieAdmin = options.cookieAdmin || (() => false);
+  const authorized = (req) => isAdmin(req) || (
+    req.get("X-CentralDark-Intent") === "pairing-admin" && isCookieAdmin(req)
+  );
+  const limiter = new Map();
+  const allowStart = (req) => {
+    const key = String(req.ip || req.socket?.remoteAddress || "unknown");
+    const now = Date.now();
+    for (const [ip, entry] of limiter) if (entry.until < now) limiter.delete(ip);
+    const entry = limiter.get(key);
+    if (!entry || entry.until < now) { limiter.set(key, {count: 1, until: now + 60_000}); return true; }
+    if (entry.count >= 20) return false;
+    entry.count++;
+    return true;
+  };
 
   router.post("/pair/start", (req, res) => {
+    if (!allowStart(req)) return res.status(429).json({ok:false,error:"pair_rate_limited"});
     const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
     res.status(201).json({ ok: true, pair_id: pair.pairId, pair_secret: pair.pairSecret, code: pair.code, expires_at: new Date(pair.expiresAt).toISOString() });
   });
@@ -160,8 +208,13 @@ export function createDevicePairingRouter(options = {}) {
     const result = store.status({ pairId: req.query.id, pairSecret: req.query.secret });
     res.status(result.status === "denied" ? 403 : 200).json(result);
   });
+  // Use POST para que o segredo de posse nao apareca em URL, referrer e access logs.
+  router.post("/pair/status", (req, res) => {
+    const result = store.status({ pairId: req.body?.id, pairSecret: req.body?.secret });
+    res.status(result.status === "denied" ? 403 : 200).json(result);
+  });
   router.post("/pair/approve", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
     const result = store.approve({ pairId: req.body?.id, code: req.body?.code, deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
     res.status(result.ok ? 200 : 400).json(result);
   });
@@ -173,8 +226,13 @@ export function createDevicePairingRouter(options = {}) {
     const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });
     res.status(result.ok ? 200 : 401).json(result);
   });
+  router.post("/devices/revoke", (req, res) => {
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    const result = store.revoke({ deviceId: req.body?.device_id });
+    res.status(result.ok ? 200 : 404).json(result);
+  });
   router.get("/devices", (req, res) => {
-    if (!isAdmin(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
+    if (!authorized(req)) return res.status(401).json({ ok: false, error: "admin_auth_required" });
     res.json({ ok: true, devices: store.listDevices() });
   });
   return router;

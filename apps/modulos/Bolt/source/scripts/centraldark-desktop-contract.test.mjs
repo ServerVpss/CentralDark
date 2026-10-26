@@ -48,6 +48,17 @@ test('a ponte Electron é estreita e o renderer não ganha Node', () => {
   assert.doesNotMatch(preload, /process\.env/);
 });
 
+test('Obsidian original tem launch fixo e bloqueia renderer não autorizado', () => {
+  const main = read(`${root}/electron/main/index.ts`);
+  const preload = read(`${root}/electron/preload/index.ts`);
+  assert.match(main, /centraldark:obsidian:open/);
+  assert.match(main, /CENTRALDARK_OBSIDIAN_UNTRUSTED_RENDERER/);
+  assert.match(main, /event\.sender\.id !== current\.webContents\.id/);
+  assert.match(main, /shell\.openExternal\('obsidian:\/\/open\?vault=BRAIN'\)/);
+  assert.match(preload, /openObsidianDesktop/);
+  assert.doesNotMatch(preload, /process\.env|readFileSync|spawn\(/);
+});
+
 test('cockpit projeta Linear pela rota segura do MCP sem secret no renderer', () => {
   const cockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
 
@@ -162,4 +173,30 @@ test('HUD unificado reusa o cockpit, move, redimensiona e nao inventa quota', ()
   assert.match(inventory, /DATADOG/);
   assert.match(inventory, /ADAPTER_REQUIRED/);
   assert.match(inventory, /id: 'CHATGPT'[\s\S]*?quota: 'ADAPTER_REQUIRED'/);
+});
+
+
+test('Unigram original entra no leque por abertura nativa restrita, sem copiar aplicativo ou conta', () => {
+  const main = read(`${root}/electron/main/index.ts`);
+  const preload = read(`${root}/electron/preload/index.ts`);
+  const nativeCockpit = read(`${root}/app/components/centraldark/CentralDarkCockpitShell.client.tsx`);
+  const webCockpit = read(`${root}/../../../instinto-superior/src/components/central/CockpitShell.tsx`);
+
+  assert.ok(main.includes("const UNIGRAM_WINDOWS_APP_ID = '38833FF26BA1D.UnigramPreview_g9c9v27vpyspw!App'"));
+  assert.ok(main.includes("register('centraldark:unigram:open'"));
+  assert.ok(main.includes('CENTRALDARK_UNIGRAM_UNTRUSTED_RENDERER'));
+  assert.ok(main.includes('event.senderFrame?.url'));
+  assert.ok(main.includes('shell:AppsFolder'));
+  assert.ok(main.includes('shell: false'));
+  assert.ok(main.includes("status: 'REQUESTED'"));
+  assert.ok(!main.includes('Unigram-13.0.1'));
+  assert.ok(!main.includes('Telegram_TemporaryKey'));
+
+  assert.ok(preload.includes("openUnigramDesktop: () => ipcRenderer.invoke('centraldark:unigram:open')"));
+  assert.ok(nativeCockpit.includes('bridge.openUnigramDesktop()'));
+  assert.ok(nativeCockpit.includes('Abertura solicitada · janela ainda não comprovada'));
+  assert.ok(webCockpit.includes('TabsTrigger value="unigram"'));
+  assert.ok(webCockpit.includes('Esta ação requer o CentralDark.exe no Windows'));
+  assert.ok(!webCockpit.includes('Start-Process'));
+  assert.ok(!webCockpit.includes('Get-AppxPackage'));
 });

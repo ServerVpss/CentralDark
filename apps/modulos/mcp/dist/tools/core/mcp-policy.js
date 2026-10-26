@@ -2,11 +2,21 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { config } from "../../config.js";
+import { CANONICAL_DESTRUCTIVE_TOOLS, CANONICAL_KNOWN_DESTRUCTIVE_TOOLS, DESTRUTIVAS_EM_REVISAO } from "../../lib/admin-guard.js";
 const LOG_BASE = path.join(config.vps.repoPath, "revisoes");
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
 const policy = {
+    destructiveCatalog: {
+        known: CANONICAL_KNOWN_DESTRUCTIVE_TOOLS.length,
+        approved: CANONICAL_DESTRUCTIVE_TOOLS.length,
+        registeredReview: DESTRUTIVAS_EM_REVISAO.length,
+        reviewedToolNames: DESTRUTIVAS_EM_REVISAO.map((item) => item.nome).sort(),
+        rule: "Registra aprovadas + em revisao; apenas aprovadas podem executar. Desconhecidas bloqueadas.",
+        registeredDoesNotGrantPermission: true,
+        individualAdminConfirmationRequired: true,
+    },
     mode: {
         autoSafe: true,
         sensitiveConfirmed: true,
@@ -41,6 +51,15 @@ const policy = {
             "release",
         ],
     },
+    adminSession: {
+        authenticatedSessionReuse: true,
+        validProvenance: ["verified_oauth_admin", "verified_hub_admin"],
+        noRepeatLiteralForVerifiedAdmin: true,
+        legacyConfirmationOnly: true,
+        autoMissionNeverMintsApproval: true,
+        safetyAndAuditGatesRemain: true,
+        platformPromptsOutsideMcpUnaffected: true,
+    },
     requiredConfirmations: {
         genericAdmin: "CONFIRMO ADMIN",
         delete: "CONFIRMO DELETAR",
@@ -72,9 +91,9 @@ const policy = {
         "Segredo real continua bloqueado sempre.",
         "Nunca retornar valor de secret/token/cookie/sessão.",
         "Dry-run por padrão em ações destrutivas.",
-        "Logs completos ficam em /root/CentralDark/revisoes; chat recebe só resumo.",
+        "Logs completos ficam em <caminho-vps>; chat recebe só resumo.",
         "CRM, WhatsApp, WuzAPI, Caddy, Docker e banco real exigem confirmação explícita.",
-        "mcp_admin_call é dispatcher fixo; tools destrutivas exigem confirmação adicional.",
+        "mcp_admin_call e o dispatcher fixo; sessao OAuth/Hub admin verificada dispensa frase repetida para tools aprovadas; chamadas legadas exigem confirmAdmin, e auditoria/gates de risco continuam.",
         "Modo Obra Full Admin aparece no resumo quando MCP_OBRA_FULL_ADMIN=true ou MCP_FULL_ADMIN=true.",
     ],
 };
@@ -106,7 +125,7 @@ export const mcpPolicyTools = [
     },
     {
         name: "mcp_audit_recent_logs",
-        description: "Lista pastas recentes de logs/auditoria em /root/CentralDark/revisoes sem expor conteúdo sensível.",
+        description: "Lista pastas recentes de logs/auditoria em <caminho-vps> sem expor conteúdo sensível.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Auditoria recente" },
         inputSchema: z.object({
             limit: z.number().int().min(1).max(50).optional(),

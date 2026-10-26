@@ -2,12 +2,15 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import express from "express";
 import { config } from "./config.js";
+import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
+import { assertNoRetiredCentralDarkHostedDeploy } from "./tools/github/github.js";
 import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, } from "./oauth.js";
-import { getStatusHtml, getStatusJson } from "./tools/status.js";
+import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
+import { getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
 import { correlationMiddleware, withCid } from "./correlation.js";
@@ -18,16 +21,17 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
+import { isAdmin as isCockpitAdmin } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
 // Captura QUALQUER erro não tratado com stack trace completo antes do PM2 matar.
 process.on("uncaughtException", (err) => {
     console.error("[FATAL] uncaughtException:", err?.stack || err);
     try {
-        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] uncaughtException\n${err?.stack || String(err)}\n\n`, { flag: "a" });
+        writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] uncaughtException\n${err?.stack || String(err)}\n\n`, { flag: "a" });
     }
     catch { }
     process.exit(1);
@@ -35,7 +39,7 @@ process.on("uncaughtException", (err) => {
 process.on("unhandledRejection", (reason) => {
     console.error("[FATAL] unhandledRejection:", reason?.stack || reason);
     try {
-        writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] unhandledRejection\n${reason?.stack || String(reason)}\n\n`, { flag: "a" });
+        writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] unhandledRejection\n${reason?.stack || String(reason)}\n\n`, { flag: "a" });
     }
     catch { }
     process.exit(1);
@@ -54,7 +58,7 @@ function validarEnvsObrigatorias() {
         const msg = `[BOOT] MCP não pode iniciar. Variáveis de ambiente ausentes: ${faltando.join(", ")}. Configure no ecosystem.config.cjs ou export antes de subir o PM2.`;
         console.error(msg);
         try {
-            writeFileSync("/root/CentralDark/logs/mcp-crash.log", `[${new Date().toISOString()}] BOOT ABORTADO — envs faltando: ${faltando.join(", ")}\n\n`, { flag: "a" });
+            writeFileSync("<caminho-vps>", `[${new Date().toISOString()}] BOOT ABORTADO — envs faltando: ${faltando.join(", ")}\n\n`, { flag: "a" });
         }
         catch { }
         process.exit(2);
@@ -69,14 +73,36 @@ bootstrapAdminLogCapture();
 startHubMissionConsumer();
 const app = express();
 app.disable("x-powered-by");
+app.get("/", (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ ok:true, service:"CentralDark MCP", api:"/api/mcp",
+        ui:"https://admin.centralldark.com/sala-controle" });
+});
 function setCorsHeaders(res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,Mcp-Session-Id,MCP-Protocol-Version,X-MCP-Session,X-Correlation-Id,X-Request-Id");
     res.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate,Mcp-Session-Id,X-Correlation-Id,X-Request-Id");
 }
-app.use((_req, res, next) => {
+// Cross-origin apenas para LEITURAS admin autenticadas no cockpit confiavel.
+// O login admin do MCP ainda e validado por isAdmin() no endpoint; escrita
+// administrativa permanece same-origin (nunca liberar POST por este caminho).
+const cockpitAdminReadOrigins = new Set([
+    "https://admin.centralldark.com",
+    ...String(process.env.CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS || "")
+        .split(",").map(x => x.trim()).filter(Boolean),
+]);
+app.use((req, res, next) => {
     setCorsHeaders(res);
+    const origin = String(req.headers.origin || "");
+    const path = String(req.path || "");
+    if (cockpitAdminReadOrigins.has(origin)
+        && (path.startsWith("/admin/api/") || path === "/admin/login" || path === "/admin/logout"
+            || path.startsWith("/device/"))) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.vary("Origin");
+    }
     next();
 });
 app.options(/.*/, (_req, res) => {
@@ -94,6 +120,12 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
+// Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
+app.use("/device", createDevicePairingRouter({ cookieAdmin: isCockpitAdmin }));
+
+app.get("/admin/pairing", (_req, res) => {
+    res.redirect(302, "https://admin.centralldark.com/sala-controle");
+});
 app.post("/integrations/buildkite/webhook", (req, res) => {
     const result = handleBuildkiteWebhook(req, res);
     if (result?.ok) {
@@ -116,7 +148,29 @@ app.get("/intent/manifesto", (_req, res) => {
     res.setHeader("Cache-Control", "public, max-age=60");
     res.json({ schema: "centraldark.intent.public.v1", produto: "CentralDark - Instinto Superior", visibilidade: "PUBLICO_SOMENTE_LEITURA", intencao: "Reunir ferramentas, agentes e conhecimento em um unico cockpit, com aprendizagem a partir de evidencias.", controle_remoto: "NAO_EXPOSTO" });
 });
-app.get("/health", (_req, res) => {
+// A mesma receita consumida pelo dispatcher é medida no /health existente.
+// A prova é escopada ao HTTP: não deduz implantação dos processos STDIO do Hermes.
+app.get("/health", async (_req, res) => {
+    let preflight = null;
+    try {
+        preflight = await canonicalRecipeFirstPreflight(
+            "centraldark_deploy_micro_fallback", { owner: "mcp", dryRun: true },
+        );
+    } catch {
+        // /health continua disponível como sensor mesmo se a receita estiver ausente.
+    }
+    let hostedDispatchLocked = false;
+    try {
+        assertNoRetiredCentralDarkHostedDeploy("ServerVpss", "CentralDark", "vps-ssh-exec.yml");
+    } catch (error) {
+        hostedDispatchLocked = String(error?.message || error)
+            .includes("CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
+    }
+    const adminAliasLoaded = ALL_TOOLS.some((tool) => tool.name === "admin_ssh_microdeploy");
+    const recipeMatched = preflight?.status === "RECIPE_FIRST_MATCHED"
+        && preflight?.priority === 0 && preflight?.ok === true;
+    const recipeReady = recipeMatched && hostedDispatchLocked && adminAliasLoaded;
+    res.setHeader("Cache-Control", "no-store");
     res.json({
         ok: true,
         service: "mcp-centraldark",
@@ -124,6 +178,18 @@ app.get("/health", (_req, res) => {
         catalogVersion: CATALOG_VERSION,
         toolCount: getCatalogSummary().toolCount,
         time: new Date().toISOString(),
+        recipeFirst: {
+            scope: "MCP_HTTP_ONLY",
+            status: recipeReady ? "PASS" : "DRIFT",
+            codeStatus: preflight?.status ?? "UNKNOWN",
+            priority: preflight?.priority === 0 ? 0 : null,
+            canonicalRoute: "MCP_CENTRALDARK_VPS_DIRECT",
+            hostedDispatchLocked,
+            adminAliasLoaded,
+            proofLevel: recipeReady
+                ? "HTTP_CODE_AND_RUNTIME_RECIPE_READBACK"
+                : "NOT_PROVEN",
+        },
     });
 });
 // Projecao unica de rotas locais para HUD/API. Leitura limitada, sem varredura,
@@ -144,8 +210,7 @@ app.get("/health/routes", async (_req, res) => {
             });
             return { id, httpStatus: response.status, reachable: true,
                 state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
-        }
-        catch {
+        } catch {
             return { id, httpStatus: null, reachable: false, state: "NOT_REACHABLE" };
         }
     }));
@@ -169,7 +234,7 @@ app.get("/figma/status", async (_req, res) => {
     res.status(status.ok ? 200 : 503).json(status);
 });
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
-const HEART_FILE = "/root/CentralDark/logs/heartbeat-api.json";
+const HEART_FILE = "<caminho-vps>";
 app.get("/heartbeat", (_req, res) => {
     const nowIso = new Date().toISOString();
     const nowMs = Date.now();
@@ -234,6 +299,7 @@ app.get("/heartbeat", (_req, res) => {
 // ONDE    > issue #148, itens 2, 4 e 7 da secao "Falhas / atritos".
 // RESOLVE > cada uma passa a responder o codigo que descreve o fato:
 //           favicon 200, transporte aposentado 410, metodo errado 405.
+
 // Favicon 32x32 (PNG embutido em base64 — sem arquivo binario no repo).
 // Existe porque a UI /admin e mantida; sem ele o conector fica com icone
 // generico na lista do cliente.
@@ -245,7 +311,8 @@ const serveFavicon = (_req, res) => {
 };
 app.get("/favicon.ico", serveFavicon);
 app.get("/favicon.png", serveFavicon);
-// Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /mcp.
+
+// Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /api/mcp.
 // MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como
 //           "servidor errado" em vez de "transporte trocado".
 // ONDE    > issue #148, item 2.
@@ -254,11 +321,12 @@ app.all("/sse", (_req, res) => {
     res.status(410).json({
         ok: false,
         error: "sse_transport_gone",
-        message: "O transporte SSE foi aposentado. Use POST /mcp (MCP Streamable HTTP, protocolo 2025-06-18).",
-        replacement: "/mcp",
+        message: "O transporte SSE foi aposentado. Use POST /api/mcp (MCP Streamable HTTP, protocolo 2025-06-18).",
+        replacement: "/api/mcp",
         documentation: "/.well-known/oauth-protected-resource",
     });
 });
+
 // Metodo errado responde 405 com Allow, nao 404.
 // MOTIVO  > GET /token e GET /register caiam no 404 generico, escondendo que
 //           a rota existe e so aceita POST. Confunde diagnostico de OAuth.
@@ -275,6 +343,7 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
+
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.use("/admin/grafo", adminGraphProxy);
 app.get("/admin", adminGet);
@@ -292,6 +361,25 @@ app.get("/admin/api/operational-snapshot", adminOperationalSnapshot);
 app.get("/admin/api/linear", adminLinear);
 app.get("/admin/api/tailscale", adminTailscale);
 app.get("/intent/status", intentPublicStatus); // projeção pública sanitizada, sem mutação
+// Manifesto público: apenas mensagem de produto, sem SSH, logs, contas ou chaves.
+// Rota de LEITURA; a automação continua no MCP autenticado existente.
+app.get("/intent/manifesto", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=60");
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.json({
+        schema: "centraldark.intent.public.v1",
+        produto: "CentralDark — Instinto Superior",
+        visibilidade: "PUBLICO_SOMENTE_LEITURA",
+        intencao: "Reunir ferramentas, agentes e conhecimento em um unico cockpit, com aprendizagem a partir de evidencias.",
+        principios: [
+            "Uma casca mutavel, um unico sistema",
+            "Reutilizar antes de criar",
+            "Evoluir por pequenos incrementos",
+            "A realidade valida os resultados"
+        ],
+        controle_remoto: "NAO_EXPOSTO"
+    });
+});
 app.get("/admin/api/intent", adminIntentGet);
 app.post("/admin/api/intent", adminIntentRun);
 app.post("/admin/api/e2e", adminE2E);
@@ -346,7 +434,7 @@ app.get("/openapi.json", (_req, res) => {
     };
     const respostaJson = { "200": { description: "Resposta JSON-RPC", content: { "application/json": { schema: { type: "object" } } } } };
     const paths = {
-        "/mcp": {
+        "/api/mcp": {
             post: {
                 summary: "Endpoint MCP publico (JSON-RPC 2.0, Streamable HTTP)",
                 description: "Exige Authorization: Bearer com escopo mcp. Nao anuncia nem executa ferramentas destrutivas.",
@@ -356,22 +444,6 @@ app.get("/openapi.json", (_req, res) => {
                 responses: { ...respostaJson, "401": { description: "Bearer ausente ou invalido (ver header WWW-Authenticate)" } },
             },
         },
-        "/admin/mcp": {
-            post: {
-                summary: "Endpoint MCP administrativo (JSON-RPC 2.0)",
-                description: "Exige Authorization: Bearer com escopo admin. Toda destrutiva passa pelo dispatcher auditado mcp_admin_call.",
-                operationId: "mcpAdminJsonRpc",
-                security: [{ oauth2: ["admin"] }],
-                requestBody: jsonRpcBody,
-                responses: { ...respostaJson, "401": { description: "Bearer com escopo admin ausente" }, "403": { description: "Token sem escopo admin" } },
-            },
-        },
-        "/tools.json": { get: { summary: "Manifesto publico do catalogo de tools", operationId: "toolsCatalog", responses: respostaJson } },
-        "/health": { get: { summary: "Healthcheck", operationId: "health", responses: respostaJson } },
-        "/health/deep": { get: { summary: "Healthcheck profundo", operationId: "healthDeep", responses: respostaJson } },
-        "/linear/status": { get: { summary: "Status seguro da integração Linear", operationId: "linearStatus", responses: respostaJson } },
-        "/figma/status": { get: { summary: "Status seguro da integração Figma/FigJam", operationId: "figmaStatus", responses: respostaJson } },
-        "/heartbeat": { get: { summary: "Heartbeat + snapshot operacional determinístico", operationId: "heartbeat", responses: respostaJson } },
         "/status.json": { get: { summary: "Status dos conectores", operationId: "statusJson", responses: respostaJson } },
         "/register": { post: { summary: "OAuth 2.1 Dynamic Client Registration", operationId: "oauthRegister", responses: respostaJson } },
         "/authorize": { get: { summary: "OAuth 2.1 authorize (PKCE S256)", operationId: "oauthAuthorize", responses: { "200": { description: "Tela de consentimento" }, "302": { description: "Redirect com code" } } } },
@@ -406,7 +478,7 @@ app.get("/openapi.json", (_req, res) => {
         },
         paths,
         // Catalogo informativo. NAO e rota HTTP — as tools sao chamadas por
-        // JSON-RPC tools/call em /mcp. Ver MOTIVO no bloco acima.
+        // JSON-RPC tools/call em /api/mcp. Ver MOTIVO no bloco acima.
         "x-mcp-tools": summary.tools.map((tool) => ({
             name: tool.name,
             title: tool.title ?? tool.name,
@@ -417,11 +489,8 @@ app.get("/openapi.json", (_req, res) => {
     });
 });
 // ───────────────────────── Status dos conectores ─────────────────────────
-app.get("/status", (req, res) => {
-    getStatusHtml(req, res).catch(() => {
-        if (!res.headersSent)
-            res.status(500).send("Erro ao gerar status.");
-    });
+app.get("/status", (_req, res) => {
+    res.redirect(302, "https://admin.centralldark.com/sala-controle");
 });
 app.get("/status.json", (req, res) => {
     getStatusJson(req, res).catch(() => {
@@ -468,6 +537,10 @@ app.get("/.well-known/oauth-authorization-server", getAuthorizationServerMetadat
 app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMetadata);
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
+// Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
+const oauthDeviceStore = createDevicePairingStore();
+configureDevicePairingForOAuth(oauthDeviceStore);
+app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore }));
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
@@ -564,12 +637,8 @@ function resolveGhToken(req) {
     const authScheme = schemeMatch ? schemeMatch[1] : (rawAuth ? "raw" : "none");
     const bearer = extractBearer(req);
     const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
-    const stats = (() => { try {
-        return getStateStats();
-    }
-    catch {
-        return { accessTokens: -1 };
-    } })();
+    const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
+
     // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
     const logAuth = (lookupResult, extra = {}) => {
         l.info("mcp_auth_diagnostic", {
@@ -581,6 +650,7 @@ function resolveGhToken(req) {
             ...extra,
         });
     };
+
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
@@ -630,7 +700,7 @@ function resolveGhToken(req) {
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
-app.post("/mcp", (req, res) => {
+app.post("/api/mcp", (req, res) => {
     const l = withCid(req.cid);
     const r = resolveGhToken(req);
     if ("error" in r) {
@@ -641,7 +711,8 @@ app.post("/mcp", (req, res) => {
     l.info("mcp_request_authorized", { method: req.body?.method || "unknown" });
     handleMcpRequest(req, res, r.token, {
         cid: req.cid,
-        admin: false,
+        admin: /(?:^|\s)admin(?:\s|$)/.test(String(r.oauthScope || "")),
+        authProvenance: /(?:^|\s)admin(?:\s|$)/.test(String(r.oauthScope || "")) ? "verified_oauth_admin" : null,
         callerUser: r.callerUser,
         clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-public").slice(0, 160),
         oauthScope: r.oauthScope,
@@ -658,101 +729,22 @@ app.post("/mcp", (req, res) => {
     });
 });
 // GET /mcp — alguns clientes pingam pra checar OAuth via 401
-app.get("/mcp", (req, res) => {
+app.get("/api/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-// ─────────────── /admin/mcp — endpoint MCP com escopo admin obrigatório ───────────────
-function requireAdminScope(req, res) {
-    const bearer = extractBearer(req);
-    if (!bearer) {
-        unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
-        return null;
+app.get("/admin/catalog", authAdmin, async (req, res) => {
+    try {
+        const result = await getAdminCatalog(req);
+        res.json(result);
+    } catch (err) {
+        log.error("admin_catalog_error", { error: String(err) });
+        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
     }
-    const at = getAccessToken(bearer);
-    if (!at) {
-        unauthorizedAdmin(req, res, "Access token admin inválido ou expirado.");
-        return null;
-    }
-    const scope = String(at.oauth_scope || "");
-    if (!/\badmin\b/.test(scope)) {
-        unauthorizedAdmin(req, res, "escopo admin obrigatório", 403);
-        return null;
-    }
-    return {
-        token: at.gh_token,
-        callerUser: at.gh_login || "github-admin",
-        oauthScope: scope,
-    };
-}
-app.post("/admin/mcp", (req, res) => {
-    const l = withCid(req.cid);
-    const auth = requireAdminScope(req, res);
-    if (!auth)
-        return;
-    l.info("mcp_admin_request_authorized", { method: req.body?.method || "unknown", actor: auth.callerUser });
-    handleMcpRequest(req, res, auth.token, {
-        cid: req.cid,
-        admin: true,
-        callerUser: auth.callerUser,
-        clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-admin").slice(0, 160),
-        oauthScope: auth.oauthScope,
-        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
-        authProvenance: "verified_oauth_admin",
-    }).catch((err) => {
-        l.error("mcp_admin_handler_unhandled", { error: String(err) });
-        if (!res.headersSent) {
-            res.status(500).json({
-                jsonrpc: "2.0",
-                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
-                id: null,
-                cid: req.cid,
-            });
-        }
-    });
-});
-app.get("/admin/mcp", (req, res) => {
-    unauthorizedAdmin(req, res, "Authorization Bearer com escopo admin ausente.");
-});
-// Alias de compatibilidade: /mcp/admin converge para o MESMO handler /admin/mcp.
-// Mantemos o método e o corpo (sem redirect HTTP) porque clientes MCP/OAuth podem
-// não preservar POST/Authorization em redirects. O resource canônico continua /admin/mcp.
-app.post("/mcp/admin", (req, res) => {
-    const l = withCid(req.cid);
-    const auth = requireAdminScope(req, res);
-    if (!auth)
-        return;
-    l.info("mcp_admin_compat_request_authorized", {
-        method: req.body?.method || "unknown",
-        actor: auth.callerUser,
-        canonicalPath: "/admin/mcp",
-        requestedPath: "/mcp/admin",
-    });
-    handleMcpRequest(req, res, auth.token, {
-        cid: req.cid,
-        admin: true,
-        callerUser: auth.callerUser,
-        oauthScope: auth.oauthScope,
-        // requireAdminScope() validated the unexpired OAuth bearer + admin scope.
-        authProvenance: "verified_oauth_admin",
-    }).catch((err) => {
-        l.error("mcp_admin_compat_handler_unhandled", { error: String(err) });
-        if (!res.headersSent) {
-            res.status(500).json({
-                jsonrpc: "2.0",
-                error: { code: -32603, message: "Erro interno do servidor MCP admin", data: { cid: req.cid } },
-                id: null,
-                cid: req.cid,
-            });
-        }
-    });
-});
-app.get("/mcp/admin", (req, res) => {
-    unauthorizedAdmin(req, res, "Rota compatível; resource canônico: /admin/mcp.");
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
 // ─────────────────────── Telemetria VPS (vps-reporter) ───────────────────────
-const PAINEL_DATA_PATH = "/root/CentralDark/apps/modulos/status/painel-data.json";
+const PAINEL_DATA_PATH = "<caminho-vps>";
 const ADMIN_KEY = process.env.CENTRALDARK_ADMIN_KEY;
 app.post("/api/telemetry-ingest", (req, res) => {
     const auth = req.headers["authorization"] ?? "";
@@ -791,4 +783,3 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
-//# sourceMappingURL=index.js.map

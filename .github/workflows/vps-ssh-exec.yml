@@ -1,18 +1,15 @@
-name: ⚙️ VPS SSH Exec [DESATIVADO — duplicata de vps-exec-selfhosted.yml]
-# TRAVA: Este workflow é duplicata exata de vps-exec-selfhosted.yml (ambos rodam bash -lc local).
-# Use vps-exec-selfhosted.yml. Este não será executado (if:false).
-# Mesmo desativado, respeita a política global de executor da Casa para não reintroduzir hosted runner por cópia futura.
+name: "CentralDark — Deploy SSH GitHub Actions LEGADO DESATIVADO"
+# Historico preservado. Nao reativar job hospedado, runner ou CI para deploy.
+# Caminho canônico: MCP CentralDark -> centraldark_deploy_micro_fallback
+# -> scripts/vps/main-pinned-microdeploy.sh na VPS.
+# SSH privado da Casa e opcional e independe do GitHub Actions.
 on:
-  workflow_dispatch:
-    inputs:
-      _disabled:
-        description: 'DESATIVADO. Use vps-exec-selfhosted.yml'
-        required: true
-        type: string
-
+  workflow_dispatch: {}
+permissions:
+  contents: read
 jobs:
-  noop:
+  legado-desativado:
+    if: ${{ false }}
     runs-on: [self-hosted, Linux]
-    if: false
     steps:
-      - run: echo "desativado"
+      - run: echo "Legado desativado; usar o MCP CentralDark"

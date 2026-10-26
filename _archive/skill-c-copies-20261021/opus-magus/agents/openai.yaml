@@ -1,0 +1,14 @@
+interface:
+  display_name: Opus Magus
+  short_description: Engenharia rigorosa para Telegram e CentralDark
+  default_prompt: Use $opus-magus para diagnosticar e implementar esta tarefa de Telegram
+    com código testável.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

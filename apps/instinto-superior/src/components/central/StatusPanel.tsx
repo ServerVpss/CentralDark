@@ -4,6 +4,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, RefreshCw, RotateCcw, Server } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { lerEstadoCentralDark, type Estado, type EstadoCentralDark } from "@/lib/cockpit.functions";
+import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
+import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 type Luz = "verde" | "amarela" | "vermelha";
 const CORES: Record<Luz, string> = {
@@ -17,8 +21,9 @@ function luz(estado: Estado): Luz {
   if (estado === "FAIL" || estado === "BLOCKED") return "vermelha";
   return "amarela";
 }
-function etiqueta(estado: Estado) {
+function etiqueta(estado: Estado, nome = "") {
   if (estado === "PASS") return "OPERACIONAL";
+  if (estado === "RUNNING") return "EM EXECUÇÃO";
   if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
   return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
 }
@@ -33,11 +38,16 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
   const valido = fresco ? estado : "UNKNOWN";
   const cor = luz(valido);
   return (
-    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido)}`}>
+    <span className="inline-flex items-center gap-2" aria-label={`${nome}: ${etiqueta(valido, nome)}`}>
       <span className={`size-3 shrink-0 rounded-full ${fresco && valido === "PASS" ? "animate-pulse motion-reduce:animate-none" : ""} ${CORES[cor]}`} aria-hidden="true" />
-      <span className="font-mono text-[10px]">{etiqueta(valido)}</span>
+      <span className="font-mono text-[10px]">{etiqueta(valido, nome)}</span>
     </span>
   );
+}
+/** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
+function comMotivo(base: string, estado: Estado, motivo: string | null | undefined) {
+  if (estado === "PASS" || !motivo) return base;
+  return `${base} · MOTIVO: ${motivo.slice(0, 120)}`;
 }
 function DataHora({ iso }: { iso: string | null | undefined }) {
   if (!iso) return <>SEM MEDIÇÃO</>;
@@ -258,7 +268,8 @@ export function StatusPanel() {
     retry: false,
     refetchOnWindowFocus: true,
   });
-  const fresco = hidratado && Boolean(q.data) && !q.isError && (Date.now() - q.dataUpdatedAt < 45_000);
+  const agora = useRelogioVivo();
+  const fresco = hidratado && agora !== null && Boolean(q.data) && !q.isError && (agora - q.dataUpdatedAt < 45_000);
   const d = fresco ? q.data : null;
   const unknown: Estado = "UNKNOWN";
   const screen: Estado = d?.screenpipe ?? unknown;
@@ -337,6 +348,15 @@ export function StatusPanel() {
       origem: "API CentralDark · /health",
       gatilho: "HTTP 200 não atesta tudo."
     },
+  const sinais = [
+    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, d?.casaSite ?? unknown, d?.casaSiteErro), icon: House },
+    { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: comMotivo(d?.mainSha?.slice(0, 12) ?? "SHA não medido", d?.github ?? unknown, d?.fonte), icon: Github },
+    { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
+    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiHealthHttp ?? "?"} · /health`, d?.apiHealth ?? unknown, d?.apiHealthErro), icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
+    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
+    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
+    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: comMotivo(`HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, d?.receipts ?? unknown, d?.receiptsErro), icon: Database },
   ];
 
   const rotas = [
@@ -346,6 +366,10 @@ export function StatusPanel() {
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
     { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
+    { id: "grafo-vivo", owner: "Live Fabric", estado: d?.grafoVivo ?? unknown, fonte: d?.liveFabricFonte ?? "API /api/live-fabric/graph" },
+    { id: "omni-router", owner: "Omni Router", estado: d?.omniRouter ?? unknown, fonte: "API /api/omni/status · somente rota medida" },
+    { id: "heartbeat", owner: "Heartbeat MCP", estado: d?.heartbeat ?? unknown, fonte: "MCP /heartbeat · self=" + (d?.heartbeatSelf ?? "?") },
+    { id: "receipts", owner: "Receipts Microdeploy", estado: d?.receipts ?? unknown, fonte: "API /api/microdeploy/receipts/index.json" },
   ] as const;
   const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");
 
@@ -382,9 +406,18 @@ export function StatusPanel() {
         </div>
         <div className="flex items-center gap-3">
           <span className="font-mono text-[10px] text-muted-foreground">POLÍTICA 15S</span>
-          <Button data-cd-flow="instinto.StatusPanel.botao-01" size="sm" variant="outline" onClick={() => void q.refetch()} disabled={q.isFetching}>
-            <RefreshCw className={`size-4 ${q.isFetching ? "animate-spin" : ""}`} /> Medir agora
-          </Button>
+          <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
+            ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
+          </span>
+          <SyncActionButton
+            data-cd-flow="instinto.StatusPanel.botao-01"
+            label="Medir agora"
+            onClick={() => void q.refetch()}
+            isFetching={q.isFetching}
+            autoSyncEnabled
+            lastSuccessAt={fresco ? medidoEm : null}
+            lastError={q.isError ? "falha de transporte no servidor" : null}
+          />
         </div>
       </header>
       <p className="font-mono text-[11px] text-muted-foreground" role="status" aria-live="polite">
@@ -437,7 +470,7 @@ export function StatusPanel() {
         <ul className="mt-2 space-y-2">
           {rotas.map((rota) => (
             <li key={rota.id} className="rounded border border-border/70 p-2">
-              <span className="font-mono">{rota.id}</span> · {fresco ? etiqueta(rota.estado) : "MEDIÇÃO EXPIRADA"}
+              <span className="font-mono">{rota.id}</span> · {fresco ? etiqueta(rota.estado, rota.owner) : "MEDIÇÃO EXPIRADA"}
               <p className="text-muted-foreground">{rota.fonte} · owner: {rota.owner}</p>
               <p className="text-muted-foreground">Última consulta: <DataHora iso={medidoEm} /></p>
             </li>
