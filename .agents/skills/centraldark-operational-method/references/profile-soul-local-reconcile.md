@@ -89,3 +89,15 @@ LOCAL_MUST_NOT_COPY:
 ```
 
 Se `origin/main` não puder ser atualizado, o último cache pode servir apenas como baseline de continuidade; não pode ser chamado de estado canônico atual. `CURRENT_CANONICAL_CLAIM=UNKNOWN` até nova medição.
+
+## 2026-10-26 ? Hermes local SOUL: limite sem truncamento (Casa)
+
+- Diagn?stico: aviso REAL Context file SOUL.md TRUNCATED: 76009 chars exceeds limit of 61440, do Hermes na Casa.
+- Identidade: Hermes ? executor; seu C:/Users/Administrador/AppData/Local/hermes/SOUL.md cont?m o papel SOL/JARVIS. N?O ? outra SOL nem novo agente.
+- Owner can?nico: K:/docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md, versionado em ServerVpss/CentralDark/main. O snapshot Hermes de 04/10/2026 n?o ? id?ntico ao can?nico da main; LOADED != CANONICAL_SYNC_PASS.
+- A??o de menor delta: somente context_file_max_chars: 86016 no C:/Users/Administrador/AppData/Local/hermes/config.yaml. Config permaneceu local e FORA do Git; nenhuma chave, token ou segredo exposto. SOUL local e SOUL can?nico n?o foram alterados.
+- Leitura antes/depois: SOUL local 76009 caracteres de texto, margem 10007. SHA256 do arquivo SOUL local: 2c031ce905f2ae12f49b0016ae69f8935ac8adebbd845f9491b057094b6e3bb3.
+- Prova execut?vel: Python do .venv original do Hermes importou agent.prompt_builder e agent.context_file_sources; cap(98304) = 86016, cap(None) = 86016, list_context_file_sources(cwd=K:/,context_length=98304,home_override=HOME_HERMES) reportou SOUL.md | 76009 | loaded; processo saiu com c?digo 0.
+- Limite honesto: READBACK=PASS em NOVO carregamento do builder; o terminal j? aberto pode manter prompt em cache at? a pr?xima constru??o de contexto. Isso n?o prova que a c?pia local de outubro est? semanticamente 100% alinhada com a SOUL vigente do GitHub.
+- Teste de regress?o m?nimo: repetir context_file_sources no mesmo Hermes home ap?s mudan?as, confirmar status=loaded, arquivo correto, capacidade e SHA. N?o resolver aviso elevando limite cegamente em modelo com janela pequena; priorizar a SOUL can?nica e o perfil/ponte pequena j? descrito nesta receita existente quando a leitura efetiva estiver validada.
+- Classifica??o: Grupo 02 Loop Mestre/execu??o; Grupo 03 Evid?ncia e contraprova; Grupo 04 Drift local/can?nico pendente. Testado em 2026-10-26T19:57:31-03:00.
