@@ -574,3 +574,21 @@ test("Sync Center usa provas SSH autenticadas no Supabase sem inventar sync ou d
   assert.match(proof, /Nao comprova sincronizacao nem deploy|Não prova sincronização nem deploy/);
   assert.doesNotMatch(proof, /service_role|SERVICE_ROLE|SUPABASE_SECRET_KEY/);
 });
+
+test("feed vivo de eventos e missoes reutiliza o SyncCenter, Supabase RLS e Realtime", () => {
+  const center = read("apps/instinto-superior/src/components/central/SyncCenter.tsx");
+  const feed = read("apps/instinto-superior/src/components/central/FeedVivoCentralDark.tsx");
+  const recipe = read("docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md");
+  assert.match(center, /<FeedVivoCentralDark \/>/);
+  assert.match(feed, /data-cd-flow="instinto.SyncCenter.feed-vivo"/);
+  assert.match(feed, /supabase\.auth\.getSession\(\)/);
+  assert.match(feed, /agent_events/);
+  assert.match(feed, /hub_mission_events/);
+  assert.match(feed, /postgres_changes/);
+  assert.match(feed, /event: "INSERT"/);
+  assert.match(feed, /invalidateQueries/);
+  assert.match(feed, /refetchInterval: 60_000/);
+  assert.match(feed, /status === "STREAM_ON"/);
+  assert.match(recipe, /IDENTIFICAR|Identificar/);
+  assert.doesNotMatch(feed, /SERVICE_ROLE|service_role/);
+});

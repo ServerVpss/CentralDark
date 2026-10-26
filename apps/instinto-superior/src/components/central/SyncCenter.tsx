@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { MinhaOficina } from "@/components/central/MinhaOficina";
 import { useSshBridgeProof } from "@/components/central/SshBridgeProof";
+import { FeedVivoCentralDark } from "@/components/central/FeedVivoCentralDark";
 import {
   Activity,
   GitCommit,
@@ -737,6 +738,7 @@ export function SyncCenter({ estado }: { estado?: EstadoCentralDark }) {
       </div>
       <MinhaOficina />
       <DominioDoLoop />
+      <FeedVivoCentralDark />
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <BlocoEstado
           titulo="Main oficial"

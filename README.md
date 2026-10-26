@@ -5,6 +5,22 @@ NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
 
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+
 # 🪬 CentralDark — Instinto Superior
 
 **Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, AionUi, Rakazo, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
