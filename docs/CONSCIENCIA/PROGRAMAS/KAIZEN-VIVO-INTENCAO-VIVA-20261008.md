@@ -1,3 +1,16 @@
+---
+data_criacao: UNKNOWN
+ultima_atualizacao: 2026-10-26T16:37:55-03:00
+ultima_modificacao: 2026-10-26T16:37:55-03:00
+ultima_verificacao: 2026-10-26T16:37:55-03:00
+fuso_horario: America/Sao_Paulo
+hash_conteudo: sha256:5a82c1d9c82bfede104f9dbe02be87fe71565e9562bf28e5db253c234b63b51c
+rastro: "Owner original Kaizen Vivo; origem: CHEFE; reconcilia??o pontual pelo fiscal de RASTRO, sem alterar conte?do hist?rico"
+grupo_notas: GRUPO_05
+relacionado_a: "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md; docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml; docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+estado_evidencia: UNKNOWN
+---
+
 # 👑🪬 INTENÇÃO VIVA — KAIZEN CONTÍNUO
 
 ### 🫀👀 O coração que aprende a cada batida — agora com os Seis Olhos

@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CircleAlert, KeyRound, Link2, RefreshCw, ShieldCheck, Users } from "lucide-react";
+import { CircleAlert, KeyRound, Link2, ShieldCheck, Users } from "lucide-react";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 
 import { Button } from "@/components/ui/button";
 import { lerConexoesCentralDark, lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
@@ -125,13 +126,14 @@ export function ConexoesCentralDark() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => {
-            void q.refetch();
-            void saude.refetch();
-          }} disabled={q.isFetching || saude.isFetching}>
-            <RefreshCw className={q.isFetching || saude.isFetching ? "animate-spin" : ""} />
-            Atualizar
-          </Button>
+          <SyncActionButton
+            label="Atualizar"
+            onClick={() => {
+              void q.refetch();
+              void saude.refetch();
+            }}
+            isFetching={q.isFetching || saude.isFetching}
+          />
           <Button onClick={() => void conectar("cloudflare")} disabled={!dados?.userId}>
             <Link2 />
             Conectar Cloudflare

@@ -1,0 +1,76 @@
+{
+  "name": "centraldark-auto-sync",
+  "displayName": "CentralDark Auto Sync",
+  "description": "Sincronização Bidirecional Automática: Casa ↔ Main ↔ VPS (Hermes Executor)",
+  "version": "1.0.0",
+  "publisher": "CentralDark",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Git"
+  ],
+  "keywords": [
+    "sync",
+    "git",
+    "hermes",
+    "centraldark",
+    "auto-sync",
+    "bidirecional"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:centraldark.autoSync.status",
+    "onCommand:centraldark.autoSync.run"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "centraldark.autoSync.status",
+        "title": "CentralDark: Auto Sync Status",
+        "category": "CentralDark"
+      },
+      {
+        "command": "centraldark.autoSync.run",
+        "title": "CentralDark: Run Auto Sync",
+        "category": "CentralDark"
+      },
+      {
+        "command": "centraldark.autoSync.runWindows",
+        "title": "CentralDark: Sync Windows → Main",
+        "category": "CentralDark"
+      },
+      {
+        "command": "centraldark.autoSync.runVps",
+        "title": "CentralDark: Sync Main → VPS",
+        "category": "CentralDark"
+      }
+    ],
+    "statusBar": [
+      {
+        "id": "centraldark.autoSync.statusBar",
+        "alignment": "left",
+        "priority": 100
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=node20",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.90.0",
+    "esbuild": "^0.21.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.0"
+  }
+}
