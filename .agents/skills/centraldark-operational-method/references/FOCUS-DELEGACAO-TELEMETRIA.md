@@ -118,3 +118,28 @@ A intenção escolhe missão e executor; esta receita padroniza a ENTREGA com pr
 - Vite Casa GET dos três módulos UI + server function: HTTP 200 JavaScript, import da Gaveta confirmado; TypeScript direcionado: 0 erros nos novos arquivos. TypeScript global: exit 2 e 74 diagnósticos em outros módulos preexistentes; NÃO declarar build completo verde.
 - Fonte de contabilidade MCP: tool MCP Remote Desktop Commander efetivamente usada. Ingestão remota no MCP CentralDark central, ranking global de skills, conexões de rede e cliques físicos: ainda NÃO PROVADOS. Leitor autorizado por role admin e Casa SEGREDO. Sem servidor Casa/role não há sinal.
 - DELTA: Skill Mãe atualizada; referência e script novos; componente de Gaveta + server function nova. Contraprova de deploy/visibilidade autenticada ainda pendente. NEXT_CURSOR: reconciliar worktree dirty e origem main antes de publicar; readback visual no Cockpit sob conta admin; homologar adapter de auditoria no MCP central com receipt de envio e leitura no destino.
+
+---
+
+## Mapa verbal das quatro janelas / monitores da Casa (2026-10-26)
+
+<!-- CENTRALDARK_JANELAS_1_A_4_UIA_20261026 -->
+
+Intencao do CHEFE: dizer apenas "janela 1", "janela 2", "janela 3" ou "janela 4" para resolver a regiao de trabalho. Owner unico: esta referencia do protocolo Focus/UIAutomation ja vinculado a Skill Mae. Nao criar segundo motor, browser, HUD ou agente.
+
+| Alias | Posicao | Monitor medido | Bounds (X,Y,W,H) |
+|---|---|---|---|
+| janela 1 | esquerda vertical | DISPLAY3 | (-3000,127,1080,1920) |
+| janela 2 | centro superior | DISPLAY1 | (-1927,-863,1760,990) |
+| janela 3 | centro inferior | DISPLAY4 | (-1920,138,1920,1080) |
+| janela 4 | direita vertical | DISPLAY2 | (0,0,1080,1920) |
+
+Snapshot real da Casa SEGREDO em 2026-10-26: Chrome foi observado no monitor central inferior com uma aba "Cockpit CentralDark - Sala de Controle"; Edge foi observado na esquerda vertical com outra aba "Cockpit CentralDark - Sala de Controle". Displays podem ser renumerados pelo Windows: o apelido permanece ligado a POSICAO relativa, e nao cegamente ao numero DISPLAY.
+
+Receita antes da proxima acao: enumerar Screen.AllScreens; resolver o alias por coordenadas relativas; enumerar janelas MainWindowHandle e UIAutomation.AutomationElement.FromHandle; cruzar a intersecao de retangulos; obter titulo, abas TabItem e URL; confirmar URL e sessao autenticada por readback antes de navegar. Se monitor, aba ou URL nao forem resolvidos, retornar UNKNOWN em vez de adivinhar.
+
+A chamada "janela 3" identifica o centro inferior. "Olhe a janela 3" solicita leitura/observacao, nunca envio de mensagem. "Navegue na janela 3" autoriza apenas a navegacao solicitada, sem mutacao de backend. Se Browser API estiver sem contexto de extensao, o fallback UIAutomation lista janelas/abas, mas nao prova conteudo autenticado.
+
+Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E API -> READBACK COCKPIT; estado/owner/prova separados, sem inventar E2E. Classificacao BOUNDED, Concentração + Som. Prova local: enumeracao real de quatro monitores e duas janelas de browser. Este contrato documenta o alias; nao e uma automacao de navegacao ja testada.
+
+<!-- /CENTRALDARK_JANELAS_1_A_4_UIA_20261026 -->
