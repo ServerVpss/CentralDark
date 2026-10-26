@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { z } from "zod";
 import { CLOUDFLARE_OPENAPI_META, CLOUDFLARE_OPENAPI_OPERATIONS } from "./cloudflare-openapi-catalog.js";
 
+import { CREDENTIAL_ENV_MAP, allCredentialMetadata, resolveCredential } from "../../../lib/credential-metadata.js";
 const READ = {
   readOnlyHint: true,
   destructiveHint: false,
@@ -354,23 +355,14 @@ function credentialStatus(value) {
 }
 
 export function providerCredentialStatus(env = process.env) {
-  return {
-    cloudflare: {
-      "CLOUDFLARE_API_TOKEN": credentialStatus(env.CLOUDFLARE_API_TOKEN || env.CF_API_TOKEN),
-    },
-    contabo: {
-      "CONTABO_CLIENT_ID": credentialStatus(env.CONTABO_CLIENT_ID),
-      "CONTABO_CLIENT_SECRET": credentialStatus(env.CONTABO_CLIENT_SECRET),
-      "CONTABO_API_USER": credentialStatus(env.CONTABO_API_USER),
-      "CONTABO_API_PASSWORD": credentialStatus(env.CONTABO_API_PASSWORD),
-    },
-    tailscale: {
-      "TAILSCALE_API_KEY": credentialStatus(env.TAILSCALE_API_KEY || env.TS_API_KEY),
-    },
-    buildkite: {
-      "BUILDKITE_API_TOKEN": credentialStatus(env.BUILDKITE_API_TOKEN || env.BUILDKITE_TOKEN),
-    },
-  };
+  const out = {};
+  for (const [provider, names] of Object.entries(CREDENTIAL_ENV_MAP)) {
+    out[provider] = {};
+    for (const [name, aliases] of Object.entries(names)) {
+      out[provider][name] = credentialStatus(resolveCredential(env, aliases)?.raw);
+    }
+  }
+  return out;
 }
 
 export function deepRedact(value, depth = 0) {
@@ -1078,10 +1070,16 @@ export const adminProviderControlTools = [
   },
   {
     name: "provider_credentials_status",
-    description: "Mostra somente CONFIGURED/MISSING das credenciais dos providers. Nunca devolve valores.",
+    description: "Mostra CONFIGURED/MISSING e metadados nao sensiveis (origem, tamanho, idade, fingerprint parcial) das credenciais dos providers. Nunca devolve valores.",
     annotations: { ...READ, title: "Providers — status de credenciais" },
     inputSchema: z.object({}),
-    handler: async () => jsonBlock({ ok: true, status: "PASS", credentials: providerCredentialStatus() }),
+    handler: async () => jsonBlock({
+      ok: true,
+      status: "PASS",
+      credentials: providerCredentialStatus(),
+      metadata: allCredentialMetadata(),
+      valuePolicy: "VALOR_REAL_NUNCA_VIA_MCP; inspecao humana somente por scripts/inspect-credential-local.mjs em terminal local",
+    }),
   },
   {
     name: "provider_read",

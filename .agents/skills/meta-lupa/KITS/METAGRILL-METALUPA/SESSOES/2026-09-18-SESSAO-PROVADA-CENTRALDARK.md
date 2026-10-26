@@ -107,7 +107,7 @@ Conclusão limitada ao escopo: `PDF_GATE_CURRENT=PASS`. Isso não empresta verde
 ### 3. Casa — checkout atual medido
 
 ```text
-PATH=E:\CentralDark\CentralDark
+PATH=K:\
 HEAD=7bdfd52ad2d8be2dabe957fbd3b51ada7c261d97
 origin/main=65ff45dbab3c1b24b01b08cb56b5e96f4698616a
 HEAD...origin/main=0/60

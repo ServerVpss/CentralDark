@@ -1,6 +1,6 @@
 # AUREOLA Round 1 Receipt - Garimpo Plan Absorption
 Date: 2026-09-03
-Source: E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE\ (deep-research-report (3).md + AIOS watch.html + plan docx)
+Source: K:\_MAPA_CASA\GARIMPO-CHEFE\ (deep-research-report (3).md + AIOS watch.html + plan docx)
 Objective: PEGATUDO garimpo "plano de cristalização do sistema único" into canonical owners
 Delta: 
 - Created docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml (direct from plan: VERDE, UI contract, one brain N hands, fixed point gates)
