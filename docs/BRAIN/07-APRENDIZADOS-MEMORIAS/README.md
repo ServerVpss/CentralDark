@@ -89,3 +89,23 @@ A CentralDark deve ser **um produto com core compartilhado** e edições Desktop
 **Não criar gate paralelo.** Auditar commits específicos após #1836, classificar artefatos de origem versus arquivos gerados/arquivo morto, ampliar o escopo do fiscal existente às linguagens relevantes (PowerShell/Windows/React), com testes negativos por linguagem, e provar a obrigatoriedade efetiva do workflow antes de declarar conformidade.
 
 **Biblioteca Obsidian/BRAIN = referência canônica do acervo documental; Git/GitHub = versionamento, preservação e fonte canônica do código executável.** O PDF de referência sobre organização foi preservado no [owner existente da Biblioteca](../03-DOCUMENTACAO/02-BIBLIOTECA/README.md), com bytes originais e SHA-256, sem criar outro vault.
+
+### 🪬 Continuidade CentralDark-OS local-first — aprendizado ligado ao owner (2026-10-27)
+
+<!-- #OBSERVACOES#
+@owner: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md
+@doc_ref: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md; docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md
+@last_updated: 2026-10-27T12:16:16.618Z
+@estado: CONTRATO_DOCUMENTADO; FAILOVER_E2E_DESCONHECIDO; REPLAY_VPS_PENDENTE
+@next_cursor: testar VPS off / Casa online, reconectar e comparar SHA + receipt sem repetir trabalho verde
+-->
+
+**Intenção:** parar de apresentar VPS como condição de funcionamento da CentralDark. O produto é **CentralDark-OS**, cujo core pode rodar na **Casa/Forja local** e em cápsulas remotas como a VPS quando existirem. Desligamento da VPS não cancela a missão local, não apaga memória, não autoriza novo cérebro nem exige rede para registrar novos deltas locais. Ao retornar a conectividade, reconciliar estados/SHAs/owners, aplicar somente alterações aprovadas e fazer contraprova no destino.
+
+**Loop original e janela móvel:** CHEFE_INTENT → CONTEXT → META-GRILL → CURRENT/GREEN_STATE → GOAL → OWNER → MENOR_DELTA → HERMES/EXECUTE → OBSERVE → TEST → COUNTERPROOF → REALITY_JUDGE → RECEIPT → FIXED_POINT/NEXT_CURSOR → KAIZEN → CONTINUAR. BACKCHECK: editar → avançar → voltar algumas casas → conferir → corrigir menor causa → retestar cone afetado → continuar no mesmo trilho.
+
+**Nomes:** interfaces/prompts de identidade devem dizer `CentralDark-OS`; referências técnicas reais de `VPS` (SSH, PID, host, `scripts/vps/`, deploy) permanecem `VPS`. `VPS_OFFLINE != CENTRALDARK_OS_OFFLINE`; porém `OFFLINE_LOCAL_CONTINUITY`, `QUEUE_AND_REPLAY` e `24_7_UPTIME` exigem prova de serviço, persistência, fila e sincronização. Local-first é contrato novo, não prova de automação já concluída.
+
+**Links bidirecionais:** [JARVIS §6.0.A](../../ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md) · [CentralDark-OS e kernel](../../ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) · [Biblioteca de PDFs](../03-DOCUMENTACAO/02-BIBLIOTECA/README.md).
+
+**Nenhum novo vault, kernel, serviço, executor ou sincronizador foi criado por este aprendizado.**

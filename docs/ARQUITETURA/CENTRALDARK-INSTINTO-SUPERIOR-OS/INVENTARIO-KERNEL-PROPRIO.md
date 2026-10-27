@@ -24,7 +24,8 @@ A missão é desenvolver inteligência persistente com método, memória, owners
 - AionUi: candidato reutilizável a cockpit; AionCore: candidato a backend/agent bus. TARGET/DONOR até binding e contraprova; não são integração já entregue.
 - WebUI primeiro; Electron compartilha o renderer, os contratos e os dados. Reutilizar o pipeline upstream após medir compatibilidade; binário instalado é donor/contraprova, não fonte de implementação.
 - `apps/modulos/WebUI`: donor legado. Extrair capacidade única; aposentar somente após ZERO_UNIQUE_CONSUMERS comprovado.
-- VPS: forja contínua; Casa: laboratório humano/GPU e destino de materialização. CRYSTALLIZE_WINNER_NOT_CLONE_DIRT; PULL_PROVEN_GOLD_NOT_HISTORICAL_TRASH.
+- **CentralDark-OS: produto único, local-first.** Casa/Forja é base operacional quando saudável; **VPS é cápsula/target remoto opcional**, para réplica/headless/continuidade conforme capacidades efetivamente instaladas. `VPS_OFFLINE != CENTRALDARK_OS_OFFLINE`; não depender da VPS para executar o que a Casa já consegue. `CRYSTALLIZE_WINNER_NOT_CLONE_DIRT`; `PULL_PROVEN_GOLD_NOT_HISTORICAL_TRASH`. Regra vigente em [JARVIS §6.0.A](../JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md); os planos VPS dos capítulos históricos continuam identificando infraestrutura física.
+- **#OBSERVACOES#** `@owner=docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md` `@doc_ref=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` `@last_updated=2026-10-27T12:16:16.618Z` `@implementado=ajuste_de_contrato_documental` `@pendente=prova_runtime_da_capsula_offline_catchup`.
 - Tailscale: espinha privada existente. AnyDesk, SSH e VNC: capacidades independentes do acesso híbrido; falha de uma rota não demonstra queda da máquina.
 
 ### Sequência e cursor
@@ -224,7 +225,7 @@ Não criar V2/V3/V4. A versão OS deve reaproveitar o mesmo core, mesmos contrat
 | Setor | Estado |
 |---|---|
 | GitHub como fonte/proveniência | CANÔNICO |
-| Obsidian/Drive como espelho/memória | EXISTE / REQUER HASH |
+| Obsidian/BRAIN como biblioteca documental canônica versionada em Git; Drive como fonte/espelho externo classificado | ARQUIVOS + ÍNDICE EXISTEM / SINCRONIZAÇÃO AUTOMÁTICA REQUER PROVA |
 | Sincronização bidirecional perfeita | NÃO PROVADA |
 | `.codex`, `.claude`, `.hermes`, caches locais | NÃO COPIAR BRUTO COMO OS |
 | Estado portátil sanitizado | A DEFINIR |
