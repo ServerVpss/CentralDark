@@ -2,6 +2,29 @@
 
 **Intenção do CHEFE (15/10/2026):** o `docs/HUD/HUD.html` é a **fonte de capacidades legado**. Todas as capacidades devem convergir para o **zone de navegação existente** no Instinto Superior. `docs/HUD` fica como referência, ensinamento, template e prova de paridade até que as funções sejam comprovadamente migradas. Nenhuma exclusão antes do inventário e do teste de paridade.
 
+## 🪬 Ponte Radeon RX 580 → Cockpit vivo (27/10/2026)
+
+<!-- #OBSERVACOES#
+@owner: docs/HUD/README.md
+@code_ref: scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat; apps/instinto-superior/src/lib/maquina.functions.ts; apps/instinto-superior/src/components/central/RuntimeSistema.tsx
+@last_updated: 2026-10-27T15:25:32.000Z
+@escopo: telemetria local somente leitura reutilizando fonte Afterburner MAHMSharedMemory e RuntimeSistema autenticado
+@implementado: coletor sensor-only, feed LOCALAPPDATA, leitura SSR Casa, UI em código com FPS/GPU/CPU/VRAM/histórico/CSV
+@pendente: validar visual após reload no cockpit autenticado, CI do mesmo HEAD, testes negativos de frescor e autenticação; persistência do coletor após reboot ainda não garantida
+@next_cursor: validar no runtime real com login, corrigir só falhas do owner, selar delta Git após gates; VPS/host externo permanece UNKNOWN
+@prova_visual: 27/10/2026 12:25:32 - painel Radeon RX 580 LIVE 58/60 sensores, FPS 71.8, GPU 79%, Temp 45C, CPU 100%, VRAM 2263.1MB, 25 amostras no historico, idade 4s, CONVERGENCIA SENSOR FRESCO E AUTENTICADO. Root cause do UNKNOWN anterior: estado de bootstrap (historico aguardando duas leituras consecutivas); nao e falha intermitente.
+-->
+
+**Intenção atual:** o mesmo painel Radeon RX 580 mostrado pelo Adrenalin deve aparecer **vivo** dentro do cockpit existente, com tema escuro/vermelho, métricas selecionáveis e rastreamento. Não embutir processo/janela proprietária nem simular números. Uso estritamente **somente leitura**, sem alterar driver, clocks, tensão, potência ou ventilação.
+
+**Owners reaproveitados:** coleta `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; frontend existente `RuntimeSistema.tsx`; server function autenticada `maquina.functions.ts`; referência legado `docs/HUD/HUD.html`. O caminho `K:\HUD.html` era legado/inexistente na Casa: o HTML canônico é `K:\docs\HUD\HUD.html`. O feed efêmero **não deve ser gravado no repositório**: utiliza `%LOCALAPPDATA%\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js`; seus bytes não são prova de commit nem dado para Git.
+
+**Provas locais observadas em 27/10/2026:** GPU RX 580 e Intel i5-10400F; MSI Afterburner em execução; memória `MAHMSharedMemory` abriu em modo read-only, assinatura `MHAM`, versão 131072, **60 sensores anunciados**. O modo do coletor existente `CENTRALDARK_SENSOR_ONLY=1` iniciou o mesmo loop de **10 s**, sem exibir segundo HUD nem executar a sondagem remota. Leitura do feed: `centraldark.afterburner.v1`, `52/60` sensores válidos, `SOURCE_FRESH`. A contraprova temporal viu arquivo atualizar entre `14:58:13Z` e `14:58:33Z`, com idade da última amostra **2,4 s**. O número antigo de 51 sensores é histórico, não contagem atual.
+
+**Consumo do cockpit:** `lerMaquinaViva` já exige sessão Supabase e role `admin`; a leitura GPU somente tenta acessar o arquivo quando o próprio servidor roda na Casa Windows identificada como `SEGREDO`. Em outro host (inclusive VPS) retorna `UNKNOWN`; arquivo ausente/fora do esquema, intervalo maior que 30 s ou timestamp do futuro também retornam `UNKNOWN/STALE` sem reutilizar números vencidos. O frontend agrupa os sensores disponíveis e gráficos das leituras da sessão; registro/exportação CSV desse painel são ações explícitas locais do navegador. **Não substituem logs persistentes do AMD Adrenalin** para forense de reinicializações.
+
+**Estado dos gates desta rodada:** PowerShell payload parser `0` erros e `git diff --check` `PASS`; arquivos TS tocados com `0` diagnósticos próprios no typecheck. Entretanto a checagem geral exibe **138 erros em outros módulos** e `verify-hud-zone.mjs` reprova uma regra de layout legada no `CockpitShell`; não foi demonstrado build verde, publicação Git, visual autenticado nem runtime remoto. `LOCAL_SENSOR_PIPELINE=PASS`; `COCKPIT_VISUAL_E2E=UNKNOWN`; `GITHUB_RELEASE=NOT_DONE`. Nenhuma inferência de 24/7 após reinício.
+
 ## Fonte e owners
 
 - Fonte legada: `docs/HUD/HUD.html`; preservar selos, nomes, CSS/temas, JS, contratos de DOM, ações e histórico. **NÃO APAGAR** por haver novo botão.
