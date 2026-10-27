@@ -72,7 +72,7 @@ A skill Michelin abaixo é **nova operacionalização de uma Lembrança históri
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-26 18:18:17 -03:00. **Arquivos:** 77. **Skills:** 12.
+**Última sincronização (Casa):** 2026-10-27 00:06:46 -03:00. **Arquivos:** 77. **Skills:** 12.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 

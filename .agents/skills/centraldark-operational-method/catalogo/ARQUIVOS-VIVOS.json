@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-26T18:18:17-03:00",
+    "gerado_em":  "2026-10-27T00:06:46-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-26T18:15:17-03:00",
-                         "modificado_em":  "2026-10-26T18:15:17-03:00",
+                         "criado_em":  "2026-10-26T20:36:17-03:00",
+                         "modificado_em":  "2026-10-26T20:36:17-03:00",
                          "bytes":  10281,
                          "sha256":  "5b40a7fb5fd1c26b6b599a683487635a313efdb1cf9562814ac9e2bbac7e3c5a",
                          "descricao":  "",
@@ -141,8 +141,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-26T18:15:17-03:00",
-                         "modificado_em":  "2026-10-26T18:15:17-03:00",
+                         "criado_em":  "2026-10-26T20:36:17-03:00",
+                         "modificado_em":  "2026-10-26T20:36:17-03:00",
                          "bytes":  4890,
                          "sha256":  "439460f9a2b2cc9bb051d5b7fb23db076fd3565bc76f84bdff394108ddd6a23d",
                          "descricao":  "",
@@ -917,9 +917,9 @@
                          "caminho":  "references/profile-soul-local-reconcile.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  3572,
-                         "sha256":  "73919bb891b6cb392ff5aa674b2aba390253a9b2d98716b4d42958c7e7da922e",
+                         "modificado_em":  "2026-10-26T20:35:39-03:00",
+                         "bytes":  6746,
+                         "sha256":  "5d0fea22b46ae3781e896b580ac3b2a4ca4332bd521c505811a3fd1bd844c87a",
                          "descricao":  "",
                          "referencias":  [
 
@@ -989,9 +989,9 @@
                          "caminho":  "scripts/casa_boot.py",
                          "tipo":  "script",
                          "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  7022,
-                         "sha256":  "b5b807ed0fcb08d929ce8bd131bcdda526826b7eb3b0a912b39a54aaecc4733e",
+                         "modificado_em":  "2026-10-27T00:05:19-03:00",
+                         "bytes":  7051,
+                         "sha256":  "0724ea990d00460d67e8a18dfc0ca65197d7ee7007c3aa19a71660a8c01bb49d",
                          "descricao":  "",
                          "referencias":  [
 

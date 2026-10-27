@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-26 18:18:17 -03:00
+**Atualizado (Casa/Bahia):** 2026-10-27 00:06:46 -03:00
 **Total:** 77 arquivos. **Skills:** 12. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-26T18:15:17-03:00 | 2026-10-26T18:15:17-03:00 | 5b40a7fb5fd1 |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-26T20:36:17-03:00 | 2026-10-26T20:36:17-03:00 | 5b40a7fb5fd1 |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-26T18:15:17-03:00 | 2026-10-26T18:15:17-03:00 | 439460f9a2b2 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-26T20:36:17-03:00 | 2026-10-26T20:36:17-03:00 | 439460f9a2b2 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -66,13 +66,13 @@
 | `references/PACKAGE-INGEST-LEDGER.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | d748f1bb610f |
 | `references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md` | referencia | 2026-10-25T12:49:59-03:00 | 2026-10-25T12:56:27-03:00 | f1ab46e12c76 |
 | `references/PR-HOUSE-TEMPORAL-RECONCILIATION.md` | referencia | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | a9bb55fd0a2e |
-| `references/profile-soul-local-reconcile.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 73919bb891b6 |
+| `references/profile-soul-local-reconcile.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-26T20:35:39-03:00 | 5d0fea22b46a |
 | `references/regenerative-self-refinement-engine.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a07898852876 |
 | `references/remote-desktop-commander-vscode-casa.md` | referencia | 2026-10-18T17:20:31-03:00 | 2026-10-18T17:20:31-03:00 | 03b9c509edc7 |
 | `references/YOUTUBE-DEBUG-PAGE-STATE.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 3dee62d482ed |
 | `scripts/absorver_pasta_trancada.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | 0e91b93aa4ec |
 | `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ad7a295f81ad |
-| `scripts/casa_boot.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | b5b807ed0fcb |
+| `scripts/casa_boot.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-27T00:05:19-03:00 | 0724ea990d00 |
 | `scripts/Consultar-PowerShellDocs.ps1` | script | 2026-10-25T12:51:09-03:00 | 2026-10-25T12:56:27-03:00 | a573e07e4297 |
 | `scripts/Identify-CentralDarkMonitors.ps1` | script | 2026-10-26T12:47:12-03:00 | 2026-10-26T12:47:12-03:00 | 7e7eb54a50f6 |
 | `scripts/integrar-skills-centraldark-20261024.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 79ea87cada3f |
@@ -85,4 +85,4 @@
 | `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-26T18:15:25-03:00 | 6504ec5f0ba2 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-26T18:18:17-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-27T00:06:46-03:00 | MODIFICADO | `scripts/casa_boot.py` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

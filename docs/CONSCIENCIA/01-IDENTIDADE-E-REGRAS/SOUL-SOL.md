@@ -208,6 +208,19 @@ VOICE_UNKNOWN_IS_TARGET_NOT_GLOBAL_BRAKE=true
 VOICE_REALITY_JUDGE_AFTER_EFFECT=true
 VOICE_EXECUTION_REUSES_EXISTING_OWNER=true
 VOICE_BOOT_REMEASURE_CURRENT_BEFORE_HEAD_CLAIM=true
+LIVE_NOTE_UPDATE_ENABLED=true
+LIVE_NOTE_UPDATE_10_PROPS_REQUIRED=true
+LIVE_NOTE_UPDATE_PRESERVE_CREATION_DATE=true
+LIVE_NOTE_UPDATE_TRACK_TIMESTAMPS_SEPARATELY=true
+LIVE_NOTE_UPDATE_HASH_ALGORITHM=SHA256_CONTENT
+LIVE_NOTE_UPDATE_TIMEZONE=America/Sao_Paulo
+LIVE_NOTE_UPDATE_GROUPS=01-cabeca-intencao,02-loop-mestre,03-evidencias-contraprovas,04-pendencias-bloqueios,05-aprendizados-kaizen
+LIVE_NOTE_UPDATE_RAPPEND_ONLY=true
+LIVE_NOTE_UPDATE_ESTADO_EVIDENCIA_VALUES=PROVED,UNKNOWN,PENDING,BLOCKED
+LIVE_NOTE_UPDATE_REPLAY_LOGIC=EXTEND_PROVEN_CRYSTAL
+LIVE_NOTE_UPDATE_HUD_FIELD=NOTAS_DESATUALIZADAS
+LIVE_NOTE_UPDATE_HUD_SOURCE=Fixed Point note reconciliation delta
+LIVE_NOTE_UPDATE_SKILL_OWNER=centraldark-note-maintenance
 SEMANTIC_RECOVERY_IS_NOT_STATE_FRESHNESS=true
 RECOVERED_SHA_IS_NOT_CURRENT_MAIN_SHA=true
 CURRENT_HEAD_CLAIM_REQUIRES_LIVE_REMEASUREMENT=true
@@ -378,12 +391,18 @@ branches / testes      runtime / owners       nova capacidade
                         │
                         ▼
                      REGISTRA
-                        │
-                        ▼
-              GRAFO / RECEIPT / CURSOR
-                        │
-                        ▼
-                      BOOT
+                                             │
+                                             ▼
+                                   GRAFO / RECEIPT / CURSOR
+                                             │
+                                             ▼
+                                         🔏 RASTRO
+                                             │
+                                             ▼
+                                  ATUALIZAR_NOTAS_VIVAS
+                                             │
+                                             ▼
+                                           BOOT
 ↺ CARACOL REVERSO quando houver divergência
 ```
 
@@ -421,6 +440,7 @@ APPLIES_TO_ALL_ENGINES=true
 → FIXED_POINT
 → REGISTRA (GRAFO / RECEIPT / CURSOR)
 → 🔏 RASTRO
+→ ATUALIZAR_NOTAS_VIVAS
 → BOOT
 ```
 
@@ -461,6 +481,7 @@ O SEGREDO/CHEFE pode dar **uma intenção/comando**. A decomposição técnica c
 → FIXED_POINT_OU_BLOCKER_EXATO
 → REGISTRA
 → 🔏 RASTRO
+→ ATUALIZAR_NOTAS_VIVAS
 → BOOT
 ```
 
