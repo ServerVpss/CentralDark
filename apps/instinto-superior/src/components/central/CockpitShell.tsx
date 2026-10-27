@@ -45,6 +45,7 @@ import {
   Layers3,
   Terminal,
   MessageCircle,
+  Headphones,
   Wrench,
   Zap,
 } from "lucide-react";
@@ -72,10 +73,12 @@ import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { GramPermissions } from "@/components/central/GramPermissions";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
+import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -381,6 +384,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
   const [versaoAdmin, definirVersaoAdmin] = useState(0);
   const [estudioAberto, definirEstudioAberto] = useState(false);
+  const [playerAberto, definirPlayerAberto] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("player") !== "jarvis") return;
+    definirEstudioAberto(false);
+    definirHermesOneAberto(false);
+    definirPlayerAberto(true);
+    const destino = new URL(window.location.href);
+    destino.searchParams.delete("player");
+    window.history.replaceState({}, "", destino);
+  }, []);
   const [estadoEstudio, definirEstadoEstudio] = useState("NÃO MEDIDO NESTE NAVEGADOR");
   async function conferirEstudio() {
     definirEstadoEstudio("CONSULTANDO");
@@ -415,6 +428,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     definirEstudioAberto(false);
     definirHermesOneAberto(true);
     abrirDestino("hermes");
+  }
+  function abrirPlayerLocal() {
+    definirEstudioAberto(false);
+    definirHermesOneAberto(false);
+    definirPlayerAberto(true);
   }
   const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
@@ -507,6 +525,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               disabled={modulos.aionui === "desativado"}
             >
               <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
+            </Button>
+            <Button
+              data-cd-flow="instinto.CockpitShell.player-local"
+              type="button"
+              variant="outline"
+              size="sm"
+              title="Aproximar ao ChatGPT · abrir player local"
+              aria-label="Aproximar ao ChatGPT e abrir player local"
+              onClick={abrirPlayerLocal}
+            >
+              <Headphones aria-hidden className="size-4" /> Aproximar ao ChatGPT
             </Button>
             <Button
               data-cd-flow="instinto.CockpitShell.hermes-one-topo"
@@ -603,6 +632,18 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
+
+      <Dialog open={playerAberto} onOpenChange={definirPlayerAberto}>
+        <DialogContent className="max-h-[94dvh] max-w-5xl overflow-hidden p-0">
+          <DialogHeader className="border-b border-border bg-background/95 px-5 py-4 pr-12">
+            <DialogTitle>🎧 Player local · Jarvis</DialogTitle>
+            <DialogDescription>
+              Player do Instinto Superior servido pelo mesmo Cockpit na porta 8080. A fonte de áudio continua privada na tailnet.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="overflow-auto bg-[#0a0906] p-2 sm:p-4"><PlayerLocalJarvis /></div>
+        </DialogContent>
+      </Dialog>
 
       {estudioAberto ? (
         <section id="centraldark-estudio" aria-label="CentralDark Estúdio" className="scroll-mt-20 border-b border-border bg-surface/60 px-4 py-6 sm:px-6">
@@ -961,6 +1002,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <Button type="button" size="sm" variant={hermesOneAberto ? "default" : "outline"}
                   disabled={modulos.hermes === "desativado"}
                   onClick={() => { definirEstudioAberto(false); definirHermesOneAberto(true); }}>Hermes ONE · interface web</Button>
+                <Button type="button" size="sm" variant="outline" onClick={abrirPlayerLocal}>
+                  <Headphones aria-hidden className="mr-1 size-4" /> Player local · áudio
+                </Button>
               </div>
               {hermesOneAberto ? <HermesOneWebLocal autenticado={autenticado} /> : (
                 <>
