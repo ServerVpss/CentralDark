@@ -229,6 +229,24 @@ Caddy `handle_path /contas*` strips `/contas` before uvicorn. Therefore:
 
 Hermes preview `file:///ai-review.html` ERR_FILE_NOT_FOUND is a local preview miss, not VPS health. Do not treat the preview pane as the public route. Open the **public** admin URL in `desktop_preview` when CHEFE needs to see the live page.
 
+## Casa Commander — engine lazy-init e npx cache (CentralDark Casa)
+
+O Casa Commander (`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs`) roda em `127.0.0.1:9101` e spawna `@wonderwhy-er/desktop-commander@0.2.48` via `npx -y` como child MCP stdio. A flag `ready` só vira `true` após o handshake `initialize` do MCP.
+
+- HTTP 200 em `/health` **não** implica `engine_connected=true`. Sempre ler o campo `engine_connected` do payload. `RUNTIME_RUNNING != AUTHORIZATION_PROVEN`.
+- O engine é **lazy**: só spawna quando um `/tool` call chega. Health check sozinho nunca dispara a inicialização.
+- Para provar conexão: fazer um `/tool` call (ex: `list_directory`) com token válido e depois re-ler `/health` → `engine_connected=true`.
+- **npx cache corruption**: se o cache `_npx/<hash>/` estiver incompleto (package.json ausente), o child sai com code 1 → `MCP_UPSTREAM_EXIT` → `engine_connected=false`. Fix: `rm -rf npm-cache/_npx` + re-download via `npx -y`. Não é falha do script nem do serviço.
+- Token DPAPI: `$LOCALAPPDATA\CentralDark\Casa-Commander\casa-bridge-token.dpapi` (64 chars). Ler via PowerShell SecureString.
+- Porta 8099 **não existe** no Casa. O `DEFAULT_HEALTH_URL` do probe (`engine_gap_probe.py`) aponta para 8099 — desatualizado; usar `http://127.0.0.1:9101/health` ou env var `CENTRALDARK_ROUTER_HEALTH_URL`.
+- Erros comuns: `MCP_UPSTREAM_EXIT:1` (cache corrompido), `MCP_UPSTREAM_TIMEOUT:initialize` (npx lento, aguardar), `EADDRINUSE` (processo anterior não morto).
+
+```text
+HEALTH_200 != ENGINE_CONNECTED
+LAZY_INIT_REQUIRES_TOOL_CALL=true
+NPM_CACHE_CORRUPTION != SCRIPT_BUG
+```
+
 ## Autonomia — `action_required` is not a finished job
 
 `workflow_run` completed never fires if no job started. `status=completed` + `conclusion=action_required` + `jobs=[]` is the GitHub first-time/fork approval gate ("Approve workflows to run"), not a runner, queue, or Hermes-down failure.
