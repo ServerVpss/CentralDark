@@ -5,6 +5,45 @@ NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
 
+
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+## 🔧 Política de entrega atual (CHEFE)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Neste escopo, a CentralDark usa commit e push diretamente na main,
+com testes locais pertinentes, readback SHA e receipt; sem aguardar CI
+ou squash de PR. SSH direto na VPS quando estiver online; VPS indisponível
+não bloqueia edição/versionamento na main. Os gates de PR/squash de
+documentos legados são condicionais à trilha de PR — não ao fast path.
+Owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+seção current_delivery_policy.
+
+
+
 <!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
 ## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
 

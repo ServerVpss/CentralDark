@@ -116,7 +116,17 @@ GRUPO_04=PENDENCIAS_E_BLOQUEIOS  # itens desconhecidos, causas de bloqueio, resp
 GRUPO_05=APRENDIZADOS_E_KAIZEN  # mudanças comprovadas, melhorias reutilizáveis, aprendizado incorporado
 ```
 
-Owner continua este arquivo. Fiscal (`scripts/trigger-fabric/rastro_fiscal.py`) ainda não lê estes campos — consumo real pelo fiscal é delta pendente, não implementado nesta passada.
+**Owner continua este arquivo.** O fiscal existente `scripts/trigger-fabric/rastro_fiscal.py` agora valida o bloco YAML de uma nota `.md` tocada pela missão em modo **somente leitura**:
+
+```bash
+python scripts/trigger-fabric/rastro_fiscal.py --note-file "CAMINHO/DA/NOTA.md" --pretty
+```
+
+Confere presença dos dez campos, datas com fuso explícito, grupo 01–05, estado da evidência e SHA-256. Para evitar hash autorreferente, `hash_conteudo` recebe `sha256:<64 hex>` do UTF-8 salvo **com apenas o valor desse próprio campo vazio**. A gravação real da nota e o momento da conferência continuam separados. O verificador não altera arquivo, datas nem rastro.
+
+`PASS` valida **formato e conteúdo contra o hash**, não comprova sozinho a origem histórica das datas ou autenticidade do rastro. Criação sem prova deve ser `UNKNOWN` e produz estado `UNKNOWN`. Campo ausente/hash divergente produz `FAIL`. Para nota legada encontrada na missão, registrar pendência e reconciliar no owner autorizado; **não fazer reescrita da biblioteca inteira** por rotina.
+
+**Contraprova executada:** `python -B scripts/trigger-fabric/test_rastro_fiscal.py` → **19 testes OK** em 26/10/2026. Testes cobrem metadados válidos, hash divergente, campo ausente e criação desconhecida, além dos testes antigos do fiscal. Esse resultado prova o verificador local, **não** o uso em todos os agentes ou um FIXED_POINT global.
 
 
 ### Ledgers legados #1562/#1757 — lookup de provenance
@@ -134,3 +144,140 @@ LEGACY_LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
 Se uma prova histórica fornecer link/ID de comentário, o fiscal pode consultá-lo diretamente como provenance.
 Receipts CURRENT citam caminho exato no repositório e o fechamento exige HUD CURRENT readback.
 Comentários de #1562/#1757 não são superfície operacional nem store primário.
+
+### 2026-10-26 ? Invent?rio de salvamento seguro Casa K: / F: / Git
+
+- Confer?ncia: 2026-10-26T18:11:58-03:00 (fuso local expl?cito do host).
+- Main inicial: c06e6ad729ac4f4cadd9a0dac52241e3d7f4c873.
+- Miss?o: salvar arquivos version?veis e proteger dados de execu??o.
+- Altera??es rastreadas K: (21 caminhos):
+  - .agents/skills/centraldark-operational-method/SKILL.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/ARQUIVOS-VIVOS.json [M]
+  - .agents/skills/centraldark-operational-method/catalogo/CATALOGO.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/ESTADO-AUTOCURA.json [M]
+  - .agents/skills/centraldark-operational-method/catalogo/HISTORICO-MUDANCAS.jsonl [M]
+  - .agents/skills/centraldark-operational-method/catalogo/INDICE-PESQUISA.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/INDICE-VIVO.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/VALIDACAO-AUTOMATICA.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/skills-integradas/michelin-3-estrelas/SKILL.md [M]
+  - .agents/skills/centraldark-operational-method/references/HERMES-KANBAN-RECEITA-UNIVERSAL.md [M]
+  - .agents/skills/kaizen-sistema-um/SKILL.md [M]
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml [M]
+  - docs/BRAIN/Excalidraw/Drawing 2026-09-07 04.53.02.excalidraw.md [D]
+  - docs/BRAIN/Excalidraw/Drawing 2026-09-07 07.06.07.excalidraw.md [D]
+  - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md [M]
+  - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md [M]
+  - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md [M]
+  - scripts/lupa/diagram-route-gate.mjs [M]
+  - scripts/trigger-fabric/rastro_fiscal.py [M]
+  - scripts/trigger-fabric/test_rastro_fiscal.py [M]
+- Entradas n?o rastreadas K: (26 agrupamentos):
+  - .codeagentswarm/
+  - Remote-Tray/
+  - WSL/
+  - c/
+  - centraldark-desktop/
+  - core_keys_by_ns.txt
+  - core_keys_flat.txt
+  - core_keys_raw.txt
+  - docs/.claudian/
+  - docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-OMNI-SOURCE.json
+  - gap_keys.txt
+  - gap_namespace_matches.txt
+  - gate-prova-consolidado-meta-lupa.json
+  - k/
+  - meta-lupa-gate-exec.json
+  - meta-lupa-gate-final.json
+  - meta-lupa-gate-lote-final.json
+  - meta-lupa-gate-lote2-final.json
+  - meta-lupa-gate-v2.json
+  - meta-lupa-gate.json
+  - orphan_keys.txt
+  - orphan_namespace_matches.txt
+  - overlap_keys.txt
+  - runtime_keys.txt
+  - scripts/lupa/diagram-route-excalidraw.mjs
+  - source_keys.txt
+- N?O enviar ao Git: K:/WSL/ (discos e backup Linux), K:/centraldark-desktop/ (cookies, sess?o/cache), K:/.codeagentswarm/ (banco, estado, snapshots), K:/Remote-Tray/ (bin?rios de build), K:/c/, K:/k/, K:/docs/.claudian/ (configura??o de sess?o), relat?rios de auditoria no root (*_keys*.txt, meta-lupa-*.json, gate-prova-*.json). Todos permanecem no disco Casa.
+- Excalidraw gerado permanece em K:/docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-ROTAS.excalidraw.md; ignorado por regra existente de .gitignore e regener?vel via scripts/lupa/diagram-route-gate.mjs. Vers?o-fonte: scripts/lupa/diagram-route-excalidraw.mjs e docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-OMNI-SOURCE.json.
+- F: n?o ? reposit?rio Git na raiz; cont?m worktrees vinculados a K:/.git.
+- Worktrees localizados (24):
+  - K:
+  - C:/root/CentralDark-main-8081
+  - C:/tmp/wt-base
+  - F:/_worktrees/centraldark-builder-ledger-20261025
+  - F:/_worktrees/centraldark-pr1880-20261021-072853
+  - F:/_worktrees/centraldark-pr1880-20261021-075059
+  - F:/_worktrees/centraldark-ssh-learning-20261025
+  - F:/_worktrees/cockpit-ui-label-20261021
+  - F:/_worktrees/mcp-api-cockpit-20261024
+  - F:/_worktrees/pr-1895
+  - F:/_worktrees/reconcile-w-skills-main-20261022
+  - F:/_worktrees/sec-gitignore-ssh-20261022
+  - F:/_worktrees/sol-bidir-sync-20261026
+  - F:/_worktrees/sol-centraldark-usina-20261026
+  - F:/_worktrees/sol-motor-evolutivo-20261025
+  - F:/_worktrees/sol-one-heart-supabase-20261025
+  - F:/_worktrees/sol-vscode-pairing-20261025
+  - F:/TEMP/CentralDark/cd-wt-015
+  - K:/_worktrees/centraldark-remote-name-migration-20261024/repo
+  - K:/_worktrees/fixed-point-pr1839
+  - K:/_worktrees/reconcile-w-skills
+  - K:/_worktrees/sol-aprendizado-220-20261022
+  - K:/centraldark-sync-casa-20261018
+  - K:/tmp/lineage-pr1837
+- CLEANUP: worktrees com commits ?nicos, altera??es, arquivos n?o rastreados ou estado UNKNOWN permanecem at? prova de descarte seguro; remover somente duplicatas comprovadamente inativas.
+- Testes do escopo: RASTRO 19 PASS; diagram-route-gate 19 PASS; Excalidraw UNCHANGED. Prova GitHub depende de SHA real p?s-push.
+- Grupo de notas: 03 Evid?ncias e Contraprovas; 04 Pend?ncias e Bloqueios; 05 Kaizen.
+
+### 2026-10-26 ? Follow-up comprovado: worktrees limpos e checkpoints F:
+
+- Data e fuso de confer?ncia: 2026-10-26T18:24:55-03:00
+- Main verificada na Casa e GitHub: fdf8b71b7aedf0e82b7dd6c9adc0f691b0109f72 (readback remoto no ciclo).
+- Checkpoint F One Heart: F:/_worktrees/sol-one-heart-supabase-20261025 | branch feat/one-heart-supabase-signal-20261025 | commit 2001da923808c71b171b2e13060348d9d71ae8ea | push e readback PASS | 3 arquivos de c?digo; execu??o em produto UNKNOWN.
+- Checkpoint F MCP: F:/_worktrees/mcp-api-cockpit-20261024 | branch feat/mcp-api-cockpit-only-20261024 | commit c40ff15920bbfa2fd150ddc2515bacea973dae49 | push e readback PASS | 3 scripts Python, AST PASS, execu??o real UNKNOWN.
+- Worktrees exclu?dos APENAS ap?s estado limpo, zero arquivos ignorados, HEAD ancestral de main e zero processos externos referentes aos diret?rios. Remo??o via git worktree remove SEM force. Branches e commits mantidos:
+  - F:/_worktrees/centraldark-builder-ledger-20261025 | feat/centraldark-builder-ledger-clean-20261025 | 93875507079cbf1473b47285b608ff33e7d5330c
+  - F:/_worktrees/sol-motor-evolutivo-20261025 | feat/cockpit-supabase-hub-20261025 | be6d855ec94bca960d493cb5731401752be27d61
+  - F:/_worktrees/sol-bidir-sync-20261026 | feat/sync-center-ssh-readback-20261026 | 9eec85c919a0dfe73ec99678b1497cf5a3a80a2e
+- Retidos deliberadamente: F:/_worktrees/centraldark-ssh-learning-20261025 (17132 dele??es rastreadas; UNKNOWN origem; NUNCA consolidar/remover sem reconcilia??o), F:/_worktrees/pr-1895, os dois F:/_worktrees/centraldark-pr1880-20261021-* e F:/TEMP/CentralDark/cd-wt-015 (dirty/untracked e/ou HEAD n?o incorporado), branches com commits n?o integrados, e worktrees K:/_worktrees com dele??o de skill.
+- Retido: F:/_worktrees/sol-centraldark-usina-20261026 (recentemente usado, apesar de HEAD j? ancestral de main).
+- Regra: branch commit WIP != merge main; exclus?o segura de checkout != exclus?o de branch; status UNKNOWN n?o ? PASS.
+- Grupo 03: provas SHA e checagens. Grupo 04: exclus?es incertas. Grupo 05: Kaizen reuso do gate original.
+
+### 2026-10-26 ? Fechamento da reconcilia??o forense das worktrees K:/F:
+
+- Confer?ncia real: 2026-10-26T18:59:29-03:00.
+- Escopo: CentralDark worktrees anexas ao reposit?rio K:/.git. GitHub/main no in?cio: 83244972375f6136f9cfbc31e21965e1d312161f.
+- Antes desta passada: 21 worktrees; ap?s: 9. Total removidas: 12.
+- REMOVIDAS via git worktree remove com readback f?sico da aus?ncia. S? ap?s provar SHA, status, branch/remote quando aplic?vel, n?o perder commits exclusivos, n?o haver trabalho novo ou depend?ncia compartilhada:
+  - C:/tmp/wt-base
+  - F:/_worktrees/sol-centraldark-usina-20261026
+  - F:/_worktrees/centraldark-ssh-learning-20261025
+  - F:/_worktrees/mcp-api-cockpit-20261024
+  - F:/_worktrees/cockpit-ui-label-20261021
+  - F:/_worktrees/reconcile-w-skills-main-20261022
+  - K:/_worktrees/sol-aprendizado-220-20261022
+  - K:/centraldark-sync-casa-20261018
+  - F:/_worktrees/sol-vscode-pairing-20261025
+  - F:/_worktrees/sec-gitignore-ssh-20261022
+  - K:/_worktrees/centraldark-remote-name-migration-20261024/repo
+  - F:/_worktrees/sol-one-heart-supabase-20261025
+- CASO 17132 DELE??ES: F:/_worktrees/centraldark-ssh-learning-20261025 foi verificada: HEAD=42c0fa2080fe, ancestral de main; EXATAMENTE 17.132 caminhos deletados, zero untracked, zero ignored, zero processos por linha de comando. Removida a worktree j? inutilizada; n?o houve commit dessas dele??es. Git worktree remove --force foi usado APENAS nesse caso ap?s contraprova.
+- JUN??O WINDOWS: a worktree One Heart apontava para K:/apps/instinto-superior/node_modules. Eliminado SOMENTE o ponto de jun??o, n?o o alvo. Hash antes/depois de .package-lock.json no alvo permaneceu c4cc5cd51284181e (prefixo). Branch One Heart preservada em GitHub no SHA 2001da923808c71b171b2e13060348d9d71ae8ea.
+- LOG PRESERVADO: F:/QUARANTINE/centraldark-gitignore-ssh-autosync-status-20261022-ac8a5b3b3f8c77b6.json | SHA256 ac8a5b3b3f8c77b6c5f871f77973bc33aeaa6dd62dcba0dfe71447df179357c3; depois a worktree de seguran?a limpa foi retirada.
+- Arquivo tempor?rio de ZERO bytes retirado: K:/_worktrees/centraldark-remote-name-migration-20261024/repo/127.0.0.1 (nome terminava em caractere de ponto privado seguido de 9101); branch git preservada.
+- Worktrees RETIDAS porque n?o s?o duplicatas limpas da main, com modifica??es locais ou HEAD diferente sem proveni?ncia de publica??o:
+  - C:/root/CentralDark-main-8081
+  - F:/_worktrees/centraldark-pr1880-20261021-072853
+  - F:/_worktrees/centraldark-pr1880-20261021-075059
+  - F:/_worktrees/pr-1895
+  - F:/TEMP/CentralDark/cd-wt-015
+  - K:/_worktrees/fixed-point-pr1839
+  - K:/_worktrees/reconcile-w-skills
+  - K:/tmp/lineage-pr1837
+- Nessas oito, foram observados: mudan?as Cockpit, variantes da extens?o VS Code e VSIX de compila??o, arquivo .agents/skills/detecting-fileless-malware-techniques/SKILL.md ausente em duas branches, checkout detached PR1837 com artefatos, e .env.local IGNORADO em c?pias com node_modules. Estado = PROTECTED_WIP; n?o fundir ? main e n?o eliminar at? contraprova por owner.
+- CLONES INDEPENDENTES EM F: n?o contam como worktrees: F:/_worktrees/bolt-ai-fix-20261025 (build-logs), F:/_worktrees/Nova pasta/centraldark-mcp-weekly-validation-20261016 (ObservabilidadeCentralDark.tsx), F:/_WORKER/LAB-DESKTOP/_STAGE_ZENDRIVE_VPN (backup e outros). T?m material n?o rastreado; preservados.
+- K:/TEMP/cd-wt-015 resolve para F:/TEMP/CentralDark/cd-wt-015; n?o ? reposit?rio adicional. K:/w-skills cont?m gitdir antigo apontando para E:/...; n?o remover sem medir destino.
+- Git worktree prune --dry-run --verbose: nenhuma worktree ?rf?. Nenhum git reset --hard, git clean -fdx ou force push.
+- Evid?ncia e estado: remo??o de 12 c?pias PASS, integridade hist?rica das 8 restantes PROTECTED_WIP, equival?ncia GitHub/main requer o SHA do pr?ximo push em readback. Grupos 03 Provas; 04 Pend?ncias reais; 05 Kaizen.
