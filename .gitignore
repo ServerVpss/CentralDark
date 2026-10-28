@@ -214,3 +214,8 @@ logs/auto-sync-status.json
 /*_namespace_matches.txt
 /meta-lupa-gate*.json
 /gate-prova-consolidado-meta-lupa.json
+
+# Local agent runtime/cache and temporary embedded worktrees; never Git source.
+/.codeagentswarm/
+/c/
+/k/hermes-desktop-src/
