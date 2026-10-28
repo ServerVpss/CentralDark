@@ -92,7 +92,7 @@ export function StatusPanel() {
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
     { id: "grafo-vivo", owner: "Live Fabric", estado: d?.grafoVivo ?? unknown, fonte: d?.liveFabricFonte ?? "API /api/live-fabric/graph" },
     { id: "omni-router", owner: "Omni Router", estado: d?.omniRouter ?? unknown, fonte: "API /api/omni/status · somente rota medida" },
-    { id: "heartbeat", owner: "Heartbeat MCP", estado: d?.heartbeat ?? unknown, fonte: "MCP /heartbeat · self=" + (d?.heartbeatSelf ?? "?") },
+    { id: "heartbeat", owner: "Omni Router · heartbeat local", estado: d?.heartbeat ?? unknown, fonte: "Omni Router /heartbeat · self=" + (d?.heartbeatSelf ?? "?") + " · nao prova invocacao" },
     { id: "receipts", owner: "Receipts Microdeploy", estado: d?.receipts ?? unknown, fonte: "API /api/microdeploy/receipts/index.json" },
   ] as const;
   const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");

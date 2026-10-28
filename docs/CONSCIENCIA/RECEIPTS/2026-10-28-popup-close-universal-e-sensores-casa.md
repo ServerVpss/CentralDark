@@ -40,6 +40,14 @@
 - Relatório da frente: Grafo/Omni/API referem a `api.centralldark.com` (HTTP 523), Commander Casa 9101 PASS, Screenpipe Casa 3030 degradado, Vite 8080 não oferece `/health`.
 - Sem escritas ou reinícios solicitados à frente Hermes; os commits Git do Obsidian são um processo externo independente.
 
+## Errata e continuidade: API nasce local (28/10/2026)
+
+**Correção de entendimento:** a porta `8099` era *um Router local não iniciado*, não uma porta descartável. O seu owner é `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`; `9101` continua sendo o Casa Commander. A Casa não depende da origem pública HTTP 523 para construir, validar e consultar sua API. A VPS recebe o **mesmo código**, com binding e runtime próprios.
+
+Foi criada uma `.venv` isolada no owner existente, usando `uv`, para contornar a distribuição Python global com FastAPI incompleto. Iniciado o Router somente em `127.0.0.1:8099`; GET de `/health`, `/api/omni/status`, `/api/omni/models`, `/api/live-fabric/status`, `/api/live-fabric/graph`, `/api/microdeploy/receipts/index.json` e `/heartbeat` responderam **HTTP 200** após restart controlado do mesmo owner. Grafo derivado de 24 receipts reais, com `proof_state=NOT_REVALIDATED`, sem alegação de execução de agentes. O probe volta a usar seu alvo canônico `8099`, sem confundir o health do Commander; o Cockpit troca o default público por loopback local e preserva `CENTRALDARK_API_BASE_URL` opcional.
+
+**Ainda não provado:** inicialização automática pós-reboot; deploy VPS e exposição Caddy; E2E do Cockpit em navegador; execução de provedor/LLM. A instância local deve manter o Router ativo para fornecer status a partir da Casa.
+
 ## Limites
 
 `HTTP_200 != END_TO_END_PROOF`. `ENGINE_CONNECTED_TRUE != PROVIDER_INVOCATION_PASS`. `PUBLIC_API_523 != CASA_COMMANDER_DOWN`. `SSH_TIMEOUT != PROOF_VPS_OFF`.

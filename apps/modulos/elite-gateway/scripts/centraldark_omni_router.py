@@ -1673,6 +1673,20 @@ def fabric_receipts_index() -> Dict[str, Any]:
     }
 
 
+@app.get("/heartbeat")
+def router_heartbeat() -> Dict[str, Any]:
+    # Process heartbeat, not Hermes/MCP/tool invocation proof.
+    return {
+        "schema": "centraldark.omni-router.heartbeat.v1",
+        "owner": "centraldark-omni-router",
+        "status": "ok",
+        "self": "alive",
+        "scope": "omni_router_http_process_only",
+        "observed_at": datetime.now(timezone.utc).isoformat(),
+        "provider_invocation_proven": False,
+    }
+
+
 @app.get("/api/omni/models")
 @app.get("/v1/models")
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:

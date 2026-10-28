@@ -173,10 +173,15 @@ async function medirApi(path: string): Promise<Probe> {
     const status = texto(candidato["status"])?.toLowerCase();
     const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
     const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
+    // Fabric graph/receipts are truthful read-only projections; connectivity is
+    // measured but a file/receipt list must not be called executed or counterproven.
+    const projecaoNaoRevalidada = candidato["proof_state"] === "NOT_REVALIDATED"
+      && ["/api/live-fabric/status", "/api/live-fabric/graph", "/api/microdeploy/receipts/index.json"].includes(path);
     return {
-      estado: falhou ? "FAIL" : saudavel ? "PASS" : "UNKNOWN",
+      estado: falhou ? "FAIL" : saudavel ? (projecaoNaoRevalidada ? "RUNNING" : "PASS") : "UNKNOWN",
       httpStatus: resposta.status,
-      erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
+      erro: projecaoNaoRevalidada ? "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"
+        : !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
   } catch (erro) {
