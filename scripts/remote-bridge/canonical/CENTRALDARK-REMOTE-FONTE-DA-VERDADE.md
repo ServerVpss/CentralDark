@@ -1,17 +1,25 @@
 ﻿# CentralDark-Remote - fonte unica de codigo local
 
-Fonte da verdade: K:\scripts\remote-bridge\canonical\
+## Readback de owners Windows + modo local-first (26/10/2026)
 
-A arvore canonical reune a bandeja Windows original (motor engine, parser, menu, OAuth PKCE, harness e fixtures), a bridge Casa-VPS, configuracao, sidecar, OneShot installer e fontes do Tray/bridge. Os caminhos antigos abaixo sao links simbolicos de arquivo para o alvo canonico, nao copias independentes.
+O unico produto continua CENTRALDARK; nao iniciar/instalar OneShot, Bridge ou gateway concorrentes. A configuracao real e `K:\scripts\remote-bridge\canonical\CENTRALDARK-REMOTE-BRIDGE.config.json`, com `local_first.enabled=true`. O Bridge executavel no checkout CURRENT e o script real `K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1` (versionado como arquivo comum); **nao** existe `canonical\CentralDark-Remote-Bridge.ps1` neste checkout. O README humano real permanece na raiz do mesmo diretorio. O Bridge foi ajustado para escolher o JSON real de `canonical\` em vez de tentar ler o arquivo-raiz que virou mero apontamento textual num checkout Windows.
+
+`-LocalStatus -Json` no Bridge e um diagnostico SEM escrita: Casa local (loopback), LAN do notebook quando medida, Radmin como overlay privado ja comprovado em TCP, Tailscale so com peer identificado, SSH Casa/VPS existente exclusivamente como fallback. `OPEN_UNAUTHENTICATED != TERMINAL_AUTENTICADO`. A receita `scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1` foi preservada sem alteracoes; ela nao e uma segunda ponte geral nem autoriza WinRM notebook. O Linux no Kingston e a FORJA local, com boot nativo ou VMware rawDisk somente com disco em acesso exclusivo apos instalacao validada. A VPS opera o MESMO codigo em runtime 24/7 e recebe deltas via Git/CI/receipts, sem se tornar fonte de verdade da Casa.
+
+**Contraprova:** nao mover arquivos, recriar alias via copia, reconfigurar rede, ligar VMware rawDisk, mudar K:/EFI/boot/WSL, executar WinRM/SSH notebook ou criar nova instancia de agente so para consertar nomes. A tabela a seguir registra aliases do projeto, mas a materializacao efetiva deve ser conferida no filesystem antes de assumir que um alias textual e symlink.
+
+Fonte da verdade: K:\scripts\remote-bridge\canonical\ (configuracao e componentes que de fato existem); Bridge real: K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1.
+
+A arvore canonical reune a bandeja Windows original (motor engine, parser, menu, OAuth PKCE, harness e fixtures), a bridge Casa-VPS, configuracao, sidecar, OneShot installer e fontes do Tray/bridge. Os caminhos abaixo sao entradas de compatibilidade. Alguns sao apontamentos de texto nos checkouts Windows; nao tratá-los automaticamente como symlinks ou como uma segunda fonte de codigo.
 
 | Alias compativel | Fonte unica |
 |---|---|
 | K:\scripts\remote-bridge\Build-Remote-Bridge.ps1 | canonical\Build-Remote-Bridge.ps1 |
 | K:\scripts\remote-bridge\CentralDark-Context-Sidecar.ps1 | canonical\CentralDark-Context-Sidecar.ps1 |
 | K:\scripts\remote-bridge\CENTRALDARK-REMOTE-BRIDGE.config.json | canonical\CENTRALDARK-REMOTE-BRIDGE.config.json |
-| K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1 | canonical\CentralDark-Remote-Bridge.ps1 |
+| K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1 | **OWNER REAL** neste checkout; preservado na raiz |
 | K:\scripts\remote-bridge\CentralDark-Remote-One.go | canonical\CentralDark-Remote-One.go |
-| K:\scripts\remote-bridge\README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md | canonical\README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md |
+| K:\scripts\remote-bridge\README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md | **OWNER REAL** neste checkout; preservado na raiz |
 | K:\scripts\CentralDark-Casa-OneShot.ps1 | canonical\CentralDark-Casa-OneShot.ps1 |
 | K:\Remote-Tray\CentralDark-Casa-OneShot.go | canonical\CentralDark-Casa-OneShot.go |
 | K:\scripts\remote-bridge\CentralDark-Casa-Agent.mjs | canonical\CentralDark-Casa-Agent.mjs |

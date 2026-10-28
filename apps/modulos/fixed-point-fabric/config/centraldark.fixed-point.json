@@ -6,14 +6,12 @@
     "sample_interval_seconds": 15,
     "max_rounds": 12,
     "max_observation_age_seconds": 120,
-    "max_open_promotion_prs": 1
+    "max_open_promotion_prs": 30
   },
   "local": {
     "repo_path": "K:/",
     "services": [
-      {"name": "dashboard", "url": "http://127.0.0.1:8788/health"},
-      {"name": "omni-router", "url": "http://127.0.0.1:8099/health"},
-      {"name": "guardiao", "url": "http://127.0.0.1:9119/health"}
+      {"name": "dashboard", "url": "http://127.0.0.1:8792/health"}
     ]
   },
   "vps": {

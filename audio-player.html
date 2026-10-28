@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <link rel="manifest" href="audio-player.webmanifest">
+  <title>CentralDark — Instinto Superior · Player local</title>
+  <style>
+    :root { color-scheme: dark; font-family: "Space Grotesk", Inter, system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; overflow-x: hidden; background: #0a0906; color: #f6f0df; }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .34; background-image: linear-gradient(rgba(192,144,43,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(192,144,43,.09) 1px, transparent 1px); background-size: 34px 34px; mask-image: linear-gradient(to bottom, black, transparent 80%); }
+    main { position: relative; width: min(92vw, 580px); padding: clamp(24px, 6vw, 48px); border: 1px solid rgba(192,144,43,.28); border-radius: 18px; background: linear-gradient(160deg, rgba(30,26,17,.96), rgba(10,9,6,.96)); box-shadow: 0 0 0 1px rgba(192,144,43,.08), 0 28px 80px -36px rgba(192,144,43,.55), 0 30px 90px -40px #000; }
+    main::after { content: ""; position: absolute; width: 190px; height: 190px; right: -78px; top: -78px; border: 1px solid rgba(0,234,255,.22); border-radius: 50%; box-shadow: 0 0 48px rgba(0,234,255,.14); pointer-events: none; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px; border: 1px solid rgba(192,144,43,.4); border-radius: 999px; color: #e9b44c; font: 700 10px/1 ui-monospace, monospace; letter-spacing: .22em; text-transform: uppercase; }
+    .eyebrow::before { content: "✦"; color: #00eaff; }
+    h1 { margin: 22px 0 5px; font-size: clamp(2.2rem, 9vw, 4rem); line-height: .95; letter-spacing: -.06em; background: linear-gradient(120deg, #f6e1a4, #c0902b 48%, #6a4b12); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    h2 { margin: 0; color: #dcc9a2; font-size: clamp(1.1rem, 4vw, 1.5rem); font-weight: 400; }
+    p { color: #9d9076; line-height: 1.55; }
+    label { display: block; margin: 26px 0 8px; color: #dcc9a2; font: 700 .78rem/1 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    input { width: 100%; padding: 14px 15px; border: 1px solid rgba(192,144,43,.28); border-radius: 10px; outline: none; background: #15120c; color: #f6f0df; font: 500 .98rem ui-monospace, monospace; }
+    input:focus { border-color: #c0902b; box-shadow: 0 0 0 3px rgba(192,144,43,.14); }
+    button { margin-top: 14px; width: 100%; padding: 14px; border: 1px solid #e9b44c; border-radius: 10px; background: linear-gradient(120deg, #f6e1a4, #b7862a 48%, #6a4b12); color: #0a0906; font-size: 1rem; font-weight: 800; box-shadow: 0 12px 30px -18px rgba(192,144,43,.8); }
+    button.secondary { border-color: rgba(0,234,255,.35); background: #11243a; color: #bfe6f2; box-shadow: none; }
+    audio { width: 100%; margin-top: 22px; filter: sepia(.65) saturate(1.35); }
+    #status { margin-top: 14px; padding: 12px 14px; border: 1px solid rgba(136,223,176,.24); border-radius: 10px; background: #0e181b; color: #b7d2c4; font: .85rem/1.45 ui-monospace, monospace; }
+    .warning { padding: 14px; border-left: 2px solid #c0902b; color: #c5b485; font-size: .86rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="eyebrow">Instinto Superior · superfície local</span>
+    <h1>CentralDark</h1>
+    <h2>Player local</h2>
+    <p>Uma pequena superfície de escuta para testar fontes de áudio compatíveis com navegador pelo iPhone.</p>
+
+    <label for="source">URL do áudio</label>
+    <input id="source" inputmode="url" autocomplete="off" value="http://100.123.93.25:59100">
+    <button id="load" type="button">Carregar áudio</button>
+    <button id="install" class="secondary" type="button" hidden>Instalar no iPhone</button>
+    <audio id="player" controls playsinline preload="none"></audio>
+    <div id="status">Aguardando uma URL de áudio compatível.</div>
+
+    <p class="warning">O protocolo próprio do AudioRelay na porta 59100 não é HTML/HTTP. Se esta página informar erro, o AudioRelay precisa de uma ponte compatível com navegador (HTTP, HLS, WebRTC ou WebSocket); o navegador não consegue reproduzi-lo diretamente.</p>
+  </main>
+
+  <script>
+    const source = document.querySelector('#source');
+    const player = document.querySelector('#player');
+    const status = document.querySelector('#status');
+    const install = document.querySelector('#install');
+    let deferredInstall;
+    const allowedSchemes = /^(https?:|blob:|data:)/i;
+    document.querySelector('#load').addEventListener('click', () => {
+      const url = source.value.trim();
+      if (!url || !allowedSchemes.test(url)) {
+        status.textContent = 'Informe uma URL http(s) de áudio compatível.';
+        return;
+      }
+      player.src = url;
+      player.load();
+      status.textContent = `Fonte carregada: ${url}`;
+      player.play().catch(() => {
+        status.textContent = 'Fonte carregada. Toque em reproduzir; o iPhone pode bloquear autoplay.';
+      });
+    });
+    player.addEventListener('playing', () => status.textContent = 'Reproduzindo.');
+    player.addEventListener('error', () => status.textContent = 'Falha: a URL não entrega áudio em formato/protocolo suportado pelo navegador.');
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault(); deferredInstall = event; install.hidden = false;
+    });
+    install.addEventListener('click', async () => {
+      if (!deferredInstall) {
+        status.textContent = 'No iPhone: use Compartilhar → Adicionar à Tela de Início.';
+        return;
+      }
+      deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall = null; install.hidden = true;
+    });
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./audio-player-sw.js').catch(() => {});
+  </script>
+</body>
+</html>
