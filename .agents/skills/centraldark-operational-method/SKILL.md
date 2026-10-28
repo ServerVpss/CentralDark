@@ -43,6 +43,8 @@ if (Test-Path -LiteralPath $p -PathType Container) {
 
 **Critério Michelin:** TARGET_EXACT + HERMES_RECEIPT_CORRELATED + COMPOSER_EMPTY + ONE_SEND + ORACLE_READBACK → REVERSE_HANDOFF_PROVEN. SURFACE_PROVEN_READONLY != DRAFT_PROVEN_NO_SEND != SENT_WITH_UI_READBACK != ORACLE_RESPONSE_CORRELATED. Bloquear em CHAT_BUSY, WRONG_TAB, EXISTING_USER_DRAFT, ENVELOPE_NOT_TERMINAL, DUPLICATE e UNKNOWN; preservar LOOP_ID, NEXT_CURSOR, foco e dados do CHEFE. **Estado observado nesta implantação:** encontro do editor da conversa atual por UIAutomation confirmado; envio Hermes→ChatGPT, gatilho nativo pós-execução e resposta automática do Oráculo ainda requerem teste E2E específico.
 
+**Hook nativo realmente encontrado na Casa:** a instalação Hermes possui `hermes hooks` e o evento shell `post_llm_call` no Desktop, cujo `extra.assistant_response` contém a resposta final do turno; `on_session_end` não fornece o corpo da resposta. `hermes hooks list` na Casa em 28/10 retornou **"No shell hooks or outbound webhooks configured"**. Assim `HERMES_ORACLE_POST_TURN_HOOK=NOT_CONFIGURED`, sem falso verde. A configuração de shell hook é um **opt-in no perfil Hermes** e usa consentimento de primeira execução; **não habilitar `hooks_auto_accept`, não mudar perfil C:\ nem reiniciar o Goal silenciosamente**. Próximo delta real: correlacionar o evento Hermes com o envelope existente, prender o URL da conversa atual de forma privada e autorizar/validar o hook `post_llm_call` no runtime antes de declarar retorno automático E2E.
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
