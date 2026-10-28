@@ -18,7 +18,6 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName UIAutomationClient
 Add-Type -AssemblyName UIAutomationTypes
-Add-Type -AssemblyName System.Windows.Forms
 
 function Get-Pattern($element, $pattern) {
   $found = $null
@@ -100,29 +99,25 @@ function Editor-Empty([string]$text) {
   $trimmed = $text.Trim()
   return $trimmed -eq '' -or $trimmed -in @('Pergunte ao ChatGPT', 'Ask anything', 'Ask ChatGPT')
 }
-function Escape-SendKeys([string]$plain) {
-  $buffer = New-Object System.Text.StringBuilder
-  foreach ($character in $plain.ToCharArray()) {
-    $token = switch ([string]$character) {
-      '+' { '{+}'; break }
-      '^' { '{^}'; break }
-      '%' { '{%}'; break }
-      '~' { '{~}'; break }
-      '(' { '{(}'; break }
-      ')' { '{)}'; break }
-      '{' { '{{}'; break }
-      '}' { '{}}'; break }
-      default { [string]$character }
-    }
-    [void]$buffer.Append($token)
-  }
-  return $buffer.ToString()
-}
 function Has-ReceiptVisible($root, [string]$marker) {
-  foreach ($item in (Find-Type $root ([System.Windows.Automation.ControlType]::Text))) {
-    if ($item.Current.Name.Contains($marker)) { return $true }
+  # ChatGPT may expose the submitted message as Text or as a message Button.
+  # The compositor is excluded by the explicit Text/Button type filters.
+  foreach ($type in @([System.Windows.Automation.ControlType]::Text,
+                      [System.Windows.Automation.ControlType]::Button)) {
+    foreach ($item in (Find-Type $root $type)) {
+      if ($item.Current.Name.Contains($marker)) { return $true }
+    }
   }
   return $false
+}
+function Find-SendInvoke($root) {
+  $actions = @(Find-Type $root ([System.Windows.Automation.ControlType]::Button) |
+    Where-Object { $_.Current.Name -in @('Enviar','Send','Send message','Enviar mensagem') -and
+                   $_.Current.IsEnabled -and -not $_.Current.IsOffscreen })
+  if ($actions.Count -ne 1) { throw ('SEND_BUTTON_COUNT_' + $actions.Count) }
+  $invoke = Get-Pattern $actions[0] ([System.Windows.Automation.InvokePattern]::Pattern)
+  if (-not $invoke) { throw 'SEND_BUTTON_INVOKE_PATTERN_MISSING' }
+  return $invoke
 }
 function Result([string]$status, [string]$detail, [string]$receipt = '') {
   [pscustomobject]@{
@@ -267,22 +262,24 @@ try {
     return
   }
 
-  $editor.SetFocus()
-  Start-Sleep -Milliseconds 120
-  $focused = [System.Windows.Automation.AutomationElement]::FocusedElement
-  if ($focused.Current.ControlType -ne [System.Windows.Automation.ControlType]::Edit -or
-      $focused.Current.Name -ne $editor.Current.Name -or
-      -not (Target-Still-Matches $matchedRoot $expectedPath)) {
-    throw 'FOCUS_OR_TARGET_CHANGED_BEFORE_TYPING'
+  # Direct UIA does NOT need SetFocus, SendKeys, Enter or clipboard.
+  # The HermesEmbedded surface was independently proven via ValuePattern.SetValue
+  # followed by a real button InvokePattern (TEST_ID CD_UISEND_2810_2335).
+  if (-not (Target-Still-Matches $matchedRoot $expectedPath)) {
+    throw 'TARGET_CHANGED_BEFORE_VALUE_SET'
   }
-  [System.Windows.Forms.SendKeys]::SendWait((Escape-SendKeys $draft))
-  Start-Sleep -Milliseconds 280
-  $written = ([string]$valuePattern.Current.Value).TrimEnd([char]13, [char]10)
+  $valuePattern.SetValue($draft)
+  $written = ''
+  for ($attempt=0; $attempt -lt 12; $attempt++) {
+    Start-Sleep -Milliseconds 180
+    $written = ([string]$valuePattern.Current.Value).TrimEnd([char]13, [char]10)
+    if ($written -ceq $draft) { break }
+  }
   if ($written -cne $draft) {
-    throw 'DRAFT_READBACK_MISMATCH_NOT_SENT'
+    throw 'DIRECT_UIA_DRAFT_READBACK_MISMATCH_NOT_SENT'
   }
   if ($Mode -eq 'Draft') {
-    Result 'DRAFT_PROVEN_NO_SEND' ('EXACT_URL; EDITOR_READBACK; LENGTH=' + $written.Length) $receiptId
+    Result 'DRAFT_PROVEN_NO_SEND' ('EXACT_URL; VALUEPATTERN_SETVALUE; EDITOR_READBACK; LENGTH=' + $written.Length) $receiptId
     return
   }
   if (-not (Target-Still-Matches $matchedRoot $expectedPath) -or
@@ -292,21 +289,32 @@ try {
   $sendBusy = @(Find-Type $matchedRoot ([System.Windows.Automation.ControlType]::Button) |
     Where-Object { $_.Current.Name -in @('Parar','Stop generating','Stop') -and $_.Current.IsEnabled }).Count -gt 0
   if ($sendBusy) { throw 'CHATGPT_GENERATION_STARTED_BEFORE_SEND' }
-  [System.Windows.Forms.SendKeys]::SendWait('{ENTER}')
-  Start-Sleep -Milliseconds 550
+  # Reacquire the actual "Enviar" control after the compositor changes.
+  # A "Parar" button is NOT an acceptable substitute for "Enviar".
+  $send = Find-SendInvoke $matchedRoot
+  if (-not (Target-Still-Matches $matchedRoot $expectedPath) -or
+      ([string]$valuePattern.Current.Value).TrimEnd([char]13, [char]10) -cne $draft) {
+    throw 'TARGET_OR_DRAFT_CHANGED_BEFORE_INVOKE'
+  }
+  $send.Invoke()  # exactly one real UIA click; do not blindly retry
   $delivered = $false
-  for ($attempt=0; $attempt -lt 6; $attempt++) {
-    if ((Editor-Empty ([string]$valuePattern.Current.Value)) -and
-        (Has-ReceiptVisible $matchedRoot ('RECEIPT_ID=' + $receiptId))) {
+  $composerCleared = $false
+  for ($attempt=0; $attempt -lt 36; $attempt++) {
+    Start-Sleep -Milliseconds 350
+    if (-not (Target-Still-Matches $matchedRoot $expectedPath)) {
+      throw 'TARGET_CHANGED_AFTER_SEND_RESULT_UNKNOWN_DO_NOT_RETRY'
+    }
+    $composerCleared = Editor-Empty ([string]$valuePattern.Current.Value)
+    if ($composerCleared -and (Has-ReceiptVisible $matchedRoot ('RECEIPT_ID=' + $receiptId))) {
       $delivered = $true
       break
     }
-    Start-Sleep -Milliseconds 350
   }
   if ($delivered) {
-    Result 'SENT_WITH_UI_READBACK' 'EXACT_TARGET; RECEIPT_VISIBLE; HUMAN_GOAL_STATUS_UNCHANGED' $receiptId
+    Result 'SENT_WITH_UI_READBACK' 'EXACT_TARGET; VALUEPATTERN_SETVALUE; SEND_INVOKEPATTERN; RECEIPT_VISIBLE; EDITOR_CLEARED' $receiptId
   } else {
-    Result 'SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY' 'Enter issued; receipt was not visible in readback' $receiptId
+    Result 'SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY' ('ONE_SEND_INVOKED; EDITOR_CLEARED=' + $composerCleared +
+      '; RECEIPT_NOT_VISIBLE_YET; NO_RETRY; SEARCH_SAME_CHAT_BEFORE_ANY_NEW_ACTION') $receiptId
   }
 } catch {
   Result 'BLOCKED' ([string]$_.Exception.Message) $receiptId
