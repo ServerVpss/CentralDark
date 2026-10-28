@@ -3061,6 +3061,31 @@ Não remover worktree quando existir commit apenas local, arquivo modificado/unt
 Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.
 
 
+### 26.1. Encerramento executável — sem worktree esquecida
+
+A regra de saída tem owner superior em `RULES.md`. O executor que criar
+worktree deve reusar scratch compatível primeiro e, no fim da missão,
+comprovar `REMOVED_VERIFIED` ou `KEEP_ACTIVE` com causa explícita, owner
+e `NEXT_CURSOR`. **É uma exigência de encerramento**, não um segundo
+scheduler ou inteligência.
+
+O gate existente de aplicação da regra é
+`scripts/lupa/worktree-teardown-gate.mjs`, testado em
+`scripts/lupa/worktree-teardown-gate.test.mjs`:
+`node scripts/lupa/worktree-teardown-gate.mjs --repo <repo> --target <scratch> --allowed-root <root-temporario> --receipt-ref evidence/<receipt>.md`.
+Sem `--apply`, apenas mede; `--apply` remove com `git worktree remove`
+**sem force** somente se alvo é worktree secundário registrado,
+realpath está dentro de raiz explícita, não há dirty/untracked/lock,
+o receipt existe em HEAD e a branch remota contém o MESMO SHA.
+Falta qualquer prova ⇒ `KEEP_ACTIVE` e nenhum delete. Após remoção,
+o script verifica ausência do diretório e desregistro no Git.
+
+Registrar resultado final no **mesmo PR/owner**, não em pasta nova.
+`GIT_BRANCH_REMOTE_PRESERVED` não significa merge nem deploy.
+Um commit local não enviado é delta único e impede teardown.
+Prova sintética do gate não equivale à execução do gate em todos os
+worktrees da Casa. Última revisão: 2026-10-28T00:46:00.462Z.
+
 ### 27. Delegação econômica com prova — continuidade canônica
 
 Para coordenar subagentes sem multiplicar custo, reutilizar a receita existente em [`references/delegacao-economica-com-prova.md`](references/delegacao-economica-com-prova.md). Primeiro procurar trabalho/prova existentes; para tarefas mecânicas usar scripts e sondas baratos; delegar apenas subtarefas independentes e com um writer por escopo; exigir resumos curtos com evidência; SOL julga resultado, testa e confere `main`/runtime antes de registrar receipt. Delegação não é conclusão. Não criar agentes, skills, HUDs ou watchers duplicados para aplicar esta regra.

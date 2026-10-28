@@ -143,6 +143,8 @@ OWNER + CURRENT_SHA + WORKTREE_LIST + NEXT_CURSOR
 → VERIFY_CLEAN_SCRATCH + RELEASE_LOCK → FIXED_POINT + NEXT_CURSOR
 ```
 
+**Fechamento verificável:** antes de deixar a missão, chamar o gate existente de teardown em `scripts/lupa/worktree-teardown-gate.mjs`; registrar `REMOVED_VERIFIED` ou `KEEP_ACTIVE` no mesmo owner/PR. Não deixar worktree criado pela própria missão sem classificação terminal. O gate faz pré-condições e readback, não exige reteste de código inalterado.
+
 **Barreiras de faxina:** worktree com processo ativo, owner diverso, arquivo untracked não classificado, commit local não promovido, stash/delta único, SHA divergente, mudanças staged/unstaged, arquivo protegido, receipt não gravado, teste falhando ou estado `UNKNOWN` ⇒ `KEEP_ACTIVE`; **NÃO** limpar. Scratch vazio por si só não autoriza `git worktree remove`. `git worktree prune` é operação de metadados posterior à remoção comprovada, não procedimento genérico de higiene.
 
 **Limites de sincronização:** `SOURCE_COMMITTED != MAIN_PROMOTED != DEPLOYED != UI_PROVEN`. Um CI verde e receipt não autorizam substituir trabalho local alheio; se a publicação na `main` conflitar, registrar e aguardar reconciliação no mesmo owner. Caso o CHEFE peça para **ver o build**, usar a Casa/VS Code já abertos, sem declarar imagem visual se não houve screenshot/readback real; quando não pedir, não inventar requisito de UI para descarte de scratch puramente documental. Teste visual só se aplica à capacidade com interface e ao runtime escolhido.
