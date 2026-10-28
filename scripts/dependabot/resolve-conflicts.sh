@@ -56,8 +56,12 @@ mkdir -p "$WORKTREE_ROOT"
 
 cleanup() {
   set +e
-  git -C "$REPO_DIR" worktree remove --force "$WORKTREE" >/dev/null 2>&1 || true
-  git -C "$REPO_DIR" worktree prune >/dev/null 2>&1 || true
+  if [ -d "$WORKTREE" ]; then
+    node "$TRUSTED_OWNER_ROOT/scripts/lupa/worktree-teardown-gate.mjs" \
+      --repo "$REPO_DIR" --target "$WORKTREE" \
+      --allowed-root "$WORKTREE_ROOT" --published-ref "$PR_HEAD_REF" --apply \
+      || echo "RESOLVER_WORKTREE_KEEP_ACTIVE=$WORKTREE"
+  fi
 }
 trap cleanup EXIT
 

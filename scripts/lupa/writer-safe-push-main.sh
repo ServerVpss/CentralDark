@@ -261,9 +261,11 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   STATUS=$?
   set -e
 
-  if ! git worktree remove --force "$WORKTREE" 2>/dev/null; then
-    rm -rf "$WORKTREE" || true
-    git worktree prune || true
+  if [ -d "$WORKTREE" ]; then
+    node "$REPO_ROOT/scripts/lupa/worktree-teardown-gate.mjs" \
+      --repo "$REPO_ROOT" --target "$WORKTREE" \
+      --allowed-root "${RUNNER_TEMP:-/tmp}" --published-ref main --apply \
+      || echo "${WRITER_TAG}_WORKTREE_KEEP_ACTIVE=$WORKTREE"
   fi
 
   if [ "$STATUS" -eq 0 ]; then

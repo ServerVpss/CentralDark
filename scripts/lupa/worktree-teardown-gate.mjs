@@ -19,6 +19,7 @@ const repo = get('repo');
 const target = get('target');
 const allowedRoot = get('allowed-root');
 const receiptRef = get('receipt-ref');
+const publishedRef = get('published-ref');
 const remote = get('remote') || 'origin';
 
 const normalize = (p) => path.normalize(fs.realpathSync.native(p)).replace(/[\\/]+$/,'').toLowerCase();
@@ -41,9 +42,11 @@ function inventory(directory) {
     )).filter(item => item.worktree);
 }
 function validate() {
-  if (!repo || !target || !allowedRoot || !receiptRef) fail('REQUIRED_ARGS_MISSING');
-  if (!/^[A-Za-z0-9._/-]+$/.test(receiptRef) ||
-      receiptRef.includes('..') || receiptRef.startsWith('/')) fail('RECEIPT_REF_INVALID');
+  if (!repo || !target || !allowedRoot || (!receiptRef && !publishedRef)) fail('REQUIRED_ARGS_MISSING');
+  if (receiptRef && (!/^[A-Za-z0-9._/-]+$/.test(receiptRef) ||
+      receiptRef.includes('..') || receiptRef.startsWith('/'))) fail('RECEIPT_REF_INVALID');
+  if (publishedRef && (!/^[A-Za-z0-9][A-Za-z0-9._/-]*$/.test(publishedRef) ||
+      publishedRef.includes('..') || publishedRef.endsWith('/'))) fail('PUBLISHED_REF_INVALID');
   if (!/^[A-Za-z0-9._-]+$/.test(remote)) fail('REMOTE_NAME_INVALID');
   for (const p of [repo, target, allowedRoot]) {
     if (!fs.existsSync(p) || !fs.statSync(p).isDirectory()) fail('PATH_NOT_A_DIRECTORY');
@@ -59,16 +62,19 @@ function validate() {
   const entry = entries.find(x => normalize(x.worktree) === candidate);
   if (!entry) fail('NOT_A_REGISTERED_WORKTREE');
   if (entry.locked || entry.prunable) fail('WORKTREE_LOCKED_OR_PRUNABLE');
-  const branch = git(target, 'symbolic-ref', '--quiet', '--short', 'HEAD');
+  const currentBranch = entry.detached === true ? null : git(target, 'symbolic-ref', '--quiet', '--short', 'HEAD');
+  if (publishedRef && currentBranch && publishedRef !== currentBranch) fail('PUBLISHED_BRANCH_MISMATCH');
+  const branch = publishedRef || currentBranch;
+  if (!branch) fail('DETACHED_REF_REQUIRED');
   const head = git(target, 'rev-parse', 'HEAD');
   if (!/^[0-9a-f]{40}$/.test(head)) fail('HEAD_INVALID');
   if (git(target, 'status', '--porcelain=v1', '--untracked-files=all') !== '')
     fail('UNCOMMITTED_OR_UNTRACKED_CONTENT');
-  git(target, 'cat-file', '-e', 'HEAD:' + receiptRef);
+  if (receiptRef) git(target, 'cat-file', '-e', 'HEAD:' + receiptRef);
   const remoteHead = git(repo, 'ls-remote', '--heads', remote, 'refs/heads/' + branch)
     .split(/\s+/)[0] || '';
   if (remoteHead !== head) fail('REMOTE_COMMIT_NOT_IDENTICAL');
-  return { branch, head, remoteHead, receiptRef, candidate, remote };
+  return { branch, head, remoteHead, receiptRef: receiptRef || ('git:'+remote+'/'+branch), candidate, remote };
 }
 const result = {
   rule: 'TEMP_MATERIAL_EXIT_GATE_V1',
@@ -85,6 +91,7 @@ try {
   result.branch = verified.branch;
   result.remote_head = verified.remoteHead;
   result.receipt_sha = verified.head;
+  result.receipt_ref = verified.receiptRef;
   if (apply) {
     git(repo, 'worktree', 'remove', target); // NEVER use --force, rm -rf or blind prune.
     if (fs.existsSync(target) || inventory(repo).some(w => {

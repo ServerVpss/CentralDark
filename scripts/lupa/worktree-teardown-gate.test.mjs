@@ -37,8 +37,9 @@ function fixture() {
 }
 function check(f, options={}) {
   const args=[gate,'--repo',f.main,'--target',options.target||f.target,
-    '--allowed-root',f.allowed,'--receipt-ref',options.receipt||'evidence/proof.md'];
+    '--allowed-root',f.allowed,...(options.noReceipt?[]:['--receipt-ref',options.receipt||'evidence/proof.md'])];
   if(options.apply)args.push('--apply');
+  if(options.publishedRef)args.push('--published-ref',options.publishedRef);
   const r=spawnSync(process.execPath,args,{encoding:'utf8',windowsHide:true,timeout:30000});
   return {status:r.status, data:JSON.parse(r.stdout)};
 }
@@ -82,3 +83,7 @@ for(const [name,body] of [
   test(name,()=>{const f=fixture();try{body(f);}
     finally{fs.rmSync(f.top,{recursive:true,force:true,maxRetries:5,retryDelay:100});}});
 }
+
+test('published detached worktree exits without receipt duplication',()=>{
+ const f=fixture();try{exec('git',['checkout','--detach','HEAD'],f.target);const x=check(f,{apply:true,noReceipt:true,publishedRef:'feature'});assert.equal(x.status,0);assert.equal(x.data.status,'REMOVED_VERIFIED');assert.equal(fs.existsSync(f.target),false);}finally{fs.rmSync(f.top,{recursive:true,force:true,maxRetries:5,retryDelay:100});}
+});
