@@ -229,7 +229,30 @@ Caddy `handle_path /contas*` strips `/contas` before uvicorn. Therefore:
 
 Hermes preview `file:///ai-review.html` ERR_FILE_NOT_FOUND is a local preview miss, not VPS health. Do not treat the preview pane as the public route. Open the **public** admin URL in `desktop_preview` when CHEFE needs to see the live page.
 
-## Casa Commander — engine lazy-init e npx cache (CentralDark Casa)
+## CARACOL funcional — owners e prova (main d7807310+)
+
+CARACOL é o mecanismo de travessia forward/reverse do trigger fabric. Owners e testes:
+
+| Role | Owner | Prova |
+|------|-------|-------|
+| 4 THINK/GOAL | `scripts/trigger-fabric/centraldark_master_cycle.py` | 36/36 PASS |
+| 1 EXECUTE/COCKPIT-HERMES | `apps/modulos/HERMES-CORE/` | owner canônico |
+| 2 OBSERVE/VAULT-PROVA | `scripts/trigger-fabric/spiral_traversal.py` | self-test PASS |
+| 3 CONTEXT/BUILDER-IAs | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml` | contrato carregado |
+| 4 JUDGE/CHECKPOINT | `apps/instinto-superior/src/components/central/CheckpointCentralDark.tsx` | existe |
+
+- `spiral_traversal.py --self-test` retorna `status=PASS` com `forward_reverse_same_denominator=true` e `nucleus_tail_proven=true`.
+- `centraldark_master_cycle.py` executa 36 testes, todos PASS.
+- `verify_repo_contract.py` tem 11 FAILs pré-existentes em owners **não-CARACOL** (MCP catalog, learning lineage, jukebox, SOUL sync, main_first_change_guard). Nenhum é owner CARACOL.
+- `UNIVERSAL_EVOLUTION_CARACOL_CONTRACT` é um dos checks do repo contract que PASSA.
+- Não criar outro Cockpit, Hermes, Supabase ou instalador para materializar CARACOL. Reutilizar owners existentes.
+- `CARACOL_FUNCTIONAL_PROVEN` requer: spiral_traversal self-test PASS + master_cycle tests PASS + main reconciliado. CI_BLOCKED e VPS_UNKNOWN não bloqueiam prova local.
+
+```text
+CARACOL_PROVEN = SPIRAL_TRAVERSAL_SELF_TEST_PASS AND MASTER_CYCLE_TESTS_PASS AND MAIN_RECONCILED
+CI_BLOCKED != CARACOL_FAIL
+VPS_UNKNOWN != CARACOL_FAIL
+```
 
 O Casa Commander (`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs`) roda em `127.0.0.1:9101` e spawna `@wonderwhy-er/desktop-commander@0.2.48` via `npx -y` como child MCP stdio. A flag `ready` só vira `true` após o handshake `initialize` do MCP.
 
