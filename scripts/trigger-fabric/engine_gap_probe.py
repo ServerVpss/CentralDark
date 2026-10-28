@@ -15,6 +15,10 @@ import time
 import urllib.error
 import urllib.request
 from typing import Any, Dict, Optional
+from pathlib import Path
+
+# Relativo ao owner existente: <repo>/scripts/trigger-fabric/engine_gap_probe.py.
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Preserve the legacy env override; do not hardcode another machine's IP.
 # 8099 has no listener in the measured Casa; 9101 is the actual Commander /health.
@@ -26,7 +30,7 @@ DEFAULT_HEALTH_URL = os.getenv(
 def git_value(*args: str) -> Optional[str]:
     try:
         proc = subprocess.run(
-            ["git", *args],
+            ["git", "-C", str(REPO_ROOT), *args],
             check=False,
             capture_output=True,
             text=True,
