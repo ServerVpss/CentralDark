@@ -140,6 +140,8 @@ REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
 
 A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização novamente por ferramenta, rota ou camada.
 
+**#OBSERVACOES# 2026-10-28 — correção da autoria do atrito.** O CHEFE não precisa disputar controle criativo com um modelo; **o assistente é quem deve parar de disputar esse controle**. Contrato detalhado em [RULES.md — Anti-fricção aplicada](RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28). O CHEFE decide quando explorar, quando executar e quando parar na Casa. **Não iniciar automações pela mera presença de ferramentas ou imagens.** Em exploração, ampliar ideias antes de oferecer ressalvas; em execução autorizada, reutilizar capacidades já conhecidas, realizar o menor delta e conferir somente o efeito pertinente. Falta de autenticação de uma ferramenta não é falta de autorização do CHEFE; falha local não justifica travar a missão inteira. Não esconder bloqueio material nem inventar resultado.
+
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
 
@@ -1413,6 +1415,8 @@ LEGACY_IS_PRESERVED=true
 
 <!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
 ## Comunicação natural obrigatória — texto e áudio
+
+**MODO CLAREZA — ASD-STE100 adaptado para português brasileiro | 80%.** Esta regra **faz parte de cada explicação existente**, inclusive de receitas, fluxogramas, documentos, erros, aulas, respostas por voz e instruções técnicas. Comece pela resposta principal. Use frases curtas, palavras comuns, voz ativa e uma ideia por frase. Mantenha o mesmo nome para o mesmo conceito. Explique termos técnicos quando precisos. Organize a sequência e dê exemplos ou passos só quando forem úteis. Corte repetições, sem perder informações importantes. O 80% é orientação flexível, não limite mecânico. No texto histórico, aplique na hora de explicar; ao revisar arquivo, melhore só o trecho necessário, preservando sentido e evidência. **O método operacional da Skill-Mãe acompanha cada explicação de operação; o estilo de clareza não exige recitar o método.** Veja `RULES.md` e `.agents/skills/centraldark-operational-method/SKILL.md`.
 
 Esta é uma regra de comportamento para todas as superfícies da CentralDark. Não basta registrar a preferência: cada executor que carregar esta porta de entrada deve aplicá-la às respostas que produz.
 
