@@ -11,7 +11,8 @@ param(
   [ValidateSet('Inspect', 'Draft', 'Send')][string]$Mode = 'Inspect',
   [string]$PayloadPath,
   [string]$TabTitle,
-  [switch]$ActivateExistingTab
+  [switch]$ActivateExistingTab,
+  [ValidateSet('Auto', 'HermesEmbedded', 'ExternalBrowser')][string]$TargetSurface = 'Auto'
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -42,6 +43,58 @@ function Match-Conversation([string]$observed, [string]$expected) {
   if (-not [Uri]::TryCreate($observed, [UriKind]::Absolute, [ref]$uri)) { return $false }
   return $uri.Scheme -eq 'https' -and $uri.Host -eq 'chatgpt.com' -and
     $uri.AbsolutePath.TrimEnd('/') -ceq $expected
+}
+function Find-HermesEmbeddedTarget([string]$expectedPath) {
+  $processes = @(Get-Process Hermes -ErrorAction SilentlyContinue |
+    Where-Object { $_.MainWindowHandle -ne [IntPtr]::Zero })
+  if ($processes.Count -eq 0) { return $null }
+  if ($processes.Count -ne 1) { throw 'MULTIPLE_HERMES_DESKTOP_WINDOWS' }
+  $process = $processes[0]
+  $window = [System.Windows.Automation.AutomationElement]::FromHandle(
+    [IntPtr]$process.MainWindowHandle)
+  if ($window.Current.Name -ne 'Hermes') { throw 'HERMES_WINDOW_IDENTITY_MISMATCH' }
+  $walker = [System.Windows.Automation.TreeWalker]::ControlViewWalker
+  $addresses = @(Find-Type $window ([System.Windows.Automation.ControlType]::Edit) |
+    Where-Object { $_.Current.Name -eq 'Address' -and -not $_.Current.IsOffscreen })
+  $matches = @()
+  foreach ($doc in (Find-Type $window ([System.Windows.Automation.ControlType]::Document))) {
+    if ($doc.Current.Name -eq 'Hermes' -or $doc.Current.IsOffscreen) { continue }
+    $url = Get-Pattern $doc ([System.Windows.Automation.ValuePattern]::Pattern)
+    if (-not $url -or -not (Match-Conversation ([string]$url.Current.Value) $expectedPath)) {
+      continue
+    }
+    $docParent = $walker.GetParent($doc)
+    if (-not $docParent) { continue }
+    $area = $docParent.Current.BoundingRectangle
+    foreach ($address in $addresses) {
+      $value = Get-Pattern $address ([System.Windows.Automation.ValuePattern]::Pattern)
+      if (-not $value -or -not (Match-Conversation ([string]$value.Current.Value) $expectedPath)) {
+        continue
+      }
+      $addressParent = $walker.GetParent($address)
+      if (-not $addressParent) { continue }
+      $addressArea = $addressParent.Current.BoundingRectangle
+      if ([Math]::Abs($area.X - $addressArea.X) -gt 2 -or
+          [Math]::Abs($area.Width - $addressArea.Width) -gt 2) { continue }
+      $matches += [pscustomobject]@{
+        Root = $doc
+        Window = $window
+        ProcessId = $process.Id
+        Address = $address
+      }
+    }
+  }
+  if ($matches.Count -gt 1) { throw 'MULTIPLE_MATCHING_HERMES_CHATGPT_PANES' }
+  if ($matches.Count -eq 0) { return $null }
+  return $matches[0]
+}
+function Target-Still-Matches($root, [string]$expectedPath) {
+  if ($script:resolvedSurface -eq 'HermesEmbedded') {
+    $value = Get-Pattern $root ([System.Windows.Automation.ValuePattern]::Pattern)
+    if (-not $value) { return $false }
+    return (Match-Conversation ([string]$value.Current.Value) $expectedPath)
+  }
+  return (Match-Conversation (Get-BrowserAddress $root) $expectedPath)
 }
 function Editor-Empty([string]$text) {
   $trimmed = $text.Trim()
@@ -79,10 +132,13 @@ function Result([string]$status, [string]$detail, [string]$receipt = '') {
     receipt_id = $receipt
     target = 'CHAT_GLOBAL_CURRENT_CONVERSATION'
     mode = $Mode
+    surface = $script:resolvedSurface
+    requested_surface = $TargetSurface
     at = [DateTimeOffset]::UtcNow.ToString('o')
   } | ConvertTo-Json -Compress
 }
 
+$script:resolvedSurface = 'UNKNOWN'
 try {
   $expectedUri = $null
   if (-not [Uri]::TryCreate($ConversationUrl, [UriKind]::Absolute, [ref]$expectedUri) -or
@@ -137,39 +193,54 @@ try {
   $matchedRoot = $null
   $matchingPid = 0
   $switchedTab = $false
-  $browsers = @(Get-Process msedge, chrome -ErrorAction SilentlyContinue |
-    Where-Object { $_.MainWindowHandle -ne 0 })
-  foreach ($process in $browsers) {
-    $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
-    $address = Get-BrowserAddress $root
-    if (Match-Conversation $address $expectedPath) {
-      if ($matchedRoot) { throw 'MULTIPLE_MATCHING_BROWSER_WINDOWS' }
-      $matchedRoot = $root
-      $matchingPid = $process.Id
+  if ($TargetSurface -in @('Auto','HermesEmbedded')) {
+    $embedded = Find-HermesEmbeddedTarget $expectedPath
+    if ($embedded) {
+      $matchedRoot = $embedded.Root
+      $matchingPid = $embedded.ProcessId
+      $script:resolvedSurface = 'HermesEmbedded'
+    }
+    if (-not $matchedRoot -and $TargetSurface -eq 'HermesEmbedded') {
+      throw 'EXACT_CHATGPT_CONVERSATION_NOT_FOUND_INSIDE_HERMES'
     }
   }
-  if (-not $matchedRoot -and $ActivateExistingTab -and $TabTitle) {
-    $candidates = @()
+  if (-not $matchedRoot -and $TargetSurface -in @('Auto','ExternalBrowser')) {
+    $browsers = @(Get-Process msedge, chrome -ErrorAction SilentlyContinue |
+      Where-Object { $_.MainWindowHandle -ne 0 })
     foreach ($process in $browsers) {
       $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
-      $tabs = @(Find-Type $root ([System.Windows.Automation.ControlType]::TabItem) |
-        Where-Object { $_.Current.Name.StartsWith($TabTitle, [StringComparison]::OrdinalIgnoreCase) })
-      foreach ($tab in $tabs) {
-        $candidates += [pscustomobject]@{ Root=$root; ProcessId=$process.Id; Tab=$tab }
+      $address = Get-BrowserAddress $root
+      if (Match-Conversation $address $expectedPath) {
+        if ($matchedRoot) { throw 'MULTIPLE_MATCHING_BROWSER_WINDOWS' }
+        $matchedRoot = $root
+        $matchingPid = $process.Id
+        $script:resolvedSurface = 'ExternalBrowser'
       }
     }
-    if ($candidates.Count -ne 1) { throw ('EXISTING_TAB_NOT_UNIQUE_OR_NOT_FOUND_' + $candidates.Count) }
-    $candidate = $candidates[0]
-    $selection = Get-Pattern $candidate.Tab ([System.Windows.Automation.SelectionItemPattern]::Pattern)
-    if (-not $selection) { throw 'EXISTING_TAB_CANNOT_SELECT' }
-    $selection.Select()
-    Start-Sleep -Milliseconds 300
-    if (-not (Match-Conversation (Get-BrowserAddress $candidate.Root) $expectedPath)) {
-      throw 'EXISTING_TAB_SELECTED_BUT_URL_MISMATCH'
+    if (-not $matchedRoot -and $ActivateExistingTab -and $TabTitle) {
+      $candidates = @()
+      foreach ($process in $browsers) {
+        $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
+        $tabs = @(Find-Type $root ([System.Windows.Automation.ControlType]::TabItem) |
+          Where-Object { $_.Current.Name.StartsWith($TabTitle, [StringComparison]::OrdinalIgnoreCase) })
+        foreach ($tab in $tabs) {
+          $candidates += [pscustomobject]@{ Root=$root; ProcessId=$process.Id; Tab=$tab }
+        }
+      }
+      if ($candidates.Count -ne 1) { throw ('EXISTING_TAB_NOT_UNIQUE_OR_NOT_FOUND_' + $candidates.Count) }
+      $candidate = $candidates[0]
+      $selection = Get-Pattern $candidate.Tab ([System.Windows.Automation.SelectionItemPattern]::Pattern)
+      if (-not $selection) { throw 'EXISTING_TAB_CANNOT_SELECT' }
+      $selection.Select()
+      Start-Sleep -Milliseconds 300
+      if (-not (Match-Conversation (Get-BrowserAddress $candidate.Root) $expectedPath)) {
+        throw 'EXISTING_TAB_SELECTED_BUT_URL_MISMATCH'
+      }
+      $matchedRoot = $candidate.Root
+      $matchingPid = $candidate.ProcessId
+      $switchedTab = $true
+      $script:resolvedSurface = 'ExternalBrowser'
     }
-    $matchedRoot = $candidate.Root
-    $matchingPid = $candidate.ProcessId
-    $switchedTab = $true
   }
   if (-not $matchedRoot) { throw 'EXACT_CHATGPT_CONVERSATION_NOT_ACTIVE' }
   $editors = @(Find-Type $matchedRoot ([System.Windows.Automation.ControlType]::Edit) |
@@ -201,7 +272,7 @@ try {
   $focused = [System.Windows.Automation.AutomationElement]::FocusedElement
   if ($focused.Current.ControlType -ne [System.Windows.Automation.ControlType]::Edit -or
       $focused.Current.Name -ne $editor.Current.Name -or
-      -not (Match-Conversation (Get-BrowserAddress $matchedRoot) $expectedPath)) {
+      -not (Target-Still-Matches $matchedRoot $expectedPath)) {
     throw 'FOCUS_OR_TARGET_CHANGED_BEFORE_TYPING'
   }
   [System.Windows.Forms.SendKeys]::SendWait((Escape-SendKeys $draft))
@@ -214,9 +285,13 @@ try {
     Result 'DRAFT_PROVEN_NO_SEND' ('EXACT_URL; EDITOR_READBACK; LENGTH=' + $written.Length) $receiptId
     return
   }
-  if (-not (Match-Conversation (Get-BrowserAddress $matchedRoot) $expectedPath)) {
-    throw 'TARGET_CHANGED_ABORT_SEND'
+  if (-not (Target-Still-Matches $matchedRoot $expectedPath) -or
+      ([string]$valuePattern.Current.Value).TrimEnd([char]13, [char]10) -cne $draft) {
+    throw 'TARGET_OR_DRAFT_CHANGED_ABORT_SEND'
   }
+  $sendBusy = @(Find-Type $matchedRoot ([System.Windows.Automation.ControlType]::Button) |
+    Where-Object { $_.Current.Name -in @('Parar','Stop generating','Stop') -and $_.Current.IsEnabled }).Count -gt 0
+  if ($sendBusy) { throw 'CHATGPT_GENERATION_STARTED_BEFORE_SEND' }
   [System.Windows.Forms.SendKeys]::SendWait('{ENTER}')
   Start-Sleep -Milliseconds 550
   $delivered = $false
