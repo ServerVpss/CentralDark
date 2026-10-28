@@ -56,6 +56,22 @@ Esta skill não cria outro sistema: consulta e alimenta o que já existe.
 
 `NEW_RESPONSE != NEW_INTENT` · `PRE_RESPONSE_INTENT_RECALL=true` · `SAME_GOAL_UNTIL_PROVEN_OR_CHEFE_OVERRIDE=true` · `DOCUMENTED != EXECUTED` · `UNKNOWN != PASS` · `ONE_WRITER_PER_SCOPE=true`
 
+## Cristalização Kaizen obrigatória — receita Kanban reutilizável (26/10/2026)
+
+**Uma intenção, um cartão existente, uma execução, uma prova, um aprendizado apenas se novo.** Aplicar a [Receita Universal Hermes, seção 8](../centraldark-operational-method/references/HERMES-KANBAN-RECEITA-UNIVERSAL.md) como **owner único do passo a passo**. Não copiar os comandos para outra skill nem criar outro fluxo. A [Skill Mãe](../centraldark-operational-method/SKILL.md) torna a consulta dessa receita obrigatória no processo CentralDark.
+
+**Regra Kaizen para qualquer nova tarefa ou retorno do CHEFE:**
+- **Relembrar:** obter intenção vigente, `TASK_ID`, `OWNER`, resultado anterior e `NEXT_CURSOR` pertinentes. Se existe cartão, reusar, inclusive se já está `DONE`.
+- **Economizar:** uma leitura do status. `DONE` → devolver resultado e parar; `RUNNING` → não executar outra vez. Somente autorização explícita desbloqueia um cartão bloqueado.
+- **Agir:** prévia `dry-run` e um despacho apenas para o alvo correto. Um writer por projeto, sem Claude/Hermes concorrentes sobre o mesmo owner.
+- **Provar:** um readback de run + efeito no alvo, com teste específico e contraprova quando necessário. Não misturar código compilado com instalação, execução, integração ou deploy.
+- **Aprender:** deduplicar lição pelo `intenção + owner + tarefa + tipo de efeito + receipt`. Se já foi aprendida, `REUSED_PROVEN_RECEIPT`, sem nota nova ou replay. Se o erro for novo, corrigir o menor delta, validar e incorporar ao owner existente.
+- **Responder:** português brasileiro claro (ASD-STE100 adaptado, 80%); prioridade para `ID | STATUS | PROVA | PRÓXIMO PASSO`; sem histórias repetidas nem jargão inútil. A prova não deve ser omitida para ganhar brevidade.
+
+**Cristal observado, não suposição:** em 26/10/2026, `hermes kanban stats` na Casa mostrou **11 cartões `DONE`**. O cartão `t_87d162cb` do **CentralDark Installer v3.0** passou de bloqueado para `DONE` e tinha **1 run `completed`**, com resumo de compilação CSC exit 0, parser PS1 0 erros, smoke de GUI e artefato .exe. O placar 11 é retrato daquele quadro, **não** onze provas independentes do mesmo procedimento. A receita é **reproduzível** porque tem entradas, comandos, condições de parada, critérios de aceitação e prova; **não garante** que a próxima execução termine com sucesso.
+
+**Princípio de melhoria contínua:** `REUSE_PROVEN_RECEIPT > NEW_AUDIT`; `NO_NEW_CAUSE => NO_NEW_TEST`; `DONE_CARD != ALL_REAL_WORLD_ACTIONS_DONE`; `CURRENT_OUTCOME != FUTURE_OUTCOME`. Só refazer medição quando mudança, expiração da prova ou contraprova concreta exigir.
+
 ## As sete batidas (ordem fixa) com os Seis Olhos
 1. Vive e experimenta — DOMÍNIO conserva intenção e contexto.
 2. Descobre — consultar APRENDIZADOS, NeuroLink, skills e `.agents/library-index.json` antes de investigar. SEIS OLHOS inventaria capacidades; AZUL atrai só evidência relevante.
