@@ -106,8 +106,11 @@ function Escape-Keys([string]$inputText) {
   }
   return $buffer.ToString()
 }
-function Read-Document-Url($window, [string]$wanted) {
+function Read-Document-Url($window, [string]$wanted, $paneBounds) {
   foreach ($doc in (Find-Controls $window ([System.Windows.Automation.ControlType]::Document))) {
+    $left=[double]$doc.Current.BoundingRectangle.X
+    if ($doc.Current.Name -eq 'Hermes' -or
+        $left -lt $paneBounds.X -or $left -ge $paneBounds.Right) { continue }
     $pattern = Try-Pattern $doc ([System.Windows.Automation.ValuePattern]::Pattern)
     if ($pattern -and (Match-Url ([string]$pattern.Current.Value) $wanted)) {
       return $true
@@ -162,6 +165,7 @@ try {
   if ($ToUrl.Length -gt 1800) { throw 'TARGET_URL_TOO_LONG' }
 
   $selected=$matches[0]
+  $paneBounds=([System.Windows.Automation.TreeWalker]::ControlViewWalker.GetParent($selected.Address)).Current.BoundingRectangle
   $before=@($selected.TabLabels)
   $beforeCount=[int]$selected.TabCount
   [void][CDHermesForeground]::SetForegroundWindow([IntPtr]$process.MainWindowHandle)
@@ -204,7 +208,7 @@ try {
   $documentOk=$false
   for ($attempt=0;$attempt -lt 12;$attempt++) {
     Start-Sleep -Milliseconds 220
-    if (Read-Document-Url $window $ToUrl) { $documentOk=$true; break }
+    if (Read-Document-Url $window $ToUrl $paneBounds) { $documentOk=$true; break }
   }
   $afterFinal=@(Read-Panes $window | Where-Object { [Math]::Abs($_.BarX - $selected.BarX) -le 2 })
   if ($afterFinal.Count -ne 1 -or $afterFinal[0].TabCount -lt $beforeCount+1) {
