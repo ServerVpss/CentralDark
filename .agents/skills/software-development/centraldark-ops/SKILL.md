@@ -149,7 +149,19 @@ GRAMMAR_PRESERVED != TECHNICAL_STATE_CURRENT
 REPORT_OLD != STATE_NOW
 ```
 
-## Procedure — three-plane reconcile then micro-deploy
+## VPS é consequência do config local (não bloqueador)
+
+Quando o config local está selado como cristal, a VPS é downstream: replay com bindings trocados, não fonte de verdade.
+
+```text
+LOCAL_CONFIG_SEALED → VPS_IS_CONSEQUENCE → REPLAY_WHEN_ROUTE_RETURNS
+```
+
+- Local PASS não depende de VPS PASS. VPS unreachable bloqueia readback remoto, não closure local.
+- Se local config está correto (HEAD medido, build PASS, health local PASS), a VPS só precisa replicar quando a rota voltar.
+- Não bloquear fechamento local por causa de VPS timeout/DNS 523/SSH down.
+- NEXT_CURSOR local: `LOCAL_CONFIG_SEALED; VPS_IS_CONSEQUENCE; REPLAY_VPS_WHEN_ROUTE_RETURNS; DO_NOT_DEPLOY_UNTIL_VPS_READBACK`.
+- Para self-healing bounded, usar `engine-gap-closure` (SELF_HEALING_FAILURE_LOOP). Controlador: `python scripts/trigger-fabric/engine_gap_fixed_point.py`. Converge só enquanto há ganho informacional. Não faz deploy, restart, merge, troca credencial ou mutação de produção.
 
 1. **GitHub (live API, not local origin/main)**
    - `gh auth status` then `gh api repos/ServerVpss/CentralDark/commits/main --jq '{sha:.sha,msg:.commit.message}'`
