@@ -1,7 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Headphones, Mic2, Radio, Volume2, Wifi, WifiOff, X } from "lucide-react";
+import { Headphones, Mic2, Radio, Volume2, Wifi, WifiOff } from "lucide-react";
+import { PopupCloseButton } from "@/components/ui/popup-close-button";
 
 type Role = "listener" | "broadcaster";
 type Signal =
@@ -352,15 +353,7 @@ export function PlayerLocalJarvis({ onClose }: { onClose?: () => void } = {}) {
       data-cd-flow="instinto.PlayerLocalJarvis"
     >
       {onClose ? (
-        <button
-          type="button"
-          aria-label="Fechar painel Ouvir PC"
-          title="Fechar"
-          onClick={onClose}
-          className="absolute right-3 top-3 z-10 flex size-8 items-center justify-center rounded-full border border-red-500/40 bg-[#05070c] text-red-400 transition-colors hover:border-red-400 hover:bg-red-500/10 hover:text-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
-        >
-          <X aria-hidden="true" className="size-5" />
-        </button>
+        <PopupCloseButton aria-label="Fechar painel Ouvir PC" onClick={onClose} />
       ) : null}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
