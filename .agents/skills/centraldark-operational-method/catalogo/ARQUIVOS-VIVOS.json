@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T20:24:30-03:00",
+    "gerado_em":  "2026-10-28T20:33:30-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T20:21:30-03:00",
-                         "modificado_em":  "2026-10-28T20:21:30-03:00",
+                         "criado_em":  "2026-10-28T20:24:30-03:00",
+                         "modificado_em":  "2026-10-28T20:24:30-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T20:21:30-03:00",
-                         "modificado_em":  "2026-10-28T20:21:30-03:00",
+                         "criado_em":  "2026-10-28T20:24:30-03:00",
+                         "modificado_em":  "2026-10-28T20:24:30-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -549,9 +549,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-28T20:18:23-03:00",
-                         "bytes":  73086,
-                         "sha256":  "7d3ffd2d1b5f4a9df1223f1a115774cc25c02553355bf395a45753d6ec944bc7",
+                         "modificado_em":  "2026-10-28T20:32:34-03:00",
+                         "bytes":  76889,
+                         "sha256":  "ef794f5c36bee0a9cc537d856fe48dc23d13f6043963363ac5f21481348919ce",
                          "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
@@ -1381,9 +1381,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T20:23:52-03:00",
-                         "bytes":  233599,
-                         "sha256":  "b02667897b904af8299528db4175b9cc351ecaf79e0f5ecfd07bf5c24b11ed43",
+                         "modificado_em":  "2026-10-28T20:31:37-03:00",
+                         "bytes":  235238,
+                         "sha256":  "7552eabc6d6d545b1a96afd03f7dc17b54421b9546da5bdd289ace80d3171005",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
@@ -1404,6 +1404,10 @@
                                              },
                                              {
                                                  "destino":  "scripts/Hermes-Oracle-Return.ps1",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
