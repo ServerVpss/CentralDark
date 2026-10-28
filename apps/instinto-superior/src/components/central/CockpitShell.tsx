@@ -634,14 +634,19 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       </Sheet>
 
       <Dialog open={playerAberto} onOpenChange={definirPlayerAberto}>
-        <DialogContent className="max-h-[94dvh] max-w-5xl overflow-hidden p-0">
-          <DialogHeader className="border-b border-border bg-background/95 px-5 py-4 pr-12">
+        <DialogContent
+          className="max-h-[94dvh] w-[calc(100vw-1.5rem)] max-w-3xl gap-0 overflow-visible border-0 bg-transparent p-0 shadow-none [&>button]:hidden"
+          data-cd-flow="instinto.CockpitShell.jarvis-dialog"
+        >
+          <DialogHeader className="sr-only">
             <DialogTitle>🎧 Player local · Jarvis</DialogTitle>
             <DialogDescription>
-              Player do Instinto Superior servido pelo mesmo Cockpit na porta 8080. A fonte de áudio continua privada na tailnet.
+              Player do Instinto Superior servido pelo mesmo Cockpit. A fonte de áudio continua privada na tailnet.
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-auto bg-[#0a0906] p-2 sm:p-4"><PlayerLocalJarvis /></div>
+          <div className="max-h-[94dvh] overflow-y-auto">
+            <PlayerLocalJarvis onClose={() => definirPlayerAberto(false)} />
+          </div>
         </DialogContent>
       </Dialog>
 
