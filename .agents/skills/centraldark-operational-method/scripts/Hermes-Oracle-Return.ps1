@@ -179,8 +179,10 @@ try {
     }
     $draft = 'HERMES -> ORACULO | ACTOR=HERMES | LOOP_ID=' + $envelope.loop_id +
       ' | TURN_ID=' + $envelope.turn_id + ' | RECEIPT_ID=' + $receiptId +
-      ' | INTENT_ID=' + $envelope.intent_id + ' | STATUS=' + $envelope.status +
-      ' | NEXT_CURSOR=' + $envelope.next_cursor +
+      ' | PARENT_ID=' + $envelope.parent_id + ' | INTENT_ID=' + $envelope.intent_id +
+      ' | EVENT_ID=' + $envelope.event_id + ' | CAUSATION_ID=' + $envelope.causation_id +
+      ' | SURFACE_ID=' + $envelope.surface_id + ' | ATTEMPT_ID=' + $envelope.attempt_id +
+      ' | STATUS=' + $envelope.status + ' | NEXT_CURSOR=' + $envelope.next_cursor +
       ' | RESULTADO_CANDIDATO=' + $msg
     if ($draft.Length -gt 3600) { throw 'ENVELOPE_TOO_LONG' }
   }
@@ -315,6 +317,7 @@ try {
   } else {
     Result 'SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY' ('ONE_SEND_INVOKED; EDITOR_CLEARED=' + $composerCleared +
       '; RECEIPT_NOT_VISIBLE_YET; NO_RETRY; SEARCH_SAME_CHAT_BEFORE_ANY_NEW_ACTION') $receiptId
+    exit 3  # avoid false-green in the existing Hermes executor/Goal
   }
 } catch {
   Result 'BLOCKED' ([string]$_.Exception.Message) $receiptId
