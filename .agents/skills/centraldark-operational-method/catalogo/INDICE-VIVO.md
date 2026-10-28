@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-28 17:39:29 -03:00
-**Total:** 93 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-28 19:33:30 -03:00
+**Total:** 94 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T16:03:30-03:00 | 2026-10-28T16:03:30-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T17:39:30-03:00 | 2026-10-28T17:39:30-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T16:03:30-03:00 | 2026-10-28T16:03:30-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T17:39:30-03:00 | 2026-10-28T17:39:30-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -90,6 +90,7 @@
 | `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-28T10:39:11-03:00 | 606a0b529595 |
 | `scripts/casa_boot.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-27T00:05:19-03:00 | 0724ea990d00 |
 | `scripts/Consultar-PowerShellDocs.ps1` | script | 2026-10-25T12:51:09-03:00 | 2026-10-25T12:56:27-03:00 | a573e07e4297 |
+| `scripts/Hermes-Oracle-Return.ps1` | script | 2026-10-28T19:33:09-03:00 | 2026-10-28T19:33:09-03:00 | aef0484c9bcc |
 | `scripts/Identify-CentralDarkMonitors.ps1` | script | 2026-10-26T12:47:12-03:00 | 2026-10-26T12:47:12-03:00 | 7e7eb54a50f6 |
 | `scripts/integrar-skills-centraldark-20261024.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 79ea87cada3f |
 | `scripts/mapear_remoto.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | b0ab2fb243d2 |
@@ -101,4 +102,4 @@
 | `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-28T17:36:58-03:00 | ffcb19804229 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-28T17:39:29-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T19:33:30-03:00 | CRIADO | `scripts/Hermes-Oracle-Return.ps1` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
