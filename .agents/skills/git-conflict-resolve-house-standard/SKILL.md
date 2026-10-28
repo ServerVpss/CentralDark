@@ -39,6 +39,20 @@ dele aceita automaticamente, sem revisão humana.
 
 ## Política de resolução
 
+### Diagnóstico amplo, mesmo owner (2026-10-27)
+
+Owner único: scripts/dependabot/resolve-conflicts.sh. Classificador existente:
+scripts/dependabot/classify-conflict.mjs --diagnose.
+
+44 assinaturas do Git e 26 famílias de caminhos são observadas junto ao
+índice unmerged via git ls-files -u -z. Conteúdo três-vias pode continuar
+para a política comprovada; outros tipos, estruturas ausentes ou assinaturas
+desconhecidas são REQUIRES_REVIEW e NO_PUSH_ON_YELLOW=1.
+Reconhecer mais não autoriza resolver mais: testes e mesmo HEAD decidem.
+Teste: node --test scripts/dependabot/conflict-diagnosis.test.mjs.
+
+
+
 | Caminho | Lado que vence | Por quê |
 |---|---|---|
 | `package.json`, `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock` — em qualquer diretório | **PR** (`--ours`) | o PR **é** o bump; manter a main aqui apaga o motivo do PR |

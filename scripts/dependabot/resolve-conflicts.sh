@@ -106,6 +106,20 @@ if ! grep -q "CONFLICT" <<<"$MERGE_OUTPUT"; then
 fi
 
 echo "CONFLICT_DETECTED"
+# Scan Git type signatures and the unmerged index: string matching never authorizes resolution.
+CONFLICT_DIAGNOSIS="$(printf '%s\n' "$MERGE_OUTPUT" | node "$CLASSIFIER" --diagnose)" || {
+  echo "BLOCKED_CONFLICT_DIAGNOSIS_FAILED"
+  git merge --abort 2>/dev/null || true
+  exit 20
+}
+echo "CONFLICT_DIAGNOSIS_JSON=$CONFLICT_DIAGNOSIS"
+SCAN_ALLOWED="$(node -e 'const d=JSON.parse(process.argv[1]);process.stdout.write(d.auto_resolve_allowed===true?"yes":"no")' "$CONFLICT_DIAGNOSIS")"
+if [ "$SCAN_ALLOWED" != "yes" ]; then
+  echo "BLOCKED_COMPLEX_CONFLICT_NEEDS_INDEPENDENT_REVIEW=1"
+  echo "NO_PUSH_ON_YELLOW=1"
+  git merge --abort 2>/dev/null || true
+  exit 20
+fi
 mapfile -t CONFLICTS < <(git diff --name-only --diff-filter=U)
 
 if [ "${#CONFLICTS[@]}" -eq 0 ]; then
