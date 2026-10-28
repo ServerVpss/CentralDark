@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-28 14:21:30 -03:00
+**Atualizado (Casa/Bahia):** 2026-10-28 14:36:30 -03:00
 **Total:** 93 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T14:15:31-03:00 | 2026-10-28T14:15:31-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T14:33:30-03:00 | 2026-10-28T14:33:30-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T14:15:31-03:00 | 2026-10-28T14:15:31-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T14:33:30-03:00 | 2026-10-28T14:33:30-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -70,7 +70,7 @@
 | `references/CENTRALDARK-REMOTE-NOMENCLATURA.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 019ea63a941e |
 | `references/delegacao-economica-com-prova.md` | referencia | 2026-10-15T13:26:01-03:00 | 2026-10-15T13:26:01-03:00 | b17d60440aa9 |
 | `references/fixed-point-terminal-receipt-contraprova.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2203d0ec37fb |
-| `references/FOCUS-DELEGACAO-TELEMETRIA.md` | referencia | 2026-10-28T08:08:26-03:00 | 2026-10-28T14:21:29-03:00 | 26fd84e146ee |
+| `references/FOCUS-DELEGACAO-TELEMETRIA.md` | referencia | 2026-10-28T08:08:26-03:00 | 2026-10-28T14:35:31-03:00 | 4a376f6416f4 |
 | `references/git-push-sequence.md` | referencia | 2026-10-27T13:29:22-03:00 | 2026-10-27T13:29:23-03:00 | 6afe1bcbc9e4 |
 | `references/HANDOFF-CENTRALDARK-REMOTE-20261024.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 025bec5dec9e |
 | `references/HERMES-FREE-TIER-FALLBACK.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d64e2826e704 |
@@ -101,4 +101,4 @@
 | `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-28T14:14:39-03:00 | 177f3407e493 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-28T14:21:30-03:00 | MODIFICADO | `references/FOCUS-DELEGACAO-TELEMETRIA.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T14:36:30-03:00 | MODIFICADO | `references/FOCUS-DELEGACAO-TELEMETRIA.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
