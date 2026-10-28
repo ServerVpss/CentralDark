@@ -518,7 +518,7 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(ui.includes("item.privado && !autenticado"));
   assert.ok(ui.includes("conexoesAbertas"));
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
-  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
+  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,34);
 });
 
 test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
