@@ -1,6 +1,6 @@
 {
   "schema": "centraldark.modules.hub.connections.v1",
-  "updated_at": "2026-09-24T12:13:00-03:00",
+  "updated_at": "2026-10-26",
   "purpose": "Mapa visivel/editavel dos bracos e pernas do Megazord CentralDark. Nao contem segredo e nao cria runtime paralelo.",
   "canonical_runtime_owner": "apps/modulos/hub",
   "rules": {
@@ -98,6 +98,33 @@
       "events": ["xp_award", "penalty", "posterior_update", "receipt_validated"],
       "proof_state": "ENGINE_EXISTS_NOT_BOUND_TO_TELEGRAM_FEEDBACK",
       "notes": "Motor existe. Falta adaptador Telegram/Gmail/GitHub event -> reward ledger."
+    },
+    {
+      "id": "casa-segredo-control-plane",
+      "label": "Casa SEGREDO — Zord de controle local",
+      "type": "runtime_host",
+      "sector": "CONTROL_PLANE_LOCAL",
+      "owner": "scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs",
+      "enabled": true,
+      "status_surface": "status.centraldark.casa.commander",
+      "events": ["health", "engine_connection", "capability_routing", "receipt"],
+      "proof_state": "HTTP_200_ENGINE_DISCONNECTED",
+      "plug_contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml",
+      "notes": "Casa Commander /health em 9101 respondeu 200, mas engine_connected=false. Componente existe; nao declarar comando/agente pronto sem handshake e teste de execucao. Snapshot observado, nao monitoramento vivo."
+    },
+    {
+      "id": "notebook-agentes-execution-node",
+      "label": "NOTEBOOK-AGENTES — Zord candidato de agentes autonomos",
+      "type": "runtime_host",
+      "sector": "EXECUTION_NODE_CANDIDATE",
+      "owner": "scripts/remote-bridge/CentralDark-Remote-Bridge.ps1",
+      "enabled": false,
+      "status_surface": "status.centraldark.nodes.notebook_agents",
+      "events": ["lan_reachability", "authenticated_pairing", "capability_advertisement", "agent_execution", "receipt"],
+      "proof_state": "LAN_UNREACHABLE_INBOUND_RADMIN_OPEN_UNAUTHENTICATED",
+      "plug_contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml",
+      "navigation_contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SPIRAL-TRAVERSAL.yml",
+      "notes": "Notebook -> Casa ping PASS pela LAN; Casa -> Notebook ICMP/TCP 5985 timeout. Radmin TCP 5985 aberto, SEM autenticacao ou execucao comprovada. AnyDesk prova controle visual humano, nao A2A. Candidato nao ativo; usar pareamento autenticado e runtime existente antes de ativar. Snapshot observado, nao health ao vivo."
     },
     {
       "id": "hub-visual-runtime",

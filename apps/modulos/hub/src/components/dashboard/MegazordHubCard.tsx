@@ -1,14 +1,45 @@
 import React from 'react';
+// O Vite incorpora exatamente este registro existente no build; nao ha lista
+// paralela nem chamada de rede privilegiada no browser.
+import registryJson from '../../../../../../MODULES/HUB/hub-connections.registry.json?raw';
 
-const connections = [
-  { id: 'hub-domain-expansion-trigger', label: 'EXPANSÃO DE DOMÍNIO / Trigger Fabric', state: 'CONFIGURED', surface: 'status.centraldark.hub.domain_expansion' },
-  { id: 'telegram-bot-api-security-sol', label: 'Telegram Bot API / Security-SOL', state: 'PASS parcial', surface: 'status.centraldark.telegram.bot' },
-  { id: 'telegram-mtproto-user-bridge', label: 'Telegram MTProto user bridge', state: 'CONFIG_BLOCKED', surface: 'status.centraldark.telegram.mtproto' },
-  { id: 'github-actions-email-signal', label: 'GitHub/Gmail event signal', state: 'EVENT_ONLY', surface: 'status.centraldark.github.email_signal' },
-  { id: 'vps-runtime', label: 'VPS Runtime / PM2', state: 'PASS parcial', surface: 'status.centraldark.vps.runtime' },
-  { id: 'mcp-centraldark', label: 'MCP CentralDark', state: 'PASS parcial', surface: 'status.centraldark.mcp.health' },
-  { id: 'meta-lupa-reward-engine', label: 'Meta-Lupa XP/posterior', state: 'engine exists / binding pending', surface: 'status.centraldark.meta_lupa.score' },
-];
+type HubConnection = {
+  id: string;
+  label: string;
+  owner: string;
+  proof_state: string;
+  status_surface: string;
+  enabled: boolean;
+  sector?: string;
+  notes?: string;
+};
+
+function parseRegistry(raw: string): { connections: HubConnection[]; valid: boolean } {
+  try {
+    const data: unknown = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return { connections: [], valid: false };
+    const record = data as { schema?: string; connections?: unknown };
+    if (record.schema !== 'centraldark.modules.hub.connections.v1' || !Array.isArray(record.connections)) {
+      return { connections: [], valid: false };
+    }
+    const entries = record.connections as unknown[];
+    const valid = entries.every((item) => {
+      if (!item || typeof item !== 'object') return false;
+      const entry = item as Partial<HubConnection>;
+      return typeof entry.id === 'string' && typeof entry.label === 'string' &&
+        typeof entry.owner === 'string' && typeof entry.status_surface === 'string' &&
+        typeof entry.proof_state === 'string' && typeof entry.enabled === 'boolean';
+    });
+    if (!valid || new Set(entries.map((item) => (item as HubConnection).id)).size !== entries.length) {
+      return { connections: [], valid: false };
+    }
+    return { connections: entries as HubConnection[], valid: true };
+  } catch {
+    return { connections: [], valid: false };
+  }
+}
+
+const registry = parseRegistry(registryJson);
 
 const controlFiles = [
   'MODULES/HUB/README.md',
@@ -26,7 +57,10 @@ export function MegazordHubCard() {
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">MODULES/HUB</p>
         <h2 className="text-xl font-bold">🧩 Megazord de conexões</h2>
         <p className="text-sm text-muted-foreground">
-          Central visível/editável para sensores, notificações, MCP, IA e rotas do status.centraldark. Não é cérebro paralelo; aponta para owners reais.
+          Zords são setores completos, plugáveis pelo contrato canônico. Este painel usa o registro real do HUB, sem criar outro cérebro.
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Catálogo incorporado no build, não saúde ao vivo. Mudanças no registro exigem novo build/deploy; só execução com prova recebe PASS operacional.
         </p>
       </div>
 
@@ -42,15 +76,23 @@ export function MegazordHubCard() {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {connections.map((item) => (
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3" data-source="MODULES/HUB/hub-connections.registry.json">
+        {!registry.valid && (
+          <p className="text-sm text-amber-600" role="alert">
+            REGISTRY_INVALID — sem estados inventados. Verifique o registro canônico do HUB.
+          </p>
+        )}
+        {registry.connections.map((item) => (
           <div key={item.id} className="rounded-lg border border-border/70 bg-background/60 p-3">
             <div className="text-sm font-semibold">{item.label}</div>
-            <div className="mt-1 text-xs text-muted-foreground">{item.id}</div>
+            <div className="mt-1 text-xs text-muted-foreground">{item.sector ?? item.id}</div>
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
-              <span className="rounded-full bg-muted px-2 py-1">{item.state}</span>
-              <span className="rounded-full bg-muted px-2 py-1">{item.surface}</span>
+              <span className="rounded-full bg-muted px-2 py-1">{item.enabled ? 'Cadastrado' : 'Nó candidato — não ativado'}</span>
+              <span className="rounded-full bg-muted px-2 py-1">{item.proof_state}</span>
             </div>
+            <p className="mt-2 break-all text-xs text-muted-foreground">{item.status_surface}</p>
+            <p className="mt-1 break-all text-xs text-muted-foreground">Owner: {item.owner}</p>
+            {item.notes && <p className="mt-2 text-xs text-muted-foreground">{item.notes}</p>}
           </div>
         ))}
       </div>

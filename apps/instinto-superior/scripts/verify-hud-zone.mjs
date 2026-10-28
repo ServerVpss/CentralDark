@@ -461,7 +461,7 @@ test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () =>
   assert.ok(fonte.includes("deploy exige recibo"));
   assert.ok(fonte.includes("dispatchPromotion"));
   assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
-  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\n  \};?\n/);
+  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\r?\n  \};?\r?\n/);
   assert.ok(handler, "handler do botão não identificado");
   assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
   assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
@@ -545,7 +545,7 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(ui.includes("item.privado && !autenticado"));
   assert.ok(ui.includes("conexoesAbertas"));
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
-  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
+  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,34);
 });
 
 test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
@@ -559,12 +559,12 @@ test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
     'aria-label="Mapa dos sistemas"',
     'aria-label="Notificações"',
   ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
-  assert.match(cockpit, /className="sticky top-0 z-50/);
-  assert.match(cockpit, /className="fixed inset-x-0 top-16/);
+  assert.match(cockpit, /className="sticky top-0 z-30/);
+  assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
   assert.match(cockpit, /ref=\{tabsScrollRef\}/);
   assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
   assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
-  assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
+  assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
   assert.match(cockpit, /harnessVisivel && gaveta === null/);
 });
 

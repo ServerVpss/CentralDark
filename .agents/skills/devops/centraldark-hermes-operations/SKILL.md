@@ -23,6 +23,12 @@ Use this when CHEFE asks to update Hermes, create Hermes cron jobs, verify Herme
 
 This skill is paired with `centraldark-ops` and the CentralDark operational family. When loaded, also load `centraldark-ops` for the broader CASA/GitHub/VPS contract and `references/hermes-desktop-communication-style.md` when CHEFE is operating through Hermes Desktop. Load `reconciliacao-diaria-centraldark` for daily checklist/delta state, `github-actions-runner-diagnostics` for self-hosted runner/CI routing, and `skill-synchronization` for skill drift. The family is one system: `centraldark-ops` governs the house-level route; this skill gives the Hermes-specific commands and receipts.
 
+## Return to SOL/Oracle after a Hermes Desktop result — reuse the Skill-Mother bridge
+
+For a CHEFE-authorized cross-surface Goal, the **original Hermes** must keep doing the real task in its own existing Desktop/Loop. When it produces a terminal **turn/result** (not necessarily GOAL_DONE), recover its actual result and causal receipt, then call the existing Skill-Mother transport K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1 with an executor-produced UTF-8 JSON envelope and the runtime exact URL of the **already-open** ChatGPT conversation. The transport is single-shot: -Mode Inspect (read-only); -Mode Send -PayloadPath <RESULT_JSON> only after terminal-state correlation; -ActivateExistingTab -TabTitle <TITLE> only when needed. Required fields and guards are in the Skill-Mother recipe and the **existing** centraldark-oracle-surface skill. Do **not** send via a new chat, paste into the Hermes input, alter the original human draft, publish secrets or repeat an unconfirmed send.
+
+This is a *handoff instruction using a callable script*, not a claim that a native Hermes completion hook is installed. HERMES_ORACLE_AUTOHOOK=NOT_PROVEN until an actual terminal Hermes event calls the bridge and the same conversation shows its receipt by independent readback. Never mark an entire parent Goal DONE from a completed micro-step.
+
 ## Always-on rules
 
 - When CHEFE asks whether running Hermes inside an IDE or terminal "improved" the agent, answer in operational terms first: `sim/nao`, what capability improved, and what evidence proves the hosting chain. Do not detour into model-identity explanations unless asked; CHEFE already distinguishes model intelligence from execution capability.
