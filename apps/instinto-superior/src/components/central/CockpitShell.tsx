@@ -45,6 +45,7 @@ import {
   Layers3,
   Terminal,
   MessageCircle,
+  Headphones,
   Wrench,
   Zap,
 } from "lucide-react";
@@ -72,10 +73,12 @@ import { DreamReviewer } from "@/components/central/DreamReviewer";
 import { GramPermissions } from "@/components/central/GramPermissions";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
+import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -381,6 +384,16 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const [abaAdminInicial, definirAbaAdminInicial] = useState<"visao" | "notificacoes">("visao");
   const [versaoAdmin, definirVersaoAdmin] = useState(0);
   const [estudioAberto, definirEstudioAberto] = useState(false);
+  const [playerAberto, definirPlayerAberto] = useState(false);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("player") !== "jarvis") return;
+    definirEstudioAberto(false);
+    definirHermesOneAberto(false);
+    definirPlayerAberto(true);
+    const destino = new URL(window.location.href);
+    destino.searchParams.delete("player");
+    window.history.replaceState({}, "", destino);
+  }, []);
   const [estadoEstudio, definirEstadoEstudio] = useState("NÃO MEDIDO NESTE NAVEGADOR");
   async function conferirEstudio() {
     definirEstadoEstudio("CONSULTANDO");
@@ -415,6 +428,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     definirEstudioAberto(false);
     definirHermesOneAberto(true);
     abrirDestino("hermes");
+  }
+  function abrirPlayerLocal() {
+    definirEstudioAberto(false);
+    definirHermesOneAberto(false);
+    definirPlayerAberto(true);
   }
   const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
@@ -507,6 +525,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               disabled={modulos.aionui === "desativado"}
             >
               <Layers3 aria-hidden className="size-4" /> CentralDark Estúdio
+            </Button>
+            <Button
+              data-cd-flow="instinto.CockpitShell.player-local"
+              type="button"
+              variant="outline"
+              size="sm"
+              title="Aproximar ao ChatGPT · abrir player local"
+              aria-label="Aproximar ao ChatGPT e abrir player local"
+              onClick={abrirPlayerLocal}
+            >
+              <Headphones aria-hidden className="size-4" /> Aproximar ao ChatGPT
             </Button>
             <Button
               data-cd-flow="instinto.CockpitShell.hermes-one-topo"
@@ -603,6 +632,23 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </SheetContent>
       </Sheet>
+
+      <Dialog open={playerAberto} onOpenChange={definirPlayerAberto}>
+        <DialogContent
+          className="max-h-[94dvh] w-[calc(100vw-1.5rem)] max-w-3xl gap-0 overflow-visible border-0 bg-transparent p-0 shadow-none [&>button]:hidden"
+          data-cd-flow="instinto.CockpitShell.jarvis-dialog"
+        >
+          <DialogHeader className="sr-only">
+            <DialogTitle>🎧 Player local · Jarvis</DialogTitle>
+            <DialogDescription>
+              Player do Instinto Superior servido pelo mesmo Cockpit. A fonte de áudio continua privada na tailnet.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="max-h-[94dvh] overflow-y-auto">
+            <PlayerLocalJarvis onClose={() => definirPlayerAberto(false)} />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {estudioAberto ? (
         <section id="centraldark-estudio" aria-label="CentralDark Estúdio" className="scroll-mt-20 border-b border-border bg-surface/60 px-4 py-6 sm:px-6">
@@ -759,7 +805,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
                   <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as áreas ▾</summary>
                   <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
-                    <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
+                    <TabsList ref={tabsScrollRef} className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
                 <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
                 <TabsTrigger value="jornada" data-cd-flow="instinto.CockpitShell.aba.jornada">🎮 Jornada</TabsTrigger>
                 <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
@@ -845,6 +891,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               {autenticado ? (
                 <MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />
               ) : null}
+              <section aria-label="Reuso comprovado — contratos canônicos" className="mt-8 rounded-lg border border-border bg-card p-4 text-sm">
+                <h3 className="font-semibold">♻️ Reuso comprovado · Cockpit</h3>
+                <p className="mt-2 text-muted-foreground">PROVEN + RECEIPT_VALID + SAME_CONTRACT → REUSE. Mudança de contrato, ambiente ou prova exige revalidação do delta afetado; UNKNOWN não é PASS.</p>
+                <p className="mt-2 text-muted-foreground">Decisão: REUSE_DECISION | REUSE_OWNER | EXTEND_OWNER | GAP_PROVEN | BLOCKED_UNKNOWN. Owner: centraldark-reuse-runtime existente; CARACOL apenas navega, sem criar segundo router ou autoridade.</p>
+                <p className="mt-2 text-xs text-muted-foreground">Contrato documentado; execução e readback de cada consumidor continuam dependentes de recibo próprio. Este cartão não afirma saúde do runtime.</p>
+              </section>
               <div className="mt-8">
                 <DeliverablesSummary />
               </div>
@@ -961,6 +1013,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <Button type="button" size="sm" variant={hermesOneAberto ? "default" : "outline"}
                   disabled={modulos.hermes === "desativado"}
                   onClick={() => { definirEstudioAberto(false); definirHermesOneAberto(true); }}>Hermes ONE · interface web</Button>
+                <Button type="button" size="sm" variant="outline" onClick={abrirPlayerLocal}>
+                  <Headphones aria-hidden className="mr-1 size-4" /> Player local · áudio
+                </Button>
               </div>
               {hermesOneAberto ? <HermesOneWebLocal autenticado={autenticado} /> : (
                 <>

@@ -301,6 +301,16 @@ THEN_CONTINUE_BY_NEXT_CURSOR_WHILE_MATERIAL_WORK_EXISTS=true
 
 `Goal done` emitted before the readback returns to the chat, or while a material cursor remains, is `FAIL_PREMATURE_GOAL_DONE`.
 
+## Casa bridge — Hermes result into the SAME ChatGPT conversation (2026-10-28)
+
+**Existing transport:** the Skill-Mother script at K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1. This is a one-shot UIAutomation adapter for the **existing** CHAT_GLOBAL/Oracle surface, not another oracle skill, chat instance, background scheduler, writer, or source of truth. Keep this skill's oracle **consultative/read-only** authority: typing a Hermes report into the authorized user's ChatGPT composer is a *transport action*, not permission for Oracle to mutate CentralDark.
+
+**When:** an original Hermes execution/turn yields a real material result with its existing correlated envelope. The parent Goal may remain ACTIVE even when one turn is DONE/BLOCKED/FAILED. Reuse the Hermes event's loop_id, turn_id, receipt_id, parent_id, intent_id, event_id, causation_id, surface_id, attempt_id, next_cursor, status, and message. The existing executor creates/uses its own JSON result file; do not fabricate a completion envelope, restart a Goal, or establish a polling loop. The actor string alone is not proof of producer identity.
+
+**How:** bind -ConversationUrl to the exact already-open https://chatgpt.com/c/... target at runtime (never hardcode this private link in Git); run -Mode Inspect for a read-only preflight, then -Mode Send -PayloadPath <HERMES_RESULT_JSON> after the executor establishes the terminal result. If necessary, -ActivateExistingTab -TabTitle <EXACT_EXISTING_TAB_TITLE> reselects the same already-open tab; no new ChatGPT tab is needed. Target address + composer + empty draft + ChatGPT idle must all match. Require a new receipt ID and UI readback after one send. Busy session, wrong tab, existing human draft, or missing receipt = BLOCKED, not silent typing or a new route.
+
+**Proof boundary:** SURFACE_PROVEN_READONLY proves target/editor discovery only; DRAFT_PROVEN_NO_SEND proves unsent input; SENT_WITH_UI_READBACK proves a submitted Hermes report is visible; an Oracle response/continuous loop needs independent correlated readback. This recipe does not itself install a native Hermes completion callback. Preserve ONE_WRITER_PER_SCOPE and UNKNOWN_IS_NOT_PASS.
+
 ## Oracle-First Human Response Routing
 
 Operational responses must be routed through the oracle before reaching the human:
