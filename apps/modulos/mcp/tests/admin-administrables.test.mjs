@@ -15,10 +15,9 @@ async function readRegistry() {
 }
 
 async function declaredAdministrableCommands() {
-  const tracked = execFileSync('git', ['-C', repoRoot, 'ls-files', '-z'], { encoding: 'utf8' })
+  const tracked = execFileSync('git', ['-C', repoRoot, 'ls-files', '-z', '--', '*.md', '*.mdc', 'LEIA-ME-IA.md'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
     .split('\0')
-    .filter(Boolean)
-    .filter((file) => /(?:^LEIA-ME-IA\.md$|\.(?:md|mdc)$)/i.test(file));
+    .filter(Boolean);
 
   const commands = new Set();
   for (const file of tracked) {

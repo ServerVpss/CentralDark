@@ -263,6 +263,12 @@
     {
       "id": "centraldark-operational-method",
       "path": ".agents/skills/centraldark-operational-method/SKILL.md",
+      "open_intents": [
+        "abre a Skill-Mãe",
+        "abre a pasta da Skill-Mãe",
+        "abre o índice global da Skill-Mãe",
+        "modo operacional da CentralDark"
+      ],
       "type": "operational_method",
       "category": "coordination",
       "owner": "SOL",
