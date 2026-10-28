@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T19:39:30-03:00",
+    "gerado_em":  "2026-10-28T19:45:30-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:36:31-03:00",
-                         "modificado_em":  "2026-10-28T19:36:31-03:00",
+                         "criado_em":  "2026-10-28T19:39:31-03:00",
+                         "modificado_em":  "2026-10-28T19:39:31-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:36:31-03:00",
-                         "modificado_em":  "2026-10-28T19:36:31-03:00",
+                         "criado_em":  "2026-10-28T19:39:31-03:00",
+                         "modificado_em":  "2026-10-28T19:39:31-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1368,9 +1368,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T19:35:16-03:00",
-                         "bytes":  227640,
-                         "sha256":  "3319f076da6f064e728d63d388982c75fca25b5a678b04e692222df11c24aad1",
+                         "modificado_em":  "2026-10-28T19:43:52-03:00",
+                         "bytes":  228498,
+                         "sha256":  "1684e616b6e27bf54275dbe186a71ec641f20522eacef8688a3a999b72f00725",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
