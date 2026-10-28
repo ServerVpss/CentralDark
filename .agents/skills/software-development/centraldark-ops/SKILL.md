@@ -14,12 +14,14 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 ## Always-on
 
 - Workspace operational = `K:\\`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
-- Nested git root is usually `K:/`. `K:\\` itself is not the repo.
+- `K:\\` is the canonical repo root; `E:/CentralDark` exists but is **not** a git repo (`TARGET_MATCH=false`). Preserve it — never move, delete, or overwrite. `C:/` is not a repo destination in this execution. `TARGET_MATCH=false` does not authorize deletion; an unclassified duplicate is UNKNOWN. Do not call `E:/CentralDark` canonical even if missions/goals cite it as such — measured reality (git repo present) wins over mission text.
+- `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
 - Remote connector down is not a Casa blocker. Measure this machine directly.
 - UNKNOWN != PASS. ACTION != PROOF. PID != SESSION_ID. HISTORY != CURRENT_STATE.
 - One writer per scope. Restart only the named PM2 process. Never `restart all`.
+- ERR_MODULE_NOT_FOUND on a CentralDark module is not a license to fabricate a stub: do not create an empty module just to make the test green. Search git history for the refactor commit that removed it (`git log --all -- <path>`), locate the legacy owner (often `src/legacy/.../*.original.*.txt` or a moved `dist/`), and restore the real implementation from there. Verify with `node -e "import('./path').then(()=>console.log('IMPORT_OK'))"` before running the test suite. The test's own git/spawn buffer limits (ENOBUFS on huge repos) are environment issues, not import failures — classify them separately.
 
 ## Autonomia do Hermes na VPS — mesma missão, sem micro-passos
 
