@@ -2,7 +2,7 @@
 title: "Metacognição operacional e coevolução humano–sistema"
 status: "CANÔNICO"
 date: "2026-08-14"
-updated_at: "2026-10-16T10:44:52.397Z"
+updated_at: "2026-10-28T00:17:22.807Z"
 authority: "SEGREDO/CHEFE"
 scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem prova AGI"
 ---
@@ -383,6 +383,83 @@ RAW_EXPERIENCE=IMMUTABLE_INPUT
 DREAM_PROPOSAL=DERIVED_CANDIDATE
 CANONICAL_MEMORY=SEPARATE_PROMOTION_STEP
 ```
+
+<!-- #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
+@last_updated: 2026-10-28T00:29:42.831Z
+@code_ref: scripts/memory-linker/dream-review-run.mjs
+@code_ref: scripts/memory-linker/dream-review-run.test.mjs
+@code_ref: scripts/memory-linker/metacognitive-metabolism.mjs
+@code_ref: scripts/memory-linker/metacognitive-metabolism.test.mjs
+@owner: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+@estado: LOCAL_WORKTREE_VALIDATED; CI_PENDING_MAIN
+-->
+
+## Metabolismo metacognitivo verificável — 50 sondas no mesmo organismo (2026-10-27)
+
+**Owner de conceito:** este documento. **Executor reutilizado:** `scripts/memory-linker/dream-review-run.mjs`.
+**Extensão pura:** `scripts/memory-linker/metacognitive-metabolism.mjs`.
+**Autotestes:** `scripts/memory-linker/metacognitive-metabolism.test.mjs`.
+
+O metabolismo é uma **avaliação determinística do Dream Review existente**, e não um novo
+motor, segunda memória, consciência subjetiva, trainer de pesos ou scheduler.
+Cada chamada ao Dream Review enriquecido devolve `metacognitive_metabolism`,
+um mapa de **50 cálculos reais** agrupados em 10 áreas interligadas (5 cada):
+
+```text
+S01-S05  SENSORES       → eventos aceitos/rejeitados, razão, observações, candidatos
+N06-N10 NORMALIZAÇÃO   → duplicatas, fingerprints, targets, kinds, digest
+T11-T15 TEMPO         → início, fim, duração, reversões, lacunas
+P16-P20 PROVENIÊNCIA  → fontes, sessões, clamps, externos, quarentena
+V21-V25 VERIFICAÇÃO  → origem medida, owner, consumidor, diversidade
+M26-M30 MEMÓRIA       → reuso, novidade, razão, recorrência, máximo
+R31-R35 PADRÕES       → clusters, membros, cobertura, fila autorizável
+E36-E40 METABOLISMO   → unidades de trabalho, budgets, saturação, densidade
+C41-C45 CAUSALIDADE   → delta tratado, delta controle, ganho corrigido,
+                        holdout e regressões
+G46-G50 GOVERNANÇA    → refs, candidatura causal, escopo, ação, NEXT_CURSOR
+```
+
+A regra causal é operacional, **não uma equação de gravidade quântica**:
+
+```text
+CORRECTED_GAIN = (TREATMENT_AFTER - TREATMENT_BEFORE)
+                 - (CONTROL_AFTER - CONTROL_BEFORE)
+CAUSAL_CANDIDATE = CORRECTED_GAIN > 1e-12
+                   + HOLDOUT_GAIN >= 0
+                   + CRITICAL_REGRESSIONS == 0
+                   + EVIDENCE_REFS_PRESENT
+                   + WITHIN_RESOURCE_BUDGET
+```
+
+Taxas usam numeradores e denominadores explícitos e o mesmo denominador
+antes/depois. Denominador zero, mudança de denominador, valores inválidos
+ou missing refs produzem **erro, nunca PASS**. Ponto flutuante perto de zero
+não pode gerar alegação falsa de melhoria. Medição declarada é sempre
+`DECLARED_MEASUREMENTS_NEED_INDEPENDENT_VERIFICATION`, nunca verdade factual
+ou prova causal independente só porque o JSON tinha valores positivos.
+O receipt SHA-256 confirma **integridade determinística do relatório**, não
+que as afirmações do alimentador eram verdadeiras.
+
+```text
+DREAM_REVIEW → PATTERN_DISCOVERY → METABOLIC_50_PROBES → NEXT_CURSOR
+                  ↘ META_LUPA + EVOLUTION_GATE (owner existente)
+SEM_ESCRITA_AUTOMATICA_NA_CANONICA=true
+SEM_AUTOPROMOCAO=true
+FEEDBACK_REUTILIZAVEL=true
+MODELOS_PESOS_ALTERADOS=false
+CLAIM_CONSCIENCIA_SUBJETIVA=false
+```
+
+O retorno `NO_NEW_INFORMATION` é fornecido ao comparar `previousDigest`
+com o fingerprint da rodada atual; `knownFingerprints` mede reuso sem
+reescrever a memória. `allowedTargets` mantém autorização explícita.
+Quando faltam experimento, baseline ou holdout, os probes causais valem
+`null` e o claim permanece `UNPROVEN`. O motor não inventa observações.
+
+**Prova executável:** `node --test scripts/memory-linker/metacognitive-metabolism.test.mjs`
+e os testes existentes `dream-review-run.test.mjs`, `dream-review.test.mjs` e
+`pattern-discovery.test.mjs`. Uma capacidade só recebe selo para o escopo
+que realmente passou, no SHA medido. Código no worktree não equivale a merge/deploy.
 
 ## Lei META — autoraplicação verificável
 
