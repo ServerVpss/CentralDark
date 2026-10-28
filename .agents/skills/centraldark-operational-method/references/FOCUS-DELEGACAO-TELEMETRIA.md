@@ -162,6 +162,14 @@ Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E
 - **Evidência e rastro:** `MONITOR_ALIAS | MEASURED_UTC | SCREEN_DEVICE_CURRENT | BOUNDS | EDID_MODEL_IF_VERIFIED | APP | HWND | BEFORE | ACTION | AFTER | AUTH_SCOPE | RECEIPT`. Persistir apenas informações operacionais sanitizadas na biblioteca; não registrar conteúdo privado de telas ou tokens. **DISPLAY_DISCOVERY_PASS != GUI_CONTROL_PASS != ACTION_EFFECT_PASS.**
 - **Estado deste registro:** `MONITORS_WMI=4_PASS`; `SCREEN_BOUNDS=4_PASS`; `AMD_DISPLAY_TO_WINDOWS_SCREEN_JOIN=UNKNOWN`; `AUTOMATED_CLICK_CURRENT=NOT_EXECUTED`. **NEXT_CURSOR:** consumir esta receita ao receber um alias; provar no desktop autorizado uma navegação de baixo risco, sem instalar segundo controlador. `LAST_UPDATED_UTC=2026-10-28T12:26:38Z`.
 
+### #OBSERVACOES# — RTSS Desktop Overlay Host: prova de alvo individual (28/10/2026)
+
+- **Intenção / owner:** reutilizar o `DesktopOverlayHost.exe` já instalado pelo RivaTuner Statistics Server, sem criar outro painel ou controlador. A telemetria da CentralDark continua sendo apenas leitura de `MSI Afterburner → MAHMSharedMemory → CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat → RuntimeSistema`.
+- **Prova atual:** `RTSS.exe`, `MSIAfterburner.exe` e `RTSSHooksLoader64.exe` estavam vivos. O host existente foi iniciado uma única vez por PowerShell, sem editar configuração; ficou `Visible=True` em `2023,-239,1080x1920`, integralmente dentro da tela física direita (`Windows Identificar 1`). O SDK instalado confirma enumeração de monitores e comando `Move to display 1..N`.
+- **Contraprova / reversão:** o PID temporário do host foi encerrado após a leitura; `RTSS_ALIVE=True`, `MSI_AFTERBURNER_ALIVE=True` e `RTSS_HOOKS_ALIVE=True` permaneceram. Não houve mudança em `DesktopOverlayHost.cfg`, resolução, arranjo, driver ou controles de GPU.
+- **Fronteira:** este é um overlay RTSS por tela, não substitui o `Configurações → Sistema → Tela → Identificar` nativo do Windows. A relação numérica do menu RTSS com o numeral Windows deve ser medida pela posição física a cada sessão; `RTSS_LABEL_PER_MONITOR=NOT_CONFIGURED` até existir teste explícito de uma etiqueta temporária e sua reversão.
+- **NEXT_CURSOR:** se o CHEFE pedir etiqueta CentralDark, iniciar o mesmo host, usar o menu já existente para mover pelo alvo físico confirmado, observar a tela e remover/reverter a etiqueta no fim; não criar segundo host nem escrever por automação cega.
+
 <!-- /CENTRALDARK_JANELAS_1_A_4_UIA_20261026 -->
 
 

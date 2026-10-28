@@ -4,6 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GITHUB_API = "https://api.github.com";
 const DEFAULT_API_BASE = "https://api.centralldark.com";
+const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
 const REQUEST_TIMEOUT_MS = 8_000;
 
 function carregarEnvForja() {
@@ -85,6 +86,7 @@ export type EstadoCentralDark = {
   omniModelsHttp: number | null;
   receiptsHttp: number | null;
   casaSiteHttp: number | null;
+  casaSiteFonte: string;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
   screenpipeFonte: string;
@@ -461,6 +463,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
     const hostScreenpipe = origemLocalScreenpipe();
     const origemHttp = apiBase();
+    const casaSiteUrl = process.env["CENTRALDARK_CASA_SITE_URL"]?.trim() || DEFAULT_CASA_SITE_URL;
     const consultaEm = new Date().toISOString();
     const [
       github,
@@ -485,7 +488,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
-      medirReachable("http://127.0.0.1:4175/", true),
+      medirReachable(casaSiteUrl, true),
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
@@ -585,6 +588,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
+      casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeFonte: screenpipeCasaFonte,

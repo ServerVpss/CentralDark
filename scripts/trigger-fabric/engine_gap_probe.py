@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Read-only probe for CentralDark engine-gap closure.
 
-Measures repository identity and Omni Router health without invoking providers,
-mutating runtime, or reading secret values.
+Measures repository identity and a configured health endpoint (Casa Commander
+9101 by default). HTTP 200 proves only the route, not provider invocation,
+Omni Router availability, or complete CentralDark readiness. Read-only.
 """
 from __future__ import annotations
 
@@ -15,8 +16,10 @@ import urllib.error
 import urllib.request
 from typing import Any, Dict, Optional
 
+# Preserve the legacy env override; do not hardcode another machine's IP.
+# 8099 has no listener in the measured Casa; 9101 is the actual Commander /health.
 DEFAULT_HEALTH_URL = os.getenv(
-    "CENTRALDARK_ROUTER_HEALTH_URL", "http://127.0.0.1:8099/health"
+    "CENTRALDARK_ROUTER_HEALTH_URL", "http://127.0.0.1:9101/health"
 ).strip()
 
 
@@ -93,6 +96,9 @@ def engine_cards(health: Dict[str, Any]) -> Dict[str, Any]:
 
 def build_report(url: str, timeout: float) -> Dict[str, Any]:
     health = probe_health(url, timeout)
+    payload = health.get("payload") if isinstance(health.get("payload"), dict) else {}
+    is_commander = payload.get("name") == "CentralDark Casa Commander"
+    engine_connected = payload.get("engine_connected") if is_commander else None
     head = git_value("rev-parse", "HEAD")
     branch = git_value("rev-parse", "--abbrev-ref", "HEAD")
 
@@ -107,6 +113,8 @@ def build_report(url: str, timeout: float) -> Dict[str, Any]:
         },
         "router": {
             "target": url,
+            "service_name": payload.get("name") if isinstance(payload.get("name"), str) else None,
+            "commander_engine_connected": engine_connected if isinstance(engine_connected, bool) else None,
             "reachable": health.get("reachable"),
             "http_status": health.get("http_status"),
             "duration_ms": health.get("duration_ms"),
@@ -115,7 +123,13 @@ def build_report(url: str, timeout: float) -> Dict[str, Any]:
         },
         "engine_capability_cards": engine_cards(health),
         "claims": {
+            # Legacy key: this proves only the configured /health endpoint.
             "router_runtime_observed": "PASS" if health.get("reachable") else "UNKNOWN",
+            "local_commander_engine_connected": (
+                "PASS" if engine_connected is True
+                else "FAIL" if engine_connected is False
+                else "UNKNOWN"
+            ),
             "provider_invocation": "UNKNOWN",
             "writer": "UNKNOWN",
             "ci": "UNKNOWN",
