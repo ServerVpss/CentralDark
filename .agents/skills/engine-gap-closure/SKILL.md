@@ -171,6 +171,7 @@ python scripts/trigger-fabric/engine_gap_probe.py
 
 Health alcançável prova o router observado naquele instante; não prova cada engine ponta a ponta.
 
+Pitfall: `DEFAULT_HEALTH_URL` do probe é `http://127.0.0.1:8099/health`, mas essa porta não existe no Casa. O Casa Commander roda em `9101`. Passar `--health-url http://127.0.0.1:9101/health` ou setar env var `CENTRALDARK_ROUTER_HEALTH_URL`. Porta 8099 ≠ 9101 — não assumir que oferecem o mesmo contrato sem verificar.
 ### ENGINE_CAPABILITY_UNKNOWN
 
 ```text

@@ -41,6 +41,7 @@ Pitfalls:
 - Do not treat the output line `[terminal] ran ...` as part of the JSON; it is a meta‑log from Hermes and must be ignored when locating the JSON start.
 - If the JSON appears truncated (e.g., cut off by the tool’s output limit), increase the char limit via the web_extract tool or re‑run with a larger buffer; never assume missing fields are false.
 - The `source_sha256` map is informational; a missing entry does not block boot, but a mismatch between expected and actual source files should be investigated as a potential drift.
+- Boot can FAIL_CLOSED when a file is marked `git update-index --assume-unchanged`: it disappears from `git status` but still differs from the pinned main SHA. Re-enable tracking with `git update-index --no-assume-unchanged <file>` and re-run boot; do not treat the hidden drift as a pass. `ASSUME_UNCHANGED` is not `CLEAN`."
 
 References:
 - See `references/example-boot-output.md` for a sample JSON payload and how to extract the HUD.

@@ -52,11 +52,12 @@ def delegate(args: argparse.Namespace) -> tuple[int, dict]:
     code, probe = call(base + ['replay'] + common)
     if code != 0 or probe.get('verdict') != 'PASS':
         return 3, {'verdict': 'DELTA_REQUIRED', 'reason': probe.get('reason', probe.get('action', 'NOT_PROVEN')),
+                   'claim': args.claim, 'owner': args.owner, 'dependency_fingerprint': fingerprint,
                    'next_cursor': 'EXISTING_OWNER_AFFECTED_CONE_ONLY', 'model_calls': 0,
                    'subagent_calls': 0, 'script_executed': False}
     if not args.execute:
         return 0, {'verdict': 'SCRIPT_REPLAY_ELIGIBLE', 'action': 'REPLAY_PROVEN_RECIPE',
-                   'claim': args.claim, 'owner': args.owner,
+                   'claim': args.claim, 'owner': args.owner, 'dependency_fingerprint': fingerprint,
                    'model_calls': 0, 'subagent_calls': 0, 'script_executed': False}
 
     run = base + ['replay-run'] + common + ['--timeout', str(args.timeout)]
@@ -69,14 +70,19 @@ def delegate(args: argparse.Namespace) -> tuple[int, dict]:
     if args.receipt_out:
         run += ['--receipt-out', args.receipt_out]
     code, result = call(run)
-    ok = code == 0 and result.get('verdict') == 'REUSE_CRYSTAL'
+    # Um selo do owner sem comprovacao dos tres efeitos nao e Fixed Point.
+    ok = (code == 0 and result.get('verdict') == 'REUSE_CRYSTAL'
+          and result.get('execution_pass') is True
+          and result.get('proof_pass') is True
+          and result.get('expected_effect_match') is True)
     return (0 if ok else 7), {
         'verdict': 'REUSE_CRYSTAL' if ok else 'REPLAY_FAILED',
-        'claim': args.claim, 'owner': args.owner,
+        'claim': args.claim, 'owner': args.owner, 'dependency_fingerprint': fingerprint,
         'execution_pass': result.get('execution_pass'),
         'proof_pass': result.get('proof_pass'),
         'expected_effect_match': result.get('expected_effect_match'),
-        'reason': None if ok else result.get('reason', 'OWNER_REPLAY_FAILED'),
+        'reason': (None if ok else ('PROOF_INCOMPLETE' if result.get('verdict') == 'REUSE_CRYSTAL'
+                                    else result.get('reason', 'OWNER_REPLAY_FAILED'))),
         'receipt_out': result.get('receipt_out'),
         'model_calls': 0, 'subagent_calls': 0,
         'script_executed': True if ok else None,

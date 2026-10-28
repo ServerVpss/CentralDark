@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Read-only probe for CentralDark engine-gap closure.
 
-Measures repository identity and Omni Router health without invoking providers,
-mutating runtime, or reading secret values.
+Measures repository identity and the canonical Omni Router health on 8099.
+9101 is a different owner (Casa Commander), not a replacement for the Router.
+HTTP 200 proves only the route, not provider invocation. Read-only.
 """
 from __future__ import annotations
 
@@ -14,7 +15,13 @@ import time
 import urllib.error
 import urllib.request
 from typing import Any, Dict, Optional
+from pathlib import Path
 
+# Relativo ao owner existente: <repo>/scripts/trigger-fabric/engine_gap_probe.py.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# Preserve the legacy env override; do not hardcode another machine's IP.
+# 8099 is the canonical Omni Router (now running locally); 9101 is Casa Commander, a separate owner.
 DEFAULT_HEALTH_URL = os.getenv(
     "CENTRALDARK_ROUTER_HEALTH_URL", "http://127.0.0.1:8099/health"
 ).strip()
@@ -23,7 +30,7 @@ DEFAULT_HEALTH_URL = os.getenv(
 def git_value(*args: str) -> Optional[str]:
     try:
         proc = subprocess.run(
-            ["git", *args],
+            ["git", "-C", str(REPO_ROOT), *args],
             check=False,
             capture_output=True,
             text=True,
@@ -93,6 +100,9 @@ def engine_cards(health: Dict[str, Any]) -> Dict[str, Any]:
 
 def build_report(url: str, timeout: float) -> Dict[str, Any]:
     health = probe_health(url, timeout)
+    payload = health.get("payload") if isinstance(health.get("payload"), dict) else {}
+    is_commander = payload.get("name") == "CentralDark Casa Commander"
+    engine_connected = payload.get("engine_connected") if is_commander else None
     head = git_value("rev-parse", "HEAD")
     branch = git_value("rev-parse", "--abbrev-ref", "HEAD")
 
@@ -107,6 +117,8 @@ def build_report(url: str, timeout: float) -> Dict[str, Any]:
         },
         "router": {
             "target": url,
+            "service_name": payload.get("name") if isinstance(payload.get("name"), str) else None,
+            "commander_engine_connected": engine_connected if isinstance(engine_connected, bool) else None,
             "reachable": health.get("reachable"),
             "http_status": health.get("http_status"),
             "duration_ms": health.get("duration_ms"),
@@ -115,7 +127,13 @@ def build_report(url: str, timeout: float) -> Dict[str, Any]:
         },
         "engine_capability_cards": engine_cards(health),
         "claims": {
+            # Legacy key: this proves only the configured /health endpoint.
             "router_runtime_observed": "PASS" if health.get("reachable") else "UNKNOWN",
+            "local_commander_engine_connected": (
+                "PASS" if engine_connected is True
+                else "FAIL" if engine_connected is False
+                else "UNKNOWN"
+            ),
             "provider_invocation": "UNKNOWN",
             "writer": "UNKNOWN",
             "ci": "UNKNOWN",

@@ -45,6 +45,9 @@
 
 ### Identidade
 - [[IDENTIDADE_VOZ_SOL]]
+- [[DIAGRAMAS-CENTRALDARK#11. Continuidade Auditável — Navio de Teseu operacional (2026-10-27)|🦀 Continuidade Auditável — diagrama Mermaid]]
+- [[DIAGRAMAS-CENTRALDARK#12. Skill-Mãe → cristal reutilizável → preservação e reconstrução (2026-10-28)|🪬 Skill-Mãe — cristal, backup e restauração]]
+- [[DIAGRAMAS-CENTRALDARK#13. CentralDark Plugin — Skill-Mãe, Obsidian e Hermes por owner (2026-10-28)|🧩 CentralDark Plugin — módulos, owners e descoberta portátil]]
 
 ### Artefatos
 - [[AUTO_MERMAID_ARTIFACT_ENGINE]]
