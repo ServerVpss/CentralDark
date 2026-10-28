@@ -525,7 +525,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
-    const vpsSha = texto(gitLive?.["head"]);
+    // A leitura local do Omni Router mede a Casa; nunca publicar o SHA da Casa como VPS.
+    const vpsSha = hostScreenpipe === "VPS" ? texto(gitLive?.["head"]) : null;
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);

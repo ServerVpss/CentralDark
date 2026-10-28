@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Read-only probe for CentralDark engine-gap closure.
 
-Measures repository identity and a configured health endpoint (Casa Commander
-9101 by default). HTTP 200 proves only the route, not provider invocation,
-Omni Router availability, or complete CentralDark readiness. Read-only.
+Measures repository identity and the canonical Omni Router health on 8099.
+9101 is a different owner (Casa Commander), not a replacement for the Router.
+HTTP 200 proves only the route, not provider invocation. Read-only.
 """
 from __future__ import annotations
 
@@ -21,9 +21,9 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 # Preserve the legacy env override; do not hardcode another machine's IP.
-# 8099 has no listener in the measured Casa; 9101 is the actual Commander /health.
+# 8099 is the canonical Omni Router (now running locally); 9101 is Casa Commander, a separate owner.
 DEFAULT_HEALTH_URL = os.getenv(
-    "CENTRALDARK_ROUTER_HEALTH_URL", "http://127.0.0.1:9101/health"
+    "CENTRALDARK_ROUTER_HEALTH_URL", "http://127.0.0.1:8099/health"
 ).strip()
 
 
