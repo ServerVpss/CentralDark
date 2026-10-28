@@ -803,3 +803,24 @@ flowchart TD
 ```
 
 **Contratos:** `VAULT_ROOT != CENTRALDARK_ROOT != HERMES_ENDPOINT`; `OBSIDIAN_EVENT != EXECUCAO`; `HUB_CANDIDATE != PROVA`; `GIT_LOCAL != GITHUB_BACKUP`. O plugin instalado contém `Hermes Live` mas o `src/` do owner ainda não foi reconciliado; não publicar um build que remova a view. **Estado deste diagrama:** arquitetura e mapa de owners registrados, não teste de integração fim a fim. Atualizar esta seção quando a implementação for provada.
+
+### 13.2 API local-first: mesma fonte na Casa e VPS (2026-10-28)
+
+**Owner da implementação:** apps/modulos/elite-gateway/scripts/centraldark_omni_router.py. **Owner do sensor:** apps/instinto-superior/src/lib/cockpit.functions.ts. CENTRALDARK_ROOT é raiz descoberta ou variável de ambiente; não precisa ser K: ou /root. O domínio público é uma entrada opcional.
+
+```mermaid
+flowchart TD
+    SRC["Um código: centraldark_omni_router.py"] --> INSTALLER["Installer: resolver raiz e dependências do host"]
+    INSTALLER --> CASA["Casa: 127.0.0.1:8099"]
+    INSTALLER --> VPS["VPS: 127.0.0.1:8099"]
+    CASA --> LOCAL["API /health, /api/omni, /api/live-fabric, /heartbeat"]
+    VPS --> REMOTE["Mesmas rotas, bindings do host"]
+    REMOTE --> EDGE["Caddy e domínio público: só se implantado e validado"]
+    LOCAL --> COCKPIT["Cockpit local: sensor medido"]
+    LOCAL --> GIT["Grafo derivado de Git e receipts locais"]
+    GIT --> BOUND["PROJECAO READ-ONLY, sem prova de invocação"]
+    REMOTE --> VPSPROOF["VPS: replay e readback próprios, pendentes"]
+    COMMANDER["Casa Commander: 127.0.0.1:9101"] --> INDEPENDENT["Outro owner; não substituir Omni Router"]
+```
+
+**Prova Casa nesta rodada:** Router em loopback 8099 respondeu HTTP 200 em rotas canônicas, com FastAPI em venv isolado no mesmo owner. O sensor Cockpit consulta loopback por padrão. **VPS ainda não testada:** LOCAL_HTTP_PASS != VPS_DEPLOY_PASS; DERIVED_GRAPH != FULL_EXECUTION_GRAPH; HEARTBEAT_ROUTER != HERMES_INVOCATION.

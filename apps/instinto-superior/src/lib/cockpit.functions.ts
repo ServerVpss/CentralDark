@@ -177,10 +177,14 @@ async function medirApi(path: string): Promise<Probe> {
     // measured but a file/receipt list must not be called executed or counterproven.
     const projecaoNaoRevalidada = candidato["proof_state"] === "NOT_REVALIDATED"
       && ["/api/live-fabric/status", "/api/live-fabric/graph", "/api/microdeploy/receipts/index.json"].includes(path);
+    const modelosCatalogados = path === "/api/omni/models"
+      && candidato["object"] === "list" && Array.isArray(candidato["data"]);
     return {
-      estado: falhou ? "FAIL" : saudavel ? (projecaoNaoRevalidada ? "RUNNING" : "PASS") : "UNKNOWN",
+      estado: falhou ? "FAIL" : saudavel ? (projecaoNaoRevalidada ? "RUNNING" : "PASS")
+        : modelosCatalogados ? "RUNNING" : "UNKNOWN",
       httpStatus: resposta.status,
       erro: projecaoNaoRevalidada ? "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"
+        : modelosCatalogados ? "CATALOGO_MEDIDO_SEM_INVOCACAO_DE_MODELO"
         : !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
