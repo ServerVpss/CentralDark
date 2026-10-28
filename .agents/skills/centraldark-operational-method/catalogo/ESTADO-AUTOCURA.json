@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T19:45:30-03:00",
+    "gerado_em":  "2026-10-28T19:54:30-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:39:31-03:00",
-                         "modificado_em":  "2026-10-28T19:39:31-03:00",
+                         "criado_em":  "2026-10-28T19:45:31-03:00",
+                         "modificado_em":  "2026-10-28T19:45:31-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:39:31-03:00",
-                         "modificado_em":  "2026-10-28T19:39:31-03:00",
+                         "criado_em":  "2026-10-28T19:45:31-03:00",
+                         "modificado_em":  "2026-10-28T19:45:31-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1251,6 +1251,18 @@
                          "modificado_em":  "2026-10-25T12:56:27-03:00",
                          "bytes":  6267,
                          "sha256":  "a573e07e42974d51e4377bfe3026dbefcac7afcf0627f5261d567fd9e1b9fcd4",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "scripts/Hermes-Desktop-BrowserTab.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-28T19:53:04-03:00",
+                         "modificado_em":  "2026-10-28T19:53:44-03:00",
+                         "bytes":  9126,
+                         "sha256":  "6898b88d35414306a31c44a7fdbbcc08759bead10eeef8579eea91d55c91d401",
                          "descricao":  "",
                          "referencias":  [
 

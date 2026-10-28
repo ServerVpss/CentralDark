@@ -85,7 +85,7 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-28 19:45:30 -03:00. **Arquivos:** 94. **Skills:** 18.
+**Última sincronização (Casa):** 2026-10-28 19:54:30 -03:00. **Arquivos:** 95. **Skills:** 18.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
