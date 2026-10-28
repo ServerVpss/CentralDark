@@ -891,6 +891,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               {autenticado ? (
                 <MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />
               ) : null}
+              <section aria-label="Reuso comprovado — contratos canônicos" className="mt-8 rounded-lg border border-border bg-card p-4 text-sm">
+                <h3 className="font-semibold">♻️ Reuso comprovado · Cockpit</h3>
+                <p className="mt-2 text-muted-foreground">PROVEN + RECEIPT_VALID + SAME_CONTRACT → REUSE. Mudança de contrato, ambiente ou prova exige revalidação do delta afetado; UNKNOWN não é PASS.</p>
+                <p className="mt-2 text-muted-foreground">Decisão: REUSE_DECISION | REUSE_OWNER | EXTEND_OWNER | GAP_PROVEN | BLOCKED_UNKNOWN. Owner: centraldark-reuse-runtime existente; CARACOL apenas navega, sem criar segundo router ou autoridade.</p>
+                <p className="mt-2 text-xs text-muted-foreground">Contrato documentado; execução e readback de cada consumidor continuam dependentes de recibo próprio. Este cartão não afirma saúde do runtime.</p>
+              </section>
               <div className="mt-8">
                 <DeliverablesSummary />
               </div>
