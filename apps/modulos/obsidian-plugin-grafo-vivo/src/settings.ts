@@ -50,7 +50,7 @@ export class GrafoVivoSettingTab extends PluginSettingTab {
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "CentralDark Grafo Vivo" });
+    containerEl.createEl("h2", { text: "CentralDark Plugin" });
 
     new Setting(containerEl)
       .setName("URL do grafo")

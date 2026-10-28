@@ -43,7 +43,7 @@ PROFILE_DIR = os.path.join(HOME, "AppData", "Local", "hermes", "profiles", "pive
 PROFILE_SOUL = os.path.join(PROFILE_DIR, "SOUL.md")
 
 CASA_ROOT = r"K:/"
-CLONE_CANONICO = os.path.join(CASA_ROOT, "CentralDark")
+CLONE_CANONICO = os.path.abspath(os.environ.get("CENTRALDARK_REPO_ROOT", CASA_ROOT))
 CANONICAL_SOUL = os.path.join(
     CLONE_CANONICO, "docs", "CONSCIENCIA", "01-IDENTIDADE-E-REGRAS", "SOUL-SOL.md"
 )
