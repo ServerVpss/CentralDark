@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T15:54:30-03:00",
+    "gerado_em":  "2026-10-28T16:03:29-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T14:36:31-03:00",
-                         "modificado_em":  "2026-10-28T14:36:31-03:00",
+                         "criado_em":  "2026-10-28T15:54:30-03:00",
+                         "modificado_em":  "2026-10-28T15:54:30-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T14:36:31-03:00",
-                         "modificado_em":  "2026-10-28T14:36:31-03:00",
+                         "criado_em":  "2026-10-28T15:54:30-03:00",
+                         "modificado_em":  "2026-10-28T15:54:30-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1011,9 +1011,9 @@
                          "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-28T08:08:26-03:00",
-                         "modificado_em":  "2026-10-28T15:52:43-03:00",
-                         "bytes":  42746,
-                         "sha256":  "cc19e5023455b7a1a426eff54ac0b68a094162ee30d5e1ea8b16fa8db05405a4",
+                         "modificado_em":  "2026-10-28T16:02:59-03:00",
+                         "bytes":  43344,
+                         "sha256":  "43c6554b847bdf5dfe27ca899559fb9ad08e28e9462cc56e6636c51baf4460ee",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1356,9 +1356,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T15:53:02-03:00",
-                         "bytes":  221533,
-                         "sha256":  "2bb5831ce43a208c3d577d0cef45a312c323b639ef0a0bdd7041e98e39edc72f",
+                         "modificado_em":  "2026-10-28T16:03:02-03:00",
+                         "bytes":  221770,
+                         "sha256":  "9bcd4dd2de15cbc52d044bc5c8cd56e10511a2e00a5a9f3d078728f5f4526d6a",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
