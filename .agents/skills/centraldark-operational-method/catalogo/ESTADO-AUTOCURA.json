@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T19:57:30-03:00",
+    "gerado_em":  "2026-10-28T20:18:30-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:54:30-03:00",
-                         "modificado_em":  "2026-10-28T19:54:30-03:00",
+                         "criado_em":  "2026-10-28T19:57:30-03:00",
+                         "modificado_em":  "2026-10-28T19:57:30-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:54:30-03:00",
-                         "modificado_em":  "2026-10-28T19:54:30-03:00",
+                         "criado_em":  "2026-10-28T19:57:30-03:00",
+                         "modificado_em":  "2026-10-28T19:57:30-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1272,9 +1272,9 @@
                          "caminho":  "scripts/Hermes-Oracle-Return.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-28T19:33:09-03:00",
-                         "modificado_em":  "2026-10-28T19:39:00-03:00",
-                         "bytes":  10495,
-                         "sha256":  "c9f446d6c90ef012820ab46c4173c81ea4893db5c1292d27b771ab546301ff2f",
+                         "modificado_em":  "2026-10-28T20:17:25-03:00",
+                         "bytes":  14226,
+                         "sha256":  "514d1476ed6461881d3be0aac0f0d34af9ca638155f6e502f797cb957a29267c",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1380,9 +1380,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T19:54:56-03:00",
-                         "bytes":  230360,
-                         "sha256":  "55e5644f59fd3663fb6aae4167e7f2281e7d13d42806d0f4e51ee22958378732",
+                         "modificado_em":  "2026-10-28T20:18:10-03:00",
+                         "bytes":  232661,
+                         "sha256":  "4dc8b5d4966b2e38425a88266b0fc8058c9408de98d24cf77debbfe9024961fd",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
