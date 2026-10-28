@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-28 19:33:30 -03:00
-**Total:** 94 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-28 19:39:30 -03:00
+**Total:** 94 arquivos. **Skills:** 18. **Mudanças detectadas:** 3.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T17:39:30-03:00 | 2026-10-28T17:39:30-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T19:36:31-03:00 | 2026-10-28T19:36:31-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T17:39:30-03:00 | 2026-10-28T17:39:30-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T19:36:31-03:00 | 2026-10-28T19:36:31-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -21,7 +21,7 @@
 | `catalogo/skills-integradas/centraldark-evidence-reconciliation/references/fixed-point-funnel.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 81b558438999 |
 | `catalogo/skills-integradas/centraldark-evidence-reconciliation/references/github-fast-inventory.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 7d863e5e85f2 |
 | `catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
-| `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | skill | 2026-10-28T10:39:33-03:00 | 2026-10-12T02:29:56-03:00 | 49f33d6f9388 |
+| `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | skill | 2026-10-28T10:39:33-03:00 | 2026-10-28T19:36:57-03:00 | b3b12f25b576 |
 | `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | skill | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
 | `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
 | `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
@@ -35,7 +35,7 @@
 | `catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-communication-style.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 6479026cba7a |
 | `catalogo/skills-integradas/centraldark-ops/references/selfhosted-runner-git-auth.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 2145a6949396 |
 | `catalogo/skills-integradas/centraldark-ops/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-25T04:01:30-03:00 | a6c703e3b56f |
-| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-18T17:20:31-03:00 | cae95ed757d4 |
+| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-28T19:36:23-03:00 | e5ab6f9494d4 |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/runtime-binding.desired.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 2cad2dcc353a |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
 | `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 88289de635e4 |
@@ -90,7 +90,7 @@
 | `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-28T10:39:11-03:00 | 606a0b529595 |
 | `scripts/casa_boot.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-27T00:05:19-03:00 | 0724ea990d00 |
 | `scripts/Consultar-PowerShellDocs.ps1` | script | 2026-10-25T12:51:09-03:00 | 2026-10-25T12:56:27-03:00 | a573e07e4297 |
-| `scripts/Hermes-Oracle-Return.ps1` | script | 2026-10-28T19:33:09-03:00 | 2026-10-28T19:33:09-03:00 | aef0484c9bcc |
+| `scripts/Hermes-Oracle-Return.ps1` | script | 2026-10-28T19:33:09-03:00 | 2026-10-28T19:39:00-03:00 | c9f446d6c90e |
 | `scripts/Identify-CentralDarkMonitors.ps1` | script | 2026-10-26T12:47:12-03:00 | 2026-10-26T12:47:12-03:00 | 7e7eb54a50f6 |
 | `scripts/integrar-skills-centraldark-20261024.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 79ea87cada3f |
 | `scripts/mapear_remoto.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | b0ab2fb243d2 |
@@ -99,7 +99,9 @@
 | `scripts/registrar-prova-hermes-casa.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 27e904b4a27d |
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
-| `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-28T17:36:58-03:00 | ffcb19804229 |
+| `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-28T19:35:16-03:00 | 3319f076da6f |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-28T19:33:30-03:00 | CRIADO | `scripts/Hermes-Oracle-Return.ps1` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-28T19:39:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T19:39:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T19:39:30-03:00 | MODIFICADO | `scripts/Hermes-Oracle-Return.ps1` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

@@ -113,7 +113,7 @@ try {
       }
     }
     if ($envelope.actor -cne 'HERMES') { throw 'SOURCE_NOT_ORIGINAL_HERMES' }
-    $terminal = @('DONE','COMPLETED','FAILED','BLOCKED')
+    $terminal = @('DONE','COMPLETED','TURN_DONE','STEP_DONE','FAILED','BLOCKED')
     if ($terminal -cnotcontains ([string]$envelope.status).ToUpperInvariant()) {
       throw 'HERMES_EVENT_NOT_TERMINAL'
     }
@@ -149,22 +149,27 @@ try {
     }
   }
   if (-not $matchedRoot -and $ActivateExistingTab -and $TabTitle) {
+    $candidates = @()
     foreach ($process in $browsers) {
       $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
       $tabs = @(Find-Type $root ([System.Windows.Automation.ControlType]::TabItem) |
         Where-Object { $_.Current.Name.StartsWith($TabTitle, [StringComparison]::OrdinalIgnoreCase) })
-      if ($tabs.Count -ne 1) { continue }
-      $selection = Get-Pattern $tabs[0] ([System.Windows.Automation.SelectionItemPattern]::Pattern)
-      if (-not $selection) { continue }
-      $selection.Select()
-      Start-Sleep -Milliseconds 300
-      if (Match-Conversation (Get-BrowserAddress $root) $expectedPath) {
-        if ($matchedRoot) { throw 'MULTIPLE_MATCHING_BROWSER_WINDOWS' }
-        $matchedRoot = $root
-        $matchingPid = $process.Id
-        $switchedTab = $true
+      foreach ($tab in $tabs) {
+        $candidates += [pscustomobject]@{ Root=$root; ProcessId=$process.Id; Tab=$tab }
       }
     }
+    if ($candidates.Count -ne 1) { throw ('EXISTING_TAB_NOT_UNIQUE_OR_NOT_FOUND_' + $candidates.Count) }
+    $candidate = $candidates[0]
+    $selection = Get-Pattern $candidate.Tab ([System.Windows.Automation.SelectionItemPattern]::Pattern)
+    if (-not $selection) { throw 'EXISTING_TAB_CANNOT_SELECT' }
+    $selection.Select()
+    Start-Sleep -Milliseconds 300
+    if (-not (Match-Conversation (Get-BrowserAddress $candidate.Root) $expectedPath)) {
+      throw 'EXISTING_TAB_SELECTED_BUT_URL_MISMATCH'
+    }
+    $matchedRoot = $candidate.Root
+    $matchingPid = $candidate.ProcessId
+    $switchedTab = $true
   }
   if (-not $matchedRoot) { throw 'EXACT_CHATGPT_CONVERSATION_NOT_ACTIVE' }
   $editors = @(Find-Type $matchedRoot ([System.Windows.Automation.ControlType]::Edit) |
@@ -201,7 +206,7 @@ try {
   }
   [System.Windows.Forms.SendKeys]::SendWait((Escape-SendKeys $draft))
   Start-Sleep -Milliseconds 280
-  $written = [string]$valuePattern.Current.Value
+  $written = ([string]$valuePattern.Current.Value).TrimEnd([char]13, [char]10)
   if ($written -cne $draft) {
     throw 'DRAFT_READBACK_MISMATCH_NOT_SENT'
   }
@@ -216,7 +221,8 @@ try {
   Start-Sleep -Milliseconds 550
   $delivered = $false
   for ($attempt=0; $attempt -lt 6; $attempt++) {
-    if (Has-ReceiptVisible $matchedRoot ('RECEIPT_ID=' + $receiptId)) {
+    if ((Editor-Empty ([string]$valuePattern.Current.Value)) -and
+        (Has-ReceiptVisible $matchedRoot ('RECEIPT_ID=' + $receiptId))) {
       $delivered = $true
       break
     }
