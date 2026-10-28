@@ -434,7 +434,7 @@ test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () =>
   assert.ok(fonte.includes("deploy exige recibo"));
   assert.ok(fonte.includes("dispatchPromotion"));
   assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
-  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\n  \};?\n/);
+  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\r?\n  \};?\r?\n/);
   assert.ok(handler, "handler do botão não identificado");
   assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
   assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
