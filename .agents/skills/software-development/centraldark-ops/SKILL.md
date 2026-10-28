@@ -14,12 +14,14 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 ## Always-on
 
 - Workspace operational = `K:\\`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
-- Nested git root is usually `K:/`. `K:\\` itself is not the repo.
+- `K:\\` is the canonical repo root; `E:/CentralDark` exists but is **not** a git repo (`TARGET_MATCH=false`). Preserve it — never move, delete, or overwrite. `C:/` is not a repo destination in this execution. `TARGET_MATCH=false` does not authorize deletion; an unclassified duplicate is UNKNOWN. Do not call `E:/CentralDark` canonical even if missions/goals cite it as such — measured reality (git repo present) wins over mission text.
+- `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
 - Remote connector down is not a Casa blocker. Measure this machine directly.
 - UNKNOWN != PASS. ACTION != PROOF. PID != SESSION_ID. HISTORY != CURRENT_STATE.
 - One writer per scope. Restart only the named PM2 process. Never `restart all`.
+- ERR_MODULE_NOT_FOUND on a CentralDark module is not a license to fabricate a stub: do not create an empty module just to make the test green. Search git history for the refactor commit that removed it (`git log --all -- <path>`), locate the legacy owner (often `src/legacy/.../*.original.*.txt` or a moved `dist/`), and restore the real implementation from there. Verify with `node -e "import('./path').then(()=>console.log('IMPORT_OK'))"` before running the test suite. The test's own git/spawn buffer limits (ENOBUFS on huge repos) are environment issues, not import failures — classify them separately.
 
 ## Autonomia do Hermes na VPS — mesma missão, sem micro-passos
 
@@ -149,7 +151,19 @@ GRAMMAR_PRESERVED != TECHNICAL_STATE_CURRENT
 REPORT_OLD != STATE_NOW
 ```
 
-## Procedure — three-plane reconcile then micro-deploy
+## VPS é consequência do config local (não bloqueador)
+
+Quando o config local está selado como cristal, a VPS é downstream: replay com bindings trocados, não fonte de verdade.
+
+```text
+LOCAL_CONFIG_SEALED → VPS_IS_CONSEQUENCE → REPLAY_WHEN_ROUTE_RETURNS
+```
+
+- Local PASS não depende de VPS PASS. VPS unreachable bloqueia readback remoto, não closure local.
+- Se local config está correto (HEAD medido, build PASS, health local PASS), a VPS só precisa replicar quando a rota voltar.
+- Não bloquear fechamento local por causa de VPS timeout/DNS 523/SSH down.
+- NEXT_CURSOR local: `LOCAL_CONFIG_SEALED; VPS_IS_CONSEQUENCE; REPLAY_VPS_WHEN_ROUTE_RETURNS; DO_NOT_DEPLOY_UNTIL_VPS_READBACK`.
+- Para self-healing bounded, usar `engine-gap-closure` (SELF_HEALING_FAILURE_LOOP). Controlador: `python scripts/trigger-fabric/engine_gap_fixed_point.py`. Converge só enquanto há ganho informacional. Não faz deploy, restart, merge, troca credencial ou mutação de produção.
 
 1. **GitHub (live API, not local origin/main)**
    - `gh auth status` then `gh api repos/ServerVpss/CentralDark/commits/main --jq '{sha:.sha,msg:.commit.message}'`
@@ -216,6 +230,47 @@ Caddy `handle_path /contas*` strips `/contas` before uvicorn. Therefore:
 - Prove public at the **prefixed** path. 404 on the prefixed path hitting uvicorn directly is expected, not a failed deploy.
 
 Hermes preview `file:///ai-review.html` ERR_FILE_NOT_FOUND is a local preview miss, not VPS health. Do not treat the preview pane as the public route. Open the **public** admin URL in `desktop_preview` when CHEFE needs to see the live page.
+
+## CARACOL funcional — owners e prova (main d7807310+)
+
+CARACOL é o mecanismo de travessia forward/reverse do trigger fabric. Owners e testes:
+
+| Role | Owner | Prova |
+|------|-------|-------|
+| 4 THINK/GOAL | `scripts/trigger-fabric/centraldark_master_cycle.py` | 36/36 PASS |
+| 1 EXECUTE/COCKPIT-HERMES | `apps/modulos/HERMES-CORE/` | owner canônico |
+| 2 OBSERVE/VAULT-PROVA | `scripts/trigger-fabric/spiral_traversal.py` | self-test PASS |
+| 3 CONTEXT/BUILDER-IAs | `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml` | contrato carregado |
+| 4 JUDGE/CHECKPOINT | `apps/instinto-superior/src/components/central/CheckpointCentralDark.tsx` | existe |
+
+- `spiral_traversal.py --self-test` retorna `status=PASS` com `forward_reverse_same_denominator=true` e `nucleus_tail_proven=true`.
+- `centraldark_master_cycle.py` executa 36 testes, todos PASS.
+- `verify_repo_contract.py` tem 11 FAILs pré-existentes em owners **não-CARACOL** (MCP catalog, learning lineage, jukebox, SOUL sync, main_first_change_guard). Nenhum é owner CARACOL.
+- `UNIVERSAL_EVOLUTION_CARACOL_CONTRACT` é um dos checks do repo contract que PASSA.
+- Não criar outro Cockpit, Hermes, Supabase ou instalador para materializar CARACOL. Reutilizar owners existentes.
+- `CARACOL_FUNCTIONAL_PROVEN` requer: spiral_traversal self-test PASS + master_cycle tests PASS + main reconciliado. CI_BLOCKED e VPS_UNKNOWN não bloqueiam prova local.
+
+```text
+CARACOL_PROVEN = SPIRAL_TRAVERSAL_SELF_TEST_PASS AND MASTER_CYCLE_TESTS_PASS AND MAIN_RECONCILED
+CI_BLOCKED != CARACOL_FAIL
+VPS_UNKNOWN != CARACOL_FAIL
+```
+
+O Casa Commander (`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs`) roda em `127.0.0.1:9101` e spawna `@wonderwhy-er/desktop-commander@0.2.48` via `npx -y` como child MCP stdio. A flag `ready` só vira `true` após o handshake `initialize` do MCP.
+
+- HTTP 200 em `/health` **não** implica `engine_connected=true`. Sempre ler o campo `engine_connected` do payload. `RUNTIME_RUNNING != AUTHORIZATION_PROVEN`.
+- O engine é **lazy**: só spawna quando um `/tool` call chega. Health check sozinho nunca dispara a inicialização.
+- Para provar conexão: fazer um `/tool` call (ex: `list_directory`) com token válido e depois re-ler `/health` → `engine_connected=true`.
+- **npx cache corruption**: se o cache `_npx/<hash>/` estiver incompleto (package.json ausente), o child sai com code 1 → `MCP_UPSTREAM_EXIT` → `engine_connected=false`. Fix: `rm -rf npm-cache/_npx` + re-download via `npx -y`. Não é falha do script nem do serviço.
+- Token DPAPI: `$LOCALAPPDATA\CentralDark\Casa-Commander\casa-bridge-token.dpapi` (64 chars). Ler via PowerShell SecureString.
+- Porta 8099 **não existe** no Casa. O `DEFAULT_HEALTH_URL` do probe (`engine_gap_probe.py`) aponta para 8099 — desatualizado; usar `http://127.0.0.1:9101/health` ou env var `CENTRALDARK_ROUTER_HEALTH_URL`.
+- Erros comuns: `MCP_UPSTREAM_EXIT:1` (cache corrompido), `MCP_UPSTREAM_TIMEOUT:initialize` (npx lento, aguardar), `EADDRINUSE` (processo anterior não morto).
+
+```text
+HEALTH_200 != ENGINE_CONNECTED
+LAZY_INIT_REQUIRES_TOOL_CALL=true
+NPM_CACHE_CORRUPTION != SCRIPT_BUG
+```
 
 ## Autonomia — `action_required` is not a finished job
 
