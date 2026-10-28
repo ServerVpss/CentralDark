@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-27T00:06:46-03:00",
+    "gerado_em":  "2026-10-28T12:06:30-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,10 +18,10 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-26T20:36:17-03:00",
-                         "modificado_em":  "2026-10-26T20:36:17-03:00",
-                         "bytes":  10281,
-                         "sha256":  "5b40a7fb5fd1c26b6b599a683487635a313efdb1cf9562814ac9e2bbac7e3c5a",
+                         "criado_em":  "2026-10-28T11:18:31-03:00",
+                         "modificado_em":  "2026-10-28T11:18:31-03:00",
+                         "bytes":  13187,
+                         "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
                          "referencias":  [
                                              {
@@ -89,6 +89,30 @@
                                                  "existe":  true
                                              },
                                              {
+                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
                                                  "destino":  "ARQUIVOS.json",
                                                  "existe":  true
                                              },
@@ -141,10 +165,10 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-26T20:36:17-03:00",
-                         "modificado_em":  "2026-10-26T20:36:17-03:00",
-                         "bytes":  4890,
-                         "sha256":  "439460f9a2b2cc9bb051d5b7fb23db076fd3565bc76f84bdff394108ddd6a23d",
+                         "criado_em":  "2026-10-28T11:18:31-03:00",
+                         "modificado_em":  "2026-10-28T11:18:31-03:00",
+                         "bytes":  6021,
+                         "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
                          "referencias":  [
                                              {
@@ -177,6 +201,38 @@
                                              },
                                              {
                                                  "destino":  "../references/regenerative-self-refinement-engine.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "CATALOGO.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "INDICE-VIVO.md",
                                                  "existe":  true
                                              },
                                              {
@@ -229,9 +285,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-boot/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  6011,
-                         "sha256":  "fd2c8d2532815f88f210c6554ebe16cecaa3d85b4aea07d112fe3160de119c29",
+                         "modificado_em":  "2026-10-27T12:22:45-03:00",
+                         "bytes":  6338,
+                         "sha256":  "4d00d49761896dd13e803b6fad2931a620756d19de8e874bedb0ca5ce142911b",
                          "descricao":  "Execute CentralDark boot to align and verify HUD.",
                          "referencias":  [
 
@@ -241,9 +297,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  3091,
-                         "sha256":  "028c33c362fdab2b5c76bb7045b20f0a94314a340103c234d9404892d8c1f772",
+                         "modificado_em":  "2026-10-27T12:23:02-03:00",
+                         "bytes":  3122,
+                         "sha256":  "628473969c7c5eaf64a6c23c0d7d9674a713166e0f1f415fbd0c6387f5fcdc1e",
                          "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
                          "referencias":  [
 
@@ -286,6 +342,54 @@
                                          ]
                      },
                      {
+                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/fixed-point-funnel.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-12T02:29:59-03:00",
+                         "bytes":  1241,
+                         "sha256":  "81b55843899937979b5d511e71da93a8c78d9e0654aa0005bfea2c981be94331",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/github-fast-inventory.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-12T02:29:59-03:00",
+                         "bytes":  2840,
+                         "sha256":  "7d863e5e85f29dbebe9d912130f380eb31e24e435c0accc485b0c8487d586950",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-15T13:26:01-03:00",
+                         "bytes":  6185,
+                         "sha256":  "2aa36f69bf5e72cd4d3c5a19a999e91c92f389a50758ecee43a9966bc1cd1aaa",
+                         "descricao":  "Reconcile CentralDark code, runtime, sources, and projections.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-12T02:29:56-03:00",
+                         "bytes":  11511,
+                         "sha256":  "49f33d6f9388b576daf2d03e649d67052ff8e4544f40c1b990496963ba133c5b",
+                         "descricao":  "Operate Hermes update, cron, SSH, ports for CentralDark.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-24T18:41:19-03:00",
@@ -313,10 +417,142 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  4490,
-                         "sha256":  "17c1445d216c745c0a1e9486bff22c2f662ed0a3d44e4eca249b1ae7e241f304",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  13626,
+                         "sha256":  "23484d80e4123417267413ac92c99baeaa4aa011a67f57dfc9130289545fae76",
                          "descricao":  "Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-27T00:30:17-03:00",
+                         "bytes":  3064,
+                         "sha256":  "b9638fb95853ed810879bd0dd92612d0c1818f272f419897693025d26fc6cfd9",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-27T00:26:41-03:00",
+                         "bytes":  6721,
+                         "sha256":  "2bc7b7f3176d1b5ac1a72e3c9126b8a0c74244288b9c6e45acce2370b5076b5b",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-27T00:30:53-03:00",
+                         "bytes":  6454,
+                         "sha256":  "c8341471b411f4f99b6052d84f2e5069d9d3c308c60981c8d01fd6180902b843",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-27T00:26:07-03:00",
+                         "bytes":  3721,
+                         "sha256":  "2ac916d6324e52d6fd78c170e0e3cf3e6a8b7f70f1b64fd024d8346d7affa9b4",
+                         "descricao":  "Use when reconciling CentralDark notes with 10 required metadata properties per \u0027Atualização Viva\u0027 rule. Single owner, preserves creation date, tracks timestamps separately, extends PROVEN_CRYSTAL replay logic.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/autonomia-actions.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  1918,
+                         "sha256":  "a329b846a8f5f98e9af1168360159d114c4cc5b02d6392fc9a4eeaeb5ee4b252",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/full-inventory-scans.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  3166,
+                         "sha256":  "b0469fc161b8b7e75260f63f9b81c8cccd5ab55390df12155bd64d3d5af6f8dc",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-binding.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  1938,
+                         "sha256":  "947c01889533f9195aa759ce21ff3e846d6908ae663340fdac8169b7626e573c",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-communication-style.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-12T02:29:59-03:00",
+                         "bytes":  1983,
+                         "sha256":  "6479026cba7ad1b02bf7971a5222dd56079bf3cb7455507b04b45765f52bc4e0",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/selfhosted-runner-git-auth.md",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-12T02:29:59-03:00",
+                         "bytes":  3375,
+                         "sha256":  "2145a6949396147ddb93dee5ae5fd111f11746a326fa739142e475494d71ce26",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-ops/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  31761,
+                         "sha256":  "a6c703e3b56fb7172a4278545e5bd71e3f6ddd78ddd7575ef78a917e7f474cc9",
+                         "descricao":  "Operate CentralDark across Casa, GitHub, VPS, Hermes.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:34-03:00",
+                         "modificado_em":  "2026-10-18T17:20:31-03:00",
+                         "bytes":  69877,
+                         "sha256":  "cae95ed757d4650907f56b1ef3234117eb28393855de34cc085a3409c72d1158",
+                         "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
                                          ]
@@ -349,9 +585,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  16610,
-                         "sha256":  "a215679f7d5599163d4f797ba1de07e7ff22e7faf039f6b81fbb9245aeacaf18",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  26429,
+                         "sha256":  "88289de635e4edc2e277254149117fea78dac45425781b2e61d84941059e9c66",
                          "descricao":  "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
                          "referencias":  [
 
@@ -377,6 +613,18 @@
                          "bytes":  8397,
                          "sha256":  "1526367015083aa074a9e3ed565c7cbe30bc0dfebc47b830de6831bf8683add4",
                          "descricao":  "Método Michelin 3 Estrelas CentralDark. Ative com !michelin ou pedido de execução deliberada passo a passo, reuso, testes, contraprova e prova real. Trabalha junto da receita operacional existente e não a substitui.",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                         "tipo":  "skill",
+                         "criado_em":  "2026-10-28T10:39:33-03:00",
+                         "modificado_em":  "2026-10-25T04:01:30-03:00",
+                         "bytes":  7728,
+                         "sha256":  "cdb5809ce22850ee1619e39d336e3cb11241f22caa142cce16efdf8f46e93c71",
+                         "descricao":  "Reconcile CentralDark state and update daily checklist.",
                          "referencias":  [
 
                                          ]
@@ -763,10 +1011,10 @@
                      {
                          "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-26T12:47:12-03:00",
-                         "modificado_em":  "2026-10-26T12:47:12-03:00",
-                         "bytes":  17378,
-                         "sha256":  "8ee72899493adc8c625c8328660a7328ddeb9b7efcce70a300049ad89576e389",
+                         "criado_em":  "2026-10-28T08:08:26-03:00",
+                         "modificado_em":  "2026-10-28T09:27:29-03:00",
+                         "bytes":  34328,
+                         "sha256":  "3ba240631cb662f4c0690e5d3ce1c5dd382294131bf5c77aedb8d1ed5f46b379",
                          "descricao":  "",
                          "referencias":  [
 
@@ -775,10 +1023,10 @@
                      {
                          "caminho":  "references/git-push-sequence.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  4432,
-                         "sha256":  "c5fce1d4519a267c668894f66b1384525300b20400d524af8f199918d3b35782",
+                         "criado_em":  "2026-10-27T13:29:22-03:00",
+                         "modificado_em":  "2026-10-27T13:29:23-03:00",
+                         "bytes":  6976,
+                         "sha256":  "6afe1bcbc9e46b7a1b6bf7efef2c0b7f09f280a8cbde193a9950b7383d75bd69",
                          "descricao":  "",
                          "referencias":  [
 
@@ -977,9 +1225,9 @@
                          "caminho":  "scripts/atualizar-catalogo-self-healing.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  14047,
-                         "sha256":  "ad7a295f81ad4d78f3d6bf2c9e5b2a146b4b47566e339914c2874bdb30233470",
+                         "modificado_em":  "2026-10-28T10:39:11-03:00",
+                         "bytes":  17197,
+                         "sha256":  "606a0b529595fbee8d80c15e8bc15696073a6c10266a5f7ec036e091aec32f32",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1109,14 +1357,14 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-26T18:15:25-03:00",
-                         "bytes":  204595,
-                         "sha256":  "6504ec5f0ba25f834b4d77321b76b57402a43d557b5dbed7a65ec294e29bddc5",
+                         "modificado_em":  "2026-10-28T12:03:37-03:00",
+                         "bytes":  219407,
+                         "sha256":  "4c5b760b64ba8ad0524f1eabbbfbb9492c8407c55d8ce2a0b0cc0b74df965503",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
-                                                 "destino":  "docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
-                                                 "existe":  false
+                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  true
                                              },
                                              {
                                                  "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
@@ -1135,7 +1383,7 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
+                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/03-evidencias-contraprovas/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
                                                  "existe":  true
                                              },
                                              {
@@ -1151,11 +1399,43 @@
                                                  "existe":  true
                                              },
                                              {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#observacoes--receita-operacional-viva-dos-4-monitores-28102026",
+                                                 "existe":  true
+                                             },
+                                             {
                                                  "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                                                  "existe":  true
                                              },
                                              {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#navegação-deliberada-do-cockpit--mapa-vivo-botão-por-botão",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#recibo-consumido--seis-cliques-de-navegação-radeon-hermes-desktop-2026-10-27",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  true
+                                             },
+                                             {
                                                  "destino":  "catalogo/CATALOGO.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
                                                  "existe":  true
                                              },
                                              {
@@ -1216,6 +1496,14 @@
                                              },
                                              {
                                                  "destino":  "catalogo/INDICE-PESQUISA.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current",
                                                  "existe":  true
                                              },
                                              {

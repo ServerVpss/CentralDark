@@ -1,0 +1,11 @@
+[
+  {
+    "type": "terminal_activity_update",
+    "terminal_id": 2,
+    "terminal_uuid": "182de5f2-41b7-4f39-85ef-37b1889b1ce5",
+    "activity": "Aguardando instruções do usuário",
+    "task_id": null,
+    "timestamp": "2026-10-09T00:09:10.303Z",
+    "processed": true
+  }
+]

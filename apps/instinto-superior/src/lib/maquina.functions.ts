@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { statfs } from "node:fs/promises";
+import { readFile, stat, statfs } from "node:fs/promises";
+import { join } from "node:path";
 import { hostname, platform } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { apiBase, type Estado } from "@/lib/cockpit.functions";
@@ -23,6 +24,16 @@ export type SondaViva = {
 
 type SondaInterna = SondaViva & { dados: Json | null };
 
+export type GpuCasa = {
+  estado: "LIVE" | "STALE" | "UNKNOWN";
+  fonte: "MAHMSharedMemory";
+  atualizadoEm: string | null;
+  idadeSeg: number | null;
+  anunciados: number | null;
+  sensores: Array<{ nome: string; unidade: string; valor: number }>;
+  motivo: string | null;
+};
+
 export type MaquinaViva = {
   fonte: string;
   medidoEm: string;
@@ -31,6 +42,7 @@ export type MaquinaViva = {
   cpu: { percentual: number | null; chave: string | null };
   memoria: { percentual: number | null; chave: string | null };
   carga: number[] | null;
+  gpuCasa: GpuCasa;
   discoServidor: {
     estado: Estado;
     host: string | null;
@@ -165,6 +177,50 @@ async function medirDiscoServidor(): Promise<MaquinaViva["discoServidor"]> {
   }
 }
 
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/maquina.functions.ts @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:36:38.462Z
+// Motivo: utilizar o coletor read-only MAHMSharedMemory que a Casa já tem; sem novo serviço, controle de GPU ou exposição de filesystem ao navegador.
+async function medirGpuCasa(): Promise<GpuCasa> {
+  const desconhecido = (motivo: string, estado: GpuCasa["estado"] = "UNKNOWN", atualizadoEm: string | null = null, idadeSeg: number | null = null): GpuCasa =>
+    ({estado, fonte:"MAHMSharedMemory", atualizadoEm, idadeSeg, anunciados:null, sensores:[], motivo});
+  if (platform() !== "win32" || hostname().toUpperCase() !== "SEGREDO" || !process.env["LOCALAPPDATA"])
+    return desconhecido("RUNTIME_NAO_E_CASA_WINDOWS");
+  const arquivo = join(process.env["LOCALAPPDATA"], "CentralDark", "CENTRALDARK-AFTERBURNER-LIVE.js");
+  try {
+    const info = await stat(arquivo);
+    if (!info.isFile() || info.size < 40 || info.size > 262144)
+      return desconhecido("FEED_INVALIDO_OU_MUITO_GRANDE");
+    const bruto = await readFile(arquivo, "utf8");
+    const prefixo = "window.CENTRALDARK_AFTERBURNER_LIVE=";
+    if (!bruto.startsWith(prefixo)) return desconhecido("FEED_SEM_ASSINATURA");
+    const texto = bruto.slice(prefixo.length).trim().replace(/;\s*$/, "");
+    const amostra: unknown = JSON.parse(texto);
+    if (!ehObjeto(amostra) || amostra["schema"] !== "centraldark.afterburner.v1" ||
+        amostra["origin"] !== "CASA_SEGREDO" || amostra["source"] !== "MAHMSharedMemory" ||
+        !Array.isArray(amostra["sensors"]) || amostra["sensors"].length > 128 ||
+        typeof amostra["sourceUpdatedAt"] !== "string")
+      return desconhecido("FEED_FORA_DO_CONTRATO");
+    const tempo = Date.parse(amostra["sourceUpdatedAt"]);
+    const idadeMs = Date.now() - tempo;
+    if (!Number.isFinite(tempo) || idadeMs < -15000) return desconhecido("FONTE_SEM_TEMPO_VALIDO");
+    const idadeSeg = Math.max(0, Math.round(idadeMs / 1000));
+    if (idadeMs > 30000) return desconhecido("FONTE_VENCIDA", "STALE", amostra["sourceUpdatedAt"], idadeSeg);
+    const sensores = amostra["sensors"].flatMap((s: unknown) => {
+      if (!ehObjeto(s) || typeof s["name"] !== "string" || s["name"].length > 100 ||
+          typeof s["unit"] !== "string" || s["unit"].length > 32 ||
+          typeof s["value"] !== "number" || !Number.isFinite(s["value"]) || Math.abs(s["value"]) > 1e8)
+        return [];
+      return [{nome: s["name"], unidade: s["unit"], valor: s["value"]}];
+    });
+    if (!sensores.some((s: {nome:string}) => s.nome === "GPU usage"))
+      return desconhecido("SENSOR_GPU_PRINCIPAL_AUSENTE");
+    return {estado:"LIVE", fonte:"MAHMSharedMemory", atualizadoEm:amostra["sourceUpdatedAt"],
+      idadeSeg, anunciados:typeof amostra["announcedCount"] === "number" ? amostra["announcedCount"] : null,
+      sensores, motivo:null};
+  } catch {
+    return desconhecido("COLETOR_LOCAL_INDISPONIVEL");
+  }
+}
+
 export const lerMaquinaViva = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MaquinaViva> => {
@@ -176,7 +232,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
       .maybeSingle();
     if (!data) throw new Response("Proibido", { status: 403 });
 
-    const [heartbeat, health, discoServidor] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor()]);
+    const [heartbeat, health, discoServidor, gpuCasa] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor(), medirGpuCasa()]);
     const fontes = [heartbeat.dados, health.dados];
     const primeiro = <T>(fn: (d: unknown) => T | null) => {
       for (const f of fontes) {
@@ -227,6 +283,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
       memoria,
       carga,
       discoServidor,
+      gpuCasa,
       frescor: {
         idadeSeg,
         fresco: idadeSeg == null ? null : idadeSeg <= LIMITE_FRESCOR_SEG,

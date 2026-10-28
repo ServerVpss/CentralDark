@@ -142,4 +142,108 @@ A chamada "janela 3" identifica o centro inferior. "Olhe a janela 3" solicita le
 
 Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E API -> READBACK COCKPIT; estado/owner/prova separados, sem inventar E2E. Classificacao BOUNDED, Concentração + Som. Prova local: enumeracao real de quatro monitores e duas janelas de browser. Este contrato documenta o alias; nao e uma automacao de navegacao ja testada.
 
+### #OBSERVACOES# — Receita operacional viva dos 4 monitores (28/10/2026)
+
+- **Owner único de uso da interface:** esta referência da Skill-Mãe. Fonte complementar de identificação AMD e da tela Installer: `E:\VMs\CentralDark-Installer\CentralDark-README.md` (documento do installer, não criar segunda automação).
+- **Objetivo/gatilho:** `!CENTRALDARK #MONITORES_CASA`, “janela 1–4”, “qual tela?”, “localizar janela”, “usar AMD Adrenalin”, “operar em monitor X”. O CHEFE indica o monitor ou envia imagem; Hermes identifica janela e aplicativo antes de navegar.
+- **Fonte comprovada em 28/10/2026:** WMI `root\wmi:WmiMonitorID` retornou 4 monitores ativos: AOC `24G2W1G4` (2), AOC `24G2W1G5` (1), Dell `S2421HN` (1). O README do Installer registra a ordem **do menu AMD Adrenalin 1–4**, com três AOC e um Dell; a ordem AMD **não é automaticamente equivalente** a `\\.\DISPLAY1..4` do Windows nem ao apelido de posição.
+- **Medida atual de `System.Windows.Forms.Screen.AllScreens` (28/10/2026):**
+
+| Alias por posição | `Screen.DeviceName` atual | Bounds atuais `(x,y,w,h)` | Orientação |
+|---|---|---|---|
+| `janela 1` · esquerda vertical | `\\.\DISPLAY2` | `(-1080,-828,1080,1920)` | vertical |
+| `janela 2` · centro superior | `\\.\DISPLAY4` | `(0,-1080,1920,1080)` | horizontal |
+| `janela 3` · centro inferior | `\\.\DISPLAY3` | `(0,0,1920,1080)` | horizontal, primária |
+| `janela 4` · direita vertical | `\\.\DISPLAY1` | `(1920,-831,1080,1920)` | vertical |
+
+- **Contraprova de mutabilidade:** o snapshot de 26/10 tinha associação diferente entre `DISPLAYx` e posições; por isso **NÃO fixar** aliases em `DISPLAY1..4` ou coordenadas em automação. Remeça `Screen.AllScreens` a cada nova sessão, após reconexão/reboot, arranjo de tela, mudança de driver ou indício de divergência. O nome comercial/identificador EDID vem de WMI; só associá-lo a `Screen.DeviceName` se houver correlação técnica confiável (display path/adapter/target), **nunca por ordem da lista**.
+- **Ciclo de operação:** `CHEFE_INTENT → IDENTIFICAR MONITOR (alias/posição) → REMEDIR DISPLAYS → LOCALIZAR HWND/PROCESSO → UIA OU BROWSER AUTORIZADO → CONFERIR ABA/URL/ROLE → BEFORE → AÇÃO SEGURA → AFTER + CONTRAPROVA → RECEIPT → NEXT_CURSOR`. Cruzar `Screen.Bounds` com retângulo da janela ativa; se houver múltiplas janelas, usar título, HWND e confirmação visual. Foco humano ocupado → `FOCUS_BUSY`, não disputar mouse. Tela/monitor ausente, renumerado ou não identificável → `UNKNOWN`, não clicar.
+- **AMD Adrenalin — somente observar:** abrir o menu já existente `Gravação e transmissão → Gravar → Janela ativa` para **localizar** as quatro saídas sem iniciar gravação, sem alterar resolução, ordem, overclock, voltagem, potência, ventoinha, perfil ou driver. O painel LIVE da RX 580 usa outro owner de telemetria; mapear monitores não equivale a alterar hardware.
+- **Evidência e rastro:** `MONITOR_ALIAS | MEASURED_UTC | SCREEN_DEVICE_CURRENT | BOUNDS | EDID_MODEL_IF_VERIFIED | APP | HWND | BEFORE | ACTION | AFTER | AUTH_SCOPE | RECEIPT`. Persistir apenas informações operacionais sanitizadas na biblioteca; não registrar conteúdo privado de telas ou tokens. **DISPLAY_DISCOVERY_PASS != GUI_CONTROL_PASS != ACTION_EFFECT_PASS.**
+- **Estado deste registro:** `MONITORS_WMI=4_PASS`; `SCREEN_BOUNDS=4_PASS`; `AMD_DISPLAY_TO_WINDOWS_SCREEN_JOIN=UNKNOWN`; `AUTOMATED_CLICK_CURRENT=NOT_EXECUTED`. **NEXT_CURSOR:** consumir esta receita ao receber um alias; provar no desktop autorizado uma navegação de baixo risco, sem instalar segundo controlador. `LAST_UPDATED_UTC=2026-10-28T12:26:38Z`.
+
 <!-- /CENTRALDARK_JANELAS_1_A_4_UIA_20261026 -->
+
+
+---
+
+## 🖱️ Navegação deliberada do Cockpit — mapa vivo botão por botão (27/10/2026)
+
+<!-- #OBSERVACOES#
+@owner: .agents/skills/centraldark-operational-method/references/FOCUS-DELEGACAO-TELEMETRIA.md
+@doc_ref: .agents/skills/centraldark-operational-method/SKILL.md; docs/HUD/README.md; apps/instinto-superior/scripts/verify-hud-zone.mjs
+@code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx; apps/instinto-superior/src/components/central/SistemaCentralDark.tsx; apps/instinto-superior/src/components/central/RuntimeSistema.tsx
+@last_updated: 2026-10-27T15:35:04.692Z
+@escopo: ensinar Hermes/Oracle a usar a interface real, mapear controles e corrigir a menor falha por owner
+@implementado: receita operacional vinculada à skill-mãe; sem novo processo, skill, browser, gateway ou writer
+@pendente: executor Hermes consumir esta versão, efetuar cliques seguros e produzir receipts UI por botão no runtime autenticado
+@next_cursor: testar seleção Sistema → Runtime / Capabilities → Métricas/Rastreamento/Configurações/Mostrar sensores; readback e link ao teste existente
+-->
+
+**Gatilhos:** `!CENTRALDARK #ACORDAR #HERMES #MAPEAR_COCKPIT`, “usa o mouse”, “clica botão por botão”, “valida a tela”, “melhora a skill”. Este é **modo da skill-mãe** `centraldark-operational-method`; não criar `centraldark-oracle-surface` como novo cérebro/owner. Se Oracle já existir como ferramenta visual conectada, aproveitar sua sessão/driver atual. Se não existir permissão efetiva de clicar no runtime, `CAN_CLICK=NO`, nunca fingir cliques ou usar logs de inspeção como cliques reais.
+
+### Fluxo único: inventariar tudo, clicar somente no que é seguro
+
+```text
+CHEFE_INTENT → CONTEXT → META-GRILL → CURRENT/GREEN_STATE
+→ OWNER EXISTENTE → MAPA DE ROTAS (somente leitura)
+→ CLASSIFICAR CADA CONTROLE: SAFE_NAV | READ_ONLY_EXPAND | MUTATING | UNKNOWN
+→ SELECIONAR ALVO SEM CONCORRER COM O HUMANO
+→ CAPTURA ANTES (URL, aba, heading, contagem, estado, amostra, UTC)
+→ CLICAR UMA VEZ [somente SAFE_NAV / READ_ONLY_EXPAND]
+→ CAPTURA DEPOIS (mesma sessão, URL, DOM/aria e efeito visível)
+→ COUNTERPROOF → REGISTRAR RESULTADO POR BOTÃO
+→ BACKCHECK → PRÓXIMO BOTÃO (mesmo trilho)
+→ PROPOR MENOR CORREÇÃO POR OWNER → TESTE/GATE → RECEIPT → NEXT_CURSOR
+```
+
+**Primeiro mapear sem clicar:** enumerar todos os controles visíveis/habilitados por `role`, nome acessível, `aria-label`, `data-cd-flow`, título/ícone e contexto do setor. O mapa separa `button`, `tab`, `link`, `switch` e `menuitem`. `VISIBLE != ENABLED != CLICKED != EFFECT_PROVED`; elemento renderizado não prova backend. Incluir controles ocultos somente com rastro de expansão de menu e sob a mesma sessão. Clicar um controle por vez, voltar ao checkpoint/aba inicial após registrar efeito, não varrer coordenadas em loop cego.
+
+**Seletor confiável:** preferir `data-cd-flow` estável; depois `getByRole("tab"|"button", {name})`, `aria-label` e caminho acessível confirmado. Clique real via ferramenta de browser/computer autorizada ou via `UIAutomation.InvokePattern` no Windows, com verificação antes/depois. `InvokePattern` é ação UIA sem mouse físico: **não reportar** `physical_mouse_clicks` se não houve evento físico observado. Mouse/posição apenas como fallback visual autorizado, com screenshot atual, verificação de resolução, janela e alvo; jamais coordenadas fixas sem readback. Não executar código JavaScript arbitrário de página, contornar login ou injetar tokens.
+
+**Política de interação:** autoriza ensaio automático só de abas, menus, expandir/recolher, seleção de área, paginação e filtros **que não alteram backend**. **NÃO clicar automaticamente** em `Enviar`, `Excluir`, `Instalar`, `Rebuild`, `Deploy`, `Sync`, `Commit`, `Push`, `Parar/Iniciar serviço`, `Exportar` com dados sensíveis, permissões, botões que aceitam transações, controles de GPU/energia, `TODO` desconhecido ou ações não classificáveis; só registrar `NEEDS_EXPLICIT_ACTION_AUTH`. Botão de registro CSV/telemetria somente com solicitação específica e verificação de privacidade. Não executar navegação automática se pessoa estiver digitando ou outro writer/robot controlar a janela; restaurar foco apenas se seguro.
+
+**Caso piloto — Radeon RX 580 já LIVE:** usar a **sessão autenticada já aberta**, verificando origem, certificado/rede e rota `/sala-controle` (Casa pode estar em `http://localhost:8080` ou no host Tailscale privado autorizado; não fixar origem por suposição). Em seguida, `Sistema CentralDark` → aba `Runtime / Capabilities` → painel `Radeon RX 580 · Desempenho`. Mapear e, quando autorizado pela sessão, selecionar **Métricas**, **Rastreamento**, **Configurações** e **Mostrar todos os sensores reais** (somente expansão). Confrontar `LIVE` + contador atual + sensor `GPU usage` + `sourceUpdatedAt` + avanço da série entre T0 e T1. **Não reutilizar snapshot de 58/60 como constante**: é medição temporal, pode variar. Comparar dados da mesma tela, no mesmo timestamp. O texto antigo `UNKNOWN` exibido pelo agente não é a verdade do novo frame; atualizar conclusão após readback e registrar `PAST_UNKNOWN → CURRENT_LIVE`, não reexecutar o coletor sem causa.
+
+**Pitfall — sessão da ferramenta ≠ sessão do usuário:** o cockpit SPA redireciona requisições não-autenticadas para `/auth`. `browser_exec` isolado pode não compartilhar a sessão do Hermes Desktop; isso **não demonstra** que o CHEFE esteja deslogado. Priorizar a sessão da superfície já autenticada e autorizada, validando a ação e o efeito por readback. Em 2026-10-27 o Hermes relatou **reuso bem-sucedido do Desktop Preview**, sem novo login, com seis controles navegados (recibo abaixo): atualizar `PAST_BROWSER_EXEC_AUTH_REQUIRED → CURRENT_DESKTOP_SESSION_AUTHORIZED`. Se a superfície autenticada real não estiver acessível naquela execução, registrar `CLICK_STATUS=NOT_EXECUTED` / `BLOCKED_AUTH_REQUIRED` especificamente para **a ferramenta usada**, preservar a missão e retomar no owner autorizado. Não copiar cookies/tokens, não pedir credencial em chat e não contornar RBAC. Evidência histórica nunca substitui readback atual. **Fallback quando o bridge do Desktop Preview estiver indisponível (timeout/sem aba):** usar `computer_use` sobre o Edge real do CHEFE — focar a barra de endereço via Ctrl+L, digitar a URL da sala de controle, Enter, e validar por `page_info`/DOM readback; não assumir que a digitação caiu na barra de endereço sem readback (a digitação pode ir para o input de uma página aberta, e.g. ChatGPT). Sempre confirmar a URL renderizada por captura + SOM antes de declarar cockpit alcançado."
+
+**Mapa/recibo sanitisado por controle:** `INTENT_ID | RUN_ID | SCREEN | SOURCE_SHA | ROUTE_URL_PATH | ROLE | ACCESSIBLE_NAME | DATA_CD_FLOW | CLASSIFICATION | BEFORE_STATE | ACTION_TOOL | ACTION_TYPE | AFTER_STATE | EFFECT | TIMESTAMP_UTC | RECEIPT | STATUS | NEXT_CURSOR`. Usar `LOCALAPPDATA\CentralDark\telemetry` apenas para logs locais autorizados, sem HTML bruto, cookies, conta, email, tokens, mensagens privadas, prints com credenciais ou conteúdo de campos de formulário. Versionar na Biblioteca Obsidian/BRAIN só síntese sanitizada e comprovada ligada ao owner, nunca telemetria privada bruta.
+
+**Autoaperfeiçoamento controlado da skill:** cada botão falho gera **uma hipótese com owner**, não PR/skill nova. Classificar `UI_ABSENT | DISABLED | WRONG_ROUTE | NO_AUTH | STALE_DATA | SOURCE_MISSING | TEST_STALE | BACKEND_ERROR | UNKNOWN`; corrigir a menor causa, atualizar o teste **no arquivo existente** `apps/instinto-superior/scripts/verify-hud-zone.mjs` quando o contrato realmente mudou, sem afrouxar invariantes de segurança. `BACKCHECK` das 2–3 ações anteriores, repetir só o botão afetado e regressões vizinhas. Registrar `#OBSERVACOES#`, owner, UTC real, antes/depois, contraprova, receipts. Novas receitas passam a esta mesma referência/skill-mãe somente depois de teste e selo causal.
+
+**Condicional real:** sem ferramenta interativa válida, executor autenticado ou autorização para a ação, **somente mapa estático/ARIA** e `CLICK_STATUS=NOT_EXECUTED`; retomar pela mesma janela depois. Browser API em modo somente leitura não vira `CLICKED=PASS` pela existência de uma aba. Não tentar controles remotos alternativos para contornar bloqueio.
+
+**Classificação:** BOUNDED. Respirações 1 Concentração (alvo), 13 Som (sinais), 9 Flor (clique preciso), 3 Lua (contraprova), 16 Regeneração Monotônica (melhoria sem regressão). `DECLARED != CLICKED != PROVED`. **A referência ensina o ciclo; não afirma execução automática agendada, cobertura 100% nem resposta dos serviços.**
+
+---
+
+## 🪬 Recibo consumido — seis cliques de navegação Radeon, Hermes Desktop (2026-10-27)
+
+<!-- #OBSERVACOES#
+@owner: .agents/skills/centraldark-operational-method/references/FOCUS-DELEGACAO-TELEMETRIA.md
+@doc_ref: .agents/skills/centraldark-operational-method/SKILL.md; docs/HUD/README.md
+@last_updated: 2026-10-27T16:15:04.980Z
+@evidence: relatorio de Hermes fornecido pelo CHEFE em 27/10/2026, 13:11 hora local, com descricoes DOM antes/depois
+@evidence_grade: EXECUTED_REPORTED_BY_HERMES; owner source selectors lidos em Casa; nao houve segunda reproducao independente nesta atualizacao
+@state: MAP_RADEON_SAFE_NAV=6/6_REPORTED; CAMERA/NETWORK_TRACE=UNKNOWN; RECORD_EXPORT_E2E=NOT_TESTED
+@next_cursor: Sistema CentralDark > Infraestrutura, Radar, Mega Painel, Status; mapear SAFE_NAV por readback; tratar gate verify-hud no owner separadamente
+-->
+
+O mapeamento da **sessão autenticada Hermes Desktop Preview**, sem reautenticação, registra seis transições de navegação com DOM readback pelo executor. Os seis controles abaixo são **SAFE_NAV/READ_ONLY_EXPAND**; os valores das métricas são **snapshot temporal**, nunca parâmetros fixos de teste.
+
+| Ordem | Seletor observado no relatório | Ação / evidência de efeito | Owner | Resultado relatado |
+|---|---|---|---|---|
+| 1 | `btn-abrir-sistema-centraldar` | Abriu Sistema CentralDark; surgiram abas Mega Painel, Status, Runtime/Capabilities, Infra e Radar | `CockpitShell.tsx` / `SistemaCentralDark.tsx` | `PASS_NAV` |
+| 2 | `tab-runtime-capabilities` | Aba Runtime/Capabilities renderizou CPU/VPS, disco, GPU/Sensores da Casa e Radeon | `SistemaCentralDark.tsx` | `PASS_NAV` |
+| 3 | `tab-m-tricas` | Seleção Métricas, cards FPS/GPU/temperatura/CPU/VRAM e estado da fonte | `RuntimeSistema.tsx` | `PASS_NAV` |
+| 4 | `tab-rastreamento` | Aba Rastreamento mostrou **Começar a registrar** e **Exportar CSV (0)** desabilitado | `RuntimeSistema.tsx` | `PASS_NAV` |
+| 5 | `tab-configura-es` | Aba Configurações mostrou MMF read-only e periodicidade do coletor/consulta | `RuntimeSistema.tsx` / `maquina.functions.ts` | `PASS_NAV` |
+| 6 | `btn-mostrar-todos-os-sensore` | Texto expandiu para **Ocultar sensores (58)** e revelou lista dos sensores | `RuntimeSistema.tsx` | `PASS_EXPAND` |
+
+**Dados observados pelo Hermes (não reensaiados nesta alteração):** `MAHMSharedMemory`, `LIVE 58/60`, timestamp da amostra `2026-10-27 13:11:22` hora local, idade relatada `7 s`, histórico `7 amostras`; entre os sensores: 75,2 FPS, GPU usage 36%, GPU 45 °C, GPU power 30,6 W, fan 47%/1277 RPM, CPU 62,3%, CPU temp 72 °C e VRAM 2224 MB. Não promover valores antigos para estado atual.
+
+**Contraprova / limite:** o botão **Começar a registrar** foi **observado**, mas o relatório de seis cliques **não demonstra seu acionamento com amostras gravadas**. **Exportar CSV (0)** apareceu disabled; não houve download validado. Então `TRACK_TAB_PASS=true` **não implica** `RECORD_PASS` ou `CSV_EXPORT_PASS`. Nenhuma ação perigosa/alteração de hardware relatada; sem log independente de rede, console e screenshot sob este mesmo `RUN_ID` (identificador ainda não informado), não declarar E2E universal nem todos os setores mapeados. O total de 58 sensores deve ser tirado do snapshot, não calculado apenas das categorias exemplificadas no relato.
+
+**Regra reaproveitável (novo cristal):** navegar nos botões SAFE_NAV em uma mesma sessão autenticada; capturar `BEFORE → ACTION → AFTER` e marcar `NAV/EXPAND_PASS` somente com DOM alterado; verificar o efeito de backend **separadamente** com network/API/DB quando a ação o exigir; preservar `RUN_ID`, seletor, owner, timestamp, receipt e `NEXT_CURSOR`. Se `browser_exec` isolado voltar a mostrar `AUTH_REQUIRED`, consultar a sessão Desktop já autorizada antes de inferir logout global.
+
+**NEXT_CURSOR:** continuar na **mesma janela** pelas abas `Infraestrutura → Radar → Mega Painel → Status`, ações seguras uma a uma, mantendo `STATE_HASH` e controle de foco. Registrar ações externas/destrutivas como `NEEDS_EXPLICIT_ACTION_AUTH` sem clicar para explorar. O problema `verify-hud-zone.mjs` (assertion legada `sticky top-0 z-50`) segue **outro cone causal**, não corrigido por este recibo. Delta Radeon e Skill-Mãe ainda dependem de gates/publicação; nenhum commit/push/deploy é inferido.

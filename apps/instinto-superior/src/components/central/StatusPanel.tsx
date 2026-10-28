@@ -105,14 +105,14 @@ export function StatusPanel() {
       nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
     },
     {
-      nome: "Desktop Commander", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
+      nome: "CentralDark Commander", estado: remote, icon: Monitor, subtitulo: "Ponte local · Casa SEGREDO",
       origem: d?.desktopFonte ?? "Adapter da sessão não conectado ao site",
       linhas: [
         `STATUS: ${remote}`,
-        "MCP do ChatGPT ≠ conexão comprovada do servidor do cockpit",
-        "Sem stream remoto autenticado neste runtime — não inferir ONLINE",
+        `HEALTH: HTTP ${d?.commanderHttp ?? "?"}`,
+        `MOTOR: ${d?.commanderEngine === true ? "conectado" : d?.commanderEngine === false ? "desconectado ou aguardando chamada" : "não medido"}`,
       ],
-      nota: "O plugin conectado nesta conversa não expõe automaticamente seus logs ao site. Exige ponte autorizada existente.",
+      nota: "Health identifica a ponte; somente uma chamada autenticada bem-sucedida comprova o motor.",
     },
   ];
 

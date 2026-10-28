@@ -197,3 +197,20 @@ id_dsa
 # Status runtime do auto-sync (scripts/vps/auto-sync-main.sh); reescrito a cada ciclo.
 # Versionado ele sujava /root/CentralDark e o proprio auto-sync ficava BLOCKED.
 logs/auto-sync-status.json
+
+# Obsidian Git: backup de VM/WSL, caches locais e estado volátil nunca são fonte Git.
+# Gitignore atua só sobre arquivos ainda não rastreados; histórico existente é preservado.
+/WSL/*.tar
+/WSL/*.tar.gz
+/**/.centraldark-fp/
+/centraldark-desktop/
+/Remote-Tray/_build/
+/Remote-Tray/*.exe
+/.codeagentswarm/mcp-servers/codeagentswarm-tasks/data/
+/docs/.claudian/
+# Saídas de investigação local (nomes de chaves/diagnósticos), não receitas canônicas.
+/core_keys_*.txt
+/*_keys.txt
+/*_namespace_matches.txt
+/meta-lupa-gate*.json
+/gate-prova-consolidado-meta-lupa.json

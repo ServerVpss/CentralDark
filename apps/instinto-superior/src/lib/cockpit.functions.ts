@@ -2,10 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
 const DEFAULT_API_BASE = "https://api.centralldark.com";
 const REQUEST_TIMEOUT_MS = 8_000;
+
+function carregarEnvForja() {
+  if (typeof process.loadEnvFile !== "function") return;
+  try { process.loadEnvFile("K:\\.env"); } catch { /* K: indisponível mantém UNKNOWN */ }
+}
 
 export type Estado = "PASS" | "RUNNING" | "BLOCKED" | "AUTH_REQUIRED" | "UNKNOWN" | "FAIL";
 
@@ -28,6 +32,8 @@ export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
   desktop: Estado;
+  commanderEngine: boolean | null;
+  commanderHttp: number | null;
   repositorio: "ServerVpss/CentralDark";
   branch: "main";
   vpsSha: string | null;
@@ -100,6 +106,7 @@ export type EstadoCentralDark = {
 };
 
 function acessoGitHub() {
+  carregarEnvForja();
   const token = process.env["GITHUB_TOKEN"];
   if (token) {
     return {
@@ -113,18 +120,7 @@ function acessoGitHub() {
     };
   }
 
-  const lovable = process.env["LOVABLE_API_KEY"];
-  const github = process.env["GITHUB_API_KEY"];
-  if (!lovable || !github) return null;
-  return {
-    base: GATEWAY,
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${lovable}`,
-      "X-Connection-Api-Key": github,
-    },
-    fonte: "Conector GitHub",
-  };
+  return null;
 }
 
 export function apiBase() {
@@ -478,6 +474,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSite,
       screenpipe,
       screenpipeRemotoCasa,
+      commanderCasa,
       actions,
     ] = await Promise.all([
       medirGithub(),
@@ -494,6 +491,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       hostScreenpipe === "VPS"
         ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
+      hostScreenpipe === "CASA"
+        ? medirReachable("http://127.0.0.1:9101/health", true)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
@@ -531,7 +531,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
-      desktop: "UNKNOWN",
+      desktop: commanderCasa.dados?.["name"] === "CentralDark Casa Commander" && commanderCasa.dados?.["ok"] === true ? "RUNNING" : "UNKNOWN",
+      commanderEngine: typeof commanderCasa.dados?.["engine_connected"] === "boolean" ? commanderCasa.dados["engine_connected"] as boolean : null,
+      commanderHttp: commanderCasa.httpStatus,
       repositorio: "ServerVpss/CentralDark",
       branch: "main",
       vpsSha,
@@ -600,7 +602,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
+      desktopFonte: hostScreenpipe === "CASA" ? "Casa · CentralDark Casa Commander · 127.0.0.1:9101/health" : "Casa Commander · sem medição neste host",
     };
 
     // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
@@ -634,7 +636,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
           host,
           ttl_seconds: 120,
         }));
-        await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        const { error } = await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        if (error) {
+          console.error("[radar-pulses] publicação falhou:", error.code ?? "UNKNOWN");
+        }
       } catch (e) {
         console.error("[radar-pulses] fire-and-forget falhou:", e);
       }

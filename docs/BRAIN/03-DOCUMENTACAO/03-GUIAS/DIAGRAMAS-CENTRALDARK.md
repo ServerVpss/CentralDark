@@ -650,3 +650,156 @@ ONE_WRITER_PER_SCOPE=true
 ONE_SYSTEM_ONLY=true
 NEXT_CURSOR=ler notas/manifest no vault da Casa, checar plugin e diagramas no Obsidian, testar rotas MCP/harness e registrar receipt com HEAD + readback
 ```
+
+---
+
+## 11. Continuidade Auditável — Navio de Teseu operacional (2026-10-27)
+
+> **Projeção conceitual aplicada ao fluxo existente; não é um novo motor nem prova automática de recuperação.** Owners: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml`, `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-EXECUTABLE-RECIPE.yml` e receipts existentes. O Mermaid é uma vista derivada no vault Obsidian da Casa.
+
+**Axioma:** identidade operacional = continuidade auditável da linhagem + estado atual identificável + justificativa verificável da transformação. Não é prova de consciência nem de identidade filosófica.
+
+```mermaid
+flowchart TD
+    INT["👑 Intenção do CHEFE + limites"] --> BOOT["📖 Recuperar SOUL, memória, owner, receipt e NEXT_CURSOR"]
+    BOOT --> BEFORE["🔎 Medir CURRENT / SHA anterior / fingerprint"]
+    BEFORE --> BLOCK["🧭 Identificar bloqueio e menor delta"]
+    BLOCK --> MUT["🦀 Writer único: aplicar muda autorizada"]
+    MUT --> AFTER["📏 Medir efeito / SHA resultante / readback"]
+    AFTER --> G["G — Genealogia: de onde veio, quem atuou e por quê"]
+    AFTER --> I["I — Integridade: preservado, alterado e não medido"]
+    AFTER --> V["V — Validade: invariantes e contraprova no escopo"]
+    G --> J{"G ∧ I ∧ V demonstrados?"}
+    I --> J
+    V --> J
+    J -->|"Sim"| FP["💎 Receipt + Fixed Point do escopo"]
+    J -->|"Não / UNKNOWN"| HOLD["⚠️ Preservar estado e commits; não declarar PASS"]
+    HOLD --> CURSOR["🧾 Receipt honesto + blocker + NEXT_CURSOR"]
+    FP --> REST{"Alegou migração ou reinício?"}
+    REST -->|"Sim"| REC["🔁 Provar recuperação de missão, histórico e cursor"]
+    REST -->|"Não"| LEARN["🧠 Reutilizar linhagem e aprendizado"]
+    REC -->|"Readback provado"| LEARN
+    REC -->|"Ainda não provado"| CURSOR
+    LEARN --> INT
+    FP -.-> FORK["🌿 Clone: ancestral comum, IDs de instância e estados distintos"]
+```
+
+### Contrato mínimo para justificar cada muda
+
+| Dimensão | Pergunta auditável | Evidência reutilizada |
+|---|---|---|
+| **G — Genealogia** | De qual estado, por qual intenção, owner e escritor? | SHA anterior/resultante, fingerprint, proveniência, receipt anterior |
+| **I — Integridade** | O que foi preservado, alterado ou não medido? | diff delimitado, hashes, baseline, memória e estado aplicáveis |
+| **V — Validade** | Quais invariantes e efeitos sobreviveram? | testes e contraprovas do mesmo alvo/SHA, readback real |
+| **Sobrevivência** | Após mudar casca, recuperou missão, histórico e NEXT_CURSOR? | prova de reinício/migração no runtime; sem medição: UNKNOWN |
+| **Bifurcação** | Duas instâncias compartilham ancestralidade, mas qual estado ativo é de cada uma? | ID de instância + estado/cursor próprios; não inferir identidade única |
+
+```text
+G ∧ I ∧ V = CONTINUIDADE_AUDITAVEL_DEMONSTRADA_NO_ESCOPO
+PROVA_AUSENTE != IDENTIDADE_PERDIDA
+LINHAGEM_COMPARTILHADA != IDENTIDADE_ATIVA_COMPARTILHADA
+FIXED_POINT != FIM_DA_EVOLUCAO
+RECEIPT_EXPLICA_TRANSFORMACAO != RECEIPT_PROVA_EFEITO_SEM_READBACK
+NO_NEW_OWNER=true
+ONE_WRITER_PER_SCOPE=true
+UNKNOWN != PASS
+```
+
+**Regra de aplicação:** anexar a justificativa ao *receipt já existente* da transformação, se e quando o owner do ciclo/receipts consumir esses campos. Não criar schema paralelo, clone de cérebro ou certificação retrospectiva. O diagrama por si só não comprova migração Casa → VPS, reinício Hermes nem sincronização GitHub.
+
+**NEXT_CURSOR:** quando houver uma muda real, comparar BEFORE/AFTER, receipts e provas já disponíveis; executar teste de sobrevivência apenas se a alegação incluir troca de máquina, processo ou modelo.
+
+---
+
+## 12. Skill-Mãe → cristal reutilizável → preservação e reconstrução (2026-10-28)
+
+**Origem da intenção:** CHEFE, 28/10/2026. **Owner desta projeção:** `docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md`. **Método que governa:** `.agents/skills/centraldark-operational-method/SKILL.md`. **Owners técnicos já existentes:** `apps/modulos/HERMES-CORE/` (execução), `.agents/skills/centraldark-operational-method/catalogo/` (descoberta), `docs/INSTALADOR/24-rebuild-deterministico.md` e `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/REINSTALL-RESTORE-AUTOPROVISIONAMENTO-VPS.md` (reconstrução). **Esta seção é um diagrama derivado; não executa nem certifica backup.**
+
+### 12.1 Aprender sem abandonar owners
+
+```mermaid
+flowchart TD
+    CHEFE["CHEFE: intenção e momento"] --> MAE["Skill-Mãe: método operacional"]
+    MAE --> BUSCA["Catálogo: buscar skill, script e receita existentes"]
+    BUSCA --> REUSO{"Existe receita pertinente?"}
+    REUSO -->|"Sim"| DONO["Abrir mesmo owner e receita"]
+    REUSO -->|"Não"| NOVO["Criar menor receita no owner pertinente, quando solicitado"]
+    NOVO --> EXEC
+    DONO --> EXEC["Hermes: executar ação autorizada"]
+    EXEC --> PROVA["Readback + teste + contraprova"]
+    PROVA --> OK{"Critérios da tarefa passaram?"}
+    OK -->|"Não ou UNKNOWN"| REPARO["Preservar estado; corrigir apenas o delta falho"]
+    REPARO --> EXEC
+    OK -->|"Sim"| CRISTAL["Atualizar receita, script e referência do mesmo owner"]
+    CRISTAL --> INDICE["Atualizar índice da Skill-Mãe + receipt"]
+    INDICE --> VAULT["Obsidian: conhecimento e diagrama derivado"]
+    VAULT --> GIT["Git/GitHub: preservar apenas conteúdo versionado e enviado"]
+    GIT --> FUTURO["Próxima intenção: recuperar cristal pertinente"]
+    FUTURO --> MAE
+```
+
+**Regra:** o sucesso de uma tarefa permite atualizar sua própria receita com prova e histórico. `TASK_PASS != RESTORE_PASS`. Histórico é fonte reutilizável, mas não prova funcionamento atual sem execução e efeito.
+
+### 12.2 Recuperação após perda da Casa ou VPS
+
+```mermaid
+flowchart TD
+    CANON["Owners, scripts, docs e receitas no GitHub já enviados"] --> PREP["Recuperar versão e identidade do projeto"]
+    BACKUP["Backup externo verificável de dados locais e privados"] --> PREP
+    PREP --> CHECK{"Git + backup + plano de restauração completos?"}
+    CHECK -->|"Não / UNKNOWN"| BLOCK["RESTORE_READY=UNKNOWN: não prometer recuperação integral"]
+    CHECK -->|"Sim"| ENSAIO["Ensaio de restore sem destruir origem"]
+    ENSAIO --> GATE{"Restore e comparação passaram?"}
+    GATE -->|"Não"| BLOCK
+    GATE -->|"Sim"| REST["Reinstalar/reprovisionar quando o CHEFE ordenar"]
+    REST --> VERIFY["Testar boot, serviços, arquivos e receipts no novo ambiente"]
+    VERIFY --> END{"Mesmo resultado operacional?"}
+    END -->|"Sim, provado"| PASS["RESTORE_PASS para escopo e versão medidos"]
+    END -->|"Não / UNKNOWN"| BLOCK
+```
+
+**Fronteira factual nesta rodada:** foram encontrados a biblioteca Obsidian e os owners de rebuild, e o repositório `K:\` é Git com remoto `ServerVpss/CentralDark`. Mas `K:\` possui modificações locais e commit ainda não enviado; não foi provado um backup externo completo, snapshot restaurável da Casa nem restauração E2E. **Não formatar Casa/VPS com base neste diagrama.** O cofre privado não deve ser copiado para Git público. Antes de qualquer formatação, o CHEFE escolhe o momento e o owner de restore precisa provar o que será preservado.
+
+**Consulta:** `[[DIAGRAMAS-CENTRALDARK#12. Skill-Mãe → cristal reutilizável → preservação e reconstrução (2026-10-28)]]`. **Atualização:** mudar esta mesma seção quando surgirem provas novas, sem criar `diagrama-final-v2` ou outro owner.
+
+---
+
+## 13. CentralDark Plugin — Skill-Mãe, Obsidian e Hermes por owner (2026-10-28)
+
+**Owner deste diagrama:** biblioteca Obsidian `DIAGRAMAS-CENTRALDARK.md`. **Owner do plugin:** `apps/modulos/obsidian-plugin-grafo-vivo/`. **Owner do método:** `.agents/skills/centraldark-operational-method/SKILL.md`. **Owner da execução:** `apps/modulos/HERMES-CORE/`. A mudança inicial preserva o ID técnico `centraldark-grafo-vivo` para não perder dados e comandos.
+
+```mermaid
+flowchart TD
+    CHEFE["CHEFE: intenção"] --> MAE["Skill-Mãe: método e catálogo"]
+    MAE --> ROTA{"Capacidade pertinente"}
+    ROTA --> PLUGIN["CentralDark Plugin: interface única"]
+    PLUGIN --> GRAFO["Grafo 2D/3D"]
+    PLUGIN --> HUD["Hermes Live / HUD"]
+    PLUGIN --> HUB["Hub de conhecimento"]
+    PLUGIN --> OUTROS["Outros plugins: eventos pertinentes"]
+    ROTA --> EXEC["Hermes Core: execução autorizada"]
+    PLUGIN --> EXEC
+    EXEC --> PROVA["Readback e prova"]
+    PROVA --> OWNER["Mesmo owner: atualizar receita/script"]
+    OWNER --> OBS["Obsidian: memória, diagramas e receipts"]
+    OBS --> MAE
+    OBS --> GIT["Git: versionar; GitHub apenas após envio"]
+```
+
+### 13.1 Descoberta portátil e fronteira do runtime
+
+```mermaid
+flowchart TD
+    VAULT["Obsidian: vault ativo"] --> DISC{"CENTRALDARK_ROOT válido?"}
+    DISC -->|"Sim"| ROOT["Raiz do projeto verificada por marcadores"]
+    DISC -->|"Não"| ANCEST["Descobrir ancestral do vault com Skill-Mãe"]
+    ANCEST --> CHECK{"Marcadores encontrados?"}
+    CHECK -->|"Sim"| ROOT
+    CHECK -->|"Não"| UNKNOWN["UNKNOWN: solicitar configuração; não inventar K: ou /root"]
+    ROOT --> HERMES{"Binding Hermes local/remoto disponível?"}
+    HERMES -->|"Sim"| TEST["Testar endpoint, identidade e efeito"]
+    HERMES -->|"Não"| UNKNOWN
+    TEST --> STATUS["Exibir status real no plugin"]
+```
+
+**Contratos:** `VAULT_ROOT != CENTRALDARK_ROOT != HERMES_ENDPOINT`; `OBSIDIAN_EVENT != EXECUCAO`; `HUB_CANDIDATE != PROVA`; `GIT_LOCAL != GITHUB_BACKUP`. O plugin instalado contém `Hermes Live` mas o `src/` do owner ainda não foi reconciliado; não publicar um build que remova a view. **Estado deste diagrama:** arquitetura e mapa de owners registrados, não teste de integração fim a fim. Atualizar esta seção quando a implementação for provada.
