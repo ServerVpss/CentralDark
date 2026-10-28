@@ -1,8 +1,32 @@
-# 🕸️ CentralDark Grafo Vivo — Plugin Obsidian
+# 🧩 CentralDark Plugin — Grafo Vivo, Hub e Hermes no Obsidian
 
 Plugin custom pra ver o ecossistema **CentralDark** se movimentando em tempo real dentro do seu Obsidian. Consome o mesmo `/api/graph` que roda em `api.centralldark.com`, mas renderiza numa view lateral do vault.
 
 Nada de mexer no Juggl ou no Graph nativo — esse aqui é **nosso**, sobrevive a update do Obsidian.
+
+## CentralDark Plugin — organização unificada (2026-10-28)
+
+**Identidade visual atual:** CentralDark Plugin. **ID técnico preservado:** `centraldark-grafo-vivo` (necessário para manter comandos, dados, autoatualização e vaults existentes). **Owner do código:** esta mesma pasta `apps/modulos/obsidian-plugin-grafo-vivo/`; não criar segundo plugin. A migração de ID/pasta para `centraldark-plugin` exige teste de compatibilidade antes de qualquer troca.
+
+| Capacidade | Owner / arquivo de implementação atual | Estado |
+| --- | --- | --- |
+| Grafo 2D | `src/view.ts` | Fonte existente |
+| Grafo 3D | `src/view3d.ts` | Fonte existente |
+| Hub de conhecimento / Obsidian | `src/knowledgeHub.ts` + `src/main.ts` | Fonte existente; eventos candidatos, não promoção de verdade |
+| Semântica local | `src/semantic.ts` | Fonte existente |
+| Configurações | `src/settings.ts` | Fonte existente |
+| Autoatualização / rollback | `src/autoUpdater.ts` | Fonte existente |
+| Hermes Live / HUD | `K:\\docs\\.obsidian\\plugins\\centraldark-grafo-vivo\\main.js` | **Presente no bundle instalado; fonte `src/` não reconciliada** |
+| Método, receitas e scripts | `.agents/skills/centraldark-operational-method/SKILL.md` | Owner Skill-Mãe, não duplicar no plugin |
+| Diagramas / memória | `docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md` | Owner Obsidian |
+| Executor Hermes | `apps/modulos/HERMES-CORE/` | Owner de execução separado |
+
+**Regra de evolução:** `INTENCAO → SKILL-MAE → CAPACIDADE PERTINENTE → MESMO OWNER → EXECUCAO → PROVA → RECEITA/DIAGRAMA/INDICE`. Plugin exibe e aciona rotas autorizadas; não promove notas a verdade por conta própria. Outros plugins recebem apenas eventos pertinentes, com proteção contra loops.
+
+**Raiz universal:** não usar `%root%` nem fixar `K:\\`/IP no código. Na Casa, procurar `CENTRALDARK_ROOT` quando configurado; senão descobrir o repositório ancestral do vault por marcadores canônicos. Em Linux/VPS, a mesma variável pode apontar a instalação correspondente. `VAULT_ROOT` (pasta do Obsidian) é diferente de `CENTRALDARK_ROOT` (repositório). O endpoint Hermes local/remoto deve ser configurado e testado separadamente; ausência = `UNKNOWN`.
+
+**Cadeado de publicação:** os dois bundles instalados têm `Hermes Live` e são diferentes do `main.js` do código-fonte. **Não executar build+deploy sobre o plugin ativo até reconciliar essa diferença** e provar que as views existentes continuam funcionando. O nome visível pode mudar sem alterar o ID técnico. Nunca copiar `data.json` com tokens para Git. Obsidian Git e o Hub de conhecimento são canais diferentes: `HUB_CANDIDATE != GITHUB_PUSH != RESTORE_PASS`.
+
 
 ---
 

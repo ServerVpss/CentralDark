@@ -244,3 +244,40 @@ Comentários de #1562/#1757 não são superfície operacional nem store primári
 - Retido: F:/_worktrees/sol-centraldark-usina-20261026 (recentemente usado, apesar de HEAD j? ancestral de main).
 - Regra: branch commit WIP != merge main; exclus?o segura de checkout != exclus?o de branch; status UNKNOWN n?o ? PASS.
 - Grupo 03: provas SHA e checagens. Grupo 04: exclus?es incertas. Grupo 05: Kaizen reuso do gate original.
+
+### 2026-10-26 ? Fechamento da reconcilia??o forense das worktrees K:/F:
+
+- Confer?ncia real: 2026-10-26T18:59:29-03:00.
+- Escopo: CentralDark worktrees anexas ao reposit?rio K:/.git. GitHub/main no in?cio: 83244972375f6136f9cfbc31e21965e1d312161f.
+- Antes desta passada: 21 worktrees; ap?s: 9. Total removidas: 12.
+- REMOVIDAS via git worktree remove com readback f?sico da aus?ncia. S? ap?s provar SHA, status, branch/remote quando aplic?vel, n?o perder commits exclusivos, n?o haver trabalho novo ou depend?ncia compartilhada:
+  - C:/tmp/wt-base
+  - F:/_worktrees/sol-centraldark-usina-20261026
+  - F:/_worktrees/centraldark-ssh-learning-20261025
+  - F:/_worktrees/mcp-api-cockpit-20261024
+  - F:/_worktrees/cockpit-ui-label-20261021
+  - F:/_worktrees/reconcile-w-skills-main-20261022
+  - K:/_worktrees/sol-aprendizado-220-20261022
+  - K:/centraldark-sync-casa-20261018
+  - F:/_worktrees/sol-vscode-pairing-20261025
+  - F:/_worktrees/sec-gitignore-ssh-20261022
+  - K:/_worktrees/centraldark-remote-name-migration-20261024/repo
+  - F:/_worktrees/sol-one-heart-supabase-20261025
+- CASO 17132 DELE??ES: F:/_worktrees/centraldark-ssh-learning-20261025 foi verificada: HEAD=42c0fa2080fe, ancestral de main; EXATAMENTE 17.132 caminhos deletados, zero untracked, zero ignored, zero processos por linha de comando. Removida a worktree j? inutilizada; n?o houve commit dessas dele??es. Git worktree remove --force foi usado APENAS nesse caso ap?s contraprova.
+- JUN??O WINDOWS: a worktree One Heart apontava para K:/apps/instinto-superior/node_modules. Eliminado SOMENTE o ponto de jun??o, n?o o alvo. Hash antes/depois de .package-lock.json no alvo permaneceu c4cc5cd51284181e (prefixo). Branch One Heart preservada em GitHub no SHA 2001da923808c71b171b2e13060348d9d71ae8ea.
+- LOG PRESERVADO: F:/QUARANTINE/centraldark-gitignore-ssh-autosync-status-20261022-ac8a5b3b3f8c77b6.json | SHA256 ac8a5b3b3f8c77b6c5f871f77973bc33aeaa6dd62dcba0dfe71447df179357c3; depois a worktree de seguran?a limpa foi retirada.
+- Arquivo tempor?rio de ZERO bytes retirado: K:/_worktrees/centraldark-remote-name-migration-20261024/repo/127.0.0.1 (nome terminava em caractere de ponto privado seguido de 9101); branch git preservada.
+- Worktrees RETIDAS porque n?o s?o duplicatas limpas da main, com modifica??es locais ou HEAD diferente sem proveni?ncia de publica??o:
+  - C:/root/CentralDark-main-8081
+  - F:/_worktrees/centraldark-pr1880-20261021-072853
+  - F:/_worktrees/centraldark-pr1880-20261021-075059
+  - F:/_worktrees/pr-1895
+  - F:/TEMP/CentralDark/cd-wt-015
+  - K:/_worktrees/fixed-point-pr1839
+  - K:/_worktrees/reconcile-w-skills
+  - K:/tmp/lineage-pr1837
+- Nessas oito, foram observados: mudan?as Cockpit, variantes da extens?o VS Code e VSIX de compila??o, arquivo .agents/skills/detecting-fileless-malware-techniques/SKILL.md ausente em duas branches, checkout detached PR1837 com artefatos, e .env.local IGNORADO em c?pias com node_modules. Estado = PROTECTED_WIP; n?o fundir ? main e n?o eliminar at? contraprova por owner.
+- CLONES INDEPENDENTES EM F: n?o contam como worktrees: F:/_worktrees/bolt-ai-fix-20261025 (build-logs), F:/_worktrees/Nova pasta/centraldark-mcp-weekly-validation-20261016 (ObservabilidadeCentralDark.tsx), F:/_WORKER/LAB-DESKTOP/_STAGE_ZENDRIVE_VPN (backup e outros). T?m material n?o rastreado; preservados.
+- K:/TEMP/cd-wt-015 resolve para F:/TEMP/CentralDark/cd-wt-015; n?o ? reposit?rio adicional. K:/w-skills cont?m gitdir antigo apontando para E:/...; n?o remover sem medir destino.
+- Git worktree prune --dry-run --verbose: nenhuma worktree ?rf?. Nenhum git reset --hard, git clean -fdx ou force push.
+- Evid?ncia e estado: remo??o de 12 c?pias PASS, integridade hist?rica das 8 restantes PROTECTED_WIP, equival?ncia GitHub/main requer o SHA do pr?ximo push em readback. Grupos 03 Provas; 04 Pend?ncias reais; 05 Kaizen.
