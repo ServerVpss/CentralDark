@@ -84,7 +84,7 @@ export const AutoSyncButton: React.FC = () => {
     } finally {
       setIsSyncing(false)
     }
-  }
+  };
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {

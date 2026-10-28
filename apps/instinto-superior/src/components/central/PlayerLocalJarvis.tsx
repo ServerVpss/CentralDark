@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Headphones, Mic2, Radio, Volume2, Wifi, WifiOff } from "lucide-react";
+import { PopupCloseButton } from "@/components/ui/popup-close-button";
 
 type Role = "listener" | "broadcaster";
 type Signal =
@@ -13,7 +14,7 @@ type Signal =
 const ROOM = "centraldark-audio-relay";
 const SECURE_PLAYER_URL = "https://windows-casa.tail6d7aa4.ts.net:8443/audio-player.html";
 
-export function PlayerLocalJarvis() {
+export function PlayerLocalJarvis({ onClose }: { onClose?: () => void } = {}) {
   const peerId = useId();
   const [role, setRole] = useState<Role>("listener");
   const [connected, setConnected] = useState(false);
@@ -348,9 +349,12 @@ export function PlayerLocalJarvis() {
 
   return (
     <section
-      className="mx-auto w-full max-w-3xl rounded-2xl border border-border bg-background/95 p-4 shadow-2xl sm:p-6"
+      className="relative mx-auto w-full max-w-3xl rounded-2xl border border-border bg-[#05070c] p-4 shadow-2xl sm:p-6"
       data-cd-flow="instinto.PlayerLocalJarvis"
     >
+      {onClose ? (
+        <PopupCloseButton aria-label="Fechar painel Ouvir PC" onClick={onClose} />
+      ) : null}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="font-mono text-[10px] tracking-[0.22em] text-neon-blue uppercase">
@@ -364,7 +368,7 @@ export function PlayerLocalJarvis() {
           </p>
         </div>
         <span
-          className={`rounded-full border px-2 py-1 font-mono text-[10px] ${connected ? "border-emerald-400/50 text-emerald-300" : "border-border text-muted-foreground"}`}
+          className={`mr-9 rounded-full border px-2 py-1 font-mono text-[10px] ${connected ? "border-emerald-400/50 text-emerald-300" : "border-border text-muted-foreground"}`}
           role="status"
         >
           {connected ? (

@@ -28,6 +28,7 @@ class ScriptOnly(unittest.TestCase):
         with patch.object(m, 'call', return_value=(0, {'verdict': 'PASS'})) as c:
             code, out = m.delegate(self.args)
         self.assertEqual((code, out['verdict'], out['subagent_calls']), (0, 'SCRIPT_REPLAY_ELIGIBLE', 0))
+        self.assertEqual(out['dependency_fingerprint'], 'abc')
         self.assertEqual(c.call_count, 1)
         self.assertIn('replay', c.call_args.args[0])
 
@@ -36,6 +37,7 @@ class ScriptOnly(unittest.TestCase):
             code, out = m.delegate(self.args)
         self.assertEqual((code, out['verdict'], out['model_calls'], out['script_executed']),
                          (3, 'DELTA_REQUIRED', 0, False))
+        self.assertEqual((out['claim'], out['owner'], out['dependency_fingerprint']), ('K', 'CANONICAL', 'abc'))
         self.assertEqual(c.call_count, 1)
 
     def test_execution_delegates_to_existing_replay_run(self):
@@ -46,8 +48,27 @@ class ScriptOnly(unittest.TestCase):
                      'proof_pass': True, 'expected_effect_match': True})]) as c:
             code, out = m.delegate(self.args)
         self.assertEqual((code, out['verdict'], out['subagent_calls']), (0, 'REUSE_CRYSTAL', 0))
+        self.assertEqual(out['dependency_fingerprint'], 'abc')
         self.assertIn('replay-run', c.call_args.args[0])
         self.assertNotIn('--allow-mutation', c.call_args.args[0])
+
+    def test_reuse_crystal_without_proof_is_not_fixed_point(self):
+        self.args.execute = True
+        for fields in [
+            {'verdict': 'REUSE_CRYSTAL'},
+            {'verdict': 'REUSE_CRYSTAL', 'execution_pass': True,
+             'proof_pass': False, 'expected_effect_match': True},
+            {'verdict': 'REUSE_CRYSTAL', 'execution_pass': True,
+             'proof_pass': True, 'expected_effect_match': False},
+        ]:
+            with self.subTest(fields=fields):
+                with patch.object(m, 'call', side_effect=[(0, {'verdict': 'PASS'}), (0, fields)]):
+                    code, out = m.delegate(self.args)
+                self.assertEqual((code, out['verdict'], out['next_cursor']),
+                                 (7, 'REPLAY_FAILED', 'AFFECTED_CONE_COUNTERPROOF'))
+                self.assertIsNone(out['script_executed'])
+                self.assertEqual(out['reason'], 'PROOF_INCOMPLETE')
+                self.assertEqual(out['dependency_fingerprint'], 'abc')
 
     def test_owner_replay_denied_never_claims_execution(self):
         self.args.execute = True
