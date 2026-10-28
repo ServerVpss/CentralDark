@@ -6,16 +6,26 @@
 
 <!-- #OBSERVACOES#
 @owner: docs/HUD/README.md
-@code_ref: scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat; apps/instinto-superior/src/lib/maquina.functions.ts; apps/instinto-superior/src/components/central/RuntimeSistema.tsx
-@last_updated: 2026-10-27T15:25:32.000Z
+@code_ref: scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat; scripts/casa/CentralDark-RtssOverlay.ps1; apps/instinto-superior/src/lib/maquina.functions.ts; apps/instinto-superior/src/components/central/RuntimeSistema.tsx
+@last_updated: 2026-10-28T17:32:00.000Z
 @escopo: telemetria local somente leitura reutilizando fonte Afterburner MAHMSharedMemory e RuntimeSistema autenticado
 @implementado: coletor sensor-only, feed LOCALAPPDATA, leitura SSR Casa, UI em código com FPS/GPU/CPU/VRAM/histórico/CSV
 @pendente: validar visual após reload no cockpit autenticado, CI do mesmo HEAD, testes negativos de frescor e autenticação; persistência do coletor após reboot ainda não garantida
-@next_cursor: validar no runtime real com login, corrigir só falhas do owner, selar delta Git após gates; VPS/host externo permanece UNKNOWN
+@next_cursor: validar a ponte RTSS no Cockpit autenticado, corrigir só falhas do owner, selar delta Git após gates; VPS/host externo permanece UNKNOWN
 @prova_visual: 27/10/2026 12:25:32 - painel Radeon RX 580 LIVE 58/60 sensores, FPS 71.8, GPU 79%, Temp 45C, CPU 100%, VRAM 2263.1MB, 25 amostras no historico, idade 4s, CONVERGENCIA SENSOR FRESCO E AUTENTICADO. Root cause do UNKNOWN anterior: estado de bootstrap (historico aguardando duas leituras consecutivas); nao e falha intermitente.
 -->
 
 **Intenção atual:** o mesmo painel Radeon RX 580 mostrado pelo Adrenalin deve aparecer **vivo** dentro do cockpit existente, com tema escuro/vermelho, métricas selecionáveis e rastreamento. Não embutir processo/janela proprietária nem simular números. Uso estritamente **somente leitura**, sem alterar driver, clocks, tensão, potência ou ventilação.
+
+## 🖥️ Ponte RTSS por posição física (28/10/2026)
+
+**Intenção:** transformar o Desktop Overlay Host já instalado em uma capacidade limitada do mesmo Cockpit. O painel reutiliza `RuntimeSistema.tsx`, a autenticação admin já existente e o script local `scripts/casa/CentralDark-RtssOverlay.ps1`; não há segundo Cockpit, executor genérico, shell enviado pelo navegador ou controlador de GPU.
+
+**Allowlist:** `status`, `open`, `move` e `close`. `move` só aceita os aliases físicos `esquerda`, `centro-superior`, `centro-inferior` e `direita`, remeça `Screen.AllScreens` no instante do comando e devolve PID, visibilidade e retângulo para readback. A rota só opera quando o servidor autenticado é a Casa Windows `SEGREDO`; VPS, preview ou host externo retornam estado explícito e não fazem tentativa remota.
+
+**Cadeado:** números `1..4` continuam pertencendo ao Windows `Configurações → Sistema → Tela → Identificar`. A UI os mostra apenas como mapa humano confirmado (`esquerda=3`, `centro superior=2`, `centro inferior=4`, `direita=1`); o comando resolve pelo retângulo físico atual, nunca por `DISPLAYx` ou pela ordem interna do RTSS. `TODAS_AS_TELAS=NOT_IMPLEMENTED` e `RTSS_LABEL_PER_MONITOR=NOT_CONFIGURED` até teste específico, reversível e visual.
+
+**Reversão:** o Cockpit só permite fechar um PID que ele mesmo iniciou durante a vida daquele servidor. Host já aberto pelo usuário não é encerrado. Abrir/mover não altera clocks, ventoinhas, resolução, arranjo, driver ou a configuração RTSS. O recibo definitivo depende do teste autenticado no Cockpit e contraprova de PID/retângulo.
 
 **Owners reaproveitados:** coleta `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; frontend existente `RuntimeSistema.tsx`; server function autenticada `maquina.functions.ts`; referência legado `docs/HUD/HUD.html`. O caminho `K:\HUD.html` era legado/inexistente na Casa: o HTML canônico é `K:\docs\HUD\HUD.html`. O feed efêmero **não deve ser gravado no repositório**: utiliza `%LOCALAPPDATA%\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js`; seus bytes não são prova de commit nem dado para Git.
 

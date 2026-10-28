@@ -170,6 +170,13 @@ Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E
 - **Fronteira:** este é um overlay RTSS por tela, não substitui o `Configurações → Sistema → Tela → Identificar` nativo do Windows. A relação numérica do menu RTSS com o numeral Windows deve ser medida pela posição física a cada sessão; `RTSS_LABEL_PER_MONITOR=NOT_CONFIGURED` até existir teste explícito de uma etiqueta temporária e sua reversão.
 - **NEXT_CURSOR:** se o CHEFE pedir etiqueta CentralDark, iniciar o mesmo host, usar o menu já existente para mover pelo alvo físico confirmado, observar a tela e remover/reverter a etiqueta no fim; não criar segundo host nem escrever por automação cega.
 
+### #OBSERVACOES# — Ponte Cockpit → RTSS allowlisted (28/10/2026)
+
+- **Owner de código:** `scripts/casa/CentralDark-RtssOverlay.ps1` + `apps/instinto-superior/src/lib/maquina.functions.ts` + `apps/instinto-superior/src/components/central/RuntimeSistema.tsx`; o cartão vive na área Radeon do Cockpit existente, não em outro painel.
+- **Contrato reutilizável:** admin autenticado → servidor precisa ser `SEGREDO` Windows → script local tipado → `status|open|move|close` → readback de PID/visibilidade/retângulo. `move` aceita apenas os aliases físicos `esquerda`, `centro-superior`, `centro-inferior`, `direita`; reenumera `Screen.AllScreens`, não aceita PowerShell ou comando arbitrário do navegador.
+- **Cadeados:** `Windows Identificar` segue sendo a fonte do número humano; RTSS resolve a geometria física atual. `close` recusa host sem PID de propriedade temporária da CentralDark. `TODAS_AS_TELAS=NOT_IMPLEMENTED`; `RTSS_LABEL_PER_MONITOR=NOT_CONFIGURED`; nenhuma alteração em driver, layout, GPU ou `DesktopOverlayHost.cfg` é autorizada por esta ponte.
+- **Prova local de script:** parser PowerShell `0` erros; `status` devolveu os quatro aliases atuais; `move direita` abriu um host temporário e retornou `1920,-831,1080x1920`; `close` encerrou esse PID; hash de `DesktopOverlayHost.cfg` permaneceu igual. O clique autenticado do Cockpit e o build do app são gates distintos, ainda pendentes de readback.
+
 <!-- /CENTRALDARK_JANELAS_1_A_4_UIA_20261026 -->
 
 

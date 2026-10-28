@@ -2,6 +2,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { readFile, stat, statfs } from "node:fs/promises";
 import { join } from "node:path";
 import { hostname, platform } from "node:os";
+import { existsSync } from "node:fs";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { apiBase, type Estado } from "@/lib/cockpit.functions";
 
@@ -34,6 +38,21 @@ export type GpuCasa = {
   motivo: string | null;
 };
 
+export type RtssOverlayCasa = {
+  ok: boolean;
+  state: string;
+  measuredAt: string;
+  running: boolean;
+  pid: number | null;
+  visible: boolean;
+  rect: { x: number; y: number; width: number; height: number } | null;
+  displays: Array<{ device: string; x: number; y: number; width: number; height: number; primary: boolean }>;
+  aliases: Record<string, { device: string; x: number; y: number; width: number; height: number; primary: boolean }>;
+  target?: string;
+  startedByCentralDark?: boolean;
+  detail?: string;
+};
+
 export type MaquinaViva = {
   fonte: string;
   medidoEm: string;
@@ -62,6 +81,48 @@ export type MaquinaViva = {
 
 function ehObjeto(v: unknown): v is Json {
   return !!v && typeof v === "object" && !Array.isArray(v);
+}
+
+async function exigirAdmin(context: { supabase: { from: (name: string) => any }; userId: string }) {
+  const { data } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+  if (!data) throw new Response("Proibido", { status: 403 });
+}
+
+const rtssInput = z.object({
+  action: z.enum(["status", "open", "move", "close"]),
+  target: z.enum(["esquerda", "centro-superior", "centro-inferior", "direita"]).optional(),
+}).superRefine((data, ctx) => {
+  if (data.action === "move" && !data.target) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target"], message: "Alvo físico obrigatório para mover" });
+  if (data.action !== "move" && data.target) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target"], message: "Alvo só é permitido ao mover" });
+});
+
+let rtssHostTemporarioPid: number | null = null;
+const rtssScript = process.env["CENTRALDARK_RTSS_OVERLAY_SCRIPT"] ?? "K:\\scripts\\casa\\CentralDark-RtssOverlay.ps1";
+
+function rtssIndisponivel(state: string): RtssOverlayCasa {
+  return { ok: false, state, measuredAt: new Date().toISOString(), running: false, pid: null, visible: false, rect: null, displays: [], aliases: {} };
+}
+
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/maquina.functions.ts @doc_ref=docs/HUD/README.md @last_updated=2026-10-28T17:32:00.000Z
+// Bridge estrita: somente o script Casa allowlisted recebe acao/alias tipados. Sem shell livre vindo do navegador; fora da Casa retorna UNKNOWN operacional.
+async function executarRtssOverlay(input: z.infer<typeof rtssInput>): Promise<RtssOverlayCasa> {
+  if (platform() !== "win32" || hostname().toUpperCase() !== "SEGREDO") return rtssIndisponivel("RUNTIME_NAO_E_CASA_WINDOWS");
+  if (!existsSync(rtssScript)) return rtssIndisponivel("RTSS_OWNER_SCRIPT_ABSENT");
+  if (input.action === "close" && rtssHostTemporarioPid == null) return rtssIndisponivel("REFUSE_CLOSE_NOT_OWNED");
+  const args = ["-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", rtssScript, "-Action", input.action];
+  if (input.target) args.push("-Target", input.target);
+  if (input.action === "close") args.push("-ExpectedPid", String(rtssHostTemporarioPid));
+  try {
+    const { stdout } = await promisify(execFile)("powershell.exe", args, { timeout: 8_000, maxBuffer: 64 * 1024, windowsHide: true });
+    const result: unknown = JSON.parse(stdout.trim());
+    if (!ehObjeto(result) || typeof result["ok"] !== "boolean" || typeof result["state"] !== "string") return rtssIndisponivel("RTSS_OWNER_RESPONSE_INVALID");
+    const view = result as unknown as RtssOverlayCasa;
+    if (view.ok && view.startedByCentralDark && typeof view.pid === "number") rtssHostTemporarioPid = view.pid;
+    if (input.action === "close" && view.ok) rtssHostTemporarioPid = null;
+    return view;
+  } catch {
+    return rtssIndisponivel("RTSS_OWNER_RUNTIME_UNREACHABLE");
+  }
 }
 
 async function sondar(caminho: string): Promise<SondaInterna> {
@@ -224,13 +285,7 @@ async function medirGpuCasa(): Promise<GpuCasa> {
 export const lerMaquinaViva = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MaquinaViva> => {
-    const { data } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    if (!data) throw new Response("Proibido", { status: 403 });
+    await exigirAdmin(context);
 
     const [heartbeat, health, discoServidor, gpuCasa] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor(), medirGpuCasa()]);
     const fontes = [heartbeat.dados, health.dados];
@@ -290,4 +345,12 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
         medidoPeloOwner,
       },
     };
+  });
+
+export const operarOverlayRtssCasa = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => rtssInput.parse(data))
+  .handler(async ({ context, data }): Promise<RtssOverlayCasa> => {
+    await exigirAdmin(context);
+    return executarRtssOverlay(data);
   });

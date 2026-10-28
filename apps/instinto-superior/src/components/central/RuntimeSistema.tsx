@@ -6,7 +6,7 @@ import { Cpu, HardDrive, HeartPulse, MemoryStick, Monitor, Activity, Download } 
 import { supabase } from "@/integrations/supabase/client";
 import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
-import { lerMaquinaViva, type GpuCasa } from "@/lib/maquina.functions";
+import { lerMaquinaViva, operarOverlayRtssCasa, type GpuCasa, type RtssOverlayCasa } from "@/lib/maquina.functions";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { FERIDA_MCP } from "@/data/painel-unico";
 
@@ -64,6 +64,14 @@ function PainelRadeonCasa({ gpu }: { gpu: GpuCasa | undefined }) {
   const [registro, setRegistro] = useState<RadeonAmostra[]>([]);
   const [aba, setAba] = useState<"metricas" | "rastreamento" | "configuracoes">("metricas");
   const [mostrarTodos, setMostrarTodos] = useState(false);
+  const operarOverlay = useServerFn(operarOverlayRtssCasa);
+  const [overlay, setOverlay] = useState<RtssOverlayCasa | null>(null);
+  const [acaoOverlay, setAcaoOverlay] = useState<string | null>(null);
+  const executarOverlay = async (action: "status" | "open" | "move" | "close", target?: "esquerda" | "centro-superior" | "centro-inferior" | "direita") => {
+    setAcaoOverlay(target ?? action);
+    try { setOverlay(await operarOverlay({ data: target ? { action, target } : { action } })); }
+    finally { setAcaoOverlay(null); }
+  };
   useEffect(() => {
     if (!vivo || !gpu.atualizadoEm) return;
     const valor = (nome: string) => gpu.sensores.find((s) => s.nome === nome)?.valor ?? null;
@@ -138,10 +146,21 @@ function PainelRadeonCasa({ gpu }: { gpu: GpuCasa | undefined }) {
           className="flex items-center gap-2 rounded border border-zinc-500 px-4 py-2 text-sm disabled:opacity-50"><Download className="size-4"/> Exportar CSV ({registro.length})</button>
         <p className="w-full text-xs text-zinc-400">Registro nesta aba somente enquanto o navegador está aberto. Para diagnóstico após reinício, usar o log persistido pelo Adrenalin.</p>
       </div>}
-      {aba==="configuracoes" && <div className="space-y-2 p-5 text-sm text-zinc-300">
+      {aba==="configuracoes" && <div className="space-y-4 p-5 text-sm text-zinc-300">
         <p>Fonte: <strong>MSI Afterburner / MAHMSharedMemory</strong> (read-only). Coletor existente da Casa: ciclo de 10 s.</p>
         <p>O painel consulta a leitura autenticada a cada 5 s. Aceleração, potência, voltagem e ventoinhas <strong>não são alteradas</strong>.</p>
-        <p>Overlay do Adrenalin e amostragem nativa continuam configurados no software AMD; este painel não simula controles que não possui.</p>
+        <p>Overlay RTSS: rota autenticada somente na Casa SEGREDO. Ela usa o Desktop Overlay Host existente e nunca altera a configuração da GPU ou o layout do Windows.</p>
+        <section className="rounded border border-zinc-700 bg-[#242426] p-4" aria-label="Controle de monitores e overlay RTSS">
+          <div className="flex flex-wrap items-center justify-between gap-3"><div><h5 className="font-semibold text-white">Monitores &amp; Overlay RTSS</h5><p className="mt-1 text-xs text-zinc-400">Mover por posição física comprovada; o número Windows continua sendo conferido pelo Identificar.</p></div>
+            <button type="button" onClick={() => void executarOverlay("status")} disabled={acaoOverlay !== null} className="rounded border border-zinc-500 px-3 py-1.5 text-xs font-semibold hover:border-white disabled:opacity-50">{acaoOverlay === "status" ? "Medindo…" : "Atualizar estado"}</button></div>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            {([['esquerda','Esquerda · Windows 3'],['centro-superior','Centro superior · Windows 2'],['centro-inferior','Centro inferior · Windows 4'],['direita','Direita · Windows 1']] as const).map(([target,label]) => <button key={target} type="button" onClick={() => void executarOverlay("move",target)} disabled={acaoOverlay !== null} className="rounded border border-[#fa315c]/60 bg-[#2b1a20] px-3 py-2 text-left text-xs font-semibold text-white hover:bg-[#41202a] disabled:opacity-50">{acaoOverlay === target ? "Movendo…" : label}</button>)}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => void executarOverlay("open")} disabled={acaoOverlay !== null} className="rounded border border-zinc-500 px-3 py-1.5 text-xs hover:border-white disabled:opacity-50">Abrir host existente</button><button type="button" onClick={() => void executarOverlay("close")} disabled={acaoOverlay !== null || !overlay?.startedByCentralDark} className="rounded border border-amber-500/70 px-3 py-1.5 text-xs text-amber-200 hover:border-amber-300 disabled:opacity-50">Fechar host temporário</button></div>
+          <p role="status" aria-live="polite" className="mt-4 font-mono text-[11px] text-zinc-300">{!overlay ? "RTSS_OVERLAY=UNKNOWN · clique Atualizar estado" : `${overlay.state} · ${overlay.running ? `PID ${overlay.pid ?? "?"}` : "host fechado"}${overlay.rect ? ` · ${overlay.rect.x},${overlay.rect.y},${overlay.rect.width}×${overlay.rect.height}` : ""}`}</p>
+          {overlay?.detail ? <p className="mt-2 text-xs text-amber-200">{overlay.detail}</p> : null}
+          <p className="mt-2 text-[11px] text-zinc-500">Todas as telas e etiqueta individual permanecem bloqueadas até teste próprio; um clique nunca executa shell livre.</p>
+        </section>
       </div>}
       <div className="border-t border-zinc-700 p-5">
         <button type="button" className="text-sm text-zinc-300 hover:text-white" onClick={() => setMostrarTodos((v) => !v)}>
