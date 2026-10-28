@@ -84,7 +84,7 @@ export function StatusPanel() {
   ];
 
   const rotas = [
-    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: "Casa/Site local · HTTP 4175" },
+    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: d?.casaSiteFonte ?? "Casa/Site local · sem medição (padrão 8080)" },
     { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
     { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
@@ -92,7 +92,7 @@ export function StatusPanel() {
     { id: "screenpipe-vps", owner: "Screenpipe VPS", estado: d?.screenpipeVps ?? unknown, fonte: d?.screenpipeVpsFonte ?? "VPS 3030/health" },
     { id: "grafo-vivo", owner: "Live Fabric", estado: d?.grafoVivo ?? unknown, fonte: d?.liveFabricFonte ?? "API /api/live-fabric/graph" },
     { id: "omni-router", owner: "Omni Router", estado: d?.omniRouter ?? unknown, fonte: "API /api/omni/status · somente rota medida" },
-    { id: "heartbeat", owner: "Heartbeat MCP", estado: d?.heartbeat ?? unknown, fonte: "MCP /heartbeat · self=" + (d?.heartbeatSelf ?? "?") },
+    { id: "heartbeat", owner: "Omni Router · heartbeat local", estado: d?.heartbeat ?? unknown, fonte: "Omni Router /heartbeat · self=" + (d?.heartbeatSelf ?? "?") + " · nao prova invocacao" },
     { id: "receipts", owner: "Receipts Microdeploy", estado: d?.receipts ?? unknown, fonte: "API /api/microdeploy/receipts/index.json" },
   ] as const;
   const rotasComProblema = rotas.filter((rota) => rota.estado !== "PASS");
@@ -105,14 +105,14 @@ export function StatusPanel() {
       nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
     },
     {
-      nome: "Desktop Commander", estado: remote, icon: Monitor, subtitulo: "Ponte remota · Casa SEGREDO / VPS",
+      nome: "CentralDark Commander", estado: remote, icon: Monitor, subtitulo: "Ponte local · Casa SEGREDO",
       origem: d?.desktopFonte ?? "Adapter da sessão não conectado ao site",
       linhas: [
         `STATUS: ${remote}`,
-        "MCP do ChatGPT ≠ conexão comprovada do servidor do cockpit",
-        "Sem stream remoto autenticado neste runtime — não inferir ONLINE",
+        `HEALTH: HTTP ${d?.commanderHttp ?? "?"}`,
+        `MOTOR: ${d?.commanderEngine === true ? "conectado" : d?.commanderEngine === false ? "desconectado ou aguardando chamada" : "não medido"}`,
       ],
-      nota: "O plugin conectado nesta conversa não expõe automaticamente seus logs ao site. Exige ponte autorizada existente.",
+      nota: "Health identifica a ponte; somente uma chamada autenticada bem-sucedida comprova o motor.",
     },
   ];
 

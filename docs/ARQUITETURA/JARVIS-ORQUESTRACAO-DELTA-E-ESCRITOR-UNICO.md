@@ -1,7 +1,7 @@
 # JARVIS — ORQUESTRAÇÃO EM DELTA, CONTEXTO RECUPERÁVEL E ESCRITOR ÚNICO
 
 > **Origem:** 2026-07-30
-> **Atualizado:** 2026-10-05
+> **Atualizado:** 2026-10-27T12:16:16.618Z
 > **Autoria da intenção:** SEGREDO/CHEFE
 > **Organização técnica:** SOL/ChatGPT + organismo CentralDark
 > **Status:** CANÔNICO
@@ -183,9 +183,56 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 **Caminho das artes:** toda arte nova segue o owner `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`: arquivo → fonte/hash → candidato → manifesto/validador → promoção → espelho Casa com readback. Arte no chat ou Library não prova arte no Git. **Não criar outra biblioteca.**
 
-**Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; Runtime/VPS = execução e logs. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
+**Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; CentralDark-OS = runtime do produto, local e/ou remoto; Casa/VPS = hosts e logs físicos. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
 
 **Critério de saída:** FIXED_POINT só com objetivo cumprido e gates requeridos provados; se ainda há trabalho, registrar o próximo discriminante no NEXT_CURSOR e prosseguir quando houver executor disponível. Se nada mudou: NOOP. Não prometer loop em segundo plano sem job/schedule real.
+
+### 6.0.A CentralDark-OS local-first — VPS é cápsula opcional, não autoridade (2026-10-27)
+
+<!-- #OBSERVACOES#
+@owner: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+@doc_ref: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md; docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md
+@last_updated: 2026-10-27T12:16:16.618Z
+@escopo: vínculo lógico local-first, nomenclatura humana, reconciliação offline/online
+@implementado: contrato documental e ligações aos owners existentes
+@pendente: prova runtime de persistência local, fila offline, replay, catch-up VPS e failover real
+@next_cursor: medir e integrar delta no reconciliador/bridge existente e executar teste de queda + retorno da VPS
+-->
+
+**Nova intenção expressa pelo CHEFE:** CentralDark-OS é o **produto único e núcleo lógico compartilhado**, com prioridade de operação na Casa/Forja e capacidade de evoluir seus arquivos, receitas e código localmente dentro dos executores/autorização existentes. **VPS é somente um alvo físico/instância opcional da cápsula CentralDark-OS**, para serviço remoto/headless quando disponível. Não exigir VPS paga ou online para iniciar o ciclo na Casa. **Casa ligada não prova continuidade 24/7**; essa propriedade depende de energia, serviços persistentes, saúde e provas do runtime local. Evolução aqui significa deltas de código, receitas, documentos e execução autenticada com testes, não treinamento espontâneo do modelo nem automutação irrestrita.
+
+**Nome de produto/interface:** usar `CentralDark-OS` em decisões, menus e prompts antes tratados como **VPS obrigatória**. **Nome operacional de máquina:** manter `VPS` onde o texto se refere de fato a SSH, host/IP, serviço, PID, scripts `scripts/vps/`, backup, deploy, caminhos `/root/`, health, logs ou recibo remoto. **Proibido replace global textual ou renomear identificadores/API/paths por estética.** Versões Desktop, OS Linux/openKylin e kernel nativo futuro continuam edições do mesmo core; kernel próprio inicializável não está provado.
+
+**Fluxo único e preservativo:**
+
+```text
+CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL
+→ CURRENT/GREEN_STATE → GOAL/CLAUSULAS → OWNER/REUSE_BEFORE_CREATE
+→ MENOR_DELTA → HERMES/EXECUTE no ALVO DISPONIVEL E AUTORIZADO
+→ OBSERVE → TEST → COUNTERPROOF → REALITY_JUDGE
+→ RECEIPT → FIXED_POINT ou NEXT_CURSOR → KAIZEN → CONTINUAR
+
+CASA/LOCAL SAUDAVEL: CONTINUA SEM VPS
+  → SOURCE + OBSIDIAN/BRAIN + RECEIPTS + CHECKPOINT LOCAL
+  → COM REDE: PR/CI/MAIN CONFORME GATES
+  → SEM REDE: DELTAS LOCAIS PRESERVADOS, AINDA NAO SINCRONIZADOS
+
+VPS OFFLINE: ISOLAR SO O REMOTO; CASA NAO PARA
+  → FILA/REGISTRO DE DELTAS PENDENTES (owner EXISTENTE, nao presumir implementado)
+VPS VOLTA:
+  → AUTENTICAR → INVENTARIAR → COMPARAR SHA/HASH + OWNER + PROVENIENCIA
+  → RECONCILIAR GREEN_STATE, LOCAL_DIRTY, REMOTE_DIRTY e CONFLITOS
+  → REUTILIZAR RECEITA PROVADA → APLICAR SO DELTA AUTORIZADO
+  → TESTAR → CONTRAPROVA NA VPS → READBACK → RECEIPT → NEXT_CURSOR
+CASA OFFLINE: VPS EXECUTA APENAS CAPACIDADES AUTONOMAS JA COMPROVADAS;
+  → CASA VOLTA: MESMA RECONCILIACAO, NUNCA SOBRESCRITA CEGA
+```
+
+**Janela móvel/backcheck:** `EDITA → AVANCA → VOLTA ALGUMAS CASAS → CONFERE → (FALHA? MENOR CAUSA → COSTURA → RETESTA → BACKCHECK) → CONTINUA`. Não reiniciar missão entre modelos/janelas. Retestar só o cone causal afetado; não refazer verde com mesmo fingerprint sem evento material novo. Em conflito preservar ambos, um escritor por owner, sem `reset --hard`, `clean`, `force push` ou migração destrutiva.
+
+**Biblioteca:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md` e `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md` registram conhecimento e PDFs no vault Obsidian/BRAIN, versionados por Git quando permitido. Enlaçar no mesmo grafo: [aprendizado](../BRAIN/07-APRENDIZADOS-MEMORIAS/README.md) · [acervo](../BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md) · [OS/kernel](CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md). Identidade, autoridade, documentação versionada, efeito no runtime e prova são camadas distintas.
+
+**Status desta seção:** `CONTRACT_UPDATED=YES`; `VPS_OFFLINE_FAILOVER_E2E=UNKNOWN`; `AUTO_CATCHUP_E2E=UNKNOWN`; `KERNEL_NATIVE_BOOT=UNKNOWN_NOT_PROVED`. Nenhuma dessas capacidades passa a existir por texto de prompt.
 
 ### Delegação do Builder na Forja existente — sem versões paralelas
 

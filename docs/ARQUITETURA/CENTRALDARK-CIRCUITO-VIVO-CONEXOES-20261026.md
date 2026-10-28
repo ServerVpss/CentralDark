@@ -25,7 +25,7 @@ Unificar Cockpit, Casa, VPS, GitHub, Supabase, Edge Functions, Realtime, conecto
 ## Conexoes e administracao
 - Setor Cockpit: Minha Oficina -> Sync Center -> Dominio do Loop -> Duas vias; ConexoesCentralDark para inventario de provedores. Cada host/VM novo tem identidade SSH, dependencia/versao propria, fonte e receipt. O template plugavel e reusavel, nao replica segredo.
 - SSH Casa->VPS e VPS->Casa ja foram testados para READ_ONLY; prova de leitura nao significa sincronizacao automatica de arquivos, controle remoto de GUI nem deploy. Duas direcoes exigem comprovacao independente.
-- Windows monitores: Skill Mae tem Identify-CentralDarkMonitors.ps1 com consulta de Screen.AllScreens e acao opcional -Identify, baseada em botao nativo Configuracoes -> Sistema -> Tela. Slot 1 esquerda, 2 centro acima, 3 centro abaixo, 4 direita. Se execucao remota ve WinDisc/desktop virtual, retorna UNKNOWN e exit 2, nao inventa quatro monitores.
+- Windows monitores: usar exclusivamente a funcao nativa `Configurações` -> `Sistema` -> `Tela` -> `Identificar` na sessao fisica local. Ela exibe o numero grande correspondente em cada painel e prova a topologia visual sem alterar configuracao. Registrar o numero, posicao, modelo, conexao e serial; confrontar identidade com `WmiMonitorID` + `WmiMonitorConnectionParams`. Nao arrastar monitores, alterar resolucao, modo de projecao ou aplicar configuracao. Se execucao remota ve WinDisc/desktop virtual, retorna UNKNOWN e exit 2, nao inventa quatro monitores.
 - Acao de identificar a tela fisica so pode vir do executor local autorizado, nao de JS em servidor remoto.
 
 ## Inventario de owners
@@ -46,5 +46,7 @@ Ciclo: INTENCAO -> COCKPIT -> GITHUB MAIN -> CASA/VPS -> SUPABASE/EDGE/API -> RE
 ## Prova e limites desta mordida
 - Supabase migration de publication verificada na mesma data.
 - Fonte Casa Screenpipe 3030 nao respondeu; Cockpit local na 8080 respondeu HTTP 200; API /health respondeu HTTP 200.
-- GUI remota inventariou WinDisc e somente um display, por isso MONITORES_FISICOS=UNKNOWN agora. O mapeamento 4 displays da sessao anterior e historico.
-- NEXT_CURSOR: compilar/validar Feed, publicar e ler no Cockpit autenticado; confirmar rota /api/screenpipe segura via owner gateway; acionar Identificar nativo na sessao fisica e receber recibo.
+- **Recibo fisico 2026-10-28 — MONITORES_FISICOS=PASS:** `Configurações > Sistema > Tela > Identificar` exibiu os numerais fisicos e confirmou a topologia: `3 = esquerda`; `2 = centro superior`; `4 = centro inferior`; `1 = direita`. Windows confirmou a identidade: Display 1 = AOC 24G2W1G4 / DisplayPort / `ATNMBXA002919`; Display 2 = AOC 24G2W1G5 / DisplayPort / `ATOM8XA000468`; Display 3 = AOC 24G2W1G4 / HDMI / `ATNM4XA002193`; Display 4 = DELL S2421HN / HDMI / `4JD4DQ3`. Nenhuma configuracao grafica foi alterada.
+- **Teste local 2026-10-28T14:14:29.254-03:00 — CADEADO_IDENTIFICAR=PASS:** o executor visual acionou o botao nativo **Identificar**; a leitura posterior por PowerShell preservou quatro telas, todos os retangulos e Radeon RX 580 em `1920x1080@144`. A funcao visual nao possui comando PowerShell/CLI publico suportado; autonomia correta = inventario headless + disparo UI local autorizado, nunca alegar Identify headless.
+- A GUI remota que reportar WinDisc ou desktop virtual continua tendo apenas evidencia remota e nao revoga nem substitui este recibo fisico.
+- NEXT_CURSOR: antes de qualquer acao visual, executar Identificar nativo na sessao fisica e conferir o numero da janela-alvo; os demais cursores de Feed/API seguem independentes.
