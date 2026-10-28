@@ -3,7 +3,8 @@ import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GITHUB_API = "https://api.github.com";
-const DEFAULT_API_BASE = "https://api.centralldark.com";
+// A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
+const DEFAULT_API_BASE = "http://127.0.0.1:8099";
 const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
 const REQUEST_TIMEOUT_MS = 8_000;
 
@@ -173,7 +174,7 @@ async function medirApi(path: string): Promise<Probe> {
     const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
     const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
     return {
-      estado: falhou ? "FAIL" : saudavel ? "PASS" : "RUNNING",
+      estado: falhou ? "FAIL" : saudavel ? "PASS" : "UNKNOWN",
       httpStatus: resposta.status,
       erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
