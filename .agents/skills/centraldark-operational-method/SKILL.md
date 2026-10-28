@@ -3061,30 +3061,19 @@ Não remover worktree quando existir commit apenas local, arquivo modificado/unt
 Isso preserva `ONE_SYSTEM_ONLY` sem impor `ONE_WORKTREE_ONLY`: percepção pode compartilhar leitura; mutação paralela usa isolamento quando necessário; cada escopo mantém um único writer.
 
 
-### 26.1. Encerramento executável — sem worktree esquecida
+### 26.1. Contrato unico de teardown com recibo
 
-A regra de saída tem owner superior em `RULES.md`. O executor que criar
-worktree deve reusar scratch compatível primeiro e, no fim da missão,
-comprovar `REMOVED_VERIFIED` ou `KEEP_ACTIVE` com causa explícita, owner
-e `NEXT_CURSOR`. **É uma exigência de encerramento**, não um segundo
-scheduler ou inteligência.
-
-O gate existente de aplicação da regra é
-`scripts/lupa/worktree-teardown-gate.mjs`, testado em
-`scripts/lupa/worktree-teardown-gate.test.mjs`:
-`node scripts/lupa/worktree-teardown-gate.mjs --repo <repo> --target <scratch> --allowed-root <root-temporario> --receipt-ref evidence/<receipt>.md`.
-Sem `--apply`, apenas mede; `--apply` remove com `git worktree remove`
-**sem force** somente se alvo é worktree secundário registrado,
-realpath está dentro de raiz explícita, não há dirty/untracked/lock,
-o receipt existe em HEAD e a branch remota contém o MESMO SHA.
-Falta qualquer prova ⇒ `KEEP_ACTIVE` e nenhum delete. Após remoção,
-o script verifica ausência do diretório e desregistro no Git.
-
-Registrar resultado final no **mesmo PR/owner**, não em pasta nova.
-`GIT_BRANCH_REMOTE_PRESERVED` não significa merge nem deploy.
-Um commit local não enviado é delta único e impede teardown.
-Prova sintética do gate não equivale à execução do gate em todos os
-worktrees da Casa. Última revisão: 2026-10-28T00:46:00.462Z.
+OWNER: esta secao WORKTREE TEARDOWN; executavel unico:
+scripts/lupa/worktree-teardown-gate.mjs. Sem --apply: somente medicao;
+com --apply: git worktree remove seguro e readback. Argumentos:
+--repo, --target, --allowed-root e uma prova de preservacao:
+--receipt-ref (artefato rastreado) OU --published-ref (branch remota
+com MESMO SHA). A segunda forma emite receipt_sha de fonte preservada,
+nao prova teste/merge/deploy. Um scratch sujo, locked, nao publicado,
+fora de realpath autorizado ou com HEAD unico recebe KEEP_ACTIVE.
+O proprio agente que abriu o scratch deve encerrar e reportar o status
+no PR da missao. Testes: node --test scripts/lupa/worktree-teardown-gate.test.mjs.
+Nao criar segundo mecanismo, script, scheduler ou pasta de recibos.
 
 ### 27. Delegação econômica com prova — continuidade canônica
 

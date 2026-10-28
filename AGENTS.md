@@ -1,14 +1,7 @@
 <!-- CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
-## 🧹 Ciclo de vida obrigatório das bancadas temporárias
-
-Herdar `RULES.md#Lei principal — material temporário tem saída comprovada`
-e o `WORKTREE TEARDOWN` da skill operacional. Nenhum agente conclui
-uma missão com worktree temporário criado por ele sem reportar
-`REMOVED_VERIFIED` ou `KEEP_ACTIVE` com causa, owner e `NEXT_CURSOR`.
-Recibo e SHA precisam sobreviver fora do scratch. O executor consulta
-`scripts/lupa/worktree-teardown-gate.mjs` no fim da missão, sem forçar
-remoção nem iniciar nova fila/scheduler. Branch remota existente e limpa
-preserva o delta do PR; merge/deploy são etapas separadas.
+Todo executor encerra sua bancada pelo gate unico indicado em RULES.md;
+registra REMOVED_VERIFIED ou KEEP_ACTIVE com causa. Nao criar motor,
+scheduler, memoria, recibo ou worktree paralelo para encerrar uma tarefa.
 <!-- /CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->

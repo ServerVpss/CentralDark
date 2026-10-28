@@ -67,39 +67,13 @@ CHEFE_INTENT
 ---
 
 <!-- CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
-## 🧹 Lei principal — material temporário tem saída comprovada
+## Ciclo de vida de worktree temporario
 
-```text
-TEMP_MATERIAL_EXIT_GATE_V1=REQUIRED
-REUSE_EXISTING_SCRATCH_BEFORE_ADD=true
-TEMP_WORKTREE_NOT_DURABLE_MEMORY=true
-SOURCE_PROOF_FIRST=true
-UNIQUE_DELTA_PRESERVED_BEFORE_CLEANUP=true
-REMOTE_HEAD_AND_RECEIPT_SAME_SHA=true
-MAIN_RUNTIME_NOT_AUTO_ASSUMED=true
-WORKTREE_TERMINAL_STATUS=REMOVED_VERIFIED|KEEP_ACTIVE_WITH_EXACT_CAUSE
-NO_FORCED_DELETE=true
-NO_BLIND_PRUNE=true
-NO_UNCLAIMED_TEMP_WORKTREE=true
-```
-
-Todo executor que cria uma bancada temporária deve identificá-la e **fechar seu ciclo no mesmo fio**:
-usar o scratch seguro já disponível antes de criar outro; registrar OWNER, BASE_SHA,
-MISSÃO e DESTINO; preservar o delta com commit/prova/receipt no owner canônico;
-verificar que o mesmo SHA está publicado e que a bancada não contém arquivos
-únicos ou trabalho pendente; remover pela ferramenta Git e comprovar readback.
-**PR aberto não obriga a manter bancada** quando a branch remota no mesmo SHA
-já preserva tudo, mas PR, main e deploy continuam estados distintos.
-
-Owner único da regra detalhada: `.agents/skills/centraldark-operational-method/SKILL.md`
-(seção `WORKTREE TEARDOWN`). Gate reutilizável e fail-closed:
-`scripts/lupa/worktree-teardown-gate.mjs`, com `--apply` somente depois da
-classificação e prova do alvo real. Sem `--apply`, apenas mede. Alvos
-sujos, não publicados, fora do escopo, travados ou sem receipt ficam
-`KEEP_ACTIVE` com causa explícita. Nunca usar `git reset --hard`,
-`git clean -fdx`, `worktree remove --force` ou apagar diretório para
-fabricar limpeza. `git worktree prune` limpa metadados órfãos, não deve
-ser usado como substituto da remoção segura.
+TEMP_MATERIAL_EXIT_GATE_V1=REQUIRED. Um unico owner de metodo:
+.agents/skills/centraldark-operational-method/SKILL.md (WORKTREE TEARDOWN).
+Um unico executor: scripts/lupa/worktree-teardown-gate.mjs.
+Delta unico e worktree sujo permanecem KEEP_ACTIVE; fonte publicada
+mais scratch limpo permitem REMOVED_VERIFIED, nunca force/prune cego.
 <!-- /CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
 
 <!-- CENTRALDARK_INLINE_DOC_SYNC_20261016 -->
