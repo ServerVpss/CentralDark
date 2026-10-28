@@ -16,7 +16,7 @@ PR_NUM="${1:?Uso: $0 <PR_NUMBER>}"
 PR_HEAD_REF="${PR_HEAD_REF:-}"
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
-WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
+WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${CENTRALDARK_WORKTREE_ROOT:-${TMPDIR:-/tmp}/centraldark-worktrees}}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
 # Roteamento fixo pelo checkout confiável que contém o motor; nunca executar
 # helpers ou registry fornecidos pela branch de PR sob pull_request_target.

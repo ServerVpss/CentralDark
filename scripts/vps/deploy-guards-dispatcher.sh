@@ -198,7 +198,9 @@ info "deploy auth: ephemeral_git=$HAS_EPHEMERAL_GIT_AUTH ssh_key=$([[ -f "$SSH_K
 
 # ─── TLC23 / Universal Method: validar o SHA alvo antes de mutação ──────
 log "=== TLC23 / UNIVERSAL PRE-FLIGHT ==="
-GATE_ROOT="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
+CENTRALDARK_WORKTREE_ROOT="${CENTRALDARK_WORKTREE_ROOT:-${TMPDIR:-/tmp}/centraldark-worktrees}"
+mkdir -p -m 700 "$CENTRALDARK_WORKTREE_ROOT"
+GATE_ROOT="$(mktemp -d "$CENTRALDARK_WORKTREE_ROOT/centraldark-tlc23-deploy.XXXXXX")"
 GATE_TMP="$GATE_ROOT/worktree"
 CONTRACT_RECEIPT="$GATE_ROOT/repo-contract.txt"
 cleanup_gate_tmp() {

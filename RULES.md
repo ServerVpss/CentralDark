@@ -69,7 +69,9 @@ CHEFE_INTENT
 <!-- CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
 ## Ciclo de vida de worktree temporario
 
-TEMP_MATERIAL_EXIT_GATE_V1=REQUIRED. Um unico owner de metodo:
+TEMP_MATERIAL_EXIT_GATE_V1=REQUIRED. Uma raiz por host:
+CENTRALDARK_WORKTREE_ROOT (padrao /tmp/centraldark-worktrees em Linux).
+Subpastas isoladas por owner. Um unico owner de metodo:
 .agents/skills/centraldark-operational-method/SKILL.md (WORKTREE TEARDOWN).
 Um unico executor: scripts/lupa/worktree-teardown-gate.mjs.
 Delta unico e worktree sujo permanecem KEEP_ACTIVE; fonte publicada
