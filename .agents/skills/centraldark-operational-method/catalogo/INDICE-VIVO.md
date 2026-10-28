@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-28 12:06:30 -03:00
-**Total:** 93 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-28 13:15:30 -03:00
+**Total:** 93 arquivos. **Skills:** 18. **Mudanças detectadas:** 3.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T11:18:31-03:00 | 2026-10-28T11:18:31-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-28T12:06:31-03:00 | 2026-10-28T12:06:31-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T11:18:31-03:00 | 2026-10-28T11:18:31-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-28T12:06:31-03:00 | 2026-10-28T12:06:31-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -25,9 +25,9 @@
 | `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | skill | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
 | `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
 | `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
-| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:30:17-03:00 | b9638fb95853 |
-| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:41-03:00 | 2bc7b7f3176d |
-| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:30:53-03:00 | c8341471b411 |
+| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-28T13:14:50-03:00 | ae8406e59a0d |
+| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-28T13:14:50-03:00 | ad4652b154ed |
+| `catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py` | catalogo | 2026-10-28T10:39:33-03:00 | 2026-10-28T13:14:50-03:00 | 8d623e92b5f3 |
 | `catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md` | skill | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
 | `catalogo/skills-integradas/centraldark-ops/references/autonomia-actions.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-25T04:01:30-03:00 | a329b846a8f5 |
 | `catalogo/skills-integradas/centraldark-ops/references/full-inventory-scans.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-25T04:01:30-03:00 | b0469fc161b8 |
@@ -101,4 +101,6 @@
 | `SKILL.md` | skill | 2026-10-26T18:15:25-03:00 | 2026-10-28T12:03:37-03:00 | 4c5b760b64ba |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-28T12:06:30-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T13:15:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T13:15:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-28T13:15:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

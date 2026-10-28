@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T12:06:30-03:00",
+    "gerado_em":  "2026-10-28T13:15:30-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T11:18:31-03:00",
-                         "modificado_em":  "2026-10-28T11:18:31-03:00",
+                         "criado_em":  "2026-10-28T12:06:31-03:00",
+                         "modificado_em":  "2026-10-28T12:06:31-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T11:18:31-03:00",
-                         "modificado_em":  "2026-10-28T11:18:31-03:00",
+                         "criado_em":  "2026-10-28T12:06:31-03:00",
+                         "modificado_em":  "2026-10-28T12:06:31-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -428,9 +428,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-27T00:30:17-03:00",
-                         "bytes":  3064,
-                         "sha256":  "b9638fb95853ed810879bd0dd92612d0c1818f272f419897693025d26fc6cfd9",
+                         "modificado_em":  "2026-10-28T13:14:50-03:00",
+                         "bytes":  3028,
+                         "sha256":  "ae8406e59a0d0e33998d843f2ebc1b37f8b06a94af92c9b6ef06d93252e2e4da",
                          "descricao":  "",
                          "referencias":  [
 
@@ -440,9 +440,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-27T00:26:41-03:00",
-                         "bytes":  6721,
-                         "sha256":  "2bc7b7f3176d1b5ac1a72e3c9126b8a0c74244288b9c6e45acce2370b5076b5b",
+                         "modificado_em":  "2026-10-28T13:14:50-03:00",
+                         "bytes":  6649,
+                         "sha256":  "ad4652b154ed6235598fe0fe4fe83e7eaefc79d78334cad80cbcc74d13c95e79",
                          "descricao":  "",
                          "referencias":  [
 
@@ -452,9 +452,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-27T00:30:53-03:00",
-                         "bytes":  6454,
-                         "sha256":  "c8341471b411f4f99b6052d84f2e5069d9d3c308c60981c8d01fd6180902b843",
+                         "modificado_em":  "2026-10-28T13:14:50-03:00",
+                         "bytes":  6386,
+                         "sha256":  "8d623e92b5f3726a4cdb6e795903c171fe5bcff9f46b0f2bff18c82cfece510b",
                          "descricao":  "",
                          "referencias":  [
 
