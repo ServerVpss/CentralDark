@@ -4,7 +4,7 @@
 
 ## 0. Princípio e evidência
 
-**Um comando para todas as intenções:** `hermes kanban create`. Criar, excluir, editar, inspecionar ou testar são **verbos no texto da missão**, não comandos Kanban alternativos. `kanban complete`, `kanban archive` e `kanban block` alteram o cartão, **não substituem ações sobre arquivos**.
+**Duas entradas da mesma receita, sem duplicação:** se a intenção e o owner já têm cartão, **reutilizar o ID** com `hermes kanban show <ID> --json`; **não criar outro**. Usar `hermes kanban create` somente para intenção genuinamente nova, após deduplicação. Criar, excluir, editar, inspecionar ou testar são **verbos no texto da missão**, não comandos Kanban alternativos. `kanban complete`, `kanban archive` e `kanban block` alteram o cartão, **não substituem ações sobre arquivos**.
 
 **PONTO FIXO DO FLUXO WINDOWS (24/10/2026):** duas missões concluídas no mesmo Kanban da Casa, mesmo perfil `default` e provedor NVIDIA. `t_2805243c` terminou `DONE` com conteúdo do TXT lido e conferido; `t_26e02a16` terminou `DONE` com ausência do TXT conferida no Windows. **CRIAR=PASS, EXCLUIR=PASS para os alvos e condições testados.** Isso prova o método de delegação e readback desse fluxo; não é prova antecipada de todo formato/operação futura. Não alterar o comando comprovado para generalizar: mudar apenas os valores de intenção e seu critério de validação.
 
@@ -101,5 +101,29 @@ Consultar catálogo/perfis disponíveis no Hermes alvo; não inferir disponibili
 
 - **Criar:** corpo da missão pede criar arquivo temporário num diretório aprovado, e conteúdo exato. Cartão `t_2805243c`, `DONE`, arquivo e conteúdo comprovados.
 - **Excluir:** corpo pediu remover **somente o arquivo do teste**, sem excluir a pasta. Cartão `t_26e02a16` foi criado com o mesmo `kanban create`, já com `--assignee default` e `--model/--provider`. **Resultado confirmado:** `DONE` / `completed`; alvo ausente no readback do Windows. Os dois testes estão fechados, cada um com prova própria.
+
+## 8. Receita reproduzível obrigatória — tarefa existente, sem verificações duplicadas (26/10/2026)
+
+**Owner:** esta mesma receita. A Skill Mãe e o Kaizen apenas apontam para ela. **Objetivo:** repetir o procedimento, não garantir o mesmo resultado em qualquer tarefa. Cada execução exige prova no seu próprio alvo.
+
+**Parâmetros de entrada:** `ID` existente; intenção e autorização atuais; host; `workspace_path`; `assignee`; `model_override/provider_override`; efeito esperado e critério de aceite. Nunca substituir esses valores por exemplos antigos.
+
+**Reprodução em sete passos:**
+1. **Uma leitura:** `hermes kanban show ID --json`. Confirmar ID, status, owner, executor e dependências. `done` → informar prova e **parar**. `running` → observar o mesmo run, **não relançar**.
+2. **Preparar só o delta:** se a tarefa existente estiver `blocked/scheduled`, e houver ordem explícita de executar, usar `hermes kanban unblock ID`. Nunca liberar outra tarefa nem a mãe `t_911e17ff` por implicação.
+3. **Simular uma vez:** `hermes kanban dispatch --dry-run --max 1 --json`. Conferir que o cartão selecionado é **exatamente** o ID autorizado. Se a ferramenta mostrar outro ID, não chamar o dispatch global.
+4. **Despachar uma vez:** `hermes kanban dispatch --max 1 --json` quando o ID for o alvo confirmado. Manter **um escritor por projeto**. Não executar simultaneamente Claude Code CLI e Hermes sobre os mesmos arquivos.
+5. **Ler o recibo:** `hermes kanban show ID --json` e `hermes kanban runs ID`. Verificar `run_id`, `outcome`, status terminal e resumo do executor. Sem run real, não afirmar `RUNNING` nem `DONE`.
+6. **Provar somente o efeito relevante:** comparar arquivos, hash, parser, build, GUI, saída ou serviço exigidos pela missão. Uma contraprova específica basta quando o resultado é inequívoco. `DONE` do Kanban **não** demonstra instalação de Linux, deploy ou todos os critérios sem readback do alvo.
+7. **Kaizen sem duplicação:** registrar comentário/receipt no **mesmo cartão** com `TASK_ID | OWNER | RUN | OUTCOME | PROVA | LIMITES | NEXT_CURSOR`. Se a lição já foi selada, reutilizar; se houver erro novo, corrigir apenas a causa. Evitar nova pasta, skill, automação, auditoria completa ou repetição de consultas por rotina.
+
+**Caso real, reproduzível como procedimento — não como promessa de sucesso universal:**
+- Casa SEGREDO, perfil `default`, projeto `E:\VMs\CentralDark-Installer`.
+- Cartão **`t_87d162cb`**, mesmo ID desde o começo. Em 26/10/2026, `hermes kanban stats` confirmou **`done=11`** no quadro. Essa contagem é fotografia do quadro; não prova individual de onze builds ou onze repetições da receita.
+- `hermes kanban show t_87d162cb --json` retornou `status=done` e `hermes kanban runs t_87d162cb` mostrou **uma execução completed** (perfil `default`, ~16 min).
+- Resumo do executor: **CentralDark Installer v3.0**, PowerShell parser **0 erros**, C# CSC **exit 0**, EXE com **8704 bytes**, subsistema GUI sem console e smoke da janela **CENTRALDARK INSTALLER**. Inventário e planejamento de disco são **read-only**. Instalação física Linux, dual boot e integração real WSL/Hermes seguem **não comprovados** e exigem missão própria.
+- As provas do cartão `t_87d162cb` permitem **reutilizar o método de continuidade Kanban + receipt**. Não transformam o resultado específico do Installer em validação automática de outros produtos.
+
+**Regra de parada:** `PROVA_SUFFICIENTE => NÃO REVERIFICAR`. Remeça apenas se o estado mudar, houver contraprova, expirar a evidência temporal ou o CHEFE pedir nova ação. Nenhuma consulta repetida só para aumentar um placar.
 
 **Regras imutáveis:** intenção do usuário define o alvo; manter Casa e VPS isoladas; uma skill canônica; reutilizar o Kanban existente; nenhuma mutação GitHub, VPS ou Cockpit fora da missão autorizada.
