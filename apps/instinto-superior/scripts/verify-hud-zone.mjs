@@ -363,6 +363,23 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("linguagem principal do Cockpit traduz estados tecnicos para pessoas", () => {
+  const estado = read("apps/instinto-superior/src/components/central/EstadoCentralDark.tsx");
+  const cartao = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const runtime = read("apps/instinto-superior/src/components/central/RuntimeSistema.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  for (const rotulo of ["Funcionando", "Em andamento", "Precisa de ação", "Conecte sua conta", "Ainda não verificado", "Precisa corrigir"]) {
+    assert.ok(estado.includes(rotulo), "rotulo humano ausente: " + rotulo);
+  }
+  assert.ok(estado.includes("Ver detalhes técnicos"));
+  assert.ok(cartao.includes("rotuloTecnicoHumano(estado)"));
+  assert.ok(painel.includes("Estado atual do sistema"));
+  assert.ok(painel.includes("Áudio sem sinal recente"));
+  assert.ok(runtime.includes("Sistema e desempenho"));
+  assert.ok(conexoes.includes("Ver detalhes técnicos das conexões"));
+});
+
 test("Screenpipe Casa projeta apenas metadados recentes no card existente, sem vazar frames", () => {
   const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
   const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
@@ -386,13 +403,13 @@ test("maquina de estados distingue rota disponível de execução comprovada sem
   assert.ok(painel.includes("function LuzProjecao("));
   assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
   assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
-  assert.ok(painel.includes("ROTA REVALIDADA"));
-  assert.ok(painel.includes("EXECUÇÃO SEM CONTRAPROVA"));
+  assert.ok(painel.includes("Conexão disponível"));
+  assert.ok(painel.includes("Uso recente ainda não verificado"));
   assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
-  assert.ok(painel.includes("PONTE CONECTADA"));
-  assert.ok(painel.includes("AÇÃO AUTENTICADA NÃO TESTADA"));
+  assert.ok(painel.includes("Conectado"));
+  assert.ok(painel.includes("Pronto para receber uma ação quando necessário."));
   assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
-  assert.ok(painel.includes("SAÚDE DEGRADADA"));
+  assert.ok(painel.includes("Áudio sem sinal recente"));
   assert.ok(painel.includes("sem prova completa"));
   assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
   assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));

@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { Estado } from "@/lib/cockpit.functions";
+import { rotuloTecnicoHumano } from "@/components/central/EstadoCentralDark";
 
 /**
  * Contrato visual canônico: humano primeiro, responsabilidade explícita,
@@ -74,7 +75,7 @@ export function CartaoResponsabilidade({
         <span
           className={`inline-flex rounded-full border px-2 py-1 font-mono text-[10px] ${tom(estado)}`}
         >
-          Estado {escopoEstado}: {estado}
+          {escopoEstado}: {rotuloTecnicoHumano(estado)}
         </span>
       </div>
       <p className="mt-2 break-words text-xs text-muted-foreground">
@@ -91,6 +92,9 @@ export function CartaoResponsabilidade({
           ⚙️ Por baixo do capô · detalhes técnicos
         </summary>
         <div className="mt-3 space-y-2 break-words text-xs text-muted-foreground">
+          <p>
+            <strong>Estado técnico:</strong> <code>{estado}</code>
+          </p>
           <p>
             <strong>Dono técnico:</strong> <code>{ownerTecnico}</code>
           </p>

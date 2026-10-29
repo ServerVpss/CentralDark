@@ -90,6 +90,7 @@ export type EstadoCentralDark = {
   casaSiteFonte: string;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
+  screenpipeAudioStatus: string | null;
   screenpipeFonte: string;
   screenpipeEvents: string[];
   screenpipeVpsHttp: number | null;
@@ -627,6 +628,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
+      screenpipeAudioStatus: texto(screenpipeCasa.dados?.["audio_status"]),
       screenpipeFonte: screenpipeCasaFonte,
       screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
       screenpipeVpsHttp: screenpipeVps.httpStatus,
