@@ -52,7 +52,9 @@ try { New-Item -ItemType Directory -Path $script:LogRoot -Force | Out-Null } cat
 $created = $false
 $mutex = [System.Threading.Mutex]::new($true, 'Local\CentralDark_CorpoUnico_HudLogs', [ref]$created)
 if (-not $created) {
-  [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  if (-not $script:SensorOnly) {
+    [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  }
   exit 0
 }
 function Clean([string]$Value) {
