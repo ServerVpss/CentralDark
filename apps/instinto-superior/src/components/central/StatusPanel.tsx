@@ -50,12 +50,12 @@ function LuzProjecao({
     && erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO";
   if (!rotaDisponivel) return <LuzViva estado={estado} nome={nome} fresco={fresco} />;
   return (
-    <div className="space-y-1" aria-label={`${nome}: rota HTTP disponível; execução não revalidada`}>
+    <div className="space-y-1" aria-label={`${nome}: rota HTTP 200 revalidada na última consulta; execução sem contraprova`}>
       <span className="inline-flex items-center gap-2">
         <span className={`size-3 shrink-0 rounded-full ${CORES.verde}`} aria-hidden="true" />
-        <span className="font-mono text-[10px]">ROTA DISPONÍVEL</span>
+        <span className="font-mono text-[10px]">ROTA REVALIDADA</span>
       </span>
-      <p className="font-mono text-[10px] text-amber-400">● EXECUÇÃO NÃO REVALIDADA</p>
+      <p className="font-mono text-[10px] text-amber-400">● EXECUÇÃO SEM CONTRAPROVA</p>
     </div>
   );
 }

@@ -369,8 +369,8 @@ test("maquina de estados distingue rota disponível de execução comprovada sem
   assert.ok(painel.includes("function LuzProjecao("));
   assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
   assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
-  assert.ok(painel.includes("ROTA DISPONÍVEL"));
-  assert.ok(painel.includes("EXECUÇÃO NÃO REVALIDADA"));
+  assert.ok(painel.includes("ROTA REVALIDADA"));
+  assert.ok(painel.includes("EXECUÇÃO SEM CONTRAPROVA"));
   assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
   assert.ok(painel.includes("PONTE CONECTADA"));
   assert.ok(painel.includes("AÇÃO AUTENTICADA NÃO TESTADA"));
