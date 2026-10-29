@@ -657,7 +657,7 @@ def hud_first_gate(repo: Path) -> dict:
     evidence = {
         "status": "FAIL_CLOSED",
         "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
-        "legacy_source": rel,
+        "legacy_source": "docs/HUD/HUD.html",
         "mirror": str(mirror) if mirror else "UNCONFIGURED",
         "hud_read_first": True,
         "authorization": "UNCHANGED",

@@ -370,11 +370,12 @@ test("HUD owner usa snapshot e preserva a fonte legada sem alegar paridade", () 
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
   const hook = readFileSync(".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md", "utf8");
   const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
-  const hud = HUD_SOURCE_BLOB;
+  const hud = HUD_OWNER;
   const contract = readFileSync("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md", "utf8");
   assert.match(hook, /Autoentrevista operacional baseada no CURRENT/);
   assert.match(oracle, /Goal-Clause META-GRILL/);
-  assert.match(hud, /renderGoalClauseProjection/);
+  assert.match(hud, /hudMigrationSnapshot/);
+  assert.match(hud, /export function HudDeterministico/);
   assert.match(contract, /G12.*Ciclo registra receita/);
 });
 
