@@ -75,6 +75,32 @@ if (Test-Path -LiteralPath $p -PathType Container) {
 
 **Recibo da tentativa de delegação na UI nativa (mesma sessão, sem novo Goal):** `INTENT_REF=CD_RSI20_20261028_2322` composto no `Edit 'Mensagem'` do `Hermes.exe PID 31664`, com readback exato `1802` caracteres. Após sincronização do estado do editor, o botão **`Enfileirar mensagem`** ficou habilitado; `InvokePattern.Invoke()` executado **uma vez** e editor ficou vazio. A interface mostrou `1 Queued`; ao abrir a fila, o item que ficou visível era um tick do **Goal original de reconciliação de caminhos**, enquanto o Goal original avançou para `Turn 5/20`. O marcador da delegação **não foi visto ainda** no histórico nem no cartão atual da fila. **Veredito fiel:** `QUEUE_BUTTON_INVOKED=PROVEN`, `DRAFT_CLEARED=PROVEN`, `QUEUE_NONEMPTY=PROVEN`, `RSI_MESSAGE_RECEIVED_BY_EXECUTOR=UNCONFIRMED`, `RSI_20_TURNS=NOT_PROVEN`. A fila já existente foi preservada, sem repetição ou interrupção do Goal corrente.
 
+### RECEITA DE RECUPERAÇÃO E REUTILIZAÇÃO DO GOAL NATIVO (29/10/2026) — `GOAL_RECOVERY_RECONCILE_REPLACE_V1`
+
+**Descoberta reusável, SEM mecanismo novo:** o Hermes original mantém o Goal na mesma sessão de desktop por `GoalManager`/`SessionDB` (`state_meta['goal:<session_id>']`). O comando **`/goal clear`** limpa **somente** o Goal, não exige apagar o histórico da sessão nem criar agente/Loop/worktree. **`/goal <objetivo>`** na mesma sessão define novo Goal com `max_turns=20` por padrão e admite contrato nativo com linhas `outcome:`, `verification:`, `stop when:`. `/goal show` e `/goal status` dão readback no owner. **Não chamar `/goal resume` como substituição de objetivo**: ele só retoma o Goal que já estava pausado. A alteração de um Goal vigente usa autorização explícita do CHEFE; **a autorização de 29/10/2026 para substituir este Goal já foi concedida e utilizada**, não reclamar permissão nova retroativamente.
+
+**Problema medido que motivou a receita:** sessão `20260920_235705_013b82`, Hermes Desktop original, tinha `GOAL_ID=CENTRALDARK_TARGET_PATH_RECONCILE_0_20`, `paused 6/20`, `7 subgoals`, causa declarada `scope conflict; CHEFE must resolve/archive the blocked goal and issue a new RSI Goal ID`. A fonte de verdade mostra que `E:\CentralDark` existe como **diretório, mas NÃO é checkout Git**; `K:\` é repo Git na `main`. Não confundir TARGET_PATH histórico de uma missão com raiz Git atual ou inventar conflito entre Goal e permissão. O old Goal foi auditado em `/goal show` e no `state.db` em modo **readonly**, depois `/goal clear` foi executado uma vez no owner da **mesma sessão**; stdout `✓ Objetivo removido.`, readback `status=cleared, turns=6/20`.
+
+**Replay da receita pela interface nativa do Hermes (substituir somente depois de medir o Goal e quando a intenção do CHEFE autorizar):**
+
+```powershell
+$sid = '20260920_235705_013b82' # Substituir pelo session_id real do Goal a recuperar
+hermes chat --resume $sid --query '/goal show' --oneshot --quiet
+# Reconciliar GOAL_ID, status, turns, subgoals, NEXT_CURSOR, HEAD, owner e caminhos antes da mutacao.
+# Com a autorizacao expressa vigente para trocar o Goal:
+hermes chat --resume $sid --query '/goal clear' --oneshot --quiet
+$q = @'
+/goal GOAL_ID=CENTRALDARK_RSI_SELF_IMPROVEMENT_20_20261029 | CHEFE | HERMES_DESKTOP_ORIGINAL | RUMO=20 rodadas mensuradas de aperfeicoamento na CentralDark a partir de CURRENT e do cursor real.
+outcome: Melhorar execucao, receitas e avaliacao em ate 20 rodadas; terminar com fixed point demonstrado ou bloqueio real documentado.
+verification: Para cada rodada verificar baseline, delta, testes, RECEIPT_ID, NEXT_CURSOR e HEAD; medir transferencia da receita em tarefa nova, sem regressao; classificar RSI_NOT_PROVEN se a melhoria do metodo nao tiver evidencias.
+stop when: Bloqueio real provado, falta de evidencia critica, ou fixed point verificavel; apresentar NEXT_CURSOR sem falso PASS.
+'@
+hermes chat --resume $sid --query $q --oneshot --quiet
+hermes chat --resume $sid --query '/goal show' --oneshot --quiet
+```
+
+**Aplicação real e resultado:** em `29/10/2026`, após autorização do CHEFE, a CLI do Hermes original confirmou `Objetivo definido (orçamento de 20 turnos)` com **GoalID `CENTRALDARK_RSI_SELF_IMPROVEMENT_20_20261029`** e contrato **C01–C10** completo (a instalação real incluiu os dez critérios detalhados, mais extensos que o exemplo acima). O `state.db` em leitura confirmou `status=active`, `turns_used=0`, `max_turns=20`, `subgoals=0` e `contract.verification` preenchido. **`GOAL_REPLACED_BY_OWNER=PROVEN`; `GOAL_RSI_20_ROUNDS_EXECUTED=NOT_PROVEN`.** O Loop existente não foi alterado; a receita não cria novos mecanismos ou regras. Em recuperação futura, usar GoalID e critérios **correntes** da intenção do CHEFE, nunca copiar cegamente o ID/data do exemplo e nunca reiniciar um Goal vivo sem autorização.
+
 ## #OBSERVACOES# — Supabase Realtime: usos reais de skills no Cockpit (28/10/2026)
 
 **Owner único / não duplicar:** reutilizar o Supabase **CentralDark** já conectado e a tabela **`public.agent_events`** existente (publicação `supabase_realtime`, RLS com `has_role(auth.uid(),'admin')` para leitura). Não criar segunda tabela/coleção ou expor `service_role` no frontend. A Edge Function original `agent-log` é o único ponto de ingestão: exige `X-Agent-Secret` obtido do ambiente confiável do executor, nunca do navegador, repositório ou chat.
