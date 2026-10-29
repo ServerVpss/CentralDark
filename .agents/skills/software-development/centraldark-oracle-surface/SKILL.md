@@ -301,6 +301,33 @@ THEN_CONTINUE_BY_NEXT_CURSOR_WHILE_MATERIAL_WORK_EXISTS=true
 
 `Goal done` emitted before the readback returns to the chat, or while a material cursor remains, is `FAIL_PREMATURE_GOAL_DONE`.
 
+## Operational RSI circuit — reuse the PROVEN Hermes Desktop UI recipe (2026-10-29)
+
+**CHEFE intent, same original owner:** The goal is not just a one-off test of the ChatGPT composer. The intended loop is **CHEFE intent → SOL proposes an actionable next delta → original Hermes Desktop executes the currently active Goal → Hermes sends a real terminal result back to this exact existing ChatGPT/Oracle conversation → SOL correlates the evidence and identifies the next delta → SOL dispatches to the SAME Hermes session**. A material self-correction that improves the next turn is the unit of learning. Do not invent a second agent, bridge, background poller, browser tab, worktree, Goal, Loop or orchestration system to implement this. The ChatGPT conversation is a review/coordination surface; **Hermes remains the persistent Goal owner and executor**.
+
+### Actual native paths — use both directions, not documentation alone
+
+**SOL → Hermes (dispatch):** Identify the already-open original `Hermes.exe` window and its `Edit 'Mensagem'` composer. Prefer direct UIAutomation `ValuePattern.SetValue(next_instruction)` with exact readback. When the original Hermes is idle, invoke its actual enabled **Enviar/Send** submit control once; when busy, the UI may expose **`Enfileirar mensagem`**. A visible `N Queued` alone proves only queuing, **not** acceptance of the requested payload or task execution. Verify the distinctive instruction/intent marker in the same Hermes timeline or its native session/receipt before marking `DISPATCH_PROVEN`. If the intended payload is not visible/acknowledged, preserve the draft and classify `DISPATCH_UNKNOWN`; never resend blindly or clear the current Goal. The native Hermes CLI's `hermes chat --resume <EXACT_SESSION_ID> --query '/goal show' --oneshot --quiet` can read the existing Goal; **do not use `/goal resume` merely to probe** (installed `GoalManager.resume(reset_budget=True)` can reset the turn count).
+
+**Hermes → ChatGPT (return):** After a **real Hermes material turn** (not a synthetic `oi`), record its genuine terminal result and causal envelope in the existing execution's JSON result: `actor=HERMES`, `loop_id`, `turn_id`, `receipt_id`, `parent_id`, `intent_id`, `event_id`, `causation_id`, `surface_id`, `attempt_id`, `next_cursor`, `status` and `message`. `TURN_DONE/STEP_DONE/FAILED/BLOCKED` are **not** `GOAL_DONE`. Check that the envelope matches the original Hermes session, current Goal and execution receipt; `actor=HERMES` in a file or chat message is not authentication by itself.
+
+Use **the existing Skill-Mother transport** `K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1` on the exact already-open embedded ChatGPT conversation, with its URL bound privately **at runtime** (do not commit private conversation IDs). It implements target-pane identity checks, `ValuePattern.SetValue` + exact editor readback, re-discovery of enabled `Button 'Enviar'`, one `InvokePattern.Invoke`, and a later readback of `RECEIPT_ID` as visible ChatGPT text. Do **not** use focus, SendKeys, keyboard Enter, a newly opened ChatGPT session or another UI agent as the substitute. An early UI timeout after one click is `SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY`, not permission to click again.
+
+~~~powershell
+$transport = 'K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1'
+# Both parameters are runtime bindings from the existing Hermes session.
+$exactChatUrl = '<EXACT_CURRENT_CHATGPT_CONVERSATION_URL>'
+$realHermesReceipt = '<EXISTING_HERMES_TERMINAL_ENVELOPE_JSON>'
+powershell.exe -NoProfile -File $transport -ConversationUrl $exactChatUrl -TargetSurface HermesEmbedded -Mode Inspect
+powershell.exe -NoProfile -File $transport -ConversationUrl $exactChatUrl -TargetSurface HermesEmbedded -Mode Send -PayloadPath $realHermesReceipt
+~~~
+
+**SOL receives and decides:** A new user-role message in this same ChatGPT chat proves UI delivery; it does **not** prove Hermes authored it. Correlate `RECEIPT_ID/TURN_ID/LOOP_ID/NEXT_CURSOR` with actual owner-side runtime evidence and `K:\`/GitHub CURRENT (use `gh` on the Casa for GitHub lookups). Review the resulting ChatGPT answer and any next probe as **candidate**, not autonomous authority to mutate the repo. Then dispatch the next material action via the same existing `Mensagem` surface, preserving the active Goal. For a 20-turn RSI test require receipts and correct correlation **per turn**; three verified consecutive bidirectional turns is the first meaningful transport milestone, not an unverified claim that 20 turns are completed.
+
+### Verification boundary and missing automatic trigger
+
+`SOL_DIRECT_UIA_SAME_CHAT_PROBE=PROVEN` (historical `CD_UISEND_2810_2335`), `SOL_TO_HERMES_UI_DISPATCH=PROVEN_FOR_PRIOR_TASK`. The **Hermes-executed Goal terminal receipt → same-chat send → actual SOL review → next Hermes execution** is **NOT YET PROVEN end-to-end**. `Hermes-Oracle-Return.ps1` is a **one-shot transport**, not a persistent callback; it does not watch for Goal events by itself. The installed Hermes `post_llm_call` shell hook is a possible native completion trigger but `hermes hooks list` has previously shown no configured hooks; use owner-side execution/callback only when actually configured and approved, without auto-accepting hooks. ChatGPT does not independently run a background screen watcher between messages. Neither code in a skill nor a queued message counts as loop delivery. The immediate genuine test is a fresh **real** Hermes terminal event with a correlated envelope, one call to the existing transport, delayed readback in the current conversation, and a next-turn readback from the Hermes owner. `UNKNOWN_IS_NOT_PASS`.
+
 ## Casa bridge — Hermes result into the SAME ChatGPT conversation (2026-10-28)
 
 ### Native Oracle query FIRST — historical replay before UI focus
