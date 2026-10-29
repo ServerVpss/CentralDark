@@ -255,9 +255,9 @@ function Refresh-Scripts {
 # AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
 # #OBSERVACOES# @owner=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:28:17.879Z
-# Motivo: o HUD canônico reside em docs/HUD; K:/HUD.html legado não existe. O feed é dado efêmero, jamais commitado.
-$script:ABHudFile = 'K:\docs\HUD\HUD.html'
-# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked HUD. Cockpit consumes via authorized reader only.
+# Motivo: o owner canônico é o Cockpit; o feed é dado efêmero, jamais commitado.
+$script:ABHudOwner = 'K:\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked source. Cockpit consumes via authorized reader only.
 $script:ABFeedFile = Join-Path $script:LogRoot 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'
 $script:ABLastLog = [datetime]::MinValue
@@ -265,7 +265,7 @@ function Poll-Afterburner {
   $mapHandle=[IntPtr]::Zero
   $mapView=[IntPtr]::Zero
   try {
-    if(-not (Test-Path -LiteralPath $script:ABHudFile -PathType Leaf)){throw 'HUD_LOCAL_ABSENT'}
+    if(-not (Test-Path -LiteralPath $script:ABHudOwner -PathType Leaf)){throw 'COCKPIT_OWNER_ABSENT'}
     if(-not ('CentralDarkAfterburnerMmf' -as [type])) {
       Add-Type -TypeDefinition @'
 using System;

@@ -647,7 +647,8 @@ def hud_first_gate(repo: Path) -> dict:
     Fail-closed on unavailable remote, missing files or mismatched bytes.
     Never extract secrets, mutate checkout, or issue a runtime restart.
     """
-    rel = "docs/HUD/HUD.html"
+    # The Cockpit owner is canonical; the legacy HTML is inventory history only.
+    rel = "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
     source = repo / rel
     # The Cockpit owner is the runtime surface. A legacy mirror is optional
     # and must be supplied explicitly; never infer an Obsidian path.
@@ -671,8 +672,8 @@ def hud_first_gate(repo: Path) -> dict:
         evidence["reason"] = "HUD_MAIN_SOURCE_READ_FAILED"
         return evidence
     evidence["source_sha256"] = hashlib.sha256(current_bytes).hexdigest()
-    if not current_bytes.startswith(b"<!DOCTYPE html") or b"CentralDark Index + HUD" not in current_bytes:
-        evidence["reason"] = "HUD_MAIN_CONTENT_INVALID"
+    if not current_bytes.startswith(b"import ") or b"hudMigrationSnapshot" not in current_bytes:
+        evidence["reason"] = "HUD_OWNER_CONTENT_INVALID"
         return evidence
 
     def git(*args: str) -> str | None:
