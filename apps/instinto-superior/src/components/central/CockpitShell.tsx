@@ -634,14 +634,19 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       </Sheet>
 
       <Dialog open={playerAberto} onOpenChange={definirPlayerAberto}>
-        <DialogContent className="max-h-[94dvh] max-w-5xl overflow-hidden p-0">
-          <DialogHeader className="border-b border-border bg-background/95 px-5 py-4 pr-12">
+        <DialogContent
+          className="max-h-[94dvh] w-[calc(100vw-1.5rem)] max-w-3xl gap-0 overflow-visible border-0 bg-transparent p-0 shadow-none [&>button]:hidden"
+          data-cd-flow="instinto.CockpitShell.jarvis-dialog"
+        >
+          <DialogHeader className="sr-only">
             <DialogTitle>🎧 Player local · Jarvis</DialogTitle>
             <DialogDescription>
-              Player do Instinto Superior servido pelo mesmo Cockpit na porta 8080. A fonte de áudio continua privada na tailnet.
+              Player do Instinto Superior servido pelo mesmo Cockpit. A fonte de áudio continua privada na tailnet.
             </DialogDescription>
           </DialogHeader>
-          <div className="overflow-auto bg-[#0a0906] p-2 sm:p-4"><PlayerLocalJarvis /></div>
+          <div className="max-h-[94dvh] overflow-y-auto">
+            <PlayerLocalJarvis onClose={() => definirPlayerAberto(false)} />
+          </div>
         </DialogContent>
       </Dialog>
 
@@ -886,6 +891,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               {autenticado ? (
                 <MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />
               ) : null}
+              <section aria-label="Reuso comprovado — contratos canônicos" className="mt-8 rounded-lg border border-border bg-card p-4 text-sm">
+                <h3 className="font-semibold">♻️ Reuso comprovado · Cockpit</h3>
+                <p className="mt-2 text-muted-foreground">PROVEN + RECEIPT_VALID + SAME_CONTRACT → REUSE. Mudança de contrato, ambiente ou prova exige revalidação do delta afetado; UNKNOWN não é PASS.</p>
+                <p className="mt-2 text-muted-foreground">Decisão: REUSE_DECISION | REUSE_OWNER | EXTEND_OWNER | GAP_PROVEN | BLOCKED_UNKNOWN. Owner: centraldark-reuse-runtime existente; CARACOL apenas navega, sem criar segundo router ou autoridade.</p>
+                <p className="mt-2 text-xs text-muted-foreground">Contrato documentado; execução e readback de cada consumidor continuam dependentes de recibo próprio. Este cartão não afirma saúde do runtime.</p>
+              </section>
               <div className="mt-8">
                 <DeliverablesSummary />
               </div>

@@ -42,7 +42,7 @@ O caminho VPS consta do script existente `K:\scripts\vps\neurolink-gateway-dispa
 
 ## Módulos incorporados e método Michelin convertido
 
-A skill Michelin abaixo é **nova operacionalização de uma Lembrança histórica preservada**. Os outros 11 módulos são cópias catalogadas previamente; não contam como execuções comprovadas do runtime.
+A skill Michelin é uma operacionalização de uma Lembrança histórica preservada. O catálogo agora contém cópias das **17 capacidades CentralDark** encontradas nos diretórios especializados (`12` no nível principal, `2` em `devops`, `3` em `software-development`). Dessas, `16` têm `SKILL.md` e uma (`centraldark-auto-sync-vscode`) contém um manifesto `package.json`. O método central permanece no `SKILL.md` da Skill-Mãe. Os scripts e as referências específicos de cada módulo ficam dentro da sua pasta integrada. **Cópia catalogada não comprova execução do runtime.** As fontes originais permanecem por compatibilidade.
 
 | Módulo incorporado | Para qual intenção usar | Tipo de conteúdo |
 |---|---|---|
@@ -59,6 +59,19 @@ A skill Michelin abaixo é **nova operacionalização de uma Lembrança históri
 | [vscode-log-bridge](skills-integradas/centraldark-vscode-log-bridge/SKILL.md) | Coletar sinais VS Code Casa via ponte existente | Observabilidade, sem exportar log bruto |
 | [auto-sync-vscode](skills-integradas/centraldark-auto-sync-vscode/package.json) | Inspecionar dependências do auto-sync VS Code | **package.json**, não skill executável; descobrir consumidor real |
 
+### Capacidades CentralDark incorporadas em 28/10/2026
+
+| Pasta integrada em `skills-integradas/` | Quando usar | Recursos na mesma pasta |
+|---|---|---|
+| [centraldark-note-maintenance](skills-integradas/centraldark-note-maintenance/SKILL.md) | Atualizar e reconciliar notas vivas | `scripts/` com 3 scripts Python |
+| [centraldark-hermes-operations](skills-integradas/centraldark-hermes-operations/SKILL.md) | Operar Hermes, cron, SSH e portas | `SKILL.md` |
+| [reconciliacao-diaria-centraldark](skills-integradas/reconciliacao-diaria-centraldark/SKILL.md) | Reconciliar estado e checklist diário | `SKILL.md` |
+| [centraldark-evidence-reconciliation](skills-integradas/centraldark-evidence-reconciliation/SKILL.md) | Comparar provas de código, runtime e HUD | `references/` com 2 receitas |
+| [centraldark-ops](skills-integradas/centraldark-ops/SKILL.md) | Operações integradas da Casa, GitHub e VPS | `references/` com 5 receitas |
+| [centraldark-oracle-surface](skills-integradas/centraldark-oracle-surface/SKILL.md) | Consultar a superfície Oracle já existente | `SKILL.md` |
+
+**Sincronização deliberada e preservação:** executar `scripts/atualizar-catalogo-self-healing.ps1 -SincronizarSkillsCentralDark` a partir desta Skill-Mãe. Importa **somente** as pastas CentralDark conhecidas, preserva arquivos originais e exige destino sem edição local antes de atualizar cópias divergentes. O atualizador já existente registra SHA, datas e histórico no índice vivo. Não mover o owner original nem eliminar caminhos usados pelos loaders até que exista prova de substituição funcional.
+
 ## Descoberta e auditoria
 
 - **Inventário importado**: [ARQUIVOS.json](ARQUIVOS.json), com SHA256 dos 15 arquivos de 11 módulos.
@@ -72,24 +85,30 @@ A skill Michelin abaixo é **nova operacionalização de uma Lembrança históri
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-27 00:06:46 -03:00. **Arquivos:** 77. **Skills:** 12.
+**Última sincronização (Casa):** 2026-10-28 21:57:30 -03:00. **Arquivos:** 96. **Skills:** 18.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
 | Skill | Criada em (Casa) | Modificada em (Casa) | SHA-256 (12) |
 |---|---|---|---|
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
-| `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | fd2c8d253281 |
-| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 028c33c362fd |
+| `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:22:45-03:00 | 4d00d4976189 |
+| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:23:02-03:00 | 628473969c7c |
 | `catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
+| `catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
+| `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-28T19:36:57-03:00 | b3b12f25b576 |
 | `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
 | `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
-| `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 17c1445d216c |
+| `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
+| `catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
+| `catalogo/skills-integradas/centraldark-ops/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-25T04:01:30-03:00 | a6c703e3b56f |
+| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-28T20:45:35-03:00 | 33774e644004 |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
-| `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a215679f7d55 |
+| `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 88289de635e4 |
 | `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
 | `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
-| `SKILL.md` | 2026-10-26T18:15:25-03:00 | 2026-10-26T18:15:25-03:00 | 6504ec5f0ba2 |
+| `catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
+| `SKILL.md` | 2026-10-26T18:15:25-03:00 | 2026-10-28T21:55:56-03:00 | 713a113231f7 |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)

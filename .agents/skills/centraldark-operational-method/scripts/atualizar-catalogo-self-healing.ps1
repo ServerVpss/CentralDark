@@ -1,5 +1,59 @@
-﻿param([switch]$SomenteVerificar)
+﻿param([switch]$SomenteVerificar, [switch]$SincronizarSkillsCentralDark)
 $ErrorActionPreference = 'Stop'
+
+# CentralDark-only sync. Reuses this catalog owner; originals remain valid compatibility paths.
+# Opt-in mode: never import unrelated global skills or overwrite local changes to imported files.
+if ($SincronizarSkillsCentralDark) {
+  if ($SomenteVerificar) { throw 'Use -SincronizarSkillsCentralDark without -SomenteVerificar for the explicit import.' }
+  $skillsRoot = Split-Path -Parent $PSScriptRoot | Split-Path -Parent
+  $repoRoot = (Resolve-Path (Join-Path $skillsRoot '..\..')).Path
+  $motherRoot = Join-Path $skillsRoot 'centraldark-operational-method'
+  $targetRoot = Join-Path $motherRoot 'catalogo\skills-integradas'
+  $sources = @(
+    Get-ChildItem -LiteralPath $skillsRoot -Directory |
+      Where-Object { $_.Name -like 'centraldark-*' -and $_.Name -ne 'centraldark-operational-method' }
+  )
+  foreach ($group in @('devops', 'software-development')) {
+    $groupPath = Join-Path $skillsRoot $group
+    if (Test-Path -LiteralPath $groupPath) {
+      $sources += @(Get-ChildItem -LiteralPath $groupPath -Directory |
+        Where-Object { $_.Name -like 'centraldark-*' -or $_.Name -eq 'reconciliacao-diaria-centraldark' })
+    }
+  }
+  $sources = @($sources | Sort-Object FullName -Unique)
+  $hash = [System.Security.Cryptography.SHA256]::Create()
+  $added = 0; $refreshed = 0; $unchanged = 0
+  try {
+    foreach ($origin in $sources) {
+      $destDir = Join-Path $targetRoot $origin.Name
+      foreach ($sourceFile in @(Get-ChildItem -LiteralPath $origin.FullName -File -Recurse -Force)) {
+        $relative = $sourceFile.FullName.Substring($origin.FullName.Length + 1)
+        $destination = Join-Path $destDir $relative
+        $shaSource = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($sourceFile.FullName)))
+        $exists = Test-Path -LiteralPath $destination -PathType Leaf
+        if ($exists) {
+          $shaTarget = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($destination)))
+          if ($shaSource -eq $shaTarget) { $unchanged++; continue }
+          $gitRelative = $destination.Substring($repoRoot.Length).TrimStart('\').Replace('\','/')
+          $gitDirty = @(& git -C $repoRoot status --porcelain -- $gitRelative)
+          if ($LASTEXITCODE -ne 0 -or $gitDirty.Count -gt 0) {
+            throw "IMPORT_TARGET_DIRTY: $gitRelative (not overwritten)"
+          }
+        }
+        $parent = Split-Path -Parent $destination
+        if (-not (Test-Path -LiteralPath $parent)) {
+          New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+        Copy-Item -LiteralPath $sourceFile.FullName -Destination $destination -Force
+        $shaAfter = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($destination)))
+        if ($shaSource -ne $shaAfter) { throw "IMPORT_SHA_MISMATCH: $destination" }
+        if ($exists) { $refreshed++ } else { $added++ }
+      }
+    }
+  } finally { $hash.Dispose() }
+  Write-Output ("CENTRALDARK_IMPORT=PASS SOURCES=$($sources.Count) ADDED=$added REFRESHED=$refreshed UNCHANGED=$unchanged ORIGINALS_PRESERVED=true")
+}
+
 $raiz = Split-Path -Parent $PSScriptRoot
 $catalogo = Join-Path $raiz 'catalogo'
 $estadoPath = Join-Path $catalogo 'ESTADO-AUTOCURA.json'
