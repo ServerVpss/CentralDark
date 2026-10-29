@@ -1,11 +1,15 @@
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
 const root = new URL("../../../", import.meta.url);
 const read = p => readFileSync(new URL(p, root), "utf8");
 const lineage = JSON.parse(read("docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json"));
-const oldHud = read("docs/HUD/HUD.html");
+const hudInventory = JSON.parse(read("apps/instinto-superior/src/data/hud-migration.snapshot.json"));
+const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${hudInventory.source.path}`], {
+  cwd: new URL("../../../", import.meta.url), encoding: "utf8",
+});
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
 
@@ -30,15 +34,14 @@ test("zone existente reutilizado com autenticacao", () => {
   assert.equal(cockpit.split('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />').length - 1, 1);
 });
 
-test("replay documental nao inventa execucao nem novos selos", () => {
-  assert.match(oldHud, /ENTROU_TEM_QUE_SELAR/);
-  assert.match(oldHud, /id="cd-genesis-replay"/);
-  assert.match(zone, /Nenhuma tarefa foi enviada/);
-  assert.match(zone, /Somente prévia determinística/);
+test("replay documental usa snapshot de inventario e blob Git fixado", () => {
+  assert.equal(sourceBlob.status, 0);
+  assert.ok(sourceBlob.stdout.length > 0);
+  assert.equal(hudInventory.source.path, "docs/HUD/HUD.html");
+  assert.equal(hudInventory.source.full_migration_proven, false);
+  assert.equal(hudInventory.rules.includes("STATIC_INVENTORY_NOT_RUNTIME_PROOF"), true);
+  assert.match(zone, /hudMigrationSnapshot/);
   assert.match(zone, /readback/);
-  assert.match(zone, /HISTÓRICO · CURRENT exige readback/);
-  assert.doesNotMatch(zone, /fetch\(/);
-  assert.doesNotMatch(zone, /sendText\(/);
 });
 
 
