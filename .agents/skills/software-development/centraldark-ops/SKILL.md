@@ -151,6 +151,27 @@ GRAMMAR_PRESERVED != TECHNICAL_STATE_CURRENT
 REPORT_OLD != STATE_NOW
 ```
 
+## LOCAL_FIRST_PROMOTION_RULE — VPS é promoção, não dependência (2026-10-29)
+
+O trabalho corrente da CentralDark é executado e provado na **Casa/local**. A VPS é o destino de promoção do mesmo script/configuração, não uma pré-condição para desenvolver, testar ou fechar a prova local. Não transformar `VPS_OFF`, `VPS_UNREACHABLE`, `SSH_DOWN` ou `VPS_UNKNOWN` em falha do script local.
+
+O ponto que fazia o fluxo parecer dependente da VPS é a agregação operacional do escopo `Casa / Main / VPS`: o botão/relatório apresenta os três alvos juntos e alguns gates condicionam o fechamento do fluxo agregado ao readback remoto. Essa dependência é de **apresentação/fechamento remoto**, não de execução local. O owner correto é separar as provas:
+
+```text
+LOCAL_EXECUTION + LOCAL_TEST + LOCAL_READBACK = prova local
+LOCAL_PROOF → PROMOTION_TARGET_VPS (quando a rota retornar)
+VPS_READBACK != PRECONDITION_FOR_LOCAL_PROOF
+```
+
+Registrar sempre separadamente:
+
+- `LOCAL_SCRIPT`: executado/testado na Casa;
+- `LOCAL_READBACK`: resultado local comprovado;
+- `PROMOTION_TARGET`: VPS como destino posterior;
+- `VPS_RUNTIME_READBACK`: somente quando a VPS estiver disponível.
+
+Quando a VPS estiver desligada, manter `VPS_RUNTIME_READBACK=DEFERRED/OFFLINE`, sem bloquear `LOCAL_SCRIPT`, `LOCAL_READBACK`, build ou testes locais. Só declarar a promoção concluída depois do readback na VPS; isso não rebaixa nem invalida a prova local.
+
 ## VPS é consequência do config local (não bloqueador)
 
 Quando o config local está selado como cristal, a VPS é downstream: replay com bindings trocados, não fonte de verdade.
