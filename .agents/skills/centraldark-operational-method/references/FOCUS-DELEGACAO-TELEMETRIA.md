@@ -202,6 +202,18 @@ Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E
 
 ---
 
+## Hermes Desktop — controle de abas por UIAutomation, sem navegador externo (28/10/2026)
+
+**Origem precisa:** o CHEFE forneceu export do Recorder/Power Automate Desktop com a única ação textual `UIAutomation.Click.Click Element: appmask['Window \'Hermes\'']['Edit \'Address\''] ClickType: UIAutomation.ClickType.LeftClick`; o restante é o `ControlRepositorySymbols`, protocolo `uia3`, seletor hierárquico `RootWebArea → Edit 'Address'` e screenshots serializados. **Esse export não inclui resposta posterior ao clique nem criação de aba**. Não reinterpretar screenshot embutido como readback do runtime.
+
+**Mapa atual da Casa (somente leitura):** `Hermes.exe` expõe **2** painéis de browser com pares `Button 'New tab'` (suporta `InvokePattern`) + `Edit 'Address'` (suporta `ValuePattern`). Existem também controles `New session tab` que pertencem ao chat do Hermes, **não** ao navegador. O endereço `http://127.0.0.1:8080/sala-controle` corresponde a um único painel; há outro painel para ChatGPT. A seleção deve exigir URL de origem exata, não apenas o título Hermes nem índice de painel presumido.
+
+**Receita executável existente na Skill-Mãe:** `K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Desktop-BrowserTab.ps1` (nenhum novo owner). Executar `-Mode Inspect` para mapear; ao receber comando real com URL fornecida pelo CHEFE, executar `-Mode OpenNewTab -FromUrl '<URL_ORIGINAL>' -ToUrl '<URL_NOVA>'`. O script associa os elementos UIA de um mesmo painel, invoca `New tab`, verifica incremento de TabItem e preservação dos nomes anteriores, foca o editor `Address`, digita a URL e pressiona Enter uma só vez; procura o novo documento/URL após a navegação. Nenhuma coordenada é usada para clicar; bounds só associam elementos do mesmo painel. Não alterar o perfil do Hermes, a sessão do Goal, os dados das abas preexistentes ou o Edge externo.
+
+**Gates:** `PAD_SELECTOR=PROVEN_AS_EXPORTED`; `HERMES_TWO_BROWSER_PANES=OBSERVED`; `NEW_TAB_INVOKE_PATTERN=AVAILABLE`; `OPEN_NEW_TAB_NAVIGATION_E2E=NOT_RUN_IN_THIS_RECEIPT`. PASS somente quando `NEW_TAB_COUNT=BEFORE+1`, todas as abas anteriores persistem, o endereço é digitado no editor certo e o documento novo confirma a URL. Saída `BLOCKED_OR_PARTIAL` nunca é promovida a sucesso. Reusar esse procedimento sem criar outro script por URL ou resortar a `Ctrl+T` por rotina.
+
+---
+
 ## 🖱️ Navegação deliberada do Cockpit — mapa vivo botão por botão (27/10/2026)
 
 <!-- #OBSERVACOES#
