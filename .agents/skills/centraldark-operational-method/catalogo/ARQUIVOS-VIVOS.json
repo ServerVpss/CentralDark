@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T19:45:30-03:00",
+    "gerado_em":  "2026-10-28T21:57:30-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:39:31-03:00",
-                         "modificado_em":  "2026-10-28T19:39:31-03:00",
+                         "criado_em":  "2026-10-28T21:54:32-03:00",
+                         "modificado_em":  "2026-10-28T21:54:32-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T19:39:31-03:00",
-                         "modificado_em":  "2026-10-28T19:39:31-03:00",
+                         "criado_em":  "2026-10-28T21:54:32-03:00",
+                         "modificado_em":  "2026-10-28T21:54:32-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -549,9 +549,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-28T19:36:23-03:00",
-                         "bytes":  72105,
-                         "sha256":  "e5ab6f9494d4fc24915a12f330c3318f57a9233094e91f0c9ee514fb4db1c84f",
+                         "modificado_em":  "2026-10-28T20:45:35-03:00",
+                         "bytes":  79553,
+                         "sha256":  "33774e6440040db4d4a54d48f43c32d2766e4363e72dbb055adaee96f386340d",
                          "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
@@ -1012,9 +1012,9 @@
                          "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-28T08:08:26-03:00",
-                         "modificado_em":  "2026-10-28T16:02:59-03:00",
-                         "bytes":  43344,
-                         "sha256":  "43c6554b847bdf5dfe27ca899559fb9ad08e28e9462cc56e6636c51baf4460ee",
+                         "modificado_em":  "2026-10-28T19:55:11-03:00",
+                         "bytes":  45748,
+                         "sha256":  "e38d9a82074d32d321dc0f876f4cb6f2a5679c07d039c88e31885e9361abf4c7",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1258,12 +1258,24 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Hermes-Desktop-BrowserTab.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-28T19:53:04-03:00",
+                         "modificado_em":  "2026-10-28T19:56:45-03:00",
+                         "bytes":  9452,
+                         "sha256":  "98972cfd0643a483dbeaa30db4e30c65e7e05e348d6a4debf2dcdc7094b1981f",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "scripts/Hermes-Oracle-Return.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-28T19:33:09-03:00",
-                         "modificado_em":  "2026-10-28T19:39:00-03:00",
-                         "bytes":  10495,
-                         "sha256":  "c9f446d6c90ef012820ab46c4173c81ea4893db5c1292d27b771ab546301ff2f",
+                         "modificado_em":  "2026-10-28T20:45:05-03:00",
+                         "bytes":  15507,
+                         "sha256":  "109f6cf8d22dab2f4068cffa46609a5bc9965fbb8615eae3165ed13f0c4ab876",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1330,6 +1342,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Publish-SkillUsageReceipt.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-28T21:54:23-03:00",
+                         "modificado_em":  "2026-10-28T21:54:23-03:00",
+                         "bytes":  2978,
+                         "sha256":  "a668079765b6cc127c3258dee644fe38a7d7422e0654d2263c7eb851270a7dbb",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "scripts/registrar-prova-hermes-casa.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
@@ -1369,11 +1393,23 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T19:43:52-03:00",
-                         "bytes":  228498,
-                         "sha256":  "1684e616b6e27bf54275dbe186a71ec641f20522eacef8688a3a999b72f00725",
+                         "modificado_em":  "2026-10-28T21:55:56-03:00",
+                         "bytes":  251584,
+                         "sha256":  "713a113231f7dcf3e5d834faa0abbef73a38e709a5fafc48d1733561d93714fe",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
+                                             {
+                                                 "destino":  "scripts/Hermes-Desktop-BrowserTab.ps1",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
+                                                 "existe":  true
+                                             },
                                              {
                                                  "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  true
@@ -1384,6 +1420,10 @@
                                              },
                                              {
                                                  "destino":  "scripts/Hermes-Oracle-Return.ps1",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
