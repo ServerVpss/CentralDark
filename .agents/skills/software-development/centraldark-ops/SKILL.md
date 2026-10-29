@@ -427,7 +427,13 @@ DIRTY: 1 file (SKILL.md — this receipt)
 RECEIPT_ID: RSI_R20_20261029_FINAL
 STATE: PASS (20/20 rounds complete; all criteria met)
 
-## RSI Round 20 Receipt (2026-10-29) — FINAL (UPDATED)
+## RSI Methodology Pitfalls (from CD_ORACLE_R20_COUNTERPROOF_20261029_0802)
+
+- **Self-reported results ≠ native Goal turn tracking.** The native Goal system may track fewer turns than manually executed rounds. Always reconcile: check `goal show` for actual turn count vs reported rounds. If discrepancy exists, classify as COUNTERPROOF_REQUIRED, not PASS.
+- **BUILD PASS requires `npm run build` EXIT 0.** Pre-existing test failures in verify-hud-zone.mjs (prebuild) block the build even when TS passes. Always run the full build, not just tsc. Check with `git stash` + test to confirm pre-existing.
+- **20 source files changed ≠ 18 independent transfers.** Count files changed, not transfers. Report both numbers honestly.
+- **Report text in SKILL.md ≠ authenticated terminal receipts.** Receipts must include actual command output and exit codes, not just descriptions.
++- **Round-trip communication via Hermes-Oracle-Return.ps1:** Requires a Hermes envelope JSON with all 13 required fields. Status must be terminal. The script proves delivery with SENT_WITH_UI_READBACK (EXACT_TARGET, VALUEPATTERN_SETVALUE, SEND_INVOKEPATTERN, RECEIPT_VISIBLE, EDITOR_CLEARED). This is the only proof of round-trip delivery — text alone is not proof.\n\n## RSI Round 20 Receipt (2026-10-29) — FINAL (UPDATED)\n\nROUND: 20/20
 
 ROUND: 20/20
 CAUSE: Final summary + round-trip communication proof.
