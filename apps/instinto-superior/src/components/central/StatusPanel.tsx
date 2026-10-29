@@ -35,6 +35,30 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
     </span>
   );
 }
+/**
+ * Sonda da superfície ≠ prova de execução. A API pode responder com JSON
+ * e ainda declarar NOT_REVALIDATED: mostramos conectividade verde somente
+ * para a ROTA, com o aviso amarelo de execução explicitamente separado.
+ * Nunca promove grafo/receipts do owner de RUNNING para PASS.
+ */
+function LuzProjecao({
+  estado, nome, fresco, http, erro,
+}: {
+  estado: Estado; nome: string; fresco: boolean; http: number | null | undefined; erro: string | null | undefined;
+}) {
+  const rotaDisponivel = fresco && estado === "RUNNING" && http === 200
+    && erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO";
+  if (!rotaDisponivel) return <LuzViva estado={estado} nome={nome} fresco={fresco} />;
+  return (
+    <div className="space-y-1" aria-label={`${nome}: rota HTTP disponível; execução não revalidada`}>
+      <span className="inline-flex items-center gap-2">
+        <span className={`size-3 shrink-0 rounded-full ${CORES.verde}`} aria-hidden="true" />
+        <span className="font-mono text-[10px]">ROTA DISPONÍVEL</span>
+      </span>
+      <p className="font-mono text-[10px] text-amber-400">● EXECUÇÃO NÃO REVALIDADA</p>
+    </div>
+  );
+}
 /** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
 function comMotivo(base: string, estado: Estado, motivo: string | null | undefined) {
   if (estado === "PASS" || !motivo) return base;
