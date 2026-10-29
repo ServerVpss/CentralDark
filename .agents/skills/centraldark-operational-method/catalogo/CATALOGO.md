@@ -85,7 +85,7 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-29 10:03:23 -03:00. **Arquivos:** 98. **Skills:** 18.
+**Última sincronização (Casa):** 2026-10-29 10:48:30 -03:00. **Arquivos:** 98. **Skills:** 18.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
@@ -102,13 +102,13 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 | `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
 | `catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
 | `catalogo/skills-integradas/centraldark-ops/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T09:46:42-03:00 | b7163181023d |
-| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:02:28-03:00 | 1f234413ee3b |
+| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:46:50-03:00 | 4b8a7ca948be |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
 | `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-29T09:31:40-03:00 | 16f68fa7db6f |
 | `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
 | `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
 | `catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
-| `SKILL.md` | 2026-10-29T09:51:30-03:00 | 2026-10-29T09:51:30-03:00 | 81b0641ecbf6 |
+| `SKILL.md` | 2026-10-29T09:51:30-03:00 | 2026-10-29T10:46:01-03:00 | 5e1d391e2be1 |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)

@@ -426,17 +426,13 @@ function Local-Refresh {
     Add-Log 'SCREENPIPE' 'UNKNOWN' 'stdout do gravador em outra janela nao tem arquivo de log conhecido; /health segue monitorado'
     $script:ScreenLogWarned=$true
   }
-  # Path found by file-name, without guessing emoji spelling.
-  $vault=Join-Path (Join-Path $env:USERPROFILE 'Documents') 'Obsidian Vault'
-  $hudFile=$null
-  if(Test-Path $vault){
-    $hudFile=Get-ChildItem -LiteralPath $vault -Directory -ErrorAction SilentlyContinue | ForEach-Object {Join-Path $_.FullName 'HUD.html'} | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf} | Select-Object -First 1
-  }
-  if($hudFile){
+  # Instrument the existing Cockpit owner; do not infer an Obsidian vault path.
+  $cockpitOwner=Join-Path $PSScriptRoot '..\..\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+  if(Test-Path -LiteralPath $cockpitOwner -PathType Leaf){
     $hudPass=$true
-    $f=Get-Item -LiteralPath $hudFile
-    Set-Card 'HUD / OBSIDIAN' 'PASS' ('HUD local existe; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
-  }else{Set-Card 'HUD / OBSIDIAN' 'UNKNOWN' 'HUD.html local nao localizado'}
+    $f=Get-Item -LiteralPath $cockpitOwner
+    Set-Card 'HUD / COCKPIT OWNER' 'PASS' ('owner presente; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
+  }else{Set-Card 'HUD / COCKPIT OWNER' 'UNKNOWN' 'owner do Cockpit nao localizado'}
   if($screenPass -and $tailPass -and $hudPass){
     Set-Card 'PROVA / ARQUIVO' 'PASS' 'provas locais: /health + Tailscale + HUD; sem TXT'
   }else{

@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-29 10:03:23 -03:00
-**Total:** 98 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-29 10:48:30 -03:00
+**Total:** 98 arquivos. **Skills:** 18. **Mudanças detectadas:** 2.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-29T09:51:30-03:00 | 2026-10-29T09:51:30-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-29T10:03:24-03:00 | 2026-10-29T10:03:24-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-29T09:51:30-03:00 | 2026-10-29T09:51:30-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-29T10:03:24-03:00 | 2026-10-29T10:03:24-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -35,7 +35,7 @@
 | `catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-communication-style.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 6479026cba7a |
 | `catalogo/skills-integradas/centraldark-ops/references/selfhosted-runner-git-auth.md` | catalogo | 2026-10-28T10:39:34-03:00 | 2026-10-12T02:29:59-03:00 | 2145a6949396 |
 | `catalogo/skills-integradas/centraldark-ops/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-29T09:46:42-03:00 | b7163181023d |
-| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:02:28-03:00 | 1f234413ee3b |
+| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | skill | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:46:50-03:00 | 4b8a7ca948be |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/runtime-binding.desired.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 2cad2dcc353a |
 | `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
 | `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-29T09:31:40-03:00 | 16f68fa7db6f |
@@ -103,7 +103,8 @@
 | `scripts/registrar-prova-hermes-casa.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 27e904b4a27d |
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
-| `SKILL.md` | skill | 2026-10-29T09:51:30-03:00 | 2026-10-29T09:51:30-03:00 | 81b0641ecbf6 |
+| `SKILL.md` | skill | 2026-10-29T09:51:30-03:00 | 2026-10-29T10:46:01-03:00 | 5e1d391e2be1 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-29T10:03:23-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-29T10:48:30-03:00 | MODIFICADO | `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-29T10:48:30-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
