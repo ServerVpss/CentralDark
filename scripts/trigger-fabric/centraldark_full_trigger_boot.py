@@ -660,7 +660,7 @@ def hud_first_gate(repo: Path) -> dict:
         "mirror": str(mirror) if mirror else "UNCONFIGURED",
         "hud_read_first": True,
         "authorization": "UNCHANGED",
-        "next_cursor": "MATERIALIZE_MAIN_HUD_AND_REMEASURE",
+        "next_cursor": "INSTRUMENT_EXISTING_COCKPIT_OWNER",
     }
     if not source.is_file() or source.is_symlink():
         evidence["reason"] = "HUD_MAIN_SOURCE_MISSING_OR_LINK"
