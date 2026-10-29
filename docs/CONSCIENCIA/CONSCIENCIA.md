@@ -2,6 +2,12 @@
 title: "CONSCIENCIA — compatibilidade histórica"
 status: "HISTORICAL_REDIRECT"
 updated: 2026-08-14
+soul_owner: "CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+tags:
+  - consciencia
+  - identidade
+  - compatibilidade
+  - soul-sol
 ---
 
 # CONSCIÊNCIA — redirecionamento canônico

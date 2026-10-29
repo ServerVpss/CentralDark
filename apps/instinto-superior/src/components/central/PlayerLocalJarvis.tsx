@@ -155,7 +155,7 @@ export function PlayerLocalJarvis({ onClose }: { onClose?: () => void } = {}) {
         });
         return;
       }
-      if (payload.to !== peerId) return;
+      if ((payload as { to?: string }).to !== peerId) return;
       if (payload.type === "offer" && role === "listener") {
         closeAll();
         const peer = new RTCPeerConnection({ iceServers: [] });
