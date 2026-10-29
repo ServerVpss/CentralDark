@@ -63,7 +63,7 @@ Troque `'kanban'` pela palavra da intenção. A busca cobre o conteúdo da skill
 <!-- AUTOCATALOGO:INICIO -->
 ## Índice vivo (gerado automaticamente)
 
-**Última verificação:** 2026-10-28 21:39:30 -03:00; 95 arquivos catalogados; 18 skills.
+**Última verificação:** 2026-10-28 21:57:30 -03:00; 96 arquivos catalogados; 18 skills.
 
 Consulte [INDICE-VIVO.md](INDICE-VIVO.md) para **criação, modificação e SHA de cada arquivo**, e [VALIDACAO-AUTOMATICA.md](VALIDACAO-AUTOMATICA.md) para alertas.
 <!-- AUTOCATALOGO:FIM -->

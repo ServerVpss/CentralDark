@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T21:39:30-03:00",
+    "gerado_em":  "2026-10-28T21:57:30-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:36:32-03:00",
-                         "modificado_em":  "2026-10-28T21:36:32-03:00",
+                         "criado_em":  "2026-10-28T21:54:32-03:00",
+                         "modificado_em":  "2026-10-28T21:54:32-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:36:32-03:00",
-                         "modificado_em":  "2026-10-28T21:36:32-03:00",
+                         "criado_em":  "2026-10-28T21:54:32-03:00",
+                         "modificado_em":  "2026-10-28T21:54:32-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1342,6 +1342,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Publish-SkillUsageReceipt.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-28T21:54:23-03:00",
+                         "modificado_em":  "2026-10-28T21:54:23-03:00",
+                         "bytes":  2978,
+                         "sha256":  "a668079765b6cc127c3258dee644fe38a7d7422e0654d2263c7eb851270a7dbb",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "scripts/registrar-prova-hermes-casa.ps1",
                          "tipo":  "script",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
@@ -1381,9 +1393,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T21:37:28-03:00",
-                         "bytes":  248439,
-                         "sha256":  "60f1e9c048e3ca3280b9a70b77856870acc1535d5bdf894350aa0b04772724bc",
+                         "modificado_em":  "2026-10-28T21:55:56-03:00",
+                         "bytes":  251584,
+                         "sha256":  "713a113231f7dcf3e5d834faa0abbef73a38e709a5fafc48d1733561d93714fe",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
@@ -1392,6 +1404,10 @@
                                              },
                                              {
                                                  "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
                                                  "existe":  true
                                              },
                                              {

@@ -19,13 +19,13 @@ function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 function safeId(value: unknown, max: number): string | null {
-  if (typeof value !== "string" || value.length > max ||
-      !/^[A-Za-z0-9_.:/-]+$/.test(value)) return null;
+  if (typeof value !== "string" || value.length > max || !/^[A-Za-z0-9_.:/-]+$/.test(value))
+    return null;
   return value;
 }
 export function normalizeSkillUsageEvent(raw: unknown): SkillUsageReceipt | null {
-  if (!record(raw) || raw["area"] !== "skill-usage" ||
-      raw["acao"] !== "skill_invocation") return null;
+  if (!record(raw) || raw["area"] !== "skill-usage" || raw["acao"] !== "skill_invocation")
+    return null;
   const meta = raw["metadata"];
   if (!record(meta) || meta["verified"] !== true) return null;
   const skill = safeId(meta["skill_id"], 160);
@@ -34,8 +34,8 @@ export function normalizeSkillUsageEvent(raw: unknown): SkillUsageReceipt | null
   const at = typeof raw["ts"] === "string" ? raw["ts"] : "";
   if (!skill || !receiptId || !source || !Number.isFinite(Date.parse(at))) return null;
   const outcome = meta["outcome"];
-  if (outcome !== "PASS" && outcome !== "FAIL" &&
-      outcome !== "BLOCKED" && outcome !== "UNKNOWN") return null;
+  if (outcome !== "PASS" && outcome !== "FAIL" && outcome !== "BLOCKED" && outcome !== "UNKNOWN")
+    return null;
   return { skill, receiptId, at, source, outcome };
 }
 export function summarizeSkillUsage(rows: readonly unknown[]): {
@@ -49,12 +49,23 @@ export function summarizeSkillUsage(rows: readonly unknown[]): {
   let repeated = 0;
   for (const row of rows) {
     const event = normalizeSkillUsageEvent(row);
-    if (!event) { invalid++; continue; }
-    if (seen.has(event.receiptId)) { repeated++; continue; }
+    if (!event) {
+      invalid++;
+      continue;
+    }
+    if (seen.has(event.receiptId)) {
+      repeated++;
+      continue;
+    }
     seen.add(event.receiptId);
     const count = map.get(event.skill) ?? {
-      skill: event.skill, executions: 0, pass: 0, fail: 0,
-      blocked: 0, unknown: 0, lastSeen: event.at,
+      skill: event.skill,
+      executions: 0,
+      pass: 0,
+      fail: 0,
+      blocked: 0,
+      unknown: 0,
+      lastSeen: event.at,
     };
     count.executions++;
     if (event.outcome === "PASS") count.pass++;
@@ -65,7 +76,10 @@ export function summarizeSkillUsage(rows: readonly unknown[]): {
     map.set(event.skill, count);
   }
   return {
-    records: [...map.values()].sort((a, b) => b.executions - a.executions || a.skill.localeCompare(b.skill)),
-    invalid, repeated,
+    records: [...map.values()].sort(
+      (a, b) => b.executions - a.executions || a.skill.localeCompare(b.skill),
+    ),
+    invalid,
+    repeated,
   };
 }
