@@ -233,6 +233,35 @@ BLOCKER_IF_ANY=
 4. Probe the public IP from Casa for the named ports with real TCP connects. Classify each as `OPEN` or `CLOSED_OR_FILTERED`; do not infer public exposure from UFW alone.
 5. Security note rule: if `PermitRootLogin yes` and `PasswordAuthentication yes` are present, say access works but password login increases surface. Do not harden SSH or firewall rules unless CHEFE asks for mutation.
 
+## Dual-surface Desktop Preview handoff
+
+For a CHEFE request to map two existing conversations/surfaces, keep the original Hermes Desktop as the executor and use the same round envelope. `desktop_preview` reads the document; `drive_preview` inventories fresh semantic refs and renders its transient mapping overlay. The overlay is instrumentation only.
+
+```text
+DISCOVER_A → MAP_A → READBACK_A
+→ DISCOVER_B → MAP_B → READBACK_B
+→ REMAP_AFTER_EACH_NAVIGATION_OR_FOCUS_CHANGE
+→ CORRELATE_OWNER_RECEIPT
+```
+
+Unless concurrent bindings are actually exposed, report `PARALLEL_EXECUTION=UNAVAILABLE` and `EXECUTION_ORDER=A→B`; do not claim simultaneous interaction. If `active_tab_id` and URL/title disagree, do not invoke a ref. Reacquire elements, record `FOCUS_CONSISTENCY=UNKNOWN`, and preserve the last good state.
+
+The handoff must carry:
+
+```text
+ACTOR=HERMES
+ORIGIN_DECLARED=PASS|UNKNOWN
+ORIGIN_AUTHENTICATED=PASS|UNKNOWN
+SURFACE_ID=
+OVERLAY_MAPPING=PASS|UNKNOWN
+ACTION=PASS|UNKNOWN|BLOCKED
+READBACK=PASS|UNKNOWN|BLOCKED
+RECEIPT_ID=ID|UNKNOWN
+NEXT_CURSOR=
+```
+
+A visible ChatGPT message containing `ACTOR=HERMES` is not authentication. Authentication requires the original Hermes owner receipt/UIA or terminal event correlated to the same intent, turn, surface and target. Keep `COCKPIT_SYNC_ACIONADO`, `READBACK`, `RESULTADO_DO_SYNC` and `CICLO_BILATERAL_COMPLETO` as `UNKNOWN` until independently read back.
+
 ## Receipt shape
 
 Use this compact form:
