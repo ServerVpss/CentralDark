@@ -610,3 +610,26 @@ next_cursor: MEASURE
 Invariantes herdadas das seções 0–14: `REUSE_BEFORE_CREATE`, `ONE_OWNER_PER_CAPABILITY`, `ONE_WRITER_PER_SCOPE`, `UNKNOWN != PASS`, `ACTION != PROOF`, `EXPLICIT_ORDER = EXECUTION_REQUEST`. O script é determinístico e não faz I/O de ferramentas; testes unitários provam **lógica de seleção**, não execução Hermes, delegação real ou ativação na Casa. O Hermes deve medir seu loader e invocar os owners existentes para provar isso ao vivo.
 
 **Changelog (2026-10-24):** evoluído o mesmo `kimetsu-brainstorm` com catálogo 17/REMIX, oito métodos como técnicas condicionais, planejamento de subagentes, hooks de `fable-loop` e `cot-react-loop`, histórico/XP condicionado a prova; razão: CHEFE quer técnicas recombinadas por rodada com melhora demonstrável. **NEXT_CURSOR:** em runtime Hermes, invocar o REMIX sobre missão real, capturar seleção + tool calls + workers que retornaram + contraprova e comparar métricas antes/depois.
+
+### Selector obrigatório — duas superfícies com overlay
+
+Quando o pedido mencionar duas conversas, mapeamento visual, linhas rosas ou `desktop_preview` + `drive_preview`, selecionar `13 Som` + `9 Flor` + `3 Lua` e aplicar uma única rodada correlacionada:
+
+```text
+DISCOVER_A → FRESH_MAP_A → OVERLAY_A_READBACK
+→ FRESH_MAP_B → OVERLAY_B_READBACK
+→ ACTIONS_ONLY_WITH_FRESH_REFS
+→ ORIGIN_PROVENANCE_CHECK
+```
+
+A seleção é paralela no plano lógico, mas a execução é serial `A→B` salvo capability concorrente comprovada. Registrar `PARALLEL_EXECUTION=UNAVAILABLE|PROVEN` e não confundir overlay com ação. O seletor deve exigir `surface_id`, URL/documento, foco consistente, refs frescos e estado do composer para cada superfície.
+
+Origem declarada é separada de origem autenticada:
+
+```text
+ACTOR=HERMES                 # declaração
+ORIGIN_SOURCE=...            # binding observado
+ORIGIN_AUTHENTICATED=PASS|UNKNOWN  # receipt independente
+```
+
+Mensagem contendo `ACTOR=HERMES`, resposta do Oráculo ou timestamp de UI não autentica o executor. Sem receipt do Hermes original/UIA/terminal correlacionado, o resultado permanece `UNKNOWN`; `UNKNOWN` nunca é promovido a XP, cristal ou `PASS`.

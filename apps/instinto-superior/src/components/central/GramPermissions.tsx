@@ -6,6 +6,7 @@ import {
   enviarGOALAoHermes,
   monitorarGOALNoHermes,
   type GOALObject,
+  type DelegacaoSolicitada as DelegacaoSolicitadaLib,
   type GramRecibo,
   criarRecibo,
 } from "@/lib/gram-goals-system";
@@ -90,7 +91,7 @@ export function GramPermissions() {
     setEnviandoAoHermes(true);
     try {
       // Converter solicitação → GOAL
-      const goal = delegacaoParaGOAL(estruturaSolicitacao);
+      const goal = delegacaoParaGOAL(estruturaSolicitacao as unknown as DelegacaoSolicitadaLib);
       setGoalAtivo(goal);
 
       // Enviar ao Hermes

@@ -59,23 +59,23 @@ function importarPerfil(nomeArquivo: string, txt: string): Perfil {
     if (!obj || typeof obj !== "object" || Array.isArray(obj))
       throw Error("JSON deve ser um objeto.");
     const d = obj as Record<string, unknown>;
-    nome = typeof d.name === "string" ? d.name : nome;
-    const kind = d.kind ?? d.type ?? d.role;
+    nome = typeof d['name'] === "string" ? d['name'] : nome;
+    const kind = d['kind'] ?? d['type'] ?? d['role'];
     if (typeof kind === "string" && TIPOS.includes(kind as Papel)) papel = kind as Papel;
     conteudo =
-      typeof d.instructions === "string"
-        ? d.instructions
-        : typeof d.content === "string"
-          ? d.content
+      typeof d['instructions'] === "string"
+        ? d['instructions']
+        : typeof d['content'] === "string"
+          ? d['content']
           : "";
   } else {
     const front = txt.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
     if (front) {
-      const title = front[1].match(/^name:\s*(.+)$/m);
-      const kind = front[1].match(/^(kind|role|type):\s*(.+)$/m);
-      if (title) nome = title[1].replace(/^["']|["']$/g, "");
-      if (kind && TIPOS.includes(kind[2].trim() as Papel)) papel = kind[2].trim() as Papel;
-      conteudo = txt.slice(front[0].length);
+      const title = front[1]!.match(/^name:\s*(.+)$/m);
+      const kind = front[1]!.match(/^(kind|role|type):\s*(.+)$/m);
+      if (title) nome = title[1]!.replace(/^["']|["']$/g, "");
+      if (kind && TIPOS.includes(kind[2]!.trim() as Papel)) papel = kind[2]!.trim() as Papel;
+      conteudo = txt.slice(front[0]!.length);
     }
   }
   if (!textoValido(conteudo))
@@ -85,7 +85,7 @@ function importarPerfil(nomeArquivo: string, txt: string): Perfil {
 }
 export function PerfisCognitivos() {
   const [perfis, setPerfis] = useState<Perfil[]>(BASE);
-  const [selecionado, setSelecionado] = useState(BASE[0].id);
+  const [selecionado, setSelecionado] = useState(BASE[0]!.id);
   const [aviso, setAviso] = useState("Nenhum perfil foi injetado no runtime.");
   const [modo, setModo] = useState<"isolado" | "comparar">("isolado");
   const ativo = perfis.find((p) => p.id === selecionado);
