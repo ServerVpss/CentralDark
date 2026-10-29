@@ -177,8 +177,8 @@ function DominioDoLoop() {
   const ssh = useSshBridgeProof();
   const provasAtuais: Record<string, ConexaoFluxo> = {
     ...PROVAS_FLUXO,
-    "casa-vps": { ...PROVAS_FLUXO["casa-vps"], ...ssh.rotas["casa-vps"] },
-    "vps-casa": { ...PROVAS_FLUXO["vps-casa"], ...ssh.rotas["vps-casa"] },
+    "casa-vps": { ...PROVAS_FLUXO["casa-vps"], ...ssh.rotas["casa-vps"] as any },
+    "vps-casa": { ...PROVAS_FLUXO["vps-casa"], ...ssh.rotas["vps-casa"] as any },
   };
   const rotaDetalhe = rotaSelecionada ? provasAtuais[rotaSelecionada] : null;
   const principais: string[] = [...ROTAS_FLUXO[percurso]];
@@ -454,7 +454,7 @@ function DominioDoLoop() {
                   </h5>
                   <span
                     className={
-                      etapa.estado === "PROVADO"
+                      etapa.estado === "HISTÓRICO"
                         ? "rounded border border-emerald-500/40 px-2 py-0.5 text-[10px] text-emerald-500"
                         : "rounded border border-amber-500/40 px-2 py-0.5 text-[10px] text-amber-500"
                     }

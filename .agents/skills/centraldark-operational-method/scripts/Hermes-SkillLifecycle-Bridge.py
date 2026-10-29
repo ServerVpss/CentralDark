@@ -15,7 +15,6 @@ import urllib.request
 
 ENDPOINT = "https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/agent-log"
 ALLOWED = re.compile(r"^[A-Za-z0-9_.:/-]{1,160}$")
-CORRELATION = re.compile(r"^[A-Za-z0-9_.:/-]{1,180}$")
 
 
 def process(raw: str, *, secret: str = "", send=None) -> dict:
@@ -33,12 +32,11 @@ def process(raw: str, *, secret: str = "", send=None) -> dict:
     task = extra.get("task_id")
     use_count = extra.get("use_count")
     if (not isinstance(skill, str) or not ALLOWED.fullmatch(skill)
-            or not isinstance(session, str) or not CORRELATION.fullmatch(session)
-            or not isinstance(task, str) or not CORRELATION.fullmatch(task)
             or type(use_count) is not int or use_count <= 0):
         return {"status": "BLOCKED", "reason": "INCOMPLETE_NATIVE_SKILL_CAUSAL_EVENT"}
     # Same native loaded event has a stable receipt, even if a hook is retried.
-    fingerprint = "|".join([hook.get("profile", "default"), session, task, skill, str(use_count)])
+    fingerprint = "|".join([str(hook.get("profile") or "default"), str(session or ""),
+                            str(task or ""), skill, str(use_count)])
     receipt_id = "hermes-skill-" + hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()
     if not secret:
         return {"status": "BLOCKED", "reason": "AGENT_LOG_SECRET_UNAVAILABLE", "emitted": False}
