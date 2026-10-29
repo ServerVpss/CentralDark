@@ -363,6 +363,23 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("Screenpipe Casa projeta apenas metadados recentes no card existente, sem vazar frames", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  for (const campo of ["last_frame_timestamp", "frame_status", "monitors", "frames_db_written", "capture_fps_actual"]) {
+    assert.ok(sensor.includes(campo), "fonte real ausente: " + campo);
+  }
+  assert.ok(sensor.includes("idade <= 30_000"));
+  assert.ok(sensor.includes("frameFresco && frameStatus === \"ok\""));
+  assert.ok(sensor.includes('sonda.httpStatus === 200'));
+  assert.ok(sensor.includes('HISTÓRICO VISUAL: Screenpipe Desktop'));
+  assert.ok(painel.includes("Capturas recentes · Screenpipe Casa"));
+  assert.ok(painel.includes("d?.screenpipeEvents"));
+  assert.ok(painel.includes("Histórico e imagens: Screenpipe Desktop"));
+  assert.ok(!sensor.includes('fetch("http://127.0.0.1:3030/frames/'));
+  assert.ok(!painel.includes('<img src="http://127.0.0.1:3030/'));
+});
+
 test("maquina de estados distingue rota disponível de execução comprovada sem falso verde", () => {
   const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
   const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
