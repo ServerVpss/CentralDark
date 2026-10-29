@@ -380,6 +380,20 @@ reproduce the failing step on a **detached worktree of that exact HEAD** (`git w
 Pitfall — queued autonomia while the only online self-hosted runner is `busy` is WAIT, not FAIL:
 do not treat a pending juiz job as a code blocker. Check both runners (`online+busy` vs `offline`) before inventing a second promoter or a VPS restart.
 
+## RSI Round 14 Receipt (2026-10-29)
+
+ROUND: 14/20
+CAUSE: TS2345 in radar-pulses.functions.ts (ServerFn type mismatch) + TS2339 (Property 'to' on Signal) + TS2345 in GramPermissions.tsx (DelegacaoSolicitada mismatch).
+FIX: radar-pulses: removed explicit handler type annotation, cast data inside. PlayerLocalJarvis: cast payload to { to?: string }. GramPermissions: imported DelegacaoSolicitada as lib type, cast through unknown.
+ERRORS_FIXED: 3 (total TS 3->0).
+VERIFY: npx tsc --noEmit (exit 0, 0 errors); npm run build (exit 0, PASS).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 18 files modified
+RECEIPT_ID: RSI_R14_20261029_ALL_TS_ZERO
+STATE: PASS (ALL TypeScript errors eliminated: 138->0)
+TRANSFER_PROVEN: true (multiple recipes applied across 18 files)
+FIXED_POINT_TS: true (0 errors, build PASS)
+
 ## RSI Round 13 Receipt (2026-10-29)
 
 ROUND: 13/20
