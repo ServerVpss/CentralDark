@@ -200,7 +200,7 @@ async function medirApi(path: string): Promise<Probe> {
   }
 }
 
-async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
+async function medirReachable(url: string, casaOnly = false, siteCheck = false): Promise<Probe> {
   if (casaOnly && process.platform !== "win32") {
     return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
   }
@@ -233,7 +233,9 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
         ? "FAIL"
         : dados?.["ok"] === true || status === "healthy"
           ? "PASS"
-          : "RUNNING";
+          : siteCheck
+            ? "PASS"
+            : "RUNNING";
     return { estado, httpStatus: resposta.status, erro: null, dados };
   } catch (erro) {
     return {
@@ -498,7 +500,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
-      medirReachable(casaSiteUrl, true),
+      medirReachable(casaSiteUrl, true, true),
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),

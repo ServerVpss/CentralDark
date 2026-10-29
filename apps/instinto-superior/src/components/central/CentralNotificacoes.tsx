@@ -137,29 +137,11 @@ type Props =
 export function CentralNotificacoes(props: Props) {
   const [periodo, setPeriodo] = useState<PeriodoFiltro>("24h");
   const [soReds, definirSoReds] = useState(false);
-  const [preferenciasCarregadas, definirPreferenciasCarregadas] = useState(false);
   const [fontesAtivas, definirFontesAtivas] = useState<Record<FonteNotificacao, boolean>>({
     claude: true, powershell: true, hermes: true, dream: true, sistema: true,
   });
   const [vistoAte, setVistoAte] = useState<number | null>(null);
-  // Preferencias locais de EXIBICAO, nao da entrega: sem credenciais no storage.
-  useEffect(() => {
-    try {
-      const gravadas = JSON.parse(window.localStorage.getItem("centraldark-notify-fontes-v1") || "{}") as Record<string, unknown>;
-      definirFontesAtivas((atuais) => {
-        const novas = { ...atuais };
-        for (const fonte of FONTES)
-          if (typeof gravadas[fonte.id] === "boolean") novas[fonte.id] = gravadas[fonte.id] as boolean;
-        return novas;
-      });
-    } catch { /* Sem storage: preferencias somente nesta montagem. */ }
-    definirPreferenciasCarregadas(true);
-  }, []);
-  useEffect(() => {
-    if (!preferenciasCarregadas) return;
-    try { window.localStorage.setItem("centraldark-notify-fontes-v1", JSON.stringify(fontesAtivas)); }
-    catch { /* storage opcional */ }
-  }, [preferenciasCarregadas, fontesAtivas]);
+  // Filtros de exibicao locais a esta montagem; sem armazenamento paralelo.
   const { items, loading, erro, lastEventAt, realtimeStatus, refresh } =
     useNotificationsLog(periodo);
   useEffect(() => {

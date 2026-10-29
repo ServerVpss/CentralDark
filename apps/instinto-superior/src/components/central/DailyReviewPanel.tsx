@@ -31,7 +31,7 @@ interface DailyReview {
  */
 export const DailyReviewPanel: React.FC = () => {
   const [review, setReview] = useState<DailyReview>({
-    date: new Date().toISOString().split('T')[0],
+    date: new Date().toISOString().split('T')[0]!,
     skillsSynced: 11,
     skillsLoaded: 8,
     skillsProven: 6,

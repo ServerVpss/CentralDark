@@ -519,14 +519,14 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore · fonte 0.1.4 no PR #1842
-                        centraldark.centraldark-vscode-restore · fonte 0.1.3
+                        centraldark.centraldark-vscode-restore · fonte 0.2.1 (manifesto local)
+                        Histórico: fonte 0.1.4 no PR #1842; 0.1.3 anterior
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: versão instalada exige leitura do VS Code · pacote 0.1.4 em preparação
-                    Fonte main 0.1.3 · Casa 0.1.3 instalada em 16/10
+                    Fonte do manifesto Git: 0.2.1 · Casa: instalação exige leitura no VS Code
+                    Sem readback da versão instalada nesta consulta
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -566,7 +566,7 @@ export function DesignCenter({
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
                     <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
-                      Versão 0.1.4 · PR / atualizar <ExternalLink />
+                      Histórico 0.1.4 · PR #1842 <ExternalLink />
                     </a>
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
