@@ -5,12 +5,22 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { existsSync } from "node:fs";
+import { loadEnv } from "vite";
+
+// A Forja fornece apenas o token do servidor; nunca injete segredos no cliente.
+if (!process.env["GITHUB_TOKEN"] && existsSync("K:/.env")) {
+  const token = loadEnv("centraldark", "K:/", "")["GITHUB_TOKEN"];
+  if (token) process.env["GITHUB_TOKEN"] = token;
+}
 
 export default defineConfig({
   // Acesso privado ao Cockpit pelo Tailscale Serve. Host EXATO; nunca allowedHosts:true.
   // Admin continua exigindo login e permissões no backend.
   vite: {
     server: {
+      port: 8080,
+      strictPort: true,
       allowedHosts: ["windows-casa.tail6d7aa4.ts.net"],
     },
   },

@@ -2,10 +2,16 @@ import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
-const DEFAULT_API_BASE = "https://api.centralldark.com";
+// A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
+const DEFAULT_API_BASE = "http://127.0.0.1:8099";
+const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
 const REQUEST_TIMEOUT_MS = 8_000;
+
+function carregarEnvForja() {
+  if (typeof process.loadEnvFile !== "function") return;
+  try { process.loadEnvFile("K:\\.env"); } catch { /* K: indisponível mantém UNKNOWN */ }
+}
 
 export type Estado = "PASS" | "RUNNING" | "BLOCKED" | "AUTH_REQUIRED" | "UNKNOWN" | "FAIL";
 
@@ -28,6 +34,8 @@ export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
   desktop: Estado;
+  commanderEngine: boolean | null;
+  commanderHttp: number | null;
   repositorio: "ServerVpss/CentralDark";
   branch: "main";
   vpsSha: string | null;
@@ -79,6 +87,7 @@ export type EstadoCentralDark = {
   omniModelsHttp: number | null;
   receiptsHttp: number | null;
   casaSiteHttp: number | null;
+  casaSiteFonte: string;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
   screenpipeFonte: string;
@@ -100,6 +109,7 @@ export type EstadoCentralDark = {
 };
 
 function acessoGitHub() {
+  carregarEnvForja();
   const token = process.env["GITHUB_TOKEN"];
   if (token) {
     return {
@@ -113,18 +123,7 @@ function acessoGitHub() {
     };
   }
 
-  const lovable = process.env["LOVABLE_API_KEY"];
-  const github = process.env["GITHUB_API_KEY"];
-  if (!lovable || !github) return null;
-  return {
-    base: GATEWAY,
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${lovable}`,
-      "X-Connection-Api-Key": github,
-    },
-    fonte: "Conector GitHub",
-  };
+  return null;
 }
 
 export function apiBase() {
@@ -174,10 +173,19 @@ async function medirApi(path: string): Promise<Probe> {
     const status = texto(candidato["status"])?.toLowerCase();
     const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
     const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
+    // Fabric graph/receipts are truthful read-only projections; connectivity is
+    // measured but a file/receipt list must not be called executed or counterproven.
+    const projecaoNaoRevalidada = candidato["proof_state"] === "NOT_REVALIDATED"
+      && ["/api/live-fabric/status", "/api/live-fabric/graph", "/api/microdeploy/receipts/index.json"].includes(path);
+    const modelosCatalogados = path === "/api/omni/models"
+      && candidato["object"] === "list" && Array.isArray(candidato["data"]);
     return {
-      estado: falhou ? "FAIL" : saudavel ? "PASS" : "RUNNING",
+      estado: falhou ? "FAIL" : saudavel ? (projecaoNaoRevalidada ? "RUNNING" : "PASS")
+        : modelosCatalogados ? "RUNNING" : "UNKNOWN",
       httpStatus: resposta.status,
-      erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
+      erro: projecaoNaoRevalidada ? "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"
+        : modelosCatalogados ? "CATALOGO_MEDIDO_SEM_INVOCACAO_DE_MODELO"
+        : !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
   } catch (erro) {
@@ -465,6 +473,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
     const hostScreenpipe = origemLocalScreenpipe();
     const origemHttp = apiBase();
+    const casaSiteUrl = process.env["CENTRALDARK_CASA_SITE_URL"]?.trim() || DEFAULT_CASA_SITE_URL;
     const consultaEm = new Date().toISOString();
     const [
       github,
@@ -478,6 +487,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSite,
       screenpipe,
       screenpipeRemotoCasa,
+      commanderCasa,
       actions,
     ] = await Promise.all([
       medirGithub(),
@@ -488,12 +498,15 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
-      medirReachable("http://127.0.0.1:4175/", true),
+      medirReachable(casaSiteUrl, true),
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       hostScreenpipe === "VPS"
         ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
+        : Promise.resolve(SONDA_NAO_EXECUTADA),
+      hostScreenpipe === "CASA"
+        ? medirReachable("http://127.0.0.1:9101/health", true)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
     ]);
@@ -521,7 +534,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
-    const vpsSha = texto(gitLive?.["head"]);
+    // A leitura local do Omni Router mede a Casa; nunca publicar o SHA da Casa como VPS.
+    const vpsSha = hostScreenpipe === "VPS" ? texto(gitLive?.["head"]) : null;
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
@@ -531,7 +545,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
-      desktop: "UNKNOWN",
+      desktop: commanderCasa.dados?.["name"] === "CentralDark Casa Commander" && commanderCasa.dados?.["ok"] === true ? "RUNNING" : "UNKNOWN",
+      commanderEngine: typeof commanderCasa.dados?.["engine_connected"] === "boolean" ? commanderCasa.dados["engine_connected"] as boolean : null,
+      commanderHttp: commanderCasa.httpStatus,
       repositorio: "ServerVpss/CentralDark",
       branch: "main",
       vpsSha,
@@ -583,6 +599,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
+      casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeFonte: screenpipeCasaFonte,
@@ -600,7 +617,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
+      desktopFonte: hostScreenpipe === "CASA" ? "Casa · CentralDark Casa Commander · 127.0.0.1:9101/health" : "Casa Commander · sem medição neste host",
     };
 
     // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
@@ -634,7 +651,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
           host,
           ttl_seconds: 120,
         }));
-        await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        const { error } = await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        if (error) {
+          console.error("[radar-pulses] publicação falhou:", error.code ?? "UNKNOWN");
+        }
       } catch (e) {
         console.error("[radar-pulses] fire-and-forget falhou:", e);
       }

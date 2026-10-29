@@ -20,6 +20,19 @@
 | Deploy, esteira, GitHub e VPS | Esteira Motor + Intent Router | `workflow`, `VPS`, `CI` |
 | Integrar VS Code e observabilidade | VS Code Log Bridge | `vscode`, `log` |
 
+## Capacidades CentralDark disponíveis na Skill-Mãe
+
+| Intenção | Pasta integrada |
+|---|---|
+| Atualizar notas vivas | [centraldark-note-maintenance](skills-integradas/centraldark-note-maintenance/SKILL.md) |
+| Operar o Hermes, cron e conexões | [centraldark-hermes-operations](skills-integradas/centraldark-hermes-operations/SKILL.md) |
+| Reconciliar checklist diário | [reconciliacao-diaria-centraldark](skills-integradas/reconciliacao-diaria-centraldark/SKILL.md) |
+| Comparar prova, fonte e runtime | [centraldark-evidence-reconciliation](skills-integradas/centraldark-evidence-reconciliation/SKILL.md) |
+| Operar Casa, GitHub e VPS | [centraldark-ops](skills-integradas/centraldark-ops/SKILL.md) |
+| Consultar Oracle/Preview | [centraldark-oracle-surface](skills-integradas/centraldark-oracle-surface/SKILL.md) |
+
+**Todas as demais capacidades CentralDark** seguem na [lista de módulos](CATALOGO.md) e no [índice completo de arquivos](INDICE-VIVO.md). Quando houver `scripts/` ou `references/` de um módulo, estão dentro da pasta desse módulo. Evitar escolher por nome parecido sem ler a intenção.
+
 ## Busca textual própria (somente leitura)
 
 ```powershell
@@ -50,7 +63,7 @@ Troque `'kanban'` pela palavra da intenção. A busca cobre o conteúdo da skill
 <!-- AUTOCATALOGO:INICIO -->
 ## Índice vivo (gerado automaticamente)
 
-**Última verificação:** 2026-10-27 00:06:46 -03:00; 77 arquivos catalogados; 12 skills.
+**Última verificação:** 2026-10-28 21:57:30 -03:00; 96 arquivos catalogados; 18 skills.
 
 Consulte [INDICE-VIVO.md](INDICE-VIVO.md) para **criação, modificação e SHA de cada arquivo**, e [VALIDACAO-AUTOMATICA.md](VALIDACAO-AUTOMATICA.md) para alertas.
 <!-- AUTOCATALOGO:FIM -->

@@ -26,6 +26,8 @@ Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 $Casa = '100.123.93.25'
 $Vps  = '100.90.199.124'
+# Sensor-only é modo do MESMO coletor (sem segundo HUD), read-only, sem varredura remota.
+$script:SensorOnly = $env:CENTRALDARK_SENSOR_ONLY -eq '1'
 $script:LogRoot = Join-Path $env:LOCALAPPDATA 'CentralDark'
 $script:LogFile = Join-Path $script:LogRoot 'Corpo-Unico-HUD-Logs.txt'
 # Reaproveita os scripts existentes: fonte != execucao; NUNCA le tailscale.env.
@@ -252,8 +254,11 @@ function Refresh-Scripts {
 }
 # AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
-$script:ABHudFile = 'K:\HUD.html'
-$script:ABFeedFile = Join-Path (Split-Path -Parent $script:ABHudFile) 'CENTRALDARK-AFTERBURNER-LIVE.js'
+# #OBSERVACOES# @owner=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:28:17.879Z
+# Motivo: o HUD canônico reside em docs/HUD; K:/HUD.html legado não existe. O feed é dado efêmero, jamais commitado.
+$script:ABHudFile = 'K:\docs\HUD\HUD.html'
+# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked HUD. Cockpit consumes via authorized reader only.
+$script:ABFeedFile = Join-Path $script:LogRoot 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'
 $script:ABLastLog = [datetime]::MinValue
 function Poll-Afterburner {
@@ -695,11 +700,19 @@ $script:BtnVerify.Add_Click({
 $timer=New-Object Windows.Forms.Timer
 $timer.Interval=10000
 $timer.Add_Tick({
+  if($script:SensorOnly){try{Poll-Afterburner}catch{};return}
   if($script:Loading){return}
   $script:Loading=$true
   try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts;Poll-AccountProbe}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
 })
 $form.Add_Shown({
+  if($script:SensorOnly) {
+    $form.Hide()
+    Add-Log 'RUNTIME' 'INFO' 'SENSOR_ONLY: MMF Afterburner local; sem GUI, SSH, Screenpipe ou servico novo'
+    try{Poll-Afterburner}catch{Add-Log 'RUNTIME' 'UNKNOWN' $_.Exception.Message}
+    $timer.Start()
+    return
+  }
   try{$split.SplitterDistance=[int][Math]::Max(340,$split.Height*0.52)}catch{}
   Add-Log 'RUNTIME' 'INFO' 'Terminal incorporado nos logs deste HUD; processo PowerShell oculto; nenhum painel/bridge paralelo.'
   try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}

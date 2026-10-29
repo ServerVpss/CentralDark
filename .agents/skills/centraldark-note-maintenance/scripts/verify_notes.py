@@ -54,48 +54,48 @@ def verify_note(note_file: Path, group: str) -> dict:
     """Verify a single note, return status dict"""
     content = note_file.read_text(encoding='utf-8')
     fm, body = parse_frontmatter(content)
-    
+
     errors = []
     warnings = []
-    
+
     # Check all 10 required properties
     for prop in REQUIRED_PROPS:
         if prop not in fm:
             errors.append(f"MISSING_PROP: {prop}")
-    
+
     # Validate hash_conteudo
     if 'hash_conteudo' in fm:
         expected_hash = compute_hash(body)
         if fm['hash_conteudo'] != expected_hash:
             errors.append(f"HASH_MISMATCH: stored={fm['hash_conteudo'][:12]}... computed={expected_hash[:12]}...")
-    
+
     # Validate grupo_notas matches actual group
     if fm.get('grupo_notas') != group:
         errors.append(f"GRUPO_MISMATCH: frontmatter={fm.get('grupo_notas')} actual={group}")
-    
+
     # Validate grupo_notas is valid
     if fm.get('grupo_notas') not in VALID_GROUPS:
         errors.append(f"INVALID_GROUP: {fm.get('grupo_notas')}")
-    
+
     # Validate estado_evidencia
     if fm.get('estado_evidencia') not in VALID_ESTADO_EVIDENCIA:
         errors.append(f"INVALID_ESTADO_EVIDENCIA: {fm.get('estado_evidencia')}")
-    
+
     # Validate rastro is list
     if 'rastro' in fm and not isinstance(fm['rastro'], list):
         errors.append("RASTRO_NOT_LIST")
-    
+
     # Validate relacionado_a is list
     if 'relacionado_a' in fm and not isinstance(fm['relacionado_a'], list):
         errors.append("RELACIONADO_A_NOT_LIST")
-    
+
     # Validate data_criacao format
     if 'data_criacao' in fm:
         try:
             datetime.strptime(fm['data_criacao'], '%Y-%m-%d')
         except:
             warnings.append(f"INVALID_DATA_CRIACAO_FORMAT: {fm['data_criacao']}")
-    
+
     # Validate timestamps are ISO format
     for ts_prop in ['ultima_atualizacao', 'ultima_modificacao', 'ultima_verificacao']:
         if ts_prop in fm:
@@ -103,7 +103,7 @@ def verify_note(note_file: Path, group: str) -> dict:
                 datetime.fromisoformat(fm[ts_prop].replace('Z', '+00:00'))
             except:
                 warnings.append(f"INVALID_{ts_prop.upper()}_FORMAT: {fm[ts_prop]}")
-    
+
     return {
         'file': note_file.name,
         'group': group,
@@ -123,9 +123,9 @@ def main():
     parser.add_argument('--group', help='Verify specific group')
     parser.add_argument('--file', help='Verify specific file')
     args = parser.parse_args()
-    
+
     results = []
-    
+
     if args.file:
         for group in GROUPS:
             fpath = NOTES_ROOT / group / args.file
@@ -150,19 +150,19 @@ def main():
                 for note_file in group_path.glob("*.md"):
                     if note_file.name not in ['LEMBRANCAS.md', 'README.md', 'lembrancas-202606.md']:
                         results.append(verify_note(note_file, group))
-    
+
     # Summary
     total = len(results)
     valid = sum(1 for r in results if r['valid'])
     invalid = total - valid
     total_props_missing = sum(r['props_required'] - r['props_present'] for r in results)
-    
+
     print(f"\n=== VERIFICATION SUMMARY ===")
     print(f"Total notes: {total}")
     print(f"Valid (all 10 props + valid hash): {valid}")
     print(f"Invalid: {invalid}")
     print(f"Total missing properties: {total_props_missing}")
-    
+
     if invalid > 0:
         print(f"\n--- INVALID NOTES ---")
         for r in results:
@@ -172,7 +172,7 @@ def main():
                     print(f"    ERROR: {e}")
                 for w in r['warnings']:
                     print(f"    WARN: {w}")
-    
+
     # Exit code for CI/automation
     if invalid > 0 or total_props_missing > 0:
         print(f"\nFAIL: ZERO_NOTES_MISSING_PROPS condition not met")
