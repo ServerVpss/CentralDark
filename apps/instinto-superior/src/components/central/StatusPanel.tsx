@@ -241,6 +241,21 @@ export function StatusPanel() {
                 ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
+              {m.nome === "Screenpipe" ? (
+                <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Screenpipe: capturas recentes e monitores">
+                  <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>
+                  <ul className="mt-2 space-y-1 font-mono text-[11px]" aria-live="polite">
+                    {(fresco ? d?.screenpipeEvents ?? [] : []).filter((linha) =>
+                      /^(CAPTURA VISUAL|ÚLTIMO FRAME|MONITORES DETECTADOS|FRAMES NO HISTÓRICO ATUAL|FREQUÊNCIA MEDIDA):/.test(linha)
+                    ).map((linha) => <li key={linha} className="break-words">{linha}</li>)}
+                    {!fresco && <li>UNKNOWN · consulta expirada, sem comprovação de captura atual</li>}
+                  </ul>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Histórico e imagens: Screenpipe Desktop → Timeline. A gravação permanece local na Casa;
+                    este card consulta só os metadados de /health e não publica capturas privadas.
+                  </p>
+                </div>
+              ) : null}
               <div className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Saída do sensor ${m.nome}`}>
                 <p className="font-mono text-[10px] tracking-wide text-neon-green">SAÍDA DO SENSOR · <DataHora iso={medidoEm} /></p>
                 <ul className="mt-2 max-h-40 space-y-1 overflow-auto font-mono text-[10px] text-foreground/90">
