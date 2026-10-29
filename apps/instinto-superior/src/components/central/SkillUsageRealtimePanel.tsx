@@ -84,6 +84,7 @@ export function SkillUsageRealtimePanel() {
   const summary = summarizeSkillUsage(query.data?.rows ?? []);
   const live = authorized && channelStatus === "SUBSCRIBED";
   const total = summary.records.reduce((acc, skill) => acc + skill.executions, 0);
+  const activations = summary.records.reduce((acc, skill) => acc + skill.activations, 0);
   const state = query.isError
     ? "SOURCE_ERROR"
     : !authorized
@@ -102,7 +103,7 @@ export function SkillUsageRealtimePanel() {
         <div>
           <h6 className="font-semibold">📊 Uso real de skills · Supabase Realtime</h6>
           <p className="mt-1 text-xs text-muted-foreground">
-            Owner: agent_events · somente invocações com receipt_id e verified=true.
+            Fonte: agent_events · ativações nativas separadas de execuções com recibo.
           </p>
         </div>
         <span role="status" className="font-mono text-xs">
@@ -111,8 +112,12 @@ export function SkillUsageRealtimePanel() {
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-3 text-xs">
         <span>
-          Invocações com recibo:{" "}
+          Execuções com recibo:{" "}
           <strong>{authorized && !query.isError ? total : "NÃO MEDIDO"}</strong>
+        </span>
+        <span>
+          Ativações nativas:{" "}
+          <strong>{authorized && !query.isError ? activations : "NÃO MEDIDO"}</strong>
         </span>
         <span>
           Skills observadas:{" "}
@@ -139,7 +144,7 @@ export function SkillUsageRealtimePanel() {
       )}
       {authorized && !query.isError && summary.records.length === 0 && (
         <p className="mt-2 text-xs">
-          Nenhuma invocação real de skill registrada nesta fonte. Catálogo e carregamento não contam
+          Nenhuma ativação nativa ou execução com recibo registrada nesta fonte. Catálogo não conta
           como uso.
         </p>
       )}
@@ -152,7 +157,10 @@ export function SkillUsageRealtimePanel() {
                   Skill
                 </th>
                 <th scope="col" className="p-2">
-                  Usos
+                  Ativações
+                </th>
+                <th scope="col" className="p-2">
+                  Execuções
                 </th>
                 <th scope="col" className="p-2">
                   PASS
@@ -172,6 +180,7 @@ export function SkillUsageRealtimePanel() {
               {summary.records.map((row) => (
                 <tr key={row.skill} className="border-b border-border/50">
                   <td className="p-2 font-mono">{row.skill}</td>
+                  <td className="p-2">{row.activations}</td>
                   <td className="p-2">{row.executions}</td>
                   <td className="p-2">{row.pass}</td>
                   <td className="p-2">{row.fail}</td>

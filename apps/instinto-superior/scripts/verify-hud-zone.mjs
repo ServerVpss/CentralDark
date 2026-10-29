@@ -145,7 +145,7 @@ test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => 
   assert.match(infra, /export function GavetaForja\s*\(/);
   assert.ok(infra.includes('TabsTrigger value="gavetas"'));
   assert.ok(infra.includes("GavetaForja />"));
-  assert.ok(zone.includes("<GavetaForja mainShaAtual={estado?.mainSha} />"));
+  assert.ok(zone.includes("<GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />"));
   assert.ok(infra.includes("MAIN_SYNCED ≠ RUNTIME_LOADED"));
   assert.ok(infra.includes("MAIN_AVANCOU"));
   assert.ok(infra.includes("CURRENT_MAIN_SHA_UNKNOWN_NESTA_ABA"));
@@ -377,7 +377,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
 
   // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
   assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
-  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.match(design, /autenticado \? \(\r?\n\s*<TabsContent value="extensoes"/);
   assert.ok(cockpit.includes('autenticado={autenticado}'));
   assert.ok(extension.includes("terminal.show(false)"));
   const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),

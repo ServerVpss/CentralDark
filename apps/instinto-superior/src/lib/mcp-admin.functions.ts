@@ -72,23 +72,23 @@ export const lerEstadoMcpIntegrado = createServerFn({ method: "GET" })
     if (!papel) throw new Response("FORBIDDEN", { status: 403 });
 
     const [health, catalogo] = await Promise.all([lerPublico("/health"), lerPublico("/tools.json")]);
-    const healthOk = health.dados?.ok === true && health.http === 200;
-    const toolsRaw = catalogo.dados?.tools;
+    const healthOk = health.dados?.['ok'] === true && health.http === 200;
+    const toolsRaw = catalogo.dados?.['tools'];
     const ferramentas = Array.isArray(toolsRaw)
-      ? toolsRaw.filter(objeto).filter((tool) => typeof tool.name === "string" && tool.name.length > 0)
+      ? toolsRaw.filter(objeto).filter((tool) => typeof tool['name'] === "string" && tool['name'].length > 0)
         .slice(0, 400).map((tool) => ({
-          name: String(tool.name).slice(0, 120),
-          title: texto(tool.title),
-          description: texto(tool.description) ?? "",
-          readOnly: tool.readOnly === true,
-          destructive: tool.destructive === true,
+          name: String(tool['name']).slice(0, 120),
+          title: texto(tool['title']),
+          description: texto(tool['description']) ?? "",
+          readOnly: tool['readOnly'] === true,
+          destructive: tool['destructive'] === true,
         }))
       : [];
-    const total = typeof catalogo.dados?.toolCount === "number"
-      && Number.isSafeInteger(catalogo.dados.toolCount)
-      ? catalogo.dados.toolCount : null;
-    const versaoHealth = texto(health.dados?.catalogVersion);
-    const versaoCatalogo = texto(catalogo.dados?.catalogVersion);
+    const total = typeof catalogo.dados?.['toolCount'] === "number"
+      && Number.isSafeInteger(catalogo.dados['toolCount'])
+      ? catalogo.dados['toolCount'] : null;
+    const versaoHealth = texto(health.dados?.['catalogVersion']);
+    const versaoCatalogo = texto(catalogo.dados?.['catalogVersion']);
     const catalogoIntegro = catalogo.http === 200 && Array.isArray(toolsRaw) && total !== null
       && total === toolsRaw.length && ferramentas.length === toolsRaw.length && versaoHealth !== null
       && versaoHealth === versaoCatalogo;
@@ -104,7 +104,7 @@ export const lerEstadoMcpIntegrado = createServerFn({ method: "GET" })
       medidoEm: new Date().toISOString(),
       healthHttp: health.http,
       catalogoHttp: catalogo.http,
-      service: texto(health.dados?.service),
+      service: texto(health.dados?.['service']),
       catalogVersion: versaoCatalogo ?? versaoHealth,
       declaradas: total,
       ferramentas,
