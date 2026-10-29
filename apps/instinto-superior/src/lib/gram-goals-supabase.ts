@@ -100,7 +100,7 @@ export async function listarGOALsRecentes(): Promise<GOALObject[]> {
         mensagem: row.resultado_msg,
         timestamp: row.completada_em,
       } : undefined,
-    }));
+    })) as GOALObject[];
   } catch (e) {
     console.error("Erro ao listar GOALs:", e);
     return [];

@@ -380,6 +380,18 @@ reproduce the failing step on a **detached worktree of that exact HEAD** (`git w
 Pitfall — queued autonomia while the only online self-hosted runner is `busy` is WAIT, not FAIL:
 do not treat a pending juiz job as a code blocker. Check both runners (`online+busy` vs `offline`) before inventing a second promoter or a VPS restart.
 
+## RSI Round 13 Receipt (2026-10-29)
+
+ROUND: 13/20
+CAUSE: TS2322 in gram-goals-supabase.ts (any[] to GOALObject[]).
+FIX: Cast map result to GOALObject[].
+ERRORS_FIXED: 1 (total TS 4->3).
+VERIFY: npx tsc --noEmit (exit 0, 3 errors); npm run build (exit 0, PASS).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 17 files modified
+RECEIPT_ID: RSI_R13_20261029_GRAM_GOALS_CAST
+STATE: PASS (3 complex errors remain)
+
 ## RSI Round 12 Receipt (2026-10-29)
 
 ROUND: 12/20
