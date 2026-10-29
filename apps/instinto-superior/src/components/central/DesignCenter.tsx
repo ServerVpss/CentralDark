@@ -519,8 +519,8 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore · fonte 0.1.4 no PR #1842
-                        centraldark.centraldark-vscode-restore · fonte 0.1.3
+                        centraldark.centraldark-vscode-restore · fonte 0.2.1 (manifesto local)
+                        Histórico: fonte 0.1.4 no PR #1842; 0.1.3 anterior
                       </p>
                     </div>
                   </div>
@@ -566,7 +566,7 @@ export function DesignCenter({
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
                     <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
-                      Versão 0.1.4 · PR / atualizar <ExternalLink />
+                      Histórico 0.1.4 · PR #1842 <ExternalLink />
                     </a>
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
