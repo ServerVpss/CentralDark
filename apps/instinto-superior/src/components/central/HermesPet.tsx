@@ -359,7 +359,7 @@ export function PainelHermes({ compacto = false }: { compacto?: boolean }) {
                apenasPose={Math.min(controle.movimento, POSES.length - 1)}
                reproduzindo={controle.reproduzindo}
                quadroForcado={controle.quadro}
-               {...{(controle.visual === "ego" ? { rotulo: t("pet.ego") } : {})}}
+               {...(controle.visual === "ego" ? { rotulo: t("pet.ego") } : {})}
              />
           ) : null}
         </div>
@@ -786,7 +786,7 @@ export function HermesFlutuante() {
               apenasPose={Math.min(movimentoFlutuante, POSES.length - 1)}
               quadroForcado={controle.quadro}
               reproduzindo={controle.reproduzindo}
-              {...{(controle.visual === "ego" ? { rotulo: t("pet.ego") } : {})}}
+              {...(controle.visual === "ego" ? { rotulo: t("pet.ego") } : {})}
             />
           ) : null}
         </div>
