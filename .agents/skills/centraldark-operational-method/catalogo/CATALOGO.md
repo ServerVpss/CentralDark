@@ -85,7 +85,7 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-29 11:48:31 -03:00. **Arquivos:** 98. **Skills:** 18.
+**Última sincronização (Casa):** 2026-10-29 12:21:30 -03:00. **Arquivos:** 98. **Skills:** 18.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
@@ -93,7 +93,7 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 |---|---|---|---|
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:22:45-03:00 | 4d00d4976189 |
-| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:23:02-03:00 | 628473969c7c |
+| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-29T12:18:58-03:00 | 2026-10-29T12:18:58-03:00 | 6a5523d34828 |
 | `catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
 | `catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
 | `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-29T09:31:40-03:00 | eb1700fedac4 |
@@ -108,7 +108,7 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 | `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
 | `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
 | `catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
-| `SKILL.md` | 2026-10-29T09:51:30-03:00 | 2026-10-29T11:46:52-03:00 | 441682219481 |
+| `SKILL.md` | 2026-10-29T12:19:46-03:00 | 2026-10-29T12:19:47-03:00 | 206c9c744bc9 |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)

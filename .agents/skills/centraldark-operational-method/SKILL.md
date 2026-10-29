@@ -2556,6 +2556,12 @@ Esta seção registra o delta de absorção de skills locais (`K:\skills\`) na b
 - Proveniência preservada: skill local permanece em `K:\skills\screenpipe-hermes-integration\` como registro histórico; não deletado, não promovido a owner separado
 - Regra aplicada: ZERO_BLIND_COPY=true; SAME_NAME != SAME_ENTITY; delta checado antes de absorver
 
+### Delta materializado da captura Hermes Desktop → Capability HUD (status: ABSORVIDO)
+- Capacidades únicas absorvidas sem criar owner paralelo: `CAP_SCREEN_CONTEXT_CAPTURE`, `CAP_SCREENSHOTS_TIMELINE`, `CAP_ALL_MONITORS`, `CAP_CAPTURE_FREQUENCY_1S`, `CAP_MATERIALIZE_DESKTOP_CAPTURE`, `CAP_SCREENPIPE_LOCAL_API_3030`, `CAP_COCKPIT_READBACK`, `CAP_SUPABASE_REALTIME_COCKPIT`.
+- Rota canônica: Hermes Desktop autenticado → `computer_use.capture(app=screen)` → captura materializada/readback; Screenpipe `127.0.0.1:3030` → health/inventário/freshness; Cockpit → owner Supabase Realtime existente → readback Hermes.
+- Estados preservados: `CONFIGURED != ACTIVE != FRESH != SUPABASE_REALTIME_PROVEN`; HTTP 200 em `3030` é somente alcance.
+- Owner de catálogo: `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md`; não duplicar em outra skill.
+
 ### `fable-loop` → `fable-loop` canônico (status: NÃO_ABSORVIDO — deixar local)
 - Classe: DUPLICATE_DIVERGED (same name + same archetype, conteúdo paralelo não-overlapping: local = contract de autoload SKILL.md coreano/inglês; canônico = método centraldark de calibração contínua PT-BR, experimental, READ_ONLY)
 - Decisão: NÃO fundir. Manter ambos. Canônico mantém owner SEGREDO/CHEFE e status experimental-read-only. Local permanece em `K:\skills\fable-loop\` como referência de autoload alternativo. Documentar divergência, não criar espaço paralelo.
