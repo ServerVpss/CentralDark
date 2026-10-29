@@ -380,6 +380,20 @@ reproduce the failing step on a **detached worktree of that exact HEAD** (`git w
 Pitfall — queued autonomia while the only online self-hosted runner is `busy` is WAIT, not FAIL:
 do not treat a pending juiz job as a code blocker. Check both runners (`online+busy` vs `offline`) before inventing a second promoter or a VPS restart.
 
+## RSI Round 1 Receipt (2026-10-29)
+
+ROUND: 1/20
+CAUSE: TS4111 errors from dot-notation access on Record<string,unknown> (index signature).
+FIX: Changed obj.prop to obj['prop'] (bracket notation).
+FILE: apps/instinto-superior/src/components/central/FeedVivoCentralDark.tsx
+ERRORS_FIXED: 14 (TS4111 56->42; total TS 138->124).
+VERIFY: npx tsc --noEmit (exit 0, 124 errors, 42 TS4111); npm run build (exit 0, PASS).
+REPLAY: Apply same bracket-notation fix to remaining 42 TS4111 errors in other files (mcp-admin.functions.ts, admin.functions.ts, SshBridgeProof.ts, PerfisCognitivos.tsx, McpConsoleCentralDark.tsx, supabase/client.ts).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 1 file modified (FeedVivoCentralDark.tsx)
+RECEIPT_ID: RSI_R1_20261029_TS4111_BRACKET
+STATE: PASS (measurable improvement, no regression)
+
 ## Output shape CHEFE expects
 
 When CHEFE asks SIM/NAO or "1 linha", answer that first in one line, then the block. No tutorial, no micro-step menu, no standing-goal HTML replay.
