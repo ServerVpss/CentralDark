@@ -8,6 +8,37 @@
   "centraldark_mcp_auth": "oauth2_pkce_admin_password_or_persisted_bearer",
   "remote_mcp": "https://mcp.desktopcommander.app/mcp",
   "legacy_remote_enabled_by_default": false,
+  "local_first": {
+    "enabled": true,
+    "control_owner": "CASA_SEGREDO",
+    "code_owner": "ServerVpss/CentralDark",
+    "one_system_only": true,
+    "read_only_diagnostics": true,
+    "remote_execution_enabled": false,
+    "route_priority": ["LAN", "RADMIN_PRIVATE_OVERLAY", "TAILSCALE", "SSH_FALLBACK_EXISTING"],
+    "notebook": {
+      "device_label": "NOTEBOOK-AGENTES-FULL-ADMIN",
+      "lan_ipv4_env": "CENTRALDARK_NOTEBOOK_LAN_IP",
+      "lan_ipv4_observed": "192.168.100.2",
+      "lan_ipv4_observed_at": "2026-10-26",
+      "lan_ipv4_source": "NOTEBOOK_GET_NETIPCONFIGURATION_AND_PING_TO_CASA",
+      "radmin_ipv4_observed": "26.251.127.144",
+      "tailscale_ipv4_observed": "100.102.99.102",
+      "identity_verified": false,
+      "human_note": "IP LAN 192.168.100.2 medido no notebook; notebook->Casa ping PASS; Casa->notebook na LAN sem resposta (ping e TCP 5985 timeout). O endereco nao prova login nem que o serviço esteja acessivel. Radmin e fallback TCP, nunca execucao automatica."
+    },
+    "linux_forja": {
+      "owner": "KINGSTON_PHYSICAL_DISK",
+      "modes": ["BOOT_NATIVO", "VMWARE_RAW_DISK_COM_ACESSO_EXCLUSIVO"],
+      "installation_status": "PENDENTE",
+      "hermes_cli_status": "PENDENTE_POS_OPENKYLIN"
+    },
+    "vps": {
+      "role": "RUNTIME_24_7_MESMO_CODIGO",
+      "deploy_mechanism": "GIT_CI_RECEIPT_REUSO",
+      "ssh_fallback_script": "scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1"
+    }
+  },
   "github_default": "ServerVpss/CentralDark",
   "github_auth_mode": "gh-keyring-local",
   "github_auth_note": "Medir gh auth status na propria VPS/Casa e reutilizar gh/keyring; nao copiar refresh token para .env, log ou arquivo.",

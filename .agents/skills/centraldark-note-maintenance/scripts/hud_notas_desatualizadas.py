@@ -53,32 +53,32 @@ def check_note(note_file: Path, group: str) -> bool:
     """Return True if note is OUTDATED (missing props or invalid hash)"""
     content = note_file.read_text(encoding='utf-8')
     fm, body = parse_frontmatter(content)
-    
+
     # Check all 10 required properties
     for prop in REQUIRED_PROPS:
         if prop not in fm:
             return True
-    
+
     # Check hash
     if 'hash_conteudo' in fm:
         expected_hash = compute_hash(body)
         if fm['hash_conteudo'] != expected_hash:
             return True
-    
+
     # Check grupo_notas
     if fm.get('grupo_notas') != group:
         return True
-    
+
     # Check estado_evidencia valid
     if fm.get('estado_evidencia') not in VALID_ESTADO_EVIDENCIA:
         return True
-    
+
     return False
 
 def main():
     outdated = []
     total = 0
-    
+
     for group in GROUPS:
         group_path = NOTES_ROOT / group
         if group_path.exists():
@@ -87,9 +87,9 @@ def main():
                     total += 1
                     if check_note(note_file, group):
                         outdated.append(f"{group}/{note_file.name}")
-    
+
     count = len(outdated)
-    
+
     # Output for HUD consumption (JSON)
     import json
     result = {
@@ -101,7 +101,7 @@ def main():
         "timestamp": __import__('datetime').datetime.now().isoformat(),
         "outdated_notes": outdated
     }
-    
+
     print(json.dumps(result, ensure_ascii=False))
     return 0 if count == 0 else 1
 

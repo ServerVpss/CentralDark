@@ -1,4 +1,4 @@
-// Plugin CentralDark Grafo Vivo — ponto de entrada.
+// CentralDark Plugin — ponto de entrada único; Grafo Vivo permanece módulo existente.
 // Registra views, comandos, Hub de conhecimento e autoatualizador.
 
 import { Notice, Platform, Plugin, TFile, WorkspaceLeaf } from "obsidian";
