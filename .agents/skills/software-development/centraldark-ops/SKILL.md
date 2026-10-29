@@ -380,6 +380,21 @@ reproduce the failing step on a **detached worktree of that exact HEAD** (`git w
 Pitfall — queued autonomia while the only online self-hosted runner is `busy` is WAIT, not FAIL:
 do not treat a pending juiz job as a code blocker. Check both runners (`online+busy` vs `offline`) before inventing a second promoter or a VPS restart.
 
+## RSI Round 2 Receipt (2026-10-29)
+
+ROUND: 2/20
+CAUSE: TS4111 errors in mcp-admin.functions.ts (15 errors, same index-signature root cause as Round 1).
+FIX: Reused Round 1 recipe — changed obj.prop to obj['prop'] (bracket notation). No rediscovery needed.
+FILE: apps/instinto-superior/src/lib/mcp-admin.functions.ts
+ERRORS_FIXED: 15 (TS4111 42->20; total TS 124->102).
+VERIFY: npx tsc --noEmit (exit 0, 102 errors, 20 TS4111); npm run build (exit 0, PASS).
+REPLAY: Apply same bracket-notation fix to remaining 20 TS4111 errors in PerfisCognitivos.tsx (9), SshBridgeProof.ts (8), supabase/client.ts (2), McpConsoleCentralDark.tsx (1).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 2 files modified (FeedVivoCentralDark.tsx, mcp-admin.functions.ts)
+RECEIPT_ID: RSI_R2_20261029_TS4111_REPLAY
+STATE: PASS (recipe reused without rediscovery; measurable improvement, no regression)
+TRANSFER_PROVEN: true (Round 1 recipe applied to new file with same result pattern)
+
 ## RSI Round 1 Receipt (2026-10-29)
 
 ROUND: 1/20

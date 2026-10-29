@@ -59,14 +59,14 @@ function importarPerfil(nomeArquivo: string, txt: string): Perfil {
     if (!obj || typeof obj !== "object" || Array.isArray(obj))
       throw Error("JSON deve ser um objeto.");
     const d = obj as Record<string, unknown>;
-    nome = typeof d.name === "string" ? d.name : nome;
-    const kind = d.kind ?? d.type ?? d.role;
+    nome = typeof d['name'] === "string" ? d['name'] : nome;
+    const kind = d['kind'] ?? d['type'] ?? d['role'];
     if (typeof kind === "string" && TIPOS.includes(kind as Papel)) papel = kind as Papel;
     conteudo =
-      typeof d.instructions === "string"
-        ? d.instructions
-        : typeof d.content === "string"
-          ? d.content
+      typeof d['instructions'] === "string"
+        ? d['instructions']
+        : typeof d['content'] === "string"
+          ? d['content']
           : "";
   } else {
     const front = txt.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
