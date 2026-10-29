@@ -363,6 +363,24 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("maquina de estados distingue rota disponível de execução comprovada sem falso verde", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.ok(painel.includes("function LuzProjecao("));
+  assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
+  assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
+  assert.ok(painel.includes("ROTA DISPONÍVEL"));
+  assert.ok(painel.includes("EXECUÇÃO NÃO REVALIDADA"));
+  assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
+  assert.ok(painel.includes("PONTE CONECTADA"));
+  assert.ok(painel.includes("AÇÃO AUTENTICADA NÃO TESTADA"));
+  assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
+  assert.ok(painel.includes("SAÚDE DEGRADADA"));
+  assert.ok(painel.includes("sem prova completa"));
+  assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));
+});
+
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
   const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");

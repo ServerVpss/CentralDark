@@ -99,7 +99,9 @@ export function StatusPanel() {
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, d?.casaSite ?? unknown, d?.casaSiteErro), icon: House },
     { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: comMotivo(d?.mainSha?.slice(0, 12) ?? "SHA não medido", d?.github ?? unknown, d?.fonte), icon: Github },
-    { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
+    { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: d?.vpsSha
+      ? `SHA ${d.vpsSha.slice(0, 12)} · sem prova de deploy/serviço`
+      : "SHA remoto não medido · requer readback da VPS", icon: Server },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiHealthHttp ?? "?"} · /health`, d?.apiHealth ?? unknown, d?.apiHealthErro), icon: Activity },
     { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
     { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
@@ -182,7 +184,17 @@ export function StatusPanel() {
           return (
             <article key={s.nome} className="rounded-lg border border-border bg-background/40 p-3">
               <div className="flex items-center gap-2"><Icon className="size-4 text-muted-foreground" /><strong className="text-xs">{s.nome}</strong></div>
-              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} fresco={fresco} /></div>
+              <div className="mt-3">
+                {s.nome === "Grafo Vivo" || s.nome === "Receipts" ? (
+                  <LuzProjecao
+                    estado={s.estado}
+                    nome={s.nome}
+                    fresco={fresco}
+                    http={s.nome === "Grafo Vivo" ? d?.grafoHttp : d?.receiptsHttp}
+                    erro={s.nome === "Grafo Vivo" ? d?.grafoErro : d?.receiptsErro}
+                  />
+                ) : <LuzViva estado={s.estado} nome={s.nome} fresco={fresco} />}
+              </div>
               <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">{s.detalhe}</p>
             </article>
           );
@@ -190,7 +202,7 @@ export function StatusPanel() {
       </div>
       <details className="rounded-md border border-border p-3 text-xs">
         <summary className="cursor-pointer font-medium">
-          🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem PASS atual
+          🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem prova completa
         </summary>
         <p className="mt-2 text-muted-foreground">
           Alertas deste painel usam o mesmo sensor da Casa/VPS. Histórico persistente usa a Central de Notificações (Supabase);
@@ -213,7 +225,20 @@ export function StatusPanel() {
             <article key={m.nome} className="rounded-xl border border-border bg-background/60 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2"><Icon className="size-6 text-neon-blue" /><div><h4 className="font-semibold">{m.nome}</h4><p className="text-[11px] text-muted-foreground">{m.subtitulo}</p></div></div>
-                <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />
+                {m.nome === "CentralDark Commander" && fresco && d?.commanderHttp === 200 && d?.commanderEngine === true && remote === "RUNNING" ? (
+                  <div className="space-y-1" aria-label="Commander: ponte conectada; execução autenticada não comprovada">
+                    <span className="inline-flex items-center gap-2">
+                      <span className={`size-3 shrink-0 rounded-full ${CORES.verde}`} aria-hidden="true" />
+                      <span className="font-mono text-[10px]">PONTE CONECTADA</span>
+                    </span>
+                    <p className="font-mono text-[10px] text-amber-400">● AÇÃO AUTENTICADA NÃO TESTADA</p>
+                  </div>
+                ) : m.nome === "Screenpipe" && fresco && d?.screenpipeDetail === "degraded" && m.estado === "RUNNING" ? (
+                  <span className="inline-flex items-center gap-2" aria-label="Screenpipe: saúde degradada">
+                    <span className={`size-3 shrink-0 rounded-full ${CORES.amarela}`} aria-hidden="true" />
+                    <span className="font-mono text-[10px]">SAÚDE DEGRADADA</span>
+                  </span>
+                ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
               <div className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Saída do sensor ${m.nome}`}>
