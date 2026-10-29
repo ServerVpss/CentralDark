@@ -1182,6 +1182,54 @@ Official upstream references (source links, not runtime proof):
 
 `DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
 
+## Dual-surface overlay contract — `DUAL_SURFACE_MAPPING_SEQUENCE_V1`
+
+When the CHEFE requests mapping overlays in two open conversations/surfaces, reuse the existing Hermes Desktop Preview and execute one controlled correlated round. Do not open a new chat, browser, bridge, writer or scheduler.
+
+```text
+ROUND_ID + LOOP_ID + INTENT_ID
+→ DISCOVER_EXISTING_SURFACES
+→ FRESH desktop_preview/read + drive_preview/elements (A)
+→ RECORD overlay/identity/refs A
+→ FRESH desktop_preview/read + drive_preview/elements (B)
+→ RECORD overlay/identity/refs B
+→ ONLY_IF_EACH_IDENTITY_MATCHES: interact with fresh ref
+→ READBACK A and B independently
+→ RECONCILE origin, action, response and receipt
+```
+
+“Em paralelo” is a logical same-round guarantee. Unless the runtime exposes safe concurrent bindings, use `EXECUTION_ORDER=A→B`, `PARALLEL_EXECUTION=UNAVAILABLE`, and do not imply simultaneous clicks. The pink/colored lines from `drive_preview` are a mapping overlay only: `OVERLAY_OBSERVED` does not mean `ACTION_EXECUTED` or `EFFECT_PROVEN`.
+
+A surface record must include:
+
+```yaml
+surface_id:
+url_or_document_identity:
+title_observed:
+active_tab_id:
+focus_consistency: PASS|UNKNOWN
+snapshot_ref:
+element_refs_fresh: true|false
+overlay_observed: PASS|UNKNOWN
+composer_state: EMPTY|DRAFT|BUSY|UNKNOWN
+action: PASS|UNKNOWN|BLOCKED
+readback: PASS|UNKNOWN|BLOCKED
+origin_declared: HERMES|SOL|HUMAN|UNKNOWN
+origin_authenticated: PASS|UNKNOWN
+receipt_ref: ID|UNKNOWN
+```
+
+`ACTOR=HERMES` in a ChatGPT message is `ORIGIN_DECLARED`, not independent authentication. Promote `origin_authenticated=PASS` only when the same target has a correlated owner-side terminal/UIA receipt and independent readback. If `active_tab_id` conflicts with URL/title/document, set `focus_consistency=UNKNOWN`, stop interaction, remap/reacquire the target, and preserve `UNKNOWN`; never use a stale ref. Final output must keep the CHEFE's explicit states when unproven:
+
+```text
+COCKPIT_SYNC_ACIONADO=UNKNOWN
+READBACK=UNKNOWN
+RESULTADO_DO_SYNC=UNKNOWN
+CICLO_BILATERAL_COMPLETO=UNKNOWN
+```
+
+The controlled sequence is considered complete only when both surfaces have fresh mapping evidence and independent readback; a ChatGPT acknowledgement alone is not completion.
+
 ## Canonical master phases, complete learning lineage and approved crystals (CHEFE · 2026-10-08)
 
 This is an **inheritance and retrieval binding within this existing Oracle skill**, never an Oracle-owned trigger dispatcher, autonomous writer, second brain or competing canonical knowledge store. The CHEFE's latest explicit intention and the parent Goal remain the target. Consult Oracle as a candidate when it can change the decision; an active Hermes↔Oracle Goal loop continues material turns by `NEXT_CURSOR`, not redundant identical questions.

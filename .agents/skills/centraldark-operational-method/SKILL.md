@@ -3468,3 +3468,51 @@ Registros aditivos comprovados no Windows Casa pelo script verificador. Nao subs
 **Aplicação ao incidente atual:** a hipótese de que uma carga anormal/instabilidade da GPU, tela apagada ou possível encaixe/conexão física tenha provocado a interrupção do computador e, por consequência, as falhas observadas de conectividade deve permanecer registrada como **CANDIDATA NÃO CONFIRMADA** até a repetição da receita e a comparação de fingerprints. Não tratar falhas observadas durante a possível queda como prova automática de defeito de software ou da rede.
 
 **Owner:** esta skill canônica centraldark-operational-method, com reaproveitamento do owner de MetaLupa/contraprova e dos receipts já existentes. Não criar skill, HUD, watcher, agente ou sistema paralelo para guardar esta regra. Registro nesta skill prova apenas que a regra foi documentada; consumo, correlação e diagnóstico continuam exigindo execução e readback reais.
+
+## Receita canônica — overlay de mapeamento em duas superfícies no Hermes original
+
+Quando o CHEFE pedir mapeamento/overlay em duas conversas, tratar como uma única rodada de observabilidade do mesmo Goal. Reutilizar as abas já abertas e os owners `desktop_preview`/`drive_preview`; não usar sessão isolada, não criar chat e não alegar paralelismo físico sem capability medida.
+
+```text
+MEASURE_CURRENT_MAIN_AND_LOOP
+→ IDENTIFY_SURFACE_A/B (URL, título, tab/document, origem)
+→ desktop_preview/read(A) + drive_preview/elements(A)
+→ STORE FRESH_REFS_A + OVERLAY_A + FOCUS_A
+→ desktop_preview/read(B) + drive_preview/elements(B)
+→ STORE FRESH_REFS_B + OVERLAY_B + FOCUS_B
+→ IF_FOCUS_OR_IDENTITY_CONFLICT: STOP_INTERACTION, REMAP
+→ ACTION_A, READBACK_A
+→ REMAP_B, ACTION_B, READBACK_B
+→ CORRELATE_RECEIPT_AND_ORIGIN
+```
+
+O overlay colorido/rosa do `drive_preview` significa apenas que elementos foram mapeados. `OVERLAY_OBSERVED != ACTION_EXECUTED != EFFECT_PROVEN`. “Paralelo” nesta receita significa `SAME_ROUND_ID`; se não houver execução concorrente segura, registrar `PARALLEL_EXECUTION=UNAVAILABLE` e `EXECUTION_ORDER=A→B`.
+
+Envelope mínimo de cada superfície:
+
+```text
+ACTOR=HERMES
+ORIGIN_DECLARED=PASS|UNKNOWN
+ORIGIN_SOURCE=HERMES_DESKTOP|CHAT_GLOBAL|COCKPIT|HUMAN|UNKNOWN
+ORIGIN_AUTHENTICATED=PASS|UNKNOWN
+SURFACE_ID=
+URL_OR_DOCUMENT=
+SNAPSHOT_REF=
+OVERLAY_MAPPING=PASS|UNKNOWN
+FOCUS_CONSISTENCY=PASS|UNKNOWN
+ACTION=PASS|UNKNOWN|BLOCKED
+READBACK=PASS|UNKNOWN|BLOCKED
+RECEIPT_ID=ID|UNKNOWN
+NEXT_CURSOR=
+```
+
+`ACTOR=HERMES` escrito no ChatGPT nunca autentica a origem. Só promover `ORIGIN_AUTHENTICATED=PASS` com receipt do executor original/UIA ou evento terminal correlacionado ao mesmo `LOOP_ID`, `TURN_ID`, `INTENT_ID`, `SURFACE_ID` e alvo. Se `active_tab_id` discordar de URL/título/documento, classificar `FOCUS_CONSISTENCY=UNKNOWN`, remapear refs e não clicar. O relatório deve preservar literalmente os estados não provados:
+
+```text
+COCKPIT_SYNC_ACIONADO=UNKNOWN
+READBACK=UNKNOWN
+RESULTADO_DO_SYNC=UNKNOWN
+CICLO_BILATERAL_COMPLETO=UNKNOWN
+```
+
+Esta receita está documentada, não executada por este patch. Sua homologação exige replay A→B, readback independente em ambas as superfícies, receipt correlacionado, contraprova e comparação com a baseline; sem isso o veredito é `UNKNOWN`.
