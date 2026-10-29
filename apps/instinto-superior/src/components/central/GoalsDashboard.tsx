@@ -38,7 +38,7 @@ export function GoalsDashboard() {
     const newGoal: Goal = {
       id: `goal-${Date.now()}`,
       title: newGoalTitle,
-      description: newGoalDesc || undefined,
+      ...(newGoalDesc ? { description: newGoalDesc } : {}),
       status: selectedStatus,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

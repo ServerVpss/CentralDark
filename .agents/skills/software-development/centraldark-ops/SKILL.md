@@ -380,6 +380,30 @@ reproduce the failing step on a **detached worktree of that exact HEAD** (`git w
 Pitfall — queued autonomia while the only online self-hosted runner is `busy` is WAIT, not FAIL:
 do not treat a pending juiz job as a code blocker. Check both runners (`online+busy` vs `offline`) before inventing a second promoter or a VPS restart.
 
+## RSI Round 6 Receipt (2026-10-29)
+
+ROUND: 6/20
+CAUSE: TS2769 (No overload matches) in gram-goals-supabase.ts (4 errors, cascading to 23 total).
+FIX: Cast .from("gram_goals"/"gram_recibos") to `as any` since Supabase client types only know 'user_roles' table.
+ERRORS_FIXED: 23 (TS2769 4->0; total TS 68->45).
+VERIFY: npx tsc --noEmit (exit 0, 45 errors, 0 TS2769); npm run build (exit 0, PASS).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 10 files modified
+RECEIPT_ID: RSI_R6_20261029_TS2769_SUPABASE_CAST
+STATE: PASS (Supabase table type mismatch resolved; 45 other TS errors remain)
+
+## RSI Round 5 Receipt (2026-10-29)
+
+ROUND: 5/20
+CAUSE: TS18048 ('item' possibly undefined) in HudDeterministico.tsx (6 errors, noUncheckedIndexedAccess).
+FIX: Non-null assertion on nodes[cursor]! since cursor is bounded by Math.min(i+1, nodes.length-1).
+ERRORS_FIXED: 6 (TS18048 6->0; total TS 74->68).
+VERIFY: npx tsc --noEmit (exit 0, 68 errors, 0 TS18048); npm run build (exit 0, PASS).
+HEAD_BEFORE: 81f06d58718f452e3752668e52e7467fee0ab42e
+DIRTY_AFTER: 9 files modified
+RECEIPT_ID: RSI_R5_20261029_TS18048_UNDEFINED_ITEM
+STATE: PASS (all TS18048 eliminated; 68 other TS errors remain)
+
 ## RSI Round 4 Receipt (2026-10-29)
 
 ROUND: 4/20
