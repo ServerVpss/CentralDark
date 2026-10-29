@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-29T10:03:23-03:00",
+    "gerado_em":  "2026-10-29T12:21:30-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T09:51:30-03:00",
-                         "modificado_em":  "2026-10-29T09:51:30-03:00",
+                         "criado_em":  "2026-10-29T11:48:32-03:00",
+                         "modificado_em":  "2026-10-29T11:48:32-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T09:51:30-03:00",
-                         "modificado_em":  "2026-10-29T09:51:30-03:00",
+                         "criado_em":  "2026-10-29T11:48:32-03:00",
+                         "modificado_em":  "2026-10-29T11:48:32-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -295,10 +295,10 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-27T12:23:02-03:00",
-                         "bytes":  3122,
-                         "sha256":  "628473969c7c5eaf64a6c23c0d7d9674a713166e0f1f415fbd0c6387f5fcdc1e",
+                         "criado_em":  "2026-10-29T12:18:58-03:00",
+                         "modificado_em":  "2026-10-29T12:18:58-03:00",
+                         "bytes":  4437,
+                         "sha256":  "6a5523d348280bc9c59e22cdf3b41138f1332d499cf2c8b81ae122f1dd1f0458",
                          "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
                          "referencias":  [
 
@@ -548,9 +548,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-29T10:02:28-03:00",
-                         "bytes":  92471,
-                         "sha256":  "1f234413ee3b8ceffec4fe041ad8da9a87fcf462f3ad41de54aeeccdfc9b4fe5",
+                         "modificado_em":  "2026-10-29T10:46:50-03:00",
+                         "bytes":  94473,
+                         "sha256":  "4b8a7ca948be680bd15b5b5a00cc80b4b9a60815df79730e19a2540b12ef2549",
                          "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
@@ -1415,10 +1415,10 @@
                      {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-29T09:51:30-03:00",
-                         "modificado_em":  "2026-10-29T09:51:30-03:00",
-                         "bytes":  269253,
-                         "sha256":  "81b0641ecbf668fe9f6098d1cef8089c3adc800432a4986028e470dde1bff25d",
+                         "criado_em":  "2026-10-29T12:19:46-03:00",
+                         "modificado_em":  "2026-10-29T12:19:47-03:00",
+                         "bytes":  274099,
+                         "sha256":  "206c9c744bc9fe4d1140fdbc76f761585cdc4106d338efb92def7e6e8632148e",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
