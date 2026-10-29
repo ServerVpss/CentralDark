@@ -71,11 +71,11 @@ function importarPerfil(nomeArquivo: string, txt: string): Perfil {
   } else {
     const front = txt.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
     if (front) {
-      const title = front[1].match(/^name:\s*(.+)$/m);
-      const kind = front[1].match(/^(kind|role|type):\s*(.+)$/m);
-      if (title) nome = title[1].replace(/^["']|["']$/g, "");
-      if (kind && TIPOS.includes(kind[2].trim() as Papel)) papel = kind[2].trim() as Papel;
-      conteudo = txt.slice(front[0].length);
+      const title = front[1]!.match(/^name:\s*(.+)$/m);
+      const kind = front[1]!.match(/^(kind|role|type):\s*(.+)$/m);
+      if (title) nome = title[1]!.replace(/^["']|["']$/g, "");
+      if (kind && TIPOS.includes(kind[2]!.trim() as Papel)) papel = kind[2]!.trim() as Papel;
+      conteudo = txt.slice(front[0]!.length);
     }
   }
   if (!textoValido(conteudo))
@@ -85,7 +85,7 @@ function importarPerfil(nomeArquivo: string, txt: string): Perfil {
 }
 export function PerfisCognitivos() {
   const [perfis, setPerfis] = useState<Perfil[]>(BASE);
-  const [selecionado, setSelecionado] = useState(BASE[0].id);
+  const [selecionado, setSelecionado] = useState(BASE[0]!.id);
   const [aviso, setAviso] = useState("Nenhum perfil foi injetado no runtime.");
   const [modo, setModo] = useState<"isolado" | "comparar">("isolado");
   const ativo = perfis.find((p) => p.id === selecionado);

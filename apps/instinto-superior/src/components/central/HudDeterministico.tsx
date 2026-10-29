@@ -169,7 +169,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
   const chosenForge = forgeAliases.find(action => action.id === forgeSelected);
   const integrity = useMemo(() => nodes.every((n, i) =>
     i === 0 ? n.uid === "L000" && n.prev_uid == null :
-    n.prev_uid === nodes[i - 1].uid && nodes[i - 1].next_uid === n.uid
+    n.prev_uid === nodes[i - 1]!.uid && nodes[i - 1]!.next_uid === n.uid
   ) && nodes.at(-1)?.next_uid === "PENDING_NEXT_CURSOR", []);
   useEffect(() => {
     if (!playing || !integrity) return;
