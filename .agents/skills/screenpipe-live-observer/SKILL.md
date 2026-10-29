@@ -175,6 +175,66 @@ control-recording
 health-check
   → estado de gravação, frames/audio e timestamps
 
+## Registro de capacidades e rotas — captura materializada da Casa
+
+A captura validada pela superfície autenticada do Hermes Desktop transforma as opções observáveis do Screenpipe em capacidades roteáveis. A imagem não é só evidência visual: ela registra o contrato operacional disponível no host.
+
+```text
+CAP_SCREEN_CONTEXT_CAPTURE
+  → contexto de app/janela, acessibilidade, screenshot e OCR fallback
+
+CAP_SCREENSHOTS_TIMELINE
+  → imagens para timeline e texto-only visual
+
+CAP_ALL_MONITORS
+  → captura de todos os monitores disponíveis
+
+CAP_CAPTURE_FREQUENCY_1S
+  → intervalo mínimo observado: 1 segundo
+
+CAP_MATERIALIZE_DESKTOP_CAPTURE
+  → Hermes Desktop/computer_use capture(app=screen)
+  → MEDIA:/caminho/da/captura.png
+
+CAP_SCREENPIPE_LOCAL_API_3030
+  → health + inventário de monitores + frames temporais
+```
+
+### Roteamento canônico
+
+```text
+HERMES_DESKTOP_AUTHENTICATED_SURFACE
+  → computer_use.capture(app=screen, mode=vision)
+  → materialized screenshot
+  → evidence/readback
+
+SCREENPIPE_LOCAL_API_3030
+  → GET /health
+  → monitor inventory (all monitors)
+  → frame/search APIs (quando autorizadas)
+  → timestamp/freshness
+
+COCKPIT_SALA_CONTROLE
+  → local sensor feed
+  → Supabase Realtime owner existente
+  → runtime/capability cards
+  → Hermes Desktop readback
+```
+
+A configuração visual observada deixou **Screen context capture**, **Screenshots**, **Use all monitors** e frequência mínima de **1 s** habilitados. Isso promove as quatro primeiras capacidades para `CONFIGURED`; não promove `LIVE` sem timestamp de frame atual. `GET /health=200` prova alcance, não captura fresca.
+
+Estados obrigatórios:
+
+```text
+CONFIGURED != ACTIVE
+ACTIVE != FRESH
+FRESH != SUPABASE_REALTIME_PROVEN
+MATERIALIZED_CAPTURE = PROOF_OF_CURRENT_DESKTOP_VIEW
+SCREENPIPE_HEALTH_200 = REACHABILITY_ONLY
+```
+
+Quando `capture_stalled` ou `last_frame` antigo aparecer, roteie a prova imediata por `computer_use.capture(app=screen)` e mantenha `CAP_SCREENPIPE_LOCAL_API_3030=DEGRADED` até um novo timestamp ser observado. Não reclassifique o Cockpit ou o Supabase como falhos apenas por stale frame do sensor; meça cada owner separadamente.
+
 list-audio-devices
 list-monitors
 

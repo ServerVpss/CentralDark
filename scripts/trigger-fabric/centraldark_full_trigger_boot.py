@@ -647,20 +647,21 @@ def hud_first_gate(repo: Path) -> dict:
     Fail-closed on unavailable remote, missing files or mismatched bytes.
     Never extract secrets, mutate checkout, or issue a runtime restart.
     """
-    rel = "docs/HUD/HUD.html"
+    # The Cockpit owner is canonical; the legacy HTML is inventory history only.
+    rel = "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
     source = repo / rel
-    # One canonical source, two materializations, never a second HUD owner.
-    mirror = Path(os.environ.get("CENTRALDARK_HUD_RUNTIME_PATH") or (
-        str(Path.home() / "Documents" / "Obsidian Vault" / "🪬Centraldark -HUD🪬" / "HUD.html")
-        if os.name == "nt" else "/root/.centraldark/HUD.html"
-    ))
+    # The Cockpit owner is the runtime surface. A legacy mirror is optional
+    # and must be supplied explicitly; never infer an Obsidian path.
+    mirror_raw = os.environ.get("CENTRALDARK_HUD_RUNTIME_PATH", "").strip()
+    mirror = Path(mirror_raw) if mirror_raw else None
     evidence = {
         "status": "FAIL_CLOSED",
-        "owner": rel,
-        "mirror": str(mirror),
+        "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+        "legacy_source": "docs/HUD/HUD.html",
+        "mirror": str(mirror) if mirror else "UNCONFIGURED",
         "hud_read_first": True,
         "authorization": "UNCHANGED",
-        "next_cursor": "MATERIALIZE_MAIN_HUD_AND_REMEASURE",
+        "next_cursor": "INSTRUMENT_EXISTING_COCKPIT_OWNER",
     }
     if not source.is_file() or source.is_symlink():
         evidence["reason"] = "HUD_MAIN_SOURCE_MISSING_OR_LINK"
@@ -671,8 +672,8 @@ def hud_first_gate(repo: Path) -> dict:
         evidence["reason"] = "HUD_MAIN_SOURCE_READ_FAILED"
         return evidence
     evidence["source_sha256"] = hashlib.sha256(current_bytes).hexdigest()
-    if not current_bytes.startswith(b"<!DOCTYPE html") or b"CentralDark Index + HUD" not in current_bytes:
-        evidence["reason"] = "HUD_MAIN_CONTENT_INVALID"
+    if not current_bytes.startswith(b"import ") or b"hudMigrationSnapshot" not in current_bytes:
+        evidence["reason"] = "HUD_OWNER_CONTENT_INVALID"
         return evidence
 
     def git(*args: str) -> str | None:
@@ -709,20 +710,21 @@ def hud_first_gate(repo: Path) -> dict:
         evidence["reason"] = "HUD_COMMIT_BLOB_UNREADABLE"
         return evidence
 
-    if mirror.is_symlink() or not mirror.is_file():
-        evidence["reason"] = "HUD_RUNTIME_NOT_MATERIALIZED"
-        return evidence
-    try:
-        runtime_bytes = mirror.read_bytes()
-    except OSError:
-        evidence["reason"] = "HUD_RUNTIME_READ_FAILED"
-        return evidence
-    evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
-    if current_bytes != runtime_bytes:
-        evidence["reason"] = "HUD_MAIN_RUNTIME_SHA_MISMATCH"
-        return evidence
-    evidence.update({"status": "PASS", "reason": "SAME_MAIN_BYTES_AND_RUNTIME",
-                     "next_cursor": "CONTINUE_SAME_GOAL"})
+    if mirror is not None:
+        if mirror.is_symlink() or not mirror.is_file():
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_NOT_FOUND"
+            return evidence
+        try:
+            runtime_bytes = mirror.read_bytes()
+        except OSError:
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_READ_FAILED"
+            return evidence
+        evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
+        if current_bytes != runtime_bytes:
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_SHA_MISMATCH"
+            return evidence
+    evidence.update({"status": "PASS", "reason": "COCKPIT_OWNER_SOURCE_VERIFIED",
+                     "next_cursor": "INSTRUMENT_EXISTING_COCKPIT_OWNER"})
     return evidence
 
 
