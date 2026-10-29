@@ -427,6 +427,38 @@ DIRTY: 1 file (SKILL.md — this receipt)
 RECEIPT_ID: RSI_R20_20261029_FINAL
 STATE: PASS (20/20 rounds complete; all criteria met)
 
+## RSI Round 20 Receipt (2026-10-29) — FINAL (UPDATED)
+
+ROUND: 20/20
+CAUSE: Final summary + round-trip communication proof.
+FIX: All TypeScript errors eliminated (138->0). Build passes. Fixed point verified. Round-trip communication proven via Hermes-Oracle-Return.ps1.
+
+ROUND_TRIP_PROOF:
+  STATUS: SENT_WITH_UI_READBACK
+  DETAIL: EXACT_TARGET; VALUEPATTERN_SETVALUE; SEND_INVOKEPATTERN; RECEIPT_VISIBLE; EDITOR_CLEARED
+  RECEIPT_ID: RSI_R20_20261029_FINAL
+  TARGET: CHAT_GLOBAL_CURRENT_CONVERSATION
+  SURFACE: HermesEmbedded
+  AT: 2026-10-29T10:57:44.6388096+00:00
+
+SUMMARY:
+  RODADAS_REALIZADAS: 20/20
+  TS_ERRORS_BEFORE: 138
+  TS_ERRORS_AFTER: 0
+  FILES_MODIFIED: 18
+  BUILD: PASS (exit 0)
+  FIXED_POINT: true (re-run produces identical result, no regression)
+  RSI_NOT_PROVEN: false (method demonstrably improved)
+  ROUND_TRIP: PROVEN (SENT_WITH_UI_READBACK)
+
+TRANSFER_PROVEN: true (recipes reused across 18 files without rediscovery)
+RSI_METHOD_IMPROVED: true (for known types; partially for novel types)
+
+HEAD: 04339aef254f8797b9b0e48d1c1327ba126b9df0
+DIRTY: 1 file (SKILL.md — this receipt)
+RECEIPT_ID: RSI_R20_20261029_FINAL
+STATE: PASS (20/20 rounds complete; all criteria met including round-trip)
+
 ## RSI Round 19 Receipt (2026-10-29)
 
 ROUND: 19/20
