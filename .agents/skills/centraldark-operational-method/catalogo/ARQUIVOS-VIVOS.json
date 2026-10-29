@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-29T09:51:30-03:00",
+    "gerado_em":  "2026-10-29T10:03:23-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T09:49:36-03:00",
-                         "modificado_em":  "2026-10-29T09:49:36-03:00",
+                         "criado_em":  "2026-10-29T09:51:30-03:00",
+                         "modificado_em":  "2026-10-29T09:51:30-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T09:49:36-03:00",
-                         "modificado_em":  "2026-10-29T09:49:36-03:00",
+                         "criado_em":  "2026-10-29T09:51:30-03:00",
+                         "modificado_em":  "2026-10-29T09:51:30-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -549,9 +549,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-29T09:31:40-03:00",
-                         "bytes":  90250,
-                         "sha256":  "d7eaf53288d8eb8716365ffc8a7dab023296d0c3f2168016bc5d475f0458ed75",
+                         "modificado_em":  "2026-10-29T10:02:28-03:00",
+                         "bytes":  92471,
+                         "sha256":  "1f234413ee3b8ceffec4fe041ad8da9a87fcf462f3ad41de54aeeccdfc9b4fe5",
                          "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
