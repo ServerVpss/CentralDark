@@ -199,7 +199,8 @@ export function SkillUsageRealtimePanel() {
         </p>
       )}
       <p className="mt-2 text-[11px] text-muted-foreground">
-        STREAM_ON indica conexão Supabase Realtime, não prova de execução. Os resultados refletem recibos declarados pelo owner e exigem contraprova independente. INSERT atualiza por
+        STREAM_ON indica conexão Supabase Realtime, não prova de execução. Os resultados refletem
+        recibos declarados pelo owner e exigem contraprova independente. INSERT atualiza por
         assinatura; reconciliação a cada 60s. Fonte: agent_events/skill-usage.
         {query.data?.sampledAt
           ? " Medido: " + new Date(query.data.sampledAt).toLocaleString("pt-BR")
