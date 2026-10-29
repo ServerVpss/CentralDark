@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T22:09:30-03:00",
+    "gerado_em":  "2026-10-28T22:18:31-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:57:31-03:00",
-                         "modificado_em":  "2026-10-28T21:57:31-03:00",
+                         "criado_em":  "2026-10-28T22:15:31-03:00",
+                         "modificado_em":  "2026-10-28T22:15:31-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:57:31-03:00",
-                         "modificado_em":  "2026-10-28T21:57:31-03:00",
+                         "criado_em":  "2026-10-28T22:15:31-03:00",
+                         "modificado_em":  "2026-10-28T22:15:31-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1285,9 +1285,9 @@
                          "caminho":  "scripts/Hermes-SkillLifecycle-Bridge.py",
                          "tipo":  "script",
                          "criado_em":  "2026-10-28T22:07:39-03:00",
-                         "modificado_em":  "2026-10-28T22:07:39-03:00",
-                         "bytes":  3819,
-                         "sha256":  "c05167ba1a372388ba5de7fe47192e0000fe7c7bf1dcf52e47d768ccb2e16d8c",
+                         "modificado_em":  "2026-10-28T22:14:02-03:00",
+                         "bytes":  3718,
+                         "sha256":  "d3786b3002b6becc917a235eea6143ef850bfb7e12b3eadaca11e67fd0ba894e",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1405,9 +1405,9 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T21:55:56-03:00",
-                         "bytes":  251584,
-                         "sha256":  "713a113231f7dcf3e5d834faa0abbef73a38e709a5fafc48d1733561d93714fe",
+                         "modificado_em":  "2026-10-28T22:17:33-03:00",
+                         "bytes":  253750,
+                         "sha256":  "a315053e1e43e9f73f8d9cc6966b7aed169acf2377572fb4db39a204d44e3d56",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
@@ -1420,6 +1420,10 @@
                                              },
                                              {
                                                  "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "scripts/Hermes-SkillLifecycle-Bridge.py",
                                                  "existe":  true
                                              },
                                              {

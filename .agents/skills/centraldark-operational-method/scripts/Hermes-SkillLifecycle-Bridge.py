@@ -15,7 +15,6 @@ import urllib.request
 
 ENDPOINT = "https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/agent-log"
 ALLOWED = re.compile(r"^[A-Za-z0-9_.:/-]{1,160}$")
-CORRELATION = re.compile(r"^[A-Za-z0-9_.:/-]{1,180}$")
 
 
 def process(raw: str, *, secret: str = "", send=None) -> dict:
