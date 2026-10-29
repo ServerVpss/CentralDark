@@ -377,7 +377,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
 
   // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
   assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
-  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.match(design, /autenticado \? \(\r?\n\s*<TabsContent value="extensoes"/);
   assert.ok(cockpit.includes('autenticado={autenticado}'));
   assert.ok(extension.includes("terminal.show(false)"));
   const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
