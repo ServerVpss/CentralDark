@@ -84,7 +84,39 @@ git branch fix/writer-canonical-40 origin/main
 git branch fix/writer-canonical-40 origin/main 2>/dev/null || git branch fix/writer-canonical-40 main
 ```
 
-## Recuperação após erro
+## Armadilha: staging area suja em repo com muitas alterações não commitadas
+
+Quando o repo tem dezenas/centenas de alterações não commitadas (de outros writers ou de sessões anteriores), a área de staging pode já conter arquivos. `git add <files>` adiciona, mas não remove o que já estava staged. O `git commit` subsequente inclui **tudo** que está staged, não apenas os arquivos recém-adicionados.
+
+Correção:
+```bash
+git reset HEAD -- .          # limpar staging area (preserva working tree)
+git add <arquivo1> <arquivo2>  # staged apenas os arquivos desejados
+git diff --cached --stat     # VERIFICAR: deve mostrar apenas os arquivos desejados
+git commit -m "..."
+```
+
+Nunca confiar em `git add` sozinho para delimitar o escopo do commit em repo sujo. Sempre verificar `git diff --cached --stat` antes de commitar.
+
+## Armadilha: index.lock residual
+
+Processos git anteriores podem deixar `.git/index.lock` residual. Se `git commit` falhar com "Unable to create index.lock", matar processos git (`taskkill /F /IM git.exe` no Windows, `pkill git` no Linux) e remover o lock manualmente (`rm -f .git/index.lock`). Verificar ausência do lock antes de retry.
+
+## Armadilha: gate de teste legado com assertions stale
+
+Quando um teste legado (`verify-hud-zone.mjs` ou similar) falha por assertion que não corresponde ao código atual:
+
+1. Grep o código real para encontrar o valor atual (ex: `grep -n "sticky top-0" CockpitShell.tsx`).
+2. Se o código tem um valor diferente do esperado pelo teste, o teste está stale — corrigir a assertion para refletir o código real.
+3. Se o código **não tem** o padrão esperado (ex: `ref={tabsScrollRef}` ausente), verificar se é um bug real (ref não attached = funcionalidade quebrada) ou uma remoção intencional.
+4. Nunca remover a assertion para produzir PASS artificial. Corrigir o código OU o teste, nunca ambos para forçar verde.
+5. Após cada correção, re-rodar o teste completo e verificar se novas falhas surgem. Corrigir uma assertion pode expor a próxima.
+
+## Armadilha: browser_exec vs desktop_preview para cockpit autenticado
+
+`browser_exec` (cloud e local) NÃO possui sessão autenticada no cockpit — apenas `centraldark-lang` no localStorage. Para navegação no cockpit autenticado (localhost:8080/sala-controle), usar `desktop_preview` + `drive_preview`. O `browser_exec` retorna AUTH_REQUIRED falso-positivo em ambiente com sessão ativa no desktop preview.
+
+Evidência: desktop_preview mostra "Minha conta" e "Admin CentralDark" quando autenticado.
 
 Se o branch foi corrompido por reset hard acidental:
 ```bash

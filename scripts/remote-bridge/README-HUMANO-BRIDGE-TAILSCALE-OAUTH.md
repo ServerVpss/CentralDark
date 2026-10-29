@@ -1,12 +1,30 @@
-# CentralDark Remote Bridge — para que serve
+# CentralDark Remote Bridge — entrada unica, LOCAL-FIRST
 
-Este é o fio único do bridge Casa/VPS. Ele não cria outro sistema.
+**Um produto, uma base de codigo, varios ambientes de execucao.** O Bridge da Casa e o ponto de controle local. Notebook = no de agentes; openKylin no Kingston = Forja (boot nativo OU VMware rawDisk com acesso exclusivo); VPS = runtime 24/7 do MESMO produto promovido por Git/CI/receipts. A VPS nao substitui a Forja e nao e um segundo projeto.
+
+## Diagnostico da rede local (SEM mutacao)
+
+Executar o **mesmo arquivo ja existente** na Casa:
+
+```powershell
+powershell.exe -NoProfile -File K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1 -LocalStatus -Json
+```
+
+Retorna um JSON tipado `centraldark.local-first.readonly.v1`, com portas locais e rotas ao notebook. Ordem: **LAN fisica (se IP conhecido)** -> **Radmin VPN privada** -> **Tailscale autorizado** -> **SSH Casa/VPS existente apenas como fallback**. Nunca instala serviço, altera firewall/VPN, modifica disco ou executa comandos remotos neste modo.
+
+O IP LAN do notebook foi medido pelo proprio Windows como `192.168.100.2` (Wi-Fi); a Casa usa `192.168.100.5/24` (Ethernet). Notebook -> Casa ping PASS (2-3 ms). **Casa -> notebook pela LAN ainda falhou**: ICMP sem resposta e TCP 5985/445/22/3389 com timeout. Esse IP e apenas um candidato observado, nao uma identidade validada nem uma rota autenticada. O Bridge o testa primeiro; se nao responde, passa ao Radmin. O endereco candidato pode ser atualizado pela variavel de sessao `CENTRALDARK_NOTEBOOK_LAN_IP`, sem mudar o JSON. O diagnostico rejeita enderecos fora da LAN ou apontando para a propria Casa.
+
+A ultima medicao do notebook `NOTEBOOK-AGENTES-FULL-ADMIN` teve Radmin `26.251.127.144:5985` acessivel, mas **porta aberta NAO prova identidade, login, autorizacao ou terminal**. O IP Tailscale `100.102.99.102` veio de outra conta/tailnet e nao apareceu como peer na Casa. Nao misturar esses estados. O modo `-LocalStatus` nunca chama WinRM remoto, SSH remoto ou SMB para executar.
+
+**Reuso de owners (nao criar/instalar nada):** `K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1` e o script real do Bridge; `canonical\CENTRALDARK-REMOTE-BRIDGE.config.json` e o JSON real. Em alguns checkouts Windows, o alias de configuracao na raiz e um arquivo-texto que aponta para o JSON, nao um symlink funcional; o Bridge ja prioriza o JSON canônico. A receita `K:\scripts\casa\CentralDark-VPS-Casa-PID-OneShot.ps1` permanece INALTERADA e prova apenas a consulta de PIDs VPS->Casa.
+
+**Regra:** codigo validado na Forja -> PR/CI -> VPS 24/7. Mesmo repositorio/produto, runtimes separados; nunca assumir que processo da VPS ou do Linux esta ativo so porque o codigo existe. VMware rawDisk so pode usar o Kingston quando nao houver outro sistema gravando no mesmo disco.
 
 ## O que ele faz
 
-1. Abre o Desktop Commander Remote.
-   - Serve para a VPS/Hermes enxergar a Casa quando o dispositivo `SEGREDO` está online.
-   - Prova esperada: `Device ready`, `Device ID`, `Device Name: SEGREDO`.
+1. Reutiliza o Bridge e os canais existentes; Desktop Commander Remote legado fica DESLIGADO por padrao.
+   - Se o modo remoto legado for explicitamente habilitado, o dispositivo `SEGREDO` pode ser visto pela conta conectada.
+   - Processo presente nao prova dispositivo autorizado; exigir `Device ready` e acesso real.
 
 2. Mantém contexto local do Screenpipe.
    - Serve para deixar um resumo recente da tela em `GARIMPO-CHEFE/context/screenpipe-latest.json`.
@@ -23,18 +41,13 @@ Este é o fio único do bridge Casa/VPS. Ele não cria outro sistema.
 
 ## Como rodar na Casa
 
-PowerShell:
+**Para diagnosticar a rede, use somente `-LocalStatus`** (nao inicia processos). Para iniciar o Bridge existente com seus recursos e tunelamentos previamente configurados, use o owner sem essa flag:
 
 ```powershell
-cd K:\_MAPA_CASA\GARIMPO-CHEFE\CentralDark-OneShot-Integrated-GIGANTE\CentralDark-OneShot-Integrated\vendor\desktop-commander-dist
-npx @wonderwhy-er/desktop-commander@latest remote
+powershell.exe -NoProfile -File K:\scripts\remote-bridge\CentralDark-Remote-Bridge.ps1
 ```
 
-Pelo owner do repo, preferir:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\remote-bridge\CentralDark-Remote-Bridge.ps1
-```
+Nao iniciar outro `npx ... remote` manual ou `@latest` em paralelo ao supervisor existente. Desktop Commander legado requer decisao explicita e mantem o pacote fixado na configuracao.
 
 Para compilar o exe canônico no Windows:
 
@@ -58,3 +71,34 @@ gh pr list --repo ServerVpss/CentralDark --state open --limit 30
 ```
 
 Sem `gh auth status` verde, não declare GitHub integrado.
+
+## Recibo local-first — 26/10/2026 (Casa SEGREDO)
+
+**OWNER:** `scripts/remote-bridge/CentralDark-Remote-Bridge.ps1` + unico JSON de `canonical/`. **Sem nova pasta, app, daemon, chave, usuario, firewall ou servico.** Este delta alterou apenas o codigo do Bridge, sua configuracao real e dois documentos existentes.
+
+```text
+LOCAL_STATUS_CLI_EXIT=0
+PS_PARSER_ERRORS=0
+CONFIG_JSON_PARSE=PASS
+LAN_NOTEBOOK_IP=192.168.100.2 (observado Wi-Fi notebook, 26/10/2026)
+CASA_LAN=192.168.100.5/24 (Ethernet)
+NOTEBOOK_TO_CASA_LAN_PING=PASS (2-3 ms, comprovado no notebook)
+CASA_TO_NOTEBOOK_LAN_ICMP=NO_REPLY
+CASA_TO_NOTEBOOK_LAN_TCP_5985_445_22_3389=TIMEOUT
+LOCAL_ROUTE_LAN_CANDIDATE=TIMEOUT
+LOCAL_ROUTE_FALLBACK=RADMIN_PRIVATE_OVERLAY
+LAN_SELF_AND_PUBLIC_NEGATIVE_TESTS=PASS
+RADMIN_NOTEBOOK_26.251.127.144:5985=OPEN_UNAUTHENTICATED
+TAILSCALE_NOTEBOOK_100.102.99.102=NOT_VERIFIED_IN_CASA_TAILNET
+SELECTED_CONNECTIVITY=RADMIN_PRIVATE_OVERLAY
+REMOTE_LOGIN=NOT_PROVEN
+REMOTE_EXECUTION=NOT_TESTED
+CASA_COMMANDER_127.0.0.1:9101_HEALTH=HTTP_200
+CASA_COMMANDER_ENGINE_CONNECTED=false
+MCP_9100_BIND=TAILSCALE_ONLY (sem bind loopback na medicao)
+HERMES_DASHBOARD_9119=NOT_LISTENING
+GIT_DIFF_CHECK=PASS
+SSH_VPS_CASA_PROVEN_RECIPE=UNCHANGED
+```
+
+A arquitetura e LOCAL-FIRST mas **nao esta autorizada para executar comandos no notebook** apenas por 5985 aberta. `engine_connected=false` ainda requer remediacao no owner atual do Casa Commander, sem segundo gateway. O Bridge foi testado somente em `-LocalStatus`; a partida normal com configuracao de tuneis nao foi repetida neste delta. O Linux fisico do K: ainda nao foi instalado por este trabalho, e a VPS nao foi modificada. NEXT_CURSOR: medir IP LAN do notebook e autenticar via canal explicitamente autorizado; provar handshake do motor local 9101; so entao A2A/executor com recibo tipado e promocao de codigo para VPS 24/7.

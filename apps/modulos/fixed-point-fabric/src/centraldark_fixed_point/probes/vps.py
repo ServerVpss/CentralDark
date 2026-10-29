@@ -28,8 +28,12 @@ class VPSProbe:
             blockers.append(f"HTTP_{status_code}")
         timestamp = float(payload.get("timestamp", 0)) if isinstance(payload, dict) else 0
         max_age = int(self.config.get("max_age_seconds", 120))
-        if time.time() - timestamp > max_age:
+        if timestamp > 0 and time.time() - timestamp > max_age:
             blockers.append("HEARTBEAT_STALE")
+        elif timestamp == 0:
+            # No timestamp - check for basic health indicator
+            if not payload.get("ok", False):
+                blockers.append("HEARTBEAT_UNHEALTHY")
         secret = self.config.get("hmac_secret")
         if secret:
             signature = payload.get("signature", "")

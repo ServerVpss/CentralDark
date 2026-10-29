@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { lerTelemetriaFocoCentralDark } from "@/lib/centraldark-focus-telemetry.functions";
+import { SkillUsageRealtimePanel } from "@/components/central/SkillUsageRealtimePanel";
 
 function Ms({ value }: { value: number | null }) {
   return <>{value === null ? "NÃO MEDIDO" : value.toLocaleString("pt-BR") + " ms"}</>;
@@ -100,6 +101,7 @@ export function FocusTelemetryPanel() {
           </p>
         </div>
       </div>
+      <SkillUsageRealtimePanel />
       <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">
         {data?.source ?? "Casa / Desktop Commander / sem conexão de sensor"}
         {" • "}{data?.note ?? "Aguardando leitura autenticada"}
