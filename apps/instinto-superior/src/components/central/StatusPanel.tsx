@@ -157,20 +157,24 @@ export function StatusPanel() {
             Verde: funcionando. Amarelo: precisa de atenção ou verificação. Vermelho: precisa corrigir.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] text-muted-foreground">Atualiza a cada 15 s</span>
-          <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
-            ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
-          </span>
-          <SyncActionButton
-            data-cd-flow="instinto.StatusPanel.botao-01"
-            label="Medir agora"
-            onClick={() => void q.refetch()}
-            isFetching={q.isFetching}
-            autoSyncEnabled
-            lastSuccessAt={fresco ? medidoEm : null}
-            lastError={q.isError ? "falha de transporte no servidor" : null}
-          />
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center">
+            <SyncActionButton
+              data-cd-flow="instinto.StatusPanel.botao-01"
+              label="Medir agora"
+              onClick={() => void q.refetch()}
+              isFetching={q.isFetching}
+              autoSyncEnabled
+              lastSuccessAt={fresco ? medidoEm : null}
+              lastError={q.isError ? "falha de transporte no servidor" : null}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
+              ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
+            </span>
+            <span className="text-[11px] text-muted-foreground">Atualiza a cada 15 s</span>
+          </div>
         </div>
       </header>
       <p className="font-mono text-[11px] text-muted-foreground" role="status" aria-live="polite">

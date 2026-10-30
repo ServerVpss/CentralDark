@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
+import { useQueryClient } from '@tanstack/react-query'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
 import { supabase } from '@/integrations/supabase/client'
@@ -34,6 +35,7 @@ export const AutoSyncButton: React.FC = () => {
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
   const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
+  const queryClient = useQueryClient()
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -51,7 +53,7 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
-  const handleSync = async (target: 'windows' | 'main' | 'vps' | 'all' = 'all') => {
+  const handleSync = async (target: 'local' | 'windows' | 'main' | 'vps' | 'all' = 'local') => {
     setIsSyncing(true)
     try {
       const data = await runSync({ data: { target } } as any)
@@ -60,6 +62,11 @@ export const AutoSyncButton: React.FC = () => {
       console.error('Sync failed:', error)
       setSyncStatus(prev => ({ ...prev, status: 'failed' }))
     } finally {
+      if (target === 'local' || target === 'all') {
+        // A sincronização total termina com a mesma leitura viva do card
+        // 🫀 Estado atual do sistema; não cria sensor nem runtime paralelo.
+        await queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
+      }
       setIsSyncing(false)
     }
   }
@@ -113,7 +120,7 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-              <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
+               <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main · VPS manual</p>
               <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
                 <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
@@ -135,7 +142,7 @@ export const AutoSyncButton: React.FC = () => {
             </Button>
             <SyncActionButton
               label="Sincronizar Tudo"
-              onClick={() => handleSync('all')}
+               onClick={() => handleSync('local')}
               isFetching={isSyncing}
               autoSyncEnabled
               lastError={syncStatus.status === 'failed' ? syncStatus.human_readable : null}

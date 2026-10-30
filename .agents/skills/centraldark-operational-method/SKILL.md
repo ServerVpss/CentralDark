@@ -7,6 +7,13 @@ oracle_review_on_change: true
 ---
 
 
+<!-- CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+## 🍒+1 Busca autorizada e continuidade por rotas eficazes
+
+Toda busca autorizada pelo CHEFE escolhe a rota mais rápida e comprovada para a intenção, sem repetir medições válidas. Reutilizar owner, sessão, receita, receipt, fingerprint e NEXT_CURSOR. Usar dinamicamente índice/catálogo, log primário, MCP, UI Automation do Classic/Codex/Cockpit/openKylin, Screenpipe local 3030 ou outras fontes disponíveis. Redescobrir somente quando uma identidade, estado, versão ou autorização mudar. Confira a [receita UI + roteamento + caches](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
+
+Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência se medida, estado de cache, prova, contraprova e cursor; sem delta novo, NOOP. Reutilizar catálogo/autocura da Skill-Mãe, session-intelligence-harvester, scripts/memory-linker e knowledge-compiler, sem segundo motor. Separar cache operacional persistente entre chats de Prompt/Self-Cache P15 e KV Cache interno do modelo P16; nunca alegar HIT ou economia dos modelos sem telemetria. A permissão do CHEFE para buscar não contorna autenticação do serviço. CACHE_HIT não é prova do efeito.
+<!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
 ## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
 

@@ -573,7 +573,9 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(ui.includes("item.privado && !autenticado"));
   assert.ok(ui.includes("conexoesAbertas"));
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
-  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,34);
+  // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
+  // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
+  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,27);
 });
 
 test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {

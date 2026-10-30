@@ -237,7 +237,7 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
 export const executarSync = createServerFn({ method: "POST" }).handler(
   async (ctx: any): Promise<SyncStatus> => {
     const target = ctx?.data?.target || "all";
-    if (!["all", "windows", "main", "vps"].includes(target)) {
+    if (!["local", "all", "windows", "main", "vps"].includes(target)) {
       return { timestamp: null, status: "failed", human_readable: "Target inválido", target };
     }
 
@@ -249,13 +249,13 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       if (target === "main") return syncMain();
       if (target === "vps") return syncVps();
 
-      // target === "all": executa os três em sequência
+      // "local" estabiliza apenas Casa/Main. VPS permanece uma ação explícita.
       const results: SyncStatus[] = [];
       const steps = [
         { name: "windows", fn: syncWindows },
         { name: "main", fn: syncMain },
-        { name: "vps", fn: syncVps },
       ];
+      if (target === "all") steps.push({ name: "vps", fn: syncVps });
 
       for (const step of steps) {
         try {
@@ -279,7 +279,9 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       return {
         timestamp: new Date().toISOString(),
         status: allOk ? "success" : "failed",
-        human_readable: allOk ? "Sync completo: Casa → Main → VPS ✓" : `Sync parcial: ${summary}`,
+         human_readable: allOk
+           ? (target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓")
+           : `Sync parcial: ${summary}`,
         target: "all",
         details: summary,
       };
