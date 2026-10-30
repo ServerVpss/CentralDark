@@ -55,18 +55,17 @@ export const AutoSyncButton: React.FC = () => {
 
   const handleSync = async (target: 'local' | 'windows' | 'main' | 'vps' | 'all' = 'local') => {
     setIsSyncing(true)
+    const medirJunto = target === 'local' || target === 'all'
+      ? queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
+      : Promise.resolve()
     try {
       const data = await runSync({ data: { target } } as any)
       setSyncStatus(data)
+      await medirJunto
     } catch (error) {
       console.error('Sync failed:', error)
       setSyncStatus(prev => ({ ...prev, status: 'failed' }))
     } finally {
-      if (target === 'local' || target === 'all') {
-        // A sincronização total termina com a mesma leitura viva do card
-        // 🫀 Estado atual do sistema; não cria sensor nem runtime paralelo.
-        await queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
-      }
       setIsSyncing(false)
     }
   }

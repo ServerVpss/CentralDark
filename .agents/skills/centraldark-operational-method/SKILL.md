@@ -14,6 +14,11 @@ Toda busca autorizada pelo CHEFE escolhe a rota mais rápida e comprovada para a
 
 Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência se medida, estado de cache, prova, contraprova e cursor; sem delta novo, NOOP. Reutilizar catálogo/autocura da Skill-Mãe, session-intelligence-harvester, scripts/memory-linker e knowledge-compiler, sem segundo motor. Separar cache operacional persistente entre chats de Prompt/Self-Cache P15 e KV Cache interno do modelo P16; nunca alegar HIT ou economia dos modelos sem telemetria. A permissão do CHEFE para buscar não contorna autenticação do serviço. CACHE_HIT não é prova do efeito.
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+<!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
+
+Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita multijanela existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e selecionar menor rota com prova: pagina alcançavel por chrome-devtools-mcp existente -> list_pages, take_snapshot, click(uid)/fill(uid), novo snapshot + efeito; Windows app/Edge nao exposto -> UIA Name/PID/ControlType, Invoke/Value/SelectionItem, readback. Codex e Claude ja executam chrome-devtools-mcp v1.12.0. O Chrome de depuracao observado usa pipe e perfil separado, portanto nao pressupor acesso a abas pessoais do Edge. CDP usa mouse virtual; UIA Invoke nao move cursor fisico Windows. Cursor de Windows visivel exige input nativo autorizado sobre alvo real. Screenpipe 3030 = sensor, nao executor. Preservar recursos em uso, sem iniciar servidor/Chrome duplicado ou copiar cookies; registrar click, snapshot/readback e recibo, UNKNOWN se sem prova. 🍒+1 somente ganho comprovado.
+<!-- /CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
 <!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
 ## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
 
