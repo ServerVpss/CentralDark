@@ -54,7 +54,7 @@ import { PainelHermes } from "@/components/central/HermesPet";
 import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { DesignCenter, usePeleCockpit } from "@/components/central/DesignCenter";
 import { Ledger } from "@/components/central/Ledger";
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
@@ -269,12 +269,16 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
           <Button type="button" variant="outline" size="sm" onClick={abrirAdmin}>Admin dos bots</Button>
         </div>
       </div>
-      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado MTProto autenticado no servidor">
-        <div><span className="text-muted-foreground">Gateway VPS</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.gateway ?? "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Configurado</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.configurado === true ? "SIM" : mtproto.data?.configurado === false ? "NÃO" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Sessão MTProto</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.sessaoPresente === true ? "PRESENTE" : mtproto.data?.sessaoPresente === false ? "AUSENTE" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Telegram autorizado</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-mono font-semibold text-emerald-500" : "mt-1 font-mono font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "CONFIRMADO" : mtproto.data?.autorizado === false ? "NÃO AUTORIZADO" : "UNKNOWN"}</p></div>
-        <p className="text-muted-foreground sm:col-span-4">Fonte: centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "Consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "Sem consulta autenticada"}{mtproto.isError ? " · AUTH_REQUIRED ou conexão indisponível" : ""}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Consulta não comprova entrega de mensagens.</p>
+      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado da conexão com Telegram">
+        <div><span className="text-muted-foreground">Servidor de mensagens</span><p className="mt-1 font-semibold">{mtproto.data?.gateway ? "Encontrado" : "Ainda não verificado"}</p></div>
+        <div><span className="text-muted-foreground">Configuração</span><p className="mt-1 font-semibold">{mtproto.data?.configurado === true ? "Pronta" : mtproto.data?.configurado === false ? "Precisa configurar" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Sessão Telegram</span><p className="mt-1 font-semibold">{mtproto.data?.sessaoPresente === true ? "Conectada" : mtproto.data?.sessaoPresente === false ? "Desconectada" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Autorização</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-semibold text-emerald-500" : "mt-1 font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "Conectado" : mtproto.data?.autorizado === false ? "Precisa autorizar" : "Ainda não verificada"}</p></div>
+        {mtproto.isError ? <p className="text-amber-500 sm:col-span-4">Não foi possível verificar a conexão com o Telegram. Tente atualizar.</p> : null}
+        <details className="text-muted-foreground sm:col-span-4">
+          <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+          <p className="mt-2">Gateway: {mtproto.data?.gateway ?? "não informado"} · serviço centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "sem consulta autenticada"}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Esta consulta não comprova entrega de mensagens.</p>
+        </details>
       </div>
       <div className="grid min-h-[28rem] md:grid-cols-[minmax(13rem,0.38fr)_minmax(0,1fr)]">
         <aside className="border-b border-border md:border-b-0 md:border-r" aria-label="Lista de conversas e bots">
@@ -289,7 +293,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             {consulta.loading ? <p className="p-3 text-sm text-muted-foreground">Consultando owner Telegram…</p> : null}
             {consulta.erro ? (
               <p className="rounded border border-amber-500/40 p-3 text-xs text-amber-500">
-                AUTH_REQUIRED / consulta bloqueada: {consulta.erro}
+                Não foi possível consultar os bots. Atualize a conexão e tente novamente.
               </p>
             ) : null}
             {!consulta.loading && !consulta.erro && encontrados.length === 0 ? (
@@ -317,22 +321,22 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             <div className="min-w-0">
               <h3 className="font-semibold">{selecionado?.name ?? "CentralDark Gram"}</h3>
               <p className="text-xs text-muted-foreground">
-                {selecionado ? "Cadastro: " + (selecionado.is_active ? "ativo" : "inativo") + " · Saúde: " + (selecionado.health_status ?? "UNKNOWN") : "Selecione um bot. O estado MTProto da VPS aparece acima; conversas ainda não integradas."}
+                {selecionado ? "Cadastro " + (selecionado.is_active ? "ativo" : "inativo") + " · " + rotuloTecnicoHumano(selecionado.health_status) : "Selecione um bot. O estado da conexão aparece acima; conversas ainda não estão integradas."}
               </p>
             </div>
-            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500">Mensageria: UNKNOWN</span>
+            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500" title="Estado técnico: mensageria UNKNOWN">Envio ainda não conectado</span>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-10 text-center">
             <MessagesSquare className="size-10 text-muted-foreground" aria-hidden="true" />
             <p className="max-w-md font-semibold">Tua interface Gram está dentro do mesmo cockpit.</p>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Busca, seleção e atualização de bots usam o owner de cadastro. O status da sessão MTProto vem diretamente do servidor autenticado na VPS.
-              Este serviço existente oferece /health, /status, /start, /confirm e /logout; ainda não oferece endpoints de conversas, mídia ou envio. Essas ações ficam desativadas.
+              Você já pode buscar e consultar os bots cadastrados. O envio de mensagens ainda não está conectado nesta tela.
+              Quando a conexão de envio estiver disponível, o campo abaixo poderá ser ativado sem criar outra interface.
             </p>
             <Button type="button" variant="outline" onClick={abrirSync}>Abrir contraprova no Sync Center</Button>
           </div>
           <div className="flex items-center gap-2 border-t border-border bg-muted/20 p-3">
-            <input aria-label="Campo de mensagem indisponível" placeholder="Envio desativado · API Telegram/MTProto não comprovada" disabled
+            <input aria-label="Campo de mensagem indisponível" placeholder="Envio ainda não conectado" disabled
               className="min-h-11 min-w-0 flex-1 rounded-md border border-border bg-background/40 px-3 text-sm opacity-70" />
             <Button type="button" disabled title="Envio indisponível sem API autorizada e sessão comprovada">Enviar</Button>
           </div>
@@ -404,7 +408,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       definirEstadoEstudio(resposta.ok ? "API HTTP_ACK" : "API HTTP_" + resposta.status);
     } catch {
       // Bloqueio CORS e falta de rede são inconclusivos, não equivalem a OFFLINE.
-      definirEstadoEstudio("UNKNOWN · rede ou CORS");
+      definirEstadoEstudio("Não foi possível conectar à prévia.");
     }
   }
   function abrirEstudio() {
@@ -1179,7 +1183,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     <Send className="size-4" aria-hidden /> Abrir Unigram original
                   </Button>
                   <span role="status" aria-live="polite" className="text-xs text-muted-foreground">
-                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: UNKNOWN"
+                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: ainda não verificada"
                       : unigramLaunch === "PENDING" ? "Solicitando abertura…"
                       : unigramLaunch === "REQUESTED" ? "Solicitação enviada ao Windows · janela não comprovada"
                       : unigramLaunch === "UNAVAILABLE" ? "Esta ação requer o CentralDark.exe no Windows; navegador não abre apps locais"
@@ -1372,7 +1376,7 @@ REUSE: before_create (sem duplicação)`}
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Terminal Condition</dt>
-                      <dd className="mt-1 font-mono">UNKNOWN · exige contraprova</dd>
+                      <dd className="mt-1">Ainda não verificado</dd>
                     </div>
                   </dl>
                 </div>
@@ -1511,7 +1515,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
-                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · RUNTIME UNKNOWN</p>
+                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · ESTADO ATUAL NÃO VERIFICADO</p>
                   <ul className="mt-3 space-y-1 text-xs text-emerald-400">
                     <li>✅ Consolidação 100% bem-sucedida</li>
                     <li>✅ Zero perda de dados</li>
@@ -1559,7 +1563,7 @@ REUSE: before_create (sem duplicação)`}
                       </div>
                     </dl>
                     <p className="mt-5 break-all font-mono text-[10px] text-muted-foreground">
-                      SHA-256 UNKNOWN · sem hash derivado do arquivo nesta medição
+                      Hash do arquivo ainda não verificado nesta medição
                     </p>
                     <Button data-cd-flow="instinto.CockpitShell.botao-06" asChild className="mt-6">
                       <a href={pacoteHermes.url} download>

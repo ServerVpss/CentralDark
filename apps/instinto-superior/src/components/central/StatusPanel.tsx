@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
 import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
 import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { rotuloEstadoHumano } from "@/components/central/EstadoCentralDark";
 import { useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 type Luz = "verde" | "amarela" | "vermelha";
@@ -18,11 +19,8 @@ function luz(estado: Estado): Luz {
   if (estado === "FAIL" || estado === "BLOCKED") return "vermelha";
   return "amarela";
 }
-function etiqueta(estado: Estado, nome = "") {
-  if (estado === "PASS") return "OPERACIONAL";
-  if (estado === "RUNNING") return "EM EXECUÇÃO";
-  if (estado === "FAIL" || estado === "BLOCKED") return "INDISPONÍVEL";
-  return estado === "AUTH_REQUIRED" ? "AUTORIZAÇÃO" : "NÃO COMPROVADO";
+function etiqueta(estado: Estado, _nome = "") {
+  return rotuloEstadoHumano(estado);
 }
 /** O pulso verde significa exclusivamente medição atual PASS, não prova histórica. */
 function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresco: boolean }) {
@@ -35,15 +33,48 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
     </span>
   );
 }
+/**
+ * Sonda da superfície ≠ prova de execução. A API pode responder com JSON
+ * e ainda declarar NOT_REVALIDATED: mostramos conectividade verde somente
+ * para a ROTA, com o aviso amarelo de execução explicitamente separado.
+ * Nunca promove grafo/receipts do owner de RUNNING para PASS.
+ */
+function LuzProjecao({
+  estado, nome, fresco, http, erro,
+}: {
+  estado: Estado; nome: string; fresco: boolean; http: number | null | undefined; erro: string | null | undefined;
+}) {
+  const rotaDisponivel = fresco && estado === "RUNNING" && http === 200
+    && erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO";
+  if (!rotaDisponivel) return <LuzViva estado={estado} nome={nome} fresco={fresco} />;
+  return (
+    <div className="space-y-1" aria-label={`${nome}: rota HTTP 200 revalidada na última consulta; execução sem contraprova`}>
+      <span className="inline-flex items-center gap-2">
+        <span className={`size-3 shrink-0 rounded-full ${CORES.verde}`} aria-hidden="true" />
+        <span className="text-[11px] font-medium">Conexão disponível</span>
+      </span>
+      <p className="text-[11px] text-amber-400">Uso recente ainda não verificado</p>
+    </div>
+  );
+}
 /** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
 function comMotivo(base: string, estado: Estado, motivo: string | null | undefined) {
   if (estado === "PASS" || !motivo) return base;
   return `${base} · MOTIVO: ${motivo.slice(0, 120)}`;
 }
 function DataHora({ iso }: { iso: string | null | undefined }) {
-  if (!iso) return <>SEM MEDIÇÃO</>;
+  if (!iso) return <>Sem leitura</>;
   const n = Date.parse(iso);
-  return <>{Number.isFinite(n) ? new Date(n).toLocaleString("pt-BR", { timeZone: "America/Bahia" }) : "DATA INVÁLIDA"}</>;
+  return <>{Number.isFinite(n) ? new Date(n).toLocaleString("pt-BR", { timeZone: "America/Bahia" }) : "Data indisponível"}</>;
+}
+function linhaScreenpipeHumana(linha: string) {
+  if (/^CAPTURA VISUAL: FRESH/.test(linha)) return "Telas sendo gravadas agora";
+  if (/^CAPTURA VISUAL:/.test(linha)) return "Gravação das telas sem atualização recente";
+  if (/^ÚLTIMO FRAME:/.test(linha)) return linha.replace("ÚLTIMO FRAME:", "Última imagem:");
+  if (/^MONITORES DETECTADOS:/.test(linha)) return linha.replace("MONITORES DETECTADOS:", "Monitores encontrados:");
+  if (/^FRAMES NO HISTÓRICO ATUAL:/.test(linha)) return linha.replace("FRAMES NO HISTÓRICO ATUAL:", "Imagens registradas nesta gravação:");
+  if (/^FREQUÊNCIA MEDIDA:/.test(linha)) return linha.replace("FREQUÊNCIA MEDIDA:", "Ritmo de captura:");
+  return linha;
 }
 
 /**
@@ -72,15 +103,16 @@ export function StatusPanel() {
   const screen: Estado = d?.screenpipe ?? unknown;
   const remote: Estado = d?.desktop ?? unknown;
   const medidoEm = d?.atualizadoEm;
+  const audioScreenpipe = d?.screenpipeAudioStatus?.toLowerCase() ?? null;
+  const audioSemSinal = audioScreenpipe === "stale" || audioScreenpipe === "stalled" || audioScreenpipe === "unavailable";
   const sinais = [
-    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: comMotivo(`HTTP ${d?.casaSiteHttp ?? "?"} · testado apenas no Windows`, d?.casaSite ?? unknown, d?.casaSiteErro), icon: House },
-    { nome: "Main GitHub", estado: d?.github ?? unknown, detalhe: comMotivo(d?.mainSha?.slice(0, 12) ?? "SHA não medido", d?.github ?? unknown, d?.fonte), icon: Github },
-    { nome: "VPS · comparação SHA", estado: d?.deploy ?? unknown, detalhe: `SHA ${d?.vpsSha?.slice(0, 12) ?? "?"} · não prova serviço`, icon: Server },
-    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: comMotivo(`HTTP ${d?.apiHealthHttp ?? "?"} · /health`, d?.apiHealth ?? unknown, d?.apiHealthErro), icon: Activity },
-    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: comMotivo(`HTTP ${d?.grafoHttp ?? "?"} · /api/live-fabric/graph`, d?.grafoVivo ?? unknown, d?.grafoErro), icon: GitBranch },
-    { nome: "Omni Router", estado: d?.omniRouter ?? unknown, detalhe: comMotivo(`HTTP ${d?.omniHttp ?? "?"} · /api/omni/status`, d?.omniRouter ?? unknown, d?.omniErro), icon: Cpu },
-    { nome: "Heartbeat", estado: d?.heartbeat ?? unknown, detalhe: comMotivo(`HTTP ${d?.heartbeatHttp ?? "?"} · self=${d?.heartbeatSelf ?? "?"}`, d?.heartbeat ?? unknown, d?.heartbeatErro), icon: HeartPulse },
-    { nome: "Receipts", estado: d?.receipts ?? unknown, detalhe: comMotivo(`HTTP ${d?.receiptsHttp ?? "?"} · /api/microdeploy/receipts`, d?.receipts ?? unknown, d?.receiptsErro), icon: Database },
+    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: "Site local consultado agora.", icon: House },
+    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "GitHub principal consultado agora.", icon: Github },
+    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: "Conexão principal da API consultada.", icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: "Mapa interno consultado.", icon: GitBranch },
+    { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Roteador de serviços consultado.", icon: Cpu },
+    { nome: "Sinal de atividade", estado: d?.heartbeat ?? unknown, detalhe: "Último sinal de atividade consultado.", icon: HeartPulse },
+    { nome: "Confirmações", estado: d?.receipts ?? unknown, detalhe: "Histórico de confirmações consultado.", icon: Database },
   ];
 
   const rotas = [
@@ -99,10 +131,10 @@ export function StatusPanel() {
 
   const modulos = [
     {
-      nome: "Screenpipe", estado: screen, icon: Eye, subtitulo: "Saída local do /health do Screenpipe",
+      nome: "Screenpipe", estado: screen, icon: Eye, subtitulo: "Gravação de telas e áudio da Casa",
       origem: d?.screenpipeFonte ?? "Sensor não carregado",
       linhas: d?.screenpipeEvents ?? ["Aguardando leitura real do servidor"],
-      nota: "Linhas sanitizadas de saúde e dependências. Capturas/OCR e stream bruto não são publicados.",
+      nota: "As gravações ficam na Casa. Este cartão mostra somente situação, horário e quantidade.",
     },
     {
       nome: "CentralDark Commander", estado: remote, icon: Monitor, subtitulo: "Ponte local · Casa SEGREDO",
@@ -120,13 +152,13 @@ export function StatusPanel() {
     <section className="panel space-y-5 p-5" aria-label="Máquina de estados viva da CentralDark">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-base font-semibold">🫀 Máquina de estados · conexões vivas</h3>
+          <h3 className="text-base font-semibold">🫀 Estado atual do sistema</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            Sensor real → identidade → estado → contraprova. 🟢 PASS · 🟡 sem prova/degradado · 🔴 falha confirmada.
+            Verde: funcionando. Amarelo: precisa de atenção ou verificação. Vermelho: precisa corrigir.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">POLÍTICA 15S</span>
+          <span className="text-[11px] text-muted-foreground">Atualiza a cada 15 s</span>
           <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
             ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
           </span>
@@ -142,7 +174,7 @@ export function StatusPanel() {
         </div>
       </header>
       <p className="font-mono text-[11px] text-muted-foreground" role="status" aria-live="polite">
-        {fresco ? <>Consulta: <DataHora iso={medidoEm} /> · atualização periódica ativa</> : "SEM MEDIÇÃO FRESCA · não promover último verde"}
+        {fresco ? <>Última atualização: <DataHora iso={medidoEm} /></> : "Sem leitura recente · use Medir agora para verificar novamente"}
         {q.isError ? " · falha de transporte no servidor" : ""}
       </p>
       {fresco && rotasComProblema.some((rota) => rota.estado === "FAIL" || rota.estado === "BLOCKED") ? (
@@ -158,7 +190,17 @@ export function StatusPanel() {
           return (
             <article key={s.nome} className="rounded-lg border border-border bg-background/40 p-3">
               <div className="flex items-center gap-2"><Icon className="size-4 text-muted-foreground" /><strong className="text-xs">{s.nome}</strong></div>
-              <div className="mt-3"><LuzViva estado={s.estado} nome={s.nome} fresco={fresco} /></div>
+              <div className="mt-3">
+                {s.nome === "Grafo Vivo" || s.nome === "Receipts" ? (
+                  <LuzProjecao
+                    estado={s.estado}
+                    nome={s.nome}
+                    fresco={fresco}
+                    http={s.nome === "Grafo Vivo" ? d?.grafoHttp : d?.receiptsHttp}
+                    erro={s.nome === "Grafo Vivo" ? d?.grafoErro : d?.receiptsErro}
+                  />
+                ) : <LuzViva estado={s.estado} nome={s.nome} fresco={fresco} />}
+              </div>
               <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground">{s.detalhe}</p>
             </article>
           );
@@ -166,7 +208,7 @@ export function StatusPanel() {
       </div>
       <details className="rounded-md border border-border p-3 text-xs">
         <summary className="cursor-pointer font-medium">
-          🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem PASS atual
+          🧿 Rotas e alertas · {fresco ? rotasComProblema.length : rotas.length} sem prova completa
         </summary>
         <p className="mt-2 text-muted-foreground">
           Alertas deste painel usam o mesmo sensor da Casa/VPS. Histórico persistente usa a Central de Notificações (Supabase);
@@ -189,22 +231,51 @@ export function StatusPanel() {
             <article key={m.nome} className="rounded-xl border border-border bg-background/60 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2"><Icon className="size-6 text-neon-blue" /><div><h4 className="font-semibold">{m.nome}</h4><p className="text-[11px] text-muted-foreground">{m.subtitulo}</p></div></div>
-                <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />
+                {m.nome === "CentralDark Commander" && fresco && d?.commanderHttp === 200 && d?.commanderEngine === true && remote === "RUNNING" ? (
+                  <div className="space-y-1" aria-label="Commander: ponte conectada; execução autenticada não comprovada">
+                    <span className="inline-flex items-center gap-2">
+                      <span className={`size-3 shrink-0 rounded-full ${CORES.verde}`} aria-hidden="true" />
+                      <span className="text-[11px] font-medium">Conectado</span>
+                    </span>
+                    <p className="text-[11px] text-muted-foreground">Pronto para receber uma ação quando necessário.</p>
+                  </div>
+                ) : m.nome === "Screenpipe" && fresco && d?.screenpipeDetail === "degraded" && m.estado === "RUNNING" ? (
+                  <span className="inline-flex items-center gap-2" aria-label={audioSemSinal ? "Screenpipe: telas gravando; áudio sem sinal recente" : "Screenpipe: precisa de atenção"}>
+                    <span className={`size-3 shrink-0 rounded-full ${CORES.amarela}`} aria-hidden="true" />
+                    <span className="text-[11px] font-medium">{audioSemSinal ? "Áudio sem sinal recente" : "Precisa de atenção"}</span>
+                  </span>
+                ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
-              <div className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Saída do sensor ${m.nome}`}>
-                <p className="font-mono text-[10px] tracking-wide text-neon-green">SAÍDA DO SENSOR · <DataHora iso={medidoEm} /></p>
+              {m.nome === "Screenpipe" ? (
+                <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Screenpipe: capturas recentes e monitores">
+                  <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>
+                  <ul className="mt-2 space-y-1 font-mono text-[11px]" aria-live="polite">
+                    {(fresco ? d?.screenpipeEvents ?? [] : []).filter((linha) =>
+                      /^(CAPTURA VISUAL|ÚLTIMO FRAME|MONITORES DETECTADOS|FRAMES NO HISTÓRICO ATUAL|FREQUÊNCIA MEDIDA):/.test(linha)
+                    ).map((linha) => <li key={linha} className="break-words">{linhaScreenpipeHumana(linha)}</li>)}
+                    {!fresco && <li>Sem leitura recente · clique em Medir agora</li>}
+                  </ul>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Histórico e imagens: Screenpipe Desktop → Timeline. A gravação permanece local na Casa;
+                    este card consulta só os metadados de /health e não publica capturas privadas.
+                  </p>
+                </div>
+              ) : null}
+              <details className="mt-3 rounded-md border border-border/70 bg-black/50 p-3" aria-label={`Detalhes técnicos do sensor ${m.nome}`}>
+                <summary className="cursor-pointer text-xs font-medium text-neon-green">Ver detalhes técnicos</summary>
+                <p className="mt-2 font-mono text-[10px] text-muted-foreground">Leitura: <DataHora iso={medidoEm} /></p>
                 <ul className="mt-2 max-h-40 space-y-1 overflow-auto font-mono text-[10px] text-foreground/90">
                   {m.linhas.map((linha, i) => <li key={i} className="break-all">{linha}</li>)}
                 </ul>
-              </div>
+              </details>
               <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">{m.nota}</p>
             </article>
           );
         })}
       </div>
       <p className="font-mono text-[10px] text-muted-foreground">
-        READ-ONLY · NO_FALSE_GREEN · QUERY_TIMEOUT/STALE→UNKNOWN · MONITORES NÃO EXECUTAM COMANDOS
+        Este painel apenas consulta o estado. Ele não executa comandos por conta própria.
       </p>
     </section>
   );

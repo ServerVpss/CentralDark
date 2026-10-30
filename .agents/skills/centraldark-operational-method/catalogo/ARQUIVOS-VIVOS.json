@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-29T12:21:30-03:00",
+    "gerado_em":  "2026-10-29T14:18:30-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,8 +18,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T11:48:32-03:00",
-                         "modificado_em":  "2026-10-29T11:48:32-03:00",
+                         "criado_em":  "2026-10-29T14:12:31-03:00",
+                         "modificado_em":  "2026-10-29T14:12:31-03:00",
                          "bytes":  13187,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -165,8 +165,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T11:48:32-03:00",
-                         "modificado_em":  "2026-10-29T11:48:32-03:00",
+                         "criado_em":  "2026-10-29T14:12:31-03:00",
+                         "modificado_em":  "2026-10-29T14:12:31-03:00",
                          "bytes":  6021,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1047,10 +1047,10 @@
                      {
                          "caminho":  "references/HERMES-FREE-TIER-FALLBACK.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  9125,
-                         "sha256":  "d64e2826e70459595a250ffa68d2b260ee5ee7402631514fb9644020b1bde403",
+                         "criado_em":  "2026-10-29T14:12:13-03:00",
+                         "modificado_em":  "2026-10-29T14:12:14-03:00",
+                         "bytes":  10698,
+                         "sha256":  "c45930635f52d3bd0f263e31b110e806a9d0957146df130b877b5991ef3c82e0",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1416,10 +1416,10 @@
                      {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-29T12:19:46-03:00",
-                         "modificado_em":  "2026-10-29T12:19:47-03:00",
-                         "bytes":  274099,
-                         "sha256":  "206c9c744bc9fe4d1140fdbc76f761585cdc4106d338efb92def7e6e8632148e",
+                         "criado_em":  "2026-10-29T14:16:28-03:00",
+                         "modificado_em":  "2026-10-29T14:16:28-03:00",
+                         "bytes":  277047,
+                         "sha256":  "ca6a319c897ba7ee4ec60344c5d99217f605a4f599cb6bd5b468317c42b849ca",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {

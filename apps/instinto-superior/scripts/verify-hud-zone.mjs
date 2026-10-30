@@ -363,6 +363,58 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("linguagem principal do Cockpit traduz estados tecnicos para pessoas", () => {
+  const estado = read("apps/instinto-superior/src/components/central/EstadoCentralDark.tsx");
+  const cartao = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const runtime = read("apps/instinto-superior/src/components/central/RuntimeSistema.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  for (const rotulo of ["Funcionando", "Em andamento", "Precisa de ação", "Conecte sua conta", "Ainda não verificado", "Precisa corrigir"]) {
+    assert.ok(estado.includes(rotulo), "rotulo humano ausente: " + rotulo);
+  }
+  assert.ok(estado.includes("Ver detalhes técnicos"));
+  assert.ok(cartao.includes("rotuloTecnicoHumano(estado)"));
+  assert.ok(painel.includes("Estado atual do sistema"));
+  assert.ok(painel.includes("Áudio sem sinal recente"));
+  assert.ok(runtime.includes("Sistema e desempenho"));
+  assert.ok(conexoes.includes("Ver detalhes técnicos das conexões"));
+});
+
+test("Screenpipe Casa projeta apenas metadados recentes no card existente, sem vazar frames", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  for (const campo of ["last_frame_timestamp", "frame_status", "monitors", "frames_db_written", "capture_fps_actual"]) {
+    assert.ok(sensor.includes(campo), "fonte real ausente: " + campo);
+  }
+  assert.ok(sensor.includes("idade <= 30_000"));
+  assert.ok(sensor.includes("frameFresco && frameStatus === \"ok\""));
+  assert.ok(sensor.includes('sonda.httpStatus === 200'));
+  assert.ok(sensor.includes('HISTÓRICO VISUAL: Screenpipe Desktop'));
+  assert.ok(painel.includes("Capturas recentes · Screenpipe Casa"));
+  assert.ok(painel.includes("d?.screenpipeEvents"));
+  assert.ok(painel.includes("Histórico e imagens: Screenpipe Desktop"));
+  assert.ok(!sensor.includes('fetch("http://127.0.0.1:3030/frames/'));
+  assert.ok(!painel.includes('<img src="http://127.0.0.1:3030/'));
+});
+
+test("maquina de estados distingue rota disponível de execução comprovada sem falso verde", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.ok(painel.includes("function LuzProjecao("));
+  assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
+  assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
+  assert.ok(painel.includes("Conexão disponível"));
+  assert.ok(painel.includes("Uso recente ainda não verificado"));
+  assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
+  assert.ok(painel.includes("Conectado"));
+  assert.ok(painel.includes("Pronto para receber uma ação quando necessário."));
+  assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
+  assert.ok(painel.includes("Áudio sem sinal recente"));
+  assert.ok(painel.includes("sem prova completa"));
+  assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));
+});
+
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
   const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");

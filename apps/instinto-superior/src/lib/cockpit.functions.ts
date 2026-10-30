@@ -90,6 +90,7 @@ export type EstadoCentralDark = {
   casaSiteFonte: string;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
+  screenpipeAudioStatus: string | null;
   screenpipeFonte: string;
   screenpipeEvents: string[];
   screenpipeVpsHttp: number | null;
@@ -285,6 +286,29 @@ function saidaScreenpipe(sonda: Probe): string[] {
     const estado = texto(valor["status"]);
     if (estado && /^[a-zA-Z0-9 _-]{1,32}$/.test(estado)) saida.push(`${nome}: ${estado}`);
   }
+  // Metadados do gravador local, sem expor OCR, imagem, áudio ou conteúdo privado.
+  // HEALTH 200 e FRAME FRESH são provas diferentes; áudio degradado não apaga frame vivo.
+  const quadro = texto(sonda.dados?.["last_frame_timestamp"]);
+  const idade = quadro ? Date.now() - Date.parse(quadro) : Number.NaN;
+  const frameFresco = sonda.httpStatus === 200 && Number.isFinite(idade) && idade >= -5_000 && idade <= 30_000;
+  const frameStatus = texto(sonda.dados?.["frame_status"])?.toLowerCase();
+  const frameProven = frameFresco && frameStatus === "ok";
+  saida.push(`CAPTURA VISUAL: ${frameProven ? "FRESH" : "UNKNOWN/STALE"} · frame_status=${frameStatus ?? "UNKNOWN"}`);
+  saida.push(`ÚLTIMO FRAME: ${quadro ?? "UNKNOWN"}`);
+  const monitores = Array.isArray(sonda.dados?.["monitors"])
+    ? sonda.dados["monitors"].filter((v): v is string => typeof v === "string").slice(0, 8)
+    : [];
+  saida.push(`MONITORES DETECTADOS: ${sonda.httpStatus === 200 ? monitores.length : "UNKNOWN"}`);
+  if (sonda.httpStatus === 200) monitores.forEach((monitor, i) => {
+    saida.push(`MONITOR ${i + 1}: ${monitor.replace(/[^a-zA-Z0-9 ()x-]/g, "").slice(0, 64)}`);
+  });
+  const pipeline = objetoJson(sonda.dados?.["pipeline"]) ? sonda.dados["pipeline"] : null;
+  const gravados = pipeline?.["frames_db_written"];
+  const fps = pipeline?.["capture_fps_actual"];
+  saida.push(`FRAMES NO HISTÓRICO ATUAL: ${typeof gravados === "number" && Number.isFinite(gravados) && gravados >= 0 ? gravados : "UNKNOWN"}`);
+  saida.push(`FREQUÊNCIA MEDIDA: ${typeof fps === "number" && Number.isFinite(fps) && fps >= 0 ? fps.toFixed(2) + " fps" : "UNKNOWN"}`);
+  saida.push(`ÁUDIO: ${texto(sonda.dados?.["audio_status"]) ?? "UNKNOWN"} · independente da captura visual`);
+  saida.push("HISTÓRICO VISUAL: Screenpipe Desktop → Timeline; imagens e OCR não publicados no Cockpit.");
   return saida;
 }
 
@@ -604,6 +628,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
+      screenpipeAudioStatus: texto(screenpipeCasa.dados?.["audio_status"]),
       screenpipeFonte: screenpipeCasaFonte,
       screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
       screenpipeVpsHttp: screenpipeVps.httpStatus,

@@ -178,3 +178,29 @@ Para o esforço por cartão, usar **superfície suportada pela versão instalada
 ### Aprendizado para a skill-mãe
 
 O inventário deve guardar, por execução comprovada: `skill_chamada`, `gatilho`, `breath_id`, `perfil`, `provider`, `model`, `reasoning_effort`, `tempo`, `resultado`, `evidência`, `contraprova` e `contexto`. Só então uma combinação pode virar preferência para um tipo de missão; manter as alternativas preservadas para outros casos.
+
+## Receita comprovada — delegação Free Tier para subagentes (29/10/2026)
+
+Preferir sempre modelo Free Tier/barato para subagentes; o modelo principal pode permanecer mais capaz, mas não deve autoelevar subagentes para GPT/Codex/Claude. Para a rota Nous mostrada no Desktop como `Orion 3.5 122B:Free`, o identificador efetivo medido foi `ornith/ornith-1.5-122b:free`.
+
+### Configuração persistente
+
+Não alterar o YAML sensível com `patch`/editor direto. Usar a CLI instalada:
+
+```bash
+hermes config set delegation.provider nous
+hermes config set delegation.model ornith/ornith-1.5-122b:free
+hermes config set compression.codex_gpt55_autoraise false
+```
+
+Depois, fazer readback de `config.yaml` e confirmar `delegation.provider`, `delegation.model` e `codex_gpt55_autoraise=false`.
+
+### Smoke test obrigatório antes do fan-out
+
+1. Abrir nova sessão/recarregar configuração quando exigido pela versão.
+2. Disparar **um** subagente curto, sem mutação.
+3. Consultar `delegate_task(action="list")` e exigir `model=ornith/ornith-1.5-122b:free` enquanto `status=running`.
+4. Aguardar o resultado e registrar o route/model efetivo.
+5. Só então lançar quatro subagentes; se aparecer `gpt-5.6`, `claude-*` ou outro fallback, interromper e marcar `BLOCKED`.
+
+Prova desta receita: smoke test `deleg_814b177a` concluiu com `route=ornith/ornith-1.5-122b:free`; quatro tarefas anteriores que resolveram `gpt-5.6-luna-900k` foram rejeitadas e interrompidas. `TÉCNICA_DECLARADA != TÉCNICA_EXECUTADA`; sempre confiar no readback do dispatcher.
