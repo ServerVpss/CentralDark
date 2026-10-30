@@ -25,6 +25,22 @@ oracle_review_on_change: true
 **Reuso canônico:** `docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md` (reuso de prova/Delta Útil), `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (cursor e único writer), `.agents/skills/meta-lupa/SKILL.md` (contraprova). `RANDOLPH.md` aparece como legado pendente de migração; não assumir que é owner vigente nem criar clone por grafia ambígua.
 <!-- /CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
 
+<!-- CENTRALDARK_CUA_CODEX_HERMES_20261029 -->
+## 🖱️ Computer Use existente — Codex + Hermes + AI Andarilho (CHEFE, 2026-10-29)
+
+**Intenção:** navegar com mouse, clique, rolagem e readback pelo braço **já existente**, sem criar outro driver, agente, bridge, scheduler ou automação. Reusar `.agents/skills/autonomous-ai-agents/computer-use/SKILL.md` (vocabulário tipado de `computer_use` do Hermes) e `.agents/skills/autonomous-ai-agents/ai-andarilho/SKILL.md` (travessia e continuidade). Borda alaranjada vista no Codex é pista visual, **não** identificação comprovada da ferramenta que executou o clique.
+
+**Caminho preferido, quando a sessão Hermes expõe a ferramenta:** `computer_use(action="list_windows")` → `computer_use(action="capture", mode="som", app="<janela certa>")` → selecionar elemento pelo índice **do snapshot atual** → `computer_use(action="click", element=N, capture_after=True)` ou `computer_use(action="scroll", direction="down", amount=3, element=N)` → novo `capture` e readback do efeito. Primeiro tentar entrega em segundo plano pelo `cua-driver`; recapturar após mudança de janela; não reutilizar índice velho.
+
+**Contraprova medida na Casa SEGREDO (2026-10-29):** `codex-computer-use-swift.exe` estava rodando, mas **chamada direta à ferramenta nativa do Codex por este chat = UNKNOWN**. O comando já existente `hermes computer-use status` confirmou `cua-driver 0.21.0` instalado; `hermes computer-use doctor` confirmou sessão MCP ativa, UIAutomation acessível e captura D3D11 disponível. `DRIVER_HEALTH_PASS != HERMES_SESSION_ACTION_PASS`.
+
+**Fallback observado, não substituir o dono:** quando este chat não dispõe do `computer_use` direto, o Remote Desktop Commander autorizado acessou UIAutomation do Edge na Casa. Em quatro monitores, coordenadas podem ser negativas. O cursor físico foi movido e houve clique em **“Inspecionar rota GitHub para Casa”**, somente após conferir o botão no ponto; o readback mostrou a gaveta **“Inspeção de rota”**. **Clique físico com efeito na UI = PASS apenas nessa ação**, não é prova de invocação pelo Codex/Hermes. Esse fallback move o cursor real, ao contrário do modo em segundo plano da skill; requer intenção explícita do CHEFE e cuidado para não disputar foco.
+
+**Limite medido:** eventos de rolagem física para baixo e para cima foram enviados, mas não houve deslocamento mensurável do texto da gaveta; `SCROLL_EFFECT=UNKNOWN`, nunca PASS por mero envio. Um comando “Voltar” da interface pode trocar a página/aba: confirmar alvo exato antes de fechar painéis. Quando o hit-test do cursor não identifica o botão esperado, **não clicar**. Não clicar em `Sincronizar Tudo`, VPS, permissões ou ações destrutivas como teste de mouse; `ACTION_DISPATCHED != EFFECT_OBSERVED`.
+
+**Continuidade:** `INTENÇÃO → JANELA/SESSÃO → SNAPSHOT ATUAL → AÇÃO MÍNIMA → READBACK → RECEIPT → MESMO OWNER OU NOOP`. Ensinar ao Hermes pela Skill-Mãe/owners citados; **publicado no Git != carregado na Casa/Hermes**. Se houver aprendizado novo comprovado, acrescentar **somente o delta útil** nesta Skill-Mãe e conservar a receita detalhada no owner `computer-use`, sem recomeçar a descoberta.
+<!-- /CENTRALDARK_CUA_CODEX_HERMES_20261029 -->
+
 <!-- CENTRALDARK_SKILL_MOTHER_OPEN_AND_GLOBAL_INDEX_20261028 -->
 ## 🪬 Índice global e abertura da Skill-Mãe — modo operacional
 
