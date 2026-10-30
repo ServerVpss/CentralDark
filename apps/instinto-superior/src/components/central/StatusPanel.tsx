@@ -33,6 +33,22 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
     </span>
   );
 }
+function SensorScreenpipe({ nome, estado, detalhe }: { nome: string; estado: Estado; detalhe: string }) {
+  const cor = luz(estado);
+  const piscar = estado !== "UNKNOWN" ? "animate-pulse motion-reduce:animate-none" : "";
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2">
+      <div className="flex min-w-0 items-center gap-2">
+        <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${piscar}`} aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="text-[11px] font-medium">{nome}</p>
+          <p className="truncate text-[10px] text-muted-foreground">{detalhe}</p>
+        </div>
+      </div>
+      <span className="shrink-0 text-[10px]">{estado === "RUNNING" ? "Precisa de atenção" : etiqueta(estado, nome)}</span>
+    </li>
+  );
+}
 /**
  * Sonda da superfície ≠ prova de execução. A API pode responder com JSON
  * e ainda declarar NOT_REVALIDATED: mostramos conectividade verde somente
@@ -123,6 +139,11 @@ export function StatusPanel() {
   const medidoEm = d?.atualizadoEm;
   const audioScreenpipe = d?.screenpipeAudioStatus?.toLowerCase() ?? null;
   const audioSemSinal = audioScreenpipe === "stale" || audioScreenpipe === "stalled" || audioScreenpipe === "unavailable";
+  const screenpipeVisualAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^CAPTURA VISUAL: FRESH/.test(linha)));
+  const screenpipeImagemAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^ÚLTIMO FRAME:/.test(linha)));
+  // d?.screenpipeDetail === "degraded" continua sendo uma degradação interna;
+  // não rebaixa o estado principal quando 3030/health responde PASS.
+  const screenpipeSaude: Estado = fresco && d?.screenpipeHttp === 200 ? "PASS" : screen;
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: d?.casaSiteFonte ?? "Casa · site local · fonte não medida", icon: House },
     { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "Main · GitHub principal consultado agora.", icon: Github },
@@ -261,11 +282,8 @@ export function StatusPanel() {
                     </span>
                     <p className="text-[11px] text-muted-foreground">Pronto para receber uma ação quando necessário.</p>
                   </div>
-                ) : m.nome === "Screenpipe" && fresco && d?.screenpipeDetail === "degraded" && m.estado === "RUNNING" ? (
-                  <span className="inline-flex items-center gap-2" aria-label={audioSemSinal ? "Screenpipe: telas gravando; áudio sem sinal recente" : "Screenpipe: precisa de atenção"}>
-                    <span className={`size-3 shrink-0 rounded-full ${CORES.amarela}`} aria-hidden="true" />
-                    <span className="text-[11px] font-medium">{audioSemSinal ? "Áudio sem sinal recente" : "Precisa de atenção"}</span>
-                  </span>
+                ) : m.nome === "Screenpipe" ? (
+                  <LuzViva estado={screenpipeSaude} nome="Screenpipe" fresco={fresco} />
                 ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
@@ -309,6 +327,17 @@ export function StatusPanel() {
               ) : null}
               {m.nome === "Screenpipe" ? (
                 <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Screenpipe: capturas recentes e monitores">
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold">Sensores Screenpipe · leitura separada</p>
+                    <ul className="mt-2 space-y-2" aria-live="polite">
+                      <SensorScreenpipe nome="Porta e health" estado={screenpipeSaude} detalhe="3030/health · processo Screenpipe medido na Casa" />
+                      <SensorScreenpipe nome="Captura visual" estado={screenpipeVisualAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeVisualAtual ? "telas gravando agora" : "sem frame visual fresco nesta leitura"} />
+                      <SensorScreenpipe nome="Imagem / último frame" estado={screenpipeImagemAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeImagemAtual ? "última imagem registrada" : "sem último frame confirmado"} />
+                      <SensorScreenpipe nome="Áudio" estado={audioSemSinal ? "RUNNING" : fresco && d?.screenpipeAudioStatus ? "PASS" : "UNKNOWN"} detalhe={audioSemSinal ? "Áudio sem sinal recente · não derruba o health principal" : "sinal de áudio medido"} />
+                      <SensorScreenpipe nome="Vídeo" estado="UNKNOWN" detalhe="sem sensor separado de vídeo; não inferido da captura visual" />
+                      <SensorScreenpipe nome="Texto / OCR" estado="UNKNOWN" detalhe="não promovido sem sensor ou evento OCR medido" />
+                    </ul>
+                  </div>
                   <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>
                   <ul className="mt-2 space-y-1 font-mono text-[11px]" aria-live="polite">
                     {(fresco ? d?.screenpipeEvents ?? [] : []).filter((linha) =>
