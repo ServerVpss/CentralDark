@@ -7,6 +7,24 @@ oracle_review_on_change: true
 ---
 
 
+<!-- CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
+## 🔎 RASTRO PRIMEIRO — TRACE-FIRST / Delta Útil (CHEFE, 2026-10-29)
+
+**Gatilho:** pedido para verificar, continuar, auditar ou diagnosticar uma missão que já está com Claude, Hermes, Codex ou outro executor conhecido. Antes de abrir busca geral, identificar a **sessão original e seu rastro primário**, no canal autorizado pelo CHEFE (por exemplo, **somente GH Casa** significa não chamar Desktop Commander, VPS nem fontes locais). Isto complementa o Delta Contínuo e a MetaLupa, sem nova skill, log, sensor, executor ou owner.
+
+**Procedimento mínimo:** INTENÇÃO VIGENTE → EXECUTOR/GOAL/SESSION_ID → LOG/JSONL ORIGINAL + TOOL_USE/TOOL_RESULT (timestamps, comandos, exit codes) → ÚLTIMO RECEIPT/NEXT_CURSOR → ESTADO ATUAL DO OWNER/HEAD → DELTA MATERIAL NÃO PROVADO → CONTRAPROVA DISCRIMINANTE (somente quando necessária) → VEREDITO (PASS/FAIL/BLOCKED/UNKNOWN) → MESMO OWNER/WRITER → PR/RECEIPT COMPATÍVEL ou NOOP.
+
+1. Priorizar fonte primária do executor: trilha de ferramentas e respostas, sobre resumo do assistente, narrativa de chat, screenshot ou descoberta por varredura. Resolver o último cursor antes de reabrir o sistema inteiro; usar busca ampla somente se a fonte primária for inacessível/incompleta, registrando o motivo.
+2. Correlacionar sessão, intenção, caminho do owner, SHA, momento, ferramenta, ação, resultado e recibo. **Mensagem de sucesso ≠ comando executado ≠ efeito observado**. Um log mostra o que seu executor registrou, não prova sozinho impacto no runtime; contraprovar com readback independente apropriado.
+3. Reutilizar testes e recibos válidos por identidade causal. Só medir novamente se HEAD, runtime, owner, claim, escopo ou validade da prova mudou. **UNKNOWN ≠ PASS; TESTES_FIXTURE ≠ TESTE_REAL; DOCUMENTED ≠ EXECUTED; MERGED ≠ DEPLOYED**.
+4. Preservar uma caneta por escopo e as restrições do CHEFE. Leitura de log não autoriza agir na UI, manipular disco, reexecutar comandos com efeitos ou vazar tokens; sanitizar segredos. Se só GitHub foi autorizado, **GH_ONLY** vale também para a contraprova.
+5. Retornar em formato compacto: `EXECUTOR | SESSION/TRACE | CURRENT | DELTA | EVIDÊNCIA | CONTRAPROVA | VEREDITO | NEXT_CURSOR`. Sem delta novo: `NO_NEW_INFORMATION → NOOP`; sem rastro acessível: `TRACE_UNAVAILABLE → UNKNOWN`, nunca inventar conclusão.
+
+**Caso motivador:** na auditoria do instalador openKylin, a leitura da sessão Claude `88b5c878-405d-47e0-a708-9da1b23da730` (2026-10-29) explicou rapidamente o bloqueio da ISO e o encerramento por limite de uso; a suíte de fixtures foi reexecutada independentemente (`236 PASS, 0 FAIL, 1 SKIP`) sem tocar nos originais K:. Esse caso valida o ganho de rota na **sessão observada**, não uma melhora universal medida. Não transformar o exemplo em obrigação de consultar dispositivo local em outras missões.
+
+**Reuso canônico:** `docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md` (reuso de prova/Delta Útil), `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (cursor e único writer), `.agents/skills/meta-lupa/SKILL.md` (contraprova). `RANDOLPH.md` aparece como legado pendente de migração; não assumir que é owner vigente nem criar clone por grafia ambígua.
+<!-- /CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
+
 <!-- CENTRALDARK_SKILL_MOTHER_OPEN_AND_GLOBAL_INDEX_20261028 -->
 ## 🪬 Índice global e abertura da Skill-Mãe — modo operacional
 
