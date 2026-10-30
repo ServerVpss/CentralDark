@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-29T14:18:30-03:00",
+    "gerado_em":  "2026-10-30T15:29:57-03:00",
     "fuso_horario":  "America/Bahia",
     "especificacao":  "https://agentskills.io/specification",
     "arquivos":  [
@@ -18,9 +18,9 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T14:12:31-03:00",
-                         "modificado_em":  "2026-10-29T14:12:31-03:00",
-                         "bytes":  13187,
+                         "criado_em":  "2026-10-30T15:09:14-03:00",
+                         "modificado_em":  "2026-10-30T15:09:14-03:00",
+                         "bytes":  13188,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
                          "referencias":  [
@@ -165,9 +165,9 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-29T14:12:31-03:00",
-                         "modificado_em":  "2026-10-29T14:12:31-03:00",
-                         "bytes":  6021,
+                         "criado_em":  "2026-10-30T15:09:14-03:00",
+                         "modificado_em":  "2026-10-30T15:09:14-03:00",
+                         "bytes":  6022,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
                          "referencias":  [
@@ -985,6 +985,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T10:32:11-03:00",
+                         "modificado_em":  "2026-10-30T10:32:11-03:00",
+                         "bytes":  5029,
+                         "sha256":  "9dfe33889f757cecdcec15946a5420d6bb2199cb2f54feccafa203772ef1bec6",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "references/delegacao-economica-com-prova.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-15T13:26:01-03:00",
@@ -1096,6 +1108,25 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T00:07:00-03:00",
+                         "modificado_em":  "2026-10-30T00:07:00-03:00",
+                         "bytes":  6131,
+                         "sha256":  "4826354b5828f8342deb71a945848f6304429f01c3f3acd6ddfcb7bd5f3e925f",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "../SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../scripts/Trace-TransientConsoleWindows.ps1",
+                                                 "existe":  true
+                                             }
+                                         ]
+                     },
+                     {
                          "caminho":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
@@ -1204,6 +1235,18 @@
                          "modificado_em":  "2026-10-29T07:58:27-03:00",
                          "bytes":  3996,
                          "sha256":  "6d133be5f60868207de97592a8bb35c07d64cc8d77aae6a08f18d454921a731a",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T14:30:16-03:00",
+                         "modificado_em":  "2026-10-30T15:29:41-03:00",
+                         "bytes":  7559,
+                         "sha256":  "e5be52dbf49f66d5259c65e44a00bab79d9a9c6ff67dd87535c6eb9b0ad2ee70",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1414,14 +1457,46 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Trace-TransientConsoleWindows.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-30T00:07:40-03:00",
+                         "modificado_em":  "2026-10-30T00:08:59-03:00",
+                         "bytes":  6164,
+                         "sha256":  "4ffb343763f0129704b616c5988f276ad7b4205a721e91584f8f0ded28b78109",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-29T14:16:28-03:00",
-                         "modificado_em":  "2026-10-29T14:16:28-03:00",
-                         "bytes":  277047,
-                         "sha256":  "ca6a319c897ba7ee4ec60344c5d99217f605a4f599cb6bd5b468317c42b849ca",
+                         "criado_em":  "2026-10-30T00:36:32-03:00",
+                         "modificado_em":  "2026-10-30T14:57:26-03:00",
+                         "bytes":  289372,
+                         "sha256":  "0b640305828f84e4625373fad9b5ef551b6c0b3932095d19516a761a499a36c6",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
+                                             {
+                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "scripts/Trace-TransientConsoleWindows.ps1",
+                                                 "existe":  true
+                                             },
                                              {
                                                  "destino":  "scripts/Hermes-Desktop-BrowserTab.ps1",
                                                  "existe":  true

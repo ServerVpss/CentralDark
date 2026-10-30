@@ -7,6 +7,34 @@ oracle_review_on_change: true
 ---
 
 
+<!-- CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+## 🍒+1 Busca autorizada e continuidade por rotas eficazes
+
+Toda busca autorizada pelo CHEFE escolhe a rota mais rápida e comprovada para a intenção, sem repetir medições válidas. Reutilizar owner, sessão, receita, receipt, fingerprint e NEXT_CURSOR. Usar dinamicamente índice/catálogo, log primário, MCP, UI Automation do Classic/Codex/Cockpit/openKylin, Screenpipe local 3030 ou outras fontes disponíveis. Redescobrir somente quando uma identidade, estado, versão ou autorização mudar. Confira a [receita UI + roteamento + caches](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
+
+Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência se medida, estado de cache, prova, contraprova e cursor; sem delta novo, NOOP. Reutilizar catálogo/autocura da Skill-Mãe, session-intelligence-harvester, scripts/memory-linker e knowledge-compiler, sem segundo motor. Separar cache operacional persistente entre chats de Prompt/Self-Cache P15 e KV Cache interno do modelo P16; nunca alegar HIT ou economia dos modelos sem telemetria. A permissão do CHEFE para buscar não contorna autenticação do serviço. CACHE_HIT não é prova do efeito.
+### 🍒+1 Rota curta de delegação Codex pela UI, voz e texto (30/10/2026)
+
+**Fato observado:** o CHEFE ditou em voz a delegação para integração Gênesis + replay operacional + RSI no Cockpit; SOL localizou a conversa Codex já aberta ("Inspect CentralDark surface plugin"), leu o contexto, preencheu o campo "Trabalhe com o Codex", encontrou "Enviar" habilitado e enviou uma única vez. O CHEFE confirmou visualmente que a mensagem apareceu. **Estado:** `VOICE_INTENT_TO_CODEX_UI_SEND=USER_CONFIRMED`; isto prova o envio observado pelo CHEFE, **não** a execução ou conclusão da integração pelo Codex. Não inventar um receipt remoto de mensagem.
+
+**Receita reutilizável, sem redescoberta:** `INTENÇÃO_VOZ_OU_TEXTO → REUTILIZAR_JANELA_E_SESSÃO_CODEX → CONFERIR_DESTINO_APENAS_SE_MUDOU → PREENCHER_CAMPO_EXISTENTE → ENTER_PARA_ENVIAR_SE_SUPORTADO → READBACK_MÍNIMO → NEXT_CURSOR`. Reutilizar a janela, a conversa, os seletores e a autorização já confirmados, sem reiniciar Codex, varrer monitores, reler catálogos, duplicar pesquisas, testar novamente a modalidade textual ou repetir verificações que não mudam a decisão. Não aguardar ou clicar no botão quando o campo já está pronto e `Enter` efetua o envio; verificar habilitação/estado só quando necessário. Se `Enter` inserir quebra de linha ou não produzir envio, usar **uma vez** o botão Enviar já identificado, após conferir que a mensagem não foi enviada. Nunca reenviar se o resultado for incerto. Confirmar destino e efeito apenas no ponto mínimo necessário, sem eliminar a verificação que impede envio para conversa errada.
+
+**Modalidades e prova:** a delegação **por voz** funcionou e foi confirmada visualmente pelo CHEFE. A entrada **por texto** aproveita exatamente a mesma rota, pois a UI recebe o texto final; por decisão expressa do CHEFE, **não exigir teste independente de texto para reutilizar esse método**. Isto é transferência do método já comprovado, não alegação de medição separada ou execução concluída pelo Codex.
+
+**Kaizen por utilização:** a cada uso real, registrar imediatamente método, ganho observado, caminho/controle, estado e `NEXT_CURSOR` na Skill-Mãe/owner existente; classificar a evidência sem bloquear captura. Antecipar o próximo passo já autorizado e eliminar checagens, esperas, cliques ou confirmações redundantes que não alterem risco, destino ou prova do efeito. **Se surgir rota mais rápida:** compará-la apenas no delta relevante (mesmo destino, autorização e efeito), registrar como candidata imediatamente e, após prova suficiente de que é mais simples/rápida e não perde segurança ou confiabilidade, substituir a rota padrão na MESMA receita, preservando fallback e histórico; não impor bateria de testes que repete fatos válidos. Reavaliar somente se houver delta material de UI, sessão, permissão, alvo, erro ou resultado. Não inventar automação permanente: reutilização ocorre quando o executor carrega a receita. Preservar escritor único e delegação Gênesis/Cockpit existente.
+
+<!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+<!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
+
+Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita multijanela existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e selecionar menor rota com prova: pagina alcançavel por chrome-devtools-mcp existente -> list_pages, take_snapshot, click(uid)/fill(uid), novo snapshot + efeito; Windows app/Edge nao exposto -> UIA Name/PID/ControlType, Invoke/Value/SelectionItem, readback. Codex e Claude ja executam chrome-devtools-mcp v1.12.0. O Chrome de depuracao observado usa pipe e perfil separado, portanto nao pressupor acesso a abas pessoais do Edge. CDP usa mouse virtual; UIA Invoke nao move cursor fisico Windows. Cursor de Windows visivel exige input nativo autorizado sobre alvo real. Screenpipe 3030 = sensor, nao executor. Preservar recursos em uso, sem iniciar servidor/Chrome duplicado ou copiar cookies; registrar click, snapshot/readback e recibo, UNKNOWN se sem prova. 🍒+1 somente ganho comprovado.
+<!-- /CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+<!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
+## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
+
+Gatilho automatico por contexto: quando CHEFE pedir para entrar no ChatGPT Classic, clicar, preencher, navegar, baixar, editar ou atualizar plugin no aplicativo Windows, carregar [receita de UIAutomation do Classic](references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md). Identificar OpenAI.ChatGPT-Desktop / ChatGPT Classic.exe e janela ChatGPT Classic, nao Codex nem aba Edge. Reutilizar AutomationElement e padroes InvokePattern, ExpandCollapsePattern, SelectionItemPattern, ValuePattern e TogglePattern conforme suporte real. Conferir controles e efeitos. Preservar drafts e arquivos, nao enviar ou excluir sem autorizacao, e nao codificar coordenadas. CLI/UI_CLICK != EFFECT_PROVED; documentacao Git != automacao ativa.
+
+<!-- /CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
 <!-- CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
 ## 🪟 Gatilho autônomo de diagnóstico — terminal piscando, janelas [], Hermes/CLI :9119
 
@@ -1175,6 +1203,31 @@ Nao usar em conversa comum. Só para missao operacional executada.
 
 
 ## SELF-LEARNING HARVEST (integrado ao Registro do Ouro)
+
+### Técnica cristalizada — adapter de health separado por owner
+
+Quando o Cockpit consulta vários serviços com contratos diferentes, não usar uma
+única `apiBase` para todas as sondas. Manter a base do Omni Router separada da
+base de health do Commander:
+
+```text
+OMNI_API_BASE=127.0.0.1:8099
+COMMANDER_HEALTH_BASE=127.0.0.1:9101
+TUNNEL_READYZ=127.0.0.1:8742/readyz
+```
+
+O adapter deve aceitar `CENTRALDARK_ROUTER_HEALTH_URL`, usar `9101` como padrão
+na Casa e preservar `8099` para `/api/omni/*` e `/api/live-fabric/*`. Não
+substituir todas as rotas por `9101`: o Commander expõe health e `/tool`, não o
+contrato Omni. Depois do menor delta, validar nesta ordem: build, heartbeat e
+health do 8099, `9101/health` com `engine_connected=true`, uma ferramenta
+read-only em `9101/tool` com `CASA_ENGINE_RESULT` e `8742/readyz`. Registrar
+receipt com numerador/denominador Michelin e manter a leitura visual do Cockpit
+como prova separada do runtime.
+
+Falha evitada: listener 8099 existente, mas sem resposta, mascarando o
+Commander 9101 e deixando o card amarelo. Rollback: remover o adapter separado
+e restaurar a chamada anterior, sem criar serviço ou processo paralelo.
 
 **Gatilho:** tarefa só funcionou após várias tentativas / descobriu fato projeto-específico / workflow recorrente / usuário disse "lembra isso".
 
@@ -3663,3 +3716,201 @@ CICLO_BILATERAL_COMPLETO=UNKNOWN
 ```
 
 Esta receita está documentada, não executada por este patch. Sua homologação exige replay A→B, readback independente em ambas as superfícies, receipt correlacionado, contraprova e comparação com a baseline; sem isso o veredito é `UNKNOWN`.
+
+## RECEITA VIVA — mapa completo de navegação do Cockpit (2026-10-30)
+
+<!-- CENTRALDARK_COCKPIT_CONTROL_MAP_20261030 -->
+
+**Objetivo:** ensinar qualquer executor que carregue esta Skill-Mãe a operar o Cockpit existente com o mesmo método. A receita separa navegação segura, leitura, expansão e mutação. Ela não transforma um botão visível em prova de backend.
+
+**Owner:** `K:\apps\instinto-superior\src\components\central\CockpitShell.tsx`.
+**Owners auxiliares:** `AutoSyncButton.tsx`, `StatusPanel.tsx`, `MapaOwners.tsx`, `SyncCenter.tsx` e `CockpitActionButton.tsx`.
+**Superfície medida:** `http://127.0.0.1:8080/sala-controle`, título `Cockpit CentralDark — Sala de Controle`.
+**Rota de controle:** Browser/UI Automation autorizado → DOM/ARIA → ação sem coordenada fixa → readback do mesmo documento.
+
+### Inventário atual comprovado
+
+- `CONTROL_ELEMENTS=127`: união de `button`, `summary`, `a`, `role=tab`, `role=checkbox` e `role=combobox` no DOM renderizado.
+- `TOP_LEVEL_TABS=27`: todas as 27 abas foram selecionadas uma vez e cada seleção mostrou um `tabpanel` ativo com título ou conteúdo próprio.
+- `HARNESS_STATUS_CONTROLS=37` antes do catálogo de abas; `CONTENT_CONTROLS=63` depois do catálogo. Esses números são o snapshot da sessão, não um contrato fixo.
+- `PORT_INVENTORY_READBACK=204` no momento da medição. O número é dinâmico. Não copiar um valor histórico para outra sessão.
+- `MEASURE_READBACK=PASS` no escopo do sensor: antes `Última atualização: 30/10/2026, 16:05:36`; depois `16:05:58`, após `Medir agora` retornar ao estado utilizável. Isso prova a leitura do sensor, não todas as rotas do backend.
+- `OBSERVED_AT=2026-10-30T19:06:30.212Z`; `URL_READBACK=PASS`; `TITLE_READBACK=PASS`.
+
+### Fluxo obrigatório para qualquer botão
+
+```text
+IDENTIFICAR_INTENÇÃO
+→ RESOLVER_OWNER_E_SESSÃO
+→ SNAPSHOT_BEFORE(URL,TÍTULO,ROLE,NOME,ARIA,FLOW,ESTADO)
+→ CLASSIFICAR(SAFE_NAV|READ_ONLY_EXPAND|READ_ONLY_MEASURE|MUTATING|UNKNOWN)
+→ SEGURO? CLICAR UMA VEZ PELO SELETOR SEMÂNTICO
+→ SNAPSHOT_AFTER(DOM,ARIA,TAB/DIÁLOGO,STATUS,DATA)
+→ CONTRAPROVA_E_COMPARAÇÃO
+→ REGISTRAR(AÇÃO,READBACK,EFEITO,STATUS,RECEIPT,NEXT_CURSOR)
+```
+
+Use `data-cd-flow` quando existir. Caso contrário, use `role` + nome acessível. Reidentifique o controle depois de qualquer navegação. Não reutilize índice AX antigo. `CLICK_ACCEPTED != EFFECT_PROVED`.
+
+### Mapa de controles e comportamento
+
+| Local | Controle | Classificação | Ação real / owner | Regra de prova |
+|---|---|---|---|---|
+| Harness superior flutuante | `CentralDark` | `SAFE_NAV` | `abrirDestino("visao")` | aba Visão ativa e `#centraldark-harness-abas` visível |
+| Harness superior flutuante | lupa | `SAFE_NAV` | `definirGaveta("top")` | gaveta Harness aberta e campo `busca-harness` presente |
+| Harness superior flutuante | mapa | `SAFE_NAV` | `definirGaveta("right")` | gaveta direita aberta |
+| Harness superior flutuante | notificações | `SAFE_NAV` | `definirAbaAdminInicial("notificacoes")` + Admin | aba Admin e painel correto; não inventar evento |
+| Cabeçalho | `CentralDark Estúdio` | `READ_ONLY_MEASURE` | `abrirEstudio()`; usa o AionUI existente ou verifica a API | `estadoEstudio` e URL devem ser lidos depois |
+| Cabeçalho | `Aproximar ao ChatGPT` | `READ_ONLY_NAV` | `abrirPlayerLocal()`; abre o player local | diálogo do player presente; não confundir com conexão MCP |
+| Cabeçalho | `Hermes ONE` | `SAFE_NAV` | `abrirHermesOne()` → aba Hermes | aba Hermes ativa; não alegar execução Hermes |
+| Cabeçalho | `Minha conta` | `READ_ONLY_EXPAND` | abre popover de conta; `sair()` só com ordem própria | readback do menu; logout é mutação de sessão |
+| Rail esquerdo | ferramentas | `SAFE_NAV` | `definirGaveta("left")` | Sheet Harness aberto; a sessão mediu este efeito |
+| Rail esquerdo | Gram | `SAFE_NAV` | Gram se autenticado; Visão sem autenticação | confirmar aba resultante e estado de autenticação |
+| Rail esquerdo | Goals | `SAFE_NAV` | `abrirDestino("goals")` | aba Goals ativa |
+| Rail esquerdo | buscar módulos | `SAFE_NAV` | `definirGaveta("top")` | gaveta top e filtro presentes |
+| Rail direito | Sistemas | `SAFE_NAV` | `definirGaveta("right")` | gaveta direita aberta |
+| Rail direito | Hermes | `SAFE_NAV` | `abrirDestino("hermes")` | aba Hermes ativa |
+| Rail direito | Configurar Harness | `READ_ONLY_EXPAND` | `definirGaveta("bottom")` | gaveta inferior aberta |
+| Rail inferior | Sync | `SAFE_NAV` | `abrirDestino("sync")` | Oficina ativa |
+| Rail inferior | Pacotes | `SAFE_NAV` | `abrirDestino("downloads")` | Downloads ativa |
+| Rail inferior | moldura | `READ_ONLY_EXPAND` | `definirGaveta("bottom")` | gaveta inferior aberta |
+| Auto Sync | `Windows` | `MUTATING` | `handleSync("windows")`; commit/push via `executarSync` | nunca clicar em varredura; exige autorização e readback GitHub |
+| Auto Sync | `Main` | `READ_ONLY_OPERATIONAL` | `handleSync("main")`; consulta e compara SHAs | provar SHA local e `origin/main`; consulta não é merge |
+| Auto Sync | `VPS` | `MUTATING` | `handleSync("vps")`; SSH/fast-forward | exige autorização; conflito bloqueia; readback remoto obrigatório |
+| Auto Sync | `Sincronizar Tudo` | `MUTATING` | alvo atual `local`; Casa/Main, sem VPS | texto/escopo do seletor é parte do contrato; não chamar “deploy” |
+| Auto Sync | `Main Only` / `Full` | `READ_ONLY_SELECT` | altera somente `microDeployMode` | seleção não executa nada; a prova começa no botão seguinte |
+| Automação | `Executar Automação` | `MUTATING` | `handleMicroDeploy` → pré-sync → promoção existente | não clicar automaticamente; gates, workflow e receipt devem existir |
+| Estado | `Medir agora` | `READ_ONLY_MEASURE` | `q.refetch()` → `lerEstadoCentralDark` | timestamp/estado mudam e botão retorna a utilizável; não prova deploy |
+| Estado | Rotas e alertas | `READ_ONLY_EXPAND` | abre `<details>` | conteúdo expandido visível; não reclassificar status sozinho |
+| Commander | inventário de portas | `READ_ONLY_EXPAND` | alterna `inventarioAberto` | título troca para ocultar e lista TCP/UDP aparece |
+| Cards | detalhes técnicos | `READ_ONLY_EXPAND` | abre `<details>` do sensor | conteúdo do mesmo card aparece |
+| Jornada | iniciante/engenharia | `READ_ONLY_SELECT` | altera `simples` | texto da etapa muda; não executa comando |
+| Jornada | etapas / anterior / próxima | `READ_ONLY_SELECT` | altera `passoAtivo` | etapa e `aria-pressed` mudam |
+| Mapa Owners | caminhos simples | `SAFE_NAV` ou `READ_ONLY_EXPAND` | `abrirCaminhoSimples`; Conexões abre diálogo Admin | destino/diálogo deve aparecer; privado desabilitado sem auth |
+| Mapa Owners | `Abrir área →` / `Abrir Admin →` / `Abrir Sistema →` / `Abrir Hermes →` | `SAFE_NAV` | `onNavigate` para o owner indicado | aba correta ativa; não inferir runtime |
+| Sync Center | Personalizar / Modelos | `READ_ONLY_EXPAND` | abre gaveta local | gaveta e conteúdo visíveis; não altera executor |
+| Sync Center | percurso / visão / duas vias | `READ_ONLY_SELECT` | altera estado visual do Sync Center | estado selecionado muda; não é sincronização |
+| Forja / Sistema | atualizar/medir | `READ_ONLY_MEASURE` | refetch do sensor existente | timestamp e resposta do sensor |
+| Externo/desktop | Obsidian / Unigram | `MUTATING_LOCAL_APP` | bridge nativa `openObsidianDesktop`/`openUnigramDesktop` | só executar com pedido explícito; status `REQUESTED` não prova janela pronta |
+| Harness | Ocultar moldura / Mostrar Harness | `READ_ONLY_LOCAL_UI` | altera somente `harnessVisivel` | barras desaparecem/aparecem; não altera backend |
+
+### As 27 áreas navegadas nesta rodada
+
+`Visão geral`, `Jornada`, `Portal`, `Builder Bolt`, `Mapa PR #1873`, `CentralDark Gram`, `Minha Oficina`, `Design Center`, `Goals`, `Gênesis · Michelin`, `Dream`, `Estrutura`, `Raio-X`, `Recibos`, `Forja`, `Permissões Forja`, `Admin CentralDark`, `Sistema CentralDark`, `Obsidian`, `Estúdio`, `Hermes`, `Unigram`, `Regras Forja`, `Inventário`, `Agent Mode`, `HTML Consolidation` e `Downloads`.
+
+O readback de cada área deve guardar `id`, título/heading, `tabpanel` ativo e uma amostra curta. Nesta rodada, as leituras principais foram: Visão (`K:\`, `F:\`, `C:\`, heartbeat, grafo), Jornada (8 etapas), Portal/Builder (estrutura visual), PR (mapa), Gram (mensagens/bots), Oficina (sync), Design (tokens), Goals, Gênesis, Dream, Estrutura, Raio-X, Recibos, Forja, Permissões, Admin, Sistema (Mega Painel), Obsidian, Estúdio, Hermes, Unigram, Regras, Inventário, Agent Mode, HTML e Downloads.
+
+### Limites e estados honestos
+
+- `TOP_LEVEL_NAV=PASS` nesta sessão: `27/27` seleções tiveram `tabpanel` ativo.
+- `DOM_CONTROL_INVENTORY=PASS`: `127` elementos catalogados nesta sessão.
+- `MEASURE_BUTTON=PASS` no sensor: readback de horário atualizado.
+- `PORT_INVENTORY_EXPANSION=PASS`: o controle mudou de `Exibir inventário total de portas · 204` para `Ocultar inventário total`; lista medida apareceu.
+- `HARNESS_DRAWER_OPEN=PASS` para `Abrir ferramentas`; os demais rails estão mapeados pelo owner, mas exigem readback individual quando a gaveta/viewport não permanecer único.
+- `MUTATING_BUTTON_E2E=NOT_EXECUTED`: Windows, VPS, Sincronizar Tudo, Executar Automação, Obsidian e Unigram não foram acionados nesta rodada.
+- `BACKEND_EFFECT_FOR_NAVIGATION=NOT_APPLICABLE`: navegação de aba é efeito de UI. Qualquer efeito remoto exige outra prova.
+- `MCP_ORIGIN_FROM_COCKPIT=UNKNOWN`: esta leitura do Cockpit não prova chamada MCP nem origem de qualquer log externo.
+
+### Receipt desta rodada
+
+```text
+INTENT=MAPEAR_COCKPIT_E_ATUALIZAR_SKILL_MAE
+OWNER=K:\.agents\skills\centraldark-operational-method\SKILL.md
+SURFACE=http://127.0.0.1:8080/sala-controle
+CONTROL_ELEMENTS=127
+TOP_LEVEL_TABS=27/27
+READ_ONLY_MEASURE=PASS
+PORT_INVENTORY_EXPANSION=PASS
+SAFE_NAV_MUTATING_CONTROLS=NOT_EXECUTED
+SOURCE_HANDLERS=READ
+RUNTIME_MUTATION=NOT_REQUESTED
+STATUS=PASS_BOUNDED_WITH_MUTATIONS_PROTECTED
+NEXT_CURSOR=COCKPIT_CONTROL_MAP_REPLAY_SAFE_RAILS_AND_DETAIL_EXPANSIONS
+```
+
+Este receipt prova o inventário, a navegação segura executada e o readback limitado. Não prova commit, push, deploy, conexão MCP, execução de automação ou funcionamento de todos os owners.
+
+<!-- /CENTRALDARK_COCKPIT_CONTROL_MAP_20261030 -->
+
+<!-- CENTRALDARK_PAGE_ERROR_SENTINEL_RECIPE_20261030 -->
+## 🧿 Receita operacional — ler e correlacionar erro real do Sentinel do Cockpit
+
+**Owner único:** `apps/instinto-superior/public/centraldark-erros-visiveis.js`, injetado uma vez por `apps/instinto-superior/src/routes/__root.tsx`. Não criar outro Sentinel, watcher, endpoint, skill ou backend.
+
+### Objetivo
+
+Capturar o que a página realmente observou e devolver uma mensagem reproduzível para o owner correto. A mensagem do usuário, screenshot ou texto de memória é contexto. A fonte primária é a entrada existente no Sentinel, seu detalhe técnico e o evento `centraldark:sentinela` quando ele foi observado na mesma página.
+
+### Leitura da mensagem real
+
+1. Confirmar a página e o horário atuais.
+2. Abrir o botão `🧿` do mesmo Sentinel.
+3. Selecionar a entrada observada, sem fabricar uma nova ocorrência.
+4. Ler o resumo humano e abrir `detalhe técnico`.
+5. Copiar a receita somente pelo controle existente `Copiar pro Instinto` ou `Copiar todos`.
+6. Preservar exatamente, após sanitização:
+   - `Página`: URL sem query ou fragmento;
+   - `Quando`: horário local e, quando disponível, `hora` ISO;
+   - `O que aconteceu`: classificação simples do Sentinel;
+   - `Mensagem técnica`: mensagem original observada;
+   - `Onde`: arquivo, rota ou origem medida;
+   - `Botão relacionado`: último `data-cd-flow`/controle observado em até 15 segundos;
+   - `Pilha`: stack disponível, sem tokens, cookies, headers ou corpos;
+   - `Intenção`: correção limitada, preservação, teste e regra `UNKNOWN não é PASS`.
+
+### Correlação mínima
+
+Correlacionar `pagina + hora + tipo + mensagem + onde + controle + pilha + intent_id/receipt`, quando existirem. Usar `evento_id` e `centraldark:sentinela` somente como evidência da mesma execução. A proximidade temporal do botão é correlação, não causalidade. `CLICK_SEEN` prova apenas clique observado; não prova execução, efeito remoto, deploy ou origem MCP.
+
+Se a mensagem tiver `Mensagem técnica: %o`, `undefined`, vazio ou stack ausente, marcar `MESSAGE_INCOMPLETE=UNKNOWN`. Não substituir pelo erro provável. Reproduzir somente o conjunto autorizado e registrar a primeira mensagem real recebida.
+
+### Receita reutilizável para qualquer erro de página
+
+```text
+1. IDENTIFICAR: URL, aba/perfil, título e horário.
+2. ABRIR: Sentinel único da própria página.
+3. LER: entrada, resumo, detalhe técnico, origem e stack.
+4. CORRELACIONAR: controle próximo, evento_id, componente/arquivo e intenção.
+5. SANITIZAR: remover Bearer, token, secret, api_key, query, fragmento, cookie, header e corpo.
+6. CLASSIFICAR: PASS somente com efeito reproduzido; FAIL com erro real reproduzido; UNKNOWN sem fonte primária, mensagem incompleta ou efeito não provado.
+7. DELIMITAR: escolher o owner e o menor delta; preservar arquivos e rotas não afetados.
+8. TESTAR: reproduzir o componente/rota afetada.
+9. CONTRAPROVAR: ler a tela, console/log primário e resultado pós-teste de forma independente.
+10. REGISTRAR: CURRENT, DELTA, PROVA, ROLLBACK, RECEIPT_ID e NEXT_CURSOR.
+```
+
+### Critérios de veredito
+
+- **PASS:** a entrada real do Sentinel contém mensagem técnica completa; página, horário e origem estão correlacionados; o delta foi testado; o efeito foi lido de volta; nenhum segredo foi exposto.
+- **FAIL:** a entrada real reproduz o erro e o teste confirma falha do owner ou do efeito esperado.
+- **UNKNOWN:** Sentinel inacessível, página/aba incerta, mensagem truncada, stack ausente quando necessária, transporte remoto sem ACK, ou efeito ainda não lido. Não converter silêncio em PASS.
+
+### Limites de transporte
+
+`window.__cdErros.lista` e o DOM do Sentinel são leitura local. `centraldark:sentinela` é evento de observação local. `cfg.coracao` só pode ser usado se for endpoint same-origin autenticado e explicitamente configurado. `HTTP_ACK` não prova efeito. Sem rota autenticada comprovada, manter `TRANSPORT=UNKNOWN` e usar `Copiar pro Instinto` como saída manual, sem enviar dados.
+
+### Receipt obrigatório
+
+O receipt deve registrar `OWNER`, `SURFACE`, `SOURCE`, `PAGE`, `MEASURED_AT`, `ERROR_TYPE`, `MESSAGE_FINGERPRINT`, `COMPONENT_OR_WHERE`, `STACK_AVAILABLE`, `RELATED_CONTROL`, `INTENT`, `DELTA`, `TEST`, `COUNTERPROOF`, `STATUS`, `ROLLBACK` e `NEXT_CURSOR`. Nunca registrar o texto de credenciais ou o valor integral de tokens. A presença desta receita na Skill-Mãe documenta o método; só uma execução com readback promove `PASS`.
+
+<!-- /CENTRALDARK_PAGE_ERROR_SENTINEL_RECIPE_20261030 -->
+
+<!-- CENTRALDARK_GENESIS_OPERATIONAL_REPLAY_20261030 -->
+## Genesis existente — replay operacional de regressão
+
+Este bloco integra o Genesis já existente ao ciclo de regressão. Ele não cria
+um segundo executor, agente, MCP ou watcher. Toda técnica observável entra
+primeiro como `OBSERVED`; somente teste e readback independente podem elevar o
+registro para `TESTED` ou `PROVEN`.
+
+Cada replay deve preservar estes campos: `INTENT_ID`, `RUN_ID`, `area`,
+`selector_aria_data_cd_flow`, `antes`, `clique_ou_acao`, `depois`, `efeito`,
+`fingerprint`, `receipt`, `correlation_id`, `tool_call_id` e `NEXT_CURSOR`.
+
+Regra desta execução: o status do MCP oficial foi lido em modo somente
+leitura. A tentativa de leitura nativa Kylin retornou “MCP server is not
+initialized”; portanto, não é prova de falha do túnel nem de binding do
+Cockpit. A sessão do navegador não pôde ser reacessada nesta janela; o replay
+de abas e botões fica `UNKNOWN` e não pode ser promovido.
+
+<!-- /CENTRALDARK_GENESIS_OPERATIONAL_REPLAY_20261030 -->

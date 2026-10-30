@@ -1,0 +1,18 @@
+{
+  "intent_id": "COCKPIT_HEALTH_ADAPTER_9101_PRESERVE_8099_OMNI",
+  "run_id": "michelin-3-runtime-adapter-20261030T220500Z",
+  "scope": "Cockpit health adapter + existing Omni Router runtime + Casa Commander + Secure Tunnel",
+  "classification": "MICHELIN_3_SCOPED",
+  "conformity": {"proved_pass": 3, "applicable": 3, "percent": 100},
+  "stars": {
+    "build": {"status": "PASS", "proof": "npm run build; verify:hud 33 pass, 1 preexisting todo; client and SSR build pass"},
+    "integration": {"status": "PASS", "proof": "existing 8099 launcher restarted with authorization; one listener remains on 127.0.0.1:8099; Commander health remains on 127.0.0.1:9101"},
+    "effect": {"status": "PASS", "proof": ["8099/heartbeat HTTP 200", "8099/health HTTP 200", "8099/api/omni/status HTTP 200", "8099/api/live-fabric/status HTTP 200", "9101/health HTTP 200 with engine_connected=true", "9101/tool list_directory HTTP 200 CASA_ENGINE_RESULT", "8742/readyz HTTP 200"]}
+  },
+  "counterproof": {
+    "preserved": ["no new service", "no new MCP", "no new script", "no token in output", "Omni remains on 8099", "Commander remains on 9101"],
+    "not_global": "Visual Cockpit card readback is a separate surface and is not included in this 3/3 denominator."
+  },
+  "rollback": "revert the adapter delta in K:/apps/instinto-superior/src/lib/cockpit.functions.ts and restart the same launcher only if required",
+  "next_cursor": "COCKPIT_UI_READBACK_AFTER_HMR_9101_8099"
+}

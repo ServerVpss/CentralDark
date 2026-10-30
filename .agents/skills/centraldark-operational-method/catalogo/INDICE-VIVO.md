@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-29 14:18:30 -03:00
-**Total:** 98 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-30 15:29:57 -03:00
+**Total:** 102 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-29T14:12:31-03:00 | 2026-10-29T14:12:31-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T15:09:14-03:00 | 2026-10-30T15:09:14-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-29T14:12:31-03:00 | 2026-10-29T14:12:31-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T15:09:14-03:00 | 2026-10-30T15:09:14-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -68,6 +68,7 @@
 | `references/AUTO-MELHORIA-COM-PROVA.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 052c2907453b |
 | `references/centraldark-remote-bridge.md` | referencia | 2026-10-15T13:26:01-03:00 | 2026-10-15T13:26:01-03:00 | 2de7827e7487 |
 | `references/CENTRALDARK-REMOTE-NOMENCLATURA.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 019ea63a941e |
+| `references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md` | referencia | 2026-10-30T10:32:11-03:00 | 2026-10-30T10:32:11-03:00 | 9dfe33889f75 |
 | `references/delegacao-economica-com-prova.md` | referencia | 2026-10-15T13:26:01-03:00 | 2026-10-15T13:26:01-03:00 | b17d60440aa9 |
 | `references/fixed-point-terminal-receipt-contraprova.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2203d0ec37fb |
 | `references/FOCUS-DELEGACAO-TELEMETRIA.md` | referencia | 2026-10-28T08:08:26-03:00 | 2026-10-28T19:55:11-03:00 | e38d9a82074d |
@@ -77,6 +78,7 @@
 | `references/HERMES-KANBAN-RECEITA-UNIVERSAL.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:17:59-03:00 | 5ffca46f168b |
 | `references/hermes-model-config.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2b2a4653aea8 |
 | `references/HUMAN-ACTION-DIRECT-LINK.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a251f7766cab |
+| `references/JANELAS-TRANSITORIAS-HERMES-TRACE.md` | referencia | 2026-10-30T00:07:00-03:00 | 2026-10-30T00:07:00-03:00 | 4826354b5828 |
 | `references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 957cf5a0a417 |
 | `references/MICHELIN-3-ESTRELAS-PROTOCOLO.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | cb1486df5e5d |
 | `references/PACKAGE-INGEST-LEDGER.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | d748f1bb610f |
@@ -86,6 +88,7 @@
 | `references/regenerative-self-refinement-engine.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a07898852876 |
 | `references/remote-desktop-commander-vscode-casa.md` | referencia | 2026-10-18T17:20:31-03:00 | 2026-10-18T17:20:31-03:00 | 03b9c509edc7 |
 | `references/rsi-loop-method.md` | referencia | 2026-10-29T07:58:27-03:00 | 2026-10-29T07:58:27-03:00 | 6d133be5f608 |
+| `references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md` | referencia | 2026-10-30T14:30:16-03:00 | 2026-10-30T15:29:41-03:00 | e5be52dbf49f |
 | `references/YOUTUBE-DEBUG-PAGE-STATE.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 3dee62d482ed |
 | `scripts/absorver_pasta_trancada.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | 0e91b93aa4ec |
 | `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-28T10:39:11-03:00 | 606a0b529595 |
@@ -103,7 +106,8 @@
 | `scripts/registrar-prova-hermes-casa.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 27e904b4a27d |
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
-| `SKILL.md` | skill | 2026-10-29T14:16:28-03:00 | 2026-10-29T14:16:28-03:00 | ca6a319c897b |
+| `scripts/Trace-TransientConsoleWindows.ps1` | script | 2026-10-30T00:07:40-03:00 | 2026-10-30T00:08:59-03:00 | 4ffb343763f0 |
+| `SKILL.md` | skill | 2026-10-30T00:36:32-03:00 | 2026-10-30T14:57:26-03:00 | 0b640305828f |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-29T14:18:30-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-30T15:29:57-03:00 | MODIFICADO | `references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

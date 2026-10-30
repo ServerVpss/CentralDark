@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
+import { useQueryClient } from '@tanstack/react-query'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
 import { supabase } from '@/integrations/supabase/client'
 import { SyncLoopIcon } from '@/components/central/SyncLoopIcon'
 import { SyncActionButton } from '@/components/central/SyncActionButton'
+import { CockpitActionButton } from '@/components/central/CockpitActionButton'
 
 interface SyncStatus {
   timestamp: string | null
@@ -15,6 +17,15 @@ interface SyncStatus {
   human_readable: string
   target?: string
   details?: string
+}
+
+type SyncRunner = (args: { data: { target: 'local' | 'all' } }) => Promise<SyncStatus>;
+
+async function prepararAutomacao(modo: 'main-only' | 'full', executarSync: SyncRunner) {
+  const target = modo === 'full' ? 'all' : 'local';
+  const escopo = modo === 'full' ? 'Casa/Main/VPS' : 'Casa/Main';
+  const sync = await executarSync({ data: { target } });
+  return { sync, escopo };
 }
 
 /**
@@ -34,6 +45,7 @@ export const AutoSyncButton: React.FC = () => {
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
   const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
+  const queryClient = useQueryClient()
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -51,11 +63,15 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
-  const handleSync = async (target: 'windows' | 'main' | 'vps' | 'all' = 'all') => {
+  const handleSync = async (target: 'local' | 'windows' | 'main' | 'vps' | 'all' = 'local') => {
     setIsSyncing(true)
+    const medirJunto = target === 'local' || target === 'all'
+      ? queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
+      : Promise.resolve()
     try {
       const data = await runSync({ data: { target } } as any)
       setSyncStatus(data)
+      await medirJunto
     } catch (error) {
       console.error('Sync failed:', error)
       setSyncStatus(prev => ({ ...prev, status: 'failed' }))
@@ -68,14 +84,24 @@ export const AutoSyncButton: React.FC = () => {
   const handleMicroDeploy = async () => {
     if (isSyncing) return
     setIsSyncing(true)
-    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando promoção segura ao GitHub...' }))
+    const syncLabel = microDeployMode === 'full' ? 'Casa/Main/VPS' : 'Casa/Main'
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: `Estabilizando ${syncLabel} antes da promoção...` }))
     try {
+      const { sync } = await prepararAutomacao(microDeployMode, runSync as unknown as SyncRunner)
+      if (sync.status !== 'success') {
+        setSyncStatus({
+          ...sync,
+          status: sync.status === 'conflict' ? 'conflict' : 'failed',
+          human_readable: `Promoção bloqueada: sincronização ${syncLabel} não fechou (${sync.human_readable})`,
+        })
+        return
+      }
       const { data, error } = await supabase.auth.getSession()
       const token = data.session?.access_token
       if (error || !token) throw new Error('SESSION_MISSING')
       const result = await dispatchPromotion({ headers: { Authorization: `Bearer ${token}` } })
       if (result.state === 'DISPATCHED') {
-        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Promotor acionado. Aguardando gates, squash e recibo; deploy ainda não comprovado.' }))
+        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: `${syncLabel} estabilizada. Promotor acionado; aguardando gates verdes, squash e recibo. deploy ainda não comprovado.` }))
       } else {
         setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: `Promoção não confirmada: ${result.reason}` }))
       }
@@ -113,7 +139,7 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-              <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main / VPS</p>
+               <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main · VPS manual</p>
               <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
                 <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
@@ -124,22 +150,24 @@ export const AutoSyncButton: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
+            <CockpitActionButton hint="Casa/Windows: envia as alterações locais para o GitHub com commit e push" onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
               Windows
-            </Button>
-            <Button onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
+            </CockpitActionButton>
+            <CockpitActionButton hint="Main: consulta o remoto e compara os SHAs local e origin/main" onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
               Main
-            </Button>
-            <Button onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
+            </CockpitActionButton>
+            <CockpitActionButton hint="VPS: atualiza o checkout remoto por SSH com fast-forward; conflito bloqueia" onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
               VPS
-            </Button>
+            </CockpitActionButton>
             <SyncActionButton
               label="Sincronizar Tudo"
-              onClick={() => handleSync('all')}
+               onClick={() => handleSync('local')}
               isFetching={isSyncing}
               autoSyncEnabled
               lastError={syncStatus.status === 'failed' ? syncStatus.human_readable : null}
               variant="default"
+              title="Executa Casa/Windows e consulta Main. Não sincroniza a VPS."
+              aria-label="Sincronizar Casa e Main, sem incluir a VPS"
             />
           </div>
         </div>
@@ -160,16 +188,18 @@ export const AutoSyncButton: React.FC = () => {
               value={microDeployMode}
               onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
               disabled={isSyncing}
+              aria-label="Escopo da automação"
+              title="Escolha se a pré-sincronização inclui somente Casa/Main ou também a VPS"
               className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
             >
-              <option value="main-only">Main Only (rapido)</option>
-              <option value="full">Full (Casa/VPS/Main)</option>
+              <option value="main-only">Main Only · Casa/Main</option>
+              <option value="full">Full · Casa/VPS/Main</option>
             </select>
 
-            <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
+            <CockpitActionButton hint="Primeiro sincroniza o escopo escolhido. Depois solicita o workflow canônico, que exige gates verdes e faz squash. Deploy só é confirmado por receipt." onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
               <Zap className="w-4 h-4" />
               {isSyncing ? 'Solicitando...' : 'Executar Automação'}
-            </Button>
+            </CockpitActionButton>
           </div>
         </div>
       </Card>

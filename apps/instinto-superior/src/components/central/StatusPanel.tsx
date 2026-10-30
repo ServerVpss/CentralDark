@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
-import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { lerEstadoCentralDark, type Estado, type PortaCentralDark } from "@/lib/cockpit.functions";
 import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { rotuloEstadoHumano } from "@/components/central/EstadoCentralDark";
 import { useRelogioVivo } from "@/hooks/useRelogioVivo";
@@ -33,6 +33,22 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
     </span>
   );
 }
+function SensorScreenpipe({ nome, estado, detalhe }: { nome: string; estado: Estado; detalhe: string }) {
+  const cor = luz(estado);
+  const piscar = estado !== "UNKNOWN" ? "animate-pulse motion-reduce:animate-none" : "";
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2">
+      <div className="flex min-w-0 items-center gap-2">
+        <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${piscar}`} aria-hidden="true" />
+        <div className="min-w-0">
+          <p className="text-[11px] font-medium">{nome}</p>
+          <p className="truncate text-[10px] text-muted-foreground">{detalhe}</p>
+        </div>
+      </div>
+      <span className="shrink-0 text-[10px]">{estado === "RUNNING" ? "Precisa de atenção" : etiqueta(estado, nome)}</span>
+    </li>
+  );
+}
 /**
  * Sonda da superfície ≠ prova de execução. A API pode responder com JSON
  * e ainda declarar NOT_REVALIDATED: mostramos conectividade verde somente
@@ -55,6 +71,23 @@ function LuzProjecao({
       </span>
       <p className="text-[11px] text-amber-400">Uso recente ainda não verificado</p>
     </div>
+  );
+}
+function PortaViva({ porta }: { porta: PortaCentralDark }) {
+  const cor = luz(porta.estado);
+  const classe = porta.estado === "PASS" ? "cd-port-dot--pass" : porta.estado === "FAIL" || porta.estado === "BLOCKED" ? "cd-port-dot--fail" : "cd-port-dot--unknown";
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2" data-cd-port={porta.id}>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${classe}`} aria-hidden="true" />
+          <span className="font-mono text-[11px]">{porta.bind}</span>
+          <span className="text-[10px] text-muted-foreground">{porta.transporte}</span>
+        </div>
+        <p className="truncate text-[10px] text-muted-foreground">{porta.origem} · {porta.processo} · PID {porta.pid ?? "não medido"}</p>
+      </div>
+      <span className="shrink-0 text-[10px]">{etiqueta(porta.estado, porta.bind)}</span>
+    </li>
   );
 }
 /** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
@@ -87,6 +120,7 @@ export function StatusPanel() {
   // influence the server render vs the browser's first hydration render.
   // This is an incremental, fail-closed fix; post-mount reads stay measured.
   const [hidratado, definirHidratado] = useState(false);
+  const [inventarioAberto, definirInventarioAberto] = useState(false);
   useEffect(() => { definirHidratado(true); }, []);
   const ler = useServerFn(lerEstadoCentralDark);
   const q = useQuery({
@@ -105,14 +139,19 @@ export function StatusPanel() {
   const medidoEm = d?.atualizadoEm;
   const audioScreenpipe = d?.screenpipeAudioStatus?.toLowerCase() ?? null;
   const audioSemSinal = audioScreenpipe === "stale" || audioScreenpipe === "stalled" || audioScreenpipe === "unavailable";
+  const screenpipeVisualAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^CAPTURA VISUAL: FRESH/.test(linha)));
+  const screenpipeImagemAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^ÚLTIMO FRAME:/.test(linha)));
+  // d?.screenpipeDetail === "degraded" continua sendo uma degradação interna;
+  // não rebaixa o estado principal quando 3030/health responde PASS.
+  const screenpipeSaude: Estado = fresco && d?.screenpipeHttp === 200 ? "PASS" : screen;
   const sinais = [
-    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: "Site local consultado agora.", icon: House },
-    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "GitHub principal consultado agora.", icon: Github },
-    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: "Conexão principal da API consultada.", icon: Activity },
-    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: "Mapa interno consultado.", icon: GitBranch },
-    { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Roteador de serviços consultado.", icon: Cpu },
-    { nome: "Sinal de atividade", estado: d?.heartbeat ?? unknown, detalhe: "Último sinal de atividade consultado.", icon: HeartPulse },
-    { nome: "Confirmações", estado: d?.receipts ?? unknown, detalhe: "Histórico de confirmações consultado.", icon: Database },
+    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: d?.casaSiteFonte ?? "Casa · site local · fonte não medida", icon: House },
+    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "Main · GitHub principal consultado agora.", icon: Github },
+    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: d?.apiHealthFonte ?? "Host atual · API /health · fonte não medida", icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: d?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida", icon: GitBranch },
+    { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Host atual · Omni Router consultado agora.", icon: Cpu },
+    { nome: "Sinal de atividade", estado: d?.heartbeat ?? unknown, detalhe: "Host atual · heartbeat consultado agora.", icon: HeartPulse },
+    { nome: "Confirmações", estado: d?.receipts ?? unknown, detalhe: "Host atual · receipts consultados agora.", icon: Database },
   ];
 
   const rotas = [
@@ -157,20 +196,24 @@ export function StatusPanel() {
             Verde: funcionando. Amarelo: precisa de atenção ou verificação. Vermelho: precisa corrigir.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] text-muted-foreground">Atualiza a cada 15 s</span>
-          <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
-            ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
-          </span>
-          <SyncActionButton
-            data-cd-flow="instinto.StatusPanel.botao-01"
-            label="Medir agora"
-            onClick={() => void q.refetch()}
-            isFetching={q.isFetching}
-            autoSyncEnabled
-            lastSuccessAt={fresco ? medidoEm : null}
-            lastError={q.isError ? "falha de transporte no servidor" : null}
-          />
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center">
+            <SyncActionButton
+              data-cd-flow="instinto.StatusPanel.botao-01"
+              label="Medir agora"
+              onClick={() => void q.refetch()}
+              isFetching={q.isFetching}
+              autoSyncEnabled
+              lastSuccessAt={fresco ? medidoEm : null}
+              lastError={q.isError ? "falha de transporte no servidor" : null}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] text-muted-foreground" aria-label="Relógio vivo, atualiza a cada segundo">
+              ⏱ {agora === null ? "--:--:--" : new Date(agora).toLocaleTimeString("pt-BR", { timeZone: "America/Bahia" })}
+            </span>
+            <span className="text-[11px] text-muted-foreground">Atualiza a cada 15 s</span>
+          </div>
         </div>
       </header>
       <p className="font-mono text-[11px] text-muted-foreground" role="status" aria-live="polite">
@@ -239,16 +282,62 @@ export function StatusPanel() {
                     </span>
                     <p className="text-[11px] text-muted-foreground">Pronto para receber uma ação quando necessário.</p>
                   </div>
-                ) : m.nome === "Screenpipe" && fresco && d?.screenpipeDetail === "degraded" && m.estado === "RUNNING" ? (
-                  <span className="inline-flex items-center gap-2" aria-label={audioSemSinal ? "Screenpipe: telas gravando; áudio sem sinal recente" : "Screenpipe: precisa de atenção"}>
-                    <span className={`size-3 shrink-0 rounded-full ${CORES.amarela}`} aria-hidden="true" />
-                    <span className="text-[11px] font-medium">{audioSemSinal ? "Áudio sem sinal recente" : "Precisa de atenção"}</span>
-                  </span>
+                ) : m.nome === "Screenpipe" ? (
+                  <LuzViva estado={screenpipeSaude} nome="Screenpipe" fresco={fresco} />
                 ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
+              {m.nome === "CentralDark Commander" ? (
+                <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Inventário de portas CentralDark">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold">Portas e interfaces CentralDark</p>
+                    <span className="text-[10px] text-muted-foreground">Casa Windows · openKylin</span>
+                  </div>
+                  <ul className="mt-2 space-y-2" aria-live="polite">
+                    {(fresco ? d?.portas ?? [] : []).map((porta) => <PortaViva key={porta.id} porta={porta} />)}
+                    {!fresco ? <li className="text-[10px] text-muted-foreground">Sem leitura recente · clique em Medir agora</li> : null}
+                    {fresco && !(d?.portas?.length) ? <li className="text-[10px] text-amber-400">Nenhuma porta CentralDark foi confirmada nesta leitura.</li> : null}
+                  </ul>
+                  <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+                    TCP LISTEN é separado de MCP stdio: stdio funciona sem abrir porta HTTP. Portas do sistema não são atribuídas ao CentralDark sem prova de processo.
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-3 rounded-md border border-border px-3 py-2 text-[11px] font-medium hover:border-neon-blue/70"
+                    onClick={() => definirInventarioAberto((aberto) => !aberto)}
+                    aria-expanded={inventarioAberto}
+                  >
+                    {inventarioAberto ? "Ocultar inventário total" : `Exibir inventário total de portas · ${(fresco ? d?.portasTotais?.length : 0) ?? 0}`}
+                  </button>
+                  {inventarioAberto ? (
+                    <div className="mt-3 rounded-md border border-border/70 p-2" aria-label="Inventário total de portas openKylin">
+                      <p className="mb-2 text-[10px] text-muted-foreground">Somente portas medidas agora · TCP e UDP · Casa Windows + openKylin</p>
+                      <ul className="space-y-1">
+                        {(fresco ? d?.portasTotais ?? [] : []).map((porta) => (
+                          <li key={porta.id} className="flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <span><span className={`mr-2 inline-block size-2 rounded-full ${CORES[luz(porta.estado)]}`} aria-hidden="true" />{porta.protocolo} {porta.bind}</span>
+                            <span className="text-muted-foreground">{porta.processo} · PID {porta.pid ?? "?"}</span>
+                          </li>
+                        ))}
+                        {fresco && !(d?.portasTotais?.length) ? <li className="text-amber-400">Inventário total não medido.</li> : null}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
               {m.nome === "Screenpipe" ? (
                 <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Screenpipe: capturas recentes e monitores">
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold">Sensores Screenpipe · leitura separada</p>
+                    <ul className="mt-2 space-y-2" aria-live="polite">
+                      <SensorScreenpipe nome="Porta e health" estado={screenpipeSaude} detalhe="3030/health · processo Screenpipe medido na Casa" />
+                      <SensorScreenpipe nome="Captura visual" estado={screenpipeVisualAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeVisualAtual ? "telas gravando agora" : "sem frame visual fresco nesta leitura"} />
+                      <SensorScreenpipe nome="Imagem / último frame" estado={screenpipeImagemAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeImagemAtual ? "última imagem registrada" : "sem último frame confirmado"} />
+                      <SensorScreenpipe nome="Áudio" estado={audioSemSinal ? "RUNNING" : fresco && d?.screenpipeAudioStatus ? "PASS" : "UNKNOWN"} detalhe={audioSemSinal ? "Áudio sem sinal recente · não derruba o health principal" : "sinal de áudio medido"} />
+                      <SensorScreenpipe nome="Vídeo" estado="UNKNOWN" detalhe="sem sensor separado de vídeo; não inferido da captura visual" />
+                      <SensorScreenpipe nome="Texto / OCR" estado="UNKNOWN" detalhe="não promovido sem sensor ou evento OCR medido" />
+                    </ul>
+                  </div>
                   <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>
                   <ul className="mt-2 space-y-1 font-mono text-[11px]" aria-live="polite">
                     {(fresco ? d?.screenpipeEvents ?? [] : []).filter((linha) =>

@@ -369,8 +369,26 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const { pele, selecionar } = usePeleCockpit();
   const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [navegacaoCompacta, definirNavegacaoCompacta] = useState(false);
   const [hermesOneAberto, definirHermesOneAberto] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let quadro: number | null = null;
+    const atualizarNavegacao = () => {
+      quadro = null;
+      definirNavegacaoCompacta(window.scrollY > 24);
+    };
+    const aoRolar = () => {
+      if (quadro !== null) return;
+      quadro = window.requestAnimationFrame(atualizarNavegacao);
+    };
+    atualizarNavegacao();
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", aoRolar);
+      if (quadro !== null) window.cancelAnimationFrame(quadro);
+    };
+  }, []);
   // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
   // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
   useEffect(() => {
@@ -506,7 +524,10 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
-      <header className="relative z-50 border-b border-border bg-background/95 px-4 py-3 sm:px-6">
+      <header
+        className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
+        style={{ transform: navegacaoCompacta ? "translateY(-100%)" : "translateY(0)" }}
+      >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
@@ -524,7 +545,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               variant="outline"
               size="sm"
               aria-expanded={estudioAberto}
-              aria-controls="centraldark-estudio"
+              aria-controls={estudioAberto ? "centraldark-estudio" : undefined}
               onClick={abrirEstudio}
               disabled={modulos.aionui === "desativado"}
             >
@@ -575,8 +596,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </div>
       </header>
+      <div aria-hidden="true" className="h-12" />
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral esquerdo" data-cd-harness="left-rail" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -584,14 +606,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral direito" data-cd-harness="right-rail" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
             definirAbaAdminInicial("notificacoes");
@@ -602,7 +624,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness inferior" data-cd-harness="bottom-rail" className="fixed bottom-2 left-1/2 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur z-40">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><SyncLoopIcon autoSyncEnabled={false} isFetching={false} size={16} className="mr-1" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
@@ -797,7 +819,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           ) : null}
 
           <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
+            <div
+              className="sticky top-0 z-30 fixed min-w-0 border-y border-border bg-background/95 px-3 py-2 shadow-[0_8px_24px_-20px_hsl(var(--primary)/0.8)] backdrop-blur transition-[top,border-radius,box-shadow] duration-300 ease-out sm:border"
+              style={{
+                position: "fixed",
+                top: navegacaoCompacta ? 0 : "4.5rem",
+                left: 0,
+                right: 0,
+                borderRadius: navegacaoCompacta ? "0 0 0.75rem 0.75rem" : undefined,
+              }}
+              aria-label="Navegação do cockpit"
+            >
               <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
                 <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                   <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
@@ -830,15 +862,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? (
                   <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
-                <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
                 <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
-                <TabsTrigger value="unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads">Downloads</TabsTrigger>
                 <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
@@ -875,20 +900,24 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
-                  estado="UNKNOWN"
+                  estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
                   codigo={
-                    dado?.atualizadoEm
-                      ? `Consulta: ${new Date(dado.atualizadoEm).toLocaleString("pt-BR")}`
-                      : "Sem consulta"
+                    dado?.heartbeatHttp
+                      ? `HTTP ${dado.heartbeatHttp} · self=${dado.heartbeatSelf ?? "UNKNOWN"}`
+                      : "Sem resposta medida"
                   }
-                  detalhe="Horário da consulta não comprova heartbeat. Sem measured_at do owner One Heart, a pulsação permanece UNKNOWN."
+                  detalhe={dado?.heartbeatErro
+                    ? `Fonte: /heartbeat · MOTIVO: ${dado.heartbeatErro}`
+                    : "Fonte: /heartbeat · leitura real do owner consultado agora."}
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado
                   titulo="Grafo vivo"
                   estado={dado?.grafoVivo ?? "UNKNOWN"}
                   codigo={dado?.grafoHttp ? `HTTP ${dado.grafoHttp}` : "Sem resposta medida"}
-                  detalhe="Projeção da capacidade Live Fabric existente; nenhum segundo motor de grafo."
+                  detalhe={dado?.grafoErro
+                    ? `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · MOTIVO: ${dado.grafoErro}`
+                    : `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · rota medida; execução ainda depende de contraprova.`}
                   icone={<Radar className="size-5" />}
                 />
               </div>

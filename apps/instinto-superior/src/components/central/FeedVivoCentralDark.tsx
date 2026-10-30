@@ -47,6 +47,10 @@ async function lerFeedVivo(): Promise<ResultadoFeed> {
     },
     body: JSON.stringify({ _user_id: data.session.user.id, _role: "admin" }),
   });
+  // PostgREST pode responder 404 quando a função existe, mas a sessão atual
+  // não tem o papel autenticado que pode executá-la. Isso é ausência de
+  // autorização da sessão, não ausência do esquema canônico.
+  if ([401, 403, 404].includes(permissao.status)) return { autenticado: false, eventos: [] };
   if (!permissao.ok) throw Error("VERIFICACAO_ADMIN_HTTP_" + permissao.status);
   if (await permissao.json() !== true) return { autenticado: false, eventos: [] };
   const get = async (tabela: "agent_events" | "hub_mission_events", query: URLSearchParams) => {
