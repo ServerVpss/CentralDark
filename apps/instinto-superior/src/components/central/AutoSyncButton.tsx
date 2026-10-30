@@ -29,7 +29,6 @@ export const AutoSyncButton: React.FC = () => {
     human_readable: 'Nunca sincronizado'
   })
   const [isSyncing, setIsSyncing] = useState(false)
-  const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
@@ -68,16 +67,19 @@ export const AutoSyncButton: React.FC = () => {
   const handleMicroDeploy = async () => {
     if (isSyncing) return
     setIsSyncing(true)
-    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando promoção segura ao GitHub...' }))
+    setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Solicitando execução ao promotor do GitHub...' }))
     try {
       const { data, error } = await supabase.auth.getSession()
       const token = data.session?.access_token
       if (error || !token) throw new Error('SESSION_MISSING')
       const result = await dispatchPromotion({ headers: { Authorization: `Bearer ${token}` } })
       if (result.state === 'DISPATCHED') {
-        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Promotor acionado. Aguardando gates, squash e recibo; deploy ainda não comprovado.' }))
+        setSyncStatus(prev => ({ ...prev, status: 'syncing', human_readable: 'Pedido recebido pelo GitHub. Conferir workflow e gates; integração e deploy não comprovados.' }))
       } else {
-        setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: `Promoção não confirmada: ${result.reason}` }))
+        const motivo = result.reason === 'DISPATCH_TOKEN_NOT_CONFIGURED'
+          ? 'O servidor do Cockpit não tem credencial para solicitar a automação. Nenhuma execução foi iniciada.'
+          : `O GitHub não confirmou a solicitação: ${result.reason}. Nenhuma integração foi comprovada.`
+        setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: motivo }))
       }
     } catch {
       setSyncStatus(prev => ({ ...prev, status: 'failed', human_readable: 'Sessão/autorização indisponível; nenhuma promoção confirmada.' }))
@@ -151,24 +153,18 @@ export const AutoSyncButton: React.FC = () => {
             <Zap className="w-5 h-5 text-amber-400" />
             <div>
               <p className="text-sm font-semibold text-foreground">Automação CentralDark · execução segura</p>
-              <p className="text-xs text-amber-200/80">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
+              <p className="text-xs text-amber-200/80">Solicita o promotor existente no GitHub. Ele verifica os gates e decide a integração. Não sincroniza Casa/VPS nem faz deploy.</p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <select
-              value={microDeployMode}
-              onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
-              disabled={isSyncing}
-              className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
-            >
-              <option value="main-only">Main Only (rapido)</option>
-              <option value="full">Full (Casa/VPS/Main)</option>
-            </select>
+            <span className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground">
+              GitHub main · sem deploy
+            </span>
 
             <Button onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
               <Zap className="w-4 h-4" />
-              {isSyncing ? 'Solicitando...' : 'Executar Automação'}
+              {isSyncing ? 'Solicitando...' : 'Solicitar avaliação'}
             </Button>
           </div>
         </div>
