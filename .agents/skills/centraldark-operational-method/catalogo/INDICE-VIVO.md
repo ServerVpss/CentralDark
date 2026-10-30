@@ -1,15 +1,15 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-29 14:18:30 -03:00
-**Total:** 98 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-30 00:38:38 -03:00
+**Total:** 100 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-29T14:12:31-03:00 | 2026-10-29T14:12:31-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T00:09:23-03:00 | 2026-10-30T00:09:23-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-29T14:12:31-03:00 | 2026-10-29T14:12:31-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T00:09:23-03:00 | 2026-10-30T00:09:23-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -77,6 +77,7 @@
 | `references/HERMES-KANBAN-RECEITA-UNIVERSAL.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:17:59-03:00 | 5ffca46f168b |
 | `references/hermes-model-config.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2b2a4653aea8 |
 | `references/HUMAN-ACTION-DIRECT-LINK.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a251f7766cab |
+| `references/JANELAS-TRANSITORIAS-HERMES-TRACE.md` | referencia | 2026-10-30T00:07:00-03:00 | 2026-10-30T00:07:00-03:00 | 4826354b5828 |
 | `references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 957cf5a0a417 |
 | `references/MICHELIN-3-ESTRELAS-PROTOCOLO.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | cb1486df5e5d |
 | `references/PACKAGE-INGEST-LEDGER.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | d748f1bb610f |
@@ -103,7 +104,8 @@
 | `scripts/registrar-prova-hermes-casa.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 27e904b4a27d |
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
-| `SKILL.md` | skill | 2026-10-29T14:16:28-03:00 | 2026-10-29T14:16:28-03:00 | ca6a319c897b |
+| `scripts/Trace-TransientConsoleWindows.ps1` | script | 2026-10-30T00:07:40-03:00 | 2026-10-30T00:08:59-03:00 | 4ffb343763f0 |
+| `SKILL.md` | skill | 2026-10-30T00:36:32-03:00 | 2026-10-30T00:36:32-03:00 | 7adadd55c792 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-29T14:18:30-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-30T00:38:38-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

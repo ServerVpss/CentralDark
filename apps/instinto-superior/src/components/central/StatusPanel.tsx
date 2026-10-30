@@ -106,13 +106,13 @@ export function StatusPanel() {
   const audioScreenpipe = d?.screenpipeAudioStatus?.toLowerCase() ?? null;
   const audioSemSinal = audioScreenpipe === "stale" || audioScreenpipe === "stalled" || audioScreenpipe === "unavailable";
   const sinais = [
-    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: "Site local consultado agora.", icon: House },
-    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "GitHub principal consultado agora.", icon: Github },
-    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: "Conexão principal da API consultada.", icon: Activity },
-    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: "Mapa interno consultado.", icon: GitBranch },
-    { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Roteador de serviços consultado.", icon: Cpu },
-    { nome: "Sinal de atividade", estado: d?.heartbeat ?? unknown, detalhe: "Último sinal de atividade consultado.", icon: HeartPulse },
-    { nome: "Confirmações", estado: d?.receipts ?? unknown, detalhe: "Histórico de confirmações consultado.", icon: Database },
+    { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: d?.casaSiteFonte ?? "Casa · site local · fonte não medida", icon: House },
+    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "Main · GitHub principal consultado agora.", icon: Github },
+    { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: d?.apiHealthFonte ?? "Host atual · API /health · fonte não medida", icon: Activity },
+    { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: d?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida", icon: GitBranch },
+    { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Host atual · Omni Router consultado agora.", icon: Cpu },
+    { nome: "Sinal de atividade", estado: d?.heartbeat ?? unknown, detalhe: "Host atual · heartbeat consultado agora.", icon: HeartPulse },
+    { nome: "Confirmações", estado: d?.receipts ?? unknown, detalhe: "Host atual · receipts consultados agora.", icon: Database },
   ];
 
   const rotas = [
