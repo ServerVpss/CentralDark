@@ -1201,6 +1201,31 @@ FIO_DA_MISSAO=   continuidade do fio
 
 Nao usar em conversa comum. Só para missao operacional executada.
 
+### REGRA DA REGRA — publicar cada cursor fechado
+
+Quando um `NEXT_CURSOR` for fechado com prova real e o estado for
+`FIXED_POINT_SCOPED` ou equivalente, o executor deve publicar o delta concluído
+no owner versionado, sem esperar um comando separado de publicação:
+
+```text
+NEXT_CURSOR_FECHADO_COM_PROVA
+→ git fetch --no-tags origin refs/heads/main
+→ comparar HEAD local com origin/main
+→ separar somente os arquivos do delta concluído
+→ git commit
+→ git push origin main
+→ ler novamente SHA local e remoto
+→ exigir SAME_HEAD=true
+→ preservar dirty não relacionado
+```
+
+Esta regra não autoriza publicar `UNKNOWN`, `PARTIAL`, `BLOCKED` ou cursor ainda
+pendente. Não usar `git add -A` quando houver dirty de outro escopo. Commit,
+push, merge, deploy e UI continuam sendo estados distintos; o push só fecha a
+publicação do delta quando o readback confirma o mesmo SHA remoto. A regra é
+parte do método operacional compartilhado e não depende da memória local de um
+único executor.
+
 
 ## SELF-LEARNING HARVEST (integrado ao Registro do Ouro)
 
