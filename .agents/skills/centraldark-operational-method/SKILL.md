@@ -7,6 +7,16 @@ oracle_review_on_change: true
 ---
 
 
+<!-- CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
+## 🪟 Gatilho autônomo de diagnóstico — terminal piscando, janelas [], Hermes/CLI :9119
+
+**Ativar por contexto, sem comando nominal do CHEFE:** durante uma missão ativa, reconhecer automaticamente prints/relatos de janelas `[]`, PowerShell/CMD que piscam, `conhost.exe` em rajada, suspeita de CLI/Hermes :9119 ou gateway reiniciando. Reutilizar [receita com critérios de causalidade](references/JANELAS-TRANSITORIAS-HERMES-TRACE.md) e [traçador pontual de processos+janelas](scripts/Trace-TransientConsoleWindows.ps1). Não criar outra skill/daemon nem procurar quando não houver sinal material.
+
+**Ordem:** owner de porta/PID/pai e scheduled tasks → WMI `Win32_ProcessStartTrace` (inícios) + Win32 `EnumWindows`/visibilidade/título/PID (janelas) → correlação com logs Hermes e atividades humanas → separar tool calls do próprio observador → emitir `OBSERVED|CORRELATED|CAUSE_PROVEN|UNKNOWN` com horário, recibo e `NEXT_CURSOR`. **Amostra sem janela não prova ausência; porta 9119 HTTP 200 não prova execução nem causa; previous_unclean_exit não prova falha espontânea.** Read-only e duração finita por padrão; nunca matar `conhost.exe`, reiniciar Hermes, alterar Task Scheduler/porta ou ocultar todas as janelas para 'consertar' um sintoma sem prova e autorização.
+
+**Escopo de autonomia:** o agente que carregou a Skill-Mãe escolhe quando aplicar a receita **na própria execução**. Texto persistido em Git não cria observação remota contínua nem garante adoção por agente que não lê a skill.
+<!-- /CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
+
 <!-- CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
 ## 🔎 RASTRO PRIMEIRO — TRACE-FIRST / Delta Útil (CHEFE, 2026-10-29)
 
