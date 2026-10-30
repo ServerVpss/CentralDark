@@ -916,8 +916,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   estado={dado?.grafoVivo ?? "UNKNOWN"}
                   codigo={dado?.grafoHttp ? `HTTP ${dado.grafoHttp}` : "Sem resposta medida"}
                   detalhe={dado?.grafoErro
-                    ? `Fonte: ${dado.liveFabricFonte} · MOTIVO: ${dado.grafoErro}`
-                    : `Fonte: ${dado.liveFabricFonte} · rota medida; execução ainda depende de contraprova.`}
+                    ? `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · MOTIVO: ${dado.grafoErro}`
+                    : `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · rota medida; execução ainda depende de contraprova.`}
                   icone={<Radar className="size-5" />}
                 />
               </div>

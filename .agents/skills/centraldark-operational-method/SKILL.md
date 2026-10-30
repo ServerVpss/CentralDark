@@ -13,6 +13,16 @@ oracle_review_on_change: true
 Toda busca autorizada pelo CHEFE escolhe a rota mais rápida e comprovada para a intenção, sem repetir medições válidas. Reutilizar owner, sessão, receita, receipt, fingerprint e NEXT_CURSOR. Usar dinamicamente índice/catálogo, log primário, MCP, UI Automation do Classic/Codex/Cockpit/openKylin, Screenpipe local 3030 ou outras fontes disponíveis. Redescobrir somente quando uma identidade, estado, versão ou autorização mudar. Confira a [receita UI + roteamento + caches](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
 
 Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência se medida, estado de cache, prova, contraprova e cursor; sem delta novo, NOOP. Reutilizar catálogo/autocura da Skill-Mãe, session-intelligence-harvester, scripts/memory-linker e knowledge-compiler, sem segundo motor. Separar cache operacional persistente entre chats de Prompt/Self-Cache P15 e KV Cache interno do modelo P16; nunca alegar HIT ou economia dos modelos sem telemetria. A permissão do CHEFE para buscar não contorna autenticação do serviço. CACHE_HIT não é prova do efeito.
+### 🍒+1 Rota curta de delegação Codex pela UI, voz e texto (30/10/2026)
+
+**Fato observado:** o CHEFE ditou em voz a delegação para integração Gênesis + replay operacional + RSI no Cockpit; SOL localizou a conversa Codex já aberta ("Inspect CentralDark surface plugin"), leu o contexto, preencheu o campo "Trabalhe com o Codex", encontrou "Enviar" habilitado e enviou uma única vez. O CHEFE confirmou visualmente que a mensagem apareceu. **Estado:** `VOICE_INTENT_TO_CODEX_UI_SEND=USER_CONFIRMED`; isto prova o envio observado pelo CHEFE, **não** a execução ou conclusão da integração pelo Codex. Não inventar um receipt remoto de mensagem.
+
+**Receita reutilizável, sem redescoberta:** `INTENÇÃO_VOZ_OU_TEXTO → REUTILIZAR_JANELA_E_SESSÃO_CODEX → CONFERIR_DESTINO_APENAS_SE_MUDOU → PREENCHER_CAMPO_EXISTENTE → ENTER_PARA_ENVIAR_SE_SUPORTADO → READBACK_MÍNIMO → NEXT_CURSOR`. Reutilizar a janela, a conversa, os seletores e a autorização já confirmados, sem reiniciar Codex, varrer monitores, reler catálogos, duplicar pesquisas, testar novamente a modalidade textual ou repetir verificações que não mudam a decisão. Não aguardar ou clicar no botão quando o campo já está pronto e `Enter` efetua o envio; verificar habilitação/estado só quando necessário. Se `Enter` inserir quebra de linha ou não produzir envio, usar **uma vez** o botão Enviar já identificado, após conferir que a mensagem não foi enviada. Nunca reenviar se o resultado for incerto. Confirmar destino e efeito apenas no ponto mínimo necessário, sem eliminar a verificação que impede envio para conversa errada.
+
+**Modalidades e prova:** a delegação **por voz** funcionou e foi confirmada visualmente pelo CHEFE. A entrada **por texto** aproveita exatamente a mesma rota, pois a UI recebe o texto final; por decisão expressa do CHEFE, **não exigir teste independente de texto para reutilizar esse método**. Isto é transferência do método já comprovado, não alegação de medição separada ou execução concluída pelo Codex.
+
+**Kaizen por utilização:** a cada uso real, registrar imediatamente método, ganho observado, caminho/controle, estado e `NEXT_CURSOR` na Skill-Mãe/owner existente; classificar a evidência sem bloquear captura. Antecipar o próximo passo já autorizado e eliminar checagens, esperas, cliques ou confirmações redundantes que não alterem risco, destino ou prova do efeito. **Se surgir rota mais rápida:** compará-la apenas no delta relevante (mesmo destino, autorização e efeito), registrar como candidata imediatamente e, após prova suficiente de que é mais simples/rápida e não perde segurança ou confiabilidade, substituir a rota padrão na MESMA receita, preservando fallback e histórico; não impor bateria de testes que repete fatos válidos. Reavaliar somente se houver delta material de UI, sessão, permissão, alvo, erro ou resultado. Não inventar automação permanente: reutilização ocorre quando o executor carrega a receita. Preservar escritor único e delegação Gênesis/Cockpit existente.
+
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
 ## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
@@ -3716,3 +3726,86 @@ NEXT_CURSOR=COCKPIT_CONTROL_MAP_REPLAY_SAFE_RAILS_AND_DETAIL_EXPANSIONS
 Este receipt prova o inventário, a navegação segura executada e o readback limitado. Não prova commit, push, deploy, conexão MCP, execução de automação ou funcionamento de todos os owners.
 
 <!-- /CENTRALDARK_COCKPIT_CONTROL_MAP_20261030 -->
+
+<!-- CENTRALDARK_PAGE_ERROR_SENTINEL_RECIPE_20261030 -->
+## 🧿 Receita operacional — ler e correlacionar erro real do Sentinel do Cockpit
+
+**Owner único:** `apps/instinto-superior/public/centraldark-erros-visiveis.js`, injetado uma vez por `apps/instinto-superior/src/routes/__root.tsx`. Não criar outro Sentinel, watcher, endpoint, skill ou backend.
+
+### Objetivo
+
+Capturar o que a página realmente observou e devolver uma mensagem reproduzível para o owner correto. A mensagem do usuário, screenshot ou texto de memória é contexto. A fonte primária é a entrada existente no Sentinel, seu detalhe técnico e o evento `centraldark:sentinela` quando ele foi observado na mesma página.
+
+### Leitura da mensagem real
+
+1. Confirmar a página e o horário atuais.
+2. Abrir o botão `🧿` do mesmo Sentinel.
+3. Selecionar a entrada observada, sem fabricar uma nova ocorrência.
+4. Ler o resumo humano e abrir `detalhe técnico`.
+5. Copiar a receita somente pelo controle existente `Copiar pro Instinto` ou `Copiar todos`.
+6. Preservar exatamente, após sanitização:
+   - `Página`: URL sem query ou fragmento;
+   - `Quando`: horário local e, quando disponível, `hora` ISO;
+   - `O que aconteceu`: classificação simples do Sentinel;
+   - `Mensagem técnica`: mensagem original observada;
+   - `Onde`: arquivo, rota ou origem medida;
+   - `Botão relacionado`: último `data-cd-flow`/controle observado em até 15 segundos;
+   - `Pilha`: stack disponível, sem tokens, cookies, headers ou corpos;
+   - `Intenção`: correção limitada, preservação, teste e regra `UNKNOWN não é PASS`.
+
+### Correlação mínima
+
+Correlacionar `pagina + hora + tipo + mensagem + onde + controle + pilha + intent_id/receipt`, quando existirem. Usar `evento_id` e `centraldark:sentinela` somente como evidência da mesma execução. A proximidade temporal do botão é correlação, não causalidade. `CLICK_SEEN` prova apenas clique observado; não prova execução, efeito remoto, deploy ou origem MCP.
+
+Se a mensagem tiver `Mensagem técnica: %o`, `undefined`, vazio ou stack ausente, marcar `MESSAGE_INCOMPLETE=UNKNOWN`. Não substituir pelo erro provável. Reproduzir somente o conjunto autorizado e registrar a primeira mensagem real recebida.
+
+### Receita reutilizável para qualquer erro de página
+
+```text
+1. IDENTIFICAR: URL, aba/perfil, título e horário.
+2. ABRIR: Sentinel único da própria página.
+3. LER: entrada, resumo, detalhe técnico, origem e stack.
+4. CORRELACIONAR: controle próximo, evento_id, componente/arquivo e intenção.
+5. SANITIZAR: remover Bearer, token, secret, api_key, query, fragmento, cookie, header e corpo.
+6. CLASSIFICAR: PASS somente com efeito reproduzido; FAIL com erro real reproduzido; UNKNOWN sem fonte primária, mensagem incompleta ou efeito não provado.
+7. DELIMITAR: escolher o owner e o menor delta; preservar arquivos e rotas não afetados.
+8. TESTAR: reproduzir o componente/rota afetada.
+9. CONTRAPROVAR: ler a tela, console/log primário e resultado pós-teste de forma independente.
+10. REGISTRAR: CURRENT, DELTA, PROVA, ROLLBACK, RECEIPT_ID e NEXT_CURSOR.
+```
+
+### Critérios de veredito
+
+- **PASS:** a entrada real do Sentinel contém mensagem técnica completa; página, horário e origem estão correlacionados; o delta foi testado; o efeito foi lido de volta; nenhum segredo foi exposto.
+- **FAIL:** a entrada real reproduz o erro e o teste confirma falha do owner ou do efeito esperado.
+- **UNKNOWN:** Sentinel inacessível, página/aba incerta, mensagem truncada, stack ausente quando necessária, transporte remoto sem ACK, ou efeito ainda não lido. Não converter silêncio em PASS.
+
+### Limites de transporte
+
+`window.__cdErros.lista` e o DOM do Sentinel são leitura local. `centraldark:sentinela` é evento de observação local. `cfg.coracao` só pode ser usado se for endpoint same-origin autenticado e explicitamente configurado. `HTTP_ACK` não prova efeito. Sem rota autenticada comprovada, manter `TRANSPORT=UNKNOWN` e usar `Copiar pro Instinto` como saída manual, sem enviar dados.
+
+### Receipt obrigatório
+
+O receipt deve registrar `OWNER`, `SURFACE`, `SOURCE`, `PAGE`, `MEASURED_AT`, `ERROR_TYPE`, `MESSAGE_FINGERPRINT`, `COMPONENT_OR_WHERE`, `STACK_AVAILABLE`, `RELATED_CONTROL`, `INTENT`, `DELTA`, `TEST`, `COUNTERPROOF`, `STATUS`, `ROLLBACK` e `NEXT_CURSOR`. Nunca registrar o texto de credenciais ou o valor integral de tokens. A presença desta receita na Skill-Mãe documenta o método; só uma execução com readback promove `PASS`.
+
+<!-- /CENTRALDARK_PAGE_ERROR_SENTINEL_RECIPE_20261030 -->
+
+<!-- CENTRALDARK_GENESIS_OPERATIONAL_REPLAY_20261030 -->
+## Genesis existente — replay operacional de regressão
+
+Este bloco integra o Genesis já existente ao ciclo de regressão. Ele não cria
+um segundo executor, agente, MCP ou watcher. Toda técnica observável entra
+primeiro como `OBSERVED`; somente teste e readback independente podem elevar o
+registro para `TESTED` ou `PROVEN`.
+
+Cada replay deve preservar estes campos: `INTENT_ID`, `RUN_ID`, `area`,
+`selector_aria_data_cd_flow`, `antes`, `clique_ou_acao`, `depois`, `efeito`,
+`fingerprint`, `receipt`, `correlation_id`, `tool_call_id` e `NEXT_CURSOR`.
+
+Regra desta execução: o status do MCP oficial foi lido em modo somente
+leitura. A tentativa de leitura nativa Kylin retornou “MCP server is not
+initialized”; portanto, não é prova de falha do túnel nem de binding do
+Cockpit. A sessão do navegador não pôde ser reacessada nesta janela; o replay
+de abas e botões fica `UNKNOWN` e não pode ser promovido.
+
+<!-- /CENTRALDARK_GENESIS_OPERATIONAL_REPLAY_20261030 -->
