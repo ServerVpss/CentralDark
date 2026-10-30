@@ -1124,6 +1124,31 @@ Nao usar em conversa comum. Só para missao operacional executada.
 
 ## SELF-LEARNING HARVEST (integrado ao Registro do Ouro)
 
+### Técnica cristalizada — adapter de health separado por owner
+
+Quando o Cockpit consulta vários serviços com contratos diferentes, não usar uma
+única `apiBase` para todas as sondas. Manter a base do Omni Router separada da
+base de health do Commander:
+
+```text
+OMNI_API_BASE=127.0.0.1:8099
+COMMANDER_HEALTH_BASE=127.0.0.1:9101
+TUNNEL_READYZ=127.0.0.1:8742/readyz
+```
+
+O adapter deve aceitar `CENTRALDARK_ROUTER_HEALTH_URL`, usar `9101` como padrão
+na Casa e preservar `8099` para `/api/omni/*` e `/api/live-fabric/*`. Não
+substituir todas as rotas por `9101`: o Commander expõe health e `/tool`, não o
+contrato Omni. Depois do menor delta, validar nesta ordem: build, heartbeat e
+health do 8099, `9101/health` com `engine_connected=true`, uma ferramenta
+read-only em `9101/tool` com `CASA_ENGINE_RESULT` e `8742/readyz`. Registrar
+receipt com numerador/denominador Michelin e manter a leitura visual do Cockpit
+como prova separada do runtime.
+
+Falha evitada: listener 8099 existente, mas sem resposta, mascarando o
+Commander 9101 e deixando o card amarelo. Rollback: remover o adapter separado
+e restaurar a chamada anterior, sem criar serviço ou processo paralelo.
+
 **Gatilho:** tarefa só funcionou após várias tentativas / descobriu fato projeto-específico / workflow recorrente / usuário disse "lembra isso".
 
 **Promotion Rule (obrigatória - os 3 juntos):**

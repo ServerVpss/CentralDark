@@ -5,6 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const GITHUB_API = "https://api.github.com";
 // A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
 const DEFAULT_API_BASE = "http://127.0.0.1:8099";
+const DEFAULT_CASA_COMMANDER_HEALTH_BASE = "http://127.0.0.1:9101";
 const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
 const REQUEST_TIMEOUT_MS = 8_000;
 
@@ -146,6 +147,10 @@ export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
 
+function casaCommanderHealthBase() {
+  return (process.env["CENTRALDARK_ROUTER_HEALTH_URL"] ?? DEFAULT_CASA_COMMANDER_HEALTH_BASE).replace(/\/$/, "");
+}
+
 function objetoJson(valor: unknown): valor is JsonObject {
   return !!valor && typeof valor === "object" && !Array.isArray(valor);
 }
@@ -154,12 +159,12 @@ function texto(valor: unknown) {
   return typeof valor === "string" && valor.length > 0 ? valor : null;
 }
 
-async function medirApi(path: string): Promise<Probe> {
+async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const resposta = await fetch(`${apiBase()}${path}`, {
+    const resposta = await fetch(`${base}${path}`, {
       headers: { accept: "application/json" },
       cache: "no-store",
       signal: controller.signal,
@@ -663,6 +668,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
     const hostScreenpipe = origemLocalScreenpipe();
     const origemHttp = apiBase();
+    const origemHealth = casaCommanderHealthBase();
     const casaSiteUrl = process.env["CENTRALDARK_CASA_SITE_URL"]?.trim() || DEFAULT_CASA_SITE_URL;
     const consultaEm = new Date().toISOString();
     const [
@@ -686,7 +692,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/live-fabric/status"),
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
-      medirApi("/health"),
+      medirApi("/health", origemHealth),
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
@@ -805,7 +811,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
       screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
-      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHealth}/health · GET server-side`,
       apiHealthServico: apiServico.slice(0, 100),
       apiHealthMedidoEm: consultaEm,
       desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",
