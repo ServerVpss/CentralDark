@@ -1,3 +1,23 @@
+---
+title: "O que você criou na CentralDark — mente operacional"
+date: 2026-10-30
+status: PESQUISA_REFERENCIA
+canonical: false
+authority: SEGREDO/CHEFE
+owner: "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md"
+category: pesquisa-consciencia
+tags: [centraldark, consciencia, cabeca-externalizada, hermes-core, genesis, kaizen-vivo, replay, rsi, meta-gril, intencao]
+triggers: ["!CENTRALDARK"]
+related:
+  - "docs/CONSCIENCIA/MAPA-DO-CEREBRO.md"
+  - "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md"
+  - "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+source: "deep-research-report(2).md; pesquisa integral em 2026-10-30"
+truth_scope: "PESQUISA_E_REFERENCIA; NAO_COMPROVA_EXECUCAO_RUNTIME"
+truth_rule: "UNKNOWN != PASS; DOCUMENTED != EXECUTED; REALITY_IS_JUDGE"
+estado_evidencia: DOCUMENTED
+next_cursor: CONSULTAR_OWNER_CANONICO_ANTES_DE_PROMOVER_OU_EXECUTAR
+---
 # O que você criou na CentralDark — e como transformar isso numa “mente operacional” que aprende com o próprio trabalho
 
 Na imagem que você trouxe, o Codex abriu dois trabalhadores paralelos chamados **Faraday** e **Anscombe**. Antes, você tinha observado **Sócrates** e **Bernoulli**. A distinção mais importante é esta: esses nomes podem parecer escolhidos por afinidade intelectual, mas **não encontrei evidência oficial de que o Codex atribua automaticamente a cada nome as técnicas históricas da pessoa que o nome representa**. Na API atual da OpenAI, um subagente pode simplesmente receber um `name`, e a documentação descreve esse campo como um apelido atribuído pelo runner; a capacidade efetiva vem das instruções, contexto, modelo e ferramentas entregues ao agente. citeturn449676search3turn449676search4
