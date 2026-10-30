@@ -3601,3 +3601,118 @@ CICLO_BILATERAL_COMPLETO=UNKNOWN
 ```
 
 Esta receita está documentada, não executada por este patch. Sua homologação exige replay A→B, readback independente em ambas as superfícies, receipt correlacionado, contraprova e comparação com a baseline; sem isso o veredito é `UNKNOWN`.
+
+## RECEITA VIVA — mapa completo de navegação do Cockpit (2026-10-30)
+
+<!-- CENTRALDARK_COCKPIT_CONTROL_MAP_20261030 -->
+
+**Objetivo:** ensinar qualquer executor que carregue esta Skill-Mãe a operar o Cockpit existente com o mesmo método. A receita separa navegação segura, leitura, expansão e mutação. Ela não transforma um botão visível em prova de backend.
+
+**Owner:** `K:\apps\instinto-superior\src\components\central\CockpitShell.tsx`.
+**Owners auxiliares:** `AutoSyncButton.tsx`, `StatusPanel.tsx`, `MapaOwners.tsx`, `SyncCenter.tsx` e `CockpitActionButton.tsx`.
+**Superfície medida:** `http://127.0.0.1:8080/sala-controle`, título `Cockpit CentralDark — Sala de Controle`.
+**Rota de controle:** Browser/UI Automation autorizado → DOM/ARIA → ação sem coordenada fixa → readback do mesmo documento.
+
+### Inventário atual comprovado
+
+- `CONTROL_ELEMENTS=127`: união de `button`, `summary`, `a`, `role=tab`, `role=checkbox` e `role=combobox` no DOM renderizado.
+- `TOP_LEVEL_TABS=27`: todas as 27 abas foram selecionadas uma vez e cada seleção mostrou um `tabpanel` ativo com título ou conteúdo próprio.
+- `HARNESS_STATUS_CONTROLS=37` antes do catálogo de abas; `CONTENT_CONTROLS=63` depois do catálogo. Esses números são o snapshot da sessão, não um contrato fixo.
+- `PORT_INVENTORY_READBACK=204` no momento da medição. O número é dinâmico. Não copiar um valor histórico para outra sessão.
+- `MEASURE_READBACK=PASS` no escopo do sensor: antes `Última atualização: 30/10/2026, 16:05:36`; depois `16:05:58`, após `Medir agora` retornar ao estado utilizável. Isso prova a leitura do sensor, não todas as rotas do backend.
+- `OBSERVED_AT=2026-10-30T19:06:30.212Z`; `URL_READBACK=PASS`; `TITLE_READBACK=PASS`.
+
+### Fluxo obrigatório para qualquer botão
+
+```text
+IDENTIFICAR_INTENÇÃO
+→ RESOLVER_OWNER_E_SESSÃO
+→ SNAPSHOT_BEFORE(URL,TÍTULO,ROLE,NOME,ARIA,FLOW,ESTADO)
+→ CLASSIFICAR(SAFE_NAV|READ_ONLY_EXPAND|READ_ONLY_MEASURE|MUTATING|UNKNOWN)
+→ SEGURO? CLICAR UMA VEZ PELO SELETOR SEMÂNTICO
+→ SNAPSHOT_AFTER(DOM,ARIA,TAB/DIÁLOGO,STATUS,DATA)
+→ CONTRAPROVA_E_COMPARAÇÃO
+→ REGISTRAR(AÇÃO,READBACK,EFEITO,STATUS,RECEIPT,NEXT_CURSOR)
+```
+
+Use `data-cd-flow` quando existir. Caso contrário, use `role` + nome acessível. Reidentifique o controle depois de qualquer navegação. Não reutilize índice AX antigo. `CLICK_ACCEPTED != EFFECT_PROVED`.
+
+### Mapa de controles e comportamento
+
+| Local | Controle | Classificação | Ação real / owner | Regra de prova |
+|---|---|---|---|---|
+| Harness superior flutuante | `CentralDark` | `SAFE_NAV` | `abrirDestino("visao")` | aba Visão ativa e `#centraldark-harness-abas` visível |
+| Harness superior flutuante | lupa | `SAFE_NAV` | `definirGaveta("top")` | gaveta Harness aberta e campo `busca-harness` presente |
+| Harness superior flutuante | mapa | `SAFE_NAV` | `definirGaveta("right")` | gaveta direita aberta |
+| Harness superior flutuante | notificações | `SAFE_NAV` | `definirAbaAdminInicial("notificacoes")` + Admin | aba Admin e painel correto; não inventar evento |
+| Cabeçalho | `CentralDark Estúdio` | `READ_ONLY_MEASURE` | `abrirEstudio()`; usa o AionUI existente ou verifica a API | `estadoEstudio` e URL devem ser lidos depois |
+| Cabeçalho | `Aproximar ao ChatGPT` | `READ_ONLY_NAV` | `abrirPlayerLocal()`; abre o player local | diálogo do player presente; não confundir com conexão MCP |
+| Cabeçalho | `Hermes ONE` | `SAFE_NAV` | `abrirHermesOne()` → aba Hermes | aba Hermes ativa; não alegar execução Hermes |
+| Cabeçalho | `Minha conta` | `READ_ONLY_EXPAND` | abre popover de conta; `sair()` só com ordem própria | readback do menu; logout é mutação de sessão |
+| Rail esquerdo | ferramentas | `SAFE_NAV` | `definirGaveta("left")` | Sheet Harness aberto; a sessão mediu este efeito |
+| Rail esquerdo | Gram | `SAFE_NAV` | Gram se autenticado; Visão sem autenticação | confirmar aba resultante e estado de autenticação |
+| Rail esquerdo | Goals | `SAFE_NAV` | `abrirDestino("goals")` | aba Goals ativa |
+| Rail esquerdo | buscar módulos | `SAFE_NAV` | `definirGaveta("top")` | gaveta top e filtro presentes |
+| Rail direito | Sistemas | `SAFE_NAV` | `definirGaveta("right")` | gaveta direita aberta |
+| Rail direito | Hermes | `SAFE_NAV` | `abrirDestino("hermes")` | aba Hermes ativa |
+| Rail direito | Configurar Harness | `READ_ONLY_EXPAND` | `definirGaveta("bottom")` | gaveta inferior aberta |
+| Rail inferior | Sync | `SAFE_NAV` | `abrirDestino("sync")` | Oficina ativa |
+| Rail inferior | Pacotes | `SAFE_NAV` | `abrirDestino("downloads")` | Downloads ativa |
+| Rail inferior | moldura | `READ_ONLY_EXPAND` | `definirGaveta("bottom")` | gaveta inferior aberta |
+| Auto Sync | `Windows` | `MUTATING` | `handleSync("windows")`; commit/push via `executarSync` | nunca clicar em varredura; exige autorização e readback GitHub |
+| Auto Sync | `Main` | `READ_ONLY_OPERATIONAL` | `handleSync("main")`; consulta e compara SHAs | provar SHA local e `origin/main`; consulta não é merge |
+| Auto Sync | `VPS` | `MUTATING` | `handleSync("vps")`; SSH/fast-forward | exige autorização; conflito bloqueia; readback remoto obrigatório |
+| Auto Sync | `Sincronizar Tudo` | `MUTATING` | alvo atual `local`; Casa/Main, sem VPS | texto/escopo do seletor é parte do contrato; não chamar “deploy” |
+| Auto Sync | `Main Only` / `Full` | `READ_ONLY_SELECT` | altera somente `microDeployMode` | seleção não executa nada; a prova começa no botão seguinte |
+| Automação | `Executar Automação` | `MUTATING` | `handleMicroDeploy` → pré-sync → promoção existente | não clicar automaticamente; gates, workflow e receipt devem existir |
+| Estado | `Medir agora` | `READ_ONLY_MEASURE` | `q.refetch()` → `lerEstadoCentralDark` | timestamp/estado mudam e botão retorna a utilizável; não prova deploy |
+| Estado | Rotas e alertas | `READ_ONLY_EXPAND` | abre `<details>` | conteúdo expandido visível; não reclassificar status sozinho |
+| Commander | inventário de portas | `READ_ONLY_EXPAND` | alterna `inventarioAberto` | título troca para ocultar e lista TCP/UDP aparece |
+| Cards | detalhes técnicos | `READ_ONLY_EXPAND` | abre `<details>` do sensor | conteúdo do mesmo card aparece |
+| Jornada | iniciante/engenharia | `READ_ONLY_SELECT` | altera `simples` | texto da etapa muda; não executa comando |
+| Jornada | etapas / anterior / próxima | `READ_ONLY_SELECT` | altera `passoAtivo` | etapa e `aria-pressed` mudam |
+| Mapa Owners | caminhos simples | `SAFE_NAV` ou `READ_ONLY_EXPAND` | `abrirCaminhoSimples`; Conexões abre diálogo Admin | destino/diálogo deve aparecer; privado desabilitado sem auth |
+| Mapa Owners | `Abrir área →` / `Abrir Admin →` / `Abrir Sistema →` / `Abrir Hermes →` | `SAFE_NAV` | `onNavigate` para o owner indicado | aba correta ativa; não inferir runtime |
+| Sync Center | Personalizar / Modelos | `READ_ONLY_EXPAND` | abre gaveta local | gaveta e conteúdo visíveis; não altera executor |
+| Sync Center | percurso / visão / duas vias | `READ_ONLY_SELECT` | altera estado visual do Sync Center | estado selecionado muda; não é sincronização |
+| Forja / Sistema | atualizar/medir | `READ_ONLY_MEASURE` | refetch do sensor existente | timestamp e resposta do sensor |
+| Externo/desktop | Obsidian / Unigram | `MUTATING_LOCAL_APP` | bridge nativa `openObsidianDesktop`/`openUnigramDesktop` | só executar com pedido explícito; status `REQUESTED` não prova janela pronta |
+| Harness | Ocultar moldura / Mostrar Harness | `READ_ONLY_LOCAL_UI` | altera somente `harnessVisivel` | barras desaparecem/aparecem; não altera backend |
+
+### As 27 áreas navegadas nesta rodada
+
+`Visão geral`, `Jornada`, `Portal`, `Builder Bolt`, `Mapa PR #1873`, `CentralDark Gram`, `Minha Oficina`, `Design Center`, `Goals`, `Gênesis · Michelin`, `Dream`, `Estrutura`, `Raio-X`, `Recibos`, `Forja`, `Permissões Forja`, `Admin CentralDark`, `Sistema CentralDark`, `Obsidian`, `Estúdio`, `Hermes`, `Unigram`, `Regras Forja`, `Inventário`, `Agent Mode`, `HTML Consolidation` e `Downloads`.
+
+O readback de cada área deve guardar `id`, título/heading, `tabpanel` ativo e uma amostra curta. Nesta rodada, as leituras principais foram: Visão (`K:\`, `F:\`, `C:\`, heartbeat, grafo), Jornada (8 etapas), Portal/Builder (estrutura visual), PR (mapa), Gram (mensagens/bots), Oficina (sync), Design (tokens), Goals, Gênesis, Dream, Estrutura, Raio-X, Recibos, Forja, Permissões, Admin, Sistema (Mega Painel), Obsidian, Estúdio, Hermes, Unigram, Regras, Inventário, Agent Mode, HTML e Downloads.
+
+### Limites e estados honestos
+
+- `TOP_LEVEL_NAV=PASS` nesta sessão: `27/27` seleções tiveram `tabpanel` ativo.
+- `DOM_CONTROL_INVENTORY=PASS`: `127` elementos catalogados nesta sessão.
+- `MEASURE_BUTTON=PASS` no sensor: readback de horário atualizado.
+- `PORT_INVENTORY_EXPANSION=PASS`: o controle mudou de `Exibir inventário total de portas · 204` para `Ocultar inventário total`; lista medida apareceu.
+- `HARNESS_DRAWER_OPEN=PASS` para `Abrir ferramentas`; os demais rails estão mapeados pelo owner, mas exigem readback individual quando a gaveta/viewport não permanecer único.
+- `MUTATING_BUTTON_E2E=NOT_EXECUTED`: Windows, VPS, Sincronizar Tudo, Executar Automação, Obsidian e Unigram não foram acionados nesta rodada.
+- `BACKEND_EFFECT_FOR_NAVIGATION=NOT_APPLICABLE`: navegação de aba é efeito de UI. Qualquer efeito remoto exige outra prova.
+- `MCP_ORIGIN_FROM_COCKPIT=UNKNOWN`: esta leitura do Cockpit não prova chamada MCP nem origem de qualquer log externo.
+
+### Receipt desta rodada
+
+```text
+INTENT=MAPEAR_COCKPIT_E_ATUALIZAR_SKILL_MAE
+OWNER=K:\.agents\skills\centraldark-operational-method\SKILL.md
+SURFACE=http://127.0.0.1:8080/sala-controle
+CONTROL_ELEMENTS=127
+TOP_LEVEL_TABS=27/27
+READ_ONLY_MEASURE=PASS
+PORT_INVENTORY_EXPANSION=PASS
+SAFE_NAV_MUTATING_CONTROLS=NOT_EXECUTED
+SOURCE_HANDLERS=READ
+RUNTIME_MUTATION=NOT_REQUESTED
+STATUS=PASS_BOUNDED_WITH_MUTATIONS_PROTECTED
+NEXT_CURSOR=COCKPIT_CONTROL_MAP_REPLAY_SAFE_RAILS_AND_DETAIL_EXPANSIONS
+```
+
+Este receipt prova o inventário, a navegação segura executada e o readback limitado. Não prova commit, push, deploy, conexão MCP, execução de automação ou funcionamento de todos os owners.
+
+<!-- /CENTRALDARK_COCKPIT_CONTROL_MAP_20261030 -->

@@ -900,20 +900,24 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
-                  estado="UNKNOWN"
+                  estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
                   codigo={
-                    dado?.atualizadoEm
-                      ? `Consulta: ${new Date(dado.atualizadoEm).toLocaleString("pt-BR")}`
-                      : "Sem consulta"
+                    dado?.heartbeatHttp
+                      ? `HTTP ${dado.heartbeatHttp} · self=${dado.heartbeatSelf ?? "UNKNOWN"}`
+                      : "Sem resposta medida"
                   }
-                  detalhe="Horário da consulta não comprova heartbeat. Sem measured_at do owner One Heart, a pulsação permanece UNKNOWN."
+                  detalhe={dado?.heartbeatErro
+                    ? `Fonte: /heartbeat · MOTIVO: ${dado.heartbeatErro}`
+                    : "Fonte: /heartbeat · leitura real do owner consultado agora."}
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado
                   titulo="Grafo vivo"
                   estado={dado?.grafoVivo ?? "UNKNOWN"}
                   codigo={dado?.grafoHttp ? `HTTP ${dado.grafoHttp}` : "Sem resposta medida"}
-                  detalhe="Projeção da capacidade Live Fabric existente; nenhum segundo motor de grafo."
+                  detalhe={dado?.grafoErro
+                    ? `Fonte: ${dado.liveFabricFonte} · MOTIVO: ${dado.grafoErro}`
+                    : `Fonte: ${dado.liveFabricFonte} · rota medida; execução ainda depende de contraprova.`}
                   icone={<Radar className="size-5" />}
                 />
               </div>
