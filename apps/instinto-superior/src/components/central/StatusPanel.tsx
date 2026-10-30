@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, Eye, Github, House, Monitor, Server, GitBranch, Cpu, Database, HeartPulse } from "lucide-react";
-import { lerEstadoCentralDark, type Estado } from "@/lib/cockpit.functions";
+import { lerEstadoCentralDark, type Estado, type PortaCentralDark } from "@/lib/cockpit.functions";
 import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { rotuloEstadoHumano } from "@/components/central/EstadoCentralDark";
 import { useRelogioVivo } from "@/hooks/useRelogioVivo";
@@ -57,6 +57,23 @@ function LuzProjecao({
     </div>
   );
 }
+function PortaViva({ porta }: { porta: PortaCentralDark }) {
+  const cor = luz(porta.estado);
+  const classe = porta.estado === "PASS" ? "cd-port-dot--pass" : porta.estado === "FAIL" || porta.estado === "BLOCKED" ? "cd-port-dot--fail" : "cd-port-dot--unknown";
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2" data-cd-port={porta.id}>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${classe}`} aria-hidden="true" />
+          <span className="font-mono text-[11px]">{porta.bind}</span>
+          <span className="text-[10px] text-muted-foreground">{porta.transporte}</span>
+        </div>
+        <p className="truncate text-[10px] text-muted-foreground">{porta.origem} · {porta.processo} · PID {porta.pid ?? "não medido"}</p>
+      </div>
+      <span className="shrink-0 text-[10px]">{etiqueta(porta.estado, porta.bind)}</span>
+    </li>
+  );
+}
 /** Anexa o motivo real da sonda ao detalhe do card, só quando o estado não é PASS. */
 function comMotivo(base: string, estado: Estado, motivo: string | null | undefined) {
   if (estado === "PASS" || !motivo) return base;
@@ -87,6 +104,7 @@ export function StatusPanel() {
   // influence the server render vs the browser's first hydration render.
   // This is an incremental, fail-closed fix; post-mount reads stay measured.
   const [hidratado, definirHidratado] = useState(false);
+  const [inventarioAberto, definirInventarioAberto] = useState(false);
   useEffect(() => { definirHidratado(true); }, []);
   const ler = useServerFn(lerEstadoCentralDark);
   const q = useQuery({
@@ -251,6 +269,44 @@ export function StatusPanel() {
                 ) : <LuzViva estado={m.estado} nome={m.nome} fresco={fresco} />}
               </div>
               <p className="mt-3 break-all font-mono text-[10px] text-muted-foreground">Fonte: {m.origem}</p>
+              {m.nome === "CentralDark Commander" ? (
+                <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Inventário de portas CentralDark">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-xs font-semibold">Portas e interfaces CentralDark</p>
+                    <span className="text-[10px] text-muted-foreground">Casa Windows · openKylin</span>
+                  </div>
+                  <ul className="mt-2 space-y-2" aria-live="polite">
+                    {(fresco ? d?.portas ?? [] : []).map((porta) => <PortaViva key={porta.id} porta={porta} />)}
+                    {!fresco ? <li className="text-[10px] text-muted-foreground">Sem leitura recente · clique em Medir agora</li> : null}
+                    {fresco && !(d?.portas?.length) ? <li className="text-[10px] text-amber-400">Nenhuma porta CentralDark foi confirmada nesta leitura.</li> : null}
+                  </ul>
+                  <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+                    TCP LISTEN é separado de MCP stdio: stdio funciona sem abrir porta HTTP. Portas do sistema não são atribuídas ao CentralDark sem prova de processo.
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-3 rounded-md border border-border px-3 py-2 text-[11px] font-medium hover:border-neon-blue/70"
+                    onClick={() => definirInventarioAberto((aberto) => !aberto)}
+                    aria-expanded={inventarioAberto}
+                  >
+                    {inventarioAberto ? "Ocultar inventário total" : `Exibir inventário total de portas · ${(fresco ? d?.portasTotais?.length : 0) ?? 0}`}
+                  </button>
+                  {inventarioAberto ? (
+                    <div className="mt-3 rounded-md border border-border/70 p-2" aria-label="Inventário total de portas openKylin">
+                      <p className="mb-2 text-[10px] text-muted-foreground">Somente portas medidas agora · TCP e UDP · Casa Windows + openKylin</p>
+                      <ul className="space-y-1">
+                        {(fresco ? d?.portasTotais ?? [] : []).map((porta) => (
+                          <li key={porta.id} className="flex items-center justify-between gap-2 font-mono text-[10px]">
+                            <span><span className={`mr-2 inline-block size-2 rounded-full ${CORES[luz(porta.estado)]}`} aria-hidden="true" />{porta.protocolo} {porta.bind}</span>
+                            <span className="text-muted-foreground">{porta.processo} · PID {porta.pid ?? "?"}</span>
+                          </li>
+                        ))}
+                        {fresco && !(d?.portasTotais?.length) ? <li className="text-amber-400">Inventário total não medido.</li> : null}
+                      </ul>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
               {m.nome === "Screenpipe" ? (
                 <div className="mt-3 rounded-md border border-border/70 p-3" aria-label="Screenpipe: capturas recentes e monitores">
                   <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>

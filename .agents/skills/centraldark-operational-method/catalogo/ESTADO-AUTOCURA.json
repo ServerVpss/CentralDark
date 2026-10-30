@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-30T14:32:14-03:00",
+    "gerado_em":  "2026-10-30T15:29:57-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,8 +17,8 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T00:38:39-03:00",
-                         "modificado_em":  "2026-10-30T00:38:39-03:00",
+                         "criado_em":  "2026-10-30T15:09:14-03:00",
+                         "modificado_em":  "2026-10-30T15:09:14-03:00",
                          "bytes":  13188,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
@@ -164,8 +164,8 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T00:38:39-03:00",
-                         "modificado_em":  "2026-10-30T00:38:39-03:00",
+                         "criado_em":  "2026-10-30T15:09:14-03:00",
+                         "modificado_em":  "2026-10-30T15:09:14-03:00",
                          "bytes":  6022,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
@@ -1243,9 +1243,9 @@
                          "caminho":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-30T14:30:16-03:00",
-                         "modificado_em":  "2026-10-30T14:30:16-03:00",
-                         "bytes":  2637,
-                         "sha256":  "6c57071e49af5823cb78016ff041e521d4f5b206df307f2ee36fa615aea28cea",
+                         "modificado_em":  "2026-10-30T15:29:41-03:00",
+                         "bytes":  7559,
+                         "sha256":  "e5be52dbf49f66d5259c65e44a00bab79d9a9c6ff67dd87535c6eb9b0ad2ee70",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1471,11 +1471,15 @@
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-30T00:36:32-03:00",
-                         "modificado_em":  "2026-10-30T14:30:16-03:00",
-                         "bytes":  288254,
-                         "sha256":  "e46298f06d890ab040baf2b83b7459c4cef864aba626bdd59153eded39269d6d",
+                         "modificado_em":  "2026-10-30T14:57:26-03:00",
+                         "bytes":  289372,
+                         "sha256":  "0b640305828f84e4625373fad9b5ef551b6c0b3932095d19516a761a499a36c6",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
+                                             {
+                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+                                                 "existe":  true
+                                             },
                                              {
                                                  "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
                                                  "existe":  true

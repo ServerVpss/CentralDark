@@ -497,6 +497,31 @@
   }
 }
 
+/* Estado das portas: respiração/ring, não o pisca-pisca do status geral. */
+@keyframes cd-port-breathe {
+  0%, 100% { transform: scale(0.82); box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-green) 0%, transparent); }
+  50% { transform: scale(1.12); box-shadow: 0 0 0 4px color-mix(in oklab, var(--neon-green) 18%, transparent); }
+}
+
+@keyframes cd-port-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--gold) 35%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 5px color-mix(in oklab, var(--gold) 0%, transparent); }
+}
+
+@keyframes cd-port-alert {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+}
+
+.cd-port-dot--pass { animation: cd-port-breathe 2.6s ease-in-out infinite; }
+.cd-port-dot--unknown { animation: cd-port-ring 2s ease-out infinite; }
+.cd-port-dot--fail { animation: cd-port-alert 1.1s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-port-dot--pass, .cd-port-dot--unknown, .cd-port-dot--fail { animation: none; }
+}
+
 @keyframes forge-flow {
   0%,
   100% {

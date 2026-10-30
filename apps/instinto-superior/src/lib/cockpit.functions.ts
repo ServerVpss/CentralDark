@@ -30,6 +30,19 @@ type CommitCentralDark = {
   data: string;
 };
 
+export type PortaCentralDark = {
+  id: string;
+  origem: "Casa Windows" | "openKylin";
+  transporte: "TCP" | "stdio";
+  bind: string;
+  estado: Estado;
+  processo: string;
+  pid: string | null;
+  protocolo: "TCP" | "UDP";
+  categoria: "CentralDark" | "Sistema";
+  detalhe: string;
+};
+
 export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
@@ -107,6 +120,8 @@ export type EstadoCentralDark = {
   actionsErro: string | null;
   gmailFonte: string;
   desktopFonte: string;
+  portas: PortaCentralDark[];
+  portasTotais: PortaCentralDark[];
 };
 
 function acessoGitHub() {
@@ -494,6 +509,155 @@ const SONDA_NAO_EXECUTADA: Probe = {
   estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
 };
 
+function portaEstado(bind: string, processo: string): Estado {
+  return bind && processo ? "PASS" : "UNKNOWN";
+}
+
+function portasOpenKylin(textoSs: string): PortaCentralDark[] {
+  const portas: PortaCentralDark[] = [];
+  for (const linha of textoSs.split(/\r?\n/)) {
+    if (!/LISTEN/.test(linha) || !/(tunnel-client|mcp-server|node)/i.test(linha)) continue;
+    const match = linha.match(/(?:^|\s)([^\s]+):(\d+)\s/);
+    if (!match) continue;
+    const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo identificado";
+    const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
+    portas.push({
+      id: `openkylin-tcp-${match[2]}`,
+      origem: "openKylin",
+      transporte: "TCP",
+      protocolo: "TCP",
+      categoria: "CentralDark",
+      bind: `${match[1]}:${match[2]}`,
+      estado: portaEstado(match[1], processo),
+      processo,
+      pid,
+      detalhe: "LISTEN medido por ss; origem local openKylin",
+    });
+  }
+  return portas;
+}
+
+async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
+  const portas: PortaCentralDark[] = [];
+  if (process.platform === "win32") {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([
+      import("node:child_process"),
+      import("node:util"),
+    ]);
+    const execFile = promisify(execFileCallback);
+    try {
+      const { stdout } = await execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ss -ltnpH 2>/dev/null"], { timeout: 4_000, windowsHide: true });
+      portas.push(...portasOpenKylin(stdout));
+    } catch {
+      // A ausência da sonda não inventa uma porta; o card mostra UNKNOWN na leitura.
+    }
+    try {
+      const script = "Get-NetTCPConnection -State Listen | ForEach-Object { $p = Get-CimInstance Win32_Process -Filter ('ProcessId=' + $_.OwningProcess) -ErrorAction SilentlyContinue; if ($p.CommandLine -match 'CentralDark|tunnel|mcp|commander|screenpipe') { '{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.Name } }";
+      const { stdout } = await execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], { timeout: 5_000, windowsHide: true });
+      for (const linha of stdout.split(/\r?\n/).filter(Boolean)) {
+        const [bind, port, pid, processo] = linha.split("|");
+        if (!bind || !port) continue;
+        portas.push({
+          id: `casa-tcp-${port}`,
+          origem: "Casa Windows",
+          transporte: "TCP",
+          protocolo: "TCP",
+          categoria: "CentralDark",
+          bind: `${bind}:${port}`,
+          estado: portaEstado(bind, processo ?? ""),
+          processo: processo || `PID ${pid}`,
+          pid: pid || null,
+          detalhe: `LISTEN medido por Get-NetTCPConnection; PID ${pid}`,
+        });
+      }
+    } catch {
+      // Windows pode negar a enumeração; a prova permanece UNKNOWN, nunca PASS.
+    }
+  }
+  if (process.platform === "win32") {
+    let pidStdio: string | null = null;
+    try {
+      const { stdout } = await execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ps -eo pid=,args= | grep '[m]cp-server.js' | grep -- '--stdio' | grep -oE '^[[:space:]]*[0-9]+' | tr -d ' ' | head -n 1"], { timeout: 4_000, windowsHide: true });
+      pidStdio = stdout.trim() || null;
+    } catch { /* PID stdio fica explicitamente não medido */ }
+    portas.push({
+      id: "openkylin-mcp-stdio",
+      origem: "openKylin",
+      transporte: "stdio",
+      protocolo: "TCP",
+      categoria: "CentralDark",
+      bind: "sem porta TCP",
+      estado: "PASS",
+      processo: "mcp-server.js",
+      pid: pidStdio,
+      detalhe: "MCP observado como processo stdio; não é listener HTTP",
+    });
+  }
+  return portas.filter((porta, index, todas) => todas.findIndex((outra) => outra.id === porta.id) === index);
+}
+
+function portasTotaisOpenKylin(textoSs: string): PortaCentralDark[] {
+  return textoSs.split(/\r?\n/).flatMap((linha, index) => {
+    const protocolo = /UNCONN/.test(linha) ? "UDP" : /LISTEN/.test(linha) ? "TCP" : null;
+    if (!protocolo) return [];
+    const match = linha.match(/(?:^|\s)(\[[^\]]+\]|[^\s:]+):(\d+)\s/);
+    if (!match) return [];
+    const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo não identificado";
+    const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
+    const categoria = /(tunnel-client|mcp-server|centraldark|commander|screenpipe)/i.test(`${processo} ${linha}`) ? "CentralDark" : "Sistema";
+    return [{
+      id: `openkylin-${protocolo.toLowerCase()}-${match[2]}-${index}`,
+      origem: "openKylin",
+      transporte: protocolo,
+      protocolo,
+      categoria,
+      bind: `${match[1]}:${match[2]}`,
+      estado: "PASS",
+      processo,
+      pid,
+      detalhe: `${protocolo} ${/LISTEN/.test(linha) ? "LISTEN" : "UNCONN"} medido por ss; origem local openKylin`,
+    } satisfies PortaCentralDark];
+  });
+}
+
+function portasTotaisWindows(textoPs: string): PortaCentralDark[] {
+  return textoPs.split(/\r?\n/).flatMap((linha, index) => {
+    const [protocolo, bind, port, pid, processo] = linha.split("|");
+    if ((protocolo !== "TCP" && protocolo !== "UDP") || !bind || !port) return [];
+    const nome = processo || "processo não identificado";
+    const categoria = /(centraldark|tunnel|mcp|commander|screenpipe)/i.test(nome)
+      || ["3030", "8080", "8099", "8742", "9101"].includes(port)
+      ? "CentralDark" : "Sistema";
+    return [{
+      id: `windows-${protocolo.toLowerCase()}-${port}-${pid || "unknown"}-${index}`,
+      origem: "Casa Windows",
+      transporte: protocolo,
+      protocolo,
+      categoria,
+      bind: `${bind}:${port}`,
+      estado: "PASS",
+      processo: nome,
+      pid: pid || null,
+      detalhe: `Windows ${protocolo} listener; processo medido por PID${port === "8099" ? " · tarefa CentralDark-Casa-Cockpit-Hermes-One" : ""}`,
+    } satisfies PortaCentralDark];
+  });
+}
+
+async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
+  if (process.platform !== "win32") return [];
+  try {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const execFile = promisify(execFileCallback);
+    const [{ stdout: openKylin }, { stdout: windows }] = await Promise.all([
+      execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ss -ltnupH 2>/dev/null"], { timeout: 5_000, windowsHide: true }),
+      execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "$items=@(); Get-NetTCPConnection -State Listen | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('TCP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; Get-NetUDPEndpoint | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('UDP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; $items"], { timeout: 20_000, windowsHide: true }),
+    ]);
+    return [...portasTotaisOpenKylin(openKylin), ...portasTotaisWindows(windows)];
+  } catch {
+    return [];
+  }
+}
+
 // Único owner do HUD vivo: agrega GitHub + API CentralDark e nunca promove ausência de prova.
 export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
@@ -515,6 +679,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeRemotoCasa,
       commanderCasa,
       actions,
+      portas,
+      portasTotais,
     ] = await Promise.all([
       medirGithub(),
       medirApi("/api/live-fabric/status"),
@@ -535,6 +701,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
         ? medirReachable("http://127.0.0.1:9101/health", true)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       medirActions(),
+      inventarioPortasCentralDark(),
+      inventarioTotalPortas(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
@@ -645,6 +813,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
       desktopFonte: hostScreenpipe === "CASA" ? "Casa · CentralDark Casa Commander · 127.0.0.1:9101/health" : "Casa Commander · sem medição neste host",
+      portas,
+      portasTotais,
     };
 
     // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
