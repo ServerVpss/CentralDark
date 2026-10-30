@@ -92,6 +92,17 @@ oracle_review_on_change: true
 **NEXT_CURSOR:** incluir a receita documental na gaveta existente sem alterar runtime; mapear capacidade real do `computer_use` na sessão executora; testar por pedido humano "mostre a janela aberta do WSL", depois um clique de baixo impacto autorizado, readback e teste ambíguo; nenhum observador permanente por padrão.
 <!-- /CENTRALDARK_CASA_UI_CONTEXTUAL_RECIPE_20261030 -->
 
+
+<!-- CENTRALDARK_OPENKYLIN_CLAUDE_SSH_PROXY_TRACE_20261030 -->
+### 🔗 SSH openKylin no WSL2 — preservar rota comprovada do Claude (30/10/2026)
+
+**Intenção vigente:** CHEFE pediu SSH pelo **22** sem abrir 2222, reutilizando o sistema Windows e o openKylin no WSL2. **Fonte primária:** `C:\Users\Administrador\.claude\projects\E--VMs-CentralDark-Installer\88b5c878-405d-47e0-a708-9da1b23da730.jsonl`, tool_use/tool_result originais de 30/10/2026 **03:31–03:32 UTC**; o recibo positivo está no Bash `toolu_01Cyop2ZHceEuE9XgM1WKPww`, timestamp `2026-10-30T03:32:20.139Z`. Primeiro houve duas falhas por interpretação de caminho entre Git Bash/WSL; a correção no `config_openkylin` usou `ProxyCommand wsl.exe -d openKylin -u root --exec //usr/sbin/sshd -i`; o teste real do Claude executou `ssh.exe -F $cfg -o BatchMode=yes -o ConnectTimeout=40 openkylin 'echo OK_ALIAS; id -un; uname -r'` e retornou `OK_ALIAS / openkylin / 6.6.114.1-microsoft-standard-WSL2 / RESULTADO=PASS`. **Isto comprova SSH + execução remota na sessão medida, não prova Hermes remoto, nem GUI/RDP.**
+
+**Owner/entrada já existentes:** `%USERPROFILE%\.ssh\config_openkylin` (arquivo SSH separado) + `%USERPROFILE%\.ssh\openkylin-ssh.cmd` (atalho que usa aquele arquivo) + chave já autorizada `id_ed25519_openkylin`; nunca exibir a chave privada nem copiar credenciais. Arquivo principal `%USERPROFILE%\.ssh\config` é **protegido, somente leitura, com aviso NÃO TOCAR**; o Claude preservou-o. `ssh openkylin` sem `-F` **não foi comprovado**, apesar da abreviação no texto final do Claude. No Windows, porta 22 continua ocupada por `sshd.exe` do Windows; no openKylin há `sshd` interno na porta 22; 2222 não foi criada. WSL `Stopped` após o uso é compatível com acionamento sob demanda pelo ProxyCommand e não invalida o PASS histórico.
+
+**Contraprova atual:** tentativa anterior do Hermes One `Connect via SSH` usando IP WSL `172.29.96.181`, usuário e chave retornou `banner exchange: Connection to UNKNOWN port -1: Connection refused`; o formulário do Hermes One **não foi provado** capaz de consumir `config_openkylin` ou executar o `.cmd` automaticamente. `CLAUDE_SSH_PROXY_PASS != HERMES_ONE_CONNECTED`. Na Casa, `which hermes` no openKylin não encontrou binário no PATH na medição anterior; não afirmar que existe gateway Hermes remoto. **NEXT_CURSOR:** quando o CHEFE pedir "conecta o Hermes One ao openKylin", primeiro recuperar a receita de SSH existente, verificar capacidade nativa de selecionar arquivo SSH/host e presença de Hermes remoto; evitar nova porta, nova instância Hermes ou alteração do config protegido sem autorização explícita e prova de necessidade.
+<!-- /CENTRALDARK_OPENKYLIN_CLAUDE_SSH_PROXY_TRACE_20261030 -->
+
 <!-- /CENTRALDARK_CUA_CODEX_HERMES_20261029 -->
 
 <!-- CENTRALDARK_SKILL_MOTHER_OPEN_AND_GLOBAL_INDEX_20261028 -->
