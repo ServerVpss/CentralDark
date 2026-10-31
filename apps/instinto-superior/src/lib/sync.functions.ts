@@ -106,6 +106,47 @@ function syncMain(): SyncStatus {
   return { timestamp: new Date().toISOString(), status: "success", human_readable: details, target: "main" };
 }
 
+/* ── Sync Casa/Main com convergência e readback de SHA ── */
+function syncCasaMain(): SyncStatus {
+  git("fetch", "--no-tags", "origin", "refs/heads/main");
+
+  const before = git("rev-parse", "HEAD");
+  const remote = git("rev-parse", "FETCH_HEAD");
+  const behind = Number(git("rev-list", "--count", `HEAD..FETCH_HEAD`));
+  const ahead = Number(git("rev-list", "--count", `FETCH_HEAD..HEAD`));
+
+  if (behind > 0 && ahead > 0) {
+    const details = `Divergência: local ${before.slice(0, 8)} · remoto ${remote.slice(0, 8)} · ↓${behind} ↑${ahead}`;
+    writeStatus("conflict", details);
+    return { timestamp: new Date().toISOString(), status: "conflict", human_readable: "Casa/Main divergentes; merge manual necessário", target: "local", details };
+  }
+
+  if (behind > 0) git("merge", "--ff-only", "FETCH_HEAD");
+
+  const dirty = git("status", "--porcelain");
+  if (dirty) {
+    git("add", "-A");
+    git("commit", "-m", `auto-sync: Casa/Main ${new Date().toISOString()}`);
+  }
+
+  git("push", "origin", "HEAD");
+  git("fetch", "--no-tags", "origin", "refs/heads/main");
+
+  const headAfter = git("rev-parse", "HEAD");
+  const originAfter = git("rev-parse", "FETCH_HEAD");
+  const details = `HEAD=${headAfter.slice(0, 8)} · origin/main=${originAfter.slice(0, 8)}`;
+  const converged = headAfter === originAfter;
+
+  writeStatus(converged ? "success" : "failed", details);
+  return {
+    timestamp: new Date().toISOString(),
+    status: converged ? "success" : "failed",
+    human_readable: converged ? "Casa/Main sincronizados no mesmo SHA" : "Casa/Main não convergiram no mesmo SHA",
+    target: "local",
+    details,
+  };
+}
+
 /* ── Sync VPS (GitHub → VPS via SSH com stash seguro) ── */
 function syncVps(): SyncStatus {
   const script = `
@@ -249,11 +290,10 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       if (target === "main") return syncMain();
       if (target === "vps") return syncVps();
 
-      // "local" estabiliza apenas Casa/Main. VPS permanece uma ação explícita.
+      // "local" estabiliza Casa/Main no mesmo SHA. VPS permanece uma ação explícita.
       const results: SyncStatus[] = [];
       const steps = [
-        { name: "windows", fn: syncWindows },
-        { name: "main", fn: syncMain },
+        { name: "local", fn: syncCasaMain },
       ];
       if (target === "all") steps.push({ name: "vps", fn: syncVps });
 
