@@ -1,19 +1,19 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-30 22:09:34 -03:00
-**Total:** 112 arquivos. **Skills:** 18. **Mudanças detectadas:** 11.
+**Atualizado (Casa/Bahia):** 2026-10-31 09:47:20 -03:00
+**Total:** 112 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T19:45:33-03:00 | 2026-10-30T19:45:33-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T22:09:44-03:00 | 2026-10-30T22:09:44-03:00 | e6b27bfbcd3c |
 | `catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json` | catalogo | 2026-10-30T18:53:20-03:00 | 2026-10-30T19:04:44-03:00 | 740ebec23cfa |
 | `catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json` | catalogo | 2026-10-30T18:27:01-03:00 | 2026-10-30T18:27:01-03:00 | 682f8bb68057 |
 | `catalogo/comprovacoes/genesis-replay-20261030T204009Z.json` | catalogo | 2026-10-30T17:41:51-03:00 | 2026-10-30T17:43:55-03:00 | bef6f8660479 |
 | `catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json` | catalogo | 2026-10-30T19:09:53-03:00 | 2026-10-30T19:09:53-03:00 | ce5043e9c0ab |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T19:45:33-03:00 | 2026-10-30T19:45:33-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T22:09:44-03:00 | 2026-10-30T22:09:44-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -117,17 +117,7 @@
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
 | `scripts/Trace-TransientConsoleWindows.ps1` | script | 2026-10-30T00:07:40-03:00 | 2026-10-30T00:08:59-03:00 | 4ffb343763f0 |
-| `SKILL.md` | skill | 2026-10-30T22:09:36-03:00 | 2026-10-30T22:09:36-03:00 | 760bc993d1f6 |
+| `SKILL.md` | skill | 2026-10-30T22:09:36-03:00 | 2026-10-31T09:46:58-03:00 | 8342963ce7fe |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-02-LICOES-LEGADO-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-03-CONTRATOS-E-GATES-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-04-ROTAS-RECENTES-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/INDICE-INTEGRAL-SKILL-MAE-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | CRIADO | `references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
-- 2026-10-30T22:09:34-03:00 | MODIFICADO | `scripts/atualizar-catalogo-self-healing.ps1` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
-- 2026-10-30T22:09:34-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-31T09:47:20-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
