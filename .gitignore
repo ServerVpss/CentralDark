@@ -204,11 +204,15 @@ id_dsa
 logs/auto-sync-status.json
 
 # Obsidian Git: backup de VM/WSL, caches locais e estado volátil nunca são fonte Git.
+# K:\WSL contém discos do sistema openKylin; nunca enviar o conteúdo pesado ao Git.
 # Gitignore atua só sobre arquivos ainda não rastreados; histórico existente é preservado.
 /WSL/*.tar
 /WSL/*.tar.gz
+/WSL/**/*.tar
+/WSL/**/*.tar.*
 # WSL virtual disks are local runtime state; never stage new VHDX images.
 /WSL/**/*.vhdx
+/WSL/**/*.vhdx.*
 /**/.centraldark-fp/
 /centraldark-desktop/
 /Remote-Tray/_build/
