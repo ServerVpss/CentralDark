@@ -17,6 +17,9 @@ interface SyncStatus {
   human_readable: string
   target?: string
   details?: string
+  phase?: string
+  progress?: number
+  files?: string[]
 }
 
 type SyncRunner = (args: { data: { target: 'local' | 'all' } }) => Promise<SyncStatus>;
@@ -40,6 +43,7 @@ export const AutoSyncButton: React.FC = () => {
     human_readable: 'Nunca sincronizado'
   })
   const [isSyncing, setIsSyncing] = useState(false)
+  const [syncProgress, setSyncProgress] = useState({ value: 0, label: 'Preparando sincronização...' })
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
 
   const getStatus = useServerFn(lerStatusSync)
@@ -65,17 +69,27 @@ export const AutoSyncButton: React.FC = () => {
 
   const handleSync = async (target: 'local' | 'windows' | 'main' | 'vps' | 'all' = 'local') => {
     setIsSyncing(true)
+    const phases = ['Lendo estado local...', 'Consultando origin/main...', 'Conferindo alterações...', 'Enviando arquivos autorizados...', 'Confirmando o mesmo SHA...']
+    let phaseIndex = 0
+    setSyncProgress({ value: 8, label: phases[phaseIndex] })
+    const progressTimer = setInterval(() => {
+      phaseIndex = Math.min(phaseIndex + 1, phases.length - 1)
+      setSyncProgress((current) => ({ value: Math.min(current.value + 16, 88), label: phases[phaseIndex] }))
+    }, 700)
     const medirJunto = target === 'local' || target === 'all'
       ? queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
       : Promise.resolve()
     try {
       const data = await runSync({ data: { target } } as any)
       setSyncStatus(data)
+      setSyncProgress({ value: data.progress ?? 100, label: data.phase ?? data.human_readable })
       await medirJunto
     } catch (error) {
       console.error('Sync failed:', error)
       setSyncStatus(prev => ({ ...prev, status: 'failed' }))
+      setSyncProgress({ value: 100, label: 'Falha na sincronização' })
     } finally {
+      clearInterval(progressTimer)
       setIsSyncing(false)
     }
   }
@@ -171,6 +185,26 @@ export const AutoSyncButton: React.FC = () => {
             />
           </div>
         </div>
+        {(isSyncing || syncProgress.value > 0) && (
+          <div className="mt-3 rounded-md border border-white/10 bg-background/30 px-3 py-2" aria-live="polite">
+            <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
+              <span className="truncate">{isSyncing ? syncProgress.label : syncStatus.phase ?? syncProgress.label}</span>
+              <span className="font-mono">{isSyncing ? syncProgress.value : syncStatus.progress ?? syncProgress.value}%</span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-full bg-muted/50">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${syncStatus.status === 'failed' || syncStatus.status === 'conflict' ? 'bg-amber-400' : 'bg-emerald-400'}`}
+                style={{ width: `${isSyncing ? syncProgress.value : syncStatus.progress ?? syncProgress.value}%` }}
+              />
+            </div>
+            {syncStatus.files && syncStatus.files.length > 0 && !isSyncing && (
+              <div className="mt-2 text-[10px] text-muted-foreground">
+                <span className="font-semibold text-foreground">Arquivos considerados:</span>{' '}
+                <span className="font-mono">{syncStatus.files.join(' · ')}</span>
+              </div>
+            )}
+          </div>
+        )}
       </Card>
 
       <Card className="p-4 border border-amber-500/40 bg-amber-500/10">

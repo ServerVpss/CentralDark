@@ -10,6 +10,9 @@ export interface SyncStatus {
   human_readable: string;
   target?: string;
   details?: string;
+  phase?: string;
+  progress?: number;
+  files?: string[];
 }
 
 /* ── caminhos ── */
@@ -58,6 +61,21 @@ function git(...args: string[]): string {
   }).trim();
 }
 
+function changedFiles(): string[] {
+  const raw = git("status", "--porcelain");
+  if (!raw) return [];
+
+  const files = raw.split(/\r?\n/).filter(Boolean).map((line) => line.slice(3).trim());
+  const seen = new Set<string>();
+  return files.map((file) => {
+    const sensitive = /(^|[\\/])\.env(?:[.\\/]|$)|(^|[\\/])(?:.*\.(?:pem|key|p12|pfx))$/i.test(file);
+    const safe = sensitive ? "[arquivo sensível ocultado]" : file;
+    if (seen.has(safe)) return "";
+    seen.add(safe);
+    return safe;
+  }).filter(Boolean).slice(0, 50);
+}
+
 function sshVps(script: string): string {
   const tmpScript = path.join(CENTRALDARK_ROOT, ".auto-sync", "_vps-sync-tmp.sh");
   ensureStatusDir();
@@ -74,9 +92,10 @@ function sshVps(script: string): string {
 
 /* ── Sync Windows (Casa → GitHub) ── */
 function syncWindows(): SyncStatus {
-  const porcelain = git("status", "--porcelain", "--untracked-files=no");
+  const files = changedFiles();
+  const porcelain = git("status", "--porcelain");
   if (!porcelain) {
-    return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa limpa, nada para commitar", target: "windows" };
+    return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa limpa, nada para commitar", target: "windows", phase: "Concluído", progress: 100, files };
   }
 
   git("add", "-A");
@@ -84,7 +103,7 @@ function syncWindows(): SyncStatus {
   git("push", "origin", "HEAD");
 
   writeStatus("success", "Casa → GitHub push OK");
-  return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa → GitHub: push OK", target: "windows" };
+  return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa → GitHub: push OK", target: "windows", phase: "Concluído", progress: 100, files };
 }
 
 /* ── Sync Main (fetch + status) ── */
@@ -109,6 +128,7 @@ function syncMain(): SyncStatus {
 /* ── Sync Casa/Main com convergência e readback de SHA ── */
 function syncCasaMain(): SyncStatus {
   git("fetch", "--no-tags", "origin", "refs/heads/main");
+  const files = changedFiles();
 
   const before = git("rev-parse", "HEAD");
   const remote = git("rev-parse", "FETCH_HEAD");
@@ -118,7 +138,7 @@ function syncCasaMain(): SyncStatus {
   if (behind > 0 && ahead > 0) {
     const details = `Divergência: local ${before.slice(0, 8)} · remoto ${remote.slice(0, 8)} · ↓${behind} ↑${ahead}`;
     writeStatus("conflict", details);
-    return { timestamp: new Date().toISOString(), status: "conflict", human_readable: "Casa/Main divergentes; merge manual necessário", target: "local", details };
+    return { timestamp: new Date().toISOString(), status: "conflict", human_readable: "Casa/Main divergentes; merge manual necessário", target: "local", details, phase: "Conflito detectado", progress: 100, files };
   }
 
   if (behind > 0) git("merge", "--ff-only", "FETCH_HEAD");
@@ -144,6 +164,9 @@ function syncCasaMain(): SyncStatus {
     human_readable: converged ? "Casa/Main sincronizados no mesmo SHA" : "Casa/Main não convergiram no mesmo SHA",
     target: "local",
     details,
+    phase: converged ? "Concluído" : "Readback pendente",
+    progress: converged ? 100 : 95,
+    files,
   };
 }
 
