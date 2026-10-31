@@ -164,6 +164,76 @@ Gatilho automatico por contexto: quando CHEFE pedir para entrar no ChatGPT Class
 **FIXED_POINT:** apenas reorganizacao do texto e provas de integridade; execucao operacional, deployment e adocao por outros agentes permanecem UNKNOWN sem recibo. Alteracao local dirty, sem commit/push.
 <!-- /CENTRALDARK_SKILL_MAE_CORPUS_INTEGRAL_20261030 -->
 
+<!-- CENTRALDARK_SYNC_CONVERGENCE_METHOD_20261031 -->
+## 🍒+1 Sincronização contínua por convergência — Casa/Main e VPS sob escopo
+
+Esta é a receita geral para qualquer alteração autorizada no CentralDark.
+Ela reutiliza o executor existente do Cockpit, `executarSync`, e a função
+`syncCasaMain` em `apps/instinto-superior/src/lib/sync.functions.ts`. Não cria
+worker, watcher, gateway, fila, branch, cache ou painel paralelo.
+
+**Regra central:** leituras podem ocorrer em paralelo; mutações Git têm um único
+writer. "Paralelo" significa que Casa, Main e, quando autorizado, VPS são
+comparados no mesmo ciclo. Não significa executar dois writes concorrentes no
+mesmo checkout.
+
+```text
+INTENÇÃO
+→ IDENTIFICAR OWNER E ESCOPO (CASA/MAIN; VPS SOMENTE SE PEDIDA)
+→ FETCH origin/main
+→ LER HEAD, origin/main, dirty e divergência
+→ SE BEHIND E NÃO DIVERGENTE: merge --ff-only
+→ SE AHEAD OU DIRTY: commit da alteração autorizada
+→ PUSH origin/main
+→ FETCH NOVAMENTE
+→ READBACK HEAD == origin/main
+→ SE VPS NO ESCOPO: atualizar por fast-forward e ler SHA remoto
+→ RECEIPT + NEXT_CURSOR
+```
+
+**Condições de convergência:** o estado só é `PASS` quando `HEAD` local e
+`origin/main` retornam o mesmo SHA após o push. `git fetch` sozinho é leitura.
+`git push` sem readback não é prova final. Se `HEAD..origin/main` e
+`origin/main..HEAD` forem ambos maiores que zero, há divergência: marcar
+`CONFLICT`, preservar os dois lados e não fazer merge automático.
+
+**Escopo do botão:** `Sincronizar Tudo` do Cockpit estabiliza Casa/Main no
+mesmo SHA. A VPS continua manual por padrão. O modo `target=all` inclui a VPS
+somente quando a intenção pedir Casa/Main/VPS. Não usar o nome do botão para
+inferir deploy ou sincronização da VPS.
+
+**Redução de complexidade:** reutilizar `syncCasaMain`, `syncVps`, o launcher,
+o owner e o receipt existentes. Não criar uma segunda função para a mesma
+convergência. Não repetir testes que não mudam `HEAD`, owner, runtime,
+autorização ou resultado. Não usar `reset --hard`, sobrescrita cega ou stash
+para esconder conflito. Arquivos dirty de terceiros permanecem preservados e
+devem ser separados antes de qualquer commit.
+
+**Receipt mínimo:**
+
+```text
+INTENT_ID=
+OWNER=
+SCOPE=CASA_MAIN|CASA_MAIN_VPS
+HEAD_BEFORE=
+ORIGIN_BEFORE=
+DELTA=
+COMMIT=
+HEAD_AFTER=
+ORIGIN_AFTER=
+SAME_SHA=PASS|FAIL|UNKNOWN
+VPS_SHA=PASS|NOT_IN_SCOPE|UNKNOWN
+WORKTREE=
+COUNTERPROOF=
+NEXT_CURSOR=
+```
+
+`SAME_SHA=PASS` não prova deploy, runtime saudável, ferramenta MCP, Gateway,
+Hermes ou comportamento do Cockpit. Cada camada precisa de sua própria prova.
+`MERGED != DEPLOYED`, `REGISTERED != CONSUMED` e `UNKNOWN != PASS` continuam
+obrigatórios.
+<!-- /CENTRALDARK_SYNC_CONVERGENCE_METHOD_20261031 -->
+
 <!-- AUTOCATALOGO:INICIO -->
 ## Melhorias comprovadas e incorporadas sem regressao
 
