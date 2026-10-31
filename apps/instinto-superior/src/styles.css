@@ -497,6 +497,39 @@
   }
 }
 
+/* Confirmação DONE: desenha o círculo e depois escreve o visto. */
+@keyframes cd-done-ring {
+  from { stroke-dashoffset: 63; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes cd-done-check {
+  from { stroke-dashoffset: 24; opacity: 0; }
+  1% { opacity: 1; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+
+.cd-done-ring {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: cd-done-ring 520ms cubic-bezier(.65, 0, .35, 1) forwards;
+}
+
+.cd-done-check {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  opacity: 0;
+  animation: cd-done-check 320ms cubic-bezier(.65, 0, .35, 1) 520ms forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-done-ring, .cd-done-check {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
 /* Estado das portas: respiração/ring, não o pisca-pisca do status geral. */
 @keyframes cd-port-breathe {
   0%, 100% { transform: scale(0.82); box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-green) 0%, transparent); }

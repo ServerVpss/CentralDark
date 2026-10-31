@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CheckCircle, AlertCircle, Clock, Zap } from 'lucide-react'
+import { AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { useQueryClient } from '@tanstack/react-query'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
@@ -23,6 +23,15 @@ interface SyncStatus {
 }
 
 type SyncRunner = (args: { data: { target: 'local' | 'all' } }) => Promise<SyncStatus>;
+
+function AnimatedDoneIcon({ size = 20, className = '', label }: { size?: number; className?: string; label?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
+      <circle className="cd-done-ring" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+      <path className="cd-done-check" d="m7.5 12.5 3 3 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 async function prepararAutomacao(modo: 'main-only' | 'full', executarSync: SyncRunner) {
   const target = modo === 'full' ? 'all' : 'local';
@@ -128,7 +137,7 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {
-      case 'success': return <CheckCircle className="w-5 h-5 text-green-500 motion-safe:animate-pulse" aria-label="Sincronização confirmada" />
+      case 'success': return <AnimatedDoneIcon className="w-5 h-5 text-green-500" label="Sincronização confirmada" />
       case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
@@ -202,7 +211,7 @@ export const AutoSyncButton: React.FC = () => {
         {!isSyncing && syncStatus.status === 'success' && (
           <div className="mt-3 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[10px] text-emerald-200" aria-live="polite">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-3.5 w-3.5 motion-safe:animate-pulse" aria-hidden="true" />
+              <AnimatedDoneIcon size={14} className="h-3.5 w-3.5 text-emerald-300" />
               <span className="font-semibold">Sincronizado · mesmo SHA confirmado</span>
             </div>
             {syncStatus.files && syncStatus.files.length > 0 && (
