@@ -22,6 +22,11 @@ function luz(estado: Estado): Luz {
 function etiqueta(estado: Estado, _nome = "") {
   return rotuloEstadoHumano(estado);
 }
+function classePulsoEstado(estado: Estado) {
+  if (estado === "PASS") return "cd-port-dot--pass";
+  if (estado === "FAIL" || estado === "BLOCKED") return "cd-port-dot--fail";
+  return "cd-port-dot--unknown";
+}
 /** O pulso verde significa exclusivamente medição atual PASS, não prova histórica. */
 function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresco: boolean }) {
   const valido = fresco ? estado : "UNKNOWN";
@@ -33,19 +38,19 @@ function LuzViva({ estado, nome, fresco }: { estado: Estado; nome: string; fresc
     </span>
   );
 }
-function SensorScreenpipe({ nome, estado, detalhe }: { nome: string; estado: Estado; detalhe: string }) {
+function SensorScreenpipe({ nome, estado, detalhe, rotulo }: { nome: string; estado: Estado; detalhe: string; rotulo?: string }) {
   const cor = luz(estado);
-  const piscar = estado !== "UNKNOWN" ? "animate-pulse motion-reduce:animate-none" : "";
+  const pulso = classePulsoEstado(estado);
   return (
     <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2">
       <div className="flex min-w-0 items-center gap-2">
-        <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${piscar}`} aria-hidden="true" />
+        <span className={`size-2.5 shrink-0 rounded-full ${CORES[cor]} ${pulso}`} aria-hidden="true" />
         <div className="min-w-0">
           <p className="text-[11px] font-medium">{nome}</p>
           <p className="truncate text-[10px] text-muted-foreground">{detalhe}</p>
         </div>
       </div>
-      <span className="shrink-0 text-[10px]">{estado === "RUNNING" ? "Precisa de atenção" : etiqueta(estado, nome)}</span>
+      <span className="shrink-0 text-[10px]">{rotulo ?? (estado === "RUNNING" ? "Precisa de atenção" : estado === "UNKNOWN" ? "Ainda não medido" : etiqueta(estado, nome))}</span>
     </li>
   );
 }
@@ -75,7 +80,7 @@ function LuzProjecao({
 }
 function PortaViva({ porta }: { porta: PortaCentralDark }) {
   const cor = luz(porta.estado);
-  const classe = porta.estado === "PASS" ? "cd-port-dot--pass" : porta.estado === "FAIL" || porta.estado === "BLOCKED" ? "cd-port-dot--fail" : "cd-port-dot--unknown";
+  const classe = classePulsoEstado(porta.estado);
   return (
     <li className="flex items-center justify-between gap-3 rounded-md border border-border/70 bg-black/20 px-2 py-2" data-cd-port={porta.id}>
       <div className="min-w-0">
@@ -293,6 +298,13 @@ export function StatusPanel() {
                     <p className="text-xs font-semibold">Portas e interfaces CentralDark</p>
                     <span className="text-[10px] text-muted-foreground">Casa Windows · openKylin</span>
                   </div>
+                  <div className="mt-2 rounded-md border border-border/70 bg-black/20 p-2">
+                    <p className="text-[10px] font-semibold">Leituras separadas</p>
+                    <p className="mt-1 text-[10px] text-muted-foreground">
+                      Commander HTTP `9101/health` e MCP openKylin `8742/health` são rotas diferentes.
+                      Uma rota amarela não rebaixa a outra.
+                    </p>
+                  </div>
                   <ul className="mt-2 space-y-2" aria-live="polite">
                     {(fresco ? d?.portas ?? [] : []).map((porta) => <PortaViva key={porta.id} porta={porta} />)}
                     {!fresco ? <li className="text-[10px] text-muted-foreground">Sem leitura recente · clique em Medir agora</li> : null}
@@ -333,9 +345,9 @@ export function StatusPanel() {
                       <SensorScreenpipe nome="Porta e health" estado={screenpipeSaude} detalhe="3030/health · processo Screenpipe medido na Casa" />
                       <SensorScreenpipe nome="Captura visual" estado={screenpipeVisualAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeVisualAtual ? "telas gravando agora" : "sem frame visual fresco nesta leitura"} />
                       <SensorScreenpipe nome="Imagem / último frame" estado={screenpipeImagemAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeImagemAtual ? "última imagem registrada" : "sem último frame confirmado"} />
-                      <SensorScreenpipe nome="Áudio" estado={audioSemSinal ? "RUNNING" : fresco && d?.screenpipeAudioStatus ? "PASS" : "UNKNOWN"} detalhe={audioSemSinal ? "Áudio sem sinal recente · não derruba o health principal" : "sinal de áudio medido"} />
-                      <SensorScreenpipe nome="Vídeo" estado="UNKNOWN" detalhe="sem sensor separado de vídeo; não inferido da captura visual" />
-                      <SensorScreenpipe nome="Texto / OCR" estado="UNKNOWN" detalhe="não promovido sem sensor ou evento OCR medido" />
+                      <SensorScreenpipe nome="Áudio" estado={audioSemSinal ? "RUNNING" : fresco && d?.screenpipeAudioStatus ? "PASS" : "UNKNOWN"} detalhe={audioSemSinal ? "Nenhum sinal de áudio recente" : "Sinal de áudio detectado"} rotulo={audioSemSinal ? "Sem sinal de áudio" : undefined} />
+                      <SensorScreenpipe nome="Vídeo" estado="UNKNOWN" detalhe="A câmera ou o vídeo ainda não foram medidos" rotulo="Ainda não medido" />
+                      <SensorScreenpipe nome="Texto / OCR" estado="UNKNOWN" detalhe="A leitura de texto ainda não foi medida" rotulo="Ainda não medido" />
                     </ul>
                   </div>
                   <p className="text-xs font-semibold">Capturas recentes · Screenpipe Casa</p>

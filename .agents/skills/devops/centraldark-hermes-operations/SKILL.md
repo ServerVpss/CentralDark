@@ -1,7 +1,7 @@
 ---
 name: centraldark-hermes-operations
 description: Operate Hermes update, cron, SSH, ports for CentralDark.
-version: 1.0.0
+version: 1.1.0
 author: Hermes Agent
 license: internal
 metadata:
@@ -40,6 +40,98 @@ This is a *handoff instruction using a callable script*, not a claim that a nati
 - For cron output CHEFE must receive later, use a real gateway delivery target such as `--deliver telegram`; `local`/`origin` output may only be visible through cron state/logs in a plain CLI session.
 - Prove access from both directions: local SSH/TCP reachability and remote listener/firewall state. A process listening only on `127.0.0.1:PORT` is internal, not publicly open.
 - For local Jan/llama.cpp tests, prefer a short direct OpenAI-compatible API smoke test before routing the full Hermes conversation through Jan. The current Hermes session may exceed a small local model's context even when the local API is healthy; prove the local model separately, then decide whether a fresh short Hermes session is needed.
+
+## Casa + openKylin: dois gateways, um organismo
+
+Use esta receita quando CHEFE pedir para reduzir Hermes duplicados, retomar a
+ligação Casa↔openKylin, iniciar/parar/reiniciar uma ponta ou reaproveitar a
+mesma autenticação da Casa. Ela consolida os owners existentes; não cria outro
+Hermes, outro gateway, outro túnel, outro scheduler ou uma cópia do workspace.
+
+**Papéis observados na Casa em 31/10/2026:**
+
+```text
+CASA_HERMES_GATEWAY=127.0.0.1:9119
+OPENKYLIN_HERMES_ENDPOINT=127.0.0.1:8643
+MCP_SECURE_TUNNEL=127.0.0.1:8742
+WORKSPACE_CASA=K:\
+WORKSPACE_OPENKYLIN=/var/mnt/k
+```
+
+`8742` é o túnel MCP e não é um gateway Hermes. `8099` é o Omni Router,
+`9101` é o CentralDark Commander e `8080` é o Cockpit; nenhum deles substitui
+`9119` ou `8643`. Não trocar portas para obter um indicador verde. Uma porta
+viva prova somente o seu próprio papel.
+
+**Topologia desejada:** uma ponta Hermes na Casa e uma ponta Hermes no
+openKylin. O acesso remoto ao openKylin permanece privado, por loopback/SSH.
+O WSL e o relay não contam como terceiro gateway quando apenas transportam a
+mesma ponta. A comunicação entre as duas pontas deve usar o envelope já
+existente (`intent_id`, `correlation_id`, `owner`, `action`, `receipt` e
+`next_cursor`), sem abrir outra porta A2A apenas para transportar a mesma
+mensagem.
+
+**Credenciais e provedor:** reutilize primeiro a identidade já autenticada da
+Casa. Copie somente o perfil que o consumidor remoto realmente requer, pelo
+owner local autorizado, com permissão restrita e sem imprimir valores. Não
+espalhe `.env`, Bearer, DPAPI, chaves privadas ou credenciais de outros setores
+como se fossem uma credencial Hermes. Antes de configurar um modelo, consulte
+o catálogo autenticado do provedor; uma lista estática de modelos ou um token
+presente não prova execução. Registre apenas `AUTH_SOURCE`, `PROVIDER`,
+`MODEL` e o resultado sanitizado.
+
+**Consolidação autorizada pelo CHEFE:**
+
+```text
+INTENCAO_EXPLICITA
+→ MEDIR listeners Hermes atuais
+→ MANTER 9119 (Casa) E 8643 (openKylin)
+→ PARAR somente listeners Hermes redundantes do owner conhecido
+→ READBACK das duas pontas e de 8742
+→ SE FALHAR, REINICIAR somente o launcher canônico da ponta afetada
+→ RECEIPT
+```
+
+Não exigir mapeamento de tráfego amplo quando a intenção explícita é a
+consolidação de duas pontas já identificadas. Ainda assim, não matar processo
+por número de porta isolado: confirmar processo, linha de comando e owner uma
+vez. Para cada parada, registrar o launcher de retomada antes da ação. A mesma
+receita deve permitir `stop`, `start` e `restart`; reinício não é prova de
+recuperação sem readback da porta, do health e de uma ação de leitura útil.
+
+**Prova mínima por camada:**
+
+```text
+LISTENER=porta/PID/owner
+HEALTH=HTTP ou protocolo da própria ponta
+AUTH=identidade aceita sem expor segredo
+CHAT=prompt curto com resposta útil
+E2E=ação de leitura + receipt correlacionado
+```
+
+Não promover `HEALTH` a `CHAT` nem `CHAT` a `E2E`. Se uma camada não foi
+medida, use `UNKNOWN`; não desfaça a consolidação por uma hipótese sem erro
+concreto. Se o runtime retornar erro de saldo/créditos, primeiro tente a
+identidade autenticada já existente e o provedor já aceito; não iniciar OAuth,
+contratar serviço ou criar provider paralelo sem pedido do CHEFE.
+
+**Receipt compacto obrigatório:**
+
+```text
+INTENCAO=
+OWNER=
+CASA_GATEWAY_9119=
+OPENKYLIN_ENDPOINT_8643=
+MCP_TUNNEL_8742=
+REDUNDANT_LISTENERS_REMOVED=
+AUTH_SOURCE=
+PROVIDER_MODEL=
+LISTENER_READBACK=
+CHAT_READ_ONLY=
+ROLLBACK_LAUNCHER=
+STATUS=PASS|PARTIAL|FAIL|UNKNOWN
+NEXT_CURSOR=
+```
 
 ## IDE/terminal hosting proof
 

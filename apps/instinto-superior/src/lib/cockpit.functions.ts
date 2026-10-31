@@ -522,7 +522,7 @@ function portasOpenKylin(textoSs: string): PortaCentralDark[] {
   const portas: PortaCentralDark[] = [];
   for (const linha of textoSs.split(/\r?\n/)) {
     if (!/LISTEN/.test(linha) || !/(tunnel-client|mcp-server|node)/i.test(linha)) continue;
-    const match = linha.match(/(?:^|\s)([^\s]+):(\d+)\s/);
+    const match = linha.match(/(?:^|\s)([^\s]+):(\d+)(?:\s|$)/);
     if (!match) continue;
     const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo identificado";
     const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
@@ -540,6 +540,25 @@ function portasOpenKylin(textoSs: string): PortaCentralDark[] {
     });
   }
   return portas;
+}
+
+async function portaOpenKylin8742(): Promise<PortaCentralDark | null> {
+  const health = await medirReachable("http://127.0.0.1:8742/health");
+  if (health.httpStatus !== 200) return null;
+  const runtime = objetoJson(health.dados?.["runtime"]) ? health.dados["runtime"] : null;
+  const lifecycle = texto(runtime?.["lifecycle"]);
+  return {
+    id: "openkylin-tcp-8742",
+    origem: "openKylin",
+    transporte: "TCP",
+    protocolo: "TCP",
+    categoria: "CentralDark",
+    bind: "127.0.0.1:8742",
+    estado: "PASS",
+    processo: "tunnel-client",
+    pid: null,
+    detalhe: `MCP tunnel health HTTP 200${lifecycle ? ` · lifecycle=${lifecycle}` : ""}`,
+  };
 }
 
 async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
@@ -598,6 +617,8 @@ async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
       detalhe: "MCP observado como processo stdio; não é listener HTTP",
     });
   }
+  const tunnel = await portaOpenKylin8742();
+  if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
   return portas.filter((porta, index, todas) => todas.findIndex((outra) => outra.id === porta.id) === index);
 }
 
@@ -653,11 +674,16 @@ async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
   try {
     const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
     const execFile = promisify(execFileCallback);
-    const [{ stdout: openKylin }, { stdout: windows }] = await Promise.all([
+    const sondas = await Promise.allSettled([
       execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ss -ltnupH 2>/dev/null"], { timeout: 5_000, windowsHide: true }),
       execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "$items=@(); Get-NetTCPConnection -State Listen | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('TCP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; Get-NetUDPEndpoint | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('UDP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; $items"], { timeout: 20_000, windowsHide: true }),
     ]);
-    return [...portasTotaisOpenKylin(openKylin), ...portasTotaisWindows(windows)];
+    const openKylin = sondas[0].status === "fulfilled" ? sondas[0].value.stdout : "";
+    const windows = sondas[1].status === "fulfilled" ? sondas[1].value.stdout : "";
+    const portas = [...portasTotaisOpenKylin(openKylin), ...portasTotaisWindows(windows)];
+    const tunnel = await portaOpenKylin8742();
+    if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
+    return portas;
   } catch {
     return [];
   }
@@ -745,7 +771,13 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
-      desktop: commanderCasa.dados?.["name"] === "CentralDark Casa Commander" && commanderCasa.dados?.["ok"] === true ? "RUNNING" : "UNKNOWN",
+      // HTTP 200 mede somente a ponte. O card só fica verde quando o motor
+      // também confirma conexão; isso evita promover A para B/C.
+      desktop: commanderCasa.dados?.["name"] === "CentralDark Casa Commander"
+        && commanderCasa.dados?.["ok"] === true
+        && commanderCasa.dados?.["engine_connected"] === true
+        ? "RUNNING"
+        : "UNKNOWN",
       commanderEngine: typeof commanderCasa.dados?.["engine_connected"] === "boolean" ? commanderCasa.dados["engine_connected"] as boolean : null,
       commanderHttp: commanderCasa.httpStatus,
       repositorio: "ServerVpss/CentralDark",
@@ -811,7 +843,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
       screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
-      apiHealthFonte: `origem=${hostname()} · destino=${origemHealth}/health · GET server-side`,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side · API/Omni 8099`,
       apiHealthServico: apiServico.slice(0, 100),
       apiHealthMedidoEm: consultaEm,
       desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",

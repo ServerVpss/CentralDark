@@ -1,15 +1,19 @@
 # Índice vivo de todos os arquivos da skill
 
-**Atualizado (Casa/Bahia):** 2026-10-30 15:29:57 -03:00
-**Total:** 102 arquivos. **Skills:** 18. **Mudanças detectadas:** 1.
+**Atualizado (Casa/Bahia):** 2026-10-30 22:09:34 -03:00
+**Total:** 112 arquivos. **Skills:** 18. **Mudanças detectadas:** 11.
 **Atenção:** SHA e datas comprovam integridade documental, não funcionamento técnico. O método funcional só é considerado provado com recibo e verificação da execução.
 
 | Caminho relativo | Categoria | Criado em (Casa) | Modificado em (Casa) | SHA-256 (12) |
 |---|---|---|---|---|
 | `catalogo/ARQUIVOS.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 0fe461d90715 |
-| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T15:09:14-03:00 | 2026-10-30T15:09:14-03:00 | e6b27bfbcd3c |
+| `catalogo/CATALOGO.md` | catalogo | 2026-10-30T19:45:33-03:00 | 2026-10-30T19:45:33-03:00 | e6b27bfbcd3c |
+| `catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json` | catalogo | 2026-10-30T18:53:20-03:00 | 2026-10-30T19:04:44-03:00 | 740ebec23cfa |
+| `catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json` | catalogo | 2026-10-30T18:27:01-03:00 | 2026-10-30T18:27:01-03:00 | 682f8bb68057 |
+| `catalogo/comprovacoes/genesis-replay-20261030T204009Z.json` | catalogo | 2026-10-30T17:41:51-03:00 | 2026-10-30T17:43:55-03:00 | bef6f8660479 |
+| `catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json` | catalogo | 2026-10-30T19:09:53-03:00 | 2026-10-30T19:09:53-03:00 | ce5043e9c0ab |
 | `catalogo/comprovacoes/t_26e02a16.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | a46900409980 |
-| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T15:09:14-03:00 | 2026-10-30T15:09:14-03:00 | fbcd2e2867f4 |
+| `catalogo/INDICE-PESQUISA.md` | catalogo | 2026-10-30T19:45:33-03:00 | 2026-10-30T19:45:33-03:00 | fbcd2e2867f4 |
 | `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | skill | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
 | `catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 72df3dbedb78 |
 | `catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md` | catalogo | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | acf78bea4b62 |
@@ -69,15 +73,20 @@
 | `references/centraldark-remote-bridge.md` | referencia | 2026-10-15T13:26:01-03:00 | 2026-10-15T13:26:01-03:00 | 2de7827e7487 |
 | `references/CENTRALDARK-REMOTE-NOMENCLATURA.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 019ea63a941e |
 | `references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md` | referencia | 2026-10-30T10:32:11-03:00 | 2026-10-30T10:32:11-03:00 | 9dfe33889f75 |
+| `references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:59:40-03:00 | 53f89b23a4a1 |
+| `references/CORPUS-02-LICOES-LEGADO-20261030.md` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:58:52-03:00 | cfdfdf8b711e |
+| `references/CORPUS-03-CONTRATOS-E-GATES-20261030.md` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:58:52-03:00 | 7bb7fd3fa210 |
+| `references/CORPUS-04-ROTAS-RECENTES-20261030.md` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:58:52-03:00 | 8bf88a7cdbec |
 | `references/delegacao-economica-com-prova.md` | referencia | 2026-10-15T13:26:01-03:00 | 2026-10-15T13:26:01-03:00 | b17d60440aa9 |
 | `references/fixed-point-terminal-receipt-contraprova.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2203d0ec37fb |
-| `references/FOCUS-DELEGACAO-TELEMETRIA.md` | referencia | 2026-10-28T08:08:26-03:00 | 2026-10-28T19:55:11-03:00 | e38d9a82074d |
+| `references/FOCUS-DELEGACAO-TELEMETRIA.md` | referencia | 2026-10-28T08:08:26-03:00 | 2026-10-30T16:07:23-03:00 | df35d32e79e9 |
 | `references/git-push-sequence.md` | referencia | 2026-10-27T13:29:22-03:00 | 2026-10-27T13:29:23-03:00 | 6afe1bcbc9e4 |
 | `references/HANDOFF-CENTRALDARK-REMOTE-20261024.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 025bec5dec9e |
 | `references/HERMES-FREE-TIER-FALLBACK.md` | referencia | 2026-10-29T14:12:13-03:00 | 2026-10-29T14:12:14-03:00 | c45930635f52 |
 | `references/HERMES-KANBAN-RECEITA-UNIVERSAL.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:17:59-03:00 | 5ffca46f168b |
 | `references/hermes-model-config.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 2b2a4653aea8 |
 | `references/HUMAN-ACTION-DIRECT-LINK.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a251f7766cab |
+| `references/INDICE-INTEGRAL-SKILL-MAE-20261030.md` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:59:40-03:00 | e7bf64b67c14 |
 | `references/JANELAS-TRANSITORIAS-HERMES-TRACE.md` | referencia | 2026-10-30T00:07:00-03:00 | 2026-10-30T00:07:00-03:00 | 4826354b5828 |
 | `references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 957cf5a0a417 |
 | `references/MICHELIN-3-ESTRELAS-PROTOCOLO.md` | referencia | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | cb1486df5e5d |
@@ -85,13 +94,14 @@
 | `references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md` | referencia | 2026-10-25T12:49:59-03:00 | 2026-10-25T12:56:27-03:00 | f1ab46e12c76 |
 | `references/PR-HOUSE-TEMPORAL-RECONCILIATION.md` | referencia | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | a9bb55fd0a2e |
 | `references/profile-soul-local-reconcile.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-26T20:35:39-03:00 | 5d0fea22b46a |
+| `references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json` | referencia | 2026-10-30T21:58:52-03:00 | 2026-10-30T21:59:40-03:00 | 6c2abb0544e9 |
 | `references/regenerative-self-refinement-engine.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | a07898852876 |
 | `references/remote-desktop-commander-vscode-casa.md` | referencia | 2026-10-18T17:20:31-03:00 | 2026-10-18T17:20:31-03:00 | 03b9c509edc7 |
-| `references/rsi-loop-method.md` | referencia | 2026-10-29T07:58:27-03:00 | 2026-10-29T07:58:27-03:00 | 6d133be5f608 |
+| `references/rsi-loop-method.md` | referencia | 2026-10-29T07:58:27-03:00 | 2026-10-30T18:20:07-03:00 | 8594a3cb0d53 |
 | `references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md` | referencia | 2026-10-30T14:30:16-03:00 | 2026-10-30T15:29:41-03:00 | e5be52dbf49f |
 | `references/YOUTUBE-DEBUG-PAGE-STATE.md` | referencia | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 3dee62d482ed |
 | `scripts/absorver_pasta_trancada.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-25T04:01:30-03:00 | 0e91b93aa4ec |
-| `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-25T04:03:31-03:00 | 2026-10-28T10:39:11-03:00 | 606a0b529595 |
+| `scripts/atualizar-catalogo-self-healing.ps1` | script | 2026-10-30T19:45:33-03:00 | 2026-10-30T19:45:33-03:00 | fe6f00553c0e |
 | `scripts/casa_boot.py` | script | 2026-10-25T04:01:30-03:00 | 2026-10-27T00:05:19-03:00 | 0724ea990d00 |
 | `scripts/Consultar-PowerShellDocs.ps1` | script | 2026-10-25T12:51:09-03:00 | 2026-10-25T12:56:27-03:00 | a573e07e4297 |
 | `scripts/Hermes-Desktop-BrowserTab.ps1` | script | 2026-10-28T19:53:04-03:00 | 2026-10-28T19:56:45-03:00 | 98972cfd0643 |
@@ -107,7 +117,17 @@
 | `scripts/test_goal_criterion_inheritance.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6ff9fac0f8ce |
 | `scripts/tlc23_runtime_gate.py` | script | 2026-10-12T02:29:56-03:00 | 2026-10-12T02:29:56-03:00 | 6d2a806c2b28 |
 | `scripts/Trace-TransientConsoleWindows.ps1` | script | 2026-10-30T00:07:40-03:00 | 2026-10-30T00:08:59-03:00 | 4ffb343763f0 |
-| `SKILL.md` | skill | 2026-10-30T00:36:32-03:00 | 2026-10-30T14:57:26-03:00 | 0b640305828f |
+| `SKILL.md` | skill | 2026-10-30T22:09:36-03:00 | 2026-10-30T22:09:36-03:00 | 760bc993d1f6 |
 
 ## Últimas alterações capturadas nesta execução
-- 2026-10-30T15:29:57-03:00 | MODIFICADO | `references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-02-LICOES-LEGADO-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-03-CONTRATOS-E-GATES-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/CORPUS-04-ROTAS-RECENTES-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/INDICE-INTEGRAL-SKILL-MAE-20261030.md` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | CRIADO | `references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json` | Novo arquivo registrado automaticamente; capacidade nao validada sem prova.
+- 2026-10-30T22:09:34-03:00 | MODIFICADO | `scripts/atualizar-catalogo-self-healing.ps1` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.
+- 2026-10-30T22:09:34-03:00 | MODIFICADO | `SKILL.md` | Alteracao detectada; integridade catalogada, funcionalidade aguarda prova.

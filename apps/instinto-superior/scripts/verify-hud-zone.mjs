@@ -375,7 +375,7 @@ test("linguagem principal do Cockpit traduz estados tecnicos para pessoas", () =
   assert.ok(estado.includes("Ver detalhes técnicos"));
   assert.ok(cartao.includes("rotuloTecnicoHumano(estado)"));
   assert.ok(painel.includes("Estado atual do sistema"));
-  assert.ok(painel.includes("Áudio sem sinal recente"));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
   assert.ok(runtime.includes("Sistema e desempenho"));
   assert.ok(conexoes.includes("Ver detalhes técnicos das conexões"));
 });
@@ -409,7 +409,7 @@ test("maquina de estados distingue rota disponível de execução comprovada sem
   assert.ok(painel.includes("Conectado"));
   assert.ok(painel.includes("Pronto para receber uma ação quando necessário."));
   assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
-  assert.ok(painel.includes("Áudio sem sinal recente"));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
   assert.ok(painel.includes("sem prova completa"));
   assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
   assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));
