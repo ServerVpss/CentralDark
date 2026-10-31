@@ -128,7 +128,7 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {
-      case 'success': return <CheckCircle className="w-5 h-5 text-green-500" />
+      case 'success': return <CheckCircle className="w-5 h-5 text-green-500 motion-safe:animate-pulse" aria-label="Sincronização confirmada" />
       case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
@@ -185,7 +185,7 @@ export const AutoSyncButton: React.FC = () => {
             />
           </div>
         </div>
-        {(isSyncing || syncProgress.value > 0) && (
+        {isSyncing && (
           <div className="mt-3 rounded-md border border-white/10 bg-background/30 px-3 py-2" aria-live="polite">
             <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
               <span className="truncate">{isSyncing ? syncProgress.label : syncStatus.phase ?? syncProgress.label}</span>
@@ -197,10 +197,17 @@ export const AutoSyncButton: React.FC = () => {
                 style={{ width: `${isSyncing ? syncProgress.value : syncStatus.progress ?? syncProgress.value}%` }}
               />
             </div>
-            {syncStatus.files && syncStatus.files.length > 0 && !isSyncing && (
-              <div className="mt-2 text-[10px] text-muted-foreground">
-                <span className="font-semibold text-foreground">Arquivos considerados:</span>{' '}
-                <span className="font-mono">{syncStatus.files.join(' · ')}</span>
+          </div>
+        )}
+        {!isSyncing && syncStatus.status === 'success' && (
+          <div className="mt-3 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[10px] text-emerald-200" aria-live="polite">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-3.5 w-3.5 motion-safe:animate-pulse" aria-hidden="true" />
+              <span className="font-semibold">Sincronizado · mesmo SHA confirmado</span>
+            </div>
+            {syncStatus.files && syncStatus.files.length > 0 && (
+              <div className="mt-1 truncate font-mono text-muted-foreground" title={syncStatus.files.join(' · ')}>
+                Arquivos considerados: {syncStatus.files.join(' · ')}
               </div>
             )}
           </div>
@@ -210,7 +217,7 @@ export const AutoSyncButton: React.FC = () => {
       <Card className="p-4 border border-amber-500/40 bg-amber-500/10">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Zap className="w-5 h-5 text-amber-400" />
+            <Zap className={`w-5 h-5 text-amber-400 ${isSyncing ? 'motion-safe:animate-pulse' : ''}`} aria-label="Automação CentralDark" />
             <div>
               <p className="text-sm font-semibold text-foreground">Automação CentralDark · execução segura</p>
               <p className="text-xs text-amber-200/80">Despacha o promotor existente. GitHub decide gates e squash; deploy exige recibo.</p>
@@ -231,7 +238,7 @@ export const AutoSyncButton: React.FC = () => {
             </select>
 
             <CockpitActionButton hint="Primeiro sincroniza o escopo escolhido. Depois solicita o workflow canônico, que exige gates verdes e faz squash. Deploy só é confirmado por receipt." onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">
-              <Zap className="w-4 h-4" />
+              <Zap className={`w-4 h-4 ${isSyncing ? 'motion-safe:animate-pulse' : ''}`} aria-hidden="true" />
               {isSyncing ? 'Solicitando...' : 'Executar Automação'}
             </CockpitActionButton>
           </div>
