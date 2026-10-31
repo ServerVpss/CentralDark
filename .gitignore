@@ -70,6 +70,11 @@ docs/BRAIN/Excalidraw/*.excalidraw.md
 secrets/
 *.env
 !*.env.example
+# Bloqueio explícito para .env na raiz e em qualquer módulo.
+# Os exemplos continuam permitidos para documentação sem segredo.
+**/.env
+**/.env.*
+!**/.env.example
 .backups/
 
 # Dados de sistema / runtime que vazaram pra estrutura do repo (30/06/2026)
