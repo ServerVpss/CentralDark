@@ -6,6 +6,15 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+## Acoplamento obrigatório: Skill Mãe + Kimetsu (01/11/2026)
+
+**SE USOU ESTA SKILL MÃE, CARREGUE JUNTO O KIMETSU.** Todo agente/executor que carregar `centraldark-operational-method/SKILL.md` deve consultar **na mesma intenção** `../kimetsu-brainstorm/SKILL.md` e `references/regenerative-self-refinement-engine.md` (17 Respirações), antes de escolher uma ação. Isso vale inclusive para tarefas de UI, texto, voz, Cloudroom, ChatGPT e continuidade SOL ↔ Hermes. Não basta escrever "Kimetsu" no relatório: aplicar a classificação e o critério de prova da técnica selecionada. **Classificação/respiração só precisam aparecer no receipt operacional**, sem transformar conversa simples em ritual.
+
+**Ciclo único:** INTENÇÃO → OWNER/SESSÃO → KIMETSU (SPIKE|BOUNDED|ARCHITECTURAL + respiração conforme estado) → REUTILIZAR ROTA → AÇÃO AUTORIZADA → READBACK/CONTRAPROVA → RECEIPT/NEXT_CURSOR. Para leitura, Concentração/Lua/Som podem bastar; para operação material, respeitar o contrato Kimetsu `VERSO → DECLARAÇÃO → EXECUÇÃO → EVIDÊNCIA → VEREDITO → TRANSIÇÃO`. Se a skill ou a referência de 17 não estiver acessível, declarar `KIMETSU_NOT_LOADED`; não declarar execução completa do protocolo nem substituí-lo por mecanismo paralelo.
+
+**Rota comprovada ChatGPT Windows:** localizar a janela real (nome, PID e `MainWindowHandle` atuais), identificar monitor/retângulo atual, conferir a conversa visualmente, fazer hit-test do alvo antes do clique e focar o campo existente. Depois validar `AutomationElement.FocusedElement` por `Name=Pergunte ao ChatGPT`, `ControlType.Edit`, `ProcessId` correto. Ver [receita reutilizável nesta mesma biblioteca](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#chatgpt-windows-foco-comprovado-2026-11-01). **FOCUS_PASS não prova retorno Hermes→SOL nem acionamento automático da conversa.** Nunca usar PID/coordenadas históricos como constantes; não enviar mensagens nem modificar rascunhos sem intenção explícita.
+
+`PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso da receita sem HIT medido); `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=TEST_HERMES_TO_SAME_CHAT_DELIVERY`.
 
 <!-- CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 ## 🍒+1 Busca autorizada e continuidade por rotas eficazes
