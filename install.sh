@@ -28,8 +28,8 @@ fi
 export CD_FORCE_COLOR="${CD_FORCE_COLOR:-1}"
 
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly REPO_URL="https://github.com/segredounlock/clone-deck.git"
-readonly CENTRALDARK_ROOT="/root/CentralDark"
+readonly REPO_URL="https://github.com/ServerVpss/CentralDark.git"
+readonly CENTRALDARK_ROOT="${CENTRALDARK_ROOT:-$SCRIPT_DIR}"
 readonly CENTRALDARK_APPS="${CENTRALDARK_ROOT}/apps"
 readonly MULTIZAP_DIR="${CENTRALDARK_APPS}/modulos/multizap"
 readonly MCP_DIR="${CENTRALDARK_ROOT}/infra/mcp"
@@ -897,6 +897,7 @@ wizard() {
     aio_menu_row 3 "ESTRUTURA DE PASTAS"  8 "ASSISTENTE DNS WILDCARD"
     aio_menu_row 4 "CLOUDFLARE / DNS"     9 "INSTALAR DEPENDÊNCIAS"
     aio_menu_row 5 "MCP CENTRALDARK"     10 "ATUALIZAR INSTALADOR"
+    aio_menu_row 11 "INVENTÁRIO / FORJA"     ""  ""
     aio_menu_row 0 "SAIR DO MENU"         ""  ""
     aio_sep
     aio_bar_red "Feito por CentralDark · IA Ops"
@@ -913,7 +914,7 @@ wizard() {
       exit 0
     fi
 
-    aio_prompt "Escolha uma opção (0-10):"
+    aio_prompt "Escolha uma opção (0-11):"
     # -r evita escape, timeout 300s evita travar sessão SSH abandonada
     if ! read -r -t 300 choice; then
       echo
@@ -933,6 +934,7 @@ wizard() {
       8)  run_wildcard_wizard || true ;;
       9)  ensure_deps ;;
       10) update_repo ;;
+      11) run_reconciler --menu ;;
       0)  clear 2>/dev/null || true; ok "Até a próxima!"; exit 0 ;;
       "") warn "Nenhuma opção digitada." ;;
       *)  warn "Opção inválida: '$choice' — digite um número de 0 a 10." ;;
@@ -982,6 +984,16 @@ run_online_check_only() {
   oc_check_all "$zone"
 }
 
+run_reconciler() {
+  # Somente encaminha ao owner existente: inventário/scan/diff/menu/pulse plan.
+  local owner="$SCRIPT_DIR/scripts/centraldark-inventory-reconcile.sh"
+  if [ ! -f "$owner" ]; then
+    err "Owner de inventário não encontrado: $owner"
+    return 2
+  fi
+  bash "$owner" "$@"
+}
+
 usage() {
   cat <<EOF
 Uso: $0 <modo>
@@ -1004,6 +1016,11 @@ Modos:
   --connect             Conectar Cloudflare pelo celular (QR no terminal)
   --deps                Instala só as dependências do instalador (curl, jq, qrencode, dig, ...)
   --menu                Instala menu colorido da VPS (cdmenu / cdstatus / menu)
+  --inventory           Inventário canônico via owner existente
+  --scan                Varredura de scripts e duplicatas via owner existente
+  --diff                Reconciliar diferenças via owner existente
+  --inventory-menu      Menu openKylin/Forja do mesmo owner
+  --pulse-plan          Planejar pulso de SHA sem microdeploy
   --update              Atualiza install.sh + repo local (git pull main)
   --no-update           Pula o auto-update desta execução
   --link                Cria atalho global (centraldark / clonedeck em /usr/local/bin)
@@ -1023,7 +1040,7 @@ run_install_menu() {
 }
 
 readonly RAW_INSTALLER_URL="${CD_INSTALL_URL:-https://install.centralldark.com/raw/install.sh}"
-readonly RAW_INSTALLER_FALLBACK="https://raw.githubusercontent.com/segredounlock/clone-deck/main/install.sh"
+readonly RAW_INSTALLER_FALLBACK="https://raw.githubusercontent.com/ServerVpss/CentralDark/main/install.sh"
 
 self_update() {
   # Auto-update do install.sh a partir do repo. Re-exec quando há versão nova.
@@ -1069,22 +1086,29 @@ self_update() {
 }
 
 update_repo() {
-  # Atualiza repo local (se já clonado) e força re-download do install.sh.
-  local repo_dir="${CENTRALDARK_ROOT}/repo/clone-deck"
-  title "Atualizando instalador (auto-update do repo)"
-  if [ -d "$repo_dir/.git" ]; then
-    progress_run "Buscando alterações no repo" \
-      bash -c "cd '$repo_dir' && git fetch --all --prune" \
-      || warn "git fetch falhou em $repo_dir"
-    progress_run "Aplicando última versão (main)" \
-      bash -c "cd '$repo_dir' && git reset --hard origin/main" \
-      || warn "git reset falhou em $repo_dir"
-  else
-    log "Repo local ainda não existe ($repo_dir) — só atualizando install.sh."
+  # Mesmo repo da Forja/VPS; nunca reseta ou destrói trabalho local.
+  local repo_dir="$CENTRALDARK_ROOT"
+  title "Atualizando fonte CentralDark (fast-forward protegido)"
+  if ! git -C "$repo_dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    warn "Checkout Git não encontrado em $repo_dir — nenhuma alteração"
+    return 2
   fi
+  local origin branch
+  origin="$(git -C "$repo_dir" remote get-url origin 2>/dev/null || true)"
+  case "$origin" in
+    *github.com*ServerVpss/CentralDark*) ;;
+    *) warn "Origin não é ServerVpss/CentralDark; atualização bloqueada"; return 2 ;;
+  esac
+  branch="$(git -C "$repo_dir" branch --show-current)"
+  if [ "$branch" != "main" ] || [ -n "$(git -C "$repo_dir" status --porcelain)" ]; then
+    warn "Branch diferente de main ou checkout com alterações; preservado sem merge"
+    return 2
+  fi
+  git -C "$repo_dir" fetch origin main --quiet || { warn "Git fetch falhou"; return 2; }
+  git -C "$repo_dir" merge --ff-only origin/main || { warn "Sem fast-forward; preservar checkout"; return 2; }
   unset CD_SELF_UPDATED
   self_update "$@"
-  progress_done "Atualização concluída"
+  progress_done "Atualização concluída sem reset"
 }
 
 # ============================================================================
@@ -1228,6 +1252,13 @@ main() {
 
   # Garante que comandos relativos funcionem mesmo se rodaram de outra pasta.
   cd "$SCRIPT_DIR" 2>/dev/null || true
+
+  # Modos de inventário são leitura/recibo e NÃO acionam auto-update nem symlinks.
+  case "${1:-}" in
+    --inventory|--scan|--diff) run_reconciler "$1"; return $? ;;
+    --inventory-menu) run_reconciler --menu; return $? ;;
+    --pulse-plan) run_reconciler --pulse --plan; return $? ;;
+  esac
 
   # Auto-update no início (pula com CD_NO_UPDATE=1 ou flag --no-update)
   case "${1:-}" in
