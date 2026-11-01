@@ -34,3 +34,22 @@ Melhoria antecipada de selecao: para pagina listada pela instancia MCP, fazer li
 - TESTE REAL AUTORIZADO: Chrome original PID 50048, UIA Button "Nova guia", InvokePattern -> leitura de 1 para 2 TabItems; UIA Button "Fechar" SOMENTE na nova aba -> leitura volta a 1 TabItem about:blank. Sem segundo navegador nem alteracao externa. UIA_CLICK_PASS e RESTORE_PASS.
 - FRONTEIRA: este clique foi Windows UI Automation, nao click(uid) do CDP. CODEX_CDP_CLICK_UID=UNKNOWN porque Codex owner estava executando outra tarefa e seu remote-debugging-pipe nao esta exposto a esta sessao. Nao interferir no processo, iniciar outro Chrome ou declarar falso PASS.
 - NEXT_CURSOR: quando o proprio Codex estiver livre, reutilizar a ferramenta chrome-devtools-mcp da mesma sessao: list_pages -> take_snapshot -> click(uid) em elemento descartavel -> take_snapshot e readback. Sem nova instancia e sem invadir navegador pessoal.
+
+## Cloudroom Windows: delegacao real (2026-11-01)
+
+**Gatilho:** CHEFE pede enviar Goal/DELTA ao Hermes na conversa Cloudroom existente. Usar **a mesma conversa e a mesma missão**; não iniciar outra sessão nem mudar de agente. O método complementa as rotas UIA/computer_use da Skill-Mãe, não adiciona ferramentas.
+
+**Receita operacional mínima (observada na Casa):**
+
+1. Identificar o processo/janela **Cloudroom** por `Get-Process` + `MainWindowHandle` e conferir o título e a conversa visível. Na sessão observada, PID 29440 e título “Analisar identidade de agentes autôn...”; **PID e título são evidência histórica, nunca alvos fixos**.
+2. Descobrir monitores por `[System.Windows.Forms.Screen]::AllScreens`; nessa sessão, `DISPLAY2` era vertical à esquerda, com **X negativo**. Ancorar cada clique ao retângulo da janela atual (`GetWindowRect`), não a posições estáticas.
+3. Tentar UIAutomation sobre a janela certa (`AutomationElement.FromHandle`, `ControlType.Edit/Document`, `ValuePattern`). **Prova real:** raiz Window encontrada, porém 0 editores/documentos; logo o fallback foi necessário e não deve ser confundido com UIA edit.
+4. Fallback nativo: capturar somente a área necessária da janela via `System.Drawing.Graphics.CopyFromScreen`, verificar **Ask Cloudroom**, ausência de rascunho e conversa/Goal certos. Antes do clique, usar `WindowFromPoint` + `GetAncestor(GA_ROOT)` e comparar com `MainWindowHandle`; cancelar se não coincidir. Focar a janela, clicar no editor real, colar a mensagem autorizada (`Set-Clipboard` + `Ctrl+V` pela entrada do Windows). Melhorar a próxima execução preservando/restaurando o clipboard quando tecnicamente possível; **a restauração não foi comprovada na sessão original**, não declarar PASS retroativo.
+5. **Conferir captura antes de enviar:** texto completo correto e botão de envio habilitado. Clicar **uma única vez** no controle de envio observado; não usar `Enter` às cegas se pode adicionar quebra de linha. Não enviar por nova sessão/Goal, nem reenviar se efeito incerto.
+6. **Readback após o clique:** captura da conversa mostrou a mensagem em bolha, editor voltou a **Ask Cloudroom** e apareceu **Working...**. Apagar a captura temporária após leitura, sem guardá-la como acervo. `SEND_CLICKED` + `BUBBLE_PRESENT` + `COMPOSER_CLEARED` = `MESSAGE_SENT_PASS`; `HERMES_COMPLETED=UNKNOWN` até receipt/log do executor.
+
+**Caso comprovado:** Goal `PREPARE_INDEPENDENT_RECOVERY_BACKUP_AND_OFFLINE_MIGRATION_PLAN`, enviado à conversa em andamento com `!CENTRALDARK`; intenção de preparar plano de backup e migração offline do SSD Kingston rawDisk, **sem reparticionar nem formatar**. Provas visuais de antes/preenchido/depois no mesmo ciclo; captura temporária removida. Não houve execução remota de partições neste método. Envio comprovado, *não* conclusão da missão pelo Hermes.
+
+**Melhorias reutilizáveis:** seleção de janela por PID+handle e hit-test de processo antes de clique; fallback de geometria/captura só quando UIA não expõe o editor; check de rascunho existente, redigitação proibida quando envio incerto, higiene de clipboard e imagens temporárias. Preferir API/ACP já autorizada se surgir rota real com prova mais barata; não criar broker paralelo. Registrar `OWNER|SESSION|GOAL|WINDOW_HANDLE_FRESH|UIA_OR_FALLBACK|INPUT_VERIFIED|SEND_ONCE|READBACK|NEXT_CURSOR`. Prova não autoriza acesso sem autenticação.
+
+**Status:** `CLOUDROOM_MESSAGE_SEND=PASS`; `HERMES_GOAL_EXECUTION=UNKNOWN`; `PROMPT_SELF_CACHE_P15=APLICÁVEL` (receita reusável, sem medição de economia/HIT); `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.

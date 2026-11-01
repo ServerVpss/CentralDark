@@ -27,6 +27,12 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 
 **Atalho sob ordem do CHEFE: texto e arquivos (30/10/2026):** COPIAR, COLAR, RECORTAR, EDITAR e CRIAR usam o alvo e owner existentes. Ciclo minimo: ordem -> alvo conhecido -> acao autorizada -> uma prova do efeito. Notepad ja aberto: reutilizar janela, editor e arquivo; colar pelo ValuePattern; apagar somente sob ordem e salvar, verificando editor e arquivo vazios. Copiar nao apaga; recortar retira somente a selecao indicada; editar preserva o restante; criar nao significa executar. Sem ordem: NOOP. Nao repetir discovery, checagens ou cliques sem mudanca. PROVA anterior: abrir, preencher e limpar Notepad, nao recorte generico. PROMPT_SELF_CACHE_P15=APLICAVEL como reuso de receita, HIT nao aferido; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=NOTEPAD_TEXT_ACTION_ON_DEMAND.
 
+### 🍒+1 Delegação no Cloudroom Windows (01/11/2026) | texto/voz → mesmo Goal
+
+**Gatilho por intenção:** quando o CHEFE pedir para delegar um Goal ao Hermes **na conversa Cloudroom já aberta**, reutilizar a sessão e o owner. Executar a [receita Cloudroom comprovada](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#cloudroom-windows-delegacao-real-2026-11-01); não criar outro agente, chat, ponte, serviço ou script. Preferir controle nativo/acessível; se UIAutomation retornar zero editores, usar fallback de janela real + geometria atual + captura visual + entrada Win32 autorizada, nunca coordenada/PID fixos. Confirmar janela, conversa, campo vazio e texto antes de enviar **uma vez**. Preservar rascunhos, clipboard e foco na medida possível; se incerto, parar sem reenviar.
+
+**Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
+
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
 ## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
