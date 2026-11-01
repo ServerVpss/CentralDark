@@ -21,6 +21,7 @@
 # @prova_2026_11_01: CENTRALDARK_FORJA_CONNECTED_VPS_SAME_CORE_20261101: canal remoto autenticado no openKylin CentralDark-OS ONLINE, shell PID 14759 completou UTC=2026-11-01T03:28:21Z; /data=/dev/sda6 ext4; git/node/kylin-bot/ssh no PATH; gh/hermes ausentes do PATH; checkout não encontrado nos 3 candidatos.
 # @governanca_forja_vps: Forja Linux é único core; GitHub main é fonte canônica; VPS espelha o MESMO SHA aprovado apenas quando CHEFE ordenar. Igualmente lógico != kernel/estado VPS idênticos. Histórico: scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md (commit c272a5df3ded119bea5caf66fba14ad0a1ccc5df).
 # @next_cursor_forja: LOCALIZAR_SOURCE_LINUX → GH_HERMES_GATEWAY_LINUX → EXECUCAO_E_TESTES → SAME_SHA_VPS_QUANDO_AUTORIZADO → READBACK.
+# @prova_viva_2026_11_01: CENTRALDARK_KYLINBOT_REAL_MODEL_PROBE_20261101: Remote Desktop Commander em openKylin confirmou kylin-bot 0.7.5 e status native; fallback nvidia inválido corrigido via kylin-bot config set para openai-codex; workspace.enabled True corrigido para False; readback config TOML PASS. Auth status/list zerados; agent --provider openai-codex exit 1 (auth profile not found). Modelo padrão resolvido durante teste = anthropic/claude-sonnet-4, incompatível com Codex; não considerar modelo operacional. OAuth device-code em KylinBot retornou 404, fallback browser/paste iniciado, navegador da Forja solicitado por xdg-open RC0, autorização ainda PENDING. Tokens/URL OAuth não registrados.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -89,6 +90,13 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
         # CENTRALDARK_KYLINBOT_ONBOARD_SINGLE_WORKSPACE_20261101 — captura do assistente onboard, sem reler dados sensiveis.
         _cd_status '📂 ONBOARD_WORKSPACE_CAPTURA=/home/CentralDark-OS/.kylinbot/workspace'
         _cd_status '🪬 MULTI_WORKSPACE_PERGUNTA_CAPTURA=enabled [No] (padrao; confirmacao ainda nao observada)'
+        # CENTRALDARK_KYLINBOT_REAL_MODEL_PROBE_20261101 — prova viva pela Forja via terminal remoto, sem coletar auth data.
+        _cd_status '🐧 PROVA_LINUX_2026_11_01=KylinBot 0.7.5; provider fallback corrigido de nvidia inválido para openai-codex'
+        _cd_status '📂 READBACK_WORKSPACE_ENABLED=false; workspace principal ~/.kylinbot/workspace'
+        _cd_status '🔴 AUTH_PROFILE_EM_03_31Z=nenhum perfil OAuth; login iniciado, autorização no navegador pendente'
+        _cd_status '🔴 AGENT_TEST_03_32Z=exit 1; OpenAI Codex auth profile not found'
+        _cd_status '🟡 MODEL_NA_TENTATIVA=anthropic/claude-sonnet-4 (default antigo); resolver nome suportado só após autenticação'
+        _cd_status '🍒 NEXT=autorizar login no navegador da Forja; testar inferência; registrar provider/modelo real sem expor tokens'
         _cd_status '🔧 DIRECAO=workspace unico CentralDark: confirmar No usando Enter no wizard, sem presumir configuracao aplicada'
         # CENTRALDARK_KYLINBOT_TUNNEL_PROFILES_ISOLATION_20261101 — apenas estado visual do wizard, não confirma opção salva.
         _cd_status '🌐 TUNNEL_PUBLICO_GUI=none selecionado na captura; tunnel público não necessário para SSH local'
