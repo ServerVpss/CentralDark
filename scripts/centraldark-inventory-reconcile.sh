@@ -17,6 +17,7 @@
 # @evidencia_visual_2026_11_01: CENTRALDARK_OPENKYLIN_MCP_MULTIMODAL_CHANNELS_20261101: KylinBot Onboard > Channels mostra telegram, gmail, discord, slack, whatsapp, mqtt, webhook, voice-call; Done selecionado; lista não comprova canal configurado.
 # @pesquisa_oficial_2026_11_01: https://www.openkylin.top/news/4099-en.html (3.0 agentes/MCP); https://www.openkylin.top/news/3449-cn.html (AI SDK/Runtime texto, imagem, áudio); https://www.openkylin.top/news/4168-en.html (KART acesso multimodal). Vídeo e LLM local não comprovados como READY.
 # @prova_da_opcao13: usa consultas de leitura, sem credenciais, separa modelo listado de READY e execução MCP.
+# @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_TUNNEL_PROFILES_ISOLATION_20261101: wizard Tunnel apresenta Public tunnel provider none; Workspace profiles workspaces-dir /home/CentralDark-OS/.kylinbot/workspaces; isolate-memory Yes em foco. Perfil isolado => brain.db por perfil; sem evidência de gravação definitiva. Single-workspace pretendido => configurar enabled No na etapa inicial, em vez de presumir que isolate-memory troca número de perfis.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -86,6 +87,12 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
         _cd_status '📂 ONBOARD_WORKSPACE_CAPTURA=/home/CentralDark-OS/.kylinbot/workspace'
         _cd_status '🪬 MULTI_WORKSPACE_PERGUNTA_CAPTURA=enabled [No] (padrao; confirmacao ainda nao observada)'
         _cd_status '🔧 DIRECAO=workspace unico CentralDark: confirmar No usando Enter no wizard, sem presumir configuracao aplicada'
+        # CENTRALDARK_KYLINBOT_TUNNEL_PROFILES_ISOLATION_20261101 — apenas estado visual do wizard, não confirma opção salva.
+        _cd_status '🌐 TUNNEL_PUBLICO_GUI=none selecionado na captura; tunnel público não necessário para SSH local'
+        _cd_status '📂 WORKSPACES_DIR_GUI=/home/CentralDark-OS/.kylinbot/workspaces (diretório de perfis; não é o mesmo que workspace único)'
+        _cd_status '🧠 ISOLATE_MEMORY_GUI=Yes destacado; cada perfil recebe brain.db próprio quando a opção estiver habilitada'
+        _cd_status '🎯 SINGLE_WORKSPACE=retornar a enabled [No] se o objetivo for um único workspace; a opção isolate-memory não substitui esse ajuste'
+        _cd_status '🔐 ESTADO_APLICADO=UNKNOWN: as capturas mostram opções apresentadas, não a conclusão do onboarding'
         # CENTRALDARK_KYLINBOT_PROVIDER_FILTER_20261101 — seleção visual de provedores disponíveis no assistente, não autenticação ou inferência.
         _cd_status '🧩 PROVIDER_FILTER_GUI=GitHub Copilot, Claude Code (CLI), Gemini CLI, LM Studio, llama.cpp server, SGLang, vLLM, NVIDIA NIM e Custom OpenAI-compatible endpoint'
         _cd_status '🔎 CATALOGO_GUI=outras opções visíveis: Cohere, KiloCLI, Hugging Face, DeepInfra, SiliconFlow, OpenAI-compatible; lista não equivale a provedor instalado/configurado'
