@@ -759,7 +759,72 @@ install_fallback_shortcuts() {
   done
 }
 
+# GitHub CLI: integracao no instalador canonico, sem segundo executor.
+ensure_gh_cli() {
+  if require_cmd gh; then return 0; fi
+  local -a elevate=()
+  if [ "$(id -u)" -ne 0 ]; then
+    require_cmd sudo || { err "gh ausente, e sudo indisponivel."; return 2; }
+    elevate=(sudo)
+  fi
+  title "===== GitHub CLI (gh) ====="
+  if require_cmd apt-get; then
+    "${elevate[@]}" apt-get update -qq || return 2
+    "${elevate[@]}" apt-get install -y gh || return 2
+  elif require_cmd dnf; then
+    "${elevate[@]}" dnf install -y gh || return 2
+  elif require_cmd yum; then
+    "${elevate[@]}" yum install -y gh || return 2
+  elif require_cmd apk; then
+    "${elevate[@]}" apk add github-cli || return 2
+  elif require_cmd brew; then
+    brew install gh || return 2
+  else
+    err "Sem gerenciador reconhecido; nao instalar gh por fonte improvisada."
+    return 2
+  fi
+  require_cmd gh || { err "gh continua indisponivel."; return 2; }
+}
+
+github_auth_preflight() {
+  ensure_gh_cli || return 2
+  if ! gh auth status --hostname github.com >/dev/null 2>&1; then
+    if [ ! -t 0 ] || [ ! -r /dev/tty ]; then
+      warn "GH_AUTH=PENDING: execute ./install.sh --gh-auth em SSH interativo."
+      return 3
+    fi
+    title "===== GitHub CLI — autorizacao humana ====="
+    log "Abra https://github.com/login/device no seu navegador e digite o codigo exibido SOMENTE no terminal."
+    log "Sem DISPLAY: navegador remoto dispensado; a porta 1455 nao e necessaria."
+    # GH_BROWSER=true evita erro 'no DISPLAY environment variable specified'.
+    # Redirecionar diretamente ao terminal protege o codigo do tee/log.
+    if ! GH_BROWSER=true gh auth login --hostname github.com --git-protocol https --web </dev/tty >/dev/tty 2>&1; then
+      err "GH_AUTH=PENDING: autorizacao cancelada/falhou."
+      return 4
+    fi
+  fi
+  if ! gh auth status --hostname github.com >/dev/null 2>&1; then
+    err "GH_AUTH=UNKNOWN: login nao comprovado."
+    return 5
+  fi
+  gh auth setup-git --hostname github.com >/dev/null 2>&1 || {
+    err "GH_GIT_CREDENTIAL_HELPER=FAIL; sem expor credenciais."
+    return 6
+  }
+  if ! gh repo view ServerVpss/CentralDark --json nameWithOwner --jq '.nameWithOwner' >/dev/null 2>&1; then
+    err "GH_REPO=SEM_ACESSO: login valido, repo privado inacessivel."
+    return 7
+  fi
+  ok "GH_AUTH=PASS; GH_REPO=PASS; Git pronto para checkout da main."
+}
+
 install_base() {
+  # No onboarding interativo, oferecer GitHub sem depender do navegador Linux.
+  if [ -t 0 ] && [ -r /dev/tty ]; then
+    github_auth_preflight || warn "GH_AUTH=PENDING — instalacao existente preservada."
+  else
+    warn "GH_AUTH=NOT_CHECKED: sessao sem terminal; use --gh-auth via SSH."
+  fi
   ensure_deps || warn "Algumas dependências falharam — seguindo mesmo assim."
   verify_environment
   prepare_structure
@@ -897,7 +962,7 @@ wizard() {
     aio_menu_row 3 "ESTRUTURA DE PASTAS"  8 "ASSISTENTE DNS WILDCARD"
     aio_menu_row 4 "CLOUDFLARE / DNS"     9 "INSTALAR DEPENDÊNCIAS"
     aio_menu_row 5 "MCP CENTRALDARK"     10 "ATUALIZAR INSTALADOR"
-    aio_menu_row 11 "INVENTÁRIO / FORJA"     ""  ""
+    aio_menu_row 11 "INVENTÁRIO / FORJA"     12 "GITHUB CLI / LOGIN"
     aio_menu_row 0 "SAIR DO MENU"         ""  ""
     aio_sep
     aio_bar_red "Feito por CentralDark · IA Ops"
@@ -935,9 +1000,10 @@ wizard() {
       9)  ensure_deps ;;
       10) update_repo ;;
       11) run_reconciler --menu ;;
+      12) github_auth_preflight || warn "GH_AUTH=PENDING" ;;
       0)  clear 2>/dev/null || true; ok "Até a próxima!"; exit 0 ;;
       "") warn "Nenhuma opção digitada." ;;
-      *)  warn "Opção inválida: '$choice' — digite um número de 0 a 10." ;;
+      *)  warn "Opção inválida: '$choice' — digite um número de 0 a 12." ;;
     esac
     echo
     aio_prompt "Pressione ENTER pra voltar ao menu..."
@@ -1016,6 +1082,7 @@ Modos:
   --connect             Conectar Cloudflare pelo celular (QR no terminal)
   --deps                Instala só as dependências do instalador (curl, jq, qrencode, dig, ...)
   --menu                Instala menu colorido da VPS (cdmenu / cdstatus / menu)
+  --gh-auth             Instala gh se faltar; OAuth sem DISPLAY e prova do repo privado
   --inventory           Inventário canônico via owner existente
   --scan                Varredura de scripts e duplicatas via owner existente
   --diff                Reconciliar diferenças via owner existente
@@ -1255,6 +1322,7 @@ main() {
 
   # Modos de inventário são leitura/recibo e NÃO acionam auto-update nem symlinks.
   case "${1:-}" in
+    --gh-auth) github_auth_preflight; return $? ;;
     --inventory|--scan|--diff) run_reconciler "$1"; return $? ;;
     --inventory-menu) run_reconciler --menu; return $? ;;
     --pulse-plan) run_reconciler --pulse --plan; return $? ;;
