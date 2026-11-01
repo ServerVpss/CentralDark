@@ -137,3 +137,24 @@ A arquitetura e LOCAL-FIRST mas **nao esta autorizada para executar comandos no 
 **Aprendizado Kaizen:** a instalação nativa via `VMware rawDisk → instalador openKylin → disco físico → boot sem ISO → SSH` resolveu o objetivo local com menos passos que as tentativas anteriores. Preservar esta receita e **não repetir detecção de HWND, reconfiguração de SSH, instalador ou investigação sem mudança material**. `PROMPT_SELF_CACHE_P15=APLICÁVEL` ao reuso desta receita (HIT não medido); `KV_CACHE_P16=UNKNOWN` (sem telemetria de atenção).
 
 **NEXT_CURSOR:** `FORJA_OPENKYLIN_RAWDISK_BOOT_OBSERVADO → SSH_INTERATIVO_PROVADO → OPERAR_SSH_OU_VMWARE → BOOT_BARE_METAL_SOMENTE_SE_SOLICITADO → INTEGRAR_CENTRALDARK_NO_OWNER_EXISTENTE`. Este commit registra estado e rota; não executa mudanças no host.
+
+## PRIORIDADE ATUAL — 31/10/2026 — FORJA SSH LINUX ONLY
+
+<!-- #OBSERVACOES#
+@owner: scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md; RULES.md; AGENTS.md
+@last_updated: 2026-11-01T01:30:39.582Z
+@escopo: alteração explícita do CHEFE sobre o runtime principal da Forja
+@estado: decisão DOCUMENTADA no Git; consumo pelos executores e operação dos serviços no Linux ainda requerem execução real
+@next_cursor: Codex acessa Forja por SSH, mede workspace e migra operações existentes para Linux; git/gh executados no próprio Linux; publica trabalho pronto com SHA e readback
+-->
+
+**ORDEM VIGENTE DO CHEFE — substitui as rotas anteriores apenas para a operação da FORJA CENTRALDARK:** toda execução, desenvolvimento, compilação, Git e `gh`, commits, push, serviços e automações da Forja devem ocorrer **dentro do openKylin Linux pelo terminal SSH**. **Não usar a Casa Windows como executor, fonte de checkout, ponte obrigatória ou GH client.** A letra `K:` é histórica: o mesmo disco físico agora é Linux; não pesquisar uma unidade K: do Windows nem usar `C:\BACKUP` para operar a CentralDark. Nenhum serviço, checkout ou repositório é considerado migrado até ser encontrado/validado no Linux.
+
+**Conexão já observada:** `CentralDark-OS@192.168.35.128`, SSH 22; este IPv4 foi entregue pelo DHCP no NAT do VMware e **pode mudar**, portanto não fixá-lo como endereço universal. O Codex já iniciou a verificação do SSH conforme captura do CHEFE; a captura não comprova conclusão da migração.
+
+**Receita mínima para Codex na sessão SSH atual:** identificar `lsblk`, `findmnt /`, `findmnt /data` e `df -hT`, localizar **o workspace existente no Linux**, conferir `git status --short --branch`, `git remote -v`, `gh auth status` **dentro do Linux**, classificar as alterações prontas, então commit/push apenas do escopo pronto com proteção de branch, sem `reset --hard`, `clean`, `--force` ou sobrescrever trabalho alheio. Preservar documentos e recibos históricos da Casa como histórico, **não executá-los**.
+
+**Transporte:** SSH é a **única rota operacional padrão** autorizada para a Forja; o VMware foi um meio de instalação/boot e permanece apenas como histórico nesta decisão, **não um segundo executor nem dependência do trabalho cotidiano**. Não há prova nova de boot bare-metal ou de migração do código em função desta atualização documental.
+
+**NEXT_CURSOR:** `FORJA_LINUX_SSH_ONLY → WORKSPACE_LINUX_CURRENT → GIT_GH_NO_LINUX → COMMIT_PUSH_APENAS_PRONTOS → READBACK_SHA → SERVICOS_CENTRALDARK_TESTADOS_NO_LINUX`.
