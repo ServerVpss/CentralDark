@@ -675,10 +675,23 @@ s['gmail']={'status':'SEM_ACESSO','reason':'Gmail is an external authorized conn
 import collections,re,time
 from zoneinfo import ZoneInfo
 started=time.monotonic()
-roots=[pathlib.Path(x) for x in ('/root','/opt','/srv','/home','/usr/local','/var/opt')]
+# Priorizar a raiz REAL do checkout; ambientes adicionais são opcionais.
+roots=list(dict.fromkeys([root]+[
+ pathlib.Path(x) for x in os.environ.get(
+  'CENTRALDARK_SCAN_ROOTS','/data:/home:/root:/opt:/srv:/usr/local:/var/opt'
+ ).split(os.pathsep) if x
+]))
 skip={'.git','node_modules','.ssh','.cache','.npm','secrets','private','__pycache__','.venv','venv','build','dist'}
 ext={'.sh','.bash','.py','.mjs','.cjs','.js','.ts','.ps1','.bat','.cmd','.rb'}
 discovered=[];folders=[];seen=set();excluded=collections.Counter()
+# Auditoria de sinais, não tradução automática de scripts específicos do SO.
+portability_flags=collections.Counter();portability_files=[]
+portability_markers={
+ 'FIXED_REPO_ROOT':lambda b:b'/root/CentralDark' in b or b'/root/Multizap' in b,
+ 'WINDOWS_DRIVE':lambda b:bool(re.search(rb'[A-Za-z]:[\\\\/]',b)),
+ 'SYSTEMD_REFERENCE':lambda b:b'systemctl' in b or b'/etc/systemd/system' in b,
+ 'PACKAGE_MANAGER_REFERENCE':lambda b:b'apt-get' in b or b'dpkg-query' in b,
+}
 for base in roots:
  if not base.is_dir():continue
  for here,subdirs,names in os.walk(base,followlinks=False):
@@ -703,6 +716,10 @@ for base in roots:
    sha=hashlib.sha256(data).hexdigest()
    clean=re.sub(r'\s+', '', re.sub(r'(?m)^\s*(?:#|//).*' + chr(36), '', src)).lower()
    normalized=hashlib.sha256(clean.encode()).hexdigest()
+   flags=[key for key,probe in portability_markers.items() if probe(data)]
+   if flags:
+    portability_flags.update(flags)
+    portability_files.append({'path':str(file),'signals':flags})
    discovered.append((str(file),sha,normalized))
 same=collections.defaultdict(list);norm=collections.defaultdict(list);names=collections.defaultdict(list)
 for file,sha,n in discovered:
@@ -714,6 +731,16 @@ normalized=[sorted(file for file,sha in group) for group in norm.values() if len
 candidates=[sorted(group) for group in names.values() if len(group)>1]
 fp=hashlib.sha256('\n'.join(file+' '+sha for file,sha,n in discovered).encode()).hexdigest()
 v['brasilia']=datetime.datetime.now(ZoneInfo('America/Sao_Paulo')).strftime('%Y-%m-%dT%H:%M:%S%z')
+v['portability']={
+ 'classification':'READ_ONLY_SIGNALS_NOT_CONFIRMED_DEFECTS',
+ 'searched_script_files':len(discovered),
+ 'signal_file_counts':dict(portability_flags),
+ 'candidate_count':len(portability_files),
+ 'candidate_files':portability_files[:800],
+ 'truncated':len(portability_files)>800,
+ 'requires_owner_review':True,
+ 'source':'current Linux filesystem (not GitHub tree)'
+}
 v['duplicates']={'policy':'NEVER_DELETE_AUTOMATICALLY','scanned_scripts_folders':len(folders),'scanned_script_files':len(discovered),
 'exact_bytes_count':len(equal),'normalized_content_count':len(normalized),'name_candidates_count':len(candidates),
 'exact_bytes':equal[:100],'normalized_content':normalized[:100],'name_candidates_not_proven':candidates[:100],
@@ -747,6 +774,7 @@ print('♻️ MESMOS_BYTES='+str(v['duplicates']['exact_bytes_count'])+' NORMALI
 for k,x in s.items():print('SECTOR='+k+' STATUS='+x.get('status','MIXED'))
 print('OWNER_SCRIPTS_DISCOVERED='+str(sum(x['status']=='EXISTS' for x in v['owners'].values())))
 print('RECEIPT='+str(latest))
+print('PORTABILITY_CANDIDATES='+str(v['portability']['candidate_count'])+' SIGNALS='+json.dumps(v['portability']['signal_file_counts'],sort_keys=True))
 print('🟡 SCAN_PARTIAL='+str(v['duplicates']['partial']).upper()+' SKIPPED='+json.dumps(v['duplicates']['skipped'],sort_keys=True))
 print('NO_RUNTIME_REPAIR=TRUE; RECEIPT_UPDATED=TRUE; NO_NEW_GH=TRUE; NO_AUTO_CREDENTIAL_SEARCH=TRUE')
 PY
