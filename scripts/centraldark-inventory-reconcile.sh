@@ -18,6 +18,9 @@
 # @pesquisa_oficial_2026_11_01: https://www.openkylin.top/news/4099-en.html (3.0 agentes/MCP); https://www.openkylin.top/news/3449-cn.html (AI SDK/Runtime texto, imagem, áudio); https://www.openkylin.top/news/4168-en.html (KART acesso multimodal). Vídeo e LLM local não comprovados como READY.
 # @prova_da_opcao13: usa consultas de leitura, sem credenciais, separa modelo listado de READY e execução MCP.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_TUNNEL_PROFILES_ISOLATION_20261101: wizard Tunnel apresenta Public tunnel provider none; Workspace profiles workspaces-dir /home/CentralDark-OS/.kylinbot/workspaces; isolate-memory Yes em foco. Perfil isolado => brain.db por perfil; sem evidência de gravação definitiva. Single-workspace pretendido => configurar enabled No na etapa inicial, em vez de presumir que isolate-memory troca número de perfis.
+# @prova_2026_11_01: CENTRALDARK_FORJA_CONNECTED_VPS_SAME_CORE_20261101: canal remoto autenticado no openKylin CentralDark-OS ONLINE, shell PID 14759 completou UTC=2026-11-01T03:28:21Z; /data=/dev/sda6 ext4; git/node/kylin-bot/ssh no PATH; gh/hermes ausentes do PATH; checkout não encontrado nos 3 candidatos.
+# @governanca_forja_vps: Forja Linux é único core; GitHub main é fonte canônica; VPS espelha o MESMO SHA aprovado apenas quando CHEFE ordenar. Igualmente lógico != kernel/estado VPS idênticos. Histórico: scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md (commit c272a5df3ded119bea5caf66fba14ad0a1ccc5df).
+# @next_cursor_forja: LOCALIZAR_SOURCE_LINUX → GH_HERMES_GATEWAY_LINUX → EXECUCAO_E_TESTES → SAME_SHA_VPS_QUANDO_AUTORIZADO → READBACK.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -142,6 +145,9 @@ PY
       10)
         # CENTRALDARK_FORJA_SOURCE_GIT_GH_MENU10 — somente inventário da Forja Linux.
         _cd_title '🍒 10 SOURCE / GIT / GH DA FORJA LINUX'
+        # CENTRALDARK_FORJA_CONNECTED_VPS_SAME_CORE_20261101 — a conexão de 2026-11-01 é prova histórica, não o estado vivo de outros hosts.
+        _cd_status '🪬 ARQUITETURA=ONE_CORE_LINUX_FORJA -> GITHUB_MAIN -> VPS_SAME_APPROVED_SHA_ONLY_ON_CHEFE_ORDER'
+        _cd_status '🎯 FORJA_REMOTE_SHELL=HISTORICAL_PASS_2026-11-01T03:28:21Z; VPS_SHA_PARITY=NOT_TESTED'
         if _cd_have findmnt; then
           printf 'Disco de dados: '
           findmnt -no TARGET,SOURCE,FSTYPE /data 2>/dev/null || _cd_status 'UNKNOWN: /data sem montagem confirmada'
@@ -176,6 +182,8 @@ PY
         else
           _cd_status 'GH_LINUX=CLI_NAO_ENCONTRADA'
         fi
+        if _cd_have hermes; then _cd_status '🦀 HERMES_LINUX=CLI_NO_PATH (execucao ainda nao comprovada)'
+        else _cd_status 'HERMES_LINUX=CLI_NAO_ENCONTRADA_NO_PATH'; fi
         _cd_status 'WINDOWS_NAO_E_EXECUTOR | VPS_SOMENTE_SOB_ORDEM | STATUS_READ_ONLY'
         ;;
 
