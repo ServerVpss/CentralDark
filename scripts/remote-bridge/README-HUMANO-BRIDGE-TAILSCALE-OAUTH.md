@@ -102,3 +102,38 @@ SSH_VPS_CASA_PROVEN_RECIPE=UNCHANGED
 ```
 
 A arquitetura e LOCAL-FIRST mas **nao esta autorizada para executar comandos no notebook** apenas por 5985 aberta. `engine_connected=false` ainda requer remediacao no owner atual do Casa Commander, sem segundo gateway. O Bridge foi testado somente em `-LocalStatus`; a partida normal com configuracao de tuneis nao foi repetida neste delta. O Linux fisico do K: ainda nao foi instalado por este trabalho, e a VPS nao foi modificada. NEXT_CURSOR: medir IP LAN do notebook e autenticar via canal explicitamente autorizado; provar handshake do motor local 9101; so entao A2A/executor com recibo tipado e promocao de codigo para VPS 24/7.
+
+## Recibo da Forja openKylin em disco físico — 31/10/2026 (Casa/VMware)
+
+<!-- #OBSERVACOES#
+@owner: scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md; AGENTS.md; RULES.md
+@last_updated: 2026-11-01T01:22:32.669Z
+@escopo: registro de instalação e acesso da Forja local, não VPS nem WSL
+@estado: instalado e acessível via VMware rawDisk + SSH; boot bare-metal independente ainda não testado
+@next_cursor: operar preferencialmente por SSH, com VMware como console existente; conferir boot direto fora do VMware somente quando pertinente
+-->
+
+**Decisão explícita do CHEFE:** a **Forja oficial local** passa a ser o openKylin instalado no disco físico antes identificado por `K:` no Windows. Para operar essa Forja, **reutilizar SSH ou o VMware Workstation já existente**, sem depender do Desktop Commander, sem criar VM/forja/executor paralelo e sem regressar ao WSL como instalação-alvo. O Bridge, Hermes, GitHub e VPS mantêm seus papéis existentes. Esta decisão não significa que a VPS foi alterada nem que o SSH está disponível em todo futuro boot.
+
+### Evidência observada nas capturas do CHEFE (31/10/2026, Bahia)
+
+| Critério | Evidência e alcance |
+| --- | --- |
+| Disco instalado | VMware `Hard Disk (SCSI)` configurado para `\\\\.\\PhysicalDrive1`, disco físico completo de ~447,1 GB (antigo K:); não é VMDK virtual de dados. |
+| Particionamento | Instalação completa confirmada sobre `/dev/sda`: boot `vfat` (`sda1`), estendida (`sda2`), raiz `ext4` (`sda5`), backup `ext4` (`sda6`), data `ext4` (`sda7`), swap (`sda8`). Partições distintas continuam num **único disco físico**. |
+| Boot pela Forja no VMware | O CD/DVD virtual ficou configurado para drive físico em vez da ISO; a VM exibiu splash, configuração e desktop openKylin com o rawDisk. `BOOT_DISCO_FISICO_VIA_VMWARE=OBSERVADO`. |
+| Linux operacional | Desktop openKylin e terminal `CentralDark-OS@CentralDark-OS` visíveis. |
+| Rede na VM | `ens33` em estado `UP`, IPv4 `192.168.35.128/24` na NAT do VMware. `hostname -i` respondeu `127.0.1.1`, que não substitui o IP em `ip addr`. IP DHCP não é endereço estático garantido. |
+| Serviço SSH | `ssh.service` em `active (running)`, `sshd` escutando na porta 22; `sudo systemctl enable ssh` mostrou criação dos symlinks do systemd. |
+| SSH Windows → openKylin | Terminal Windows exibiu sessão remota autenticada e prompt `CentralDark-OS@CentralDark-OS:~$`. O alerta anterior de `known_hosts` por troca de chave foi resolvido na sessão observada; não presumir validade global da chave em outros clientes. |
+| Boot diretamente pela BIOS/UEFI, sem VMware | `NOT_TESTED` nas capturas. Não confundir rawDisk funcionando dentro do VMware com prova de boot bare-metal. |
+| Identidade da VPS / integração de código / deploy | `NOT_TESTED` neste delta; não promover `DOCUMENTED` a `DEPLOYED`. |
+
+**Rota operacional definida:** `CHEFE/CASA → SSH (porta 22, usuário CentralDark-OS, IP descoberto em ip addr) → openKylin/Forja`; para console, manutenção de inicialização ou sessão gráfica, reutilizar `VMware Workstation → mesmo PhysicalDrive1`. Não redescobrir WSL ou abrir um segundo instalador. **Acesso exclusivo ao disco físico:** não iniciar o boot nativo e a VM rawDisk ao mesmo tempo nem montar/escrever esse disco no Windows enquanto estiver em uso pelo Linux.
+
+**Contraprova mínima:** a ausência da ISO foi observada na configuração do CD/DVD, e a autenticação SSH foi observada em terminal diferente do desktop da VM. Essas duas observações confirmam o caminho de boot na VM e o acesso remoto; não confirmam boot independente sem hypervisor. Evidência primária: capturas enviadas pelo CHEFE nesta conversa; não são arquivos de log do host nem teste automatizado deste commit.
+
+**Aprendizado Kaizen:** a instalação nativa via `VMware rawDisk → instalador openKylin → disco físico → boot sem ISO → SSH` resolveu o objetivo local com menos passos que as tentativas anteriores. Preservar esta receita e **não repetir detecção de HWND, reconfiguração de SSH, instalador ou investigação sem mudança material**. `PROMPT_SELF_CACHE_P15=APLICÁVEL` ao reuso desta receita (HIT não medido); `KV_CACHE_P16=UNKNOWN` (sem telemetria de atenção).
+
+**NEXT_CURSOR:** `FORJA_OPENKYLIN_RAWDISK_BOOT_OBSERVADO → SSH_INTERATIVO_PROVADO → OPERAR_SSH_OU_VMWARE → BOOT_BARE_METAL_SOMENTE_SE_SOLICITADO → INTEGRAR_CENTRALDARK_NO_OWNER_EXISTENTE`. Este commit registra estado e rota; não executa mudanças no host.
