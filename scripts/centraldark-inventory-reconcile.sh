@@ -10,6 +10,8 @@
 # @evidencia_visual_2026_11_01: CENTRALDARK_KART_GUI_PREFERENCIAS_CAPTURA_20261101: KART Cloud/Local/Custom switches azuis; prioridade Cloud Model First (Kylin Certification); carregamento automático do modelo de fala no boot desligado; Cloud/Custom=Configure, Local=Install.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KART_CLOUD_CATALOG_GUI_20261101: Cloud First selecionado entre Cloud/Local/Custom First; Cloud Model Configuration lista DeepSeek-R1/DeepSeek-V3/Qwen-Plus (testes), Qwen-Plus com indicador azul; disclaimer de Local File Retrieval; Software Store com categoria IA.
 # @estado_da_prova: inventário visual, não comprova modelo acessível, autenticação, chamada de API ou Hermes/gateway instalados; teste de conversa Xiao K continua PENDENTE.
+# @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_ONBOARD_SINGLE_WORKSPACE_20261101: kylin-bot onboard etapa Workspace, caminho /home/CentralDark-OS/.kylinbot/workspace, pergunta multi-workspace profiles 'enabled [No]'. A captura prova default No, nao confirmacao ou gravacao da escolha.
+# @direcao_operacional: uma CentralDark/workspace por padrao. Para manter single-workspace, confirmar No com Enter no proprio wizard. Nao criar perfis/agents paralelos; isolamentos futuros exigem decisao especifica. Nenhuma chave/segredo em recibos.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -75,6 +77,10 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
           if _cd_have timeout; then timeout 8s kylin-bot status 2>&1 || _cd_status 'Status nao concluido'
           else kylin-bot status 2>&1 || _cd_status 'Status nao concluido'; fi
         else _cd_status 'kylin-bot nao encontrado'; fi
+        # CENTRALDARK_KYLINBOT_ONBOARD_SINGLE_WORKSPACE_20261101 — captura do assistente onboard, sem reler dados sensiveis.
+        _cd_status '📂 ONBOARD_WORKSPACE_CAPTURA=/home/CentralDark-OS/.kylinbot/workspace'
+        _cd_status '🪬 MULTI_WORKSPACE_PERGUNTA_CAPTURA=enabled [No] (padrao; confirmacao ainda nao observada)'
+        _cd_status '🔧 DIRECAO=workspace unico CentralDark: confirmar No usando Enter no wizard, sem presumir configuracao aplicada'
         ;;
       7)
         _cd_title '💬 TESTAR CONVERSA (ACAO EXPLICITA)'
