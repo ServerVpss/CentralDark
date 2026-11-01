@@ -18,6 +18,8 @@ oracle_review_on_change: true
 
 `PROMPT_SELF_CACHE_P15=APLICÁVEL` (receita reutilizável, sem HIT medido); `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=VALIDATE_NEXT_ROUNDTRIP_AFTER_HERMES_RECEIPT`.
 
+**🍒+1 Self-Refinement no transporte SOL ↔ Hermes (01/11/2026):** regra de execução: **se não houve mudança de janela, sessão, conversa, owner ou controle, não redescobrir**. Reutilizar [fast-path e fila nativa comprovados](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#fast-path-bidirecional-e-fila-nativa-cloudroom-2026-11-01) junto de [RSI Loop](references/rsi-loop-method.md) e Kimetsu; verificar apenas a transição nova `QUEUED → RUNNING → RESULT_SENT → ACK`. Reutilizar a fila Cloudroom quando Hermes estiver trabalhando; fila enfileirada não equivale a aceite final. Hermes devolve `DONE/BLOCKED/FAIL` ao mesmo ChatGPT com `GOAL_ID|RESULT|EVIDENCE|RECEIPT|NEXT_CURSOR` e o SOL devolve o DELTA, sem enviar duas vezes sob incerteza. Prova real de `H2S-20261101-03`: mensagem chegou ao mesmo ChatGPT e foi analisada; ACK posterior ao Hermes `UNKNOWN` naquela medição, multi-turn automático ilimitado `UNKNOWN`. Nenhum runtime foi alterado. `NEXT_CURSOR=VERIFY_NEXT_COMPLETED_GOAL_RETURN_AND_QUEUE_CONSUMPTION`.
+
 <!-- CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 ## 🍒+1 Busca autorizada e continuidade por rotas eficazes
 
