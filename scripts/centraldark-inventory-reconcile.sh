@@ -8,6 +8,8 @@
 # @evidencia_visual_2026_11_01: Xiao K -> No available AI model detected; lista GUI Models vazia; providers disponíveis na tela Add Model.
 # @evidencia_visual_2026_11_01: KART AI Subsystem v1.3.0.0-ok0.4, categorias Cloud Model/Local Model/Custom Model; sem provar modelo conversacional.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KART_GUI_PREFERENCIAS_CAPTURA_20261101: KART Cloud/Local/Custom switches azuis; prioridade Cloud Model First (Kylin Certification); carregamento automático do modelo de fala no boot desligado; Cloud/Custom=Configure, Local=Install.
+# @evidencia_visual_2026_11_01: CENTRALDARK_KART_CLOUD_CATALOG_GUI_20261101: Cloud First selecionado entre Cloud/Local/Custom First; Cloud Model Configuration lista DeepSeek-R1/DeepSeek-V3/Qwen-Plus (testes), Qwen-Plus com indicador azul; disclaimer de Local File Retrieval; Software Store com categoria IA.
+# @estado_da_prova: inventário visual, não comprova modelo acessível, autenticação, chamada de API ou Hermes/gateway instalados; teste de conversa Xiao K continua PENDENTE.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -202,6 +204,14 @@ PY
         printf '☁️ PRIORIDADE_GUI_CAPTURA=Cloud Model First (Kylin Certification)\n'
         printf '🗣️ VOZ_GUI_CAPTURA=Automatically loading local speech model on system boot: desligado (cinza)\n'
         printf '🔧 ACOES_GUI_CAPTURA=Cloud/Custom: Configure; Local: Install\n'
+
+        # CENTRALDARK_KART_CLOUD_CATALOG_GUI_20261101 — inventário observado na GUI, não teste de inferência.
+        printf '🧿 PRIORIDADES_GUI=Cloud Model First, Local Model First, Custom Model First; Cloud First selecionado na captura\n'
+        printf '☁️ CATALOGO_CLOUD_GUI=DeepSeek-R1 (trial), DeepSeek-V3 (trial), Qwen-Plus (trial)\n'
+        printf '🔵 SELECAO_CLOUD_GUI=Qwen-Plus (indicador azul); não equivale a autenticação, disponibilidade ou resposta da IA\n'
+        printf '📂 AVISO_RETRIEVAL_GUI=Disclaimer for Local File Retrieval; interface informa que busca em arquivos exige cuidado com dados sensíveis\n'
+        printf '🛍️ LOJA_UKUI_GUI=Software Store visível com categorias, incluindo inteligência artificial; isso não atesta instalação de novos modelos\n'
+        printf '🔴 CONVERSA_XIAO_K=anteriormente sem modelo disponível; testar mensagem de ponta a ponta após configuração, sem presumir PASS\n'
         printf '🎯 ESTADO_MODELO_CONVERSACIONAL=sem modelo configurado no Xiao K na captura anterior; controles habilitados nao sao modelo pronto\n'
         printf '📌 PROVENIENCIA=captura enviada pelo CHEFE; configurações atuais devem ser lidas na GUI antes de afirmar mudança\n'
         printf '🔍 MODELO_CONVERSACIONAL_GUI_ATUAL=NAO_MEDIDO; ver modelos na GUI e opção 05 para KyTensor\n'
