@@ -102,6 +102,45 @@ except (OSError,ValueError,TypeError) as exc:
 PY
         else _cd_status 'SEM RECIBO LOCAL — NAO E ERRO DE RUNTIME'; fi
         ;;
+      10)
+        # CENTRALDARK_FORJA_SOURCE_GIT_GH_MENU10 — somente inventário da Forja Linux.
+        _cd_title '🍒 10 SOURCE / GIT / GH DA FORJA LINUX'
+        if _cd_have findmnt; then
+          printf 'Disco de dados: '
+          findmnt -no TARGET,SOURCE,FSTYPE /data 2>/dev/null || _cd_status 'UNKNOWN: /data sem montagem confirmada'
+        fi
+        if ! _cd_have git; then
+          _cd_status 'UNKNOWN: git indisponivel no Linux'
+          return 0
+        fi
+        local _cd_candidate='' _cd_repo=''
+        for _cd_candidate in "${CENTRALDARK_REPO:-}" "$HOME/CentralDark" /data/CentralDark /opt/CentralDark; do
+          [[ -n "$_cd_candidate" && -d "$_cd_candidate" ]] || continue
+          if git -C "$_cd_candidate" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            _cd_repo="$(git -C "$_cd_candidate" rev-parse --show-toplevel 2>/dev/null)" || _cd_repo=''
+            [[ -n "$_cd_repo" ]] && break
+          fi
+        done
+        if [[ -n "$_cd_repo" ]]; then
+          printf '📂 WORKSPACE=%s\n' "$_cd_repo"
+          printf '🔐 HEAD='; git -C "$_cd_repo" rev-parse --short HEAD 2>/dev/null || _cd_status 'UNKNOWN'
+          printf '🌿 BRANCH='; git -C "$_cd_repo" branch --show-current 2>/dev/null || _cd_status 'UNKNOWN'
+          printf '📝 ALTERACOES_TRACKED='
+          git -C "$_cd_repo" status --porcelain --untracked-files=no 2>/dev/null | awk 'END {print NR}'
+        else
+          _cd_status 'SOURCE=UNKNOWN: checkout nao localizado nos caminhos candidatos; sem criar ou copiar nada'
+        fi
+        if _cd_have gh; then
+          if gh auth status >/dev/null 2>&1; then
+            _cd_status '🟢 GH_LINUX=AUTH_OK'
+          else
+            _cd_status 'GH_LINUX=SEM_AUTENTICACAO_CONFIRMADA'
+          fi
+        else
+          _cd_status 'GH_LINUX=CLI_NAO_ENCONTRADA'
+        fi
+        _cd_status 'WINDOWS_NAO_E_EXECUTOR | VPS_SOMENTE_SOB_ORDEM | STATUS_READ_ONLY'
+        ;;
     esac
   }
   while :; do
@@ -113,12 +152,13 @@ PY
     printf '║ 🤖 05 KYTENSOR 🦀 06 KYLINBOT      ║\n'
     printf '║ 💬 07 CONVERSA 📊 08 DIAGNOSTICO   ║\n'
     printf '║ 📝 09 RECIBOS  🚪 00 SAIR           ║\n'
+    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'
     printf '%s╚══════════════════════════════════════╝%s\n' "$_cd_cyan" "$_cd_reset"
     printf '%s🍒 Escolha: %s' "$_cd_green" "$_cd_reset"
     IFS= read -r _cd_choice || exit 0
     case "$_cd_choice" in
       0|00|q|Q) exit 0 ;;
-      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09) _cd_section "$((10#$_cd_choice))" ;;
+      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10) _cd_section "$((10#$_cd_choice))" ;;
       *) _cd_status 'Opcao invalida' ;;
     esac
   done
