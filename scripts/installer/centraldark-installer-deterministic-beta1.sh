@@ -3,7 +3,7 @@
 # Version: 0.1.0-beta.1
 set -uo pipefail
 
-ROOT="${CENTRALDARK_ROOT:-/root/CentralDark}"
+ROOT="${CENTRALDARK_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)}"
 CANONICAL_INSTALLER="${CENTRALDARK_CANONICAL_INSTALLER:-$ROOT/install.sh}"
 STATE_DIR="${CENTRALDARK_INSTALLER_STATE_DIR:-$ROOT/revisoes/installer-state}"
 SESSION_ID="${CENTRALDARK_INSTALLER_SESSION_ID:-$(date +%Y%m%d-%H%M%S)}"
