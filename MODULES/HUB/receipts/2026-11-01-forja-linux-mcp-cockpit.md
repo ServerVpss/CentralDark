@@ -13,3 +13,7 @@ Base source: 14153f91ad9929cd5456d00c8ec50da74901cdc0. Writer: Codex nesta sess�
 - TAILSCALE: 1.104.4 Linux amd64; SHA256 oficial 624ea093d47d62cf56f17b8332d74b8decda4a1faa610ebc60a1de334b2b3dc9 confirmado. Nada de Funnel público.
 - ROLLBACK: remover apenas units/perfil desta instalação após preservar credencial no owner; reverter commit do escopo, sem reset/clean e sem tocar cloudroom. Não apagar .env original.
 - NEXT_CURSOR: autenticação Tailscale → Serve HTTPS privado 8080 → readback Windows/segundo dispositivo → login admin → provar campo e sondas pelo cockpit.
+
+## Readback posterior — 2026-11-01T19:34:27.097270+00:00
+
+Código aplicado: be3cc504b71d3601ee3f664b01fa94e1ee878e42 (commit local, ainda não publicado). Servidor compilado Linux :8080 ativo, HTTP200 medido também pelo Windows Casa. Túnel OpenAI mcp_status novamente PASS em 2026-11-01T19:33:46.047Z. Tailscale avançou para NeedsMachineAuth na tailnet servervpss.org.github, DNS centraldark-forja.tail6d7aa4.ts.net, IPv4 100.116.153.56; aguardando aprovação do dispositivo pelo administrador. HTTPS Serve e acesso por segundo dispositivo ainda não executados/provados. NEXT_CURSOR: aprovar somente a Forja → Serve HTTPS privado para 127.0.0.1:8080 → readback pela Casa → login admin → prova do campo e inventário pelo cockpit.
