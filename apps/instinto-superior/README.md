@@ -58,3 +58,15 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 ## 🪬 Manifesto incremental do harness privado
 
 O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o NEXT_CURSOR ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
+
+
+## Túnel OpenAI na Forja Linux — 2026-11-01T19:13:55.777094+00:00
+
+@owner: instinto.admin.mcp; @code_ref: src/lib/mcp-admin.functions.ts; src/components/central/McpAdminIntegrado.tsx
+@last_updated: 2026-11-01T19:13:55.777094+00:00
+O Admin MCP reutiliza autenticação Supabase e user_roles admin para receber CONTROL_PLANE_API_KEY. O servidor habilitado por CENTRALDARK_LOCAL_TUNNEL_ENABLED=1 grava atomicamente ~/.config/tunnel-client/centraldark-casa.env com modo 0600; o observador systemd do mesmo usuário inicia centraldark-mcp-tunnel.service. O valor nunca é retornado, logado ou enviado ao Vault remoto. O Cofre Supabase permanece dono das outras credenciais; isto configura o owner local específico do túnel. Sem sessão/admin, sem escrita. Readiness não equivale a chamada pelo plugin. Ambiente Linux: checkout medido, sem impor /root/CentralDark.
+Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. NEXT_CURSOR: build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
+
+@code_ref: src/lib/cockpit.functions.ts; @last_updated: 2026-11-01T19:22:05.143254+00:00. Inventário executa ss/pgrep no Linux nativo, sem exigir WSL/PowerShell. CASA é papel explícito, não deduzido de hostname. TCP/UDP e processo STDIO mantêm provas separadas de execução funcional.
+
+Rotação de chave: após gravação privada, a função administrativa solicita restart exclusivamente da unit centraldark-mcp-tunnel.service (argumentos fixos, sem segredo). Falha no restart retorna SAVED_RESTART_PENDING; nunca retorna erro que finja que a gravação não ocorreu.
