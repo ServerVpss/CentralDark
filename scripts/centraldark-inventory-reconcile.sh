@@ -14,6 +14,9 @@
 # @direcao_operacional: uma CentralDark/workspace por padrao. Para manter single-workspace, confirmar No com Enter no proprio wizard. Nao criar perfis/agents paralelos; isolamentos futuros exigem decisao especifica. Nenhuma chave/segredo em recibos.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_PROVIDER_FILTER_20261101: onboarding KylinBot > Providers > Provider filter com muitos provedores, incluindo GitHub Copilot, Claude Code CLI, Gemini CLI, LM Studio, llama.cpp, vLLM, SGLang, NVIDIA NIM e endpoint custom OpenAI-compatible; selecionador destacado "Done". Catalogação != autenticação ou modelo ativo.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_CODEX_OAUTH_SELECTED_GUI_20261101: no KylinBot Onboard > Providers > OpenAI Codex (OAuth) > Authentication, menu Provider filter mostra OpenAI Codex (OAuth) [active], enquanto foco azul está em OpenAI (API). Active é estado de seleção do provedor, não prova login ou chamada. Não registrar chaves nem tokens.
+# @evidencia_visual_2026_11_01: CENTRALDARK_OPENKYLIN_MCP_MULTIMODAL_CHANNELS_20261101: KylinBot Onboard > Channels mostra telegram, gmail, discord, slack, whatsapp, mqtt, webhook, voice-call; Done selecionado; lista não comprova canal configurado.
+# @pesquisa_oficial_2026_11_01: https://www.openkylin.top/news/4099-en.html (3.0 agentes/MCP); https://www.openkylin.top/news/3449-cn.html (AI SDK/Runtime texto, imagem, áudio); https://www.openkylin.top/news/4168-en.html (KART acesso multimodal). Vídeo e LLM local não comprovados como READY.
+# @prova_da_opcao13: usa consultas de leitura, sem credenciais, separa modelo listado de READY e execução MCP.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -234,6 +237,59 @@ PY
         printf '🔍 MODELO_CONVERSACIONAL_GUI_ATUAL=NAO_MEDIDO; ver modelos na GUI e opção 05 para KyTensor\n'
         printf '🔎 KylinBot CLI e Xiao K são componentes distintos; status de um não prova o outro\n'
         ;;
+
+      13)
+        # CENTRALDARK_OPENKYLIN_MCP_MULTIMODAL_CHANNELS_20261101
+        # Docs: https://www.openkylin.top/news/4099-en.html (MCP e KylinBot)
+        # Docs: https://www.openkylin.top/news/3449-cn.html (AI SDK + Runtime)
+        _cd_title '🪬 13 KART / MCP / MULTIMODAL / CHANNELS'
+        _cd_status '📚 OFICIAL=AI SDK/Runtime, KyTensor, agentes; openKylin 3.0 anuncia ferramentas MCP desktop'
+        if _cd_have dpkg-query; then
+          printf '🧠 PACOTES_RUNTIME_INSTALADOS:\n'
+          dpkg-query -W -f='${binary:Package} ${Version}\n' \
+            kylin-ai-runtime kylin-ai-subsystem kylin-ai-vector-engine \
+            kytensor-server kytensor-llm kylin-aiassistant kylin-bot 2>/dev/null ||
+            _cd_status 'UNKNOWN: algum pacote nao localizado'
+        else _cd_status 'UNKNOWN: dpkg-query ausente'; fi
+        if _cd_have kylin-bot; then
+          printf '🦀 CLI_INTERFACES:\n'
+          kylin-bot --help 2>&1 | grep -Ei '^  (agent|gateway|acp|channel|integrations|skills|models|providers|memory|cron)[[:space:]]' || true
+          _cd_status '⚪ ACP e protocolo distinto de MCP; interface CLI nao comprova servidor MCP ativo'
+        else _cd_status 'UNKNOWN: kylin-bot ausente'; fi
+        if _cd_have curl && _cd_have python3; then
+          local _cd_models=''
+          _cd_models="$(curl -fsS --max-time 6 -X POST \
+            -H 'Content-Type: application/json' -d '{}' \
+            http://127.0.0.1:8000/v2/repository/index 2>/dev/null)" || _cd_models=''
+          if [[ -n "$_cd_models" ]]; then
+            printf '%s' "$_cd_models" | python3 -c '
+import json,sys
+try:
+ models=json.load(sys.stdin)
+ groups={"VOZ_ASR_TTS":[],"EMBEDDINGS":[],"IMAGEM_OCR":[],"OUTROS":[]}
+ for m in models:
+  name=str(m.get("name",""))
+  state=str(m.get("state","SEM_STATUS_READY"))
+  display=name+" ["+state+"]"
+  if name.startswith(("asr","tts","ensemble-asr","ensemble-tts","punc","ensemble-punc")): groups["VOZ_ASR_TTS"].append(display)
+  elif name.startswith(("embd","ensemble-embd","tokenizer")): groups["EMBEDDINGS"].append(display)
+  elif name.startswith(("ocr","seg","matting")): groups["IMAGEM_OCR"].append(display)
+  else: groups["OUTROS"].append(display)
+ for k,items in groups.items():
+  print("  "+k+" count="+str(len(items))+" | "+", ".join(items))
+ print("  VIDEO_READY=NAO_COMPROVADO_NESTE_ENDPOINT")
+ print("  LLM_CHAT_READY=NAO_COMPROVADO_NESTE_ENDPOINT")
+ print("  CATALOGO != READY != RESPOSTA_GERADA")
+except (ValueError,TypeError):
+ print("MODELOS=JSON_INVALIDO")
+' || _cd_status 'UNKNOWN: falha ao classificar o inventario'
+          else _cd_status 'UNKNOWN: KyTensor sem resposta do repositorio'; fi
+        else _cd_status 'UNKNOWN: python3 ou curl ausentes'; fi
+        _cd_status '📱 CHANNELS_GUI_CAPTURA=telegram, gmail, discord, slack, whatsapp, mqtt, webhook, voice-call e outros'
+        _cd_status '⚪ CANAL_AUTENTICADO=UNKNOWN (menu de opcoes nao significa canal ativo)'
+        _cd_status '⚪ MCP_DESKTOP_RUNTIME=UNKNOWN (suporte documentado nao equivale a servico provado)'
+        _cd_status '🔒 READ_ONLY, SEM_SEGREDOS, SEM_NOVO_MOTOR, SEM_INSTALACAO'
+        ;;
     esac
   }
   while :; do
@@ -246,14 +302,15 @@ PY
     printf '║ 💬 07 CONVERSA 📊 08 DIAGNOSTICO   ║\n'
     printf '║ 📝 09 RECIBOS  🚪 00 SAIR           ║\n'
     printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'
-    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'
+    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'    printf '║ 🪬 13 MCP / MULTIMODAL / CHANNELS  ║\n'
+
 
     printf '%s╚══════════════════════════════════════╝%s\n' "$_cd_cyan" "$_cd_reset"
     printf '%s🍒 Escolha: %s' "$_cd_green" "$_cd_reset"
     IFS= read -r _cd_choice || exit 0
     case "$_cd_choice" in
       0|00|q|Q) exit 0 ;;
-      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12) _cd_section "$((10#$_cd_choice))" ;;
+      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12|13) _cd_section "$((10#$_cd_choice))" ;;
       *) _cd_status 'Opcao invalida' ;;
     esac
   done
