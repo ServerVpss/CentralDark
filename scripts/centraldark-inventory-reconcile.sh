@@ -2,6 +2,13 @@
 # CentralDark owner unico: inventario, scan, diff, pulse. Um JSON canonico.
 
 # CENTRALDARK_KYLIN_MENU_INCREMENTAL_20261101
+# @last_updated: 2026-11-01T02:47:46.131Z
+# @evidencia_visual_2026_11_01: UKUI 3.0 huanghe, hostname CentralDark-OS, kernel 7.0.0-3-generic, CPU i5-10400F, RAM 16GB, armazenamento reportado 480GB.
+# @evidencia_visual_2026_11_01: UKUI System Monitor aberto com abas Processo/Servico/Disco; processo Xiao K = /usr/bin/kylin-aiassistant; System Monitor = /usr/bin/ukui-system-monitor.
+# @evidencia_visual_2026_11_01: Xiao K -> No available AI model detected; lista GUI Models vazia; providers disponíveis na tela Add Model.
+# @evidencia_visual_2026_11_01: KART AI Subsystem v1.3.0.0-ok0.4, categorias Cloud Model/Local Model/Custom Model; sem provar modelo conversacional.
+# @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
+# @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
 # @owner: scripts/centraldark-inventory-reconcile.sh
 # @doc_ref: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md
@@ -83,7 +90,7 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
       8)
         _cd_title '📊 DIAGNOSTICO DE LEITURA'
         local n
-        for n in 1 2 3 4 5 6; do _cd_section "$n"; done
+        for n in 1 2 3 4 5 6 9 10 11 12; do _cd_section "$n"; done
         ;;
       9)
         _cd_title '📝 RECIBOS EXISTENTES'
@@ -141,6 +148,57 @@ PY
         fi
         _cd_status 'WINDOWS_NAO_E_EXECUTOR | VPS_SOMENTE_SOB_ORDEM | STATUS_READ_ONLY'
         ;;
+
+      11)
+        # CENTRALDARK_UKUI_MONITOR_XIAOK_KART_20261101 — monitor existente, nao um segundo HUD.
+        _cd_title '📊 11 MONITOR UKUI / SISTEMA E SERVICOS'
+        printf '🖥️ HOST='; hostname 2>/dev/null || _cd_status 'UNKNOWN'
+        printf '🐧 KERNEL='; uname -r 2>/dev/null || _cd_status 'UNKNOWN'
+        if [[ -r /etc/os-release ]]; then
+          ( . /etc/os-release; printf '🐧 SISTEMA=%s\n' "${PRETTY_NAME:-UNKNOWN}" )
+        fi
+        if [[ -r /proc/cpuinfo ]]; then
+          awk -F: '/^model name[[:space:]]*:/ {gsub(/^[[:space:]]+/, "", $2); print "⚙️ CPU=" $2; exit}' /proc/cpuinfo
+        fi
+        if _cd_have free; then printf '🧠 MEMORIA:\n'; free -h; else _cd_status 'MEMORIA=UNKNOWN'; fi
+        printf '💾 DISCO:\n'
+        if _cd_have df; then df -hT / /data 2>/dev/null || df -hT / 2>/dev/null || _cd_status 'DISCO=UNKNOWN'; fi
+        if _cd_have ps; then
+          printf '📈 PROCESSOS TOP CPU (AMOSTRA VIVA):\n'
+          ps -eo pid,comm,%cpu,%mem --sort=-%cpu 2>/dev/null | sed -n '1,13p'
+        else _cd_status 'PROCESSOS=UNKNOWN'; fi
+        if _cd_have systemctl; then
+          printf '🧩 SERVICOS ATIVOS (AMOSTRA):\n'
+          systemctl list-units --type=service --state=running --plain --no-pager --no-legend 2>/dev/null | sed -n '1,16p'
+        else _cd_status 'SERVICOS=UNKNOWN'; fi
+        printf '🖥️ UKUI_SYSTEM_MONITOR='
+        if _cd_have ukui-system-monitor; then command -v ukui-system-monitor
+        else _cd_status 'NAO_LOCALIZADO_NO_PATH'; fi
+        ;;
+      12)
+        _cd_title '🧿 12 XIAO K / KART / MODELOS GUI'
+        printf '🦀 KYLIN_AIASSISTANT='
+        if _cd_have kylin-aiassistant; then command -v kylin-aiassistant
+        else _cd_status 'NAO_LOCALIZADO_NO_PATH'; fi
+        if _cd_have dpkg-query; then
+          dpkg-query -W -f='${binary:Package} ${Version}\n' \
+            kylin-ai-subsystem kylin-aiassistant kylin-bot kylin-ai-runtime 2>/dev/null ||
+            _cd_status 'UNKNOWN: alguns pacotes nao constam'
+        fi
+        if _cd_have pgrep; then
+          local _cd_proc
+          for _cd_proc in kylin-aiassistant kylin-ai-runtime kylin-bot kytensor; do
+            if pgrep -f "(^|/)$_cd_proc([[:space:]]|$)" >/dev/null 2>&1; then
+              printf '🟢 PROCESSO_OBSERVADO=%s (nao prova modelo configurado)\n' "$_cd_proc"
+            else
+              printf '⚪ PROCESSO_NAO_OBSERVADO=%s\n' "$_cd_proc"
+            fi
+          done
+        else _cd_status 'PROCESSOS_IA=UNKNOWN'; fi
+        printf '📷 CAPTURA_HISTORICA=UKUI 3.0 huanghe; KART 1.3.0.0-ok0.4; Xiao K sem modelo na interface de Chat\n'
+        printf '🔍 MODELO_CONVERSACIONAL_GUI_ATUAL=NAO_MEDIDO; ver modelos na GUI e opção 05 para KyTensor\n'
+        printf '🔎 KylinBot CLI e Xiao K são componentes distintos; status de um não prova o outro\n'
+        ;;
     esac
   }
   while :; do
@@ -152,13 +210,14 @@ PY
     printf '║ 🤖 05 KYTENSOR 🦀 06 KYLINBOT      ║\n'
     printf '║ 💬 07 CONVERSA 📊 08 DIAGNOSTICO   ║\n'
     printf '║ 📝 09 RECIBOS  🚪 00 SAIR           ║\n'
-    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'
+    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'
+
     printf '%s╚══════════════════════════════════════╝%s\n' "$_cd_cyan" "$_cd_reset"
     printf '%s🍒 Escolha: %s' "$_cd_green" "$_cd_reset"
     IFS= read -r _cd_choice || exit 0
     case "$_cd_choice" in
       0|00|q|Q) exit 0 ;;
-      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10) _cd_section "$((10#$_cd_choice))" ;;
+      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12) _cd_section "$((10#$_cd_choice))" ;;
       *) _cd_status 'Opcao invalida' ;;
     esac
   done
