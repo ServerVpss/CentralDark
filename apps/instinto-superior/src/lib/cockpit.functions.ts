@@ -1,4 +1,6 @@
 // #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
+// @last_updated: 2026-11-01T19:41:24.979255+00:00 @implementado: autenticação do Omni local server-side, rótulo Forja Linux; sem promoção de projeções a execução.
+// #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
 // @last_updated: 2026-11-01T19:22:05.143254+00:00 @implementado: sondas nativas Linux e papel CASA explícito; sem inferir VPS por hostname.
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
@@ -166,8 +168,13 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+    carregarEnvForja();
+    const headers: Record<string, string> = { accept: "application/json" };
+    const localOwner = base === apiBase() && ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname);
+    const routerToken = process.env['CENTRALDARK_ROUTER_TOKEN'];
+    if (localOwner && routerToken) headers['authorization'] = `Bearer ${routerToken}`;
     const resposta = await fetch(`${base}${path}`, {
-      headers: { accept: "application/json" },
+      headers,
       cache: "no-store",
       signal: controller.signal,
     });
@@ -224,8 +231,8 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
 }
 
 async function medirReachable(url: string, casaOnly = false, siteCheck = false): Promise<Probe> {
-  if (casaOnly && process.platform !== "win32") {
-    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
+  if (casaOnly && origemLocalScreenpipe() !== "CASA") {
+    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_HOST_NOT_CONFIRMED", dados: null };
   }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -764,7 +771,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
-      ? "Casa Windows · Screenpipe 3030/health · HTTP e status real"
+      ? `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · Screenpipe 3030/health · HTTP e status real`
       : hostScreenpipe === "VPS"
         ? "Casa Windows · Tailscale privado · Screenpipe 3030/health · HTTP e status real"
         : "Casa Windows · sem adapter/medição remota neste servidor";
@@ -855,7 +862,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
-      casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
+      casaSiteFonte: `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · GET ${casaSiteUrl} · só HTTP (não prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeAudioStatus: texto(screenpipeCasa.dados?.["audio_status"]),

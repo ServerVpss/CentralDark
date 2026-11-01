@@ -1,3 +1,5 @@
+// #OBSERVACOES# @owner: instinto.status @doc_ref: README.md
+// @last_updated: 2026-11-01T19:41:24.979255+00:00 @implementado: owner do site local independente do sistema operacional.
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -143,7 +145,7 @@ export function StatusPanel() {
   const remote: Estado = d?.desktop ?? unknown;
   const medidoEm = d?.atualizadoEm;
   const audioScreenpipe = d?.screenpipeAudioStatus?.toLowerCase() ?? null;
-  const audioSemSinal = audioScreenpipe === "stale" || audioScreenpipe === "stalled" || audioScreenpipe === "unavailable";
+  const audioSemSinal = audioScreenpipe !== null && ["stale", "stalled", "unavailable", "no_input_device", "disabled", "no_audio"].includes(audioScreenpipe);
   const screenpipeVisualAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^CAPTURA VISUAL: FRESH/.test(linha)));
   const screenpipeImagemAtual = Boolean(d?.screenpipeEvents?.some((linha) => /^ÚLTIMO FRAME:/.test(linha)));
   // d?.screenpipeDetail === "degraded" continua sendo uma degradação interna;
@@ -160,7 +162,7 @@ export function StatusPanel() {
   ];
 
   const rotas = [
-    { id: "casa-site", owner: "Casa Windows / Vite", estado: d?.casaSite ?? unknown, fonte: d?.casaSiteFonte ?? "Casa/Site local · sem medição (padrão 8080)" },
+    { id: "casa-site", owner: "Cockpit / host local", estado: d?.casaSite ?? unknown, fonte: d?.casaSiteFonte ?? "Casa/Site local · sem medição (padrão 8080)" },
     { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
     { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
@@ -342,7 +344,7 @@ export function StatusPanel() {
                   <div className="mb-3">
                     <p className="text-xs font-semibold">Sensores Screenpipe · leitura separada</p>
                     <ul className="mt-2 space-y-2" aria-live="polite">
-                      <SensorScreenpipe nome="Porta e health" estado={screenpipeSaude} detalhe="3030/health · processo Screenpipe medido na Casa" />
+                      <SensorScreenpipe nome="Porta e health" estado={screenpipeSaude} detalhe="3030/health · processo Screenpipe medido na Forja/Casa" />
                       <SensorScreenpipe nome="Captura visual" estado={screenpipeVisualAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeVisualAtual ? "telas gravando agora" : "sem frame visual fresco nesta leitura"} />
                       <SensorScreenpipe nome="Imagem / último frame" estado={screenpipeImagemAtual ? "PASS" : fresco ? "RUNNING" : "UNKNOWN"} detalhe={screenpipeImagemAtual ? "última imagem registrada" : "sem último frame confirmado"} />
                       <SensorScreenpipe nome="Áudio" estado={audioSemSinal ? "RUNNING" : fresco && d?.screenpipeAudioStatus ? "PASS" : "UNKNOWN"} detalhe={audioSemSinal ? "Nenhum sinal de áudio recente" : "Sinal de áudio detectado"} rotulo={audioSemSinal ? "Sem sinal de áudio" : undefined} />

@@ -70,3 +70,12 @@ Estado: implementação local, testes/runtime em validação; nenhuma promoção
 @code_ref: src/lib/cockpit.functions.ts; @last_updated: 2026-11-01T19:22:05.143254+00:00. Inventário executa ss/pgrep no Linux nativo, sem exigir WSL/PowerShell. CASA é papel explícito, não deduzido de hostname. TCP/UDP e processo STDIO mantêm provas separadas de execução funcional.
 
 Rotação de chave: após gravação privada, a função administrativa solicita restart exclusivamente da unit centraldark-mcp-tunnel.service (argumentos fixos, sem segredo). Falha no restart retorna SAVED_RESTART_PENDING; nunca retorna erro que finja que a gravação não ocorreu.
+
+
+## Omni Router nativo conectado — 2026-11-01T19:41:24.979255+00:00
+
+@code_ref: src/lib/cockpit.functions.ts; src/components/central/StatusPanel.tsx
+@last_updated: 2026-11-01T19:41:24.979255+00:00
+Owner API existente: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py, iniciado pelo scripts/launch_omni_router_direct.py no Linux, loopback8099. Dependências isoladas na .venv do módulo, usando somente FastAPI/uvicorn/pydantic/requests do manifesto atual. Token privado no .env canônico e consumido server-side pelo cockpit apenas para o owner API loopback; não enviado a destinos externos ou navegador. Health do cockpit aponta ao mesmo owner8099, substituindo binding Windows9101 no ambiente local. Grafo/receipts seguem NOT_REVALIDATED quando só projetam arquivos; heartbeat mede processo, não inferência. Próxima prova: rotas reais, negação sem token, readback pelo cockpit e providers separados.
+
+Screenpipe Linux: binário npm oficial da mesma versão0.4.51 já fixada no projeto; serviço nativo screenpipe.service do usuário, loopback3030 e dados privados em ~/.screenpipe. Captura local, sem cloud sync e telemetria desligada. Sensor identifica Forja Linux; no_input_device/disabled/no_audio não são rotulados como áudio detectado. Frames e áudio precisam de timestamps/contagem reais; health200 sozinho não prova captura.
