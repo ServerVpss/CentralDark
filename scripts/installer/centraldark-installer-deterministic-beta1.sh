@@ -113,6 +113,11 @@ step_state() {
     10) canonical_ok && printf '%s' "$S_READY" || printf '%s' "$S_BLOCKED" ;;
     11) provider_state ;;
     12) probe_webhook && printf '%s' "$S_PROVED" || printf '%s' "$S_READY" ;;
+    13) if have gh && gh auth status --hostname github.com >/dev/null 2>&1; then
+          printf '%s' "$S_READY"
+        else
+          printf '%s' "$S_SETUP"
+        fi ;;
     *) printf '%s' "$S_UNKNOWN" ;;
   esac
 }
@@ -183,6 +188,8 @@ run_option() {
         print_state "Auto-update/webhook" "$S_READY" "não provado; pode ser instalado sem matar o menu"
       fi
       ;;
+    13) run_canonical "GitHub CLI / login (sem DISPLAY)" --gh-auth \
+          && print_state "GitHub CLI" "$S_PROVED" "gh auth status + repo privado verificados" ;;
     0) return 99 ;;
     *) print_state "Opção" "$S_UNKNOWN" "entrada inválida; nenhuma mutação executada" ;;
   esac
@@ -201,6 +208,7 @@ show_menu() {
   print_state "MCP" "$(step_state 5)"
   print_state "Provider IA" "$(step_state 11)"
   print_state "Auto-update/webhook" "$(step_state 12)"
+  print_state "GitHub CLI" "$(step_state 13)"
   printf '\n'
   printf ' [1] Verificar ambiente        [7] Login Cloudflare\n'
   printf ' [2] Instalar base             [8] DNS wildcard\n'
@@ -208,6 +216,7 @@ show_menu() {
   printf ' [4] Cloudflare / DNS         [10] Atualizar instalador\n'
   printf ' [5] MCP CentralDark          [11] Provider IA (opcional)\n'
   printf ' [6] Checagem completa        [12] Auto-update / webhook\n'
+  printf ' [13] GitHub CLI / login (SSH sem DISPLAY)\n'
   printf ' [0] Sair\n'
   printf '\nLegenda: 🟢 PROVED | 🔵 READY | 🟡 SETUP | 🟠 BLOCKED | ⚪ OPTIONAL | 🟣 UNKNOWN\n'
 }
