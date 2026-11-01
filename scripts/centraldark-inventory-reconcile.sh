@@ -7,6 +7,7 @@
 # @evidencia_visual_2026_11_01: UKUI System Monitor aberto com abas Processo/Servico/Disco; processo Xiao K = /usr/bin/kylin-aiassistant; System Monitor = /usr/bin/ukui-system-monitor.
 # @evidencia_visual_2026_11_01: Xiao K -> No available AI model detected; lista GUI Models vazia; providers disponíveis na tela Add Model.
 # @evidencia_visual_2026_11_01: KART AI Subsystem v1.3.0.0-ok0.4, categorias Cloud Model/Local Model/Custom Model; sem provar modelo conversacional.
+# @evidencia_visual_2026_11_01: CENTRALDARK_KART_GUI_PREFERENCIAS_CAPTURA_20261101: KART Cloud/Local/Custom switches azuis; prioridade Cloud Model First (Kylin Certification); carregamento automático do modelo de fala no boot desligado; Cloud/Custom=Configure, Local=Install.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -196,6 +197,13 @@ PY
           done
         else _cd_status 'PROCESSOS_IA=UNKNOWN'; fi
         printf '📷 CAPTURA_HISTORICA=UKUI 3.0 huanghe; KART 1.3.0.0-ok0.4; Xiao K sem modelo na interface de Chat\n'
+        # CENTRALDARK_KART_GUI_PREFERENCIAS_CAPTURA_20261101: observação visual, não leitura viva das preferências.
+        printf '🧿 KART_GUI_CAPTURA=Cloud Model, Local Model e Custom Model: controles azuis/ligados na imagem\n'
+        printf '☁️ PRIORIDADE_GUI_CAPTURA=Cloud Model First (Kylin Certification)\n'
+        printf '🗣️ VOZ_GUI_CAPTURA=Automatically loading local speech model on system boot: desligado (cinza)\n'
+        printf '🔧 ACOES_GUI_CAPTURA=Cloud/Custom: Configure; Local: Install\n'
+        printf '🎯 ESTADO_MODELO_CONVERSACIONAL=sem modelo configurado no Xiao K na captura anterior; controles habilitados nao sao modelo pronto\n'
+        printf '📌 PROVENIENCIA=captura enviada pelo CHEFE; configurações atuais devem ser lidas na GUI antes de afirmar mudança\n'
         printf '🔍 MODELO_CONVERSACIONAL_GUI_ATUAL=NAO_MEDIDO; ver modelos na GUI e opção 05 para KyTensor\n'
         printf '🔎 KylinBot CLI e Xiao K são componentes distintos; status de um não prova o outro\n'
         ;;
