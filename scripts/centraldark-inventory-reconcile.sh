@@ -12,6 +12,7 @@
 # @estado_da_prova: inventário visual, não comprova modelo acessível, autenticação, chamada de API ou Hermes/gateway instalados; teste de conversa Xiao K continua PENDENTE.
 # @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_ONBOARD_SINGLE_WORKSPACE_20261101: kylin-bot onboard etapa Workspace, caminho /home/CentralDark-OS/.kylinbot/workspace, pergunta multi-workspace profiles 'enabled [No]'. A captura prova default No, nao confirmacao ou gravacao da escolha.
 # @direcao_operacional: uma CentralDark/workspace por padrao. Para manter single-workspace, confirmar No com Enter no proprio wizard. Nao criar perfis/agents paralelos; isolamentos futuros exigem decisao especifica. Nenhuma chave/segredo em recibos.
+# @evidencia_visual_2026_11_01: CENTRALDARK_KYLINBOT_PROVIDER_FILTER_20261101: onboarding KylinBot > Providers > Provider filter com muitos provedores, incluindo GitHub Copilot, Claude Code CLI, Gemini CLI, LM Studio, llama.cpp, vLLM, SGLang, NVIDIA NIM e endpoint custom OpenAI-compatible; selecionador destacado "Done". Catalogação != autenticação ou modelo ativo.
 # @evidencia_terminal_anterior: KyTensor /v2/health/ready HTTP 200; tts_melo, ensemble-tts_melo e model_bank READY; KylinBot OpenRouter sem API key no teste, conversa falhou.
 # @limite_prova: capturas do CHEFE = observação histórica; opções 11/12 realizam medição sob demanda no Linux; não houve execução desta mudança na Forja.
 #OBSERVACOES#
@@ -81,6 +82,11 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
         _cd_status '📂 ONBOARD_WORKSPACE_CAPTURA=/home/CentralDark-OS/.kylinbot/workspace'
         _cd_status '🪬 MULTI_WORKSPACE_PERGUNTA_CAPTURA=enabled [No] (padrao; confirmacao ainda nao observada)'
         _cd_status '🔧 DIRECAO=workspace unico CentralDark: confirmar No usando Enter no wizard, sem presumir configuracao aplicada'
+        # CENTRALDARK_KYLINBOT_PROVIDER_FILTER_20261101 — seleção visual de provedores disponíveis no assistente, não autenticação ou inferência.
+        _cd_status '🧩 PROVIDER_FILTER_GUI=GitHub Copilot, Claude Code (CLI), Gemini CLI, LM Studio, llama.cpp server, SGLang, vLLM, NVIDIA NIM e Custom OpenAI-compatible endpoint'
+        _cd_status '🔎 CATALOGO_GUI=outras opções visíveis: Cohere, KiloCLI, Hugging Face, DeepInfra, SiliconFlow, OpenAI-compatible; lista não equivale a provedor instalado/configurado'
+        _cd_status '⚪ PROVEDOR_ESCOLHIDO=UNKNOWN; o cursor está em Done, sem evidência de login, chave válida ou resposta'
+        _cd_status '🍒 NEXT=confirmar o filtro → escolher provedor existente/permitido → configurar autenticação local → testar primeira resposta, sem expor segredos'
         ;;
       7)
         _cd_title '💬 TESTAR CONVERSA (ACAO EXPLICITA)'
