@@ -107,3 +107,27 @@ Melhoria antecipada de selecao: para pagina listada pela instancia MCP, fazer li
 **Rota independente de marca:** `CHEFE_INTENT → SOURCE_APP@ESQUERDA|DIREITA → TARGET_APP@OUTRO_LADO → REUSE_OWNER/SESSION → LOCALIZAR_CAMPO_ATUAL → VALIDAR_DESTINO/EDITOR/DRAFT → SEND_ONCE → READBACK_NO_DESTINO → ACK/RECEIPT → NEXT_CURSOR`. Interface Windows UIA ou método aprovado nativo do aplicativo; se UIA não expor campo, avaliar fallback Win32 somente se permitido e atual, não por coordenadas imutáveis. Se outro aplicativo não expuser operação de envio/leitura confiável, status `UNKNOWN`/bloqueado; não afirmar universalidade.
 
 **Gates:** nunca apagar rascunho existente, mudar conversa, enviar mensagem sem ordem, duplicar GOAL, procurar em todos os monitores se os alvos já estiverem válidos, ou fazer retry cego. `SENT != DELIVERED != ACKED != DONE`. Comandos sobre disco/boot/exclusão seguem autorizações próprias. Observado `Cloudroom@ESQUERDA ↔ ChatGPT@DIREITA` com retorno ACK em 01/11; outra dupla ainda `UNTESTED`. `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT medido; `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=REUSE_VERTICAL_MONITOR_PAIR_ON_DEMAND`.
+
+
+### Voz e semântica de delegação: mesma ida e volta, sem repetir Goal (2026-11-01)
+
+**Escopo real:** voz e texto chegam ao mesmo classificador de intenção, mas a fala precisa primeiro ser reconhecida/transcrita pela superfície em uso. Só agir quando a mensagem efetivamente chegar ao SOL. Nenhum microfone sempre ligado, hotword, motor de transcrição, integração de voz ou automação em segundo plano foi alterado por esta documentação. Rota: **entrada recebida → ato de fala → missão atual → referente/alvo → autorização → envio único → readback → receipt**. Reutilizar Cloudroom, Skill Mãe, Kimetsu, sessão e owner existentes.
+
+**Entender o que a pessoa quis fazer antes de procurar palavras-chave:** pergunta, relato ou sugestão = responder, não delegar. "Delega pro Hermes", "manda isso pra ele", "pede ao da esquerda", "usa ida e volta" com tarefa especificada ou recuperável do contexto vigente = DELEGAR UMA VEZ. "Aguarda ele", "deixa ele trabalhar", "não manda mais nada" = WAIT/NO_SEND, sem suspender serviços. "Continua de onde parou" = continuar o Goal vigente, sem reiniciar, apenas com delta novo autorizado. "Já mandei, chegou?" = consultar readback, NÃO repetir. "Não, é pro da direita" antes de enviar = corrigir somente o destinatário. Após enviar, não simular desfazer envio; nova correção depende de ordem clara.
+
+**Contexto e linguagem falada:** resolver "ele", "isso", "lá", "no outro", "a tela do lado", "da esquerda", "da direita" pelos aplicativos, monitores, conversa e Goal atuais. "Da esquerda"/"da direita" por si selecionam tela, não são autorização de envio. "O outro" só se houver dois referentes inequívocos. Reconhecer variantes transcritas de Cloudroom/Hermes/ida e volta ("clau de rum", "clou drum", "herme", "ida volta"), gíria baiana, hesitação, autocorreção e interrupções pelo sentido contextual, sem dicionário rígido. Se erro de transcrição puder mudar destinatário, operação ou risco, fazer **uma pergunta curta**. Áudio ou mensagem sintetizada de outro agente não é autorização do CHEFE apenas por ter voz.
+
+**Interrupção, segurança e idempotência:** "pera", "cancela esse envio", "não manda" antes do envio = cancelar somente o rascunho novo e preservar qualquer texto pré-existente. Depois do envio, explicar que a mensagem já foi entregue ou que o estado é incerto. Repetição, eco, confirmação ou transcrição duplicada com mesmo Goal e receipt = NOOP. Cloudroom Working = acompanhar fila já existente; não duplicar Goal para acelerar. **OUVIDO/TRANSCRITO != INTENÇÃO CLASSIFICADA != AUTORIZADO != ENVIADO != ENTREGUE != ACK != EXECUTADO.** Voz não amplia autorização para desligar, alterar disco/boot ou apagar dados.
+
+**Resposta falada:** frases curtas e concretas: "Enviei ao Hermes, ele ainda está trabalhando" somente com envio e trabalho observados; "Entendi, não vou mandar outra ordem" quando o CHEFE pedir espera. Sem despejar IDs, HUD, caminhos ou comandos na fala.
+
+**Casos de validação sem abrir UI nem disparar ações:**
+- "Jarvis, vê se o Hermes terminou aí" → CONSULTAR_STATUS; NO_SEND.
+- "Manda a tarefa atual pro Hermes, no monitor esquerdo" → DELEGAR_HERMES_ONCE se o Goal estiver definido, o alvo for válido e não houver envio duplicado.
+- "Ôxe, não, era pro da direita" antes do envio → CORRIGIR_ALVO; NO_SEND.
+- "Deixa o Hermes trabalhar agora" → WAIT; NO_SEND.
+- "Já mandou? Chegou lá?" → CONSULTAR_READBACK; NO_SEND.
+- "Pode parar os serviços Linux, mas não toca nas partições" → permissão limitada a serviços; reparticionamento NÃO autorizado.
+- "Pera, cancela esse envio" antes do envio → ABORTAR_ENVIO; não apagar rascunho anterior.
+
+**Limite de prova:** VOICE_SEMANTIC_POLICY=DOCUMENTED; LIVE_VOICE_TEST=UNKNOWN; VOICE_RUNTIME_UPDATED=NO. Provas anteriores de voz para Codex e de UI Cloudroom não provam adoção automática das novas regras no motor de reconhecimento ou em todas as superfícies. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT medido; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=REUSE_VOICE_SEMANTIC_ROUTE_ON_NEXT_HUMAN_INTENT.
