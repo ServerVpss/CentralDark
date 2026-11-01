@@ -31,7 +31,23 @@
 # @last_updated: 2026-11-01T02:16:10.695Z
 # @escopo: menu read-only incremental no owner unico, sem alterar pulse/inventory
 # @estado: diagnosticos de IA nativa; conversa somente sob escolha explicita
-# @next_cursor: transferir source para Forja Linux e testar --menu via SSH
+# @next_cursor: instalar checkout na Forja; executar o mesmo owner sem caminhos fixos de usuario/host
+# @intent: PORTABILIDADE_LINUX_FORJA_VPS_20261101 — owner preservado, estado portavel, nenhum segundo reconciliador
+CD_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+CD_REPO_DIR="${CENTRALDARK_REPO:-${CENTRALDARK_ROOT:-$(cd "$CD_SCRIPT_DIR/.." && pwd -P)}}"
+CD_STATE_DIR="${CENTRALDARK_INVENTORY_STATE_DIR:-${CENTRALDARK_STATE_DIR:-}}"
+if [[ -z "$CD_STATE_DIR" ]]; then
+  if [[ -w /var/lib/centraldark/inventory-reconcile ]] || { [[ ! -e /var/lib/centraldark/inventory-reconcile ]] && [[ -w /var/lib/centraldark ]]; }; then
+    CD_STATE_DIR=/var/lib/centraldark/inventory-reconcile
+  else
+    CD_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/centraldark/inventory-reconcile"
+  fi
+fi
+CD_MAIN_PULSE_DIR="${CENTRALDARK_MAIN_PULSE_DIR:-$HOME/.centraldark/main-pulse}"
+if [[ "$CD_REPO_DIR" != /* || "$CD_STATE_DIR" != /* ]]; then
+  echo 'BLOCKED: repositorio e estado precisam de caminhos absolutos' >&2
+  exit 64
+fi
 if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
   set -u
   if [[ -t 1 ]]; then
@@ -136,7 +152,7 @@ if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
         ;;
       9)
         _cd_title '📝 RECIBOS EXISTENTES'
-        local p='/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json'
+        local p="$CD_STATE_DIR/centraldark-inventory-reconcile.json"
         if [[ -r "$p" && -s "$p" ]] && _cd_have python3; then
           python3 - "$p" <<'PY'
 import json,sys
@@ -345,14 +361,14 @@ if [[ "${1:-}" == "--pulse" ]]; then
   shift
   if [[ "${1:-}" == "--plan" ]]; then
     echo "PULSE_PLAN=READ_ONLY"
-    printf "HEAD="; git -C /root/CentralDark rev-parse HEAD
-    printf "ORIGIN_MAIN="; git -C /root/CentralDark rev-parse origin/main
+    printf "HEAD="; git -C "$CD_REPO_DIR" rev-parse HEAD
+    printf "ORIGIN_MAIN="; git -C "$CD_REPO_DIR" rev-parse origin/main
     exit 0
   fi
   umask 077
-  _json="/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json"
-  _pulse_state="/var/lib/centraldark/inventory-reconcile/.pulse-$$"
-  mkdir -p /var/lib/centraldark/inventory-reconcile
+  _json="$CD_STATE_DIR/centraldark-inventory-reconcile.json"
+  _pulse_state="$CD_STATE_DIR/.pulse-$$"
+  mkdir -p "$CD_STATE_DIR"
   _saved="$(python3 - "$_json" <<'PY'
 import json,sys
 try:
@@ -361,7 +377,7 @@ try:
 except (OSError,ValueError,TypeError):print("")
 PY
 )"
-  if [[ -z "$_saved" && -s /root/.centraldark/main-pulse/last-seen-sha ]]; then _saved="$(tr -d "[:space:]" </root/.centraldark/main-pulse/last-seen-sha)"; fi
+  if [[ -z "$_saved" && -s "$CD_MAIN_PULSE_DIR/last-seen-sha" ]]; then _saved="$(tr -d "[:space:]" <"$CD_MAIN_PULSE_DIR/last-seen-sha")"; fi
   if [[ "$_saved" =~ ^[a-f0-9]{40}$ ]]; then printf "%s\n" "$_saved" >"$_pulse_state"; fi
   _receipt() {
     local code="$1"
@@ -384,15 +400,15 @@ PY
     rm -f -- "$_pulse_state"
     return "$code"
   }
-REPO="${CENTRALDARK_REPO:-/root/CentralDark}"
-STATE_DIR="/var/lib/centraldark/inventory-reconcile"
+REPO="$CD_REPO_DIR"
+STATE_DIR="$CD_STATE_DIR"
 STATE_FILE="$STATE_DIR/.pulse-$$"
-LOG_FILE="/root/.centraldark/main-pulse/pulse.log"
+LOG_FILE="$CD_MAIN_PULSE_DIR/pulse.log"
 LOCK="$STATE_DIR/.lock"
-MICRODEPLOY="${CENTRALDARK_MAIN_PINNED_MICRODEPLOY:-/root/CentralDark/scripts/vps/main-pinned-microdeploy.sh}"
-HERMES_INBOX="${CENTRALDARK_HERMES_INBOX:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/pendente}"
-HERMES_ANDAMENTO="${CENTRALDARK_HERMES_ANDAMENTO:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/em-andamento}"
-HERMES_CONCLUIDAS="${CENTRALDARK_HERMES_CONCLUIDAS:-/root/CentralDark/apps/modulos/HERMES-CORE/missions/concluidas}"
+MICRODEPLOY="${CENTRALDARK_MAIN_PINNED_MICRODEPLOY:-$REPO/scripts/vps/main-pinned-microdeploy.sh}"
+HERMES_INBOX="${CENTRALDARK_HERMES_INBOX:-$REPO/apps/modulos/HERMES-CORE/missions/pendente}"
+HERMES_ANDAMENTO="${CENTRALDARK_HERMES_ANDAMENTO:-$REPO/apps/modulos/HERMES-CORE/missions/em-andamento}"
+HERMES_CONCLUIDAS="${CENTRALDARK_HERMES_CONCLUIDAS:-$REPO/apps/modulos/HERMES-CORE/missions/concluidas}"
 SOURCE=""
 TRIGGER="timer"
 
@@ -404,7 +420,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-mkdir -p "$STATE_DIR"
+mkdir -p "$STATE_DIR" "$CD_MAIN_PULSE_DIR"
 touch "$LOG_FILE"
 chmod 700 "$STATE_DIR"
 chmod 600 "$LOG_FILE" 2>/dev/null || true
@@ -424,7 +440,7 @@ export GIT_TERMINAL_PROMPT=0
 if [[ -x "$REPO/secrets/github-read-askpass.sh" ]]; then
   export GIT_ASKPASS="$REPO/secrets/github-read-askpass.sh"
 fi
-export CENTRALDARK_GITHUB_TOKEN_FILE="${CENTRALDARK_GITHUB_TOKEN_FILE:-/root/secrets/GITHUB_TOKEN}"
+export CENTRALDARK_GITHUB_TOKEN_FILE="${CENTRALDARK_GITHUB_TOKEN_FILE:-$HOME/secrets/GITHUB_TOKEN}"
 
 git -C "$REPO" fetch --prune origin main --quiet || { log "PULSE_FAIL=FETCH"; exit 12; }
 MAIN_SHA="$(git -C "$REPO" rev-parse origin/main)"
@@ -606,13 +622,13 @@ fi
 # CentralDark ONE_ENTRY inventory/diff; no passwords, no destructive repairs.
 set -Eeuo pipefail
 export LC_ALL=C
-ROOT=/root/CentralDark
-STATE=/var/lib/centraldark/inventory-reconcile
+ROOT="$CD_REPO_DIR"
+STATE="$CD_STATE_DIR"
 MODE="--inventory"
 if [ "$#" -gt 0 ];then MODE="$1";fi
 case "$MODE" in --inventory|--diff|--scan) ;; --help) echo 'Uso: centraldark-inventory-reconcile.sh [--menu|--kylin-menu|--inventory|--diff|--scan|--pulse --plan]';exit 0;; *) echo 'BLOCKED: repair requer owner e receita autorizada'; exit 64;; esac
-for x in git gh python3 flock timeout; do command -v "$x" >/dev/null || { echo "BLOCKED: missing $x";exit 2; }; done
-test -d "$ROOT/.git" || { echo 'BLOCKED: repo absent';exit 2; }
+for x in git python3 flock timeout; do command -v "$x" >/dev/null || { echo "BLOCKED: missing $x";exit 2; }; done
+git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo 'BLOCKED: repo absent';exit 2; }
 umask 077
 mkdir -p "$STATE"
 exec 9>"$STATE/.lock"
