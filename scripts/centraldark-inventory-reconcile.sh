@@ -210,7 +210,8 @@ PY
     printf '║ 🤖 05 KYTENSOR 🦀 06 KYLINBOT      ║\n'
     printf '║ 💬 07 CONVERSA 📊 08 DIAGNOSTICO   ║\n'
     printf '║ 📝 09 RECIBOS  🚪 00 SAIR           ║\n'
-    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'
+    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'
+    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'
 
     printf '%s╚══════════════════════════════════════╝%s\n' "$_cd_cyan" "$_cd_reset"
     printf '%s🍒 Escolha: %s' "$_cd_green" "$_cd_reset"
