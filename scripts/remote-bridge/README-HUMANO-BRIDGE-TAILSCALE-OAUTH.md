@@ -120,7 +120,7 @@ A arquitetura e LOCAL-FIRST mas **nao esta autorizada para executar comandos no 
 
 | Critério | Evidência e alcance |
 | --- | --- |
-| Disco instalado | VMware `Hard Disk (SCSI)` configurado para `\\\\.\\PhysicalDrive1`, disco físico completo de ~447,1 GB (antigo K:); não é VMDK virtual de dados. |
+| Disco instalado | VMware `Hard Disk (SCSI)` configurado para `\\.\PhysicalDrive1`, disco físico completo de ~447,1 GB (antigo K:); não é VMDK virtual de dados. |
 | Particionamento | Instalação completa confirmada sobre `/dev/sda`: boot `vfat` (`sda1`), estendida (`sda2`), raiz `ext4` (`sda5`), backup `ext4` (`sda6`), data `ext4` (`sda7`), swap (`sda8`). Partições distintas continuam num **único disco físico**. |
 | Boot pela Forja no VMware | O CD/DVD virtual ficou configurado para drive físico em vez da ISO; a VM exibiu splash, configuração e desktop openKylin com o rawDisk. `BOOT_DISCO_FISICO_VIA_VMWARE=OBSERVADO`. |
 | Linux operacional | Desktop openKylin e terminal `CentralDark-OS@CentralDark-OS` visíveis. |
