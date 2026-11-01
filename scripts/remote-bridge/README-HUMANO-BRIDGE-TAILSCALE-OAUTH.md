@@ -1,6 +1,6 @@
 # CentralDark Remote Bridge — entrada unica, LOCAL-FIRST
 
-**Um produto, uma base de codigo, varios ambientes de execucao.** O Bridge da Casa e o ponto de controle local. Notebook = no de agentes; openKylin no Kingston = Forja (boot nativo OU VMware rawDisk com acesso exclusivo); VPS = runtime 24/7 do MESMO produto promovido por Git/CI/receipts. A VPS nao substitui a Forja e nao e um segundo projeto.
+**Um produto, uma base de código, vários ambientes de execução.** A Forja oficial é o **openKylin Linux CentralDark-OS**; a Casa Windows/Remote Desktop Commander é somente cliente/andaime transitório. O GitHub `ServerVpss/CentralDark@main` é a fonte canônica; a VPS é uma projeção Linux opcional do mesmo core lógico, promovida apenas sob ordem do CHEFE e depois de provas de compatibilidade/SHA. O Bridge da Casa descrito nas seções históricas abaixo não constitui runtime atual nem segundo gateway.
 
 ## Diagnostico da rede local (SEM mutacao)
 
@@ -158,3 +158,57 @@ A arquitetura e LOCAL-FIRST mas **nao esta autorizada para executar comandos no 
 **Transporte:** SSH é a **única rota operacional padrão** autorizada para a Forja; o VMware foi um meio de instalação/boot e permanece apenas como histórico nesta decisão, **não um segundo executor nem dependência do trabalho cotidiano**. Não há prova nova de boot bare-metal ou de migração do código em função desta atualização documental.
 
 **NEXT_CURSOR:** `FORJA_LINUX_SSH_ONLY → WORKSPACE_LINUX_CURRENT → GIT_GH_NO_LINUX → COMMIT_PUSH_APENAS_PRONTOS → READBACK_SHA → SERVICOS_CENTRALDARK_TESTADOS_NO_LINUX`.
+
+## 🐧🔗 Forja Linux conectada — um core, um Linux lógico, VPS como espelho sob ordem (2026-11-01T03:28:21Z)
+
+<!-- #OBSERVACOES#
+@owner: scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md; RULES.md; AGENTS.md; scripts/centraldark-inventory-reconcile.sh
+@intent: CENTRALDARK_FORJA_LINUX_LINKED_ONE_CORE_VPS_MIRROR_20261101
+@measured_at_utc: 2026-11-01T03:28:21Z
+@receipt: Remote Desktop Commander device CentralDark-OS, shell PID 14759, exit=0; acesso interativo/SSH também observado anteriormente
+@verification: remote bash read-only via conector autenticado; nenhuma escrita no host Linux nem VPS
+@status: FORJA_REMOTE_SHELL_PROVEN; SOURCE_MIGRATION_PENDING; VPS_MIRROR_NOT_TESTED
+@next_cursor: SOURCE_LOCALIZAR_OU_TRANSFERIR_NO_LINUX → GIT_GH_LINUX → HERMES/GATEWAY_LINUX → TESTAR_OWNER → COMMIT_MAIN_SHA → PROMOVER_VPS_APENAS_SOB_ORDEM → READBACK_SAME_SHA
+-->
+
+**Decisão já definida pelo CHEFE, agora com prova de conexão:** a CentralDark possui **uma Forja oficial** no openKylin 3.0 (`CentralDark-OS`) instalado no antigo disco físico K:, e **uma só base de código/produto**: `ServerVpss/CentralDark@main`. A VPS é a **projeção operacional remota do MESMO core lógico Linux**, com os mesmos owners, scripts, funcionalidades e SHA aprovado, quando tecnicamente compatíveis. Não criar segunda CentralDark, dois conjuntos de scripts, segundo gateway ou outro writer por escopo. A VPS não vira autoridade de código nem recebe deploy automaticamente: a promoção é **exclusivamente sob decisão expressa do CHEFE**. Igualdade lógica do software **não** significa mesma máquina, mesmo kernel/particionamento, ou que a VPS já esteja idêntica.
+
+**Acesso transitório, não dependência permanente:** o conector **Remote Desktop Commander v0.3.1** identificou `CentralDark-OS` **ONLINE**, estabeleceu shell Linux real por canal remoto e executou consulta sem privilégios e sem mutações. Esse canal é **andaime de recuperação**; deve ser dispensável após o MCP/SSH/Gateway CentralDark existente possuir a mesma capacidade verificada diretamente no Linux. A Casa Windows é cliente transitório, não executor da CentralDark. A VPS continua sem alterações nesta operação.
+
+### 🎯 Recibo real do terminal Linux — comprovado
+
+| Check | Resultado | Alcance |
+| --- | --- | --- |
+| Dispositivo remoto | `CentralDark-OS` (device id `79d87b75-…-d36a93c`) ONLINE, shell PID `14759` concluído | Conexão e comando remoto comprovados; não é SSH da VPS |
+| Sistema / usuário | `openKylin 3.0`, `CentralDark-OS`, kernel `7.0.0-3-generic` | OS da Forja local |
+| Dados | `/data → /dev/sda6 ext4` por `findmnt` | Não presumir que `/data/CentralDark` existe |
+| Raiz | `/ → /dev/sda5 ext4` via deployment ostree | Disco físico Linux observado na Forja |
+| Binários existentes | `/usr/bin/git`, `/usr/bin/kylin-bot`, `/usr/local/bin/node`, `/usr/bin/ssh` | Comprovados pelo PATH no instante de leitura |
+| Binários não localizados | `gh=NOT_FOUND`, `hermes=NOT_FOUND` | Ausentes do PATH, não prova ausência em todo o disco |
+| Checkout | `/data/CentralDark`, `/home/CentralDark-OS/CentralDark`, `/opt/CentralDark` = `ABSENT` | Apenas candidatos examinados; source ainda não reconciliada |
+| VPS | `NOT_TESTED` | Nem implantação nem comparação de SHA comprovadas |
+
+**Comando de contraprova reutilizável no Linux (somente leitura):**
+
+```bash
+hostname; id -un; uname -r; . /etc/os-release; printf '%s\n' "$PRETTY_NAME"
+findmnt -no TARGET,SOURCE,FSTYPE /data
+for tool in git gh hermes kylin-bot node ssh; do command -v "$tool" || printf '%s=NOT_FOUND\n' "$tool"; done
+for dir in /data/CentralDark "$HOME/CentralDark" /opt/CentralDark; do
+  if git -C "$dir" rev-parse --show-toplevel >/dev/null 2>&1; then
+    printf '%s=CHECKOUT\n' "$dir"
+  elif test -d "$dir"; then
+    printf '%s=DIRECTORY_NO_GIT\n' "$dir"
+  else
+    printf '%s=ABSENT\n' "$dir"
+  fi
+done
+```
+
+**Contrato de reflexo sem cópia paralela:** a Forja é desenvolvimento/integração; `GitHub main` é a autoridade do source, e a VPS é um **target de execução do mesmo SHA aprovado**, sujeito a gates, compatibilidade do ambiente, readback, contraprova e recibos. A sincronização do código não comprova deploy (`MERGED != DEPLOYED`); registrar `FORJA_SHA` e `VPS_SHA` apenas após leitura real. Preservar estado remoto e não executar `pull`, deploy ou mutações na VPS automaticamente durante a Forja.
+
+**Kaizen:** provar o Linux primeiro, absorver capacidades via owners/MCP existentes, descartar Remote Desktop Commander como **dependência** só após teste equivalente sem ele. Nem shell remoto vivo nem recibo documental provam que Hermes, `gh`, source ou gateway já estejam funcionando no openKylin.
+
+**NEXT_CURSOR:** `FORJA_REMOTE_SHELL_PASS → SOURCE_LINUX_DISCOVERY → FORJA_GIT_GH_HERMES_GATEWAY → COMMIT_SOURCE_SHA → VPS_MIRROR_ONLY_ON_CHEFE_ORDER → SAME_SHA_READBACK`.
+
