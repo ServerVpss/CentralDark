@@ -216,8 +216,10 @@ export const CRISTAL = {
 };
 
 export const VAULT = {
-  raiz: "Obsidian Vault › 🪬Centraldark -HUD🪬",
-  notas: ["HUD.html", "Home.md", "Pendências.md", "Bem-vindo.md"],
+  // Obsidian is a consumer of normal notes/scripts, not the HUD owner.
+  ownerCockpit: "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+  raiz: "docs/HUD + docs/BRAIN",
+  notas: ["docs/HUD/README.md", "docs/HUD/HUD-CONVERSA-2026-10-15.md"],
   pluginsComunidade: [
     "obsidian-git",
     "dataview",

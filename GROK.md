@@ -1,3 +1,19 @@
+---
+title: "GROK — adaptador CentralDark"
+status: "ADAPTER"
+role: "ENGINE_ADAPTER"
+engine: "GROK"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "Grok"
+tags:
+  - centraldark
+  - adapter
+  - grok
+  - soul-sol
+---
+
 # Grok — adaptador fino CentralDark
 
 ```text

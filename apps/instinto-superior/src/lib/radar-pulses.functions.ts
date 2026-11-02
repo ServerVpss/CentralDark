@@ -12,13 +12,13 @@ type PulseInput = {
 
 export const gravarPulsos = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context, data }: { context: any; data: PulseInput[] }) => {
+  .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
     const host = hostname();
 
-    const linhas = data.map((p) => ({
+    const linhas = (data as PulseInput[] | undefined)!.map((p: PulseInput) => ({
       source: p.source,
       status: p.status,
       http_code: p.httpCode,

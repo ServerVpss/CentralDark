@@ -133,7 +133,7 @@ const SENSORES_VIVOS: SensorVivo[] = [
   },
   {
     nome: "VPS (/root/CentralDark)",
-    tipo: "servidor",
+    tipo: "api",
     status: "green",
     ultimaMedicao: "AGORA — checkout acessível",
     valor: "Atrás do último SHA observado",

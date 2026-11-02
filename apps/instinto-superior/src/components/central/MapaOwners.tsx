@@ -276,7 +276,7 @@ export function MapaOwners({
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
           Prova delimitada · 19/10/2026: navegador conectado leu o DOM da aba Sala de Controle em
-          http://{"<servidor-publico>"}:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
+          http://{'<servidor-publico>'}:8080/sala-controle, com o botão Minha Oficina e o cartão K:/F:/C:.
           HTTP 200 e DOM lido comprovam esta superfície, não clique nas outras abas nem funcionamento
           de todas as capacidades. A navegação e contraprova visual autônomas pertencem ao Harness
           quando implementadas e medidas; HARNESS_UI_NAVIGATION = UNKNOWN.

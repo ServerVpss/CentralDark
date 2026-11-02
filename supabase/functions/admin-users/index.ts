@@ -9,9 +9,11 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const SUPABASE_URL = Deno.env.get("HUB_SUPABASE_URL")!;
-const SERVICE_ROLE = Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
-const ANON = Deno.env.get("HUB_SUPABASE_ANON_KEY")!;
+// Supabase fornece os nomes padrão nas Edge Functions. Os aliases HUB_* ficam
+// como fallback para o runtime CentralDark local, sem expor segredo no cliente.
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? Deno.env.get("HUB_SUPABASE_URL")!;
+const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? Deno.env.get("HUB_SUPABASE_SERVICE_ROLE_KEY")!;
+const ANON = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("HUB_SUPABASE_ANON_KEY")!;
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -39,12 +41,14 @@ Deno.serve(async (req) => {
     // Cliente admin (service role)
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-    // Confirma que quem chama é admin
-    const { data: isAdmin, error: roleErr } = await admin.rpc("has_role", {
+    // A função has_role depende de auth.uid(). Use o cliente autenticado para
+    // preservar o JWT do chamador; o cliente service_role fica reservado às
+    // operações administrativas posteriores.
+    const { data: isAdmin, error: roleErr } = await userClient.rpc("has_role", {
       _user_id: callerId,
       _role: "admin",
     });
-    if (roleErr || !isAdmin) return json({ error: "forbidden" }, 403);
+    if (roleErr || isAdmin !== true) return json({ error: "forbidden" }, 403);
 
     const body = await req.json().catch(() => ({}));
     const action = String(body?.action ?? "");
@@ -100,7 +104,7 @@ Deno.serve(async (req) => {
         const password = String(body.password ?? "");
         const full_name = String(body.full_name ?? "").trim();
         const role = body.role === "admin" ? "admin" : "user";
-        if (!email || password.length < 6) return json({ error: "invalid_input" }, 400);
+        if (!email || password.length < 12) return json({ error: "invalid_input" }, 400);
 
         const { data, error } = await admin.auth.admin.createUser({
           email,
@@ -118,6 +122,30 @@ Deno.serve(async (req) => {
         }
         await logAudit("user_created", data.user?.id ?? null, { email, role });
         return json({ ok: true, user_id: data.user?.id });
+      }
+
+      case "update_profile": {
+        const target = String(body.user_id ?? "").trim();
+        const full_name = String(body.full_name ?? "").trim();
+        const email = String(body.email ?? "").trim();
+        if (!target || !full_name || !email.includes("@")) return json({ error: "invalid_input" }, 400);
+
+        const { data: current, error: currentError } = await admin.auth.admin.getUserById(target);
+        if (currentError || !current?.user) return json({ error: currentError?.message ?? "not_found" }, 404);
+
+        const { error: authError } = await admin.auth.admin.updateUserById(target, {
+          email,
+          user_metadata: { ...(current.user.user_metadata ?? {}), full_name },
+        });
+        if (authError) return json({ error: authError.message }, 400);
+
+        const { error: profileError } = await admin.from("profiles")
+          .update({ full_name, email })
+          .eq("id", target);
+        if (profileError) return json({ error: profileError.message }, 400);
+
+        await logAudit("profile_updated", target, { fields: ["full_name", "email"] });
+        return json({ ok: true });
       }
 
       case "update_password": {
