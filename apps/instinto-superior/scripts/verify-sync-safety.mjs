@@ -32,3 +32,17 @@ test('Casa limpa publica commit existente e confirma SHA remoto real',async t=>r
  fs.writeFileSync(path.join(f.repo,'tracked.txt'),'approved commit');f.g('add','tracked.txt');f.g('commit','-m','approved');
  const result=await m.executarSync({data:{target:'local'}});assert.equal(result.status,'success');assert.equal(f.g('rev-parse','HEAD'),f.g('rev-parse','FETCH_HEAD'));
 }));
+
+test('Falha histórica VPS conserva erro e escopo sem inventar estado atual',async t=>run(t,async(f,m)=>{
+ const dir=path.join(f.repo,'.auto-sync');fs.mkdirSync(dir);
+ const status=path.join(dir,'status.json');
+ fs.writeFileSync(status,JSON.stringify({last_sync:'2026-11-01T23:01:16.662Z',status:'failed',details:'VPS sync erro: hostname segredo-vpss sem resolução'}));
+ const antigo=await m.lerStatusSync();
+ assert.equal(antigo.status,'failed');assert.equal(antigo.target,'vps');
+ assert.match(antigo.human_readable,/Última tentativa VPS falhou/);
+ assert.match(antigo.human_readable,/histórico, não estado atual/);
+ fs.writeFileSync(status,JSON.stringify({last_sync:'2026-11-02T06:00:00.000Z',status:'success',details:'Casa já está em dia com main'}));
+ const main=await m.lerStatusSync();
+ assert.equal(main.status,'success');assert.equal(main.target,undefined);
+ assert.doesNotMatch(main.human_readable,/VPS/);
+}));

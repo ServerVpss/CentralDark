@@ -289,10 +289,18 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
         return { timestamp: null, status: "idle", human_readable: "Nunca sincronizado" };
       }
       const raw = JSON.parse(fs.readFileSync(STATUS_FILE, "utf-8"));
+      // Recibo do último comando não é observação atual da VPS.
+      const registroVps = typeof raw.details === "string" && raw.details.startsWith("VPS ");
+      const ultimoResultado = raw.status === "success" ? "concluída"
+        : raw.status === "failed" ? "falhou"
+        : raw.status === "conflict" ? "bloqueada" : "registrada";
       return {
         timestamp: raw.last_sync ?? null,
         status: raw.status ?? "idle",
-        human_readable: formatTimestamp(raw.last_sync),
+        human_readable: registroVps
+          ? `Última tentativa VPS ${ultimoResultado} em ${formatTimestamp(raw.last_sync)} · histórico, não estado atual`
+          : formatTimestamp(raw.last_sync),
+        target: registroVps ? "vps" : undefined,
         details: raw.details ?? undefined,
       };
     } catch {
