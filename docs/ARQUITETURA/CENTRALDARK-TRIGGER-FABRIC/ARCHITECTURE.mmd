@@ -160,6 +160,8 @@ CD_REG_10_A["MAPA_VIVO"] -->|"EVIDENCE"| CD_REG_10_B["REALITY_JUDGE"]
 CD_REG_11_A["REALITY_JUDGE"] -->|"RECEIPT"| CD_REG_11_B["SOL"]
 %% CD_FLOW:trigger.human.CENTRALDARK_MASTER
 CD_REG_12_A["CHEFE"] -->|"!CENTRALDARK"| CD_REG_12_B["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"]
+%% CD_FLOW:trigger.human.AUREOLA_CANONICA
+CD_REG_29_A["CHEFE"] -->|"⭕ !AURÉOLA CANÔNICA"| CD_REG_29_B["AUREOLA-BAHIA-BIBLICA.yml + centraldark_master_cycle.py#aureola_route_trace"]
 %% CD_FLOW:trigger.human.DELTA_UTILS
 CD_REG_13_A["CHEFE"] -->|"!DELTA UTILS"| CD_REG_13_B["docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#delta_harvest"]
 %% CD_FLOW:trigger.human.ACORDAR
@@ -531,3 +533,7 @@ TOOLS --> MCP_SKILLS_CANONICAL_CATALOG["MCP Skill Workshop<br/>skills/ + .agents
   MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_16["readExternalSourceMetadata"]
 %% CD_FLOW:skillworkshop.catalog.20261016.17
   MCP_SKILLS_CANONICAL_CATALOG -->|SOURCE/OWNER| MCP_SKILL_PROJ_17["resolveFromCatalog"]
+%% CD_FLOW:harness.casajea.sensor.20261023.1
+  HARNESS_MODULE_REGISTRY -->|PROVEN 🔒| HARNESS_CASAJEA_1["validateEntry"]
+%% CD_FLOW:harness.casajea.sensor.20261023.2
+  HARNESS_CASAJEA_1 -->|sessão ao vivo| HARNESS_CASA_JEA_VERDICT["classifyLive · ⚠️ causa sem rebaixar"]
