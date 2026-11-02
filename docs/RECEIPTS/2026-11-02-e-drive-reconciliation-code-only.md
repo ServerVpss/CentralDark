@@ -32,5 +32,6 @@ Pastas de código como `apps/modulos`, `MODULES`, `src`, `scripts` e `tests` nã
 - `origin/main` atual após reconciliação externa: `24afe336df9fbeb056d9ce0d4eda4a83ac8f3cad`.
 - Arquivos restantes em `E:\CentralDark` após remoção recuperável: `0`.
 - Estado restante: somente diretórios vazios; `E:\CentralDark\CentralDark\2026-11-02\referenced-chatgpt-conversation-this-is-an` continua aberto por processo externo.
+- Causa comprovada do bloqueio: `codex.exe` PID `28724` e processos auxiliares/MCP (incluindo `node.exe`, `node_repl.exe`, `cmd.exe` e `bun.exe`) estão com o diretório atual dentro de `E:\CentralDark\CentralDark\2026-11-02\referenced-chatgpt-conversation-this-is-an`.
 - Remoção de `E:\CentralDark`: `PARTIAL`; o caminho ainda existe e não foi falsamente marcado como concluído.
-- Próxima ação: liberar o processo que mantém o diretório aberto e repetir a remoção dos diretórios vazios; depois comprovar `Test-Path E:\CentralDark = False`.
+- Próxima ação: encerrar/reabrir a sessão Codex que mantém esse diretório como CWD e repetir a remoção dos diretórios vazios; depois comprovar `Test-Path E:\CentralDark = False`.
