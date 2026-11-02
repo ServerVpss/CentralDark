@@ -212,6 +212,29 @@
       "bootstrap": true
     },
     {
+      "id": "trigger.human.AUREOLA_CANONICA",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:AUREOLA_CANONICA",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "AUREOLA_CANONICA",
+      "activation": "⭕ !AURÉOLA CANÔNICA",
+      "from": "CHEFE",
+      "to": "scripts/trigger-fabric/centraldark_master_cycle.py#aureola_route_trace",
+      "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
+      "canonical_route": "scripts/trigger-fabric/centraldark_master_cycle.py#aureola_route_trace",
+      "status": "IMPLEMENTED_IN_BRANCH_RUNTIME_PENDING_CI_AND_SURFACE_OBSERVATION",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "TRIGGERS.yml + scripts/trigger-fabric/centraldark_master_cycle.py on base 5bf4a0393c1b168ed41422af98698c64b9916071"
+      },
+      "bootstrap": false,
+      "mutation_authority": false,
+      "recognition_is_execution_proof": false
+    },
+    {
       "id": "trigger.human.CENTRALDARK_MASTER",
       "kind": "TRIGGER",
       "capability": "TRIGGER:CENTRALDARK_MASTER",
