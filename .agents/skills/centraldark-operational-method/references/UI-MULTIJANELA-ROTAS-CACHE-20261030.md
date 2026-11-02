@@ -156,3 +156,16 @@ Melhoria antecipada de selecao: para pagina listada pela instancia MCP, fazer li
 - "Pera, cancela esse envio" antes do envio → ABORTAR_ENVIO; não apagar rascunho anterior.
 
 **Limite de prova:** VOICE_SEMANTIC_POLICY=DOCUMENTED; LIVE_VOICE_TEST=UNKNOWN; VOICE_RUNTIME_UPDATED=NO. Provas anteriores de voz para Codex e de UI Cloudroom não provam adoção automática das novas regras no motor de reconhecimento ou em todas as superfícies. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT medido; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=REUSE_VOICE_SEMANTIC_ROUTE_ON_NEXT_HUMAN_INTENT.
+
+<!-- HERMES_DESKTOP_CHAT_FASTPATH_20261102 -->
+## 🍒+1 Hermes Desktop: envio direto na conversa existente, fast-path (02/11/2026)
+
+**Intenção/owner:** CHEFE delega instrução ao Hermes no campo de conversa do próprio Hermes Desktop. Reutilizar Skill Mãe + Kimetsu e esta receita de UI multijanela, sem criar script, agente, sessão ou método paralelo. Classificação BOUNDED; respirações Concentração (alvo), Trovão (ação única), Lua (readback), Regeneração Monotônica (aprendizado).
+
+**Caso observado na Casa:** janela Hermes encontrada com PID e `MainWindowHandle` atuais, no monitor físico indicado pelo CHEFE; processo/retângulo/hit-test `WindowFromPoint + GetAncestor(GA_ROOT)` coincidiu com a janela. Captura anterior confirmou editor da conversa vazio, distinto da aba GitHub Device Activation. Foco no editor; texto autorizado colado por área de transferência + `Ctrl+V`, com tentativa de restaurar conteúdo textual anterior. Captura de pré-envio mostrou a ordem no editor. Clique único na seta de envio já visível; captura posterior mostrou a mensagem na conversa e o editor vazio. **`HERMES_CHAT_SEND=PASS` apenas para essa mensagem; `HERMES_TASK_COMPLETED=UNKNOWN`.** O estado de Goal/fila não altera a identidade do editor nem comprova execução.
+
+**Fast-path na MESMA janela/sessão/controle já comprovados:** `INTENÇÃO → CHECAR SOMENTE DELTA (alvo e rascunho) → FOCO NO EDITOR → COLAR UMA VEZ → CLICAR SETA OU ENTER SE JÁ COMPROVADO → UM READBACK → RECEIPT/NEXT_CURSOR`. Não repetir varredura de monitores, leitura de Skills/catálogo, descoberta de PID, capturas intermediárias, screenshots ou medições quando fingerprint de janela, sessão, editor e layout não mudou. Se o envio for inequívoco, a captura final basta; a prévia só é necessária se houver dúvida sobre foco, conteúdo ou rascunho.
+
+**Invalidação do cache:** janela/monitor/layout mudou, editor ou conversa diferente, rascunho pré-existente, foco incerto, falta de evidência de envio, bloqueio da ferramenta ou autorização alterada → renovar SOMENTE a prova afetada, sem clique ou envio repetido. Nunca fixar PID, coordenadas e posição de monitor como constantes globais. Nunca sobrescrever rascunho do CHEFE. Não declarar envio por comando que apenas retornou sucesso sem readback.
+
+**Receipt (02/11/2026):** `SOURCE=SOL|TARGET=HermesDesktop/chat|ROUTE=RemoteDesktopCommander/WindowsUI|MESSAGE_SENT=PASS|EXECUTOR_ACCEPTED=UNKNOWN|EXECUTION=UNKNOWN|FIXED_POINT_SCOPE=UI_SEND_ONLY|PROMPT_SELF_CACHE_P15=APLICÁVEL_SEM_HIT_MEDIDO|KV_CACHE_P16=UNKNOWN|NEXT_CURSOR=READ_HERMES_RESPONSE_ON_SAME_CHAT`. Sem tempo de execução comparativo aferido: `SPEEDUP=UNKNOWN`.
