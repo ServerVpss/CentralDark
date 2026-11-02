@@ -1,11 +1,11 @@
 ﻿# #OBSERVACOES# @owner=.agents/skills/centraldark-operational-method/SKILL.md
 # @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
-# @last_updated=2026-11-02T16:54:38.2190596Z
+# @last_updated=2026-11-02T17:06:13.5559151Z
 # @implementado=mapa semantico Casa, aliases, janelas por tela e borda temporaria sem foco.
 # @pendente=numeros nativos devem ser reconfirmados se o arranjo mudar; overlay nao prova automacao.
 [CmdletBinding()]
 param([switch]$Identify, [string]$Target, [switch]$ListWindows,
-      [switch]$Overlay, [ValidateRange(1,30)][int]$Seconds=5)
+      [switch]$Overlay, [string]$CaptureDirectory, [ValidateRange(1,30)][int]$Seconds=5)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Windows.Forms
@@ -46,7 +46,7 @@ public class CentralDarkMonitorNative {
  [DllImport("user32.dll")] public static extern bool IsWindowVisible(IntPtr h);
 }
 public class CentralDarkMonitorBorder : Form {
- public CentralDarkMonitorBorder(){FormBorderStyle=FormBorderStyle.None;ShowInTaskbar=false;TopMost=true;}
+ public CentralDarkMonitorBorder(){FormBorderStyle=FormBorderStyle.None;ShowInTaskbar=false;TopMost=true;StartPosition=FormStartPosition.Manual;}
  protected override bool ShowWithoutActivation {get{return true;}}
  protected override CreateParams CreateParams {get{var p=base.CreateParams;p.ExStyle|=0x08000020;return p;}}
 }
@@ -83,8 +83,31 @@ if($Overlay){
                      @($b.X,$b.Y,5,$b.Height),@(($b.Right-5),$b.Y,5,$b.Height))){
         $f=New-Object CentralDarkMonitorBorder
         $f.BackColor=[System.Drawing.Color]::LimeGreen
+        $f.MinimumSize=New-Object System.Drawing.Size($r[2],$r[3])
+        $f.MaximumSize=New-Object System.Drawing.Size($r[2],$r[3])
         $f.Bounds=New-Object System.Drawing.Rectangle($r[0],$r[1],$r[2],$r[3])
         $f.Show();[void]$forms.Add($f)
+      }
+    }
+    [System.Windows.Forms.Application]::DoEvents()
+    if($CaptureDirectory){
+      [void][IO.Directory]::CreateDirectory($CaptureDirectory)
+      Start-Sleep -Milliseconds 300
+      foreach($id in $ids){
+        $b=$map[$id].screen.Bounds
+        $bmp=New-Object Drawing.Bitmap($b.Width,$b.Height)
+        $g=[Drawing.Graphics]::FromImage($bmp)
+        try{
+          $g.CopyFromScreen($b.X,$b.Y,0,0,$b.Size)
+          $file=Join-Path $CaptureDirectory ("monitor-$id-overlay.png")
+          $bmp.Save($file,[Drawing.Imaging.ImageFormat]::Png)
+          $corners=0
+          foreach($pt in @(@(2,2),@(($b.Width-3),2),@(2,($b.Height-3)),@(($b.Width-3),($b.Height-3)))){
+            $c=$bmp.GetPixel($pt[0],$pt[1])
+            if($c.G -gt 150 -and $c.R -lt 100 -and $c.B -lt 100){$corners++}
+          }
+          Write-Output "MONITOR=$id GREEN_CORNERS=$corners/4 CAPTURE=$file"
+        }finally{$g.Dispose();$bmp.Dispose()}
       }
     }
     $end=[DateTime]::UtcNow.AddSeconds($Seconds)
