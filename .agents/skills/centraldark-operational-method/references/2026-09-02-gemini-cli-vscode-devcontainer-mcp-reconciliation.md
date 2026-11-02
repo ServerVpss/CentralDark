@@ -68,7 +68,7 @@ Capturas fornecidas pelo CHEFE nesta sessão mostram:
 
 ```text
 GEMINI_CLI_VERSION_SCREEN=0.58.0
-WORKSPACE_SCREEN=K:\
+WORKSPACE_SCREEN=E:\CentralDark\Pivete\CentralDark
 BRANCH_SCREEN=main
 SANDBOX_SCREEN=no sandbox
 MODEL_SCREEN=Auto
@@ -182,7 +182,7 @@ CURRENT_INTENT_REQUIRES_CONTAINER
 A captura mostra o arquivo aberto em caminho semelhante a:
 
 ```text
-K:\workspace\sol\01-FONTES\APPCENTRALDARK-EVOLUIR\sidecar\node_modules\@overclock-app\catalog\test\fixtures\catalog-home\.gemini\config\mcp_config.json
+E:\CentralDark\workspace\sol\01-FONTES\APPCENTRALDARK-EVOLUIR\sidecar\node_modules\@overclock-app\catalog\test\fixtures\catalog-home\.gemini\config\mcp_config.json
 ```
 
 O conteúdo visível usa valor de fixture como:
@@ -324,3 +324,27 @@ RUNTIME_T1=UNKNOWN
 ```
 
 Esta regra preserva `MENOS_E_MAIS`: um bridge oficial suficiente vence cinco extensões sobrepostas, salvo evidência de capacidade única que justifique outra.
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "WORKSPACE_SCREEN=E:\\CentralDark\\Pivete\\CentralDark"
+    ],
+    "right_variant": [
+      "WORKSPACE_SCREEN=K:\\"
+    ]
+  },
+  {
+    "left_original": [
+      "E:\\CentralDark\\workspace\\sol\\01-FONTES\\APPCENTRALDARK-EVOLUIR\\sidecar\\node_modules\\@overclock-app\\catalog\\test\\fixtures\\catalog-home\\.gemini\\config\\mcp_config.json"
+    ],
+    "right_variant": [
+      "K:\\workspace\\sol\\01-FONTES\\APPCENTRALDARK-EVOLUIR\\sidecar\\node_modules\\@overclock-app\\catalog\\test\\fixtures\\catalog-home\\.gemini\\config\\mcp_config.json"
+    ]
+  }
+]
+```

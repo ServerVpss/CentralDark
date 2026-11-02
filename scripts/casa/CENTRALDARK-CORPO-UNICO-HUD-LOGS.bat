@@ -52,7 +52,9 @@ try { New-Item -ItemType Directory -Path $script:LogRoot -Force | Out-Null } cat
 $created = $false
 $mutex = [System.Threading.Mutex]::new($true, 'Local\CentralDark_CorpoUnico_HudLogs', [ref]$created)
 if (-not $created) {
-  [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  if (-not $script:SensorOnly) {
+    [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  }
   exit 0
 }
 function Clean([string]$Value) {
@@ -255,9 +257,9 @@ function Refresh-Scripts {
 # AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
 # #OBSERVACOES# @owner=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:28:17.879Z
-# Motivo: o HUD canônico reside em docs/HUD; K:/HUD.html legado não existe. O feed é dado efêmero, jamais commitado.
-$script:ABHudFile = 'K:\docs\HUD\HUD.html'
-# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked HUD. Cockpit consumes via authorized reader only.
+# Motivo: o owner canônico é o Cockpit; o feed é dado efêmero, jamais commitado.
+$script:ABHudOwner = 'K:\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked source. Cockpit consumes via authorized reader only.
 $script:ABFeedFile = Join-Path $script:LogRoot 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'
 $script:ABLastLog = [datetime]::MinValue
@@ -265,7 +267,7 @@ function Poll-Afterburner {
   $mapHandle=[IntPtr]::Zero
   $mapView=[IntPtr]::Zero
   try {
-    if(-not (Test-Path -LiteralPath $script:ABHudFile -PathType Leaf)){throw 'HUD_LOCAL_ABSENT'}
+    if(-not (Test-Path -LiteralPath $script:ABHudOwner -PathType Leaf)){throw 'COCKPIT_OWNER_ABSENT'}
     if(-not ('CentralDarkAfterburnerMmf' -as [type])) {
       Add-Type -TypeDefinition @'
 using System;
@@ -426,17 +428,13 @@ function Local-Refresh {
     Add-Log 'SCREENPIPE' 'UNKNOWN' 'stdout do gravador em outra janela nao tem arquivo de log conhecido; /health segue monitorado'
     $script:ScreenLogWarned=$true
   }
-  # Path found by file-name, without guessing emoji spelling.
-  $vault=Join-Path (Join-Path $env:USERPROFILE 'Documents') 'Obsidian Vault'
-  $hudFile=$null
-  if(Test-Path $vault){
-    $hudFile=Get-ChildItem -LiteralPath $vault -Directory -ErrorAction SilentlyContinue | ForEach-Object {Join-Path $_.FullName 'HUD.html'} | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf} | Select-Object -First 1
-  }
-  if($hudFile){
+  # Instrument the existing Cockpit owner; do not infer an Obsidian vault path.
+  $cockpitOwner=Join-Path $PSScriptRoot '..\..\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+  if(Test-Path -LiteralPath $cockpitOwner -PathType Leaf){
     $hudPass=$true
-    $f=Get-Item -LiteralPath $hudFile
-    Set-Card 'HUD / OBSIDIAN' 'PASS' ('HUD local existe; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
-  }else{Set-Card 'HUD / OBSIDIAN' 'UNKNOWN' 'HUD.html local nao localizado'}
+    $f=Get-Item -LiteralPath $cockpitOwner
+    Set-Card 'HUD / COCKPIT OWNER' 'PASS' ('owner presente; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
+  }else{Set-Card 'HUD / COCKPIT OWNER' 'UNKNOWN' 'owner do Cockpit nao localizado'}
   if($screenPass -and $tailPass -and $hudPass){
     Set-Card 'PROVA / ARQUIVO' 'PASS' 'provas locais: /health + Tailscale + HUD; sem TXT'
   }else{

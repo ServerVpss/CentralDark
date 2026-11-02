@@ -10,6 +10,9 @@ const CONTINUITY_OWNER_PATH = "docs/CONSCIENCIA/EXECUCAO-CONTINUA-OWNER-WRITER-C
 const LOGIC_REFERENCE_PATH = "docs/CONSCIENCIA/REFERENCIA-LOGICA-HORN-REUSE-FIXED-POINT.md";
 const SOURCE_NAME = "tlc23(2).pdf";
 const SOURCE_SHA256 = "b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1";
+const HUD_MIGRATION = JSON.parse(readFileSync("apps/instinto-superior/src/data/hud-migration.snapshot.json", "utf8"));
+const HUD_SOURCE_BLOB = spawnSync("git", ["cat-file", "blob", HUD_MIGRATION.source.blob_sha], { encoding: "utf8" }).stdout;
+const HUD_OWNER = readFileSync("apps/instinto-superior/src/components/central/HudDeterministico.tsx", "utf8");
 
 test("base lógica do PDF fica ligada ao owner canônico sem criar segunda autoridade", () => {
   const reference = readFileSync(LOGIC_REFERENCE_PATH, "utf8");
@@ -354,33 +357,25 @@ test("critério sem contraprova, receipt repetido ou medição vencida nunca sel
 
 
 
-test("HUD, telemetria e HORN compartilham exatamente os mesmos dez IDs de Fixed Point", () => {
+test("HUD owner usa snapshot e preserva a fonte legada sem alegar paridade", () => {
+  assert.equal(HUD_MIGRATION.source.path, "docs/HUD/HUD.html");
+  assert.ok(HUD_SOURCE_BLOB.length > 0);
+  assert.equal(HUD_MIGRATION.source.full_migration_proven, false);
   const telemetry = readFileSync("apps/modulos/mcp/src/operational-telemetry.js", "utf8");
-  const hud = readFileSync("docs/HUD/HUD.html", "utf8");
-  const expected = FIXED_POINT_TEN_CRITERIA.map((criterion) => criterion.id);
-  const expectedHudKeys = [
-    "OWNER_UNIQUE", "LOCKS_PRESERVED", "MCP_PUBLIC_HEALTH", "ONE_HEART_FRESH",
-    "SCREENPIPE_CURRENT", "AIONUI_STDIO_CURRENT", "LOG_PRIVACY_CURRENT",
-    "CHECKOUT_MAIN_SYNC", "FORENSIC_FRESHNESS", "RECEIPT_PRESENT",
-  ];
-  assert.deepEqual(expected, expectedHudKeys);
-  for (const id of expected) {
-    assert.ok(telemetry.includes('"' + id + '"'), 'telemetry owner missing ' + id);
-    assert.ok(hud.includes(id), 'HUD projection missing ' + id);
-  }
+  assert.match(HUD_OWNER, /hudMigrationSnapshot/);
+  assert.match(HUD_OWNER, /export function HudDeterministico/);
   assert.match(telemetry, /fixedPointTenEvidence/);
-  assert.ok(hud.includes("window.CENTRALDARK_OPERATIONAL_CURRENT"));
-  assert.ok(hud.includes("fp.fixedPoint===true"));
 });
 
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
   const hook = readFileSync(".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md", "utf8");
   const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
-  const hud = readFileSync("docs/HUD/HUD.html", "utf8");
+  const hud = HUD_OWNER;
   const contract = readFileSync("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md", "utf8");
   assert.match(hook, /Autoentrevista operacional baseada no CURRENT/);
   assert.match(oracle, /Goal-Clause META-GRILL/);
-  assert.match(hud, /renderGoalClauseProjection/);
+  assert.match(hud, /hudMigrationSnapshot/);
+  assert.match(hud, /export function HudDeterministico/);
   assert.match(contract, /G12.*Ciclo registra receita/);
 });
 

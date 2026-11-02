@@ -1,0 +1,52 @@
+{
+  "tipo": "cockpit_sensor_readback",
+  "status": "PARTIAL",
+  "intent_id": "COCKPIT_MEASURE_NOW_SENSOR_READBACK_8099_9101",
+  "run_id": "RUN-20261030-COCKPIT-MEASURE-8099-9101-01",
+  "owner": "K:\\apps\\instinto-superior",
+  "surface": "Cockpit CentralDark /sala-controle",
+  "measured_at": "2026-10-30T18:26:50.0692886-03:00",
+  "ui_readback": {
+    "url": "http://127.0.0.1:8080/sala-controle",
+    "action": "Medir agora",
+    "after": "botao retornou habilitado; Casa e Main verdes; API, Grafo, Roteador, Sinal e Confirmacoes continuam Ainda nao verificado",
+    "screenpipe": "audio sem sinal recente; captura visual atualizada",
+    "commander": "Em andamento"
+  },
+  "endpoint_readback": [
+    {
+      "endpoint": "http://127.0.0.1:8099/health",
+      "http_status": "TIMEOUT_10S",
+      "process": "python PID 14612 launch_omni_router_direct.py",
+      "listener": "127.0.0.1:8099 LISTEN",
+      "veredito": "UNKNOWN"
+    },
+    {
+      "endpoint": "http://127.0.0.1:9101/health",
+      "http_status": 200,
+      "body_class": "ok=true; name=CentralDark Casa Commander; engine_connected=false",
+      "process": "node PID 33456 CentralDark-Casa-Agent.mjs",
+      "veredito": "PARTIAL"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8742/readyz",
+      "http_status": 200,
+      "veredito": "PASS"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8742/health",
+      "http_status": 200,
+      "veredito": "PASS"
+    }
+  ],
+  "diagnostico": "O amarelo atual e causado por ausencia de readback do adapter 8099: ha listener TCP, mas as rotas testadas excederam 10 segundos. O Commander responde health 200, porem engine_connected=false; isso nao prova motor conectado.",
+  "contraprova": [
+    "127.0.0.1:8080 respondeu HTTP 200",
+    "127.0.0.1:8742/readyz respondeu 200",
+    "127.0.0.1:8742/health respondeu 200",
+    "nenhum servico foi reiniciado",
+    "nenhuma sincronizacao ou automacao foi executada"
+  ],
+  "rollback": "nao aplicavel; somente leitura",
+  "next_cursor": "COCKPIT_8099_OMNI_ROUTER_TIMEOUT_OWNER_READBACK"
+}

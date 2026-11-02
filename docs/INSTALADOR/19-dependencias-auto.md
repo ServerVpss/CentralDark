@@ -9,6 +9,25 @@ chama `ensure_deps`, que:
 3. Instala em batch só o que falta — com `noninteractive`, sem perguntar nada.
 4. Recheca e segue. Se algo opcional ainda faltar, só avisa.
 
+## GitHub CLI na Forja/openKylin (2026-11-01)
+
+O **owner `install.sh`** possui `--gh-auth`, acionado pelo menu canônico
+(opção 12), pelo instalador determinístico (opção 13) e também como preflight
+da instalação interativa. Reutiliza o `gh` instalado ou instala somente se
+ausente pelo gerenciador de pacotes encontrado. Não executa `autoremove`.
+
+Em sessão SSH sem ambiente gráfico, o comando usa
+`GH_BROWSER=true gh auth login --hostname github.com --git-protocol https --web`.
+O código único aparece **diretamente na TTY**, sem passar pelo log do
+`install.sh`; o humano visita `https://github.com/login/device` no próprio
+navegador e conclui a autorização. Não requer DISPLAY, X11 ou porta 1455.
+Após a autorização, o mesmo owner verifica `gh auth status`, configura
+`gh auth setup-git` e consulta `gh repo view ServerVpss/CentralDark`,
+sem imprimir credenciais. Sem TTY, sinaliza PENDING e não tenta login
+automático. `--gh-auth` evita self-update e alterações fora do escopo do
+onboarding. A `main` só pode ser instalada após confirmação humana
+e leitura do repositório; login não é prova de instalação ou deploy.
+
 ## Uso direto
 
 ```bash

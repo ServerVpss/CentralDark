@@ -39,11 +39,11 @@ async function solicitar(endpoint: string, opcoes: RequestInit = {}): Promise<Re
   });
   const tipo = resposta.headers.get("content-type") || "";
   if (!tipo.includes("json")) {
-    throw Error("MCP_HTTP_" + resposta.status + "_SEM_JSON");
+    throw Error("MCP_HTTP_" + resposta['status'] + "_SEM_JSON");
   }
   const json = (await resposta.json()) as Resultado;
   if (!resposta.ok) {
-    throw Error(String(json.error || json.status || "MCP_HTTP_" + resposta.status));
+    throw Error(String(json.error || json['status'] || "MCP_HTTP_" + resposta['status']));
   }
   return json;
 }
@@ -101,7 +101,7 @@ export function McpConsoleCentralDark() {
         body: formulario.toString(),
         redirect: "manual",
       });
-      if (!resposta.ok) throw Error("LOGIN_MCP_HTTP_" + resposta.status);
+      if (!resposta.ok) throw Error("LOGIN_MCP_HTTP_" + resposta['status']);
       definirAutenticado(true);
       definirSenha("");
       await atualizar(aba);

@@ -45,6 +45,16 @@ Todos os links apontam para fonte oficial Microsoft, documentação da equipe Po
 
 **Menor delta comprovado no caso:** `git hash-object README.md` foi usado para comparar **objetos Git** entre Casa e main; `sha256sum` no openKylin para verificar SHA-256 de bytes. **Não tratar `git hash-object` como SHA-256**: esse comando normalmente calcula OID/blobs de Git com formato e algoritmo definidos pelo repositório. Não alterar a execução do PowerShell ou instalar módulos apenas para calcular checksum.
 
+## 🍒+1 Comparação de arquivos e backups por SHA-256 (2026-11-01)
+
+**Reuso:** `Get-FileHash` é o método preferido quando existe no PowerShell atual; `Get-Command Get-FileHash -ErrorAction SilentlyContinue` determina disponibilidade real. Na Casa Windows PowerShell 5.1 observada em 01/11, `Get-FileHash` retornou `CommandNotFoundException` mesmo com o módulo Utility listado. Portanto não presumir autoload; não instalar módulos nem alterar política só para obter hash. O helper existente `Get-FileSha256` em `scripts/casa/garimpo-proof-gc.ps1` agora reutiliza `Get-StreamSha256` com .NET SHA256 como fallback e fecha o stream; `-SelfTest` usa vetor SHA-256 conhecido e cópia idêntica. A ferramenta já existia: sem criar segunda biblioteca.
+
+**Receita humana:** `(Get-FileHash -LiteralPath 'arquivo.iso' -Algorithm SHA256).Hash` e comparar ao hash **SHA-256 fornecido por origem confiável**. Exemplo `$calculado.Equals($esperado, [StringComparison]::OrdinalIgnoreCase)` retorna `True/False`, nunca `0/-1`. Quando o cmdlet não existir, preferir helper aprovado ou .NET SHA256 com leitura por stream; no Linux usar `sha256sum`. Só marcar `INTEGRIDADE=PASS` se o mesmo algoritmo e bytes coincidem e o valor esperado possui procedência verificável. Hash coincide ≠ arquivo seguro/autêntico se o hash original veio do mesmo atacante. MD5/SHA1 não são padrão de confiança para arquivos novos.
+
+**Garimpo/migração:** comparar origem/destino mediante SHA-256 e tamanho, registrar caminhos e resultados sem transportar segredos. Duplicação idêntica é **candidata** à limpeza, não autorização de apagar. No fluxo do SSD Kingston, hash de imagem e amostra restauração são gates separados, não substituem backup offline e restauração provada. `UNKNOWN != PASS`; `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT, `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=VERIFY_GARIMPO_SHA256_FALLBACK_AND_MAIN_READBACK`.
+
+**Prova executada na Casa (01/11/2026):** Windows PowerShell 5.1, cópia temporária idêntica do `scripts/casa/garimpo-proof-gc.ps1`, execução explícita de `-SelfTest` retornou `status=PASS`, `tests=8` e quatro tipos de candidatos. O mesmo teste revelou e permitiu corrigir dois defeitos preexistentes no owner: `Count` escalar com único ZIP e `TrimStart` com sequência de duas barras em vez de um caractere. Nenhum dado existente foi removido; o script de teste só criou e limpou sua própria pasta temporária. O teste não autoriza `-Apply` em acervo real.
+
 ## Exemplo de acionamento sem loop
 
 ```powershell

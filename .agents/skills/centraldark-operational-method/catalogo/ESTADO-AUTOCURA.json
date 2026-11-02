@@ -1,5 +1,5 @@
 {
-    "gerado_em":  "2026-10-28T21:57:30-03:00",
+    "gerado_em":  "2026-10-31T09:47:20-03:00",
     "formato":  1,
     "arquivos":  [
                      {
@@ -17,9 +17,9 @@
                      {
                          "caminho":  "catalogo/CATALOGO.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:54:32-03:00",
-                         "modificado_em":  "2026-10-28T21:54:32-03:00",
-                         "bytes":  13187,
+                         "criado_em":  "2026-10-30T22:09:44-03:00",
+                         "modificado_em":  "2026-10-30T22:09:44-03:00",
+                         "bytes":  13188,
                          "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
                          "descricao":  "",
                          "referencias":  [
@@ -150,6 +150,54 @@
                                          ]
                      },
                      {
+                         "caminho":  "catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-30T18:53:20-03:00",
+                         "modificado_em":  "2026-10-30T19:04:44-03:00",
+                         "bytes":  1918,
+                         "sha256":  "740ebec23cfaeb0f1cc73ce9e3ba4401a609114eddb410d21fe8039a2fbc3e5c",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-30T18:27:01-03:00",
+                         "modificado_em":  "2026-10-30T18:27:01-03:00",
+                         "bytes":  2039,
+                         "sha256":  "682f8bb6805789ccca7b46619dd3a57a285bc2dfbbd9b78fef310b36f3d8d93a",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/comprovacoes/genesis-replay-20261030T204009Z.json",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-30T17:41:51-03:00",
+                         "modificado_em":  "2026-10-30T17:43:55-03:00",
+                         "bytes":  2737,
+                         "sha256":  "bef6f8660479bfd8d876c4576d6fd279e0e7c7299ced218e6d3e3ac51272692a",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json",
+                         "tipo":  "catalogo",
+                         "criado_em":  "2026-10-30T19:09:53-03:00",
+                         "modificado_em":  "2026-10-30T19:09:53-03:00",
+                         "bytes":  1459,
+                         "sha256":  "ce5043e9c0abcefa18ea1ab511ef98f73fcda8f645b997e5b0d3dba93153782c",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "catalogo/comprovacoes/t_26e02a16.json",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
@@ -164,9 +212,9 @@
                      {
                          "caminho":  "catalogo/INDICE-PESQUISA.md",
                          "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T21:54:32-03:00",
-                         "modificado_em":  "2026-10-28T21:54:32-03:00",
-                         "bytes":  6021,
+                         "criado_em":  "2026-10-30T22:09:44-03:00",
+                         "modificado_em":  "2026-10-30T22:09:44-03:00",
+                         "bytes":  6022,
                          "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
                          "descricao":  "",
                          "referencias":  [
@@ -295,10 +343,10 @@
                      {
                          "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-27T12:23:02-03:00",
-                         "bytes":  3122,
-                         "sha256":  "628473969c7c5eaf64a6c23c0d7d9674a713166e0f1f415fbd0c6387f5fcdc1e",
+                         "criado_em":  "2026-10-29T12:18:58-03:00",
+                         "modificado_em":  "2026-10-29T12:18:58-03:00",
+                         "bytes":  4437,
+                         "sha256":  "6a5523d348280bc9c59e22cdf3b41138f1332d499cf2c8b81ae122f1dd1f0458",
                          "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
                          "referencias":  [
 
@@ -380,9 +428,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-28T19:36:57-03:00",
-                         "bytes":  12893,
-                         "sha256":  "b3b12f25b57605309b69ef719b3fb4e9f5a2102e4492ca8091982c51c149387f",
+                         "modificado_em":  "2026-10-29T09:31:40-03:00",
+                         "bytes":  14351,
+                         "sha256":  "eb1700fedac4c1775dba8f6703bf46d3ca21912d925edac92c1ac37e75d18953",
                          "descricao":  "Operate Hermes update, cron, SSH, ports for CentralDark.",
                          "referencias":  [
 
@@ -536,9 +584,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-ops/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  31761,
-                         "sha256":  "a6c703e3b56fb7172a4278545e5bd71e3f6ddd78ddd7575ef78a917e7f474cc9",
+                         "modificado_em":  "2026-10-29T09:46:42-03:00",
+                         "bytes":  56940,
+                         "sha256":  "b7163181023de645c6e43e38061181c04ea030f5206371f0ff3e060dd17a97e0",
                          "descricao":  "Operate CentralDark across Casa, GitHub, VPS, Hermes.",
                          "referencias":  [
 
@@ -548,9 +596,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-28T20:45:35-03:00",
-                         "bytes":  79553,
-                         "sha256":  "33774e6440040db4d4a54d48f43c32d2766e4363e72dbb055adaee96f386340d",
+                         "modificado_em":  "2026-10-29T10:46:50-03:00",
+                         "bytes":  94473,
+                         "sha256":  "4b8a7ca948be680bd15b5b5a00cc80b4b9a60815df79730e19a2540b12ef2549",
                          "descricao":  "Use when consulting an external browser oracle.",
                          "referencias":  [
 
@@ -584,9 +632,9 @@
                          "caminho":  "catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  26429,
-                         "sha256":  "88289de635e4edc2e277254149117fea78dac45425781b2e61d84941059e9c66",
+                         "modificado_em":  "2026-10-29T09:31:40-03:00",
+                         "bytes":  27958,
+                         "sha256":  "16f68fa7db6f943b787b710f5a70f1a0de0da791222765eea13d2cda2101f6b3",
                          "descricao":  "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
                          "referencias":  [
 
@@ -984,6 +1032,248 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T10:32:11-03:00",
+                         "modificado_em":  "2026-10-30T10:32:11-03:00",
+                         "bytes":  5029,
+                         "sha256":  "9dfe33889f757cecdcec15946a5420d6bb2199cb2f54feccafa203772ef1bec6",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:59:40-03:00",
+                         "bytes":  149114,
+                         "sha256":  "53f89b23a4a141941ef87ecc7f0ca31d66e43a365df45ce56610e54e64e871ca",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "scripts/Hermes-Desktop-BrowserTab.ps1",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "scripts/Hermes-SkillLifecycle-Bridge.py",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "scripts/Hermes-Oracle-Return.ps1",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../kaizen-sistema-um/SKILL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/03-evidencias-contraprovas/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#observacoes--receita-operacional-viva-dos-4-monitores-28102026",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#navegação-deliberada-do-cockpit--mapa-vivo-botão-por-botão",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#recibo-consumido--seis-cliques-de-navegação-radeon-hermes-desktop-2026-10-27",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/CATALOGO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/ARQUIVOS-VIVOS.json",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/INDICE-VIVO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/ARQUIVOS.json",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/AUTO-MELHORIA-COM-PROVA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/rsi-loop-method.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/HERMES-FREE-TIER-FALLBACK.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/CATALOGO.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current",
+                                                 "existe":  false
+                                             }
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/CORPUS-02-LICOES-LEGADO-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:58:52-03:00",
+                         "bytes":  67659,
+                         "sha256":  "cfdfdf8b711ebbedc5a24e8b8cb6d849d19b1e97955bf297e685bfb0189ea939",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:58:52-03:00",
+                         "bytes":  37588,
+                         "sha256":  "7bb7fd3fa210118084e3746b52a9e20f7d1fbae5ae1013935f5ee167bafe5b5e",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:58:52-03:00",
+                         "bytes":  44769,
+                         "sha256":  "8bf88a7cdbececf9b771e566110751e87317bf73f1d6e9cc88572c73d91f4d5b",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "references/delegacao-economica-com-prova.md",
+                                                 "existe":  false
+                                             },
+                                             {
+                                                 "destino":  "references/remote-desktop-commander-vscode-casa.md",
+                                                 "existe":  false
+                                             }
+                                         ]
+                     },
+                     {
                          "caminho":  "references/delegacao-economica-com-prova.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-15T13:26:01-03:00",
@@ -1011,9 +1301,9 @@
                          "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-28T08:08:26-03:00",
-                         "modificado_em":  "2026-10-28T19:55:11-03:00",
-                         "bytes":  45748,
-                         "sha256":  "e38d9a82074d32d321dc0f876f4cb6f2a5679c07d039c88e31885e9361abf4c7",
+                         "modificado_em":  "2026-10-30T16:07:23-03:00",
+                         "bytes":  48648,
+                         "sha256":  "df35d32e79e941a3ca7ef30ef310797a463b8167f65484909ca6f57f345dcad7",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1046,10 +1336,10 @@
                      {
                          "caminho":  "references/HERMES-FREE-TIER-FALLBACK.md",
                          "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  9125,
-                         "sha256":  "d64e2826e70459595a250ffa68d2b260ee5ee7402631514fb9644020b1bde403",
+                         "criado_em":  "2026-10-29T14:12:13-03:00",
+                         "modificado_em":  "2026-10-29T14:12:14-03:00",
+                         "bytes":  10698,
+                         "sha256":  "c45930635f52d3bd0f263e31b110e806a9d0957146df130b877b5991ef3c82e0",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1092,6 +1382,52 @@
                          "descricao":  "",
                          "referencias":  [
 
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:59:40-03:00",
+                         "bytes":  23097,
+                         "sha256":  "e7bf64b67c14765dcc1f54d62680e37f76db3030fe139f372b43f37100fff239",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "CORPUS-02-LICOES-LEGADO-20261030.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "CORPUS-04-ROTAS-RECENTES-20261030.md",
+                                                 "existe":  true
+                                             }
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T00:07:00-03:00",
+                         "modificado_em":  "2026-10-30T00:07:00-03:00",
+                         "bytes":  6131,
+                         "sha256":  "4826354b5828f8342deb71a945848f6304429f01c3f3acd6ddfcb7bd5f3e925f",
+                         "descricao":  "",
+                         "referencias":  [
+                                             {
+                                                 "destino":  "../SKILL.md",
+                                                 "existe":  true
+                                             },
+                                             {
+                                                 "destino":  "../scripts/Trace-TransientConsoleWindows.ps1",
+                                                 "existe":  true
+                                             }
                                          ]
                      },
                      {
@@ -1173,6 +1509,18 @@
                                          ]
                      },
                      {
+                         "caminho":  "references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T21:58:52-03:00",
+                         "modificado_em":  "2026-10-30T21:59:40-03:00",
+                         "bytes":  1676,
+                         "sha256":  "6c2abb0544e926c74b44900422d20a447afed82e12ae67ba43bb5756e0d86ab3",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "references/regenerative-self-refinement-engine.md",
                          "tipo":  "referencia",
                          "criado_em":  "2026-10-12T02:29:56-03:00",
@@ -1191,6 +1539,30 @@
                          "modificado_em":  "2026-10-18T17:20:31-03:00",
                          "bytes":  9149,
                          "sha256":  "03b9c509edc7f2181eca6a19542f383b68b25370898efec4d0713b7286241d21",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/rsi-loop-method.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-29T07:58:27-03:00",
+                         "modificado_em":  "2026-10-30T18:20:07-03:00",
+                         "bytes":  6958,
+                         "sha256":  "8594a3cb0d535cd030415577cf7f1da8f204efb90f48ae150d54397f13288bb2",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+                         "tipo":  "referencia",
+                         "criado_em":  "2026-10-30T14:30:16-03:00",
+                         "modificado_em":  "2026-10-30T15:29:41-03:00",
+                         "bytes":  7559,
+                         "sha256":  "e5be52dbf49f66d5259c65e44a00bab79d9a9c6ff67dd87535c6eb9b0ad2ee70",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1223,10 +1595,10 @@
                      {
                          "caminho":  "scripts/atualizar-catalogo-self-healing.ps1",
                          "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-28T10:39:11-03:00",
-                         "bytes":  17197,
-                         "sha256":  "606a0b529595fbee8d80c15e8bc15696073a6c10266a5f7ec036e091aec32f32",
+                         "criado_em":  "2026-10-30T19:45:33-03:00",
+                         "modificado_em":  "2026-10-30T19:45:33-03:00",
+                         "bytes":  18294,
+                         "sha256":  "fe6f00553c0e84a13095ac2e40106b6a4a9982ab41c1f320f6698de5f831f704",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1275,6 +1647,18 @@
                          "modificado_em":  "2026-10-28T20:45:05-03:00",
                          "bytes":  15507,
                          "sha256":  "109f6cf8d22dab2f4068cffa46609a5bc9965fbb8615eae3165ed13f0c4ab876",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
+                         "caminho":  "scripts/Hermes-SkillLifecycle-Bridge.py",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-28T22:07:39-03:00",
+                         "modificado_em":  "2026-10-28T22:18:35-03:00",
+                         "bytes":  3663,
+                         "sha256":  "10d92021043a05c3807718c4dcf843eb165d063d3d4c8f16300a2a0562336efe",
                          "descricao":  "",
                          "referencias":  [
 
@@ -1389,192 +1773,64 @@
                                          ]
                      },
                      {
+                         "caminho":  "scripts/Trace-TransientConsoleWindows.ps1",
+                         "tipo":  "script",
+                         "criado_em":  "2026-10-30T00:07:40-03:00",
+                         "modificado_em":  "2026-10-30T00:08:59-03:00",
+                         "bytes":  6164,
+                         "sha256":  "4ffb343763f0129704b616c5988f276ad7b4205a721e91584f8f0ded28b78109",
+                         "descricao":  "",
+                         "referencias":  [
+
+                                         ]
+                     },
+                     {
                          "caminho":  "SKILL.md",
                          "tipo":  "skill",
-                         "criado_em":  "2026-10-26T18:15:25-03:00",
-                         "modificado_em":  "2026-10-28T21:55:56-03:00",
-                         "bytes":  251584,
-                         "sha256":  "713a113231f7dcf3e5d834faa0abbef73a38e709a5fafc48d1733561d93714fe",
+                         "criado_em":  "2026-10-30T22:09:36-03:00",
+                         "modificado_em":  "2026-10-31T09:46:58-03:00",
+                         "bytes":  45254,
+                         "sha256":  "8342963ce7fe7a4e9f368c3f82a8cc8288a6dfa77517e79116efc05060eb31a3",
                          "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
                          "referencias":  [
                                              {
-                                                 "destino":  "scripts/Hermes-Desktop-BrowserTab.ps1",
+                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
+                                                 "destino":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+                                                 "destino":  "scripts/Trace-TransientConsoleWindows.ps1",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "scripts/Hermes-Oracle-Return.ps1",
+                                                 "destino":  "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "references/CORPUS-02-LICOES-LEGADO-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+                                                 "destino":  "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+                                                 "destino":  "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "../kaizen-sistema-um/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/03-evidencias-contraprovas/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#observacoes--receita-operacional-viva-dos-4-monitores-28102026",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#navegação-deliberada-do-cockpit--mapa-vivo-botão-por-botão",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#recibo-consumido--seis-cliques-de-navegação-radeon-hermes-desktop-2026-10-27",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/CATALOGO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/ARQUIVOS-VIVOS.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-VIVO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/ARQUIVOS.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/AUTO-MELHORIA-COM-PROVA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/regenerative-self-refinement-engine.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/HERMES-FREE-TIER-FALLBACK.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/CATALOGO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/delegacao-economica-com-prova.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/remote-desktop-commander-vscode-casa.md",
+                                                 "destino":  "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
                                                  "existe":  true
                                              }
                                          ]

@@ -1,3 +1,10 @@
+/*
+ * #OBSERVACOES# | CENTRALDARK.HARNESS.MODULE_REGISTRY.CARD
+ * @owner: apps/instinto-superior/config/harness-module-registry.json
+ * @doc_ref: docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md
+ * @last_updated: 2026-10-23T03:05:00.000Z
+ * @scope: card dos módulos; PROVEN travado (🟢🔒) separado da sessão ao vivo.
+ */
 import { ExternalLink, CircleHelp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -10,6 +17,8 @@ type HarnessModule = {
   runtimeUrl?: string;
   evidence?: string;
   lastObserved?: "OFFLINE_2026_10_17";
+  locked?: boolean;
+  liveNote?: string;
 };
 
 const MODULES: HarnessModule[] = [
@@ -26,6 +35,8 @@ const MODULES: HarnessModule[] = [
   { id: "casa-vps-ssh", label: "Casa → VPS · Tailscale SSH", owner: "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1", transport: "100.90.199.124:22 · host key estrita · fallback público existente", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md" },
   { id: "vscode-restore", label: "CentralDark VS Code Restore 0.1.4", owner: "VS Code · Casa SEGREDO", transport: "Extensão instalada · prova em sessão histórica", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
   { id: "vscode-remote-ssh", label: "VS Code Remote-SSH 0.128.0", owner: "VS Code · Casa SEGREDO", transport: "Remote-SSH oficial · transporte Casa → VPS", status: "PROVEN", lastObserved: "OFFLINE_2026_10_17", evidence: "Captura de sessão Windows/VS Code fornecida pelo CHEFE em 17/10" },
+  { id: "casa-jea-winrm", label: "Casa JEA · WinRM 5985 via Tailscale", owner: "Hermes skill devops/centraldark-casa-jea", transport: "VPS 100.90.199.124 → Tailscale → Casa 100.123.93.25:5985 → JEA CentralDark-Harness · VER/PEDIR/MEXER/allow 🟢🔒", status: "PROVEN", locked: true, evidence: "apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm · provado 22/10/2026 23:38:13 BRT", liveNote: "SESSÃO AO VIVO · só pelo sensor scripts/lupa/validar-harness-casa-jea.mjs; ⚠️ com causa não rebaixa o PROVEN" },
+  { id: "terminal-visivel-sol-casa", label: "Terminal visível SOL → Casa", owner: "Desktop Commander · Casa SEGREDO", transport: "Dispatch → Cowork → Desktop Commander → conhost.exe → PowerShell visível (sessão 1) · só leitura 🟢🔒", status: "PROVEN", locked: true, evidence: "apps/instinto-superior/config/harness-module-registry.json#terminal-visivel-sol-casa · 22/10/2026 23:47 BRT · foto confirmada pelo CHEFE", liveNote: "SESSÃO AO VIVO · não medida nesta tela; receita: Start-Process conhost.exe (nunca Start-Process powershell)" },
 ];
 
 export function HarnessModuleRegistry() {
@@ -56,14 +67,14 @@ export function HarnessModuleRegistry() {
             <div className="flex items-center justify-between gap-2">
               <strong className="text-sm">{modulo.label}</strong>
               <span className={modulo.status === "PROVEN" ? "text-xs text-emerald-500" : "text-xs text-amber-500"}>
-                {modulo.status === "PROVEN" ? "EVIDÊNCIA PROVADA" : "SEM PROVA DE RUNTIME"}
+                {modulo.status === "PROVEN" ? (modulo.locked ? "🟢🔒 EVIDÊNCIA PROVADA · TRAVADA" : "EVIDÊNCIA PROVADA") : "SEM PROVA DE RUNTIME"}
               </span>
             </div>
             <p className="mt-1 break-all font-mono text-[10px] text-muted-foreground">OWNER · {modulo.owner}</p>
             <p className="mt-1 text-xs text-muted-foreground">TRANSPORTE · {modulo.transport}</p>
             {modulo.evidence ? <p className="mt-1 break-all text-[10px] text-muted-foreground">RECIBO · {modulo.evidence}</p> : null}
             <p className="mt-1 text-[10px] text-muted-foreground">
-              SESSÃO AO VIVO · NÃO MEDIDA NESTA TELA{modulo.lastObserved ? " · ÚLTIMA CONSULTA 17/10: CONECTOR OFFLINE" : ""}
+              {modulo.liveNote ?? "SESSÃO AO VIVO · NÃO MEDIDA NESTA TELA"}{modulo.lastObserved ? " · ÚLTIMA CONSULTA 17/10: CONECTOR OFFLINE" : ""}
             </p>
             {modulo.runtimeUrl ? (
               <Button asChild size="sm" variant="outline" className="mt-2">

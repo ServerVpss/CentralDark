@@ -11,7 +11,7 @@ const STATUS_COLORS: Record<GoalStatus, string> = {
   unknown: "text-gray-600 bg-gray-50",
 };
 
-const STATUS_ICONS: Record<GoalStatus, JSX.Element> = {
+const STATUS_ICONS: Record<GoalStatus, React.JSX.Element> = {
   pending: <Clock className="h-4 w-4" />,
   in_progress: <Clock className="h-4 w-4" />,
   in_testing: <AlertCircle className="h-4 w-4" />,
@@ -38,7 +38,7 @@ export function GoalsDashboard() {
     const newGoal: Goal = {
       id: `goal-${Date.now()}`,
       title: newGoalTitle,
-      description: newGoalDesc || undefined,
+      ...(newGoalDesc ? { description: newGoalDesc } : {}),
       status: selectedStatus,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

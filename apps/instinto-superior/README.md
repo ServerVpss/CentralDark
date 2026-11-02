@@ -58,3 +58,29 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 ## 🪬 Manifesto incremental do harness privado
 
 O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o NEXT_CURSOR ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
+
+
+## Túnel OpenAI na Forja Linux — 2026-11-01T19:13:55.777094+00:00
+
+@owner: instinto.admin.mcp; @code_ref: src/lib/mcp-admin.functions.ts; src/components/central/McpAdminIntegrado.tsx
+@last_updated: 2026-11-01T19:13:55.777094+00:00
+O Admin MCP reutiliza autenticação Supabase e user_roles admin para receber CONTROL_PLANE_API_KEY. O servidor habilitado por CENTRALDARK_LOCAL_TUNNEL_ENABLED=1 grava atomicamente ~/.config/tunnel-client/centraldark-casa.env com modo 0600; o observador systemd do mesmo usuário inicia centraldark-mcp-tunnel.service. O valor nunca é retornado, logado ou enviado ao Vault remoto. O Cofre Supabase permanece dono das outras credenciais; isto configura o owner local específico do túnel. Sem sessão/admin, sem escrita. Readiness não equivale a chamada pelo plugin. Ambiente Linux: checkout medido, sem impor /root/CentralDark.
+Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. NEXT_CURSOR: build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
+
+@code_ref: src/lib/cockpit.functions.ts; @last_updated: 2026-11-01T19:22:05.143254+00:00. Inventário executa ss/pgrep no Linux nativo, sem exigir WSL/PowerShell. CASA é papel explícito, não deduzido de hostname. TCP/UDP e processo STDIO mantêm provas separadas de execução funcional.
+
+Rotação de chave: após gravação privada, a função administrativa solicita restart exclusivamente da unit centraldark-mcp-tunnel.service (argumentos fixos, sem segredo). Falha no restart retorna SAVED_RESTART_PENDING; nunca retorna erro que finja que a gravação não ocorreu.
+
+
+## Omni Router nativo conectado — 2026-11-01T19:41:24.979255+00:00
+
+@code_ref: src/lib/cockpit.functions.ts; src/components/central/StatusPanel.tsx
+@last_updated: 2026-11-01T19:41:24.979255+00:00
+Owner API existente: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py, iniciado pelo scripts/launch_omni_router_direct.py no Linux, loopback8099. Dependências isoladas na .venv do módulo, usando somente FastAPI/uvicorn/pydantic/requests do manifesto atual. Token privado no .env canônico e consumido server-side pelo cockpit apenas para o owner API loopback; não enviado a destinos externos ou navegador. Health do cockpit aponta ao mesmo owner8099, substituindo binding Windows9101 no ambiente local. Grafo/receipts seguem NOT_REVALIDATED quando só projetam arquivos; heartbeat mede processo, não inferência. Próxima prova: rotas reais, negação sem token, readback pelo cockpit e providers separados.
+
+Screenpipe Linux: binário npm oficial da mesma versão0.4.51 já fixada no projeto; serviço nativo screenpipe.service do usuário, loopback3030 e dados privados em ~/.screenpipe. Captura local, sem cloud sync e telemetria desligada. Sensor identifica Forja Linux; no_input_device/disabled/no_audio não são rotulados como áudio detectado. Frames e áudio precisam de timestamps/contagem reais; health200 sozinho não prova captura.
+
+## Regressão dos botões de sincronização — 2026-11-01T19:58:27.552347+00:00
+@code_ref: src/lib/sync.functions.ts; src/components/central/AutoSyncButton.tsx
+@last_updated: 2026-11-01T19:58:27.552347+00:00
+Botão Main mede sem publicar e retorna conflito se SHAs diferem; consulta bem-sucedida não significa convergência. Casa/Forja reutiliza syncCasaMain, bloqueia drift antes de merge/push e não adiciona arquivos automaticamente. Seleção/publicação de arquivos permanece com writer-safe-push-main existente. Sincronizar Tudo cobre Casa/Main; VPS é explícita e bloqueia checkout remoto sujo. Sequência all interrompe no primeiro conflito, sem alcançar VPS. Regressão exige clique, readback do host e contraprova; navegação não é execução do motor.
