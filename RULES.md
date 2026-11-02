@@ -448,6 +448,22 @@ Nunca imprimir token, senha, cookie, chave privada ou valor secreto em Git, chat
 
 ## Prova, contraprova e fixed point
 
+### 🧹 Lei de responsabilidade por alterações e limpeza segura (2026-11-01)
+
+**Quem cria ou altera script, teste, automação, configuração executável ou código é responsável por executar a suíte pertinente ao delta e informar o resultado real.** O Writer pode delegar a execução a uma rota autorizada, mas conserva a responsabilidade pelo receipt. A suíte deve incluir os testes existentes que verificam a parte tocada e a contraprova discriminante necessária, sem repetir verificações sem efeito material.
+
+**Recibo obrigatório no owner ou PR existente:** registrar alvo e SHA/versão testada, comando ou método realmente executado, escopo da suíte, resultado observado (`PASS`, `FAIL`, `SKIPPED`, `BLOCKED` ou `UNKNOWN`), falhas e limites, e `NEXT_CURSOR` quando houver pendência. **Falha, runner offline, suíte ausente ou indisponível não viram PASS nem execução presumida.** Se o trabalho foi somente documental, declarar isso e fazer a validação pertinente ao texto/contrato alterado, sem inventar build ou CI.
+
+**Limpeza segura é a última etapa, não a primeira:** `ALTERAR → EXECUTAR TESTES PERTINENTES → CONTRAPROVAR → REGISTRAR RECEIPT → LIMPAR TEMPORÁRIOS PRÓPRIOS → CONFERIR O QUE RESTOU`. Após validação e receipt, o executor remove **somente** temporários descartáveis que ele próprio criou nesta operação, identificados pelo caminho e escopo, sem apagar evidência necessária para diagnóstico ou continuidade. Preservar backups, históricos Git, arquivos do CHEFE, workspaces/worktrees de outros escritores, fontes, logs e recibos. Se algum temporário precisar ser preservado por falha ou prova pendente, informar caminho e motivo; **limpeza não comprovada = PENDENTE**, nunca alegar conclusão.
+
+```text
+CODE_CHANGED_REQUIRES_RELEVANT_TEST_EXECUTION_AND_REAL_REPORT=true
+TEST_UNAVAILABLE_OR_FAILED_IS_NOT_PASS=true
+RECEIPT_BEFORE_OWN_TEMP_CLEANUP=true
+CLEANUP_ONLY_OWN_DISPOSABLE_TEMP_AFTER_VALIDATION=true
+PRESERVE_USER_FILES_BACKUPS_HISTORY_AND_EVIDENCE=true
+```
+
 A CentralDark não aceita verde por aparência.
 
 ```text
