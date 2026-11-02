@@ -169,3 +169,21 @@ Melhoria antecipada de selecao: para pagina listada pela instancia MCP, fazer li
 **Invalidação do cache:** janela/monitor/layout mudou, editor ou conversa diferente, rascunho pré-existente, foco incerto, falta de evidência de envio, bloqueio da ferramenta ou autorização alterada → renovar SOMENTE a prova afetada, sem clique ou envio repetido. Nunca fixar PID, coordenadas e posição de monitor como constantes globais. Nunca sobrescrever rascunho do CHEFE. Não declarar envio por comando que apenas retornou sucesso sem readback.
 
 **Receipt (02/11/2026):** `SOURCE=SOL|TARGET=HermesDesktop/chat|ROUTE=RemoteDesktopCommander/WindowsUI|MESSAGE_SENT=PASS|EXECUTOR_ACCEPTED=UNKNOWN|EXECUTION=UNKNOWN|FIXED_POINT_SCOPE=UI_SEND_ONLY|PROMPT_SELF_CACHE_P15=APLICÁVEL_SEM_HIT_MEDIDO|KV_CACHE_P16=UNKNOWN|NEXT_CURSOR=READ_HERMES_RESPONSE_ON_SAME_CHAT`. Sem tempo de execução comparativo aferido: `SPEEDUP=UNKNOWN`.
+
+<!-- HERMES_MODEL_SWITCH_UNKNOWN_EXECUTION_AND_CWD_20261102 -->
+## Hermes Desktop: diagnóstico real de `Model switch failed: unknown_execution` e reparo de CWD (02/11/2026)
+
+**Intenção:** CHEFE mostrou erro ao trocar modelo e esclareceu que o disco `K:` não existe mais; autorizou corrigir as referências obsoletas sem interromper trabalho ativo. Skill Mãe + Kimetsu (SPIKE → BOUNDED, Concentração/Inseto/Lua), escritor único na Casa.
+
+**Provas na Casa:** `logs/desktop.log` registrou três recusas `Model switch failed: JsonRpcGatewayError: unknown_execution` em 02/11 às 12:34:34, 12:34:41 e 12:34:57; houve outra às 12:44:12. `logs/agent.log` registrou `TERMINAL_CWD does not exist: K:/` repetidamente. `Test-Path K:\` retornou `False`; `E:\CentralDark` existe. Código real `hermes_state_mutation_guards.py` bloqueia alterações em sessões com admissions/workers `unknown`; `gateway/session_authority.py` pausa entradas com esse estado. Portanto o CWD inválido e a recusa de troca de modelo são **dois problemas distintos**, sem relação causal comprovada.
+
+**Correção mínima aplicada:** três arquivos de configuração originais, sem tocar em discos, sessões ou código do Hermes:
+- `%LOCALAPPDATA%\hermes\config.yaml`: `terminal.cwd: K:/` → `E:/CentralDark`; caminho confiável `K:\` → `E:\CentralDark`.
+- `%USERPROFILE%\.hermes\config.yaml`: `terminal.cwd: K:/` → `E:/CentralDark`.
+- **Perfil ativo** `%LOCALAPPDATA%\hermes\profiles\hermes-vmware\config.yaml`: `terminal.cwd: 'K:'` → `'E:/CentralDark'`.
+
+Cada arquivo recebeu backup irmão `.before-cwd-repair-20261102.bak`; readback textual confirmou a mudança. `hermes config get terminal.cwd` e `hermes --profile hermes-vmware config get terminal.cwd` retornaram `E:/CentralDark`. O gateway manual ainda rodava após a edição e emitiu aviso antigo `K:/`, logo **`CWD_CONFIG_FIXED=PASS`, `LIVE_PROCESS_RELOADED=UNKNOWN/NOT_PROVEN`**. Não reiniciar gateway nem interromper sessões em curso automaticamente.
+
+**Recuperação de troca de modelo:** `unknown_execution` é recusa real de segurança/idempotência por execução anterior com resultado incerto, não falta de chave de modelo e não algo que deva ser mascarado como sucesso. `hermes sessions discard --help` confirma que a função existente descarta uma admissão desconhecida e **não a reproduz**; exige decisão explícita de qual admissão pode ser abandonada e preservação de eventuais resultados. Leitura somente do `state.db` encontrou quatro admissions antigos `unknown` e zero workers `unknown` naquele banco; sem prova de correlação 1:1 com a sessão exibida, não executar descarte. `HERMES_MODEL_SWITCH_FIXED=NO` até reconciliação da sessão alvo e teste efetivo de troca.
+
+**Fast-path reuse:** ao observar `Model switch failed: unknown_execution`, coletar uma linha do log + identificar perfil/sessão de origem, conferir apenas `hermes --profile <ativo> config get terminal.cwd` caso apareça também `TERMINAL_CWD` inválido. Não varrer discos, repetir autenticações nem reabrir todas as sessões. Se CWD for inválido, corrigir somente o perfil ativo e configurações explicitamente afetadas; se execução desconhecida, recuperar receipt antes de decidir `discard`. Só após tarefa ativa terminar, reavaliar recarregamento do perfil e testar a troca. `NEXT_CURSOR=RECONCILE_TARGET_SESSION_UNKNOWN_ADMISSION_WITHOUT_LOSS_THEN_MODEL_SWITCH_READBACK`.
