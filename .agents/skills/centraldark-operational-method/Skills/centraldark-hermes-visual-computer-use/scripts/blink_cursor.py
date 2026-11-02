@@ -1,5 +1,5 @@
 """Cursor virtual nativo Cua com overlay Hermes no monitor solicitado."""
-#OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/native-cursor.md
+#OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/native-cursor.md
 import argparse
 import json
 import os
@@ -49,7 +49,9 @@ def main():
                             text=True, timeout=5)
     if status.returncode or "not running" in (status.stdout + status.stderr).lower():
         raise RuntimeError("CUA_VISUAL_HOST_REQUIRED: daemon Cua com overlay precisa estar ativo")
-    import visual
+    import importlib.util
+    spec=importlib.util.spec_from_file_location("visual",Path(__file__).resolve().with_name("visual.py"))
+    visual=importlib.util.module_from_spec(spec);spec.loader.exec_module(visual)
     sid = "hermes-visual-cursor-" + uuid.uuid4().hex[:10]
     session_started = False
     receipt = {"session": sid, "mode": args.mode, "cursor": "native_cua_virtual",

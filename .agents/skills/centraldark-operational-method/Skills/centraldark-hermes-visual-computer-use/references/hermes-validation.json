@@ -1,5 +1,6 @@
 {
   "skill_discovered": true,
+  "skill_owner": "centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use",
   "registered_tools": [
     "computer_list_monitors",
     "computer_capture_monitor",
@@ -81,7 +82,7 @@
     },
     "state": "CAPTURING",
     "overlayExcluded": true,
-    "activeUntil": "2026-11-02T17:33:58.9419038Z",
+    "activeUntil": "2026-11-02T20:10:56.0576952Z",
     "retention": "caller deletes temporary image after inspection"
   },
   "final_status": {
@@ -95,5 +96,5 @@
   "requested_validation": "Hermes, identifique todos os monitores conectados ao computador. Apresente a quantidade, resolucao, coordenadas e monitor principal. Ative o overlay verde no Monitor 1, faca uma captura de diagnostico e encerre a captura corretamente.",
   "execution": "actual Hermes registered tool handlers; no simulated LLM conversation",
   "hooks": "actual_plugin_hooks_pass_no_input_injected",
-  "timestamp": 1793640819.965971
+  "timestamp": 1793650236.9290028
 }

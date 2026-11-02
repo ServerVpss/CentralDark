@@ -1,5 +1,5 @@
 """Hermes Visual Computer Use bridge: one bounded child per authorized session.
-#OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+#OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 No mouse injection. Existing Hermes computer_use owns all input.
 """
 from __future__ import annotations

@@ -1,5 +1,5 @@
 """Public Hermes plugin SDK registration; never overrides computer_use.
-#OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+#OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 """
 import importlib.util, ctypes
 import json
@@ -7,7 +7,7 @@ from pathlib import Path
 from hermes_constants import get_hermes_home
 
 def _bridge():
-    path = Path(get_hermes_home()) / "skills" / "hermes-visual-computer-use" / "scripts" / "visual.py"
+    path = Path(get_hermes_home()) / "skills" / "centraldark-operational-method" / "Skills" / "centraldark-hermes-visual-computer-use" / "scripts" / "visual.py"
     spec = importlib.util.spec_from_file_location("hermes_visual_bridge", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)

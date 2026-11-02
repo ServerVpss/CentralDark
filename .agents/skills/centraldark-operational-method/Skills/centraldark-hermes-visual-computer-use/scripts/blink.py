@@ -1,5 +1,5 @@
 """Blink the selected monitor via the existing Hermes overlay. No capture or input.
-#OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/monitor-human-confirmation.json
+#OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/monitor-human-confirmation.json
 """
 import argparse, json, time
 from visual import request, close_session

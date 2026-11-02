@@ -1,6 +1,6 @@
 // @last_updated=2026-11-02T17:33:10.1446661Z
 using System.IO;
-// #OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+// #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 using Windows.Foundation.Metadata;
 using Windows.Graphics.Capture;
 using Windows.Graphics.DirectX;

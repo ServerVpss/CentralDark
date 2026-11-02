@@ -1,4 +1,4 @@
-﻿# #OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+# #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 [CmdletBinding()]param([string]$HermesRoot=(Join-Path $env:LOCALAPPDATA 'hermes\hermes-agent'))
 $ErrorActionPreference='Stop'
 $source=Split-Path $PSScriptRoot
@@ -7,12 +7,18 @@ if(-not(Test-Path $python)){throw 'HERMES_PYTHON_NOT_FOUND: pass -HermesRoot wit
 Push-Location $HermesRoot
 try{$homePath=(& $python -c 'from hermes_constants import get_hermes_home; print(get_hermes_home())' | Select-Object -Last 1).Trim()}finally{Pop-Location}
 if(-not $homePath){throw 'HERMES_HOME_UNRESOLVED'}
-$dest=Join-Path $homePath 'skills\hermes-visual-computer-use'
+$mother=Join-Path $homePath 'skills\centraldark-operational-method'
+if(-not(Test-Path $mother)){throw 'SKILL_MAE_NOT_INSTALLED'}
+$dest=Join-Path $mother 'Skills\centraldark-hermes-visual-computer-use'
 [void](New-Item -ItemType Directory -Force -Path $dest)
-foreach($file in @('SKILL.md')){Copy-Item (Join-Path $source $file) (Join-Path $dest $file) -Force}
+function Copy-IfChanged([string]$from,[string]$to){
+ if((Test-Path -LiteralPath $to) -and ([Convert]::ToBase64String([IO.File]::ReadAllBytes($from)) -ceq [Convert]::ToBase64String([IO.File]::ReadAllBytes($to)))){return}
+ Copy-Item -LiteralPath $from -Destination $to -Force
+}
+foreach($file in @('SKILL.md')){Copy-IfChanged (Join-Path $source $file) (Join-Path $dest $file)}
 foreach($folder in @('scripts','references','native')){
  [void](New-Item -ItemType Directory -Force -Path (Join-Path $dest $folder))
- Get-ChildItem (Join-Path $source $folder) -File | Copy-Item -Destination (Join-Path $dest $folder) -Force
+ Get-ChildItem (Join-Path $source $folder) -File | ForEach-Object {Copy-IfChanged $_.FullName (Join-Path (Join-Path $dest $folder) $_.Name)}
 }
 if(-not(Test-Path (Join-Path $dest 'default.json'))){Copy-Item (Join-Path $source 'default.json') $dest}
 Push-Location (Join-Path $source 'native')

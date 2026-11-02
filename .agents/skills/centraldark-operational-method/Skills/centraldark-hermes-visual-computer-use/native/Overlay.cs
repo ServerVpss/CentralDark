@@ -1,5 +1,5 @@
 // @last_updated=2026-11-02T17:33:10.1446661Z
-// #OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+// #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;

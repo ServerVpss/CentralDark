@@ -1,5 +1,5 @@
 # Hermes Visual Computer Use — implementacao Windows
-Owner: .agents/skills/hermes-visual-computer-use. @code_ref: native/*.cs; scripts/visual.py; scripts/hermes_plugin.py.
+Owner: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use. @code_ref: native/*.cs; scripts/visual.py; scripts/hermes_plugin.py.
 Escopo: complemento por monitor; nao substitui Hermes/Cua, nao modifica fontes do Hermes, nao injeta input.
 
 ## Arquitetura real
@@ -39,7 +39,7 @@ captura retorna imagem no formato multimodal ja adotado por Hermes; PNG temporar
 
 ## Instalacao e uso
 PowerShell: scripts/Install.ps1 [-HermesRoot <repositorio-instalado>].
-Detecta HERMES_HOME pelo proprio hermes_constants.get_hermes_home; instala em skills/hermes-visual-computer-use e plugins/hermes-visual-computer-use.
+Detecta HERMES_HOME pelo proprio hermes_constants.get_hermes_home; instala em skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use e plugin existente plugins/hermes-visual-computer-use.
 Usa SDK .NET8 instalado, target Windows10.0.26100 para expor IsBorderRequired; disponibilidade runtime checada antes de usar.
 Publica runtime gerado localmente; binarios e imagens nao entram no Git.
 Ativacao usa cmd_enable oficial, preservando outros plugins e configuracoes. Sem restart forcado.

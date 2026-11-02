@@ -1,5 +1,5 @@
 // @last_updated=2026-11-02T17:33:10.1446661Z
-// #OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+// #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 // @implementado=EnumDisplayMonitors, DPI, WGC monitor interop; no input injection.
 using System.Runtime.InteropServices;
 using Windows.Graphics.Capture;

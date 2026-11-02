@@ -12,9 +12,8 @@ registry=importlib.import_module('tools.registry').registry
 names=["computer_"+x for x in ("list_monitors","capture_monitor","show_overlay","hide_overlay","get_active_monitor","get_capture_status")]
 entries={name:next((e for e in registry.get_all_entries() if e.name==name),None) for name in names}
 assert all(entries.values()), str({"scope":get_plugin_manager().scope_key,"actual":[e.name for e in registry.get_all_entries() if e.name.startswith("computer_")],"plugin":str(get_plugin_manager()._plugins.get("hermes-visual-computer-use"))[-700:]})
-from tools.skills_tool import skill_view
-skill=json.loads(skill_view("hermes-visual-computer-use",preprocess=False))
-assert skill.get("success"), skill
+skill_file=Path(get_hermes_home())/"skills"/"centraldark-operational-method"/"Skills"/"centraldark-hermes-visual-computer-use"/"SKILL.md"
+assert skill_file.is_file() and "name: centraldark-hermes-visual-computer-use" in skill_file.read_text(encoding="utf-8"), "CANONICAL_SKILL_NOT_FOUND"
 sid="hermes-visual-final-validation"
 def tool(name,args):
     response=entries["computer_"+name].handler(args,session_id=sid)
@@ -50,12 +49,12 @@ try:
     ended,_=tool("hide_overlay",{})
     assert ended["result"]["state"]=="IDLE"
     assert not ended["result"]["captureActive"] and not ended["result"]["overlayVisible"]
-    report={"skill_discovered":True,"registered_tools":names,"monitors":listed["result"]["monitors"],
+    report={"skill_discovered":True,"skill_owner":"centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use","registered_tools":names,"monitors":listed["result"]["monitors"],
             "capture":captured["result"],"final_status":ended["result"],
             "requested_validation":"Hermes, identifique todos os monitores conectados ao computador. Apresente a quantidade, resolucao, coordenadas e monitor principal. Ative o overlay verde no Monitor 1, faca uma captura de diagnostico e encerre a captura corretamente.",
             "execution":"actual Hermes registered tool handlers; no simulated LLM conversation", "hooks":hook_result,
             "timestamp":time.time()}
-    path=Path(get_hermes_home())/"skills"/"hermes-visual-computer-use"/"references"/"hermes-validation.json"
+    path=Path(get_hermes_home())/"skills"/"centraldark-operational-method"/"Skills"/"centraldark-hermes-visual-computer-use"/"references"/"hermes-validation.json"
     path.write_text(json.dumps(report,indent=2),encoding="utf-8")
     print(json.dumps(report))
 finally:

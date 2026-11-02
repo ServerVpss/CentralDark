@@ -1,6 +1,6 @@
 // @last_updated=2026-11-02T17:33:10.1446661Z
 using System.IO;
-// #OBSERVACOES# @owner=hermes-visual-computer-use @doc_ref=../references/technical.md
+// #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/technical.md
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Threading;

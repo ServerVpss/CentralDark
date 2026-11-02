@@ -1,5 +1,5 @@
 ---
-name: hermes-visual-computer-use
+name: centraldark-hermes-visual-computer-use
 description: Identificar monitores por numero ou posicao, capturar um monitor autorizado com Windows.Graphics.Capture e mostrar moldura verde de atividade no Hermes Windows 11. Use para captura de tela, monitor um/dois/tres/quatro, bancada operacional e automacao visual com indicador, sem substituir o cursor Cua existente.
 platforms: [windows]
 metadata:
@@ -7,13 +7,13 @@ metadata:
     category: productivity
     tags: [desktop, computer-use, monitors, capture, overlay]
 ---
-# Hermes Visual Computer Use
+# CENTRALDARK Hermes Visual Computer Use
 Reutiliza Skill Mae + Kimetsu para contexto e o computer_use Cua para cursor/teclado.
 Este complemento fornece a captura WGC por monitor ausente no driver instalado; nao substitui captura de janela Cua nem usa outro motor de input.
 
 ## Ativacao e ferramentas reais
-Instalacao: scripts/Install.ps1 publica o .NET e instala skill e plugin no HERMES_HOME REAL.
-Descoberta: skill_view(name="hermes-visual-computer-use"); ferramentas no toolset hermes_visual_computer_use.
+Instalacao: scripts/Install.ps1 publica o .NET na biblioteca Skills/ da Skill Mae e instala o plugin existente no HERMES_HOME real.
+Descoberta: Ler Skill Mae em centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md; ferramentas no toolset hermes_visual_computer_use. O plugin permanece registrado como hermes-visual-computer-use por compatibilidade; sem segunda pasta de Skill.
 Uma sessao GUI ja aberta pode manter catalogo congelado. Usar nova sessao ou recarga nativa de plugins; nao reiniciar o aplicativo nem interromper tarefas alheias.
 
 1. computer_list_monitors({}) retorna quantidade pela lista, numero logico, Device, coordenadas fisicas, resolucao, DpiScale, Primary e Connected.
@@ -65,3 +65,7 @@ Onde modificar: SKILL.md=metodo; default.json=aparencia/binding; native/=WGC/ove
 Para piscar com mouse visivel, usar scripts/blink_cursor.py --monitor N ou --all (ordem humana crescente). Reutilizar a sessao persistente CuaDriverBackend do Hermes e o overlay visual.py existente. Posicionar primeiro o cursor e depois piscar a moldura e o cursor tres vezes. Consultar references/native-cursor.md antes de executar.
 Usar scope=window e coordenadas ABSOLUTAS do desktop virtual: X+Width/2, Y+Height*.35. Nao combinar target com scope. Nao usar scope=desktop: ele move o mouse fisico. Cor distingue sessoes; nao identifica monitor.
 Prova humana real: references/native-cursor-confirmation.json. A foto mostra exatamente hermes-443ff947f17d. Na versao Windows Cua 0.28.2, position:null e um valor fixo no codigo upstream; nao interpretar como cursor invisivel.
+
+## Integracao canonica na Mae (2026-11-02)
+
+Owner: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md. Codigo WGC, overlay, monitores, capturas, cursor virtual Cua e provas neste mesmo diretorio. O plugin existente hermes-visual-computer-use permanece adaptador da runtime Hermes, nao e outra biblioteca. Testar tela por tela com scripts/blink_cursor.py --monitor N --mode blink e exigir observacao humana separada da execucao automatica. Nao declarar validacao humana sem confirmacao do CHEFE.
