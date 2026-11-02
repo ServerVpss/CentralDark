@@ -34,8 +34,10 @@ has_cmd() { command -v "$1" >/dev/null 2>&1; }
 safe_run() { "$@" 2>&1 || true; }
 
 # Fronteira canônica do checkout: definida pela localização desta biblioteca
-# (não por hostname, nome de usuário ou variável externa). Overrides externos
-# continuam bloqueados se escaparem da raiz física conhecida.
+# (não por cwd, hostname, nome de usuário ou variável externa). Overrides
+# externos continuam bloqueados se escaparem da raiz física conhecida.
+# CONTRATO_PORTABILIDADE_GLOBAL: scripts Bash novos/modificados reutilizam este
+# resolver; não criar outro resolvedor por script.
 CK_CANONICAL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 CK_REQUESTED_REPO_ROOT="${CK_REPO_ROOT:-${CENTRALDARK_ROOT:-$CK_CANONICAL_ROOT}}"
 export CK_CENTRALDARK_ROOT="$CK_CANONICAL_ROOT"

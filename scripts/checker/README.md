@@ -10,7 +10,7 @@ bash scripts/checker/run-all.sh
 ./install.sh --check-final
 ```
 
-Relatório vai pra `/root/Multizap/revisoes/YYYYMMDD-HHMMSS/checker-final/relatorio.md`.
+Relatório vai para `${CK_CENTRALDARK_ROOT}/revisoes/YYYYMMDD-HHMMSS/checker-final/relatorio.md`.
 
 ## Códigos de saída
 
@@ -22,7 +22,7 @@ Relatório vai pra `/root/Multizap/revisoes/YYYYMMDD-HHMMSS/checker-final/relato
 
 | # | Arquivo | O que valida |
 |---|---------|--------------|
-| 01 | `01-estrutura.sh` | Pastas obrigatórias do `/root/Multizap` e `/root/CentralDark` |
+| 01 | `01-estrutura.sh` | Pastas obrigatórias derivadas da raiz do checkout |
 | 02 | `02-logs.sh` | Diretório de revisões gravável + sem vazamento de secrets |
 | 03 | `03-github-deploy.sh` | Repo clonado, webhook em :9003, cron de fallback |
 | 04 | `04-pm2.sh` | 10 serviços PM2 (online + restarts < 5) |

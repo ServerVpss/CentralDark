@@ -824,3 +824,25 @@ O CHEFE aprovou na PR #1804 a apresentação em que o resultado real aparece em 
 
  Exemplo: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
  <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+## Portabilidade ambiental — regra global para scripts
+
+<!-- @owner: RULES.md + AGENTS.md + scripts/checker/_lib.sh | @last_updated: 2026-11-02T13:38:34.413Z | @status: IMPLEMENTADO_NO_DELTA_LOCAL -->
+
+`SCRIPT_PORTABILITY_GLOBAL=ENFORCED_INCREMENTALLY`.
+
+Todo script novo ou modificado deve descobrir o local do próprio arquivo,
+derivar a raiz/owner existente e funcionar fora do diretório corrente em
+Windows, Linux, VMware ou VPS, sem transformar ambiente em identidade. O
+resolvedor Bash canônico é `scripts/checker/_lib.sh`; validadores existentes
+devem ser estendidos antes de qualquer biblioteca nova.
+
+`ABSOLUTE_MACHINE_PATH|FIXED_USER|FIXED_HOST|FIXED_IP` não podem ser bindings
+operacionais padrão. Variáveis externas são apenas candidatas e devem passar
+por validação de fronteira; escapes por caminho relativo, symlink ou árvore
+irmã devem falhar fechado. Regexes dinâmicas devem ser escapadas/compiladas no
+owner afetado; corrigir somente regex inválida comprovada no cone, preservando
+scripts legados fora do delta.
+
+Aceite mínimo: teste/validator não destrutivo executado a partir de diretório
+externo, readback da raiz/owner resolvido, contraprova de override fora da
+fronteira e receipt com SHA. `DOCUMENTED != EXECUTED` e `UNKNOWN != PASS`.

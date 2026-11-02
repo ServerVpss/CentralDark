@@ -2605,3 +2605,30 @@ FIXED_POINT_HEADER_ALL_TEN_PASS_AND_GOAL_RECEIPT=USED_AND_FIXED_POINT
 HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true
 UNKNOWN_IS_NOT_PASS=true
 ACTION_IS_NOT_PROOF=true
+## Regra canônica global — portabilidade de scripts
+
+<!-- @owner: AGENTS.md + RULES.md + scripts/checker/_lib.sh | @last_updated: 2026-11-02T13:38:34.413Z | @status: IMPLEMENTADO_NO_DELTA_LOCAL -->
+
+Qualquer script novo ou modificado deve ser independente do diretório atual,
+usuário, hostname, letra de unidade, IP e caminho absoluto do ambiente onde
+vive. Antes de criar um resolvedor, reutilizar o owner existente: em Bash,
+`scripts/checker/_lib.sh`; em outras linguagens, o mecanismo idiomático de
+localização do próprio arquivo (`__file__`, `$PSScriptRoot`, equivalente) e os
+validadores já existentes.
+
+Contrato mínimo obrigatório:
+
+- localizar o script real e derivar a raiz pelo checkout/owner canônico;
+- aceitar configuração externa apenas como entrada candidata, validando-a
+  contra a raiz descoberta e bloqueando escape por `..`, symlink ou árvore irmã;
+- não introduzir `/root/...`, `C:\...`, `K:\...`, IP ou usuário como binding
+  operacional padrão;
+- regex dinâmica deve ser literal/escapada ou validada antes do uso; regex
+  inválida comprovada corrige-se no owner afetado, sem reescrever legados em
+  massa;
+- adicionar ou atualizar o teste/validator do owner e registrar a prova. A
+  ausência de prova permanece `UNKNOWN`.
+
+Esta regra vale daqui para frente e para arquivos tocados por um delta. Scripts
+legados fora do cone afetado permanecem preservados até existir causa e teste
+para uma migração específica.
