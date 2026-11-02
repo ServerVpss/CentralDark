@@ -669,3 +669,10 @@ FILES_CHANGED_IN_GATE → RESEAL_BEFORE_PUSH (replay=REVALIDATE não é verde)
 Se a plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
 CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas (ChatGPT, Codex Chat, Gemini Chat e futuras superfícies são exemplos)
 Várias canetas, uma main. Antes de qualquer envio direto na main, qualquer superfície (Codex, ChatGPT texto/voz/Work, Cowork, Hermes) roda a receita selada — não um portão inventado na hora:
+
+## Conteudo integrado do catalogo existente (Michelin/Kimetsu)
+
+Rota provada em 2026-10-21:
+1. ABRIR    → Chrome de uso do CHEFE (sessão já logada) via extensão Claude in Chrome
+              (list_connected_browsers → tabs_context_mcp → navigate http://127.0.0.1:8080/sala-controle)
+              Navegador de testes/automação isolado NÃO tem a sessão: cai em /auth. Não logar por ele.
