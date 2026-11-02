@@ -187,3 +187,46 @@ Cada arquivo recebeu backup irmão `.before-cwd-repair-20261102.bak`; readback t
 **Recuperação de troca de modelo:** `unknown_execution` é recusa real de segurança/idempotência por execução anterior com resultado incerto, não falta de chave de modelo e não algo que deva ser mascarado como sucesso. `hermes sessions discard --help` confirma que a função existente descarta uma admissão desconhecida e **não a reproduz**; exige decisão explícita de qual admissão pode ser abandonada e preservação de eventuais resultados. Leitura somente do `state.db` encontrou quatro admissions antigos `unknown` e zero workers `unknown` naquele banco; sem prova de correlação 1:1 com a sessão exibida, não executar descarte. `HERMES_MODEL_SWITCH_FIXED=NO` até reconciliação da sessão alvo e teste efetivo de troca.
 
 **Fast-path reuse:** ao observar `Model switch failed: unknown_execution`, coletar uma linha do log + identificar perfil/sessão de origem, conferir apenas `hermes --profile <ativo> config get terminal.cwd` caso apareça também `TERMINAL_CWD` inválido. Não varrer discos, repetir autenticações nem reabrir todas as sessões. Se CWD for inválido, corrigir somente o perfil ativo e configurações explicitamente afetadas; se execução desconhecida, recuperar receipt antes de decidir `discard`. Só após tarefa ativa terminar, reavaliar recarregamento do perfil e testar a troca. `NEXT_CURSOR=RECONCILE_TARGET_SESSION_UNKNOWN_ADMISSION_WITHOUT_LOSS_THEN_MODEL_SWITCH_READBACK`.
+
+## Bancada por linguagem natural e borda de alvo — 02/11/2026
+
+@code_ref: ../scripts/Identify-CentralDarkMonitors.ps1
+@last_updated: 2026-11-02T17:00:00Z
+Owner unico: Skill Mae. Classificacao BOUNDED; Concentracao (alvo), Flor (precisao), Lua (contraprova).
+A numeracao humana NAO e o sufixo de DISPLAY: foto das Configuracoes confirmada pelo CHEFE.
+Mapa Casa: monitor 1=direita vertical; 2=centro superior; 3=esquerda vertical; 4=centro inferior principal.
+Inventario atual confirma DISPLAY1, DISPLAY4, DISPLAY2, DISPLAY3 respectivamente; IDs nao sao constantes.
+
+### Resolver a fala
+"monitor um/1", "tela um", "direita" selecionam 1; "monitor dois/2", "superior" selecionam 2;
+"monitor tres/3", "esquerda" selecionam 3; "monitor quatro/4", "inferior" selecionam 4.
+"Deixei aberto no monitor 2" fornece pista de localizacao, nao prova app, arquivo ou conversa.
+"Foque no Chatti" exige localizar ChatGPT na tela selecionada e conferir titulo, PID, handle, conversa e campo.
+Sem alvo unico, perguntar somente o referente ambiguo; nao abrir outra conversa nem limpar rascunhos.
+"Use monitores 1, 2, 3 e 4" enumera quatro alvos; nao interpretar "12" ambiguo como monitor doze.
+
+### Comando reutilizavel (Windows PowerShell)
+Executar scripts/Identify-CentralDarkMonitors.ps1 sem argumentos lista o mapa em JSONL.
+-Target 'monitor dois' -ListWindows devolve tela, geometria e janelas atuais.
+-Target 1 -Overlay -Seconds 5 mostra borda verde temporaria de PREVIA DO ALVO; nao captura nem envia.
+-Identify preserva o Identificar NATIVO do Windows. Borda customizada nunca comprova numero nativo.
+Nao derivar numeracao universal de geometria. Este mapa e binding confirmado da Casa.
+Arranjo diferente, reconexao ou numeracao do Windows alterada: reconfirmar Identificar e atualizar binding.
+Geometria incompatível falha explicitamente; nao reaproveitar coordenadas nem PID antigos.
+
+### Overlay e Hermes
+Reutilizar computer_use existente no Hermes para captura, foco, clique e envio.
+Codigo instalado oferece set_agent_cursor_enabled via cua_backend; isto prova codigo, nao cursor em runtime.
+RTSS DesktopOverlayHost ja possui bridge scripts/casa/CentralDark-RtssOverlay.ps1 para HUD, nao borda de automacao.
+A borda aqui estende o inventario existente: quatro faixas sem foco, click-through, duracao 1..30s, finally fecha.
+Verde nesta PREVIA significa alvo selecionado, nunca "agente trabalhando" nem PASS de tarefa.
+Durante automacao, usar cursor nativo existente se capability anunciada; ao terminar/falhar, desativar na mesma sessao.
+Sem evento real de inicio/fim nao simular indicador persistente. Nao criar watcher ou segundo executor.
+
+### Convergencia de chats por tela
+Uma intencao, Goal pai e coordenador; subobjetivos por tela/app/conversa confirmada.
+Usar fila/A2A/ida-volta existentes. Mensagem unica por subobjetivo; readback e ACK por destino.
+Leituras podem ocorrer em paralelo; teclado/mouse fisicos serializados e uma caneta por escopo de arquivo.
+Tela nao e agente: quatro chats podem compartilhar runtime, modelo ou sessao; conferir identidade.
+Convergir evidencias no mesmo Goal: destino, sessao, subobjetivo, efeito, receipt e NEXT_CURSOR.
+Sem envio/retorno medido, MULTISCREEN_DELEGATION=DOCUMENTED, nao autonomia comprovada.

@@ -280,3 +280,7 @@ Registros aditivos comprovados no Windows Casa pelo script verificador. Nao subs
 - Contraprova: Kanban DONE isolado nao prova exclusao; Test-Path do alvo retornou falso no Windows Casa.
 - Resultado: PROVADO na operacao/alvo avaliados. Recibo: catalogo/comprovacoes/t_26e02a16.json
 <!-- AUTOCATALOGO:FIM -->
+
+
+## Bancada numerada 1 a 4 — linguagem natural
+Para pedidos sobre monitor/tela um, dois, tres, quatro, posicao, arquivo ou chat aberto em uma tela e delegacao entre telas, carregar a secao Bancada por linguagem natural e borda de alvo em [UI-MULTIJANELA-ROTAS-CACHE-20261030.md](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md). Executar [Identify-CentralDarkMonitors.ps1](scripts/Identify-CentralDarkMonitors.ps1) -Target 'monitor dois' -ListWindows; -Overlay -Seconds 5 apenas quando desejar previa visual. Binding confirmado da Casa: 1 direita, 2 superior, 3 esquerda, 4 inferior; DISPLAY nao e numero das Configuracoes. Revalidar arranjo alterado. Coordenar chats pela fila e Goal existentes; cursor/teclado fisicos serializados. Borda de previa nao certifica automacao nem resultado.
