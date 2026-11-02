@@ -6,6 +6,49 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+## Rota rápida universal — manuseio de interface por qualquer modelo
+
+Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma interface gráfica. Ela é deliberadamente curta e independe do modelo, do aplicativo e da ferramenta de automação.
+
+```text
+INTENÇÃO EXPLÍCITA
+→ IDENTIFICAR JANELA ATUAL PELO TÍTULO + PROCESSO + IDENTIFICADOR VIVO
+→ CAPTURAR ESTADO VISÍVEL ANTES DA AÇÃO
+→ SEPARAR AVISO PERIFÉRICO DE FALHA DO SISTEMA
+→ TENTAR O CONTROLE ACESSÍVEL EXATO UMA VEZ
+→ SE FALHAR: CAPTURA NOVA + REGIÃO CORRETA + COORDENADA ATUAL
+→ SE O PRIMEIRO CLIQUE SÓ FOCAR O BOTÃO: ENTER UMA VEZ
+→ RELER A MESMA JANELA
+→ PROVAR O RUNTIME POR UMA ROTA INDEPENDENTE
+→ PASS | PARTIAL | FAIL | UNKNOWN
+```
+
+Regras simples:
+
+- `TELA != RUNTIME`: tela preta não prova sistema desligado; processo, registro, porta ou serviço podem provar que ele está vivo.
+- `AVISO PERIFÉRICO != FALHA CENTRAL`: leitor virtual, áudio, câmera ou USB ausente não condena disco, sistema operacional ou serviço principal.
+- Índice de acessibilidade, PID, coordenada e identificador de janela são temporários. Obter valores novos depois de mudança, foco ou entrada humana.
+- Se surgir `user input detected` ou equivalente, não disputar teclado e mouse. Observar novamente e continuar somente com estado fresco.
+- Não repetir clique quando o resultado estiver incerto. Primeiro verificar se o botão apenas ganhou foco, se o diálogo fechou ou se a ação já começou.
+- Preferir: controle acessível → captura por região e coordenada atual → teclado com foco comprovado. Não reutilizar coordenadas históricas.
+- Após a ação visual, usar contraprova independente quando material: PID, porta, registro, arquivo, serviço, resposta de rede ou estado do processo.
+- Um aviso específico só vira receita específica depois de medir o impacto. Exemplo: em uma máquina virtual, escolher `Não` para um leitor óptico ausente é válido somente quando o leitor é opcional e a intenção é continuar a inicialização sem reconectá-lo.
+
+Recibo mínimo, legível por qualquer modelo:
+
+```text
+ALVO=
+ANTES=
+AÇÃO=
+DEPOIS_VISUAL=
+PROVA_RUNTIME=
+CONTRAPROVA=
+RESULTADO=PASS|PARTIAL|FAIL|UNKNOWN
+NEXT_CURSOR=
+```
+
+`CLIQUÉI != FUNCIONOU`. `JANELA ABERTA != SISTEMA SAUDÁVEL`. `PORTA RESPONDEU != INTERFACE VISUAL CORRETA`. Declarar somente o que cada prova realmente cobre.
+
 ## Acoplamento obrigatório: Skill Mãe + Kimetsu (01/11/2026)
 
 **SE USOU ESTA SKILL MÃE, CARREGUE JUNTO O KIMETSU.** Todo agente/executor que carregar `centraldark-operational-method/SKILL.md` deve consultar **na mesma intenção** `../kimetsu-brainstorm/SKILL.md` e `references/regenerative-self-refinement-engine.md` (17 Respirações), antes de escolher uma ação. Isso vale inclusive para tarefas de UI, texto, voz, Cloudroom, ChatGPT e continuidade SOL ↔ Hermes. Não basta escrever "Kimetsu" no relatório: aplicar a classificação e o critério de prova da técnica selecionada. **Classificação/respiração só precisam aparecer no receipt operacional**, sem transformar conversa simples em ritual.

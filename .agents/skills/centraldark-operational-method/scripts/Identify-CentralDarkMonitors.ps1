@@ -1,4 +1,4 @@
-﻿# #OBSERVACOES# @owner=.agents/skills/centraldark-operational-method/SKILL.md
+# #OBSERVACOES# @owner=.agents/skills/centraldark-operational-method/SKILL.md
 # @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
 # @last_updated=2026-11-02T17:06:13.5559151Z
 # @implementado=mapa semantico Casa, aliases, janelas por tela e borda temporaria sem foco.
