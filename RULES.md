@@ -5,13 +5,35 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-11-02"
+rules_last_updated: "2026-10-16"
 soul_last_updated: "2026-10-05"
 agents_last_updated: "2026-10-16"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 ---
 
 # 👑🪬 CentralDark RULES
+
+<!-- CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+## 🧹 Lei oficial: baixar só o necessário, testar o que alterou, limpar após recibo
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@last_updated: 2026-11-02T02:20:23.099Z
+@escopo: todas as superfícies e executores que leem as RULES da CentralDark
+@implementado: contrato canônico de aquisição mínima, responsabilidade de testes e limpeza segura pós-recibo
+@pendente: provar consumo desta revisão nos runtimes e em CI quando aplicável
+@next_cursor: VALIDATE_OWNER_SUITE_AND_SAFE_TEMP_CLEANUP_PER_DELTA
+-->
+
+**DOWNLOAD_MINIMO_OBRIGATORIO:** proibido baixar/clonar todo o código por padrão se o CHEFE não solicitou isso e a tarefa não exige. Primeiro usar GitHub API, leitura por arquivo, referências Git, comparação, `git fetch --filter=blob:none`, checkout esparso ou equivalente para obter **somente** objetos/arquivos do escopo. Download total só com solicitação expressa ou necessidade técnica demonstrada; registrar por que a rota parcial é insuficiente. Não transformar exceção em padrão. Preservar fontes existentes e evitar download duplicado.
+
+**QUEM ALTERA, TESTA:** quem cria ou altera script/código é responsável por executar a **suíte pertinente ao cone alterado** (lint, sintaxe, testes direcionados, regressão e contraprova quando aplicáveis), conferir o mesmo SHA/artefato e relatar o resultado **real** com comando, alvo e evidência. `PASS`, `FAIL`, `UNAVAILABLE`, `NOT_RUN` e `PENDING` são estados diferentes. Falha, ambiente indisponível ou suíte não executada ficam explícitos; **nunca** deduzir PASS a partir de edição, commit, push, resolução de conflito ou ausência de erro visível. CI no mesmo HEAD é um gate separado quando exigido.
+
+**FAXINA SEGURA PÓS-RECIBO:** o agente/executor que criou arquivos temporários, worktrees ou scripts auxiliares fica responsável por removê-los **somente depois** de validar o resultado e registrar recibo/rastro recuperável. Antes de limpar: provar que o temporário foi criado pela operação, está dentro de caminho isolado autorizado, não contém alterações exclusivas sem salvamento e não está em uso; conferir leitura de volta do commit/artefato preservado. Nunca apagar backups, worktrees preexistentes, arquivos do usuário, logs/receipts necessários ou conteúdo desconhecido. Reutilizar `scripts/lupa/worktree-teardown-gate.mjs` onde aplicável; não executar `git clean -fdx`, `reset --hard` ou remoção ampla como "faxina". Se a prova faltar, **preservar e informar PENDING_CLEANUP**, sem falso verde.
+
+**Contrato obrigatório:** `NECESSIDADE → DOWNLOAD_MINIMO → OWNER → MENOR_DELTA → SUITE_PERTINENTE → RESULTADO_REAL → CONTRAPROVA → RECEIPT → LIMPEZA_SEGURA → READBACK → FIXED_POINT | NEXT_CURSOR`. `UNKNOWN != PASS`; `CLEANUP_BEFORE_RECEIPT=FORBIDDEN`; `FULL_CLONE_WITHOUT_NEED=FORBIDDEN`; `TEST_OWNER=CODE_WRITER`.
+<!-- /CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+
 
 ## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
 
@@ -24,23 +46,6 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **RECEITA:** `OWNER EXISTENTE → IDENTIFICAR REFERÊNCIA OPERACIONAL WINDOWS → MEDIR DESTINO REAL LINUX → MENOR DELTA → TESTE → READBACK → COMMIT/SHA → KAIZEN`. Código-fonte, Hermes e gateway só serão declarados rodando no Linux quando isso for medido no destino.
 
 **NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
-
-## 🧪 LEI GLOBAL — AUTOR EXECUTA E PROVA A SUÍTE
-
-<!-- #OBSERVACOES# | CENTRALDARK.EXECUTOR_VALIDATES_OWN_CHANGES | @owner: RULES.md | @updated_utc: 2026-11-02T02:16:51Z | @status: CANONICAL_RULE -->
-
-Quem escreve ou altera script, código ou configuração comportamental é responsável por identificar e executar a suíte de testes pertinente ao escopo, incluindo a contraprova necessária para distinguir regressão introduzida de falha preexistente. Deve registrar comandos e resultados observados. Suíte que falha, não existe, está incompleta ou não pode rodar permanece explicitamente pendente; não declarar sucesso por inspeção, intenção, build alheio ou documentação.
-
-Ao concluir e registrar o recibo da operação, o executor deve remover somente temporários criados pela própria operação e confirmar a limpeza. Preservar backups, históricos, arquivos do usuário e provas; diante de origem ou propriedade incerta, não remover.
-
-```text
-CODE_WRITER_RUNS_RELEVANT_SUITE=true
-TEST_RESULT_MUST_BE_OBSERVED=true
-TEMP_CLEANUP_AFTER_VALIDATION_AND_RECEIPT=true
-TEMP_CLEANUP_SCOPE=CREATED_BY_CURRENT_OPERATION_ONLY
-PRESERVE_BACKUP_HISTORY_USER_FILES_AND_PROOFS=true
-UNCERTAIN_OWNERSHIP_MEANS_PRESERVE=true
-```
 
 
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
@@ -464,6 +469,22 @@ Nunca imprimir token, senha, cookie, chave privada ou valor secreto em Git, chat
 <!-- /ONE_HOUSE_AUREOLA_20261017_RULES -->
 
 ## Prova, contraprova e fixed point
+
+### 🧹 Lei de responsabilidade por alterações e limpeza segura (2026-11-01)
+
+**Quem cria ou altera script, teste, automação, configuração executável ou código é responsável por executar a suíte pertinente ao delta e informar o resultado real.** O Writer pode delegar a execução a uma rota autorizada, mas conserva a responsabilidade pelo receipt. A suíte deve incluir os testes existentes que verificam a parte tocada e a contraprova discriminante necessária, sem repetir verificações sem efeito material.
+
+**Recibo obrigatório no owner ou PR existente:** registrar alvo e SHA/versão testada, comando ou método realmente executado, escopo da suíte, resultado observado (`PASS`, `FAIL`, `SKIPPED`, `BLOCKED` ou `UNKNOWN`), falhas e limites, e `NEXT_CURSOR` quando houver pendência. **Falha, runner offline, suíte ausente ou indisponível não viram PASS nem execução presumida.** Se o trabalho foi somente documental, declarar isso e fazer a validação pertinente ao texto/contrato alterado, sem inventar build ou CI.
+
+**Limpeza segura é a última etapa, não a primeira:** `ALTERAR → EXECUTAR TESTES PERTINENTES → CONTRAPROVAR → REGISTRAR RECEIPT → LIMPAR TEMPORÁRIOS PRÓPRIOS → CONFERIR O QUE RESTOU`. Após validação e receipt, o executor remove **somente** temporários descartáveis que ele próprio criou nesta operação, identificados pelo caminho e escopo, sem apagar evidência necessária para diagnóstico ou continuidade. Preservar backups, históricos Git, arquivos do CHEFE, workspaces/worktrees de outros escritores, fontes, logs e recibos. Se algum temporário precisar ser preservado por falha ou prova pendente, informar caminho e motivo; **limpeza não comprovada = PENDENTE**, nunca alegar conclusão.
+
+```text
+CODE_CHANGED_REQUIRES_RELEVANT_TEST_EXECUTION_AND_REAL_REPORT=true
+TEST_UNAVAILABLE_OR_FAILED_IS_NOT_PASS=true
+RECEIPT_BEFORE_OWN_TEMP_CLEANUP=true
+CLEANUP_ONLY_OWN_DISPOSABLE_TEMP_AFTER_VALIDATION=true
+PRESERVE_USER_FILES_BACKUPS_HISTORY_AND_EVIDENCE=true
+```
 
 A CentralDark não aceita verde por aparência.
 
