@@ -1,10 +1,16 @@
 ---
 name: centraldark-operational-method
-description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
+description: Capacidade operacional de todo o sistema CentralDark; uma Skill Mãe, uma biblioteca Skills/, um único organismo. SOL coordena e HERMES executa; PIVETE permanece vocativo/proveniência histórica.
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
+
+# CENTRALDARK — Capacidade Operacional de Todo o Sistema
+
+**Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
+
+Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
