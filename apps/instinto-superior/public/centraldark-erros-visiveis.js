@@ -10,13 +10,16 @@
  */
 (function () {
   if (window.__cdErros) return;
-  var cfg = Object.assign({ coracao: '', apiHealth: '', apiProbeMs: 60000, max: 50 }, window.CD_ERROS_CONFIG || {});
+  var VERSION = '2.2.0';
+  var cfg = Object.assign({ coracao: '', apiHealth: '', apiProbeMs: 60000, transportStaleMs: 120000, max: 50 }, window.CD_ERROS_CONFIG || {});
   var lista = [];
   var aberto = false;
   var ultimoClique = null;
   var sinais = [];
   var apiStatus = 'UNKNOWN';
   var transporteStatus = 'UNKNOWN';
+  var ultimoTransporteEm = 0;
+  var transporteTimer = null;
   var falhasApi = 0;
   var somAtivo = false;
   var somCtx = null;
@@ -25,9 +28,40 @@
   function seguro(v) {
     return String(v == null ? '' : v)
       .replace(/Bearer\s+[^\s,;&]+/gi, 'Bearer [REDACTED]')
-      .replace(/(password|token|secret|api_key)\s*[:=]\s*[^\s,;&]+/gi, '$1=[REDACTED]')
+      .replace(/(["']?(?:password|token|secret|api[_-]?key|authorization)["']?\s*[:=]\s*["']?)[^\s,;&"'}]+/gi, '$1[REDACTED]')
       .replace(/https?:\/\/[^\s"'<>)]+/gi, function(url) { return limparUrl(url); })
       .slice(0, 500);
+  }
+  function hash(texto) {
+    var h = 2166136261, i;
+    texto = String(texto || '');
+    for (i = 0; i < texto.length; i++) { h ^= texto.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return ('00000000' + (h >>> 0).toString(16)).slice(-8);
+  }
+  function gravidade(tipo, msg) {
+    if (tipo === 'code' || tipo === 'promise') return 'CRITICAL';
+    if (/HTTP 5\d\d|NETWORK_FAIL|Failed to fetch|NetworkError|Load failed|ERR_/i.test(String(msg || ''))) return 'HIGH';
+    if (/HTTP 4\d\d/i.test(String(msg || ''))) return 'MEDIUM';
+    return tipo === 'resource' ? 'LOW' : 'MEDIUM';
+  }
+  function tipoCanonico(tipo) {
+    return ({ codigo: 'code', promessa: 'promise', console: 'console', recurso: 'resource', rede: 'network', xhr: 'xhr', manual: 'manual', api: 'network' })[tipo] || tipo || 'manual';
+  }
+  function rotuloGravidade(tipo) {
+    return ({ CRITICAL: 'CRÍTICO', HIGH: 'ALTO', MEDIUM: 'MÉDIO', LOW: 'BAIXO' })[tipo] || 'NÃO CLASSIFICADO';
+  }
+  function correlation() { return 'cd-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8); }
+  function transporteSaude() {
+    if (!cfg.coracao) return 'TRANSPORT_UNKNOWN';
+    if (transporteStatus === 'HTTP_ACK' && ultimoTransporteEm && Date.now() - ultimoTransporteEm > Math.max(30000, Number(cfg.transportStaleMs) || 120000)) return 'STALE';
+    if (/^HTTP_/.test(transporteStatus) && transporteStatus !== 'HTTP_ACK') return 'TRANSPORT_FAIL';
+    return transporteStatus === 'HTTP_ACK' ? 'TRANSPORT_READY' : 'TRANSPORT_UNKNOWN';
+  }
+  function atualizarTransporte(estado) {
+    transporteStatus = estado;
+    if (estado === 'HTTP_ACK') ultimoTransporteEm = Date.now();
+    sinal('sentinel_transport', transporteSaude(), { destino: cfg.coracao ? limparUrl(cfg.coracao) : '', ultimo_ack_em: ultimoTransporteEm ? new Date(ultimoTransporteEm).toISOString() : null });
+    desenhar();
   }
   function origemLocal(url) {
     try { return new URL(url, location.href).origin === location.origin; } catch (_) { return false; }
@@ -55,23 +89,30 @@
   function controlePerto() {
     return ultimoClique && Date.now() - ultimoClique.em < 15000 ? ultimoClique.id : '';
   }
+  function payloadSentinel(item, estado) {
+    return { schema: 'centraldark.sentinel.event.v2', source: 'cockpit-sentinel', status: estado === 'FAIL' ? 'FAIL' : 'UNKNOWN',
+      page: limparUrl(location.href), route: location.pathname, control: item && item.controle || null,
+      event_id: item && item.id || null, correlation_id: item && item.correlation_id || correlation(), fingerprint: item && item.fingerprint || null,
+      severity: item && item.gravidade || 'UNKNOWN', kind: item && item.tipo || 'manual', message: item && item.msg || null,
+      simplified_message: item && item.simples || null, first_seen: item && item.primeiraHora ? item.primeiraHora.toISOString() : null,
+      last_seen: item && item.hora ? item.hora.toISOString() : new Date().toISOString(), occurrences: item && item.vezes || 1,
+      sentinel_version: VERSION, metadata: { onde: item && item.onde || null, pilha: item && item.pilha || null } };
+  }
   function enviarSinal(tipo, estado, item) {
-    // Transporte só para API autenticada e explicitamente configurada na mesma origem.
-    if (!cfg.coracao || !origemLocal(cfg.coracao) || !fOriginal) return;
+    // Transporte somente para uma rota explicitamente configurada. O navegador
+    // nunca recebe chave administrativa e o corpo não contém headers/segredos.
+    if (!cfg.coracao || !fOriginal || tipo !== 'ui_error') return;
     try {
       fOriginal.call(window, cfg.coracao, {
-        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fonte: 'erros-visiveis', evento: tipo, estado: estado,
-          pagina: limparUrl(location.href), controle: item && item.id || null,
-          evento_id: item && item.evento_id || null, hora: new Date().toISOString() })
+        method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-CentralDark-Sentinel': VERSION, 'X-CentralDark-Correlation-Id': item && item.correlation_id || '' },
+        body: JSON.stringify(payloadSentinel(item, estado))
       }).then(function(res) {
-        transporteStatus = res.ok ? 'HTTP_ACK' : 'HTTP_' + res.status;
-        if (!res.ok) registrar('api', 'O registro foi recusado: HTTP ' + res.status, limparUrl(cfg.coracao));
+        atualizarTransporte(res.ok ? 'HTTP_ACK' : 'HTTP_' + res.status);
+        if (!res.ok && tipo !== 'api') registrar('api', 'O registro foi recusado: HTTP ' + res.status, limparUrl(cfg.coracao));
       }).catch(function() {
-        transporteStatus = 'UNKNOWN';
-        registrar('api', 'A API de eventos não respondeu.', limparUrl(cfg.coracao));
+        atualizarTransporte('UNKNOWN');
       });
-    } catch (_) { transporteStatus = 'UNKNOWN'; }
+    } catch (_) { atualizarTransporte('UNKNOWN'); }
   }
   document.addEventListener('click', function(e) {
     try {
@@ -84,7 +125,6 @@
       sinais.unshift(ultimoClique);
       if (sinais.length > 50) sinais.pop();
       sinal('ui_click', 'CLICK_SEEN', { controle: id, evento_id: ultimoClique.evento_id });
-      enviarSinal('ui_click', 'CLICK_SEEN', ultimoClique);
     } catch (_) {}
   }, true);
   function medirApi() {
@@ -110,6 +150,9 @@
     window.setInterval(medirApi, Math.max(30000, Number(cfg.apiProbeMs) || 60000));
     window.addEventListener('online', medirApi);
   }
+  if (cfg.coracao) {
+    transporteTimer = window.setInterval(function () { desenhar(); }, 30000);
+  }
 
 
   function limparUrl(u) { try { return String(u || '').split('?')[0].split('#')[0].slice(0, 200); } catch (e) { return ''; } }
@@ -127,12 +170,13 @@
     if (/is not a function/.test(m)) return 'O código chamou uma ação que não existe ou mudou de nome.';
     if (/Cannot read prop|undefined is not an object|of null|of undefined|null is not an object/.test(m)) return 'O código tentou usar um dado que ainda não chegou ou veio vazio.';
     if (/Unexpected token|JSON/.test(m)) return 'Uma resposta veio em formato errado.';
-    if (tipo === 'recurso') return 'Uma parte da página (imagem, estilo ou código) não carregou.';
+    if (tipo === 'recurso' || tipo === 'resource') return 'Uma parte da página (imagem, estilo ou código) não carregou.';
     return 'Algo quebrou nesta página.';
   }
 
   function registrar(tipo, msg, onde, pilha) {
     try {
+      tipo = tipoCanonico(tipo);
       msg = seguro(msg || 'erro sem mensagem');
       onde = seguro(onde);
       if (onde.indexOf('?') !== -1 || onde.indexOf('#') !== -1) onde = limparUrl(onde);
@@ -141,11 +185,15 @@
       if (ja) { ja.vezes++; ja.hora = new Date(); }
       else {
         lista.unshift({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), chave: chave, tipo: tipo, msg: msg, onde: onde,
-          pilha: seguro(pilha), hora: new Date(), vezes: 1, simples: simples(tipo, msg), controle: controlePerto() });
+          pilha: seguro(pilha), hora: new Date(), primeiraHora: new Date(), vezes: 1, simples: simples(tipo, msg),
+          gravidade: gravidade(tipo, msg), fingerprint: hash(chave), correlation_id: correlation(), controle: controlePerto() });
         alerta();
         if (lista.length > cfg.max) lista.pop();
       }
-      sinal('ui_error', 'FAIL', { tipo: tipo, controle: controlePerto(), origem: onde });
+      var eventoAtual = ja || lista[0];
+      sinal('ui_error', 'FAIL', { tipo: tipo, gravidade: eventoAtual.gravidade, fingerprint: eventoAtual.fingerprint,
+        correlation_id: eventoAtual.correlation_id, controle: controlePerto(), origem: onde });
+      enviarSinal('ui_error', 'FAIL', eventoAtual);
       desenhar();
     } catch (e) { /* o sentinela nunca derruba a página */ }
   }
@@ -171,14 +219,15 @@
     var fOriginal = window.fetch;
     window.fetch = function (rec) {
       var url = limparUrl(rec && rec.url ? rec.url : rec);
+      var inicio = Date.now(), metodo = rec && rec.method ? rec.method : (arguments[1] && arguments[1].method) || 'GET';
       if (cfg.coracao && url === limparUrl(cfg.coracao)) return fOriginal.apply(this, arguments);
       return fOriginal.apply(this, arguments).then(function (r) {
         if (!r.ok) registrar('rede', 'HTTP ' + r.status + ' em ' + url, url);
-        sinal('api_fetch', r.ok ? 'HTTP_ACK' : 'HTTP_FAIL', { http_status: r.status, destino: url, controle: controlePerto() });
+        sinal('api_fetch', r.ok ? 'HTTP_ACK' : 'HTTP_FAIL', { http_status: r.status, metodo: metodo, duracao_ms: Date.now() - inicio, destino: url, controle: controlePerto() });
         return r;
       }, function (err) {
         registrar('rede', ((err && err.message) || 'falha de rede') + ' em ' + url, url, err && err.stack);
-        sinal('api_fetch', 'NETWORK_FAIL', { destino: url, controle: controlePerto() });
+        sinal('api_fetch', 'NETWORK_FAIL', { metodo: metodo, duracao_ms: Date.now() - inicio, destino: url, controle: controlePerto() });
         throw err;
       });
     };
@@ -188,7 +237,7 @@
   if (window.XMLHttpRequest && window.XMLHttpRequest.prototype) {
     var xhrProto = window.XMLHttpRequest.prototype, oldOpen = xhrProto.open, oldSend = xhrProto.send;
     xhrProto.open = function(method, url) {
-      this.__cdRota = limparUrl(url);
+      this.__cdRota = limparUrl(url); this.__cdMetodo = method; this.__cdInicio = Date.now();
       return oldOpen.apply(this, arguments);
     };
     xhrProto.send = function() {
@@ -198,7 +247,7 @@
           var failed = !xhr.status || xhr.status >= 400;
           if (failed) registrar('rede', 'XHR HTTP ' + xhr.status + ' em ' + xhr.__cdRota, xhr.__cdRota);
           sinal('api_xhr', failed ? 'HTTP_FAIL' : 'HTTP_ACK',
-            { http_status: xhr.status, destino: xhr.__cdRota, controle: controlePerto() });
+            { http_status: xhr.status, metodo: xhr.__cdMetodo || 'GET', duracao_ms: Date.now() - (xhr.__cdInicio || Date.now()), destino: xhr.__cdRota, controle: controlePerto() });
         }, { once: true });
       } catch (_) {}
       return oldSend.apply(this, arguments);
@@ -226,9 +275,9 @@
   function enviar(x, botao) {
     if (!cfg.coracao || !origemLocal(cfg.coracao) || !fOriginal) { botao.textContent = 'API sem rota segura'; return; }
     botao.textContent = 'Enviando…';
-    fOriginal.call(window, cfg.coracao, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fonte: 'erros-visiveis', pagina: limparUrl(location.href), erro: { tipo: x.tipo, simples: x.simples, msg: x.msg, onde: x.onde, pilha: x.pilha, vezes: x.vezes, hora: x.hora.toISOString() } }) })
-      .then(function (r) { botao.textContent = r.ok ? '✅ Enviado' : '🔴 Coração recusou (' + r.status + ')'; },
+    fOriginal.call(window, cfg.coracao, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-CentralDark-Sentinel': VERSION },
+      body: JSON.stringify(payloadSentinel(x, 'FAIL')) })
+      .then(function (r) { atualizarTransporte(r.ok ? 'HTTP_ACK' : 'HTTP_' + r.status); botao.textContent = r.ok ? '✅ Enviado' : '🔴 Gateway recusou (' + r.status + ')'; },
             function () { botao.textContent = '🔴 Coração fora do ar'; });
   }
 
@@ -282,17 +331,17 @@
     bt.textContent = lista.length ? '🧿 ' + lista.length + (lista.length === 1 ? ' erro' : ' erros') : '🧿';
     gv.hidden = !aberto;
     if (!aberto) return;
-    gv.innerHTML = '<h2>🧿 Sentinela · Erros desta página</h2><div class="cdapi">API: ' + esc(apiStatus) +
-      ' · eventos: ' + esc(transporteStatus) + '<br>Último controle: ' +
+    gv.innerHTML = '<h2>🧿 Sentinela · Erros desta página</h2><div class="cdapi">versão: ' + VERSION + ' · captura: CAPTURING · API: ' + esc(apiStatus) +
+      ' · transporte: ' + esc(transporteSaude()) + '<br>Último controle: ' +
       esc(ultimoClique ? ultimoClique.id : 'nenhum') + '<br><button class="a" id="cdSom">' +
       (somAtivo ? '🔔 Desativar som' : '🔕 Ativar som') +
       '</button><br><small>CLICK_SEEN não é execução. UNKNOWN não significa falha.</small></div><div class="sub">' +
       (lista.length ? lista.length + ' tipos · ' + total + ' ocorrências. Copie e mande pro Instinto corrigir só aquela parte.' : 'Nenhum erro visto até agora. Silêncio aqui não é prova de que está tudo certo: é só o que esta tela enxergou.') + '</div>' +
       lista.map(function (x) {
-        return '<div class="it"><div class="s">' + esc(x.simples) + (x.vezes > 1 ? ' ×' + x.vezes : '') + '</div>' +
-          '<div class="m">' + esc(x.hora.toLocaleTimeString('pt-BR')) + ' · ' + esc(x.tipo) +
+        return '<div class="it"><div class="s">' + esc(rotuloGravidade(x.gravidade)) + ' · ' + esc(x.simples) + (x.vezes > 1 ? ' ×' + x.vezes : '') + '</div>' +
+          '<div class="m">' + esc(x.hora.toLocaleTimeString('pt-BR')) + ' · ' + esc(x.tipo) + ' · fingerprint: ' + esc(x.fingerprint) +
           (x.controle ? ' · botão: ' + esc(x.controle) : '') + '</div>' +
-          '<details><summary>detalhe técnico</summary><pre>' + esc(x.msg + (x.onde ? '\n' + x.onde : '') + (x.pilha ? '\n\n' + x.pilha : '')) + '</pre></details>' +
+          '<details><summary>detalhe técnico</summary><pre>' + esc('correlation_id: ' + x.correlation_id + '\nprimeiro: ' + x.primeiraHora.toISOString() + '\núltimo: ' + x.hora.toISOString() + '\n' + x.msg + (x.onde ? '\n' + x.onde : '') + (x.pilha ? '\n\n' + x.pilha : '')) + '</pre></details>' +
           '<div class="row"><button class="a p" data-acao="copiar" data-id="' + x.id + '">Copiar pro Instinto</button>' +
           (cfg.coracao ? '<button class="a" data-acao="enviar" data-id="' + x.id + '">Enviar ao coração</button>' : '') + '</div></div>';
       }).join('') +
@@ -300,8 +349,8 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', desenhar); else desenhar();
 
-  window.__cdErros = { lista: lista, sinais: sinais, registrar: registrar, medirApi: medirApi,
-    estado: function () { return { api: apiStatus, transporte: transporteStatus, erros: lista.length }; },
+  window.__cdErros = { versao: VERSION, lista: lista, sinais: sinais, registrar: registrar, medirApi: medirApi,
+    estado: function () { return { versao: VERSION, api: apiStatus, transporte: transporteSaude(), ultimoTransporteEm: ultimoTransporteEm ? new Date(ultimoTransporteEm).toISOString() : null, erros: lista.length, ocorrencias: lista.reduce(function (n, x) { return n + x.vezes; }, 0) }; },
     abrir: function () { aberto = true; desenhar(); } };
   window.cdErro = function (msg, onde) { registrar('manual', msg, onde); };
 })();

@@ -477,11 +477,11 @@ PHASE_0_BOOT:
 
 PHASE_1_LIVE_CASA_READ_ONLY:
   roots_to_probe:
-    - K:\
-    - K:\
-    - K:\_MAPA_CASA
-    - K:\_MAPA_CASA\GARIMPO-CHEFE
-    - K:\sol-desktop-poc
+    - E:\CentralDark
+    - E:\CentralDark\Pivete
+    - E:\CentralDark\_MAPA_CASA
+    - E:\CentralDark\_MAPA_CASA\GARIMPO-CHEFE
+    - E:\CentralDark\sol-desktop-poc
     - C:\Users\danda\hermes-vscode-router-provider
     - C:\Users\danda\AppData\Local\hermes
   inventory:
@@ -691,4 +691,29 @@ HERMES_CASA_LIVE_MEASURE
 → SAME_HEAD_CI
 → REALITY_JUDGE
 → FIXED_POINT
+```
+
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "    - E:\\CentralDark",
+      "    - E:\\CentralDark\\Pivete",
+      "    - E:\\CentralDark\\_MAPA_CASA",
+      "    - E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
+      "    - E:\\CentralDark\\sol-desktop-poc"
+    ],
+    "right_variant": [
+      "    - K:\\",
+      "    - K:\\",
+      "    - K:\\_MAPA_CASA",
+      "    - K:\\_MAPA_CASA\\GARIMPO-CHEFE",
+      "    - K:\\sol-desktop-poc"
+    ]
+  }
+]
 ```
