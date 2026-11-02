@@ -1,6 +1,8 @@
 """Cursor virtual nativo Cua com overlay Hermes no monitor solicitado."""
 #OBSERVACOES# @owner=centraldark-hermes-visual-computer-use @doc_ref=../references/native-cursor.md
 import argparse
+import ctypes
+from ctypes import wintypes
 import json
 import os
 import shutil
@@ -27,16 +29,39 @@ def call(driver, sid, name, payload=None):
         raise RuntimeError("CUA_CLI_LOGICAL_ERROR " + name + ": " + str(result)[:450])
     return result
 
+def resolve_window(pid, hwnd):
+    """Valida a janela viva antes de qualquer clique do Cua (sem mouse fisico)."""
+    user32 = ctypes.windll.user32
+    rect = wintypes.RECT()
+    actual_pid = wintypes.DWORD()
+    if not user32.IsWindow(hwnd) or not user32.GetWindowRect(hwnd, ctypes.byref(rect)):
+        raise RuntimeError("CUA_CLICK_WINDOW_STALE")
+    user32.GetWindowThreadProcessId(hwnd, ctypes.byref(actual_pid))
+    if actual_pid.value != pid:
+        raise RuntimeError("CUA_CLICK_PID_MISMATCH")
+    return rect
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     choice = parser.add_mutually_exclusive_group(required=True)
     choice.add_argument("--monitor", type=int)
     choice.add_argument("--all", action="store_true", help="Ordem humana crescente")
-    parser.add_argument("--mode", choices=("blink", "position"), default="blink",
-                        help="position = cursor e overlay por 5 segundos; blink = 3 ciclos")
+    parser.add_argument("--mode", choices=("blink", "position", "click"), default="blink",
+                        help="position = previa 5 segundos; blink = 3 ciclos; click = Cua virtual + overlay")
+    parser.add_argument("--pid", type=int, help="PID atual da janela para --mode click")
+    parser.add_argument("--hwnd", type=int, help="HWND atual da janela para --mode click")
+    parser.add_argument("--x", type=int, help="X absoluto do alvo na tela para --mode click")
+    parser.add_argument("--y", type=int, help="Y absoluto do alvo na tela para --mode click")
     parser.add_argument("--hermes-root", type=Path,
                         default=Path(os.environ.get("LOCALAPPDATA", "")) / "hermes/hermes-agent")
     args = parser.parse_args()
+    click_params = (args.pid, args.hwnd, args.x, args.y)
+    if args.mode == "click":
+        if args.all or any(value is None for value in click_params):
+            parser.error("click exige --monitor N --pid PID --hwnd HWND --x X --y Y")
+    elif any(value is not None for value in click_params):
+        parser.error("--pid/--hwnd/--x/--y somente sao permitidos no modo click")
     root = args.hermes_root.resolve()
     sys.path.insert(0, str(root))
     os.chdir(root)
@@ -68,6 +93,43 @@ def main():
         call(driver, sid, "start_session")
         session_started = True
         for monitor in monitors:
+            if args.mode == "click":
+                rect = resolve_window(args.pid, args.hwnd)
+                x, y = args.x, args.y
+                if not (monitor["X"] <= x < monitor["X"] + monitor["Width"] and
+                        monitor["Y"] <= y < monitor["Y"] + monitor["Height"]):
+                    raise RuntimeError("CUA_CLICK_WRONG_MONITOR")
+                if not (rect.left <= x < rect.right and rect.top <= y < rect.bottom):
+                    raise RuntimeError("CUA_CLICK_OUTSIDE_WINDOW")
+                # Foco na janela, sem SetCursorPos, mouse_event ou SendInput.
+                ctypes.windll.user32.SetForegroundWindow(args.hwnd)
+                call(driver, sid, "set_agent_cursor_enabled", {"enabled": True})
+                shown = visual.request("show_overlay",
+                    {"monitor": monitor["Number"], "leaseSeconds": 12}, session=sid)
+                if not shown.get("ok") or not shown.get("result", {}).get("overlayVisible"):
+                    raise RuntimeError("CUA_CLICK_OVERLAY_FAILED")
+                try:
+                    call(driver, sid, "move_cursor",
+                         {"scope": "window", "x": x, "y": y})
+                    time.sleep(.8)
+                    clicked = call(driver, sid, "click",
+                        {"scope": "window", "pid": args.pid,
+                         "x": x - rect.left, "y": y - rect.top,
+                         "delivery_mode": "background"})
+                    time.sleep(1.2)
+                finally:
+                    hidden = visual.request("hide_overlay", session=sid)
+                    if not hidden.get("ok") or hidden.get("result", {}).get("overlayVisible"):
+                        raise RuntimeError("CUA_CLICK_OVERLAY_DID_NOT_CLOSE")
+                item = {"number": monitor["Number"], "mode": "click",
+                        "cursor_origin": [x, y], "pid": args.pid, "hwnd": args.hwnd,
+                        "execution": "dispatched", "route": "cua-driver",
+                        "delivery": clicked.get("delivery"),
+                        "effect": "requires_independent_UI_readback",
+                        "human_visual_confirmation": "not_inferred"}
+                receipt["monitors"].append(item)
+                print(json.dumps(item), flush=True)
+                continue
             x = monitor["X"] + monitor["Width"] * .5
             y = monitor["Y"] + monitor["Height"] * .35
             call(driver, sid, "set_agent_cursor_enabled", {"enabled": True})
