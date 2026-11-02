@@ -13,6 +13,28 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+<!-- CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+## 🧹 Lei oficial: baixar só o necessário, testar o que alterou, limpar após recibo
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@last_updated: 2026-11-02T02:20:23.099Z
+@escopo: todas as superfícies e executores que leem as RULES da CentralDark
+@implementado: contrato canônico de aquisição mínima, responsabilidade de testes e limpeza segura pós-recibo
+@pendente: provar consumo desta revisão nos runtimes e em CI quando aplicável
+@next_cursor: VALIDATE_OWNER_SUITE_AND_SAFE_TEMP_CLEANUP_PER_DELTA
+-->
+
+**DOWNLOAD_MINIMO_OBRIGATORIO:** proibido baixar/clonar todo o código por padrão se o CHEFE não solicitou isso e a tarefa não exige. Primeiro usar GitHub API, leitura por arquivo, referências Git, comparação, `git fetch --filter=blob:none`, checkout esparso ou equivalente para obter **somente** objetos/arquivos do escopo. Download total só com solicitação expressa ou necessidade técnica demonstrada; registrar por que a rota parcial é insuficiente. Não transformar exceção em padrão. Preservar fontes existentes e evitar download duplicado.
+
+**QUEM ALTERA, TESTA:** quem cria ou altera script/código é responsável por executar a **suíte pertinente ao cone alterado** (lint, sintaxe, testes direcionados, regressão e contraprova quando aplicáveis), conferir o mesmo SHA/artefato e relatar o resultado **real** com comando, alvo e evidência. `PASS`, `FAIL`, `UNAVAILABLE`, `NOT_RUN` e `PENDING` são estados diferentes. Falha, ambiente indisponível ou suíte não executada ficam explícitos; **nunca** deduzir PASS a partir de edição, commit, push, resolução de conflito ou ausência de erro visível. CI no mesmo HEAD é um gate separado quando exigido.
+
+**FAXINA SEGURA PÓS-RECIBO:** o agente/executor que criou arquivos temporários, worktrees ou scripts auxiliares fica responsável por removê-los **somente depois** de validar o resultado e registrar recibo/rastro recuperável. Antes de limpar: provar que o temporário foi criado pela operação, está dentro de caminho isolado autorizado, não contém alterações exclusivas sem salvamento e não está em uso; conferir leitura de volta do commit/artefato preservado. Nunca apagar backups, worktrees preexistentes, arquivos do usuário, logs/receipts necessários ou conteúdo desconhecido. Reutilizar `scripts/lupa/worktree-teardown-gate.mjs` onde aplicável; não executar `git clean -fdx`, `reset --hard` ou remoção ampla como "faxina". Se a prova faltar, **preservar e informar PENDING_CLEANUP**, sem falso verde.
+
+**Contrato obrigatório:** `NECESSIDADE → DOWNLOAD_MINIMO → OWNER → MENOR_DELTA → SUITE_PERTINENTE → RESULTADO_REAL → CONTRAPROVA → RECEIPT → LIMPEZA_SEGURA → READBACK → FIXED_POINT | NEXT_CURSOR`. `UNKNOWN != PASS`; `CLEANUP_BEFORE_RECEIPT=FORBIDDEN`; `FULL_CLONE_WITHOUT_NEED=FORBIDDEN`; `TEST_OWNER=CODE_WRITER`.
+<!-- /CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+
+
 ## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
 
 <!-- @owner: documentos canônicos existentes | @updated_utc: 2026-11-01T02:33:57.429Z | @status: DOCUMENTED_NOT_RUNTIME_PROVEN -->
