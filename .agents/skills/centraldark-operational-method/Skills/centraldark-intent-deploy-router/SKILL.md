@@ -196,3 +196,9 @@ BLOQUEIO_REAL=
 JA_TENTEI=
 IDENTIFICADOR_MINIMO_PARA_CONTINUAR=
 ```
+
+## Conteudo complementar unificado - Michelin/Kimetsu 2026-11-02
+
+### Incrementos incorporados da instalacao mae
+
+VOICE_CLASSIFIER_OWNER=.claude/skills/synced/voice-semantic-classifier/SKILL.md

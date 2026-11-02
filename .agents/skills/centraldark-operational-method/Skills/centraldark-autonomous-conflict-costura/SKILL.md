@@ -293,3 +293,9 @@ KEEP_METHOD
 O valor está na sequência verificável: **resolver o conhecido sozinho, parar no
 desconhecido sem destruir estado, aprender uma vez com prova e reutilizar na
 próxima ocorrência**.
+
+## Conteudo complementar unificado - Michelin/Kimetsu 2026-11-02
+
+### Incrementos incorporados da instalacao mae
+
+reutilizável** por Codex, Codex, Hermes, ChatGPT, CI ou qualquer engine

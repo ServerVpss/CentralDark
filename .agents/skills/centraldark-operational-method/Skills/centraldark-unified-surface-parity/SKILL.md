@@ -660,3 +660,12 @@ FULL_FILE_WRITE_MUST_START_FROM_CURRENT_MAIN_BLOB=true
 WRITE_FROM_STALE_BASE_SILENTLY_REVERTS_OTHER_PEN=FORBIDDEN
 FILES_CHANGED_IN_GATE → RESEAL_BEFORE_PUSH (replay=REVALIDATE não é verde)
 ```
+
+## Conteudo complementar unificado - Michelin/Kimetsu 2026-11-02
+
+### Incrementos incorporados da instalacao mae
+
+  - .Codex/skills/synced/voice-semantic-classifier/SKILL.md
+Se a plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
+CHAT_GLOBAL/Texto = oráculo + executor conforme tools autorizadas medidas (ChatGPT, Codex Chat, Gemini Chat e futuras superfícies são exemplos)
+Várias canetas, uma main. Antes de qualquer envio direto na main, qualquer superfície (Codex, ChatGPT texto/voz/Work, Cowork, Hermes) roda a receita selada — não um portão inventado na hora:

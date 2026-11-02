@@ -12,6 +12,23 @@ oracle_review_on_change: true
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
+## Biblioteca operacional centralizada (13 Skills)
+
+Cada receita operacional centraldark* reside fisicamente em `Skills/<nome>/`, com SKILL.md e arquivos de apoio preservados e reconciliados. Carregar diretamente a receita adequada abaixo; nao buscar uma segunda copia na raiz de `.agents/skills/`. Esta biblioteca substitui as antigas pastas irmas, sem links individuais e sem criar motor paralelo.
+
+- [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
+- [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
+- [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
+- [centraldark-hub-credential-control-plane](Skills/centraldark-hub-credential-control-plane/SKILL.md)
+- [centraldark-integration-verification](Skills/centraldark-integration-verification/SKILL.md)
+- [centraldark-intent-deploy-router](Skills/centraldark-intent-deploy-router/SKILL.md)
+- [centraldark-live-editing-fabric](Skills/centraldark-live-editing-fabric/SKILL.md)
+- [centraldark-note-maintenance](Skills/centraldark-note-maintenance/SKILL.md)
+- [centraldark-reuse-runtime](Skills/centraldark-reuse-runtime/SKILL.md)
+- [centraldark-unified-surface-parity](Skills/centraldark-unified-surface-parity/SKILL.md)
+- [centraldark-vscode-log-bridge](Skills/centraldark-vscode-log-bridge/SKILL.md)
+
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
 Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma interface gráfica. Ela é deliberadamente curta e independe do modelo, do aplicativo e da ferramenta de automação.

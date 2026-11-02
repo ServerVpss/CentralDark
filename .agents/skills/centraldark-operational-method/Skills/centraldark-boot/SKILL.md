@@ -55,3 +55,36 @@ References:
 **🍒🎰🎲 Outra melhoria antecipada:** propor o menor delta útil, reaproveitar owner e comprovar antes de promover. **🧹:** consultar receita de faxina em `.agents/skills/main-pinned-runtime-fast-path/SKILL.md`; classificar `KEEP_ACTIVE` em checkout dirty/divergente e nunca disparar limpeza pelo boot. **🔧🛠️👨🏻‍🔧👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️🎰🎲🫀🫆🧠:** aliases são interface para selecionar receitas, **não shell commands**, e exigem resolução de owner + permissões + dry-run/prova. O boot nunca faz merge/deploy, nunca interrompe escritor ativo e não assume controle de terminal por detectar uma janela.
 
 **Critério de integração em Telegram ou qualquer porta:** carregar política/catálogo por versão canônica ou cache local verificado; apresentar o mesmo estado no cockpit; ações são delegadas apenas ao executor autenticado e com escopo. Offline: continuar com snapshot local comprovado, registrar receipt pendente e reconciliar sem sobrescrever mudanças divergentes quando reconectar.
+
+## Conteudo complementar unificado - Michelin/Kimetsu 2026-11-02
+
+### Incrementos incorporados da instalacao mae
+
+1. Change to the CentralDark repository root. In Hermes terminal, run: `cd /c/CentralDark` (or `cd C:\CentralDark` if using Windows paths).
+2. Execute the boot loader with a minimal input: `python scripts/trigger-fabric/centraldark_full_trigger_boot.py boot --input '{}'`
+5. Verify that `runtime_preflight_contract.status` equals `BOUND` and `canonical_consumption.status` equals `BOUND`. If either is not BOUND, treat the boot as blocked and output an exact blocker receipt containing the mismatched field and its value.
+7. The boot is considered successful when the HUD shows expected values and all contracts are BOUND; otherwise follow the blocker procedure defined in the CentralDark SOUL.
+- Before step 2, verify that the file `scripts/trigger-fabric/centraldark_full_trigger_boot.py` exists and is executable; otherwise the error "python: can't open file" is a setup issue, not a boot failure.
+
+### Incrementos incorporados da instalacao hermes
+
+1. Discover and change to the actual CentralDark repository root; do not assume a fixed drive or folder. Verify the canonical boot file exists before running it (for example, search for `scripts/trigger-fabric/centraldark_full_trigger_boot.py`, then `cd` to the directory that contains `scripts/` and `CENTRALDARK_AI_BOOT.yaml`).
+   - If the canonical local root is unavailable, measure `git ls-remote <canonical-url> refs/heads/main`, create an isolated read-only evidence checkout with `git clone --filter=blob:none --no-checkout --depth=1 --branch main`, and use `git show HEAD:<path>` to materialize only the boot/checkpoint files and their declared dependencies. This proves `main` content, not a live checkout or runtime.
+   - Run checkpoint status/verify and the boot only after the required files and dependencies have been materialized; otherwise report `UNKNOWN/BLOCKED` rather than treating a missing file or import as a canonical boot result.
+2. Execute the boot loader from that verified root with a minimal input: `python scripts/trigger-fabric/centraldark_full_trigger_boot.py boot --input '{}'`
+   - Ensure you are using the Hermes-internal python (the one activated in the session). If you get "python: can't open file", stop and rediscover the repository root and exact relative path before retrying; do not reinterpret the missing file as a boot failure.
+5. Verify that `runtime_preflight_contract.status` equals `BOUND` and `canonical_consumption.status` equals `BOUND`. If either is not BOUND, treat the boot as blocked and output an exact blocker receipt containing the mismatched field and its value.
+- The boot is considered successful when the HUD shows expected values and all contracts are BOUND; otherwise follow the blocker procedure defined in the CentralDark SOUL.
+- Distinguish global boot currency from scoped artifact currency: a target subtree can be equal to `origin/main` while the checkout HEAD is stale. Report the subtree fixed point separately and keep the global boot claim blocked until the repository-level prerequisite is resolved.
+## Continuity-trigger preflight
+When boot is entered through an explicit continuity trigger (`!CENTRALDARK`, `#ACORDAR`, or `!CALIBRAR`), run the existing entry owner before HUD work. In a fresh installation with no checkpoint, require the entry owner to return `NO_VERIFIED_CHECKPOINT` without fabricating a mission, receipt, or cursor; bootstrap is proven only when an explicit first checkpoint operation can then create and verify a checkpoint in an isolated root:
+```bash
+python3 scripts/hermes/centraldark-entry.py --status
+python3 scripts/hermes/verified-checkpoint.py verify --mission latest
+```
+Require the preflight to return the latest verified checkpoint and `HASH_CHAIN_PASS`; then perform a read-only reconciliation of `HEAD`, `origin/main`, porcelain status, checkpoint owner, writer lock, and runtime readiness. Preserve a dirty checkout and report it as `DIRTY_PRESERVED`; do not switch checkouts or overwrite unrelated work. Emit the recovered contract as `INTENT_ID | GOAL | OWNER | MAIN_SHA | ACTIVE_WRITER | RECEIPT | NEXT_CURSOR`, using `UNKNOWN` for fields absent from the persisted checkpoint rather than manufacturing values.
+Test each trigger in a fresh process and compare the recovered mission, receipt, integrity result, and cursor. A successful process exit is not sufficient if the JSON readback differs, is missing, or the boot ran before continuity recovery. If checkpoint recovery fails, fail closed before HUD/dispatch work and return the exact blocker. Do not interpret this clean bootstrap result as a permanent lock: perform the explicit first-run checkpoint probe separately, after the read-only no-history assertion, and read it back from a new process.
+Do not invoke `status`, `verify`, or `resume` from inside a checkpoint writer operation: the writer lock makes nested reads legitimately unavailable. Release the writer, then read back from separate processes. Resolve entrypoint executors from `Path.home()` or `PATH`, never a hardcoded `/root` path, so portability does not change the authority being read.
+- Before step 2, locate the boot file from the live workspace and verify its repository root, canonical HUD source, and live checkout; scratch/cache copies are test artifacts, not proof of the repository boot. Hardcoded paths such as `/c/CentralDark` can point at a different checkout and produce a false setup diagnosis.
+- When the local root is unavailable, an isolated filtered clone plus `git show` is valid for measuring `main` and validating canonical source content, but never upgrade that evidence to `HEAD`, live runtime, or operational boot proof.
+- When boot returns `FAIL_CLOSED` with `HUD_MAIN_SOURCE_MISSING_OR_LINK`, report the exact owner/mirror and `next_cursor`; do not substitute a screenshot, demo projection, or cached copy for the live HUD.
