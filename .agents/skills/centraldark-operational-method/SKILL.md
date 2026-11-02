@@ -385,3 +385,13 @@ Para identificar monitores dinamicamente, capturar um monitor com borda nativa e
 - Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
 - Critério de FIXED_POINT: intenção atendida + prova técnica + contraprova aplicável + registro verificado. UNKNOWN nunca vira PASS.
 - Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
+
+### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)
+
+**Decisão vigente:** na construção, manutenção, auditoria e documentação da CentralDark, SOL deve **navegar o código real** e verificar imports, owners, rotas, chamadas, contratos, dependências e fluxos, recorrendo aos scripts e validadores já existentes e a testes dirigidos ao cone afetado (por exemplo, sintaxe, lint, testes unitários/contratos, quando executáveis sem efeitos indevidos). **Não iniciar, reiniciar, movimentar ou testar ao vivo Hermes, suas janelas, mouse, overlay ou consumo de Skill automaticamente** como cerimônia de conclusão. Teste visual/interativo com Hermes fica para quando o CHEFE solicitar expressamente ou aprovar uma necessidade concreta; até lá, não gerar demanda por essa contraprova.
+
+**Critério proporcional:** `CODE_REVIEWED` e `STATIC_TEST_PASS` demonstram o que foi inspecionado/testado no código e com qual comando, SHA e resultado; **não** equivalem a `HERMES_RUNTIME_CONSUMED`, `DEPLOYED` nem a funcionamento futuro garantido. Se o objetivo era apenas escrever, integrar ou documentar código, registrar `FIXED_POINT` **do escopo documental/de código** com readback e testes pertinentes, deixando consumo vivo como `NOT_REQUESTED` ou `UNKNOWN` sem reabrir um cursor obrigatório. Quando o objetivo explícito exigir um efeito vivo ou quando um gate de publicação efetivamente o exigir, declarar a pendência específica em vez de fingir prova ou contornar o gate.
+
+**Fluxo curto:** `INTENÇÃO → OWNER EXISTENTE → INSPECIONAR CÓDIGO/ROTAS → MENOR DELTA → TESTAR SCRIPTS PERTINENTES → READBACK/SHA → RECEIPT/APRENDIZADO → CONCLUIR ESCOPO`. `HERMES_LIVE_TEST=ON_DEMAND_BY_CHEFE`. Não tornar a falta de teste vivo — que não foi solicitado — bloqueio fictício para o trabalho de código.
+
+**PROMPT_SELF_CACHE_P15=APLICÁVEL** para reuso desta receita, sem telemetria de HIT; **KV_CACHE_P16=UNKNOWN**; **NEXT_CURSOR=CODIGO_E_VALIDADORES_EXISTENTES_NO_PROXIMO_DELTA**.
