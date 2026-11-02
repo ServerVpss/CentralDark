@@ -1,0 +1,10 @@
+{
+  "timestamp_utc": "2026-11-02T18:18:29.138795+00:00",
+  "result": "HUMAN_VISUAL_CONFIRMED",
+  "confirmed_session": "hermes-443ff947f17d",
+  "evidence": "User photograph clearly shows native green Cua cursor and exact session label; user also reports pink and green cursors visible.",
+  "method": "CentralDark Michelin 3 estrelas; existing Hermes CuaDriverBackend; selected PM dependency environment; persistent session; existing Cua serve overlay; window-scoped move_cursor; existing Hermes green monitor overlay.",
+  "scope": "Native emulated cursor visual proof; does not certify all monitor mappings by color.",
+  "known_limitation": "Cua 0.28.2 get_agent_cursor_state returns position:null in upstream Windows source; MCP reports output schema mismatch. This is not evidence that cursor is invisible.",
+  "upstream_source": "https://github.com/trycua/cua/blob/cua-driver-rs-v0.28.2/libs/cua-driver/rust/crates/platform-windows/src/tools/impl_.rs"
+}
