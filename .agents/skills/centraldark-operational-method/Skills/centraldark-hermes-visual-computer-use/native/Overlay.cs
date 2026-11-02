@@ -39,12 +39,28 @@ public sealed class Overlay : Window {
   ShowInTaskbar=false;Topmost=true;WindowStartupLocation=WindowStartupLocation.Manual;
   Left=m.X/m.DpiScale;Top=m.Y/m.DpiScale;Width=m.Width/m.DpiScale;Height=m.Height/m.DpiScale;
   var color=(Color)ColorConverter.ConvertFromString(cfg.borderColor);
-  double inset=cfg.shadow ? cfg.shadowBlur/2 : 1;
+  // Soft, transparent outer glow. Keep the same click-through window and cursor route.
+  // Layered borders diffuse light beyond the line without tinting the desktop center.
+  double scale=m.DpiScale;
+  double inset=cfg.shadow ? Math.Max(12,cfg.shadowBlur*.65)/scale : 1;
   var grid=new Grid{Background=Brushes.Transparent};
+  if(cfg.shadow){
+   var halo=new Border{
+    BorderBrush=new SolidColorBrush(Color.FromArgb(65,color.R,color.G,color.B)),
+    BorderThickness=new Thickness((cfg.borderThickness+3)/scale),
+    Margin=new Thickness(inset),
+    CornerRadius=new CornerRadius(cfg.roundedCorners?22:0),
+    Effect=new DropShadowEffect{
+     Color=color,BlurRadius=Math.Max(36,cfg.shadowBlur*1.8),
+     ShadowDepth=0,Opacity=.62,RenderingBias=RenderingBias.Quality}};
+   grid.Children.Add(halo);
+  }
   var edge=new Border{BorderBrush=new SolidColorBrush(color),
-   BorderThickness=new Thickness(cfg.borderThickness/m.DpiScale),Margin=new Thickness(inset),
+   BorderThickness=new Thickness(cfg.borderThickness/scale),Margin=new Thickness(inset),
    CornerRadius=new CornerRadius(cfg.roundedCorners?20:0)};
-  if(cfg.shadow)edge.Effect=new DropShadowEffect{Color=color,BlurRadius=cfg.shadowBlur,ShadowDepth=0,Opacity=.8};
+  if(cfg.shadow)edge.Effect=new DropShadowEffect{
+   Color=color,BlurRadius=Math.Max(24,cfg.shadowBlur),
+   ShadowDepth=0,Opacity=.48,RenderingBias=RenderingBias.Quality};
   grid.Children.Add(edge);
   label.Foreground=new SolidColorBrush(color);label.Background=new SolidColorBrush(Color.FromArgb(210,12,20,18));
   label.FontSize=16;label.FontWeight=FontWeights.Bold;label.Padding=new Thickness(14,7,14,7);
