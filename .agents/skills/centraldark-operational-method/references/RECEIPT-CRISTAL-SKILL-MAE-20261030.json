@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "source": "K:\\.agents\\skills\\centraldark-operational-method\\SKILL.md",
+  "original_sha256": "c0ece235debcfb1595816b42d9e53ecd00839a5158735d2ae5c853e134c3f4ec",
+  "original_bytes": 338709,
+  "original_lines": 3945,
+  "original_heading_count": 239,
+  "original_prefix_lines": 149,
+  "new_root_sha256": "8180f9a22e25b77d6ca2fa5bc3105394fac8c604c727f5eabd8f2d4f4aa69b4c",
+  "backup_path": "F:\\_WORKER\\centraldark-skill-mae-before-crystal-c0ece235debc.md",
+  "chunks": [
+    {
+      "file": "CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+      "original_start_line": 150,
+      "original_end_line": 1369,
+      "bytes": 149114,
+      "sha256": "53f89b23a4a141941ef87ecc7f0ca31d66e43a365df45ce56610e54e64e871ca"
+    },
+    {
+      "file": "CORPUS-02-LICOES-LEGADO-20261030.md",
+      "original_start_line": 1370,
+      "original_end_line": 2751,
+      "bytes": 67659,
+      "sha256": "cfdfdf8b711ebbedc5a24e8b8cb6d849d19b1e97955bf297e685bfb0189ea939"
+    },
+    {
+      "file": "CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+      "original_start_line": 2752,
+      "original_end_line": 3440,
+      "bytes": 37588,
+      "sha256": "7bb7fd3fa210118084e3746b52a9e20f7d1fbae5ae1013935f5ee167bafe5b5e"
+    },
+    {
+      "file": "CORPUS-04-ROTAS-RECENTES-20261030.md",
+      "original_start_line": 3441,
+      "original_end_line": 3945,
+      "bytes": 44769,
+      "sha256": "8bf88a7cdbececf9b771e566110751e87317bf73f1d6e9cc88572c73d91f4d5b"
+    }
+  ],
+  "index_sha256": "e7bf64b67c14765dcc1f54d62680e37f76db3030fe139f372b43f37100fff239",
+  "integrity": "SPLIT_EQUALS_ORIGINAL_BYTES",
+  "state": "LOCAL_ONLY_UNCOMMITTED"
+}

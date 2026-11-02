@@ -13,6 +13,19 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
+
+<!-- @owner: documentos canônicos existentes | @updated_utc: 2026-11-01T02:33:57.429Z | @status: DOCUMENTED_NOT_RUNTIME_PROVEN -->
+
+**RUNTIME PRINCIPAL:** openKylin na Forja física (antigo disco K:). Source, compilação, testes, scripts, Hermes CLI, gateway, serviços, Git e gh devem operar **diretamente no Linux**, por SSH ou pelo próprio terminal Linux. O Windows deixa de ser executor e dependência da CentralDark; pode ser somente cliente temporário de acesso/transferência. O VMware permanece como meio atual de boot/acesso, não como proprietário de execução. A VPS recebe promoção **somente sob ordem do CHEFE**, nunca por sincronização automática presumida.
+
+**REGRA DE CONVERSÃO DE REFERÊNCIAS:** toda referência a Windows, Casa, K:\\, C:\\, F:\\, PowerShell ou componentes equivalentes que esteja sendo usada como **binding ativo de execução** deve ser avaliada no mesmo owner e, quando existir rota Linux comprovada, trocada incrementalmente pelo caminho, serviço ou runtime real do openKylin. Não fazer substituição textual em massa. Preservar históricos, logs, provas, backups e usos do Windows como cliente. Não adivinhar que `K:\\` virou `/data/CentralDark`: validar a localização real no Linux. Se a migração não estiver comprovada, manter PENDENTE, não declarar PASS.
+
+**RECEITA:** `OWNER EXISTENTE → IDENTIFICAR REFERÊNCIA OPERACIONAL WINDOWS → MEDIR DESTINO REAL LINUX → MENOR DELTA → TESTE → READBACK → COMMIT/SHA → KAIZEN`. Código-fonte, Hermes e gateway só serão declarados rodando no Linux quando isso for medido no destino.
+
+**NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
+
+
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
 
 Estas regras existem para manter a CentralDark viva, útil, verificável e fiel à intenção do SEGREDO/CHEFE.

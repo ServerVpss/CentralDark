@@ -50,6 +50,7 @@ CANONICAL_CONSUMPTION_GATE = Path("scripts/centraldark/canonical-consumption-gat
 CANONICAL_LEARNINGS = Path("docs/CONSCIENCIA/APRENDIZADOS.md")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
+CONTINUITY_ENTRY = Path("scripts/hermes/centraldark-entry.py")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
 PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO = True
 
@@ -647,20 +648,21 @@ def hud_first_gate(repo: Path) -> dict:
     Fail-closed on unavailable remote, missing files or mismatched bytes.
     Never extract secrets, mutate checkout, or issue a runtime restart.
     """
-    rel = "docs/HUD/HUD.html"
+    # The Cockpit owner is canonical; the legacy HTML is inventory history only.
+    rel = "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
     source = repo / rel
-    # One canonical source, two materializations, never a second HUD owner.
-    mirror = Path(os.environ.get("CENTRALDARK_HUD_RUNTIME_PATH") or (
-        str(Path.home() / "Documents" / "Obsidian Vault" / "🪬Centraldark -HUD🪬" / "HUD.html")
-        if os.name == "nt" else "/root/.centraldark/HUD.html"
-    ))
+    # The Cockpit owner is the runtime surface. A legacy mirror is optional
+    # and must be supplied explicitly; never infer an Obsidian path.
+    mirror_raw = os.environ.get("CENTRALDARK_HUD_RUNTIME_PATH", "").strip()
+    mirror = Path(mirror_raw) if mirror_raw else None
     evidence = {
         "status": "FAIL_CLOSED",
-        "owner": rel,
-        "mirror": str(mirror),
+        "owner": "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+        "legacy_source": "docs/HUD/HUD.html",
+        "mirror": str(mirror) if mirror else "UNCONFIGURED",
         "hud_read_first": True,
         "authorization": "UNCHANGED",
-        "next_cursor": "MATERIALIZE_MAIN_HUD_AND_REMEASURE",
+        "next_cursor": "INSTRUMENT_EXISTING_COCKPIT_OWNER",
     }
     if not source.is_file() or source.is_symlink():
         evidence["reason"] = "HUD_MAIN_SOURCE_MISSING_OR_LINK"
@@ -671,8 +673,8 @@ def hud_first_gate(repo: Path) -> dict:
         evidence["reason"] = "HUD_MAIN_SOURCE_READ_FAILED"
         return evidence
     evidence["source_sha256"] = hashlib.sha256(current_bytes).hexdigest()
-    if not current_bytes.startswith(b"<!DOCTYPE html") or b"CentralDark Index + HUD" not in current_bytes:
-        evidence["reason"] = "HUD_MAIN_CONTENT_INVALID"
+    if not current_bytes.startswith(b"import ") or b"hudMigrationSnapshot" not in current_bytes:
+        evidence["reason"] = "HUD_OWNER_CONTENT_INVALID"
         return evidence
 
     def git(*args: str) -> str | None:
@@ -709,26 +711,97 @@ def hud_first_gate(repo: Path) -> dict:
         evidence["reason"] = "HUD_COMMIT_BLOB_UNREADABLE"
         return evidence
 
-    if mirror.is_symlink() or not mirror.is_file():
-        evidence["reason"] = "HUD_RUNTIME_NOT_MATERIALIZED"
-        return evidence
-    try:
-        runtime_bytes = mirror.read_bytes()
-    except OSError:
-        evidence["reason"] = "HUD_RUNTIME_READ_FAILED"
-        return evidence
-    evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
-    if current_bytes != runtime_bytes:
-        evidence["reason"] = "HUD_MAIN_RUNTIME_SHA_MISMATCH"
-        return evidence
-    evidence.update({"status": "PASS", "reason": "SAME_MAIN_BYTES_AND_RUNTIME",
-                     "next_cursor": "CONTINUE_SAME_GOAL"})
+    if mirror is not None:
+        if mirror.is_symlink() or not mirror.is_file():
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_NOT_FOUND"
+            return evidence
+        try:
+            runtime_bytes = mirror.read_bytes()
+        except OSError:
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_READ_FAILED"
+            return evidence
+        evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
+        if current_bytes != runtime_bytes:
+            evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_SHA_MISMATCH"
+            return evidence
+    evidence.update({"status": "PASS", "reason": "COCKPIT_OWNER_SOURCE_VERIFIED",
+                     "next_cursor": "INSTRUMENT_EXISTING_COCKPIT_OWNER"})
     return evidence
+
+
+def operational_reconcile_preflight(repo: Path, continuity: dict) -> dict:
+    # Read-only reconciliation before any trigger boot continuation.
+    def git(*args):
+        try:
+            p = subprocess.run(["git", "-C", str(repo), *args], capture_output=True,
+                               text=True, timeout=12, env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+            return p.stdout.strip() if p.returncode == 0 else "UNKNOWN"
+        except (OSError, subprocess.TimeoutExpired):
+            return "UNKNOWN"
+    mission = continuity.get("mission", "UNKNOWN")
+    lock = Path(os.environ.get("CENTRALDARK_HERMES_CHECKPOINTS", str(Path.home() / ".hermes/centraldark/verified-execution"))).expanduser() / mission / ".lock"
+    dirty = git("status", "--porcelain=v1")
+    return {
+        "git_head": git("rev-parse", "HEAD"),
+        "git_origin_main": git("rev-parse", "origin/main"),
+        "git_dirty": bool(dirty and dirty != "UNKNOWN"),
+        "git_changes_preserved": dirty if dirty != "UNKNOWN" else "UNKNOWN",
+        "owner": continuity.get("owner", CONTINUITY_ENTRY.as_posix()),
+        "active_writer": "UNKNOWN_LOCK_PRESENT" if lock.exists() else "NONE",
+        "writer_lock_path": str(lock),
+        "runtime": {
+            "hermes_dispatch_ready": bool(continuity.get("dispatch_ready")),
+            "verified_plan_ready": bool(continuity.get("plan_ready")),
+            "state": "READY_FOR_NEXT_CURSOR" if continuity.get("ok") else "BLOCKED",
+        },
+        "status": "DIRTY_PRESERVED" if dirty and dirty != "UNKNOWN" else "RECONCILED",
+    }
+
+def hermes_continuity_preflight(repo: Path) -> dict:
+    # Recover the latest verified mission before trigger boot continues.
+    entry = repo / CONTINUITY_ENTRY
+    result = {"status": "BLOCKED", "owner": CONTINUITY_ENTRY.as_posix(),
+              "source": "centraldark-entry.py -> verified-checkpoint.py",
+              "integrity": "UNKNOWN", "reason": "ENTRY_NOT_FOUND"}
+    if not entry.is_file() or entry.is_symlink():
+        return result
+    try:
+        proc = subprocess.run(["python3", str(entry), "--status"], cwd=str(repo),
+                              capture_output=True, text=True, timeout=20, env=os.environ.copy())
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        result["reason"] = type(exc).__name__
+        return result
+    try:
+        payload = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        result["reason"] = "ENTRY_OUTPUT_INVALID"
+        return result
+    result.update(payload)
+    result["integrity"] = ("HASH_CHAIN_PASS" if payload.get("ok") and
+                            payload.get("state") == "VERIFIED_CHECKPOINT_FOUND" else "FAILED")
+    result["preflight_exit"] = proc.returncode
+    if proc.returncode != 0 or not payload.get("ok"):
+        result["reason"] = payload.get("state", "CHECKPOINT_UNAVAILABLE")
+        return result
+    result["status"] = "RECOVERED"
+    result["reason"] = "LATEST_VERIFIED_CHECKPOINT_RECOVERED_BEFORE_TRIGGER_BOOT"
+    return result
 
 
 def cmd_boot(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
-    # First operation: use the canonical HUD. No stale or missing HUD can
+    active = explicit_command_context(args.input)
+    continuity = hermes_continuity_preflight(repo) if active else {
+        "status": "NOT_APPLICABLE", "owner": CONTINUITY_ENTRY.as_posix(),
+        "integrity": "NOT_APPLICABLE", "reason": "NO_EXPLICIT_TRIGGER",
+    }
+    if active and continuity["status"] != "RECOVERED":
+        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
+                          "status": "FAIL_CLOSED", "continuity_preflight": continuity,
+                          "boot_executed": False}, ensure_ascii=False, indent=2))
+        return 18
+    operational_context = operational_reconcile_preflight(repo, continuity)
+    # First operation after continuity and read-only reconciliation: use the canonical HUD. No stale or missing HUD can
     # start the CentralDark control-plane boot; optional failures stay plaques.
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
@@ -761,6 +834,17 @@ def cmd_boot(args: argparse.Namespace) -> int:
         "fixed_point_pack": fixed_point_pack,
         "discovered": registry,
         "source_sha256": source_hashes,
+        "continuity_preflight": continuity,
+        "operational_reconcile": operational_context,
+        "continuity_contract": {
+            "INTENT_ID": continuity.get("intent_id", "UNKNOWN_NOT_STORED_IN_CHECKPOINT"),
+            "GOAL": continuity.get("goal", continuity.get("intent", "UNKNOWN")),
+            "OWNER": operational_context.get("owner", "UNKNOWN"),
+            "MAIN_SHA": operational_context.get("git_head", "UNKNOWN"),
+            "ACTIVE_WRITER": operational_context.get("active_writer", "UNKNOWN"),
+            "RECEIPT": continuity.get("receipt_sha256", "UNKNOWN"),
+            "NEXT_CURSOR": continuity.get("next_cursor", "UNKNOWN"),
+        },
         "feedback": classify_realtime_feedback(args.input),
         "cognitive_bios": bios,
         "runtime_preflight_contract": preflight_contract,

@@ -1,0 +1,39 @@
+{
+  "intent_id": "COCKPIT_HEALTH_ADAPTER_9101_PRESERVE_8099_OMNI",
+  "run_id": "cockpit-health-adapter-20261030T215232Z",
+  "owner": "K:/apps/instinto-superior/src/lib/cockpit.functions.ts",
+  "status": "PARTIAL_UI_READBACK_PENDING",
+  "current": {
+    "omni_base": "http://127.0.0.1:8099",
+    "commander_health": "http://127.0.0.1:9101/health",
+    "commander_health_before": {"http": 200, "engine_connected": false},
+    "tunnel_readyz": {"url": "http://127.0.0.1:8742/readyz", "http": 200}
+  },
+  "delta": {
+    "file": "K:/apps/instinto-superior/src/lib/cockpit.functions.ts",
+    "change": "separate Commander health base from Omni API base",
+    "env_override": "CENTRALDARK_ROUTER_HEALTH_URL",
+    "default_health_base": "http://127.0.0.1:9101",
+    "preserved_omni_base": "http://127.0.0.1:8099"
+  },
+  "proof": {
+    "source_sha256": "C75B187DF393DC5A3F0C7F3FA81FB6AE579BE15AF80A342D26122E3B78AE27E5",
+    "validation": "npm run build",
+    "result": "PASS; verify:hud 33 pass, 1 todo; client and SSR builds completed",
+    "artifact": "K:/apps/instinto-superior/.output/server/_ssr/cockpit.functions-DS4AW2Ye.mjs",
+    "post_restart": {
+      "launcher": "K:/scripts/launch_omni_router_direct.py",
+      "heartbeat": 200,
+      "health": 200,
+      "omni_status": 200,
+      "live_fabric_status": 200,
+      "commander_tool": {"http": 200, "tool": "list_directory", "execution": "CASA_ENGINE_RESULT"},
+      "commander_health": {"http": 200, "engine_connected": true},
+      "tunnel_readyz": 200
+    }
+  },
+  "not_touched": ["tokens", "plugins", "new services", "new scripts"],
+  "runtime_action": "restarted existing 8099 launcher after explicit authorization; no new process owner or port",
+  "rollback": "remove casaCommanderHealthBase and pass origemHealth only from cockpit.functions.ts; restore previous apiHealth call",
+  "next_cursor": "COCKPIT_UI_READBACK_API_HEALTH_9101_AND_OMNI_8099_SEPARATE"
+}

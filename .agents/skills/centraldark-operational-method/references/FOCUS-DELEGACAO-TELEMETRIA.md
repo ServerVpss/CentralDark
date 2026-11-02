@@ -202,6 +202,18 @@ Inventario circular desejado: COCKPIT -> GITHUB MAIN -> CASA E VPS -> SUPABASE E
 
 ---
 
+## Hermes Desktop — controle de abas por UIAutomation, sem navegador externo (28/10/2026)
+
+**Origem precisa:** o CHEFE forneceu export do Recorder/Power Automate Desktop com a única ação textual `UIAutomation.Click.Click Element: appmask['Window \'Hermes\'']['Edit \'Address\''] ClickType: UIAutomation.ClickType.LeftClick`; o restante é o `ControlRepositorySymbols`, protocolo `uia3`, seletor hierárquico `RootWebArea → Edit 'Address'` e screenshots serializados. **Esse export não inclui resposta posterior ao clique nem criação de aba**. Não reinterpretar screenshot embutido como readback do runtime.
+
+**Mapa atual da Casa (somente leitura):** `Hermes.exe` expõe **2** painéis de browser com pares `Button 'New tab'` (suporta `InvokePattern`) + `Edit 'Address'` (suporta `ValuePattern`). Existem também controles `New session tab` que pertencem ao chat do Hermes, **não** ao navegador. O endereço `http://127.0.0.1:8080/sala-controle` corresponde a um único painel; há outro painel para ChatGPT. A seleção deve exigir URL de origem exata, não apenas o título Hermes nem índice de painel presumido.
+
+**Receita executável existente na Skill-Mãe:** `K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Desktop-BrowserTab.ps1` (nenhum novo owner). Executar `-Mode Inspect` para mapear; ao receber comando real com URL fornecida pelo CHEFE, executar `-Mode OpenNewTab -FromUrl '<URL_ORIGINAL>' -ToUrl '<URL_NOVA>'`. O script associa os elementos UIA de um mesmo painel, invoca `New tab`, verifica incremento de TabItem e preservação dos nomes anteriores, foca o editor `Address`, digita a URL e pressiona Enter uma só vez; procura o novo documento/URL após a navegação. Nenhuma coordenada é usada para clicar; bounds só associam elementos do mesmo painel. Não alterar o perfil do Hermes, a sessão do Goal, os dados das abas preexistentes ou o Edge externo.
+
+**Gates:** `PAD_SELECTOR=PROVEN_AS_EXPORTED`; `HERMES_TWO_BROWSER_PANES=OBSERVED`; `NEW_TAB_INVOKE_PATTERN=AVAILABLE`; `OPEN_NEW_TAB_NAVIGATION_E2E=NOT_RUN_IN_THIS_RECEIPT`. PASS somente quando `NEW_TAB_COUNT=BEFORE+1`, todas as abas anteriores persistem, o endereço é digitado no editor certo e o documento novo confirma a URL. Saída `BLOCKED_OR_PARTIAL` nunca é promovida a sucesso. Reusar esse procedimento sem criar outro script por URL ou resortar a `Ctrl+T` por rotina.
+
+---
+
 ## 🖱️ Navegação deliberada do Cockpit — mapa vivo botão por botão (27/10/2026)
 
 <!-- #OBSERVACOES#
@@ -282,3 +294,53 @@ O mapeamento da **sessão autenticada Hermes Desktop Preview**, sem reautentica�
 **Regra reaproveitável (novo cristal):** navegar nos botões SAFE_NAV em uma mesma sessão autenticada; capturar `BEFORE → ACTION → AFTER` e marcar `NAV/EXPAND_PASS` somente com DOM alterado; verificar o efeito de backend **separadamente** com network/API/DB quando a ação o exigir; preservar `RUN_ID`, seletor, owner, timestamp, receipt e `NEXT_CURSOR`. Se `browser_exec` isolado voltar a mostrar `AUTH_REQUIRED`, consultar a sessão Desktop já autorizada antes de inferir logout global.
 
 **NEXT_CURSOR:** continuar na **mesma janela** pelas abas `Infraestrutura → Radar → Mega Painel → Status`, ações seguras uma a uma, mantendo `STATE_HASH` e controle de foco. Registrar ações externas/destrutivas como `NEEDS_EXPLICIT_ACTION_AUTH` sem clicar para explorar. O problema `verify-hud-zone.mjs` (assertion legada `sticky top-0 z-50`) segue **outro cone causal**, não corrigido por este recibo. Delta Radeon e Skill-Mãe ainda dependem de gates/publicação; nenhum commit/push/deploy é inferido.
+
+## 🪬 Recibo vivo — Cockpit Sala de Controle, mapa 127/27 (2026-10-30)
+
+<!-- CENTRALDARK_COCKPIT_CONTROL_MAP_RECEIPT_20261030 -->
+
+**Owner:** `../SKILL.md` → `K:\apps\instinto-superior\src\components\central\CockpitShell.tsx`.
+**Superfície:** `http://127.0.0.1:8080/sala-controle`, título `Cockpit CentralDark — Sala de Controle`.
+**Método:** Browser/UI Automation autorizado, locators semânticos, DOM/ARIA readback. Nenhum clique por coordenada fixa.
+
+### Prova executada
+
+- Inventário DOM: `127` elementos interativos catalogados.
+- Navegação: `27/27` abas de área selecionadas. Cada seleção devolveu `tabpanel` ativo e conteúdo próprio.
+- `Medir agora`: antes `Última atualização: 30/10/2026, 16:05:36`; depois `16:05:58`; o botão voltou a `Medir agora · há 12s`; `MEASURE_READBACK=PASS` no sensor.
+- Inventário de portas: antes `Exibir inventário total de portas · 204`; depois `Ocultar inventário total`; a lista TCP/UDP apareceu com origem, porta e PID quando medidos. `PORT_INVENTORY_EXPANSION=PASS`.
+- Harness: `Abrir ferramentas` abriu a gaveta `🧿 CentralDark · Harness` e mostrou as áreas existentes. `HARNESS_DRAWER_OPEN=PASS`.
+
+### Mapa de áreas lido
+
+`Visão geral`, `Jornada`, `Portal`, `Builder Bolt`, `Mapa PR #1873`, `CentralDark Gram`, `Minha Oficina`, `Design Center`, `Goals`, `Gênesis · Michelin`, `Dream`, `Estrutura`, `Raio-X`, `Recibos`, `Forja`, `Permissões Forja`, `Admin CentralDark`, `Sistema CentralDark`, `Obsidian`, `Estúdio`, `Hermes`, `Unigram`, `Regras Forja`, `Inventário`, `Agent Mode`, `HTML Consolidation` e `Downloads`.
+
+### Fronteira de mutação
+
+`Windows`, `VPS`, `Sincronizar Tudo`, `Executar Automação`, `Obsidian` e `Unigram` não foram acionados. O código foi lido para identificar seus handlers. `MUTATING_BUTTON_E2E=NOT_EXECUTED`; isso é proteção, não falha.
+
+O seletor `Main Only · Casa/Main` / `Full · Casa/VPS/Main` apenas muda o escopo da automação. A automação seguinte sincroniza e solicita o workflow existente. Não chamar isso de deploy sem gate, receipt e readback remoto.
+
+### Receita de replay
+
+```text
+OPEN_EXISTING_AUTHORIZED_TAB
+→ INVENTORY(role,name,aria,data-cd-flow,enabled)
+→ CLASSIFY_CONTROL
+→ OPEN_AREA_CATALOG
+→ CLICK_SAFE_NAV_ONCE
+→ READ_ACTIVE_TABPANEL
+→ MEASURE_ONLY_READ_ONLY_CONTROLS
+→ EXPAND_DETAILS_AND_PORT_INVENTORY
+→ RESTORE_VISÃO_GERAL
+→ RECORD_BEFORE_AFTER_AND_COUNTERPROOF
+→ NEVER_AUTOCLICK_MUTATING_CONTROLS
+```
+
+### Veredito
+
+`PASS_BOUNDED_WITH_MUTATIONS_PROTECTED`: o mapa de navegação e a receita foram comprovados na superfície local. `UNKNOWN`: efeito de backend de cada área, origem MCP, commit/push/deploy e execução dos controles mutáveis.
+
+`NEXT_CURSOR=COCKPIT_CONTROL_MAP_REPLAY_SAFE_RAILS_AND_DETAIL_EXPANSIONS`
+
+<!-- /CENTRALDARK_COCKPIT_CONTROL_MAP_RECEIPT_20261030 -->

@@ -103,6 +103,24 @@ if (Test-Path -LiteralPath $diretorioProvas) {
   foreach ($arquivoProva in @(Get-ChildItem -LiteralPath $diretorioProvas -Filter '*.json' -File | Sort-Object Name)) {
     try {
       $prova = Get-Content -LiteralPath $arquivoProva.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+      # Genesis registra observacoes imediatamente: recibo OBSERVED nao se passa por prova PROVADO.
+      # Continua indexado como arquivo vivo; so o verificador do Hermes promove comprovacoes.
+      if ($prova.tipo -eq 'genesis_operational_replay') {
+        $requiredTrace = @('intent_id','run_id','owner','surface','next_cursor')
+        $missingTrace = @($requiredTrace | Where-Object { [string]::IsNullOrWhiteSpace([string]$prova.$_) })
+        $validTraceStates = @('OBSERVED','TESTED','PROVEN','REFUTED','UNKNOWN')
+        $steps = @($prova.observacoes)
+        $invalidSteps = @($steps | Where-Object {
+          [string]::IsNullOrWhiteSpace([string]$_.area) -or
+          [string]::IsNullOrWhiteSpace([string]$_.clique_ou_acao) -or
+          [string]::IsNullOrWhiteSpace([string]$_.status)
+        })
+        if ($missingTrace.Count -gt 0 -or $prova.status -notin $validTraceStates -or
+            $steps.Count -eq 0 -or $invalidSteps.Count -gt 0) {
+          [void]$problemas.Add("TRILHA_OBSERVADA_INCOMPLETA: $($arquivoProva.Name)")
+        }
+        continue
+      }
       $campos = @('missao','acao','arquivo','criado_em','por_que_fazer','por_que_nao_fazer_outra_coisa','por_que_usar','por_que_modificar','o_que_mudou','contraprova')
       $faltando = @($campos | Where-Object { [string]::IsNullOrWhiteSpace([string]$prova.$_) })
       if ($prova.veredito -ne 'PROVADO' -or $prova.verificador -ne 'registrar-prova-hermes-casa.ps1' -or $faltando.Count -gt 0) {
