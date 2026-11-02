@@ -19,9 +19,11 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
 import json
 import re
 import subprocess
+from datetime import datetime, timezone
 import sys
 import urllib.parse
 from dataclasses import dataclass, asdict
@@ -87,6 +89,108 @@ CAPABILITY_HANDOFF_EVIDENCE_RE = re.compile(
 
 # Canonical executable output-guard contract.
 RESPONSE_WITHOUT_TRACE = "INVALID"
+
+# Nota tocada: o mesmo fiscal do !RASTRO valida metadados sem reescrever a nota.
+# O hash interno é SHA256 do conteúdo UTF-8 salvo, com APENAS o valor da linha
+# hash_conteudo vazio. Hash do arquivo completo incluindo seu próprio hash seria
+# autorreferente e não teria valor estável.
+NOTE_REQUIRED_FIELDS = (
+    "data_criacao", "ultima_atualizacao", "ultima_modificacao",
+    "ultima_verificacao", "fuso_horario", "hash_conteudo",
+    "rastro", "grupo_notas", "relacionado_a", "estado_evidencia",
+)
+NOTE_VALID_GROUPS = {"GRUPO_01", "GRUPO_02", "GRUPO_03", "GRUPO_04", "GRUPO_05"}
+NOTE_VALID_STATES = {"PASS", "FAIL", "UNKNOWN", "BLOCKED"}
+NOTE_HASH_RE = re.compile(r"^(?:sha256:)?[0-9a-f]{64}$", re.I)
+NOTE_HASH_FIELD_RE = re.compile(r"(?m)^([ \t]*hash_conteudo[ \t]*:[ \t]*)[^\r\n]*", re.I)
+
+
+def _note_metadata(text: str) -> dict[str, str]:
+    # Frontmatter YAML escalar; não busca campos no corpo para impedir falso PASS.
+    match = re.match(r"\A(?:\ufeff)?---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", text, re.S)
+    if not match:
+        return {}
+    result: dict[str, str] = {}
+    for line in match.group(1).splitlines():
+        item = re.fullmatch(r"([a-z_]+):[ \t]*(.*)", line)
+        if item:
+            result[item.group(1)] = item.group(2).strip().strip('"').strip("'")
+    return result
+
+
+def _timezone_timestamp(value: str) -> bool:
+    try:
+        moment = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return moment.tzinfo is not None and moment.utcoffset() is not None
+    except (ValueError, TypeError):
+        return False
+
+
+def verify_note_metadata(text: str, note_path: str = "") -> dict[str, Any]:
+    """Verificação somente leitura, acionada para notas .md realmente tocadas.
+
+    NÃO infere a data original, NÃO altera ultima_modificacao durante conferência
+    e NÃO transforma metadado formatado em prova histórica independente.
+    """
+    props = _note_metadata(text)
+    checks: list[Check] = []
+    missing = [field for field in NOTE_REQUIRED_FIELDS if not props.get(field)]
+    if missing:
+        checks.append(Check("note_required_fields", "FAIL", "missing: " + ",".join(missing)))
+    else:
+        checks.append(Check("note_required_fields", "PASS", "ten required fields present"))
+    if props:
+        for name in ("ultima_atualizacao", "ultima_modificacao", "ultima_verificacao"):
+            if props.get(name) and not _timezone_timestamp(props[name]):
+                checks.append(Check("note_datetime_" + name, "FAIL", "RFC3339 with UTC offset required"))
+        creation = props.get("data_criacao", "")
+        if creation.upper() in {"UNKNOWN", "DESCONHECIDA", "DESCONHECIDO"}:
+            checks.append(Check("note_creation_provenance", "UNKNOWN", "original creation not proven"))
+        elif creation and not _timezone_timestamp(creation):
+            checks.append(Check("note_datetime_data_criacao", "FAIL", "creation must be offset-aware or UNKNOWN"))
+        if props.get("fuso_horario") and not (
+            props["fuso_horario"] == "UTC"
+            or bool(re.fullmatch(r"(?:[A-Za-z_]+/[A-Za-z_]+(?:/[A-Za-z_]+)?)|[+-]\d{2}:\d{2}", props["fuso_horario"]))
+        ):
+            checks.append(Check("note_timezone", "FAIL", "IANA timezone, UTC or UTC offset required"))
+        if props.get("grupo_notas") and props["grupo_notas"] not in NOTE_VALID_GROUPS:
+            checks.append(Check("note_group", "FAIL", "group must be GRUPO_01..GRUPO_05"))
+        evidence_state = props.get("estado_evidencia", "")
+        if evidence_state and evidence_state not in NOTE_VALID_STATES:
+            checks.append(Check("note_evidence_state", "FAIL", "expected PASS|FAIL|UNKNOWN|BLOCKED"))
+        elif evidence_state == "UNKNOWN":
+            checks.append(Check("note_evidence_state", "UNKNOWN", "note evidence awaits external proof"))
+        elif evidence_state == "BLOCKED":
+            checks.append(Check("note_evidence_state", "UNKNOWN", "note evidence blocked; cannot promote to PASS"))
+        elif evidence_state == "FAIL":
+            checks.append(Check("note_evidence_state", "FAIL", "note itself records failed evidence"))
+        stated_hash = props.get("hash_conteudo", "")
+        if stated_hash:
+            if not NOTE_HASH_RE.fullmatch(stated_hash):
+                checks.append(Check("note_hash", "FAIL", "sha256:<64 hex> required"))
+            else:
+                normalized = NOTE_HASH_FIELD_RE.sub(r"\1", text, count=1)
+                computed = hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+                claimed = stated_hash.split(":")[-1].lower()
+                checks.append(Check(
+                    "note_hash", "PASS" if claimed == computed else "FAIL",
+                    "SHA256 normalized content matches" if claimed == computed else "stored note content hash mismatch",
+                    computed,
+                ))
+    verdict = _aggregate(checks)
+    return {
+        "schema": "centraldark.rastro-note-metadata.v1",
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+        "note_path": note_path,
+        "verdict": verdict,
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "checks": [asdict(c) for c in checks],
+        "missing_fields": missing,
+        "grupo_notas": props.get("grupo_notas") or None,
+        "estado_evidencia": props.get("estado_evidencia") or "UNKNOWN",
+        "proof_scope": "metadata_format_and_normalized_sha256_only; historic dates need external evidence",
+        "modified_note": False,
+    }
 
 
 @dataclass
@@ -595,8 +699,24 @@ def main(argv: Optional[list[str]] = None) -> int:
     src = parser.add_mutually_exclusive_group()
     src.add_argument("--text")
     src.add_argument("--file")
+    parser.add_argument("--note-file", help="Read-only metadata verification for touched Markdown notes")
     parser.add_argument("--pretty", action="store_true")
     args = parser.parse_args(argv)
+
+    if args.note_file:
+        if args.file or args.text:
+            parser.error("--note-file does not combine with --file or --text")
+        file_path = Path(args.note_file)
+        if file_path.suffix.lower() != ".md":
+            parser.error("--note-file expects .md")
+        try:
+            note_text = file_path.read_bytes().decode("utf-8")  # preserve CRLF for stable normalized hash
+        except (OSError, UnicodeError) as exc:
+            print(json.dumps({"verdict": "BLOCKED", "reason": str(exc), "modified_note": False}))
+            return 2
+        result = verify_note_metadata(note_text, str(file_path))
+        print(json.dumps(result, ensure_ascii=False, indent=2 if args.pretty else None))
+        return {"PASS": 0, "FAIL": 1, "UNKNOWN": 2}[result["verdict"]]
 
     text = _load_text(args)
     backend = GitHubBackend(args.repo)

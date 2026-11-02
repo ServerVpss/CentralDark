@@ -356,6 +356,26 @@
       "bootstrap": true
     },
     {
+      "id": "trigger.human.MICHELIN",
+      "kind": "TRIGGER",
+      "capability": "TRIGGER:MICHELIN",
+      "boundary": "trigger-fabric",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "symbol": "MICHELIN",
+      "activation": "!MICHELIN",
+      "from": "CHEFE",
+      "to": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#phase_contracts.MICHELIN",
+      "owner": "RULES.md",
+      "canonical_route": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#phase_contracts.MICHELIN",
+      "status": "CANDIDATE_UNTIL_SAME_HEAD_CI",
+      "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
+      }
+    },
+    {
       "id": "trigger.human.FIXED_POINT",
       "kind": "TRIGGER",
       "capability": "TRIGGER:FIXED_POINT",
@@ -3331,6 +3351,46 @@
         "counterproof_no_match": true,
         "evidence_ref": "apps/modulos/mcp/src/tools/skills/skill.js; catalog index reuse of existing MCP skill tools; registry had no registered MCP_SKILL_CATALOG_AUTHENTICATED flow prior to PR #1837"
       }
+    },
+    {
+      "id": "harness.casajea.sensor.20261023.1",
+      "kind": "FUNCTION",
+      "capability": "HARNESS_CASA_JEA_ROUTE_SENSOR",
+      "boundary": "scripts/lupa",
+      "source": "scripts/lupa/validar-harness-casa-jea.mjs",
+      "activation": "CLI_OR_TEST_READONLY",
+      "from": "HARNESS_MODULE_REGISTRY",
+      "to": "HARNESS_CASA_JEA_VERDICT",
+      "owner": "apps/instinto-superior/config/harness-module-registry.json",
+      "canonical_route": "scripts/lupa/validar-harness-casa-jea.mjs",
+      "status": "SOURCE_COMMITTED_SENSOR_TESTED",
+      "evidence_ref": "docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md#rota-casa-jea-winrm",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY sem capability HARNESS_CASA_JEA_ROUTE_SENSOR; padrão reusado de scripts/lupa/validar-cristal-casa-remote-screenpipe.mjs; registro harness-module-registry.json reusado"
+      },
+      "symbol": "validateEntry"
+    },
+    {
+      "id": "harness.casajea.sensor.20261023.2",
+      "kind": "FUNCTION",
+      "capability": "HARNESS_CASA_JEA_ROUTE_SENSOR",
+      "boundary": "scripts/lupa",
+      "source": "scripts/lupa/validar-harness-casa-jea.mjs",
+      "activation": "CLI_OR_TEST_READONLY",
+      "from": "HARNESS_MODULE_REGISTRY",
+      "to": "HARNESS_CASA_JEA_VERDICT",
+      "owner": "apps/instinto-superior/config/harness-module-registry.json",
+      "canonical_route": "scripts/lupa/validar-harness-casa-jea.mjs",
+      "status": "SOURCE_COMMITTED_SENSOR_TESTED",
+      "evidence_ref": "docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md#rota-casa-jea-winrm",
+      "new_route_proof": {
+        "searched_existing_routes": true,
+        "counterproof_no_match": true,
+        "evidence_ref": "FLOW-REGISTRY sem capability HARNESS_CASA_JEA_ROUTE_SENSOR; padrão reusado de scripts/lupa/validar-cristal-casa-remote-screenpipe.mjs; registro harness-module-registry.json reusado"
+      },
+      "symbol": "classifyLive"
     }
   ]
 }

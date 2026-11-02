@@ -1,3 +1,16 @@
+---
+data_criacao: UNKNOWN
+ultima_atualizacao: 2026-10-26T16:37:55-03:00
+ultima_modificacao: 2026-10-26T16:37:55-03:00
+ultima_verificacao: 2026-10-26T16:37:55-03:00
+fuso_horario: America/Sao_Paulo
+hash_conteudo: sha256:5a82c1d9c82bfede104f9dbe02be87fe71565e9562bf28e5db253c234b63b51c
+rastro: "Owner original Kaizen Vivo; origem: CHEFE; reconcilia??o pontual pelo fiscal de RASTRO, sem alterar conte?do hist?rico"
+grupo_notas: GRUPO_05
+relacionado_a: "docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md; docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml; docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md"
+estado_evidencia: UNKNOWN
+---
+
 # 👑🪬 INTENÇÃO VIVA — KAIZEN CONTÍNUO
 
 ### 🫀👀 O coração que aprende a cada batida — agora com os Seis Olhos
@@ -1761,7 +1774,7 @@ NEXT_CURSOR=PR1785_WAIT_CHEFE_NEXT_EVOLUTION_OR_FINAL_MAIN_PERMISSION
 | Volume | Capacidade bytes | Livres bytes | Observação |
 |---|---:|---:|---|
 | C: | 511.021.412.352 | 64.158.007.296 | espaço livre medido nesta rodada; diferente de estimativa histórica anterior de ~14 GB |
-| E: | 484.657.065.984 | 468.532.932.608 | preservar `E:\CentralDark` |
+| E: | 484.657.065.984 | 468.532.932.608 | preservar `K:\` |
 | F: | 499.979.911.168 | 464.846.061.568 | rótulo OBSIDIAN não comprova vault ativo |
 | J: | 15.548.280.832 | 8.539.738.112 | volume boot/reparo; não tocar |
 | K: | 480.086.323.200 | 479.968.505.856 | NTFS quase vazio; rótulo não comprova instalação Linux |
@@ -1784,7 +1797,7 @@ NEXT_CURSOR=PR1785_WAIT_CHEFE_NEXT_EVOLUTION_OR_FINAL_MAIN_PERMISSION
 ### Próxima investigação read-only (não executada ainda)
 
 1. Mapear **cada um dos 90 itens** em manifest estruturado com nome, bytes, UTC, extensão, hash opt-in e classificação; evitar incluir conteúdo ou nome de segredos em logs públicos. Esta seção é inventário categorizado, **não a transcrição de todos os 90 itens**.
-2. Para `E:\CentralDark`, `F:\` e `K:\`, medir árvores/uso/links de VMDK e pontos de montagem sem mudar nada.
+2. Para `K:\`, `F:\` e `K:\`, medir árvores/uso/links de VMDK e pontos de montagem sem mudar nada.
 3. Reconciliar `E:\VMs\CENTRALDARK-OS` com disco físico K: e a VM realmente em execução; validar `PhysicalDriveN` por ID/modelo, não por índice de tela.
 4. Investigar a diferença do espaço livre em C: por timestamps e dados atuais, sem afirmar causa não medida.
 5. Se houver material privado (`.env`, token, senha, documento pessoal), registrar apenas classificação/contagem em inventário público; **não copiar valores, paths de segredo ou conteúdo sensível para o PR**.

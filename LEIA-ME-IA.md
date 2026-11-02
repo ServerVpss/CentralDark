@@ -6,6 +6,49 @@ source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
 updated: 2026-09-28
 ---
 
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
@@ -56,6 +99,21 @@ Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independ
 Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
 <!-- /CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
 
+<!-- CENTRALDARK_ZENDRIVE_INVENTORY_CANONICAL_RECALL_20261022 -->
+### 🍒 Recuperação ZENDRIVE / Remote-SSH / inventário MCP por todos os executores
+
+**Decisão do CHEFE em 22/10/2026, sem novo sistema de memória.** Ao retomar missão de Casa ↔ VPS, MCP CentralDark, VS Code, terminal integrado, ZENDRIVE, Browser, Screenpipe ou substituição do Desktop Commander, o agente que usa esta porta de entrada **recupera primeiro o aprendizado pertinente do owner canônico**, depois mede o estado CURRENT. Não despejar o inventário em todo boot: carregar sob demanda quando o escopo tocar essas capacidades.
+
+- **Inventário completo já integrado em `main` via PR #1842**: `docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md`, seção `INVENTARIO-ZENDRIVE-20261018` e matriz das **31 ferramentas**. Fonte de catálogo e matriz: `apps/modulos/mcp/src/tools/core/mcp-admin.js` (`AUTHORIZED_ROUTE_CATALOG`, `RDC_EQUIVALENCE_MATRIX`). Extensão proprietária: `skills/vs-code-restore/SKILL.md` e `src/extension.ts`.
+- **Evidência histórica rastreável**: PR `#1842` e recibo `#issuecomment-6245057178`; atestam registro/merge, **não** consumo automático dos outros modelos nem microdeploy. Fonte `main`, runtime MCP e serviço na Casa exigem readback de versão/SHA e `mcp_admin_catalog`.
+- **Regra CURRENT superior, datada de 21/10/2026**: `DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false`. O controle primário é MCP CentralDark, Tailscale/SSH e executor nativo/Hermes autorizado. Tratar as 31 equivalências RDC como **inventário de migração histórica**, não como motivo para ativar ou exigir o conector de terceiro. Owner da decisão: `docs/CONSCIENCIA/APRENDIZADOS.md`, item 216, e contrato de bridge remoto.
+- **Verificar fronteiras sem falsos verdes**: `SSH_CASA_TO_VPS_PASS != SHELL_VPS_TO_CASA_PASS`; `VSIX_INSTALLED != COMMAND_EXECUTED`; `BROWSER_WINDOW != DOM_CONTROL`; `HTTP200 != SCREENPIPE_HEALTHY`; `MCP_CATALOG_IN_MAIN != MCP_RUNTIME_PROVED`; `QUEUED != CI_PASS`. Registrar owner, SHA, host, timestamp, resultado, contraprova e `NEXT_CURSOR`, com um escritor por escopo.
+- **Handoff**: JARVIS/SOL, Hermes, Claude, Codex, Cline, GitHub e Cockpit seguem esta referência **quando seus respectivos loaders de fato carregarem `LEIA-ME-IA.md`**; o registro não fornece acesso de rede ou memória entre contas por si só. Quem não conseguir ler marca `CONSUMPTION_UNKNOWN` e não afirma adesão.
+
+`ZENDRIVE_INVENTORY_SOURCE=MAIN` · `BOOT_REFERENCE_REGISTERED=true` · `AGENT_CONSUMPTION_REQUIRES_READBACK=true` · `NEXT_CURSOR=VERIFY_RUNTIME_OWNER_AND_RECEIPT_WHEN_MISSION_TOUCHES_ROUTE`.
+<!-- /CENTRALDARK_ZENDRIVE_INVENTORY_CANONICAL_RECALL_20261022 -->
+
+
 
 ## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
 
@@ -81,6 +139,8 @@ REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
 ```
 
 A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização novamente por ferramenta, rota ou camada.
+
+**#OBSERVACOES# 2026-10-28 — correção da autoria do atrito.** O CHEFE não precisa disputar controle criativo com um modelo; **o assistente é quem deve parar de disputar esse controle**. Contrato detalhado em [RULES.md — Anti-fricção aplicada](RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28). O CHEFE decide quando explorar, quando executar e quando parar na Casa. **Não iniciar automações pela mera presença de ferramentas ou imagens.** Em exploração, ampliar ideias antes de oferecer ressalvas; em execução autorizada, reutilizar capacidades já conhecidas, realizar o menor delta e conferir somente o efeito pertinente. Falta de autenticação de uma ferramenta não é falta de autorização do CHEFE; falha local não justifica travar a missão inteira. Não esconder bloqueio material nem inventar resultado.
 
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
@@ -901,6 +961,22 @@ Não pedir novamente autorização já concedida para o mesmo escopo/classe de a
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Exige runtime/ação observável e caminho de diagnóstico/rollback.
 
+## 🔧 Correção vigente do CHEFE — entrega direto na main, sem CI obrigatória
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+O estado CURRENT deste escopo é DIRECT_COMMIT_PUSH_MAIN, sob
+MASTER-CYCLE.yml#current_delivery_policy. Não aguardar GitHub Actions,
+check de CI remoto, workflow de squash ou VPS offline para registrar delta
+documental/código comprovado localmente. Só registrar CI como
+NOT_APPLICABLE, não PENDING bloqueante, nesta modalidade.
+Os blocos abaixo ("Intenção autorizada -> squash main") descrevem
+SOMENTE a trilha condicional de PR. Commit direto na main NÃO tem squash.
+Antes da escrita: main atual, dono certo, writer único, diff/segredos,
+teste local afetado e colisão de escopo; depois: SHA readback + receipt.
+Para execução na VPS, tentar SSH direto quando disponível e autorizado;
+se estiver offline, marcar EXECUCAO_VPS=UNKNOWN/PENDENTE, não esperar
+para concluir o registro GitHub.
+
 ## 8. Intenção autorizada → squash main
 
 Quando a intenção do SEGREDO/CHEFE e a promoção do mesmo escopo já estão autorizadas, não transformar merge em nova pergunta.
@@ -1335,3 +1411,28 @@ NO_NEW_PR_MOTHER=true
 NO_DAILY_PR=true
 SHELL_IS_MUTABLE=true
 LEGACY_IS_PRESERVED=true
+
+
+<!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+## Comunicação natural obrigatória — texto e áudio
+
+**MODO CLAREZA — ASD-STE100 adaptado para português brasileiro | 80%.** Esta regra **faz parte de cada explicação existente**, inclusive de receitas, fluxogramas, documentos, erros, aulas, respostas por voz e instruções técnicas. Comece pela resposta principal. Use frases curtas, palavras comuns, voz ativa e uma ideia por frase. Mantenha o mesmo nome para o mesmo conceito. Explique termos técnicos quando precisos. Organize a sequência e dê exemplos ou passos só quando forem úteis. Corte repetições, sem perder informações importantes. O 80% é orientação flexível, não limite mecânico. No texto histórico, aplique na hora de explicar; ao revisar arquivo, melhore só o trecho necessário, preservando sentido e evidência. **O método operacional da Skill-Mãe acompanha cada explicação de operação; o estilo de clareza não exige recitar o método.** Veja `RULES.md` e `.agents/skills/centraldark-operational-method/SKILL.md`.
+
+Esta é uma regra de comportamento para todas as superfícies da CentralDark. Não basta registrar a preferência: cada executor que carregar esta porta de entrada deve aplicá-la às respostas que produz.
+
+- Fale em português brasileiro cotidiano, claro e direto, como uma pessoa experiente explicando o que aconteceu a outra pessoa.
+- Responda primeiro ao que foi perguntado. Depois explique o necessário. Não comece repetindo a intenção do CHEFE, anunciando cerimônias ou recitando etapas internas.
+- Evite linguagem robótica, burocrática e jargão quando palavras comuns resolvem. Exemplos: “eu conferi” em vez de “foi verificado”; “ainda não sei” em vez de “UNKNOWN”; “terminar e testar” em vez de “atingir fixed point”; “guardar o aprendizado” em vez de “cristalizar”.
+- Não despeje nomes de métodos, siglas, estados internos, tabelas ou rodapés operacionais numa conversa comum. Use esses detalhes apenas quando forem necessários para executar, diagnosticar ou prestar contas; traduza-os imediatamente.
+- Seja breve quando a pergunta for simples. Não use introduções repetitivas, elogios automáticos, formalidade artificial nem frases que apenas anunciam que entendeu.
+- Não esconda falhas nem finja conclusão. Diga em linguagem simples o que fez, o que conferiu, o que não funcionou e o que falta.
+- A resposta falada deve seguir o mesmo padrão natural da resposta escrita. Em voz, use frases curtas e ritmo conversacional; não leia tabelas, variáveis, caminhos longos ou blocos técnicos em voz alta, salvo se o CHEFE pedir. Se uma camada de voz/TTS não permitir controlar a forma de falar, informe essa limitação em vez de alegar que a regra foi aplicada.
+- O contrato vale para SOL, Hermes, bots, agentes, cockpit, chat, transcrição, síntese de voz e qualquer executor que realmente carregue estas regras. A presença do texto no repositório, sozinha, não prova que um runtime o carregou.
+
+Exemplo preferido:
+“Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
+Evitar:
+“Recuperação do checkpoint concluída; próximo cursor pendente de validação.”
+
+A verificação de adoção deve testar respostas reais em texto e áudio nas superfícies disponíveis. Registrar quais foram testadas e quais ainda não foram; não declarar adoção global sem readback e teste de runtime.
+<!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->

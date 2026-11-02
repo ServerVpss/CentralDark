@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { canonicalIcon } from './centraldark-hub-inventory';
+import { CentralDarkBuilderHistory, type BuilderBridge } from './CentralDarkBuilderHistory.client';
 import './centraldark-cockpit.scss';
 
 type HouseMode = 'OPERAR' | 'PLANEJAR' | 'TAREFA' | 'DELEGAR';
@@ -28,11 +29,12 @@ type LinearStatusSnapshot = {
   checkedAt?: string;
 };
 
-type CentralDarkBridge = {
+type CentralDarkBridge = BuilderBridge & {
   getRuntime?: () => Promise<RuntimeSnapshot>;
   getHermesHealth?: () => Promise<HealthSnapshot>;
   getScreenpipeHealth?: () => Promise<HealthSnapshot>;
   toggleWidget?: () => Promise<unknown>;
+  openObsidianDesktop?: () => Promise<{ status: 'REQUESTED' | 'UNAVAILABLE'; capability: 'OBSIDIAN' }>;
   openUnigramDesktop?: () => Promise<{
     status: 'REQUESTED' | 'UNAVAILABLE';
     capability: 'UNIGRAM';
@@ -53,6 +55,7 @@ const navItems = [
   ['i-ph:calendar-check', 'Automações'],
   ['i-ph:kanban', 'Linear'],
   ['i-ph:squares-four', 'Personalizar'],
+  ['i-ph:book-open', 'Obsidian'],
 ] as const;
 
 const visualWorkMarkers = [
@@ -197,6 +200,16 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
   const [screenpipe, setScreenpipe] = useState<HealthSnapshot>({ status: 'UNKNOWN' });
   const [linear, setLinear] = useState<LinearStatusSnapshot>({ status: 'UNKNOWN' });
   const [unigramLaunch, setUnigramLaunch] = useState<UnigramLaunchState>('IDLE');
+  const [obsidianLaunch, setObsidianLaunch] = useState<UnigramLaunchState>('IDLE');
+  async function openObsidian() {
+    const bridge = getBridge();
+    if (!bridge?.openObsidianDesktop) { setObsidianLaunch('UNAVAILABLE'); return; }
+    setObsidianLaunch('PENDING');
+    try {
+      const result = await bridge.openObsidianDesktop();
+      setObsidianLaunch(result.status === 'REQUESTED' ? 'REQUESTED' : 'UNAVAILABLE');
+    } catch { setObsidianLaunch('ERROR'); }
+  }
 
   async function openUnigram() {
     const bridge = getBridge();
@@ -263,7 +276,7 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
               key={label}
               type="button"
               className={`cd-nav__item ${activeNav === label ? 'is-active' : ''}`}
-              onClick={() => setActiveNav(label)}
+              onClick={() => label === 'Obsidian' ? void openObsidian() : setActiveNav(label)}
             >
               <span className={`${icon} cd-nav__icon`} />
               <span>{label}</span>
@@ -271,6 +284,14 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
+        {obsidianLaunch !== 'IDLE' ? (
+          <div className="cd-chip" role="status" aria-live="polite">
+            {obsidianLaunch === 'PENDING' ? 'Abrindo Obsidian...'
+              : obsidianLaunch === 'REQUESTED' ? 'Obsidian solicitado ao Windows'
+              : obsidianLaunch === 'UNAVAILABLE' ? 'Obsidian disponível somente no Desktop'
+              : 'Não foi possível abrir Obsidian'}
+          </div>
+        ) : null}
         <section className="cd-side-section">
           <div className="cd-side-section__title"><span>Sessões</span><span className="cd-muted">1 ativa</span></div>
           <div className="cd-session is-active">
@@ -359,6 +380,8 @@ export function CentralDarkCockpitShell({ children }: { children: ReactNode }) {
           <ProgressBar value={readiness.pct} />
           <small>{readiness.closed}/{readiness.denominator} sinais observáveis. Não é percentual global do projeto.</small>
         </section>
+
+        <CentralDarkBuilderHistory bridge={getBridge()} />
 
         <section className="cd-status-card cd-status-card--list">
           <div className="cd-evidence"><span className="i-ph:desktop" /><div><strong>Desktop</strong><small>{runtime ? 'DETECTADO' : 'UNKNOWN'}</small></div></div>

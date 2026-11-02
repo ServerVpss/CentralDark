@@ -13,7 +13,7 @@ truth_rule: REALIDADE_IS_JUDGE
 
 Esta arquitetura cristaliza um fluxo unico para o CHEFE iniciar, observar e continuar execucoes reais da CentralDark pelo painel admin, pelo Hermes Desktop/CASA ou por qualquer agente autorizado.
 
-O objetivo nao e criar um segundo painel, segundo router ou segundo MCP. O objetivo e ligar o painel existente `admin.centraldark.com/omni` a uma rota viva: API CentralDark -> MCP -> alvos reais -> receipts -> grafo vivo -> consumidores de inteligencia.
+O objetivo nao e criar um segundo painel, segundo router ou segundo MCP. O objetivo e ligar o painel existente `admin.centralldark.com/omni` a uma rota viva: API CentralDark -> MCP -> alvos reais -> receipts -> grafo vivo -> consumidores de inteligencia.
 
 ## Regra curta
 
@@ -34,7 +34,7 @@ BOTAO_ADMIN_OU_HERMES
 
 ```text
 ADMIN_PANEL=https://admin.centralldark.com/omni
-HERMES_DESKTOP_CASA=E:\CentralDark
+HERMES_DESKTOP_CASA=K:\
 VPS_RUNTIME=/root/CentralDark
 GITHUB_REPO=ServerVpss/CentralDark
 MCP_RUNTIME=http://127.0.0.1:9100
@@ -59,14 +59,14 @@ O botao principal nao dispara prompt solto. Ele cria um job deterministico com e
 ```mermaid
 flowchart LR
     CHEFE["👑 CHEFE / Admin"]
-    ADMIN["📊 admin.centraldark.com/omni"]
+    ADMIN["📊 admin.centralldark.com/omni"]
     API["🧠 CentralDark API / Omni Router"]
     MCP["🔌 MCP CentralDark"]
     HERMES["🤖 Hermes / SOL"]
     GRAFO["🕸️ Grafo Vivo"]
     RECEIPTS["🧾 Receipts"]
     VPS["🖥️ VPS /root/CentralDark"]
-    CASA["🏠 CASA E:\\CentralDark"]
+    CASA["🏠 CASA K:\\"]
     GITHUB["🐙 GitHub"]
     TELEGRAM["✈️ Telegram / HubBot"]
 
@@ -171,6 +171,14 @@ BLOCKED real quando:
 - servico externo indisponivel;
 - escolha destrutiva sem owner seguro.
 ```
+
+## Contrato local-first medido na Casa (2026-10-28)
+
+**Uma API, um owner:** `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`. Porta canônica privada por host: `127.0.0.1:8099`. **`9101` é Casa Commander; nunca equivale a Omni Router.** O domínio `api.centralldark.com` é entrada pública/reverse proxy, não dependência para a API funcionar no próprio host. O Cockpit usa `CENTRALDARK_API_BASE_URL` como override opcional; por padrão consulta `http://127.0.0.1:8099`, tanto na Casa quanto numa instalação VPS que rode o mesmo owner.
+
+Rotas read-only locais do mesmo FastAPI owner: `GET /health`, `GET /api/omni/status`, `GET /api/omni/models`, `GET /api/live-fabric/status`, `GET /api/live-fabric/graph`, `GET /api/microdeploy/receipts/index.json` e `GET /heartbeat`. As duas rotas do Live Fabric nesta implementação são **projeções limitadas de Git e receipts locais** — sem mutação nem alegação de grafo completo ou invocação. O endpoint heartbeat prova apenas o processo do Router; o Gateway Hermes e o Commander exigem sensores independentes.
+
+Portabilidade: `scripts/launch_omni_router_direct.py` descobre a raiz pelo caminho do próprio script ou `CENTRALDARK_ROOT`; a aplicação valida o marker do owner. Casa Windows e VPS Linux reutilizam a **mesma fonte** com configurações/dependências por host. O Router foi iniciado somente em loopback na Casa e confirmou HTTP 200 nas rotas; reinício automático, Caddy/VPS e execução dos providers ainda exigem testes próprios. `LOCAL_API_200 != VPS_DEPLOY_PASS != PROVIDER_INVOCATION_PASS`.
 
 ## Frase canonica
 

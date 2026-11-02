@@ -769,3 +769,50 @@ jarvis_critical_intent_voice_text_20261018:
     consumer_must_load_this_contract_for_runtime_effect: true
     do_not_claim_voice_style_test_pass_without_call: true
     no_new_agent_or_owner_or_second_persona: true
+
+# Delta 2026-11-01: delegação por voz no mesmo método SOL <-> Hermes.
+voice_delegation_semantics_20261101:
+  status: DOCUMENTED_NOT_RUNTIME_TESTED
+  method_owner: .agents/skills/centraldark-operational-method/SKILL.md
+  recipe_owner: .agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
+  reuse_same_session_owner_goal: true
+  voice_and_text_share_intent_contract_after_transcription: true
+  never_claim_hotword_or_always_listening: true
+  never_change_microphone_or_speech_engine_by_documentation: true
+  normalize_colloquial_phonetic_contextual_speech: true
+  do_not_treat_agent_synthesized_audio_as_chefe_authorization: true
+  first_classify_speech_act: true
+  speech_acts:
+    QUESTION_OR_REPORT: ANSWER_OR_READ_ONLY_NO_SEND
+    CLEAR_DELEGATION_WITH_KNOWN_GOAL: SEND_ONCE_TO_CURRENT_OWNER
+    WAIT_OR_LET_HERMES_WORK: WAIT_NO_SEND
+    STATUS_OR_DID_IT_ARRIVE: READBACK_NO_RESEND
+    CONTINUE_PREVIOUS_TASK: REUSE_SAME_GOAL_ONLY_WITH_NEW_AUTHORIZED_DELTA
+    CORRECT_TARGET_BEFORE_SEND: RETARGET_PENDING_DRAFT_ONLY
+    CANCEL_PENDING_SEND: ABORT_PENDING_SEND_PRESERVE_EXISTING_DRAFT
+    CORRECTION_AFTER_SEND: NEVER_PRETEND_UNSEND
+  context_references:
+    preserve_current_intent_and_goal: true
+    resolve_he_her_it_there_other_by_current_session: true
+    relative_left_right_monitor_not_static_coordinates: true
+    mention_monitor_alone_does_not_authorize_send: true
+    ambiguous_other_requires_one_short_question: true
+    phonetic_names_are_hints_not_unconditional_aliases: true
+  safeguards:
+    voice_does_not_expand_permissions: true
+    duplicates_with_same_goal_and_receipt_are_noop: true
+    queued_not_done: true
+    heard_not_authorized: true
+    transcribed_not_delivered: true
+    never_override_protected_drafts: true
+    stop_if_target_or_operation_ambiguity_changes_risk: true
+  spoken_feedback:
+    short_natural_ptbr: true
+    do_not_read_receipt_ids_or_hud_aloud: true
+    report_send_only_after_ui_readback: true
+  evidence:
+    voice_policy_documented: true
+    live_voice_test: UNKNOWN
+    speech_recognizer_changed: false
+    no_new_cloudroom_goal_sent_by_this_change: true
+  next_cursor: REUSE_VOICE_SEMANTIC_ROUTE_ON_NEXT_HUMAN_INTENT

@@ -1,3 +1,19 @@
+---
+title: "CHATGPT — adaptador CentralDark"
+status: "ADAPTER"
+role: "ENGINE_ADAPTER"
+engine: "CHATGPT"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "ChatGPT"
+tags:
+  - centraldark
+  - adapter
+  - chatgpt
+  - soul-sol
+---
+
 # ChatGPT — adaptador fino CentralDark
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
@@ -124,6 +140,21 @@ ACTIVE_PR_MOTHER_RECEIPT_SAME_TURN_AS_DIRECT_MAIN=true
 
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
 
+
+## 🔌 Preferência ChatGPT — CentralDark nativo antes de Desktop Commander (CHEFE, 2026-10-23)
+
+Regra exclusiva de seleção de ferramentas e comunicação do ChatGPT, sem desinstalar nem apagar integrações históricas.
+
+```text
+CENTRALDARK_MCP_FIRST=true
+DESKTOP_COMMANDER_LEGACY_OPTIONAL=true
+DESKTOP_COMMANDER_DEFAULT_PROBE=false
+DESKTOP_COMMANDER_DEFAULT_STATUS_REPORT=false
+DESKTOP_COMMANDER_ONLY_IF_USER_EXPLICITLY_REQUESTS_OR_TASK_STRICTLY_REQUIRES_IT=true
+DO_NOT_POLL_OFFLINE_DESKTOP_DEVICES_WITHOUT_RELEVANCE=true
+```
+
+Para diagnósticos da VPS, cockpit, MCP, GitHub e infraestrutura, priorizar ferramentas CentralDark nativas e evidência atual. Não chamar list_devices, não inserir status 'offline' do Desktop Commander no HUD ou resposta por hábito. Se necessário para uma tarefa expressamente pedida, esclarecer dependência e acessar apenas por autorização/rota disponível. Registro em adapter ChatGPT: preferência de superfície, não regra nova da SOUL. Este delta prevalece sobre sugestões genéricas neste arquivo para usar Desktop Commander por padrão.
 
 ## 👑🪬 !EXECUTOR_CENTRALDARK — modo executor da Casa
 

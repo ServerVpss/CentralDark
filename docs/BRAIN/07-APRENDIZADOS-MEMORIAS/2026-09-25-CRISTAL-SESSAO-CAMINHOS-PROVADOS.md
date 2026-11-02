@@ -193,7 +193,7 @@ FORCE_PUSH=false
 VPS_DIRTY_TREE_CARRIED=false
 ```
 
-Contrato operacional obrigatório para E:/CentralDark e VPS:
+Contrato operacional obrigatório para K:/ e VPS:
 
 ```ini
 CENTRALDARK_EXECUTION_CONTRACT=MANDATORY
@@ -236,7 +236,7 @@ AGENTS.md
 → regra obrigatória da Casa
 
 scripts/hooks/pre-commit.centraldark-execution-contract.sh
-→ hook local instalável para E:\CentralDark e clones autorizados
+→ hook local instalável para K:\ e clones autorizados
 
 .github/workflows/centraldark-execution-contract.yml
 → CI que bloqueia remoção/acidente do contrato

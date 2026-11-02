@@ -12,6 +12,10 @@ esac
 ROOT="${CENTRALDARK_ROOT:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
 HOME="${HOME:-$(getent passwd "$(id -u)" 2>/dev/null | cut -d: -f6)}"
 HOME="${HOME:-/root}"
+# Windows Casa: o runtime Hermes vive em %LOCALAPPDATA%\hermes, não em ~/.hermes.
+if [[ -z "${HERMES_HOME:-}" && -n "${LOCALAPPDATA:-}" && -d "$LOCALAPPDATA/hermes" ]]; then
+  HERMES_HOME="$LOCALAPPDATA/hermes"
+fi
 HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
 RUNTIME_ROOT="${CENTRALDARK_SKILL_RUNTIME_ROOT:-$HERMES_HOME/skills}"
 STATE_DIR="${CENTRALDARK_SKILL_SYNC_STATE_DIR:-$HERMES_HOME/state}"
@@ -20,12 +24,24 @@ LOCK_FILE="$STATE_DIR/centraldark-skill-sync.lock"
 BACKUP_ROOT="$HERMES_HOME/backups/skill-sync"
 REF="${CENTRALDARK_SKILL_SYNC_REF:-origin/main}"
 
-mkdir -p "$STATE_DIR" "$RUNTIME_ROOT" "$BACKUP_ROOT"
-touch "$LOCK_FILE"
-exec 9>"$LOCK_FILE"
-if ! flock -n 9; then
-  echo "SKILL_SYNC=BLOCKED_WRITER_LOCK"
-  exit 75
+mkdir -p "$STATE_DIR" "$RUNTIME_ROOT"
+LOCK_DIR=""
+if command -v flock >/dev/null 2>&1; then
+  touch "$LOCK_FILE"
+  exec 9>"$LOCK_FILE"
+  if ! flock -n 9; then
+    echo "SKILL_SYNC=BLOCKED_WRITER_LOCK"
+    exit 75
+  fi
+else
+  # Git Bash no Windows não tem flock; mkdir é atômico e serve de lock.
+  # Lock órfão após kill -9: remover "$LOCK_FILE.d" manualmente.
+  if ! mkdir "$LOCK_FILE.d" 2>/dev/null; then
+    echo "SKILL_SYNC=BLOCKED_WRITER_LOCK"
+    exit 75
+  fi
+  LOCK_DIR="$LOCK_FILE.d"
+  trap 'rmdir "$LOCK_DIR" 2>/dev/null; true' EXIT
 fi
 
 cd "$ROOT"
@@ -36,7 +52,7 @@ MAIN_SHA="$(git rev-parse "$REF")"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 BACKUP_DIR="$BACKUP_ROOT/$STAMP"
 TMP_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_DIR"' EXIT
+trap 'rm -rf "$TMP_DIR"; [[ -n "$LOCK_DIR" ]] && rmdir "$LOCK_DIR" 2>/dev/null; true' EXIT
 
 declare -A PREV_HASH
 if [[ -f "$STATE_FILE" ]]; then
@@ -47,7 +63,8 @@ if [[ -f "$STATE_FILE" ]]; then
 fi
 
 hash_file() {
-  sha256sum "$1" | awk '{print $1}'
+  # stdin: com nome de arquivo contendo "\" (caminho Windows) o sha256sum prefixa "\" no hash.
+  sha256sum < "$1" | awk '{print $1}'
 }
 
 target_is_main_ancestor_content() {

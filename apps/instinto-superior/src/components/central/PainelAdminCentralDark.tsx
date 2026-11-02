@@ -5,7 +5,6 @@ import {
   Loader2,
   Package,
   Plus,
-  RefreshCw,
   Save,
   ShieldCheck,
   Trash2,
@@ -15,9 +14,11 @@ import {
 import { CofreAdministrativo, HubSeguranca } from "@/components/central/AdminCofreSeguranca";
 import { ConexoesCentralDark } from "@/components/central/ConexoesCentralDark";
 import { CatalogoCapacidadesMcp } from "@/components/central/CatalogoCapacidadesMcp";
+import { McpAdminIntegrado } from "@/components/central/McpAdminIntegrado";
 import { ObservabilidadeCentralDark } from "@/components/central/ObservabilidadeCentralDark";
 import { CentralNotificacoes } from "@/components/central/CentralNotificacoes";
 import { Button } from "@/components/ui/button";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { supabase } from "@/integrations/supabase/client";
@@ -236,10 +237,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
             Administração absorvida do TelePainel para a sala autenticada do Instinto Superior.
           </p>
         </div>
-        <Button variant="outline" onClick={() => void carregar()} disabled={loading}>
-          <RefreshCw className={loading ? "animate-spin" : ""} />
-          Atualizar
-        </Button>
+        <SyncActionButton label="Atualizar" onClick={() => void carregar()} isFetching={loading} />
       </div>
       {erro ? (
         <div className="mt-6 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
@@ -400,6 +398,7 @@ export function PainelAdminCentralDark({ estado, abaInicial = "visao" }: { estad
           <ConexoesCentralDark />
         </TabsContent>
         <TabsContent value="catalogo" className="mt-6">
+          <McpAdminIntegrado />
           <CatalogoCapacidadesMcp />
         </TabsContent>
         <TabsContent value="hub-inventario" className="mt-6">
@@ -507,6 +506,8 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
   const [nome, definirNome] = useState("");
   const [email, definirEmail] = useState("");
   const [senha, definirSenha] = useState("");
+  const [nomeEditado, definirNomeEditado] = useState("");
+  const [emailEditado, definirEmailEditado] = useState("");
   const [planos, definirPlanos] = useState<string[] | null>(null);
 
   async function chamarAdmin(action: string, payload: Record<string, unknown> = {}) {
@@ -534,7 +535,7 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
   const fonteAdmin = status === "FONTE_ADMIN_AUTORIZADA";
   const usuarioSelecionado = usuariosAdmin.find(usuario => usuario.id === selecionado);
   const contaSelecionavel = usuarioSelecionado?.role === "admin" || usuarioSelecionado?.role === "user";
-  const roleWriteReleased = false; // Gate: publicar e provar a Edge corrigida antes de habilitar esta acao.
+  const roleWriteReleased = true;
 
   async function criarUsuario(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -562,6 +563,25 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
       definirStatus("ROLE_UPDATED: aguardando readback");
       await carregarAdmin();
     } catch (erro) { definirStatus("ROLE_FAILED: " + mensagemErro(erro)); }
+    finally { definirProcessando(false); }
+  }
+
+  async function salvarPerfil() {
+    if (!fonteAdmin || !usuarioSelecionado || !nomeEditado.trim() || !emailEditado.includes("@")) {
+      definirStatus("VALIDACAO_PENDENTE: selecione uma conta e informe nome/e-mail válidos");
+      return;
+    }
+    if (!window.confirm("Salvar nome e e-mail desta conta no Supabase CentralDark?")) return;
+    definirProcessando(true);
+    try {
+      await chamarAdmin("update_profile", {
+        user_id: usuarioSelecionado.id,
+        full_name: nomeEditado.trim(),
+        email: emailEditado.trim(),
+      });
+      definirStatus("PROFILE_UPDATED: aguardando readback");
+      await carregarAdmin();
+    } catch (erro) { definirStatus("PROFILE_FAILED: " + mensagemErro(erro)); }
     finally { definirProcessando(false); }
   }
 
@@ -616,8 +636,11 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
           <select aria-label="Selecionar conta" className="mt-1 w-full rounded border border-border bg-background p-2"
             value={selecionado} onChange={evento => {
               const id = evento.target.value;
+              const usuario = usuariosAdmin.find(u => u.id === id);
               definirSelecionado(id);
-              definirPapel(usuariosAdmin.find(u => u.id === id)?.role === "admin" ? "admin" : "user");
+              definirPapel(usuario?.role === "admin" ? "admin" : "user");
+              definirNomeEditado(usuario?.full_name ?? "");
+              definirEmailEditado(usuario?.email ?? "");
             }} disabled={!fonteAdmin}>
             <option value="">Selecionar...</option>
             {usuariosAdmin.map(usuario => <option key={usuario.id} value={usuario.id}>
@@ -641,10 +664,25 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
         <Button type="button" className="self-end" variant="outline" disabled={!fonteAdmin || !usuarioSelecionado?.email || processando}
           onClick={() => void enviarReset()}>Solicitar redefinição</Button>
       </div>
+      <div className="grid gap-3 border-t border-border pt-3 sm:grid-cols-[1fr_1fr_auto]">
+        <label className="text-xs">Nome da conta selecionada
+          <input className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={nomeEditado} onChange={evento => definirNomeEditado(evento.target.value)}
+            disabled={!fonteAdmin || !usuarioSelecionado || processando} maxLength={120} />
+        </label>
+        <label className="text-xs">E-mail da conta selecionada
+          <input type="email" className="mt-1 w-full rounded border border-border bg-background p-2"
+            value={emailEditado} onChange={evento => definirEmailEditado(evento.target.value)}
+            disabled={!fonteAdmin || !usuarioSelecionado || processando} maxLength={254} />
+        </label>
+        <Button type="button" className="self-end" variant="outline"
+          disabled={!fonteAdmin || !usuarioSelecionado || processando}
+          onClick={() => void salvarPerfil()}>Salvar nome/e-mail</Button>
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
         <p className="text-xs text-muted-foreground">
           Conta selecionada: {usuarioSelecionado?.role ?? "nenhuma"} · plano: {usuarioSelecionado?.plan_name || "ASSOCIAÇÃO NÃO MEDIDA"}.
-          Troca de papel aguarda backend seguro publicado; suporte/agente e concessões por plano exigem PDP/PEP e RLS comprovados.
+          Troca de papel e edição de perfil passam pela Edge Admin com JWT + has_role(admin); suporte/agente e concessões por plano exigem PDP/PEP e RLS comprovados.
         </p>
         <Button type="button" variant="outline" size="sm" onClick={() => void lerPlanos()}>
           Ver catálogo de planos
@@ -654,7 +692,7 @@ function AdministracaoUsuariosCentralDark({ usuariosLocais, carregandoLocal }: {
         {planos.length ? planos.join(" · ") : "Nenhum plano retornado."}
       </p> : null}
       <p className="text-[11px] text-muted-foreground">
-        Autoridade: Edge admin-users → JWT + has_role(admin). Histórico: audit_logs.
+        Autoridade: Edge admin-users → JWT autenticado + has_role(admin). Histórico: audit_logs.
         A listagem simples abaixo permanece disponível se a Edge estiver indisponível.
         Ligar o botão não concede privilégios no cliente.
       </p>

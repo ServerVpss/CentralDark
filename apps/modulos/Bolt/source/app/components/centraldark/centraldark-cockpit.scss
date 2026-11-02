@@ -265,6 +265,18 @@ button.cd-nav__item { cursor: pointer; }
 .cd-evidence > span:first-child { font-size: 17px; color: var(--bolt-elements-textSecondary); }
 .cd-evidence strong { font-size: 11px; }
 
+.cd-builder-history { display: grid; gap: 8px; }
+.cd-builder-history small { display: block; line-height: 1.35; overflow-wrap: anywhere; }
+.cd-builder-history__actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.cd-builder-history__actions .cd-button { font-size: 11px; min-height: 30px; }
+.cd-builder-history details { border-top: 1px solid var(--bolt-elements-borderColor); padding-top: 7px; }
+.cd-builder-history summary { cursor: pointer; font-size: 11px; color: var(--bolt-elements-textSecondary); }
+.cd-builder-history__recipe { display: grid; gap: 5px; padding-top: 6px; }
+.cd-builder-history__recipe p { margin: 0; font-size: 11px; line-height: 1.4; overflow-wrap: anywhere; }
+.cd-builder-history__entry { display: grid; gap: 3px; padding: 7px 0; border-top: 1px solid var(--bolt-elements-borderColor); }
+.cd-builder-history__entry a { font-size: 11px; text-decoration: underline; }
+.cd-builder-history__entry code { overflow-wrap: anywhere; font-size: 10px; }
+
 @media (max-width: 1180px) {
   .cd-cockpit { grid-template-columns: 200px minmax(0, 1fr); }
   .cd-status-panel { display: none; }

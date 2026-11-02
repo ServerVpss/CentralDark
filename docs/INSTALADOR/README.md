@@ -46,6 +46,17 @@ Documentação viva do instalador automático. Esta pasta é a **fonte única de
 | `24-rebuild-deterministico.md` | rebuild limpo e reproduzível |
 | `30-skill-consciencia.md` | skill da Consciência CentralDark |
 | `31-forja-total-drive-vps.md` | **Forja Total na VPS**: Drive auto-ingest + provenance + Memory Linker + Fixed Point heartbeat, reutilizando owners existentes |
+| `32-builder-multiplataforma-centraldark.md` | **Comandos canônicos do CHEFE:** reset AionUI, rebuild Web/Linux/Windows, Rakazo e plano de integração Unigram no builder único |
+
+## Cápsula de preservação do Installer físico da Casa (2026-10-28)
+
+O aplicativo de instalação de openKylin e preservação do disco físico tem **owner operacional fora do Git**: `E:\VMs\CentralDark-Installer\`. Para permitir reconstrução após perda da Casa, foi criada aqui uma **cópia de distribuição**, não um segundo owner nem uma nova aplicação: [CentralDark-Installer-CASA-source-20261028.zip](CentralDark-Installer-CASA-source-20261028.zip).
+
+- Arquivos preservados: `CentralDark-Installer.ps1`, `CentralDark-Installer-Launcher.cs`, `CentralDark-Installer.cmd`, `CentralDark-Installer.exe`, `CentralDark-MISSAO-OPUS.md`, `CentralDark-README.md`, `CentralDark-Relatorio_20261027_081912.txt`.
+- SHA-256 do ZIP: `CD6020131E98317F512D20C6208ED4BDC5C1048FBEC5D90CD10D20DB678B4232`.
+- O código atual descreve **planejamento dry-run** de preservação do NTFS, instalação Linux e reconciliação pós-boot; não prova backup externo nem instalação de openKylin. `INSTALLER_PACKAGE_SAVED != BACKUP_K_PROVED != INSTALLATION_PROVED`.
+- Para restaurar este aplicativo, extrair o ZIP em um diretório de trabalho selecionado, verificar hash e executar os testes do código antes de qualquer uso. **Nunca executar automaticamente operações de partição, formatação ou boot por recuperar este pacote.**
+- Repositorio privado é cópia de recuperação de código; não contém todos os arquivos do disco físico. Dados privados/serviços vivos dependem de backup externo validado.
 
 ## Regra de ouro
 

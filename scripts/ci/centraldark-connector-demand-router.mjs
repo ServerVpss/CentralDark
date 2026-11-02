@@ -48,8 +48,17 @@ export const CONNECTORS = Object.freeze({
     canWebhookOnDemand: false,
     secretPolicy: 'NO_SECRET_EXPOSURE',
   },
+  CentralDark_Casa_Tailscale: {
+    domains: ['casa', 'windows', 'runtime_local', 'terminal', 'remote_desktop'],
+    canWebhookOnDemand: false,
+    secretPolicy: 'NO_SECRET_EXPOSURE',
+    controlPlane: 'MCP_REMOTE_OAUTH',
+    transport: 'TAILSCALE_PRIVATE_ROUTE',
+    executor: 'HERMES_SHELL_OR_AUTHORIZED_SSH',
+    routeProof: 'REMEASURE_AT_RUNTIME_BEFORE_ACTION',
+  },
   Remote_Desktop_Commander: {
-    domains: ['local_file', 'remote_desktop', 'terminal', 'casa', 'windows', 'runtime_local'],
+    domains: [],
     canWebhookOnDemand: false,
     secretPolicy: 'NO_SECRET_EXPOSURE',
   },
@@ -94,13 +103,14 @@ export function routeDemand(input = '') {
   if (/\b(calendar|agenda|meeting|evento|reuniao)\b/i.test(input)) selected.push('Google_Calendar');
   if (/\b(contact|contato|pessoa|recipient|attendee)\b/i.test(input)) selected.push('Google_Contacts');
   if (/\b(drive|doc|sheet|slide|arquivo|folder|pasta)\b/i.test(input)) selected.push('Google_Drive');
-  if (/\b(remote desktop|commander|casa|windows|runtime local|terminal)\b/i.test(input)) selected.push('Remote_Desktop_Commander');
+  if (/\b(casa|windows|runtime local|terminal|remote desktop|commander)\b/i.test(input)) selected.push('CentralDark_Casa_Tailscale');
   if (/\b(pdf|zip|attachment|anexo|print|image|imagem|arquivo da conversa)\b/i.test(input)) selected.push('files');
   if (/\b(plugin|connector|conector|integracao|integration)\b/i.test(input)) selected.push('Plugin_Management');
   if (/\b(phishing|scam|malware|dominio suspeito|link suspeito)\b/i.test(input)) selected.push('Malwarebytes');
   if (/\b(notion|database|workspace doc)\b/i.test(input)) selected.push('Notion');
   if (/\b(openai api|api key|openai platform|sk-proj)\b/i.test(input)) selected.push('OpenAI_Platform');
 
+  // Legacy stays a mapped fallback, never an automatic primary selection.
   return [...new Set(selected)];
 }
 
@@ -109,11 +119,22 @@ export function planConnectorActivation(input = {}) {
   const requestedWebhook = Boolean(input.requestedWebhook);
   const connectors = routeDemand(demand);
   const unknownDemand = connectors.length === 0;
+  const casaDemand = connectors.includes('CentralDark_Casa_Tailscale');
+  const casaRoute = casaDemand ? {
+    primary: ['TAILSCALE_PRIVATE_ROUTE', 'MCP_REMOTE_OAUTH', 'HERMES_SHELL'],
+    executorRequiresReadback: true,
+    connectivityIsNotShellProof: true,
+    fallback: 'RDC_DESKTOP_COMMANDER',
+    fallbackActivation: 'ONLY_IF_PRIMARY_FAILED_AND_AUTHORIZED_AND_DEVICE_ONLINE',
+    fallbackAutoExecuted: false,
+    runtimeStatus: 'REMEASURE_AT_RUNTIME',
+  } : null;
 
   return {
     status: unknownDemand ? 'UNKNOWN_DEMAND' : 'ROUTED_ON_DEMAND',
     ruleZeroOrder: RULE_ZERO_ORDER,
     localeAxes: LOCALES,
+    casaRoute,
     connectors: connectors.map((name) => ({
       name,
       activation: 'ON_DEMAND_ONLY',
