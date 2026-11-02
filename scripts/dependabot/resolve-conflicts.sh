@@ -83,6 +83,66 @@ fi
 
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
+# Preflight leve no mesmo motor: nao criar 12 mil arquivos antes de saber
+# se o historico existe e se os conflitos ja exigem um discriminante humano.
+# Clone shallow/partial nao significa historicos independentes (Git 128).
+if ! git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+  if [ "$(git -C "$REPO_DIR" rev-parse --is-shallow-repository)" = "true" ]; then
+    echo "PREFLIGHT_SHALLOW_HISTORY=DEEPEN_BOUNDED"
+    for depth in 64 256; do
+      git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch "--deepen=$depth" origin main "refs/pull/${PR_NUM}/head:${FETCH_REF}" || {
+        echo "BLOCKED_SHALLOW_FETCH_FAILED depth=$depth"
+        exit 22
+      }
+      if git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+        break
+      fi
+    done
+  fi
+  if ! git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+    echo "BLOCKED_MERGE_BASE_UNAVAILABLE shallow=$(git -C "$REPO_DIR" rev-parse --is-shallow-repository)"
+    echo "NO_WORKTREE_NO_PUSH=1"
+    exit 22
+  fi
+fi
+
+# merge-tree examina a mesma fonte e base sem checkout, branch ou push.
+# --name-only devolve SHA da arvore, caminhos conflitantes e, depois de
+# uma linha vazia, diagnosticos. UNKNOWN bloqueia ANTES do checkout caro.
+set +e
+PREFLIGHT_MERGE_TREE="$(git -C "$REPO_DIR" merge-tree --write-tree --name-only "$FETCH_REF" origin/main 2>&1)"
+PREFLIGHT_STATUS=$?
+set -e
+if [ "$PREFLIGHT_STATUS" -gt 1 ]; then
+  echo "BLOCKED_PREFLIGHT_MERGE_TREE status=$PREFLIGHT_STATUS"
+  exit 23
+fi
+if [ "$PREFLIGHT_STATUS" -eq 1 ]; then
+  PREFLIGHT_PATHS="$(printf '%s\n' "$PREFLIGHT_MERGE_TREE" | awk 'NR == 1 { next } NF == 0 { exit } { print }')"
+  if [ -z "$PREFLIGHT_PATHS" ]; then
+    echo "BLOCKED_PREFLIGHT_CONFLICT_PATHS_MISSING"
+    exit 23
+  fi
+  PREFLIGHT_YELLOW=0
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    RESULT="$(node "$CLASSIFIER" "$path")" || {
+      echo "BLOCKED_PREFLIGHT_CLASSIFIER_FAILED path=$path"
+      exit 23
+    }
+    ACTION="$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).action)' "$RESULT")"
+    echo "PREFLIGHT_CONFLICT path=$path action=$ACTION"
+    if [ "$ACTION" = "YELLOW" ]; then
+      PREFLIGHT_YELLOW=$((PREFLIGHT_YELLOW + 1))
+    fi
+  done <<< "$PREFLIGHT_PATHS"
+  if [ "$PREFLIGHT_YELLOW" -gt 0 ]; then
+    echo "PREFLIGHT_UNREGISTERED_CONFLICTS=$PREFLIGHT_YELLOW"
+    echo "NO_WORKTREE_NO_PUSH=1"
+    exit 20
+  fi
+fi
+
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
