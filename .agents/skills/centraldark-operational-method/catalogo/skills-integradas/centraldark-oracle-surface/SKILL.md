@@ -301,13 +301,74 @@ THEN_CONTINUE_BY_NEXT_CURSOR_WHILE_MATERIAL_WORK_EXISTS=true
 
 `Goal done` emitted before the readback returns to the chat, or while a material cursor remains, is `FAIL_PREMATURE_GOAL_DONE`.
 
+## Native Hermes Goal criteria: add + expand + prove in the SAME original UI (2026-10-29)
+
+**Reusable operational route: `HERMES_GOAL_CRITERION_NATIVE_UIA_V1`.** The CHEFE first opened the native add-criterion dialog; SOL filled its `Edit 'Criterion'` using writable `ValuePattern.SetValue` and proved `DRAFT_EXACT=true`. Later the CHEFE explicitly authorized adding. SOL used **one original Hermes.exe window**: `Button 'Goal actions'` → `ExpandCollapsePattern.Expand` → `MenuItem 'Add criterion'` → `InvokePattern.Invoke` → `Window 'Add criterion'` → `Edit 'Criterion'` (preserve current draft unless identical; readback exact) → enabled `Button 'Add'` → `InvokePattern.Invoke ONCE`. Native UI source independently verified via `gh`: [official NousResearch session-control-goal.tsx](https://github.com/NousResearch/hermes-agent/blob/main/apps/desktop/src/app/chat/composer/status-stack/session-control-goal.tsx): `onSelect={openAddCriterion}`, `newCriterionText.trim()`, `handleAction('subgoal.add',{text})`, `Button type='submit'`. This is the **existing** Hermes Goal action, not a new agent/bridge/automation.
+
+**Visual confirmation route shown by CHEFE:** expand the `Goal active · Turn 0/20` status block, then inspect **`Criteria · 1`**, the saved criterion text, and `Copy criterion 1`/`Remove criterion 1`. SOL verified those elements directly through UIAutomation after CHEFE pointed out the expansion control. **Independent persistence confirmation:** SQLite read-only `state_meta['goal:20260920_235705_013b82']`: same `GOAL_ID=CENTRALDARK_RSI_SELF_IMPROVEMENT_20_20261029`, `active`, `0/20`, `subgoals=1`, text `CRITERIO - COMUNICACAO SOL <-> HERMES POR RODADA` exactly 938 characters and SHA-256 `2904861a3014a08c214883f6fd10afa2562db72d2d77935a9d438e714adbf44a`. **`UI_ADD=PASS`; `VISUAL_READBACK=PASS`; `PERSISTED_OWNER_READBACK=PASS`; `20_TURN_RSI=NOT_YET_PROVEN`.**
+
+**Self-refinement lesson:** transient menus and dialogs disappeared between separate probes (`MENU_ITEM_COUNT=0` or `DIALOG_COUNT=0`) while the Goal itself remained valid. A successful sequence located controls, waited for actual native elements, validated the draft and clicked the **single enabled Add button in one UIAutomation operation**; then performed an independent read-only owner check. If a click may have happened, **check saved `subgoals` before any retry**; never double-submit, clear the Goal, remove a criterion or overwrite a CHEFE draft. No keyboard/focus-based substitute needed. This is a **recipe for future Goal problems** and is kept in the existing Oráculo skill and its mirrored copy.
+
+### ALWAYS CASA FIRST on inbound Hermes / CHEFE message (2026-10-29)
+
+**Trigger:** Every new inbound CHEFE instruction or HERMES -> ORACULO receipt in this same ChatGPT conversation is the start of a material review turn, NOT an occasion to answer with a text-only ACK.
+
+**Existing owner sequence:** (1) Read the actual Hermes original Goal/session and receipt/cursor. (2) Read live Casa K:\ HEAD, branch, dirty, relevant Cockpit/owner status and tests; verify GitHub via gh on Casa. (3) Counterprove claimed source, action, result, timestamp and status from independent owner/readback; UNKNOWN_IS_NOT_PASS. (4) Determine smallest material next Goal action or BLOCKED/FIXED_POINT plus NEXT_CURSOR. (5) Dispatch the next authorized command through the SAME original Hermes Mensagem UI (ValuePattern.SetValue + readback + native send) or existing same-session CLI when there is no writer conflict; prove receipt in Hermes. (6) Return the measured state and cursor to CHEFE; repeat only on the next actual message. Never blindly retry, overwrite a human draft, create new Goal/Loop/chat/bridge or claim background monitoring when no turn runs.
+
+**Current counterproof:** Prior reply to CD_HUD_3_GATE_FIX_20261029 failed to consult Casa before answering. Subsequent session 20260920_235705_013b82 returned BLOCKED receipt CD_HUD_RECON_20261029_BD9A28C5E6E0, cursor OWNER_SYNC_EVENT_PROOF_REQUIRED: owner sync.functions.ts does not log CLICK/ACK/ACTOR/EVENT_ID. A success timestamp 09:34:08 BRT does not prove alleged 09:24:24 click. Native Hermes Goal had done 2/20; reported 20/20 not established. Casa/GitHub gh at 10:40 BRT HEAD a34bf39023567cd268b923facbdda049119c541d and clean worktree. Hermes's real diagnostic remained blocked from same-chat transport because its target composer was nonempty, so preserve draft and do not fabricate delivery. Next useful delta: instrument the CURRENT sync owner for future causal evidence, with tests; never invent past event or automatically reset Goal.
+
+## Operational RSI circuit — reuse the PROVEN Hermes Desktop UI recipe (2026-10-29)
+
+**CHEFE intent, same original owner:** The goal is not just a one-off test of the ChatGPT composer. The intended loop is **CHEFE intent → SOL proposes an actionable next delta → original Hermes Desktop executes the currently active Goal → Hermes sends a real terminal result back to this exact existing ChatGPT/Oracle conversation → SOL correlates the evidence and identifies the next delta → SOL dispatches to the SAME Hermes session**. A material self-correction that improves the next turn is the unit of learning. Do not invent a second agent, bridge, background poller, browser tab, worktree, Goal, Loop or orchestration system to implement this. The ChatGPT conversation is a review/coordination surface; **Hermes remains the persistent Goal owner and executor**.
+
+### Actual native paths — use both directions, not documentation alone
+
+**SOL → Hermes (dispatch):** Identify the already-open original `Hermes.exe` window and its `Edit 'Mensagem'` composer. Prefer direct UIAutomation `ValuePattern.SetValue(next_instruction)` with exact readback. When the original Hermes is idle, invoke its actual enabled **Enviar/Send** submit control once; when busy, the UI may expose **`Enfileirar mensagem`**. A visible `N Queued` alone proves only queuing, **not** acceptance of the requested payload or task execution. Verify the distinctive instruction/intent marker in the same Hermes timeline or its native session/receipt before marking `DISPATCH_PROVEN`. If the intended payload is not visible/acknowledged, preserve the draft and classify `DISPATCH_UNKNOWN`; never resend blindly or clear the current Goal. The native Hermes CLI's `hermes chat --resume <EXACT_SESSION_ID> --query '/goal show' --oneshot --quiet` can read the existing Goal; **do not use `/goal resume` merely to probe** (installed `GoalManager.resume(reset_budget=True)` can reset the turn count).
+
+**Hermes → ChatGPT (return):** After a **real Hermes material turn** (not a synthetic `oi`), record its genuine terminal result and causal envelope in the existing execution's JSON result: `actor=HERMES`, `loop_id`, `turn_id`, `receipt_id`, `parent_id`, `intent_id`, `event_id`, `causation_id`, `surface_id`, `attempt_id`, `next_cursor`, `status` and `message`. `TURN_DONE/STEP_DONE/FAILED/BLOCKED` are **not** `GOAL_DONE`. Check that the envelope matches the original Hermes session, current Goal and execution receipt; `actor=HERMES` in a file or chat message is not authentication by itself.
+
+Use **the existing Skill-Mother transport** `K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1` on the exact already-open embedded ChatGPT conversation, with its URL bound privately **at runtime** (do not commit private conversation IDs). It implements target-pane identity checks, `ValuePattern.SetValue` + exact editor readback, re-discovery of enabled `Button 'Enviar'`, one `InvokePattern.Invoke`, and a later readback of `RECEIPT_ID` as visible ChatGPT text. Do **not** use focus, SendKeys, keyboard Enter, a newly opened ChatGPT session or another UI agent as the substitute. An early UI timeout after one click is `SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY`, not permission to click again.
+
+~~~powershell
+$transport = 'K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1'
+# Both parameters are runtime bindings from the existing Hermes session.
+$exactChatUrl = '<EXACT_CURRENT_CHATGPT_CONVERSATION_URL>'
+$realHermesReceipt = '<EXISTING_HERMES_TERMINAL_ENVELOPE_JSON>'
+powershell.exe -NoProfile -File $transport -ConversationUrl $exactChatUrl -TargetSurface HermesEmbedded -Mode Inspect
+powershell.exe -NoProfile -File $transport -ConversationUrl $exactChatUrl -TargetSurface HermesEmbedded -Mode Send -PayloadPath $realHermesReceipt
+~~~
+
+**SOL receives and decides:** A new user-role message in this same ChatGPT chat proves UI delivery; it does **not** prove Hermes authored it. Correlate `RECEIPT_ID/TURN_ID/LOOP_ID/NEXT_CURSOR` with actual owner-side runtime evidence and `K:\`/GitHub CURRENT (use `gh` on the Casa for GitHub lookups). Review the resulting ChatGPT answer and any next probe as **candidate**, not autonomous authority to mutate the repo. Then dispatch the next material action via the same existing `Mensagem` surface, preserving the active Goal. For a 20-turn RSI test require receipts and correct correlation **per turn**; three verified consecutive bidirectional turns is the first meaningful transport milestone, not an unverified claim that 20 turns are completed.
+
+### Leitura simultânea das duas superfícies existentes — prova Casa (29/10/2026)
+
+**Menor caminho comprovado, somente observação:** na janela ORIGINAL de `Hermes.exe`, obter `AutomationElement.FromHandle(MainWindowHandle)`; numa **única** inspeção `FindAll(TreeScope.Descendants, Condition.TrueCondition)`, localizar os `ControlType.Document` cujo `ValuePattern.Current.Value` aponta respectivamente para a conversa ChatGPT já aberta e para `http://127.0.0.1:8080/sala-controle`. Vincular cada documento ao seu `SURFACE_ID`, URL exata, título, `IsOffscreen`, snapshot/horário e controles descendentes; realizar `READBACK_CHAT` e `READBACK_COCKPIT` separadamente e correlacionar ao `INTENT_ID/LOOP_ID/RECEIPT_ID` existente. Na medição Casa, ambos os documentos apareceram simultaneamente sob PID Hermes `31664`, `IsOffscreen=false`, **sem trocar abas, criar browser nem depender do foco**. O Cockpit mostrava `Rotas e alertas · 5 sem PASS atual` e `VPS · NÃO COMPROVADO`, que são estados projetados e não devem virar verdes por causa do mapeamento. `TWO_SURFACE_READONLY_MAP=PROVEN`; isso **não significa** monitoramento em segundo plano, duas mutações concorrentes, overlay visual do `drive_preview`, execução do Sync ou autenticidade de recibo. Para uma ação, seguir o owner e a receita `DUAL_SURFACE_MAPPING_SEQUENCE_V1` da skill existente `centraldark-unified-surface-parity`, com `MAP_A → READBACK_A → MAP_B → READBACK_B → CORRELATE` (e remapear após mudança de foco/navegação). Não criar engine nem outro observador.
+
+### Verification boundary and missing automatic trigger
+
+`SOL_DIRECT_UIA_SAME_CHAT_PROBE=PROVEN` (historical `CD_UISEND_2810_2335`), `SOL_TO_HERMES_UI_DISPATCH=PROVEN_FOR_PRIOR_TASK`. **ONE CAUSAL FEEDBACK CYCLE=PROVEN (29/10/2026), NOT A PERMANENT AUTOMATIC LOOP.** In the original Hermes session `20260920_235705_013b82`, owner-side message `55357` records terminal transport `SENT_WITH_UI_READBACK`, `receipt_id=RSI_R20_20261029_FINAL`, `RECEIPT_VISIBLE`, `EDITOR_CLEARED`. Message `55363` then records the Oraculo counterproof `AUDIT_REF=CD_ORACLE_R20_COUNTERPROOF_20261029_0802` entering the **same Hermes session**; owner-side terminal messages `55365` and `55367` show actual subsequent HUD/build checks, and assistant message `55380` acknowledges the counterproof. This proves a real return + review + next owner execution in that historical chain; it does **not** prove continuous unattended automatic repetition, 20 independent bidirectional returns or build PASS at that earlier SHA. The current Goal was `DONE` after 2/20 native turns while the 20 RSI round receipts were independent actions: do not equate these counters. `Hermes-Oracle-Return.ps1` remains a **one-shot transport**, not a persistent callback. The installed Hermes `post_llm_call` shell hook is a possible native completion trigger but `hermes hooks list` has previously shown no configured hooks; do not claim a hook is active without live readback. ChatGPT does not independently run a background screen watcher between messages. A queued message is not delivery. **Next transport proof:** demonstrate three consecutive correlated cycles using the same owner, each with actual execution + `RECEIPT_ID/INTENT_ID/NEXT_CURSOR`, independent readback and no duplicate dispatch. `UNKNOWN_IS_NOT_PASS`.
+
 ## Casa bridge — Hermes result into the SAME ChatGPT conversation (2026-10-28)
+
+### Native Oracle query FIRST — historical replay before UI focus
+
+**GitHub provenance (08/10/2026):** commits `f69597e220cb` (Oracle response telemetry), `c444f7761bbf` (same-conversation recovery), `037ee28c13be` (visual readback) and `04d569a4eddb` (reuse supported Nous native browser tools) preserve the existing **Proven Pilot** below: an Oracle question was sent in Hermes Desktop Preview, the answer was captured, and a second current-tab replay used a new causal pair. That pilot proves a **Preview transport and capture** recipe in that historical runtime, not that every later Hermes session exposes the same tools or that the user's current thread was targeted.
+
+**Shortest authorized path when the current ChatGPT conversation is already open:** `Hermes/oracle skill → inspect AVAILABLE TOOLS in current executor session → desktop_preview read + drive_preview elements (when those actions exist and address the ALREADY OPEN EXACT tab) → fill/send existing composer by fresh semantic ref → desktop_preview read response → oracle_evidence_hook.py evidence → reconcile existing owner`. Do **not** run `desktop_preview open`, open/navigate a new tab, create another chat, change URL or launch `browser_exec` as a replacement context. If official `browser_*` tools are available, use them **only** if their binding demonstrably addresses the same existing conversation; a separate browser instance is `WRONG_SURFACE`, not a fallback. Retrieve current conversation URL/fingerprint, composer state and actual control refs before a single send; require post-send marker and correlated response readback. If `desktop_preview`/`drive_preview` is absent in the live Hermes toolset (as may vary by session), record `NATIVE_PREVIEW=UNAVAILABLE_IN_THIS_SESSION` and use the existing **HermesEmbedded** UIAutomation transport below; do not claim the historical pilot runs now.
+
+**Direct Hermes Desktop UI FIX POINT — self-correction 28/10/2026:** After the earlier focus-dependent attempt was blocked, SOL used the **already-open exact ChatGPT conversation inside `Hermes.exe` (PID 31664)** with the Windows UI Automation patterns exported by the real app: `Edit 'Pergunte ao ChatGPT'` supports writable `ValuePattern.SetValue`; `Button 'Enviar'` supports `InvokePattern.Invoke`. Without `SetFocus`, `SendKeys`, Enter, desktop Preview tools, new tab or another chat, SOL wrote `TEST_ID=CD_UISEND_2810_2335` (`ACTOR=SOL_OPERATOR`), independently reread the full 204-character draft, invoked Enviar **exactly once**, and observed the editor clear. The initial 9-second local readback said `SEND_ATTEMPTED_READBACK_UNCONFIRMED`; **a later fresh document scan recovered the exact marker as `ControlType.Text` in that same conversation, and the marker arrived in the ChatGPT thread**. Hence `DIRECT_UIA_WRITE=PROVEN`, `DIRECT_UIA_SEND=PROVEN`, `SAME_CONVERSATION_DELIVERY=PROVEN_FOR_SOL_PROBE`; old `FOCUS_OR_TARGET_CHANGED_BEFORE_TYPING` is not a general block for this surface. This is a *transport* pilot from SOL, not a terminal result created by Hermes with a verified causal receipt. `HERMES_TERMINAL_RECEIPT_AUTO_RETURN=UNKNOWN` and `NATIVE_POST_LLM_CALL_HOOK=NOT_CONFIGURED`. **One send, then delayed readback; never resend based solely on an early UI snapshot.** Keep the **same** Skill-Mother `Hermes-Oracle-Return.ps1` as transport, now using direct UIA SetValue/Invoke when native Preview actions do not bind to the target.
+
+**Historical blocked route 28/10/2026:** `FOCUS_OR_TARGET_CHANGED_BEFORE_TYPING` from `Hermes-Oracle-Return.ps1`, after `EXACT_URL_MATCH=true`, `COMPOSER_FOUND=true`, `EMPTY=true`, and `CHAT_BUSY=false` on PID 31664. This is a **failed combined UIAutomation focus/target guard** (the receipt does not isolate which subcondition changed), not a ChatGPT transport rejection and not evidence that the Oracle cannot answer. `DELIVERY_NOT_ATTEMPTED`; preserve original chat, receipt and cursor, then prefer the independent native Preview action if that exact surface can be resolved. Never loop blind retries on a failing focus selector; a reattempt with a different binding requires a new action/readback and the original CHEFE authorization scope.
+
+**The existing** `scripts/trigger-fabric/oracle_evidence_hook.py --mode query` **builds the canonical prompt with real causal IDs; it does not send HTTP, press buttons or own the browser.** Use it for query construction and `--mode evidence` to normalize actual responses. Do not fabricate missing `LOOP_ID`, `TURN_ID`, or `RECEIPT_ID`: UNKNOWN remains UNKNOWN; only a real Hermes event supplies provenance. `post_llm_call` is relevant to automatic **future turn-completion notification**, not a prerequisite for a one-shot Oracle question when a supported current-tab Preview is already available.
 
 **Existing transport:** the Skill-Mother script at K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1. This is a one-shot UIAutomation adapter for the **existing** CHAT_GLOBAL/Oracle surface, not another oracle skill, chat instance, background scheduler, writer, or source of truth. Keep this skill's oracle **consultative/read-only** authority: typing a Hermes report into the authorized user's ChatGPT composer is a *transport action*, not permission for Oracle to mutate CentralDark.
 
 **When:** an original Hermes execution/turn yields a real material result with its existing correlated envelope. The parent Goal may remain ACTIVE even when one turn is DONE/BLOCKED/FAILED. Reuse the Hermes event's loop_id, turn_id, receipt_id, parent_id, intent_id, event_id, causation_id, surface_id, attempt_id, next_cursor, status, and message. The existing executor creates/uses its own JSON result file; do not fabricate a completion envelope, restart a Goal, or establish a polling loop. The actor string alone is not proof of producer identity.
 
-**How:** bind -ConversationUrl to the exact already-open https://chatgpt.com/c/... target at runtime (never hardcode this private link in Git); run -Mode Inspect for a read-only preflight, then -Mode Send -PayloadPath <HERMES_RESULT_JSON> after the executor establishes the terminal result. If necessary, -ActivateExistingTab -TabTitle <EXACT_EXISTING_TAB_TITLE> reselects the same already-open tab; no new ChatGPT tab is needed. Target address + composer + empty draft + ChatGPT idle must all match. Require a new receipt ID and UI readback after one send. Busy session, wrong tab, existing human draft, or missing receipt = BLOCKED, not silent typing or a new route.
+**How — ready to invoke, no extra bridge:** use the existing `K:\.agents\skills\centraldark-operational-method\scripts\Hermes-Oracle-Return.ps1`. Bind `-ConversationUrl` to the exact already-open ChatGPT thread at runtime (never hardcode this private link in Git), and use `-TargetSurface HermesEmbedded` for the internal Hermes view. `-Mode Inspect` is read-only; when the original Hermes execution produces a **real** terminal JSON envelope with all 13 correlated fields, invoke the **same file** once with `-Mode Send -PayloadPath <EXISTING_HERMES_RESULT_JSON>`. The proven transport writes by `ValuePattern.SetValue` and submits by the real `Button 'Enviar'` `InvokePattern`, **without focus, keyboard keys or a new tab**; after one send, verify the message via fresh `Text`/`Button` readback on that exact chat. An early missing render is `SEND_UNCONFIRMED_DO_NOT_RETRY_BLINDLY` and **must not trigger another send**. The transport returns distinct nonzero exits for `BLOCKED` (2) and unconfirmed post-send (3); `SENT_WITH_UI_READBACK` is the only positive send receipt. The marker `CD_UISEND_2810_2335` proves a SOL-initiated same-chat send, not yet a callback from a terminal Hermes Goal. No native completion hook is necessary to use this one-shot command. If necessary, -ActivateExistingTab -TabTitle <EXACT_EXISTING_TAB_TITLE> reselects the same already-open tab; no new ChatGPT tab is needed. Target address + composer + empty draft + ChatGPT idle must all match. Require a new receipt ID and UI readback after one send. Busy session, wrong tab, existing human draft, or missing receipt = BLOCKED, not silent typing or a new route.
+
+**Two UI surfaces, same Oracle:** `-TargetSurface HermesEmbedded` binds directly to the exact existing `Document` ChatGPT conversation inside `Hermes.exe`; checks the sibling `Edit 'Address'` from the same browser pane and scopes composer, busy button and receipt readback to that document. `-TargetSurface ExternalBrowser` retains the Edge/Chrome route; `-TargetSurface Auto` prefers HermesEmbedded and falls back to ExternalBrowser only when the embedded target is not present. These are two transports of the same owner, not duplicate oracles. An ordinary ChatGPT user-role message containing `ACTOR=HERMES` is not authenticated by its text: SOL must correlate runtime sender, intent and receipt before trusting provenance. A changed URL, occupied composer, active response or missing real terminal receipt stops the bridge. The conversation URL is provided at runtime and never versioned in Git. `HERMES_EMBEDDED_SEND_SOL_PROBE=PROVEN` by the later exact same-chat marker readback; `HERMES_EXECUTOR_TERMINAL_RECEIPT_RETURN=NOT_YET_PROVEN` until a real Hermes completion envelope is returned.
 
 **Proof boundary:** SURFACE_PROVEN_READONLY proves target/editor discovery only; DRAFT_PROVEN_NO_SEND proves unsent input; SENT_WITH_UI_READBACK proves a submitted Hermes report is visible; an Oracle response/continuous loop needs independent correlated readback. This recipe does not itself install a native Hermes completion callback. Preserve ONE_WRITER_PER_SCOPE and UNKNOWN_IS_NOT_PASS.
 
@@ -702,8 +763,8 @@ Use an existing ping/heartbeat API only when its binding is available. A success
 
 ## Preview Procedure
 
-1. Open the external surface with `desktop_preview` using `action=open`; do not use `browser_navigate` or an external browser for the Hermes Desktop Preview path.
-2. Read the page with `desktop_preview` `action=read`.
+1. **When the exact authorized ChatGPT conversation is ALREADY OPEN in Hermes Preview, do not call `action=open` or navigate.** First use `desktop_preview action=read` and `drive_preview action=elements` on that existing tab, if the Hermes session exposes those bindings. `action=open` applies only to an explicitly requested new destination after proving that no current authorized tab matches; never use `browser_navigate` or an external browser to replace an already-open Hermes Desktop Preview conversation.
+2. Read the page with `desktop_preview` `action=read` and verify its URL/identity, composer and response state; if Preview actions are unavailable in this runtime, record the exact toolset and use the existing measured UIAutomation fallback rather than inventing capability.
 3. For interaction, start `drive_preview` with `action=elements`, then act by returned refs.
 4. Send only pertinent, sanitized context. Never send secrets, tokens, private credentials, or unnecessary raw history.
 5. Include causal identifiers when testing: `INTENT_ID`, `EVENT_ID`, `CAUSATION_ID`, `SURFACE_ID`.
@@ -1132,6 +1193,54 @@ Official upstream references (source links, not runtime proof):
 - `https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/computer-use.md` — supported computer-use and visual limits.
 
 `DOCUMENTED != EXECUTED`; `SOURCE_PROVEN != SESSION_CAPTURE_PROVEN`; `CURRENT > HISTORY`. Report `UNKNOWN` if the session lacks terminal events or full coverage.
+
+## Dual-surface overlay contract — `DUAL_SURFACE_MAPPING_SEQUENCE_V1`
+
+When the CHEFE requests mapping overlays in two open conversations/surfaces, reuse the existing Hermes Desktop Preview and execute one controlled correlated round. Do not open a new chat, browser, bridge, writer or scheduler.
+
+```text
+ROUND_ID + LOOP_ID + INTENT_ID
+→ DISCOVER_EXISTING_SURFACES
+→ FRESH desktop_preview/read + drive_preview/elements (A)
+→ RECORD overlay/identity/refs A
+→ FRESH desktop_preview/read + drive_preview/elements (B)
+→ RECORD overlay/identity/refs B
+→ ONLY_IF_EACH_IDENTITY_MATCHES: interact with fresh ref
+→ READBACK A and B independently
+→ RECONCILE origin, action, response and receipt
+```
+
+“Em paralelo” is a logical same-round guarantee. Unless the runtime exposes safe concurrent bindings, use `EXECUTION_ORDER=A→B`, `PARALLEL_EXECUTION=UNAVAILABLE`, and do not imply simultaneous clicks. The pink/colored lines from `drive_preview` are a mapping overlay only: `OVERLAY_OBSERVED` does not mean `ACTION_EXECUTED` or `EFFECT_PROVEN`.
+
+A surface record must include:
+
+```yaml
+surface_id:
+url_or_document_identity:
+title_observed:
+active_tab_id:
+focus_consistency: PASS|UNKNOWN
+snapshot_ref:
+element_refs_fresh: true|false
+overlay_observed: PASS|UNKNOWN
+composer_state: EMPTY|DRAFT|BUSY|UNKNOWN
+action: PASS|UNKNOWN|BLOCKED
+readback: PASS|UNKNOWN|BLOCKED
+origin_declared: HERMES|SOL|HUMAN|UNKNOWN
+origin_authenticated: PASS|UNKNOWN
+receipt_ref: ID|UNKNOWN
+```
+
+`ACTOR=HERMES` in a ChatGPT message is `ORIGIN_DECLARED`, not independent authentication. Promote `origin_authenticated=PASS` only when the same target has a correlated owner-side terminal/UIA receipt and independent readback. If `active_tab_id` conflicts with URL/title/document, set `focus_consistency=UNKNOWN`, stop interaction, remap/reacquire the target, and preserve `UNKNOWN`; never use a stale ref. Final output must keep the CHEFE's explicit states when unproven:
+
+```text
+COCKPIT_SYNC_ACIONADO=UNKNOWN
+READBACK=UNKNOWN
+RESULTADO_DO_SYNC=UNKNOWN
+CICLO_BILATERAL_COMPLETO=UNKNOWN
+```
+
+The controlled sequence is considered complete only when both surfaces have fresh mapping evidence and independent readback; a ChatGPT acknowledgement alone is not completion.
 
 ## Canonical master phases, complete learning lineage and approved crystals (CHEFE · 2026-10-08)
 

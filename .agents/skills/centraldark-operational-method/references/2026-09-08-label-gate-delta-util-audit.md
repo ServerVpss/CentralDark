@@ -96,7 +96,7 @@ UNKNOWN_LABEL != PASS
 
 ```text
 CI_SAME_HEAD_REQUIRED=true
-LOCAL_SKILL_K:\skills\software-development\centraldark-pr-label\SKILL.md=USER_PROVIDED_NOT_REMOTE_PROVED
+LOCAL_SKILL_E:\CentralDark\Pivete\skills\software-development\centraldark-pr-label\SKILL.md=USER_PROVIDED_NOT_REMOTE_PROVED
 REMOTE_LABEL_CATALOG_SCAN=BLOCKED_BY_CONNECTOR_ENDPOINT_LIMITATION
 MAIN_TOUCH=false
 ```
@@ -109,4 +109,21 @@ SAME_HEAD_CI
   -> github-autonomia-varredura.test
   -> PR #1463 review
   -> only then consider main promotion
+```
+
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "LOCAL_SKILL_E:\\CentralDark\\Pivete\\skills\\software-development\\centraldark-pr-label\\SKILL.md=USER_PROVIDED_NOT_REMOTE_PROVED"
+    ],
+    "right_variant": [
+      "LOCAL_SKILL_K:\\skills\\software-development\\centraldark-pr-label\\SKILL.md=USER_PROVIDED_NOT_REMOTE_PROVED"
+    ]
+  }
+]
 ```

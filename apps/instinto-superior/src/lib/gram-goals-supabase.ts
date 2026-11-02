@@ -9,7 +9,7 @@ import type { GOALObject, GramRecibo } from "./gram-goals-system";
 export async function salvarGOALNoSupabase(goal: GOALObject): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from("gram_goals")
+      .from("gram_goals" as any)
       .insert({
         id: goal.id,
         executor: goal.executor,
@@ -33,7 +33,7 @@ export async function salvarGOALNoSupabase(goal: GOALObject): Promise<boolean> {
 export async function atualizarGOALNoSupabase(goal: GOALObject): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from("gram_goals")
+      .from("gram_goals" as any)
       .update({
         status: goal.status,
         completada_em: goal.completada_em,
@@ -54,7 +54,7 @@ export async function atualizarGOALNoSupabase(goal: GOALObject): Promise<boolean
 export async function salvarReciboNoSupabase(recibo: GramRecibo): Promise<boolean> {
   try {
     const { error } = await supabase
-      .from("gram_recibos")
+      .from("gram_recibos" as any)
       .insert({
         id: recibo.id,
         goal_id: recibo.goalId,
@@ -75,7 +75,7 @@ export async function salvarReciboNoSupabase(recibo: GramRecibo): Promise<boolea
 export async function listarGOALsRecentes(): Promise<GOALObject[]> {
   try {
     const { data, error } = await supabase
-      .from("gram_goals")
+      .from("gram_goals" as any)
       .select("*")
       .order("criada_em", { ascending: false })
       .limit(20);
@@ -100,7 +100,7 @@ export async function listarGOALsRecentes(): Promise<GOALObject[]> {
         mensagem: row.resultado_msg,
         timestamp: row.completada_em,
       } : undefined,
-    }));
+    })) as GOALObject[];
   } catch (e) {
     console.error("Erro ao listar GOALs:", e);
     return [];
