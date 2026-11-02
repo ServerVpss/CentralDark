@@ -374,3 +374,14 @@ Para identificar monitores dinamicamente, capturar um monitor com borda nativa e
 - Limite: aprovação visual humana não comprova, por si só, futuras sessões, outras máquinas ou ausência de regressões.
 - Referência técnica: commit `a52c589906cef48c370c8c9936108be020829003`.
 - NEXT_CURSOR: encerrado para a contraprova humana desta execução; reabrir apenas mediante nova falha ou mudança de escopo.
+
+
+## Protocolo operacional aprovado pelo CHEFE — execução direta e contraprova (02/11/2026)
+
+- Intenção do CHEFE é o ponto de partida. Reutilizar owner e receitas existentes; não criar caminhos, Skills ou executores paralelos.
+- Executar diretamente quando autorizado, sem confirmações repetidas, micro-passos ou explicações antecipadas desnecessárias. Comunicar apenas achados materiais, impedimentos reais e decisões que dependam do CHEFE.
+- Após a execução, testar tecnicamente, observar o resultado e apresentar prova concreta. O CHEFE faz a contraprova humana da experiência real e informa se funcionou e se ficou satisfatório.
+- Aprovação humana não substitui testes técnicos; testes técnicos não substituem a aprovação humana quando esta for exigida. Registrar recibo, aprendizado e SHA/readback no owner existente após a confirmação.
+- Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
+- Critério de FIXED_POINT: intenção atendida + prova técnica + contraprova aplicável + registro verificado. UNKNOWN nunca vira PASS.
+- Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
