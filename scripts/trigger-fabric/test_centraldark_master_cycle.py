@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # #OBSERVACOES# | CENTRALDARK.MICHELIN.TRIGGER_COUNTERPROOF
 # @owner: scripts/trigger-fabric/test_centraldark_master_cycle.py
-# @doc_ref: docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md
+# @doc_ref: docs/CONSCIENCIA/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md
 # @last_updated: 2026-10-22T00:31:00.000Z
 # @escopo: regressão !MICHELIN na rota e anti-falso-verde.
 import importlib.util

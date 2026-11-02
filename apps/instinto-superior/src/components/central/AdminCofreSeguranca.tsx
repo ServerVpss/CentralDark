@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Boxes,
   KeyRound,
@@ -6,9 +7,14 @@ import {
   ShieldCheck,
   ClipboardCopy,
   LockKeyhole,
+  Database,
+  Server,
+  Cloud,
+  AlertTriangle,
+  ExternalLink,
 } from "lucide-react";
 
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloEstadoHumano, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { useNotificationsLog } from "@/hooks/useNotificationsLog";
@@ -19,7 +25,7 @@ export const SEM_FONTE = "Sem fonte operacional autorizada nesta superfície.";
 export function RotuloEstado({ estado }: { estado: EstadoOperacional }) {
   return (
     <span className="rounded-md border border-border bg-muted/50 px-2 py-1 font-mono text-[10px] text-muted-foreground">
-      {estado}
+      {rotuloEstadoHumano(estado)}
     </span>
   );
 }
@@ -44,6 +50,162 @@ export function ItemCofre({
   );
 }
 
+type ProvedorInfra = "supabase" | "contabo" | "cloudflare";
+type MetricaInfra = { titulo: string; valor: string; detalhe: string };
+
+function ProvedoresInfraSeguranca({ estado }: { estado: EstadoCentralDark | undefined }) {
+  const [provedor, setProvedor] = useState<ProvedorInfra>("supabase");
+  const medidoEm = estado?.atualizadoEm ? Date.parse(estado.atualizadoEm) : NaN;
+  const fresco =
+    Number.isFinite(medidoEm) && Date.now() - medidoEm >= 0 && Date.now() - medidoEm < 60_000;
+  const valorVivo = (v: string | undefined) => (fresco && v ? rotuloTecnicoHumano(v) : "Ainda não verificado");
+
+  const botoes: { id: ProvedorInfra; nome: string; icone: typeof Database }[] = [
+    { id: "supabase", nome: "Supabase", icone: Database },
+    { id: "contabo", nome: "Contabo", icone: Server },
+    { id: "cloudflare", nome: "Cloudflare", icone: Cloud },
+  ];
+  const metricas: Record<ProvedorInfra, MetricaInfra[]> = {
+    supabase: [
+      {
+        titulo: "API Gateway",
+        valor: "—",
+        detalhe: "Requisições: fonte de telemetria ainda não conectada",
+      },
+      { titulo: "Postgres", valor: "—", detalhe: "Erros e requisições do banco: sem medição" },
+      { titulo: "Edge Functions", valor: "—", detalhe: "Execuções e erros: sem medição" },
+      {
+        titulo: "Avisos do Advisor",
+        valor: "—",
+        detalhe: "Consulta de segurança não conectada a este Cockpit",
+      },
+    ],
+    contabo: [
+      {
+        titulo: "API CentralDark",
+        valor: valorVivo(estado?.apiHealth),
+        detalhe: "Medição do estado existente do Cockpit",
+      },
+      {
+        titulo: "Deploy VPS",
+        valor: valorVivo(estado?.deploy),
+        detalhe: "Estado do deploy; não equivale à saúde integral da VPS",
+      },
+      {
+        titulo: "Omni Router",
+        valor: valorVivo(estado?.omniRouter),
+        detalhe: "Medição do roteador existente",
+      },
+      {
+        titulo: "CPU / RAM / Disco",
+        valor: "—",
+        detalhe: "Telemetria Contabo ainda não conectada",
+      },
+    ],
+    cloudflare: [
+      { titulo: "DNS / Zonas", valor: "—", detalhe: "Consulta de zonas ainda não conectada" },
+      { titulo: "Requisições", valor: "—", detalhe: "Série temporal indisponível" },
+      { titulo: "Erros HTTP", valor: "—", detalhe: "Série temporal indisponível" },
+      { titulo: "Proteção / WAF", valor: "—", detalhe: "Métricas de segurança indisponíveis" },
+    ],
+  };
+  const nome = botoes.find((b) => b.id === provedor)?.nome ?? "Supabase";
+  const indicador =
+    provedor === "contabo" && fresco ? "Estado medido no Cockpit" : "Sem telemetria ao vivo";
+
+  return (
+    <section
+      aria-labelledby="infra-provedores-titulo"
+      className="mt-8 rounded-[28px] border border-white/15 bg-[#090909] p-4 text-white sm:p-7"
+    >
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h4
+          id="infra-provedores-titulo"
+          className="flex items-center gap-3 text-xl font-semibold sm:text-3xl"
+        >
+          <span aria-hidden="true">🪬</span> CentralDark — Infraestrutura
+        </h4>
+        <span className="rounded-full bg-[#242424] px-4 py-2 text-xs text-white/75 sm:text-sm">
+          Painel operacional
+        </span>
+      </div>
+      <div
+        className="grid grid-cols-3 gap-2 sm:gap-4"
+        role="group"
+        aria-label="Selecionar provedor de infraestrutura"
+      >
+        {botoes.map(({ id, nome: rotulo, icone: Icone }) => (
+          <button
+            type="button"
+            key={id}
+            aria-pressed={provedor === id}
+            onClick={() => setProvedor(id)}
+            className={`flex min-h-28 flex-col items-center justify-center gap-3 rounded-2xl border p-2 text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:min-h-36 sm:text-xl ${
+              provedor === id
+                ? "border-white/35 bg-[#232323]"
+                : "border-white/15 bg-[#1c1c1c] hover:bg-[#292929]"
+            }`}
+          >
+            <Icone aria-hidden="true" className="size-6 sm:size-8" strokeWidth={1.8} />
+            <span>{rotulo}</span>
+          </button>
+        ))}
+      </div>
+      <div className="mt-5 rounded-3xl bg-[#191919] p-4 sm:p-7">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <h5 className="text-xl font-semibold sm:text-2xl">{nome} — CentralDark</h5>
+          <span className="rounded-full bg-[#282828] px-3 py-1.5 text-xs text-white/75">
+            {indicador}
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          {metricas[provedor].map((m) => (
+            <article key={m.titulo} className="min-h-32 rounded-2xl bg-[#242424] p-4 sm:p-5">
+              <h6 className="text-sm font-normal text-white/70 sm:text-base">{m.titulo}</h6>
+              <div className="mt-2 break-words font-mono text-2xl font-semibold tabular-nums sm:text-3xl">
+                {m.valor}
+              </div>
+              <p className="mt-2 text-xs leading-relaxed text-white/55">{m.detalhe}</p>
+            </article>
+          ))}
+        </div>
+        <p className="mt-5 text-sm leading-relaxed text-white/65">
+          {provedor === "contabo" && fresco && estado?.atualizadoEm
+            ? `Última leitura do estado CentralDark: ${new Date(estado.atualizadoEm).toLocaleString("pt-BR")}. Não é a API de métricas da Contabo.`
+            : "Dados deste provedor ainda não têm fonte de telemetria autorizada no Cockpit. Não são valores zerados."}
+        </p>
+        <div className="mt-5 rounded-2xl bg-[#242424] p-4 sm:p-5">
+          <h6 className="text-lg font-semibold sm:text-xl">
+            Segurança — {provedor === "supabase" ? "Advisor" : "Monitoramento"}
+          </h6>
+          <div className="mt-4 flex items-start gap-3 text-sm text-white/85">
+            <AlertTriangle aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-amber-400" />
+            <p>
+              {provedor === "supabase"
+                ? "Há alertas conhecidos no Supabase, mas a quantidade atual não está sendo consultada nesta tela."
+                : "Os dados de segurança deste provedor ainda não estão conectados nesta tela."}
+            </p>
+          </div>
+          <p className="mt-3 text-sm text-white/60">
+            Exibir gravidade, objeto afetado, horário da leitura e referência de correção somente
+            após resposta da fonte real.
+          </p>
+          {provedor === "supabase" ? (
+            <a
+              href="https://supabase.com/dashboard/project/lyoigsqluyktoclwdaft/advisors/security"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-white underline underline-offset-4 hover:text-white/80"
+            >
+              Abrir Advisor no Supabase <ExternalLink aria-hidden="true" className="size-4" />
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined }) {
   return (
     <section aria-labelledby="hub-seguranca-titulo">
@@ -57,6 +219,7 @@ export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined
         Visão central dos controles de acesso, fontes e superfícies críticas. Este espaço não
         concede permissões nem expõe credenciais.
       </p>
+      <ProvedoresInfraSeguranca estado={estado} />
       <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <BlocoEstado
           titulo="Acesso administrativo"
@@ -92,6 +255,147 @@ export function HubSeguranca({ estado }: { estado: EstadoCentralDark | undefined
   );
 }
 
+type CredencialMetadata = {
+  id?: string;
+  name: string;
+  kind?: string;
+  description?: string | null;
+  updated_at?: string | null;
+};
+
+// Fonte existente: Supabase Edge Function "vault". Nunca requisitar "get" nem renderizar valores.
+function CredenciaisCofre() {
+  const [items, setItems] = useState<CredencialMetadata[]>([]);
+  const [status, setStatus] = useState("Carregando metadados do cofre...");
+  const [nome, setNome] = useState("CENTRALDARK_GITHUB_DISPATCH_TOKEN");
+  const [valor, setValor] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  async function carregar() {
+    setStatus("Consultando cofre autorizado...");
+    try {
+      const { data, error } = await supabase.functions.invoke("vault", {
+        body: { action: "list" },
+      });
+      if (error || !Array.isArray(data?.items)) throw new Error("VAULT_UNAVAILABLE");
+      setItems(data.items);
+      setLoaded(true);
+      setStatus(`${data.items.length} credencial(is) catalogada(s); valores sempre ocultos.`);
+    } catch {
+      setLoaded(false);
+      setItems([]);
+      setStatus("Não foi possível acessar o cofre nesta sessão. Entre novamente e tente atualizar.");
+    }
+  }
+  useEffect(() => {
+    void carregar();
+  }, []);
+
+  async function salvar(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!loaded || !nome.trim() || !valor) return;
+    setBusy(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("vault", {
+        body: { action: "put", name: nome.trim(), kind: "token", value: valor },
+      });
+      if (error || data?.ok !== true) throw new Error("VAULT_WRITE_FAILED");
+      setValor("");
+      setStatus(
+        "Credencial enviada ao cofre criptografado. Uso pelo executor ainda exige integração e prova.",
+      );
+      await carregar();
+    } catch {
+      setStatus("Gravação não confirmada. Não copie o token para Git, logs ou chat.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      <article className="panel space-y-3 p-5">
+        <h4 className="flex items-center gap-2 font-semibold">
+          <LockKeyhole className="size-5" /> Cofre de credenciais
+        </h4>
+        <p className="text-sm text-muted-foreground">
+          Nomes e tipos das credenciais existentes no Vault Supabase. Valores nunca são exibidos ou
+          copiados. Cofre Obsidian é separado.
+        </p>
+        <p role="status" className="text-xs text-muted-foreground">
+          {status}
+        </p>
+        <button
+          type="button"
+          className="rounded border border-border px-3 py-2 text-sm"
+          onClick={() => void carregar()}
+        >
+          Atualizar lista
+        </button>
+        {loaded &&
+          (items.length === 0 ? (
+            <p className="text-sm">Nenhuma credencial cadastrada nesta fonte.</p>
+          ) : (
+            <ul className="grid gap-2 md:grid-cols-2">
+              {items.map((item) => (
+                <li key={item.id ?? item.name} className="rounded-lg border border-border p-3">
+                  <div className="break-all font-mono text-sm">{item.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    {item.kind ?? "generic"} · ••••••••••••
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ))}
+      </article>
+      <form className="panel space-y-3 p-5" onSubmit={(event) => void salvar(event)}>
+        <h4 className="font-semibold">Adicionar ou atualizar credencial</h4>
+        <label className="block text-sm" htmlFor="cofre-secret-name">
+          Nome da credencial
+        </label>
+        <input
+          id="cofre-secret-name"
+          autoComplete="off"
+          spellCheck={false}
+          className="w-full rounded border border-border bg-background p-2 font-mono text-sm"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          required
+        />
+        <label className="block text-sm" htmlFor="cofre-secret-value">
+          Valor secreto
+        </label>
+        <input
+          id="cofre-secret-value"
+          type="password"
+          autoComplete="new-password"
+          spellCheck={false}
+          className="w-full rounded border border-border bg-background p-2 text-sm"
+          value={valor}
+          onChange={(e) => setValor(e.target.value)}
+          required
+        />
+        <button
+          type="submit"
+          disabled={!loaded || busy || !valor.trim()}
+          className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50"
+        >
+          {busy ? "Salvando..." : "Salvar no Cofre"}
+        </button>
+        <p className="text-xs text-muted-foreground">
+          Somente admin. O token não vai para GitHub nem para recibos. Salvar não configura
+          automaticamente a variável do serviço VPS.
+        </p>
+      </form>
+      <p className="text-xs text-muted-foreground">
+        Fonte adicional VPS (/etc, secrets): inventário ainda não integrado; não afirmar que esta
+        lista representa todos os segredos do servidor.
+      </p>
+    </div>
+  );
+}
+
 export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | undefined }) {
   const notificacoes = useNotificationsLog("24h");
   const bots = useTelegramBotsResumo();
@@ -114,6 +418,7 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
             <TabsTrigger value="bots">Bots</TabsTrigger>
             <TabsTrigger value="rotas">Rotas</TabsTrigger>
             <TabsTrigger value="contas">Contas</TabsTrigger>
+            <TabsTrigger value="credenciais">Credenciais</TabsTrigger>
             <TabsTrigger value="infra">Infra</TabsTrigger>
             <TabsTrigger value="modulos">Módulos</TabsTrigger>
             <TabsTrigger value="instalador">Instalador</TabsTrigger>
@@ -175,6 +480,9 @@ export function CofreAdministrativo({ estado }: { estado: EstadoCentralDark | un
             estado={(estado?.omniRouter ?? "UNKNOWN") as EstadoOperacional}
           />
           <ItemCofre titulo="Entrega de alertas" detalhe={SEM_FONTE} />
+        </TabsContent>
+        <TabsContent value="credenciais" className="mt-6">
+          <CredenciaisCofre />
         </TabsContent>
         <TabsContent value="contas" className="mt-6 grid gap-4 md:grid-cols-2">
           <ItemCofre
@@ -268,7 +576,7 @@ const CAPACIDADES_FORJA = [
 function PreparadorPermissoesForja() {
   const [executor, setExecutor] = useState("Hermes");
   const [capacidade, setCapacidade] = useState<string>("repo_read");
-  const [ambiente, setAmbiente] = useState("Casa · K:/CentralDark");
+  const [ambiente, setAmbiente] = useState("Casa · K:/");
   const [validade, setValidade] = useState("session");
   const [feedback, setFeedback] = useState<string | null>(null);
   const selecionada = CAPACIDADES_FORJA.find((c) => c.id === capacidade) ?? CAPACIDADES_FORJA[0];
@@ -355,7 +663,7 @@ function PreparadorPermissoesForja() {
             value={ambiente}
             onChange={(e) => setAmbiente(e.target.value)}
           >
-            <option>Casa · K:/CentralDark</option>
+            <option>Casa · K:/</option>
             <option>VPS · /root/CentralDark</option>
             <option>GitHub · ServerVpss/CentralDark</option>
           </select>

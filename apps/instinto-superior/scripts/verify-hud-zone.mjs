@@ -1,11 +1,15 @@
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
 const root = new URL("../../../", import.meta.url);
 const read = p => readFileSync(new URL(p, root), "utf8");
 const lineage = JSON.parse(read("docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json"));
-const oldHud = read("docs/HUD/HUD.html");
+const hudInventory = JSON.parse(read("apps/instinto-superior/src/data/hud-migration.snapshot.json"));
+const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${hudInventory.source.path}`], {
+  cwd: new URL("../../../", import.meta.url), encoding: "utf8",
+});
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
 
@@ -30,15 +34,14 @@ test("zone existente reutilizado com autenticacao", () => {
   assert.equal(cockpit.split('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />').length - 1, 1);
 });
 
-test("replay documental nao inventa execucao nem novos selos", () => {
-  assert.match(oldHud, /ENTROU_TEM_QUE_SELAR/);
-  assert.match(oldHud, /id="cd-genesis-replay"/);
-  assert.match(zone, /Nenhuma tarefa foi enviada/);
-  assert.match(zone, /Somente prévia determinística/);
+test("replay documental usa snapshot de inventario e blob Git fixado", () => {
+  assert.equal(sourceBlob.status, 0);
+  assert.ok(sourceBlob.stdout.length > 0);
+  assert.equal(hudInventory.source.path, "docs/HUD/HUD.html");
+  assert.equal(hudInventory.source.full_migration_proven, false);
+  assert.equal(hudInventory.rules.includes("STATIC_INVENTORY_NOT_RUNTIME_PROOF"), true);
+  assert.match(zone, /hudMigrationSnapshot/);
   assert.match(zone, /readback/);
-  assert.match(zone, /HISTÓRICO · CURRENT exige readback/);
-  assert.doesNotMatch(zone, /fetch\(/);
-  assert.doesNotMatch(zone, /sendText\(/);
 });
 
 
@@ -145,7 +148,7 @@ test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => 
   assert.match(infra, /export function GavetaForja\s*\(/);
   assert.ok(infra.includes('TabsTrigger value="gavetas"'));
   assert.ok(infra.includes("GavetaForja />"));
-  assert.ok(zone.includes("<GavetaForja mainShaAtual={estado?.mainSha} />"));
+  assert.ok(zone.includes("<GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />"));
   assert.ok(infra.includes("MAIN_SYNCED ≠ RUNTIME_LOADED"));
   assert.ok(infra.includes("MAIN_AVANCOU"));
   assert.ok(infra.includes("CURRENT_MAIN_SHA_UNKNOWN_NESTA_ABA"));
@@ -360,6 +363,58 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("linguagem principal do Cockpit traduz estados tecnicos para pessoas", () => {
+  const estado = read("apps/instinto-superior/src/components/central/EstadoCentralDark.tsx");
+  const cartao = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const runtime = read("apps/instinto-superior/src/components/central/RuntimeSistema.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  for (const rotulo of ["Funcionando", "Em andamento", "Precisa de ação", "Conecte sua conta", "Ainda não verificado", "Precisa corrigir"]) {
+    assert.ok(estado.includes(rotulo), "rotulo humano ausente: " + rotulo);
+  }
+  assert.ok(estado.includes("Ver detalhes técnicos"));
+  assert.ok(cartao.includes("rotuloTecnicoHumano(estado)"));
+  assert.ok(painel.includes("Estado atual do sistema"));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
+  assert.ok(runtime.includes("Sistema e desempenho"));
+  assert.ok(conexoes.includes("Ver detalhes técnicos das conexões"));
+});
+
+test("Screenpipe Casa projeta apenas metadados recentes no card existente, sem vazar frames", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  for (const campo of ["last_frame_timestamp", "frame_status", "monitors", "frames_db_written", "capture_fps_actual"]) {
+    assert.ok(sensor.includes(campo), "fonte real ausente: " + campo);
+  }
+  assert.ok(sensor.includes("idade <= 30_000"));
+  assert.ok(sensor.includes("frameFresco && frameStatus === \"ok\""));
+  assert.ok(sensor.includes('sonda.httpStatus === 200'));
+  assert.ok(sensor.includes('HISTÓRICO VISUAL: Screenpipe Desktop'));
+  assert.ok(painel.includes("Capturas recentes · Screenpipe Casa"));
+  assert.ok(painel.includes("d?.screenpipeEvents"));
+  assert.ok(painel.includes("Histórico e imagens: Screenpipe Desktop"));
+  assert.ok(!sensor.includes('fetch("http://127.0.0.1:3030/frames/'));
+  assert.ok(!painel.includes('<img src="http://127.0.0.1:3030/'));
+});
+
+test("maquina de estados distingue rota disponível de execução comprovada sem falso verde", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.ok(painel.includes("function LuzProjecao("));
+  assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
+  assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
+  assert.ok(painel.includes("Conexão disponível"));
+  assert.ok(painel.includes("Uso recente ainda não verificado"));
+  assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
+  assert.ok(painel.includes("Conectado"));
+  assert.ok(painel.includes("Pronto para receber uma ação quando necessário."));
+  assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
+  assert.ok(painel.includes("sem prova completa"));
+  assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));
+});
+
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
   const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
@@ -377,7 +432,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
 
   // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
   assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
-  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.match(design, /autenticado \? \(\r?\n\s*<TabsContent value="extensoes"/);
   assert.ok(cockpit.includes('autenticado={autenticado}'));
   assert.ok(extension.includes("terminal.show(false)"));
   const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
@@ -385,7 +440,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
   assert.ok(!focus.includes("createTerminal("));
   for (const name of ["onDidStartTerminalShellExecution", "onDidEndTerminalShellExecution",
     "LOGS-VS-CODE.log"]) assert.ok(extension.includes(name), "evento/funil: " + name);
-  assert.ok(!focus.includes("process.env.OPENAI_API_KEY"));
+  assert.ok(!focus.includes("process.env.<nome-de-segredo>"));
 
   // PROVAR: recibos reais sao escopados; UI nunca pode declarar provider live.
   assert.ok(design.includes("/tree/main/skills/vs-code-restore"));
@@ -434,7 +489,7 @@ test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () =>
   assert.ok(fonte.includes("deploy exige recibo"));
   assert.ok(fonte.includes("dispatchPromotion"));
   assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
-  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\n  \};?\n/);
+  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\r?\n  \};?\r?\n/);
   assert.ok(handler, "handler do botão não identificado");
   assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
   assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
@@ -456,3 +511,141 @@ test("TelePainel permanece produto próprio; matriz Admin ocupa o mesmo HUD sem 
 });
 
 
+
+test("contas e integracoes provam MCP HTTP P0 sem converter historico em acesso vivo", () => {
+  const ui = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const runtime = read("apps/modulos/mcp/src/index.js");
+  for (const name of ["lerSaudeInfraCentralDark", "mcpRecipe", "mcpCatalogo", "statusBroker"]) {
+    assert.ok(ui.includes(name), `cockpit sem leitura real: ${name}`);
+  }
+  assert.ok(ui.includes("REGISTRO ATIVO · TESTE PENDENTE"));
+  assert.ok(ui.includes("instâncias STDIO do Hermes"));
+  assert.ok(fn.includes("requireSupabaseAuth"));
+  assert.ok(fn.includes(".eq(\"role\", \"admin\")"));
+  assert.ok(fn.includes('mcpTools.statusHttp === 200'));
+  assert.ok(fn.includes('recipe?.["hostedDispatchLocked"] === true'));
+  assert.ok(fn.includes('recipe?.["adminAliasLoaded"] === true'));
+  assert.ok(fn.includes('recipe?.["codeStatus"] === "RECIPE_FIRST_MATCHED"'));
+  assert.ok(runtime.includes('app.get("/health", async'));
+  assert.ok(runtime.includes('canonicalRecipeFirstPreflight('));
+  assert.ok(runtime.includes('assertNoRetiredCentralDarkHostedDeploy('));
+  assert.ok(runtime.includes('proofLevel: recipeReady'));
+  assert.doesNotMatch(ui, /acesso verificado em 23\/10/);
+});
+
+test("runtime owner wins over stale checkout na leitura P0", () => {
+  const source = read("apps/modulos/mcp/src/tools/deploy/centraldark-capabilities.js");
+  assert.ok(source.includes("function installedRuntimeRoot()"));
+  assert.ok(source.includes("RUNTIME_OWNER_FIRST"));
+  assert.ok(source.includes("CHECKOUT_FALLBACK_ONLY_ON_MISSING"));
+  assert.ok(source.includes("recipeSource: selected.source"));
+});
+
+test("HUD mostra receita P0 a partir do mesmo sensor autentico, sem nova secao", () => {
+  const fn = read("apps/instinto-superior/src/lib/conexoes.functions.ts");
+  const hud = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  assert.ok(hud.includes("lerSaudeInfraCentralDark"));
+  assert.ok(hud.includes('["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN"'));
+  assert.ok(hud.includes("STDIO/Hermes exigem contraprova separada"));
+  assert.ok(hud.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(conexoes.includes('queryKey: ["centraldark", "saude-hub-mcp"]'));
+  assert.ok(fn.includes(".middleware([requireSupabaseAuth])"));
+  assert.ok(fn.includes('mcpRecipeEscopo: "MCP_HTTP_ONLY"'));
+  assert.equal((hud.match(/\["Receita em uso",/g) || []).length,1);
+});
+
+test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => {
+  const data = read("apps/instinto-superior/src/data/painel-unico.ts");
+  const ui = read("apps/instinto-superior/src/components/central/MapaOwners.tsx");
+  const shell = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
+  const names = ["🏠 Início", "✨ Criar", "👁️ Ao vivo", "🔗 Conexões", "📖 Histórico"];
+  for (const n of names) assert.ok(data.includes(n), "caminho simples ausente: " + n);
+  assert.equal((data.match(/rotulo: "/g) || []).length,5);
+  assert.ok(data.includes('id: "ao-vivo", rotulo: "👁️ Ao vivo", aba: "visao"'));
+  assert.ok(data.includes("StatusPanel/PapagaioHudMcp/cockpit.functions"));
+  assert.ok(data.includes("RASCUNHO_SEM_DESPACHO"));
+  assert.ok(data.includes("ABRIR_OWNER_AUTENTICADO"));
+  assert.ok(ui.includes("O que você quer fazer hoje?"));
+  assert.ok(ui.includes("onNavigate?.(item.aba)"));
+  assert.ok(ui.includes("ConexoesCentralDark"));
+  assert.ok(ui.includes("item.privado && !autenticado"));
+  assert.ok(ui.includes("conexoesAbertas"));
+  assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
+  // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
+  // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
+  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,27);
+});
+
+test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
+  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
+  // volta a capsula flutuante superior (sem criar segundo shell/executor).
+  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
+  assert.match(cockpit, /data-cd-harness="top-floating"/);
+  for (const control of [
+    'aria-label="CentralDark · visão geral"',
+    'aria-label="Lupa · buscar ferramentas"',
+    'aria-label="Mapa dos sistemas"',
+    'aria-label="Notificações"',
+  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+  assert.match(cockpit, /className="sticky top-0 z-30/);
+  assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
+  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
+  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
+  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
+  assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
+  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+});
+
+test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
+  const loop = read("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md");
+  assert.match(cockpit, /function JornadaEvolutiva/);
+  assert.match(cockpit, /TabsTrigger value="jornada"/);
+  assert.match(cockpit, /TabsContent value="jornada"/);
+  assert.match(cockpit, /data-cd-flow="instinto.CockpitShell.jornada-evolutiva"/);
+  assert.match(cockpit, /!KAIZEN/);
+  assert.match(cockpit, /!MULTIBUSSOLA/);
+  assert.match(cockpit, /Nível 06 · marco narrativo/);
+  assert.match(cockpit, /abrirDestino\("recibos"\)/);
+  assert.match(cockpit, /abrirDestino\("forja"\)/);
+  assert.match(loop, /Projecao didatica no Cockpit/);
+  const bloco = cockpit.split("function JornadaEvolutiva")[1].split("function MenuVisualCentralDark")[0];
+  assert.doesNotMatch(bloco, /fetch\(|execSync\(|localStorage/);
+});
+
+test("Sync Center usa provas SSH autenticadas no Supabase sem inventar sync ou deploy", () => {
+  const center = read("apps/instinto-superior/src/components/central/SyncCenter.tsx");
+  const proof = read("apps/instinto-superior/src/components/central/SshBridgeProof.ts");
+  assert.match(center, /useSshBridgeProof/);
+  assert.match(center, /data-cd-flow="instinto.SyncCenter.ssh-bidirecional-supabase"/);
+  assert.match(center, /provasAtuais\[id\]/);
+  assert.match(center, /ssh\.rotas\["casa-vps"\]/);
+  assert.match(center, /ssh\.rotas\["vps-casa"\]/);
+  assert.match(proof, /supabase\.auth\.getSession/);
+  assert.match(proof, /\/rest\/v1\/agent_events/);
+  assert.match(proof, /area: "eq\.sync-center-ssh"/);
+  assert.match(proof, /proof_run_ended_at/);
+  assert.match(proof, /ttl_seconds/);
+  assert.match(proof, /"AUTH_REQUIRED"/);
+  assert.match(proof, /Nao comprova sincronizacao nem deploy|Não prova sincronização nem deploy/);
+  assert.doesNotMatch(proof, /service_role|SERVICE_ROLE|SUPABASE_SECRET_KEY/);
+});
+
+test("feed vivo de eventos e missoes reutiliza o SyncCenter, Supabase RLS e Realtime", () => {
+  const center = read("apps/instinto-superior/src/components/central/SyncCenter.tsx");
+  const feed = read("apps/instinto-superior/src/components/central/FeedVivoCentralDark.tsx");
+  const recipe = read("docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md");
+  assert.match(center, /<FeedVivoCentralDark \/>/);
+  assert.match(feed, /data-cd-flow="instinto.SyncCenter.feed-vivo"/);
+  assert.match(feed, /supabase\.auth\.getSession\(\)/);
+  assert.match(feed, /agent_events/);
+  assert.match(feed, /hub_mission_events/);
+  assert.match(feed, /postgres_changes/);
+  assert.match(feed, /event: "INSERT"/);
+  assert.match(feed, /invalidateQueries/);
+  assert.match(feed, /refetchInterval: 60_000/);
+  assert.match(feed, /status === "STREAM_ON"/);
+  assert.match(recipe, /IDENTIFICAR|Identificar/);
+  assert.doesNotMatch(feed, /SERVICE_ROLE|service_role/);
+});

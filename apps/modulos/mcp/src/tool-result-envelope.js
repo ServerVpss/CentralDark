@@ -33,6 +33,20 @@ function legacyJsonResult(payload) {
   try { return asObject(JSON.parse(text)); } catch { return {}; }
 }
 
+// Resultado semantico: o dispatcher devolve bloqueios como texto JSON
+// ({ ok:false, executionStatus:"blocked" }) sem isError. A auditoria usa isto
+// para nao registrar PASS quando a operacao interna foi bloqueada ou falhou.
+export function semanticOutcome(payload) {
+  const data = legacyJsonResult(asObject(payload));
+  const blocked = data.executionStatus === "blocked";
+  const failed = data.ok === false;
+  return {
+    ok: !blocked && !failed,
+    blocked,
+    status: typeof data.status === "string" ? data.status.slice(0, 80) : null,
+  };
+}
+
 // Read *reported* causal references only. The outer envelope cannot validate
 // the runtime receipt and must never turn a completed tool call into a PASS.
 function continuityFromPayload(payload, toolName) {
@@ -55,6 +69,22 @@ function continuityFromPayload(payload, toolName) {
     receipt_ref: receipt,
     next_cursor: safeTraceValue(explicit("next_cursor", explicit("nextCursor", diagnostic.nextCursor)), 240),
   };
+}
+
+// Clientes MCP que preferem structuredContent mostram só ele e descartam content.
+// Espelha o resultado original ali para a leitura não chegar vazia; content segue intacto.
+const MIRROR_MAX_CHARS = 65536;
+function mirrorContent(payload) {
+  const parts = Array.isArray(payload.content)
+    ? payload.content.filter(c => c && c.type === "text" && typeof c.text === "string").map(c => c.text)
+    : [];
+  if (parts.length === 0) return {};
+  const text = parts.join("\n");
+  if (text.length > MIRROR_MAX_CHARS) return { result_truncated: true, result_chars: text.length };
+  if (parts.length === 1 && text.trimStart().startsWith("{")) {
+    try { return { result: JSON.parse(text) }; } catch { /* texto simples abaixo */ }
+  }
+  return { result: text };
 }
 
 export function decorateToolResult(raw, {
@@ -89,6 +119,7 @@ export function decorateToolResult(raw, {
     ...payload,
     isError,
     structuredContent: {
+      ...(Object.keys(asObject(payload.structuredContent)).length ? {} : mirrorContent(payload)),
       ...asObject(payload.structuredContent),
       centraldark,
     },

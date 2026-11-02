@@ -18,9 +18,19 @@ REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
 WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
-SEMANTIC_ALL_HELPER="${SEMANTIC_ALL_HELPER:-scripts/dependabot/semantic-all-resolver.mjs}"
-CLASSIFIER="${CONFLICT_CLASSIFIER:-scripts/dependabot/classify-conflict.mjs}"
-STRUCTURED_HELPER="${STRUCTURED_CONFLICT_HELPER:-scripts/dependabot/structured-conflict-resolver.mjs}"
+# Roteamento fixo pelo checkout confiável que contém o motor; nunca executar
+# helpers ou registry fornecidos pela branch de PR sob pull_request_target.
+TRUSTED_OWNER_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+SEMANTIC_ALL_HELPER="$TRUSTED_OWNER_ROOT/scripts/dependabot/semantic-all-resolver.mjs"
+CLASSIFIER="$TRUSTED_OWNER_ROOT/scripts/dependabot/classify-conflict.mjs"
+STRUCTURED_HELPER="$TRUSTED_OWNER_ROOT/scripts/dependabot/structured-conflict-resolver.mjs"
+SKILL_CONTRACT="$TRUSTED_OWNER_ROOT/.agents/skills/git-conflict-resolve-house-standard/SKILL.md"
+export CONFLICT_REGISTRY="$TRUSTED_OWNER_ROOT/scripts/dependabot/known-conflict-patterns.json"
+
+if ! [[ "$PR_NUM" =~ ^[1-9][0-9]*$ ]]; then
+  echo "BLOCKED_INVALID_PR_NUMBER"
+  exit 2
+fi
 
 if [ -z "$PR_HEAD_REF" ]; then
   echo "BLOCKED_MISSING_PR_HEAD_REF"
@@ -116,6 +126,25 @@ if [ ! -f "$STRUCTURED_HELPER" ]; then
   exit 6
 fi
 
+if [ ! -f "$SKILL_CONTRACT" ] || ! grep -Fq "PRIMARY_SOURCE_REQUIRED_BEFORE_RESOLUTION=true" "$SKILL_CONTRACT"; then
+  echo "BLOCKED_PRIMARY_SOURCE_SKILL_CONTRACT_MISSING"
+  git merge --abort 2>/dev/null || true
+  exit 6
+fi
+
+PR_HEAD_SHA="$(git rev-parse HEAD)"
+MAIN_SHA="$(git rev-parse origin/main)"
+MERGE_BASE_SHA="$(git merge-base "$PR_HEAD_SHA" "$MAIN_SHA")"
+if [ -z "$MERGE_BASE_SHA" ]; then
+  echo "BLOCKED_MISSING_MERGE_BASE"
+  git merge --abort 2>/dev/null || true
+  exit 6
+fi
+echo "PRIMARY_SOURCE_SCOPE=CONFLICTED_FILE_HISTORY"
+echo "SOURCE_PR_HEAD=$PR_HEAD_SHA"
+echo "SOURCE_MAIN_HEAD=$MAIN_SHA"
+echo "SOURCE_MERGE_BASE=$MERGE_BASE_SHA"
+
 CURRENT_COUNT=0
 INCOMING_COUNT=0
 BOTH_COUNT=0
@@ -123,12 +152,31 @@ STRUCTURED_COUNT=0
 YELLOW_COUNT=0
 
 for f in "${CONFLICTS[@]}"; do
+  # Primeiro ler a história dos dois lados; o diff isolado não representa intenção.
+  # Histórico insuficiente ou hunk não textual permanece YELLOW, sem publicação.
+  PR_SOURCE="$(git log -1 --format="%H|%s" "$PR_HEAD_SHA" -- "$f" || true)"
+  MAIN_SOURCE="$(git log -1 --format="%H|%s" "$MAIN_SHA" -- "$f" || true)"
+  HUNK_COUNT="$(grep -c "^<<<<<<< " -- "$f" 2>/dev/null || true)"
+  echo "PRIMARY_SOURCE path=$f pr=$PR_SOURCE main=$MAIN_SOURCE hunks=$HUNK_COUNT"
   DECISION_JSON="$(node "$CLASSIFIER" "$f")"
   ACTION="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.action)" "$DECISION_JSON")"
   REASON="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.reason)" "$DECISION_JSON")"
   CONFLICT_ID="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.conflict_id)" "$DECISION_JSON")"
   STRUCTURED_STRATEGY="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.structured_strategy||'')" "$DECISION_JSON")"
   SEMANTIC_KEY="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.semantic_key||'')" "$DECISION_JSON")"
+  SOURCE_REF="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.source_ref||'')" "$DECISION_JSON")"
+  PRESERVE_RULE="$(node -e "const x=JSON.parse(process.argv[1]); process.stdout.write(x.preserve_rule||'')" "$DECISION_JSON")"
+  if [ -z "$PR_SOURCE" ] || [ -z "$MAIN_SOURCE" ] || [ "${HUNK_COUNT:-0}" -eq 0 ]; then
+    ACTION=YELLOW
+    REASON=PRIMARY_SOURCE_OR_HUNK_UNPROVEN
+  fi
+  echo "PRIMARY_INTENT path=$f registry_source=$SOURCE_REF preserve_rule=$PRESERVE_RULE"
+  case "$ACTION" in
+    CURRENT) echo "INTENT_TRADEOFF path=$f kept=PR_HEAD discarded=MAIN reason=$REASON" ;;
+    INCOMING) echo "INTENT_TRADEOFF path=$f kept=MAIN discarded=PR_HEAD reason=$REASON" ;;
+    BOTH|STRUCTURED) echo "INTENT_TRADEOFF path=$f kept=PR_AND_MAIN rule=$PRESERVE_RULE" ;;
+    YELLOW) echo "INTENT_TRADEOFF path=$f kept=UNDECIDED needs_discriminant=1" ;;
+  esac
   echo "CONFLICT_DECISION path=$f action=$ACTION reason=$REASON conflict_id=$CONFLICT_ID strategy=$STRUCTURED_STRATEGY key=$SEMANTIC_KEY"
 
   case "$ACTION" in
@@ -225,7 +273,18 @@ PY
   esac
 done
 
-echo "AUTO_REVIEW_COUNTERPROOF=PASS"
+echo "AUTO_REVIEW_LOCAL_SYNTAX=PASS"
+echo "PROJECT_BEHAVIOR_TESTS=AWAIT_UNPRIVILEGED_SAME_HEAD_CI"
+echo "AUTO_REVIEW_COUNTERPROOF=PENDING_SAME_HEAD_CI"
+
+# Não gravar um merge em PR se outro escritor avançou a branch ou a main.
+REMOTE_PR_SHA="$(git "${GIT_AUTH[@]}" ls-remote origin "refs/heads/${PR_HEAD_REF}" | awk '{print $1}')"
+REMOTE_MAIN_SHA="$(git "${GIT_AUTH[@]}" ls-remote origin "refs/heads/main" | awk '{print $1}')"
+if [ "$REMOTE_PR_SHA" != "$PR_HEAD_SHA" ] || [ "$REMOTE_MAIN_SHA" != "$MAIN_SHA" ]; then
+  echo "BLOCKED_SOURCE_HEAD_CHANGED pr_current=$REMOTE_PR_SHA pr_expected=$PR_HEAD_SHA main_current=$REMOTE_MAIN_SHA main_expected=$MAIN_SHA"
+  git merge --abort 2>/dev/null || true
+  exit 21
+fi
 
 git -c user.name='CentralDark COSTURA Resolver' \
     -c user.email='actions@users.noreply.github.com' \

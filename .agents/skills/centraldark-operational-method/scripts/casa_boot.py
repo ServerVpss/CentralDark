@@ -16,7 +16,7 @@ NAO COPIA: o script apenas:
   - imprime relatorio + STATUS para o runtime consumir (stdout).
 
 FORA DE ESCOPO (noremoto): nao toca origin/remoto. Trabalha com o estado
-local do clone CentralDark montado em E:/CentralDark/Pivete/CentralDark.
+local do clone CentralDark montado em K:/.
 
 SAIDA:
   JSON compacto em stdout com:
@@ -42,8 +42,8 @@ HOME = os.path.expanduser("~")
 PROFILE_DIR = os.path.join(HOME, "AppData", "Local", "hermes", "profiles", "pivete")
 PROFILE_SOUL = os.path.join(PROFILE_DIR, "SOUL.md")
 
-CASA_ROOT = r"E:\CentralDark\Pivete"
-CLONE_CANONICO = os.path.join(CASA_ROOT, "CentralDark")
+CASA_ROOT = r"K:/"
+CLONE_CANONICO = os.path.abspath(os.environ.get("CENTRALDARK_REPO_ROOT", CASA_ROOT))
 CANONICAL_SOUL = os.path.join(
     CLONE_CANONICO, "docs", "CONSCIENCIA", "01-IDENTIDADE-E-REGRAS", "SOUL-SOL.md"
 )

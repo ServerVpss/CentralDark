@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, RefreshCw, Search, Copy } from "lucide-react";
+import { ExternalLink, Search, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SyncLoopIcon } from "@/components/central/SyncLoopIcon";
 
 // Projeção de catálogo público já versionado no MCP. NÃO concede execução.
 // A fonte do despacho permanece apps/modulos/mcp/src/tools/core/mcp-admin.js.
@@ -199,7 +200,7 @@ export function CatalogoCapacidadesMcp() {
               {VALID_METHODS.map((m) => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
-          {loading ? <p className="mt-4 flex items-center gap-2 text-sm"><RefreshCw className="size-4 animate-spin" /> Validando catálogo…</p> : null}
+          {loading ? <p className="mt-4 flex items-center gap-2 text-sm"><SyncLoopIcon autoSyncEnabled isFetching size={16} /> Validando catálogo…</p> : null}
           {error ? <p role="alert" className="mt-4 text-xs text-amber-500">
             Não foi possível verificar o snapshot: {error}. Inventário não promovido a PASS.
           </p> : null}

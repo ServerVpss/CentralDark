@@ -133,13 +133,14 @@ function RootComponent() {
   // 🧿 Erros visíveis: sensor único em public/centraldark-erros-visiveis.js (skill kaizen-sistema-um).
   useEffect(() => {
     if (document.getElementById("cd-erros-visiveis-script")) return;
-    // 🧿 A rota de saúde do MCP responde CORS e foi validada sem credenciais.
-    // Saúde HTTP não equivale a ferramenta executada; o owner único do olho permanece o mesmo.
-    const sensorWindow = window as typeof window & { CD_ERROS_CONFIG?: { apiHealth?: string; apiProbeMs?: number; coracao?: string } };
+    // A saúde do MCP é medida pelo owner server-side do Cockpit. Esta casca roda
+    // no navegador e não pode sondar o domínio externo sem CORS; manter a URL
+    // aqui causava erro visível recorrente, sem acrescentar prova.
+    const sensorWindow = window as typeof window & { CD_ERROS_CONFIG?: { apiHealth?: string; apiProbeMs?: number; transportStaleMs?: number; coracao?: string } };
     sensorWindow.CD_ERROS_CONFIG = {
       ...(sensorWindow.CD_ERROS_CONFIG || {}),
-      apiHealth: "https://mcp.centralldark.com/health",
-      apiProbeMs: 60000,
+      apiHealth: "",
+      coracao: (import.meta.env["VITE_CENTRALDARK_SENTINEL_ENDPOINT"] as string | undefined) || "",
     };
     const sensor = document.createElement("script");
     sensor.id = "cd-erros-visiveis-script";

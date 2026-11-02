@@ -1,0 +1,125 @@
+{
+  "schema": "centraldark.execucao-integral.v1",
+  "mission_id": "CENTRALDARK_DUAS_FRENTES_20261012",
+  "authority": "ServerVpss/CentralDark@main",
+  "intent": "Uma intenção, dois owners existentes, um JSON canônico ativo",
+  "sources": {
+    "mcp_dispatcher": {
+      "path": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "creation_commit": "9f516fbe7842aa56b2be93a7f5021208cfc06b16",
+      "blob_sha": "12f4c9cc6f49cc16757f99f5b1dccfbcfdbcd405",
+      "status_main": "READBACK_PRESENT",
+      "status_runtime": "UNKNOWN"
+    },
+    "reconciler": {
+      "path": "scripts/centraldark-inventory-reconcile.sh",
+      "final_patch_commit": "9277a9ff41c7b341411fe6465186231554116904",
+      "blob_sha": "4a70ed98f37990e0f099dfbed9b1eb419bc53e31",
+      "sha256_running": "b56706f65fd045acc60dc88d11643362faded88ae9f0a504a7ec17bf2a906830",
+      "sha256_backup_old": "4792fab2b553537219fe43afe06cb8a9745f02ad4d897d17870575218d75f902",
+      "status_runtime": "SCRIPT_INSTALLED_SCAN_PASS",
+      "sha256_original_measured_on_vps_20261012": "b56706f65fd045acc60dc88d11643362faded88ae9f0a504a7ec17bf2a906830",
+      "desired_sha256_main_append_only_replay": "ead45fcfae0417038542f1bc7a7d4f93651bfd5e0dd0d730db29053e82d46a10",
+      "replay_append_only_patch_commit": "eaab55ffdf6cd928947a2967b8fd449c89bf7910",
+      "replay_append_only_blob_sha": "7d710e7f12dd211a79a6b9c624ddc07933fe6a04"
+    },
+    "pulse_legacy": {
+      "path": "scripts/vps/main-pulse-reconciler.sh",
+      "blob_sha": "1588c0d7c5717e2843611f6ae01b4e22b3b45c1a",
+      "sha256_original": "c932a1202ee7dd5497debc5ab27f2fe52459739871487380053c6c704ca6bcac",
+      "status": "PRESERVED_HAKAI_PENDING"
+    },
+    "guard": {
+      "path": "apps/modulos/mcp/src/lib/admin-guard.js",
+      "blob_sha": "9958926325a247c09f0dd97ba026cfb1969459d7"
+    },
+    "tests": {
+      "path": "apps/modulos/mcp/tests/admin-guard-core.test.mjs",
+      "blob_sha": "668841fe6a7ff3b7de68891f1c70505d326a5542"
+    },
+    "learning": {
+      "number": 171,
+      "path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "commit": "a0e08e23c02c2caf7d7dc8f38ce9c7da4782e30c"
+    }
+  },
+  "measured": {
+    "mcp": {
+      "runtime_tools": 141,
+      "destructive_tools": 20,
+      "route_count": 13,
+      "startup_audit_ready": true,
+      "new_mcp_code_deployed": "UNKNOWN",
+      "deploy_gate": "MCP_NATIVE_FILESET_NOT_APPROVED"
+    },
+    "casa": {
+      "device": "SEGREDO",
+      "route": "Remote Desktop Commander → Windows PowerShell → Segredo-VPS (OpenSSH) → VPS",
+      "measured_ssh": "PASS"
+    },
+    "vps": {
+      "original_checkout_sha": "5344bd87074c334ddf3ac322ae7d6aaacecdf665",
+      "checkout_dirty": true,
+      "main_and_checkout_equal": false
+    },
+    "scan_1": {
+      "folders": 4346,
+      "scripts": 6821,
+      "identical_groups": 1375,
+      "normalized_groups": 2,
+      "candidates": 287,
+      "partial": true,
+      "bounded_scan": 6,
+      "exit_code": 0
+    },
+    "scan_2": {
+      "folders": 2620,
+      "scripts": 4224,
+      "identical_groups": 1375,
+      "normalized_groups": 1,
+      "candidates": 279,
+      "partial": true,
+      "bounded_scan": 6,
+      "exit_code": 0
+    },
+    "json": {
+      "canonical": "/var/lib/centraldark/inventory-reconcile/centraldark-inventory-reconcile.json",
+      "valid": true,
+      "legacy_receipts": "moved_to_existing_backup",
+      "single_active_receipt": true
+    },
+    "pulse_plan": {
+      "exit_code": 0,
+      "side_effect": false
+    },
+    "pulse_live": {
+      "status": "UNKNOWN"
+    },
+    "hakai": {
+      "status": "NOT_EXECUTED"
+    },
+    "ten_openai_blocks": {
+      "status": "USER_REFERENCED_COUNT_NOT_INDEPENDENTLY_ATTESTED",
+      "lesson": "Blocked call by external tool guard != app error, no bypass"
+    }
+  },
+  "backup_root": "/var/lib/centraldark/inventory-reconcile/backups/20261012T225707Z",
+  "unknowns": [
+    "MCP live binary matches main",
+    "Rebuilder existing owner outside searched roots",
+    "Pulse live full parity",
+    "Legacy script runtime consumers",
+    "Scanner complete coverage",
+    "HAKAI safe"
+  ],
+  "laws": [
+    "UNKNOWN != PASS",
+    "ACTION != PROOF",
+    "DOCUMENTED != EXECUTED",
+    "MERGED != DEPLOYED",
+    "EXISTS != RUNNING",
+    "TOOL_LISTADO != TOOL_ATIVO",
+    "HISTORY != CURRENT_STATE",
+    "REALIDADE É O JUIZ"
+  ]
+}

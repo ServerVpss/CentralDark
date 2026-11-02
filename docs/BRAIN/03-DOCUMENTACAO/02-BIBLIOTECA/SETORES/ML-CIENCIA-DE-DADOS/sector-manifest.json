@@ -20,8 +20,8 @@
   "local_offline_corpus": {
     "contract": "LOCAL-OFFLINE-CORPUS.md",
     "ingest_script": "scripts/library/CentralDark-LocalOffline-Library-Ingest.ps1",
-    "recommended_source_root": "E:\\CentralDark\\_BIBLIOTECA_OFFLINE\\entrada",
-    "recommended_output_root": "E:\\CentralDark\\_BIBLIOTECA_OFFLINE\\ML-CIENCIA-DE-DADOS",
+    "recommended_source_root": "K:\\_BIBLIOTECA_OFFLINE\\entrada",
+    "recommended_output_root": "K:\\_BIBLIOTECA_OFFLINE\\ML-CIENCIA-DE-DADOS",
     "inventory": "index/inventory.jsonl",
     "corpus": "index/corpus.jsonl",
     "raw": "raw/",

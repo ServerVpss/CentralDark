@@ -21,6 +21,51 @@ pertinence_first: true
 minimum_sufficient_loop: true
 triggers_are_conditional_not_ritual: true
 
+fix_point_reference_pack:
+  marker: FIX_POINT_7_CANONICAL_REFS_V1
+  human_heading: "🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT"
+  trigger: "!CENTRALDARK"
+  aliases: ["!CENTRALDARK", "#CENTRALDARK"]
+  meaning: ONE_MASTER_CYCLE_SEVEN_CANONICAL_REFERENCE_OWNERS
+  source_resolution: BOOT_HASH_READ_ALL_SEVEN_THEN_SELECT_PERTINENT_SECTIONS
+  require_manual_header_repetition: false
+  no_parallel_loader: true
+  sources:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+    - docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+    - docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md
+    - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
+    - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md
+    - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md
+    - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+  presentation:
+    compact_hud: "🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐"
+    show_for_active_master_session: true
+    stars_awarded_by_trigger: 0
+    quality_gate_owner: RULES.md
+    fixed_point_receipt_owner: scripts/lupa/horn-reuse-fixed-point.mjs
+  consumer: scripts/trigger-fabric/centraldark_full_trigger_boot.py#fixed_point_pack_state
+  limits: [HASH_NOT_SEMANTIC_USE, NO_FALSE_GREEN, NO_BLIND_EXECUTION, REUSE_EXISTING_HUD]
+
+current_delivery_policy:
+  marker: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+  authority: SEGREDO_CHEFE_EXPLICIT_FOR_CURRENT_SCOPE
+  default_delivery: DIRECT_COMMIT_AND_PUSH_MAIN
+  github_role: VERSIONED_LEDGER_WITH_SHA_AND_READBACK
+  ci_required_to_edit_or_push: false
+  ci_pending_is_blocker: false
+  report_ci_when_not_required_as: NOT_APPLICABLE_NOT_PENDING
+  create_pr_for_direct_main: false
+  squash_for_direct_main: false
+  squash_only_when_pr_lane_explicitly_applies: true
+  vps_offline_blocks_repository_edit: false
+  ssh_vps_only_when_reachable_and_authorized: true
+  vps_unreachable_requires: REPORT_RUNTIME_READBACK_PENDING_WITHOUT_WAITING
+  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RECEIPT]
+  active_pr_collision: RECONCILE_OWNER_AND_SCOPE_BEFORE_WRITE
+  material_failures: DO_NOT_CLAIM_PASS_OR_FIXED_POINT
+  no_new_branch_or_workflow_by_default: true
+
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
   executable_master_trigger: "!CENTRALDARK"
@@ -66,11 +111,69 @@ expands_to:
   - RASTRO
   - HANDOFF
   - BOOT
+  - ATUALIZAR_NOTAS_VIVAS
 
-canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !MICHELIN -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
-canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
-canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
-canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 🌟 !MICHELIN → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 🚀 !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !MICHELIN -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !ATUALIZAR_NOTAS_VIVAS -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> ATUALIZAR_NOTAS_VIVAS -> HANDOFF -> BOOT"
+canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> ATUALIZAR_NOTAS_VIVAS -> HANDOFF -> BOOT"
+canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 🌟 !MICHELIN → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 📝 !ATUALIZAR_NOTAS_VIVAS → 🚀 !BOOT"
+fixed_point_execution_header:
+  marker: FIXED_POINT_EXECUTION_HEADER_REQUIRED
+  required: true
+  applies_to: ALL_CURRENT_AND_FUTURE_AGENTS
+  owner: scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
+  builder: scripts/lupa/horn-reuse-fixed-point.mjs#buildFixedPointExecutionHeader
+  canonical_criteria_owner: scripts/lupa/horn-reuse-fixed-point.mjs#evaluateFixedPointTen
+  entry: BEFORE_FIRST_MATERIAL_ACTION_AND_EACH_MATERIAL_DELTA
+  exit: BEFORE_AGENT_RETURNS_RESULT_OR_CLAIMS_FIXED_POINT
+  ten_criteria_ids:
+    - OWNER_UNIQUE
+    - LOCKS_PRESERVED
+    - MCP_PUBLIC_HEALTH
+    - ONE_HEART_FRESH
+    - SCREENPIPE_CURRENT
+    - AIONUI_STDIO_CURRENT
+    - LOG_PRIVACY_CURRENT
+    - CHECKOUT_MAIN_SYNC
+    - FORENSIC_FRESHNESS
+    - RECEIPT_PRESENT
+  required_fields: [agent_id, mission_id, intent_id, goal_fingerprint, observed_head, measured_at, evaluator, evaluation_ref, criteria, verdict, next_cursor]
+  each_criterion_requires: [id, evaluated, status, source, attempt_ref, evaluated_at]
+  pass_requires: [source_sha, proof_ref, counterproof_ref, counterproof_verdict_NOT_REFUTED]
+  unknown_requires: [reason, attempt_ref]
+  statuses: [PASS, FAIL, UNKNOWN, STALE, BLOCKED]
+  usage_detection:
+    header_missing: HEADER_MISSING
+    criteria_missing_or_duplicate: HEADER_NOT_USED
+    stale_or_untraceable_attempt: HEADER_NOT_USED
+    ten_current_attempts_with_gaps: HEADER_USED_WITH_GAPS
+    ten_pass_plus_current_goal_receipt_same_head: HEADER_USED_AND_FIXED_POINT
+  invariants:
+    header_is_execution_receipt_not_decoration: true
+    exactly_ten_ids_required: true
+    every_agent_reports_criteria_considered: true
+    unknown_is_a_valid_measured_result_not_a_pass: true
+    no_probe_attempt_ref_means_not_evaluated: true
+    fixed_point_claim_requires_all_ten_pass: true
+    goal_receipt_and_next_cursor_required_for_fixed_point: true
+    header_missing_blocks_agent_call: true
+    preserve_same_intent_and_next_cursor: true
+    no_new_owner_or_evaluator: true
+  canonical_navigation_header:
+    required_for: MATERIAL_FIXED_POINT_REPORT
+    role: SEVEN_CANONICAL_REFERENCES_NOT_A_REPLACEMENT_FOR_TEN_EXECUTION_CRITERIA
+    source_order_fixed: true
+    links:
+      - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+      - docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md
+      - docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-FRAGMENTOS-DA-CABECA-EXTERNALIZADA-SELECAO-TEMPORAL.md
+      - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-intencao-unica-propriedades-ciclo-mestre.md
+      - docs/CONSCIENCIA/APRENDIZADOS/2026-08-26-ciclo-mestre-reconciliacao-passado-futuro.md
+      - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+    links_are_navigation_not_runtime_proof: true
+    ten_horn_criteria_still_required: true
+
 aureola_visible_route_debugger:
   contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
   visible_fields: [CURRENT_PHASE, MULTIBUSSOLA_AXIS, DESTINATION_OWNER, NEXT_GATE]
@@ -201,10 +304,52 @@ phase_contracts:
     required_output: [COMMIT_SHA, PATH, LINK, READBACK, MEMORY_LOCATION_WHEN_CLAIMED]
     response_without_trace: INVALID
     applies_to_all_engines: true
+    touched_note_reconciliation:
+      status: CONTRACT_AND_LOCAL_FISCAL_TESTED
+      scope: MD_FILES_TOUCHED_BY_AUTHORIZED_MISSION_ONLY
+      contract_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md
+      existing_fiscal: scripts/trigger-fabric/rastro_fiscal.py
+      existing_test: scripts/trigger-fabric/test_rastro_fiscal.py
+      command: python scripts/trigger-fabric/rastro_fiscal.py --note-file CAMINHO_DA_NOTA.md --pretty
+      fields: [data_criacao, ultima_atualizacao, ultima_modificacao, ultima_verificacao, fuso_horario, hash_conteudo, rastro, grupo_notas, relacionado_a, estado_evidencia]
+      groups: [GRUPO_01, GRUPO_02, GRUPO_03, GRUPO_04, GRUPO_05]
+      pass_scope: METADATA_FORMAT_AND_NORMALIZED_HASH_ONLY
+      preserve_original_creation: true
+      verification_does_not_modify_content: true
+      no_bulk_rewrite_or_new_note_folders: true
+      note_change_requires_authorized_owner_writer: true
+      runtime_all_agents_enforcement: UNKNOWN_UNTIL_INTEGRATION_PROVED
+
+
+  ATUALIZAR_NOTAS_VIVAS:
+    meaning: RECONCILIAR NOTAS COM 10 PROPRIEDADES OBRIGATORIAS E GRUPOS
+    token: "!ATUALIZAR_NOTAS_VIVAS"
+    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md + .agents/skills/centraldark-note-maintenance/SKILL.md"
+    emoji: "📝"
+    phase_type: MANDATORY_EVERY_CYCLE
+    execution: IMMEDIATE_AFTER_RASTRO_BEFORE_BOOT
+    contract:
+      required_properties: [data_criacao, ultima_atualizacao, ultima_modificacao, ultima_verificacao, fuso_horario, hash_conteudo, rastro, grupo_notas, relacionado_a, estado_evidencia]
+      hash_algorithm: SHA256_CONTENT
+      timezone: America/Sao_Paulo
+      groups: [01-cabeca-intencao, 02-loop-mestre, 03-evidencias-contraprovas, 04-pendencias-bloqueios, 05-aprendizados-kaizen]
+      preserve_creation_date: true
+      track_timestamps_separately: true
+      rastro_append_only: true
+      estado_evidencia_values: [PROVED, UNKNOWN, PENDING, BLOCKED]
+      replay_logic: EXTEND_PROVEN_CRYSTAL
+    verification:
+      fiscal_script: scripts/trigger-fabric/rastro_fiscal.py
+      check: ALL_NOTES_HAVE_10_PROPS_AND_VALID_HASH
+      pass_condition: ZERO_NOTES_MISSING_PROPS
+    hud_field: NOTAS_DESATUALIZADAS
+    hud_source: "Fixed Point note reconciliation delta"
 
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE
     owner: LEIA-ME-IA.md
+    canonical_boot_file: CENTRALDARK_AI_BOOT.yaml
+    boot_mode: REUSE_EXISTING_CENTRALDARK_BOOT
     runtime_restart_implied: false
 
 failure_discriminant:

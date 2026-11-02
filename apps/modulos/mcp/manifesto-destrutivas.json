@@ -41,7 +41,7 @@
     "Sem isso o gate falha — pendencia sem plano vira divida invisivel."
   ],
   "versaoFormato": 1,
-  "revisadoEm": "2026-09-25",
+  "revisadoEm": "2026-10-23",
   "revisadoPor": "Chefe/SEGREDO via missao ADMIN_PROVIDER_CONTROL_PLANE_20260815",
   "geradoPor": "scripts/gerar-manifesto-destrutivas.mjs",
   "resumo": {
@@ -409,5 +409,14 @@
       "ultimoTeste": "2026-09-25: MAIN-PINNED manual provado em MCP com same SHA, fileset causal, restart isolado e health 200; handler novo ainda não replayado.",
       "proximoExperimento": "Após deploy MCP, dry-run do fileset; execução real em owner MCP; depois teste de rollback controlado e repetição da compensação."
     }
-  ]
+  ],
+  "politicaCatalogo": {
+    "modo": "RECONHECER_20_POR_NOME_SEM_APROVACAO_AUTOMATICA",
+    "fonteUnica": "destrutivasAprovadas + destrutivasEmRevisao",
+    "revisaoEmQuarentenaPontual": true,
+    "novaDestrutivaDesconhecida": "BLOQUEADA",
+    "diferencaEntreAprovadasERuntimeNaoEBloqueioGlobal": true,
+    "confirmacaoAdminEAuditoriaContinuam": true,
+    "nota": "20 ferramentas conhecidas nao significa 20 executaveis. As 8 em revisao aguardam os gates declarados."
+  }
 }

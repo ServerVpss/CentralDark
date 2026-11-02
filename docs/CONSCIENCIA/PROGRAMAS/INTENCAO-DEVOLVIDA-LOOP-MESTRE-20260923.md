@@ -1130,3 +1130,129 @@ GOAL_ID + INTENT_FIXED
 ### 🌟 !MICHELIN — seta de qualidade do Loop Mestre (2026-10-21)
 
 A intenção do CHEFE acrescenta `🌟 !MICHELIN` ao **mesmo** `!CENTRALDARK` entre contraprova/remedição/Reality Judge e `!FIXED_POINT`; todos os gatilhos visíveis usam `!` ou `#`. O Michelin não é motor separado: `RULES.md` continua sendo a regra de três níveis. A estrela somente pode ser atribuída com provas materiais do mesmo SHA. Sem CI, deploy autenticado, Casa/VPS/logs, o estado é `UNKNOWN`. Owner do fluxo `MASTER-CYCLE.yml`, resolver `centraldark_master_cycle.py`, inventário `ADM-GATILHOS-OPERACIONAIS.json` e diagrama `FLOW-REGISTRY.json` permanecem existentes. `DOCUMENTED != EXECUTED`; `NEXT_CURSOR=MICHELIN_TRIGGER_CI_SAME_HEAD`.
+
+---
+
+## 22. Rota Casa JEA (WinRM 5985) — Harness fechado VPS → Casa (22/10/2026)
+
+**Estado:** `casa-jea-winrm` está PROVEN e travado (🟢🔒) em VER, PEDIR, MEXER e allow. Registro estruturado: `apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm`. Sensor: `scripts/lupa/validar-harness-casa-jea.mjs`. Autorização: PERMITO SEGREDO, dado pelo CHEFE.
+
+`MERGED != DEPLOYED`: o card só aparece no Cockpit publicado depois do `build:vps` da VPS, que é decisão do CHEFE e está com o outro agente.
+
+### NEXT_CURSOR
+
+```text
+1. Rodar o sensor ao vivo (casa_jea.py suite → validar-harness-casa-jea.mjs --live) quando o Hermes precisar agir na Casa; ⚠️ mostra a causa e não rebaixa o PROVEN.
+2. CHEFE decide se entra serviço na allowlist (candidato: actions.runner.ServerVpss-CentralDark.centraldark-casa-1).
+3. Versionar a skill Hermes devops/centraldark-casa-jea pelo owner de sincronização de skills (hoje só existe na VPS).
+4. Ligar validar-harness-casa-jea.test.mjs ao CI quando o workflow existente ganhar a trilha #OBSERVACOES#.
+5. Fora deste escopo e só com autorização: fechar a exposição na LAN (3389, 8080, 32052, 33000, 3030) e atualizar o termo PERMITO na documentação e no código.
+```
+
+---
+
+## 23. Motor Evolutivo Deliberado Gamificado - Kaizen + Multibussola (25/10/2026)
+
+<!-- CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
+
+**Intencao vigente do CHEFE:** toda descoberta util de uma conversa pode virar capacidade verificavel na CentralDark, com progresso gamificado no Cockpit/Forja/Woner existentes. A conversa explora hipoteses; o nivel de engenharia e o nivel de habilidade comprovada sao coisas diferentes. Este item e DELTA do Loop Mestre, nao outro motor, sistema de memoria, writer ou Goal.
+
+**Metodo:** engenharia conversacional gamificada subordinada ao **Kaizen Vivo - Sistema Um** (sete batidas, mesmo Goal/NEXT_CURSOR) e a **Multibussola** (analise multidirecional, referenciais, contraprova e remedicao). !MICHELIN permanece o criterio de qualidade, e !CENTRALDARK permanece o gatilho mestre.
+
+**Gatilhos/owners canonicos ja existentes na main:**
+- !KAIZEN => .agents/skills/kaizen-sistema-um/SKILL.md; recupera intencao, compara estado, reusa prova, executa menor delta, aprende e continua.
+- !MULTIBUSSOLA => docs/CONSCIENCIA/MULTIBUSSOLA.md; observa e confronta os eixos materiais antes do fixed point.
+- !MICHELIN => RULES.md e MASTER-CYCLE.yml; selo so com evidencia pertinente.
+- Variantes de ditado nesta sessao (!kaizem, !muttibussula) indicam os conceitos acima, sem afirmar que parsers e runtimes ja aceitam esses aliases. Nao criar segundo protocolo por erro de transcricao.
+
+**Fluxo unico proposto:**
+INTENCAO_CHEFE -> RECALL_GOAL/NEXT_CURSOR -> DESCOBERTA_CANDIDATA -> !MULTIBUSSOLA (eixos pertinentes) -> !KAIZEN (reuse + menor delta) -> GATILHO/CONTRATO/OWNER/EXECUTOR_EXISTENTES -> IMPLEMENTACAO -> TESTE/CONTRAPROVA -> !MICHELIN/REALITY_JUDGE -> RECEIPT+SHA+READBACK -> HABILIDADE_COMPROVADA -> XP/NIVEL/HUD -> NEXT_CURSOR.
+
+**Estados distintos da habilidade:** IDEIA | CANDIDATA | DOCUMENTADA | IMPLEMENTADA | TESTADA | COMPROVADA | REUTILIZADA. O desbloqueio operacional ocorre somente em COMPROVADA, por efeito real e receipt do escopo; explorar uma hipotese pode evoluir o capitulo narrativo, mas nao produz falsa prova de runtime.
+
+**Interface-alvo:** reusar apps/instinto-superior/src/components/central/CockpitShell.tsx e as capacidades existentes do HUD/Forja; nenhum cockpit paralelo. O HUD mostra progresso, origem, owner, receipt, SHA e NEXT_CURSOR, sem inventar estado vivo. XP simbolico conserva o owner docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md; novo nivel nao confere autoridade.
+
+**Regra:** NEW_CONVERSATION != NEW_GOAL; DISCOVERY != EXECUTION; DOCUMENTED != IMPLEMENTED; IMPLEMENTED != PROVEN; XP_REQUIRES_RECEIPT; UNKNOWN != PASS; ONE_WRITER_PER_SCOPE=true.
+
+**Escopo desta batida:** somente contrato documental canonicamente versionado na main. Nenhum gatilho executavel, painel, teste CI, runtime Casa/VPS ou experiencia autenticada recebe PASS por causa deste texto.
+
+**NEXT_CURSOR:** no mesmo Goal, inventariar o consumo real de !KAIZEN/!MULTIBUSSOLA no motor/gatilhos existentes; corrigir somente eventual falta comprovada de normalizacao de voz ou exibicao no Cockpit e produzir receipt do mesmo SHA antes de desbloquear habilidade.
+
+<!-- /CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
+
+### 23.1 Projecao didatica no Cockpit - Jornada Evolutiva (25/10/2026)
+
+@code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx
+@last_updated: 2026-10-25T12:00:00Z
+@escopo: interface interativa dentro da Sala de Controle existente.
+
+A aba "Jornada" e o atalho existente permitem navegar por oito etapas e alternar linguagem iniciante/engenharia. Botoes abrem Forja e Recibos atuais, sem novos coletores, endpoints, executores, banco de XP ou cockpit paralelo. Kaizen Vivo e Multibussola sao reusados conceitualmente dos owners canonicos, nao reimplementados. Nivel 06 e marco narrativo, nao prova de runtime. O chefao final solicita receipt do Reality Judge, sem premiacao automatica.
+
+A prova exige teste de fonte, build no mesmo SHA, readback autenticado e separacao de COMMIT/DEPLOY. NEXT_CURSOR: medir CI/build e visibilidade real no Cockpit antes do selo Michelin.
+
+
+---
+
+<!-- CENTRALDARK_FORJA_UNICA_GATEWAY_UNICO_CASA_GITHUB_VPS_20261031 -->
+## 24. Cristal da sessão 31/10/2026: Forja única, Gateway único, Casa → GitHub → VPS
+
+**Origem:** intenção explícita do SEGREDO/CHEFE na sessão de 31/10/2026 (America/Bahia). **Owner:** este Loop Mestre. **Natureza:** decisão registrada para orientar execução futura. Registrar não significa que migração, exclusão, deploy ou testes novos foram feitos. **Regra:** reusar o sistema existente, sem segundo cérebro, segundo Hermes, segundo Gateway, segundo catálogo ou scripts paralelos.
+
+### 24.1 Intenção devolvida em fala clara
+
+"Eu desenvolvo, executo e comprovo na Forja openKylin da Casa. O GitHub guarda o aprovado; a VPS reproduz o mesmo sistema, diretórios e scripts para ficar pública 24 horas. O Windows é interface, não uma segunda instalação de inteligência. Um Gateway central recebe várias interfaces e coordena executores locais e remotos. Não inventar complicações. Se aparecer uma diferença concreta, eu resolvo com Kaizen Vivo."
+
+**100%** é o escopo funcional que o CHEFE já aceitou como realidade comprovada naquele instante na Casa. Não desvalorizar esse marco por suposições hipotéticas. Outra máquina só recebe a mesma classificação quando executa o mesmo comportamento. Se houver divergência real na VPS, corrigir esse delta e absorver a solução, sem refazer a arquitetura.
+
+### 24.2 Divisão operacional e redução de complexidade
+
+- **Casa openKylin em WSL2 (dentro de Windows):** Forja principal, serviços de IA, scripts, CLIs, skills, modelos quando necessários, testes, execução, Gateway central e receipts. Preservar a instalação que o CHEFE declara estar em funcionamento. Área de trabalho concentrada no Linux, evitando escrita desnecessária no Windows.
+- **Windows:** hospeda o WSL2 e interfaces já utilizadas, incluindo Hermes Desktop e Hermes One. Essas interfaces consomem a mesma conexão Linux; não precisam instalar segunda CLI, segundo modelo ou segundo Gateway só para apresentar uma UI. Tarefas genuinamente Windows podem continuar por um executor autorizado.
+- **GitHub ServerVpss/CentralDark@main:** registro auditável do código validado na Casa, dos métodos, mudanças e receipts aprovados. Casa prova; GitHub registra. Não criar pipeline, runner ou Forja paralela para realizar a mesma função.
+- **VPS openKylin:** reprodução do produto desenvolvido e validado na Casa, com os mesmos diretórios e scripts relevantes. O que muda é configuração de destino (IP, domínio, rota, credenciais e serviços locais necessários para acesso público). A VPS mantém seu próprio runtime público 24/7; não exige que a Casa permaneça conectada para servir usuários.
+- **Cópia do ambiente:** não é obrigatório transportar uma "cápsula" integral; pode-se instalar o mesmo Linux na máquina de destino e aplicar os arquivos aprovados na mesma estrutura. A menção do CHEFE a reinstalar/formatar a VPS é possibilidade arquitetural, não ordem executada de apagamento.
+- **Docker:** opcional, apenas se oferecer isolamento que falte de fato. O WSL2 já separa boa parte da execução do Windows, mas permissões e áreas de escrita devem delimitar qual setor cada script pode alterar. Nada de inventar novas camadas para resolver uma hipótese.
+- **Portas e serviços:** reduzir portas abertas por duplicação de instâncias, clientes e CLIs; aproveitar as portas e roteamentos existentes. Uma interface adicional não exige novo listener. Só desligar redundâncias depois que a conexão substituta satisfizer a mesma função.
+
+**Fluxo escolhido:**
+
+CASA / FORJA E PROVA → GITHUB / REGISTRO APROVADO → VPS / REPRODUÇÃO E SERVIÇO PÚBLICO.
+
+### 24.3 Coordenação por perfis, sem multiplicar inteligências
+
+Uma instância lógica de **Gateway central no openKylin da Casa** é compartilhada pelas interfaces. O **coordenador lógico** pode se chamar SOL, Hermes ou qualquer nome, porque o nome não cria competência. Ele recebe a intenção, escolhe o perfil e entrega a tarefa ao executor correspondente, recebe o retorno e o devolve no **mesmo chat de origem**, com recibo e próximo passo.
+
+**Perfis de destino reusando executores e rotas existentes:**
+1. **Casa/Windows:** executa apenas o que precisa do Windows.
+2. **Casa/openKylin:** trabalha na Forja e seus scripts locais.
+3. **VPS/openKylin:** opera tarefas do runtime de nuvem, sem montar um segundo produto.
+
+**Arquitetura de referência:** intenção do CHEFE → Hermes Desktop / Hermes One / Cockpit → mesmo Gateway da Casa → coordenador e perfil → executor Casa Windows OU Casa Linux OU VPS Linux → resultado, receipt, correlation_id e NEXT_CURSOR → mesmo chat. Não existe obrigação de um Gateway por perfil/agente.
+
+### 24.4 Conexões com a Consciência: continuidade da sessão completa
+
+1. **Agentes do Codex:** Sócrates, Bernoulli, Faraday e Anscombe são nomes de sessões/subagentes, não prova de que carreguem o método filosófico ou científico dos homenageados. Instrução, contexto, modelo e ferramentas definem o comportamento. Na CentralDark interessa o **método reutilizável**, não o crachá.
+2. **O que foi criado:** CentralDark é a estrutura operacional aberta, distribuída em Markdown, Git, JSON, scripts, estados, Gateway, MCP, skills, recibos e protocolos. **Não é um modelo de linguagem empacotado**. Sem LLM executa receitas determinísticas; com modelo local pode inferir novos casos sem internet.
+3. **Consciência externalizada e Loop Mestre:** Mapa do Cérebro, Fragmentos, Master Circle, seleção temporal, passado-futuro, Intenção Viva, Kaizen Vivo e Gênesis pertencem ao mesmo organismo. Evitar arquivos, bibliotecas, roteadores ou "segundo cérebro" paralelos.
+4. **Meta GRIL-me:** primeiro entrevistar a própria documentação e código em docs/CONSCIENCIA, reconciliar respostas e marcar UNKNOWN; depois usar /gril-me para perguntar ao CHEFE somente o que permaneceu materialmente desconhecido. Não reiniciar entrevista humana sem necessidade.
+5. **Métodos e Skill Mãe / RSI:** observar → **salvar imediatamente** a técnica, inclusive falhas e tentativas → classificar OBSERVED, TESTED, PROVEN, REJECTED ou SUPERSEDED → replay e contraprova quando pertinente → preferir a receita reproduzida. Prova classifica e promove; **não impede o registro inicial**.
+6. **Gênesis e receipts:** intenção, estado anterior, ação, estado posterior, efeito, fingerprint, correlation_id, tool_call_id, resultado e NEXT_CURSOR preservam o rastro. Evento de carregamento de skill não equivale a execução comprovada. Método salvo não equivale a método reproduzido.
+7. **Comunicação do CHEFE (Michelin três estrelas, ASD-STE100 80%):** responder direto, como em conversa normal; resultado primeiro; no máximo quatro linhas por padrão; explicar "o que faz" em vez de jargões; sem repetir provas e precauções, sem papagaio, sem perguntas cuja resposta já está na Consciência. Uma nova fala é um **DELTA**, não outra missão.
+8. **Kaizen Vivo:** intenção → contexto → meta-grill interno → reusar owner → menor delta → executar → observar → contraprova necessária → receipt → FIXED_POINT/NEXT_CURSOR → melhoria contínua. Uma inconsistência observada é objeto de correção, não motivo de paralisia.
+
+**Referências existentes, sem copiar sua integralidade novamente:**
+- docs/CONSCIENCIA/PESQUISA-CENTRALDARK-MENTE-OPERACIONAL-20261030.md (pesquisa completa já arquivada).
+- docs/CONSCIENCIA/MAPA-DO-CEREBRO.md.
+- docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md.
+- docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md.
+- Owners existentes de Gateway, Hermes Core, Skill Mãe, RSI, Gênesis, receipts e promoção Casa→GitHub→VPS.
+
+### 24.5 Estado e próximo delta
+
+**DECISÃO CONFIRMADA:** uma Forja Linux Casa, Gateway único lógico, múltiplas interfaces e perfis, Windows sem pilha paralela de IA, GitHub como registro aprovado, VPS como reprodução do mesmo produto. O CHEFE aceita o 100% funcional observado na Casa dentro do seu escopo; diferenças reais futuras serão corrigidas com Kaizen.
+
+**ESTADO DESTE COMMIT:** DOCUMENTED, não MIGRATED nem DEPLOYED. Não foram desinstalados componentes, fechadas portas, formatada VPS ou alterados perfis ao escrever este contrato.
+
+**NEXT_CURSOR:** pelo executor/owner que já existe, identificar somente as duplicações reais de Gateway/CLI/serviços; fazer as interfaces atuais compartilhar o serviço Linux; desligar duplicações substituídas preservando outros processos; reproduzir na VPS os scripts validados e configurar os endpoints públicos; registrar receipts e diferenças observadas. Nenhuma nova arquitetura.
+
+<!-- /CENTRALDARK_FORJA_UNICA_GATEWAY_UNICO_CASA_GITHUB_VPS_20261031 -->

@@ -1,7 +1,7 @@
 ---
 title: "Regra Global — Micro-deploy Contínuo por PASS Comprovado"
 status: "CANONICAL_GLOBAL_RULE"
-updated: 2026-09-25
+updated: 2026-10-23
 owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/"
 authority: "SEGREDO/CHEFE"
 scope: "CentralDark, VPS, MCP, Hermes, bots, plugins, workflows e agentes autorizados"
@@ -88,6 +88,27 @@ REFINE_AFTER_MICRO_DEPLOY=true
 ```
 
 O CI deve deixar passar o que foi provado e manter o resto como `UNKNOWN/PENDING`, sem transformar pendência paralela em bloqueio global.
+
+## 5A. Política de execução leve, segurança sob demanda e MCP direto
+
+A lei de execução está detalhada no owner `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md`, seção **CI proporcional e microdeploy nativo MCP/VPS (2026-10-23)**. Esta regra global herda o seguinte contrato:
+
+```text
+MVP_FAST_LOOP_IS_DEFAULT=true
+CI_DEEP_LOOP_REQUIRES_SECURITY_RISK_OR_CHEFE_INTENT=true
+CENTRALDARK_MCP_IS_CONTROL_PLANE=true
+MCP_NATIVE_VPS_ROUTE_IS_DEFAULT=true
+GITHUB_ACTIONS_IS_NOT_DEPLOY_EXECUTOR=true
+PAID_GITHUB_RUNNER_REQUIRED=false
+SSH_PRIVATE_CASA_VPS_OPTIONAL=true
+BUILD_AND_TEST_APPLICABLE_SCOPE_ON_VPS=true
+MAIN_SHA_OWNER_FILESET_REQUIRED=true
+RUNTIME_HEALTH_RECEIPT_ROLLBACK_REQUIRED=true
+MCP_MICRODEPLOY_RUNTIME_NOT_YET_PROVEN=true
+NO_RUNNER_DELETION_BY_REPOSITORY_COMMIT=true
+```
+
+Gates obrigatórios de risco crítico permanecem aplicáveis. Fallback MAIN-PINNED e checks existentes não são substituídos por uma aprovação fictícia; nenhuma credencial, script SSH ou deploy não validado entra automaticamente em produção; nenhuma ferramenta bloqueada pela plataforma pode ser executada por rota alternativa.
 
 ## 6. Receipt mínimo
 

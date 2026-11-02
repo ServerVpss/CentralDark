@@ -24,7 +24,8 @@ A missão é desenvolver inteligência persistente com método, memória, owners
 - AionUi: candidato reutilizável a cockpit; AionCore: candidato a backend/agent bus. TARGET/DONOR até binding e contraprova; não são integração já entregue.
 - WebUI primeiro; Electron compartilha o renderer, os contratos e os dados. Reutilizar o pipeline upstream após medir compatibilidade; binário instalado é donor/contraprova, não fonte de implementação.
 - `apps/modulos/WebUI`: donor legado. Extrair capacidade única; aposentar somente após ZERO_UNIQUE_CONSUMERS comprovado.
-- VPS: forja contínua; Casa: laboratório humano/GPU e destino de materialização. CRYSTALLIZE_WINNER_NOT_CLONE_DIRT; PULL_PROVEN_GOLD_NOT_HISTORICAL_TRASH.
+- **CentralDark-OS: produto único, local-first.** Casa/Forja é base operacional quando saudável; **VPS é cápsula/target remoto opcional**, para réplica/headless/continuidade conforme capacidades efetivamente instaladas. `VPS_OFFLINE != CENTRALDARK_OS_OFFLINE`; não depender da VPS para executar o que a Casa já consegue. `CRYSTALLIZE_WINNER_NOT_CLONE_DIRT`; `PULL_PROVEN_GOLD_NOT_HISTORICAL_TRASH`. Regra vigente em [JARVIS §6.0.A](../JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md); os planos VPS dos capítulos históricos continuam identificando infraestrutura física.
+- **#OBSERVACOES#** `@owner=docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md` `@doc_ref=docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` `@last_updated=2026-10-27T12:16:16.618Z` `@implementado=ajuste_de_contrato_documental` `@pendente=prova_runtime_da_capsula_offline_catchup`.
 - Tailscale: espinha privada existente. AnyDesk, SSH e VNC: capacidades independentes do acesso híbrido; falha de uma rota não demonstra queda da máquina.
 
 ### Sequência e cursor
@@ -224,7 +225,7 @@ Não criar V2/V3/V4. A versão OS deve reaproveitar o mesmo core, mesmos contrat
 | Setor | Estado |
 |---|---|
 | GitHub como fonte/proveniência | CANÔNICO |
-| Obsidian/Drive como espelho/memória | EXISTE / REQUER HASH |
+| Obsidian/BRAIN como biblioteca documental canônica versionada em Git; Drive como fonte/espelho externo classificado | ARQUIVOS + ÍNDICE EXISTEM / SINCRONIZAÇÃO AUTOMÁTICA REQUER PROVA |
 | Sincronização bidirecional perfeita | NÃO PROVADA |
 | `.codex`, `.claude`, `.hermes`, caches locais | NÃO COPIAR BRUTO COMO OS |
 | Estado portátil sanitizado | A DEFINIR |
@@ -1292,3 +1293,17 @@ Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.
 `NEXT_CURSOR=RECONCILIAR_OWNER_HEAD_PR → ADMIN_AUTH_READBACK → CAPTURAR_ERRO_EXATO_POWERSHELL → MEDIR_SSR_ENOSPC_MCP → MENOR_DELTA → TESTE_BUILD_AUTH_MARKETPLACE → RUNTIME_RECEIPT`
 
 **Estado deste registro:** `SCOPE_RECORDED=YES`; `ADMIN_CONFIRMED_BY_CHEFE=YES`; `ADMIN_SESSION_PROVEN=UNKNOWN`; `SCREENSHOT_SOURCE=CONVERSA_NAO_VERSIONADA`; `NEW_BUILD_OR_DEPLOY=NOT_EXECUTED`. `DOCUMENTED != EXECUTED`.
+
+<!-- CENTRALDARK_KYLIN_MENU_INCREMENTAL_20261101 -->
+## 🐧🍒 Forja openKylin — menu de diagnóstico incremental no reconciliador único
+
+**Atualizado (UTC):** 2026-11-01T02:16:10.695Z. **Owner de código único:** `scripts/centraldark-inventory-reconcile.sh`.
+
+**Decisão do CHEFE:** cada melhoria evolui esse MESMO script; nenhum segundo inventário, menu, daemon, cérebro ou executor. `--menu` (alias `--kylin-menu`) acrescenta um painel interativo de leitura que pode ser levado à Forja openKylin após migração da source. Os caminhos legados `--pulse`, `--inventory`, `--diff` e `--scan` foram preservados. **Commit/documentação não equivale a instalar ou executar a versão nova na Forja.**
+
+**Itens do mesmo menu:** 01 🐧 SO; 02 🔐 SSH; 03 🧠 pacotes nativos; 04 ⚙️ processos; 05 🤖 KyTensor HTTP/READY; 06 🦀 status KylinBot; 07 💬 conversa (somente escolha humana explícita; pode invocar provedor externo); 08 📊 diagnóstico de leitura; 09 📝 resumo de recibos já existentes; 00 🚪 sair. O menu não ativa serviços, instala pacotes, cria credenciais, sobrescreve o disco nem publica na VPS. Mostrar status somente conforme o resultado de cada comando.
+
+**Evidências T0 trazidas pelo CHEFE (01/11/2026):** `openKylin 3.0` no disco físico; `kylin-bot 0.7.5-ok1.9` e `kylin-ai-runtime` instalados; `kytensor` e `kylin-bot daemon` observados em processos; KyTensor `/v2/health/ready` retornou HTTP 200; modelos READY `ensemble-tts_melo`, `tts_melo` e `model_bank`. Em `kylin-bot status`, o provedor era `openrouter`, `model=(default)` e `Service: stopped`; o teste `kylin-bot agent -m` falhou com `OpenRouter API key not set` (sem resposta textual produzida). Esses dados são da sessão observada, não um diagnóstico runtime novo. Não copiar/registrar segredos no Git.
+
+**Validação planejada no ambiente real:** executar `bash scripts/centraldark-inventory-reconcile.sh --menu` no Linux quando a mesma source for disponibilizada; conferir opções 01–09 e ausência de mutações. Atualizar o mesmo owner ao longo das próximas descobertas, readback e SHA por incremento. **NEXT_CURSOR:** `MENU_COMMITADO_GITHUB → SOURCE_NA_FORJA → MENU_LINUX_SMOKE → PROXIMO_DELTA_MESMO_SCRIPT`.
+<!-- /CENTRALDARK_KYLIN_MENU_INCREMENTAL_20261101 -->

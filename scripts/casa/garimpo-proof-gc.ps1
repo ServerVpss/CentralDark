@@ -1,5 +1,5 @@
 param(
-  [string]$Root = 'E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE',
+  [string]$Root = 'K:\\_MAPA_CASA\\GARIMPO-CHEFE',
   [switch]$Apply,
   [switch]$SelfTest
 )
@@ -9,7 +9,14 @@ $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
 function Get-FileSha256([string]$Path) {
-  (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash
+  # Prefer the native cmdlet, but some Casa PowerShell runspaces do not expose it.
+  if (Get-Command Get-FileHash -ErrorAction SilentlyContinue) {
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToUpperInvariant()
+  }
+  $file = [System.IO.File]::Open($Path, [System.IO.FileMode]::Open,
+    [System.IO.FileAccess]::Read, [System.IO.FileShare]::Read)
+  # Existing stream helper disposes the stream and the SHA256 instance.
+  return Get-StreamSha256 $file
 }
 
 function Get-StreamSha256([System.IO.Stream]$Stream) {
@@ -53,10 +60,10 @@ function Get-ReproducibleExtraction([System.IO.DirectoryInfo]$Dir, [string]$Root
   if (Test-Protected $Dir.FullName) { return $null }
 
   $base = $Dir.Name.Substring('.extracted_'.Length)
-  $zipCandidates = @(
+  $zipCandidates = @(@(
     (Join-Path $RootPath $base),
     (Join-Path $RootPath ($base + '.zip'))
-  ) | Where-Object { (Test-Path -LiteralPath $_ -PathType Leaf) -and $_.ToLowerInvariant().EndsWith('.zip') }
+  ) | Where-Object { (Test-Path -LiteralPath $_ -PathType Leaf) -and $_.ToLowerInvariant().EndsWith('.zip') })
 
   if ($zipCandidates.Count -eq 0) { return $null }
   $zipPath = $zipCandidates[0]
@@ -67,9 +74,9 @@ function Get-ReproducibleExtraction([System.IO.DirectoryInfo]$Dir, [string]$Root
   try {
     $entries = @($zip.Entries | Where-Object { -not [string]::IsNullOrEmpty($_.Name) })
     foreach ($file in $files) {
-      $rel = $file.Substring($Dir.FullName.Length).TrimStart('\\','/').Replace('\\','/')
+      $rel = $file.Substring($Dir.FullName.Length).TrimStart([char]92,[char]47).Replace([char]92,[char]47)
       $matches = @($entries | Where-Object {
-        $n = $_.FullName.Replace('\\','/').TrimStart('.','/')
+        $n = $_.FullName.Replace([char]92,[char]47).TrimStart('.','/')
         $n -eq $rel -or $n.EndsWith('/' + $rel)
       })
       if ($matches.Count -eq 0) { return $null }
@@ -222,6 +229,12 @@ function Invoke-SelfTest {
     New-Item -ItemType Directory -Path (Join-Path $t '.extracted_empty') | Out-Null
     [IO.File]::WriteAllText((Join-Path $t 'alpha.txt'),'same')
     Copy-Item (Join-Path $t 'alpha.txt') (Join-Path $t 'alpha (1).txt')
+    $originalHash = Get-FileSha256 (Join-Path $t 'alpha.txt')
+    $duplicateHash = Get-FileSha256 (Join-Path $t 'alpha (1).txt')
+    if ($originalHash -ne '0967115F2813A3541EAEF77DE9D9D5773F1C0C04314B0BBFE4FF3B3B1C55B5D5') {
+      throw 'SELF_TEST_SHA256_KNOWN_VECTOR_FAILED'
+    }
+    if ($originalHash -ne $duplicateHash) { throw 'SELF_TEST_SHA256_COPY_FAILED' }
 
     $src = Join-Path $t 'pack-src'
     New-Item -ItemType Directory -Path $src | Out-Null
@@ -245,7 +258,7 @@ function Invoke-SelfTest {
     if ($dry.removed_count -ne 0) { throw 'SELF_TEST_DRY_RUN_MUTATED' }
     if (-not (Test-Path -LiteralPath (Join-Path $t 'openai-api-key.txt'))) { throw 'SELF_TEST_PROTECTED_FILE_LOST' }
 
-    [pscustomobject]@{ status='PASS'; tests=6; candidate_types=($types | Sort-Object -Unique) }
+    [pscustomobject]@{ status='PASS'; tests=8; candidate_types=($types | Sort-Object -Unique) }
   } finally {
     Remove-Item -LiteralPath $t -Recurse -Force -ErrorAction SilentlyContinue
   }
