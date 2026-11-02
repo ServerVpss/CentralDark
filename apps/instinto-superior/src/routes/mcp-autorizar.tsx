@@ -13,7 +13,7 @@ export const Route = createFileRoute("/mcp-autorizar")({
 
 const CAMPOS = [
   "client_id", "redirect_uri", "response_type", "code_challenge",
-  "code_challenge_method", "state", "scope", "pair_id",
+  "code_challenge_method", "state", "scope", "pair_id", "pair_nonce",
 ] as const;
 
 function AutorizarMcpNoCockpit() {
@@ -58,12 +58,21 @@ function AutorizarMcpNoCockpit() {
                 <input key={campo} type="hidden" name={campo} value={params.get(campo) || ""} />
               ))}
               {dispositivo ? (
+                params.get("pair_code") ? (
+                  <div className="rounded-lg border border-border bg-background p-4" role="group" aria-label="Confirmação de pareamento">
+                    <p className="text-sm">Compare com o código mostrado no VS Code:</p>
+                    <output className="mt-2 block font-mono text-2xl font-bold tracking-wider" aria-label="Código de pareamento">{params.get("pair_code")}</output>
+                    <p className="mt-2 text-xs text-muted-foreground">Se os códigos coincidirem, clique em Confirmar pareamento.</p>
+                    <input type="hidden" name="pair_code" value={params.get("pair_code") || ""} />
+                  </div>
+                ) : (
                 <label className="block text-sm">
                   Código apresentado pelo VS Code
                   <input type="text" autoComplete="off" required name="pair_code" value={pairCode}
                     onChange={(e) => alterarPairCode(e.target.value.toUpperCase())}
                     className="mt-2 w-full rounded-lg border border-border bg-background p-3 font-mono" />
                 </label>
+                )
               ) : (
                 <label className="block text-sm">
                   Autenticação do proprietário
@@ -73,7 +82,7 @@ function AutorizarMcpNoCockpit() {
                 </label>
               )}
               <div className="flex gap-3">
-                <Button type="submit">Autorizar</Button>
+                <Button type="submit">{dispositivo ? "Confirmar pareamento" : "Autorizar"}</Button>
                 <Button type="button" variant="outline" onClick={() => history.back()}>Cancelar</Button>
               </div>
             </form>
