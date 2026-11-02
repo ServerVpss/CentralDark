@@ -191,7 +191,7 @@ Cada arquivo recebeu backup irmão `.before-cwd-repair-20261102.bak`; readback t
 ## Bancada por linguagem natural e borda de alvo — 02/11/2026
 
 @code_ref: ../scripts/Identify-CentralDarkMonitors.ps1
-@last_updated: 2026-11-02T17:00:00Z
+@last_updated: 2026-11-02T16:58:46.3649672Z
 Owner unico: Skill Mae. Classificacao BOUNDED; Concentracao (alvo), Flor (precisao), Lua (contraprova).
 A numeracao humana NAO e o sufixo de DISPLAY: foto das Configuracoes confirmada pelo CHEFE.
 Mapa Casa: monitor 1=direita vertical; 2=centro superior; 3=esquerda vertical; 4=centro inferior principal.
@@ -230,3 +230,5 @@ Leituras podem ocorrer em paralelo; teclado/mouse fisicos serializados e uma can
 Tela nao e agente: quatro chats podem compartilhar runtime, modelo ou sessao; conferir identidade.
 Convergir evidencias no mesmo Goal: destino, sessao, subobjetivo, efeito, receipt e NEXT_CURSOR.
 Sem envio/retorno medido, MULTISCREEN_DELEGATION=DOCUMENTED, nao autonomia comprovada.
+
+Receipt 02/11/2026: BASE_IMPLEMENTATION=90232f46b363d9c391a1fc347103f2b9d103e878; seis aliases resolvidos; alvo inexistente rejeitado; inventario quatro telas PASS; overlay 2s abriu/encerrou sem erro (visual independente UNKNOWN). Instalacao reutilizou C:\Users\Administrador\.agents\skills\centraldark-operational-method por junction no diretorio real C:\Users\Administrador\AppData\Local\hermes\skills. tools.skills_tool.skill_view retornou success=true, HERMES_READ_MONITOR_RECIPE=True e KIMETSU_FOUND=True; bytes dos tres arquivos iguais ao codigo publicado. Isto prova carregador local, nao consumo pelo modelo da sessao GUI ja aberta nem ferramenta registrada separada. MULTICHAT_END_TO_END=UNKNOWN. NEXT_CURSOR=usar alvo por pedido e validar inicio/fim do indicador na automacao real.
