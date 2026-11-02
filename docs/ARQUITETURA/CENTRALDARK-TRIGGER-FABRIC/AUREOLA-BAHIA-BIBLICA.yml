@@ -1,7 +1,9 @@
 schema: centraldark.aureola-bahia-biblica.v2
 # #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_TRACE
 # @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
-# @last_updated: 2026-11-02T02:16:51Z
+# @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+# @code_ref: scripts/trigger-fabric/test_centraldark_master_cycle.py
+# @last_updated: 2026-11-02T02:20:39.000Z
 # @escopo: Auréola acionável com trilha visual observada; separa reconhecimento, execução e UNKNOWN.
 status: CANONICAL_SOURCE_CONTRACT
 runtime_status: UNKNOWN_UNTIL_SAME_HEAD_CI_AND_SURFACE_OBSERVATION

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_TRACE
 # @owner: scripts/trigger-fabric/centraldark_master_cycle.py
-# @doc_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml
-# @last_updated: 2026-11-02T02:16:51Z
+# @doc_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/README.md
+# @last_updated: 2026-11-02T02:20:39.000Z
 # @escopo: !AUREOLA_CANONICA ingressa pelo resolvedor existente e mostra trilha observada sem presumir execução.
 # @implementado: alias canônico/AUREULA e route_trace por gatilho com status de reconhecimento e telemetria.
 # @pendente: conexão do recibo ao dispatcher/chat runtime deve ser observada no consumer real.
