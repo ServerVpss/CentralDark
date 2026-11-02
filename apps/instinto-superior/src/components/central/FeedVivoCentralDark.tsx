@@ -31,8 +31,8 @@ async function lerFeedVivo(): Promise<ResultadoFeed> {
   const { data, error } = await supabase.auth.getSession();
   if (error) throw Error("SESSAO_INDISPONIVEL");
   if (!data.session?.access_token) return { autenticado: false, eventos: [] };
-  const base = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-  const chave = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+  const base = import.meta.env['VITE_SUPABASE_URL'] as string | undefined;
+  const chave = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] as string | undefined;
   if (!base || !chave) throw Error("FONTE_SUPABASE_NAO_CONFIGURADA");
   // Guard adicional da UI: o painel administrativo nao lista eventos de missao
   // para outro usuario autenticado. O Supabase RLS segue autoritativo.
@@ -47,6 +47,10 @@ async function lerFeedVivo(): Promise<ResultadoFeed> {
     },
     body: JSON.stringify({ _user_id: data.session.user.id, _role: "admin" }),
   });
+  // PostgREST pode responder 404 quando a função existe, mas a sessão atual
+  // não tem o papel autenticado que pode executá-la. Isso é ausência de
+  // autorização da sessão, não ausência do esquema canônico.
+  if ([401, 403, 404].includes(permissao.status)) return { autenticado: false, eventos: [] };
   if (!permissao.ok) throw Error("VERIFICACAO_ADMIN_HTTP_" + permissao.status);
   if (await permissao.json() !== true) return { autenticado: false, eventos: [] };
   const get = async (tabela: "agent_events" | "hub_mission_events", query: URLSearchParams) => {
@@ -69,20 +73,20 @@ async function lerFeedVivo(): Promise<ResultadoFeed> {
   ]);
   const eventos: EventoFeed[] = [
     ...agentes.map((e) => ({
-      id: "agente-" + String(e.id),
-      data: texto(e.ts),
+      id: "agente-" + String(e['id']),
+      data: texto(e['ts']),
       origem: "agent_events" as const,
-      titulo: texto(e.area) + " · " + texto(e.acao),
-      detalhe: texto(e.alvo),
-      estado: texto(e.status),
+      titulo: texto(e['area']) + " · " + texto(e['acao']),
+      detalhe: texto(e['alvo']),
+      estado: texto(e['status']),
     })),
     ...missoes.map((e) => ({
-      id: "missao-" + String(e.id),
-      data: texto(e.created_at),
+      id: "missao-" + String(e['id']),
+      data: texto(e['created_at']),
       origem: "hub_mission_events" as const,
-      titulo: "Missão " + texto(e.mission_id).slice(0, 8) + " · " + texto(e.type),
-      detalhe: texto(e.message),
-      estado: texto(e.status),
+      titulo: "Missão " + texto(e['mission_id']).slice(0, 8) + " · " + texto(e['type']),
+      detalhe: texto(e['message']),
+      estado: texto(e['status']),
     })),
   ].filter((e) => Number.isFinite(Date.parse(e.data)))
     .sort((a, b) => Date.parse(b.data) - Date.parse(a.data))

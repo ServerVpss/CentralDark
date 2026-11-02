@@ -178,8 +178,8 @@ Logo `APPCENTRALDARK EVOLUIR` deve reutilizar esse probe para qualquer claim de 
 ### Observado visualmente
 
 ```text
-K:\sol-desktop-poc = pasta presente
-K:\ = raiz com múltiplas superfícies/pastas históricas e atuais
+E:\CentralDark\sol-desktop-poc = pasta presente
+E:\CentralDark = raiz com múltiplas superfícies/pastas históricas e atuais
 Gmail = notificações de avanço/bloqueio do PR #1381 visíveis
 APPCENTRALDARK/arquivos locais = material candidato a reconciliação
 ```
@@ -450,3 +450,21 @@ UPDATE_EXISTING_COCKPIT_OWNER_MAP
 ```
 
 A regra final permanece: **um painel pode mostrar muitos braços; isso não cria muitos sistemas.**
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "E:\\CentralDark\\sol-desktop-poc = pasta presente",
+      "E:\\CentralDark = raiz com múltiplas superfícies/pastas históricas e atuais"
+    ],
+    "right_variant": [
+      "K:\\sol-desktop-poc = pasta presente",
+      "K:\\ = raiz com múltiplas superfícies/pastas históricas e atuais"
+    ]
+  }
+]
+```

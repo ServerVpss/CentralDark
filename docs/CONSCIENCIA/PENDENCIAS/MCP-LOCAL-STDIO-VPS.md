@@ -106,3 +106,10 @@ docs/CONSCIENCIA/04-MCP-E-CONECTORES/
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+
+## Delta comprovado na Forja Linux — 2026-11-01T19:31:55.999507+00:00
+
+Servidor reutilizado: apps/modulos/mcp/src/mcp-server.js --stdio --compact --admin; não foi criado mcp-server paralelo. Túnel OpenAI existente reconectado com chave recuperada sem exposição, e mcp_status + mcp_admin_catalog executados pelo plugin CentralDark MCP Casa. RuntimeTools=149, routeCount=17. auditStartupReady=false permanece pendente; não declarar ações destrutivas operacionais.
+
+Instinto Superior compilado servido no Linux :8080 com entrada de chave no MCP Admin existente. Credencial local privada, gates Supabase/admin preservados. Tailscale instalada nativamente em userspace, checksum oficial SHA256 confirmado, NeedsLogin no último readback; autenticação humana e HTTPS privado ainda pendentes. VPS não alterada e pendência original não encerrada. NEXT_CURSOR: autenticar Tailscale da Forja na tailnet da Casa, aplicar Serve para 127.0.0.1:8080, provar acesso de outro dispositivo e sessão admin; reavaliar auditoria MCP pelo owner sem contornar gates.

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# @owner: centraldark-omni-router @doc_ref: docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md
+# @last_updated: 2026-11-01T19:52:00.703528+00:00 @implementado: consome receipts existentes do HUB sem novo store; mantém NOT_REVALIDATED.
 """
 CentralDark Omni Router
 ONE_SYSTEM_ONLY: one entrypoint, multiple replaceable engines.
@@ -1590,6 +1592,7 @@ def _fabric_receipts(root: Optional[Path], limit: int = 24) -> List[Dict[str, An
     folders = (
         root / "docs" / "CONSCIENCIA" / "MICRO-DEPLOY" / "RECEIPTS",
         root / "docs" / "CONSCIENCIA" / "RECEIPTS",
+        root / "MODULES" / "HUB" / "receipts",
     )
     files: List[Path] = []
     for folder in folders:

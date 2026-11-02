@@ -66,6 +66,41 @@ NEXT_REQUIRED_IDENTIFIER=
 CONFIDENCE_ACTING_PERCENT=
 ```
 
+## Capacidades da captura Hermes Desktop e rotas canônicas
+
+Absorção única do delta observado no Hermes Desktop; este é o owner de catálogo para o conjunto, sem duplicar os nomes em outras skills.
+
+```text
+CAP_SCREEN_CONTEXT_CAPTURE       → SCREENPIPE_LOCAL_API_3030
+CAP_SCREENSHOTS_TIMELINE         → SCREENPIPE_LOCAL_API_3030
+CAP_ALL_MONITORS                 → SCREENPIPE_LOCAL_API_3030
+CAP_CAPTURE_FREQUENCY_1S         → SCREENPIPE_LOCAL_API_3030
+CAP_MATERIALIZE_DESKTOP_CAPTURE  → HERMES_DESKTOP_COMPUTER_USE
+CAP_SCREENPIPE_LOCAL_API_3030    → 127.0.0.1:3030
+CAP_COCKPIT_READBACK             → HERMES_DESKTOP_PREVIEW/DRIVE_PREVIEW
+CAP_SUPABASE_REALTIME_COCKPIT    → COCKPIT_EXISTING_OWNER
+```
+
+Rota de prova:
+
+```text
+Hermes Desktop autenticado
+→ computer_use.capture(app=screen, mode=vision)
+→ captura materializada/readback
+
+Screenpipe :3030
+→ /health
+→ inventário de monitores
+→ frame timestamp/freshness
+
+Cockpit
+→ owner local/Supabase Realtime existente
+→ cards Runtime/Capabilities
+→ readback Hermes Desktop
+```
+
+Estados nunca colapsam: `CONFIGURED != ACTIVE != FRESH != SUPABASE_REALTIME_PROVEN`. Um `HTTP 200` em `3030` prova alcance, não frame vivo; `capture_stalled` mantém a capacidade como `DEGRADED` até novo timestamp.
+
 ## Probes obrigatorios por rota
 
 ### GitHub

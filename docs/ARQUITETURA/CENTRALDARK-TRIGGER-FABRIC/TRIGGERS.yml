@@ -1,5 +1,18 @@
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_MAP
+# @owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+# @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+# @last_updated: 2026-11-02T02:16:51Z
+# @escopo: registrar Auréola como entrada visual explícita, sem autoridade de mutação ou prova de execução.
 schema: centraldark.trigger-map.v1
 human_triggers:
+  - id: AUREOLA_CANONICA
+    token: "!AURÉOLA CANÔNICA"
+    emoji: "⭕"
+    aliases: ["!AUREOLA", "#AUREOLA", "!AUREULA", "#AUREULA", "!AUREURLA", "#AUREURLA", "!AUREOLA CANONICA", "!AUREULA CANONICA", "!AUREURLA CANONICA", "!AUREOLA_CANONICA", "!AUREOLA-CANONICA"]
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
+    behavior: [RENDER_OBSERVED_TRIGGER_TRACE, SHOW_RECOGNITION_AND_EXECUTION_SEPARATELY, KEEP_UNKNOWN_EXPLICIT]
+    mutation_authority: false
+    execution_proof: false
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
     emoji: "👑"

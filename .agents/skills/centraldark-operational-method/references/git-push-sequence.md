@@ -90,7 +90,7 @@ Quando o repo tem dezenas/centenas de alterações não commitadas (de outros wr
 
 Correção:
 ```bash
-git reset HEAD -- .          # limpar staging area (preserva working tree)
+# Preserve staging de outros writers. Use checkout isolado ou indice temporario; nao limpe todo o index.
 git add <arquivo1> <arquivo2>  # staged apenas os arquivos desejados
 git diff --cached --stat     # VERIFICAR: deve mostrar apenas os arquivos desejados
 git commit -m "..."
@@ -100,7 +100,7 @@ Nunca confiar em `git add` sozinho para delimitar o escopo do commit em repo suj
 
 ## Armadilha: index.lock residual
 
-Processos git anteriores podem deixar `.git/index.lock` residual. Se `git commit` falhar com "Unable to create index.lock", matar processos git (`taskkill /F /IM git.exe` no Windows, `pkill git` no Linux) e remover o lock manualmente (`rm -f .git/index.lock`). Verificar ausência do lock antes de retry.
+Processos Git: identificar o dono do index.lock; preservar processos e staging alheios. Remover apenas lock comprovadamente orfao do proprio escopo.
 
 ## Armadilha: gate de teste legado com assertions stale
 
@@ -129,3 +129,6 @@ Se o branch foi corrompido e o SHA não existe mais:
 git fetch origin                    # recuperar do remote
 git reset --hard origin/main        # descartar trabalho local perdido
 ```
+
+## Recuperacao apos erro — criterio reconciliado
+Preservar staging de outros writers. Divergencia teste/codigo nao prova teste stale: comparar requisito e comportamento antes de alterar a assertion. Nao ajustar teste so para espelhar implementacao.

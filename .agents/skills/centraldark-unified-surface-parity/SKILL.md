@@ -344,7 +344,41 @@ A lateral de observabilidade deve mostrar, na mesma sessão e em ordem:
 
 O contrato de saída estruturada é igual nas superfícies: `INTENT_ID`, `DECISION`, `OWNER`, `ACTION_RESULT`, `EVIDENCE`, `COUNTERPROOF`, `RECEIPT_ID` e `NEXT_CURSOR`. A apresentação pode acompanhar voz ou texto; intenção, owner, ação, prova e receipt permanecem iguais.
 
-Se a plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
+A plataforma não expuser sessão, tracing, tool calls ou usage, marcar aquela capacidade como `PLATFORM_UNAVAILABLE`. Não abrir caixa-preta/trilha separada para Voz e não afirmar paridade sem prova.
+
+## 6.1.1 Paridade de overlay em duas superfícies
+
+A paridade entre Cockpit e CHAT_GLOBAL/ChatGPT deve preservar a mesma intenção e receipt, mas cada superfície mantém identidade e readback próprios. Reutilizar `desktop_preview` + `drive_preview` no Hermes original; não substituir por `browser_exec` isolado.
+
+```text
+SAME_ROUND_ID + SAME_LOOP_ID + SAME_INTENT_ID
+→ MAP_SURFACE_A
+→ READBACK_A
+→ MAP_SURFACE_B
+→ READBACK_B
+→ RECONCILE_WITH_ORIGIN
+```
+
+A rodada é lógica/paralela; a execução física é `A→B` quando o runtime não fornece concorrência segura. Declarar `PARALLEL_EXECUTION=UNAVAILABLE|SEQUENTIAL_CONTROLLED`, nunca inferir paralelismo pelo fato de duas abas existirem. `drive_preview` overlay é observabilidade visual e não muta código, não autentica o ator e não prova Sync.
+
+Contrato de origem por superfície:
+
+```yaml
+actor: HERMES
+origin_declared: true|false
+origin_authenticated: true|unknown
+origin_source: HERMES_DESKTOP|CHAT_GLOBAL|COCKPIT|HUMAN|UNKNOWN
+surface_id:
+source_sha_or_runtime_ref:
+action:
+expected:
+observed:
+receipt_id: ID|UNKNOWN
+counterproof: PASS|UNKNOWN|BLOCKED
+status: PASS|UNKNOWN|BLOCKED
+```
+
+`ACTOR=HERMES` digitado pelo modelo é declaração, não autenticação. Autenticação exige owner-side receipt/UIA ou evento terminal correlacionado ao mesmo `LOOP_ID`, `TURN_ID`, `INTENT_ID` e `SURFACE_ID`. Se a superfície não expuser essa prova, manter `origin_authenticated=UNKNOWN` e conservar `RESULTADO_DO_SYNC=UNKNOWN`.
 
 ## 6.2 Roteamento híbrido multi-conta por capability
 
@@ -401,6 +435,23 @@ PROVIDER_NAMESPACE_ABSENT → API/MCP/provider adapter existente; depois RDC/VPS
 
 O Cockpit `/sala-controle` é a superfície onde o CHEFE vê, em tempo real, o efeito do que o agente muda na CentralDark. Não é canal novo: reutiliza o navegador já logado, o servidor de desenvolvimento da Forja e o ledger `notifications_log` existente.
 
+### Regra cristalizada: Hermes Desktop é a rota autenticada da Casa
+
+Quando a operação ocorre nesta sessão do Hermes Desktop, use primeiro e diretamente o próprio Hermes Desktop (`desktop_preview`/`drive_preview`) para abrir, navegar, agir e ler o Cockpit. A autenticação e a capacidade operacional já estão na superfície Desktop; não substitua essa rota por `browser_exec` isolado, Browser Use, browser de teste ou `browser_vault`.
+
+```text
+HERMES_DESKTOP_AUTHENTICATED_SURFACE=true
+COCKPIT_READBACK_ROUTE=HERMES_DESKTOP_PREVIEW
+COCKPIT_ACTION_ROUTE=HERMES_DESKTOP_DRIVE_PREVIEW
+BROWSER_EXEC_ISOLATED != CHEFE_AUTHENTICATED_SESSION
+BROWSER_VAULT != HERMES_DESKTOP_OPERATIONAL_ROUTE
+NEVER_DOWNGRADE_DESKTOP_READBACK_TO_BROWSER_AUTH_BLOCKER=true
+```
+
+A divergência ocorreu quando o executor escolheu um browser automatizado isolado para testar `/sala-controle`; esse contexto não carregava a autenticação do Hermes Desktop, caiu em `/auth` e criou um bloqueio falso para uma capacidade que estava disponível no Desktop. Corrija a rota, não a autenticação: abra o Cockpit pelo preview do Hermes Desktop, faça `drive_preview(action='elements')` antes de qualquer clique, opere por refs, e confirme o resultado com `desktop_preview(action='read')`.
+
+Só classifique Runtime/Capabilities como `UNKNOWN` ou `BLOCKED` quando o próprio readback do Hermes Desktop mostrar a lacuna, ou quando a ação/medição real do owner falhar. Nunca use a ausência de sessão em browser isolado como prova contra a Casa.
+
 ```text
 COCKPIT_IS_LIVE_SURFACE=true
 REUSE_LOGGED_BROWSER_SESSION=true
@@ -410,12 +461,13 @@ EVENT_WRITTEN != CARD_VISIBLE
 CARD_VISIBLE_REQUIRES_READBACK=true
 ```
 
-Rota provada em 2026-10-21:
+Rota histórica anterior (substituída pela rota canônica do Hermes Desktop):
 
 ```text
-1. ABRIR    → Chrome de uso do CHEFE (sessão já logada) via extensão Claude in Chrome
-              (list_connected_browsers → tabs_context_mcp → navigate http://127.0.0.1:8080/sala-controle)
-              Navegador de testes/automação isolado NÃO tem a sessão: cai em /auth. Não logar por ele.
+1. ABRIR    → Hermes Desktop autenticado, usando desktop_preview para abrir
+              http://127.0.0.1:8080/sala-controle
+              e drive_preview(action='elements') para obter refs.
+              Browser Use/browser isolado NÃO é a sessão do CHEFE: pode cair em /auth. Não usar para este readback.
 2. MUDAR    → código em K:\apps\instinto-superior (owner real dos cards)
               Vite dev server (`vite --port 8080`, servido do K:) recarrega o card sozinho (HMR).
 3. EMITIR   → evento no ledger existente public.notifications_log (projeto Supabase do Cockpit),

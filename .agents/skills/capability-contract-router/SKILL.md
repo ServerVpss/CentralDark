@@ -133,6 +133,22 @@ SCREENPIPE
 FUTURE_DISCOVERED_CAPABILITIES
 ```
 
+### Capabilities concretely observed from Hermes Desktop capture
+
+The authenticated Hermes Desktop capture is a discovery input for this router, not a new runtime or writer:
+
+```text
+CAP_SCREEN_CONTEXT_CAPTURE      → SCREENPIPE_LOCAL_API_3030
+CAP_SCREENSHOTS_TIMELINE        → SCREENPIPE_LOCAL_API_3030
+CAP_ALL_MONITORS                → SCREENPIPE_LOCAL_API_3030
+CAP_CAPTURE_FREQUENCY_1S        → SCREENPIPE_LOCAL_API_3030
+CAP_MATERIALIZE_DESKTOP_CAPTURE→ HERMES_DESKTOP_COMPUTER_USE
+CAP_COCKPIT_READBACK            → HERMES_DESKTOP_PREVIEW/DRIVE_PREVIEW
+CAP_SUPABASE_REALTIME_COCKPIT   → COCKPIT_EXISTING_OWNER
+```
+
+Route only measured capabilities. `CONFIGURED`, `REACHABLE`, `ACTIVE`, `FRESH` and `SUPABASE_REALTIME_PROVEN` remain distinct states; a port `3030` health response or a static capture must not be promoted to live realtime.
+
 Regras:
 
 ```text

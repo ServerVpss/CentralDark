@@ -54,7 +54,7 @@ import { PainelHermes } from "@/components/central/HermesPet";
 import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { DesignCenter, usePeleCockpit } from "@/components/central/DesignCenter";
 import { Ledger } from "@/components/central/Ledger";
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
@@ -269,12 +269,16 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
           <Button type="button" variant="outline" size="sm" onClick={abrirAdmin}>Admin dos bots</Button>
         </div>
       </div>
-      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado MTProto autenticado no servidor">
-        <div><span className="text-muted-foreground">Gateway VPS</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.gateway ?? "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Configurado</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.configurado === true ? "SIM" : mtproto.data?.configurado === false ? "NÃO" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Sessão MTProto</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.sessaoPresente === true ? "PRESENTE" : mtproto.data?.sessaoPresente === false ? "AUSENTE" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Telegram autorizado</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-mono font-semibold text-emerald-500" : "mt-1 font-mono font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "CONFIRMADO" : mtproto.data?.autorizado === false ? "NÃO AUTORIZADO" : "UNKNOWN"}</p></div>
-        <p className="text-muted-foreground sm:col-span-4">Fonte: centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "Consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "Sem consulta autenticada"}{mtproto.isError ? " · AUTH_REQUIRED ou conexão indisponível" : ""}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Consulta não comprova entrega de mensagens.</p>
+      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado da conexão com Telegram">
+        <div><span className="text-muted-foreground">Servidor de mensagens</span><p className="mt-1 font-semibold">{mtproto.data?.gateway ? "Encontrado" : "Ainda não verificado"}</p></div>
+        <div><span className="text-muted-foreground">Configuração</span><p className="mt-1 font-semibold">{mtproto.data?.configurado === true ? "Pronta" : mtproto.data?.configurado === false ? "Precisa configurar" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Sessão Telegram</span><p className="mt-1 font-semibold">{mtproto.data?.sessaoPresente === true ? "Conectada" : mtproto.data?.sessaoPresente === false ? "Desconectada" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Autorização</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-semibold text-emerald-500" : "mt-1 font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "Conectado" : mtproto.data?.autorizado === false ? "Precisa autorizar" : "Ainda não verificada"}</p></div>
+        {mtproto.isError ? <p className="text-amber-500 sm:col-span-4">Não foi possível verificar a conexão com o Telegram. Tente atualizar.</p> : null}
+        <details className="text-muted-foreground sm:col-span-4">
+          <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+          <p className="mt-2">Gateway: {mtproto.data?.gateway ?? "não informado"} · serviço centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "sem consulta autenticada"}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Esta consulta não comprova entrega de mensagens.</p>
+        </details>
       </div>
       <div className="grid min-h-[28rem] md:grid-cols-[minmax(13rem,0.38fr)_minmax(0,1fr)]">
         <aside className="border-b border-border md:border-b-0 md:border-r" aria-label="Lista de conversas e bots">
@@ -289,7 +293,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             {consulta.loading ? <p className="p-3 text-sm text-muted-foreground">Consultando owner Telegram…</p> : null}
             {consulta.erro ? (
               <p className="rounded border border-amber-500/40 p-3 text-xs text-amber-500">
-                AUTH_REQUIRED / consulta bloqueada: {consulta.erro}
+                Não foi possível consultar os bots. Atualize a conexão e tente novamente.
               </p>
             ) : null}
             {!consulta.loading && !consulta.erro && encontrados.length === 0 ? (
@@ -317,22 +321,22 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             <div className="min-w-0">
               <h3 className="font-semibold">{selecionado?.name ?? "CentralDark Gram"}</h3>
               <p className="text-xs text-muted-foreground">
-                {selecionado ? "Cadastro: " + (selecionado.is_active ? "ativo" : "inativo") + " · Saúde: " + (selecionado.health_status ?? "UNKNOWN") : "Selecione um bot. O estado MTProto da VPS aparece acima; conversas ainda não integradas."}
+                {selecionado ? "Cadastro " + (selecionado.is_active ? "ativo" : "inativo") + " · " + rotuloTecnicoHumano(selecionado.health_status) : "Selecione um bot. O estado da conexão aparece acima; conversas ainda não estão integradas."}
               </p>
             </div>
-            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500">Mensageria: UNKNOWN</span>
+            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500" title="Estado técnico: mensageria UNKNOWN">Envio ainda não conectado</span>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-10 text-center">
             <MessagesSquare className="size-10 text-muted-foreground" aria-hidden="true" />
             <p className="max-w-md font-semibold">Tua interface Gram está dentro do mesmo cockpit.</p>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Busca, seleção e atualização de bots usam o owner de cadastro. O status da sessão MTProto vem diretamente do servidor autenticado na VPS.
-              Este serviço existente oferece /health, /status, /start, /confirm e /logout; ainda não oferece endpoints de conversas, mídia ou envio. Essas ações ficam desativadas.
+              Você já pode buscar e consultar os bots cadastrados. O envio de mensagens ainda não está conectado nesta tela.
+              Quando a conexão de envio estiver disponível, o campo abaixo poderá ser ativado sem criar outra interface.
             </p>
             <Button type="button" variant="outline" onClick={abrirSync}>Abrir contraprova no Sync Center</Button>
           </div>
           <div className="flex items-center gap-2 border-t border-border bg-muted/20 p-3">
-            <input aria-label="Campo de mensagem indisponível" placeholder="Envio desativado · API Telegram/MTProto não comprovada" disabled
+            <input aria-label="Campo de mensagem indisponível" placeholder="Envio ainda não conectado" disabled
               className="min-h-11 min-w-0 flex-1 rounded-md border border-border bg-background/40 px-3 text-sm opacity-70" />
             <Button type="button" disabled title="Envio indisponível sem API autorizada e sessão comprovada">Enviar</Button>
           </div>
@@ -365,8 +369,26 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const { pele, selecionar } = usePeleCockpit();
   const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [navegacaoCompacta, definirNavegacaoCompacta] = useState(false);
   const [hermesOneAberto, definirHermesOneAberto] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let quadro: number | null = null;
+    const atualizarNavegacao = () => {
+      quadro = null;
+      definirNavegacaoCompacta(window.scrollY > 24);
+    };
+    const aoRolar = () => {
+      if (quadro !== null) return;
+      quadro = window.requestAnimationFrame(atualizarNavegacao);
+    };
+    atualizarNavegacao();
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", aoRolar);
+      if (quadro !== null) window.cancelAnimationFrame(quadro);
+    };
+  }, []);
   // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
   // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
   useEffect(() => {
@@ -404,7 +426,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       definirEstadoEstudio(resposta.ok ? "API HTTP_ACK" : "API HTTP_" + resposta.status);
     } catch {
       // Bloqueio CORS e falta de rede são inconclusivos, não equivalem a OFFLINE.
-      definirEstadoEstudio("UNKNOWN · rede ou CORS");
+      definirEstadoEstudio("Não foi possível conectar à prévia.");
     }
   }
   function abrirEstudio() {
@@ -502,7 +524,10 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
-      <header className="relative z-50 border-b border-border bg-background/95 px-4 py-3 sm:px-6">
+      <header
+        className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
+        style={{ transform: navegacaoCompacta ? "translateY(-100%)" : "translateY(0)" }}
+      >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
@@ -520,7 +545,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               variant="outline"
               size="sm"
               aria-expanded={estudioAberto}
-              aria-controls="centraldark-estudio"
+              aria-controls={estudioAberto ? "centraldark-estudio" : undefined}
               onClick={abrirEstudio}
               disabled={modulos.aionui === "desativado"}
             >
@@ -571,8 +596,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </div>
       </header>
+      <div aria-hidden="true" className="h-12" />
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral esquerdo" data-cd-harness="left-rail" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -580,14 +606,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral direito" data-cd-harness="right-rail" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
             definirAbaAdminInicial("notificacoes");
@@ -598,7 +624,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness inferior" data-cd-harness="bottom-rail" className="fixed bottom-2 left-1/2 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur z-40">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><SyncLoopIcon autoSyncEnabled={false} isFetching={false} size={16} className="mr-1" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
@@ -793,7 +819,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           ) : null}
 
           <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
+            <div
+              className="sticky top-0 z-30 fixed min-w-0 border-y border-border bg-background/95 px-3 py-2 shadow-[0_8px_24px_-20px_hsl(var(--primary)/0.8)] backdrop-blur transition-[top,border-radius,box-shadow] duration-300 ease-out sm:border"
+              style={{
+                position: "fixed",
+                top: navegacaoCompacta ? 0 : "4.5rem",
+                left: 0,
+                right: 0,
+                borderRadius: navegacaoCompacta ? "0 0 0.75rem 0.75rem" : undefined,
+              }}
+              aria-label="Navegação do cockpit"
+            >
               <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
                 <div className="flex min-w-0 flex-wrap items-center gap-1.5">
                   <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
@@ -826,15 +862,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 {autenticado ? (
                   <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
                 ) : null}
-                <TabsTrigger value="hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
                 <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
-                <TabsTrigger value="unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads">Downloads</TabsTrigger>
                 <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
                 <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
                 <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
@@ -871,20 +900,24 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
-                  estado="UNKNOWN"
+                  estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
                   codigo={
-                    dado?.atualizadoEm
-                      ? `Consulta: ${new Date(dado.atualizadoEm).toLocaleString("pt-BR")}`
-                      : "Sem consulta"
+                    dado?.heartbeatHttp
+                      ? `HTTP ${dado.heartbeatHttp} · self=${dado.heartbeatSelf ?? "UNKNOWN"}`
+                      : "Sem resposta medida"
                   }
-                  detalhe="Horário da consulta não comprova heartbeat. Sem measured_at do owner One Heart, a pulsação permanece UNKNOWN."
+                  detalhe={dado?.heartbeatErro
+                    ? `Fonte: /heartbeat · MOTIVO: ${dado.heartbeatErro}`
+                    : "Fonte: /heartbeat · leitura real do owner consultado agora."}
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado
                   titulo="Grafo vivo"
                   estado={dado?.grafoVivo ?? "UNKNOWN"}
                   codigo={dado?.grafoHttp ? `HTTP ${dado.grafoHttp}` : "Sem resposta medida"}
-                  detalhe="Projeção da capacidade Live Fabric existente; nenhum segundo motor de grafo."
+                  detalhe={dado?.grafoErro
+                    ? `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · MOTIVO: ${dado.grafoErro}`
+                    : `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · rota medida; execução ainda depende de contraprova.`}
                   icone={<Radar className="size-5" />}
                 />
               </div>
@@ -1179,7 +1212,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     <Send className="size-4" aria-hidden /> Abrir Unigram original
                   </Button>
                   <span role="status" aria-live="polite" className="text-xs text-muted-foreground">
-                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: UNKNOWN"
+                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: ainda não verificada"
                       : unigramLaunch === "PENDING" ? "Solicitando abertura…"
                       : unigramLaunch === "REQUESTED" ? "Solicitação enviada ao Windows · janela não comprovada"
                       : unigramLaunch === "UNAVAILABLE" ? "Esta ação requer o CentralDark.exe no Windows; navegador não abre apps locais"
@@ -1372,7 +1405,7 @@ REUSE: before_create (sem duplicação)`}
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Terminal Condition</dt>
-                      <dd className="mt-1 font-mono">UNKNOWN · exige contraprova</dd>
+                      <dd className="mt-1">Ainda não verificado</dd>
                     </div>
                   </dl>
                 </div>
@@ -1511,7 +1544,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
-                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · RUNTIME UNKNOWN</p>
+                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · ESTADO ATUAL NÃO VERIFICADO</p>
                   <ul className="mt-3 space-y-1 text-xs text-emerald-400">
                     <li>✅ Consolidação 100% bem-sucedida</li>
                     <li>✅ Zero perda de dados</li>
@@ -1559,7 +1592,7 @@ REUSE: before_create (sem duplicação)`}
                       </div>
                     </dl>
                     <p className="mt-5 break-all font-mono text-[10px] text-muted-foreground">
-                      SHA-256 UNKNOWN · sem hash derivado do arquivo nesta medição
+                      Hash do arquivo ainda não verificado nesta medição
                     </p>
                     <Button data-cd-flow="instinto.CockpitShell.botao-06" asChild className="mt-6">
                       <a href={pacoteHermes.url} download>

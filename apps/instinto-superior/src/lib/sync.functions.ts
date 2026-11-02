@@ -1,3 +1,5 @@
+// #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
+// @last_updated: 2026-11-01T19:58:27.552347+00:00 @implementado: divergencia e drift bloqueiam falso verde/publicacao cega; restante preservado.
 import { createServerFn } from "@tanstack/react-start";
 import { execSync, execFileSync } from "child_process";
 import path from "path";
@@ -10,6 +12,9 @@ export interface SyncStatus {
   human_readable: string;
   target?: string;
   details?: string;
+  phase?: string;
+  progress?: number;
+  files?: string[];
 }
 
 /* ── caminhos ── */
@@ -58,6 +63,21 @@ function git(...args: string[]): string {
   }).trim();
 }
 
+function changedFiles(): string[] {
+  const raw = git("status", "--porcelain");
+  if (!raw) return [];
+
+  const files = raw.split(/\r?\n/).filter(Boolean).map((line) => line.slice(3).trim());
+  const seen = new Set<string>();
+  return files.map((file) => {
+    const sensitive = /(^|[\\/])\.env(?:[.\\/]|$)|(^|[\\/])(?:.*\.(?:pem|key|p12|pfx))$/i.test(file);
+    const safe = sensitive ? "[arquivo sensível ocultado]" : file;
+    if (seen.has(safe)) return "";
+    seen.add(safe);
+    return safe;
+  }).filter(Boolean).slice(0, 50);
+}
+
 function sshVps(script: string): string {
   const tmpScript = path.join(CENTRALDARK_ROOT, ".auto-sync", "_vps-sync-tmp.sh");
   ensureStatusDir();
@@ -74,17 +94,8 @@ function sshVps(script: string): string {
 
 /* ── Sync Windows (Casa → GitHub) ── */
 function syncWindows(): SyncStatus {
-  const porcelain = git("status", "--porcelain", "--untracked-files=no");
-  if (!porcelain) {
-    return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa limpa, nada para commitar", target: "windows" };
-  }
-
-  git("add", "-A");
-  git("commit", "-m", `auto-sync: Casa ${new Date().toISOString()}`);
-  git("push", "origin", "HEAD");
-
-  writeStatus("success", "Casa → GitHub push OK");
-  return { timestamp: new Date().toISOString(), status: "success", human_readable: "Casa → GitHub: push OK", target: "windows" };
+  // Mesmo owner Casa/Main; nunca seleciona arquivos alheios com git add -A.
+  return syncCasaMain();
 }
 
 /* ── Sync Main (fetch + status) ── */
@@ -102,8 +113,59 @@ function syncMain(): SyncStatus {
   const ahead = git("rev-list", "--count", `FETCH_HEAD..HEAD`);
   const details = `Local: ${local.slice(0, 8)} · Remote: ${remote.slice(0, 8)} · ↓${behind} ↑${ahead}`;
 
-  writeStatus("success", details);
-  return { timestamp: new Date().toISOString(), status: "success", human_readable: details, target: "main" };
+  writeStatus("conflict", details);
+  return { timestamp: new Date().toISOString(), status: "conflict", human_readable: details, target: "main" };
+}
+
+/* ── Sync Casa/Main com convergência e readback de SHA ── */
+function syncCasaMain(): SyncStatus {
+  git("fetch", "--no-tags", "origin", "refs/heads/main");
+  const files = changedFiles();
+
+  const before = git("rev-parse", "HEAD");
+  const remote = git("rev-parse", "FETCH_HEAD");
+  const behind = Number(git("rev-list", "--count", `HEAD..FETCH_HEAD`));
+  const ahead = Number(git("rev-list", "--count", `FETCH_HEAD..HEAD`));
+
+  if (behind > 0 && ahead > 0) {
+    const details = `Divergência: local ${before.slice(0, 8)} · remoto ${remote.slice(0, 8)} · ↓${behind} ↑${ahead}`;
+    writeStatus("conflict", details);
+    return { timestamp: new Date().toISOString(), status: "conflict", human_readable: "Casa/Main divergentes; merge manual necessário", target: "local", details, phase: "Conflito detectado", progress: 100, files };
+  }
+
+  if (git("status", "--porcelain")) {
+    const details = "Alterações locais sem escopo revisado; preservadas antes de merge/publicação";
+    writeStatus("conflict", details);
+    return { timestamp: new Date().toISOString(), status: "conflict", target: "local", human_readable: details, details, files };
+  }
+  if (behind > 0) git("merge", "--ff-only", "FETCH_HEAD");
+
+  const dirty = git("status", "--porcelain");
+  if (dirty) {
+    const details = "Alterações locais sem escopo revisado; nenhum commit/push executado";
+    writeStatus("conflict", details);
+    return { timestamp: new Date().toISOString(), status: "conflict", target: "local", human_readable: details, details, files };
+  }
+
+  git("push", "origin", "HEAD");
+  git("fetch", "--no-tags", "origin", "refs/heads/main");
+
+  const headAfter = git("rev-parse", "HEAD");
+  const originAfter = git("rev-parse", "FETCH_HEAD");
+  const details = `HEAD=${headAfter.slice(0, 8)} · origin/main=${originAfter.slice(0, 8)}`;
+  const converged = headAfter === originAfter;
+
+  writeStatus(converged ? "success" : "failed", details);
+  return {
+    timestamp: new Date().toISOString(),
+    status: converged ? "success" : "failed",
+    human_readable: converged ? "Casa/Main sincronizados no mesmo SHA" : "Casa/Main não convergiram no mesmo SHA",
+    target: "local",
+    details,
+    phase: converged ? "Concluído" : "Readback pendente",
+    progress: converged ? 100 : 95,
+    files,
+  };
 }
 
 /* ── Sync VPS (GitHub → VPS via SSH com stash seguro) ── */
@@ -118,7 +180,13 @@ echo "HEAD_BEFORE=$(git rev-parse HEAD)"
 # Preflight: verificar se é um repo válido
 git rev-parse --git-dir >/dev/null 2>&1 || { echo "ERRO: não é um repo git"; exit 2; }
 
-# Salvar estado local com stash (inclui untracked)
+# Preservar drift remoto: bloqueia antes de qualquer stash/merge.
+if [ -n "$(git status --porcelain)" ]; then
+  echo "VPS_DIRTY_SCOPE_BLOCKED=true"
+  exit 4
+fi
+
+# Checkout comprovadamente limpo; nenhum arquivo local deve ser movido.
 STASH_BEFORE=$(git stash list | wc -l)
 git stash push -u -m "auto-sync-$(date +%Y%m%d-%H%M%S)" 2>&1 || true
 STASH_AFTER=$(git stash list | wc -l)
@@ -180,10 +248,10 @@ echo "=== VPS SYNC DONE ==="
     }
 
     if (stashConflict) {
-      writeStatus("success", `VPS atualizada mas stash pop teve conflito — verificar manualmente. HEAD=${headAfter}`);
+      writeStatus("conflict", `VPS atualizada mas stash pop teve conflito — verificar manualmente. HEAD=${headAfter}`);
       return {
         timestamp: new Date().toISOString(),
-        status: "success",
+        status: "conflict",
         human_readable: `VPS → ${headAfter} (stash pop com conflito — verificar)`,
         target: "vps",
         details: output.slice(-300),
@@ -221,10 +289,18 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
         return { timestamp: null, status: "idle", human_readable: "Nunca sincronizado" };
       }
       const raw = JSON.parse(fs.readFileSync(STATUS_FILE, "utf-8"));
+      // Recibo do último comando não é observação atual da VPS.
+      const registroVps = typeof raw.details === "string" && raw.details.startsWith("VPS ");
+      const ultimoResultado = raw.status === "success" ? "concluída"
+        : raw.status === "failed" ? "falhou"
+        : raw.status === "conflict" ? "bloqueada" : "registrada";
       return {
         timestamp: raw.last_sync ?? null,
         status: raw.status ?? "idle",
-        human_readable: formatTimestamp(raw.last_sync),
+        human_readable: registroVps
+          ? `Última tentativa VPS ${ultimoResultado} em ${formatTimestamp(raw.last_sync)} · histórico, não estado atual`
+          : formatTimestamp(raw.last_sync),
+        target: registroVps ? "vps" : undefined,
         details: raw.details ?? undefined,
       };
     } catch {
@@ -237,7 +313,7 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
 export const executarSync = createServerFn({ method: "POST" }).handler(
   async (ctx: any): Promise<SyncStatus> => {
     const target = ctx?.data?.target || "all";
-    if (!["all", "windows", "main", "vps"].includes(target)) {
+    if (!["local", "all", "windows", "main", "vps"].includes(target)) {
       return { timestamp: null, status: "failed", human_readable: "Target inválido", target };
     }
 
@@ -249,17 +325,18 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       if (target === "main") return syncMain();
       if (target === "vps") return syncVps();
 
-      // target === "all": executa os três em sequência
+      // "local" estabiliza Casa/Main no mesmo SHA. VPS permanece uma ação explícita.
       const results: SyncStatus[] = [];
       const steps = [
-        { name: "windows", fn: syncWindows },
-        { name: "main", fn: syncMain },
-        { name: "vps", fn: syncVps },
+        { name: "local", fn: syncCasaMain },
       ];
+      if (target === "all") steps.push({ name: "vps", fn: syncVps });
 
       for (const step of steps) {
         try {
-          results.push(step.fn());
+          const result = step.fn();
+          results.push(result);
+          if (result.status === "failed" || result.status === "conflict") break;
         } catch (err: unknown) {
           const msg = err instanceof Error ? err.message : String(err);
           results.push({
@@ -279,7 +356,9 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       return {
         timestamp: new Date().toISOString(),
         status: allOk ? "success" : "failed",
-        human_readable: allOk ? "Sync completo: Casa → Main → VPS ✓" : `Sync parcial: ${summary}`,
+         human_readable: allOk
+           ? (target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓")
+           : `Sync parcial: ${summary}`,
         target: "all",
         details: summary,
       };
