@@ -1,6 +1,6 @@
 # Cursor nativo Cua com moldura Hermes
 
-Owner: hermes-visual-computer-use, subordinado ao metodo operacional CentralDark. Reutilizar o driver Cua nativo do computer_use e a CLI direta do daemon ja ativo; nao desenhar outro cursor. O wrapper CuaDriverBackend.start() permanece registrado como rota que falhou nesta bancada.
+Owner: centraldark-hermes-visual-computer-use, dentro de centraldark-operational-method/Skills; plugin Hermes com ID legado somente por compatibilidade. Reutilizar o driver Cua nativo do computer_use e a CLI direta do daemon ja ativo; nao desenhar outro cursor. O wrapper CuaDriverBackend.start() permanece registrado como rota que falhou nesta bancada.
 
 ## Executar
 1. Resolver Python e raiz reais do Hermes. O helper carrega selected_venv/site_packages do gerenciador PM existente. Nao instalar pacotes nem mudar a configuracao global para contornar ambiente incorreto.
@@ -26,3 +26,11 @@ Fonte upstream inspecionada: https://github.com/trycua/cua/blob/cua-driver-rs-v0
 
 ## Recuperacao
 Falha de alvo: enumerar novamente. Falha de daemon: consultar status e corrigir o host existente. Falha no meio: finally encerra backend e overlay proprios. Nao matar todos os processos Cua. Nao atualizar driver automaticamente.
+
+## Clique operacional (sem mouse fisico) — 02/11/2026
+
+Reutilizar **o mesmo** `scripts/blink_cursor.py` com `--mode click`. Descobrir PID, HWND, monitor N e centro real do controle pelo UIAutomation da janela atual; conferir hit-test e geometria. Chamar `--monitor N --mode click --pid PID_ATUAL --hwnd HWND_ATUAL --x X_ABSOLUTO --y Y_ABSOLUTO`. Nao utilizar `--all` ou PID/HWND/coordenadas historicos para cliques.
+
+O modo valida `GetWindowThreadProcessId`, `GetWindowRect` e ponto dentro da janela e do monitor; `SetForegroundWindow` atua somente no foco da janela. A sessao nativa do Cua mantem `set_agent_cursor_enabled(true)`, `move_cursor(scope=window, x/y absolutos)` e `click(scope=window, pid, x/y relativos ao retangulo da janela, delivery_mode=background)`. O overlay existente `visual.request("show_overlay")` permanece ativo durante movimento e clique; `finally` sempre solicita `hide_overlay` e encerra somente aquela sessao Cua. Nenhum mouse fisico, `SendInput`, `SetCursorPos`, `mouse_event`, `scope=desktop`, segundo cursor ou segundo overlay.
+
+Teste observado: Chrome Trinity, monitor 4, botao "Todos os Agentes", resultado do Cua `delivery.mode=background`, execucao exit 0, UIAutomation `HasKeyboardFocus=True` no botao apos o clique. `effect=unverifiable` no driver exige readback do efeito desejado; clique enviado nao significa que toda navegacao foi concluida. Aprovacao visual do CHEFE para este **modo de clique** ainda nao recebida; nao extrapolar a confirmacao anterior da piscada para esta funcao. Exigir nova contraprova somente se a intencao for validar visualmente o novo modo; nao transformar prova de codigo em necessidade de teste Hermes ao vivo para outros deltas.
