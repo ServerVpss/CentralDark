@@ -9,8 +9,8 @@ oracle_review_on_change: true
 Use when you need to execute the CentralDark boot sequence (#acordar) to align system state, verify HUD, and produce a deterministic boot receipt. Procedure first, pitfalls attached to steps.
 
 Procedure:
-1. Change to the CentralDark repository root. In Hermes terminal, run: `cd /c/CentralDark` (or `cd C:\CentralDark` if using Windows paths).
-2. Execute the boot loader with a minimal input: `python scripts/trigger-fabric/centraldark_full_trigger_boot.py boot --input '{}'`
+1. Bind the request to ServerVpss/CentralDark@main. Discover the active checkout root from the session (for example, git rev-parse --show-toplevel); do not assume C:\\CentralDark or another fixed drive. Verify that the root contains CENTRALDARK_AI_BOOT.yaml and scripts/trigger-fabric/centraldark_full_trigger_boot.py, and that HEAD matches a fresh git ls-remote origin refs/heads/main before claiming the contract is current.
+2. Execute the boot loader from that verified checkout with a minimal input: python scripts/trigger-fabric/centraldark_full_trigger_boot.py boot --input '{}'. When --repo is omitted, the loader discovers its own root from its file location.
    - Ensure you are using the Hermes-internal python (the one activated in the session). If you get "python: can't open file", verify the path uses forward slashes and that you are in the correct directory.
 3. The script prints a JSON object (may be preceded/followed by logs). Locate the first line that starts with `{` and collect until the end of the output. Parse this JSON.
 4. From the parsed JSON, extract the `hud` object and report the following fields in a concise summary:
@@ -23,9 +23,9 @@ Procedure:
    - EVIDENCE_STATE
    - ACTIVE_FRONTS
    Example format: `COGNITIVE_BIOS_STATUS: LOADED | COGNITIVE_MODE: ADAPTIVE | FIXED_POINT_STATE: NOT_PROVEN | ...`
-5. Verify that `runtime_preflight_contract.status` equals `BOUND` and `canonical_consumption.status` equals `BOUND`. If either is not BOUND, treat the boot as blocked and output an exact blocker receipt containing the mismatched field and its value.
+5. Verify that runtime_preflight_contract.status equals BOUND and canonical_consumption.status equals BOUND. If either is not BOUND, report its exact value. A missing Hermes checkpoint blocks only mission resumption; it must not hide the canonical contract readback. HUD failure blocks operational continuation but must still return the already-read canonical state. Never claim that Hermes applied the contract in its active session without session-level evidence.
 6. (Optional) Persist the full JSON to a file for later diff: `echo '<JSON>' > boot-last.json` (ensure proper escaping).
-7. The boot is considered successful when the HUD shows expected values and all contracts are BOUND; otherwise follow the blocker procedure defined in the CentralDark SOUL.
+7. Classify canonical loading and mission resumption separately. CANONICAL_MAIN_LOADED_RESUME_BLOCKED means the current contract was read but mission continuation remains blocked; LOCAL_CONTRACTS_READ_CONTROL_PLANE_BLOCKED means the readback is available but current-main/HUD binding is unproven. Neither status proves Hermes applied the contract to an active session.
 
 Always-on rules:
 - Token matching is case-insensitive; `!ACORDAR`, `#ACORDAR`, `acordar` in command position are equivalent.
@@ -36,7 +36,7 @@ Always-on rules:
 - User preference: present the HUD summary first, then offer the full JSON on request; avoid verbose dumps unless asked.
 
 Pitfalls:
-- Before step 2, verify that the file `scripts/trigger-fabric/centraldark_full_trigger_boot.py` exists and is executable; otherwise the error "python: can't open file" is a setup issue, not a boot failure.
+- Before step 2, verify the resolved checkout is the current ServerVpss/CentralDark@main; a stale or unidentified checkout is not the canonical source.
 - When invoking from MSYS/Git Bash, wrap the JSON input in single quotes (`'{}'`) to prevent shell expansion; double quotes may cause premature variable expansion.
 - Do not treat the output line `[terminal] ran ...` as part of the JSON; it is a meta‑log from Hermes and must be ignored when locating the JSON start.
 - If the JSON appears truncated (e.g., cut off by the tool’s output limit), increase the char limit via the web_extract tool or re‑run with a larger buffer; never assume missing fields are false.
