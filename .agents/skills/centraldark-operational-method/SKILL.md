@@ -363,3 +363,14 @@ Para pedidos sobre monitor/tela um, dois, tres, quatro, posicao, arquivo ou chat
 **Comando operacional falado = monitor + acao, sem frase fixa.** "Posicione no monitor 2", "bota o cursor na tela dois", "leva o mouse virtual pro monitor de cima", "aponte pro monitor dois" e "mostra o mouse na tela 2" = selecionar monitor humano 2, posicionar cursor virtual Cua e exibir overlay Hermes simultaneamente. Usar a Skill visual existente: hermes-visual-computer-use/scripts/blink_cursor.py --monitor 2 --mode position (previa 5 segundos). "Pisca monitor 2" = --mode blink (3 ciclos). Interpretar numero 1-4, numero por extenso ou posicao confirmada: 1 direita, 2 superior, 3 esquerda, 4 inferior; revalidar apenas se geometria mudar. Mouse fisico so sob pedido explicito; captura apenas com autorizacao. Pergunta, negacao ou relato nao equivale a ordem. Receita comprovada 02/11/2026: daemon Cua ja aberto; start_session, set_agent_cursor_enabled, move_cursor(scope=window), end_session; o CHEFE confirmou visualmente o cursor virtual no monitor 2. A moldura usa o plugin visual.py existente. Nao criar parser, skill, segundo cursor ou processo paralelo. PROMPT_SELF_CACHE_P15=APLICAVEL; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=REUSE_EXISTING_SKILL_WITH_MONITOR_ACTION.
 
 Para identificar monitores dinamicamente, capturar um monitor com borda nativa e moldura esmeralda de atividade, carregar [hermes-visual-computer-use](../hermes-visual-computer-use/SKILL.md). Instala plugin oficial com seis ferramentas computer_*; preserva o computer_use/Cua e seu cursor. Usar esta skill para captura WGC por monitor; o Identify-CentralDarkMonitors.ps1 anterior permanece receita de inventario/previa historica, sem alegar WGC. Nao iniciar duas molduras para o mesmo alvo. Descoberta e testes ficam em references/validation.json e references/hermes-validation.json da nova skill.
+
+
+## Contraprova humana — Hermes Visual Computer Use (02/11/2026)
+
+- Intenção: validar visualmente mouse virtual e overlay nos quatro monitores, individualmente.
+- Prova técnica reportada na execução: captura WGC em quatro monitores, plugin Hermes com seis ferramentas registradas, overlay e três piscadas por monitor.
+- Contraprova humana: CHEFE confirmou ter visto perfeitamente o mouse virtual e a borda verde nas quatro telas, na ordem 1 → 2 → 3 → 4; satisfação declarada: **100%**.
+- Critério Michelin ⭐⭐⭐ + Kimetsu: executar → testar tecnicamente → apresentar prova → solicitar validação humana → registrar aprendizado → ponto fixo do escopo validado.
+- Limite: aprovação visual humana não comprova, por si só, futuras sessões, outras máquinas ou ausência de regressões.
+- Referência técnica: commit `a52c589906cef48c370c8c9936108be020829003`.
+- NEXT_CURSOR: encerrado para a contraprova humana desta execução; reabrir apenas mediante nova falha ou mudança de escopo.
