@@ -5,7 +5,7 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-10-16"
+rules_last_updated: "2026-11-02"
 soul_last_updated: "2026-10-05"
 agents_last_updated: "2026-10-16"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
@@ -24,6 +24,23 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **RECEITA:** `OWNER EXISTENTE → IDENTIFICAR REFERÊNCIA OPERACIONAL WINDOWS → MEDIR DESTINO REAL LINUX → MENOR DELTA → TESTE → READBACK → COMMIT/SHA → KAIZEN`. Código-fonte, Hermes e gateway só serão declarados rodando no Linux quando isso for medido no destino.
 
 **NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
+
+## 🧪 LEI GLOBAL — AUTOR EXECUTA E PROVA A SUÍTE
+
+<!-- #OBSERVACOES# | CENTRALDARK.EXECUTOR_VALIDATES_OWN_CHANGES | @owner: RULES.md | @updated_utc: 2026-11-02T02:16:51Z | @status: CANONICAL_RULE -->
+
+Quem escreve ou altera script, código ou configuração comportamental é responsável por identificar e executar a suíte de testes pertinente ao escopo, incluindo a contraprova necessária para distinguir regressão introduzida de falha preexistente. Deve registrar comandos e resultados observados. Suíte que falha, não existe, está incompleta ou não pode rodar permanece explicitamente pendente; não declarar sucesso por inspeção, intenção, build alheio ou documentação.
+
+Ao concluir e registrar o recibo da operação, o executor deve remover somente temporários criados pela própria operação e confirmar a limpeza. Preservar backups, históricos, arquivos do usuário e provas; diante de origem ou propriedade incerta, não remover.
+
+```text
+CODE_WRITER_RUNS_RELEVANT_SUITE=true
+TEST_RESULT_MUST_BE_OBSERVED=true
+TEMP_CLEANUP_AFTER_VALIDATION_AND_RECEIPT=true
+TEMP_CLEANUP_SCOPE=CREATED_BY_CURRENT_OPERATION_ONLY
+PRESERVE_BACKUP_HISTORY_USER_FILES_AND_PROOFS=true
+UNCERTAIN_OWNERSHIP_MEANS_PRESERVE=true
+```
 
 
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
