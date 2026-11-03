@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/redaction.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:21:11.636Z
+# @implementado: credenciais redigidas tambem sob chave credential/authorization.
+# @pendente: gates static source pendentes; sem runtime.
+# @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: verificar reviews P1 #1381 no SHA.
+
 import re
 from typing import Any
 
@@ -22,7 +31,7 @@ def redact(value: Any) -> Any:
     if isinstance(value, str):
         return redact_text(value)
     if isinstance(value, dict):
-        return {k: ("[REDACTED]" if re.search(r"(?i)token|secret|password|key", str(k)) else redact(v)) for k, v in value.items()}
+        return {k: ("[REDACTED]" if re.search(r"(?i)token|secret|password|key|credential|authorization", str(k)) else redact(v)) for k, v in value.items()}
     if isinstance(value, list):
         return [redact(v) for v in value]
     if isinstance(value, tuple):
