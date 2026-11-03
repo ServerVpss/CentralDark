@@ -3,6 +3,14 @@
 <!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
+<!-- TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
+**🍒 REGRA ZERO — SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** A única meta de integração é manter source coerente, revisado e alinhado no GitHub e depois `main`, preservando **todas** as branches. O código bem feito, incluindo contratos, imports, owners, rastros e gates estáticos, é o critério de prontidão nesta missão; `RUNTIME=NOT_TESTED_BY_SCOPE` não bloqueia a promoção do source, mas tampouco pode ser relatado como funcionando já comprovado.
+
+**Reuso obrigatório sem duplicação:** `.agents/skills/centraldark-operational-method/Skills/michelin-3-estrelas/SKILL.md` (⭐ construir, ⭐⭐ integrar, ⭐⭐⭐ provar proporcionalmente ao **source**) e `.agents/skills/centraldark-operational-method/Skills/centraldark-autonomous-conflict-costura/SKILL.md` (owner primário `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`, `CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW`). Para cada ramo, buscar trabalho pendente do Hermes, Corpo Único e Instinto Superior antes de classificar como completo; `MERGED != REVIEW_CLEARED` e `UNKNOWN != PASS`.
+
+<!-- /TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
+
+
 <!-- SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
 ### 🧬 Escopo atual — integração somente no código GitHub
 
