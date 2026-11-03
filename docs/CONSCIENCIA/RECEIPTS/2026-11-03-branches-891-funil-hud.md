@@ -78,6 +78,24 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 **NEXT_CURSOR SOURCE_ONLY:** inspecionar o diff de #733/#918/#1381 e os arquivos/reviews citados pelos IDs 0031/0077 e 0046/0059/0075/0082; reconciliar no **mesmo source owner** que realmente faltar, testar estaticamente e registrar SHA/readback no #1977. Não requer comandos VPS, containers, SSH, PM2, browser ou ações na Casa. Todas as refs permanecem.
 
+
+### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
+
+@last_updated: 2026-11-03T18:16:50.564Z
+**Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
+
+**Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
+
+**Contraprova documental:** P1 de lease não atômica do PR #1381 foi confrontado com a `main` CURRENT: `store.py:301–328` já usa `BEGIN IMMEDIATE` + token exclusivo e liberação condicionada; **source já corrigido**, mas thread histórica continua aberta até aceite/revisão. Outros P1 do #1381 não foram marcados como resolvidos sem readback e gate.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/codec.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/config.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/vps.py
+@code_ref: apps/modulos/fixed-point-fabric/scripts/package.sh
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
+
+**Prova pendente:** readback do HEAD exato, checks de source e confrontação dos alertas históricos restantes; `RUNTIME=NOT_TESTED_BY_SCOPE` e `MAIN_MERGE=PENDING` até prova independente.
+
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
 ## 🧿 Regras de combate — critérios obrigatórios
