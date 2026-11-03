@@ -11,8 +11,8 @@
 - **Zero exclusões nesta abertura.** Exige PR, SHA, comparação com `main`, preservação de delta útil, contraprova, decisão individual e readback.
 <!-- CHECKPOINT_G1_82_G2_10 -->
 - **Checkpoint G1 parcial (03/11/2026):** 16/16 branches do snapshot ligadas a PRs abertos (proteger), mais a branch nova do #1977 fora do baseline; 66/66 branches com PR histórico fechado sem merge reconsultadas e confirmadas `merged=false`. Total de vínculos PR verificados **82/891**.
-- **Checkpoint G2 parcial:** IDs 0017–0026 comparados com `main@55db287f203d3208bc92d50e1a21b7250a827d21`: **10 divergentes**, com commits ahead; não significa automaticamente código não absorvido. Compare e owners restantes = UNKNOWN.
-- **HUD vivo:** [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977) contém o progresso; [anexo nominal](./RECEIPTS/2026-11-03-branches-891-funil-hud.md) possui status por branch e dez contraprovas. `DELETE_ELIGIBLE=0`, `DELETED=0`, ondas `0/18` concluídas; nenhuma ref eliminada.
+- **Checkpoint G2 parcial (03/11/2026):** **66/66** refs P1 comparadas com `main@55db287f203d3208bc92d50e1a21b7250a827d21`: 60 divergem com arquivos alterados, 4 divergem mas compare lista 0 arquivos, 2 são ancestrais da `main` (`ahead=0`, IDs 0031/0077). Dependências e equivalência pós-squash continuam `UNKNOWN`; nenhum `DELETE_ELIGIBLE` comprovado.
+- **HUD vivo:** [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977) contém o progresso; [anexo nominal](./RECEIPTS/2026-11-03-branches-891-funil-hud.md) possui 891 refs com estado e 66 comparações Git auditáveis. `DELETE_ELIGIBLE=0`, `DELETED=0`, ondas `0/18` concluídas; nenhuma ref eliminada.
 <!-- /CHECKPOINT_G1_82_G2_10 -->
 - **NEXT_CURSOR:** monitorar as etapas `[ ]` no corpo do PR #1977 e atualizar o CURRENT deste owner conforme resultados comprovados.
 
