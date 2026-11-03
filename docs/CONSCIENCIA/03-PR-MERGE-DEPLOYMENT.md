@@ -4,12 +4,13 @@
 @code_ref: scripts/github-autonomia-promocao.test.mjs
 @code_ref: .github/workflows/autonomia-promocao.yml
 @code_ref: scripts/farm-pr.sh
-@last_updated: 2026-11-03T19:24:11.247Z
+@last_updated: 2026-11-03T19:29:54.225Z
 
 @code_ref: scripts/github-autonomia-varredura.mjs
 @code_ref: scripts/github-autonomia-varredura.test.mjs
 @code_ref: .github/workflows/porta-de-entrada.yml
 @code_ref: .github/workflows/test.yml
+@code_ref: apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs
 @last_updated: 2026-11-03T19:24:11.247Z
 
 <!-- GLOBAL_MAIN_PUSH_AUDIT_AND_VISUAL_20261103 -->
@@ -23,7 +24,7 @@
 - `scripts/lupa/diagram-route-gate.mjs` emite `::error file=...,line=...` no CI quando puder provar a linha real do source, preservando a saída JSON e sem fabricar números. Testes no `diagram-route-gate.test.mjs`.
 - `.github/workflows/test.yml` usa Puppeteer existente em PRs que toquem `apps/instinto-superior/**`; captura desktop/mobile e receipt só quando CI concluir. Checkout e screenshot devem apontar ao **mesmo HEAD do PR**, sem alegar deploy. Auditoria de push não vira gatilho novo de instalação.
 
-**Estado da edição:** regras e testes versionados na branch do [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977); `MAIN_AUDIT_RUNTIME=UNKNOWN`, `VISUAL_PR_CI=UNKNOWN`, `WORKFLOW_RUN_PENDING`. A ausência de proteção nativa significa que a auditoria **não pode garantir prevenção de push direto**. A decisão sobre squash continua com o promotor existente, independentemente da auditoria observacional.
+**Verificação do código visual:** o `puppeteer-michelin-smoke.mjs` referencia este documento `docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md`, compatível com o regex de documentação do gate; o manifesto incremental do Instinto permanece como complemento histórico.\n\n**Estado da edição:** regras e testes versionados na branch do [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977); `MAIN_AUDIT_RUNTIME=UNKNOWN`, `VISUAL_PR_CI=UNKNOWN`, `WORKFLOW_RUN_PENDING`. A ausência de proteção nativa significa que a auditoria **não pode garantir prevenção de push direto**. A decisão sobre squash continua com o promotor existente, independentemente da auditoria observacional.
 
 <!-- /GLOBAL_MAIN_PUSH_AUDIT_AND_VISUAL_20261103 -->
 
