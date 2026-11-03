@@ -1,3 +1,11 @@
+# #OBSERVACOES#
+# @owner: .github/workflows/porta-de-entrada.yml
+# @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+# @last_updated: 2026-11-03T19:21:22.142Z
+# @implementado: anotação visual de erros e audit read-only após push em main.
+# @pendente: runner/CI SAME_HEAD e eventos reais para comprovar receipt.
+# @estado: SOURCE_ONLY; MAIN_PUSH_AUDIT_OBSERVATIONAL
+# @next_cursor: validar o workflow sem transformar aviso de push em gate de PR.
 name: ⚙️ porta-de-entrada
 
 # Gate canônico: atualiza o mecanismo existente em vez de criar workflows
@@ -14,6 +22,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: porta-de-entrada-${{ github.event.pull_request.number || github.ref }}
@@ -67,6 +76,14 @@ jobs:
 
       - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
+
+      # push main pode vir de squash via PR ou de writer direto previamente autorizado.
+      # O auditor observa e documenta a origem, nunca altera main nem bloqueia PR.
+      - name: 🧾 Auditar origem do push na main (read-only, sem veto)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-autonomia-varredura.mjs audit-main-push
 
       - name: 🔹 Testar fonte autenticada de autorização
         run: node --test scripts/lupa/authority-approval.test.mjs
