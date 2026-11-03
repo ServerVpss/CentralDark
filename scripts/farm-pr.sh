@@ -5,8 +5,8 @@
 # #OBSERVACOES#
 # @owner: scripts/farm-pr.sh
 # @doc_ref: docs/CONSCIENCIA/BRANCHES-ESTACIONADAS-PR-MAE.md
-# @last_updated: 2026-11-03T17:50:02.265Z
-# @implementado: fonte do fluxo de squash preserva a branch; sync local apenas fast-forward.
+# @last_updated: 2026-11-03T18:48:36.673Z
+# @implementado: criação de PR só despacha recheck ao promotor canônico; nunca dá squash direto; sync ff-only.
 # @pendente: consumo por executores/CI não comprovado; não executar farm neste escopo.
 # @estado: SOURCE_ONLY; BRANCH_DELETE_ALLOWED=false; EXECUTION_NOT_TESTED
 # @next_cursor: conferir diff e readback do PR #1977, sem VPS ou deploy.
@@ -30,7 +30,7 @@ fi
 # Garante main atualizada
 git fetch origin main --quiet
 git checkout main --quiet
-git pull --rebase origin main --quiet
+git pull --ff-only origin main --quiet
 
 CO_AUTHOR="Co-authored-by: SegredoiDev <segredounlock@users.noreply.github.com>"
 
@@ -86,13 +86,16 @@ ${CO_AUTHOR}")
     -H "Accept: application/vnd.github.squirrel-girl-preview+json" \
     -f content='heart' >/dev/null 2>&1 || true
 
-  # Branch preservada (PR #1977): squash não autoriza exclusão da ref.
-  if gh pr merge "$PR_NUM" --squash --auto >/dev/null 2>&1; then
-    echo "🛡️ Auto-merge solicitado no PR #${PR_NUM}; branch preservada."
-  elif gh pr merge "$PR_NUM" --squash >/dev/null 2>&1; then
-    echo "🛡️ Squash aceito no PR #${PR_NUM}; branch preservada."
+  # O farm só solicita reavaliação; o promotor canônico verifica
+  # P1, os checks verdes do MESMO HEAD, proteção da branch e autorização.
+  # Nenhum comando de merge direto, admin ou delete ocorre neste script.
+  if gh api -X POST "repos/{owner}/{repo}/dispatches" \
+      -f event_type="centraldark_autonomia_recheck" \
+      -F "client_payload[pr_number]=$PR_NUM" \
+      -f "client_payload[reason]=farm_pr_requires_green_gate" >/dev/null 2>&1; then
+    echo "🛡️ PR #${PR_NUM}: solicitado ao juiz canônico; não promovido por este script."
   else
-    echo "🟠 PR #${PR_NUM}: merge não comprovado; branch preservada." >&2
+    echo "🟠 PR #${PR_NUM}: solicitação ao juiz falhou; sem merge, branch preservada." >&2
   fi
 
   # Sincronização local somente fast-forward; nunca reset destrutivo.
