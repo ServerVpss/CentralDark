@@ -2,7 +2,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:26:40.796Z
+ * @last_updated: 2026-11-03T19:18:59.810Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
@@ -10,6 +10,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   detectAddedUnits,
+  githubIssueAnnotations,
   extractTriggerSymbols,
   validateDiagram,
   validateDiffCoverage,
@@ -350,4 +351,29 @@ print("ola")`;
   const readAt = (ref, path) => path === source ? (ref === "head" ? head : "print('old')") :
     ref === "head" ? updatedDoc : "<!-- @last_updated: 2026-10-15T10:00:00.000Z -->\nAntigo";
   assert.deepEqual(validateDiffCoverage({ flows: [] }, [], { changes, readAt }), []);
+});
+
+test("anota erro nativo GitHub com arquivo e linha realmente conhecida", () => {
+  const source = "// header\n// #OBSERVACOES#\n// @doc_ref: docs/receipts/owner.md\n";
+  const line = githubIssueAnnotations([
+    "CODE_DOC_NOT_UPDATED_IN_SAME_DIFF:apps/x/a.ts:docs/receipts/owner.md",
+  ], (file) => file === "apps/x/a.ts" ? source : null);
+  assert.equal(line.length, 1);
+  assert.match(line[0], /^::error file=apps\/x\/a\.ts,line=3,title=CODE_DOC_NOT_UPDATED_IN_SAME_DIFF::/);
+});
+
+test("quando linha real inexiste, não inventa posição, mantém código visual", () => {
+  const list = githubIssueAnnotations([
+    "CODE_TRACE_MISSING:apps/x/a.ts",
+    "FLOW_REGISTRY_SCHEMA_INVALID",
+  ], (file) => file === "apps/x/a.ts" ? "export const ok = true;\n" : null);
+  assert.match(list[0], /^::error file=apps\/x\/a\.ts,title=CODE_TRACE_MISSING::/);
+  assert.doesNotMatch(list[0], /,line=/);
+  assert.match(list[1], /^::error title=FLOW_REGISTRY_SCHEMA_INVALID::/);
+});
+
+test("sanitiza quebra de linha para não injetar anotação GitHub", () => {
+  const [annotation] = githubIssueAnnotations(["FLOW_FIELD_MISSING:fake%\n::warning::injected"]);
+  assert.match(annotation, /%25%0A/);
+  assert.equal(annotation.split("\n").length, 1);
 });
