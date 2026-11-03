@@ -33,7 +33,7 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "destino":  "../Skills/michelin-3-estrelas/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
@@ -41,75 +41,75 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "destino":  "../Skills/michelin-3-estrelas/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-intent-deploy-router/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-intent-deploy-router/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-capability-hud/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-capability-hud/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-reuse-runtime/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-reuse-runtime/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-boot/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-boot/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-esteira-motor/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-esteira-motor/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-autonomous-conflict-costura/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-live-editing-fabric/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-live-editing-fabric/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-unified-surface-parity/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-unified-surface-parity/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-hub-credential-control-plane/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-vscode-log-bridge/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-vscode-log-bridge/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-auto-sync-vscode/package.json",
+                                                 "destino":  "../Skills/centraldark-auto-sync-vscode/package.json",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-note-maintenance/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-hermes-operations/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                                                 "destino":  "../Skills/reconciliacao-diaria-centraldark/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-evidence-reconciliation/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-ops/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
@@ -232,7 +232,7 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "destino":  "../Skills/michelin-3-estrelas/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
@@ -252,27 +252,27 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-note-maintenance/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-hermes-operations/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                                                 "destino":  "../Skills/reconciliacao-diaria-centraldark/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-evidence-reconciliation/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-ops/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "../Skills/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
@@ -294,103 +294,103 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md",
+                         "caminho":  "Skills/centraldark-autonomous-conflict-costura/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  8201,
-                         "sha256":  "6b85b31d4b9d8ba81a56a28c74bc11f5d54601d3b2c50d9ac53782438dac0d39",
+                         "bytes":  8094,
+                         "sha256":  "f5d7434950de087cbc58720cd51b266d8b9b90edc814b391b32ceae9900ea36f",
                          "descricao":  "Método reutilizável da CentralDark para resolução autônoma de conflitos Git/PR por intenção, com decisão CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW, sem invocação manual de agente por conflito.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json",
+                         "caminho":  "Skills/centraldark-auto-sync-vscode/package.json",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  2088,
-                         "sha256":  "72df3dbedb785967b5ba50d740bce8202fad7a644b30c570ce024fde8bfc2e3c",
+                         "bytes":  2012,
+                         "sha256":  "ea472d0c6bbb2d7a1ae8adfed1c08bc5c96e7bfd44376e757f0fa6d7720d79c2",
                          "descricao":  "",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md",
+                         "caminho":  "Skills/centraldark-boot/references/example-boot-output.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  1052,
-                         "sha256":  "acf78bea4b627fd342a002f48b537ee8f7c6aa35ffc281307158b8e42e17491a",
+                         "bytes":  1015,
+                         "sha256":  "2eace68361b5d18764321c568b0a244a7e4d345a5433c53ac05ca4f721c9e921",
                          "descricao":  "",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-boot/SKILL.md",
+                         "caminho":  "Skills/centraldark-boot/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-27T12:22:45-03:00",
-                         "bytes":  6338,
-                         "sha256":  "4d00d49761896dd13e803b6fad2931a620756d19de8e874bedb0ca5ce142911b",
+                         "bytes":  12994,
+                         "sha256":  "51e9f2597fcb0ff8ee5d406dcc2cc8ff53de3de062c68dfb1e721440ba498437",
                          "descricao":  "Execute CentralDark boot to align and verify HUD.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
+                         "caminho":  "Skills/centraldark-capability-hud/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-29T12:18:58-03:00",
                          "modificado_em":  "2026-10-29T12:18:58-03:00",
-                         "bytes":  4437,
-                         "sha256":  "6a5523d348280bc9c59e22cdf3b41138f1332d499cf2c8b81ae122f1dd1f0458",
+                         "bytes":  4296,
+                         "sha256":  "b02d78eff1721e0a39aee134dadbb47d5c1870b12c472da8e3d86c8dc6f6092e",
                          "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/INTERLIGADOS.md",
+                         "caminho":  "Skills/centraldark-esteira-motor/INTERLIGADOS.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  770,
-                         "sha256":  "b3c73cbc4065ee89eb7868d415d95341df2253862c564f324f78efe04589f77a",
+                         "bytes":  749,
+                         "sha256":  "7b26643398619be4a4c85351139a5d687d6c8c0aa61ff6ec42e392d0f326ece8",
                          "descricao":  "",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/references/sessao-erros-reais.md",
+                         "caminho":  "Skills/centraldark-esteira-motor/references/sessao-erros-reais.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  1217,
-                         "sha256":  "dc23825f47023c4ccdff0a9d637bd9595d4262afd9b9a99d279b2e76b93876ab",
+                         "bytes":  1189,
+                         "sha256":  "4164eb31dafc234e9716f8a4034c974968a358fccfcfc02cf52c96cb83927876",
                          "descricao":  "",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md",
+                         "caminho":  "Skills/centraldark-esteira-motor/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  18027,
-                         "sha256":  "49745155400ee5b98825dcb60405d3bbbb28e6e38325813cb585c832190d5e5d",
+                         "bytes":  17656,
+                         "sha256":  "47a6c45eb999ebb767c55574bd8c3e7958c9b2c1643bf04f86556b2ca8e4ef56",
                          "descricao":  "CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/fixed-point-funnel.md",
+                         "caminho":  "Skills/centraldark-evidence-reconciliation/references/fixed-point-funnel.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-12T02:29:59-03:00",
@@ -402,7 +402,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/github-fast-inventory.md",
+                         "caminho":  "Skills/centraldark-evidence-reconciliation/references/github-fast-inventory.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-12T02:29:59-03:00",
@@ -414,7 +414,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
+                         "caminho":  "Skills/centraldark-evidence-reconciliation/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-15T13:26:01-03:00",
@@ -426,7 +426,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md",
+                         "caminho":  "Skills/centraldark-hermes-operations/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-29T09:31:40-03:00",
@@ -438,43 +438,43 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
+                         "caminho":  "Skills/centraldark-hub-credential-control-plane/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-24T18:41:19-03:00",
                          "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  2403,
-                         "sha256":  "f907162e7819de04dafd29c69660e0454d01c9ccce04ab9e4c26f71d987c181e",
+                         "bytes":  2327,
+                         "sha256":  "ecc033157b6bdc9ff7ccfe84784622b2a7ebdbea12239baaf0dfad47f6124f99",
                          "descricao":  "Use quando o CHEFE trabalhar com Hub, conectores, OAuth, API keys temporarias, providers, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou catalogo de modelos pelo painel CentralDark.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md",
+                         "caminho":  "Skills/centraldark-intent-deploy-router/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  5628,
-                         "sha256":  "ff847288dd610dd6c062faadf8d05231915224c035bd80f7be2af4b3eb986681",
+                         "bytes":  5625,
+                         "sha256":  "7e9f944f99e2a40be6c49643d43c7f62d4a9328d0e21b783850e19ab1ed0ea2e",
                          "descricao":  "Router obrigatório de intenção, gatilhos, Capability HUD e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider, segredo temporário ou antes de alegar limitação de ferramenta.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md",
+                         "caminho":  "Skills/centraldark-live-editing-fabric/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  13626,
-                         "sha256":  "23484d80e4123417267413ac92c99baeaa4aa011a67f57dfc9130289545fae76",
+                         "bytes":  13404,
+                         "sha256":  "358ba392801406dc84d0cf8b41be2a62bef9bead38512cdcfc6eb20cf2953162",
                          "descricao":  "Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
+                         "caminho":  "Skills/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-28T13:14:50-03:00",
@@ -486,7 +486,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py",
+                         "caminho":  "Skills/centraldark-note-maintenance/scripts/reconcile_notes.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-28T13:14:50-03:00",
@@ -498,7 +498,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py",
+                         "caminho":  "Skills/centraldark-note-maintenance/scripts/verify_notes.py",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-28T13:14:50-03:00",
@@ -510,7 +510,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md",
+                         "caminho":  "Skills/centraldark-note-maintenance/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-27T00:26:07-03:00",
@@ -522,7 +522,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/autonomia-actions.md",
+                         "caminho":  "Skills/centraldark-ops/references/autonomia-actions.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-25T04:01:30-03:00",
@@ -534,7 +534,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/full-inventory-scans.md",
+                         "caminho":  "Skills/centraldark-ops/references/full-inventory-scans.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-25T04:01:30-03:00",
@@ -546,7 +546,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-binding.md",
+                         "caminho":  "Skills/centraldark-ops/references/hermes-desktop-binding.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-25T04:01:30-03:00",
@@ -558,7 +558,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-communication-style.md",
+                         "caminho":  "Skills/centraldark-ops/references/hermes-desktop-communication-style.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-12T02:29:59-03:00",
@@ -570,7 +570,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/selfhosted-runner-git-auth.md",
+                         "caminho":  "Skills/centraldark-ops/references/selfhosted-runner-git-auth.md",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-12T02:29:59-03:00",
@@ -582,7 +582,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/SKILL.md",
+                         "caminho":  "Skills/centraldark-ops/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-29T09:46:42-03:00",
@@ -594,7 +594,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                         "caminho":  "Skills/centraldark-oracle-surface/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:34-03:00",
                          "modificado_em":  "2026-10-29T10:46:50-03:00",
@@ -606,55 +606,55 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/runtime-binding.desired.json",
+                         "caminho":  "Skills/centraldark-reuse-runtime/runtime-binding.desired.json",
                          "tipo":  "catalogo",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  471,
-                         "sha256":  "2cad2dcc353ae81ec9d0b87767afdd623356bfa1cc9e39e5dd76998feb69737d",
+                         "bytes":  453,
+                         "sha256":  "98f087dc6dcd985303b90cb9ec879e4bdfd20ca9b00eca8c990b9147421817c8",
                          "descricao":  "",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md",
+                         "caminho":  "Skills/centraldark-reuse-runtime/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  2074,
-                         "sha256":  "7be3491476069a245f5943f0b341593e05b36a930efd27505c06e22f14a1968e",
+                         "bytes":  1999,
+                         "sha256":  "cd7d6af7a2133e1ab7504be2a6ca414ee6fcda7adb18cc77c799162a4d297adb",
                          "descricao":  "Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md",
+                         "caminho":  "Skills/centraldark-unified-surface-parity/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-29T09:31:40-03:00",
-                         "bytes":  27958,
-                         "sha256":  "16f68fa7db6f943b787b710f5a70f1a0de0da791222765eea13d2cda2101f6b3",
+                         "bytes":  30020,
+                         "sha256":  "cbd020838c1aa2838fe1e3c46828276b1b8c5474472cf2ac20098a9adf7405c7",
                          "descricao":  "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md",
+                         "caminho":  "Skills/centraldark-vscode-log-bridge/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  14645,
-                         "sha256":  "d28db794b3a1564ed9d65caf2e7448aac53a634357f052907b53766538c620ab",
+                         "bytes":  14527,
+                         "sha256":  "0df178c7bd2b0b76bfdf7b65c176876ac485c7218968a1c8d85b6fd5d98c9936",
                          "descricao":  "Enviar sinais do VS Code Casa ao funil unico CentralDark via SSH/Tailscale, sem transportar texto bruto ou duplicar o owner.",
                          "referencias":  [
 
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
+                         "caminho":  "Skills/michelin-3-estrelas/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-25T04:03:31-03:00",
                          "modificado_em":  "2026-10-26T16:35:50-03:00",
@@ -666,7 +666,7 @@
                                          ]
                      },
                      {
-                         "caminho":  "catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
+                         "caminho":  "Skills/reconciliacao-diaria-centraldark/SKILL.md",
                          "tipo":  "skill",
                          "criado_em":  "2026-10-28T10:39:33-03:00",
                          "modificado_em":  "2026-10-25T04:01:30-03:00",
@@ -731,7 +731,7 @@
                                                  "existe":  true
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "destino":  "Skills/michelin-3-estrelas/SKILL.md",
                                                  "existe":  true
                                              },
                                              {
@@ -1070,7 +1070,7 @@
                                                  "existe":  false
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "Skills/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  false
                                              },
                                              {
@@ -1082,7 +1082,7 @@
                                                  "existe":  false
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
+                                                 "destino":  "Skills/centraldark-oracle-surface/SKILL.md",
                                                  "existe":  false
                                              },
                                              {
@@ -1154,7 +1154,7 @@
                                                  "existe":  false
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/",
+                                                 "destino":  "Skills/",
                                                  "existe":  false
                                              },
                                              {
@@ -1202,7 +1202,7 @@
                                                  "existe":  false
                                              },
                                              {
-                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
+                                                 "destino":  "Skills/michelin-3-estrelas/SKILL.md",
                                                  "existe":  false
                                              },
                                              {
