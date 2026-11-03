@@ -1,5 +1,35 @@
 # 32 — Comandos do CHEFE: builder multiplataforma do CentralDark
 
+@code_ref: install.sh
+@code_ref: apps/modulos/Bolt/source/package.json
+@code_ref: apps/modulos/Bolt/source/electron-builder.yml
+@last_updated: 2026-11-03T18:34:00.000Z
+@estado: SOURCE_ONLY; HYBRID_BUILDER_PROPOSED_IN_PR_1977; CI_UNKNOWN; BUILD_NOT_RUN
+
+<!-- INSTALLER_HYBRID_SYNC_20261103 -->
+## 🍒 Regra obrigatória — Installer evolui junto com o source (PR #1977)
+
+**SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** Em toda alteração da casca Electron, builder, targets, recursos empacotados ou nomes de artefatos, atualizar **no mesmo diff** o `install.sh` principal, esta documentação, o contrato de testes existente e o receipt do owner. **INSTALLER_FOLLOWS_SOURCE=REQUIRED**; nenhuma implementação é declarada completa com instalador defasado. Sem scripts de instalação paralelos.
+
+**Um builder híbrido, dois sistemas:** `apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs` suporta `win32-x64` e `linux-x64` reaproveitando `centraldark-build-ledger.mjs` e o SHA-256 dos dois artefatos. A ponte `electron/main/index.ts` chama a mesma receita para o host escolhido; `electron-builder.yml` preserva Windows NSIS e Linux AppImage + deb. `package.json` define `desktopName: com.centraldark.desktop`, com `linux.syncDesktopName: true`, visando a associação correta ao lançador Linux/KDE. `RUNTIME=NOT_TESTED_BY_SCOPE`.
+
+**Entradas do install.sh (só código neste PR):**
+
+| Opção | Comportamento proposto | Efeito quando executado no futuro |
+|---|---|---|
+| `./install.sh --desktop-check` | Confere contrato do source, lê o ledger, valida os hashes da última versão Linux se ela existir | leitura apenas, sem auto-update nem atalhos |
+| `./install.sh --desktop-build` | Encaminha à receita `centraldark-rebuild.mjs --execute` já existente | gera nova versão e artefatos no host, não instala nem faz deploy |
+| `./install.sh --desktop-install-deb --yes` | Valida `.deb` e `.AppImage` pelo ledger e SHA-256 antes de instalar o .deb | **somente opção explícita**; requer Linux apt + permissão administrativa |
+
+**Porta de segurança:** ausência de build Linux resulta `LINUX_ARTIFACT=NOT_PROVEN`; não inventar PASS de artefato. Os modos desktop devem funcionar **sem disparar** atualização de VPS, auto-instalação silenciosa, reset de Git ou criação de atalhos globais. O instalador legado da base permanece intacto.
+
+**Contraprova pendente:** `bash -n install.sh`, testes de contrato, lint/typecheck e CI de source no HEAD; o pacote `deb`/AppImage e a execução do instalador **não foram produzidos nem instalados nesta missão**. `SOURCE_COMMITTED != BUILD_PASS != INSTALLED`.
+
+**NEXT_CURSOR:** validar os três modos em source/CI sem executar instalação; confirmar o diff e o artefato Linux somente quando houver build, atualizar HUD do [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977), manter 891 branches preservadas.
+
+<!-- /INSTALLER_HYBRID_SYNC_20261103 -->
+
+
 **INTENT_ID:** CENTRALDARK-CHEFE-BUILDER-UNICO-AIONUI-RAKAZO-UNIGRAM-20261022  
 **ESTADO:** contrato e receitas documentados; botão e orquestração multiplataforma ainda não implementados.  
 **OWNER DA DOCUMENTAÇÃO:** docs/INSTALADOR (continuação da numeração existente).  
