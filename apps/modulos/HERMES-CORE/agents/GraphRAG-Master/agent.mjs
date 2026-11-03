@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 // 🕸️  GraphRAG-Master — memória oficial do Hermes Core.
+// #OBSERVACOES#
+// @owner: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+// @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+// @last_updated: 2026-11-03T18:28:07.127Z
+// @implementado: partitura inválida lança erro antes de produzir contexto de decisão.
+// @pendente: validação de source e checks CI SAME_HEAD; não houve runtime.
+// @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+// @next_cursor: verificar compatibilidade de consumers e gate GitHub.
+
 // Partitura fixa (Banda/17 Respirações) + memória dinâmica (grafo/knowledge/aprendizados/lacres/bibliotecas).
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, dirname, relative } from 'node:path';
@@ -96,9 +105,17 @@ export function carregarPartitura() {
   }
 }
 
+function exigirPartituraValida(loaded = carregarPartitura()) {
+  if (!loaded.ok) {
+    const error = new Error(`BAND_SCORE_GATE_BLOCKED:${loaded.status}`);
+    error.code = loaded.status;
+    throw error;
+  }
+  return loaded;
+}
+
 function contextoPartitura() {
-  const loaded = carregarPartitura();
-  if (!loaded.ok) return `Partitura fixa CentralDark: ${loaded.status}; FAIL_CLOSED=true; error=${JSON.stringify(loaded.error)}`;
+  const loaded = exigirPartituraValida();
   const names = loaded.score.breaths.items.map(item => item.name).join(', ');
   const groups = Object.keys(loaded.score.groups || {}).join(', ');
   return [
@@ -297,6 +314,9 @@ export function selfTest() {
   const agentCallSource = existsSync(AGENT_CALL_PATH) ? readFileSync(AGENT_CALL_PATH, 'utf8') : '';
   let inverseMissingBreathRejected = false;
   let inverseTrailProtocolRejected = false;
+  let invalidBandBlocksContext = false;
+  try { exigirPartituraValida({ ok: false, status: 'BAND_SCORE_INVALID' }); }
+  catch (error) { invalidBandBlocksContext = error.code === 'BAND_SCORE_INVALID'; }
   if (loaded.ok) {
     const missingBreath = JSON.parse(JSON.stringify(loaded.score));
     missingBreath.breaths.items.pop();
@@ -332,6 +352,7 @@ export function selfTest() {
     graph_binding_learning: /aprendizados/.test(graphSource),
     counterproof_missing_breath_is_rejected: inverseMissingBreathRejected,
     counterproof_wrong_trail_protocol_is_rejected: inverseTrailProtocolRejected,
+    counterproof_invalid_band_fails_closed: invalidBandBlocksContext,
   };
   const ok = Object.values(checks).every(Boolean);
   return {
