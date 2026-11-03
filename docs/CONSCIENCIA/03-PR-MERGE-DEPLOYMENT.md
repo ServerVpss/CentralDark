@@ -4,7 +4,28 @@
 @code_ref: scripts/github-autonomia-promocao.test.mjs
 @code_ref: .github/workflows/autonomia-promocao.yml
 @code_ref: scripts/farm-pr.sh
-@last_updated: 2026-11-03T18:47:46.856Z
+@last_updated: 2026-11-03T19:24:11.247Z
+
+@code_ref: scripts/github-autonomia-varredura.mjs
+@code_ref: scripts/github-autonomia-varredura.test.mjs
+@code_ref: .github/workflows/porta-de-entrada.yml
+@code_ref: .github/workflows/test.yml
+@last_updated: 2026-11-03T19:24:11.247Z
+
+<!-- GLOBAL_MAIN_PUSH_AUDIT_AND_VISUAL_20261103 -->
+### 🪡 Auditoria global de push na main + PR visual com linha do erro
+
+**Fonte da verdade:** `main` contém o código integrado; PRs, branches, commits, comments, reviews, SHA e anexos são **memória preservada**. Sem branch protection disponível, **push direto pode acontecer**: a CentralDark deve **auditar depois do evento**, registrar a origem, não fingir que a auditoria pré-bloqueou o GitHub e não fazer rollback automático.
+
+**Owners reutilizados:**
+- `.github/workflows/porta-de-entrada.yml` já recebe `push` em todas as branches. Para `refs/heads/main`, a mesma pipeline chama `scripts/github-autonomia-varredura.mjs audit-main-push` com acesso de leitura. O classificador compara o `merge_commit_sha` do PR associado ao SHA novo da `main`: `PR_MERGE_COMMIT_LINKED`, `UNLINKED_MAIN_PUSH_REVIEW` ou `UNKNOWN`. Emite `::warning/::notice` e `GITHUB_STEP_SUMMARY` **sem reprovar PR nem anular trabalho**; origem sem vínculo não é automaticamente violação.
+- `scripts/lupa/writer-safe-push-main.sh` segue como salvaguarda de escritores cooperativos: `--force` proibido, push condicionado a gate, escopo e readback do SHA. **Isso não impede push feito fora dele**.
+- `scripts/lupa/diagram-route-gate.mjs` emite `::error file=...,line=...` no CI quando puder provar a linha real do source, preservando a saída JSON e sem fabricar números. Testes no `diagram-route-gate.test.mjs`.
+- `.github/workflows/test.yml` usa Puppeteer existente em PRs que toquem `apps/instinto-superior/**`; captura desktop/mobile e receipt só quando CI concluir. Checkout e screenshot devem apontar ao **mesmo HEAD do PR**, sem alegar deploy. Auditoria de push não vira gatilho novo de instalação.
+
+**Estado da edição:** regras e testes versionados na branch do [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977); `MAIN_AUDIT_RUNTIME=UNKNOWN`, `VISUAL_PR_CI=UNKNOWN`, `WORKFLOW_RUN_PENDING`. A ausência de proteção nativa significa que a auditoria **não pode garantir prevenção de push direto**. A decisão sobre squash continua com o promotor existente, independentemente da auditoria observacional.
+
+<!-- /GLOBAL_MAIN_PUSH_AUDIT_AND_VISUAL_20261103 -->
 
 <!-- SOURCE_ONLY_SQUASH_REVIEW_RETENTION_20261103 -->
 ## 🍒+1 CURRENT — GitHub é memória canônica, e verde libera squash seguro
