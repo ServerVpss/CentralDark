@@ -1,7 +1,7 @@
 /* #OBSERVACOES#
  * @owner: scripts/github-autonomia-promocao.test.mjs
  * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
- * @last_updated: 2026-11-03T18:46:18.693Z
+ * @last_updated: 2026-11-03T18:49:41.897Z
  * @implementado: provas negativas de P1 em FAST e de retenção de branches antes do squash.
  * @pendente: executar node --test no mesmo HEAD do PR #1977.
  * @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
@@ -630,4 +630,12 @@ test("reconciliador da Casa não vira segundo promotor", async () => {
   assert.match(source, /centraldark_autonomia_recheck/);
   assert.match(source, /centraldark_dependabot_reconcile/);
   assert.match(source, /direct_merge=0/);
+});
+
+test("farm de PR nao ignora o promotor e nunca usa squash direto", async () => {
+  const source = await readFile(new URL("./farm-pr.sh", import.meta.url), "utf8");
+  assert.doesNotMatch(source, /gh pr merge/);
+  assert.match(source, /centraldark_autonomia_recheck/);
+  assert.match(source, /git pull --ff-only origin main/);
+  assert.doesNotMatch(source, /--delete-branch|git reset --hard/);
 });
