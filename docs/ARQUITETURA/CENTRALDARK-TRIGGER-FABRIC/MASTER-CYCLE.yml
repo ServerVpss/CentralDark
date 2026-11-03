@@ -324,7 +324,7 @@ phase_contracts:
   ATUALIZAR_NOTAS_VIVAS:
     meaning: RECONCILIAR NOTAS COM 10 PROPRIEDADES OBRIGATORIAS E GRUPOS
     token: "!ATUALIZAR_NOTAS_VIVAS"
-    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md + .agents/skills/centraldark-note-maintenance/SKILL.md"
+    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md + .agents/skills/centraldark-operational-method/Skills/centraldark-note-maintenance/SKILL.md"
     emoji: "📝"
     phase_type: MANDATORY_EVERY_CYCLE
     execution: IMMEDIATE_AFTER_RASTRO_BEFORE_BOOT

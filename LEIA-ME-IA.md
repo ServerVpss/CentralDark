@@ -7,6 +7,14 @@ updated: 2026-09-28
 ---
 
 
+<!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+## 🪬 Capacidade operacional única — Skill Mãe
+
+A execução de toda intenção segue o owner existente [centraldark-operational-method](.agents/skills/centraldark-operational-method/SKILL.md): **uma Skill Mãe, uma biblioteca `Skills/`, um organismo**. A entrada técnica continua sendo este `LEIA-ME-IA.md`; a Skill Mãe é o método operacional, não uma segunda porta de entrada. Reutilizar owner, sessão e receita; executar o delta autorizado sem micro-passos nem confirmações redundantes; medir efeito, contraprova, recibo e `NEXT_CURSOR`. A aprovação humana complementa a prova técnica quando exigida. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`.
+
+Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.md`, instruções de agentes no `AGENTS.md` e receitas na Skill Mãe. Não criar biblioteca paralela nem afirmar que a migração física ou o carregamento pelo Hermes já foram comprovados.
+<!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 

@@ -304,7 +304,7 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
   const terminalRota = {
     nome: "Terminal integrado VS Code → RDC CentralDark",
     owner: "skills/vs-code-restore/SKILL.md",
-    codigoFonte: ".agents/skills/centraldark-vscode-log-bridge/SKILL.md",
+    codigoFonte: ".agents/skills/centraldark-operational-method/Skills/centraldark-vscode-log-bridge/SKILL.md",
     registroMcp: "RDC_DESKTOP_COMMANDER",
     estado: "UIA_IDENTIFICADA_SESSAO_NAO_VINCULADA",
   } as const;
