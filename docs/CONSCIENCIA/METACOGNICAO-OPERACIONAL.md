@@ -2,7 +2,7 @@
 title: "Metacognição operacional e coevolução humano–sistema"
 status: "CANÔNICO"
 date: "2026-08-14"
-updated_at: "2026-11-03T19:22:49.981Z"
+updated_at: "2026-11-03T19:58:56.203Z"
 authority: "SEGREDO/CHEFE"
 scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem prova AGI"
 ---
@@ -11,7 +11,7 @@ scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem p
 
 @code_ref: scripts/lupa/diagram-route-gate.mjs
 @code_ref: scripts/lupa/diagram-route-gate.test.mjs
-@last_updated: 2026-11-03T19:22:49.981Z
+@last_updated: 2026-11-03T19:58:56.203Z
 
 <!-- LINE_VISUAL_ANNOTATION_20261103 -->
 ### 🧿 GitHub — erro visível onde está o código
@@ -21,6 +21,20 @@ scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem p
 O PR continua sendo caderno de prova e localização; anotações **não adicionam gate novo** nem substituem a contraprova visual de Puppeteer em arquivos UI. `UNKNOWN != PASS` e `MISSING_LINE != LINE_1`.
 
 <!-- /LINE_VISUAL_ANNOTATION_20261103 -->
+
+<!-- PR_DIAGRAM_RENDERER_INTEGRATION_20261103 -->
+### 🪡 PR como caderno de diagramas — mesmo owner, todas as saídas
+
+O gate `scripts/lupa/diagram-route-gate.mjs` agora possui a opção **`--pr-preview --out-dir`**, independente da validação canônica que já existe. Para qualquer PR, a porta `.github/workflows/porta-de-entrada.yml` reutiliza o mesmo owner e o renderizador existente `skills/mermaid_render.py`, com `skills/pretty-mermaid/scripts/render.mjs`, para derivar **SVG, PNG e ASCII do mesmo `.mmd`**. Se o PR trouxer Mermaid explícito, preservar sua fonte; se não trouxer, o **Grafo Vivo** `scripts/grafo-vivo/mermaid-core.mjs` gera somente o grafo de explicação da revisão, com fingerprint e checagem das conexões. O Excalidraw existente `scripts/lupa/diagram-route-excalidraw.mjs` continua como saída derivada separada, **sem alteração nos desenhos canônicos**.
+
+A primeira escolha automática privilegia **PNG para telas**, **ASCII para scripts/CLI** e **SVG para explicação geral**; a exportação tenta **os três**. GitHub Actions salva `.mmd`, `.svg`, `.png`, `.txt` e `receipt.json` com HEAD do PR, tamanho e SHA-256. O formato Mermaid também aparece na aba de resumo do check. `RENDER_SOURCE != SOURCE_PROVEN`, `FILE_EXISTS != VISUALLY_REVIEWED`: falha de renderização fica YELLOW e não é um novo bloqueio global de merge.
+
+**Isolamento:** não chamar modelos generativos automaticamente no gate, não enviar topologia privada a Kroki sem `--allow-remote`, não instalar dependências silenciosamente no runner. Qualquer modelo pode contribuir com Mermaid ou imagens próprias já autorizadas, anexadas no mesmo PR; o gate não inventa proveniência de imagem.
+
+**Testes incrementais:** `scripts/lupa/diagram-route-gate.test.mjs` contém provas de preservação do Mermaid fornecido, seleção automática e nomes dos artefatos. São testes descritos no código; **CI ainda precisa executar no HEAD exato**.
+
+<!-- /PR_DIAGRAM_RENDERER_INTEGRATION_20261103 -->
+
 
 
 ```text
