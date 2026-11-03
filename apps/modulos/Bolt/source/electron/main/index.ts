@@ -1,3 +1,11 @@
+// #OBSERVACOES#
+// @owner: apps/modulos/Bolt/source/electron/main/index.ts
+// @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// @last_updated: 2026-11-03T18:20:00.000Z
+// @implementado: ponte builder unico seleciona workspace e Node por plataforma Windows/Linux.
+// @pendente: testes e gates de source no mesmo HEAD; runtime fora de escopo.
+// @estado: SOURCE_ONLY; HYBRID_BUILDER_SOURCE; RUNTIME_NOT_TESTED
+// @next_cursor: checar build contract e readback no PR #1977.
 /// <reference types="vite/client" />
 import { createRequestHandler } from '@remix-run/node';
 import electron, { app, BrowserWindow, globalShortcut, ipcMain, protocol, session } from 'electron';
@@ -60,9 +68,13 @@ let builderActivity: { status: string; version?: string; at?: string; error?: st
 function builderWorkspace() {
   // Caminho de FONTE autorizado pelo host; jamais aceitar path vindo do renderer.
   const explicit = process.env.CENTRALDARK_BUILD_WORKSPACE;
-  return explicit && path.isAbsolute(explicit)
-    ? path.resolve(explicit)
-    : path.join(DEFAULT_HOUSE_ROOT, 'apps', 'modulos', 'Bolt', 'source');
+  if (explicit && !path.isAbsolute(explicit)) throw new Error('CENTRALDARK_BUILD_WORKSPACE_MUST_BE_ABSOLUTE');
+  if (explicit) return path.resolve(explicit);
+  // Windows mantém sua Casa; Linux usa o checkout no dev. No pacote, exigir
+  // workspace explícito se a receita não estiver no app.getAppPath().
+  return process.platform === 'win32'
+    ? path.join(DEFAULT_HOUSE_ROOT, 'apps', 'modulos', 'Bolt', 'source')
+    : isDev ? process.cwd() : app.getAppPath();
 }
 
 function builderHistorySnapshot() {
@@ -70,7 +82,8 @@ function builderHistorySnapshot() {
   const live = path.join(workspace, 'resources', 'build-history.json');
   const embedded = path.join(app.getAppPath(), 'resources', 'build-history.json');
   const source = existsSync(live) ? live : embedded;
-  const canRebuild = process.platform === 'win32'
+  const canRebuild = ['win32', 'linux'].includes(process.platform)
+    && process.arch === 'x64'
     && existsSync(path.join(workspace, 'scripts', 'centraldark-rebuild.mjs'))
     && existsSync(path.join(workspace, 'package.json'));
   if (!existsSync(source)) return {
@@ -225,7 +238,7 @@ function registerBridge() {
     builderBusy = true;
     builderActivity = { status: 'REQUESTED', at: new Date().toISOString() };
     try {
-      const child = spawn('node.exe', [recipe, '--execute'], {
+      const child = spawn(process.platform === 'win32' ? 'node.exe' : 'node', [recipe, '--execute'], {
         cwd: workspace, windowsHide: true, shell: false, stdio: ['ignore', 'pipe', 'pipe'],
       });
       let lastError = '';
