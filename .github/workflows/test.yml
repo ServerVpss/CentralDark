@@ -1,10 +1,10 @@
 # #OBSERVACOES#
 # @owner: .github/workflows/test.yml
 # @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
-# @last_updated: 2026-11-03T19:24:38.143Z
-# @implementado: captura visual desktop/mobile no PR do Instinto, HEAD exato e artifact.
+# @last_updated: 2026-11-03T21:49:40.259Z
+# @implementado: source e build preservados; preview/browser bloqueados em PR SOURCE_ONLY.
 # @pendente: execução do runner GitHub e readback do screenshot; não é prova de deploy.
-# @estado: SOURCE_ONLY; VISUAL_CI_PR_ENABLED; SCREENSHOT_NOT_RUN
+# @estado: SOURCE_ONLY_SCOPE_GUARD; VISUAL_CI_OPT_IN_FOR_OTHER_PRS; RUNTIME_NOT_TESTED.
 # @next_cursor: verificar PR/HEAD dos artefatos após GitHub Actions.
 name: ⚙️ Test Workflow — regressão Instinto Superior
 
@@ -70,6 +70,8 @@ jobs:
           echo "RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB"
 
       - name: 🧿 Puppeteer visual Michelin — preview real, sem selo runtime
+        # Regra ZERO: PR SOURCE_ONLY nao inicia servidor nem Puppeteer.
+        if: ${{ github.event_name != 'pull_request' || !contains(github.event.pull_request.body, 'RUNTIME_TESTS_REQUIRED=false') }}
         working-directory: apps/instinto-superior
         shell: bash
         env:
