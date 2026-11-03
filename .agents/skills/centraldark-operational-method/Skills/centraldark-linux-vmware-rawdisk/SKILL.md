@@ -39,6 +39,19 @@ related_skills: [centraldark-hermes-visual-computer-use, centraldark-hermes-oper
 **Resultado atual:** `CASA_VM_SSH=PASS`; `VMWARE_IP_DRIFT=FOUND`; `VM_VPS=BLOCKED/UNPROVEN`; `TAILSCALE_APPROVAL=PENDING`; `CONFIG_MUTATIONS=0`; `VMWARE_DISK_MUTATIONS=0`. Próximo passo: aprovar a VM na tailnet pelo controle autorizado, então remedir VM→VPS; reconciliar alias somente com backup, gate de host key e readback.
 <!-- /REVALIDACAO_CASA_VMWARE_VPS_20261103 -->
 
+<!-- LAUNCHER_PATH_CORRECTED_20261103 -->
+### Corrigido: seleção de configuração do launcher XRDP
+
+Readback na Casa: os dois caminhos existem. A configuração em F: resolve o alias `openkylin-vm` para `192.168.35.130` e autenticou com sucesso; a cópia do perfil Windows ainda resolve para `.128`. Logo, substituir F por C causaria regressão.
+
+No owner `scripts/Open-CentralDarkForjaRDP.ps1`, o seletor mantém F como primeira opção e verifica a conexão antes de aceitá-la. A configuração do perfil Windows é fallback condicionado à verificação SSH. Não houve alteração dos arquivos de configuração na Casa. `-CheckOnly` e reutilização do túnel existente foram preservados.
+
+Provas: `PARSER_ERRORS=0` no PowerShell Windows; `SELECTED=F:\CentralDark\.ssh\config_openkylin` na execução isolada do seletor. A sessão XRDP do script atualizado não foi aberta neste delta.
+
+`NEXT_CURSOR=VALIDATE_XRDP_HANDSHAKE_WITH_EXISTING_LAUNCHER_WHEN_GUI_NEEDED`.
+<!-- /LAUNCHER_PATH_CORRECTED_20261103 -->
+
+
 
 ## Acionamento
 CHEFE fala "Linux no Kingston", "VMware no proprio SSD", "particao VMWARE", "GParted", "SWAP", "fullDevice", "PhysicalDrive", "boot + SSH", "partitionedDevice" ou solicita replay da operacao concluida em 2026-11-03. Esta Skill propria fica na biblioteca da Skill Mae existente, sem segundo executor, driver, plugin ou organismo. Sempre reutilizar Skill Mae, Kimetsu, Michelin, Hermes Visual Computer Use/Cua e os owners reais.
