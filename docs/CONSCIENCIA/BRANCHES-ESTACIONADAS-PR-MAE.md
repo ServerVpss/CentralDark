@@ -3,6 +3,18 @@
 <!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
+<!-- UNIVERSAL_PR_DIAGRAM_TRIPLE_20261103 -->
+### 🎨+1 Diagramas derivados em todos os PRs — um motor, três formatos
+
+Reuso de owners já existentes: `scripts/lupa/diagram-route-gate.mjs` lê a explicação do PR, preserva Mermaid explícito e, sem Mermaid, utiliza `scripts/grafo-vivo/mermaid-core.mjs` para projeção auditável do fluxo **de revisão**. `scripts/lupa/diagram-route-excalidraw.mjs` e seu desenho Obsidian continuam preservados. O renderizador `skills/mermaid_render.py` reusa `skills/pretty-mermaid/scripts/render.mjs`, produzindo **SVG + PNG + ASCII** e fonte `.mmd` num artifact de `.github/workflows/porta-de-entrada.yml`. Tema/saída preferida são adaptativos, mas o trio é sempre requisitado.
+
+**Independência de modelo:** qualquer assistente pode fornecer Mermaid ou imagens autorizadas no PR, sem API nova, sem writers paralelos, sem permissão para transmitir diagrama privado para serviço remoto. Somente fonte local por padrão; Kroki exige opt-in. Check summary apresenta Mermaid e artifact contém recibo com HEAD e SHA-256. Isso é evidência, não prova de execução ou runtime.
+
+**CURRENT:** Mermaid explícito inserido na descrição do [#1977](https://github.com/ServerVpss/CentralDark/pull/1977); código, teste, documentação e workflow no mesmo PR. **Renderer CI ainda queued/pending**, então `SVG_FILE/PNG_FILE/ASCII_FILE=NOT_YET_PROVEN`. Não bloquear branches por falha da apresentação; `BRANCH_DELETE_ALLOWED=false` segue vigente.
+
+<!-- /UNIVERSAL_PR_DIAGRAM_TRIPLE_20261103 -->
+
+
 <!-- PUSH_AUDIT_VISUAL_PR_TRACE_20261103 -->
 ### 🍒+1 Auditoria global sem gate cego
 
