@@ -89,7 +89,7 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 ### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
 
-@last_updated: 2026-11-03T18:28:07.127Z
+@last_updated: 2026-11-03T18:44:11.351Z
 **Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
 
 **Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
@@ -130,6 +130,19 @@ Na `main` do PR legado, `GraphRAG-Master/agent.mjs` convertia partitura inválid
 
 @code_ref: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
 @code_ref: apps/modulos/HERMES-CORE/core/decisor.mjs
+
+
+### 🧿 P1 #1381 · Mesmo commit obrigatório entre domínios
+
+**Readback de source em 03/11/2026:** `policy.py` conferia apenas estado PASS/idade dos receipts, sem ligar `local.head`, `github.main_head` e um SHA VPS. `vps_agent.py` não emitia SHA e `probes/vps.py` não o expunha como evidência. **Menor delta:** política agora exige os três SHA completos e idênticos quando domínios requeridos; não há FIXED_POINT por três PASS em commits diferentes nem por SHA ausente. VPS observa `git rev-parse HEAD` via checkout, e assina o SHA no payload HMAC; ausência da referência vira bloqueio. `screenpipe` segue sensor sem SHA. `test_core.py` ganhou contraprovas de SHA divergente/ausente e round-trip do payload assinado. `test_counterproof.py` usa fixtures com commit comum para preservar testes de transição de estados. *Sem VPS, deploy ou teste de runtime executado.*
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/policy.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/vps_agent.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/vps.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
+
+**STATE:** SOURCE_PATCHED_IN_PR_1977; CI_SAME_HEAD=UNKNOWN; review #1381 não marcado como resolvido automaticamente. 
 
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
