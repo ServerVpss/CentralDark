@@ -352,7 +352,16 @@ export const PAINEL_CENTRALDARK_FOTOS: Array<{
   },
 ];
 
-// #OBSERVACOES# @owner: painel-unico.ts @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// #OBSERVACOES#
+// @owner: apps/instinto-superior/src/data/painel-unico.ts
+// @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// @last_updated: 2026-11-03T17:51:45.789Z
+// @implementado: referencia HUD.html corrigida no PR #1973; HudDeterministico.tsx indicado
+//   como inventario do cockpit, sem afirmar integracao do Hermes/Corpo Unico.
+// @pendente: revisar paridade funcional das branches e comentarios P1; SOURCE_ONLY
+//   nesta missao, sem tarefa de VPS/deploy/runtime.
+// @estado: SOURCE_TEXT_ONLY; VISUAL_ONLY=true; TYPECHECK=UNKNOWN; CI=UNKNOWN
+// @next_cursor: validar #OBSERVACOES# e doc_ref no mesmo diff; registrar review no PR #1977.
 // Camada de linguagem humana. Os 25 IDs de COCKPIT_ABAS permanecem intactos.
 // Este atalho NAVEGA ou ABRE owner existente: nunca confundir com despacho concluido.
 export const CAMINHOS_SIMPLES_INSTINTO = [
