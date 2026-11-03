@@ -2,7 +2,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:55:20.672Z
+ * @last_updated: 2026-11-03T20:06:03.954Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
@@ -391,6 +391,11 @@ test("Mermaid escrito no PR prevalece; nenhum nó, seta ou subgraph é substitu�
   });
   assert.equal(render.kind, "PR_MERMAID_EXPLICIT");
   assert.equal(render.preferred, "svg");
+  const ui = buildPrDiagramPreview({
+    number: 1977, body, files: ["apps/instinto-superior/Screen.tsx"],
+  });
+  assert.equal(ui.preferred, "png");
+  assert.equal(ui.mermaid, original);
   assert.equal(render.mermaid, original);
   assert.match(render.mermaid, /subgraph A\[Original\]/);
   assert.match(render.mermaid, /X\[Origem\] --> Y\[Destino\]/);
