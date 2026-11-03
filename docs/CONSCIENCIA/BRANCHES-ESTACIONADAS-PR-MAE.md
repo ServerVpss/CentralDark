@@ -10,6 +10,14 @@
 
 <!-- /TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
 
+<!-- INSTALLER_COHERENCE_20261103 -->
+**🍒+1 CONTRATO ACOPLADO:** `INSTALLER_FOLLOWS_SOURCE=REQUIRED`. Qualquer evolução do source Electron/cockpit/Hermes embutido, builder, targets de sistema ou cápsula exige revisar e versionar o **mesmo `install.sh`** com seus documentos/testes no PR ativo. O source Linux/openKylin precisa manter `.deb`, `.AppImage`, identidade KDE, entrypoint e ledger SHA coerentes; Windows NSIS é preservado. Nenhuma ação da VPS ou runtime é pré-requisito deste trabalho de source; nenhum instalador foi executado.
+
+**Patch atual:** `install.sh` recebeu `--desktop-check`, `--desktop-build`, `--desktop-install-deb --yes`; `centraldark-rebuild.mjs` e a ponte Electron usam o builder único em Windows/Linux; `electron-builder.yml`, `package.json` e `resources/runtime/manifest.json` mapeiam pacotes/entrypoints; `docs/INSTALADOR/32-builder-multiplataforma-centraldark.md` contém o mesmo delta. **Não confundir código versionado com build/deb instalado; BUILD=NOT_PROVEN.**
+
+<!-- /INSTALLER_COHERENCE_20261103 -->
+
+
 
 <!-- SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
 ### 🧬 Escopo atual — integração somente no código GitHub
