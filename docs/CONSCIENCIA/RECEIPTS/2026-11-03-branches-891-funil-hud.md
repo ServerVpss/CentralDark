@@ -60,6 +60,19 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 <!-- /NO_BRANCH_IS_DISPOSABLE_20261103 -->
 
+<!-- SOURCE_ONLY_RECONCILIATION_20261103 -->
+## 🧬 CURRENT — alinhamento no código, sem VPS/deploy
+
+**SOURCE_ONLY=true · VPS_REQUIRED=false · DEPLOY_REQUIRED=false · BRANCH_DELETE_ALLOWED=false.** A intenção atual é identificar as partes do **Hermes + Corpo Único + Instinto Superior** ausentes, parciais ou não reconciliadas e alinhar os owners existentes por source/PR. Não exigir medição da VPS nem deploy para marcar a prova de **código**; também não declarar integração funcional em runtime.
+
+**Menor delta aplicado nesta branch de missão:** `scripts/farm-pr.sh` sem deleção de branches e sem `reset --hard`; guias Git existentes e skill de merge corrigidos; `apps/instinto-superior/src/data/painel-unico.ts` com `#OBSERVACOES#` no cabeçalho, e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md` atualizado pelo P1 do #1973. A dívida de revisão continua `REVIEW_OPEN` até prova do gate e aceite do reviewer.
+
+**Pré-checagem baseada na lógica `validateDiffCoverage`:** nos 10 arquivos atualmente alterados do PR, os dois fontes executáveis (`painel-unico.ts`, `farm-pr.sh`) apresentam o rastro dentro das primeiras 65 linhas, `@owner`, `@doc_ref`, `@last_updated`, documento modificado e `@code_ref` literal do source. `CODE_DOC_PREFLIGHT=2/2`; não é execução do gate `scripts/lupa/diagram-route-gate.mjs`. `CI_STATUS=UNKNOWN`.
+
+**NEXT_CURSOR SOURCE_ONLY:** inspecionar o diff de #733/#918/#1381 e os arquivos/reviews citados pelos IDs 0031/0077 e 0046/0059/0075/0082; reconciliar no **mesmo source owner** que realmente faltar, testar estaticamente e registrar SHA/readback no #1977. Não requer comandos VPS, containers, SSH, PM2, browser ou ações na Casa. Todas as refs permanecem.
+
+<!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
+
 ## 🧿 Regras de combate — critérios obrigatórios
 
 1. **MAIN é sagrada.** `main`, branches protegidas e branches usadas por PR aberto não são eliminadas.
