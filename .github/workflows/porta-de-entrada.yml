@@ -1,8 +1,8 @@
 # #OBSERVACOES#
 # @owner: .github/workflows/porta-de-entrada.yml
 # @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
-# @last_updated: 2026-11-03T19:21:22.142Z
-# @implementado: anotação visual de erros e audit read-only após push em main.
+# @last_updated: 2026-11-03T19:53:43.366Z
+# @implementado: alertas por linha, audit push main e preview PR em SVG PNG ASCII no gate existente.
 # @pendente: runner/CI SAME_HEAD e eventos reais para comprovar receipt.
 # @estado: SOURCE_ONLY; MAIN_PUSH_AUDIT_OBSERVATIONAL
 # @next_cursor: validar o workflow sem transformar aviso de push em gate de PR.
@@ -120,6 +120,29 @@ jobs:
             echo "GATE_BASE_FALLBACK=origin/main:${BASE_SHA}"
           fi
           node scripts/lupa/diagram-route-gate.mjs --base-ref "$BASE_SHA" --head-ref "$HEAD_SHA"
+
+      # 🍒 Diagrama legível em QUALQUER PR: só derivação da explicação.
+      # Preserva desenhos originais. Não cria gate adicional, nem usa APIs de modelos.
+      - name: 🎨 Prévia Mermaid do PR — SVG + PNG + ASCII (source only)
+        id: pr_diagram
+        if: ${{ always() && github.event_name == 'pull_request' && steps.fork_guard.outputs.blocked != 'true' }}
+        continue-on-error: true
+        shell: bash
+        env:
+          CENTRALDARK_RENDER_NO_INSTALL: "1"
+        run: |
+          set -euo pipefail
+          npm ci --prefix skills/pretty-mermaid --ignore-scripts --no-audit --no-fund --prefer-offline
+          node scripts/lupa/diagram-route-gate.mjs --pr-preview --out-dir "$RUNNER_TEMP/centraldark-pr-diagrams"
+
+      - name: 📎 Guardar trio Mermaid (.mmd + .svg + .png + .txt + SHA receipt)
+        if: ${{ always() && github.event_name == 'pull_request' && steps.fork_guard.outputs.blocked != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: centraldark-pr-diagrams-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/centraldark-pr-diagrams/
+          if-no-files-found: warn
+          retention-days: 30
 
       - name: 🔹 Gate INTERLIGADOS — padrões de PR e dívida runtime explícita
         run: node scripts/lupa/validar-interligados-pr-padroes.mjs
