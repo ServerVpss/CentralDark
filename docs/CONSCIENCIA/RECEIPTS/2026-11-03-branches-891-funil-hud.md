@@ -39,6 +39,25 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 **Regras:** `MERGED != REVIEW_CLEARED` · `OUTDATED != FIXED` · `COMMENT_EXISTS != VERIFIED` · `NO_DIFF != WORK_COMPLETE`. O caso #1973 foi verificado; **não** há varredura completa de revisões dos demais PRs ainda. O levantamento dos 891 itens continua em progresso.
 
+### 🔍 G3 — seis PRs históricos com histórico de comentários consultado
+
+<!-- G3_REVIEW_SIX_REFS_20261103 -->
+**Fontes:** threads inline + comentários do PR consultados individualmente para #1337, #1369, #736, #1484, #724 e #921. **Ainda não foi provado uso atual/proteção de branch em worktrees, VPS, Casa ou runners.** `G3=PARTIAL`; `RESOLVED=NOT_PROVEN` para correções de código/documentação.
+
+| ID | PR | Threads inline | Comentários de PR | Alerta histórico significativo | Juízo |
+|---|---|---:|---:|---|---|
+| 0031 | [#1337](https://github.com/ServerVpss/CentralDark/pull/1337) | 0 | 3 | [Artefato de aprendizado](https://github.com/ServerVpss/CentralDark/pull/1337#issuecomment-5455659685) `SUPPORT_REQUIRED`; revisão consultiva `NEEDS_HUMAN` | PRESERVE / OWNER_USE_UNKNOWN |
+| 0077 | [#1369](https://github.com/ServerVpss/CentralDark/pull/1369) | 0 | 4 | [Recibo](https://github.com/ServerVpss/CentralDark/pull/1369#issuecomment-5473043516): `SUPERADO por #1381`, **não** absorvido byte a byte | PRESERVE / VERIFY_1381_AND_CASA |
+| 0046 | [#736](https://github.com/ServerVpss/CentralDark/pull/736) | 0 | 8 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/736#issuecomment-5234575379): `SUPERSEDED_BY=#733` | PRESERVE / VERIFY_733 |
+| 0059 | [#1484](https://github.com/ServerVpss/CentralDark/pull/1484) | 0 | 7 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/1484#issuecomment-5610254473): revisão Codex final `[ ]`, `SUPPORT_REQUIRED` em artifact | PRESERVE / REVIEW_UNKNOWN |
+| 0075 | [#724](https://github.com/ServerVpss/CentralDark/pull/724) | **33 (33 resolved/outdated)** | **134** | [P1 Judge independente](https://github.com/ServerVpss/CentralDark/pull/724#discussion_r3740255810) entre revisões; **resolvido/outdated não prova código corrigido** | PRESERVE / REVIEW_CONTENT |
+| 0082 | [#921](https://github.com/ServerVpss/CentralDark/pull/921) | 0 | 5 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/921#issuecomment-5304814458): `SUPERSEDED_PREDEPLOY_PROOF`; resíduo funcional ainda vinculado a #918 | PRESERVE / VERIFY_918 |
+
+**Não inferir** que `0 threads` significa `0 pendências`: comentários de Conversation, limitações de revisão e evidências em PR sucessor também são parte do histórico. `is_resolved=true` e `is_outdated=true` são estados da thread, não prova de alteração efetiva da `main`. **Todas as seis branches seguem sob `BRANCH_DELETE_ALLOWED=false`.**
+
+**Próximo cone:** examinar owners/consumidores nos PRs sucessores #733, #918, #1381, conferir os arquivos de review do #724, e verificar proteção/uso real de IDs 0031 e 0077 via acessos apropriados. Só após isso medir G3 completo; nenhuma caixa G3 fechada.
+<!-- /G3_REVIEW_SIX_REFS_20261103 -->
+
 <!-- /NO_BRANCH_IS_DISPOSABLE_20261103 -->
 
 ## 🧿 Regras de combate — critérios obrigatórios
