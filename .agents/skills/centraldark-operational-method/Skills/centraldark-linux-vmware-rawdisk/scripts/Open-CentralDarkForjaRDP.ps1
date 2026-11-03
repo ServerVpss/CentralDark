@@ -2,7 +2,7 @@
 # #OBSERVACOES#
 # @owner: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/scripts/Open-CentralDarkForjaRDP.ps1
 # @doc_ref: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md
-# @last_updated: 2026-11-03T23:02:50.330Z
+# @last_updated: 2026-11-03T23:04:19.608Z
 # @implementado: resolver config F: funcional ou perfil Windows autenticado sem mutar aliases.
 # @pendente: validar handshake XRDP do launcher atualizado na Casa.
 # @estado: SOURCE_ONLY; SSH_CONFIG_RESOLVER_FAIL_CLOSED
@@ -68,9 +68,15 @@ function Resolve-WorkingSshConfig {
         $found=$true
         # A rota só é elegível quando a identidade de host já confiada e o
         # usuário normal autenticam; StrictHostKeyChecking=yes não aceita host novo.
-        $result=@(& $ssh -F $candidate -o BatchMode=yes -o ConnectTimeout=5 `
-            -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0 $sshAlias 'hostname' 2>$null)
-        if($LASTEXITCODE -eq 0 -and ($result -join '').Trim() -ceq 'CentralDark-OS'){
+        try {
+            $result=@(& $ssh -F $candidate -o BatchMode=yes -o ConnectTimeout=5 `
+                -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0 $sshAlias 'hostname' 2>$null)
+            if($LASTEXITCODE -ne 0){continue}
+        }catch{
+            # Uma config falha nao impede testar outra existente; nao altera credenciais.
+            continue
+        }
+        if(($result -join '').Trim() -ceq 'CentralDark-OS'){
             return $candidate
         }
     }
