@@ -1,3 +1,11 @@
+// #OBSERVACOES#
+// @owner: apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs
+// @doc_ref: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md
+// @last_updated: 2026-11-03T19:22:20.610Z
+// @implementado: SHA do PR exato em smoke Puppeteer já existente, desktop/mobile.
+// @pendente: CI real e screenshot no mesmo HEAD; sem alegar instalação.
+// @estado: SOURCE_ONLY; VISUAL_PREVIEW_RECEIPT; CI_NOT_PROVEN
+// @next_cursor: conferir artifacts e comparativo visual do PR.
 // Michelin visual smoke — one-off read-only test, not a new runtime or star certifier.
 // Run with a clean Puppeteer profile on an approved, non-authenticated preview.
 // BUILD_PASS, INSTALL_PASS and 3 stars require separate material receipts.
@@ -72,7 +80,7 @@ export function findExistingChrome(cacheRoot, platform = process.platform) {
 }
 
 async function runVisualSmoke() {
-  const sourceSha = process.env.GITHUB_SHA || process.env.CENTRALDARK_SOURCE_SHA || "";
+  const sourceSha = process.env.CENTRALDARK_SOURCE_SHA || process.env.GITHUB_SHA || "";
   const target = validateVisualTarget(process.env.CENTRALDARK_VISUAL_URL || "http://127.0.0.1:4179/");
   const outDir = resolve(process.env.CENTRALDARK_VISUAL_ARTIFACTS || join(tmpdir(), "centraldark-visual-smoke"));
   mkdirSync(outDir, { recursive: true, mode: 0o700 });
