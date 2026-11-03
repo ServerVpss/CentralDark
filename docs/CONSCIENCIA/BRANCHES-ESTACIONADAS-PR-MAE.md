@@ -4,6 +4,13 @@
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
 <!-- BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
+@code_ref: scripts/farm-pr.sh
+@last_updated: 2026-11-03T17:53:58.872Z
+@estado: SOURCE_ONLY; BRANCH_DELETE_ALLOWED=false; RUNTIME_UNKNOWN
+@next_cursor: validar lint e diff no PR #1977; sem VPS nem deploy neste escopo.
+
+**Correção do executor de PRs no source:** `scripts/farm-pr.sh` removeu os argumentos de exclusão de branch em `gh pr merge` e o `reset --hard` posterior. Agora tenta sincronizar `main` apenas por fast-forward e informa quando o merge não foi comprovado. A documentação das receitas Git/Claude também foi alinhada para não recomendar limpeza de refs. **Este recibo prova alteração de source, não execução do script nem adoção universal por executores.**
+
 ### 🔒 Regra vigente do CHEFE — nenhuma branch descartável
 
 **BRANCH_DELETE_ALLOWED=FALSE · BRANCH_DISPOSABLE=NONE · PRESERVE_ALL_REFS=TRUE.**
