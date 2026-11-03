@@ -650,7 +650,7 @@ rastro_lock:
 
 hybrid_multiroute_capability_replay_2026_10_02:
   claim_key: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
-  owner: .agents/skills/centraldark-unified-surface-parity/SKILL.md
+  owner: .agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md
   registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   state: SEALED_PROVEN
   learning_ref: 146

@@ -1,10 +1,44 @@
 ---
 name: centraldark-operational-method
-description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
+description: Capacidade operacional de todo o sistema CentralDark; uma Skill Mãe, uma biblioteca Skills/, um único organismo. SOL coordena e HERMES executa; PIVETE permanece vocativo/proveniência histórica.
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
+
+# CENTRALDARK — Capacidade Operacional de Todo o Sistema
+
+**Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
+
+Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
+
+## Biblioteca operacional centralizada (21 Skills)
+
+Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
+
+- [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
+- [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
+- [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
+- [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
+- [centraldark-evidence-reconciliation](Skills/centraldark-evidence-reconciliation/SKILL.md)
+- [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md)
+- [centraldark-hermes-visual-computer-use](Skills/centraldark-hermes-visual-computer-use/SKILL.md)
+- [centraldark-hub-credential-control-plane](Skills/centraldark-hub-credential-control-plane/SKILL.md)
+- [centraldark-integration-verification](Skills/centraldark-integration-verification/SKILL.md)
+- [centraldark-intent-deploy-router](Skills/centraldark-intent-deploy-router/SKILL.md)
+- [centraldark-live-editing-fabric](Skills/centraldark-live-editing-fabric/SKILL.md)
+- [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md)
+- [centraldark-note-maintenance](Skills/centraldark-note-maintenance/SKILL.md)
+- [centraldark-ops](Skills/centraldark-ops/SKILL.md)
+- [centraldark-oracle-surface](Skills/centraldark-oracle-surface/SKILL.md)
+- [centraldark-reuse-runtime](Skills/centraldark-reuse-runtime/SKILL.md)
+- [centraldark-unified-surface-parity](Skills/centraldark-unified-surface-parity/SKILL.md)
+- [centraldark-vscode-log-bridge](Skills/centraldark-vscode-log-bridge/SKILL.md)
+- [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
+- [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
+
+**Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
@@ -330,4 +364,38 @@ Para pedidos sobre monitor/tela um, dois, tres, quatro, posicao, arquivo ou chat
 
 
 ## Hermes Visual Computer Use — WGC real
+**Comando operacional falado = monitor + acao, sem frase fixa.** "Posicione no monitor 2", "bota o cursor na tela dois", "leva o mouse virtual pro monitor de cima", "aponte pro monitor dois" e "mostra o mouse na tela 2" = selecionar monitor humano 2, posicionar cursor virtual Cua e exibir overlay Hermes simultaneamente. Usar a Skill visual existente: hermes-visual-computer-use/scripts/blink_cursor.py --monitor 2 --mode position (previa 5 segundos). "Pisca monitor 2" = --mode blink (3 ciclos). Interpretar numero 1-4, numero por extenso ou posicao confirmada: 1 direita, 2 superior, 3 esquerda, 4 inferior; revalidar apenas se geometria mudar. Mouse fisico so sob pedido explicito; captura apenas com autorizacao. Pergunta, negacao ou relato nao equivale a ordem. Receita comprovada 02/11/2026: daemon Cua ja aberto; start_session, set_agent_cursor_enabled, move_cursor(scope=window), end_session; o CHEFE confirmou visualmente o cursor virtual no monitor 2. A moldura usa o plugin visual.py existente. Nao criar parser, skill, segundo cursor ou processo paralelo. PROMPT_SELF_CACHE_P15=APLICAVEL; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=REUSE_EXISTING_SKILL_WITH_MONITOR_ACTION.
+
 Para identificar monitores dinamicamente, capturar um monitor com borda nativa e moldura esmeralda de atividade, carregar [hermes-visual-computer-use](../hermes-visual-computer-use/SKILL.md). Instala plugin oficial com seis ferramentas computer_*; preserva o computer_use/Cua e seu cursor. Usar esta skill para captura WGC por monitor; o Identify-CentralDarkMonitors.ps1 anterior permanece receita de inventario/previa historica, sem alegar WGC. Nao iniciar duas molduras para o mesmo alvo. Descoberta e testes ficam em references/validation.json e references/hermes-validation.json da nova skill.
+
+
+## Contraprova humana — Hermes Visual Computer Use (02/11/2026)
+
+- Intenção: validar visualmente mouse virtual e overlay nos quatro monitores, individualmente.
+- Prova técnica reportada na execução: captura WGC em quatro monitores, plugin Hermes com seis ferramentas registradas, overlay e três piscadas por monitor.
+- Contraprova humana: CHEFE confirmou ter visto perfeitamente o mouse virtual e a borda verde nas quatro telas, na ordem 1 → 2 → 3 → 4; satisfação declarada: **100%**.
+- Critério Michelin ⭐⭐⭐ + Kimetsu: executar → testar tecnicamente → apresentar prova → solicitar validação humana → registrar aprendizado → ponto fixo do escopo validado.
+- Limite: aprovação visual humana não comprova, por si só, futuras sessões, outras máquinas ou ausência de regressões.
+- Referência técnica: commit `a52c589906cef48c370c8c9936108be020829003`.
+- NEXT_CURSOR: encerrado para a contraprova humana desta execução; reabrir apenas mediante nova falha ou mudança de escopo.
+
+
+## Protocolo operacional aprovado pelo CHEFE — execução direta e contraprova (02/11/2026)
+
+- Intenção do CHEFE é o ponto de partida. Reutilizar owner e receitas existentes; não criar caminhos, Skills ou executores paralelos.
+- Executar diretamente quando autorizado, sem confirmações repetidas, micro-passos ou explicações antecipadas desnecessárias. Comunicar apenas achados materiais, impedimentos reais e decisões que dependam do CHEFE.
+- Após a execução, testar tecnicamente, observar o resultado e apresentar prova concreta. O CHEFE faz a contraprova humana da experiência real e informa se funcionou e se ficou satisfatório.
+- Aprovação humana não substitui testes técnicos; testes técnicos não substituem a aprovação humana quando esta for exigida. Registrar recibo, aprendizado e SHA/readback no owner existente após a confirmação.
+- Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
+- Critério de FIXED_POINT: intenção atendida + prova técnica + contraprova aplicável + registro verificado. UNKNOWN nunca vira PASS.
+- Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
+
+### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)
+
+**Decisão vigente:** na construção, manutenção, auditoria e documentação da CentralDark, SOL deve **navegar o código real** e verificar imports, owners, rotas, chamadas, contratos, dependências e fluxos, recorrendo aos scripts e validadores já existentes e a testes dirigidos ao cone afetado (por exemplo, sintaxe, lint, testes unitários/contratos, quando executáveis sem efeitos indevidos). **Não iniciar, reiniciar, movimentar ou testar ao vivo Hermes, suas janelas, mouse, overlay ou consumo de Skill automaticamente** como cerimônia de conclusão. Teste visual/interativo com Hermes fica para quando o CHEFE solicitar expressamente ou aprovar uma necessidade concreta; até lá, não gerar demanda por essa contraprova.
+
+**Critério proporcional:** `CODE_REVIEWED` e `STATIC_TEST_PASS` demonstram o que foi inspecionado/testado no código e com qual comando, SHA e resultado; **não** equivalem a `HERMES_RUNTIME_CONSUMED`, `DEPLOYED` nem a funcionamento futuro garantido. Se o objetivo era apenas escrever, integrar ou documentar código, registrar `FIXED_POINT` **do escopo documental/de código** com readback e testes pertinentes, deixando consumo vivo como `NOT_REQUESTED` ou `UNKNOWN` sem reabrir um cursor obrigatório. Quando o objetivo explícito exigir um efeito vivo ou quando um gate de publicação efetivamente o exigir, declarar a pendência específica em vez de fingir prova ou contornar o gate.
+
+**Fluxo curto:** `INTENÇÃO → OWNER EXISTENTE → INSPECIONAR CÓDIGO/ROTAS → MENOR DELTA → TESTAR SCRIPTS PERTINENTES → READBACK/SHA → RECEIPT/APRENDIZADO → CONCLUIR ESCOPO`. `HERMES_LIVE_TEST=ON_DEMAND_BY_CHEFE`. Não tornar a falta de teste vivo — que não foi solicitado — bloqueio fictício para o trabalho de código.
+
+**PROMPT_SELF_CACHE_P15=APLICÁVEL** para reuso desta receita, sem telemetria de HIT; **KV_CACHE_P16=UNKNOWN**; **NEXT_CURSOR=CODIGO_E_VALIDADORES_EXISTENTES_NO_PROXIMO_DELTA**.
