@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:57:26.210Z
+ * @last_updated: 2026-11-03T20:03:50.826Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -68,7 +68,7 @@ export function buildPrDiagramPreview({ number, title, body = "", headSha = "", 
     nodes: labels.map(([id, label]) => ({ id, label, group: "core" })),
     edges: edges.map(([from, to]) => ({ from, to })),
   });
-  if (!graph.validation.ok || graph.audit.dangling?.length || graph.audit.duplicates?.length) {
+  if (!graph.validation.ok || graph.audit.dangling_edges.length || graph.audit.duplicate_edges.length || graph.audit.self_loops.length) {
     throw new Error("PR_DIAGRAM_GRAPH_AUDIT_FAILED");
   }
   return {
