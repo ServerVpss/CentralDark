@@ -46,7 +46,7 @@ export function githubIssueAnnotations(errors = [], readSource = () => null) {
         idx = lines.findIndex((line) => line.includes(marker));
         if (idx >= 0) break;
       }
-      location = ` file=${relative}${idx >= 0 ? ",line=" + (idx + 1) : ""},`;
+      location = `file=${relative}${idx >= 0 ? ",line=" + (idx + 1) : ""},`;
     }
     return `::error ${location}title=${safeCode}::${escape(message)}`;
   });
