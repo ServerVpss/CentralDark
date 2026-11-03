@@ -7,6 +7,14 @@
 
 <!-- /CODE_FIRST_NO_RUNTIME_TOP_20261103 -->
 
+<!-- INSTALLER_SAME_SOURCE_20261103 -->
+> 🍒 **REGRA ACOPLADA AO HUD:** `INSTALLER_FOLLOWS_SOURCE=REQUIRED`. Se o Electron/cockpit ou pacote Windows/Linux evoluir, o **mesmo `install.sh`** e seu documento `docs/INSTALADOR/32-builder-multiplataforma-centraldark.md` evoluem junto, no diff do mesmo PR. **Sem segundo instalador, sem VPS/deploy/runtime nesta missão.**
+>
+> **Conferência de source do builder híbrido:** `win32-x64` NSIS, `linux-x64` AppImage/deb, `desktopName=com.centraldark.desktop`, `linux.executableName=centraldark-desktop`, seleção de entrypoints no manifesto e hashes no ledger; `install.sh` ganhou `--desktop-check`, `--desktop-build`, `--desktop-install-deb --yes`. **Nenhum build ou install executado. `BUILD=NOT_PROVEN`.**
+
+<!-- /INSTALLER_SAME_SOURCE_20261103 -->
+
+
 > **Natureza:** recibo de inventário CURRENT e fila operacional do owner histórico [BRANCHES-ESTACIONADAS-PR-MAE.md](../BRANCHES-ESTACIONADAS-PR-MAE.md).
 > **Fonte:** pesquisa paginada de refs remotas de `ServerVpss/CentralDark`; fotografia anterior à criação da branch desta missão.
 > **Integridade:** 892 refs distintas, incluindo `main`; 891 branches secundárias; inventário histórico com 569 entradas de 15/09/2026; 16 PRs abertos no momento da leitura.
@@ -22,7 +30,7 @@
 | 🟠 P1 PR fechado sem merge (hist.) | **66** | classificada em 15/09; exige releitura |
 | 🟡 P2 sem PR / status antigo (hist.) | **96** | exige descoberta atual |
 | 🔵 P3 fora do inventário de 15/09 | **321** | UNKNOWN, não presumir dispensável |
-| ⚪ P4 PR mergeado (hist.) | **392** | candidatura, **não é autorização de exclusão** |
+| ⚪ P4 PR mergeado (hist.) | **392** | fonte preservada para estudo; **não descartável** |
 | 🟢 Exclusões comprovadas nesta missão | **0** | nenhuma mutação de ref |
 | ✅ Ondas concluídas | **0/18** | checkboxes abaixo |
 
