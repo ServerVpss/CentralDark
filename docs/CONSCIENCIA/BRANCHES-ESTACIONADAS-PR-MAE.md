@@ -3,6 +3,19 @@
 <!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
+<!-- SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
+### 🧬 Escopo atual — integração somente no código GitHub
+
+**SOURCE_ONLY=true · VPS_REQUIRED=false · DEPLOY_REQUIRED=false · RUNTIME_GATE_FOR_THIS_MISSION=false.**
+
+Decisão vigente do CHEFE: reconciliar **no código fonte da mesma CentralDark** (owners existentes, receitas, metadata, documentação e review debts) e comprovar a diferença por SHA/readback no GitHub. **Não executar VPS, Casa, serviços, Docker, instalação ou deploy**; esses setores não são pré-requisitos desta missão. Isso não equivale a alegar que algum runtime foi testado.
+
+**Ajustes no PR #1977 (source):** `scripts/farm-pr.sh` preserva as referências remotas/locais e não executa `reset --hard`; quatro receitas Git espelhadas e a skill `.claude/skills/pr-merge-autonomous/SKILL.md` não instruem `--delete-branch`; `apps/instinto-superior/src/data/painel-unico.ts` agora apresenta o `#OBSERVACOES#` no cabeçalho, vinculado ao receipt `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`. A pendência P1 do PR #1973 só passa a **DOC_SOURCE_PATCHED_IN_PR**, não a `RESOLVED`, enquanto o gate de validação e revisão não comprovarem a correção.
+
+**Pré-validação estática do diff do PR #1977:** 10 arquivos alterados; os 2 arquivos executáveis (`painel-unico.ts` e `farm-pr.sh`) atendem às condições de metadados das primeiras 65 linhas e `@code_ref`/timestamp/doc alterado na mesma proposta. **Validador completo ainda não executado.** O critério de conclusão é alinhamento de source no GitHub com revisão comprovada, não deploy.
+
+<!-- /SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
+
 <!-- BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
 @code_ref: scripts/farm-pr.sh
 @last_updated: 2026-11-03T17:53:58.872Z
