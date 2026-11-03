@@ -2,12 +2,26 @@
 title: "Metacognição operacional e coevolução humano–sistema"
 status: "CANÔNICO"
 date: "2026-08-14"
-updated_at: "2026-10-16T10:44:52.397Z"
+updated_at: "2026-11-03T19:22:49.981Z"
 authority: "SEGREDO/CHEFE"
 scope: "Aprendizado do scaffold operacional; não altera autoridade humana nem prova AGI"
 ---
 
 # Metacognição operacional
+
+@code_ref: scripts/lupa/diagram-route-gate.mjs
+@code_ref: scripts/lupa/diagram-route-gate.test.mjs
+@last_updated: 2026-11-03T19:22:49.981Z
+
+<!-- LINE_VISUAL_ANNOTATION_20261103 -->
+### 🧿 GitHub — erro visível onde está o código
+
+**Mesma Meta Lupa:** `scripts/lupa/diagram-route-gate.mjs` mantém o recibo JSON e a semântica do gate. Quando `GITHUB_ACTIONS=true` e a validação falha, a CLI emite **anotações nativas `::error` pelo stderr**, com `file` e `line` apenas quando a localização puder ser deduzida do arquivo lido no HEAD do PR. Caso contrário, emitir código e mensagem sem inventar linha. Testes negativos no mesmo `diagram-route-gate.test.mjs`.
+
+O PR continua sendo caderno de prova e localização; anotações **não adicionam gate novo** nem substituem a contraprova visual de Puppeteer em arquivos UI. `UNKNOWN != PASS` e `MISSING_LINE != LINE_1`.
+
+<!-- /LINE_VISUAL_ANNOTATION_20261103 -->
+
 
 ```text
 METACOGNITION_IS_TOOL_NOT_GATE=true
