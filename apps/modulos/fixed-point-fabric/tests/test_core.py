@@ -3,8 +3,8 @@ from __future__ import annotations
 # #OBSERVACOES#
 # @owner: apps/modulos/fixed-point-fabric/tests/test_core.py
 # @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
-# @last_updated: 2026-11-03T18:21:11.636Z
-# @implementado: contraprovas config, HMAC, symlink, redacao, probe e ledger.
+# @last_updated: 2026-11-03T18:44:11.351Z
+# @implementado: testes de regressão HEAD único, HMAC assinado, config, symlink, ledger e probe.
 # @pendente: CI e revisão source SAME_HEAD; runtime fora do escopo.
 # @estado: SOURCE_CORRECTED; STATIC_GATES=PENDING; RUNTIME=NOT_TESTED_BY_SCOPE
 # @next_cursor: confrontar gates e review debts de #1381 no PR #1977.
@@ -34,7 +34,11 @@ class StaticProbe:
         self.blockers = blockers
 
     def run(self):
-        return ProbeReceipt(self.domain, self.status, self.domain, (Evidence(self.domain, "alive", True),), self.blockers)
+        head_claim = {"local": "head", "vps": "head_sha", "github": "main_head"}.get(self.domain)
+        evidence = (Evidence(self.domain, "alive", True),)
+        if head_claim:
+            evidence += (Evidence(self.domain, head_claim, "a" * 40),)
+        return ProbeReceipt(self.domain, self.status, self.domain, evidence, self.blockers)
 
 
 def probes(screenpipe_status=Status.PASS):
@@ -159,6 +163,30 @@ class FixedPointTests(unittest.TestCase):
         self.store.db.commit()
         with self.assertRaisesRegex(RuntimeError, "EVENT_CHAIN_INVALID"):
             self.engine(probes()).run_until_fixed_point()
+
+    def test_fixed_point_rejects_cross_head_even_when_every_probe_passes(self):
+        receipts = [probe.run() for probe in probes()]
+        receipts[2] = ProbeReceipt("github", Status.PASS, "github", (
+            Evidence("github", "main_head", "b" * 40),
+        ))
+        blockers = FixedPointPolicy().blockers_for(receipts)
+        self.assertIn("local:HEAD_MISMATCH", blockers)
+        self.assertIn("vps:HEAD_MISMATCH", blockers)
+
+    def test_fixed_point_rejects_missing_head_evidence(self):
+        receipts = [probe.run() for probe in probes()]
+        receipts[1] = ProbeReceipt("vps", Status.PASS, "vps", ())
+        blockers = FixedPointPolicy().blockers_for(receipts)
+        self.assertIn("vps:HEAD_UNVERIFIED", blockers)
+
+    def test_signed_vps_heartbeat_carries_checkout_head(self):
+        from centraldark_fixed_point.vps_agent import payload
+        with patch("centraldark_fixed_point.vps_agent.subprocess.check_output", return_value="a" * 40):
+            signed = payload("example-test-secret")
+        with patch("centraldark_fixed_point.probes.vps.fetch_json", return_value=(200, signed)):
+            receipt = VPSProbe({"heartbeat_url": "https://example.invalid/health", "hmac_secret": "example-test-secret"}).run()
+        self.assertEqual(receipt.status, Status.PASS)
+        self.assertEqual(next(e.value for e in receipt.evidence if e.claim == "head_sha"), "a" * 40)
 
     def test_project_pack_does_not_follow_outside_symlink(self):
         source = Path(self.temp.name) / "source"
