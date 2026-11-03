@@ -3,7 +3,8 @@
 @code_ref: install.sh
 @code_ref: apps/modulos/Bolt/source/package.json
 @code_ref: apps/modulos/Bolt/source/electron-builder.yml
-@last_updated: 2026-11-03T18:34:00.000Z
+@code_ref: apps/modulos/Bolt/source/resources/runtime/manifest.json
+@last_updated: 2026-11-03T18:43:00.000Z
 @estado: SOURCE_ONLY; HYBRID_BUILDER_PROPOSED_IN_PR_1977; CI_UNKNOWN; BUILD_NOT_RUN
 
 <!-- INSTALLER_HYBRID_SYNC_20261103 -->
@@ -11,7 +12,7 @@
 
 **SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** Em toda alteração da casca Electron, builder, targets, recursos empacotados ou nomes de artefatos, atualizar **no mesmo diff** o `install.sh` principal, esta documentação, o contrato de testes existente e o receipt do owner. **INSTALLER_FOLLOWS_SOURCE=REQUIRED**; nenhuma implementação é declarada completa com instalador defasado. Sem scripts de instalação paralelos.
 
-**Um builder híbrido, dois sistemas:** `apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs` suporta `win32-x64` e `linux-x64` reaproveitando `centraldark-build-ledger.mjs` e o SHA-256 dos dois artefatos. A ponte `electron/main/index.ts` chama a mesma receita para o host escolhido; `electron-builder.yml` preserva Windows NSIS e Linux AppImage + deb. `package.json` define `desktopName: com.centraldark.desktop`, com `linux.syncDesktopName: true`, visando a associação correta ao lançador Linux/KDE. `RUNTIME=NOT_TESTED_BY_SCOPE`.
+**Um builder híbrido, dois sistemas:** `apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs` suporta `win32-x64` e `linux-x64` reaproveitando `centraldark-build-ledger.mjs` e o SHA-256 dos dois artefatos. A ponte `electron/main/index.ts` chama a mesma receita para o host escolhido; `electron-builder.yml` preserva Windows NSIS e Linux AppImage + deb. `package.json` define `desktopName: com.centraldark.desktop`, com `linux.syncDesktopName: true` e `linux.executableName: centraldark-desktop`, visando a associação correta ao lançador Linux/KDE. O manifesto de cápsula mantém `entrypoint: CentralDark.exe` por compatibilidade e declara `entrypoints.win32-x64 = CentralDark.exe` / `entrypoints.linux-x64 = centraldark-desktop`; isso não altera os requisitos de sidecar Hermes. `RUNTIME=NOT_TESTED_BY_SCOPE`.
 
 **Entradas do install.sh (só código neste PR):**
 
