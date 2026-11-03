@@ -1,5 +1,35 @@
 # 🚀 Fluxo Autônomo de PR → Merge → Deploy
 
+@code_ref: scripts/github-autonomia-promocao.mjs
+@code_ref: scripts/github-autonomia-promocao.test.mjs
+@code_ref: .github/workflows/autonomia-promocao.yml
+@code_ref: scripts/farm-pr.sh
+@last_updated: 2026-11-03T18:47:46.856Z
+
+<!-- SOURCE_ONLY_SQUASH_REVIEW_RETENTION_20261103 -->
+## 🍒+1 CURRENT — GitHub é memória canônica, e verde libera squash seguro
+
+**Escopo do CHEFE em 03/11/2026:** `SOURCE_ONLY=true`, **SEM VPS, SEM DEPLOY, SEM TESTES DE RUNTIME**. As etapas de VPS/PM2/deploy abaixo são **históricas/opcionais sob autorização separada**, não requisitos para validar o código desta missão. `BRANCH_DELETE_ALLOWED=false` protege **todas** as branches antigas e novas.
+
+**Owner operacional único:** `scripts/github-autonomia-promocao.mjs`, invocado pela `.github/workflows/autonomia-promocao.yml` e validado com `scripts/github-autonomia-promocao.test.mjs` + `scripts/github-autonomia-green-guard.mjs`. Não criar um segundo mecanismo de merge nem usar `scripts/farm-pr.sh` como promotor substituto.
+
+### ⚖️ Equação fechada para promoção
+
+`SQUASH_READY = AUTHORIZED ∧ NON_DRAFT ∧ HEAD_SAME ∧ BASE_SAME ∧ MERGEABLE ∧ NO_UNRESOLVED_REVIEW ∧ NO_REVIEW_OVERFLOW ∧ NO_CHANGES_REQUESTED ∧ ALL_REQUIRED_CHECKS_GREEN_AT_HEAD ∧ CANONICAL_PASS ∧ REPO_ALLOWS_SQUASH ∧ DELETE_BRANCH_ON_MERGE_FALSE`.
+
+* Gates de CI `queued`, `pending`, `skipped`, `missing`, `cancelled` ou `failed` **não são SUCCESS na régua canônica**. `CONCLUSION=success`, associado ao **mesmo HEAD do PR e base revalidada**, é exigido para cada gate obrigatório.
+* Revisões P1/P2 anteriores, inclusive de PR já mergeado, são **dívida de source** e exigem análise de arquivo/docs no SHA atual; `MERGED != REVIEW_CLEARED`. No PR ativo, qualquer thread não resolvida ou overflow bloqueia **tanto FAST quanto ADVERSARIAL**. Nunca passar com thread zerada simulada.
+* GitHub REST expõe `delete_branch_on_merge` e `allow_squash_merge`. O promotor reconsulta o repositório **imediatamente antes do PUT /merge**; se a exclusão automática estiver ligada ou o campo estiver ausente, **não faz squash**. Não alternar configuração por conta própria.
+* O squash usa `sha: PR_HEAD_EXATO`; a main deve ser relida após o merge, registrando `merge_sha`, SHA de origem e recibo. **Código mergeado não prova runtime.**
+* A opção `allow_auto_merge` nativa pode estar desligada sem invalidar este **promotor customizado canônico**, desde que ele esteja executando e as cláusulas acima sejam provadas. Não realizar merge de emergência com `--admin`.
+
+**P1 concreto:** [#1973](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463) foi mergeado com thread ainda não resolvida; a correção de `#OBSERVACOES#` e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md` está proposta no PR #1977. Só encerrar a dívida depois de validar os documentos atuais, os gates e o readback na main.
+
+**CURRENT da auditoria:** PR #1977 em Draft, HEAD `10c5ee0cc13889e0e8f2474b4b90c79839edd646` na medição inicial; 11 workflows `queued`, 2 `pending`, 2 `skipped`; sem verde demonstrado. A alteração deste documento cria HEAD novo: **reconsultar SHA e checks antes de promover**. A configuração de deleção da ref no GitHub ainda não foi lida por conector; seu valor continua `UNKNOWN`.
+
+<!-- /SOURCE_ONLY_SQUASH_REVIEW_RETENTION_20261103 -->
+
+
 **Título canônico:** Orchestração determinística de PR, gates e deployment mínimo  
 **Origem:** Sessão 2026-09-20, cristalização de delta operacional  
 **Autoridade:** SEGREDO/CHEFE + aprendizado de uma casa  
@@ -137,7 +167,7 @@ git log -1 --oneline fix/branch
 ### 4.2 Squash Merge
 ```bash
 # Opção A: via gh CLI (se disponível)
-gh pr merge 1605 --squash --admin
+gh pr merge 1605 --squash --match-head-commit "$EXPECTED_HEAD"  # somente após gates e guarda de retenção
 
 # Opção B: via MCP admin_commit_main (determinístico)
 mcp_admin_commit_main(
@@ -160,7 +190,7 @@ git push origin main
 git log main -1 --oneline
 
 # Verificar que branch antiga foi limpa (opcional)
-git branch -d fix/admin-operational-flow-card-20260920
+# PRESERVAR: branch histórica retida por BRANCH_DELETE_ALLOWED=false
 
 # Registrar commit SHA em receipt
 echo "MERGE_SHA=$(git rev-parse main)" >> /tmp/receipt-#1605.txt
