@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:50:46.288Z
+ * @last_updated: 2026-11-03T19:52:41.703Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -11,6 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { syncObsidian } from "./diagram-route-excalidraw.mjs";
 
@@ -74,7 +75,13 @@ function renderPrDiagramPreview() {
     throw new Error("PR_DIAGRAM_REQUIRES_PULL_REQUEST");
   }
   const pr = event.pull_request;
-  const files = String(process.env.CENTRALDARK_CHANGED_FILES || "").split("\n").filter(Boolean);
+  let files = String(process.env.CENTRALDARK_CHANGED_FILES || "").split("\n").filter(Boolean);
+  if (files.length === 0 && /^[0-9a-f]{40}$/i.test(String(event.pull_request.base?.sha || ""))) {
+    try {
+      files = git(["diff", "--name-only", event.pull_request.base.sha, pr.head.sha, "--"])
+        .split(/\r?\n/).filter(Boolean);
+    } catch { files = []; }
+  }
   const diagram = buildPrDiagramPreview({
     number: pr.number, title: pr.title, body: pr.body, headSha: pr.head.sha, files,
   });
@@ -89,15 +96,25 @@ function renderPrDiagramPreview() {
     path.join(REPO, "skills/mermaid_render.py"), sourcePath,
     "--svg", svg, "--png", png, "--ascii", ascii, "--theme", "tokyo-night",
   ], { cwd: REPO, stdio: "inherit", timeout: 180000 });
-  for (const filename of [svg, png, ascii]) {
+  const proofs = {};
+  for (const [format, filename] of Object.entries({ svg, png, ascii })) {
     if (!fs.existsSync(filename) || fs.statSync(filename).size <= 0) {
       throw new Error("PR_DIAGRAM_ARTIFACT_NOT_PROVEN:" + filename);
     }
+    const bytes = fs.readFileSync(filename);
+    const svgStart = bytes.toString("utf8", 0, 150).trimStart();
+    if (format === "svg" && !/^(?:<svg\b|<\?xml\b)/i.test(svgStart)) {
+      throw new Error("PR_DIAGRAM_SVG_INVALID");
+    }
+    if (format === "png" && !bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) {
+      throw new Error("PR_DIAGRAM_PNG_INVALID");
+    }
+    proofs[format] = { bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") };
   }
   const receipt = {
     status: "ARTIFACTS_RENDERED", owner: "scripts/lupa/diagram-route-gate.mjs",
     pr: pr.number, sha: pr.head.sha, source_kind: diagram.kind,
-    preferred: diagram.preferred, formats: ["svg", "png", "ascii"], names,
+    preferred: diagram.preferred, formats: ["svg", "png", "ascii"], names, proofs,
     runtime: "NOT_TESTED_BY_SCOPE",
   };
   fs.writeFileSync(path.join(output, "receipt.json"), JSON.stringify(receipt, null, 2) + "\n");
