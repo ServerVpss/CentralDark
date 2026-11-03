@@ -81,7 +81,7 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 ### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
 
-@last_updated: 2026-11-03T18:26:02.893Z
+@last_updated: 2026-11-03T18:28:07.127Z
 **Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
 
 **Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
@@ -114,6 +114,14 @@ Code readback mostrou três lacunas em `engine.py`: exceção de probe, evidence
 @code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py
 @code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/cli.py
 @code_ref: apps/modulos/fixed-point-fabric/tests/test_state_library.py
+
+
+### 🧠 #1381 P1 · Fail-closed da partitura obrigatória Hermes
+
+Na `main` do PR legado, `GraphRAG-Master/agent.mjs` convertia partitura inválida em texto `FAIL_CLOSED=true`, mas `core/decisor.mjs` podia continuar pelo cache, modelo local e fallback sem nenhum bloqueio. No delta de source do PR #1977, `contextoPartitura` agora rejeita falhas estruturadamente; `decidir` verifica `carregarPartitura()` **antes do cache e dos modelos** e retorna `BLOCKED` determinístico ao falhar. `selfTest` existente recebe contraprova de erro da partitura. Nenhuma decisão de modelo foi executada nesta missão.
+
+@code_ref: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+@code_ref: apps/modulos/HERMES-CORE/core/decisor.mjs
 
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
