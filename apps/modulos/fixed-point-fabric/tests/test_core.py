@@ -1,10 +1,25 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/tests/test_core.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:16:50.564Z
+# @implementado: contraprovas de configuração, HMAC ausente e symlink externo adicionadas.
+# @pendente: CI e revisão source SAME_HEAD; runtime fora do escopo.
+# @estado: SOURCE_CORRECTED; STATIC_GATES=PENDING; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: confrontar gates e review debts de #1381 no PR #1977.
+
 import os
+import json
+import zipfile
+from unittest.mock import patch
 import tempfile
 import unittest
 from pathlib import Path
 
+from centraldark_fixed_point.codec import compact_project
+from centraldark_fixed_point.config import load_config
+from centraldark_fixed_point.probes.vps import VPSProbe
 from centraldark_fixed_point.engine import FixedPointEngine
 from centraldark_fixed_point.models import Evidence, ProbeReceipt, Status
 from centraldark_fixed_point.policy import FixedPointPolicy
@@ -106,6 +121,35 @@ class FixedPointTests(unittest.TestCase):
             self.engine([]).policy.regressions_against(baseline, candidate),
             ["screenpipe:FAIL"],
         )
+
+
+    def test_config_rejects_one_sample_fixed_point(self):
+        path = Path(self.temp.name) / "invalid.json"
+        path.write_text(json.dumps({"policy": {"required_stable_samples": 1}}), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "required_stable_samples"):
+            load_config(path)
+
+    def test_vps_without_hmac_secret_is_blocked_before_network(self):
+        with patch("centraldark_fixed_point.probes.vps.fetch_json", side_effect=AssertionError("network must not run")):
+            receipt = VPSProbe({"heartbeat_url": "https://example.invalid/health"}).run()
+        self.assertEqual(receipt.status, Status.BLOCKED)
+        self.assertIn("HMAC_SECRET_MISSING", receipt.blockers)
+
+    def test_project_pack_does_not_follow_outside_symlink(self):
+        source = Path(self.temp.name) / "source"
+        source.mkdir()
+        (source / "safe.txt").write_text("inside", encoding="utf-8")
+        outside = Path(self.temp.name) / "secret.txt"
+        outside.write_text("private", encoding="utf-8")
+        try:
+            (source / "linked.txt").symlink_to(outside)
+        except (OSError, NotImplementedError):
+            self.skipTest("symlinks unavailable")
+        destination = Path(self.temp.name) / "snapshot.zip"
+        manifest = compact_project(source, destination)
+        self.assertEqual([item["path"] for item in manifest["files"]], ["safe.txt"])
+        with zipfile.ZipFile(destination) as archive:
+            self.assertNotIn("linked.txt", archive.namelist())
 
 
 if __name__ == "__main__":
