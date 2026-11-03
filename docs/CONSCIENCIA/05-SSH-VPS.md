@@ -7,6 +7,14 @@ updated: 2026-06-29
 
 # 05 — SSH na VPS
 
+
+<!-- CURRENT_VMWARE_LINK_SSH_REUSE_20261103 -->
+## 🍒+1 SSH Casa→VMware (não confundir com a VPS e com SFTP AkyronHost)
+
+A fonte operacional da VM está na [Skill VMware existente](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md) e na [receita Kingston](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). **Não partir de `Segredo-VPS` para localizar a VM**. Prova atual: processo VMX em `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`; `vmrun` = `192.168.35.130`; alias `openkylin-vm` ainda em `192.168.35.128` (timeout), SSH Casa→VM usando override pontual e host key previamente verificada = **PASS**. VM Tailscale sem aprovação do administrador; VM→VPS não comprovado. Nenhuma configuração SSH foi alterada, e o acesso SFTP à AkyronHost descrito mais abaixo é **outro servidor e outra finalidade**. `CURRENT > HISTORY`; `NEXT_CURSOR=REMEASURE_VMWARE_DHCP_BEFORE_VPS_PROBE`.
+<!-- /CURRENT_VMWARE_LINK_SSH_REUSE_20261103 -->
+
+
 ## Regra inviolável
 
 **NUNCA** usar `$VPS_SSH_KEY_LOVABLE` direto com `printf` / `echo` + `ssh`.
