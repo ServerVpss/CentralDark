@@ -4,7 +4,7 @@
 @code_ref: scripts/github-autonomia-promocao.test.mjs
 @code_ref: .github/workflows/autonomia-promocao.yml
 @code_ref: scripts/farm-pr.sh
-@last_updated: 2026-11-03T19:29:54.225Z
+@last_updated: 2026-11-03T19:59:25.853Z
 
 @code_ref: scripts/github-autonomia-varredura.mjs
 @code_ref: scripts/github-autonomia-varredura.test.mjs
@@ -12,6 +12,20 @@
 @code_ref: .github/workflows/test.yml
 @code_ref: apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs
 @last_updated: 2026-11-03T19:24:11.247Z
+
+
+<!-- UNIVERSAL_PR_VISUAL_TRIPLE_20261103 -->
+### 🎮 A cada PR — Mermaid e três formatos, sem inventar integração
+
+A própria `porta-de-entrada.yml` agora usa `scripts/lupa/diagram-route-gate.mjs --pr-preview` para produzir diagrama **derivado** de cada explicação. A primeira escolha é adaptativa (`PNG` para UI; `ASCII` para scripts; `SVG` para explicação genérica), mas **o artefato de Actions inclui todos**: `.mmd`, `.svg`, `.png`, `.txt` e `receipt.json` com `PR_HEAD_SHA` e SHA-256 de cada saída.
+
+O PR pode receber Mermaid de qualquer agente/modelo via Markdown; se existir bloco explícito, ele é preservado; se não existir, o Grafo Vivo existente monta um fluxograma de **revisão**, não uma especificação inventada. `scripts/lupa/diagram-route-excalidraw.mjs` continua o owner da projeção Obsidian/Excalidraw, sem duplicar geradores. Render local `pretty-mermaid` recebe dependências via lockfile. Kroki remoto é opt-in, não transmite código privado silenciosamente.
+
+**Prova e leitura:** o resumo do workflow exibe Mermaid e a lista de arquivos, e `actions/upload-artifact@v4` guarda os quatro formatos e o recibo. `RENDER_SKIPPED/ERROR=YELLOW`: falha de renderização não reprova os outros gates do PR. `WORKFLOW_SUCCESS` não substitui a inspeção do código nem a prova de runtime. O check continua exigindo seus gates de segurança preexistentes.
+
+**Portabilidade de modelos:** diagramas e screenshots criados por outros modelos são **entradas de usuário/PR**; nenhum novo fornecedor de IA é chamado automaticamente nem ganha autorização de escrita no GitHub.
+
+<!-- /UNIVERSAL_PR_VISUAL_TRIPLE_20261103 -->
 
 <!-- GLOBAL_MAIN_PUSH_AUDIT_AND_VISUAL_20261103 -->
 ### 🪡 Auditoria global de push na main + PR visual com linha do erro
