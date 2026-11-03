@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T20:03:50.826Z
+ * @last_updated: 2026-11-03T20:04:39.383Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -128,6 +128,8 @@ function renderPrDiagramPreview() {
     }
     proofs[format] = { bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") };
   }
+  const mmdBytes = fs.readFileSync(sourcePath);
+  proofs.mmd = { bytes: mmdBytes.length, sha256: createHash("sha256").update(mmdBytes).digest("hex") };
   const receipt = {
     status: "ARTIFACTS_RENDERED", owner: "scripts/lupa/diagram-route-gate.mjs",
     pr: pr.number, sha: pr.head.sha, source_kind: diagram.kind,
@@ -144,7 +146,12 @@ function renderPrDiagramPreview() {
       "SHA: " + fence.slice(0, 1) + pr.head.sha + fence.slice(0, 1) +
         " · preferido: **" + diagram.preferred.toUpperCase() + "**",
       "Fonte: " + diagram.kind + " · Todos os formatos: SVG, PNG e ASCII no artifact do job.",
+      "Abrir artefatos: https://github.com/" +
+        String(process.env.GITHUB_REPOSITORY || "").replace(/[^A-Za-z0-9_.\/-]/g, "") +
+        "/actions/runs/" + String(process.env.GITHUB_RUN_ID || "").replace(/[^0-9]/g, ""),
       fence + "mermaid", escaped.trimEnd(), fence,
+      "#### Texto ASCII acessível a agentes e terminais",
+      fence + "text", fs.readFileSync(ascii, "utf8").slice(0, 7500).replaceAll(fence, "'''").trimEnd(), fence,
       "A imagem não é fonte da verdade; confirmar código e comentários do PR.", "",
     ];
     fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
