@@ -263,14 +263,16 @@ When asked to auto-fix CI, follow this loop:
 
 ## 6. Merging
 
+> **CentralDark — SOURCE_ONLY / PR #1977:** `BRANCH_DELETE_ALLOWED=false`; squash não elimina branch, e integração no código do GitHub não depende de VPS/deploy. Não alegar runtime comprovado.
+
 **With gh:**
 
 ```bash
-# Squash merge + delete branch (cleanest for feature branches)
-gh pr merge --squash --delete-branch
+# Squash sem apagar ref remota/local: nenhuma branch CentralDark é descartável.
+gh pr merge --squash
 
-# Enable auto-merge (merges when all checks pass)
-gh pr merge --auto --squash --delete-branch
+# Auto-merge após checks, também sem exclusão de ref.
+gh pr merge --auto --squash
 ```
 
 **With git + curl:**
@@ -287,13 +289,9 @@ curl -s -X PUT \
     \"commit_title\": \"feat: add user authentication (#$PR_NUMBER)\"
   }"
 
-# Delete the remote branch after merge
-BRANCH=$(git branch --show-current)
-git push origin --delete $BRANCH
-
-# Switch back to main locally
-git checkout main && git pull origin main
-git branch -d $BRANCH
+# REGRA CENTRALDARK: preservar toda branch, mesmo após squash/merge.
+# Não remover refs remotas nem locais; somente avançar main por fast-forward.
+git checkout main && git pull --ff-only origin main
 ```
 
 Merge methods: `"merge"` (merge commit), `"squash"`, `"rebase"`
