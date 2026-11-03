@@ -1,7 +1,21 @@
+# #OBSERVACOES#
+# @owner: .github/workflows/test.yml
+# @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+# @last_updated: 2026-11-03T19:21:55.426Z
+# @implementado: captura visual desktop/mobile no PR do Instinto, HEAD exato e artifact.
+# @pendente: execução do runner GitHub e readback do screenshot; não é prova de deploy.
+# @estado: SOURCE_ONLY; VISUAL_CI_PR_ENABLED; SCREENSHOT_NOT_RUN
+# @next_cursor: verificar PR/HEAD dos artefatos após GitHub Actions.
 name: ⚙️ Test Workflow — regressão Instinto Superior
 
 on:
   workflow_dispatch: {}
+  pull_request:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - 'apps/instinto-superior/**'
+      - '.github/workflows/test.yml'
   push:
     branches: [main]
     paths:
@@ -20,22 +34,25 @@ concurrency:
 
 jobs:
   instinto-regression:
+    env:
+      CENTRALDARK_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     name: 🧬 Construir e testar sem fingir instalação
     runs-on: [self-hosted, Linux]
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 1
       - name: Provar HEAD e executar testes de fonte
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD)" = "$CENTRALDARK_SOURCE_SHA"
           node --version
           node --test apps/instinto-superior/scripts/verify-hud-zone.mjs
-          echo "SOURCE_REGRESSION=PASS SAME_SHA=$GITHUB_SHA"
+          echo "SOURCE_REGRESSION=PASS SAME_SHA=$CENTRALDARK_SOURCE_SHA"
       - name: Instalar dependências, validar lint e compilar Instinto
         working-directory: apps/instinto-superior
         shell: bash
@@ -44,8 +61,8 @@ jobs:
           npm ci --ignore-scripts --no-audit --no-fund
           npm run lint
           npm run build:vps
-          echo "BUILD_REGRESSION=PASS SAME_SHA=$GITHUB_SHA"
-          echo "MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$GITHUB_SHA"
+          echo "BUILD_REGRESSION=PASS SAME_SHA=$CENTRALDARK_SOURCE_SHA"
+          echo "MICHELIN_STAR_1=SOURCE_BUILD_PASS SAME_SHA=$CENTRALDARK_SOURCE_SHA"
           echo "MICHELIN_STAR_2=CI_CONCLUSION_AND_INTEGRATION_RECEIPTS_REQUIRED"
           echo "MICHELIN_STAR_3=DEPLOY_VISUAL_CASA_VPS_RECEIPTS_REQUIRED"
           echo "RUNTIME_INSTALL_CONNECT_PROVE=NOT_COVERED_BY_THIS_JOB"
@@ -69,7 +86,7 @@ jobs:
           done
           curl -fsS --max-time 5 "$CENTRALDARK_VISUAL_URL" >/dev/null
           node scripts/puppeteer-michelin-smoke.mjs
-          echo "MICHELIN_PUPPETEER_VISUAL=PASS SCOPE=PUBLIC_PREVIEW SAME_SHA=$GITHUB_SHA STARS_CERTIFIED=0"
+          echo "MICHELIN_PUPPETEER_VISUAL=PASS SCOPE=PUBLIC_PREVIEW SAME_SHA=$CENTRALDARK_SOURCE_SHA STARS_CERTIFIED=0"
           echo "MICHELIN_STAR_3=REQUIRES_AUTH_CASA_VPS_AND_INDEPENDENT_RECEIPTS"
 
       - name: 🧾 Preservar recibo visual público (sem sessão/cookies)
