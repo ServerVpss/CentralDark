@@ -1,5 +1,12 @@
 # 🪬 CentralDark — Funil único das 891 branches | snapshot 2026-11-03
 
+<!-- CODE_FIRST_NO_RUNTIME_TOP_20261103 -->
+> 🍒 **REGRA ZERO DA MISSÃO:** **SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** Alinhar o código diretamente no GitHub, promover à `main` somente com proof de source, e preservar **todas** as 891 branches do snapshot e quaisquer novas. Nenhuma exclusão autorizada.
+>
+> ⭐⭐⭐ **Michelin existente:** construir pelo menor delta → integrar código no owner atual → provar por diff, revisão, gates estáticos e SHA/readback, proporcional ao alvo do GitHub. 🪡 **Costura existente:** classificar conflitos (`CURRENT/INCOMING/BOTH/STRUCTURED/YELLOW`) e preservar material útil, sem criar resolvedor novo. `RUNTIME=NOT_TESTED_BY_SCOPE` **não impede** a conclusão de código; `SOURCE_ALIGNED != RUNTIME_VERIFIED`.
+
+<!-- /CODE_FIRST_NO_RUNTIME_TOP_20261103 -->
+
 > **Natureza:** recibo de inventário CURRENT e fila operacional do owner histórico [BRANCHES-ESTACIONADAS-PR-MAE.md](../BRANCHES-ESTACIONADAS-PR-MAE.md).
 > **Fonte:** pesquisa paginada de refs remotas de `ServerVpss/CentralDark`; fotografia anterior à criação da branch desta missão.
 > **Integridade:** 892 refs distintas, incluindo `main`; 891 branches secundárias; inventário histórico com 569 entradas de 15/09/2026; 16 PRs abertos no momento da leitura.
