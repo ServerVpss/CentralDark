@@ -1,7 +1,7 @@
 # #OBSERVACOES#
 # @owner: .github/workflows/porta-de-entrada.yml
 # @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
-# @last_updated: 2026-11-03T19:53:43.366Z
+# @last_updated: 2026-11-03T20:07:29.843Z
 # @implementado: alertas por linha, audit push main e preview PR em SVG PNG ASCII no gate existente.
 # @pendente: runner/CI SAME_HEAD e eventos reais para comprovar receipt.
 # @estado: SOURCE_ONLY; MAIN_PUSH_AUDIT_OBSERVATIONAL
@@ -132,6 +132,12 @@ jobs:
           CENTRALDARK_RENDER_NO_INSTALL: "1"
         run: |
           set -euo pipefail
+          # O Grafo Vivo preexistente é testado sem virar gate global por escopo alheio.
+          node --test scripts/grafo-vivo/mermaid-core.test.mjs || \
+            echo "::warning title=GRAFO_VIVO_TEST_PENDING::Projeção a revalidar no cone de diagramas"
+          # Excalidraw original: auditoria de conservação read-only; nunca sobrescrever desenho.
+          node scripts/lupa/diagram-route-gate.mjs --check-obsidian || \
+            echo "::warning title=EXCALIDRAW_SOURCE_STALE::Fonte Excalidraw requer reconciliação, não apagar conteúdo"
           npm ci --prefix skills/pretty-mermaid --ignore-scripts --no-audit --no-fund --prefer-offline
           node scripts/lupa/diagram-route-gate.mjs --pr-preview --out-dir "$RUNNER_TEMP/centraldark-pr-diagrams"
 
