@@ -2,6 +2,14 @@
 # 🎖️  farm-pr.sh — abre PR fake, auto-mergeia e farma medalha do GitHub.
 # Uso: bash scripts/farm-pr.sh [quantidade]   (padrão: 1)
 # Requer: gh autenticado (gh auth status).
+# #OBSERVACOES#
+# @owner: scripts/farm-pr.sh
+# @doc_ref: docs/CONSCIENCIA/BRANCHES-ESTACIONADAS-PR-MAE.md
+# @last_updated: 2026-11-03T17:50:02.265Z
+# @implementado: fonte do fluxo de squash preserva a branch; sync local apenas fast-forward.
+# @pendente: consumo por executores/CI não comprovado; não executar farm neste escopo.
+# @estado: SOURCE_ONLY; BRANCH_DELETE_ALLOWED=false; EXECUTION_NOT_TESTED
+# @next_cursor: conferir diff e readback do PR #1977, sem VPS ou deploy.
 
 set -euo pipefail
 
@@ -78,16 +86,22 @@ ${CO_AUTHOR}")
     -H "Accept: application/vnd.github.squirrel-girl-preview+json" \
     -f content='heart' >/dev/null 2>&1 || true
 
-  # Auto-merge (tolerante a falhas — branch pode já ter sido deletada por auto-merge anterior)
-  gh pr merge "$PR_NUM" --squash --delete-branch --auto >/dev/null 2>&1 || \
-    gh pr merge "$PR_NUM" --squash --delete-branch >/dev/null 2>&1 || true
+  # Branch preservada (PR #1977): squash não autoriza exclusão da ref.
+  if gh pr merge "$PR_NUM" --squash --auto >/dev/null 2>&1; then
+    echo "🛡️ Auto-merge solicitado no PR #${PR_NUM}; branch preservada."
+  elif gh pr merge "$PR_NUM" --squash >/dev/null 2>&1; then
+    echo "🛡️ Squash aceito no PR #${PR_NUM}; branch preservada."
+  else
+    echo "🟠 PR #${PR_NUM}: merge não comprovado; branch preservada." >&2
+  fi
 
-  echo "🚀 Auto-merge ativado no PR #${PR_NUM}"
-
-  # Volta pra main e força sincronia (evita conflito com auto-merge em andamento)
-  git checkout main --quiet 2>/dev/null || true
-  git fetch origin main --quiet 2>/dev/null || true
-  git reset --hard origin/main --quiet 2>/dev/null || true
+  # Sincronização local somente fast-forward; nunca reset destrutivo.
+  git checkout main --quiet
+  git fetch origin main --quiet
+  if ! git merge --ff-only origin/main --quiet; then
+    echo "🟠 main local divergente: preservar alterações e interromper sem reset." >&2
+    exit 1
+  fi
 
   # Pequena pausa pra não estourar rate limit
   [ "$QTD" -gt 1 ] && sleep 3
