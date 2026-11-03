@@ -3,8 +3,8 @@ from __future__ import annotations
 # #OBSERVACOES#
 # @owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/vps.py
 # @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
-# @last_updated: 2026-11-03T18:16:50.564Z
-# @implementado: heartbeat só pode passar com segredo e assinatura HMAC válidos.
+# @last_updated: 2026-11-03T18:43:17.560Z
+# @implementado: HMAC verificado e Git HEAD assinado exposto como evidence ao gate.
 # @pendente: CI e revisão source SAME_HEAD; runtime fora do escopo.
 # @estado: SOURCE_CORRECTED; STATIC_GATES=PENDING; RUNTIME=NOT_TESTED_BY_SCOPE
 # @next_cursor: confrontar gates e review debts de #1381 no PR #1977.
@@ -55,4 +55,7 @@ class VPSProbe:
             blockers.append("SIGNATURE_INVALID")
         receipt_status = Status.PASS if not blockers else Status.FAIL
         stable_payload = {k: payload.get(k) for k in ("hostname", "platform", "agent_version") if k in payload}
-        return ProbeReceipt(self.domain, receipt_status, "Heartbeat VPS assinado", (Evidence("vps", "heartbeat", stable_payload),), tuple(blockers))
+        return ProbeReceipt(self.domain, receipt_status, "Heartbeat VPS assinado", (
+            Evidence("vps", "heartbeat", stable_payload),
+            Evidence("vps", "head_sha", payload.get("head_sha")),
+        ), tuple(blockers))
