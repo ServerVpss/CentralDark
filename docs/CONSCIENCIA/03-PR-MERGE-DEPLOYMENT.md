@@ -4,7 +4,7 @@
 @code_ref: scripts/github-autonomia-promocao.test.mjs
 @code_ref: .github/workflows/autonomia-promocao.yml
 @code_ref: scripts/farm-pr.sh
-@last_updated: 2026-11-03T20:10:31.120Z
+@last_updated: 2026-11-03T21:49:40.259Z
 
 @code_ref: scripts/github-autonomia-varredura.mjs
 @code_ref: scripts/github-autonomia-varredura.test.mjs
@@ -36,7 +36,7 @@ O PR pode receber Mermaid de qualquer agente/modelo via Markdown; se existir blo
 - `.github/workflows/porta-de-entrada.yml` já recebe `push` em todas as branches. Para `refs/heads/main`, a mesma pipeline chama `scripts/github-autonomia-varredura.mjs audit-main-push` com acesso de leitura. O classificador compara o `merge_commit_sha` do PR associado ao SHA novo da `main`: `PR_MERGE_COMMIT_LINKED`, `UNLINKED_MAIN_PUSH_REVIEW` ou `UNKNOWN`. Emite `::warning/::notice` e `GITHUB_STEP_SUMMARY` **sem reprovar PR nem anular trabalho**; origem sem vínculo não é automaticamente violação.
 - `scripts/lupa/writer-safe-push-main.sh` segue como salvaguarda de escritores cooperativos: `--force` proibido, push condicionado a gate, escopo e readback do SHA. **Isso não impede push feito fora dele**.
 - `scripts/lupa/diagram-route-gate.mjs` emite `::error file=...,line=...` no CI quando puder provar a linha real do source, preservando a saída JSON e sem fabricar números. Testes no `diagram-route-gate.test.mjs`.
-- `.github/workflows/test.yml` usa Puppeteer existente em PRs que toquem `apps/instinto-superior/**`; captura desktop/mobile e receipt só quando CI concluir. Checkout e screenshot devem apontar ao **mesmo HEAD do PR**, sem alegar deploy. Auditoria de push não vira gatilho novo de instalação.
+- `.github/workflows/test.yml` preserva os gates estáticos e o build de source. **Se o corpo do PR declarar `RUNTIME_TESTS_REQUIRED=false`, o step Puppeteer não inicia servidor nem navegador**. Para demais PRs, conserva a captura desktop/mobile condicionada ao CI. Nenhum screenshot ou runtime é alegado para o #1977. Auditoria de push não vira gatilho novo de instalação.
 
 **Verificação do código visual:** o `puppeteer-michelin-smoke.mjs` referencia este documento `docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md`, compatível com o regex de documentação do gate; o manifesto incremental do Instinto permanece como complemento histórico.\n\n**Estado da edição:** regras e testes versionados na branch do [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977); `MAIN_AUDIT_RUNTIME=UNKNOWN`, `VISUAL_PR_CI=UNKNOWN`, `WORKFLOW_RUN_PENDING`. A ausência de proteção nativa significa que a auditoria **não pode garantir prevenção de push direto**. A decisão sobre squash continua com o promotor existente, independentemente da auditoria observacional.
 
