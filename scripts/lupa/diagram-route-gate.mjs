@@ -3,9 +3,9 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:26:40.796Z
+ * @last_updated: 2026-11-03T19:18:11.167Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
- * @status: CODE_GATE_IMPLEMENTED; GLOBAL_ENFORCEMENT_PENDING_MAIN_AND_CI
+ * @status: CODE_GATE_IMPLEMENTED; CI_FILE_LINE_ANNOTATIONS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
  */
 import fs from "node:fs";
@@ -22,6 +22,34 @@ const TRIGGERS_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
 
 export function normalizePath(value) {
   return String(value || "").replaceAll("\\", "/").replace(/^\.\//, "");
+}
+
+/** Visualize erros no PR sem alterar o JSON original: file/line somente quando comprováveis. */
+export function githubIssueAnnotations(errors = [], readSource = () => null) {
+  const escape = (value) => String(value).replaceAll("%", "%25")
+    .replaceAll("\r", "%0D").replaceAll("\n", "%0A");
+  return errors.map((raw) => {
+    const message = String(raw);
+    const [code, candidate] = message.split(":");
+    const safeCode = /^[A-Z0-9_]+$/.test(code || "") ? code : "CENTRALDARK_GATE_ERROR";
+    const relative = String(candidate || "");
+    const isSource = /^(?:apps|src|scripts|docs|\.github|\.agents)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|js|jsx|mjs|cjs|json|yml|yaml|md|mmd|sh|py)$/.test(relative)
+      && !relative.split("/").includes("..");
+    const content = isSource ? readSource(relative) : null;
+    let location = "";
+    if (typeof content === "string") {
+      const lines = content.split(/\r?\n/);
+      const prefer = /^(?:CODE_DOC_|DOC_CODE_|CODE_TIMESTAMP_|CODE_OWNER_|CODE_TRACE_)/.test(safeCode)
+        ? ["@doc_ref:", "#OBSERVACOES#", "@owner:"] : [];
+      let idx = -1;
+      for (const marker of prefer) {
+        idx = lines.findIndex((line) => line.includes(marker));
+        if (idx >= 0) break;
+      }
+      location = ` file=${relative}${idx >= 0 ? ",line=" + (idx + 1) : ""},`;
+    }
+    return `::error ${location}title=${safeCode}::${escape(message)}`;
+  });
 }
 
 export function git(args, options = {}) {
@@ -705,6 +733,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   });
 
   console.log(JSON.stringify(report, null, 2));
+  // STDERR: anotações GitHub nativas; STDOUT JSON é preservado para consumidores.
+  if (!report.ok && process.env.GITHUB_ACTIONS === "true") {
+    for (const annotation of githubIssueAnnotations(report.errors, (file) => showAt(report.head_ref, file))) {
+      console.error(annotation);
+    }
+  }
   if (!report.ok) process.exit(1);
   console.log("DIAGRAM_ROUTE_GATE=PASS");
   }
