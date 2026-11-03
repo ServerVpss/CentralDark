@@ -1,7 +1,7 @@
 /* #OBSERVACOES#
  * @owner: scripts/github-autonomia-promocao.test.mjs
  * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
- * @last_updated: 2026-11-03T18:49:41.897Z
+ * @last_updated: 2026-11-03T18:50:50.408Z
  * @implementado: provas negativas de P1 em FAST e de retenção de branches antes do squash.
  * @pendente: executar node --test no mesmo HEAD do PR #1977.
  * @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
@@ -415,7 +415,12 @@ test("P1 ou thread pendente bloqueia FAST e ADVERSARIAL mesmo com CI verde", () 
   assert.equal(fast.decision, "BLOCKED");
   assert.match(fast.reasons.join(" "), /UNRESOLVED_REVIEW_THREADS:9/);
 
-  const adversarial = evaluate(prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] }), { unresolvedThreads: 1 });
+  const adversarial = evaluate(prFixture(), {
+    unresolvedThreads: 1,
+    workflowRuns: successfulRuns(["gate-a", "gate-b"]).map((run, i) =>
+      i === 0 ? { ...run, conclusion: "action_required" } : run),
+  });
+  assert.equal(adversarial.mode, "ADVERSARIAL");
   assert.equal(adversarial.decision, "BLOCKED");
   assert.match(adversarial.reasons.join(" "), /UNRESOLVED_REVIEW_THREADS:1/);
 
