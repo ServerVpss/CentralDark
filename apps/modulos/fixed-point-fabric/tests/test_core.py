@@ -3,8 +3,8 @@ from __future__ import annotations
 # #OBSERVACOES#
 # @owner: apps/modulos/fixed-point-fabric/tests/test_core.py
 # @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
-# @last_updated: 2026-11-03T18:16:50.564Z
-# @implementado: contraprovas de configuração, HMAC ausente e symlink externo adicionadas.
+# @last_updated: 2026-11-03T18:21:11.636Z
+# @implementado: contraprovas config, HMAC, symlink, redacao, probe e ledger.
 # @pendente: CI e revisão source SAME_HEAD; runtime fora do escopo.
 # @estado: SOURCE_CORRECTED; STATIC_GATES=PENDING; RUNTIME=NOT_TESTED_BY_SCOPE
 # @next_cursor: confrontar gates e review debts de #1381 no PR #1977.
@@ -134,6 +134,31 @@ class FixedPointTests(unittest.TestCase):
             receipt = VPSProbe({"heartbeat_url": "https://example.invalid/health"}).run()
         self.assertEqual(receipt.status, Status.BLOCKED)
         self.assertIn("HMAC_SECRET_MISSING", receipt.blockers)
+
+    def test_evidence_redacted_before_persist(self):
+        class SecretProbe:
+            domain = "local"
+            def run(self):
+                return ProbeReceipt("local", Status.PASS, "ok", (Evidence("local", "secret", {"credential": "TOPSECRET"}),))
+        snapshot, _ = self.engine([SecretProbe(), StaticProbe("vps"), StaticProbe("github"), StaticProbe("screenpipe")]).run_once()
+        self.assertEqual(snapshot.receipts[0].evidence[0].value["credential"], "[REDACTED]")
+        self.assertNotIn("TOPSECRET", json.dumps(self.store.list_events()))
+
+    def test_probe_exception_blocks_final_verdict(self):
+        class BrokenProbe:
+            domain = "vps"
+            def run(self):
+                raise RuntimeError("boom")
+        _, result = self.engine([StaticProbe("local"), BrokenProbe(), StaticProbe("github"), StaticProbe("screenpipe")]).run_until_fixed_point()
+        self.assertFalse(result.reached)
+        self.assertIn("vps:BLOCKED", result.blockers)
+
+    def test_tampered_ledger_never_reaches_fixed_point(self):
+        self.store.append("A", {"ok": True})
+        self.store.db.execute("UPDATE events SET payload='{}' WHERE sequence=1")
+        self.store.db.commit()
+        with self.assertRaisesRegex(RuntimeError, "EVENT_CHAIN_INVALID"):
+            self.engine(probes()).run_until_fixed_point()
 
     def test_project_pack_does_not_follow_outside_symlink(self):
         source = Path(self.temp.name) / "source"
