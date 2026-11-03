@@ -2,6 +2,10 @@
   "schema": "centraldark.runtime-capsule/v1",
   "owner": "apps/modulos/Bolt/source",
   "entrypoint": "CentralDark.exe",
+  "entrypoints": {
+    "win32-x64": "CentralDark.exe",
+    "linux-x64": "centraldark-desktop"
+  },
   "source_of_truth": "ServerVpss/CentralDark@main",
   "capability_router": ".agents/skills/capability-contract-router/SKILL.md",
   "runtime_plug_contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RUNTIME-PLUG-CONTRACT.yml",
