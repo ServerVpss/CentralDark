@@ -1,3 +1,11 @@
+# #OBSERVACOES#
+# @owner: apps/modulos/Bolt/source/electron-builder.yml
+# @doc_ref: docs/INSTALADOR/32-builder-multiplataforma-centraldark.md
+# @last_updated: 2026-11-03T18:31:00.000Z
+# @implementado: empacotamento Linux .deb/AppImage com desktopName/KDE e Windows NSIS no mesmo aplicativo.
+# @pendente: prova de build real no HEAD; sem VPS/deploy nesta missão.
+# @estado: SOURCE_ONLY; LINUX_PACKAGING_CONFIGURED; BUILD_NOT_EXECUTED
+# @next_cursor: alinhar install.sh, docs e testes; conferir diff.
 appId: com.centraldark.desktop
 productName: CentralDark
 directories:
@@ -40,6 +48,7 @@ win:
 
 linux:
   icon: assets/icons/icon.png
+  syncDesktopName: true
   target:
     - AppImage
     - deb
