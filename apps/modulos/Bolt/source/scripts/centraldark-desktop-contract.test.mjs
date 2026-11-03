@@ -1,3 +1,11 @@
+// #OBSERVACOES#
+// @owner: apps/modulos/Bolt/source/scripts/centraldark-desktop-contract.test.mjs
+// @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// @last_updated: 2026-11-03T18:21:00.000Z
+// @implementado: asserts de source para builder Windows/Linux no mesmo Electron.
+// @pendente: execução dos testes no HEAD da PR #1977; runtime não requisitado.
+// @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
+// @next_cursor: rodar node --test quando checkout do HEAD estiver disponível.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
@@ -199,4 +207,30 @@ test('Unigram original entra no leque por abertura nativa restrita, sem copiar a
   assert.ok(webCockpit.includes('Esta ação requer o CentralDark.exe no Windows'));
   assert.ok(!webCockpit.includes('Start-Process'));
   assert.ok(!webCockpit.includes('Get-AppxPackage'));
+});
+
+test('builder híbrido usa a mesma receita para Windows x64 e Linux x64', () => {
+  const pkg = JSON.parse(read(`${root}/package.json`));
+  const builder = read(`${root}/electron-builder.yml`);
+  const main = read(`${root}/electron/main/index.ts`);
+  const recipe = read(`${root}/scripts/centraldark-rebuild.mjs`);
+  const ledger = read(`${root}/scripts/centraldark-build-ledger.mjs`);
+
+  assert.match(pkg.scripts['electron:build:linux'], /electron-builder --linux/);
+  assert.match(pkg.scripts['centraldark:build:win'], /electron-builder --win/);
+  assert.match(builder, /linux:[\s\S]*?- AppImage[\s\S]*?- deb/);
+  assert.ok(main.includes("['win32', 'linux'].includes(process.platform)"));
+  assert.ok(main.includes("process.platform === 'win32' ? 'node.exe' : 'node'"));
+  assert.ok(main.includes('CENTRALDARK_BUILD_WORKSPACE_MUST_BE_ABSOLUTE'));
+  assert.ok(recipe.includes("['win32', 'linux'].includes(process.platform)"));
+  assert.ok(recipe.includes("process.arch !== 'x64'"));
+  assert.ok(recipe.includes("pnpm.cmd centraldark:build:win"));
+  assert.ok(recipe.includes("['electron:build:linux']"));
+  assert.ok(recipe.includes("selectLinux('.deb')"));
+  assert.ok(recipe.includes("selectLinux('.AppImage')"));
+  assert.ok(recipe.includes("windows ? 'win32-x64' : 'linux-x64'"));
+  assert.ok(recipe.includes('fileProof(installer), fileProof(exe)'));
+  assert.ok(recipe.includes('appendSuccessful(ledger, entry)'));
+  assert.ok(ledger.includes('LEDGER_SCHEMA ='));
+  assert.doesNotMatch(recipe, /WINDOWS_BUILD_ONLY/);
 });
