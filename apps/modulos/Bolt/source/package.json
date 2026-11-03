@@ -6,6 +6,7 @@
   "sideEffects": false,
   "type": "module",
   "version": "1.0.0",
+  "desktopName": "com.centraldark.desktop",
   "author": {
     "name": "CentralDark",
     "email": "segredounlock@users.noreply.github.com"
