@@ -4,11 +4,11 @@ Estrutura no repositório:
 
 ```text
 apps/modulos/fixed-point-fabric/        # este pacote inteiro
-.github/workflows/centraldark-fixed-point-fabric.yml
+.github/workflows/trigger-fabric-package.yml
 ```
 
-O workflow fornecido fica em `github-workflow/` apenas para transporte no ZIP. Ao integrar no
-CentralDark, mova-o para `.github/workflows/`.
+O gate é consumido pelo workflow canônico já existente `.github/workflows/trigger-fabric-package.yml`.
+Não copiar ou instalar um segundo workflow de fixed-point: reconciliar no owner atual.
 
 ## Registro
 
