@@ -1,6 +1,7 @@
 # Cockpit — compactacao visual e 25 owners (22/10/2026)
+@code_ref: apps/instinto-superior/src/data/painel-unico.ts
 @code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx; apps/instinto-superior/src/components/central/MapaOwners.tsx; apps/instinto-superior/src/components/central/ArchitectureVisualization.tsx; apps/instinto-superior/src/data/painel-unico.ts
-@last_updated: 2026-11-03T17:52:11.466Z
+@last_updated: 2026-11-03T17:53:43.936Z
 @estado: SOURCE_DOC_RECONCILED_IN_PR_1977; VISUAL_ONLY=true; TYPECHECK_UNKNOWN; CI_UNKNOWN; UI_E2E_UNKNOWN; RUNTIME_NOT_IN_SCOPE
 @next_cursor: validar CODE_DOC_NOT_UPDATED_IN_SAME_DIFF no diff do PR #1977; reconciliar os demais owners do Hermes/Corpo Unico/Instinto Superior. Nao requer VPS/deploy neste escopo.
 
