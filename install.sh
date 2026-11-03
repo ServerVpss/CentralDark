@@ -1448,7 +1448,7 @@ main() {
     --no-update) export CD_NO_UPDATE=1; shift ;;
   esac
   # Desktop: opções isoladas antes do auto-update e dos atalhos globais.
-  case "$1" in
+  case "${1:-}" in
     --desktop-check) desktop_source_check && desktop_package_receipt check; return $? ;;
     --desktop-build) desktop_source_check && node "$(desktop_source_dir)/scripts/centraldark-rebuild.mjs" --execute; return $? ;;
     --desktop-install-deb) shift; desktop_install_deb "$@"; return $? ;;
