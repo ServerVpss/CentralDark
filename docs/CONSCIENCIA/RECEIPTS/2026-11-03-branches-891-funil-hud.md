@@ -89,7 +89,7 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 ### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
 
-@last_updated: 2026-11-03T18:44:11.351Z
+@last_updated: 2026-11-03T18:45:59.211Z
 **Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
 
 **Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
@@ -143,6 +143,14 @@ Na `main` do PR legado, `GraphRAG-Master/agent.mjs` convertia partitura inválid
 @code_ref: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
 
 **STATE:** SOURCE_PATCHED_IN_PR_1977; CI_SAME_HEAD=UNKNOWN; review #1381 não marcado como resolvido automaticamente. 
+
+
+### 🧪 P1 #1381 · Check-runs do candidato GitHub antes de PASS
+
+Na fonte corrente, `probes/github.py` aceitava `Status.PASS` sem consultar os checks do SHA. O delta no próprio owner chama a API GitHub `/commits/{head}/check-runs` e falha fechado para lista ausente/parcial, check ainda em fila, conclusão falha, SHA divergente ou zero checks com sucesso. Apenas SOURCE: `test_core.py` ganhou contraprova com checks sucesso, pendência e SHA divergente mockados. Não foi atribuída execução de CI ao teste local nem declarado merge.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/github.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
 
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
