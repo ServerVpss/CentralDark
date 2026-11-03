@@ -81,7 +81,7 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 ### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
 
-@last_updated: 2026-11-03T18:16:50.564Z
+@last_updated: 2026-11-03T18:21:11.636Z
 **Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
 
 **Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
@@ -95,6 +95,14 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 @code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
 
 **Prova pendente:** readback do HEAD exato, checks de source e confrontação dos alertas históricos restantes; `RUNTIME=NOT_TESTED_BY_SCOPE` e `MAIN_MERGE=PENDING` até prova independente.
+
+
+### 🧿 Revisão adicional P1 #1381 · engine/source
+
+Code readback mostrou três lacunas em `engine.py`: exceção de probe, evidence persistida sem redaction e falta de `verify_chain()` interno. Código desta branch passa a tratar exceções como `BLOCKED`, redigir evidence antes de salvar e bloquear a decisão se o ledger for inválido; `redaction.py` cobre também `credential` e `authorization`. Três testes de contraprova adicionados a `test_core.py` existente. Sem execução de runtime, CI source ainda pendente.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/engine.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/redaction.py
 
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
