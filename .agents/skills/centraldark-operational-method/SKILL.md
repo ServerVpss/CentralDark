@@ -12,10 +12,11 @@ oracle_review_on_change: true
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
-## Biblioteca operacional centralizada (20 Skills)
+## Biblioteca operacional centralizada (21 Skills)
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
+- [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)
 - [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
@@ -27,6 +28,7 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [centraldark-integration-verification](Skills/centraldark-integration-verification/SKILL.md)
 - [centraldark-intent-deploy-router](Skills/centraldark-intent-deploy-router/SKILL.md)
 - [centraldark-live-editing-fabric](Skills/centraldark-live-editing-fabric/SKILL.md)
+- [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md)
 - [centraldark-note-maintenance](Skills/centraldark-note-maintenance/SKILL.md)
 - [centraldark-ops](Skills/centraldark-ops/SKILL.md)
 - [centraldark-oracle-surface](Skills/centraldark-oracle-surface/SKILL.md)
@@ -35,6 +37,8 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [centraldark-vscode-log-bridge](Skills/centraldark-vscode-log-bridge/SKILL.md)
 - [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
+
+**Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
