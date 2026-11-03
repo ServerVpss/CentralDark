@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T20:04:39.383Z
+ * @last_updated: 2026-11-03T20:05:38.266Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -35,13 +35,13 @@ export function buildPrDiagramPreview({ number, title, body = "", headSha = "", 
   const blockPattern = new RegExp("(?:^|\\n)[ \\t]*" + fence +
     "[ \\t]*mermaid[^\\n]*\\n([\\s\\S]*?)(?:\\n[ \\t]*" + fence + ")", "i");
   const explicit = String(body || "").match(blockPattern);
-  if (explicit && explicit[1].trim().length <= 12000 &&
-      /^(?:flowchart|graph|sequenceDiagram|stateDiagram(?:-v2)?|classDiagram|erDiagram|gantt|journey|pie|mindmap|timeline)\b/i.test(explicit[1].trim())) {
-    return { kind: "PR_MERMAID_EXPLICIT", preferred: "svg", mermaid: explicit[1].trim() + "\n" };
-  }
   const preferred = files.some((file) => /\.(?:tsx|jsx|vue|svelte|css|scss)$/i.test(file))
     ? "png" : files.some((file) => /\.(?:sh|py|go|rs|mjs|cjs)$/i.test(file))
       ? "ascii" : "svg";
+  if (explicit && explicit[1].trim().length <= 12000 &&
+      /^(?:flowchart|graph|sequenceDiagram|stateDiagram(?:-v2)?|classDiagram|erDiagram|gantt|journey|pie|mindmap|timeline)\b/i.test(explicit[1].trim())) {
+    return { kind: "PR_MERMAID_EXPLICIT", preferred, mermaid: explicit[1].trim() + "\n" };
+  }
   const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "UNKNOWN";
   const prTitle = label(title || "Revisar alteracao");
   const sha = /^[0-9a-f]{40}$/i.test(String(headSha || "")) ? headSha.slice(0, 12) : "HEAD_UNKNOWN";
