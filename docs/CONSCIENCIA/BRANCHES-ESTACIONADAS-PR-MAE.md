@@ -10,6 +10,27 @@
 
 <!-- /TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
 
+<!-- CURRENT_GREEN_P1_SQUASH_GATE_20261103 -->
+### 🎯 CURRENT — P1 → 8 gates SAME_HEAD → squash sem apagar branches
+
+**OWNER DO PROMOTOR:** `scripts/github-autonomia-promocao.mjs` + `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-green-guard.mjs`; contrato/documentação existentes em [03-PR-MERGE-DEPLOYMENT.md](./03-PR-MERGE-DEPLOYMENT.md). **O GitHub é o caderno da intenção, código, avaliações e recibos; `main` é a fonte do código integrado.**
+
+**Condições de promoção:** `PR_AUTHORIZED ∧ NOT_DRAFT ∧ MERGEABLE ∧ SAME_HEAD ∧ SAME_BASE ∧ P1/P2_REVIEW_THREADS_CLEARED ∧ ALL_8_REQUIRED_WORKFLOWS_SUCCESS ∧ CANONICAL_PASS ∧ SQUASH_ENABLED ∧ DELETE_BRANCH_ON_MERGE_FALSE`. Sem qualquer componente comprovado, `SQUASH_READY=false`; `QUEUED != PASS` e `MERGED != REVIEW_CLEARED`.
+
+**P1 causal no código corrigido na branch deste PR (não na main):**
+- `evaluateCandidate` agora bloqueia threads pendentes e overflow **em FAST e ADVERSARIAL**, sem caminho `Promise.resolve({unresolved:0})` em FAST.
+- `runPromote` consulta `GET /repos/{owner}/{repo}` antes do `PUT /merge`, exigindo `allow_squash_merge=true` e `delete_branch_on_merge=false`; ausência da flag também bloqueia. **Nenhum ajuste silencioso de configuração.**
+- A lista de obrigatórios do workflow foi corrigida para o nome real `⚙️ PR auto-review CentralDark — checklist determinístico`.
+- `scripts/farm-pr.sh` não realiza mais squash direto; somente despacha recheck ao **promotor canônico**, sem apagar branch. O teste existente de autonomia foi estendido para regressão de reviews e retenção.
+- P1 pós-merge de [#1973](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463) ainda apresenta thread não resolvida; correção documental no #1977 não comprova resolução até passar gates/estar na main.
+
+**Contraprova de 03/11/2026 antes desta edição:** no HEAD `564d2fdd6d24036e30ffcd7542731f24570ef645`, **0/8 obrigatórios success**, com `1 missing`, `1 skipped` e `6 queued/pending`; PR em Draft. O conector atual não expõe `delete_branch_on_merge` (valor UNKNOWN), mas o novo promotor fail-closed pode obter a flag no REST bruto quando executado. **Apenas source alterado**, sem teste CI, sem merge, sem excluir branch, sem VPS.
+
+**NEXT_CURSOR:** concluir demais achados P1 por owner, executar suíte de source e confirmar GitHub Actions `success` no HEAD final; confirmar retenção no repo; tirar de Draft quando os critérios de revisão forem atendidos; só então squash com SHA exato e readback de branch preservada. Não induzir verde alterando checks ou removendo gate.
+
+<!-- /CURRENT_GREEN_P1_SQUASH_GATE_20261103 -->
+
+
 <!-- INSTALLER_COHERENCE_20261103 -->
 **🍒+1 CONTRATO ACOPLADO:** `INSTALLER_FOLLOWS_SOURCE=REQUIRED`. Qualquer evolução do source Electron/cockpit/Hermes embutido, builder, targets de sistema ou cápsula exige revisar e versionar o **mesmo `install.sh`** com seus documentos/testes no PR ativo. O source Linux/openKylin precisa manter `.deb`, `.AppImage`, identidade KDE, entrypoint e ledger SHA coerentes; Windows NSIS é preservado. Nenhuma ação da VPS ou runtime é pré-requisito deste trabalho de source; nenhum instalador foi executado.
 
