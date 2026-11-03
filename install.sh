@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 # ============================================================================
 #  CentralDark — Instalador Automático
+# #OBSERVACOES#
+# @owner: install.sh
+# @doc_ref: docs/INSTALADOR/32-builder-multiplataforma-centraldark.md
+# @last_updated: 2026-11-03T18:29:00.000Z
+# @implementado: comandos explícitos desktop-check/build/install-deb reutilizando builder híbrido.
+# @pendente: gates de source e build Linux real; nenhum ambiente alterado nesta missão.
+# @estado: SOURCE_ONLY; NO_VPS; NO_DEPLOY; BRANCH_DELETE_ALLOWED=false
+# @next_cursor: testar os modos no HEAD de PR #1977; preservar as refs.
 # ----------------------------------------------------------------------------
 #  Uso:
 #    ./install.sh                       # abre wizard interativo
@@ -1088,6 +1096,9 @@ Modos:
   --diff                Reconciliar diferenças via owner existente
   --inventory-menu      Menu openKylin/Forja do mesmo owner
   --pulse-plan          Planejar pulso de SHA sem microdeploy
+  --desktop-check       Verificar fonte híbrida e hashes dos pacotes Linux se existirem
+  --desktop-build       Build pelo MESMO builder (não instala, não faz deploy)
+  --desktop-install-deb --yes  Instalar .deb validado com SHA (somente autorização explícita)
   --update              Atualiza install.sh + repo local (git pull main)
   --no-update           Pula o auto-update desta execução
   --link                Cria atalho global (centraldark / clonedeck em /usr/local/bin)
@@ -1304,6 +1315,110 @@ migrate_autostart_cdmenu_to_cdinstall() {
   ok "Painel fixo no SSH migrado pro instalador colorido local (backup .bak-migrate-${stamp})" 2>/dev/null || true
 }
 
+
+# Desktop híbrido: mesmas fontes Electron/ledger, sem VPS, deploy ou auto-update.
+desktop_source_dir() {
+  local src
+  src="$(printenv CENTRALDARK_BUILD_WORKSPACE 2>/dev/null || true)"
+  if [ -n "$src" ]; then
+    case "$src" in
+      /*) printf '%s\n' "$src" ;;
+      *) err "CENTRALDARK_BUILD_WORKSPACE deve ser absoluto"; return 2 ;;
+    esac
+  else
+    printf '%s\n' "$CENTRALDARK_ROOT/apps/modulos/Bolt/source"
+  fi
+}
+
+desktop_source_check() {
+  local source
+  source="$(desktop_source_dir)" || return 2
+  if ! require_cmd node; then err "Node.js ausente — builder não executado"; return 2; fi
+  if [ ! -f "$source/package.json" ] || [ ! -f "$source/electron-builder.yml" ] \
+     || [ ! -f "$source/scripts/centraldark-rebuild.mjs" ] \
+     || [ ! -f "$source/scripts/centraldark-build-ledger.mjs" ]; then
+    err "Fonte do builder único incompleta em $source"; return 2
+  fi
+  node --input-type=module - "$source" <<'NODE'
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+const src = process.argv[2];
+const pkg = JSON.parse(readFileSync(path.join(src, 'package.json'), 'utf8'));
+const config = readFileSync(path.join(src, 'electron-builder.yml'), 'utf8');
+const recipe = readFileSync(path.join(src, 'scripts/centraldark-rebuild.mjs'), 'utf8');
+if (pkg.name !== 'centraldark-desktop' ||
+    !pkg.scripts?.['electron:build:linux']?.includes('electron-builder --linux') ||
+    !pkg.scripts?.['centraldark:build:win']?.includes('electron-builder --win') ||
+    !/linux:[\s\S]*?- AppImage[\s\S]*?- deb/.test(config) ||
+    !recipe.includes("['win32', 'linux'].includes(process.platform)")) {
+  console.error('DESKTOP_SOURCE_CONTRACT=FAIL'); process.exit(2);
+}
+console.log('DESKTOP_SOURCE_CONTRACT=PASS');
+console.log('DESKTOP_TARGETS=win32-x64,linux-x64');
+console.log('DESKTOP_LINUX_PACKAGES=AppImage,deb');
+NODE
+  node "$source/scripts/centraldark-rebuild.mjs" --verify
+}
+
+# Reuso obrigatório da prova criptográfica no ledger existente do desktop.
+desktop_package_receipt() {
+  local mode="$1" source
+  source="$(desktop_source_dir)" || return 2
+  node --input-type=module - "$source" "$mode" <<'NODE'
+import { join, basename, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+const source = process.argv[2];
+const mode = process.argv[3];
+const { readLedger, fileProof } = await import(pathToFileURL(join(source, 'scripts/centraldark-build-ledger.mjs')).href);
+const ledger = readLedger(join(source, 'resources/build-history.json'));
+const entries = ledger.entries.filter((item) => item.platform === 'linux-x64' && item.build_status === 'PASS')
+  .sort((a, b) => b.builder_version.localeCompare(a.builder_version, undefined, { numeric: true }));
+if (entries.length === 0) {
+  if (mode === 'install') { console.error('LINUX_ARTIFACT=NOT_PROVEN'); process.exit(2); }
+  console.log('LINUX_ARTIFACT=NOT_PROVEN');
+  process.exit(0);
+}
+const entry = entries[0];
+const check = async (object, ext) => {
+  const name = object?.file;
+  if (!name || name !== basename(name) ||
+      !name.startsWith('centraldark-desktop-' + entry.builder_version + '-linux-') ||
+      !name.endsWith(ext)) throw Error('ARTIFACT_NAME_MISMATCH:' + ext);
+  const absolute = resolve(source, 'dist', name);
+  const proof = await fileProof(absolute);
+  if (proof.sha256 !== object.sha256 || proof.bytes !== object.bytes) throw Error('ARTIFACT_HASH_MISMATCH:' + name);
+  return absolute;
+};
+const deb = await check(entry.artifacts?.installer, '.deb');
+await check(entry.artifacts?.executable, '.AppImage');
+if (mode === 'install') console.log(deb);
+else {
+  console.log('LINUX_ARTIFACT=HASH_VERIFIED');
+  console.log('LINUX_ARTIFACT_VERSION=' + entry.builder_version);
+}
+NODE
+}
+
+desktop_install_deb() {
+  if [ "$(uname -s)" != "Linux" ] || ! require_cmd apt-get; then
+    err "Instalação .deb exige Linux com apt (openKylin/Debian)."; return 2
+  fi
+  if [ "$#" -ne 1 ] || [ "$1" != "--yes" ]; then
+    err "Nada instalado. Use --desktop-install-deb --yes para autorização explícita."; return 2
+  fi
+  desktop_source_check || return 2
+  local package
+  package="$(desktop_package_receipt install)" || return 2
+  # Sem download, rebuild, reset ou instalação sem SHA do ledger.
+  if [ "$(id -u)" -eq 0 ]; then
+    apt-get install -y -- "$package"
+  elif require_cmd sudo; then
+    sudo apt-get install -y -- "$package"
+  else
+    err "Administrador necessário; nenhum pacote instalado."; return 2
+  fi
+}
+
 main() {
   # Se a gente foi chamado fora do repo (via symlink global, curl|bash, etc.),
   # localiza o repo correto e re-executa de lá.
@@ -1332,6 +1447,13 @@ main() {
   case "${1:-}" in
     --no-update) export CD_NO_UPDATE=1; shift ;;
   esac
+  # Desktop: opções isoladas antes do auto-update e dos atalhos globais.
+  case "$1" in
+    --desktop-check) desktop_source_check && desktop_package_receipt check; return $? ;;
+    --desktop-build) desktop_source_check && node "$(desktop_source_dir)/scripts/centraldark-rebuild.mjs" --execute; return $? ;;
+    --desktop-install-deb) shift; desktop_install_deb "$@"; return $? ;;
+  esac
+
   self_update "$@"
 
   # Instala launcher global na primeira vez (silencioso se já existe).
