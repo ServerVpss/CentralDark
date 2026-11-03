@@ -1,5 +1,15 @@
 # T0 — MEDIÇÃO COMPLETA FASE 1: CENTRALDARK-OS openKylin
 
+
+<!-- CURRENT_OVER_HISTORICAL_VMWARE_DHCP_20261103 -->
+## ⚠️ Nota de atualização — este T0 é snapshot histórico, não discovery atual da VM
+
+O material abaixo contém IPs, serviços, HEADs, contagens e caminhos **datados**. Para a Forja openKylin VMware local, o owner atual é [Skill VMware](../../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md), com [receita Kingston existente](../../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md).
+
+**Contraprova 03/11/2026:** VMX corrente no processo VMware `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`, `vmrun getGuestIPAddress` = **`192.168.35.130`**, SSH Casa→VM por chave e `HostName` temporário = **PASS**. O `192.168.35.128` de T0/receipts antigos era DHCP histórico e ainda aparecia no alias `openkylin-vm` de `C:\Users\Administrador\.ssh\config_openkylin`, causando timeout. Descobrir VMX e IP correntes antes de qualquer SSH. A VM tem Tailscale instalado, mas **não aprovado na tailnet**; VM→VPS permanece `UNKNOWN/BLOCKED` nesta sessão. Isto **não altera** os resultados históricos de VPS abaixo, apenas evita usá-los como estado atual.
+<!-- /CURRENT_OVER_HISTORICAL_VMWARE_DHCP_20261103 -->
+
+
 **Data:** 2026-09-30T07:38Z (atualizado 2026-09-30T09:15Z — medição provider control plane)
 **Sessão:** Claude Code Remote
 **Objetivo:** medir estado completo antes de transformar openKylin 3.0 no corpo vivo da CentralDark
