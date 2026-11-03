@@ -209,3 +209,30 @@ Quando o usuário pergunta "tenho passagem para casa/vps/tunel/cas segredo":
 - `scripts/remote-bridge/CentralDark-Remote-Bridge.ps1` — script de inicialização
 - `scripts/mcp/mcp-tunnel.json` — configuração do tunnel local
 - `secrets/mcp-state.json` — estado OAuth (tokens, clientes, sessions)
+
+## 2026-11-03 | #ACORDAR / !CENTRALDARK / !CALIBRAR | Pareamento OAuth da ponte Casa
+
+**Intencao:** cristalizar o roteiro que ja existe; Tailscale como transporte privado da CentralDark e OAuth device-code como autenticacao do Desktop Commander Remote. Dois canais distintos e complementares, nao um novo servico. Sem armazenar codigo temporario, Bearer, token nem credenciais.
+
+**Owners reusados:** scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md (Tailscale), scripts/casa/CentralDark-DesktopCommander-DualAccount.ps1 (entrada), scripts/remote-bridge/canonical/engine/CentralDark-Remote-Tray.ps1 + CentralDark-Remote-Parser.psm1 (pareamento e estados), cache/desktop-commander-runtime/receipts/latest.json (recibo local sensivel). MCP CentralDark = control plane independente da rota OAuth do fornecedor.
+
+### Rota operacional sem duplicacao
+1. Identificar na bandeja o dispositivo SEGREDO e clicar **Ver estado**. Se o dispositivo ja estiver acessivel externamente, NAO refazer o pareamento.
+2. Se mostrar **LOGIN_NECESSARIO / CODIGO_PRONTO**, a propria bandeja oferece **Abrir login / copiar codigo**. O owner existente copia o codigo temporario para a area de transferencia e abre https://mcp.desktopcommander.app/device/verify. O dono da conta aprova no navegador. Nao repassar o codigo a modelos, logs, repositorios ou terceiros.
+3. O parser existente reconhece Authorization successful, Device ready e online declarado. O menu **Forcar tela de login** reabre a UX atual. **Reconectar agora** para somente quando houver falha de conexao real; ele interrompe e reinicia a ponte. Nao usar reconectar como refresh cosmetico.
+4. Ler apenas os campos nao sensiveis do receipt: observed_at, device, phase, sensor, bridge_pid, attempt, local_mcp_connected, remote_mcp_connected, auth_confirmed, remote_device_online_claim e stale_session_seen. **Nunca publicar user_code** contido no mesmo JSON.
+5. Prova externa necessaria: Remote Desktop Commander lista SEGREDO Online e uma chamada permitida de leitura/diagnostico ao mesmo dispositivo retorna. PID da ponte e efemero, nao deve ser fixado. PROCESSO_ATIVO != DEVICE_ONLINE.
+6. Tailscale Running/SelfOnline na Casa prova conexao do cliente a tailnet, NAO E2E Casa-VPS nem acesso administrativo. Pareamento do Desktop Commander usa o OAuth do seu fornecedor, NAO e uma autenticacao Tailscale. A rota privada MCP CentralDark exige testes proprios de transporte, identidade e ferramentas; nao inferir status por outra rota.
+
+### Contraprova observada em 03/11/2026 (sem segredos)
+- Bandeja inicialmente LOGIN_NECESSARIO, sensor CODIGO_PRONTO, bridge_pid 32088, tentativa 1.
+- Depois: ONLINE_DECLARADO, auth_confirmed=true, local_mcp_connected=true, remote_mcp_connected=true, remote_device_online_claim=true.
+- Remote Desktop Commander list_devices: SEGREDO Online, app 0.3.1; chamada start_process pela Casa respondeu. REMOTE_DESKTOP_COMMANDER_DEVICE_E2E=PASS.
+- MCP CentralDark mcp_status respondeu SUCCESS e catalogou 149 ferramentas, mas e **outro canal**; nao comprova Tailscale privado E2E.
+- Tailscale Casa BackendState=Running e Self.Online=true; TAILSCALE_CASA_VPS_E2E=UNKNOWN_NOT_TESTED.
+- Nenhum codigo, token ou senha copiado para este documento; nenhuma nova ponte, porta, login, processo ou instancia foi iniciada para esta cristalizacao.
+- PROVA_COMBINADA=OAUTH_PAREAMENTO_REMOTO_PASS|TAILSCALE_LOCAL_ONLINE_PASS|TAILSCALE_PRIVATE_E2E_UNKNOWN.
+- FIXED_POINT=DOCUMENTAL_E_DESKTOP_COMMANDER_REMOTE_NO_INSTANTE_MEDIDO.
+- NEXT_CURSOR=SE_A_CONEXAO_FALHAR_LER_RECEIPT_ATUAL_E_VERIFICAR_DISPOSITIVO; PROVAR_TAILSCALE_E2E_SE_HOUVER_NOVA_INTENCAO.
+
+**Comando seguro de inspecao:** PowerShell: selecionar os campos explicitos com Select-Object, nunca imprimir JSON inteiro. Reusar a autenticacao existente, sem reiniciar um canal verde para medir outro.
