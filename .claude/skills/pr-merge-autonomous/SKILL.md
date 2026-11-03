@@ -11,7 +11,7 @@ applies_to: ["github", "deployment", "ci_cd"]
 
 ## Fluxo Executivo
 
-> **CentralDark PR #1977 — SOURCE_ONLY (03/11/2026):** o CHEFE autorizou alinhamento do **código GitHub**, sem VPS, reload PM2, deploy, acesso Casa ou smoke test de runtime. Para esta missão, executar somente fonte, documentação, diff, revisão de alertas, SAME_HEAD e readback no GitHub; **não executar etapas 4–8** de VPS/deploy desta skill. Não afirmar `FIXED_POINT` global nem `DEPLOYED`. `BRANCH_DELETE_ALLOWED=false`: qualquer squash deve **preservar a branch**; não usar `--admin` para contornar gates.
+> **CentralDark PR #1977 — SOURCE_ONLY (03/11/2026):** o CHEFE autorizou alinhamento do **código GitHub**, sem VPS, reload PM2, deploy, acesso Casa ou smoke test de runtime. Para esta missão, executar somente fonte, documentação, diff, revisão de alertas, SAME_HEAD e readback no GitHub; **não executar etapas 4–7** (VPS, PM2, endpoints e snapshot remoto). A **etapa 8** só pode validar o HEAD correto do PR via gates de source quando disponíveis; não disparar teste na `main` antes do merge nem confundir CI pendente com PASS. Não afirmar `FIXED_POINT` global nem `DEPLOYED`. `BRANCH_DELETE_ALLOWED=false`: qualquer squash deve **preservar a branch**; não usar `--admin` para contornar gates.
 
 
 ### 1. Status Check Inicial
