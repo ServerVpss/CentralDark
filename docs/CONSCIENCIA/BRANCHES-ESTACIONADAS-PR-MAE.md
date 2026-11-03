@@ -9,6 +9,11 @@
 - Categorias iniciais: **P0 16** refs de PR aberto; **P1 66** refs marcadas como PR fechado sem merge no histórico; **P2 96** sem PR/status antigo; **P3 321** não documentadas no inventário anterior; **P4 392** historicamente mergeadas. Esses rótulos são ordens de inspeção, não autorização para apagar.
 - Owner continua sendo **este arquivo**; o anexo é fotografia e lista de trabalho, não segundo inventário autoritativo. O conteúdo de 15/09 abaixo foi mantido intacto.
 - **Zero exclusões nesta abertura.** Exige PR, SHA, comparação com `main`, preservação de delta útil, contraprova, decisão individual e readback.
+<!-- CHECKPOINT_G1_82_G2_10 -->
+- **Checkpoint G1 parcial (03/11/2026):** 16/16 branches do snapshot ligadas a PRs abertos (proteger), mais a branch nova do #1977 fora do baseline; 66/66 branches com PR histórico fechado sem merge reconsultadas e confirmadas `merged=false`. Total de vínculos PR verificados **82/891**.
+- **Checkpoint G2 parcial:** IDs 0017–0026 comparados com `main@55db287f203d3208bc92d50e1a21b7250a827d21`: **10 divergentes**, com commits ahead; não significa automaticamente código não absorvido. Compare e owners restantes = UNKNOWN.
+- **HUD vivo:** [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977) contém o progresso; [anexo nominal](./RECEIPTS/2026-11-03-branches-891-funil-hud.md) possui status por branch e dez contraprovas. `DELETE_ELIGIBLE=0`, `DELETED=0`, ondas `0/18` concluídas; nenhuma ref eliminada.
+<!-- /CHECKPOINT_G1_82_G2_10 -->
 - **NEXT_CURSOR:** monitorar as etapas `[ ]` no corpo do PR #1977 e atualizar o CURRENT deste owner conforme resultados comprovados.
 
 <!-- /CURRENT_BRANCH_FUNNEL_891_20261103 -->
