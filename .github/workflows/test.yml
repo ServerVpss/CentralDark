@@ -1,7 +1,7 @@
 # #OBSERVACOES#
 # @owner: .github/workflows/test.yml
 # @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
-# @last_updated: 2026-11-03T19:21:55.426Z
+# @last_updated: 2026-11-03T19:24:38.143Z
 # @implementado: captura visual desktop/mobile no PR do Instinto, HEAD exato e artifact.
 # @pendente: execução do runner GitHub e readback do screenshot; não é prova de deploy.
 # @estado: SOURCE_ONLY; VISUAL_CI_PR_ENABLED; SCREENSHOT_NOT_RUN
@@ -34,6 +34,8 @@ concurrency:
 
 jobs:
   instinto-regression:
+    # Runner persistente só executa código de PR com HEAD no próprio repositório.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     env:
       CENTRALDARK_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
     name: 🧬 Construir e testar sem fingir instalação
