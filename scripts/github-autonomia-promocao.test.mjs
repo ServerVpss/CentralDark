@@ -1,3 +1,12 @@
+/* #OBSERVACOES#
+ * @owner: scripts/github-autonomia-promocao.test.mjs
+ * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+ * @last_updated: 2026-11-03T18:46:18.693Z
+ * @implementado: provas negativas de P1 em FAST e de retenção de branches antes do squash.
+ * @pendente: executar node --test no mesmo HEAD do PR #1977.
+ * @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
+ * @next_cursor: confirmar correção do teste e CI SAME_HEAD.
+ */
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -15,6 +24,7 @@ import {
   executionProvenance,
   intentReceipt,
   promotionLaneDecision,
+  repositoryMergeSafety,
   scanPullFiles,
   sealReceipt,
   selectLatestWorkflowRun,
@@ -400,13 +410,43 @@ test("fast path defere missing pending failure cancelled e skipped", () => {
   }
 });
 
-test("fast path ignora thread comum mas não CHANGES_REQUESTED explícito", () => {
-  const common = evaluate(prFixture(), { unresolvedThreads: 9 });
-  assert.equal(common.decision, "READY");
+test("P1 ou thread pendente bloqueia FAST e ADVERSARIAL mesmo com CI verde", () => {
+  const fast = evaluate(prFixture(), { unresolvedThreads: 9 });
+  assert.equal(fast.decision, "BLOCKED");
+  assert.match(fast.reasons.join(" "), /UNRESOLVED_REVIEW_THREADS:9/);
+
+  const adversarial = evaluate(prFixture({ body: "sem recibo", labels: [{ name: "👑 PERMITO-SEGREDO" }] }), { unresolvedThreads: 1 });
+  assert.equal(adversarial.decision, "BLOCKED");
+  assert.match(adversarial.reasons.join(" "), /UNRESOLVED_REVIEW_THREADS:1/);
+
+  const overflow = evaluate(prFixture(), { reviewThreadsOverflow: true });
+  assert.equal(overflow.decision, "BLOCKED");
+  assert.match(overflow.reasons.join(" "), /REVIEW_THREADS_OVERFLOW/);
 
   const blocked = evaluate(prFixture(), { blockingReview: true });
   assert.equal(blocked.decision, "BLOCKED");
   assert.match(blocked.reasons.join(" "), /CHANGES_REQUESTED/);
+});
+
+test("squash só preserva todas as branches se settings do GitHub comprovarem a retenção", () => {
+  assert.deepEqual(repositoryMergeSafety({ allow_squash_merge: true, delete_branch_on_merge: false }),
+    { ready: true, reasons: [] });
+  for (const settings of [
+    { allow_squash_merge: true, delete_branch_on_merge: true },
+    { allow_squash_merge: true },
+    { allow_squash_merge: false, delete_branch_on_merge: false },
+    null,
+  ]) assert.equal(repositoryMergeSafety(settings).ready, false);
+});
+
+test("promotor consulta threads em FAST e settings imediatamente antes do merge", async () => {
+  const source = await readFile(new URL("./github-autonomia-promocao.mjs", import.meta.url), "utf8");
+  assert.match(source, /fetchReviewThreadState\(client, repository, number\)/);
+  assert.doesNotMatch(source, /Promise\.resolve\(\{ unresolved: 0, overflow: false \}\)/);
+  const guardPosition = source.indexOf('const repositorySettings = await client.request("GET",');
+  const mergePosition = source.indexOf('client.request("PUT", `/repos/${repository}/pulls/${pr.number}/merge`');
+  assert.ok(guardPosition > 0 && mergePosition > guardPosition);
+  assert.match(source, /repositoryMergeSafety\(repositorySettings\)/);
 });
 
 test("fast path continua fail-closed para conflito, fork e autor externo", () => {
