@@ -3,6 +3,20 @@
 <!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
+<!-- PUSH_AUDIT_VISUAL_PR_TRACE_20261103 -->
+### 🍒+1 Auditoria global sem gate cego
+
+**Intenção recuperada do CHEFE:** o GitHub é o caderno de commits/PRs/anotações; o PR deve exibir **arquivo + linha + erro + SHA** quando a localização for comprovável. O código/UI precisa de teste visual **somente quando o delta for visual**, reaproveitando `apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs` e `.github/workflows/test.yml`. Nenhum teste visual vira certificação de instalação em openKylin ou VPS.
+
+**Push direto na `main`:** a regra local `scripts/lupa/writer-safe-push-main.sh` já protege writers cooperativos, mas proteção remota da `main` não foi comprovada. O owner `scripts/github-autonomia-varredura.mjs`, via o `push` já existente em `.github/workflows/porta-de-entrada.yml`, ganha o modo **read-only** `audit-main-push`. Ele relaciona o SHA de merge a um PR quando confirmado; caso contrário registra `UNLINKED_MAIN_PUSH_REVIEW` ou `UNKNOWN`, como `::warning` e resumo, **sem reverter, bloquear ou eliminar branch**. Isso é auditoria **pós-push**, não server-side branch protection.
+
+**Lupa com erro localizado:** `scripts/lupa/diagram-route-gate.mjs` continua emitindo JSON e passa a emitir annotations GitHub Actions para erros com arquivo e linha comprováveis. Sem linha identificável, mantém código e mensagem sem inventar posição. Testes nos mesmos owners `diagram-route-gate.test.mjs` e `github-autonomia-varredura.test.mjs`; não afirmar suite verde antes da execução.
+
+**P1 e GitHub:** revisão material não resolvida exige reconciliação, mas eventos de push, screenshots e anotações são **evidência**, não novos gates globais que possam bloquear trabalhos sem relação. O PR #1977 ainda não foi integrado à `main`; mudanças e recibos permanecem na branch. **`SOURCE_ONLY=true`, `VPS_REQUIRED=false`, `DELETED=0`.**
+
+<!-- /PUSH_AUDIT_VISUAL_PR_TRACE_20261103 -->
+
+
 <!-- TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
 **🍒 REGRA ZERO — SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** A única meta de integração é manter source coerente, revisado e alinhado no GitHub e depois `main`, preservando **todas** as branches. O código bem feito, incluindo contratos, imports, owners, rastros e gates estáticos, é o critério de prontidão nesta missão; `RUNTIME=NOT_TESTED_BY_SCOPE` não bloqueia a promoção do source, mas tampouco pode ser relatado como funcionando já comprovado.
 
