@@ -1,7 +1,7 @@
 // #OBSERVACOES#
 // @owner: apps/modulos/Bolt/source/scripts/centraldark-desktop-contract.test.mjs
 // @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
-// @last_updated: 2026-11-03T18:21:00.000Z
+// @last_updated: 2026-11-03T18:37:00.000Z
 // @implementado: asserts de source para builder Windows/Linux no mesmo Electron.
 // @pendente: execução dos testes no HEAD da PR #1977; runtime não requisitado.
 // @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
@@ -215,7 +215,10 @@ test('builder híbrido usa a mesma receita para Windows x64 e Linux x64', () => 
   const main = read(`${root}/electron/main/index.ts`);
   const recipe = read(`${root}/scripts/centraldark-rebuild.mjs`);
   const ledger = read(`${root}/scripts/centraldark-build-ledger.mjs`);
+  const installer = read(`${root}/../../../../install.sh`);
 
+  assert.equal(pkg.desktopName, 'com.centraldark.desktop');
+  assert.match(builder, /syncDesktopName: true/);
   assert.match(pkg.scripts['electron:build:linux'], /electron-builder --linux/);
   assert.match(pkg.scripts['centraldark:build:win'], /electron-builder --win/);
   assert.match(builder, /linux:[\s\S]*?- AppImage[\s\S]*?- deb/);
@@ -233,4 +236,13 @@ test('builder híbrido usa a mesma receita para Windows x64 e Linux x64', () => 
   assert.ok(recipe.includes('appendSuccessful(ledger, entry)'));
   assert.ok(ledger.includes('LEDGER_SCHEMA ='));
   assert.doesNotMatch(recipe, /WINDOWS_BUILD_ONLY/);
+  assert.match(installer, /desktop_source_check\(\)/);
+  assert.match(installer, /desktop_package_receipt\(\)/);
+  assert.match(installer, /desktop_install_deb\(\)/);
+  assert.match(installer, /ARTIFACT_HASH_MISMATCH/);
+  assert.match(installer, /--desktop-install-deb --yes/);
+  assert.match(installer, /--desktop-check\) desktop_source_check/);
+  assert.match(installer, /--desktop-build\) desktop_source_check/);
+  assert.match(installer, /case "\$\{1:-\}" in/);
+  assert.ok(installer.indexOf('Desktop: opções isoladas antes do auto-update') < installer.indexOf('self_update "$@"', installer.indexOf('Desktop: opções isoladas antes do auto-update')));
 });
