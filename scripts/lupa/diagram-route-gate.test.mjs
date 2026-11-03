@@ -2,7 +2,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:18:59.810Z
+ * @last_updated: 2026-11-03T19:55:20.672Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
@@ -11,6 +11,8 @@ import test from "node:test";
 import {
   detectAddedUnits,
   githubIssueAnnotations,
+  buildPrDiagramPreview,
+  prDiagramArtifactNames,
   extractTriggerSymbols,
   validateDiagram,
   validateDiffCoverage,
@@ -376,4 +378,51 @@ test("sanitiza quebra de linha para não injetar anotação GitHub", () => {
   const [annotation] = githubIssueAnnotations(["FLOW_FIELD_MISSING:fake%\n::warning::injected"]);
   assert.match(annotation, /%25%0A/);
   assert.equal(annotation.split("\n").length, 1);
+});
+
+test("Mermaid escrito no PR prevalece; nenhum nó, seta ou subgraph é substituído", () => {
+  const fence = String.fromCharCode(96).repeat(3);
+  const original = [
+    "flowchart LR", "  subgraph A[Original]", "    X[Origem] --> Y[Destino]", "  end",
+  ].join("\n") + "\n";
+  const body = "Revisão\n\n" + fence + "mermaid\n" + original.trimEnd() + "\n" + fence;
+  const render = buildPrDiagramPreview({
+    number: 1977, title: "Explicação", body, headSha: "a".repeat(40),
+  });
+  assert.equal(render.kind, "PR_MERMAID_EXPLICIT");
+  assert.equal(render.preferred, "svg");
+  assert.equal(render.mermaid, original);
+  assert.match(render.mermaid, /subgraph A\[Original\]/);
+  assert.match(render.mermaid, /X\[Origem\] --> Y\[Destino\]/);
+});
+
+test("PR sem Mermaid recebe só fluxo derivado da revisão, com SHA e escolha automática", () => {
+  const sha = "b".repeat(40);
+  const v = buildPrDiagramPreview({
+    number: 1977, title: 'Corrigir "Tela" <x>', body: "texto sem diagrama",
+    headSha: sha, files: ["apps/instinto-superior/Screen.tsx"],
+  });
+  assert.equal(v.kind, "PR_EXPLANATION_DERIVED");
+  assert.equal(v.preferred, "png");
+  assert.match(v.mermaid, /HEAD: bbbbbbbbbbbb/);
+  assert.match(v.mermaid, /SVG\["SVG: leitura no GitHub"\]/);
+  assert.match(v.mermaid, /ASCII\["ASCII: terminal\/chat"\]/);
+  assert.doesNotMatch(v.mermaid, /<x>|"Tela"/);
+  const cli = buildPrDiagramPreview({ number: 22, title: "CLI", files: ["scripts/a.sh"] });
+  assert.equal(cli.preferred, "ascii");
+  assert.equal(buildPrDiagramPreview({ number: 33, title: "Docs" }).preferred, "svg");
+});
+
+test("artefatos são trio fixo no mesmo número de PR e fontes permanecem imutáveis", () => {
+  assert.deepEqual(prDiagramArtifactNames(1977), {
+    mmd: "centraldark-pr-1977-mermaid.mmd",
+    svg: "centraldark-pr-1977-mermaid.svg",
+    png: "centraldark-pr-1977-mermaid.png",
+    ascii: "centraldark-pr-1977-mermaid.txt",
+  });
+  assert.equal(prDiagramArtifactNames("not-number").mmd, "centraldark-pr-unknown-mermaid.mmd");
+  const tooLarge = "flowchart LR\n" + "  X-->Y\n".repeat(2000);
+  const fence = String.fromCharCode(96).repeat(3);
+  const fallback = buildPrDiagramPreview({ number: 1, body: fence + "mermaid\n" + tooLarge + fence });
+  assert.equal(fallback.kind, "PR_EXPLANATION_DERIVED");
 });
