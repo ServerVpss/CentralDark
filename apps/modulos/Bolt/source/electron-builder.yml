@@ -48,6 +48,7 @@ win:
 
 linux:
   icon: assets/icons/icon.png
+  executableName: centraldark-desktop
   syncDesktopName: true
   target:
     - AppImage
