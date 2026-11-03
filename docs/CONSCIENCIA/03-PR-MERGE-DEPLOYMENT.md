@@ -4,7 +4,7 @@
 @code_ref: scripts/github-autonomia-promocao.test.mjs
 @code_ref: .github/workflows/autonomia-promocao.yml
 @code_ref: scripts/farm-pr.sh
-@last_updated: 2026-11-03T19:59:25.853Z
+@last_updated: 2026-11-03T20:10:31.120Z
 
 @code_ref: scripts/github-autonomia-varredura.mjs
 @code_ref: scripts/github-autonomia-varredura.test.mjs
@@ -17,7 +17,7 @@
 <!-- UNIVERSAL_PR_VISUAL_TRIPLE_20261103 -->
 ### 🎮 A cada PR — Mermaid e três formatos, sem inventar integração
 
-A própria `porta-de-entrada.yml` agora usa `scripts/lupa/diagram-route-gate.mjs --pr-preview` para produzir diagrama **derivado** de cada explicação. A primeira escolha é adaptativa (`PNG` para UI; `ASCII` para scripts; `SVG` para explicação genérica), mas **o artefato de Actions inclui todos**: `.mmd`, `.svg`, `.png`, `.txt` e `receipt.json` com `PR_HEAD_SHA` e SHA-256 de cada saída.
+A própria `porta-de-entrada.yml` recebe PRs contra **qualquer branch** e contém um job `pr-diagram-preview` não bloqueante, que usa `scripts/lupa/diagram-route-gate.mjs --pr-preview` para produzir diagrama **derivado** de cada explicação. O job `validar` preserva o escopo anterior de governança (`main` e `program/centraldark-convergencia-omniroute-722`); não endurecer gates para outros destinos. A primeira escolha é adaptativa (`PNG` para UI; `ASCII` para scripts; `SVG` para explicação genérica), mas **o artefato de Actions inclui todos**: `.mmd`, `.svg`, `.png`, `.txt` e `receipt.json` com `PR_HEAD_SHA` e SHA-256 de cada saída.
 
 O PR pode receber Mermaid de qualquer agente/modelo via Markdown; se existir bloco explícito, ele é preservado; se não existir, o Grafo Vivo existente monta um fluxograma de **revisão**, não uma especificação inventada. `scripts/lupa/diagram-route-excalidraw.mjs` continua o owner da projeção Obsidian/Excalidraw, sem duplicar geradores. Render local `pretty-mermaid` recebe dependências via lockfile. Kroki remoto é opt-in, não transmite código privado silenciosamente.
 
