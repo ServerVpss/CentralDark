@@ -1,5 +1,18 @@
 # Branches → PR-mãe #1540
 
+<!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
+## 🎮 CURRENT · Funil das 891 branches — PR #1977
+
+**Missão viva e HUD principal:** [PR #1977 — 18 ondas marcáveis](https://github.com/ServerVpss/CentralDark/pull/1977) · **snapshot integral:** [891 branches enumeradas com prioridade P0–P4](./RECEIPTS/2026-11-03-branches-891-funil-hud.md).
+
+- Medição: 892 refs remotas distintas incluindo `main` = **891 secundárias**, antes da criação da branch do próprio PR #1977.
+- Categorias iniciais: **P0 16** refs de PR aberto; **P1 66** refs marcadas como PR fechado sem merge no histórico; **P2 96** sem PR/status antigo; **P3 321** não documentadas no inventário anterior; **P4 392** historicamente mergeadas. Esses rótulos são ordens de inspeção, não autorização para apagar.
+- Owner continua sendo **este arquivo**; o anexo é fotografia e lista de trabalho, não segundo inventário autoritativo. O conteúdo de 15/09 abaixo foi mantido intacto.
+- **Zero exclusões nesta abertura.** Exige PR, SHA, comparação com `main`, preservação de delta útil, contraprova, decisão individual e readback.
+- **NEXT_CURSOR:** monitorar as etapas `[ ]` no corpo do PR #1977 e atualizar o CURRENT deste owner conforme resultados comprovados.
+
+<!-- /CURRENT_BRANCH_FUNNEL_891_20261103 -->
+
 Inventário canônico e individual das refs remotas. Gerado em 2026-09-15.
 
 Owner: [PR #1540](https://github.com/ServerVpss/CentralDark/pull/1540)
