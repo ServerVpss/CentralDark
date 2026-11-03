@@ -3,6 +3,21 @@
 <!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
 ## 🎮 CURRENT · Funil das 891 branches — PR #1977
 
+<!-- BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
+### 🔒 Regra vigente do CHEFE — nenhuma branch descartável
+
+**BRANCH_DELETE_ALLOWED=FALSE · BRANCH_DISPOSABLE=NONE · PRESERVE_ALL_REFS=TRUE.**
+
+Por decisão explícita do CHEFE, as **891 branches do snapshot** (mais a branch do próprio PR #1977 e quaisquer refs posteriores) são **patrimônio de estudo e trabalho ainda potencialmente necessário** ao código do **Hermes, Corpo Único e Instinto Superior**. Nenhuma pode ser rotulada como descartável ou excluída somente por estar atrás da `main`, ter PR mergeado/fechado, não apresentar diff ou ter pouca atividade. **Não fazer delete remoto/local, prune destrutivo, force-push ou faxina de worktrees por inferência de redundância.** O funil é auditoria e reconciliação, não mutação/exclusão. Só uma **nova autorização explícita do CHEFE que revogue esta trava**, após prova de preservação completa, poderá mudar a política; não antecipar a autorização.
+
+**Achados/revisões são dívida rastreável:** para **cada branch e PR vinculado**, consultar o histórico de comentários (Conversation), reviews, threads inline inclusive `is_resolved`/`is_outdated`, CI/gates e recibos prévios. Registrar **URL do comentário, PR, SHA revisado, arquivo/linha, severidade, owner/documento, estado atual e contraprova**. Revisão antiga, comentário P1/P2, alerta mesmo após squash/merge ou thread outdated **não equivale a RESOLVED**. Pode deixar dívida documental **PÓS-MERGE**; verificar os arquivos apontados no source **atual**, as seções `#OBSERVACOES#`, receipts e os gates, antes de marcar `RESOLVED`. `MERGED != REVIEW_CLEARED`; `COMMENT_EXISTS != ISSUE_FIXED`; `NO_DIFF != NO_WORK`.
+
+**Caso inicial PROVADO:** [PR #1973 — review P1 ainda sem resolução](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463), commit revisado `af009c9fa1bf64acf441f6789da76617a0ce9b43`, source `apps/instinto-superior/src/data/painel-unico.ts:258`, `CODE_DOC_NOT_UPDATED_IN_SAME_DIFF`. A revisão exige `#OBSERVACOES#` e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`; [#1973 foi integrado](https://github.com/ServerVpss/CentralDark/pull/1973) no merge `55db287f203d3208bc92d50e1a21b7250a827d21`, mas o thread está **`is_resolved=false`** no readback de 03/11. **REVIEW_DEBT=OPEN · POST_MERGE_DOCS=UNVERIFIED**. Este funil apenas registra a pendência; não declara correção nem abre outro owner de código.
+
+**Hud:** a fila P0–P4 mantém prioridade de **investigação**, nunca preferência de exclusão. Decisões permitidas sob a trava: `KEEP`, `REVIEW_DEBT_OPEN`, `NEEDS_CODE_COMPLETION`, `PROMOTE_AFTER_PROOF`, `UNKNOWN`; `DELETE` e `DELETE_ELIGIBLE` **desabilitados**. A prova de revisão entra em **G3/G4 antes de qualquer `[x]` individual**, inclusive quando o PR já estiver fechado/mergeado.
+
+<!-- /BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
+
 **Missão viva e HUD principal:** [PR #1977 — 18 ondas marcáveis](https://github.com/ServerVpss/CentralDark/pull/1977) · **snapshot integral:** [891 branches enumeradas com prioridade P0–P4](./RECEIPTS/2026-11-03-branches-891-funil-hud.md).
 
 - Medição: 892 refs remotas distintas incluindo `main` = **891 secundárias**, antes da criação da branch do próprio PR #1977.
