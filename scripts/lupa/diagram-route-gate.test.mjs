@@ -2,12 +2,13 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC_TESTS
  * @owner: scripts/lupa/diagram-route-gate.test.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T20:06:03.954Z
+ * @last_updated: 2026-11-03T20:11:13.586Z
  * @status: NEGATIVE_AND_POSITIVE_TESTS_ADDED; CI_PENDING
  * @next_cursor: node --test scripts/lupa/diagram-route-gate.test.mjs
  */
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import {
   detectAddedUnits,
   githubIssueAnnotations,
@@ -430,4 +431,22 @@ test("artefatos são trio fixo no mesmo número de PR e fontes permanecem imutá
   const fence = String.fromCharCode(96).repeat(3);
   const fallback = buildPrDiagramPreview({ number: 1, body: fence + "mermaid\n" + tooLarge + fence });
   assert.equal(fallback.kind, "PR_EXPLANATION_DERIVED");
+});
+
+test("renderização universal continua no MESMO workflow, sem endurecer todos os PRs", () => {
+  const workflow = readFileSync(new URL("../../.github/workflows/porta-de-entrada.yml", import.meta.url), "utf8");
+  const wrapper = readFileSync(new URL("../../skills/mermaid_render.py", import.meta.url), "utf8");
+  const pretty = readFileSync(new URL("../../skills/pretty-mermaid/scripts/render.mjs", import.meta.url), "utf8");
+  assert.match(workflow, /branches: \['\*\*'\]/);
+  assert.match(workflow, /pr-diagram-preview:/);
+  assert.match(workflow, /continue-on-error: true/);
+  assert.equal((workflow.match(/diagram-route-gate\.mjs --pr-preview/g) || []).length, 1);
+  assert.match(workflow, /actions\/upload-artifact@v4/);
+  assert.match(workflow, /node --test scripts\/grafo-vivo\/mermaid-core\.test\.mjs/);
+  assert.match(workflow, /diagram-route-gate\.mjs --check-obsidian/);
+  assert.match(workflow, /github\.base_ref == 'main'/);
+  assert.match(workflow, /github\.base_ref == 'program\/centraldark-convergencia-omniroute-722'/);
+  assert.match(wrapper, /args\.allow_remote and not validate_kroki/);
+  assert.match(wrapper, /if not ok and args\.allow_remote and fmt != "txt"/);
+  assert.match(pretty, /CENTRALDARK_RENDER_NO_INSTALL === '1'/);
 });
