@@ -46,7 +46,7 @@ Readback na Casa: os dois caminhos existem. A configuração em F: resolve o ali
 
 No owner `scripts/Open-CentralDarkForjaRDP.ps1`, o seletor mantém F como primeira opção e verifica a conexão antes de aceitá-la. A configuração do perfil Windows é fallback condicionado à verificação SSH. Não houve alteração dos arquivos de configuração na Casa. `-CheckOnly` e reutilização do túnel existente foram preservados.
 
-Provas: `PARSER_ERRORS=0` no PowerShell Windows; `SELECTED=F:\CentralDark\.ssh\config_openkylin` na execução isolada do seletor. A sessão XRDP do script atualizado não foi aberta neste delta.
+Provas: `PARSER_ERRORS=0` no PowerShell Windows; `SELECTED=F:\CentralDark\.ssh\config_openkylin` na execução isolada do seletor. A execução em memória de `-CheckOnly` também foi medida: `CENTRALDARK_FORJA_RDP_HANDSHAKE=FAIL_OR_NOT_RUNNING` (exit 2). Significa que não havia túnel XRDP validado naquele momento; **não é falha do seletor SSH**. O launcher não abriu novo túnel, GUI ou sessão XRDP neste delta.
 
 `NEXT_CURSOR=VALIDATE_XRDP_HANDSHAKE_WITH_EXISTING_LAUNCHER_WHEN_GUI_NEEDED`.
 <!-- /LAUNCHER_PATH_CORRECTED_20261103 -->
