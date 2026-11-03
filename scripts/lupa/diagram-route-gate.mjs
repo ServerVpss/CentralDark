@@ -3,9 +3,9 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:18:11.167Z
+ * @last_updated: 2026-11-03T19:50:46.288Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
- * @status: CODE_GATE_IMPLEMENTED; CI_FILE_LINE_ANNOTATIONS_ADDED; MAIN_AND_CI_PENDING
+ * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
  */
 import fs from "node:fs";
@@ -19,6 +19,103 @@ const REPO = path.resolve(HERE, "../..");
 const REGISTRY_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/FLOW-REGISTRY.json";
 const DIAGRAM_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd";
 const TRIGGERS_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml";
+
+
+/**
+ * Diagrama de PR é projeção derivada, nunca altera ARCHITECTURE.mmd.
+ * Mermaid explícito é prioridade; o fallback só descreve o processo de revisão.
+ */
+export function buildPrDiagramPreview({ number, title, body = "", headSha = "", files = [] } = {}) {
+  const label = (value, limit = 76) => String(value || "")
+    .replace(/[\r\n\t]+/g, " ").replace(/["\\<>{}[\]|]/g, "'")
+    .replace(/\s+/g, " ").trim().slice(0, limit);
+  const fence = String.fromCharCode(96).repeat(3);
+  const blockPattern = new RegExp("(?:^|\\n)[ \\t]*" + fence +
+    "[ \\t]*mermaid[^\\n]*\\n([\\s\\S]*?)(?:\\n[ \\t]*" + fence + ")", "i");
+  const explicit = String(body || "").match(blockPattern);
+  if (explicit && explicit[1].trim().length <= 12000 &&
+      /^(?:flowchart|graph|sequenceDiagram|stateDiagram(?:-v2)?|classDiagram|erDiagram|gantt|journey|pie|mindmap|timeline)\b/i.test(explicit[1].trim())) {
+    return { kind: "PR_MERMAID_EXPLICIT", preferred: "svg", mermaid: explicit[1].trim() + "\n" };
+  }
+  const preferred = files.some((file) => /\.(?:tsx|jsx|vue|svelte|css|scss)$/i.test(file))
+    ? "png" : files.some((file) => /\.(?:sh|py|go|rs|mjs|cjs)$/i.test(file))
+      ? "ascii" : "svg";
+  const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "UNKNOWN";
+  const prTitle = label(title || "Revisar alteracao");
+  const sha = /^[0-9a-f]{40}$/i.test(String(headSha || "")) ? headSha.slice(0, 12) : "HEAD_UNKNOWN";
+  const lines = [
+    "flowchart LR",
+    '  PR["PR #' + id + ': ' + prTitle + '"] --> SOURCE["Código/Docs: comparar diffs"]',
+    '  SOURCE --> HEAD["HEAD: ' + sha + '"]',
+    '  HEAD --> CHECK["Revisar: código, comentários e gates"]',
+    '  CHECK --> DIAGRAM["Mermaid: projeção derivada"]',
+    '  DIAGRAM --> SVG["SVG: leitura no GitHub"]',
+    '  DIAGRAM --> PNG["PNG: visualização"]',
+    '  DIAGRAM --> ASCII["ASCII: terminal/chat"]',
+    '  SVG --> RECEIPT["Recibo no PR / SHA"]',
+    '  PNG --> RECEIPT',
+    '  ASCII --> RECEIPT',
+  ];
+  return { kind: "PR_EXPLANATION_DERIVED", preferred, mermaid: lines.join("\n") + "\n" };
+}
+
+export function prDiagramArtifactNames(number) {
+  const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "unknown";
+  const base = "centraldark-pr-" + id + "-mermaid";
+  return { mmd: base + ".mmd", svg: base + ".svg", png: base + ".png", ascii: base + ".txt" };
+}
+
+function renderPrDiagramPreview() {
+  const index = process.argv.indexOf("--out-dir");
+  const output = index >= 0 ? process.argv[index + 1] : null;
+  if (!output || !process.env.GITHUB_EVENT_PATH) throw new Error("PR_DIAGRAM_EVENT_OR_OUT_DIR_MISSING");
+  const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
+  if (!event.pull_request?.number || !event.pull_request?.head?.sha) {
+    throw new Error("PR_DIAGRAM_REQUIRES_PULL_REQUEST");
+  }
+  const pr = event.pull_request;
+  const files = String(process.env.CENTRALDARK_CHANGED_FILES || "").split("\n").filter(Boolean);
+  const diagram = buildPrDiagramPreview({
+    number: pr.number, title: pr.title, body: pr.body, headSha: pr.head.sha, files,
+  });
+  const names = prDiagramArtifactNames(pr.number);
+  fs.mkdirSync(output, { recursive: true });
+  const sourcePath = path.join(output, names.mmd);
+  fs.writeFileSync(sourcePath, diagram.mermaid, "utf8");
+  const svg = path.join(output, names.svg);
+  const png = path.join(output, names.png);
+  const ascii = path.join(output, names.ascii);
+  execFileSync("python3", [
+    path.join(REPO, "skills/mermaid_render.py"), sourcePath,
+    "--svg", svg, "--png", png, "--ascii", ascii, "--theme", "tokyo-night",
+  ], { cwd: REPO, stdio: "inherit", timeout: 180000 });
+  for (const filename of [svg, png, ascii]) {
+    if (!fs.existsSync(filename) || fs.statSync(filename).size <= 0) {
+      throw new Error("PR_DIAGRAM_ARTIFACT_NOT_PROVEN:" + filename);
+    }
+  }
+  const receipt = {
+    status: "ARTIFACTS_RENDERED", owner: "scripts/lupa/diagram-route-gate.mjs",
+    pr: pr.number, sha: pr.head.sha, source_kind: diagram.kind,
+    preferred: diagram.preferred, formats: ["svg", "png", "ascii"], names,
+    runtime: "NOT_TESTED_BY_SCOPE",
+  };
+  fs.writeFileSync(path.join(output, "receipt.json"), JSON.stringify(receipt, null, 2) + "\n");
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    const fence = String.fromCharCode(96).repeat(3);
+    const escaped = diagram.mermaid.replaceAll(fence, "'''");
+    const lines = [
+      "### 🪬 Diagrama derivado — PR #" + pr.number,
+      "SHA: " + fence.slice(0, 1) + pr.head.sha + fence.slice(0, 1) +
+        " · preferido: **" + diagram.preferred.toUpperCase() + "**",
+      "Fonte: " + diagram.kind + " · Todos os formatos: SVG, PNG e ASCII no artifact do job.",
+      fence + "mermaid", escaped.trimEnd(), fence,
+      "A imagem não é fonte da verdade; confirmar código e comentários do PR.", "",
+    ];
+    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+  }
+  console.log(JSON.stringify(receipt));
+}
 
 export function normalizePath(value) {
   return String(value || "").replaceAll("\\", "/").replace(/^\.\//, "");
@@ -716,7 +813,9 @@ export function runGate({ baseRef, headRef }) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--sync-obsidian") || process.argv.includes("--check-obsidian")) {
+  if (process.argv.includes("--pr-preview")) {
+    renderPrDiagramPreview();
+  } else if (process.argv.includes("--sync-obsidian") || process.argv.includes("--check-obsidian")) {
     const check = process.argv.includes("--check-obsidian");
     const receipt = syncObsidian({check});
     console.log(JSON.stringify(receipt, null, 2));
