@@ -156,3 +156,96 @@ Melhoria antecipada de selecao: para pagina listada pela instancia MCP, fazer li
 - "Pera, cancela esse envio" antes do envio → ABORTAR_ENVIO; não apagar rascunho anterior.
 
 **Limite de prova:** VOICE_SEMANTIC_POLICY=DOCUMENTED; LIVE_VOICE_TEST=UNKNOWN; VOICE_RUNTIME_UPDATED=NO. Provas anteriores de voz para Codex e de UI Cloudroom não provam adoção automática das novas regras no motor de reconhecimento ou em todas as superfícies. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT medido; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=REUSE_VOICE_SEMANTIC_ROUTE_ON_NEXT_HUMAN_INTENT.
+
+<!-- HERMES_DESKTOP_CHAT_FASTPATH_20261102 -->
+## 🍒+1 Hermes Desktop: envio direto na conversa existente, fast-path (02/11/2026)
+
+**Intenção/owner:** CHEFE delega instrução ao Hermes no campo de conversa do próprio Hermes Desktop. Reutilizar Skill Mãe + Kimetsu e esta receita de UI multijanela, sem criar script, agente, sessão ou método paralelo. Classificação BOUNDED; respirações Concentração (alvo), Trovão (ação única), Lua (readback), Regeneração Monotônica (aprendizado).
+
+**Caso observado na Casa:** janela Hermes encontrada com PID e `MainWindowHandle` atuais, no monitor físico indicado pelo CHEFE; processo/retângulo/hit-test `WindowFromPoint + GetAncestor(GA_ROOT)` coincidiu com a janela. Captura anterior confirmou editor da conversa vazio, distinto da aba GitHub Device Activation. Foco no editor; texto autorizado colado por área de transferência + `Ctrl+V`, com tentativa de restaurar conteúdo textual anterior. Captura de pré-envio mostrou a ordem no editor. Clique único na seta de envio já visível; captura posterior mostrou a mensagem na conversa e o editor vazio. **`HERMES_CHAT_SEND=PASS` apenas para essa mensagem; `HERMES_TASK_COMPLETED=UNKNOWN`.** O estado de Goal/fila não altera a identidade do editor nem comprova execução.
+
+**Fast-path na MESMA janela/sessão/controle já comprovados:** `INTENÇÃO → CHECAR SOMENTE DELTA (alvo e rascunho) → FOCO NO EDITOR → COLAR UMA VEZ → CLICAR SETA OU ENTER SE JÁ COMPROVADO → UM READBACK → RECEIPT/NEXT_CURSOR`. Não repetir varredura de monitores, leitura de Skills/catálogo, descoberta de PID, capturas intermediárias, screenshots ou medições quando fingerprint de janela, sessão, editor e layout não mudou. Se o envio for inequívoco, a captura final basta; a prévia só é necessária se houver dúvida sobre foco, conteúdo ou rascunho.
+
+**Invalidação do cache:** janela/monitor/layout mudou, editor ou conversa diferente, rascunho pré-existente, foco incerto, falta de evidência de envio, bloqueio da ferramenta ou autorização alterada → renovar SOMENTE a prova afetada, sem clique ou envio repetido. Nunca fixar PID, coordenadas e posição de monitor como constantes globais. Nunca sobrescrever rascunho do CHEFE. Não declarar envio por comando que apenas retornou sucesso sem readback.
+
+**Receipt (02/11/2026):** `SOURCE=SOL|TARGET=HermesDesktop/chat|ROUTE=RemoteDesktopCommander/WindowsUI|MESSAGE_SENT=PASS|EXECUTOR_ACCEPTED=UNKNOWN|EXECUTION=UNKNOWN|FIXED_POINT_SCOPE=UI_SEND_ONLY|PROMPT_SELF_CACHE_P15=APLICÁVEL_SEM_HIT_MEDIDO|KV_CACHE_P16=UNKNOWN|NEXT_CURSOR=READ_HERMES_RESPONSE_ON_SAME_CHAT`. Sem tempo de execução comparativo aferido: `SPEEDUP=UNKNOWN`.
+
+<!-- HERMES_MODEL_SWITCH_UNKNOWN_EXECUTION_AND_CWD_20261102 -->
+## Hermes Desktop: diagnóstico real de `Model switch failed: unknown_execution` e reparo de CWD (02/11/2026)
+
+**Intenção:** CHEFE mostrou erro ao trocar modelo e esclareceu que o disco `K:` não existe mais; autorizou corrigir as referências obsoletas sem interromper trabalho ativo. Skill Mãe + Kimetsu (SPIKE → BOUNDED, Concentração/Inseto/Lua), escritor único na Casa.
+
+**Provas na Casa:** `logs/desktop.log` registrou três recusas `Model switch failed: JsonRpcGatewayError: unknown_execution` em 02/11 às 12:34:34, 12:34:41 e 12:34:57; houve outra às 12:44:12. `logs/agent.log` registrou `TERMINAL_CWD does not exist: K:/` repetidamente. `Test-Path K:\` retornou `False`; `E:\CentralDark` existe. Código real `hermes_state_mutation_guards.py` bloqueia alterações em sessões com admissions/workers `unknown`; `gateway/session_authority.py` pausa entradas com esse estado. Portanto o CWD inválido e a recusa de troca de modelo são **dois problemas distintos**, sem relação causal comprovada.
+
+**Correção mínima aplicada:** três arquivos de configuração originais, sem tocar em discos, sessões ou código do Hermes:
+- `%LOCALAPPDATA%\hermes\config.yaml`: `terminal.cwd: K:/` → `E:/CentralDark`; caminho confiável `K:\` → `E:\CentralDark`.
+- `%USERPROFILE%\.hermes\config.yaml`: `terminal.cwd: K:/` → `E:/CentralDark`.
+- **Perfil ativo** `%LOCALAPPDATA%\hermes\profiles\hermes-vmware\config.yaml`: `terminal.cwd: 'K:'` → `'E:/CentralDark'`.
+
+Cada arquivo recebeu backup irmão `.before-cwd-repair-20261102.bak`; readback textual confirmou a mudança. `hermes config get terminal.cwd` e `hermes --profile hermes-vmware config get terminal.cwd` retornaram `E:/CentralDark`. O gateway manual ainda rodava após a edição e emitiu aviso antigo `K:/`, logo **`CWD_CONFIG_FIXED=PASS`, `LIVE_PROCESS_RELOADED=UNKNOWN/NOT_PROVEN`**. Não reiniciar gateway nem interromper sessões em curso automaticamente.
+
+**Recuperação de troca de modelo:** `unknown_execution` é recusa real de segurança/idempotência por execução anterior com resultado incerto, não falta de chave de modelo e não algo que deva ser mascarado como sucesso. `hermes sessions discard --help` confirma que a função existente descarta uma admissão desconhecida e **não a reproduz**; exige decisão explícita de qual admissão pode ser abandonada e preservação de eventuais resultados. Leitura somente do `state.db` encontrou quatro admissions antigos `unknown` e zero workers `unknown` naquele banco; sem prova de correlação 1:1 com a sessão exibida, não executar descarte. `HERMES_MODEL_SWITCH_FIXED=NO` até reconciliação da sessão alvo e teste efetivo de troca.
+
+**Fast-path reuse:** ao observar `Model switch failed: unknown_execution`, coletar uma linha do log + identificar perfil/sessão de origem, conferir apenas `hermes --profile <ativo> config get terminal.cwd` caso apareça também `TERMINAL_CWD` inválido. Não varrer discos, repetir autenticações nem reabrir todas as sessões. Se CWD for inválido, corrigir somente o perfil ativo e configurações explicitamente afetadas; se execução desconhecida, recuperar receipt antes de decidir `discard`. Só após tarefa ativa terminar, reavaliar recarregamento do perfil e testar a troca. `NEXT_CURSOR=RECONCILE_TARGET_SESSION_UNKNOWN_ADMISSION_WITHOUT_LOSS_THEN_MODEL_SWITCH_READBACK`.
+
+## Bancada por linguagem natural e borda de alvo — 02/11/2026
+
+@code_ref: ../scripts/Identify-CentralDarkMonitors.ps1
+@last_updated: 2026-11-02T16:58:46.3649672Z
+Owner unico: Skill Mae. Classificacao BOUNDED; Concentracao (alvo), Flor (precisao), Lua (contraprova).
+A numeracao humana NAO e o sufixo de DISPLAY: foto das Configuracoes confirmada pelo CHEFE.
+Mapa Casa: monitor 1=direita vertical; 2=centro superior; 3=esquerda vertical; 4=centro inferior principal.
+Inventario atual confirma DISPLAY1, DISPLAY4, DISPLAY2, DISPLAY3 respectivamente; IDs nao sao constantes.
+
+### Resolver a fala
+"monitor um/1", "tela um", "direita" selecionam 1; "monitor dois/2", "superior" selecionam 2;
+"monitor tres/3", "esquerda" selecionam 3; "monitor quatro/4", "inferior" selecionam 4.
+"Deixei aberto no monitor 2" fornece pista de localizacao, nao prova app, arquivo ou conversa.
+"Foque no Chatti" exige localizar ChatGPT na tela selecionada e conferir titulo, PID, handle, conversa e campo.
+Sem alvo unico, perguntar somente o referente ambiguo; nao abrir outra conversa nem limpar rascunhos.
+"Use monitores 1, 2, 3 e 4" enumera quatro alvos; nao interpretar "12" ambiguo como monitor doze.
+
+### Comando reutilizavel (Windows PowerShell)
+Executar scripts/Identify-CentralDarkMonitors.ps1 sem argumentos lista o mapa em JSONL.
+-Target 'monitor dois' -ListWindows devolve tela, geometria e janelas atuais.
+-Target 1 -Overlay -Seconds 5 mostra borda verde temporaria de PREVIA DO ALVO; nao captura nem envia.
+-Identify preserva o Identificar NATIVO do Windows. Borda customizada nunca comprova numero nativo.
+Nao derivar numeracao universal de geometria. Este mapa e binding confirmado da Casa.
+Arranjo diferente, reconexao ou numeracao do Windows alterada: reconfirmar Identificar e atualizar binding.
+Geometria incompatível falha explicitamente; nao reaproveitar coordenadas nem PID antigos.
+
+### Overlay e Hermes
+Reutilizar computer_use existente no Hermes para captura, foco, clique e envio.
+Codigo instalado oferece set_agent_cursor_enabled via cua_backend; isto prova codigo, nao cursor em runtime.
+RTSS DesktopOverlayHost ja possui bridge scripts/casa/CentralDark-RtssOverlay.ps1 para HUD, nao borda de automacao.
+A borda aqui estende o inventario existente: quatro faixas sem foco, click-through, duracao 1..30s, finally fecha.
+Verde nesta PREVIA significa alvo selecionado, nunca "agente trabalhando" nem PASS de tarefa.
+Durante automacao, usar cursor nativo existente se capability anunciada; ao terminar/falhar, desativar na mesma sessao.
+Sem evento real de inicio/fim nao simular indicador persistente. Nao criar watcher ou segundo executor.
+
+### Convergencia de chats por tela
+Uma intencao, Goal pai e coordenador; subobjetivos por tela/app/conversa confirmada.
+Usar fila/A2A/ida-volta existentes. Mensagem unica por subobjetivo; readback e ACK por destino.
+Leituras podem ocorrer em paralelo; teclado/mouse fisicos serializados e uma caneta por escopo de arquivo.
+Tela nao e agente: quatro chats podem compartilhar runtime, modelo ou sessao; conferir identidade.
+Convergir evidencias no mesmo Goal: destino, sessao, subobjetivo, efeito, receipt e NEXT_CURSOR.
+Sem envio/retorno medido, MULTISCREEN_DELEGATION=DOCUMENTED, nao autonomia comprovada.
+
+Receipt 02/11/2026: BASE_IMPLEMENTATION=90232f46b363d9c391a1fc347103f2b9d103e878; seis aliases resolvidos; alvo inexistente rejeitado; inventario quatro telas PASS; overlay 2s abriu/encerrou sem erro (visual independente UNKNOWN). Instalacao reutilizou C:\Users\Administrador\.agents\skills\centraldark-operational-method por junction no diretorio real C:\Users\Administrador\AppData\Local\hermes\skills. tools.skills_tool.skill_view retornou success=true, HERMES_READ_MONITOR_RECIPE=True e KIMETSU_FOUND=True; bytes dos tres arquivos iguais ao codigo publicado. Isto prova carregador local, nao consumo pelo modelo da sessao GUI ja aberta nem ferramenta registrada separada. MULTICHAT_END_TO_END=UNKNOWN. NEXT_CURSOR=usar alvo por pedido e validar inicio/fim do indicador na automacao real.
+
+### Captura real e contraprova da borda — 02/11/2026
+Codigo: ../scripts/Identify-CentralDarkMonitors.ps1. -Overlay -CaptureDirectory <pasta-temporaria> captura cada tela enquanto a moldura esta aberta; -Seconds limita o tempo e finally fecha todas as faixas.
+Falha descoberta: FormStartPosition padrao reposicionava faixas; tamanho minimo do Form produzia blocos largos. Correcao: StartPosition.Manual e MinimumSize/MaximumSize explicitos por faixa. Processo sem erro NAO provava moldura correta.
+Prova nova: quatro PNGs, quatro cantos verdes em cada tela (16/16); imagem do monitor 2 inspecionada mostrou moldura nos limites. CHEFE confirmou captura individual e de todas as telas e forneceu foto da falha anterior. A prova nova substitui apenas o UNKNOWN visual anterior, nao certifica integracao automatica com tarefas Hermes.
+Diagnostico nativo: cua-driver 0.28.2 instalado, daemon inicialmente parado. Iniciado apenas para teste; get_desktop_state gravou PNG primary 1920x1080. Schema nao expoe monitor selecionavel. Demais capturas usaram System.Drawing.Graphics.CopyFromScreen. get_agent_cursor_state: enabled=true, position=null, observe; nao prova cursor visivel. end_session e stop devolveram daemon ao estado parado, sem sessoes vivas e sem alterar configuracoes Windows.
+Monitores humanos e coordenadas: 1 direita 1080x1920 (1920,-831); 2 superior 1920x1080 (0,-1080); 3 esquerda 1080x1920 (-1080,-828); 4 inferior principal 1920x1080 (0,0).
+Codex instalado: .codex/plugins/cache/openai-bundled/computer-use/26.1027.30824/skills/computer-use/SKILL.md declara Windows.Graphics.Capture, UIAutomation e SendInput. Nao foi encontrado codigo-fonte da moldura no pacote de skill; nao inferir implementacao completa nem construir cliente privado.
+Fontes: https://hermes-agent.nousresearch.com/docs/user-guide/features/computer-use (cursor de agente); https://learn.microsoft.com/en-us/uwp/api/windows.graphics.capture.graphicscapturesession.isborderrequired (borda nativa); https://github.com/openai/codex/issues/46675 (relato de usuario sobre ciclo de vida, nao especificacao oficial).
+DISTINCAO: borda nativa do Windows Graphics Capture != overlay do aplicativo Codex != cursor Cua != previa verde CentralDark. Nossa previa e simulacao sinalizada, nao identidade de API nem controle independente homologado.
+NEXT_CURSOR=ligar indicador ao inicio/fim reais da tarefa Hermes existente e testar limpeza em cancelamento; sem watcher novo. Capturas temporarias locais sao evidencia da sessao, nao repositorio publico de telas pessoais.
+### Cursor nativo + captura na mesma sessao — verificacao 02/11/2026
+Intencao: ao pedir Computer Use, associar cursor sintetico, captura e indicador ao mesmo ciclo; nao confundir cursor fisico com cursor de agente e nao substituir silenciosamente borda nativa por simulacao.
+Fontes oficiais consultadas: https://cua.ai/docs/cua-driver/concepts/how-cua-driver-works ; https://github.com/trycua/cua/blob/main/blog/inside-windows-computer-use.md ; https://learn.microsoft.com/en-us/uwp/api/windows.graphics.capture.graphicscapturesession . Cua documenta GDI/PrintWindow com fallback WGC por janela; get_desktop_state cobre primary. IsCursorCaptureEnabled inclui o cursor na imagem, nao desenha cursor de agente. IsBorderRequired sinaliza uma sessao WGC, nao qualquer screenshot.
+Receita Hermes: manter o MESMO transporte MCP/backend; start_session -> capturar janela exata -> set_agent_cursor_enabled(true) -> acao permitida -> captura/readback -> end_session em finally. Nunca scope=desktop para mera demonstracao do cursor, pois o schema instalado avisa que essa rota move o mouse fisico. Ciclo do backend ja existe em tools/computer_use/cua_backend.py:start/stop; nao criar segundo daemon permanente, nao alterar configuracao Windows e nao supor que chamadas CLI isoladas preservam a sessao privada.
+Teste instalado cua-driver 0.28.2: captura nativa de ChatGPT produziu PNG 839x1455, janela 1080x1872 em (1920,-831). set_agent_cursor_enabled retornou enabled=true. move_cursor antes do snapshot: invalid_action_target; depois do snapshot: route=synthetic_events, effect=unverifiable e visual_state.requested_action=navigate, position=null. Portanto CAPTURE=PASS, CURSOR_ENABLED_ACK=PASS, CURSOR_VISIBLE=UNKNOWN, NATIVE_BORDER_VISIBLE=UNKNOWN. Nao declarar experiencia completa provada; nao executar clique apenas para forcar uma animacao.
+Proximo delta: teste dentro do backend Hermes de transporte persistente e contraprova visual do cursor/borda, encerramento/cancelamento e alvo fora da tela principal. Simulacao verde permanece ferramenta explicita de previa, nunca prova de WGC nem evento de automacao ativa.

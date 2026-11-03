@@ -1,3 +1,5 @@
+// #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
+// @last_updated: 2026-11-01T19:58:27.552347+00:00 @implementado: divergencia e drift bloqueiam falso verde/publicacao cega; restante preservado.
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -173,8 +175,8 @@ export const AutoSyncButton: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <CockpitActionButton hint="Casa/Windows: envia as alterações locais para o GitHub com commit e push" onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
-              Windows
+            <CockpitActionButton hint="Casa/Forja: verifica alterações e bloqueia publicação sem escopo revisado" onClick={() => handleSync('windows')} disabled={isSyncing} size="sm" variant="outline">
+              Casa / Forja
             </CockpitActionButton>
             <CockpitActionButton hint="Main: consulta o remoto e compara os SHAs local e origin/main" onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
               Main
@@ -212,7 +214,7 @@ export const AutoSyncButton: React.FC = () => {
           <div className="mt-3 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[10px] text-emerald-200" aria-live="polite">
             <div className="flex items-center gap-2">
               <AnimatedDoneIcon size={14} className="h-3.5 w-3.5 text-emerald-300" />
-              <span className="font-semibold">Sincronizado · mesmo SHA confirmado</span>
+              <span className="font-semibold">{syncStatus.target === "main" || syncStatus.details?.includes("Casa já está em dia") ? "Main em dia · mesmo SHA confirmado" : "Sincronizado · mesmo SHA confirmado"}</span>
             </div>
             {syncStatus.files && syncStatus.files.length > 0 && (
               <div className="mt-1 truncate font-mono text-muted-foreground" title={syncStatus.files.join(' · ')}>

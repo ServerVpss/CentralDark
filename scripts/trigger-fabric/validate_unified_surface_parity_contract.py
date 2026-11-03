@@ -17,10 +17,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml"
 INVOCATION_GRAMMAR = ROOT / "docs" / "ARQUITETURA" / "CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md"
-SKILL = ROOT / ".agents" / "skills" / "centraldark-unified-surface-parity" / "SKILL.md"
+SKILL = ROOT / ".agents" / "skills" / "centraldark-operational-method" / "Skills" / "centraldark-unified-surface-parity" / "SKILL.md"
 HARVESTER = ROOT / ".agents" / "skills" / "session-intelligence-harvester" / "SKILL.md"
 VOICE_CLASSIFIER = ROOT / ".claude" / "skills" / "synced" / "voice-semantic-classifier" / "SKILL.md"
-INTENT_ROUTER = ROOT / ".agents" / "skills" / "centraldark-intent-deploy-router" / "SKILL.md"
+INTENT_ROUTER = ROOT / ".agents" / "skills" / "centraldark-operational-method" / "Skills" / "centraldark-intent-deploy-router" / "SKILL.md"
 INTENT_BINDING = ROOT / ".agents" / "INTENT-DEPLOY-BINDING.json"
 TRIGGER_FAMILY_OWNER = ROOT / "docs" / "SEGURANCA" / "ADM-GATILHOS-OPERACIONAIS.json"
 RECEIPT = ROOT / "docs" / "RECEIPTS" / "2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md"
@@ -318,7 +318,7 @@ def validate_intent_binding_json(path: Path, text: str) -> list[str]:
         "id": "CENTRALDARK_INVOCATION_GRAMMAR_01",
         "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
         "voice_classifier_owner": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
-        "intent_router_owner": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+        "intent_router_owner": ".agents/skills/centraldark-operational-method/Skills/centraldark-intent-deploy-router/SKILL.md",
         "no_second_parser": True,
         "wake_word_is_conditional_not_ritual": True,
         "normalized_intent_shared_across_surfaces": True,
@@ -333,7 +333,7 @@ def validate_intent_binding_json(path: Path, text: str) -> list[str]:
             errors.append(f"WRONG_BINDING_VALUE {path}: {key}={b.get(key)!r} expected={expected_value!r}")
     required_skills = set(data.get("canonical_skills", []))
     for required in {
-        ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+        ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md",
         ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
     }:
         if required not in required_skills:

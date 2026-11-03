@@ -6,7 +6,7 @@
 
 | Quero fazer... | Onde começar | Buscar por |
 |---|---|---|
-| Ativar `!michelin` / aplicar método 3 estrelas | [Skill Michelin](skills-integradas/michelin-3-estrelas/SKILL.md) + [Protocolo](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md) + receita da tarefa | `!michelin`, `MICHELIN_3_ESTRELAS`, `construir`, `integrar`, `provar` |
+| Ativar `!michelin` / aplicar método 3 estrelas | [Skill Michelin](../Skills/michelin-3-estrelas/SKILL.md) + [Protocolo](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md) + receita da tarefa | `!michelin`, `MICHELIN_3_ESTRELAS`, `construir`, `integrar`, `provar` |
 | Encontrar Lembrança e Aprendizado Michelin | Fonte `docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md` e registro `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MICHELIN-3-ESTRELAS-SKILL-HERMES-CASA.md` | `MICHELIN`, `LEMBRANCAS`, `APRENDIZADOS` |
 | Delegar qualquer missão ao Hermes | Receita universal | `kanban`, `create`, `assignee` |
 | Selecionar diretório Windows/Linux na hora | Receita universal, seção de variáveis/rotas | `WORKSPACE_ALVO`, `WORKSPACE_TARGET` |
@@ -24,12 +24,12 @@
 
 | Intenção | Pasta integrada |
 |---|---|
-| Atualizar notas vivas | [centraldark-note-maintenance](skills-integradas/centraldark-note-maintenance/SKILL.md) |
-| Operar o Hermes, cron e conexões | [centraldark-hermes-operations](skills-integradas/centraldark-hermes-operations/SKILL.md) |
-| Reconciliar checklist diário | [reconciliacao-diaria-centraldark](skills-integradas/reconciliacao-diaria-centraldark/SKILL.md) |
-| Comparar prova, fonte e runtime | [centraldark-evidence-reconciliation](skills-integradas/centraldark-evidence-reconciliation/SKILL.md) |
-| Operar Casa, GitHub e VPS | [centraldark-ops](skills-integradas/centraldark-ops/SKILL.md) |
-| Consultar Oracle/Preview | [centraldark-oracle-surface](skills-integradas/centraldark-oracle-surface/SKILL.md) |
+| Atualizar notas vivas | [centraldark-note-maintenance](../Skills/centraldark-note-maintenance/SKILL.md) |
+| Operar o Hermes, cron e conexões | [centraldark-hermes-operations](../Skills/centraldark-hermes-operations/SKILL.md) |
+| Reconciliar checklist diário | [reconciliacao-diaria-centraldark](../Skills/reconciliacao-diaria-centraldark/SKILL.md) |
+| Comparar prova, fonte e runtime | [centraldark-evidence-reconciliation](../Skills/centraldark-evidence-reconciliation/SKILL.md) |
+| Operar Casa, GitHub e VPS | [centraldark-ops](../Skills/centraldark-ops/SKILL.md) |
+| Consultar Oracle/Preview | [centraldark-oracle-surface](../Skills/centraldark-oracle-surface/SKILL.md) |
 
 **Todas as demais capacidades CentralDark** seguem na [lista de módulos](CATALOGO.md) e no [índice completo de arquivos](INDICE-VIVO.md). Quando houver `scripts/` ou `references/` de um módulo, estão dentro da pasta desse módulo. Evitar escolher por nome parecido sem ler a intenção.
 

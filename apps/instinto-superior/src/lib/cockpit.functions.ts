@@ -1,3 +1,7 @@
+// #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
+// @last_updated: 2026-11-01T19:41:24.979255+00:00 @implementado: autenticação do Omni local server-side, rótulo Forja Linux; sem promoção de projeções a execução.
+// #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
+// @last_updated: 2026-11-01T19:22:05.143254+00:00 @implementado: sondas nativas Linux e papel CASA explícito; sem inferir VPS por hostname.
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
@@ -11,7 +15,7 @@ const REQUEST_TIMEOUT_MS = 8_000;
 
 function carregarEnvForja() {
   if (typeof process.loadEnvFile !== "function") return;
-  try { process.loadEnvFile("K:\\.env"); } catch { /* K: indisponível mantém UNKNOWN */ }
+  try { process.loadEnvFile(process.env["CENTRALDARK_ENV_FILE"] || "K:\\.env"); } catch { /* Fonte indisponível mantém UNKNOWN */ }
 }
 
 export type Estado = "PASS" | "RUNNING" | "BLOCKED" | "AUTH_REQUIRED" | "UNKNOWN" | "FAIL";
@@ -34,7 +38,7 @@ type CommitCentralDark = {
 export type PortaCentralDark = {
   id: string;
   origem: "Casa Windows" | "openKylin";
-  transporte: "TCP" | "stdio";
+  transporte: "TCP" | "UDP" | "stdio";
   bind: string;
   estado: Estado;
   processo: string;
@@ -164,8 +168,13 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+    carregarEnvForja();
+    const headers: Record<string, string> = { accept: "application/json" };
+    const localOwner = base === apiBase() && ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname);
+    const routerToken = process.env['CENTRALDARK_ROUTER_TOKEN'];
+    if (localOwner && routerToken) headers['authorization'] = `Bearer ${routerToken}`;
     const resposta = await fetch(`${base}${path}`, {
-      headers: { accept: "application/json" },
+      headers,
       cache: "no-store",
       signal: controller.signal,
     });
@@ -222,8 +231,8 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
 }
 
 async function medirReachable(url: string, casaOnly = false, siteCheck = false): Promise<Probe> {
-  if (casaOnly && process.platform !== "win32") {
-    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
+  if (casaOnly && origemLocalScreenpipe() !== "CASA") {
+    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_HOST_NOT_CONFIRMED", dados: null };
   }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -503,11 +512,11 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
 type HostScreenpipe = "CASA" | "VPS" | "UNKNOWN";
 function origemLocalScreenpipe(): HostScreenpipe {
   const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
-  if (origemDeclarada === "CASA" && process.platform === "win32") return "CASA";
+  if (origemDeclarada === "CASA") return "CASA";
   if (origemDeclarada === "VPS" && process.platform !== "win32") return "VPS";
   const host = hostname().toUpperCase();
   if (process.platform === "win32" && (host === "SEGREDO" || host === "WINDOWS-CASA")) return "CASA";
-  return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
+  return "UNKNOWN";
 }
 
 const SONDA_NAO_EXECUTADA: Probe = {
@@ -523,7 +532,7 @@ function portasOpenKylin(textoSs: string): PortaCentralDark[] {
   for (const linha of textoSs.split(/\r?\n/)) {
     if (!/LISTEN/.test(linha) || !/(tunnel-client|mcp-server|node)/i.test(linha)) continue;
     const match = linha.match(/(?:^|\s)([^\s]+):(\d+)(?:\s|$)/);
-    if (!match) continue;
+    if (!match || !match[1] || !match[2]) continue;
     const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo identificado";
     const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
     portas.push({
@@ -599,6 +608,8 @@ async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
     }
   }
   if (process.platform === "win32") {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const execFile = promisify(execFileCallback);
     let pidStdio: string | null = null;
     try {
       const { stdout } = await execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ps -eo pid=,args= | grep '[m]cp-server.js' | grep -- '--stdio' | grep -oE '^[[:space:]]*[0-9]+' | tr -d ' ' | head -n 1"], { timeout: 4_000, windowsHide: true });
@@ -616,6 +627,19 @@ async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
       pid: pidStdio,
       detalhe: "MCP observado como processo stdio; não é listener HTTP",
     });
+  }
+  if (process.platform === "linux") {
+    const [{ execFile: callback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const exec = promisify(callback);
+    try {
+      const { stdout } = await exec("ss", ["-ltnpH"], { timeout: 4000 });
+      portas.push(...portasTotaisOpenKylin(stdout).filter(p => /:(8080|8742|8000|8001|8002)$/.test(p.bind) || /tunnel|mcp/i.test(p.processo)));
+    } catch { /* Falha da sonda mantém inventário desconhecido. */ }
+    try {
+      const { stdout } = await exec("pgrep", ["-f", "^/usr/local/bin/node /home/CentralDark-OS/CentralDark/apps/modulos/mcp/src/mcp-server.js --stdio"], { timeout: 3000 });
+      const pid = stdout.trim().split(/\s+/)[0];
+      if (pid) portas.push({id: 'openkylin-mcp-stdio', origem: 'openKylin', transporte: 'stdio', protocolo: 'TCP', categoria: 'CentralDark', bind: 'sem porta TCP', estado: 'RUNNING', processo: 'mcp-server.js', pid, detalhe: 'Processo STDIO medido localmente; execução MCP exige chamada própria.'});
+    } catch { /* Ausência de PID não vira PASS. */ }
   }
   const tunnel = await portaOpenKylin8742();
   if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
@@ -670,6 +694,13 @@ function portasTotaisWindows(textoPs: string): PortaCentralDark[] {
 }
 
 async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
+  if (process.platform === "linux") {
+    try {
+      const [{ execFile: callback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+      const { stdout } = await promisify(callback)("ss", ["-ltunpH"], {timeout: 4000});
+      return portasTotaisOpenKylin(stdout);
+    } catch { return []; }
+  }
   if (process.platform !== "win32") return [];
   try {
     const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
@@ -681,7 +712,7 @@ async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
     const openKylin = sondas[0].status === "fulfilled" ? sondas[0].value.stdout : "";
     const windows = sondas[1].status === "fulfilled" ? sondas[1].value.stdout : "";
     const portas = [...portasTotaisOpenKylin(openKylin), ...portasTotaisWindows(windows)];
-    const tunnel = await portaOpenKylin8742();
+  const tunnel = await portaOpenKylin8742();
     if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
     return portas;
   } catch {
@@ -740,7 +771,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
-      ? "Casa Windows · Screenpipe 3030/health · HTTP e status real"
+      ? `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · Screenpipe 3030/health · HTTP e status real`
       : hostScreenpipe === "VPS"
         ? "Casa Windows · Tailscale privado · Screenpipe 3030/health · HTTP e status real"
         : "Casa Windows · sem adapter/medição remota neste servidor";
@@ -831,7 +862,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
-      casaSiteFonte: `Casa Windows · GET ${casaSiteUrl} · so HTTP (nao prova motor)`,
+      casaSiteFonte: `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · GET ${casaSiteUrl} · só HTTP (não prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
       screenpipeAudioStatus: texto(screenpipeCasa.dados?.["audio_status"]),
