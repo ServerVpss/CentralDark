@@ -21,7 +21,7 @@
 
 **HUD ESTILO GAME FIXO V1:** ao apresentar o placar Michelin, preservar integralmente a moldura de linhas duplas do ultimo HUD aprovado pelo usuario (cabecalho, missao, ambiente, barra 100%, painel com 13 resultados historicos, inventario, duas missoes, tres estrelas e rodape). Um unico quadro; nenhuma lista gigante; evolucao so aditiva. Metricas de missoes futuras dependem de readback real. Contrato registrado no SKILL.md canônico.
 
-**Gatilho `!michelin` — skill Michelin 3 estrelas:** [SKILL.md](skills-integradas/michelin-3-estrelas/SKILL.md) + [protocolo detalhado](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md), carregados junto da receita da intenção. Fases **construir → integrar → provar**, testes e contraprova sem substituir o comando que já funcionou. Fonte histórica preservada: `docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md`; registro de aprendizado: `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MICHELIN-3-ESTRELAS-SKILL-HERMES-CASA.md`. Hierarquia constitucional: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`. Selo limitado ao escopo executado.
+**Gatilho `!michelin` — skill Michelin 3 estrelas:** [SKILL.md](../Skills/michelin-3-estrelas/SKILL.md) + [protocolo detalhado](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md), carregados junto da receita da intenção. Fases **construir → integrar → provar**, testes e contraprova sem substituir o comando que já funcionou. Fonte histórica preservada: `docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md`; registro de aprendizado: `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MICHELIN-3-ESTRELAS-SKILL-HERMES-CASA.md`. Hierarquia constitucional: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`. Selo limitado ao escopo executado.
 
 ## Rotas existentes
 
@@ -46,29 +46,29 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 
 | Módulo incorporado | Para qual intenção usar | Tipo de conteúdo |
 |---|---|---|
-| [michelin-3-estrelas](skills-integradas/michelin-3-estrelas/SKILL.md) | `!michelin` e execução deliberada passo a passo; carregar junto da receita da intenção | **Skill efetiva** criada a partir de Lembrança preservada; três fases, contraprova e readback |
-| [intent-deploy-router](skills-integradas/centraldark-intent-deploy-router/SKILL.md) | Classificar a intenção antes de escolher ferramenta, escrita, deploy ou agente | Regras de roteamento |
-| [capability-hud](skills-integradas/centraldark-capability-hud/SKILL.md) | Medir ferramentas e conectores disponíveis antes de declarar bloqueio | Diagnóstico de capacidades |
-| [reuse-runtime](skills-integradas/centraldark-reuse-runtime/SKILL.md) | Encontrar dono e receita existentes antes de criar nova infraestrutura | Reuso e ownership |
-| [boot](skills-integradas/centraldark-boot/SKILL.md) | Executar rotina de boot e validar HUD/receipts quando solicitado | Inicialização |
-| [esteira-motor](skills-integradas/centraldark-esteira-motor/SKILL.md) | Distinguir Hermes/motor, deploy Actions e fila | Operação e CI |
-| [autonomous-conflict-costura](skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md) | Resolver conflitos Git/PR por método prévio | Adaptador de resolução; dono especializado permanece válido |
-| [live-editing-fabric](skills-integradas/centraldark-live-editing-fabric/SKILL.md) | Editar e visualizar resultado sem iniciar CI desnecessária | Edição viva |
-| [unified-surface-parity](skills-integradas/centraldark-unified-surface-parity/SKILL.md) | Alinhar interfaces Texto, Voz, Work e Desktop | Contratos de superfície |
-| [hub-credential-control-plane](skills-integradas/centraldark-hub-credential-control-plane/SKILL.md) | Governar Hub, OAuth e conectores sem expor segredos | Credenciais e integrações |
-| [vscode-log-bridge](skills-integradas/centraldark-vscode-log-bridge/SKILL.md) | Coletar sinais VS Code Casa via ponte existente | Observabilidade, sem exportar log bruto |
-| [auto-sync-vscode](skills-integradas/centraldark-auto-sync-vscode/package.json) | Inspecionar dependências do auto-sync VS Code | **package.json**, não skill executável; descobrir consumidor real |
+| [michelin-3-estrelas](../Skills/michelin-3-estrelas/SKILL.md) | `!michelin` e execução deliberada passo a passo; carregar junto da receita da intenção | **Skill efetiva** criada a partir de Lembrança preservada; três fases, contraprova e readback |
+| [intent-deploy-router](../Skills/centraldark-intent-deploy-router/SKILL.md) | Classificar a intenção antes de escolher ferramenta, escrita, deploy ou agente | Regras de roteamento |
+| [capability-hud](../Skills/centraldark-capability-hud/SKILL.md) | Medir ferramentas e conectores disponíveis antes de declarar bloqueio | Diagnóstico de capacidades |
+| [reuse-runtime](../Skills/centraldark-reuse-runtime/SKILL.md) | Encontrar dono e receita existentes antes de criar nova infraestrutura | Reuso e ownership |
+| [boot](../Skills/centraldark-boot/SKILL.md) | Executar rotina de boot e validar HUD/receipts quando solicitado | Inicialização |
+| [esteira-motor](../Skills/centraldark-esteira-motor/SKILL.md) | Distinguir Hermes/motor, deploy Actions e fila | Operação e CI |
+| [autonomous-conflict-costura](../Skills/centraldark-autonomous-conflict-costura/SKILL.md) | Resolver conflitos Git/PR por método prévio | Adaptador de resolução; dono especializado permanece válido |
+| [live-editing-fabric](../Skills/centraldark-live-editing-fabric/SKILL.md) | Editar e visualizar resultado sem iniciar CI desnecessária | Edição viva |
+| [unified-surface-parity](../Skills/centraldark-unified-surface-parity/SKILL.md) | Alinhar interfaces Texto, Voz, Work e Desktop | Contratos de superfície |
+| [hub-credential-control-plane](../Skills/centraldark-hub-credential-control-plane/SKILL.md) | Governar Hub, OAuth e conectores sem expor segredos | Credenciais e integrações |
+| [vscode-log-bridge](../Skills/centraldark-vscode-log-bridge/SKILL.md) | Coletar sinais VS Code Casa via ponte existente | Observabilidade, sem exportar log bruto |
+| [auto-sync-vscode](../Skills/centraldark-auto-sync-vscode/package.json) | Inspecionar dependências do auto-sync VS Code | **package.json**, não skill executável; descobrir consumidor real |
 
 ### Capacidades CentralDark incorporadas em 28/10/2026
 
-| Pasta integrada em `skills-integradas/` | Quando usar | Recursos na mesma pasta |
+| Pasta integrada em `../Skills/` | Quando usar | Recursos na mesma pasta |
 |---|---|---|
-| [centraldark-note-maintenance](skills-integradas/centraldark-note-maintenance/SKILL.md) | Atualizar e reconciliar notas vivas | `scripts/` com 3 scripts Python |
-| [centraldark-hermes-operations](skills-integradas/centraldark-hermes-operations/SKILL.md) | Operar Hermes, cron, SSH e portas | `SKILL.md` |
-| [reconciliacao-diaria-centraldark](skills-integradas/reconciliacao-diaria-centraldark/SKILL.md) | Reconciliar estado e checklist diário | `SKILL.md` |
-| [centraldark-evidence-reconciliation](skills-integradas/centraldark-evidence-reconciliation/SKILL.md) | Comparar provas de código, runtime e HUD | `references/` com 2 receitas |
-| [centraldark-ops](skills-integradas/centraldark-ops/SKILL.md) | Operações integradas da Casa, GitHub e VPS | `references/` com 5 receitas |
-| [centraldark-oracle-surface](skills-integradas/centraldark-oracle-surface/SKILL.md) | Consultar a superfície Oracle já existente | `SKILL.md` |
+| [centraldark-note-maintenance](../Skills/centraldark-note-maintenance/SKILL.md) | Atualizar e reconciliar notas vivas | `scripts/` com 3 scripts Python |
+| [centraldark-hermes-operations](../Skills/centraldark-hermes-operations/SKILL.md) | Operar Hermes, cron, SSH e portas | `SKILL.md` |
+| [reconciliacao-diaria-centraldark](../Skills/reconciliacao-diaria-centraldark/SKILL.md) | Reconciliar estado e checklist diário | `SKILL.md` |
+| [centraldark-evidence-reconciliation](../Skills/centraldark-evidence-reconciliation/SKILL.md) | Comparar provas de código, runtime e HUD | `references/` com 2 receitas |
+| [centraldark-ops](../Skills/centraldark-ops/SKILL.md) | Operações integradas da Casa, GitHub e VPS | `references/` com 5 receitas |
+| [centraldark-oracle-surface](../Skills/centraldark-oracle-surface/SKILL.md) | Consultar a superfície Oracle já existente | `SKILL.md` |
 
 **Sincronização deliberada e preservação:** executar `scripts/atualizar-catalogo-self-healing.ps1 -SincronizarSkillsCentralDark` a partir desta Skill-Mãe. Importa **somente** as pastas CentralDark conhecidas, preserva arquivos originais e exige destino sem edição local antes de atualizar cópias divergentes. O atualizador já existente registra SHA, datas e histórico no índice vivo. Não mover o owner original nem eliminar caminhos usados pelos loaders até que exista prova de substituição funcional.
 
@@ -91,23 +91,23 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 
 | Skill | Criada em (Casa) | Modificada em (Casa) | SHA-256 (12) |
 |---|---|---|---|
-| `catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
-| `catalogo/skills-integradas/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:22:45-03:00 | 4d00d4976189 |
-| `catalogo/skills-integradas/centraldark-capability-hud/SKILL.md` | 2026-10-29T12:18:58-03:00 | 2026-10-29T12:18:58-03:00 | 6a5523d34828 |
-| `catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
-| `catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
-| `catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-29T09:31:40-03:00 | eb1700fedac4 |
-| `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
-| `catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
-| `catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
-| `catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
-| `catalogo/skills-integradas/centraldark-ops/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T09:46:42-03:00 | b7163181023d |
-| `catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:46:50-03:00 | 4b8a7ca948be |
-| `catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
-| `catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-29T09:31:40-03:00 | 16f68fa7db6f |
-| `catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
-| `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
-| `catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
+| `Skills/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
+| `Skills/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:22:45-03:00 | 4d00d4976189 |
+| `Skills/centraldark-capability-hud/SKILL.md` | 2026-10-29T12:18:58-03:00 | 2026-10-29T12:18:58-03:00 | 6a5523d34828 |
+| `Skills/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
+| `Skills/centraldark-evidence-reconciliation/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
+| `Skills/centraldark-hermes-operations/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-29T09:31:40-03:00 | eb1700fedac4 |
+| `Skills/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
+| `Skills/centraldark-intent-deploy-router/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
+| `Skills/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
+| `Skills/centraldark-note-maintenance/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
+| `Skills/centraldark-ops/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T09:46:42-03:00 | b7163181023d |
+| `Skills/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:46:50-03:00 | 4b8a7ca948be |
+| `Skills/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
+| `Skills/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-29T09:31:40-03:00 | 16f68fa7db6f |
+| `Skills/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
+| `Skills/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
+| `Skills/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
 | `SKILL.md` | 2026-10-30T22:09:36-03:00 | 2026-10-31T09:46:58-03:00 | 8342963ce7fe |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)

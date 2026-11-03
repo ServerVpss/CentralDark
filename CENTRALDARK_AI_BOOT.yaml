@@ -1454,7 +1454,7 @@ authority_reality_contract:
   unknown_blocks_only_affected_claim: true
 
 hybrid_multi_account_capability_routing:
-  owner: ".agents/skills/centraldark-unified-surface-parity/SKILL.md#62-roteamento-hibrido-multi-conta-por-capability"
+  owner: ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md#62-roteamento-hibrido-multi-conta-por-capability"
   status: "REQUIRED_CURRENT_INHERITANCE"
   applies_to: [CHAT_GLOBAL, CHATGPT_TEXT, CHATGPT_VOICE, CLAUDE_CHAT, GEMINI_CHAT, WORK, DESKTOP, HERMES, FUTURE_SURFACES]
   capability_first_tool_second: true

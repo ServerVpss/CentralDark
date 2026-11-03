@@ -89,7 +89,7 @@ consumers:
   claude: CLAUDE.md
   readme: README.md
   memory: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
-  live_editing_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+  live_editing_skill: .agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md
 non_goals:
 - criar segundo motor
 - reiniciar tudo
@@ -150,7 +150,7 @@ live_editing_default:
   human_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
   machine_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
   binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
-  skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+  skill: .agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md
   operational_default: true
   ci_policy:
     MVP_FAST_LOOP_IS_DEFAULT: true
