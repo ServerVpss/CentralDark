@@ -40,6 +40,12 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
+<!-- ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+**🍒+1 ROTA PRIORITÁRIA (nova contraprova 03/11/2026):** ao investigar Casa→VMware→VPS, **antes de consultar IP histórico, VMX D:/E: fixo, rede VPS ou novo gateway**, carregar [Skill VMware existente](Skills/centraldark-linux-vmware-rawdisk/SKILL.md#current-verificado--casa--vmware-nat--vm-vps-em-diagnostico) e sua [receita Kingston](Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). Na Casa foi comprovado: `SEGREDO` online → VMX corrente do processo `vmware-vmx.exe` em `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx` → `vmrun getGuestIPAddress` = `192.168.35.130` → SSH com override temporário do IP corrente e host key conferida = `CASA_VM_SSH=PASS`. O alias `openkylin-vm` em `C:\Users\Administrador\.ssh\config_openkylin` ainda apontava para `.128`; **nao alterar .ssh sem backup/gate**. Dentro da VM `tailscale status` = `Machine is not yet approved by tailnet admin`; VM→VPS ainda **não comprovado**. Current ≠ medições históricas; nenhuma mudança de disco/SSH/VPS foi feita. `NEXT_CURSOR=APPROVE_TAILNET_VM_THEN_REMEASURE_VM_VPS`.
+<!-- /ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+
+
+
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
 Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma interface gráfica. Ela é deliberadamente curta e independe do modelo, do aplicativo e da ferramenta de automação.
