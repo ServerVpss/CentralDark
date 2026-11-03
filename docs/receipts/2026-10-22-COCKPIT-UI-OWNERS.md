@@ -1,7 +1,7 @@
 # Cockpit — compactacao visual e 25 owners (22/10/2026)
 @code_ref: apps/instinto-superior/src/data/painel-unico.ts
 @code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx; apps/instinto-superior/src/components/central/MapaOwners.tsx; apps/instinto-superior/src/components/central/ArchitectureVisualization.tsx; apps/instinto-superior/src/data/painel-unico.ts
-@last_updated: 2026-11-03T17:53:43.936Z
+@last_updated: 2026-11-03T18:22:39.246Z
 @estado: SOURCE_DOC_RECONCILED_IN_PR_1977; VISUAL_ONLY=true; TYPECHECK_UNKNOWN; CI_UNKNOWN; UI_E2E_UNKNOWN; RUNTIME_NOT_IN_SCOPE
 @next_cursor: validar CODE_DOC_NOT_UPDATED_IN_SAME_DIFF no diff do PR #1977; reconciliar os demais owners do Hermes/Corpo Unico/Instinto Superior. Nao requer VPS/deploy neste escopo.
 
@@ -33,3 +33,15 @@ Compile, typecheck, visual, clique/ACK, API, e runtime nao foram executados nest
 - **Próximo cursor:** conferir o diff completo do PR #1977, validar a regra `CODE_DOC_NOT_UPDATED_IN_SAME_DIFF` com o gate existente, registrar resultado no HUD, e continuar a reconciliação de source dos owners existentes. **VPS_REQUIRED=false · DEPLOY_REQUIRED=false · SOURCE_ONLY=true**.
 
 <!-- /CORRECAO_P1_1973_SOURCE_ONLY_20261103 -->
+
+<!-- BOLT_HYBRID_BUILDER_SOURCE_DOC_20261103 -->
+## Ponte Builder híbrido Windows/Linux · SOURCE_ONLY · PR #1977
+
+O código-fonte do mesmo Electron/Bolt foi alterado nesta branch para selecionar ambiente Windows/Linux, reaproveitar o builder existente e registrar evidência de artefato. Os arquivos abaixo são **source editado**, não prova de compilação nem de execução. A integração funcional com Hermes/Corpo Único continua não verificada até futura conexão; esta missão não exige VPS, deploy ou testes de runtime.
+
+@code_ref: apps/modulos/Bolt/source/electron/main/index.ts
+@code_ref: apps/modulos/Bolt/source/scripts/centraldark-desktop-contract.test.mjs
+@code_ref: apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs
+
+**Source gate:** vínculos literais registrados no documento canônico do mesmo PR; conferir SHA/readback e check `validateDiffCoverage` no HEAD atual. `RUNTIME=NOT_TESTED_BY_SCOPE`.
+<!-- /BOLT_HYBRID_BUILDER_SOURCE_DOC_20261103 -->
