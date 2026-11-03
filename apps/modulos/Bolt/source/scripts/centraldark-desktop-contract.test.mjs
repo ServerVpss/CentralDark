@@ -1,7 +1,7 @@
 // #OBSERVACOES#
 // @owner: apps/modulos/Bolt/source/scripts/centraldark-desktop-contract.test.mjs
 // @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
-// @last_updated: 2026-11-03T18:37:00.000Z
+// @last_updated: 2026-11-03T18:41:00.000Z
 // @implementado: asserts de source para builder Windows/Linux no mesmo Electron.
 // @pendente: execução dos testes no HEAD da PR #1977; runtime não requisitado.
 // @estado: SOURCE_ONLY; TEST_NOT_EXECUTED
@@ -216,9 +216,14 @@ test('builder híbrido usa a mesma receita para Windows x64 e Linux x64', () => 
   const recipe = read(`${root}/scripts/centraldark-rebuild.mjs`);
   const ledger = read(`${root}/scripts/centraldark-build-ledger.mjs`);
   const installer = read(`${root}/../../../../install.sh`);
+  const capsule = JSON.parse(read(`${root}/resources/runtime/manifest.json`));
 
   assert.equal(pkg.desktopName, 'com.centraldark.desktop');
   assert.match(builder, /syncDesktopName: true/);
+  assert.match(builder, /executableName: centraldark-desktop/);
+  assert.equal(capsule.entrypoint, 'CentralDark.exe');
+  assert.equal(capsule.entrypoints['win32-x64'], 'CentralDark.exe');
+  assert.equal(capsule.entrypoints['linux-x64'], 'centraldark-desktop');
   assert.match(pkg.scripts['electron:build:linux'], /electron-builder --linux/);
   assert.match(pkg.scripts['centraldark:build:win'], /electron-builder --win/);
   assert.match(builder, /linux:[\s\S]*?- AppImage[\s\S]*?- deb/);
