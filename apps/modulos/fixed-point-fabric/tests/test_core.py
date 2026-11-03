@@ -3,8 +3,8 @@ from __future__ import annotations
 # #OBSERVACOES#
 # @owner: apps/modulos/fixed-point-fabric/tests/test_core.py
 # @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
-# @last_updated: 2026-11-03T18:44:11.351Z
-# @implementado: testes de regressão HEAD único, HMAC assinado, config, symlink, ledger e probe.
+# @last_updated: 2026-11-03T18:45:59.211Z
+# @implementado: testes CI SHA, HEAD, HMAC, config, symlink, probe, redaction e ledger.
 # @pendente: CI e revisão source SAME_HEAD; runtime fora do escopo.
 # @estado: SOURCE_CORRECTED; STATIC_GATES=PENDING; RUNTIME=NOT_TESTED_BY_SCOPE
 # @next_cursor: confrontar gates e review debts de #1381 no PR #1977.
@@ -20,6 +20,7 @@ from pathlib import Path
 from centraldark_fixed_point.codec import compact_project
 from centraldark_fixed_point.config import load_config
 from centraldark_fixed_point.probes.vps import VPSProbe
+from centraldark_fixed_point.probes.github import GitHubProbe
 from centraldark_fixed_point.engine import FixedPointEngine
 from centraldark_fixed_point.models import Evidence, ProbeReceipt, Status
 from centraldark_fixed_point.policy import FixedPointPolicy
@@ -187,6 +188,29 @@ class FixedPointTests(unittest.TestCase):
             receipt = VPSProbe({"heartbeat_url": "https://example.invalid/health", "hmac_secret": "example-test-secret"}).run()
         self.assertEqual(receipt.status, Status.PASS)
         self.assertEqual(next(e.value for e in receipt.evidence if e.claim == "head_sha"), "a" * 40)
+
+    def test_github_probe_requires_completed_same_head_checks(self):
+        head = "a" * 40
+        ref = (200, {"object": {"sha": head}})
+        success = (200, {"total_count": 1, "check_runs": [
+            {"head_sha": head, "status": "completed", "conclusion": "success"},
+        ]})
+        pending = (200, {"total_count": 1, "check_runs": [
+            {"head_sha": head, "status": "in_progress", "conclusion": None},
+        ]})
+        mismatched = (200, {"total_count": 1, "check_runs": [
+            {"head_sha": "b" * 40, "status": "completed", "conclusion": "success"},
+        ]})
+        for data, expected in ((success, None), (pending, "CANDIDATE_CHECKS_PENDING"), (mismatched, "CANDIDATE_CHECKS_SHA_MISMATCH")):
+            with self.subTest(expected=expected):
+                with patch("centraldark_fixed_point.probes.github.fetch_json", side_effect=[ref, data]):
+                    with patch.object(GitHubProbe, "_fetch_all", side_effect=[(200, []), (200, [])]):
+                        receipt = GitHubProbe({"repository": "ServerVpss/CentralDark"}).run()
+                if expected:
+                    self.assertEqual(receipt.status, Status.FAIL)
+                    self.assertIn(expected, receipt.blockers)
+                else:
+                    self.assertEqual(receipt.status, Status.PASS)
 
     def test_project_pack_does_not_follow_outside_symlink(self):
         source = Path(self.temp.name) / "source"
