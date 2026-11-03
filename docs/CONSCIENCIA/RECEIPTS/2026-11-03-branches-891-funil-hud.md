@@ -21,22 +21,42 @@
 
 **HUD G1 82/891 · G2 66/891 ·** `[■■□□□□□□□□□□□□□□□□]` (vínculo PR verificado; não implica conclusão) · **0/891 com decisão final**.
 
+
+<!-- NO_BRANCH_IS_DISPOSABLE_20261103 -->
+## 🔒 Trava permanente desta missão — preservar todas as branches
+
+**REGRA DO CHEFE:** `NO_BRANCH_IS_DISPOSABLE=true` · `BRANCH_DELETE_ALLOWED=false` · `ALL_891_SNAPSHOT_REFS=HOLD` · `NEW_REFS_INCLUDING_PR_1977=HOLD`.
+
+Todas as 891 branches deste inventário são **trabalho de estudo/implementação potencialmente incompleto**, especialmente nas dependências entre **Hermes, Corpo Único e Instinto Superior**. **Nenhuma** está autorizada para exclusão, incluindo as 392 marcadas como mergeadas no inventário antigo, as 2 `ahead=0` e as 4 `diverged/files=0`. `P0…P4` são categorias de **investigação**; **não** são lotes de descarte. `G5` significa preservar/reconciliar com prova, **não** deletar. Apenas nova decisão explícita do CHEFE pode revogar esta trava, em missão separada e após provar que tudo foi absorvido e consumido. Nenhuma operação de `delete`, `prune` destrutivo, `force push`, reset ou limpeza de worktree é autorizada por este PR.
+
+## 🔔 Rastreio obrigatório de alertas, reviews e dívida pós-merge
+
+- [x] **Regra escrita no owner** — toda revisão, comentário, thread inline, CI/gate ou alerta anterior deve ser procurado antes de classificar o trabalho da branch/PR como completo.
+- [x] **Exemplo medido** — [#1973: P1 não resolvido, linha 258](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463), HEAD revisado `af009c9fa1bf64acf441f6789da76617a0ce9b43`, código `apps/instinto-superior/src/data/painel-unico.ts`, motivo `CODE_DOC_NOT_UPDATED_IN_SAME_DIFF`, pendentes `#OBSERVACOES#` e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`. PR já mergeado em `55db287f203d3208bc92d50e1a21b7250a827d21`; o thread retornou `is_resolved=false` nesta inspeção. **DÍVIDA DOCUMENTAL PÓS-MERGE=OPEN/UNKNOWN_FIX**, não bloqueio atual de merge.
+- [ ] **G3/REVIEW_HISTORY individual** — consultar comentários de Conversation, reviews de código, threads `resolved` e `outdated`, checks de CI e recibos para cada PR referenciado. Um comentário antigo pode continuar relevante após o merge.
+- [ ] **G3/DOC_READBACK** — para cada achado, registrar **PR, URL, prioridade, HEAD revisado, arquivo/linha, owner, documento ou teste citado, resultado após abrir o arquivo atual e evidência de correção**. `is_resolved=true` ou merge por si só não provam reparo; comparar source e recibo.
+- [ ] **G4/DECISION** — marcar `RESOLVED` somente após correção material + readback; senão `OPEN_POST_MERGE`, `NEEDS_DOCS`, `NEEDS_CODE`, `UNKNOWN`, mantendo a branch.
+
+**Regras:** `MERGED != REVIEW_CLEARED` · `OUTDATED != FIXED` · `COMMENT_EXISTS != VERIFIED` · `NO_DIFF != WORK_COMPLETE`. O caso #1973 foi verificado; **não** há varredura completa de revisões dos demais PRs ainda. O levantamento dos 891 itens continua em progresso.
+
+<!-- /NO_BRANCH_IS_DISPOSABLE_20261103 -->
+
 ## 🧿 Regras de combate — critérios obrigatórios
 
 1. **MAIN é sagrada.** `main`, branches protegidas e branches usadas por PR aberto não são eliminadas.
 2. **CURRENT acima do histórico:** consultar ref, PR atual, estado aberto/mergeado/fechado, commit SHA e comparação com `main`. O rótulo de setembro nunca autoriza mutação.
 3. **Preservação de exclusividade:** se o branch tiver delta não absorvido, owner ativo, worktree em uso, release/tag dependente, handoff ou artefato pendente, registrar `KEEP/ESCALATE`; não excluir.
 4. **Squash não é ancestralidade:** branch pode conter commits exclusivos mesmo após squash; examinar diff/patch-equivalência, recibo, PR merge commit e prova SAME_HEAD antes de recomendar apagar a referência.
-5. **Estado individual:** `TODO → READ → CLASSIFIED → PROVED → DECIDED → DELETED_OR_KEPT → READBACK`. Nenhum `UNKNOWN` vira `PASS`.
+5. **Estado individual:** `TODO → READ → CLASSIFIED → REVIEW_HISTORY → DOC_READBACK → DECIDED_KEEP_OR_PROMOTE → RECEIPT`. Nenhum `UNKNOWN` vira `PASS`.
 6. **Uma caneta/owner:** o inventário histórico continua em `docs/CONSCIENCIA/BRANCHES-ESTACIONADAS-PR-MAE.md`; esta fotografia é anexo e HUD do **mesmo PR**, não um segundo sistema nem script de limpeza.
-7. **Exclusão só após gate explícito:** confirmar sem delta útil, sem PR aberto, sem dependência e sem proteção; registrar URL/SHA/prova antes/depois. Nunca usar reset, force push ou deleção em massa sem contraprova.
+7. **Exclusão desabilitada por decisão do CHEFE:** `BRANCH_DELETE_ALLOWED=false`. Conferir tudo sem apagar nada. Revogação da trava requer uma nova autorização explícita; merge, diff zero ou check verde não autorizam exclusão.
 8. **Periodicidade futura:** apenas proposta: reconciliar semanalmente no owner existente. **Não existe monitor automático novo ligado por este documento**.
 
 ### ⚔️ Ordem obrigatória
 
 `G0 SNAPSHOT → G1 VÍNCULO PR → G2 DIFF+OWNERS → G3 CONTRAPROVA → G4 DECISÃO → G5 AÇÃO AUTORIZADA → G6 READBACK → G7 KAIZEN`
 
-**Prioridade de fila por risco:** `P0 (blindar ativos) → P1 (resgatar unmerged) → P2 (verificar órfãos históricos) → P3 (classificar novos) → P4 (limpar candidatos já mergeados com prova)`.
+**Prioridade de fila por risco:** `P0 (blindar ativos) → P1 (resgatar unmerged) → P2 (verificar órfãos históricos) → P3 (classificar novos) → P4 (revisar histórico de merge e dívidas sem excluir)`. Todas as cinco filas permanecem preservadas.
 
 ## 🧩 Ondas marcáveis — grupos de 50
 
@@ -1001,4 +1021,4 @@ A coluna `⬜` significa **não auditada individualmente nesta missão**. O núm
 
 ## 🎯 NEXT_CURSOR
 
-Anexar este snapshot ao PR único; executar G1/G2 em lotes, começando pela proteção das 16 branches com PR aberto e conferindo os 66 fechamentos sem merge históricos; atualizar o HUD do PR e o mesmo inventário canônico mediante evidências. **ZERO_DELETIONS_UNTIL_PROVEN=true**.
+Anexar este snapshot ao PR único; executar G1/G2 em lotes, começando pela proteção das 16 branches com PR aberto e conferindo os 66 fechamentos sem merge históricos; atualizar o HUD do PR e o mesmo inventário canônico mediante evidências. **NO_BRANCH_IS_DISPOSABLE=true; BRANCH_DELETE_ALLOWED=false**. Toda revisão e pendência documental deve ser revisitada, mesmo após merge.
