@@ -81,7 +81,7 @@ Todas as 891 branches deste inventário são **trabalho de estudo/implementaçã
 
 ### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
 
-@last_updated: 2026-11-03T18:21:11.636Z
+@last_updated: 2026-11-03T18:26:02.893Z
 **Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
 
 **Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
@@ -103,6 +103,17 @@ Code readback mostrou três lacunas em `engine.py`: exceção de probe, evidence
 
 @code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/engine.py
 @code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/redaction.py
+
+
+### 🪡 #1381 · Webhook SQLite e selo sem autocontaminação (SOURCE_ONLY)
+
+- Verificado `webhook.py`: usava `ThreadingHTTPServer` compartilhando uma única conexão `EventStore` criada fora dos handlers. Fonte alterada para `HTTPServer`, igual ao dashboard existente; serializa chamadas sem segundo writer.
+- Verificado `cli.py`: `seal` aceitava saída dentro dos próprios caminhos protegidos. A fonte agora rejeita arquivo de saída que coincida com um arquivo protegido ou fique sob diretório selado.
+- Contraprovas de source adicionadas a `test_state_library.py` existente; ainda sem execução e sem alegar runtime verde. Revisões antigas do #1381 permanecem registradas até aceite.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/cli.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_state_library.py
 
 <!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
 
