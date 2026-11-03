@@ -47,3 +47,33 @@ Nao repetir shrink, nao formatar, nao abrir fullDevice e partitionedDevice junto
 
 ## Estado comprovado do exemplo
 Em 2026-11-03: VMware rodando D:\CENTRALDARK-OSh\CENTRALDARK-OSh.vmx; VMDK partitionedDevice no mesmo Kingston; quatro particoes Linux e swap montadas; SSH root uid=0; Windows D: rotulo VMWARE NTFS Healthy acessivel durante a VM; original em E: preservado. O backup SHA-256 verificado foi somente dos arquivos de configuracao, NAO da DATA integral.
+
+
+## 2026-11-03 | Desktop remoto da Forja por SSH + XRDP
+
+**Intencao:** Windows Casa operar graficamente o UKUI do openKylin 3.0 no VMware, sem depender da VPS, sem expor RDP na internet e sem criar outra ponte MCP. A tela XRDP e uma sessao Xorg virtual, nao o espelho do console VMware.
+
+**Rota comprovada:** Windows mstsc -> 127.0.0.1:13390 -> SSH por chave existente (alias openkylin-vm, arquivo F:\CentralDark\.ssh\config_openkylin) -> XRDP local 127.0.0.1:3389 no Linux -> Xorg -> UKUI. O alias SSH resolve a IP guest NAT 192.168.35.130 nesta medicao e pode mudar; nao codificar IP no launcher. Nao usar chave root para forwarding: a chave root tem opcao restrict e o tunel nao passou RDP; a chave do usuario normal CentralDark-OS passou. Preservar root.
+
+### Implementacao observada
+- Pacotes openKylin instalados: xrdp 0.10.1-ok1 e xorgxrdp 1:0.10.2-ok1, apenas 2 pacotes, sem recomendações; servicos xrdp e xrdp-sesman ativos e habilitados.
+- Configuracao /etc/xrdp/xrdp.ini: port=tcp://127.0.0.1:3389 (antes port=3389; backup xrdp.ini.centraldark-before-loopback-20261103). Readback ss -lntp PASS: nenhuma escuta RDP em 0.0.0.0.
+- Usuario /home/CentralDark-OS/.xsession foi criado com owner certo para iniciar /usr/bin/ukui-session. Boot continua multi-user.target, sem ativar LightDM; disco e particoes VMware nao foram tocados.
+- Windows 11 Pro estava sem mstsc.exe. Cliente nativo foi restaurado pelo instalador oficial Microsoft Learn, Authenticode Valid assinado por Microsoft Corporation; mstsc.exe voltou ao System32.
+- Tunel SSH usuario comum 127.0.0.1:13390 -> 127.0.0.1:3389 respondendo X.224 (19 bytes; prefixo 03-00-00-13, resposta X.224 Confirm) => RDP_HANDSHAKE=PASS.
+- Janela Windows MSTSC exibiu visualmente Login to CentralDark-OS, Session Xorg e campos username/password. Isso comprova acesso ao LOGIN RDP, nao autenticação do UKUI. CHEFE informa usuario CentralDark-OS e senha Linux somente na janela grafica, sem compartilhar senha no chat.
+- O tunel preliminar root na porta local 13389 foi interrompido apos verificar que o tunel valido do usuario normal estava funcionando. Nao codificar PIDs da sessao historica.
+- Launcher proprio: scripts/Open-CentralDarkForjaRDP.ps1, dentro desta Skill. Modo -CheckOnly somente leitura. Reusa tunel existente ou cria novo via SSH e abre o mstsc. Testado PowerShell parser 0 erros; -CheckOnly retornou RDP_HANDSHAKE=PASS.
+- Atalho Windows C:\Users\Administrador\Desktop\CentralDark - Forja Remota.lnk apontando para o launcher, sem guardar credenciais. O atalho e local ao Windows, nao parte do Git.
+
+### Tailscale: segunda rota, nao confundir com VMware NAT
+- Casa Windows Tailscale IPv4 observada 100.123.93.25, online.
+- openKylin: Tailscale 1.104.5 ativo e IP atribuido 100.81.207.32, mas estado Machine is not yet approved by tailnet admin. IP atribuido != peer aprovado.
+- So apos aprovacao explicita pelo dono e readback do peer permitido, a opcao oficial para acesso privado remoto e Tailscale Serve com forwarding TCP 3389 para o XRDP local: tailscale serve --tcp=3389 tcp://localhost:3389. NAO usar Funnel, nao abrir porta publica nem ativar Serve antes do gate. Serve ainda nao foi configurado; TAILSCALE_RDP_E2E=UNKNOWN.
+- A VPS continua ambiente opcional do mesmo produto e NAO participa desta rota do VMware. O controle MCP CentralDark e o OAuth do Desktop Commander sao rotas distintas, nao trocar tokens ou refazer login para o RDP.
+
+### Gates e replay
+- XRDP_SERVICE=PASS; XRDP_LOCAL_BIND=PASS; WINDOWS_MSTSC=PASS; SSH_USER_TUNNEL=PASS; RDP_X224=PASS; RDP_LOGIN_VISUAL=PASS.
+- UKUI_DESKTOP_AUTH=WAITING_FOR_HUMAN_PASSWORD; TAILSCALE_DEVICE_APPROVAL=PENDING; TAILSCALE_SERVE_RDP=NOT_CONFIGURED.
+- Replay: executar o launcher no Windows, conferir seu handshake, na tela RDP escolher Xorg, usuario CentralDark-OS e senha local. Para erro de sessao, consultar journalctl xrdp / xrdp-sesman e preservar os demais servicos.
+- NEVER claim fixed point da sessao grafica autenticada ou conexao tailnet ate provas especificas. Uso da VPN nunca substitui senha do usuario Linux.
