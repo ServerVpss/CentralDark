@@ -3,7 +3,7 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-11-03T19:52:41.703Z
+ * @last_updated: 2026-11-03T19:57:26.210Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
  * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
@@ -14,6 +14,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { syncObsidian } from "./diagram-route-excalidraw.mjs";
+import { buildGraphProjection } from "../grafo-vivo/mermaid-core.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, "../..");
@@ -44,20 +45,36 @@ export function buildPrDiagramPreview({ number, title, body = "", headSha = "", 
   const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "UNKNOWN";
   const prTitle = label(title || "Revisar alteracao");
   const sha = /^[0-9a-f]{40}$/i.test(String(headSha || "")) ? headSha.slice(0, 12) : "HEAD_UNKNOWN";
-  const lines = [
-    "flowchart LR",
-    '  PR["PR #' + id + ': ' + prTitle + '"] --> SOURCE["Código/Docs: comparar diffs"]',
-    '  SOURCE --> HEAD["HEAD: ' + sha + '"]',
-    '  HEAD --> CHECK["Revisar: código, comentários e gates"]',
-    '  CHECK --> DIAGRAM["Mermaid: projeção derivada"]',
-    '  DIAGRAM --> SVG["SVG: leitura no GitHub"]',
-    '  DIAGRAM --> PNG["PNG: visualização"]',
-    '  DIAGRAM --> ASCII["ASCII: terminal/chat"]',
-    '  SVG --> RECEIPT["Recibo no PR / SHA"]',
-    '  PNG --> RECEIPT',
-    '  ASCII --> RECEIPT',
+  // Grafo Vivo existente fornece a projeção, fingerprint e verificação de arestas.
+  // Este grafo explica o PR: não é a topologia material do sistema nem altera o MMD canônico.
+  const labels = [
+    ["PR", "PR #" + id + ": " + prTitle],
+    ["SOURCE", "Código/Docs: comparar diffs"],
+    ["HEAD", "HEAD: " + sha],
+    ["CHECK", "Revisar: código, comentários e gates"],
+    ["DIAGRAM", "Mermaid: projeção derivada"],
+    ["SVG", "SVG: leitura no GitHub"],
+    ["PNG", "PNG: visualização"],
+    ["ASCII", "ASCII: terminal/chat"],
+    ["RECEIPT", "Recibo no PR / SHA"],
   ];
-  return { kind: "PR_EXPLANATION_DERIVED", preferred, mermaid: lines.join("\n") + "\n" };
+  const edges = [
+    ["PR", "SOURCE"], ["SOURCE", "HEAD"], ["HEAD", "CHECK"],
+    ["CHECK", "DIAGRAM"], ["DIAGRAM", "SVG"], ["DIAGRAM", "PNG"],
+    ["DIAGRAM", "ASCII"], ["SVG", "RECEIPT"], ["PNG", "RECEIPT"],
+    ["ASCII", "RECEIPT"],
+  ];
+  const graph = buildGraphProjection({
+    nodes: labels.map(([id, label]) => ({ id, label, group: "core" })),
+    edges: edges.map(([from, to]) => ({ from, to })),
+  });
+  if (!graph.validation.ok || graph.audit.dangling?.length || graph.audit.duplicates?.length) {
+    throw new Error("PR_DIAGRAM_GRAPH_AUDIT_FAILED");
+  }
+  return {
+    kind: "PR_EXPLANATION_DERIVED", preferred,
+    mermaid: graph.mermaid + "\n", graph_fingerprint: graph.fingerprint,
+  };
 }
 
 export function prDiagramArtifactNames(number) {
@@ -114,6 +131,7 @@ function renderPrDiagramPreview() {
   const receipt = {
     status: "ARTIFACTS_RENDERED", owner: "scripts/lupa/diagram-route-gate.mjs",
     pr: pr.number, sha: pr.head.sha, source_kind: diagram.kind,
+    graph_fingerprint: diagram.graph_fingerprint || null,
     preferred: diagram.preferred, formats: ["svg", "png", "ascii"], names, proofs,
     runtime: "NOT_TESTED_BY_SCOPE",
   };
