@@ -1,7 +1,7 @@
 // #OBSERVACOES#
 // @owner: apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs
-// @doc_ref: apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md
-// @last_updated: 2026-11-03T19:22:20.610Z
+// @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+// @last_updated: 2026-11-03T19:29:32.638Z
 // @implementado: SHA do PR exato em smoke Puppeteer já existente, desktop/mobile.
 // @pendente: CI real e screenshot no mesmo HEAD; sem alegar instalação.
 // @estado: SOURCE_ONLY; VISUAL_PREVIEW_RECEIPT; CI_NOT_PROVEN
