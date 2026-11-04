@@ -10,9 +10,9 @@
 # #OBSERVACOES#
 # @owner: scripts/set-bot-profile.sh
 # @doc_ref: docs/CONSCIENCIA/PROGRAMAS/HUD-VOZ-CONSULTA-VISUALIZACAO-20260924.md
-# @last_updated: 2026-11-04T03:14:29.913Z
-# @implementado: base enviada + STRICT_SHELL, ONLY_GUARDIAO e receipt dos dois valores.
-# @pendente: checks GitHub no HEAD e aplicação real autorizada (não executada aqui).
+# @last_updated: 2026-11-04T03:45:00.000Z
+# @implementado: fix P1 — json_field le .result antes da raiz e mantem ok na raiz; HERMES como unico papel de execucao.
+# @pendente: checks GitHub no HEAD e aplicacao real autorizada (nao executada aqui).
 # @estado: SOURCE_ONLY; SAFE_MOCK_TESTS
 # @next_cursor: confirmar node --test e bash -n no SHA exato.
 # REGRAS  : não cria token · não imprime valor · não cria owner paralelo
@@ -23,6 +23,13 @@
 #   1. contracheque passa a provar os DOIS campos (short_description + description)
 #   2. set -euo pipefail com falhas da Bot API tratadas por bot, sem abortar a sessão
 #   3. read_key varre TODOS os cofres e devolve só valor não-vazio
+#
+# DELTA 2026-11-04 (fix das 2 P1 abertas no PR #1978):
+#   1. json_field passa a ler .result[$field] e cai para .[$field]; `ok` fica na raiz.
+#      A Bot API devolve username/short_description/description DENTRO de `result`.
+#      Sem isso, toda execucao caia em MEASURE_FAIL: username ausente.
+#   2. FULL_DESC volta a `HERMES = execução` (AGENTS.md L2294-L2300).
+#      `PIVETE/HERMES` reabria papel tecnico aposentado no texto de setMyDescription.
 #
 # USO     : bash scripts/set-bot-profile.sh          # aplica
 #           bash scripts/set-bot-profile.sh --dry    # só mede os getMe
@@ -57,22 +64,43 @@ read_key() {
 }
 
 # Parser JSON com decodificação real de \n/Unicode; nunca prova valor por regex parcial.
+# A Bot API entrega `ok` na RAIZ e os demais campos DENTRO de `result`.
+# Portanto: campo `ok` lê a raiz; qualquer outro campo tenta .result e cai para a raiz.
 json_field() {
   local json="$1" field="$2"
   if command -v jq >/dev/null 2>&1; then
-    printf '%s' "$json" | jq -er --arg field "$field" '.[$field] | if type == "boolean" then tostring elif type == "string" then . else empty end' 2>/dev/null
+    if [ "$field" = "ok" ]; then
+      printf '%s' "$json" | jq -er --arg field "$field" '.[$field] | if type == "boolean" then tostring elif type == "string" then . else empty end' 2>/dev/null
+    else
+      printf '%s' "$json" | jq -er --arg field "$field" '(.result[$field] // .[$field]) | if type == "boolean" then tostring elif type == "string" then . else empty end' 2>/dev/null
+    fi
     return $?
   fi
   command -v python3 >/dev/null 2>&1 || return 1
-  printf '%s' "$json" | python3 -c ' 
+  printf '%s' "$json" | python3 -c '
 import json, sys
+field = sys.argv[1]
 try:
-    obj=json.load(sys.stdin)
-    val=obj.get(sys.argv[1])
-    if isinstance(val, str): print(val, end="")
-    elif isinstance(val, bool): print(str(val).lower(), end="")
-    else: sys.exit(1)
-except (ValueError, TypeError, AttributeError): sys.exit(1)
+    obj = json.load(sys.stdin)
+except (ValueError, TypeError):
+    sys.exit(1)
+if not isinstance(obj, dict):
+    sys.exit(1)
+if field == "ok":
+    val = obj.get(field)
+else:
+    result = obj.get("result")
+    val = None
+    if isinstance(result, dict):
+        val = result.get(field)
+    if val is None:
+        val = obj.get(field)
+if isinstance(val, str):
+    print(val, end="")
+elif isinstance(val, bool):
+    print(str(val).lower(), end="")
+else:
+    sys.exit(1)
 ' "$field"
 }
 
@@ -87,7 +115,7 @@ Guardião da Casa. Esta é a porta falada do sistema.
 AUTORIDADE
 SEGREDO/CHEFE = dono, autoridade final
 SOL = coordenação
-PIVETE/HERMES = execução
+HERMES = execução
 
 O QUE ESTE BOT FAZ
 • recebe a intenção do CHEFE

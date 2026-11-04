@@ -1,9 +1,9 @@
 /* #OBSERVACOES#
  * @owner: scripts/set-bot-profile.test.mjs
  * @doc_ref: docs/CONSCIENCIA/PROGRAMAS/HUD-VOZ-CONSULTA-VISUALIZACAO-20260924.md
- * @last_updated: 2026-11-04T03:15:09.175Z
- * @implementado: regressões STRICT_SHELL, receipt dos dois valores e domínio oficial.
- * @pendente: CI no HEAD final; testes de produção não executados.
+ * @last_updated: 2026-11-04T03:45:00.000Z
+ * @implementado: regressoes P1 — json_field le .result e HERMES e o unico papel de execucao.
+ * @pendente: CI no HEAD final; testes de producao nao executados.
  * @estado: SOURCE_ONLY; BASH_MOCK_LOCAL_6_PASS
  * @next_cursor: verificar node --test no mesmo HEAD via CI.
  */
@@ -70,4 +70,15 @@ test("domínio oficial mantém dois L e token legado não é atribuído ao bot p
   assert.match(script, /status\.centralldark\.com/);
   assert.doesNotMatch(script, /https:\/\/mcp\.centraldark\.com/);
   assert.doesNotMatch(script, /read_key GUARDA_TELEGRAM_BOT_TOKEN/);
+});
+
+test("P1 — json_field lê dentro de result e mantém ok na raiz", () => {
+  assert.match(script, /\.result\[\$field\] \/\/ \.\[\$field\]/);
+  assert.match(script, /if \[ "\$field" = "ok" \]; then/);
+  assert.match(script, /result = obj\.get\("result"\)/);
+});
+
+test("P1 — HERMES é o único papel técnico de execução na descrição", () => {
+  assert.match(script, /^HERMES = execução$/m);
+  assert.doesNotMatch(script, /PIVETE\/HERMES/);
 });
