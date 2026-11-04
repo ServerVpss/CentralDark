@@ -1,0 +1,36 @@
+%% CENTRALDARK - MAPA TELEGRAM - SOURCE_ONLY
+%% Fonte: medicao direta dos 4 emissores em main @ 7f799d3
+%% Nao altera ARCHITECTURE.mmd canonico.
+
+flowchart TB
+  subgraph ATUAL["ESTADO ATUAL - 4 ROTAS CONCORRENTES"]
+    direction TB
+    H1["hook on-stop.sh<br/>fim de sessao"]
+    H2["cron guarda"]
+    H3["cron 6h workflow"]
+    E1["notify-telegram.sh<br/>SRVER1 | TELEGRAM_BOT_TOKEN"]
+    E2["guarda-telegram.sh<br/>GUARDA_TELEGRAM_BOT_TOKEN"]
+    E3["vps-healthcheck.mjs<br/>SRVER1 | TELEGRAM_BOT_TOKEN"]
+    H1 --> E1
+    H2 --> E2
+    H3 --> E3
+  end
+
+  E1 --> API["api.telegram.org<br/>/bot TOKEN /sendMessage"]
+  E2 --> API
+  E3 --> API
+
+  MT["telegram-mtproto/server.js<br/>MTProto - CONTA, nao bot"]
+
+  subgraph ALVO["ESTADO ALVO - 1 EMISSOR, 3 GATILHOS"]
+    direction TB
+    G1["hook on-stop"]
+    G2["cron guarda"]
+    G3["cron 6h health"]
+    UNI["emissor unico<br/>1 TOKEN - 1 COFRE - 1 LOG"]
+    G1 --> UNI
+    G2 --> UNI
+    G3 --> UNI
+  end
+
+  UNI --> API2["api.telegram.org"]
