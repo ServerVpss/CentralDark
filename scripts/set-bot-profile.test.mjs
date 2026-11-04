@@ -1,3 +1,12 @@
+/* #OBSERVACOES#
+ * @owner: scripts/set-bot-profile.test.mjs
+ * @doc_ref: docs/CONSCIENCIA/PROGRAMAS/HUD-VOZ-CONSULTA-VISUALIZACAO-20260924.md
+ * @last_updated: 2026-11-04T03:15:09.175Z
+ * @implementado: regressões STRICT_SHELL, receipt dos dois valores e domínio oficial.
+ * @pendente: CI no HEAD final; testes de produção não executados.
+ * @estado: SOURCE_ONLY; BASH_MOCK_LOCAL_6_PASS
+ * @next_cursor: verificar node --test no mesmo HEAD via CI.
+ */
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
@@ -38,4 +47,27 @@ test("perfil mede antes de mutar e fecha com receipt", () => {
   assert.ok(fullDescription > shortDescription);
   assert.ok(receipt > fullDescription);
   assert.match(body, /DRY_RUN .* getMe OK, sem mutacao/);
+});
+
+test("shell estrito sem read heredoc mascarado", () => {
+  assert.match(script, /^set -euo pipefail$/m);
+  assert.doesNotMatch(script, /read -r -d '' FULL_DESC[^\n]*\|\| true/);
+  assert.match(script, /FULL_DESC="\$\(cat <<'TXT'/);
+});
+
+test("contracheque compara os dois valores reais, não apenas HTTP ok", () => {
+  assert.match(script, /getMyShortDescription/);
+  assert.match(script, /getMyDescription/);
+  assert.match(script, /\[ "\$got_s" != "\$SHORT_DESC" \]/);
+  assert.match(script, /\[ "\$got_d" != "\$FULL_DESC" \]/);
+  assert.match(script, /match=EXACT/);
+  assert.match(script, /post_ok\(\) \{/);
+  assert.match(script, /json_field\(\) \{/);
+});
+
+test("domínio oficial mantém dois L e token legado não é atribuído ao bot principal", () => {
+  assert.match(script, /mcp\.centralldark\.com/);
+  assert.match(script, /status\.centralldark\.com/);
+  assert.doesNotMatch(script, /https:\/\/mcp\.centraldark\.com/);
+  assert.doesNotMatch(script, /read_key GUARDA_TELEGRAM_BOT_TOKEN/);
 });
