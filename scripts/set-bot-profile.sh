@@ -1,18 +1,32 @@
 #!/usr/bin/env bash
 # set-bot-profile.sh — Fachada dos bots CentralDark via Bot API direta.
 #
-# OWNER   : scripts/set-bot-profile.sh (mesma rota de notify-telegram.sh)
-# COFRE   : /root/CentralDark/secrets/telegram-alerts.env  (canonico, ja existe)
-# CHAVES  : SRVER1_BOT_TOKEN           -> @srver1bot
-#           GUARDA_PRINCIPAL_BOT_TOKEN -> @Guardiaodopivete_bot (GuardiaoCasa) — PORTA OFICIAL
-#           GUARDA_TELEGRAM_BOT_TOKEN  -> @Guardiaonotify_bot (notify, legado)
+# OWNER   : scripts/set-bot-profile.sh
+# COFRE   : /root/CentralDark/secrets/telegram-alerts.env  (canônico, já existe)
+# CHAVES  : SRVER1_BOT_TOKEN           → @srver1bot
+#           GUARDA_PRINCIPAL_BOT_TOKEN → @Guardiaodopivete_bot (GuardiaoCasa) — PORTA OFICIAL
+#           GUARDA_TELEGRAM_BOT_TOKEN  → @Guardiaonotify_bot (notify, legado)
 #
-# REGRAS  : nao cria token - nao imprime valor - nao cria owner paralelo
-#           le o cofre existente e chama setMyDescription/setMyShortDescription
+# #OBSERVACOES#
+# @owner: scripts/set-bot-profile.sh
+# @doc_ref: docs/CONSCIENCIA/PROGRAMAS/HUD-VOZ-CONSULTA-VISUALIZACAO-20260924.md
+# @last_updated: 2026-11-04T03:14:29.913Z
+# @implementado: base enviada + STRICT_SHELL, ONLY_GUARDIAO e receipt dos dois valores.
+# @pendente: checks GitHub no HEAD e aplicação real autorizada (não executada aqui).
+# @estado: SOURCE_ONLY; SAFE_MOCK_TESTS
+# @next_cursor: confirmar node --test e bash -n no SHA exato.
+# REGRAS  : não cria token · não imprime valor · não cria owner paralelo
+#           lê o cofre existente e chama setMyDescription/setMyShortDescription
+#           NUNCA falha a sessão (LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER)
+#
+# DELTA 2026-09-30 (menor delta material, owner existente — sem v2):
+#   1. contracheque passa a provar os DOIS campos (short_description + description)
+#   2. set -euo pipefail com falhas da Bot API tratadas por bot, sem abortar a sessão
+#   3. read_key varre TODOS os cofres e devolve só valor não-vazio
 #
 # USO     : bash scripts/set-bot-profile.sh          # aplica
-#           bash scripts/set-bot-profile.sh --dry    # so mede os getMe
-#           ONLY_GUARDIAO=1 bash scripts/set-bot-profile.sh   # so o bot da porta
+#           bash scripts/set-bot-profile.sh --dry    # só mede os getMe
+#           ONLY_GUARDIAO=1 bash scripts/set-bot-profile.sh   # porta oficial isolada
 set -euo pipefail
 
 API="https://api.telegram.org"
@@ -26,33 +40,59 @@ COFRES=(
 )
 
 read_key() {
-  local key="$1"
+  local key="$1" c raw v
   for c in "${COFRES[@]}"; do
     [ -f "$c" ] || continue
-    local v
-    v="$(grep -E "^${key}=" "$c" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")"
+    # O teste em if evita que uma chave AUSENTE encerre o script sob -e/pipefail.
+    if ! raw="$(grep -m1 -E "^${key}=" "$c" 2>/dev/null)"; then
+      continue
+    fi
+    v="${raw#*=}"
+    v="${v%$'\r'}"
+    if [[ "$v" == \"*\" && "$v" == *\" ]]; then v="${v:1:${#v}-2}"; fi
+    if [[ "$v" == \'*\' && "$v" == *\' ]]; then v="${v:1:${#v}-2}"; fi
     [ -n "$v" ] && { printf '%s' "$v"; return 0; }
   done
   return 1
 }
 
-SHORT_DESC='Casa CentralDark - a porta fala.
-Guardiao do Hub. Autoridade: SEGREDO/CHEFE.'
+# Parser JSON com decodificação real de \n/Unicode; nunca prova valor por regex parcial.
+json_field() {
+  local json="$1" field="$2"
+  if command -v jq >/dev/null 2>&1; then
+    printf '%s' "$json" | jq -er --arg field "$field" '.[$field] | if type == "boolean" then tostring elif type == "string" then . else empty end' 2>/dev/null
+    return $?
+  fi
+  command -v python3 >/dev/null 2>&1 || return 1
+  printf '%s' "$json" | python3 -c ' 
+import json, sys
+try:
+    obj=json.load(sys.stdin)
+    val=obj.get(sys.argv[1])
+    if isinstance(val, str): print(val, end="")
+    elif isinstance(val, bool): print(str(val).lower(), end="")
+    else: sys.exit(1)
+except (ValueError, TypeError, AttributeError): sys.exit(1)
+' "$field"
+}
 
-read -r -d '' FULL_DESC <<'TXT' || true
-CENTRALDARK
+SHORT_DESC='Casa CentralDark — a porta fala.
+Guardião do Hub. Autoridade: SEGREDO/CHEFE.'
 
-Guardiao da Casa. Esta e a porta falada do sistema.
+FULL_DESC="$(cat <<'TXT'
+👑🪬 CENTRALDARK
+
+Guardião da Casa. Esta é a porta falada do sistema.
 
 AUTORIDADE
 SEGREDO/CHEFE = dono, autoridade final
-SOL = coordenacao
-HERMES = execucao
+SOL = coordenação
+PIVETE/HERMES = execução
 
 O QUE ESTE BOT FAZ
-- recebe a intencao do CHEFE
-- roteia para o owner existente, sem criar paralelo
-- devolve resultado, evidencia, pendencia e proximo cursor
+• recebe a intenção do CHEFE
+• roteia para o owner existente — sem criar paralelo
+• devolve resultado, evidência, pendência e próximo cursor
 
 LEI DA CASA
 UNKNOWN != PASS
@@ -63,20 +103,33 @@ REALIDADE = JUIZ
 MCP: https://mcp.centralldark.com
 Painel: https://status.centralldark.com
 TXT
+)"
+
+# As falhas de transporte são convertidas em "fail" somente neste contorno,
+# sem ocultar o estado final de cada bot ou o receipt de leitura.
+post_ok() {
+  local url="$1" data="$2" resp ok
+  if ! resp="$(curl --fail --silent --show-error --max-time 8 -X POST "$url" --data-urlencode "$data" 2>/dev/null)"; then
+    printf 'fail'; return 0
+  fi
+  ok="$(json_field "$resp" ok || :)"
+  if [ "$ok" = "true" ]; then printf 'ok'; else printf 'fail'; fi
+}
 
 apply_profile() {
-  local label="$1" token="$2"
+  local label="$1" token="$2" me uname a b after_s after_d got_s got_d
   [ -n "$token" ] || { echo "SKIP ${label}: token ausente no cofre"; return 0; }
 
-  # MPRVA - Medir -> Provar -> Reconhecer -> Validar -> Aplicar
-  local me
-  me="$(curl -s --max-time 8 "$API/bot${token}/getMe")"
-  if ! printf '%s' "$me" | grep -q '"ok":true'; then
-    echo "MEASURE_FAIL ${label}: getMe nao-ok"
-    return 1
+  # MPRVA — Medir → Provar → Reconhecer → Validar → Aplicar
+  if ! me="$(curl --fail --silent --show-error --max-time 8 "$API/bot${token}/getMe" 2>/dev/null)"; then
+    echo "MEASURE_FAIL ${label}: transporte indisponível"; return 1
   fi
-  local uname
-  uname="$(printf '%s' "$me" | sed -n 's/.*"username":"\([^"]*\)".*/\1/p')"
+  if [ "$(json_field "$me" ok || :)" != "true" ]; then
+    echo "MEASURE_FAIL ${label}: getMe não-ok"; return 1
+  fi
+  if ! uname="$(json_field "$me" username)"; then
+    echo "MEASURE_FAIL ${label}: username ausente"; return 1
+  fi
   echo "MEASURED ${label} = @${uname}"
 
   if [ "$DRY" = "1" ]; then
@@ -84,35 +137,48 @@ apply_profile() {
     return 0
   fi
 
-  local a b
-  a="$(curl -s --max-time 8 -X POST "$API/bot${token}/setMyShortDescription" \
-        --data-urlencode "short_description=${SHORT_DESC}")"
-  printf '%s' "$a" | grep -q '"ok":true' \
-    && echo "APPLIED ${label} short_description=ok" \
-    || { echo "FAIL ${label} setMyShortDescription"; return 1; }
+  a="$(post_ok "$API/bot${token}/setMyShortDescription" "short_description=${SHORT_DESC}")"
+  [ "$a" = "ok" ] || { echo "FAIL ${label} setMyShortDescription"; return 1; }
+  echo "APPLIED ${label} short_description=ok"
 
-  b="$(curl -s --max-time 8 -X POST "$API/bot${token}/setMyDescription" \
-        --data-urlencode "description=${FULL_DESC}")"
-  printf '%s' "$b" | grep -q '"ok":true' \
-    && echo "APPLIED ${label} description=ok" \
-    || { echo "FAIL ${label} setMyDescription"; return 1; }
+  b="$(post_ok "$API/bot${token}/setMyDescription" "description=${FULL_DESC}")"
+  [ "$b" = "ok" ] || { echo "FAIL ${label} setMyDescription"; return 1; }
+  echo "APPLIED ${label} description=ok"
 
-  local after
-  after="$(curl -s --max-time 8 -X POST "$API/bot${token}/getMyDescription")"
-  printf '%s' "$after" | grep -q '"ok":true' \
-    && echo "RECEIPT ${label} getMyDescription=ok" \
-    || echo "RECEIPT ${label} getMyDescription=unreadable"
+  # Contracheque: comprovar OS DOIS valores exatos, não apenas HTTP/ok=true.
+  if ! after_s="$(curl --fail --silent --show-error --max-time 8 -X POST "$API/bot${token}/getMyShortDescription" 2>/dev/null)"; then
+    echo "RECEIPT_FAIL ${label} getMyShortDescription transporte"; return 1
+  fi
+  if ! after_d="$(curl --fail --silent --show-error --max-time 8 -X POST "$API/bot${token}/getMyDescription" 2>/dev/null)"; then
+    echo "RECEIPT_FAIL ${label} getMyDescription transporte"; return 1
+  fi
+  if [ "$(json_field "$after_s" ok || :)" != "true" ] || ! got_s="$(json_field "$after_s" short_description)"; then
+    echo "RECEIPT_FAIL ${label} getMyShortDescription não-ok"; return 1
+  fi
+  if [ "$(json_field "$after_d" ok || :)" != "true" ] || ! got_d="$(json_field "$after_d" description)"; then
+    echo "RECEIPT_FAIL ${label} getMyDescription não-ok"; return 1
+  fi
+  if [ "$got_s" != "$SHORT_DESC" ]; then
+    echo "RECEIPT_FAIL ${label} short_description valor divergente"; return 1
+  fi
+  if [ "$got_d" != "$FULL_DESC" ]; then
+    echo "RECEIPT_FAIL ${label} description valor divergente"; return 1
+  fi
+  printf 'RECEIPT %s getMyShortDescription=ok match=EXACT %q\n' "$label" "$got_s"
+  printf 'RECEIPT %s getMyDescription=ok match=EXACT chars=%s\n' "$label" "${#got_d}"
 }
 
-echo "=== set-bot-profile - dry=${DRY} ==="
+echo "=== set-bot-profile · dry=${DRY} ==="
 
 ONLY_GUARDIAO="${ONLY_GUARDIAO:-0}"
-TOK_SRVER1="$(read_key SRVER1_BOT_TOKEN || true)"
-TOK_GUARDA_PRINCIPAL="$(read_key GUARDA_PRINCIPAL_BOT_TOKEN || true)"
+TOK_SRVER1="$(read_key SRVER1_BOT_TOKEN || :)"
+TOK_GUARDA_PRINCIPAL="$(read_key GUARDA_PRINCIPAL_BOT_TOKEN || :)"
 
+PROFILE_FAILED=0
 if [ "$ONLY_GUARDIAO" != "1" ]; then
-  apply_profile "srver1bot"    "$TOK_SRVER1"
+  if ! apply_profile "srver1bot"    "$TOK_SRVER1"; then PROFILE_FAILED=1; fi
 fi
-apply_profile "GuardiaoCasa" "$TOK_GUARDA_PRINCIPAL"
+if ! apply_profile "GuardiaoCasa" "$TOK_GUARDA_PRINCIPAL"; then PROFILE_FAILED=1; fi
+if [ "$PROFILE_FAILED" -eq 1 ]; then echo "PROFILE_STATUS=PARTIAL_OR_FAILED (LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER)"; fi
 
 echo "=== DONE ==="
