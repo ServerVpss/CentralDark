@@ -63,7 +63,91 @@ function invalidInputResponse(input, parsed, destructive) {
         })),
     });
 }
+// CASA_COMMANDER_NATIVE_TOOLS_20261105
+// Fonte oficial: scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs.
+// Somente Tailscale privada; sem RDC, sem portas públicas, sem secrets nos receipts.
+// O dispatcher existente aplica OAuth admin e auditoria antes de chamar estas tools.
+const CASA_COMMANDER_READ_TOOLS = Object.freeze([
+    "list_directory", "read_file", "read_multiple_files", "get_file_info",
+    "list_processes", "list_sessions", "start_search", "get_more_search_results",
+    "list_searches", "read_process_output",
+]);
+function casaCommanderTarget() {
+    // Configurado pelo operador no MCP da Forja. Default é a rota Serve privada já existente.
+    const raw = process.env.CENTRALDARK_CASA_COMMANDER_URL?.trim()
+        || "http://windows-casa.tail6d7aa4.ts.net:9100";
+    const url = new URL(raw);
+    const host = url.hostname.toLowerCase();
+    if (url.username || url.password || url.pathname !== "/" || url.search || url.hash ||
+        url.protocol !== "http:" || !(
+            (host === "windows-casa.tail6d7aa4.ts.net" && url.port === "9100") ||
+            ((host === "127.0.0.1" || host === "localhost") && url.port === "9101")
+        )) throw Error("CASA_COMMANDER_PRIVATE_TARGET_INVALID");
+    return url.origin;
+}
+async function casaCommanderRequest(route, payload) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    try {
+        const response = await fetch(casaCommanderTarget() + route, {
+            method: payload ? "POST" : "GET",
+            headers: payload ? {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + (process.env.CENTRALDARK_CASA_BRIDGE_TOKEN || ""),
+            } : { Accept: "application/json" },
+            body: payload ? JSON.stringify(payload) : undefined,
+            redirect: "error",
+            signal: controller.signal,
+        });
+        const body = await response.json();
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+            return { ok: false, state: "INVALID_RESPONSE", http: response.status };
+        }
+        // Não retornar a resposta bruta em erro; mensagens de upstream podem incluir paths/segredos.
+        if (route === "/health") return {
+            ok: response.ok && body.ok === true && body.name === "CentralDark Casa Commander",
+            name: body.name === "CentralDark Casa Commander" ? body.name : "UNKNOWN",
+            engine_connected: body.engine_connected === true,
+            remote_vendor: body.remote_vendor === false ? false : "UNKNOWN",
+            http: response.status,
+            proof: "BRIDGE_HEALTH_ONLY_NOT_TOOL_EXECUTION",
+        };
+        if (response.status === 401) return { ok: false, state: "CASA_AUTH_REQUIRED", http: 401 };
+        if (response.status === 403) return { ok: false, state: "CASA_WRITE_DISABLED", http: 403 };
+        return { ok: response.ok && body.ok === true, http: response.status,
+            tool: body.tool ?? payload?.name, result: body.result ?? null,
+            proof: "UPSTREAM_TOOL_RESULT_VALIDATE_EFFECT_SEPARATELY" };
+    } catch (error) {
+        return { ok: false, state: "CASA_ROUTE_NOT_VERIFIED",
+            reason: error?.name === "AbortError" ? "TIMEOUT" : "NETWORK_OR_CONFIGURATION",
+            proof: "NOT_EXECUTED" };
+    } finally { clearTimeout(timeout); }
+}
+const nativeCasaCommanderTools = [
+    {
+        name: "casa_commander_status",
+        description: "Sonda a bridge nativa CentralDark Casa Commander pela Tailscale, sem executar ferramenta e sem depender do Desktop Commander remoto.",
+        inputSchema: z.object({}),
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Casa Commander: saúde" },
+        handler: async () => ok(await casaCommanderRequest("/health")),
+    },
+    {
+        name: "casa_commander_read",
+        description: "Despacha exclusivamente ferramentas locais de leitura do Casa Commander existente via Tailscale e Bearer armazenado no servidor; requer admin MCP autenticado e não habilita escrita.",
+        inputSchema: z.object({
+            name: z.enum(CASA_COMMANDER_READ_TOOLS),
+            arguments: z.record(z.string(), z.unknown()).default({}),
+        }),
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: false, openWorldHint: false, title: "Casa Commander: leitura autenticada" },
+        handler: async (input) => {
+            if (!process.env.CENTRALDARK_CASA_BRIDGE_TOKEN || process.env.CENTRALDARK_CASA_BRIDGE_TOKEN.length < 24)
+                return ok({ ok: false, state: "CASA_PAIRING_REQUIRED", proof: "NOT_EXECUTED" });
+            return ok(await casaCommanderRequest("/tool", { name: input.name, arguments: input.arguments }));
+        },
+    },
+];
 const runtimeTools = [
+    ...nativeCasaCommanderTools,
     ...localHybridTools,
     codeReviewerToolDefinition,
     ...aprendizadoTools,
