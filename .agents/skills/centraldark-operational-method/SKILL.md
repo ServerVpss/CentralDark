@@ -12,7 +12,7 @@ oracle_review_on_change: true
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
-## Biblioteca operacional centralizada (21 Skills)
+## Biblioteca operacional centralizada (22 Skills)
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
@@ -20,6 +20,7 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)
 - [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
+- [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md)
 - [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
 - [centraldark-evidence-reconciliation](Skills/centraldark-evidence-reconciliation/SKILL.md)
 - [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md)
@@ -39,6 +40,12 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
 
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
+
+## Diálogo Reflexivo da Intenção - continuidade entre falas
+
+**Em toda conversa CentralDark, carregar silenciosamente:** [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md).
+Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergunta, correção, ensino e ordem. Preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; reparar mal-entendidos sem abandonar trabalho.
+**Na operação:** acompanha [Kimetsu Brainstorm Remix](../kimetsu-brainstorm/SKILL.md) e [Michelin 3 Estrelas](Skills/michelin-3-estrelas/SKILL.md), escolhendo técnica e contraprova proporcionais. **Na conversa:** linguagem humana, sem ritual. REGRA_RID_DELTA_CONTINUITY=TRUE.
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
@@ -357,7 +364,7 @@ obrigatórios.
 Registros aditivos comprovados no Windows Casa pelo script verificador. Nao substituem receitas anteriores. Cada registro preserva sua origem, razoes e contraprova.
 
 ### t_26e02a16 — excluir
-- Criado em: 2026-10-24T19:46:48-03:00; destino: C:\root\HERMES-KANBAN-TESTE.txt
+- Criado em: 10/24/2026 19:46:48; destino: C:\root\HERMES-KANBAN-TESTE.txt
 - Por que fazer: Eliminar somente o TXT temporario criado no teste anterior autorizado.
 - Por que nao fazer outra coisa: Nao apagar a pasta nem recorrer a exclusao direta; somente o Hermes Kanban deveria executar a intencao.
 - Por que usar: Reutilizar o Hermes da Casa, perfil default e mesmo comando kanban create ja comprovados.
@@ -408,3 +415,9 @@ Para identificar monitores dinamicamente, capturar um monitor com borda nativa e
 **Fluxo curto:** `INTENÇÃO → OWNER EXISTENTE → INSPECIONAR CÓDIGO/ROTAS → MENOR DELTA → TESTAR SCRIPTS PERTINENTES → READBACK/SHA → RECEIPT/APRENDIZADO → CONCLUIR ESCOPO`. `HERMES_LIVE_TEST=ON_DEMAND_BY_CHEFE`. Não tornar a falta de teste vivo — que não foi solicitado — bloqueio fictício para o trabalho de código.
 
 **PROMPT_SELF_CACHE_P15=APLICÁVEL** para reuso desta receita, sem telemetria de HIT; **KV_CACHE_P16=UNKNOWN**; **NEXT_CURSOR=CODIGO_E_VALIDADORES_EXISTENTES_NO_PROXIMO_DELTA**.
+
+## WuzAPI / MultiZap / Hermes - entrada documental (05/11/2026)
+Quando a intenção citar WuzAPI, QR WhatsApp, grupos, foto de grupo, webhook, Gateway MultiZap ou ligação Hermes ↔ CRM, **abrir antes de operar** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md) e o [MAPA_EVENTOS_WUZAPI.md](../../../docs/MAPA_EVENTOS_WUZAPI.md). Reutilizar Docker Casa 127.0.0.1:8081, Gateway HTTPS multizap-mvp.centralldark.com, WuzAPI /webhook, Gateway /webhooks/wuzapi e CRM /api/public/wuzapi/webhook; não confundir destinos nem duplicar sessão. Autenticação por token usuário ou admin conforme rota; segredo nunca entra em recibo. Swagger vivo /api define payload; documentação não equivale a teste de entrega. OWNER: docs existentes e Skill-Mãe. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=CONTRATO_HERMES_MULTIZAP_COM_TESTE_REAL_SOB_INTENCAO.
+
+### WuzAPI + whatsmeow: regra de consulta aos donos (05/11/2026)
+Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webhook, mídia, grupos ou WhatsApp/Whatsmeow, ler **antes da operação** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md). Fontes upstream obrigatórias em dúvida ou divergência: [asternic/wuzapi](https://github.com/asternic/wuzapi) (API REST) e [tulir/whatsmeow](https://github.com/tulir/whatsmeow) (biblioteca/protocolo Go). **Método:** intenção → Swagger vivo Casa → dois repositórios oficiais conforme camada → comparar código, versão e configuração CentralDark → menor delta → contraprova → registrar receipt/owner. Reusar o Gateway e WuzAPI existentes; não misturar API REST, implementação Go ou estado de instância, nem criar proxy/chave ou parear telefone por mera inspeção. Capturas de 05/11 mostram formulário de instância com token, webhook/eventos, history, HMAC e opções proxy/S3, além de Add Proxy; são evidência de interface, não de sessões conectadas. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=UPSTREAM_COMPARE_BEFORE_CHANGE.

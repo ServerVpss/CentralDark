@@ -80,6 +80,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
+import { CodexHaloHarness } from "@/components/central/CodexHaloHarness";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -173,6 +174,7 @@ const HARNESS_DESTINOS = [
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "codex-halo", titulo: "Codex Halo", icone: "🌈", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -1221,6 +1223,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </div>
                 </>
               )}
+            </TabsContent>
+            <TabsContent value="codex-halo" className="mt-10">
+              <div className="mb-6">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">Harness · capacidade nativa</p>
+                <h2 className="mt-3 text-3xl font-semibold">Codex Halo</h2>
+                <p className="mt-3 text-sm text-muted-foreground">Overlay original reutilizado no próprio owner, com estados do Harness e passagem de cliques preservada.</p>
+              </div>
+              <CodexHaloHarness estado={(dado?.status ?? "UNKNOWN") as EstadoOperacional} />
+              <div className="mt-6 rounded-lg border border-border p-4 text-xs text-muted-foreground">
+                Azul = trabalhando · amarelo = atenção · verde = concluído. O Halo é visual e não substitui Hermes, Cua ou qualquer executor.
+              </div>
             </TabsContent>
             <TabsContent value="aionui" className="mt-10">
               <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">
