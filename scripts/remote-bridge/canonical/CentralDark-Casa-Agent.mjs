@@ -17,6 +17,7 @@ export const READ_ONLY_TOOLS = new Set([
 let upstream = null;
 let connecting = null;
 let ready = false;
+let lastAuthorizedTool = null; // ephemeral receipt, never a credential or file content
 let serial = 0;
 let partial = "";
 const inflight = new Map();
@@ -100,7 +101,8 @@ export function createCasaAgent(){
   if(TOKEN.length<24) throw Error("CENTRALDARK_CASA_BRIDGE_TOKEN_MISSING_OR_SHORT");
   return createServer(async(req,res)=>{
     if(req.method==="GET"&&req.url==="/health")
-      return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false});
+      return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false,
+        last_authorized_tool:lastAuthorizedTool});
     if(req.method!=="POST"||req.url!=="/tool")
       return send(res,404,{ok:false,error:"ROUTE_NOT_FOUND"});
     if(!authorized(req.headers.authorization))
@@ -115,6 +117,12 @@ export function createCasaAgent(){
     try{
       await engine();
       const value=await rpc("tools/call",{name,arguments:input.arguments});
+      if (value?.isError !== true) {
+        lastAuthorizedTool = {
+          tool: name, kind: READ_ONLY_TOOLS.has(name) ? "READ_ONLY" : "MUTATION",
+          at: new Date().toISOString(), verified: true,
+        };
+      }
       send(res,200,{ok:value?.isError!==true,tool:name,result:value,execution:"CASA_ENGINE_RESULT"});
     }catch(e){send(res,502,{ok:false,error:String(e.message).slice(0,800),execution:"NOT_PROVEN"});}
   });
