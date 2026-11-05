@@ -11,7 +11,10 @@ test("Casa agent is loopback-only, requires bearer, and blocks mutation by defau
   try {
     const health = await fetch(base+"/health");
     assert.equal(health.status,200);
-    assert.equal((await health.json()).remote_vendor,false);
+    const initial = await health.json();
+    assert.equal(initial.remote_vendor,false);
+    assert.equal(initial.name,"CentralDark Casa Commander");
+    assert.equal(initial.last_authorized_tool,null, "Nao inventar recibo antes de uma ferramenta real");
     const denied = await fetch(base+"/tool",{
       method:"POST",headers:{"content-type":"application/json"},
       body:JSON.stringify({name:"list_directory",arguments:{path:"F:\\_worktrees"}})
