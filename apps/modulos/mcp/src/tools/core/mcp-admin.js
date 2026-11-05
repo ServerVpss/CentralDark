@@ -107,7 +107,7 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
     // #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/core/mcp-admin.js
     // @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
-    // @last_updated=2026-11-05T19:00:00Z (data do contrato; readback do commit prevalece)
+    // @last_updated=2026-11-05T19:25:35.947Z
     // @implementado=CATALOG_SOURCE_CASA_COMMANDER_9101_AND_RDC_EXPLICIT_OPT_IN
     // @pendente=RUNTIME_DEPLOY_AND_NATIVE_POST_TOOL_UIA_E2E
     // @next_cursor=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E
