@@ -402,7 +402,7 @@ export function PlayerLocalJarvis({ onClose }: { onClose?: () => void } = {}) {
         </div>
       </div>
       <Button type="button" className="mt-3 w-full" variant="outline"
-        disabled={secure === false || sending || !navigator.mediaDevices?.getDisplayMedia}
+        disabled={secure === false || sending || typeof navigator === "undefined" || !navigator.mediaDevices?.getDisplayMedia}
         onClick={() => void sendWindowsAudio()}>
         <Radio className="mr-2 size-4" /> Compartilhar áudio do Windows (em vez do microfone)
       </Button>
