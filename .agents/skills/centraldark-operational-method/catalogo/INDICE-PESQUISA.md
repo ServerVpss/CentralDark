@@ -17,6 +17,8 @@
 | Descobrir ferramenta/capacidade | Capability HUD | `capability`, `preflight` |
 | Localizar dono e evitar duplicação | Reuse Runtime | `reuse`, `owner` |
 | Operar Cockpit/boot | Boot, Intent Router e Live Editing | `boot`, `HUD`, `Cockpit` |
+
+| Ler aba, enviar Goal ou clicar no navegador com o Commander nativo | [Browser → Casa Commander → Browser](../references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) + [Skill-Mãe](../SKILL.md) | `navegador`, `aba`, `browser`, `siga o roteiro`, `mande um goal`, `botão focado`, `!CENTRALDARK`, `!EXECUTOR_CENTRALDARK` |
 | Deploy, esteira, GitHub e VPS | Esteira Motor + Intent Router | `workflow`, `VPS`, `CI` |
 | Integrar VS Code e observabilidade | VS Code Log Bridge | `vscode`, `log` |
 
