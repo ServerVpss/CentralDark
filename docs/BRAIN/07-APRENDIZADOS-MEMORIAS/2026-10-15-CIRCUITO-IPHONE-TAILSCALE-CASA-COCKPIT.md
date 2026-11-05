@@ -95,7 +95,7 @@ Revalidar os caminhos operacionais apenas se a fonte expirar; nunca reverdear o 
 - Commit `4604f176b2edcc0bd7a2453061febc0348847a8d`: fonte **Mixagem estéreo** sem filtros de voz (echoCancellation, noiseSuppression e autoGainControl desativados para loopback); microfone convencional mantém cancelamento de eco.
 - Commit `3bd3f8c0f1584d9075b6584a95e32db4e697a6fd`: teste de regressão estático no owner existente.
 
-**READBACK:** fonte `main` contém os dois estados e botões independentes, linkId e captura; o Browser ainda mostrava os botões **antigos** na rota :8443 após os commits. A consulta ao commit mais recente não retornou status CI; **não há comprovação de typecheck/build/deploy nem de reprodução duplex nos dois dispositivos** nesta rodada.
+**READBACK:** fonte `main` contém os dois estados e botões independentes, linkId e captura; o Browser ainda mostrava os botões **antigos** na rota :8443 após os commits. Correção adicional SSR `7a08867776a98dafa1032fbf70d5f589e8d9e30f` evita avaliar `navigator` durante render no servidor. Na validação estática de source, **16/16 condições** corresponderam ao conteúdo, inclusive o teste reutilizado. Isto **não** substitui executar `node --test`, `tsc`, build ou E2E no iPhone. A consulta ao commit mais recente não retornou status CI; **não há comprovação de typecheck/build/deploy nem de reprodução duplex nos dois dispositivos** nesta rodada.
 
 **GATES:** `IPHONE_HEARD_PC_AUDIO=HUMAN_CONFIRMED`; `SOURCE_DUPLEX_READBACK=PASS`; `LIVE_UI_UPDATED=NO`; `LIVE_DUPLEX_BIDIRECTIONAL=UNKNOWN`; `NO_REMOTE_DESKTOP_COMMANDER_USED=TRUE`.
 
