@@ -141,6 +141,15 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 
 Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita multijanela existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e selecionar menor rota com prova: pagina alcançavel por chrome-devtools-mcp existente -> list_pages, take_snapshot, click(uid)/fill(uid), novo snapshot + efeito; Windows app/Edge nao exposto -> UIA Name/PID/ControlType, Invoke/Value/SelectionItem, readback. Codex e Claude ja executam chrome-devtools-mcp v1.12.0. O Chrome de depuracao observado usa pipe e perfil separado, portanto nao pressupor acesso a abas pessoais do Edge. CDP usa mouse virtual; UIA Invoke nao move cursor fisico Windows. Cursor de Windows visivel exige input nativo autorizado sobre alvo real. Screenpipe 3030 = sensor, nao executor. Preservar recursos em uso, sem iniciar servidor/Chrome duplicado ou copiar cookies; registrar click, snapshot/readback e recibo, UNKNOWN se sem prova. 🍒+1 somente ganho comprovado.
 <!-- /CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+
+<!-- CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+## 🍒+1 Browser → CentralDark Casa Commander → Browser (navegador)
+
+**Default por intenção para operações na aba existente:** ler pelo Browser (\`list_tabs\` / \`get_tab_context\`), **agir pelo CentralDark Casa Commander** autenticado (rota MCP CentralDark + Tailscale/SSH; owner local \`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs\`, porta 9101) e **conferir pelo Browser** a mesma aba. Não depende do Remote Desktop Commander de terceiro. Ativar quando CHEFE pedir "veja o navegador", "mande um goal", "use o botão focado", "siga o roteiro", "envie mensagem", "clique na página", ou sob os gatilhos **já existentes** \`!CENTRALDARK\`, \`#ACORDAR\`, \`!CALIBRAR\`, \`!EXECUTOR_CENTRALDARK\` se a intenção corrente envolver browser. **Owner e receita completa:** [UI-MULTIJANELA-ROTAS-CACHE-20261030.md](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#-navegador-hibrido-browser-le--centraldark-casa-commander-age--browser-confere-05112026).
+
+**Limite de prova:** combinação Browser→UIA via **Remote Desktop Commander externo** foi observada em 05/11/2026 no hPanel Hostinger; o fluxo substituto via **Casa Commander nativo** deve ser medido antes de receber PASS. O serviço local usa motor DesktopCommanderMCP stdio sem cloud do fornecedor, não substituir por um segundo motor. \`GET /health != TOOL_PASS\`; \`SEND_INVOKED != ANSWER_COMPLETED\`; \`DOCUMENTED != DEPLOYED\`. Confirmar aba, janela, campo, autorização, efeito, resposta e receipt sem reenviar rascunhos incertos. \`NEXT_CURSOR=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E\`.
+<!-- /CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+
 <!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
 ## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
 
