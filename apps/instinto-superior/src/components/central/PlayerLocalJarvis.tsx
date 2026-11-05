@@ -299,9 +299,18 @@ export function PlayerLocalJarvis({ onClose }: { onClose?: () => void } = {}) {
     if (!window.isSecureContext) { setError("Abra por HTTPS privado para enviar áudio."); return; }
     if (sendingRef.current) { stopSending(); return; }
     try {
+      const selected = devices.find((device) => device.deviceId === deviceId);
+      const isLoopback = /CABLE Output|Stereo Mix|Mixagem est[eé]reo|Loopback/i.test(
+        selected?.label ?? "",
+      );
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: deviceId
-          ? { deviceId: { exact: deviceId }, echoCancellation: true }
+          ? {
+              deviceId: { exact: deviceId },
+              echoCancellation: !isLoopback,
+              noiseSuppression: !isLoopback,
+              autoGainControl: !isLoopback,
+            }
           : { echoCancellation: true },
         video: false,
       });
