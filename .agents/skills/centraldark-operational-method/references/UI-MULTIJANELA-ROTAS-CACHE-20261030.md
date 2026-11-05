@@ -4,6 +4,14 @@ Owner: Skill-Mãe em K:. Decisão do CHEFE em 30/10/2026. Reutilizar recursos ex
 
 
 <!-- CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+<!-- #OBSERVACOES#
+@owner: .agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
+@code_ref: apps/modulos/mcp/src/tools/core/mcp-admin.js; scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs
+@last_updated: 2026-11-05
+@implementado: politica de navegacao no owner, gatilhos, indice e registro de capability no catalogo de source
+@pendente: readback de runtime atualizado e POST /tool nativo com efeito UIA + Browser readback
+@next_cursor: CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E
+-->
 ## 🍒 Navegador híbrido: Browser lê → CentralDark Casa Commander age → Browser confere (05/11/2026)
 
 **Preferência expressa do CHEFE para ações em navegador, daqui em diante.** Owner único: esta receita da Skill-Mãe. Gatilhos por intenção: "veja a aba", "olhe o navegador", "mande um goal", "envie no botão focado", "siga o roteiro", "clique", "pesquise na página", "verifique a resposta"; quando houver \`!CENTRALDARK\`, \`#ACORDAR\`, \`!CALIBRAR\` ou \`!EXECUTOR_CENTRALDARK\`, selecionar esta receita **somente se** a intenção envolver navegador. Não criar novo gatilho, skill, browser, bridge, motor ou banco.
