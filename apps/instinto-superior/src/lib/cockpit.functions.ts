@@ -803,8 +803,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
-    const lastTool = objetoJson(commanderCasa.dados?.["last_authorized_tool"])
-      ? commanderCasa.dados["last_authorized_tool"] : null;
+    const lastToolCandidate = commanderCasa.dados?.["last_authorized_tool"];
+    const lastTool = objetoJson(lastToolCandidate) ? lastToolCandidate : null;
     const lastToolAt = texto(lastTool?.["at"]);
     const lastToolAge = lastToolAt ? Date.now() - Date.parse(lastToolAt) : Number.NaN;
     const toolProof = lastTool?.["verified"] === true
