@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_COUNTERPROOF
+# @owner: scripts/trigger-fabric/test_centraldark_master_cycle.py
+# @doc_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/README.md
+# @last_updated: 2026-11-02T02:20:39.000Z
+# @escopo: regressão do gatilho Auréola, aliases, trilha visual e separação reconhecimento/execução.
 import importlib.util
 import pathlib
 import tempfile
@@ -11,6 +16,29 @@ SPEC.loader.exec_module(MODULE)
 
 
 class ContinuousDeltaContractTest(unittest.TestCase):
+    def test_aureola_is_explicit_trigger_and_renders_truthful_route(self):
+        for alias in ("!AUREULA", "#AUREOLA", "!AUREURLA", "!AURÉOLA CANÔNICA"):
+            with self.subTest(alias=alias):
+                receipt = MODULE.resolve(alias, chefe_source=True)
+                trace = receipt["aureola_route_trace"]
+                self.assertTrue(receipt["aureola"]["explicit_trigger_active"])
+                self.assertEqual("RENDERED", trace["status"])
+                self.assertIn("⭕ !AURÉOLA CANÔNICA [RECONHECIDO · ✅ PASS]", trace["visual_chain"])
+                self.assertIn("👑 !CENTRALDARK [NÃO ACIONADO · ➖ NOT_INVOKED]", trace["visual_chain"])
+                self.assertIn("TRILHA OBSERVADA", MODULE.render_aureola_trace(trace))
+                self.assertFalse(trace["recognition_is_execution_proof"])
+
+    def test_aureola_trace_uses_reported_status_and_keeps_unknown(self):
+        receipt = MODULE.resolve(
+            "⭕ !AURÉOLA CANÔNICA", chefe_source=True,
+            phase_status={"ACORDAR": "FAIL", "OWNER": "PASS"},
+        )
+        entries = {step["trigger_id"]: step for step in receipt["aureola_route_trace"]["entries"]}
+        self.assertEqual("OBSERVED", entries["ACORDAR"]["recognition_status"])
+        self.assertEqual("FAIL", entries["ACORDAR"]["execution_status"])
+        self.assertEqual("NOT_INVOKED", entries["MICHELIN"]["execution_status"])
+        self.assertIn("#ACORDAR [OBSERVADO · ❌ FAIL]", receipt["aureola_route_trace"]["visual_chain"])
+
     def test_explicit_master_activates_session(self):
         receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
         self.assertTrue(receipt["master_cycle_active"])
@@ -176,6 +204,7 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "!CENTRALUTIL": "DELTA_UTIL",
             "!CONTRAPROVA": "CONTRAPROVA",
             "!REMEDICAO": "REMEDICAO",
+            "!MICHELIN": "MICHELIN",
             "!TIK-TAK": "TIK_TAK",
             "!FIXED_POINT": "FIXED_POINT",
             "!REGISTRA": "REGISTRA",
@@ -191,6 +220,35 @@ class ContinuousDeltaContractTest(unittest.TestCase):
                 self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
                 self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
                 self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_michelin_reuses_master_and_does_not_award_stars(self):
+        for token in ("!MICHELIN", "#MICHELIN", "!CENTRALDARK !MICHELIN"):
+            with self.subTest(token=token):
+                receipt = MODULE.resolve(token, chefe_source=True)
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertIn("MICHELIN", receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertIn("MICHELIN", receipt["expanded_chain"])
+                self.assertLess(receipt["expanded_chain"].index("REALITY_JUDGE"), receipt["expanded_chain"].index("MICHELIN"))
+                self.assertLess(receipt["expanded_chain"].index("MICHELIN"), receipt["expanded_chain"].index("FIXED_POINT"))
+                self.assertIn("🌟 !MICHELIN", receipt["visual_trigger_chain"])
+                self.assertEqual("UNKNOWN", receipt["michelin"]["status"])
+                self.assertEqual(0, receipt["michelin"]["stars_awarded"])
+                self.assertFalse(receipt["michelin"]["star_award_from_trigger"])
+                self.assertFalse(receipt["michelin"]["public_smoke_is_certificate"])
+                self.assertTrue(receipt["michelin"]["same_head_proof_required"])
+
+    def test_michelin_plain_word_cannot_trigger_and_negation_denied(self):
+        self.assertFalse(MODULE.resolve("Michelin três estrelas", chefe_source=True)["master_cycle_active"])
+        denied = MODULE.resolve("não use !MICHELIN", chefe_source=True)
+        self.assertFalse(denied["master_cycle_active"])
+        self.assertIn("MICHELIN", denied["master_funnel"]["ambiguous_trigger_ids"])
+
+    def test_michelin_composes_with_inherited_master_without_new_router(self):
+        receipt = MODULE.resolve("!MICHELIN", chefe_source=True, master_active=True)
+        self.assertEqual("INHERITED_SESSION", receipt["activation_source"])
+        self.assertTrue(receipt["master_funnel"]["master_reentry_guard"])
+        self.assertEqual("RULES.md", receipt["michelin"]["owner"])
+        self.assertIn("MICHELIN", receipt["master_funnel"]["requested_phases"])
 
     def test_garimpo_universal_reuses_harvester_across_surfaces(self):
         for mode, phrase in (

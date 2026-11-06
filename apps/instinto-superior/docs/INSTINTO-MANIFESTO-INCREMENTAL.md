@@ -35,12 +35,26 @@ Estados independentes: `SOURCE_CATALOGED`, `MAIN_PRESENT`, `RUNTIME_MIRRORED`, `
 | Skills | `src/data/forja-gaveta.snapshot.json`; `.agents/skills/`; `skills/` | total, ordem alfabética, busca, setor, origem, estado | hash de snapshot e instalação/carga independente |
 | Plugins | mesmo snapshot + conectores autorizados | fontes versionadas vs conectados/operacionais **separados** | leitura de conexão e teste real |
 | Receitas | skills, scripts e gavetas históricas existentes | total derivado da fonte, owner, aliases, versão, evidência | não somar itens heterogêneos como se fossem receitas únicas |
+| Automação UI contextual Casa | `.agents/skills/centraldark-operational-method/SKILL.md` · `CASA_UI_CONTEXTUAL`; reuso de `computer-use` + `ai-andarilho` | classificar `AUTOMAÇÃO ASSISTIDA / CASA / UI CONTEXTUAL SOB DEMANDA` com aliases WSL, Hermes One, Claude, VS Code e Configurações Windows; `CURRENT=PARTIAL` | screenshot/UIAutomation + contexto conversacional + autorização de ação + readback; `DOC!=DEPLOY`, sem watcher/serviço ou reconhecimento automático comprovado |
 | Gaveta histórica | fontes do catálogo e arquivos históricos referenciados | origem, data, âncora, status e busca | preservação de proveniência e links |
 | HUD | `src/data/hud-migration.snapshot.json` + `docs/HUD/HUD.html` | controle, owner, paridade, bloqueios | comparação de comportamento e readback |
 | Terminal | MCP CentralDark + sessão VS Code/Hermes/Claude existente | conexão, alvo, permissão, comando/recibo correlacionados | eco de entrada e saída na mesma sessão |
 | Automação/Auto Sync | owners de sync já em desenvolvimento por outro escritor | SHA, estado, gates, rollback, última prova | testes, política de deploy, health e runtime |
 | Observabilidade | `src/components/central/ObservabilidadeCentralDark.tsx` | sensores Casa/VPS, origem, timestamp | dados reais e frescor, sem novo coletor |
 
+
+
+<!-- CENTRALDARK_CASA_UI_CONTEXTUAL_CATALOG_20261030 -->
+### Receita parametrizada: UI contextual da Casa (30/10/2026)
+
+**Identificador documental do catálogo:** `CASA_UI_CONTEXTUAL`. **Categoria:** `Automações → Assistidas → Desktop Windows / UI por contexto conversacional`. **Owner único:** `.agents/skills/centraldark-operational-method/SKILL.md` (`CENTRALDARK_CASA_UI_CONTEXTUAL_RECIPE_20261030`), usando `.agents/skills/autonomous-ai-agents/computer-use/SKILL.md` e `.agents/skills/autonomous-ai-agents/ai-andarilho/SKILL.md`. **Não adiciona job, observer, scheduler, novo executor, skill, script, rota de API ou componente ao front.** Esta entrada é catálogo documental para futura projeção pela Gaveta/Forja existente, sem alegar que já aparece no cockpit.
+
+- **Busca por intenção, não por PID fixo:** "olha o WSL aberto", "fecha essa janela", "abre o Hermes One", "clica em Mais tarde". Recuperar somente contexto da conversa vigente; consultar a janela realmente aberta via ferramentas autorizadas; recapturar foco/controle antes de agir.
+- **Segurança:** leitura por padrão; clique baixo risco com intenção específica; fechar janela não implica encerrar processo, VM, WSL, nem substituir botão de confirmação. "Desligar o WSL agora" encerra sessões ativas, requer autorização de efeito específica; ações de alto impacto não são inferidas de apontamentos de tela.
+- **Evidence gate:** `INTENT → TARGET(APP/TITLE/PID CURRENT) → LIVE UI SNAPSHOT → ACTION AUTHORIZED → AFTER READBACK → RECEIPT`. `PASS/PARTIAL/UNKNOWN/BLOCKED/FAIL`; sem percentual inventado. A janela WSL PID 16072 tinha "Habilitar console de depuração: Desligado" e diálogo pendente de reinício, com botões identificados; inspeção `PASS`, clique `NOT_EXECUTED`, aplicação da mudança `UNKNOWN`. Prova é daquela sessão, não habilitação de automação universal.
+- **NEXT_CURSOR:** após merge e carga da skill no runtime, homologar 1 janela WSL + 1 janela Hermes por reconhecimento contextual explícito, com casos negativos e recibos; só depois exibir capacidade como `OPERACIONAL` na interface. Documento no PR permanece `SOURCE_CATALOGED`, não `DEPLOYED`.
+
+<!-- /CENTRALDARK_CASA_UI_CONTEXTUAL_CATALOG_20261030 -->
 ### Snapshot de inventário — NÃO é execução
 
 No snapshot versionado `forja-gaveta.snapshot.json` (fonte Git SHA `0f2b35f390a8f45330bd31a95aec355e1c58621c`): **999 arquivos SKILL.md** (996 sob `.agents` e 3 na raiz `skills`), **3 categorias de fonte de plugins**; a quantidade de plugins instalados/conectados não decorre disso. No snapshot `hud-migration.snapshot.json`: **189 seções**, **33 controles**, **87 seções com owner pendente**; `full_migration_proven=false`. Esses números são **históricos do snapshot**, não medições em tempo real; atualizar com um novo SHA e receipt ao regenerar.

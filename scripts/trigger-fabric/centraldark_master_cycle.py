@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_TRACE
+# @owner: scripts/trigger-fabric/centraldark_master_cycle.py
+# @doc_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/README.md
+# @last_updated: 2026-11-02T02:20:39.000Z
+# @escopo: !AUREOLA_CANONICA ingressa pelo resolvedor existente e mostra trilha observada sem presumir execução.
+# @implementado: alias canônico/AUREULA e route_trace por gatilho com status de reconhecimento e telemetria.
+# @pendente: conexão do recibo ao dispatcher/chat runtime deve ser observada no consumer real.
+# @estado: implementação local na branch; runtime permanece UNKNOWN até CI e observação de superfície.
+# @next_cursor: validar contrato e executar suite existente; abrir PR sem publicar/deployar.
 import argparse
 import json
 import re
@@ -9,6 +18,7 @@ from pathlib import Path
 MASTER = "!CENTRALDARK"
 TRIGGER_EMOJIS = {
     "CENTRALDARK": "👑",
+    "AUREOLA_CANONICA": "⭕",
     "ACORDAR": "🌅",
     "CALIBRAR": "🎯",
     "MULTIBUSSOLA": "🧭",
@@ -17,6 +27,7 @@ TRIGGER_EMOJIS = {
     "DELTA_UTIL": "💎",
     "CONTRAPROVA": "🧪",
     "REMEDICAO": "📏",
+    "MICHELIN": "🌟",
     "FIXED_POINT": "📍",
     "REGISTRA": "🧾",
     "RASTRO": "🔏",
@@ -33,6 +44,7 @@ CHAIN = [
     "DELTA_UTIL",
     "CONTRAPROVA",
     "REMEDICAO",
+    "MICHELIN",
     "FIXED_POINT",
     "REGISTRA",
     "RASTRO",
@@ -59,6 +71,7 @@ EXPANDED_CHAIN = [
     "CONTRAPROVA",
     "REMEDICAO",
     "REALITY_JUDGE",
+    "MICHELIN",
     "FIXED_POINT",
     "TLC23_CLOSE",
     "REGISTRA",
@@ -79,6 +92,7 @@ GUIDED_TELEMETRY_PHASES = [
     ("META_LUPA", "META LUPA"),
     ("TEST", "TESTE"),
     ("CI_SAME_HEAD", "CI MESMO HEAD"),
+    ("MICHELIN", "🌟 !MICHELIN"),
     ("REALITY_JUDGE", "REALITY JUDGE"),
     ("FIXED_POINT", "FIXED POINT"),
     ("LOCK", "CADEADO"),
@@ -92,6 +106,20 @@ GUIDED_TELEMETRY_ICONS = {
     "FAIL": "❌",
     "BLOCKED": "⛔",
     "SKIPPED": "➖",
+}
+ROUTE_STATUS_ICONS = {
+    "NOT_INVOKED": "➖",
+    "UNKNOWN": "⚪",
+    "ACTIVE": "🔵",
+    "PASS": "✅",
+    "FAIL": "❌",
+    "BLOCKED": "⛔",
+    "SKIPPED": "➖",
+}
+ROUTE_RECOGNITION_LABELS = {
+    "RECOGNIZED": "RECONHECIDO",
+    "OBSERVED": "OBSERVADO",
+    "NOT_INVOKED": "NÃO ACIONADO",
 }
 GUIDED_TELEMETRY_SURFACES = [
     "CLI", "CHAT", "VOICE", "WORK", "COWORK", "CODE_AGENT", "API", "MCP", "WEB", "DESKTOP", "SOL", "HERMES", "TELEGRAM"
@@ -148,6 +176,15 @@ TIK_TAK_LOCKS = [
 NEGATION_TOKENS = {"nao", "nunca", "sem"}
 
 MASTER_INGRESS_ALIASES = {
+    "AUREOLA_CANONICA": (
+        "!aureola", "#aureola", "!aureola canonica", "#aureola canonica",
+        "aureola canonica", "!aureula", "#aureula", "aureula",
+        "!aureula canonica", "#aureula canonica", "aureula canonica",
+        "!aureurla", "#aureurla", "aureurla",
+        "!aureurla canonica", "#aureurla canonica", "aureurla canonica",
+        "!aureola_canonica", "#aureola_canonica", "aureola_canonica",
+        "!aureola-canonica", "#aureola-canonica", "aureola-canonica",
+    ),
     "CENTRALDARK_MASTER": (
         "!centraldark", "#centraldark", "!central-dark", "#central-dark", "!cdark", "#cdark",
         "centraldark visualize", "central dark visualize",
@@ -167,6 +204,7 @@ MASTER_INGRESS_ALIASES = {
     "DELTA_UTIL": ("!delta utils", "!deltautils", "!delta util", "!deltautil", "!delta útil", "!centralutil"),
     "CONTRAPROVA": ("!contraprova",),
     "REMEDICAO": ("!remedição", "!remedicao"),
+    "MICHELIN": ("!michelin", "#michelin"),
     "TIK_TAK": ("!tik-tak", "!tik_tak", "#tik-tak", "#tik_tak"),
     "FIXED_POINT": ("!fixed_point",),
     "REGISTRA": ("!registra",),
@@ -432,6 +470,55 @@ def build_guided_telemetry(
     }
 
 
+def build_aureola_trace(matched_trigger_ids, phase_status=None, aureola_active=False):
+    """Trilha visual de reconhecimento e execução, mantendo as duas evidências separadas."""
+    matched = set(matched_trigger_ids or [])
+    supplied = _normalized_phase_status(phase_status)
+    ordered = ["AUREOLA_CANONICA", "CENTRALDARK_MASTER", *CHAIN]
+    labels = {
+        "AUREOLA_CANONICA": "⭕ !AURÉOLA CANÔNICA",
+        "CENTRALDARK_MASTER": "👑 !CENTRALDARK",
+        "ACORDAR": "🌅 #ACORDAR",
+        "MICHELIN": "🌟 !MICHELIN",
+    }
+    entries = []
+    for trigger_id in ordered:
+        phase = "CENTRALDARK" if trigger_id == "CENTRALDARK_MASTER" else trigger_id
+        directly_matched = trigger_id in matched or (trigger_id == "AUREOLA_CANONICA" and aureola_active)
+        observed_execution = phase in supplied
+        recognized = directly_matched or observed_execution
+        execution_status = supplied.get(phase, "UNKNOWN" if directly_matched else "NOT_INVOKED")
+        if trigger_id == "AUREOLA_CANONICA" and aureola_active:
+            execution_status = "PASS"  # a própria trilha foi renderizada por este resolvedor
+        entries.append({
+            "trigger_id": trigger_id,
+            "label": labels.get(trigger_id, f"{TRIGGER_EMOJIS.get(trigger_id, '▫️')} {trigger_id}"),
+            "recognition_status": (
+                "RECOGNIZED" if directly_matched else "OBSERVED" if observed_execution else "NOT_INVOKED"
+            ),
+            "execution_status": execution_status,
+        })
+    visual = " → ".join(
+        f"{entry['label']} [{ROUTE_RECOGNITION_LABELS.get(entry['recognition_status'], 'UNKNOWN')} · "
+        f"{ROUTE_STATUS_ICONS.get(entry['execution_status'], '⚪')} {entry['execution_status']}]"
+        for entry in entries
+    )
+    return {
+        "schema": "centraldark.aureola-route-trace.v1",
+        "status": "RENDERED" if aureola_active else "NOT_INVOKED",
+        "entries": entries,
+        "visual_chain": visual,
+        "recognition_is_execution_proof": False,
+        "unknown_is_pass": False,
+    }
+
+
+def render_aureola_trace(trace) -> str:
+    if not trace or trace.get("status") != "RENDERED":
+        return ""
+    return "\n".join(("⭕ !AURÉOLA CANÔNICA — TRILHA OBSERVADA", trace.get("visual_chain", "")))
+
+
 def render_guided_telemetry(telemetry, ansi: bool = False) -> str:
     if not telemetry or not telemetry.get("render_required"):
         return ""
@@ -555,6 +642,7 @@ def resolve(
     master_marker_seen = "CENTRALDARK_MASTER" in ids or "CENTRALDARK_MASTER" in ambiguous_ids
     master_ambiguous = "CENTRALDARK_MASTER" in ambiguous_ids
     explicit_master = bool("CENTRALDARK_MASTER" in ids and chefe_source)
+    aureola_active = "AUREOLA_CANONICA" in ids and chefe_source
     explicit_subtrigger = bool(any(i != "CENTRALDARK_MASTER" for i in ids) and chefe_source)
     inherited = bool(master_active or bot_entry)
     master_cycle_active = bool(explicit_master or explicit_subtrigger or inherited)
@@ -587,6 +675,11 @@ def resolve(
         intent_reason=intent_reason,
         previous_failure=previous_failure,
     )
+    aureola_trace = build_aureola_trace(
+        ids,
+        phase_status=phase_status,
+        aureola_active=bool(aureola_active or master_cycle_active),
+    )
 
     session_ref = str(session_id or "").strip() or None
     canonical_profile_id = str(profile_id or "").strip() or CANONICAL_SOL_PROFILE_ID
@@ -612,9 +705,25 @@ def resolve(
             " → ".join([
                 "⭕ !AURÉOLA CANÔNICA",
                 f"{TRIGGER_EMOJIS['CENTRALDARK']} !CENTRALDARK",
-                *[f"{TRIGGER_EMOJIS[x]} {x}" for x in CHAIN],
+                *[f"{TRIGGER_EMOJIS[x]} {'!MICHELIN' if x == 'MICHELIN' else x}" for x in CHAIN],
             ]) if master_cycle_active else ""
         ),
+        "michelin": {
+            "trigger": "!MICHELIN",
+            "emoji": "🌟",
+            "owner": "RULES.md",
+            "role": "EVIDENCE_GRADED_QUALITY_CHECK_IN_EXISTING_MASTER",
+            "criteria": {
+                "STAR_1": "SOURCE_TESTS_LINT_BUILD_AUTH_SAME_SHA",
+                "STAR_2": "CI_COMPLETED_INTEGRATION_SAME_SHA",
+                "STAR_3": "DEPLOY_AUTHENTICATED_VISUAL_CASA_VPS_LOGS_SAME_SHA",
+            },
+            "status": "UNKNOWN",
+            "stars_awarded": 0,
+            "star_award_from_trigger": False,
+            "public_smoke_is_certificate": False,
+            "same_head_proof_required": True,
+        },
         "aureola": {
             "role": "VISIBLE_ROUTE_DEBUGGER",
             "contract": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml",
@@ -625,7 +734,10 @@ def resolve(
             "route_trace_is_technical_proof": False,
             "bible_reference_is_semantic_cue_not_proof": True,
             "material_discovery_is_learning_candidate_not_fact": True,
+            "explicit_trigger_active": bool(aureola_active),
+            "route_trace": aureola_trace,
         },
+        "aureola_route_trace": aureola_trace,
         "intent_alignment": {
             "phase": "CALIBRAR",
             "emoji": TRIGGER_EMOJIS["CALIBRAR"],
@@ -896,6 +1008,7 @@ def self_test():
         ("!CENTRALUTIL", "DELTA_UTIL"),
         ("!CONTRAPROVA", "CONTRAPROVA"),
         ("!REMEDICAO", "REMEDICAO"),
+        ("!MICHELIN", "MICHELIN"),
         ("!TIK-TAK", "TIK_TAK"),
         ("!FIXED_POINT", "FIXED_POINT"),
         ("!REGISTRA", "REGISTRA"),
@@ -1103,6 +1216,8 @@ def _parse_intent_ok(raw):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure") and "utf" not in str(sys.stdout.encoding or "").lower():
+        sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
     parser.add_argument("--text")
     parser.add_argument("--self-test", action="store_true")
@@ -1143,6 +1258,11 @@ def main():
             profile_display=args.profile_display,
         )
 
+    if isinstance(out, dict) and out.get("aureola_route_trace"):
+        rendered_aureola = render_aureola_trace(out["aureola_route_trace"])
+        if rendered_aureola:
+            print(rendered_aureola)
+            print()
     if args.telemetry and isinstance(out, dict) and out.get("guided_telemetry"):
         rendered = render_guided_telemetry(out["guided_telemetry"], ansi=sys.stdout.isatty())
         if rendered:

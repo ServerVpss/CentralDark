@@ -12,6 +12,7 @@ const HYBRID_CONTRACT = join(REPO_ROOT, "docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO
 const DEFAULT_DELTA_URL = process.env.CENTRALDARK_VPS_DELTA_URL || "http://127.0.0.1:8099";
 const DEFAULT_SCREENPIPE_URL = process.env.SCREENPIPE_BASE_URL || "http://127.0.0.1:3030";
 const ALLOWED_HOSTS = new Set(["127.0.0.1", "localhost", "api.centralldark.com", "mcp.centralldark.com"]);
+const CASA_SCREENPIPE_HOSTS = new Set(["100.123.93.25", "windows-casa.tail6d7aa4.ts.net"]);
 function ok(data) {
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 }
@@ -21,6 +22,19 @@ function safeUrl(raw, fallback) {
     if (!ALLOWED_HOSTS.has(url.hostname))
         throw new Error(`endpoint_not_allowed:${url.hostname}`);
     return url;
+}
+function safeScreenpipeUrl(raw, fallback) {
+    const value = String(raw || fallback || "").trim();
+    const url = new URL(value);
+    // Somente Screenpipe pode consultar a Casa privada: URL e porta fixas, nunca proxy arbitrário.
+    if (CASA_SCREENPIPE_HOSTS.has(url.hostname)) {
+        if (url.protocol !== "http:" || url.port !== "3030" || url.pathname !== "/"
+            || url.search || url.hash || url.username || url.password) {
+            throw new Error("screenpipe_casa_url_not_allowed");
+        }
+        return url;
+    }
+    return safeUrl(value, fallback);
 }
 async function fetchJson(url, timeoutMs = 8000) {
     const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
@@ -113,11 +127,35 @@ export const hybridObservabilityTools = [
         }),
         handler: async (input) => {
             try {
-                const base = safeUrl(input.baseUrl, DEFAULT_SCREENPIPE_URL);
+                const base = safeScreenpipeUrl(input.baseUrl, DEFAULT_SCREENPIPE_URL);
                 const health = await fetchJson(new URL("/health", base), 5000);
                 const body = JSON.stringify(health.json).toLowerCase();
-                const attributed = body.includes("screenpipe");
-                return ok({ endpoint: String(base), http: health.status, reachable: health.ok, owner_attributed_to_screenpipe: attributed, status: attributed ? "SENSOR_REACHABLE_ATTRIBUTED" : "REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN", authority: false, proof: false });
+                const isCasa = CASA_SCREENPIPE_HOSTS.has(base.hostname);
+                const data = health.json && typeof health.json === "object" ? health.json : {};
+                const dependencies = data.dependencies && typeof data.dependencies === "object" ? data.dependencies : {};
+                // Na Casa exigir assinatura de origem; HTTP 200 de Graph Panel não é Screenpipe.
+                const casaSignature = health.ok && isCasa && String(data.hostname || "").toUpperCase() === "SEGREDO"
+                    && Object.hasOwn(dependencies, "ffmpeg") && typeof data.frame_status === "string";
+                const attributed = isCasa ? casaSignature : health.ok && body.includes("screenpipe");
+                const frameMs = Date.parse(String(data.last_frame_timestamp || ""));
+                const ageSeconds = Number.isFinite(frameMs) ? Math.round((Date.now() - frameMs) / 1000) : null;
+                const frameRecent = attributed && ageSeconds !== null && ageSeconds >= 0
+                    && ageSeconds <= 120 && data.frame_status === "ok";
+                const state = !health.ok
+                    ? (health.status === 403 ? "AUTH_REQUIRED" : "HTTP_UNHEALTHY")
+                    : !attributed ? "REACHABLE_NOT_ATTRIBUTED_OR_UNKNOWN"
+                        : data.status === "degraded" ? "SENSOR_REACHABLE_DEGRADED" : "SENSOR_REACHABLE_ATTRIBUTED";
+                return ok({
+                    endpoint: String(base), runtime_host: isCasa ? "CASA_WINDOWS" : "CURRENT_RUNTIME",
+                    measured_at_utc: new Date().toISOString(),
+                    http: health.status, reachable: health.ok, owner_attributed_to_screenpipe: attributed,
+                    screenpipe_health_state: typeof data.status === "string" ? data.status : "UNKNOWN",
+                    frame_status: typeof data.frame_status === "string" ? data.frame_status : "UNKNOWN",
+                    frame_age_seconds: ageSeconds, recent_frame_observed: frameRecent,
+                    audio_status: typeof data.audio_status === "string" ? data.audio_status : "UNKNOWN",
+                    context_access: "NOT_TESTED_AUTH_REQUIRED_IF_403",
+                    status: state, authority: false, proof: false,
+                });
             }
             catch (error) {
                 return ok({ reachable: false, status: "UNKNOWN", error: String(error.message || error), authority: false, proof: false });

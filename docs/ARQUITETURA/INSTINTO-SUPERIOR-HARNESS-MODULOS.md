@@ -83,3 +83,79 @@ A integração página por página/arquivo por arquivo só pode ser marcada 100%
 **CONVERGÊNCIA:** P01–P08 são facetas de UMA INTENÇÃO. Não abrir nova PR, skill, HUD, gerenciador ou orquestrador concorrente só para registrar a história.
 **FIXED_POINT:** registro documental com proveniência no owner existente, sem alterar binários, instaladores, processos, VPS ou hardware.
 **NEXT_CURSOR:** identificar o owner efetivo do dock/gestão de instâncias no Electron e comparar com catálogo; escolher a menor lacuna implementável com contraprova; registrar receipt e promover por owner/escritor único.
+
+<a id="rota-casa-jea-winrm"></a>
+## Rota Casa JEA via Tailscale (WinRM 5985) — Hermes skill devops/centraldark-casa-jea
+
+<!--
+#OBSERVACOES# | CENTRALDARK.HARNESS.CASA_JEA
+@code_ref: apps/instinto-superior/config/harness-module-registry.json
+@code_ref: apps/instinto-superior/src/components/central/HarnessModuleRegistry.tsx
+@code_ref: scripts/lupa/validar-harness-casa-jea.mjs
+@code_ref: scripts/lupa/validar-harness-casa-jea.test.mjs
+@last_updated: 2026-10-23T03:05:00.000Z
+-->
+
+**Dado estruturado (fonte única):** `apps/instinto-superior/config/harness-module-registry.json` → módulo `casa-jea-winrm`. O card do Cockpit (`HarnessModuleRegistry.tsx`) só projeta esse registro. Este documento não duplica valores.
+
+| Capacidade | Estado | Prova (22/10/2026, BRT) |
+|---|---|---|
+| VER | 🟢🔒 PROVEN | T1 `ps` 438 processos · T2 `tcp` 79 portas em escuta |
+| PEDIR / negação | 🟢🔒 PROVEN | T4–T6 "is not recognized" · T7 PID 4 e T8 Spooler → `NEGADO_ALLOWLIST` |
+| MEXER | 🟢🔒 PROVEN | stop PID 17056 (Cockpit 8080) ok=True às 23:37:33 · porta caiu em menos de 1 s · religado pela receita oficial com HTTP 200 às 23:37:53 |
+| allow | 🟢🔒 PROVEN | T3 devolve o JSON da allowlist (antes respondia `None`) |
+
+- **Auditoria:** `/var/log/centraldark/casa-jea.jsonl` (VPS) e `C:\CentralDark\audit\jea\` (Casa, 25 transcrições no fechamento). Vazamento medido: 0.
+- **Allowlist:** `C:\CentralDark\harness\allowlist.json`. O CHEFE edita; vale na próxima chamada.
+- **Credencial:** só o caminho `/etc/centraldark/secrets/casa-jea.env`. O conteúdo nunca entra em repositório, log ou chat.
+- **Receita oficial para religar o Cockpit 8080:** `Start-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'`. A tarefa roda como SYSTEM o `K:\scripts\casa\instinto-cockpit-autostart.ps1`, que sobe o Vite em `K:\apps\instinto-superior` na porta 8080. A tarefa também é watchdog de 1 minuto.
+- **Sensor:** `node scripts/lupa/validar-harness-casa-jea.mjs` valida o PROVEN. Com `--live <json>`, classifica a sessão ao vivo: rota desligada vira ⚠️ com a causa, e o PROVEN continua 🔒.
+- **Rollback:** está no campo `rollback` do registro.
+- **Rotas medidas e descartadas:** estão no campo `measured_routes` do registro (Serve 9100/3000 sem destino, "SSH reverso" que na verdade é SOCKS, 8080 é Vite dev, RDC na direção errada, RDP só tela).
+
+<a id="rota-terminal-visivel-sol-casa"></a>
+## Rota Terminal visível SOL → Casa (Desktop Commander + conhost)
+
+**Dado estruturado:** `harness-module-registry.json` → módulo `terminal-visivel-sol-casa`. Provado em 22/10/2026 23:47 BRT, só leitura, visível e executando (🟢🔒). O pedido do CHEFE pelo celular (Dispatch) virou uma tarefa Cowork; o Desktop Commander abriu um PowerShell **visível** na sessão 1 com título "SOL -> Casa", e a saída foi `hostname = SEGREDO` e `whoami = segredo\administrador`.
+
+- **Receita oficial:** `Start-Process conhost.exe "powershell.exe -NoExit -Command <script>"`.
+- **Anti-receita:** `Start-Process powershell`. No Windows 11 vira aba do Windows Terminal já aberto, em vez de janela própria.
+- **Limite:** o computer-use não digita em terminais nem IDEs (tier click). A rota é Desktop Commander + conhost, não teclado.
+- **Evidência:** foto confirmada pelo CHEFE; o screenshot fica na sessão Cowork e não é versionado. Escrita por essa rota: UNKNOWN.
+
+## D006 - 2026-10-20 | Configuracoes do Harness: inventario incremental e PREVIA
+
+**INTENT_ID:** CENTRALDARK-HARNESS-CONFIGURACOES-INVENTARIO-PREVIEW-20261020.
+**CHEFE:** primeiro visualizar todas as opcoes e pendencias; escolher/ligar motor e a ULTIMA etapa. Uma unica casca, dono por arquivo. Casa `K:\` antes de GitHub/main e VPS.
+**FRONTEIRA:** o menu `config-harness` ja existe localmente em `apps/instinto-superior/src/components/central/CockpitShell.tsx` com cor delimitada `#d0e8f5`. Seus links nao significam parametrizacao, persistencia ou E2E. Dados ilustrativos sempre exibidos como **PREVIA - FALTA IMPLEMENTAR**; nenhuma alteracao real ao motor, GPU, credencial ou aplicacao.
+
+### Inventario de setores e owners a reutilizar
+
+| Setor pretendido | Owner existente / fonte canonica | Estado comprovado ou lacuna | Exemplos EXCLUSIVAMENTE de PREVIA |
+| --- | --- | --- | --- |
+| Geral / inicio | `CockpitShell.tsx`, `SistemaCentralDark.tsx` | UI existente; preferencias persistentes UNKNOWN | Iniciar no login: DESLIGADO (PREVIA) |
+| Modelos e motores | `config/harness-module-registry.json`, Design Center, Jan externo | Catalogo em source; binding e modelo ativo por runtime UNKNOWN | Jan 4B; temperatura 0,7; Top P 0,8; Top K 20; GPU layers AUTO (PREVIA) |
+| Conversas / Hermes / Jarvis | `apps/modulos/HERMES-CORE`, `HermesPet.tsx` | Interfaces presentes; controles persistentes por sessao UNKNOWN | Historico ligado; selecao Hermes (PREVIA) |
+| Ferramentas / MCP / Tool Calls | `apps/modulos/mcp/src/audit-logger.js`, Admin, Observabilidade | Auditar eventos existente; payload por clique e ligacao cliente externo UNKNOWN | Mostrar PID, call ID, duracao, solicitar/resposta sanitizados (PREVIA quando nao medidos) |
+| Voz / audio / multimodal | `JarvisParticleOrb.tsx`, Screenpipe, navegadores | Screenpipe audio_stalled nao significa Jarvis quebrado; permissao de microfone exige gesto | Entrada default, voz de saida, foto, OCR (PREVIA) |
+| Aparencia / acessibilidade / idioma | `DesignCenter.tsx`, cascas existentes | Tema e cor visuais existentes; roundtrip de preferencias UNKNOWN | Dark, contraste Sistema, cor #d0e8f5, fonte media (PREVIA onde nao salvo) |
+| Notificacoes / sino | `CentralNotificacoes.tsx`, `notifications_log` | UI existe, entrega real requer recibo de evento | Ativar alertas, agrupar por missao (PREVIA) |
+| Conexoes / Tailscale / Casa-VPS | `cockpit.functions.ts`, `StatusPanel.tsx` | Medicoes parciais com semantica UNKNOWN != PASS | Reconnect remoto, alertas da malha (PREVIA) |
+| Hardware / RX 580 / processos | `SistemaCentralDark.tsx`, sensor Windows, PR #1850 | GPU detectada nao prova offload; controles de processo nao comprovados | GPU layers AUTO; 8GB VRAM declarada (PREVIA) |
+| Seguranca / conta / credenciais | Admin autenticado; owners de secrets existentes | Preservar restricoes; nunca renderizar segredo nem simular conta | Sessao ativa / acesso admin (PREVIA/UNKNOWN sem sessao) |
+| Armazenamento / backups | `SyncCenter.tsx`, Minha Oficina, receipts | Backups/sync exigem readback; nenhuma acao automatica por abrir menu | Limite 8192 MiB, guardar historico (PREVIA) |
+| Pendencias / memorias / aprendizado | `docs/PENDENCIAS.md`, `docs/BRAIN/04-DECISOES/01-PENDENCIAS.md`, `docs/CAPACIDADES/pendencias-painel-centraldark.md` | Documentos historicos nao sao runtime; falta associar card a owner + evidencia | Aberta / em andamento / bloqueada / resolvida (PREVIA) |
+| Horario / operacoes / logs | `central-horario/frontend.ts` e central-horario cross-platform | Owner de formatacao real. Relogio compartilhado de segundos implementado em source; consumidor UI ainda pendente | BRT HH:mm:ss em tempo real (ligar apos ACK UI) |
+| Plugins / extensoes / Builder | `DesignCenter.tsx`, `skills/centraldark-delegacao/SKILL.md`, PR #1874 | Catalogo/delegacao existem em source; ACK por sessoes desconhecido | Plugin ativo, permissao, instalacao (PREVIA) |
+
+**Fontes consultadas:** `docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md` D005, `docs/PENDENCIAS.md`, `docs/BRAIN/04-DECISOES/01-PENDENCIAS.md`, `docs/CAPACIDADES/pendencias-painel-centraldark.md`, `docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md`, conversas/prints recentes (evidencia visual, nao state runtime).
+
+### Relogio compartilhado de um unico produtor
+- Owner ativo `central-horario/frontend.ts`: `inscreverRelogioCentralDark` / `lerRelogioCentralDarkMs` / `lerRelogioCentralDarkSSR`. Um timeout alinhado ao proximo segundo e compartilhado entre ouvintes; liberado apos o ultimo unsubscribe. Formatacao `formatBrasiliaTime`, fuso `America/Sao_Paulo` e localidade `pt-BR`.
+- Cliente React usa `useSyncExternalStore(inscreverRelogioCentralDark, lerRelogioCentralDarkMs, lerRelogioCentralDarkSSR)`, depois `formatBrasiliaTime(new Date(ms))` se `ms > 0`; sem setInterval por card. Tempo atual e timestamp da ultima medicao sao campos DIFERENTES.
+- Prova 20/10: dois assinantes receberam ticks sincronizados por 1s, timer limpo apos ultimo unsubscribe, formato BRT PASS. **Hidrata??o/UI nao executadas neste recibo**.
+
+### Handoff sem conflito
+- PR #1874 comment #6285216552: pedido enviado ao escritor da UI para o unico trecho `config-harness` do `CockpitShell.tsx`. **AWAIT_ACK**; comentario nao equivale a colaboracao ativa.
+- SOL escrita restrita a `central-horario/frontend.ts` e a este documento. Nao alterar `CockpitShell.tsx` durante a posse UI. Um writer por arquivo; nao criar segundo relogio, HUD, fila ou agente.
+- **NEXT_CURSOR:** `PR1874_HANDOFF_ACK -> CONFIG_PREVIA_UI -> CLOCK_CONSUMER -> 8080_BROWSER_READBACK -> GATES -> MAIN -> VPS_DEPOIS`.

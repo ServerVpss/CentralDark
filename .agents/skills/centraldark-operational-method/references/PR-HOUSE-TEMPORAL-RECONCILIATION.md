@@ -148,7 +148,7 @@ As personas podem mudar de motor/modelo. A autoridade não muda.
 ```text
 CHEFE = intenção e fronteira humana
 SOL = coordenação quando presente
-HERMES = execução/preservação/continuidade
+HERMES/PIVETE = execução/preservação/continuidade
 REALITY_JUDGE = evidência observável
 ```
 
@@ -410,3 +410,44 @@ NO_NEW_INFORMATION=true
 ```
 
 Fixed point fecha a missão atual; não desliga aprendizado futuro.
+
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "HERMES/PIVETE = execução/preservação/continuidade"
+    ],
+    "right_variant": [
+      "HERMES = execução/preservação/continuidade"
+    ]
+  },
+  {
+    "left_original": [
+      "O snapshot estrutural `CentralDark-Arvores.zip`, gerado em 2026-08-22, prova historicamente que `E:\\CentralDark\\hermes-mcp-centraldark-fixed.bat` existia naquele snapshot (aprox. 3,01 KiB, modificado em 2026-08-20 14:02:20). O ZIP não contém os bytes desse BAT, portanto:"
+    ],
+    "right_variant": [
+      "O snapshot estrutural `CentralDark-Arvores.zip`, gerado em 2026-08-22, prova historicamente que `K:\\hermes-mcp-centraldark-fixed.bat` existia naquele snapshot (aprox. 3,01 KiB, modificado em 2026-08-20 14:02:20). O ZIP não contém os bytes desse BAT, portanto:"
+    ]
+  },
+  {
+    "left_original": [
+      "O snapshot `CentralDark-Arvores.zip` declara `ROOT=E:\\CentralDark` e `GENERATED=2026-08-22 20:50:54`. Ele mostra que já existiam, naquela data, owners/matéria relacionados a:"
+    ],
+    "right_variant": [
+      "O snapshot `CentralDark-Arvores.zip` declara `ROOT=K:\\` e `GENERATED=2026-08-22 20:50:54`. Ele mostra que já existiam, naquela data, owners/matéria relacionados a:"
+    ]
+  },
+  {
+    "left_original": [
+      "- `E:\\CentralDark` é Casa/alvo de reconciliação, mas não licença para mover tudo para lá;"
+    ],
+    "right_variant": [
+      "- `K:\\` é Casa/alvo de reconciliação, mas não licença para mover tudo para lá;"
+    ]
+  }
+]
+```

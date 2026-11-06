@@ -1,5 +1,5 @@
 schema: centraldark.micro-deploy-continuo-binding.v1
-updated: 2026-09-25
+updated: 2026-10-23
 status: CANONICAL_TRIGGER_FABRIC_BINDING
 authority: SEGREDO/CHEFE
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
@@ -89,20 +89,68 @@ consumers:
   claude: CLAUDE.md
   readme: README.md
   memory: docs/CONSCIENCIA/05-APRENDIZADOS/MICRO-DEPLOY-CONTINUO-POR-PASS-COMPROVADO.md
-  live_editing_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+  live_editing_skill: .agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md
 non_goals:
 - criar segundo motor
 - reiniciar tudo
 - promover UNKNOWN para PASS
 - tratar merge como deploy
 - tratar documento como runtime executado
+light_deploy_ssh_law:
+  canonical: true
+  authority: SEGREDO/CHEFE
+  source_rule: docs/CONSCIENCIA/03-FLUXO-DEPLOY.md
+  default_ci: MVP_FAST_LOOP
+  deep_ci: ON_DEMAND_OR_MATERIAL_SECURITY_RISK
+  material_security_gates_required: true
+  control_plane: MCP_CENTRALDARK
+  transport_target: MCP_CENTRALDARK_VPS_DIRECT
+  transport_runtime_status: MCP_NATIVE_READ_VERIFIED_DEPLOY_PENDING
+  hosted_billing_blocked: true # historico: workflow hospedado aposentado
+  github_actions_required: false
+  github_hosted_runner_required: false
+  native_executor_tool: centraldark_deploy_micro_fallback
+  native_executor_script: scripts/vps/main-pinned-microdeploy.sh
+  legacy_ssh_workflow: DISABLED
+  attempted_probe_run_id: 39912949599
+  ssh_probe_runtime_pass: false
+  no_production_mutation: true
+  github_actions_auto_deploy: PAUSED
+  source_ref: main
+  required_inputs:
+    - SOURCE_SHA
+    - OWNER
+    - FILESET_CAUSAL
+  execution:
+    build_location: VPS
+    tests: SCOPE_APPLICABLE
+    scratch: SINGLE_REUSABLE_WORKTREE
+    writer: SINGLE_PER_SCOPE
+    promotion: CAUSAL_FILESET_ONLY
+    restart: OWNER_ONLY
+    health: REQUIRED
+    receipt: REQUIRED
+    rollback: REQUIRED_ON_FAILURE
+  locks:
+    NO_NEW_PARALLEL_EXECUTOR: true
+    NO_ARBITRARY_SHELL_FROM_EVENT: true
+    VERIFY_SSH_HOST_IDENTITY: true
+    NO_SECRET_ECHO: true
+    NO_BLIND_PULL_OVER_DIRTY_RUNTIME: true
+    NO_RUNNER_DELETION_BY_FILE_COMMIT: true
+    UNKNOWN_IS_NOT_PASS: true
+  reused_assets:
+    runner_wake_only: .github/workflows/vps-wake-hosted-ssh.yml
+    retired_ssh_workflow: .github/workflows/vps-ssh-exec.yml
+    microdeploy_runtime: scripts/vps/main-pinned-microdeploy.sh
+    receipt_owner: docs/CONSCIENCIA/MICRO-DEPLOY/
 live_editing_default:
   official: true
   mode: CENTRALDARK_LIVE_EDITING_FABRIC
   human_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
   machine_contract: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
   binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
-  skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+  skill: .agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md
   operational_default: true
   ci_policy:
     MVP_FAST_LOOP_IS_DEFAULT: true
@@ -115,7 +163,7 @@ live_editing_default:
     NO_SECRET_RECEIPT_VALUE: true
     SCRUB_CONTROLLED_LOGS_AFTER_USE: true
   scratch_worktree:
-    canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    canonical_path: <caminho-vps>
     single_reusable: true
     lock_required: true
     reset_before_use: true
@@ -138,7 +186,7 @@ fallback:
     CAUSAL_FILESET_ONLY: true
     PRIMARY_PIPELINE_FAILS_DO_NOT_BECOME_FIXED_BY_FALLBACK: true
   scratch_worktree:
-    canonical_path: /root/CentralDark/_worktrees/main-pinned-runtime-fastpath
+    canonical_path: <caminho-vps>
     single_reusable: true
     lock_required: true
     reset_before_use: true

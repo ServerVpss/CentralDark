@@ -408,3 +408,20 @@ PORTO_SO_EXISTE_QUANDO_OS_GATES_APLICAVEIS_PASSAM
 ```
 
 A metáfora serve para comprimir o método; não cria engine, autoridade ou prova nova.
+
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "VS_CODE_REPO_PATH=e:\\CentralDark\\Pivete\\CentralDark"
+    ],
+    "right_variant": [
+      "VS_CODE_REPO_PATH=K:\\"
+    ]
+  }
+]
+```

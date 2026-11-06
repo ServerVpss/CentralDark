@@ -1,7 +1,7 @@
 # JARVIS — ORQUESTRAÇÃO EM DELTA, CONTEXTO RECUPERÁVEL E ESCRITOR ÚNICO
 
 > **Origem:** 2026-07-30
-> **Atualizado:** 2026-10-05
+> **Atualizado:** 2026-10-27T12:16:16.618Z
 > **Autoria da intenção:** SEGREDO/CHEFE
 > **Organização técnica:** SOL/ChatGPT + organismo CentralDark
 > **Status:** CANÔNICO
@@ -183,9 +183,64 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 **Caminho das artes:** toda arte nova segue o owner `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`: arquivo → fonte/hash → candidato → manifesto/validador → promoção → espelho Casa com readback. Arte no chat ou Library não prova arte no Git. **Não criar outra biblioteca.**
 
-**Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; Runtime/VPS = execução e logs. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
+**Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; CentralDark-OS = runtime do produto, local e/ou remoto; Casa/VPS = hosts e logs físicos. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
 
 **Critério de saída:** FIXED_POINT só com objetivo cumprido e gates requeridos provados; se ainda há trabalho, registrar o próximo discriminante no NEXT_CURSOR e prosseguir quando houver executor disponível. Se nada mudou: NOOP. Não prometer loop em segundo plano sem job/schedule real.
+
+### 6.0.A CentralDark-OS local-first — VPS é cápsula opcional, não autoridade (2026-10-27)
+
+<!-- #OBSERVACOES#
+@owner: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+@doc_ref: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md; docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md
+@last_updated: 2026-10-27T12:16:16.618Z
+@escopo: vínculo lógico local-first, nomenclatura humana, reconciliação offline/online
+@implementado: contrato documental e ligações aos owners existentes
+@pendente: prova runtime de persistência local, fila offline, replay, catch-up VPS e failover real
+@next_cursor: medir e integrar delta no reconciliador/bridge existente e executar teste de queda + retorno da VPS
+-->
+
+**Nova intenção expressa pelo CHEFE:** CentralDark-OS é o **produto único e núcleo lógico compartilhado**, com prioridade de operação na Casa/Forja e capacidade de evoluir seus arquivos, receitas e código localmente dentro dos executores/autorização existentes. **VPS é somente um alvo físico/instância opcional da cápsula CentralDark-OS**, para serviço remoto/headless quando disponível. Não exigir VPS paga ou online para iniciar o ciclo na Casa. **Casa ligada não prova continuidade 24/7**; essa propriedade depende de energia, serviços persistentes, saúde e provas do runtime local. Evolução aqui significa deltas de código, receitas, documentos e execução autenticada com testes, não treinamento espontâneo do modelo nem automutação irrestrita.
+
+**Nome de produto/interface:** usar `CentralDark-OS` em decisões, menus e prompts antes tratados como **VPS obrigatória**. **Nome operacional de máquina:** manter `VPS` onde o texto se refere de fato a SSH, host/IP, serviço, PID, scripts `scripts/vps/`, backup, deploy, caminhos `/root/`, health, logs ou recibo remoto. **Proibido replace global textual ou renomear identificadores/API/paths por estética.** Versões Desktop, OS Linux/openKylin e kernel nativo futuro continuam edições do mesmo core; kernel próprio inicializável não está provado.
+
+**Fluxo único e preservativo:**
+
+```text
+CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL
+→ CURRENT/GREEN_STATE → GOAL/CLAUSULAS → OWNER/REUSE_BEFORE_CREATE
+→ MENOR_DELTA → HERMES/EXECUTE no ALVO DISPONIVEL E AUTORIZADO
+→ OBSERVE → TEST → COUNTERPROOF → REALITY_JUDGE
+→ RECEIPT → FIXED_POINT ou NEXT_CURSOR → KAIZEN → CONTINUAR
+
+CASA/LOCAL SAUDAVEL: CONTINUA SEM VPS
+  → SOURCE + OBSIDIAN/BRAIN + RECEIPTS + CHECKPOINT LOCAL
+  → COM REDE: PR/CI/MAIN CONFORME GATES
+  → SEM REDE: DELTAS LOCAIS PRESERVADOS, AINDA NAO SINCRONIZADOS
+
+VPS OFFLINE: ISOLAR SO O REMOTO; CASA NAO PARA
+  → FILA/REGISTRO DE DELTAS PENDENTES (owner EXISTENTE, nao presumir implementado)
+VPS VOLTA:
+  → AUTENTICAR → INVENTARIAR → COMPARAR SHA/HASH + OWNER + PROVENIENCIA
+  → RECONCILIAR GREEN_STATE, LOCAL_DIRTY, REMOTE_DIRTY e CONFLITOS
+  → REUTILIZAR RECEITA PROVADA → APLICAR SO DELTA AUTORIZADO
+  → TESTAR → CONTRAPROVA NA VPS → READBACK → RECEIPT → NEXT_CURSOR
+CASA OFFLINE: VPS EXECUTA APENAS CAPACIDADES AUTONOMAS JA COMPROVADAS;
+  → CASA VOLTA: MESMA RECONCILIACAO, NUNCA SOBRESCRITA CEGA
+```
+
+**Janela móvel/backcheck:** `EDITA → AVANCA → VOLTA ALGUMAS CASAS → CONFERE → (FALHA? MENOR CAUSA → COSTURA → RETESTA → BACKCHECK) → CONTINUA`. Não reiniciar missão entre modelos/janelas. Retestar só o cone causal afetado; não refazer verde com mesmo fingerprint sem evento material novo. Em conflito preservar ambos, um escritor por owner, sem `reset --hard`, `clean`, `force push` ou migração destrutiva.
+
+**Biblioteca:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md` e `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md` registram conhecimento e PDFs no vault Obsidian/BRAIN, versionados por Git quando permitido. Enlaçar no mesmo grafo: [aprendizado](../BRAIN/07-APRENDIZADOS-MEMORIAS/README.md) · [acervo](../BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md) · [OS/kernel](CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md). Identidade, autoridade, documentação versionada, efeito no runtime e prova são camadas distintas.
+
+**Status desta seção:** `CONTRACT_UPDATED=YES`; `VPS_OFFLINE_FAILOVER_E2E=UNKNOWN`; `AUTO_CATCHUP_E2E=UNKNOWN`; `KERNEL_NATIVE_BOOT=UNKNOWN_NOT_PROVED`. Nenhuma dessas capacidades passa a existir por texto de prompt.
+
+### Delegação do Builder na Forja existente — sem versões paralelas
+
+**Owner de skill:** skills/centraldark-delegacao/SKILL.md. **Contrato tipado:** .agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json. **Superfície:** apps/instinto-superior. **Bancada da Casa:** K:\ (repositório raiz, não K:\CentralDark).
+
+Delegar a Hermes/Claude/Codex pelo fluxo existente: INTENT_ID → escopos não sobrepostos → capacidade/autorização medida → tarefa Hermes Kanban → um Writer por escopo → ACK → efeito → contraprova → receipt/NEXT_CURSOR. Builder coordena e apresenta; não cria fila, CLI ou agente. Papeis de terminal são candidatos adaptáveis, não grants fixos. Não presumir suporte do CLI Hermes a novos argumentos, equivalência Codex/GitHub Actions nem webhooks ativos do Lovable.
+
+**Demonstração não é prova:** exemplos com IDs de PR, hashes, métricas ou sucessos fictícios não validam deploy/integração. PREVIEW != DEPLOYED, BUILT != INSTALLED, RUNNING != COMPLETED. Ao encontrar nomes com sufixos de versão, absorver o conteúdo exclusivo nos mesmos owners e eliminar duplicatas somente após readback e contraprova; a evolução é histórico Git.
 
 ## 6. Fluxo padrão — intenção curta, organismo desdobra
 
@@ -403,6 +458,40 @@ FAILED_MCP_ROUTE_DOES_NOT_AUTHORIZE_DIRECT_UNSCOPED_SHELL=true
 ```
 
 O backend de inferência é casca mutável. Triton, vLLM, TensorRT-LLM, Kylin SDK ou outro backend entram somente quando medidos/necessários no ambiente correspondente; nenhum deles é pré-requisito constitucional.
+
+### 6.3 Cabeça externalizada — ciclo científico de atenção, memória, energia e telemetria (2026-10-24)
+
+**Intenção do CHEFE:** diminuir carga mental e fricção operacional: a CentralDark recupera o fio, mantém memória pertinente, detecta alterações verificáveis, executa o que já foi autorizado e só chama atenção humana por motivo material. Isto é **externalização funcional** de informação, preferências operacionais e métodos, não transferência literal de consciência nem posse sobre a pessoa. CHEFE permanece no comando, inclusive podendo silenciar ou desligar avisos.
+
+**Owners reutilizados, sem segundo cérebro ou scheduler:** `LEIA-ME-IA.md` (entrada/checkpoint), `docs/CONSCIENCIA/APRENDIZADOS.md` (lições), `docs/CONSCIENCIA/MAPA-DO-CEREBRO.md` (navegação), este §6.0 (continuidade), `docs/CONSCIENCIA/02-PERMISSOES.md` (escopo), os observadores/HUD já existentes e o runtime Hermes quando realmente conectado. O registro desta intenção no Git **não prova** captura contínua, notificação ativa, leitura por outros agentes nem sensores instalados.
+
+### Funções separadas por evidência
+
+1. **Memória operacional:** guardar `INTENT_ID | GOAL | REASON | AUTH_SCOPE | OWNER | DECISION | EVIDENCE_REF | PROOF_KEY | NEXT_CURSOR`; recuperar por pertinência e validade temporal, sem pedir ao CHEFE para transportar histórico. Não presumir sentimentos ou pensamentos não expressos.
+2. **Telemetria da obra:** acompanhar indicadores técnicos permitidos (CI, SHA, regressão, disponibilidade, trabalho bloqueado, dívida de provas, divergência main/runtime), com origem/horário/escopo. O sensor registra fatos, não cria autorização.
+3. **Atenção seletiva:** gerar aviso só quando há decisão humana irredutível, falha crítica observada, deadline consentido, alteração material de intenção ou situação previamente escolhida pelo CHEFE. Deduplicar eventos correlacionados e oferecer resumo em vez de interrupções repetidas.
+4. **Energia como experiência, não choque:** usar intensidade visual/sonora ajustável e consentida, pausas e janelas de silêncio. **Nunca** coerção, estímulo elétrico, privação de sono ou pontuação de valor pessoal. Não inferir saúde ou energia física por telemetria técnica.
+5. **Ação autônoma proporcional:** dentro de escopo delegado, o writer único faz o menor delta, testa, contraprova e registra. Sem escritor/capacidade comprovada, registrar `UNKNOWN` específico e continuar o restante por rota autorizada.
+
+### Política de atenção: evento → valor → canal
+
+```text
+EVENTO_COM_PROVENIENCIA
+→ DEDUPE + PROOF_KEY + FRESCOR
+→ CLASSIFICAR IMPACTO(0..3) + URGENCIA(0..3) + CONFIANCA(0..3)
+→ PERTINENCIA_A_INTENCAO_VIGENTE
+→ ESCOLHER CANAL: SILENCIOSO | RESUMO | AVISO | INTERVENCAO_HUMANA
+→ RATE_LIMIT + QUIET_HOURS + MUTE/SNOOZE
+→ RECEIPT_DE_ENTREGA_SE_HOUVER_CANAL_REAL
+→ FEEDBACK_EXPLICITO_DO_CHEFE (UTIL|RUIDO|TARDE|CEDO)
+→ AJUSTAR APENAS O CONE AFETADO
+```
+
+**Hipótese testável (não resultado):** filtragem por materialidade pode reduzir interrupções sem aumentar incidentes perdidos. Avaliar em janela combinada: avisos emitidos/dia, taxa de alertas úteis confirmados, duplicatas, tempo até perceber evento crítico, falsos negativos auditados, decisões retomadas com contexto correto e percentual de ações com receipt. Comparar baseline T0 com T1 no mesmo escopo. Não alegar melhoria de produtividade ou bem-estar sem dados e aceitação do CHEFE.
+
+**Restrições:** mínimo de dados, retenção limitada ao necessário, controle de acesso, redação de segredos, revisão de fontes conectadas, opt-in separado para dado pessoal sensível, exportação/apagamento quando tecnicamente disponível, nunca notificar continuamente para forçar engajamento. Não capturar microfone, tela, mensagens privadas ou biometria de modo permanente por inferência desta intenção; autorização e capability precisam ser específicas. `NOTIFICATION_CONFIGURED != NOTIFICATION_DELIVERED`; `MEMORY_WRITTEN != AGENT_CONSUMED`.
+
+**Critério de FIXED_POINT:** ligação do owner correto + funcionalidade ativada no componente existente quando necessária + evento de teste + contraprova de deduplicação/silêncio + entrega no canal real + recibo e próximo cursor. Antes disso, marcar `DESIGN_REGISTERED`, nunca `LIVE`.
 
 ## 7. Generalização sistêmica por composição
 

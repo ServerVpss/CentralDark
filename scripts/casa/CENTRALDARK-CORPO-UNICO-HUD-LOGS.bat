@@ -26,6 +26,8 @@ Add-Type -AssemblyName System.Drawing
 [System.Windows.Forms.Application]::EnableVisualStyles()
 $Casa = '100.123.93.25'
 $Vps  = '100.90.199.124'
+# Sensor-only é modo do MESMO coletor (sem segundo HUD), read-only, sem varredura remota.
+$script:SensorOnly = $env:CENTRALDARK_SENSOR_ONLY -eq '1'
 $script:LogRoot = Join-Path $env:LOCALAPPDATA 'CentralDark'
 $script:LogFile = Join-Path $script:LogRoot 'Corpo-Unico-HUD-Logs.txt'
 # Reaproveita os scripts existentes: fonte != execucao; NUNCA le tailscale.env.
@@ -50,7 +52,9 @@ try { New-Item -ItemType Directory -Path $script:LogRoot -Force | Out-Null } cat
 $created = $false
 $mutex = [System.Threading.Mutex]::new($true, 'Local\CentralDark_CorpoUnico_HudLogs', [ref]$created)
 if (-not $created) {
-  [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  if (-not $script:SensorOnly) {
+    [System.Windows.Forms.MessageBox]::Show('O HUD CentralDark ja esta aberto. Nao vou iniciar outra janela.', 'CentralDark - uma janela') | Out-Null
+  }
   exit 0
 }
 function Clean([string]$Value) {
@@ -79,6 +83,29 @@ $form.StartPosition = 'CenterScreen'
 $form.BackColor = $bg
 $form.ForeColor = $light
 $form.Font = New-Object Drawing.Font('Segoe UI',10)
+# CORPO UNICO TRAY: one NotifyIcon in the existing WinForms HUD process.
+$script:TrayExitRequested=$false
+$script:CorpoUnicoTray=New-Object Windows.Forms.NotifyIcon
+$script:CorpoUnicoTray.Icon=[Drawing.SystemIcons]::Application
+$script:CorpoUnicoTray.Text='CENTRALDARK | CORPO UNICO'
+$script:CorpoUnicoMenu=New-Object Windows.Forms.ContextMenuStrip
+$openHud=[Windows.Forms.ToolStripMenuItem]::new('Abrir Corpo Unico')
+$openHud.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate()})
+[void]$script:CorpoUnicoMenu.Items.Add($openHud)
+$openCockpit=[Windows.Forms.ToolStripMenuItem]::new('Abrir Cockpit CentralDark')
+$openCockpit.Add_Click({try{Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle'|Out-Null}catch{}})
+[void]$script:CorpoUnicoMenu.Items.Add($openCockpit)
+$verifyCasa=[Windows.Forms.ToolStripMenuItem]::new('Conferir Casa Commander')
+$verifyCasa.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate();Refresh-DesktopCommander})
+[void]$script:CorpoUnicoMenu.Items.Add($verifyCasa)
+[void]$script:CorpoUnicoMenu.Items.Add((New-Object Windows.Forms.ToolStripSeparator))
+$exitCorpo=[Windows.Forms.ToolStripMenuItem]::new('Sair do Corpo Unico')
+$exitCorpo.Add_Click({$script:TrayExitRequested=$true;$form.Close()})
+[void]$script:CorpoUnicoMenu.Items.Add($exitCorpo)
+$script:CorpoUnicoTray.ContextMenuStrip=$script:CorpoUnicoMenu
+$script:CorpoUnicoTray.Visible=$true
+$script:CorpoUnicoTray.Add_DoubleClick({$form.Show();$form.WindowState='Normal';$form.Activate()})
+$form.Add_Resize({if($form.WindowState -eq 'Minimized'){$form.Hide()}})
 $header = New-Object Windows.Forms.Panel
 $header.Dock = 'Top'; $header.Height = 116; $header.BackColor = $panel
 $form.Controls.Add($header)
@@ -88,7 +115,7 @@ $title.ForeColor = $cyan; $title.Font = New-Object Drawing.Font('Segoe UI Semibo
 $title.AutoSize = $true; $title.Location = New-Object Drawing.Point(20,9)
 $header.Controls.Add($title)
 $subtitle = New-Object Windows.Forms.Label
-$subtitle.Text = 'Casa + Tailscale + Screenpipe + Hermes + VPS + Supabase + Desktop Commander + HUD | somente leitura'
+$subtitle.Text = 'Casa Commander + MCP CentralDark + Hermes + Tailscale + Screenpipe + VPS + HUD | somente leitura'
 $subtitle.ForeColor=$dim;$subtitle.AutoSize=$true;$subtitle.Location=New-Object Drawing.Point(22,45)
 $header.Controls.Add($subtitle)
 # ACTION STRIP: mesma janela WinForms, visual preservado, login sempre humano no provedor.
@@ -108,10 +135,10 @@ function New-HudAction([string]$Caption,[int]$Width) {
   $actions.Controls.Add($b)
   return $b
 }
-$script:BtnProfile1=New-HudAction '🔐 Conta 1' 133
-$script:BtnProfile2=New-HudAction '🔐 Conta 2' 133
-$script:BtnScreenpipe=New-HudAction '👁 Screenpipe' 140
-$script:BtnDesktop=New-HudAction '🖥 Desktop Commander' 183
+$script:BtnProfile1=New-HudAction '🔐 MCP CentralDark' 158
+$script:BtnProfile2=New-HudAction '🔑 Parear Casa' 145
+$script:BtnScreenpipe=New-HudAction '👁 Screenpipe' 135
+$script:BtnDesktop=New-HudAction '🖥 Casa Commander' 166
 $script:BtnVerify=New-HudAction '🔄 Conferir' 118
 
 $footer = New-Object Windows.Forms.Panel
@@ -135,7 +162,7 @@ $top.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeT
 for($i=0;$i -lt 5;$i++){ $top.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Percent,20))) | Out-Null }
 $split.Panel1.Controls.Add($top)
 $script:Cards=@{}
-$sectors=@('CASA / WINDOWS','TAILSCALE / MALHA','SCREENPIPE / TELA','HERMES / SSH','VPS / CORACAO','RUNTIME / PORTAS','HUD / OBSIDIAN','PROVA / ARQUIVO','DESKTOP COMMANDER','SUPABASE / PLUGIN')
+$sectors=@('CASA / WINDOWS','TAILSCALE / MALHA','SCREENPIPE / TELA','HERMES / SSH','VPS / CORACAO','RUNTIME / PORTAS','HUD / OBSIDIAN','PROVA / ARQUIVO','CASA COMMANDER','SUPABASE / PLUGIN')
 for($i=0;$i -lt $sectors.Count;$i++){
   $cell=New-Object Windows.Forms.Panel
   $cell.Margin=New-Object Windows.Forms.Padding(4)
@@ -252,15 +279,18 @@ function Refresh-Scripts {
 }
 # AFTERBURNER_MMF_LIVE_V1: reuse the existing 10s WinForms cycle, read-only MMF.
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
-$script:ABHudFile = 'K:\CentralDark\HUD.html'
-$script:ABFeedFile = Join-Path (Split-Path -Parent $script:ABHudFile) 'CENTRALDARK-AFTERBURNER-LIVE.js'
+# #OBSERVACOES# @owner=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:28:17.879Z
+# Motivo: o owner canônico é o Cockpit; o feed é dado efêmero, jamais commitado.
+$script:ABHudOwner = 'K:\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+# Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked source. Cockpit consumes via authorized reader only.
+$script:ABFeedFile = Join-Path $script:LogRoot 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'
 $script:ABLastLog = [datetime]::MinValue
 function Poll-Afterburner {
   $mapHandle=[IntPtr]::Zero
   $mapView=[IntPtr]::Zero
   try {
-    if(-not (Test-Path -LiteralPath $script:ABHudFile -PathType Leaf)){throw 'HUD_LOCAL_ABSENT'}
+    if(-not (Test-Path -LiteralPath $script:ABHudOwner -PathType Leaf)){throw 'COCKPIT_OWNER_ABSENT'}
     if(-not ('CentralDarkAfterburnerMmf' -as [type])) {
       Add-Type -TypeDefinition @'
 using System;
@@ -351,17 +381,27 @@ $script:SupabaseProject='lyoigsqluyktoclwdaft'
 $script:SupabaseBridgeUrl='https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/centraldark-bridge'
 $script:SupabaseLast=[datetime]::MinValue
 function Refresh-DesktopCommander {
-  try{
-    $running=@(Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction Stop |
-      Where-Object {$_.CommandLine -match '(?i)desktop-commander.*remote'})
-    if($running.Count -gt 0){
-      $pids=($running | ForEach-Object {[string]$_.ProcessId}) -join ','
-      Set-Card 'DESKTOP COMMANDER' 'PASS' ('processo PID='+$pids+'; execucao remota medida separadamente')
-    }else{
-      Set-Card 'DESKTOP COMMANDER' 'UNKNOWN' 'processo remoto local nao encontrado'
+  # Native CentralDark Casa Commander only. Vendor remote process never counts as health.
+  try {
+    $health=Invoke-RestMethod -Uri 'http://127.0.0.1:9101/health' -TimeoutSec 3 -ErrorAction Stop
+    if($health.ok -ne $true -or $health.name -ne 'CentralDark Casa Commander' -or $health.remote_vendor -ne $false) {
+      Set-Card 'CASA COMMANDER' 'UNKNOWN' 'identidade da ponte nao confirmada'
+      return
     }
-  }catch{
-    Set-Card 'DESKTOP COMMANDER' 'UNKNOWN' 'consulta local indisponivel'
+    if($health.engine_connected -ne $true) {
+      Set-Card 'CASA COMMANDER' 'WARN' 'ponte ativa; engine stdio ainda nao confirmado'
+      return
+    }
+    $receipt=$health.last_authorized_tool
+    $fresh=$false
+    if($receipt -and $receipt.verified -eq $true -and $receipt.at) {
+      try { $age=((Get-Date).ToUniversalTime()-([datetime]::Parse([string]$receipt.at)).ToUniversalTime()).TotalMinutes
+        $fresh=($age -ge 0 -and $age -le 10) } catch {}
+    }
+    if($fresh){Set-Card 'CASA COMMANDER' 'PASS' ('/tool autenticado: '+$receipt.tool)}
+    else{Set-Card 'CASA COMMANDER' 'WARN' 'engine online; sem recibo /tool fresco'}
+  } catch {
+    Set-Card 'CASA COMMANDER' 'UNKNOWN' 'http://127.0.0.1:9101/health indisponivel'
   }
 }
 function Refresh-Supabase {
@@ -421,17 +461,13 @@ function Local-Refresh {
     Add-Log 'SCREENPIPE' 'UNKNOWN' 'stdout do gravador em outra janela nao tem arquivo de log conhecido; /health segue monitorado'
     $script:ScreenLogWarned=$true
   }
-  # Path found by file-name, without guessing emoji spelling.
-  $vault=Join-Path (Join-Path $env:USERPROFILE 'Documents') 'Obsidian Vault'
-  $hudFile=$null
-  if(Test-Path $vault){
-    $hudFile=Get-ChildItem -LiteralPath $vault -Directory -ErrorAction SilentlyContinue | ForEach-Object {Join-Path $_.FullName 'HUD.html'} | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf} | Select-Object -First 1
-  }
-  if($hudFile){
+  # Instrument the existing Cockpit owner; do not infer an Obsidian vault path.
+  $cockpitOwner=Join-Path $PSScriptRoot '..\..\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+  if(Test-Path -LiteralPath $cockpitOwner -PathType Leaf){
     $hudPass=$true
-    $f=Get-Item -LiteralPath $hudFile
-    Set-Card 'HUD / OBSIDIAN' 'PASS' ('HUD local existe; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
-  }else{Set-Card 'HUD / OBSIDIAN' 'UNKNOWN' 'HUD.html local nao localizado'}
+    $f=Get-Item -LiteralPath $cockpitOwner
+    Set-Card 'HUD / COCKPIT OWNER' 'PASS' ('owner presente; '+$f.LastWriteTime.ToString('dd/MM HH:mm'))
+  }else{Set-Card 'HUD / COCKPIT OWNER' 'UNKNOWN' 'owner do Cockpit nao localizado'}
   if($screenPass -and $tailPass -and $hudPass){
     Set-Card 'PROVA / ARQUIVO' 'PASS' 'provas locais: /health + Tailscale + HUD; sem TXT'
   }else{
@@ -676,39 +712,67 @@ function Open-DesktopAccount([string]$Profile) {
   Start-AccountProbe -StartProfile $chosen
   foreach($page in $tab.TabPages) {if($page.Text -eq 'DESKTOP'){$tab.SelectedTab=$page;break}}
 }
-$script:BtnProfile1.Add_Click({ Open-DesktopAccount 'CONTA 1' })
-$script:BtnProfile2.Add_Click({ Open-DesktopAccount 'CONTA 2' })
+$script:BtnProfile1.Add_Click({
+  Add-Log 'RUNTIME' 'INFO' 'Abrindo cockpit CentralDark; autenticacao humana preservada'
+  try { Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle' | Out-Null }
+  catch { Add-Log 'RUNTIME' 'WARN' 'Cockpit nao abriu; conexao privada pode estar indisponivel' }
+})
+$script:BtnProfile2.Add_Click({
+  try {
+    $h=Invoke-RestMethod -Uri 'http://127.0.0.1:9101/health' -TimeoutSec 3 -ErrorAction Stop
+    $status=if($h.engine_connected -eq $true){'Motor conectado'}else{'Bridge ativa; motor aguardando conexao'}
+    Refresh-DesktopCommander
+  } catch { $status='Bridge indisponivel neste momento' }
+  [Windows.Forms.MessageBox]::Show(
+    "CentralDark Casa Commander: $status`n`nO pareamento requer a sessao admin do MCP CentralDark e o token ja protegido pela DPAPI na Casa. Nao exibir nem copiar o segredo nesta interface.",
+    'CentralDark | Pareamento Casa','OK','Information') | Out-Null
+})
 $script:BtnScreenpipe.Add_Click({
   Add-Log 'SCREENPIPE' 'INFO' 'Abrindo Screenpipe local, sem iniciar captura duplicada'
   try { Start-Process 'http://127.0.0.1:3030' -ErrorAction Stop | Out-Null }
   catch { Add-Log 'SCREENPIPE' 'WARN' 'Navegador indisponivel' }
 })
 $script:BtnDesktop.Add_Click({
-  Add-Log 'DESKTOP' 'INFO' 'Abrindo painel oficial; troque de conta no site antes de confirmar a segunda'
-  try { Start-Process 'https://mcp.desktopcommander.app/' -ErrorAction Stop | Out-Null }
-  catch { Add-Log 'DESKTOP' 'WARN' 'Navegador indisponivel' }
+  Add-Log 'RUNTIME' 'INFO' 'Conferindo Casa Commander nativo na porta local 9101'
+  Refresh-DesktopCommander
+  foreach($page in $tab.TabPages) { if($page.Text -eq 'RUNTIME'){$tab.SelectedTab=$page;break} }
 })
 $script:BtnVerify.Add_Click({
-  Add-Log 'DESKTOP' 'INFO' 'Conferindo dois perfis sem reiniciar servicos ativos'
-  Start-AccountProbe -StartProfile 'none'
+  Add-Log 'RUNTIME' 'INFO' 'Medindo a bridge nativa sem executar comandos'
+  Refresh-DesktopCommander
 })
 $timer=New-Object Windows.Forms.Timer
 $timer.Interval=10000
 $timer.Add_Tick({
+  if($script:SensorOnly){try{Poll-Afterburner}catch{};return}
   if($script:Loading){return}
   $script:Loading=$true
   try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts;Poll-AccountProbe}catch{Add-Log 'RUNTIME' 'WARN' ('Erro na leitura: '+$_.Exception.Message)}finally{$script:Loading=$false}
 })
 $form.Add_Shown({
+  if($script:SensorOnly) {
+    $form.Hide()
+    Add-Log 'RUNTIME' 'INFO' 'SENSOR_ONLY: MMF Afterburner local; sem GUI, SSH, Screenpipe ou servico novo'
+    try{Poll-Afterburner}catch{Add-Log 'RUNTIME' 'UNKNOWN' $_.Exception.Message}
+    $timer.Start()
+    return
+  }
   try{$split.SplitterDistance=[int][Math]::Max(340,$split.Height*0.52)}catch{}
   Add-Log 'RUNTIME' 'INFO' 'Terminal incorporado nos logs deste HUD; processo PowerShell oculto; nenhum painel/bridge paralelo.'
   try{Local-Refresh;Poll-Afterburner;Poll-Remote;Refresh-Scripts}catch{Add-Log 'RUNTIME' 'WARN' $_.Exception.Message}
   $timer.Start()
 })
 $form.Add_FormClosing({
+  param($sender,$eventArgs)
+  if(-not $script:TrayExitRequested -and $eventArgs.CloseReason -eq [Windows.Forms.CloseReason]::UserClosing) {
+    $eventArgs.Cancel=$true
+    $form.Hide()
+    return
+  }
   $timer.Stop()
   if($script:RemoteJob){Stop-Job $script:RemoteJob -ErrorAction SilentlyContinue;Remove-Job $script:RemoteJob -Force -ErrorAction SilentlyContinue}
   if($script:AccountProbeJob){Stop-Job $script:AccountProbeJob -ErrorAction SilentlyContinue;Remove-Job $script:AccountProbeJob -Force -ErrorAction SilentlyContinue}
+  try{$script:CorpoUnicoTray.Visible=$false;$script:CorpoUnicoTray.Dispose();$script:CorpoUnicoMenu.Dispose()}catch{}
   try{$mutex.ReleaseMutex()}catch{}
   $mutex.Dispose()
 })

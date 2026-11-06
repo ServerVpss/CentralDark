@@ -2,7 +2,8 @@
 # ============================================================================
 # Checker END-TO-END da CentralDark
 # Roda os 12 blocos de validação, agrega resultado e gera relatório final
-# exclusivamente em /root/CentralDark/revisoes/...
+# dentro da raiz descoberta pelo próprio checkout; nenhum caminho de máquina
+# ou usuário é autoridade operacional.
 # ============================================================================
 set -uo pipefail
 

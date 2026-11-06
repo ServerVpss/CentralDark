@@ -29,7 +29,7 @@ updated: 2026-06-29
 ## Critério de pronto
 
 ```txt
-Obsidian abre E:\CentralDark\Obsidian\Brain
+Obsidian abre K:\Obsidian\Brain
       ↓
 Obsidian Git: Pull funciona
       ↓

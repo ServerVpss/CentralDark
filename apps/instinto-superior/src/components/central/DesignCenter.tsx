@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, ExternalLink, Eye, Monitor, Puzzle, RotateCcw, Smartphone, TerminalSquare, TriangleAlert } from "lucide-react";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { tempoDecorrido, useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 export type PeleCockpit = "default" | "ouro" | "ops" | "esmeralda";
 const CHAVE_PELE = "centraldark.cockpit.pele";
@@ -67,6 +68,96 @@ const cores = [
 
 const estados = ["PASS", "RUNNING", "BLOCKED", "AUTH_REQUIRED", "UNKNOWN", "FAIL"] as const;
 
+/**
+ * CENTRALDARK_GLOBAL_THEME_PREVIEW_ONLY_20261021
+ * Amostras de: apps/modulos/Bolt/source/app/styles/variables.scss
+ * Comparação visual apenas, NÃO muda tema do Shell nem a pele do Cockpit.
+ */
+const temasGlobaisEmPrevia = [
+  {
+    id: "emerald", nome: "Emerald",
+    descricao: "Institucional · verde esmeralda em superfície clara",
+    fundo: "#f0fdf4", painel: "#ffffff", elevado: "#dcfce7",
+    borda: "rgba(16, 185, 129, 0.18)", texto: "#0a0a0a",
+    auxiliar: "#374151", acao: "hsl(152 65% 32%)",
+    botao: "rgba(16, 185, 129, 0.12)", perigo: "#dc2626",
+    artefato: "#ffffff", artefatoTexto: "#0a0a0a",
+  },
+  {
+    id: "operational", nome: "Operational",
+    descricao: "Operação · navy, ciano e vermelho de alerta",
+    fundo: "#05070d", painel: "#0b1420", elevado: "#0e1a2c",
+    borda: "rgba(79, 195, 255, 0.14)", texto: "#e9eef7",
+    auxiliar: "#7f96b6", acao: "#4fc3ff",
+    botao: "rgba(79, 195, 255, 0.12)", perigo: "#ff4b3e",
+    artefato: "#0b1420", artefatoTexto: "#e9eef7",
+  },
+  {
+    id: "forge", nome: "Forge",
+    descricao: "Forja · preto/marrom, bronze e painel pergaminho",
+    fundo: "#100d07", painel: "#1d1709", elevado: "#2b2415",
+    borda: "rgba(192, 144, 43, 0.22)", texto: "#f2db98",
+    auxiliar: "#9c8352", acao: "#c0902b",
+    botao: "rgba(192, 144, 43, 0.14)", perigo: "#e05a45",
+    artefato: "#ecdbae", artefatoTexto: "#2b1c08",
+  },
+] as const;
+
+function PreviaTemaGlobal({ tema }: { tema: (typeof temasGlobaisEmPrevia)[number] }) {
+  const amostras = [
+    ["Fundo", tema.fundo], ["Painel", tema.painel],
+    ["Elevado", tema.elevado], ["Ação", tema.acao],
+  ] as const;
+  return (
+    <article data-cd-theme-preview={tema.id}
+      aria-label={"Prévia isolada do tema " + tema.nome}
+      className="overflow-hidden rounded-xl border border-border">
+      <div className="border-b border-border bg-muted/20 p-4">
+        <h4 className="font-semibold">{tema.nome} <span className="font-mono text-xs text-muted-foreground">({tema.id})</span></h4>
+        <p className="mt-1 text-xs text-muted-foreground">{tema.descricao}</p>
+      </div>
+      <div className="min-h-64 p-4" style={{ backgroundColor: tema.fundo, color: tema.texto }}>
+        <div className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2"
+          style={{ backgroundColor: tema.painel, borderColor: tema.borda }}>
+          <span className="text-sm font-bold">🪬 CentralDark</span>
+          <span className="text-[10px]" style={{ color: tema.auxiliar }}>Harness</span>
+        </div>
+        <div className="mt-3 rounded-lg border p-3"
+          style={{ backgroundColor: tema.painel, borderColor: tema.borda }}>
+          <p className="text-[10px] uppercase tracking-widest" style={{ color: tema.acao }}>Sala de controle</p>
+          <h5 className="mt-1 text-lg font-semibold">O que vamos construir?</h5>
+          <p className="mt-1 text-xs" style={{ color: tema.auxiliar }}>Builder, agentes e projetos na mesma bancada.</p>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-md border px-3 py-2 font-semibold"
+              style={{ backgroundColor: tema.botao, borderColor: tema.acao, color: tema.acao }}>Novo projeto</span>
+            <span className="rounded-md border px-3 py-2"
+              style={{ backgroundColor: tema.elevado, borderColor: tema.borda }}>Ver terminais</span>
+          </div>
+        </div>
+        <div className="mt-3 rounded-lg border p-3 text-xs"
+          style={{ backgroundColor: tema.artefato, borderColor: tema.borda, color: tema.artefatoTexto }}>
+          <p className="font-semibold">Painel de trabalho</p>
+          <p className="mt-1">Abas • notas • processos</p>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="size-2 rounded-full" style={{ backgroundColor: tema.acao }} />
+            <span>Conectado (exemplo visual)</span>
+            <span className="ml-auto font-semibold" style={{ color: tema.perigo }}>Alerta</span>
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-2 bg-muted/20 p-3">
+        {amostras.map(([nome, cor]) => (
+          <div key={nome} className="min-w-0">
+            <span className="block h-8 rounded border border-border" style={{ backgroundColor: cor }} />
+            <span className="mt-1 block truncate text-[10px] text-muted-foreground" title={nome}>{nome}</span>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+
 
 type AchadoDom = { tipo: "ID_DUPLICADO" | "ARIA_ALVO_AUSENTE" | "TRANSBORDO_HORIZONTAL" | "CONTROLE_ENCOBERTO"; alvo: string; detalhe: string };
 type LeituraDom = {
@@ -90,6 +181,10 @@ function inspecionarDomAtual(): LeituraDom {
     for (const attribute of ["aria-labelledby", "aria-describedby", "aria-controls"]) {
       const value = el.getAttribute(attribute);
       if (!value) continue;
+      // Radix Tabs monta o conteúdo sob demanda. Um gatilho de aba inativa
+      // pode apontar para um painel ainda não presente no DOM; isso é válido
+      // e não representa um alvo ARIA quebrado.
+      if (attribute === "aria-controls" && el.getAttribute("role") === "tab" && el.getAttribute("aria-selected") !== "true") continue;
       for (const id of value.trim().split(/\s+/)) {
         if (!document.getElementById(id)) {
           achados.push({
@@ -112,12 +207,25 @@ function inspecionarDomAtual(): LeituraDom {
   }
   // Sondar APENAS controles visíveis. Elemento sobreposto é uma suspeita,
   // porque popovers/modais podem obstruir intencionalmente outros botões.
+  const estaRenderizado = (el: HTMLElement) => {
+    if (!el.getClientRects().length) return false;
+    let atual: HTMLElement | null = el;
+    while (atual) {
+      if (atual.hidden) return false;
+      const estilo = window.getComputedStyle(atual);
+      if (estilo.display === "none" || estilo.visibility === "hidden" || estilo.visibility === "collapse") return false;
+      if (atual.tagName === "DETAILS" && !(atual as HTMLDetailsElement).open) return false;
+      atual = atual.parentElement;
+    }
+    return true;
+  };
   const controles = sample.filter(el => el.matches("button, a[href], input, select, textarea, [role='button']"));
   let vistos = 0;
   for (const el of controles) {
     if (vistos >= 180) break;
+    if (el.closest("[data-cd-harness]")) continue;
     const r = el.getBoundingClientRect();
-    if (r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
+    if (!estaRenderizado(el) || r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
         r.top >= window.innerHeight || r.left >= window.innerWidth) continue;
     const style = window.getComputedStyle(el);
     if (style.visibility !== "visible" || style.display === "none" || style.pointerEvents === "none") continue;
@@ -126,7 +234,9 @@ function inspecionarDomAtual(): LeituraDom {
     if (x < r.left || x >= r.right || y < r.top || y >= r.bottom) continue;
     vistos++;
     const sobreposto = document.elementFromPoint(x, y);
-    if (sobreposto && !el.contains(sobreposto) && !sobreposto.contains(el)) {
+    const sobrepostoInterativo = sobreposto?.matches("button, a[href], input, select, textarea, [role='button']") ?? false;
+    if (sobreposto?.closest("[data-cd-harness]")) continue;
+    if (sobrepostoInterativo && !el.contains(sobreposto) && !sobreposto.contains(el)) {
       const tag = el.tagName.toLowerCase();
       achados.push({
         tipo: "CONTROLE_ENCOBERTO",
@@ -193,13 +303,23 @@ export function DesignCenter({
   const [domAtivo, definirDomAtivo] = useState(false);
   const [domMedido, definirDomMedido] = useState<LeituraDom | null>(null);
   const [copiaDom, definirCopiaDom] = useState<"idle" | "ok" | "fail">("idle");
+  const relogio = useRelogioVivo();
+  const ultimoPulsoDom = useRef<number | null>(null);
   useEffect(() => {
     if (!autenticado || !domAtivo) return;
-    const medir = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
-    medir();
-    const timer = window.setInterval(medir, 3000);
-    window.addEventListener("resize", medir);
-    return () => { window.clearInterval(timer); window.removeEventListener("resize", medir); };
+    if (relogio === null) return;
+    const segundo = Math.floor(relogio / 1000);
+    // O relógio vivo compartilhado é o único pulso; a leitura acompanha
+    // a mesma batida operacional de 15 s do StatusPanel.
+    if (ultimoPulsoDom.current !== null && segundo % 15 !== 0) return;
+    ultimoPulsoDom.current = segundo;
+    if (!document.hidden) definirDomMedido(inspecionarDomAtual());
+  }, [autenticado, domAtivo, relogio]);
+  useEffect(() => {
+    if (!autenticado || !domAtivo) return;
+    const medirAoRedimensionar = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
+    window.addEventListener("resize", medirAoRedimensionar);
+    return () => window.removeEventListener("resize", medirAoRedimensionar);
   }, [autenticado, domAtivo]);
 
   return (
@@ -257,12 +377,32 @@ export function DesignCenter({
       <Tabs defaultValue={autenticado ? abaInicial : "tokens"} className="mt-8">
         <TabsList className="h-auto max-w-full flex-wrap justify-start">
           <TabsTrigger value="tokens">Tokens</TabsTrigger>
+          <TabsTrigger value="temas-globais">Temas globais · 3 prévias</TabsTrigger>
           <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
           {autenticado ? <TabsTrigger value="extensoes">Marketplace</TabsTrigger> : null}
           <TabsTrigger value="superficies">Superfícies</TabsTrigger>
           <TabsTrigger value="auditoria">Auditoria</TabsTrigger>
           {autenticado ? <TabsTrigger value="dom-vivo">DOM Vivo</TabsTrigger> : null}
         </TabsList>
+
+        <TabsContent value="temas-globais" className="mt-6">
+          <section aria-labelledby="temas-globais-titulo" className="space-y-4">
+            <div>
+              <h3 id="temas-globais-titulo" className="font-semibold">Três temas globais · prévias independentes</h3>
+              <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
+                Compare Emerald, Operational e Forge lado a lado. Amostras dos tokens oficiais do Shell/Bolt.
+                Não aplicam temas ao Cockpit, não alteram suas quatro peles nem salvam preferências.
+              </p>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {temasGlobaisEmPrevia.map((tema) => <PreviaTemaGlobal key={tema.id} tema={tema} />)}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Mostruário: os controles simulados não executam ações. A decisão de manter os temas separados
+              ou fundi-los fica pendente da comparação visual e da aprovação do CHEFE.
+            </p>
+          </section>
+        </TabsContent>
 
         <TabsContent value="tokens" className="mt-6">
           <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
@@ -409,14 +549,14 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore · fonte 0.1.4 no PR #1842
-                        centraldark.centraldark-vscode-restore · fonte 0.1.3
+                        centraldark.centraldark-vscode-restore · fonte 0.2.1 (manifesto local)
+                        Histórico: fonte 0.1.4 no PR #1842; 0.1.3 anterior
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: versão instalada exige leitura do VS Code · pacote 0.1.4 em preparação
-                    Fonte main 0.1.3 · Casa 0.1.3 instalada em 16/10
+                    Fonte do manifesto Git: 0.2.1 · Casa: instalação exige leitura no VS Code
+                    Sem readback da versão instalada nesta consulta
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -456,7 +596,7 @@ export function DesignCenter({
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
                     <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
-                      Versão 0.1.4 · PR / atualizar <ExternalLink />
+                      Histórico 0.1.4 · PR #1842 <ExternalLink />
                     </a>
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
@@ -532,7 +672,7 @@ export function DesignCenter({
                   </Button>
                   <Button type="button" size="sm" variant={domAtivo ? "default" : "outline"}
                     aria-pressed={domAtivo} onClick={() => definirDomAtivo(!domAtivo)}>
-                    {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · 3s"}
+                    {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · pulso 15s"}
                   </Button>
                 </div>
               </div>
@@ -541,6 +681,7 @@ export function DesignCenter({
                   ? "LIDO " + new Date(domMedido.em).toLocaleString("pt-BR") +
                     " · elementos " + domMedido.elementos +
                     " · achados " + domMedido.achados.length +
+                     " · medido " + tempoDecorrido(domMedido.em, relogio) +
                     (domMedido.amostraLimitada ? " · AMOSTRA LIMITADA" : "")
                   : "AGUARDANDO LEITURA NESTA ABA"}
               </p>

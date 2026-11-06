@@ -35,6 +35,38 @@ O modo normal da CentralDark é editar, colocar vivo, medir, refinar, comprimir 
 
 Regra: `MVP_FAST_LOOP` é padrão de trabalho. CI profundo é prensa/contraprova prolongada quando o CHEFE mandar, não freio padrão para colocar delta vivo.
 
+## Política atual — CI leve e MCP/VPS nativo (23/10/2026)
+
+Lei canônica: `docs/CONSCIENCIA/03-FLUXO-DEPLOY.md`, seção `CI proporcional e microdeploy nativo MCP/VPS`; contrato consumível: `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml`.
+
+No modo normal, executar somente teste aplicável ao owner. CodeQL completo, Trigger Fabric Full Package e Run All estão configurados como acionamento manual; mudanças críticas de segurança continuam exigindo gates pertinentes. O controle é do MCP CentralDark. O destino é `centraldark_deploy_micro_fallback` pelo MCP CentralDark, com build na VPS, SHA exato, backup, health, receipt e rollback. **Sem runner hospedado pago e sem GitHub Actions no caminho de deploy.** SSH privado da Casa é opcional; teste real de deploy MCP segue pendente. O runner não é excluído apagando arquivo do GitHub.
+
+## Contraprova do transporte SSH leve — 2026-10-23
+
+- Fonte: commit `9dc4750d70f4c9a244e034bb1281383cebec71bf` na `main`; entrada manual existente reaproveitada em `.github/workflows/vps-ssh-exec.yml`.
+- Configuração: YAML parse e `bash -n` do corpo `run` = PASS pela rota MCP CentralDark (sem publicar secrets).
+- Run GitHub `39912949599`: `workflow_dispatch` aceito, `completed/failure`, `runner_id=0`, `steps=[]`. Anotação do GitHub: job não iniciou por pagamentos recentes falhos ou limite de gastos da conta. **Nenhum SSH remoto foi executado nesse run**.
+- VPS: serviço `ssh` observado `active`; isso é prova do daemon, **não** do login via GitHub. Tentativa separada de `--dry-run` nativo via MCP foi bloqueada pela segurança da ferramenta; nenhum teste de promoção passou.
+- Cadastro de runners do GitHub relido depois da remoção feita pelo CHEFE: apenas `centraldark-vps-1` e `centraldark-casa-1`. Não executar nova exclusão.
+- `SSH_TRANSPORT_PASS=UNKNOWN`, `DEPLOY_PASS=UNKNOWN`, `PRODUCTION_MUTATION=NONE`.
+- NEXT_CURSOR atualizado em 23/10/2026: NÃO pagar nem recuperar runner hosted. Usar somente rota nativa MCP/VPS e respeitar bloqueios de segurança; provar dry-run nativo, testes e runtime pelo caminho permitido antes de `apply`. Workflow antigo aposentado.
+
+## Controle administrativo do microdeploy SSH — 2026-10-23
+
+- Capacidade versionada: `admin_ssh_microdeploy` integrada ao catálogo MCP CentralDark pela coleção já existente `githubTools`; modos `status`, `probe`, `dry_run`. A promoção real por `apply` não é liberada nessa entrada de baixa fricção; continua sujeita à tool nativa `centraldark_deploy_micro_fallback` com guardas próprios; alias não dispara Actions.
+- Sessão: `admin` + OAuth/Hub verificado + ator/correlation ID permitem reutilização de autorização no dispatcher `mcp_admin_call`. Já existe lógica desse contrato em `src/lib/admin-guard.js`; atualizou-se `mcp-policy.js` para não anunciar confirmações desnecessárias. Chamada legada sem proveniência verificada continua exigindo confirmação. Auditoria e proibição de aprovações sintetizadas por agentes permanecem.
+- Runners: a consulta GitHub de 23/10/2026 listou somente `centraldark-vps-1` online e `centraldark-casa-1` offline. `vps-2/vps-3/vps-4` não estavam mais cadastrados. Não inferir remoção de instalação local nem atribuir essa exclusão a commit.
+- SSH: workflow `.github/workflows/vps-ssh-exec.yml` publicado no SHA `9dc4750d70f4c9a244e034bb1281383cebec71bf`. O disparo `probe` do run `39912949599` foi bloqueado **antes de entrar no runner** por cobrança/limite GitHub-hosted (`runner_id=0`, `steps=[]`); YAML e bash syntax PASS; daemon SSH VPS ativo; SSH fim a fim e deploy real seguem `UNKNOWN`.
+- Estado: `ADMIN_TOOL_COMMITTED_NOT_DEPLOYED`; `SSH_LIVE_PROOF=UNKNOWN`; `PRODUCTION_MUTATION=NONE`.
+- Contraprova de permissão (23/10/2026): chamada `mcp_admin_call(tool=execute_command)` com comando não mutante, sessão atual e **sem confirmAdmin** retornou `CONFIRMACAO_ADMIN_NECESSARIA` e `executionStatus=blocked`; nada foi executado. Assim, o runtime **ainda não** provou a reutilização de sessão administrativa. Catálogo vivo `mcp_admin_catalog(filter=admin_ssh_microdeploy)` retornou zero tools, `totalRuntimeTools=141`. Releitura da `main` e `node --check` de `github-tools.js`, `mcp-policy.js` e `admin-ssh-microdeploy.test.mjs` concluídas sem erro sintático. Os testes funcionais do novo módulo foram versionados, mas não executados contra runtime novo; `TEST_SUITE_RUN=UNKNOWN`.
+- Divergência: fonte `main` com contrato de sessão OAuth/Hub já implementado versus instância carregada anterior. A causa precisa de readback autenticado do endpoint `/admin/mcp` e rollout causal; **não** se corrige removendo `adminAuthorized`, audit ou a exigência de proveniência verificada. Prompts de conexão/consentimento da plataforma externa ficam fora do código MCP.
+
+- NEXT_CURSOR: testes de schema e permissão no commit exato; promover MCP com método canônico sem reset de checkout com drift; medir catálogo real pelo `mcp_admin_catalog(filter=admin_ssh_microdeploy)`; validar `status/probe` depois de resolver bloqueio financeiro ou medir transporte pela rota direta autorizada. Não declarar LIVE apenas por commit.
+
+## Rota MCP sem runner hospedado (23/10/2026)
+
+O workflow `.github/workflows/vps-ssh-exec.yml` está inerte por decisão do CHEFE, sem runner GitHub-hosted pago. O caminho de execução é o **MCP CentralDark nativo na VPS** pela tool `centraldark_deploy_micro_fallback` e pelo script existente `scripts/vps/main-pinned-microdeploy.sh`; `main` fornece apenas SHA e recibo versionado. `admin_ssh_microdeploy` fica como alias ADMIN de leitura/planejamento e não dispara Actions nem executa por conta própria uma ferramenta destrutiva. SSH privado da Casa é opcional. Teste real de deploy permanece pendente e as regras de autorização/auditoria da plataforma permanecem vigentes.
+
 ## Fallback oficial — MAIN-PINNED RUNTIME FAST-PATH
 
 Quando o deploy canônico estiver `FAIL` ou `BLOCKED` antes da promoção, usar a receita já provada:
@@ -88,3 +120,20 @@ mesmo SHA, rollback verificável e recibo de efeito.
 - Provas: npm run verify:hud + npm run build:vps validam fonte; para
   RUNTIME exigir implantação, serviço HTTP autenticado e readback do SHA.
   Git main != deployed.
+
+## 🪬 2026-10-20 — Máquina de estados Casa: sensores independentes e pulso amarelo
+
+@code_ref=apps/instinto-superior/src/components/central/StatusPanel.tsx
+@code_ref=apps/instinto-superior/src/lib/cockpit.functions.ts
+@last_updated=2026-10-20T05:53:31Z
+@owner=Instinto Superior / CentralDark Live Editing Fabric
+@estado=CASA_LOCAL_SOURCE_MODIFIED_MAIN_AND_VPS_NOT_SYNCHRONIZED
+
+- Intenção: preservar os cards existentes, completar a máquina de estados e fazer **todas as luzes amarelas pulsarem**, com `motion-reduce:animate-none`. Estado amarelo continua UNKNOWN/RUNNING/AUTH_REQUIRED, sem falso PASS.
+- Screenpipe Casa: `GET :3030/health` retornou HTTP 200 com `status=degraded`, `frame_status=ok`, `audio_status=stale` e `capture_status=audio_stalled`. Portanto **vídeo/OCR observado como OK**, **captura de áudio Screenpipe em alerta**. Esse resultado **não reprova** o microfone Jarvis via `getUserMedia` no navegador.
+- Jarvis: somente o evento já existente `centraldark:jarvis:audio` pode atestar MediaStream ativo **nesta sessão do navegador**. Sem evento atual → UNKNOWN. Sem nova gravação de áudio.
+- Tailscale: consulta local `tailscale status --json` sob CLI já instalado, sem gravar stdout, IPs, tokens ou chaves; `BackendState=Running`, `Self.Online=true` e peer `centraldark-os Online=true` na medição inicial. Prova apenas a malha; não implica deploy VPS.
+- Os demais cards reutilizam `lerEstadoCentralDark`: Casa, GitHub main, VPS SHA, API, Heartbeat, Omni Router, Grafo Vivo, Receipts e Desktop Commander. O Desktop Commander segue UNKNOWN no **site** sem adapter autenticado, mesmo que um conector externo responda nesta conversa.
+- `git diff --check`: PASS. Testes Tool Call Lens existentes: 3/3 PASS. `tsc` global aponta dezenas de erros fora dos owners desta costura; gate `verify-hud-zone.mjs` também tem falhas, portanto **BUILD/FIXED_POINT NÃO SELADOS**.
+- `localhost:8080/cockpit`: HTTP 200 depois do delta; Edge headless leu o DOM real com Tailscale, Vídeo/OCR, Áudio, Jarvis e Desktop Commander, incluindo peer Tailscale online e áudio em alerta. Renderização DOM comprovada; clique/contraprova visual E2E ainda pendente. `K:\` e suas outras alterações locais permanecem preservados.
+- NEXT_CURSOR: `CASA_STATUS_CARDS_E2E → GATES_DO_CONE → RECEIPT_COM_SHA → PR_MAIN_APROVADO → VPS_DEPOIS`. Não promover main ou VPS até revisão e contraprova. Sem reset, sem duplicar HUD/sensor ou reiniciar o Jarvis.

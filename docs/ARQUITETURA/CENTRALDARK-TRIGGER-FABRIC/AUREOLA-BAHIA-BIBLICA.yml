@@ -1,9 +1,22 @@
 schema: centraldark.aureola-bahia-biblica.v2
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_TRACE
+# @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+# @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+# @code_ref: scripts/trigger-fabric/test_centraldark_master_cycle.py
+# @last_updated: 2026-11-02T02:20:39.000Z
+# @escopo: Auréola acionável com trilha visual observada; separa reconhecimento, execução e UNKNOWN.
 status: CANONICAL_SOURCE_CONTRACT
 runtime_status: UNKNOWN_UNTIL_SAME_HEAD_CI_AND_SURFACE_OBSERVATION
 owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
 authority: SEGREDO/CHEFE
 trigger: "!CENTRALDARK"
+standalone_trigger:
+  canonical: "⭕ !AURÉOLA CANÔNICA"
+  aliases: ["!AUREOLA", "#AUREOLA", "!AUREULA", "#AUREULA", "!AUREURLA", "#AUREURLA", "!AUREOLA CANONICA", "!AUREULA CANONICA", "!AUREURLA CANONICA", "!AUREOLA_CANONICA", "!AUREOLA-CANONICA"]
+  owner: "scripts/trigger-fabric/centraldark_master_cycle.py"
+  behavior: RENDER_OBSERVED_TRIGGER_TRACE
+  authority_expansion: false
+  recognition_is_execution_proof: false
 semantic_gate: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SEMANTIC-GREEN-GATE.yml
 post_green_lock: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/POST-GREEN-LOCK.yml
 multibussola_owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
@@ -18,6 +31,10 @@ purpose: >-
 invariants:
   AUREOLA_IS_OPERATIONAL_TRACE_NOT_PRIVATE_CHAIN_OF_THOUGHT: true
   AUREOLA_IS_VISIBLE_ROUTE_DEBUGGER: true
+  AUREOLA_IS_EXPLICIT_TRIGGER: true
+  AUREOLA_SEPARATES_RECOGNITION_FROM_EXECUTION: true
+  CLEAN_OPERATION_CREATED_TEMPORARIES_AFTER_VALIDATION_AND_RECEIPT: true
+  CLEANUP_MUST_PRESERVE_BACKUPS_HISTORY_USER_FILES_AND_PROOFS: true
   BIBLE_REFERENCE_IS_SEMANTIC_CUE_NOT_PROOF: true
   VERSE_DOES_NOT_OVERRIDE_LIVE_STATE: true
   VERSE_DOES_NOT_GRANT_AUTHORITY: true
@@ -62,6 +79,13 @@ render_contract:
     show_destination: true
     show_next_gate: true
     opening_bible_reference_required: true
+  on_explicit_aureola_trigger:
+    render_only_observed_route: true
+    show_recognition_and_execution_separately: true
+    use_not_invoked_for_unmatched_stages: true
+    preserve_unknown_without_telemetry: true
+    print_header: "⭕ !AURÉOLA CANÔNICA — TRILHA OBSERVADA"
+    trigger_activation_is_runtime_proof: false
   on_repo_visit_inside_active_centraldark_session:
     show_route_trace_before_repo_claim: true
     minimum_visible_fields:
@@ -112,6 +136,7 @@ full_display_chain:
   - REALITY_JUDGE
   - SEMANTIC_GREEN
   - CI_SAME_HEAD
+  - "!MICHELIN"
   - FIXED_POINT
   - POST_GREEN_LOCK
   - "!tlc23"

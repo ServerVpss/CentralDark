@@ -7,7 +7,7 @@ case "${CENTRALDARK_DEFAULT_ENGINE:-nous}" in
   *) export CENTRALDARK_DEFAULT_ENGINE ;;
 esac
 
-cd "e:/CentralDark/Pivete/CentralDark"
+cd "K:/"
 
 # Usa o Python já instalado no ambiente Hermes apenas como runtime Python.
 exec "/c/Users/danda/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe" \

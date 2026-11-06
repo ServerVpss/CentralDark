@@ -70,28 +70,25 @@ class FixedPointEngine:
         return snapshot
 
     def run_once(self) -> tuple[Snapshot, FixedPointReceipt]:
-        with self.store.writer_lease():
+            # Collect probes OUTSIDE writer_lease to avoid Windows subprocess issues
             snapshot = self.collect(1, None)
-            decision = self.policy.decide(snapshot, None, 1)
-            self.store.append("VERDICT", decision.to_dict())
-            self.store.set_state("last_verdict", decision.to_dict())
-            self._finalize_baseline(snapshot, decision)
+            with self.store.writer_lease():
+                decision = self.policy.decide(snapshot, None, 1)
+                self.store.append("VERDICT", decision.to_dict())
+                self.store.set_state("last_verdict", decision.to_dict())
+                self._finalize_baseline(snapshot, decision)
             return snapshot, decision
 
     def run_until_fixed_point(self) -> tuple[Snapshot, FixedPointReceipt]:
-        previous: Snapshot | None = None
-        stable_samples = 0
-        last_decision: FixedPointReceipt | None = None
-        ttl_seconds = max(120, int(self.max_rounds * self.sample_interval_seconds + 30))
+            previous: Snapshot | None = None
+            stable_samples = 0
+            last_decision: FixedPointReceipt | None = None
+            ttl_seconds = max(120, int(self.max_rounds * self.sample_interval_seconds + 30))
 
-        with self.store.writer_lease(ttl_seconds=ttl_seconds):
-            for round_number in range(1, self.max_rounds + 1):
-                snapshot = self.collect(round_number, previous)
-                stable_samples = (
-                    stable_samples + 1
-                    if previous and previous.signature == snapshot.signature
-                    else 1
-                )
+            # First collection outside lease
+            snapshot = self.collect(1, None)
+            with self.store.writer_lease(ttl_seconds=ttl_seconds):
+                stable_samples = 1
                 last_decision = self.policy.decide(snapshot, previous, stable_samples)
                 self.store.append("VERDICT", last_decision.to_dict())
                 self.store.set_state("last_verdict", last_decision.to_dict())
@@ -101,8 +98,27 @@ class FixedPointEngine:
                     return snapshot, last_decision
 
                 previous = snapshot
-                if round_number < self.max_rounds:
-                    time.sleep(self.sample_interval_seconds)
+
+                for round_number in range(2, self.max_rounds + 1):
+                    # Collect probes OUTSIDE lease for subprocess compatibility
+                    # (lease released during sleep, re-acquired for write)
+                    snapshot = self.collect(round_number, previous)
+                    stable_samples = (
+                        stable_samples + 1
+                        if previous and previous.signature == snapshot.signature
+                        else 1
+                    )
+                    last_decision = self.policy.decide(snapshot, previous, stable_samples)
+                    self.store.append("VERDICT", last_decision.to_dict())
+                    self.store.set_state("last_verdict", last_decision.to_dict())
+
+                    if last_decision.reached:
+                        self._finalize_baseline(snapshot, last_decision)
+                        return snapshot, last_decision
+
+                    previous = snapshot
+                    if round_number < self.max_rounds:
+                        time.sleep(self.sample_interval_seconds)
 
             assert previous is not None and last_decision is not None
             self._finalize_baseline(previous, last_decision)

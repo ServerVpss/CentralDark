@@ -692,3 +692,28 @@ HERMES_CASA_LIVE_MEASURE
 → REALITY_JUDGE
 → FIXED_POINT
 ```
+
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "    - E:\\CentralDark",
+      "    - E:\\CentralDark\\Pivete",
+      "    - E:\\CentralDark\\_MAPA_CASA",
+      "    - E:\\CentralDark\\_MAPA_CASA\\GARIMPO-CHEFE",
+      "    - E:\\CentralDark\\sol-desktop-poc"
+    ],
+    "right_variant": [
+      "    - K:\\",
+      "    - K:\\",
+      "    - K:\\_MAPA_CASA",
+      "    - K:\\_MAPA_CASA\\GARIMPO-CHEFE",
+      "    - K:\\sol-desktop-poc"
+    ]
+  }
+]
+```

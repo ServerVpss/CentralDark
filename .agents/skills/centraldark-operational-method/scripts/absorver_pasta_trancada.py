@@ -17,7 +17,7 @@ NAO EXTRAI. NAO MOVE. NAO ESCREVE NO REPO. Fase 2 (extracao/absorcao) exige
   novo comando explicito + Writer unico + prova de gap.
 
 FORA DE ESCOPO (noremoto): nao consulta origin/remoto. Trabalha com o clone
-local CentralDark montado em E:/CentralDark/Pivete/CentralDark.
+local da Forja canônica montada em K:/.
 
 USO:
   uv run python absorver_pasta_trancada.py
@@ -40,8 +40,8 @@ if not os.path.isdir(PASTA_TRANCADA):
         HOME, "Desktop", "🔒PASTA TRANCADA APELO CHEFE🔒"
     )
 
-CASA_ROOT = r"E:\CentralDark\Pivete"
-CLONE_CANONICO = os.path.join(CASA_ROOT, "CentralDark")
+CASA_ROOT = "K:/"
+CLONE_CANONICO = CASA_ROOT
 
 # Conceitos que ja existem no repo (para marcar NO_CHANGE / REUSE_BEFORE_CREATE)
 # Varredura leve: nomes normalizados de arquivos no clone local.

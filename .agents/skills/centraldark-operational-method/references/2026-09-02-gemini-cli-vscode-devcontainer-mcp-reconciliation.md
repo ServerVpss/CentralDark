@@ -324,3 +324,27 @@ RUNTIME_T1=UNKNOWN
 ```
 
 Esta regra preserva `MENOS_E_MAIS`: um bridge oficial suficiente vence cinco extensões sobrepostas, salvo evidência de capacidade única que justifique outra.
+
+## Variantes locais reconciliadas — proveniencia, nao substituicao retroativa
+As variantes abaixo registram a migracao de caminhos/nomes na copia BACKUP. Nao alteram o local historicamente observado nem provam que K: esteja disponivel hoje.
+
+```json
+[
+  {
+    "left_original": [
+      "WORKSPACE_SCREEN=E:\\CentralDark\\Pivete\\CentralDark"
+    ],
+    "right_variant": [
+      "WORKSPACE_SCREEN=K:\\"
+    ]
+  },
+  {
+    "left_original": [
+      "E:\\CentralDark\\workspace\\sol\\01-FONTES\\APPCENTRALDARK-EVOLUIR\\sidecar\\node_modules\\@overclock-app\\catalog\\test\\fixtures\\catalog-home\\.gemini\\config\\mcp_config.json"
+    ],
+    "right_variant": [
+      "K:\\workspace\\sol\\01-FONTES\\APPCENTRALDARK-EVOLUIR\\sidecar\\node_modules\\@overclock-app\\catalog\\test\\fixtures\\catalog-home\\.gemini\\config\\mcp_config.json"
+    ]
+  }
+]
+```

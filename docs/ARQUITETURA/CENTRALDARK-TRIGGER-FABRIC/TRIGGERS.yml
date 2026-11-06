@@ -1,5 +1,18 @@
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_MAP
+# @owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+# @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py
+# @last_updated: 2026-11-02T02:16:51Z
+# @escopo: registrar Auréola como entrada visual explícita, sem autoridade de mutação ou prova de execução.
 schema: centraldark.trigger-map.v1
 human_triggers:
+  - id: AUREOLA_CANONICA
+    token: "!AURÉOLA CANÔNICA"
+    emoji: "⭕"
+    aliases: ["!AUREOLA", "#AUREOLA", "!AUREULA", "#AUREULA", "!AUREURLA", "#AUREURLA", "!AUREOLA CANONICA", "!AUREULA CANONICA", "!AUREURLA CANONICA", "!AUREOLA_CANONICA", "!AUREOLA-CANONICA"]
+    owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/AUREOLA-BAHIA-BIBLICA.yml"
+    behavior: [RENDER_OBSERVED_TRIGGER_TRACE, SHOW_RECOGNITION_AND_EXECUTION_SEPARATELY, KEEP_UNKNOWN_EXPLICIT]
+    mutation_authority: false
+    execution_proof: false
   - id: CENTRALDARK_MASTER
     token: "!CENTRALDARK"
     emoji: "👑"
@@ -9,8 +22,22 @@ human_triggers:
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
     plain_word_does_not_trigger: true
-    expands_to: [TLC23_OPEN, DESTINATION_LOCK, ACORDAR, CALIBRAR, MULTIBUSSOLA, PEGATUDO, DEBITO_COGNITIVO, READERS_MEASURE, META_LUPA, RENDEZVOUS, RECONCILE, OWNER, ONE_WRITER, PATCH, TESTE, CONTRAPROVA, REMEDICAO, REALITY_JUDGE, FIXED_POINT, TLC23_CLOSE, REGISTRA, RASTRO, HANDOFF, BOOT]
+    browser_intent_route:
+      owner: ".agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md"
+      condition: BROWSER_INTENT_AND_AUTHORIZED_CONNECTED_SURFACES
+      read: BROWSER_LIST_TABS_GET_TAB_CONTEXT
+      act: CENTRALDARK_CASA_COMMANDER_9101_AUTHORIZED_TOOL
+      verify: BROWSER_GET_TAB_CONTEXT_SAME_TAB
+      third_party_remote_desktop_commander_required: false
+      e2e_proof: MEASURE_AT_RUNTIME
+    expands_to: [TLC23_OPEN, DESTINATION_LOCK, ACORDAR, CALIBRAR, MULTIBUSSOLA, PEGATUDO, DEBITO_COGNITIVO, READERS_MEASURE, META_LUPA, RENDEZVOUS, RECONCILE, OWNER, ONE_WRITER, PATCH, TESTE, CONTRAPROVA, REMEDICAO, REALITY_JUDGE, MICHELIN, FIXED_POINT, TLC23_CLOSE, REGISTRA, RASTRO, HANDOFF, BOOT]
     session_behavior: [ACTIVATE_ON_EXPLICIT_TRIGGER_OR_BOT_ENTRY, REMAIN_ACTIVE_FOR_SESSION, PROCESS_EVERY_CHEFE_MATERIAL_AS_DELTA_CANDIDATE, NEW_CHEFE_MATERIAL_IS_ACTIVE_INTENT_DELTA_FIRST, RECALCULATE_INTENT_ALIGNMENT_EACH_MATERIAL_TURN, PRESERVE_COMPATIBLE_ACTIVE_INTENT, DELTA_CONTINUO, PERSIST_NEXT_CURSOR]
+    response_contract:
+      source: RULES.md#CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023
+      tag: CENTRALDARK_CHEFE_DIRETO_SEM_PAPAGAIO_20261023
+      applies_to: [CHEFE_CHAT, BOT_TELEGRAM, HERMES, SOL, COCKPIT, VOICE]
+      rules: [ANSWER_FIRST, NO_REPEAT_CONFIRMED_FACTS, NO_UNNECESSARY_CAVEATS, NO_REPEATED_EXPLANATIONS, SIMPLE_QUESTION_MAX_FOUR_LINES, EXACT_PROGRAM_FILE_FULL_PATH_LINE_OR_KEY_ACTION_WHEN_HUMAN_STEP_NEEDED, NEVER_INVENT_PATH_OR_LINE, SECRETS_VIA_EXISTING_SAFE_MECHANISM]
+      precedence: FOLLOW_EXISTING_CANONICAL_RULES_NO_DUPLICATE_AUTHORITY
     behavior: [PERTINENCE_FIRST, MINIMUM_SUFFICIENT_LOOP, CONSIDER_ALL_PHASES, EXECUTE_ONLY_PERTINENT_PHASES, SKIP_ONLY_IF_JUSTIFIED, TRIGGERS_ARE_CONDITIONAL_NOT_RITUAL, UNKNOWN_NEVER_PASS, NO_AUTHORITY_EXPANSION, NO_AUTO_MUTATION, MUTATION_REQUIRES_GLOBAL_CONTRACT_ENTRY_EXIT]
   - id: EXECUTOR_CENTRALDARK
     token: "!EXECUTOR_CENTRALDARK"
@@ -22,7 +49,12 @@ human_triggers:
     plain_word_does_not_trigger: true
     scope: HOUSE_LOCAL_ONLY_WHEN_AUTHORIZED_TOOL_EXISTS
     capability_gate:
-      primary_tool: "Remote Desktop Commander"
+      primary_tool: "CentralDark Casa Commander (localhost 9101 / MCP CentralDark / Tailscale)"
+      browser_reader: "Browser.list_tabs + Browser.get_tab_context"
+      browser_action_route: CASA_COMMANDER_NATIVE_AUTHORIZED_TOOL
+      browser_readback: "Browser.get_tab_context"
+      third_party_remote_desktop_commander_required: false
+      native_e2e_proof: MEASURE_AT_RUNTIME
       requirement: AVAILABLE_AND_AUTHORIZED
       unavailable: CAPABILITY_UNAVAILABLE
       unknown: UNKNOWN
@@ -114,6 +146,15 @@ human_triggers:
     is_swarm_trigger: false
     creates_new_owner: false
     creates_new_brain_or_router: false
+  - id: MICHELIN
+    token: "!MICHELIN"
+    emoji: "🌟"
+    aliases: ["#MICHELIN"]
+    owner: "RULES.md"
+    master_gate: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml#phase_contracts.MICHELIN"
+    semantic_family: EVIDENCE_GRADED_QUALITY_CHECK
+    behavior: [ENTER_EXISTING_CENTRALDARK_MASTER_ONCE, CHECK_SAME_HEAD_EVIDENCE, NEVER_AWARD_STAR_FROM_PUBLIC_SMOKE, PRESERVE_UNKNOWN_AND_NEXT_CURSOR]
+    creates_new_agent_router_or_workflow: false
   - id: FIXED_POINT
     token: "!FIXED_POINT"
     emoji: "📍"
@@ -188,6 +229,7 @@ semantic_trigger_resolution:
     - "SEMANTIC_TRIGGER_MATCH != AUTHORITY_EXPANSION"
     - "SEMANTIC_TRIGGER_MATCH != AUTO_MUTATION"
     - "MULTI_MATCH -> COMPOSE_APPLICABLE_TRIGGERS_NO_VOTE"
+    - "MICHELIN -> EXISTING_MASTER_CYCLE_QUALITY_GATE_NO_AUTOMATIC_STAR_AWARD"
     - "AMBIGUOUS_CONTEXT -> PRESERVE_UNKNOWN_OR_CALIBRATE_C1"
 
 entry_triggers:
@@ -240,14 +282,14 @@ learning_triggers:
     may_write_canonical: false
     status: CONTRACT_DECLARED
   - event: CAPABILITY_GAP
-    owner: ".agents/skills/centraldark-unified-surface-parity/SKILL.md"
+    owner: ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md"
     proven_recipe_claim: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
     registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
     behavior: [CLASSIFY_EXACT_ROUTE, KEEP_SYSTEM_STATE_UNDECIDED, INVENTORY_AUTHORIZED_ALTERNATE_ROUTES, LOAD_PROVEN_MULTIROUTE_RECIPE, MEASURE_ALTERNATES, REUSE_LIVE_CAPABILITY, COMPARE_SAME_CLAIM_SCOPE_TIME, DECIDE_PASS_UNKNOWN_OR_BLOCKED]
     may_write_canonical: false
     status: CONTRACT_AND_MACHINE_RECIPE_BOUND
   - event: TERRITORY_ROUTE_CHANGE
-    owner: ".agents/skills/centraldark-unified-surface-parity/SKILL.md"
+    owner: ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md"
     proven_recipe_claim: HYBRID_MULTIROUTE_CAPABILITY_REPLAY_PATH
     registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
     behavior: [REMEASURE_ROUTE_BINDING, PRESERVE_PER_BINDING_STATE, LOAD_PROVEN_MULTIROUTE_RECIPE, REUSE_EXISTING_CAPABILITY_BUS, NO_PARALLEL_ROUTER]
