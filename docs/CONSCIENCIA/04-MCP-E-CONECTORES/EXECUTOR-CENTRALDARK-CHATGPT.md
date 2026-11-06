@@ -19,7 +19,7 @@ surface:
   - TELEGRAM_BOT
   - AI_CHATS
 capability_gate: "HOUSE_ACCESS_REQUIRED"
-house_access_primary: "Remote Desktop Commander"
+house_access_primary: "CentralDark Casa Commander (MCP CentralDark + Tailscale + 127.0.0.1:9101)"
 canonical_core: "LEIA-ME-IA.md"
 chatgpt_adapter: "CHATGPT.md"
 trigger_registry: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml"
@@ -60,7 +60,7 @@ TRIGGER != CREDENCIAL
 TRIGGER != NOVA_AUTORIDADE
 TRIGGER != BYPASS
 HOUSE_ACCESS_REQUIRED=true
-REMOTE_DESKTOP_COMMANDER_AVAILABLE_AND_AUTHORIZED -> EXECUTOR_ENABLED
+CASA_COMMANDER_9101_AUTHENTICATED_TOOL_EXECUTION_PROVEN -> EXECUTOR_ENABLED
 NO_HOUSE_ACCESS -> CAPABILITY_UNAVAILABLE
 UNKNOWN_TOOL_STATE -> UNKNOWN
 ```
@@ -69,16 +69,18 @@ UNKNOWN_TOOL_STATE -> UNKNOWN
 
 A execução física só pode começar quando o runtime medir uma ferramenta de Casa autorizada.
 
-Primário conhecido:
+Primário canônico atual: **CentralDark Casa Commander** (serviço nativo CentralDark em `127.0.0.1:9101`, acessado pelo MCP CentralDark e transporte privado Tailscale/SSH quando autorizado). Ele reaproveita o motor DesktopCommanderMCP em `stdio` local, **não** o serviço remoto `mcp.desktopcommander.app`. O conector Remote Desktop Commander externo é legado e não deve ser acionado como fallback automático, especialmente sob ordem "sem Desktop Commander".
 
 ```text
-Remote Desktop Commander
-→ device autorizado
-→ status online
-→ ping/read/process capability disponível
+MCP_CENTRALDARK -> TRANSPORTE_PRIVADO_AUTORIZADO -> CASA_COMMANDER_9101
+GET /health (presença; não é prova de ferramenta)
+POST /tool (Bearer da bridge existente; comprovar resultado e readback)
+CENTRALDARK_CASA_WRITE_ENABLED exige autorização já concedida no runtime
 ```
 
-Equivalentemente, outro conector de Casa só vale se já for autorizado e medir a mesma capacidade material.
+Para navegador, a sequência padrão é **Browser.list_tabs + get_tab_context (leitura) → Casa Commander nativo (UI Automation/ação autorizada, se comprovada) → Browser.get_tab_context (readback)**. Owner: `.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md`. Gatilhos existentes `!CENTRALDARK` e `!EXECUTOR_CENTRALDARK`, além da intenção contextual, carregam essa receita somente quando a missão tocar browser.
+
+**Evidência:** o fluxo Browser + UI Automation por terceiro foi observado em 05/11/2026; **paridade de envio via Commander nativo = UNKNOWN**. Sem tool call nativo comprovado, não declarar executor pronto nem reexecutar remotamente sem autorização.
 
 Sem acesso:
 
@@ -198,7 +200,7 @@ SAME_RULER_FOR_ALL_ENGINES=true
 
 ### ChatGPT
 
-`CHATGPT.md` aponta para este contrato. Quando ChatGPT tiver Remote Desktop Commander acessível e autorizado, o gatilho habilita o ciclo executor da Casa.
+`CHATGPT.md` aponta para este contrato. Quando ChatGPT tiver **CentralDark Casa Commander nativo acessível, autenticado e comprovado por tool call**, o gatilho habilita o ciclo executor da Casa. O uso histórico via Remote Desktop Commander externo permanece registrado apenas como evidência de sessões passadas.
 
 ### Bot CentralDark
 

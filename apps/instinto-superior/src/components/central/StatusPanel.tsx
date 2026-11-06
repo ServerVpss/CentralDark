@@ -189,6 +189,7 @@ export function StatusPanel() {
         `STATUS: ${remote}`,
         `HEALTH: HTTP ${d?.commanderHttp ?? "?"}`,
         `MOTOR: ${d?.commanderEngine === true ? "conectado" : d?.commanderEngine === false ? "desconectado ou aguardando chamada" : "não medido"}`,
+        `RECIBO AUTENTICADO: ${d?.commanderToolProof ? `${d.commanderToolProof.tool} (${d.commanderToolProof.kind}) às ${new Date(d.commanderToolProof.at).toLocaleTimeString("pt-BR")}` : "não medido ou fora da janela de 10 minutos"}`,
       ],
       nota: "Health identifica a ponte; somente uma chamada autenticada bem-sucedida comprova o motor.",
     },

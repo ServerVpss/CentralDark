@@ -54,6 +54,7 @@ export type EstadoCentralDark = {
   desktop: Estado;
   commanderEngine: boolean | null;
   commanderHttp: number | null;
+  commanderToolProof: { tool: string; kind: string; at: string } | null;
   repositorio: "ServerVpss/CentralDark";
   branch: "main";
   vpsSha: string | null;
@@ -728,6 +729,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const origemHealth = casaCommanderHealthBase();
     const casaSiteUrl = process.env["CENTRALDARK_CASA_SITE_URL"]?.trim() || DEFAULT_CASA_SITE_URL;
     const consultaEm = new Date().toISOString();
+    const commanderHealthUrl = process.platform === "win32"
+      ? "http://127.0.0.1:9101/health"
+      : (process.env["CENTRALDARK_CASA_COMMANDER_HEALTH_URL"]?.trim()
+        || "http://windows-casa.tail6d7aa4.ts.net:9100/health");
     const [
       github,
       liveFabric,
@@ -760,9 +765,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       hostScreenpipe === "VPS"
         ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
-      hostScreenpipe === "CASA"
-        ? medirReachable("http://127.0.0.1:9101/health", true)
-        : Promise.resolve(SONDA_NAO_EXECUTADA),
+      // Servidor do Cockpit na Forja: ponte privada da Casa, nunca localhost da VM.
+      medirReachable(commanderHealthUrl),
       medirActions(),
       inventarioPortasCentralDark(),
       inventarioTotalPortas(),
@@ -799,18 +803,30 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
+    const lastToolCandidate = commanderCasa.dados?.["last_authorized_tool"];
+    const lastTool = objetoJson(lastToolCandidate) ? lastToolCandidate : null;
+    const lastToolAt = texto(lastTool?.["at"]);
+    const lastToolAge = lastToolAt ? Date.now() - Date.parse(lastToolAt) : Number.NaN;
+    const toolProof = lastTool?.["verified"] === true
+      && ["READ_ONLY", "MUTATION"].includes(String(lastTool["kind"]))
+      && typeof lastTool["tool"] === "string"
+      && Number.isFinite(lastToolAge) && lastToolAge >= -5_000 && lastToolAge < 600_000;
+    const commanderIdentity = commanderCasa.dados?.["name"] === "CentralDark Casa Commander"
+      && commanderCasa.dados?.["ok"] === true && commanderCasa.dados?.["remote_vendor"] === false;
+    const commanderConnected = commanderIdentity && commanderCasa.dados?.["engine_connected"] === true;
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
       // HTTP 200 mede somente a ponte. O card só fica verde quando o motor
       // também confirma conexão; isso evita promover A para B/C.
-      desktop: commanderCasa.dados?.["name"] === "CentralDark Casa Commander"
-        && commanderCasa.dados?.["ok"] === true
-        && commanderCasa.dados?.["engine_connected"] === true
-        ? "RUNNING"
-        : "UNKNOWN",
+      desktop: commanderConnected ? (toolProof ? "PASS" : "RUNNING") : "UNKNOWN",
       commanderEngine: typeof commanderCasa.dados?.["engine_connected"] === "boolean" ? commanderCasa.dados["engine_connected"] as boolean : null,
       commanderHttp: commanderCasa.httpStatus,
+      commanderToolProof: toolProof ? {
+        tool: String(lastTool?.["tool"]).slice(0, 64),
+        kind: String(lastTool?.["kind"]).slice(0, 24),
+        at: lastToolAt!,
+      } : null,
       repositorio: "ServerVpss/CentralDark",
       branch: "main",
       vpsSha,
@@ -881,7 +897,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: hostScreenpipe === "CASA" ? "Casa · CentralDark Casa Commander · 127.0.0.1:9101/health" : "Casa Commander · sem medição neste host",
+      desktopFonte: commanderHealthUrl + " · somente saúde e último recibo autenticado (10 min)",
       portas,
       portasTotais,
     };

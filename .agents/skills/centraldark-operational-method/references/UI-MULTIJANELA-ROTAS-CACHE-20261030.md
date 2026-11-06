@@ -2,6 +2,33 @@
 
 Owner: Skill-Mãe em K:. Decisão do CHEFE em 30/10/2026. Reutilizar recursos existentes e não iniciar daemon, skill ou cache paralelo.
 
+
+<!-- CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+<!-- #OBSERVACOES#
+@owner: .agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
+@code_ref: apps/modulos/mcp/src/tools/core/mcp-admin.js; scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs
+@last_updated: 2026-11-05
+@implementado: politica de navegacao no owner, gatilhos, indice e registro de capability no catalogo de source
+@pendente: readback de runtime atualizado e POST /tool nativo com efeito UIA + Browser readback
+@next_cursor: CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E
+-->
+## 🍒 Navegador híbrido: Browser lê → CentralDark Casa Commander age → Browser confere (05/11/2026)
+
+**Preferência expressa do CHEFE para ações em navegador, daqui em diante.** Owner único: esta receita da Skill-Mãe. Gatilhos por intenção: "veja a aba", "olhe o navegador", "mande um goal", "envie no botão focado", "siga o roteiro", "clique", "pesquise na página", "verifique a resposta"; quando houver \`!CENTRALDARK\`, \`#ACORDAR\`, \`!CALIBRAR\` ou \`!EXECUTOR_CENTRALDARK\`, selecionar esta receita **somente se** a intenção envolver navegador. Não criar novo gatilho, skill, browser, bridge, motor ou banco.
+
+**Fluxo canônico para aba autenticada já aberta:**
+1. **LER:** conector Browser da sessão: \`list_tabs\` para descobrir a aba real; \`get_tab_context(tabId)\` para ler texto, controles e estado inicial. Identificador de aba e foco são efêmeros; ler novamente depois de troca de aba ou render relevante. O conector Browser é apenas leitor neste fluxo; **ler a aba não permite clicar**.
+2. **AGIR COM O OWNER NATIVO:** preferir MCP CentralDark → rota privada Tailscale/SSH já autorizada → **CentralDark Casa Commander** existente (\`127.0.0.1:9101\`, \`GET /health\`, \`POST /tool\` com Bearer da bridge, sem expor segredo). Owner técnico: \`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs\`, launcher e configuração existentes. O serviço usa o motor DesktopCommanderMCP **local stdio** sob a marca CentralDark; **não** exige \`mcp.desktopcommander.app\` nem o plugin remoto de terceiro. Antes de agir, comprovar \`engine_connected\`, execução real da ferramenta e autorização para escrita quando necessária (\`CENTRALDARK_CASA_WRITE_ENABLED\`). \`health=200\` ou \`engine_connected=true\` isoladamente NÃO prova um \`POST /tool\` bem-sucedido.
+3. **UI NATIVA SEM DUPLICAR:** pelo executor autorizado que o Commander realmente expuser, localizar janela do navegador por processo, título e handle **atuais**; relacionar com aba confirmada. Inspecionar \`AutomationElement\` (ControlType/Name/Enabled/Focus); priorizar \`ValuePattern\` para campo (inclusive \`ComboBox\` editável) e \`InvokePattern\` para botão. Valor pode atualizar de forma assíncrona: confirmar leitura posterior antes de acionar envio; se já houver rascunho, proteger; enviar no máximo uma vez após readback. Só usar coordenadas baseadas em geometria atual quando os controles nativos não existirem e houver prova visual.
+4. **CONFERIR:** \`Browser.get_tab_context\` na mesma aba, localizar a mensagem enviada e a resposta; se a página estiver processando, observar até conclusão somente durante a interação atual, sem afirmar trabalho em background. Registrar \`tab_id\` efêmero, alvo, ferramenta, instante, resultado e fontes. Não confundir \`SEND_INVOKED\` com resposta completa, nem resposta do agente com execução de seus comandos externos.
+5. **CONTRAPROVA:** se Browser não listar aba ou Commander não expuser escrita/UIA, marcar a dimensão como \`UNKNOWN/UNAVAILABLE\` e usar apenas **outra rota nativa já autorizada e comprovada**, nunca simular clique, inventar credenciais ou ativar o Remote Desktop Commander automaticamente. O conector remoto de terceiro é **legado, não requisito e não preferência**. Quando o CHEFE disser "sem Desktop Commander", não roteá-lo para esse provedor.
+
+**Observação histórica separada da preferência futura:** em 05/11/2026, na aba Hostinger, \`Browser.list_tabs\` + \`get_tab_context\` localizaram a conversa; um executor Windows via Remote Desktop Commander **de terceiro**, PowerShell/UI Automation, preencheu \`ComboBox\` "Enviar mensagem para IA" por \`ValuePattern\` e invocou o botão \`Enviar\` por \`InvokePattern\`; Browser leu a bolha e resposta com fontes. \`BROWSER_READ=PASS\`, \`UIA_SEND_VIA_RDC=PASS\`, \`BROWSER_REPLY_READBACK=PASS\` **somente nessa sessão**. **\`CASA_COMMANDER_NATIVE_UIA_SEND=UNKNOWN\`** até repetir a mesma operação em ambiente seguro pela rota nativa. Não declarar troca de executor consumada a partir da alteração documental.
+
+**Receipt mínimo:** \`INTENT_ID | TRIGGER/INTENCAO | TAB_ORIGIN | BROWSER_READ | COMMANDER_ROUTE | AUTH_SCOPE | TOOL_EFFECT | BROWSER_READBACK | PROOF_REF | NEXT_CURSOR\`. Nunca registrar cookies, tokens, mensagens privadas completas ou credenciais. \`NEXT_CURSOR=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E\`.
+<!-- /CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+
+
 1. INTENÇÃO -> OWNER/SESSION -> NEXT_CURSOR -> FINGERPRINT/TTL -> CACHE_HIT_VALIDO ou BUSCA_EFICAZ -> AÇÃO AUTORIZADA -> READBACK/CONTRAPROVA -> RECEIPT/CATÁLOGO. Retomar conversas anteriores via session-intelligence-harvester, memory-linker, knowledge-compiler; histórico pode estar obsoleto.
 2. Escolher menor caminho conforme disponibilidade e confiabilidade: catálogo e receita com hash/validade, log primário, MCP CentralDark, UIA, Screenpipe 3030, Git/arquivo e pesquisa externa. Não consultar todas por reflexo. Registrar latência e economia somente se realmente medidas.
 3. UIA: uma descoberta em lote com AutomationElement.RootElement.Children. Selecionar janela por Current.Name e PID, controle por ControlType/Name/IsEnabled/IsOffscreen. Classic: janela ChatGPT Classic/editor Converse com o ChatGPT. Codex: janela ChatGPT/editor Trabalhe com o Codex. Cockpit/Edge e openKylin permanecem em suas janelas; monitor secundário pode gerar coordenada negativa. Usar InvokePattern, ValuePattern, SelectionItemPattern, ExpandCollapsePattern conforme suportado; confirmar efeito, sem clique por coordenada fixa, sem apagar draft ou reenviar ordem incerta.

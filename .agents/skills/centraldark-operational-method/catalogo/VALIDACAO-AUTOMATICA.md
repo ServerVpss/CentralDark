@@ -1,6 +1,6 @@
 # Validação conservadora dos vínculos e skills
 
-Data da verificação: 2026-10-31 09:47:20 -03:00
+Data da verificação: 2026-11-04 23:57:26 -03:00
 
 - Sintaxe documental e links são verificações técnicas, não comprovação de execução.
 - O sistema não apaga, reescreve nem reverte código e receitas originais automaticamente.
@@ -57,3 +57,5 @@ Data da verificação: 2026-10-31 09:47:20 -03:00
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current
 - LINK_QUEBRADO: references/CORPUS-04-ROTAS-RECENTES-20261030.md => references/delegacao-economica-com-prova.md
 - LINK_QUEBRADO: references/CORPUS-04-ROTAS-RECENTES-20261030.md => references/remote-desktop-commander-vscode-casa.md
+- LINK_QUEBRADO: SKILL.md => Skills/centraldark-auto-sync-vscode/SKILL.md
+- LINK_QUEBRADO: SKILL.md => ../hermes-visual-computer-use/SKILL.md
