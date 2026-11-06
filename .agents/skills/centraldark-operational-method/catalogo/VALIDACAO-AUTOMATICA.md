@@ -1,6 +1,6 @@
 # Validação conservadora dos vínculos e skills
 
-Data da verificação: 2026-10-31 09:47:20 -03:00
+Data da verificação: 2026-11-04 23:57:26 -03:00
 
 - Sintaxe documental e links são verificações técnicas, não comprovação de execução.
 - O sistema não apaga, reescreve nem reverte código e receitas originais automaticamente.
@@ -15,10 +15,10 @@ Data da verificação: 2026-10-31 09:47:20 -03:00
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/FOCUS-DELEGACAO-TELEMETRIA.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => scripts/Publish-SkillUsageReceipt.ps1
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => scripts/Hermes-SkillLifecycle-Bridge.py
-- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md
+- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => Skills/centraldark-oracle-surface/SKILL.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/FOCUS-DELEGACAO-TELEMETRIA.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => scripts/Hermes-Oracle-Return.ps1
-- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md
+- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => Skills/centraldark-oracle-surface/SKILL.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/HERMES-KANBAN-RECEITA-UNIVERSAL.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../kaizen-sistema-um/SKILL.md
@@ -36,7 +36,7 @@ Data da verificação: 2026-10-31 09:47:20 -03:00
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/CATALOGO.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28
-- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/skills-integradas/
+- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => Skills/
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/INDICE-PESQUISA.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/INDICE-PESQUISA.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/ARQUIVOS-VIVOS.json
@@ -48,7 +48,7 @@ Data da verificação: 2026-10-31 09:47:20 -03:00
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/rsi-loop-method.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md
-- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/skills-integradas/michelin-3-estrelas/SKILL.md
+- LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => Skills/michelin-3-estrelas/SKILL.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/MICHELIN-3-ESTRELAS-PROTOCOLO.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => references/HERMES-FREE-TIER-FALLBACK.md
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => catalogo/CATALOGO.md
@@ -57,3 +57,5 @@ Data da verificação: 2026-10-31 09:47:20 -03:00
 - LINK_QUEBRADO: references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md => ../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current
 - LINK_QUEBRADO: references/CORPUS-04-ROTAS-RECENTES-20261030.md => references/delegacao-economica-com-prova.md
 - LINK_QUEBRADO: references/CORPUS-04-ROTAS-RECENTES-20261030.md => references/remote-desktop-commander-vscode-casa.md
+- LINK_QUEBRADO: SKILL.md => Skills/centraldark-auto-sync-vscode/SKILL.md
+- LINK_QUEBRADO: SKILL.md => ../hermes-visual-computer-use/SKILL.md

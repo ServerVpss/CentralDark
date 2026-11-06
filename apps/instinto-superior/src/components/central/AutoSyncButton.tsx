@@ -7,6 +7,7 @@ import { AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
 import { useQueryClient } from '@tanstack/react-query'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
+import { lerRastreadorCasa, type EstadoRastreadorCasa } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
 import { supabase } from '@/integrations/supabase/client'
 import { SyncLoopIcon } from '@/components/central/SyncLoopIcon'
@@ -54,11 +55,15 @@ export const AutoSyncButton: React.FC = () => {
     human_readable: 'Nunca sincronizado'
   })
   const [isSyncing, setIsSyncing] = useState(false)
+  const [trackerStatus, setTrackerStatus] = useState<EstadoRastreadorCasa | null>(null)
+  const [trackerReading, setTrackerReading] = useState(false)
+  const [trackerError, setTrackerError] = useState(false)
   const [syncProgress, setSyncProgress] = useState({ value: 0, label: 'Preparando sincronização...' })
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
+  const readTracker = useServerFn(lerRastreadorCasa)
   const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
   const queryClient = useQueryClient()
 
@@ -82,10 +87,10 @@ export const AutoSyncButton: React.FC = () => {
     setIsSyncing(true)
     const phases = ['Lendo estado local...', 'Consultando origin/main...', 'Conferindo alterações...', 'Enviando arquivos autorizados...', 'Confirmando o mesmo SHA...']
     let phaseIndex = 0
-    setSyncProgress({ value: 8, label: phases[phaseIndex] })
+    setSyncProgress({ value: 8, label: (phases[phaseIndex] ?? 'Lendo estado local...') })
     const progressTimer = setInterval(() => {
       phaseIndex = Math.min(phaseIndex + 1, phases.length - 1)
-      setSyncProgress((current) => ({ value: Math.min(current.value + 16, 88), label: phases[phaseIndex] }))
+      setSyncProgress((current) => ({ value: Math.min(current.value + 16, 88), label: (phases[phaseIndex] ?? 'Lendo estado local...') }))
     }, 700)
     const medirJunto = target === 'local' || target === 'all'
       ? queryClient.refetchQueries({ queryKey: ['centraldark', 'estado-vivo'] })
@@ -102,6 +107,20 @@ export const AutoSyncButton: React.FC = () => {
     } finally {
       clearInterval(progressTimer)
       setIsSyncing(false)
+    }
+  }
+
+  const checkTracker = async () => {
+    if (trackerReading) return
+    setTrackerReading(true)
+    try {
+      setTrackerStatus(await readTracker())
+      setTrackerError(false)
+    } catch {
+      setTrackerStatus(null)
+      setTrackerError(true)
+    } finally {
+      setTrackerReading(false)
     }
   }
 
@@ -223,6 +242,34 @@ export const AutoSyncButton: React.FC = () => {
             )}
           </div>
         )}
+      </Card>
+
+      <Card className="p-3 border border-sky-500/30 bg-sky-500/5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-foreground">Rastreador de mudanças · CentralDark / openKylin</p>
+            <p className="text-xs text-muted-foreground">
+              {trackerReading ? 'Consultando monitor...' : trackerStatus?.tracker === 'active'
+                ? 'Ativo · registra criação, edição, movimentação e exclusão no journal privado da Casa.'
+                : trackerError ? 'Diagnóstico indisponível nesta sessão.'
+                : trackerStatus ? 'Estado não comprovado; nenhuma sincronização foi disparada.'
+                : 'Consulta de leitura, independente da sincronização.'}
+            </p>
+            {trackerStatus && (
+              <p className="mt-1 text-[10px] font-mono text-muted-foreground">
+                SSH: {trackerStatus.ssh === true ? 'OK' : 'UNKNOWN'} · gh: {trackerStatus.githubAuthenticated === true ? 'OK' : 'UNKNOWN'}
+                {' · '}HEAD: {trackerStatus.head?.slice(0, 8) ?? 'UNKNOWN'} · main: {trackerStatus.githubMain?.slice(0, 8) ?? 'UNKNOWN'}
+                {' · '}SHA: {trackerStatus.sameSha === true ? 'igual' : trackerStatus.sameSha === false ? 'divergente' : 'UNKNOWN'}
+              </p>
+            )}
+          </div>
+          <CockpitActionButton
+            hint="Diagnóstico read-only da Casa, GitHub e rastreador. Não sincroniza nem publica."
+            onClick={checkTracker} disabled={trackerReading || isSyncing} size="sm" variant="outline"
+          >
+            {trackerReading ? 'Lendo...' : 'Diagnosticar'}
+          </CockpitActionButton>
+        </div>
       </Card>
 
       <Card className="p-4 border border-amber-500/40 bg-amber-500/10">

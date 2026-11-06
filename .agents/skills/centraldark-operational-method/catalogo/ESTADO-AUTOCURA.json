@@ -1,1839 +1,2202 @@
 {
-    "gerado_em":  "2026-10-31T09:47:20-03:00",
-    "formato":  1,
-    "arquivos":  [
-                     {
-                         "caminho":  "catalogo/ARQUIVOS.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  6888,
-                         "sha256":  "0fe461d907152384c8f1ec876de9cccb3659f240fec2d5c1e86d975946b489a1",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/CATALOGO.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T22:09:44-03:00",
-                         "modificado_em":  "2026-10-30T22:09:44-03:00",
-                         "bytes":  13188,
-                         "sha256":  "e6b27bfbcd3ced696446b1d782e18481bb746b8445ff1831a4b5041f24330e36",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-intent-deploy-router/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-capability-hud/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-reuse-runtime/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-boot/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-esteira-motor/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-live-editing-fabric/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-unified-surface-parity/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-vscode-log-bridge/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-auto-sync-vscode/package.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "ARQUIVOS.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "INDICE-PESQUISA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../scripts/pesquisar-catalogo.ps1",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "INDICE-VIVO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "ARQUIVOS-VIVOS.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "VALIDACAO-AUTOMATICA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "HISTORICO-MUDANCAS.jsonl",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/AUTO-MELHORIA-COM-PROVA.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T18:53:20-03:00",
-                         "modificado_em":  "2026-10-30T19:04:44-03:00",
-                         "bytes":  1918,
-                         "sha256":  "740ebec23cfaeb0f1cc73ce9e3ba4401a609114eddb410d21fe8039a2fbc3e5c",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T18:27:01-03:00",
-                         "modificado_em":  "2026-10-30T18:27:01-03:00",
-                         "bytes":  2039,
-                         "sha256":  "682f8bb6805789ccca7b46619dd3a57a285bc2dfbbd9b78fef310b36f3d8d93a",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/comprovacoes/genesis-replay-20261030T204009Z.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T17:41:51-03:00",
-                         "modificado_em":  "2026-10-30T17:43:55-03:00",
-                         "bytes":  2737,
-                         "sha256":  "bef6f8660479bfd8d876c4576d6fd279e0e7c7299ced218e6d3e3ac51272692a",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T19:09:53-03:00",
-                         "modificado_em":  "2026-10-30T19:09:53-03:00",
-                         "bytes":  1459,
-                         "sha256":  "ce5043e9c0abcefa18ea1ab511ef98f73fcda8f645b997e5b0d3dba93153782c",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/comprovacoes/t_26e02a16.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  1450,
-                         "sha256":  "a469004099807fa6c7868cb6fa96db0b6e00c93db481057f2c21a613002a1576",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/INDICE-PESQUISA.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-30T22:09:44-03:00",
-                         "modificado_em":  "2026-10-30T22:09:44-03:00",
-                         "bytes":  6022,
-                         "sha256":  "fbcd2e2867f4cbbae1c7217258e98a55c7ba4559faab996280a5834db455c083",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "../SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "CATALOGO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/HERMES-FREE-TIER-FALLBACK.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../../kimetsu-brainstorm/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../references/regenerative-self-refinement-engine.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-note-maintenance/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-hermes-operations/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-ops/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "skills-integradas/centraldark-oracle-surface/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "CATALOGO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "INDICE-VIVO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "INDICE-VIVO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "VALIDACAO-AUTOMATICA.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-autonomous-conflict-costura/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  8201,
-                         "sha256":  "6b85b31d4b9d8ba81a56a28c74bc11f5d54601d3b2c50d9ac53782438dac0d39",
-                         "descricao":  "Método reutilizável da CentralDark para resolução autônoma de conflitos Git/PR por intenção, com decisão CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW, sem invocação manual de agente por conflito.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-auto-sync-vscode/package.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  2088,
-                         "sha256":  "72df3dbedb785967b5ba50d740bce8202fad7a644b30c570ce024fde8bfc2e3c",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-boot/references/example-boot-output.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  1052,
-                         "sha256":  "acf78bea4b627fd342a002f48b537ee8f7c6aa35ffc281307158b8e42e17491a",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-boot/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-27T12:22:45-03:00",
-                         "bytes":  6338,
-                         "sha256":  "4d00d49761896dd13e803b6fad2931a620756d19de8e874bedb0ca5ce142911b",
-                         "descricao":  "Execute CentralDark boot to align and verify HUD.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-capability-hud/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-29T12:18:58-03:00",
-                         "modificado_em":  "2026-10-29T12:18:58-03:00",
-                         "bytes":  4437,
-                         "sha256":  "6a5523d348280bc9c59e22cdf3b41138f1332d499cf2c8b81ae122f1dd1f0458",
-                         "descricao":  "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/INTERLIGADOS.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  770,
-                         "sha256":  "b3c73cbc4065ee89eb7868d415d95341df2253862c564f324f78efe04589f77a",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/references/sessao-erros-reais.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  1217,
-                         "sha256":  "dc23825f47023c4ccdff0a9d637bd9595d4262afd9b9a99d279b2e76b93876ab",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-esteira-motor/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  18027,
-                         "sha256":  "49745155400ee5b98825dcb60405d3bbbb28e6e38325813cb585c832190d5e5d",
-                         "descricao":  "CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/fixed-point-funnel.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-12T02:29:59-03:00",
-                         "bytes":  1241,
-                         "sha256":  "81b55843899937979b5d511e71da93a8c78d9e0654aa0005bfea2c981be94331",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/references/github-fast-inventory.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-12T02:29:59-03:00",
-                         "bytes":  2840,
-                         "sha256":  "7d863e5e85f29dbebe9d912130f380eb31e24e435c0accc485b0c8487d586950",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-evidence-reconciliation/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-15T13:26:01-03:00",
-                         "bytes":  6185,
-                         "sha256":  "2aa36f69bf5e72cd4d3c5a19a999e91c92f389a50758ecee43a9966bc1cd1aaa",
-                         "descricao":  "Reconcile CentralDark code, runtime, sources, and projections.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-hermes-operations/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-29T09:31:40-03:00",
-                         "bytes":  14351,
-                         "sha256":  "eb1700fedac4c1775dba8f6703bf46d3ca21912d925edac92c1ac37e75d18953",
-                         "descricao":  "Operate Hermes update, cron, SSH, ports for CentralDark.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-24T18:41:19-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  2403,
-                         "sha256":  "f907162e7819de04dafd29c69660e0454d01c9ccce04ab9e4c26f71d987c181e",
-                         "descricao":  "Use quando o CHEFE trabalhar com Hub, conectores, OAuth, API keys temporarias, providers, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou catalogo de modelos pelo painel CentralDark.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-intent-deploy-router/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  5628,
-                         "sha256":  "ff847288dd610dd6c062faadf8d05231915224c035bd80f7be2af4b3eb986681",
-                         "descricao":  "Router obrigatório de intenção, gatilhos, Capability HUD e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider, segredo temporário ou antes de alegar limitação de ferramenta.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-live-editing-fabric/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  13626,
-                         "sha256":  "23484d80e4123417267413ac92c99baeaa4aa011a67f57dfc9130289545fae76",
-                         "descricao":  "Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-28T13:14:50-03:00",
-                         "bytes":  3028,
-                         "sha256":  "ae8406e59a0d0e33998d843f2ebc1b37f8b06a94af92c9b6ef06d93252e2e4da",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/reconcile_notes.py",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-28T13:14:50-03:00",
-                         "bytes":  6649,
-                         "sha256":  "ad4652b154ed6235598fe0fe4fe83e7eaefc79d78334cad80cbcc74d13c95e79",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/scripts/verify_notes.py",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-28T13:14:50-03:00",
-                         "bytes":  6386,
-                         "sha256":  "8d623e92b5f3726a4cdb6e795903c171fe5bcff9f46b0f2bff18c82cfece510b",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-note-maintenance/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-27T00:26:07-03:00",
-                         "bytes":  3721,
-                         "sha256":  "2ac916d6324e52d6fd78c170e0e3cf3e6a8b7f70f1b64fd024d8346d7affa9b4",
-                         "descricao":  "Use when reconciling CentralDark notes with 10 required metadata properties per \u0027Atualização Viva\u0027 rule. Single owner, preserves creation date, tracks timestamps separately, extends PROVEN_CRYSTAL replay logic.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/autonomia-actions.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  1918,
-                         "sha256":  "a329b846a8f5f98e9af1168360159d114c4cc5b02d6392fc9a4eeaeb5ee4b252",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/full-inventory-scans.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  3166,
-                         "sha256":  "b0469fc161b8b7e75260f63f9b81c8cccd5ab55390df12155bd64d3d5af6f8dc",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-binding.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  1938,
-                         "sha256":  "947c01889533f9195aa759ce21ff3e846d6908ae663340fdac8169b7626e573c",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/hermes-desktop-communication-style.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-12T02:29:59-03:00",
-                         "bytes":  1983,
-                         "sha256":  "6479026cba7ad1b02bf7971a5222dd56079bf3cb7455507b04b45765f52bc4e0",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/references/selfhosted-runner-git-auth.md",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-12T02:29:59-03:00",
-                         "bytes":  3375,
-                         "sha256":  "2145a6949396147ddb93dee5ae5fd111f11746a326fa739142e475494d71ce26",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-ops/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-29T09:46:42-03:00",
-                         "bytes":  56940,
-                         "sha256":  "b7163181023de645c6e43e38061181c04ea030f5206371f0ff3e060dd17a97e0",
-                         "descricao":  "Operate CentralDark across Casa, GitHub, VPS, Hermes.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:34-03:00",
-                         "modificado_em":  "2026-10-29T10:46:50-03:00",
-                         "bytes":  94473,
-                         "sha256":  "4b8a7ca948be680bd15b5b5a00cc80b4b9a60815df79730e19a2540b12ef2549",
-                         "descricao":  "Use when consulting an external browser oracle.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/runtime-binding.desired.json",
-                         "tipo":  "catalogo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  471,
-                         "sha256":  "2cad2dcc353ae81ec9d0b87767afdd623356bfa1cc9e39e5dd76998feb69737d",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-reuse-runtime/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  2074,
-                         "sha256":  "7be3491476069a245f5943f0b341593e05b36a930efd27505c06e22f14a1968e",
-                         "descricao":  "Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-unified-surface-parity/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-29T09:31:40-03:00",
-                         "bytes":  27958,
-                         "sha256":  "16f68fa7db6f943b787b710f5a70f1a0de0da791222765eea13d2cda2101f6b3",
-                         "descricao":  "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/centraldark-vscode-log-bridge/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  14645,
-                         "sha256":  "d28db794b3a1564ed9d65caf2e7448aac53a634357f052907b53766538c620ab",
-                         "descricao":  "Enviar sinais do VS Code Casa ao funil unico CentralDark via SSH/Tailscale, sem transportar texto bruto ou duplicar o owner.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-26T16:35:50-03:00",
-                         "bytes":  8397,
-                         "sha256":  "1526367015083aa074a9e3ed565c7cbe30bc0dfebc47b830de6831bf8683add4",
-                         "descricao":  "Método Michelin 3 Estrelas CentralDark. Ative com !michelin ou pedido de execução deliberada passo a passo, reuso, testes, contraprova e prova real. Trabalha junto da receita operacional existente e não a substitui.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "catalogo/skills-integradas/reconciliacao-diaria-centraldark/SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-28T10:39:33-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  7728,
-                         "sha256":  "cdb5809ce22850ee1619e39d336e3cb11241f22caa142cce16efdf8f46e93c71",
-                         "descricao":  "Reconcile CentralDark state and update daily checklist.",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "contracts/TLC23-RUNTIME-GATE.yml",
-                         "tipo":  "arquivo",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  18244,
-                         "sha256":  "43f373e304729b0704e371c1e747b28e727e45742c3bae87bb365e921aa13ab0",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "INTERLIGADOS.md",
-                         "tipo":  "arquivo",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  3624,
-                         "sha256":  "b89e1a11e6657a058d563bf31f6ed0e8a2b25d526c2b520da8d3ae7d7e2aaf23",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/CATALOGO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-VIVO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/ARQUIVOS-VIVOS.json",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/HISTORICO-MUDANCAS.jsonl",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/AUTO-MELHORIA-COM-PROVA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-appcentraldark-evoluir-bridge-capability-reconciliation.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  12892,
-                         "sha256":  "e8ed8d9f1a935b42a8c7b5007afe2d287fa6d657f6fd24fa686fed16d4fc77fd",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-contabo-hermes-runtime-10-fronts.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  7875,
-                         "sha256":  "1c0af460aea9a3ce912946fb977f966ecdb74a924b7f41e3b195c01974957320",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-garimpo-visual-runtime-reconciliation.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  18382,
-                         "sha256":  "1aad27e2bb1e51803f8530709dfe795e345438383871cf16b09e39c1a7517164",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-gemini-cli-vscode-devcontainer-mcp-reconciliation.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  11890,
-                         "sha256":  "115f5ccfe34162f14c7e4736cfa90d4a1c6d0368c1b86d7045701814375a1543",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-painel-cronica-e-fable51.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  11431,
-                         "sha256":  "4f923d166d6b5934f233f14ceb21813864378c5e44564b3462734e82f65122d0",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-pergaminhos-capitulo-convergencia-superpack-figma.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  9854,
-                         "sha256":  "fa7ff9e9deed3358581af24a5872c7c7de77ca4e3d9722c4d126aa49edbd5961",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-pergaminhos-do-tempo-jornal-temporal.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  6286,
-                         "sha256":  "0e56e24642014eb290d78aadcf64ea9532e5db838e1e85410d1b9cd0a1e19733",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-session-hud-garimpo-mcp-reconciliation.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  13110,
-                         "sha256":  "bf618c8191f8056a19c17931c7542d9c1a857b38115c70c2aafdebf733917beb",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-02-sol-audit-hud-fable51-t1.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  5647,
-                         "sha256":  "8e8dcd31075b23b4dfdc3054a44200e6b7624f4f555fbeeddd80544dc0bce4a3",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-03-claude-screenpipe-skins-false-green-reconciliation.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  7617,
-                         "sha256":  "42885d806d81bcf7c7d718176995c6f34f648fb51b7e2d3a7e4df42a7e148d99",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-apply-until-blocked-cross-axis-mode.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  5285,
-                         "sha256":  "a76a035dc9c0e255cb28dc44f5e6c2efc91f6f484bf4790e48626a34a5183f25",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-ci-agent-chatgpt-label-delta-receipt.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  2696,
-                         "sha256":  "4c682869bbdb63ef37a6e39d2daf261205d26e94e34286e49c6defd39e7f0525",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-external-capability-intake-uem-vpanel.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  4417,
-                         "sha256":  "66d677a9d86a30e55507d831a4010152dd1b909141ec90019572e34b9a99a0bc",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-label-gate-delta-util-audit.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  2805,
-                         "sha256":  "2b6d48e0d41cd97058f3d275ed68a67c170329ede6cf7a64f328a55783954153",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-preanswer-github-gate-continuity.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  8146,
-                         "sha256":  "c2d1bc9575ee0c4042e82b4991317410f05a7e8094bce73508e9c87b97da9d84",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-pr-handoff-war-room-contract.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  3444,
-                         "sha256":  "96db684c1f476a815db46b24c4db3794f63d6e5f58f14fb1545ce91e73acbdcf",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-pr-title-contract-raw-code-audit.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  3088,
-                         "sha256":  "377ae82061bd48dffbe78269d50e50062a3cdb35e38c0c6f2e45d174554af4aa",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-pr-trilho-vivo-contract.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  2539,
-                         "sha256":  "65c3cdad8428a6339b7f424d681899e9a2033fc09cb2f220dbd411b71013a462",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-regra-zero-same-head-live-receipt.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  2160,
-                         "sha256":  "8fbcfafeaffdd87b39f3a935290f26e053f68a173afa5e6edc40ff39e0a46e29",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-08-rule-zero-horn-connector-demand.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  3268,
-                         "sha256":  "862e4045d1c2b5d33a2a8e357257084041c672fc0afeb7f55ca5f563b42381e2",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/2026-09-10-leitura-do-plano-do-chefe.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  10508,
-                         "sha256":  "22c637a22b48f8067a16795c1180e123081aa249d8fc98024b1e9c0d4c44879c",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/AUTO-MELHORIA-COM-PROVA.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  8940,
-                         "sha256":  "052c2907453b0b86ba67ffb4112cf2f1c4af7cd9d22fabd969c1f2072b3a28cc",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/centraldark-remote-bridge.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-15T13:26:01-03:00",
-                         "modificado_em":  "2026-10-15T13:26:01-03:00",
-                         "bytes":  2767,
-                         "sha256":  "2de7827e7487bca313792ab139d932f324eb7a254b8c285ca1bddbf5a2a3d5f8",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  5980,
-                         "sha256":  "019ea63a941ec77690f015311e96edf9183929a2c9840bd3c78a85162f05c502",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T10:32:11-03:00",
-                         "modificado_em":  "2026-10-30T10:32:11-03:00",
-                         "bytes":  5029,
-                         "sha256":  "9dfe33889f757cecdcec15946a5420d6bb2199cb2f54feccafa203772ef1bec6",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:59:40-03:00",
-                         "bytes":  149114,
-                         "sha256":  "53f89b23a4a141941ef87ecc7f0ca31d66e43a365df45ce56610e54e64e871ca",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "scripts/Hermes-Desktop-BrowserTab.ps1",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "scripts/Publish-SkillUsageReceipt.ps1",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "scripts/Hermes-SkillLifecycle-Bridge.py",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "scripts/Hermes-Oracle-Return.ps1",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/centraldark-oracle-surface/SKILL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../kaizen-sistema-um/SKILL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/LEMBRANCAS/03-evidencias-contraprovas/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#observacoes--receita-operacional-viva-dos-4-monitores-28102026",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#navegação-deliberada-do-cockpit--mapa-vivo-botão-por-botão",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/FOCUS-DELEGACAO-TELEMETRIA.md#recibo-consumido--seis-cliques-de-navegação-radeon-hermes-desktop-2026-10-27",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/CATALOGO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/ARQUIVOS-VIVOS.json",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-VIVO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/ARQUIVOS.json",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/AUTO-MELHORIA-COM-PROVA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/rsi-loop-method.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/skills-integradas/michelin-3-estrelas/SKILL.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/HERMES-FREE-TIER-FALLBACK.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/CATALOGO.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "catalogo/INDICE-PESQUISA.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current",
-                                                 "existe":  false
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CORPUS-02-LICOES-LEGADO-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:58:52-03:00",
-                         "bytes":  67659,
-                         "sha256":  "cfdfdf8b711ebbedc5a24e8b8cb6d849d19b1e97955bf297e685bfb0189ea939",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:58:52-03:00",
-                         "bytes":  37588,
-                         "sha256":  "7bb7fd3fa210118084e3746b52a9e20f7d1fbae5ae1013935f5ee167bafe5b5e",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:58:52-03:00",
-                         "bytes":  44769,
-                         "sha256":  "8bf88a7cdbececf9b771e566110751e87317bf73f1d6e9cc88572c73d91f4d5b",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "references/delegacao-economica-com-prova.md",
-                                                 "existe":  false
-                                             },
-                                             {
-                                                 "destino":  "references/remote-desktop-commander-vscode-casa.md",
-                                                 "existe":  false
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/delegacao-economica-com-prova.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-15T13:26:01-03:00",
-                         "modificado_em":  "2026-10-15T13:26:01-03:00",
-                         "bytes":  2197,
-                         "sha256":  "b17d60440aa9d5dca9c19882bcd759a9a711a2f68537c41daa36e0e9023293e7",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/fixed-point-terminal-receipt-contraprova.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  7188,
-                         "sha256":  "2203d0ec37fbcdecb6022fa3a2977f0b766b4ae11162e8380b467f01d4efd396",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/FOCUS-DELEGACAO-TELEMETRIA.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-28T08:08:26-03:00",
-                         "modificado_em":  "2026-10-30T16:07:23-03:00",
-                         "bytes":  48648,
-                         "sha256":  "df35d32e79e941a3ca7ef30ef310797a463b8167f65484909ca6f57f345dcad7",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/git-push-sequence.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-27T13:29:22-03:00",
-                         "modificado_em":  "2026-10-27T13:29:23-03:00",
-                         "bytes":  6976,
-                         "sha256":  "6afe1bcbc9e46b7a1b6bf7efef2c0b7f09f280a8cbde193a9950b7383d75bd69",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  9061,
-                         "sha256":  "025bec5dec9e6991064e482e81d4f951241619d5e0f0388a3d2b1f3e4088a012",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/HERMES-FREE-TIER-FALLBACK.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-29T14:12:13-03:00",
-                         "modificado_em":  "2026-10-29T14:12:14-03:00",
-                         "bytes":  10698,
-                         "sha256":  "c45930635f52d3bd0f263e31b110e806a9d0957146df130b877b5991ef3c82e0",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-26T16:17:59-03:00",
-                         "bytes":  12807,
-                         "sha256":  "5ffca46f168be61a1f47b123824532f9b4d2045c461113cfbafc10c766046ff2",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/hermes-model-config.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  4224,
-                         "sha256":  "2b2a4653aea8cf746fea3b1ccbc32844484b2ca573dc44820585e64835ed2565",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/HUMAN-ACTION-DIRECT-LINK.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  1765,
-                         "sha256":  "a251f7766cab2d35632a3106e70a9ed5054c22653b2064193b1ad29e6d06ce2b",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:59:40-03:00",
-                         "bytes":  23097,
-                         "sha256":  "e7bf64b67c14765dcc1f54d62680e37f76db3030fe139f372b43f37100fff239",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "CORPUS-02-LICOES-LEGADO-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "CORPUS-03-CONTRATOS-E-GATES-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "CORPUS-04-ROTAS-RECENTES-20261030.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T00:07:00-03:00",
-                         "modificado_em":  "2026-10-30T00:07:00-03:00",
-                         "bytes":  6131,
-                         "sha256":  "4826354b5828f8342deb71a945848f6304429f01c3f3acd6ddfcb7bd5f3e925f",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "../SKILL.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "../scripts/Trace-TransientConsoleWindows.ps1",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  10169,
-                         "sha256":  "957cf5a0a417b503641d9696f066fb3c7994348d69430aa87b9ffc602dfb2082",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "../../kimetsu-brainstorm/SKILL.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  5265,
-                         "sha256":  "cb1486df5e5d5efbd2803d6c44271705b9a6d3ef9e3c33aebe2be9b254c642db",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/PACKAGE-INGEST-LEDGER.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  11269,
-                         "sha256":  "d748f1bb610f8f18343ab8ba635ad3de13bc7a4d9010e510ab313505abe87091",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T12:49:59-03:00",
-                         "modificado_em":  "2026-10-25T12:56:27-03:00",
-                         "bytes":  9385,
-                         "sha256":  "f1ab46e12c7650f675d6974c54664151588a408970908009511dfeea237d8736",
-                         "descricao":  "",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "../SKILL.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/PR-HOUSE-TEMPORAL-RECONCILIATION.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  12650,
-                         "sha256":  "a9bb55fd0a2e6f9b607eaa8bfc0d1adb74519186bb340ea3465d2d0558d28492",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/profile-soul-local-reconcile.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-26T20:35:39-03:00",
-                         "bytes":  6746,
-                         "sha256":  "5d0fea22b46ae3781e896b580ac3b2a4ca4332bd521c505811a3fd1bd844c87a",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T21:58:52-03:00",
-                         "modificado_em":  "2026-10-30T21:59:40-03:00",
-                         "bytes":  1676,
-                         "sha256":  "6c2abb0544e926c74b44900422d20a447afed82e12ae67ba43bb5756e0d86ab3",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/regenerative-self-refinement-engine.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  6049,
-                         "sha256":  "a078988528762ac60b6979483932175f6989ffd4ee9348119e19da3566029a5f",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/remote-desktop-commander-vscode-casa.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-18T17:20:31-03:00",
-                         "modificado_em":  "2026-10-18T17:20:31-03:00",
-                         "bytes":  9149,
-                         "sha256":  "03b9c509edc7f2181eca6a19542f383b68b25370898efec4d0713b7286241d21",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/rsi-loop-method.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-29T07:58:27-03:00",
-                         "modificado_em":  "2026-10-30T18:20:07-03:00",
-                         "bytes":  6958,
-                         "sha256":  "8594a3cb0d535cd030415577cf7f1da8f204efb90f48ae150d54397f13288bb2",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-30T14:30:16-03:00",
-                         "modificado_em":  "2026-10-30T15:29:41-03:00",
-                         "bytes":  7559,
-                         "sha256":  "e5be52dbf49f66d5259c65e44a00bab79d9a9c6ff67dd87535c6eb9b0ad2ee70",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "references/YOUTUBE-DEBUG-PAGE-STATE.md",
-                         "tipo":  "referencia",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  1738,
-                         "sha256":  "3dee62d482ed1a887935391ee1c2e6f41d4056c6c300458d2ad01dab86851908",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/absorver_pasta_trancada.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  5036,
-                         "sha256":  "0e91b93aa4ec4a588bd16f8262c7dfed7754990c795eeeb12221d5b26606b12b",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/atualizar-catalogo-self-healing.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-30T19:45:33-03:00",
-                         "modificado_em":  "2026-10-30T19:45:33-03:00",
-                         "bytes":  18294,
-                         "sha256":  "fe6f00553c0e84a13095ac2e40106b6a4a9982ab41c1f320f6698de5f831f704",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/casa_boot.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-27T00:05:19-03:00",
-                         "bytes":  7051,
-                         "sha256":  "0724ea990d00460d67e8a18dfc0ca65197d7ee7007c3aa19a71660a8c01bb49d",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Consultar-PowerShellDocs.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T12:51:09-03:00",
-                         "modificado_em":  "2026-10-25T12:56:27-03:00",
-                         "bytes":  6267,
-                         "sha256":  "a573e07e42974d51e4377bfe3026dbefcac7afcf0627f5261d567fd9e1b9fcd4",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Hermes-Desktop-BrowserTab.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-28T19:53:04-03:00",
-                         "modificado_em":  "2026-10-28T19:56:45-03:00",
-                         "bytes":  9452,
-                         "sha256":  "98972cfd0643a483dbeaa30db4e30c65e7e05e348d6a4debf2dcdc7094b1981f",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Hermes-Oracle-Return.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-28T19:33:09-03:00",
-                         "modificado_em":  "2026-10-28T20:45:05-03:00",
-                         "bytes":  15507,
-                         "sha256":  "109f6cf8d22dab2f4068cffa46609a5bc9965fbb8615eae3165ed13f0c4ab876",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Hermes-SkillLifecycle-Bridge.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-28T22:07:39-03:00",
-                         "modificado_em":  "2026-10-28T22:18:35-03:00",
-                         "bytes":  3663,
-                         "sha256":  "10d92021043a05c3807718c4dcf843eb165d063d3d4c8f16300a2a0562336efe",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Identify-CentralDarkMonitors.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-26T12:47:12-03:00",
-                         "modificado_em":  "2026-10-26T12:47:12-03:00",
-                         "bytes":  3139,
-                         "sha256":  "7e7eb54a50f6ad1890ac3c2ccd6a7792335cbb04d7a3eb664c25e07269f0f447",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/integrar-skills-centraldark-20261024.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  5246,
-                         "sha256":  "79ea87cada3fec3f77a688373aed43e330ea8d7a5bc0afec2dd1cfc6f009135d",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/mapear_remoto.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:01:30-03:00",
-                         "modificado_em":  "2026-10-25T04:01:30-03:00",
-                         "bytes":  2855,
-                         "sha256":  "b0ab2fb243d2f7c1ece2e195ec054145f0866f278e1f4b63028ce9967175938e",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Measure-FocusWindow.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T07:31:31-03:00",
-                         "modificado_em":  "2026-10-25T07:46:45-03:00",
-                         "bytes":  6734,
-                         "sha256":  "31d23b1b006d6b6a1210b779ca908f36aba2fe2d64badfdca685bec1e8853d31",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/pesquisar-catalogo.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  476,
-                         "sha256":  "ce27ddc79c045236c731ac4d6856a192b0a2f3414bd31614d208be8237494392",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Publish-SkillUsageReceipt.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-28T21:54:23-03:00",
-                         "modificado_em":  "2026-10-28T21:54:23-03:00",
-                         "bytes":  2978,
-                         "sha256":  "a668079765b6cc127c3258dee644fe38a7d7422e0654d2263c7eb851270a7dbb",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/registrar-prova-hermes-casa.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-25T04:03:31-03:00",
-                         "modificado_em":  "2026-10-25T04:03:31-03:00",
-                         "bytes":  4302,
-                         "sha256":  "27e904b4a27d6e479e7cee5079a3a8fd2eb83cd6014b48a500707547f310bc59",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/test_goal_criterion_inheritance.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  3040,
-                         "sha256":  "6ff9fac0f8ce66391df415a41d4785a902d936c4b21ab57dd28dde7959f29354",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/tlc23_runtime_gate.py",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-12T02:29:56-03:00",
-                         "modificado_em":  "2026-10-12T02:29:56-03:00",
-                         "bytes":  23835,
-                         "sha256":  "6d2a806c2b28da521d5581648cd0c748d78b4109fb69a738c001abbd02b92fe4",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "scripts/Trace-TransientConsoleWindows.ps1",
-                         "tipo":  "script",
-                         "criado_em":  "2026-10-30T00:07:40-03:00",
-                         "modificado_em":  "2026-10-30T00:08:59-03:00",
-                         "bytes":  6164,
-                         "sha256":  "4ffb343763f0129704b616c5988f276ad7b4205a721e91584f8f0ded28b78109",
-                         "descricao":  "",
-                         "referencias":  [
-
-                                         ]
-                     },
-                     {
-                         "caminho":  "SKILL.md",
-                         "tipo":  "skill",
-                         "criado_em":  "2026-10-30T22:09:36-03:00",
-                         "modificado_em":  "2026-10-31T09:46:58-03:00",
-                         "bytes":  45254,
-                         "sha256":  "8342963ce7fe7a4e9f368c3f82a8cc8288a6dfa77517e79116efc05060eb31a3",
-                         "descricao":  "Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.",
-                         "referencias":  [
-                                             {
-                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "scripts/Trace-TransientConsoleWindows.ps1",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CORPUS-02-LICOES-LEGADO-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
-                                                 "existe":  true
-                                             },
-                                             {
-                                                 "destino":  "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
-                                                 "existe":  true
-                                             }
-                                         ]
-                     }
-                 ]
+  "gerado_em": "2026-11-04T23:57:26-03:00",
+  "formato": 1,
+  "arquivos": [
+    {
+      "caminho": "catalogo/ARQUIVOS.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 6888,
+      "sha256": "0fe461d907152384c8f1ec876de9cccb3659f240fec2d5c1e86d975946b489a1",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/CATALOGO.md",
+      "tipo": "catalogo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T23:54:31-03:00",
+      "bytes": 13185,
+      "sha256": "d6dfc2d6e0040409ee5ec52c649522f1e06850b15a2915a5ac6c8701bf58b12c",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-intent-deploy-router/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-capability-hud/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-reuse-runtime/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-boot/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-esteira-motor/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-autonomous-conflict-costura/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-live-editing-fabric/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-unified-surface-parity/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-hub-credential-control-plane/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-vscode-log-bridge/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-auto-sync-vscode/package.json",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-note-maintenance/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-hermes-operations/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/reconciliacao-diaria-centraldark/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-evidence-reconciliation/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-ops/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-oracle-surface/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "ARQUIVOS.json",
+          "existe": true
+        },
+        {
+          "destino": "INDICE-PESQUISA.md",
+          "existe": true
+        },
+        {
+          "destino": "../scripts/pesquisar-catalogo.ps1",
+          "existe": true
+        },
+        {
+          "destino": "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+          "existe": true
+        },
+        {
+          "destino": "INDICE-VIVO.md",
+          "existe": true
+        },
+        {
+          "destino": "ARQUIVOS-VIVOS.json",
+          "existe": true
+        },
+        {
+          "destino": "VALIDACAO-AUTOMATICA.md",
+          "existe": true
+        },
+        {
+          "destino": "HISTORICO-MUDANCAS.jsonl",
+          "existe": true
+        },
+        {
+          "destino": "../references/AUTO-MELHORIA-COM-PROVA.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "catalogo/comprovacoes/cockpit-health-adapter-9101-20261030T215232Z.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-30T18:53:20-03:00",
+      "modificado_em": "2026-10-30T19:04:44-03:00",
+      "bytes": 1918,
+      "sha256": "740ebec23cfaeb0f1cc73ce9e3ba4401a609114eddb410d21fe8039a2fbc3e5c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/comprovacoes/cockpit-measure-now-8099-9101-20261030T182650-0300.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-30T18:27:01-03:00",
+      "modificado_em": "2026-10-30T18:27:01-03:00",
+      "bytes": 2039,
+      "sha256": "682f8bb6805789ccca7b46619dd3a57a285bc2dfbbd9b78fef310b36f3d8d93a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/comprovacoes/genesis-replay-20261030T204009Z.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-30T17:41:51-03:00",
+      "modificado_em": "2026-10-30T17:43:55-03:00",
+      "bytes": 2737,
+      "sha256": "bef6f8660479bfd8d876c4576d6fd279e0e7c7299ced218e6d3e3ac51272692a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/comprovacoes/michelin-3-runtime-adapter-20261030T220500Z.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-30T19:09:53-03:00",
+      "modificado_em": "2026-10-30T19:09:53-03:00",
+      "bytes": 1459,
+      "sha256": "ce5043e9c0abcefa18ea1ab511ef98f73fcda8f645b997e5b0d3dba93153782c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/comprovacoes/t_26e02a16.json",
+      "tipo": "catalogo",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 1450,
+      "sha256": "a469004099807fa6c7868cb6fa96db0b6e00c93db481057f2c21a613002a1576",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "catalogo/INDICE-PESQUISA.md",
+      "tipo": "catalogo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T23:56:59-03:00",
+      "bytes": 6384,
+      "sha256": "96c90132de98b90d3808b8526275c8ae90b276ed34652e27938094a9e5516ee9",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "../SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "CATALOGO.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/HERMES-FREE-TIER-FALLBACK.md",
+          "existe": true
+        },
+        {
+          "destino": "../../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../references/regenerative-self-refinement-engine.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-note-maintenance/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-hermes-operations/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/reconciliacao-diaria-centraldark/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-evidence-reconciliation/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-ops/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../Skills/centraldark-oracle-surface/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "CATALOGO.md",
+          "existe": true
+        },
+        {
+          "destino": "INDICE-VIVO.md",
+          "existe": true
+        },
+        {
+          "destino": "INDICE-VIVO.md",
+          "existe": true
+        },
+        {
+          "destino": "VALIDACAO-AUTOMATICA.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-10-24T18:41:19-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 2403,
+      "sha256": "f907162e7819de04dafd29c69660e0454d01c9ccce04ab9e4c26f71d987c181e",
+      "descricao": "Use quando o CHEFE trabalhar com Hub, conectores, OAuth, API keys temporarias, providers, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou catalogo de modelos pelo painel CentralDark.",
+      "referencias": []
+    },
+    {
+      "caminho": "contracts/TLC23-RUNTIME-GATE.yml",
+      "tipo": "arquivo",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 18244,
+      "sha256": "43f373e304729b0704e371c1e747b28e727e45742c3bae87bb365e921aa13ab0",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "INTERLIGADOS.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T23:54:31-03:00",
+      "bytes": 4175,
+      "sha256": "57dc1876d3b7cb93a4cfb1106e02a905ee3de1f1222737a5fa751226fac95e86",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-11-04-DIALOGO-REFLEXIVO-DA-INTENCAO.md",
+          "existe": true
+        },
+        {
+          "destino": "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
+          "existe": true
+        },
+        {
+          "destino": "SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "catalogo/CATALOGO.md",
+          "existe": true
+        },
+        {
+          "destino": "catalogo/INDICE-PESQUISA.md",
+          "existe": true
+        },
+        {
+          "destino": "catalogo/INDICE-VIVO.md",
+          "existe": true
+        },
+        {
+          "destino": "catalogo/ARQUIVOS-VIVOS.json",
+          "existe": true
+        },
+        {
+          "destino": "catalogo/HISTORICO-MUDANCAS.jsonl",
+          "existe": true
+        },
+        {
+          "destino": "references/AUTO-MELHORIA-COM-PROVA.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+          "existe": true
+        },
+        {
+          "destino": "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/2026-09-02-appcentraldark-evoluir-bridge-capability-reconciliation.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 13531,
+      "sha256": "35aeda137aa07022db304aea4bde383698995ce36997eeb404a04f3639ce64a2",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-contabo-hermes-runtime-10-fronts.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 7875,
+      "sha256": "1c0af460aea9a3ce912946fb977f966ecdb74a924b7f41e3b195c01974957320",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-garimpo-visual-runtime-reconciliation.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 19168,
+      "sha256": "73ea6a71e10315dd54509cba213be445f0955ff902b00e1e024e228847d0177c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-gemini-cli-vscode-devcontainer-mcp-reconciliation.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 12807,
+      "sha256": "ee926da69eedf3d50c3837dda10cbd8ccbffb174ceb3d024a45f0991098a89e1",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-painel-cronica-e-fable51.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 11431,
+      "sha256": "4f923d166d6b5934f233f14ceb21813864378c5e44564b3462734e82f65122d0",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-pergaminhos-capitulo-convergencia-superpack-figma.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 9854,
+      "sha256": "fa7ff9e9deed3358581af24a5872c7c7de77ca4e3d9722c4d126aa49edbd5961",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-pergaminhos-do-tempo-jornal-temporal.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 6286,
+      "sha256": "0e56e24642014eb290d78aadcf64ea9532e5db838e1e85410d1b9cd0a1e19733",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-session-hud-garimpo-mcp-reconciliation.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 13580,
+      "sha256": "57709a0f3c9a5ccaeb376368af80a78186cc64378cae78eab12f5a70b28892c3",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-02-sol-audit-hud-fable51-t1.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 5647,
+      "sha256": "8e8dcd31075b23b4dfdc3054a44200e6b7624f4f555fbeeddd80544dc0bce4a3",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-03-claude-screenpipe-skins-false-green-reconciliation.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 7617,
+      "sha256": "42885d806d81bcf7c7d718176995c6f34f648fb51b7e2d3a7e4df42a7e148d99",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-apply-until-blocked-cross-axis-mode.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 5285,
+      "sha256": "a76a035dc9c0e255cb28dc44f5e6c2efc91f6f484bf4790e48626a34a5183f25",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-ci-agent-chatgpt-label-delta-receipt.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 2696,
+      "sha256": "4c682869bbdb63ef37a6e39d2daf261205d26e94e34286e49c6defd39e7f0525",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-external-capability-intake-uem-vpanel.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 4417,
+      "sha256": "66d677a9d86a30e55507d831a4010152dd1b909141ec90019572e34b9a99a0bc",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-label-gate-delta-util-audit.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3425,
+      "sha256": "d55c31639d85610135459c61ca3fe0c8cfe8d5ecb8ff0ec45f0d0eab52473302",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-pr-handoff-war-room-contract.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 3444,
+      "sha256": "96db684c1f476a815db46b24c4db3794f63d6e5f58f14fb1545ce91e73acbdcf",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-pr-title-contract-raw-code-audit.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 3088,
+      "sha256": "377ae82061bd48dffbe78269d50e50062a3cdb35e38c0c6f2e45d174554af4aa",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-pr-trilho-vivo-contract.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 2539,
+      "sha256": "65c3cdad8428a6339b7f424d681899e9a2033fc09cb2f220dbd411b71013a462",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-preanswer-github-gate-continuity.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 8146,
+      "sha256": "c2d1bc9575ee0c4042e82b4991317410f05a7e8094bce73508e9c87b97da9d84",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-regra-zero-same-head-live-receipt.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 2160,
+      "sha256": "8fbcfafeaffdd87b39f3a935290f26e053f68a173afa5e6edc40ff39e0a46e29",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-08-rule-zero-horn-connector-demand.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 3268,
+      "sha256": "862e4045d1c2b5d33a2a8e357257084041c672fc0afeb7f55ca5f563b42381e2",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/2026-09-10-leitura-do-plano-do-chefe.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 10508,
+      "sha256": "22c637a22b48f8067a16795c1180e123081aa249d8fc98024b1e9c0d4c44879c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/AUTO-MELHORIA-COM-PROVA.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 8920,
+      "sha256": "e2b682a488cbe05239203a4a02da5d31db781a8c22ef7ea3b66582f6674d8e15",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/centraldark-remote-bridge.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 11912,
+      "sha256": "087e01eb5507d69397f17fff4e1d8e41af23d568ac291f4bf840ac6e64c5ba5c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 5980,
+      "sha256": "019ea63a941ec77690f015311e96edf9183929a2c9840bd3c78a85162f05c502",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T10:32:11-03:00",
+      "modificado_em": "2026-10-30T10:32:11-03:00",
+      "bytes": 5029,
+      "sha256": "9dfe33889f757cecdcec15946a5420d6bb2199cb2f54feccafa203772ef1bec6",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 148994,
+      "sha256": "c0a5a173fe0eea485e8ad1bf6b5579c3ca01f13989bdd4bf983b75cae535ff4f",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "scripts/Hermes-Desktop-BrowserTab.ps1",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+          "existe": false
+        },
+        {
+          "destino": "scripts/Publish-SkillUsageReceipt.ps1",
+          "existe": false
+        },
+        {
+          "destino": "scripts/Hermes-SkillLifecycle-Bridge.py",
+          "existe": false
+        },
+        {
+          "destino": "Skills/centraldark-oracle-surface/SKILL.md",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+          "existe": false
+        },
+        {
+          "destino": "scripts/Hermes-Oracle-Return.ps1",
+          "existe": false
+        },
+        {
+          "destino": "Skills/centraldark-oracle-surface/SKILL.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+          "existe": false
+        },
+        {
+          "destino": "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+          "existe": false
+        },
+        {
+          "destino": "../kaizen-sistema-um/SKILL.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../scripts/casa/CentralDark-VPS-Casa-PID-OneShot.ps1",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-SSH-REVERSO-CASA-VPS-ONESHOT-REUSO.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/CONSCIENCIA/LEMBRANCAS/03-evidencias-contraprovas/2026-10-25-CIRCUITO-SSH-CASA-VPS-PIDS-COMPROVADO.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/RECEIPTS/CENTRALDARK-SSH-VPS-CASA-PIDS-ONESHOT-20261025.md",
+          "existe": false
+        },
+        {
+          "destino": "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
+          "existe": false
+        },
+        {
+          "destino": "references/CENTRALDARK-REMOTE-NOMENCLATURA.md",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md#observacoes--receita-operacional-viva-dos-4-monitores-28102026",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md#navegação-deliberada-do-cockpit--mapa-vivo-botão-por-botão",
+          "existe": false
+        },
+        {
+          "destino": "references/FOCUS-DELEGACAO-TELEMETRIA.md#recibo-consumido--seis-cliques-de-navegação-radeon-hermes-desktop-2026-10-27",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/CATALOGO.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/BRAIN/03-DOCUMENTACAO/03-GUIAS/DIAGRAMAS-CENTRALDARK.md#12-skill-mãe--cristal-reutilizável--preservação-e-reconstrução-2026-10-28",
+          "existe": false
+        },
+        {
+          "destino": "../../../apps/modulos/obsidian-plugin-grafo-vivo/README.md#centraldark-plugin--organização-unificada-2026-10-28",
+          "existe": false
+        },
+        {
+          "destino": "Skills/",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/INDICE-PESQUISA.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/INDICE-PESQUISA.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/ARQUIVOS-VIVOS.json",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/INDICE-VIVO.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/ARQUIVOS.json",
+          "existe": false
+        },
+        {
+          "destino": "references/AUTO-MELHORIA-COM-PROVA.md",
+          "existe": false
+        },
+        {
+          "destino": "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
+          "existe": false
+        },
+        {
+          "destino": "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+          "existe": false
+        },
+        {
+          "destino": "references/rsi-loop-method.md",
+          "existe": false
+        },
+        {
+          "destino": "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../docs/CONSCIENCIA/APRENDIZADOS/2026-10-25-KIMETSU-KANBAN-RECUPERACAO-DEDUPLICACAO.md",
+          "existe": false
+        },
+        {
+          "destino": "Skills/michelin-3-estrelas/SKILL.md",
+          "existe": false
+        },
+        {
+          "destino": "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+          "existe": false
+        },
+        {
+          "destino": "references/HERMES-FREE-TIER-FALLBACK.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/CATALOGO.md",
+          "existe": false
+        },
+        {
+          "destino": "catalogo/INDICE-PESQUISA.md",
+          "existe": false
+        },
+        {
+          "destino": "../../../RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28",
+          "existe": false
+        },
+        {
+          "destino": "../../../LEIA-ME-IA.md#-sem-lei-operacional--anti-fricção-current",
+          "existe": false
+        }
+      ]
+    },
+    {
+      "caminho": "references/CORPUS-02-LICOES-LEGADO-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T21:58:52-03:00",
+      "modificado_em": "2026-10-30T21:58:52-03:00",
+      "bytes": 67659,
+      "sha256": "cfdfdf8b711ebbedc5a24e8b8cb6d849d19b1e97955bf297e685bfb0189ea939",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 37568,
+      "sha256": "e20d0f7d6294481914d552987b8385cd523973d5e7ca90bf83c33543cfbef14c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T21:58:52-03:00",
+      "modificado_em": "2026-10-30T21:58:52-03:00",
+      "bytes": 44769,
+      "sha256": "8bf88a7cdbececf9b771e566110751e87317bf73f1d6e9cc88572c73d91f4d5b",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "references/delegacao-economica-com-prova.md",
+          "existe": false
+        },
+        {
+          "destino": "references/remote-desktop-commander-vscode-casa.md",
+          "existe": false
+        }
+      ]
+    },
+    {
+      "caminho": "references/delegacao-economica-com-prova.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-15T13:26:01-03:00",
+      "modificado_em": "2026-10-15T13:26:01-03:00",
+      "bytes": 2197,
+      "sha256": "b17d60440aa9d5dca9c19882bcd759a9a711a2f68537c41daa36e0e9023293e7",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/fixed-point-terminal-receipt-contraprova.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 7188,
+      "sha256": "2203d0ec37fbcdecb6022fa3a2977f0b766b4ae11162e8380b467f01d4efd396",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/FOCUS-DELEGACAO-TELEMETRIA.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-28T08:08:26-03:00",
+      "modificado_em": "2026-10-30T16:07:23-03:00",
+      "bytes": 48648,
+      "sha256": "df35d32e79e941a3ca7ef30ef310797a463b8167f65484909ca6f57f345dcad7",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/git-push-sequence.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 7105,
+      "sha256": "6f60082e4a393fa779c82ec932d451b12ef819a04e7bd487eeec468677a2773e",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/HANDOFF-CENTRALDARK-REMOTE-20261024.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 9061,
+      "sha256": "025bec5dec9e6991064e482e81d4f951241619d5e0f0388a3d2b1f3e4088a012",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/HERMES-FREE-TIER-FALLBACK.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-29T14:12:13-03:00",
+      "modificado_em": "2026-10-29T14:12:14-03:00",
+      "bytes": 10698,
+      "sha256": "c45930635f52d3bd0f263e31b110e806a9d0957146df130b877b5991ef3c82e0",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/HERMES-KANBAN-RECEITA-UNIVERSAL.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-26T16:17:59-03:00",
+      "bytes": 12807,
+      "sha256": "5ffca46f168be61a1f47b123824532f9b4d2045c461113cfbafc10c766046ff2",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/hermes-model-config.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 4224,
+      "sha256": "2b2a4653aea8cf746fea3b1ccbc32844484b2ca573dc44820585e64835ed2565",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/HUMAN-ACTION-DIRECT-LINK.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 1765,
+      "sha256": "a251f7766cab2d35632a3106e70a9ed5054c22653b2064193b1ad29e6d06ce2b",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T21:58:52-03:00",
+      "modificado_em": "2026-10-30T21:59:40-03:00",
+      "bytes": 23097,
+      "sha256": "e7bf64b67c14765dcc1f54d62680e37f76db3030fe139f372b43f37100fff239",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "CORPUS-02-LICOES-LEGADO-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "CORPUS-04-ROTAS-RECENTES-20261030.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T00:07:00-03:00",
+      "modificado_em": "2026-10-30T00:07:00-03:00",
+      "bytes": 6131,
+      "sha256": "4826354b5828f8342deb71a945848f6304429f01c3f3acd6ddfcb7bd5f3e925f",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "../SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../scripts/Trace-TransientConsoleWindows.ps1",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/KANBAN-KIMETSU-RECUPERACAO-E-DELTA-20261025.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 10169,
+      "sha256": "957cf5a0a417b503641d9696f066fb3c7994348d69430aa87b9ffc602dfb2082",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "../../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/MICHELIN-3-ESTRELAS-PROTOCOLO.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 5265,
+      "sha256": "cb1486df5e5d5efbd2803d6c44271705b9a6d3ef9e3c33aebe2be9b254c642db",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/PACKAGE-INGEST-LEDGER.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 11269,
+      "sha256": "d748f1bb610f8f18343ab8ba635ad3de13bc7a4d9010e510ab313505abe87091",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 11952,
+      "sha256": "54e81690afdf06a65a9c35b7d8b6033b3a3699300f581d57e941a32432f1a7b2",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "../SKILL.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/PR-HOUSE-TEMPORAL-RECONCILIATION.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 14497,
+      "sha256": "9da189d4438ceac80a97d0614fbe156fe986653b509bb605c6bbce486b708f20",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/profile-soul-local-reconcile.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-26T20:35:39-03:00",
+      "bytes": 6746,
+      "sha256": "5d0fea22b46ae3781e896b580ac3b2a4ca4332bd521c505811a3fd1bd844c87a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/RECEIPT-CRISTAL-SKILL-MAE-20261030.json",
+      "tipo": "referencia",
+      "criado_em": "2026-10-30T21:58:52-03:00",
+      "modificado_em": "2026-10-30T21:59:40-03:00",
+      "bytes": 1676,
+      "sha256": "6c2abb0544e926c74b44900422d20a447afed82e12ae67ba43bb5756e0d86ab3",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/regenerative-self-refinement-engine.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 6049,
+      "sha256": "a078988528762ac60b6979483932175f6989ffd4ee9348119e19da3566029a5f",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/remote-desktop-commander-vscode-casa.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-18T17:20:31-03:00",
+      "modificado_em": "2026-10-18T17:20:31-03:00",
+      "bytes": 9149,
+      "sha256": "03b9c509edc7f2181eca6a19542f383b68b25370898efec4d0713b7286241d21",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/rsi-loop-method.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-29T07:58:27-03:00",
+      "modificado_em": "2026-10-30T18:20:07-03:00",
+      "bytes": 6958,
+      "sha256": "8594a3cb0d535cd030415577cf7f1da8f204efb90f48ae150d54397f13288bb2",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+      "tipo": "referencia",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 49899,
+      "sha256": "d28791fe7d84907639d1b5a64deebbeb33b8073bc55a846c51cbfe25b83deecd",
+      "descricao": "",
+      "referencias": [
+        {
+          "destino": "rsi-loop-method.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "references/YOUTUBE-DEBUG-PAGE-STATE.md",
+      "tipo": "referencia",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 1738,
+      "sha256": "3dee62d482ed1a887935391ee1c2e6f41d4056c6c300458d2ad01dab86851908",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/absorver_pasta_trancada.py",
+      "tipo": "script",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5013,
+      "sha256": "ae90029d01daa097052751061d6ada929b53ab7f3f334e254c7b7558c9828dd1",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/atualizar-catalogo-self-healing.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-30T19:45:33-03:00",
+      "modificado_em": "2026-10-30T19:45:33-03:00",
+      "bytes": 18294,
+      "sha256": "fe6f00553c0e84a13095ac2e40106b6a4a9982ab41c1f320f6698de5f831f704",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/casa_boot.py",
+      "tipo": "script",
+      "criado_em": "2026-10-25T04:01:30-03:00",
+      "modificado_em": "2026-10-27T00:05:19-03:00",
+      "bytes": 7051,
+      "sha256": "0724ea990d00460d67e8a18dfc0ca65197d7ee7007c3aa19a71660a8c01bb49d",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Consultar-PowerShellDocs.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-25T12:51:09-03:00",
+      "modificado_em": "2026-10-25T12:56:27-03:00",
+      "bytes": 6267,
+      "sha256": "a573e07e42974d51e4377bfe3026dbefcac7afcf0627f5261d567fd9e1b9fcd4",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Hermes-Desktop-BrowserTab.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-28T19:53:04-03:00",
+      "modificado_em": "2026-10-28T19:56:45-03:00",
+      "bytes": 9452,
+      "sha256": "98972cfd0643a483dbeaa30db4e30c65e7e05e348d6a4debf2dcdc7094b1981f",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Hermes-Oracle-Return.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-28T19:33:09-03:00",
+      "modificado_em": "2026-10-28T20:45:05-03:00",
+      "bytes": 15507,
+      "sha256": "109f6cf8d22dab2f4068cffa46609a5bc9965fbb8615eae3165ed13f0c4ab876",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Hermes-SkillLifecycle-Bridge.py",
+      "tipo": "script",
+      "criado_em": "2026-10-28T22:07:39-03:00",
+      "modificado_em": "2026-10-28T22:18:35-03:00",
+      "bytes": 3663,
+      "sha256": "10d92021043a05c3807718c4dcf843eb165d063d3d4c8f16300a2a0562336efe",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Identify-CentralDarkMonitors.ps1",
+      "tipo": "script",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 7328,
+      "sha256": "d737bc2dd26b566ddc60006923c1c91576561c2e337ee97c5b0eea5025997436",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/integrar-skills-centraldark-20261024.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 5246,
+      "sha256": "79ea87cada3fec3f77a688373aed43e330ea8d7a5bc0afec2dd1cfc6f009135d",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/mapear_remoto.py",
+      "tipo": "script",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2854,
+      "sha256": "8109b7c0fd2239be1fec209205e3cb581f9fa60fbed59f916237fd969565fa89",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Measure-FocusWindow.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-25T07:31:31-03:00",
+      "modificado_em": "2026-10-25T07:46:45-03:00",
+      "bytes": 6734,
+      "sha256": "31d23b1b006d6b6a1210b779ca908f36aba2fe2d64badfdca685bec1e8853d31",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/pesquisar-catalogo.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 476,
+      "sha256": "ce27ddc79c045236c731ac4d6856a192b0a2f3414bd31614d208be8237494392",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Publish-SkillUsageReceipt.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-28T21:54:23-03:00",
+      "modificado_em": "2026-10-28T21:54:23-03:00",
+      "bytes": 2978,
+      "sha256": "a668079765b6cc127c3258dee644fe38a7d7422e0654d2263c7eb851270a7dbb",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/registrar-prova-hermes-casa.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-25T04:03:31-03:00",
+      "modificado_em": "2026-10-25T04:03:31-03:00",
+      "bytes": 4302,
+      "sha256": "27e904b4a27d6e479e7cee5079a3a8fd2eb83cd6014b48a500707547f310bc59",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/test_goal_criterion_inheritance.py",
+      "tipo": "script",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 3040,
+      "sha256": "6ff9fac0f8ce66391df415a41d4785a902d936c4b21ab57dd28dde7959f29354",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/tlc23_runtime_gate.py",
+      "tipo": "script",
+      "criado_em": "2026-10-12T02:29:56-03:00",
+      "modificado_em": "2026-10-12T02:29:56-03:00",
+      "bytes": 23835,
+      "sha256": "6d2a806c2b28da521d5581648cd0c748d78b4109fb69a738c001abbd02b92fe4",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "scripts/Trace-TransientConsoleWindows.ps1",
+      "tipo": "script",
+      "criado_em": "2026-10-30T00:07:40-03:00",
+      "modificado_em": "2026-10-30T00:08:59-03:00",
+      "bytes": 6164,
+      "sha256": "4ffb343763f0129704b616c5988f276ad7b4205a721e91584f8f0ded28b78109",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T23:57:26-03:00",
+      "modificado_em": "2026-11-04T23:57:26-03:00",
+      "bytes": 69767,
+      "sha256": "57a11a7e642580f142d548f80957363d6a97fce174c121150eed1aef43f0ffc4",
+      "descricao": "Capacidade operacional de todo o sistema CentralDark; uma Skill Mãe, uma biblioteca Skills/, um único organismo. SOL coordena e HERMES executa; PIVETE permanece vocativo/proveniência histórica.",
+      "referencias": [
+        {
+          "destino": "Skills/centraldark-auto-sync-vscode/SKILL.md",
+          "existe": false
+        },
+        {
+          "destino": "Skills/centraldark-autonomous-conflict-costura/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-boot/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-capability-hud/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-esteira-motor/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-evidence-reconciliation/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-hermes-operations/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-hermes-visual-computer-use/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-hub-credential-control-plane/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-integration-verification/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-intent-deploy-router/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-live-editing-fabric/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-linux-vmware-rawdisk/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-note-maintenance/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-ops/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-oracle-surface/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-reuse-runtime/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-unified-surface-parity/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-vscode-log-bridge/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/reconciliacao-diaria-centraldark/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-linux-vmware-rawdisk/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "Skills/michelin-3-estrelas/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#chatgpt-windows-foco-comprovado-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#loop-sol-hermes-bidirecional-uma-rodada-comprovada-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#fast-path-bidirecional-e-fila-nativa-cloudroom-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/rsi-loop-method.md",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#gatilhos-humanos-ida-e-volta-entre-monitores-verticais-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#voz-e-semântica-de-delegação-mesma-ida-e-volta-sem-repetir-goal-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md#1-comparação-de-arquivos-e-backups-por-sha-256-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#cloudroom-windows-delegacao-real-2026-11-01",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md",
+          "existe": true
+        },
+        {
+          "destino": "references/JANELAS-TRANSITORIAS-HERMES-TRACE.md",
+          "existe": true
+        },
+        {
+          "destino": "scripts/Trace-TransientConsoleWindows.ps1",
+          "existe": true
+        },
+        {
+          "destino": "references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/CORPUS-02-LICOES-LEGADO-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/CORPUS-03-CONTRATOS-E-GATES-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/CORPUS-04-ROTAS-RECENTES-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/INDICE-INTEGRAL-SKILL-MAE-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md",
+          "existe": true
+        },
+        {
+          "destino": "scripts/Identify-CentralDarkMonitors.ps1",
+          "existe": true
+        },
+        {
+          "destino": "../hermes-visual-computer-use/SKILL.md",
+          "existe": false
+        }
+      ]
+    },
+    {
+      "caminho": "Skills/.gitkeep",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-auto-sync-vscode/package.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2088,
+      "sha256": "72df3dbedb785967b5ba50d740bce8202fad7a644b30c570ce024fde8bfc2e3c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-autonomous-conflict-costura/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 8395,
+      "sha256": "6b2d8b4019b4df4cc51b4eb08ccec931c421ccf01e0f92ccbddf57abeb2ec599",
+      "descricao": "Método reutilizável da CentralDark para resolução autônoma de conflitos Git/PR por intenção, com decisão CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW, sem invocação manual de agente por conflito.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-boot/references/example-boot-output.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1052,
+      "sha256": "acf78bea4b627fd342a002f48b537ee8f7c6aa35ffc281307158b8e42e17491a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-boot/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 13084,
+      "sha256": "c80518473e62489ebea349bc77bdfe054a2eb5dfcb49dd8ea879ca0ec57bd488",
+      "descricao": "Execute CentralDark boot to align and verify HUD.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-capability-hud/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 4461,
+      "sha256": "e087a4fd1efa3140c9b70284c15bd2baaa1c288bcb80116fe895584f1f7a7be9",
+      "descricao": "Boot de capacidades reais da sessão. Use no começo de missão operacional e como parte obrigatória de #ACORDAR/!ACORDAR antes de alegar que uma ferramenta, conector, workflow, runtime, arquivo ou ponte não está disponível; mede o que está carregado, tenta probes seguros e retorna bloqueio real com próximo identificador mínimo.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T23:51:34-03:00",
+      "modificado_em": "2026-11-04T23:55:32-03:00",
+      "bytes": 4993,
+      "sha256": "6f36aa57d19bd595d4febb14205316f103fe831c877a41c2181b492fe20f4f6f",
+      "descricao": "CentralDark Reflective Intent Dialogue: escuta reflexiva, reparo conversacional, metacomunicacao e continuidade da intencao. Usar em toda conversa CentralDark, silenciosamente; uma ideia nova e DELTA, nao troca implicita de missao.",
+      "referencias": [
+        {
+          "destino": "../../SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../../INTERLIGADOS.md",
+          "existe": true
+        },
+        {
+          "destino": "../../../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../../references/regenerative-self-refinement-engine.md",
+          "existe": true
+        },
+        {
+          "destino": "../michelin-3-estrelas/SKILL.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "Skills/centraldark-esteira-motor/INTERLIGADOS.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 770,
+      "sha256": "b3c73cbc4065ee89eb7868d415d95341df2253862c564f324f78efe04589f77a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-esteira-motor/references/sessao-erros-reais.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1217,
+      "sha256": "dc23825f47023c4ccdff0a9d637bd9595d4262afd9b9a99d279b2e76b93876ab",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-esteira-motor/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 18027,
+      "sha256": "49745155400ee5b98825dcb60405d3bbbb28e6e38325813cb585c832190d5e5d",
+      "descricao": "CentralDark esteira e motor Hermes — separa PM2 motor de deploy Actions, fila self-hosted, setup-node, PAPAGAIO vs POMBO. Use quando CHEFE pedir deploy, restart, runner, fila, Hermes, VPS sync, ou status do motor.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-evidence-reconciliation/references/fixed-point-funnel.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1241,
+      "sha256": "81b55843899937979b5d511e71da93a8c78d9e0654aa0005bfea2c981be94331",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-evidence-reconciliation/references/github-fast-inventory.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2840,
+      "sha256": "7d863e5e85f29dbebe9d912130f380eb31e24e435c0accc485b0c8487d586950",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-evidence-reconciliation/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 6185,
+      "sha256": "2aa36f69bf5e72cd4d3c5a19a999e91c92f389a50758ecee43a9966bc1cd1aaa",
+      "descricao": "Reconcile CentralDark code, runtime, sources, and projections.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-operations/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T23:55:32-03:00",
+      "bytes": 14776,
+      "sha256": "3c951071727bf696b2b258308e6ad053857dbf65856cc189608d702e26c1f3dd",
+      "descricao": "Operate Hermes update, cron, SSH, ports for CentralDark.",
+      "referencias": [
+        {
+          "destino": "../centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/.gitignore",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 53,
+      "sha256": "4b6c68c75694acc3a38ea8c1a5331cf23afdedb2305eb5a905406a0982370c5a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/default.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 472,
+      "sha256": "a98400ebeb8233dd9aea571395efd2b0fcb689f37b5c7adaf0c143d0d6f992b7",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/app.manifest",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 494,
+      "sha256": "ebd6d5810b3507c370ffcf0773c8f2cd3c09b1c227e2a1451c3615ad44c159e5",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/Capture.cs",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2918,
+      "sha256": "42d03aa3fec2cf25df956d9cdfa9c18dd9a14594558d3db7ffddb1dc25cb437c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/global.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 57,
+      "sha256": "65d8d883d4a59014cd9abe40897ad16057b7f65aea5643b38f9a22055cca6a97",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/HermesVisual.csproj",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 348,
+      "sha256": "180d02e48c02c22e1faa99fe79f251a1ba1ab51c156c6e632fe94e888b930730",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/Native.cs",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5257,
+      "sha256": "afb4f6cfe9ac0ab2393291a89e5f7408601970cda979775be482131de3b8ad69",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/Overlay.cs",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 4582,
+      "sha256": "563dc2b2b90187ccddde45cdf41240fe9fffac44fcb77bba10fdd66356defbb5",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/native/Program.cs",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 6244,
+      "sha256": "43f640b3f032e062216eae38f58c6f1452ff3ea5e25edb1367c175639316daa5",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/hermes-validation.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2692,
+      "sha256": "947bc587b798fa68e98525a0987dd4a873a45b154d1105d36d0c7fadbbe822a5",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/monitor-human-confirmation.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 862,
+      "sha256": "78cfd723f6509e4f9837441aa92acc24b108db79a430e64daa8d1502281ab836",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/native-cursor-confirmation.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 964,
+      "sha256": "2bb886e09b0502f8ed648edb512c91315f8985bc5272effc935c665d844faa0f",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/native-cursor-replay-validation.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1660,
+      "sha256": "57a5691e0f6a1da29d043b9a8ad556c223b475258271c3eb4417aeaa439cd6ed",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/native-cursor.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5753,
+      "sha256": "5f679aae5cb373bb4dba55c3faee72256fa1949bf065bf002890161bf31d483d",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/technical.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 6688,
+      "sha256": "ac92bea1952975481fb79e42466aa52280ced7015c3bc762af8ef2960a91df1a",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/references/validation.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5483,
+      "sha256": "1aed21eaefbfb707a5fd1c0e68ad52b786b49fcae9a87a03f8ab286497f1d2d3",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 9274,
+      "sha256": "ce20ac544b26b87f25e51ac0ee6f35d6b15ac3d2304552d85fcb0537fc54a0a7",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/blink.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1288,
+      "sha256": "12342cce6f01bafd75b5c96d792ce728301fafe62806c61de74967dbd16dadf9",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/hermes_plugin.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 4838,
+      "sha256": "c826912a58021cc8974e1aab2970920bb44653841a3c4f5c582ccd894851b5f4",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/Install.ps1",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2885,
+      "sha256": "a174ce6d59531df8d0c6e97b11283ee6d8e63ea6f2c6661741e3419b1f94c0d6",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/test_visual.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3542,
+      "sha256": "b00a159ecf0e02acf1402c2d5eaf31f8c62fa9fb31ce440a6bc9bad81220b4cf",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/validate_hermes.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 4345,
+      "sha256": "4d58a9d72b7bdecc7d85a5ff1a75e990427d68819d77a686a4b4fe4c2d9ac69c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/scripts/visual.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 4483,
+      "sha256": "ab3928b683357270b92bf21457ae3465ed8a102fb0a13f7e254613e6f7e8c5fa",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-hermes-visual-computer-use/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 11636,
+      "sha256": "a9b8af89517da07472e4bb6bb6d6f341912fd69e26d05c4afbe75713126bc64b",
+      "descricao": "Identificar monitores por numero ou posicao, capturar um monitor autorizado com Windows.Graphics.Capture e mostrar moldura verde de atividade no Hermes Windows 11. Use para captura de tela, monitor um/dois/tres/quatro, bancada operacional e automacao visual com indicador, sem substituir o cursor Cua existente.",
+      "referencias": [
+        {
+          "destino": "references/technical.md",
+          "existe": true
+        },
+        {
+          "destino": "scripts/test_visual.py",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "Skills/centraldark-hub-credential-control-plane/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2403,
+      "sha256": "f907162e7819de04dafd29c69660e0454d01c9ccce04ab9e4c26f71d987c181e",
+      "descricao": "Use quando o CHEFE trabalhar com Hub, conectores, OAuth, API keys temporarias, providers, Abacus, Tailscale, Supabase, Gmail, GitHub, Google Drive, Casa/VPS ou catalogo de modelos pelo painel CentralDark.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-integration-verification/references/cockpit-cerebro-build-pattern.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2915,
+      "sha256": "eb4a1621286f80bddb4aa0741abe624d0b44759f0ab92fc6192e1bfa2c790445",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-integration-verification/references/legacy-surface-retirement.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2102,
+      "sha256": "0860bfd6cde36dbcd1dc79b73a2866c438f58c1a4437ee8d0485a10c29a67224",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-integration-verification/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 9857,
+      "sha256": "8465c3d033422b9e920ebad81b9fb178b06e172e0e70a06d831a52a5bdcdef32",
+      "descricao": "Use when checking CentralDark integration across surfaces.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-intent-deploy-router/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5829,
+      "sha256": "5d84730741ebc8167ff2b9a7be83f2cd90fbcbc74b1b75bb0c9fa7182660b52c",
+      "descricao": "Router obrigatório de intenção, gatilhos, Capability HUD e deploy vivo para agentes CentralDark. Use antes de escolher skill, subagente, escrita, microdeploy, CI profundo, HUB, provider, segredo temporário ou antes de alegar limitação de ferramenta.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 7749,
+      "sha256": "cf53de1b738a9dc703d4bd3648b4bd69d707acf413a4511616cdecc592f1e113",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-linux-vmware-rawdisk/scripts/Open-CentralDarkForjaRDP.ps1",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3463,
+      "sha256": "319807a8db2f4a4d042d5a95254b093b6140fca9755a829332e3b3b24dbd32b2",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-linux-vmware-rawdisk/scripts/Verify-CentralDarkVmware.ps1",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 5467,
+      "sha256": "04bafdd73f13ff948ccd5dd9b4c25fcae99e0264152a06c8c02a6bb57aba2716",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-linux-vmware-rawdisk/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 10260,
+      "sha256": "e2bb7af00c784b8effaec83760cfe227e3bbd5c6db303095da5ff67c244a9dbc",
+      "descricao": "CentralDark: migrar Linux openKylin num SSD fisico para VMware Workstation com raw disk partitionedDevice, GParted Live, SYSBOOT/SYSROOT/DATA/SWAP e NTFS VMWARE no proprio SSD. Metodo hibrido CHEFE + SOL/Hermes: GUI, SSH, Windows, Cua, provas e recibo. Acionar para Kingston, VMware, discos fisicos, NTFS de 10 GiB, swap, boot e testes simultaneos.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-live-editing-fabric/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 13626,
+      "sha256": "23484d80e4123417267413ac92c99baeaa4aa011a67f57dfc9130289545fae76",
+      "descricao": "Modo padrão da CentralDark para edição viva determinística. Use quando o CHEFE quiser editar/refinar e ver no runtime rápido, sem transformar CI profundo em freio de MVP.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-note-maintenance/scripts/hud_notas_desatualizadas.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3137,
+      "sha256": "b3573b5f59d93e7a1bb9d7f76795c2c703c176b4f2175d3b8ca898bd858e620d",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-note-maintenance/scripts/reconcile_notes.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 6857,
+      "sha256": "499aacdec85cca1034493857005bf633ba6718a7e4f28765e0d0c3846a2523e1",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-note-maintenance/scripts/verify_notes.py",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 6571,
+      "sha256": "98e6678ec9d4e0b51bad8b333cac819e359f6e613c878e82a5ce0861c3c2d7ec",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-note-maintenance/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3817,
+      "sha256": "101065acde8a09d0525cedc883b5f9362e416cb1b7d5cc2baecfcd05af320083",
+      "descricao": "Use when reconciling CentralDark notes with 10 required metadata properties per 'Atualização Viva' rule. Single owner, preserves creation date, tracks timestamps separately, extends PROVEN_CRYSTAL replay logic.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/references/autonomia-actions.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1918,
+      "sha256": "a329b846a8f5f98e9af1168360159d114c4cc5b02d6392fc9a4eeaeb5ee4b252",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/references/full-inventory-scans.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3166,
+      "sha256": "b0469fc161b8b7e75260f63f9b81c8cccd5ab55390df12155bd64d3d5af6f8dc",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/references/hermes-desktop-binding.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1938,
+      "sha256": "947c01889533f9195aa759ce21ff3e846d6908ae663340fdac8169b7626e573c",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/references/hermes-desktop-communication-style.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 1983,
+      "sha256": "6479026cba7ad1b02bf7971a5222dd56079bf3cb7455507b04b45765f52bc4e0",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/references/selfhosted-runner-git-auth.md",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 3375,
+      "sha256": "2145a6949396147ddb93dee5ae5fd111f11746a326fa739142e475494d71ce26",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-ops/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 56940,
+      "sha256": "b7163181023de645c6e43e38061181c04ea030f5206371f0ff3e060dd17a97e0",
+      "descricao": "Operate CentralDark across Casa, GitHub, VPS, Hermes.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-oracle-surface/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 94473,
+      "sha256": "4b8a7ca948be680bd15b5b5a00cc80b4b9a60815df79730e19a2540b12ef2549",
+      "descricao": "Use when consulting an external browser oracle.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-reuse-runtime/runtime-binding.desired.json",
+      "tipo": "arquivo",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 471,
+      "sha256": "2cad2dcc353ae81ec9d0b87767afdd623356bfa1cc9e39e5dd76998feb69737d",
+      "descricao": "",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-reuse-runtime/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 2074,
+      "sha256": "7be3491476069a245f5943f0b341593e05b36a930efd27505c06e22f14a1968e",
+      "descricao": "Preflight runtime CentralDark que força descoberta/reuso de decisões e owners existentes antes de criar capability, arquivo, serviço, router ou arquitetura. Deve ser selecionada no início de missões materiais e antes de criação estrutural.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-unified-surface-parity/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 30698,
+      "sha256": "1c8439a3c1f6b1b2a9f252cfdfa476b0e25cbcb1b768040347ccbcaa83c29ccd",
+      "descricao": "Ponte operacional para paridade Texto/Voz/Work/Desktop, Intent Gateway, Auto-Grill, decisão type-safe opcional e replay de cristais provados sem criar arquitetura paralela.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/centraldark-vscode-log-bridge/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 14645,
+      "sha256": "d28db794b3a1564ed9d65caf2e7448aac53a634357f052907b53766538c620ab",
+      "descricao": "Enviar sinais do VS Code Casa ao funil unico CentralDark via SSH/Tailscale, sem transportar texto bruto ou duplicar o owner.",
+      "referencias": []
+    },
+    {
+      "caminho": "Skills/michelin-3-estrelas/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T23:55:32-03:00",
+      "bytes": 8952,
+      "sha256": "d600f9334729c137b1f6b8f928d1ed2602617433b1472a303cbac258c8c3e0ed",
+      "descricao": "Método Michelin 3 Estrelas CentralDark. Ative com !michelin ou pedido de execução deliberada passo a passo, reuso, testes, contraprova e prova real. Trabalha junto da receita operacional existente e não a substitui.",
+      "referencias": [
+        {
+          "destino": "../../SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../../../kimetsu-brainstorm/SKILL.md",
+          "existe": true
+        },
+        {
+          "destino": "../centraldark-dialogo-reflexivo-da-intencao/SKILL.md",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "caminho": "Skills/reconciliacao-diaria-centraldark/SKILL.md",
+      "tipo": "skill",
+      "criado_em": "2026-11-04T04:09:28-03:00",
+      "modificado_em": "2026-11-04T04:09:28-03:00",
+      "bytes": 7728,
+      "sha256": "cdb5809ce22850ee1619e39d336e3cb11241f22caa142cce16efdf8f46e93c71",
+      "descricao": "Reconcile CentralDark state and update daily checklist.",
+      "referencias": []
+    }
+  ]
 }

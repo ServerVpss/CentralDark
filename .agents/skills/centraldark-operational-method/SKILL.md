@@ -1,10 +1,73 @@
 ---
 name: centraldark-operational-method
-description: Operar no CentralDark com SOL coordenando e HERMES executando; PIVETE permanece vocativo/proveniência histórica.
+description: Capacidade operacional de todo o sistema CentralDark; uma Skill Mãe, uma biblioteca Skills/, um único organismo. SOL coordena e HERMES executa; PIVETE permanece vocativo/proveniência histórica.
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
+
+# CENTRALDARK — Capacidade Operacional de Todo o Sistema
+
+**Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
+
+Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
+
+## Biblioteca operacional centralizada (22 Skills)
+
+Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
+
+- [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
+- [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
+- [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
+- [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md)
+- [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
+- [centraldark-evidence-reconciliation](Skills/centraldark-evidence-reconciliation/SKILL.md)
+- [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md)
+- [centraldark-hermes-visual-computer-use](Skills/centraldark-hermes-visual-computer-use/SKILL.md)
+- [centraldark-hub-credential-control-plane](Skills/centraldark-hub-credential-control-plane/SKILL.md)
+- [centraldark-integration-verification](Skills/centraldark-integration-verification/SKILL.md)
+- [centraldark-intent-deploy-router](Skills/centraldark-intent-deploy-router/SKILL.md)
+- [centraldark-live-editing-fabric](Skills/centraldark-live-editing-fabric/SKILL.md)
+- [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md)
+- [centraldark-note-maintenance](Skills/centraldark-note-maintenance/SKILL.md)
+- [centraldark-ops](Skills/centraldark-ops/SKILL.md)
+- [centraldark-oracle-surface](Skills/centraldark-oracle-surface/SKILL.md)
+- [centraldark-reuse-runtime](Skills/centraldark-reuse-runtime/SKILL.md)
+- [centraldark-unified-surface-parity](Skills/centraldark-unified-surface-parity/SKILL.md)
+- [centraldark-vscode-log-bridge](Skills/centraldark-vscode-log-bridge/SKILL.md)
+- [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
+- [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
+
+**Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
+
+## Diálogo Reflexivo da Intenção - continuidade entre falas
+
+**Em toda conversa CentralDark, carregar silenciosamente:** [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md).
+Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergunta, correção, ensino e ordem. Preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; reparar mal-entendidos sem abandonar trabalho.
+**Na operação:** acompanha [Kimetsu Brainstorm Remix](../kimetsu-brainstorm/SKILL.md) e [Michelin 3 Estrelas](Skills/michelin-3-estrelas/SKILL.md), escolhendo técnica e contraprova proporcionais. **Na conversa:** linguagem humana, sem ritual. REGRA_RID_DELTA_CONTINUITY=TRUE.
+
+## Método único: contexto vivo, navegador, monitores e edição visual (05/11/2026)
+
+**Owner e entrada:** esta Skill Mãe coordena. O Hermes executa por rotas autorizadas existentes; CHEFE decide. Esta é a única receita de orquestração para pedidos como "olhe a tela", "veja as abas", "marque o monitor", "mostre o mouse", "clique", "edite", "salve", "programe na janela". Não criar segunda Skill, mouse, ponte, navegador, daemon ou catálogo. Reutilizar [Browser/UIA](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md) com [cursor nativo](Skills/centraldark-hermes-visual-computer-use/references/native-cursor.md).
+
+**POLÍTICA DE PARALELISMO:** vários **sensores somente de leitura** podem trabalhar ao mesmo tempo para manter o contexto atualizado: Browser `list_tabs/get_tab_context` nas abas que expõe; UIAutomation com título/PID/HWND/aba/controle acessível da janela Windows atual; mapa de monitores/posição/DPI e estado WGC; `cua-driver status`; saúde do MCP/Commander local (incluindo `engine_connected`, não apenas HTTP 200); estado Git/arquivo, e Screenpipe só quando já autorizado. Não esperar um sensor lento se outra rota já deu evidência suficiente. Reutilizar índices e observações cujo fingerprint da mesma janela/sessão ainda é válido. **Uma caneta por alvo:** ações de clique, digitação, foco, salvamento, commit ou publicação são serializadas por janela/aba/arquivo/escopo. Nunca disputar mouse com usuário nem fazer dois cliques concorrentes; fan-out de leitura não vira fan-out de escrita.
+
+**Contexto compacto para o executor:** antes de agir, reunir `INTENT|WINDOW_NAME|PID|HWND|MONITOR_NUMBER+RECT|BROWSER_PROFILE+VISIBLE_TABS|SELECTED_TAB+ORIGIN|CONTROL_NAME+BOUNDS|CUA_STATUS|WGC_STATUS|COMMANDER_ROUTE|GIT_DIRTY+SHA|AUTH_STATE|EVIDENCE_AT|NEXT_CURSOR`. Informação inacessível = UNKNOWN. A aba do Chrome de testes não representa automaticamente o Chrome pessoal; Browser lista somente as abas da sessão que alcança, e UIA `ControlType.TabItem` vê outras janelas sob a identidade atual. Enumerar ambos sem fechar, migrar perfis, copiar cookies ou adivinhar aba.
+
+**Seletor de execução, preferência por owner disponível:**
+1. Para entender navegador, ler a aba certa via Browser; cruzar com UIA de janelas e abas. Se Chrome DevTools MCP já enxergar **a mesma página**, reutilizar `snapshot -> uid atual -> click/fill -> snapshot`. Caso contrário usar UIA (`InvokePattern/ValuePattern/SelectionItemPattern`) pelo CentralDark Casa Commander nativo **somente se `engine_connected` e a ferramenta estiverem comprovados**, ou pelo Desktop Commander autorizado que de fato esteja conectado. `GET /health=200` sem engine é PARTIAL, não input pronto.
+2. Quando o CHEFE pedir mouse visual/overlay, preferir **Cua virtual existente** e WGC da Skill Hermes Visual. Consultar `cua-driver status`; se parado, iniciar **uma vez** `cua-driver serve` em modo standard sem `--no-overlay`, sem alterar permissões. Pode reaproveitar `cua-driver autostart` existente para persistência, sem iniciar daemon duplicado. `scripts/blink_cursor.py --monitor N --mode position` mostra prévia breve; `--mode blink` pisca; `--mode click --monitor N --pid PID_ATUAL --hwnd HWND_ATUAL --x X_ATUAL --y Y_ATUAL` executa mouse virtual com moldura na mesma tela. Validar geometria, hit-test e janela antes do clique. Nunca `scope=desktop`/mouse físico por substituição silenciosa.
+3. Se `WINDOWS_VISUAL_RUNTIME_NOT_BUILT`, procurar primeiro `native/bin/Release/.../HermesVisual.exe` e dependências da Skill instalada ou usar seu `scripts/Install.ps1` canônico: reparar apenas `runtime` esperado, sem novo overlay ou engine. Separar `WGC_PREVIEW`, `CUA_CURSOR` e `CUA_CLICK`; sucesso de um não prova os outros.
+4. Para editar código/documento **na tela**, encontrar editor e arquivo reais, preservar conteúdo não solicitado, alterações locais e rascunhos; preferir `ValuePattern` para texto, ou o cursor Cua e controle atual quando a interação visual for exigida. Salvar uma vez no mesmo arquivo, confirmar por leitura da interface **e** `git diff`/hash/resultado de build ou teste proporcional. Operações Git mantêm um escritor por escopo e só promovem o delta autorizado; clique/tecla enviados não provam arquivo salvo.
+5. Se navegador pedir autenticação, renovação de máquina, pagamento ou aprovação administrativa, verificar o estado real e não contornar a etapa humana. Não escolher plano pago nem publicar, alterar secrets ou autorizar outros dispositivos automaticamente. Desconexão Tailscale não implica queda do Cockpit Linux: medir porta e serviço independentemente.
+
+**Loop estável:** `INTENÇÃO -> PARALELIZAR LEITURAS -> FUSÃO DO CONTEXTO -> ALVO/FINGERPRINT -> TRAVA DE UM EXECUTOR -> OVERLAY/CURSOR QUANDO SOLICITADO -> UMA AÇÃO -> READBACK UI + PROVA INDEPENDENTE -> RECEIPT -> FIXED_POINT|NEXT_CURSOR`. Se não houver efeito comprovado, não repetir o clique; renovar a observação e mudar de rota autorizada somente quando não houver risco de duplicar a ação. Após troca de janela/aba, monitor ou render, renovar HWND, posição, UID e foco. Limpar overlay/sessão iniciados apenas para a operação; preservar os preexistentes.
+
+**Receipt mínimo de contexto visual:** `OWNER=centraldark-operational-method | SESSION | ROUTES_OBSERVED[Browser,UIA,Cua,WGC,Commander,Git] | TAB_ORIGIN | MONITOR | WINDOW_PID/HWND_FRESH | ACTION_OWNER | DELTA | BEFORE | AFTER_UI | RUNTIME_PROOF | COUNTERPROOF | STATUS=PASS|PARTIAL|FAIL|UNKNOWN | NEXT_CURSOR`. Guardar somente estado operacional e referência de prova, sem tokens, cookies, imagens privadas ou texto sensível integral. Documento na main não prova que outra instância de agente carregou a nova versão.
+
+**Medição de 05/11/2026 (histórica, não usar IDs como constantes):** Casa Windows com duas janelas Chrome visíveis por UIA e abas disponíveis pela sessão Browser; Tailscale administrativo numa janela distinta. Cua 0.28.2 inicialmente parado, então `cua-driver serve` iniciou o daemon padrão; `autostart enable` registrou entrada nativa; build WGC existente foi reaproveitado no diretório `runtime` da Skill F:; `blink_cursor.py --monitor 2 --mode position` devolveu `execution=completed` em `(960,-702)`, sem prova humana do render. `Casa Commander /health` respondeu 200 com `engine_connected=false`; logo, não atribuir cliques a essa rota. O usuário confirmou antes o método de mouse/overlay, mas nenhum clique de página Tailscale foi executado nesta medição. **NEXT_CURSOR:** confirmar visualmente a prévia e provar um clique autorizado com readback na janela corrente; manter a recuperação de autenticação Tailscale como missão separada.
+
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
@@ -107,6 +170,15 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 
 Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita multijanela existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e selecionar menor rota com prova: pagina alcançavel por chrome-devtools-mcp existente -> list_pages, take_snapshot, click(uid)/fill(uid), novo snapshot + efeito; Windows app/Edge nao exposto -> UIA Name/PID/ControlType, Invoke/Value/SelectionItem, readback. Codex e Claude ja executam chrome-devtools-mcp v1.12.0. O Chrome de depuracao observado usa pipe e perfil separado, portanto nao pressupor acesso a abas pessoais do Edge. CDP usa mouse virtual; UIA Invoke nao move cursor fisico Windows. Cursor de Windows visivel exige input nativo autorizado sobre alvo real. Screenpipe 3030 = sensor, nao executor. Preservar recursos em uso, sem iniciar servidor/Chrome duplicado ou copiar cookies; registrar click, snapshot/readback e recibo, UNKNOWN se sem prova. 🍒+1 somente ganho comprovado.
 <!-- /CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+
+<!-- CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+## 🍒+1 Browser → CentralDark Casa Commander → Browser (navegador)
+
+**Default por intenção para operações na aba existente:** ler pelo Browser (\`list_tabs\` / \`get_tab_context\`), **agir pelo CentralDark Casa Commander** autenticado (rota MCP CentralDark + Tailscale/SSH; owner local \`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs\`, porta 9101) e **conferir pelo Browser** a mesma aba. Não depende do Remote Desktop Commander de terceiro. Ativar quando CHEFE pedir "veja o navegador", "mande um goal", "use o botão focado", "siga o roteiro", "envie mensagem", "clique na página", ou sob os gatilhos **já existentes** \`!CENTRALDARK\`, \`#ACORDAR\`, \`!CALIBRAR\`, \`!EXECUTOR_CENTRALDARK\` se a intenção corrente envolver browser. **Owner e receita completa:** [UI-MULTIJANELA-ROTAS-CACHE-20261030.md](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
+
+**Limite de prova:** combinação Browser→UIA via **Remote Desktop Commander externo** foi observada em 05/11/2026 no hPanel Hostinger; o fluxo substituto via **Casa Commander nativo** deve ser medido antes de receber PASS. O serviço local usa motor DesktopCommanderMCP stdio sem cloud do fornecedor, não substituir por um segundo motor. \`GET /health != TOOL_PASS\`; \`SEND_INVOKED != ANSWER_COMPLETED\`; \`DOCUMENTED != DEPLOYED\`. Confirmar aba, janela, campo, autorização, efeito, resposta e receipt sem reenviar rascunhos incertos. \`NEXT_CURSOR=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E\`.
+<!-- /CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+
 <!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
 ## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
 
@@ -314,7 +386,7 @@ obrigatórios.
 Registros aditivos comprovados no Windows Casa pelo script verificador. Nao substituem receitas anteriores. Cada registro preserva sua origem, razoes e contraprova.
 
 ### t_26e02a16 — excluir
-- Criado em: 2026-10-24T19:46:48-03:00; destino: C:\root\HERMES-KANBAN-TESTE.txt
+- Criado em: 10/24/2026 19:46:48; destino: C:\root\HERMES-KANBAN-TESTE.txt
 - Por que fazer: Eliminar somente o TXT temporario criado no teste anterior autorizado.
 - Por que nao fazer outra coisa: Nao apagar a pasta nem recorrer a exclusao direta; somente o Hermes Kanban deveria executar a intencao.
 - Por que usar: Reutilizar o Hermes da Casa, perfil default e mesmo comando kanban create ja comprovados.
@@ -330,4 +402,44 @@ Para pedidos sobre monitor/tela um, dois, tres, quatro, posicao, arquivo ou chat
 
 
 ## Hermes Visual Computer Use — WGC real
+**Comando operacional falado = monitor + acao, sem frase fixa.** "Posicione no monitor 2", "bota o cursor na tela dois", "leva o mouse virtual pro monitor de cima", "aponte pro monitor dois" e "mostra o mouse na tela 2" = selecionar monitor humano 2, posicionar cursor virtual Cua e exibir overlay Hermes simultaneamente. Usar a Skill visual existente: hermes-visual-computer-use/scripts/blink_cursor.py --monitor 2 --mode position (previa 5 segundos). "Pisca monitor 2" = --mode blink (3 ciclos). Interpretar numero 1-4, numero por extenso ou posicao confirmada: 1 direita, 2 superior, 3 esquerda, 4 inferior; revalidar apenas se geometria mudar. Mouse fisico so sob pedido explicito; captura apenas com autorizacao. Pergunta, negacao ou relato nao equivale a ordem. Receita comprovada 02/11/2026: daemon Cua ja aberto; start_session, set_agent_cursor_enabled, move_cursor(scope=window), end_session; o CHEFE confirmou visualmente o cursor virtual no monitor 2. A moldura usa o plugin visual.py existente. Nao criar parser, skill, segundo cursor ou processo paralelo. PROMPT_SELF_CACHE_P15=APLICAVEL; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=REUSE_EXISTING_SKILL_WITH_MONITOR_ACTION.
+
 Para identificar monitores dinamicamente, capturar um monitor com borda nativa e moldura esmeralda de atividade, carregar [hermes-visual-computer-use](../hermes-visual-computer-use/SKILL.md). Instala plugin oficial com seis ferramentas computer_*; preserva o computer_use/Cua e seu cursor. Usar esta skill para captura WGC por monitor; o Identify-CentralDarkMonitors.ps1 anterior permanece receita de inventario/previa historica, sem alegar WGC. Nao iniciar duas molduras para o mesmo alvo. Descoberta e testes ficam em references/validation.json e references/hermes-validation.json da nova skill.
+
+
+## Contraprova humana — Hermes Visual Computer Use (02/11/2026)
+
+- Intenção: validar visualmente mouse virtual e overlay nos quatro monitores, individualmente.
+- Prova técnica reportada na execução: captura WGC em quatro monitores, plugin Hermes com seis ferramentas registradas, overlay e três piscadas por monitor.
+- Contraprova humana: CHEFE confirmou ter visto perfeitamente o mouse virtual e a borda verde nas quatro telas, na ordem 1 → 2 → 3 → 4; satisfação declarada: **100%**.
+- Critério Michelin ⭐⭐⭐ + Kimetsu: executar → testar tecnicamente → apresentar prova → solicitar validação humana → registrar aprendizado → ponto fixo do escopo validado.
+- Limite: aprovação visual humana não comprova, por si só, futuras sessões, outras máquinas ou ausência de regressões.
+- Referência técnica: commit `a52c589906cef48c370c8c9936108be020829003`.
+- NEXT_CURSOR: encerrado para a contraprova humana desta execução; reabrir apenas mediante nova falha ou mudança de escopo.
+
+
+## Protocolo operacional aprovado pelo CHEFE — execução direta e contraprova (02/11/2026)
+
+- Intenção do CHEFE é o ponto de partida. Reutilizar owner e receitas existentes; não criar caminhos, Skills ou executores paralelos.
+- Executar diretamente quando autorizado, sem confirmações repetidas, micro-passos ou explicações antecipadas desnecessárias. Comunicar apenas achados materiais, impedimentos reais e decisões que dependam do CHEFE.
+- Após a execução, testar tecnicamente, observar o resultado e apresentar prova concreta. O CHEFE faz a contraprova humana da experiência real e informa se funcionou e se ficou satisfatório.
+- Aprovação humana não substitui testes técnicos; testes técnicos não substituem a aprovação humana quando esta for exigida. Registrar recibo, aprendizado e SHA/readback no owner existente após a confirmação.
+- Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
+- Critério de FIXED_POINT: intenção atendida + prova técnica + contraprova aplicável + registro verificado. UNKNOWN nunca vira PASS.
+- Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
+
+### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)
+
+**Decisão vigente:** na construção, manutenção, auditoria e documentação da CentralDark, SOL deve **navegar o código real** e verificar imports, owners, rotas, chamadas, contratos, dependências e fluxos, recorrendo aos scripts e validadores já existentes e a testes dirigidos ao cone afetado (por exemplo, sintaxe, lint, testes unitários/contratos, quando executáveis sem efeitos indevidos). **Não iniciar, reiniciar, movimentar ou testar ao vivo Hermes, suas janelas, mouse, overlay ou consumo de Skill automaticamente** como cerimônia de conclusão. Teste visual/interativo com Hermes fica para quando o CHEFE solicitar expressamente ou aprovar uma necessidade concreta; até lá, não gerar demanda por essa contraprova.
+
+**Critério proporcional:** `CODE_REVIEWED` e `STATIC_TEST_PASS` demonstram o que foi inspecionado/testado no código e com qual comando, SHA e resultado; **não** equivalem a `HERMES_RUNTIME_CONSUMED`, `DEPLOYED` nem a funcionamento futuro garantido. Se o objetivo era apenas escrever, integrar ou documentar código, registrar `FIXED_POINT` **do escopo documental/de código** com readback e testes pertinentes, deixando consumo vivo como `NOT_REQUESTED` ou `UNKNOWN` sem reabrir um cursor obrigatório. Quando o objetivo explícito exigir um efeito vivo ou quando um gate de publicação efetivamente o exigir, declarar a pendência específica em vez de fingir prova ou contornar o gate.
+
+**Fluxo curto:** `INTENÇÃO → OWNER EXISTENTE → INSPECIONAR CÓDIGO/ROTAS → MENOR DELTA → TESTAR SCRIPTS PERTINENTES → READBACK/SHA → RECEIPT/APRENDIZADO → CONCLUIR ESCOPO`. `HERMES_LIVE_TEST=ON_DEMAND_BY_CHEFE`. Não tornar a falta de teste vivo — que não foi solicitado — bloqueio fictício para o trabalho de código.
+
+**PROMPT_SELF_CACHE_P15=APLICÁVEL** para reuso desta receita, sem telemetria de HIT; **KV_CACHE_P16=UNKNOWN**; **NEXT_CURSOR=CODIGO_E_VALIDADORES_EXISTENTES_NO_PROXIMO_DELTA**.
+
+## WuzAPI / MultiZap / Hermes - entrada documental (05/11/2026)
+Quando a intenção citar WuzAPI, QR WhatsApp, grupos, foto de grupo, webhook, Gateway MultiZap ou ligação Hermes ↔ CRM, **abrir antes de operar** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md) e o [MAPA_EVENTOS_WUZAPI.md](../../../docs/MAPA_EVENTOS_WUZAPI.md). Reutilizar Docker Casa 127.0.0.1:8081, Gateway HTTPS multizap-mvp.centralldark.com, WuzAPI /webhook, Gateway /webhooks/wuzapi e CRM /api/public/wuzapi/webhook; não confundir destinos nem duplicar sessão. Autenticação por token usuário ou admin conforme rota; segredo nunca entra em recibo. Swagger vivo /api define payload; documentação não equivale a teste de entrega. OWNER: docs existentes e Skill-Mãe. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=CONTRATO_HERMES_MULTIZAP_COM_TESTE_REAL_SOB_INTENCAO.
+
+### WuzAPI + whatsmeow: regra de consulta aos donos (05/11/2026)
+Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webhook, mídia, grupos ou WhatsApp/Whatsmeow, ler **antes da operação** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md). Fontes upstream obrigatórias em dúvida ou divergência: [asternic/wuzapi](https://github.com/asternic/wuzapi) (API REST) e [tulir/whatsmeow](https://github.com/tulir/whatsmeow) (biblioteca/protocolo Go). **Método:** intenção → Swagger vivo Casa → dois repositórios oficiais conforme camada → comparar código, versão e configuração CentralDark → menor delta → contraprova → registrar receipt/owner. Reusar o Gateway e WuzAPI existentes; não misturar API REST, implementação Go ou estado de instância, nem criar proxy/chave ou parear telefone por mera inspeção. Capturas de 05/11 mostram formulário de instância com token, webhook/eventos, history, HMAC e opções proxy/S3, além de Add Proxy; são evidência de interface, não de sessões conectadas. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=UPSTREAM_COMPARE_BEFORE_CHANGE.

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Codex Halo — Visual Preview</title>
+    <style>
+      :root { background: #030609; color: #e9fbff; font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      * { box-sizing: border-box; } html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { --accent: #35eaff; --secondary: #086cfb; --glow: rgba(0, 220, 255, .95); background: radial-gradient(circle at 50% 45%, rgba(0,225,255,.16), transparent 26%), radial-gradient(circle at 15% 16%, rgba(25,87,255,.16), transparent 34%), #030609; }
+      body[data-state="attention"] { --accent: #ffd84a; --secondary: #ff8f2d; --glow: rgba(255, 190, 33, .96); }
+      body[data-state="completed"] { --accent: #64f2a0; --secondary: #14b879; --glow: rgba(56, 241, 151, .96); }
+      .grain { position: fixed; inset: 0; opacity: .13; background-image: radial-gradient(rgba(255,255,255,.35) .65px, transparent .7px); background-size: 4px 4px; mask-image: linear-gradient(#000, transparent); }
+      .ghost-window { position: absolute; inset: 68px 96px; border: 1px solid rgba(179,235,255,.13); border-radius: 24px; background: linear-gradient(135deg, rgba(16,28,37,.82), rgba(4,8,12,.72)); box-shadow: 0 32px 110px rgba(0,0,0,.7); }
+      .ghost-window::before { content: ""; position: absolute; top: 22px; left: 24px; width: 56px; height: 10px; border-radius: 999px; background: rgba(220,252,255,.14); box-shadow: 74px 0 0 rgba(220,252,255,.08), 148px 0 0 rgba(220,252,255,.06); }
+      .ghost-window::after { content: ""; position: absolute; top: 66px; right: 8%; left: 8%; height: 1px; background: rgba(215,252,255,.09); box-shadow: 0 74px 0 rgba(215,252,255,.055), 0 148px 0 rgba(215,252,255,.04), 0 222px 0 rgba(215,252,255,.03); }
+      .mark { position: absolute; top: 50%; left: 50%; width: 152px; height: 152px; transform: translate(-50%, -53%); filter: drop-shadow(0 0 28px var(--glow)); animation: arrive 2.4s ease-in-out infinite; }
+      .mark-ring { fill: none; stroke: var(--accent); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 245 62; transform: rotate(-32deg); transform-origin: center; }
+      .mark-code { fill: none; stroke: #e9fdff; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+      .mark-spark { fill: var(--accent); }
+      .caption { position: absolute; bottom: 48px; left: 50%; display: flex; align-items: center; gap: 10px; padding: 11px 17px; border: 1px solid color-mix(in srgb, var(--accent) 44%, transparent); border-radius: 999px; transform: translateX(-50%); background: rgba(3,8,12,.72); box-shadow: 0 0 26px color-mix(in srgb, var(--glow) 36%, transparent); color: var(--accent); font-size: 14px; font-weight: 760; letter-spacing: .04em; white-space: nowrap; }
+      .caption i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 18px var(--accent); }
+      .edge { position: fixed; z-index: 5; pointer-events: none; opacity: .98; background: linear-gradient(90deg, transparent, var(--secondary) 18%, var(--accent) 50%, var(--secondary) 82%, transparent); filter: drop-shadow(0 0 9px var(--glow)) drop-shadow(0 0 23px var(--glow)); }
+      .edge.top, .edge.bottom { right: 0; left: 0; height: 11px; background-size: 220% 100%; animation: flow-x 1.55s linear infinite, breathe 1.85s ease-in-out infinite; }
+      .edge.left, .edge.right { top: 0; bottom: 0; width: 11px; background: linear-gradient(180deg, transparent, var(--secondary) 18%, var(--accent) 50%, var(--secondary) 82%, transparent); background-size: 100% 220%; animation: flow-y 1.55s linear infinite reverse, breathe 1.85s ease-in-out infinite; }
+      .edge.top { top: 0; } .edge.right { right: 0; } .edge.bottom { bottom: 0; animation-direction: reverse, normal; } .edge.left { left: 0; }
+      body[data-state="attention"] .edge { background: var(--accent); animation: breathe .82s ease-in-out infinite; }
+      body[data-state="completed"] .edge { animation: complete .72s ease-out both; }
+      body[data-state="completed"] .edge.right { animation-delay: .18s; } body[data-state="completed"] .edge.bottom { animation-delay: .36s; } body[data-state="completed"] .edge.left { animation-delay: .54s; }
+      @keyframes flow-x { to { background-position: -220% 0; } } @keyframes flow-y { to { background-position: 0 -220%; } }
+      @keyframes breathe { 0%,100% { opacity: .48; transform: scale(.96); } 50% { opacity: 1; transform: scale(1); } }
+      @keyframes arrive { 0%,22% { opacity: 0; transform: translate(-50%,-53%) scale(.42); } 40%,72% { opacity: 1; transform: translate(-50%,-53%) scale(1); } 100% { opacity: .72; transform: translate(-50%,-53%) scale(.92); } }
+      @keyframes complete { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+    </style>
+  </head>
+  <body data-state="working">
+    <div class="grain"></div><div class="ghost-window"></div>
+    <svg class="mark" viewBox="0 0 128 128" aria-hidden="true"><circle class="mark-ring" cx="64" cy="64" r="44"/><path class="mark-code" d="m42 51 15 13-15 13M66 77h25"/><circle class="mark-spark" cx="94" cy="34" r="4"/></svg>
+    <div class="caption"><i></i><span id="label">CODEX IS WORKING</span></div>
+    <i class="edge top"></i><i class="edge right"></i><i class="edge bottom"></i><i class="edge left"></i>
+    <script>
+      const labels = { working: "CODEX IS WORKING", attention: "CODEX NEEDS YOU", completed: "TURN COMPLETED" };
+      const requested = new URLSearchParams(location.search).get("state");
+      const states = ["working", "attention", "completed"];
+      let index = requested && states.includes(requested) ? states.indexOf(requested) : 0;
+      const apply = () => { const state = states[index]; document.body.dataset.state = state; document.querySelector("#label").textContent = labels[state]; };
+      apply();
+      if (!requested) setInterval(() => { index = (index + 1) % states.length; apply(); }, 2500);
+    </script>
+  </body>
+</html>
