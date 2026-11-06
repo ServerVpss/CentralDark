@@ -1,11 +1,11 @@
 ---
 name: vs-code-restore
 description: Restaura a bancada do workspace CentralDark no VS Code (terminais, abas e checagem de extensoes) a partir do mapa salvo, sem depender do Claude. Use ao abrir o workspace CentralDark ou quando quiser reconstruir a bancada.
-version: 0.1.4
-metadata: {"status":"v0.1.4_source_in_pr_install_pending","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.4","candidate_compilado":false,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
-version: 0.1.3
-metadata: {"status":"v0.1.3_source_main_trace_integrated_runtime_readback_separate","mapa":"workspace-map-20261014.json","compilado":true,"instalado_na_casa_historico":"0.1.3","comando_nativo_testado":true,"telemetria_probe":true}
+version: 0.1.6
+metadata: {"status":"v0.1.6_source_in_pr_vibe_ui_and_remote_terminal_pending_runtime_readback","mapa":"workspace-map-20261014.json","ultima_versao_local_historica":"0.1.1","candidate_version":"0.1.6","candidate_compilado":true,"candidate_instalado_na_casa":false,"comando_nativo_testado":false,"telemetria_probe":true}
 ---
+
+> Histórico preservado: na versão `0.1.3`, a fonte havia sido integrada à main, compilada e historicamente instalada na Casa; esse registro **não** comprova que a versão `0.1.5` esteja instalada hoje.
 
 # VS Code Restore: CentralDark
 
@@ -55,6 +55,31 @@ Para instalar localmente, gerar o pacote com `npx @vscode/vsce package` e depois
 - UIAutomation: 3 janelas e 319 controles acessiveis deduplicados catalogados. Sao observacoes, nao 319 cliques comprovados.
 - GitHub: publicacao no MESMO owner em main `9aca9ff8a651b73d196e9931305a86b950d4e09a`; `.vscodeignore` em `01d4f00618dce97ef2b5d9e773f64c4b43efac5f`. Readback da fonte PASS.
 - Casa K: o diretorio local continua sem tracking do Git; ha 6 arquivos de OUTRO escopo preparados no indice. Nao realizar pull/reset/commit sobre esse trabalho ate reconciliar as arvores com o SHA remoto.
+
+
+## 🪬 Vibe Coding em linguagem natural — 0.1.6
+
+O mesmo owner `skills/vs-code-restore` expõe agora uma superfície humana simples, sem novo executor:
+- painel `🪬 CentralDark · Vibe Coding` dentro do Explorer;
+- botão fixo `CentralDark` na barra de status;
+- botões: **Conectar ao servidor**, **Testar a conexão**, **Parear este VS Code**, **Ver status e PIDs**, **Abrir terminal existente**, **Compilar a extensão**, **Mapear o VS Code**, **Restaurar a bancada**;
+- comando da paleta `CentralDark: Diga o que você quer fazer`;
+- entrada natural local para frases como “conecta no servidor”, “testa a conexão”, “mostra os PIDs”, “pareia este VS Code” e “compila a extensão”.
+
+A linguagem natural apenas resolve intenção para comandos já existentes. Ela **não** cria segundo Hermes, segundo MCP ou execução arbitrária escondida.
+
+### Compilação da 0.1.6
+
+```powershell
+cd K:\skills\vs-code-restore
+npm install --ignore-scripts
+npm test
+npm run compile
+npx --yes '@vscode/vsce' package --no-dependencies --allow-missing-repository --out .\centraldark-vscode-restore-0.1.6.vsix
+code --install-extension .\centraldark-vscode-restore-0.1.6.vsix --force
+```
+
+O `package.json` também declara o repositório canônico, portanto o aviso interativo “repository field is missing” deixa de ser parte do caminho normal.
 
 ## Manutencao
 
@@ -426,6 +451,47 @@ A extensão ZENDRIVE não conclui missão quando o código foi commitado. O cicl
 Automação de desenvolvimento permitida onde houver execução autorizada; merge em main, produção VPS e modificação de credenciais precisam do gate de promoção do CHEFE. Falhou uma fase: parar e guardar error_code, sha, owner e next_cursor. Documento canônico: docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md.
 
 
+## 🪬 MCP ↔ VS Code 0.1.5 — dispositivo pareado, mesmo PID, catálogo canônico
+
+**OWNER REUTILIZADO:** `skills/vs-code-restore` e `apps/modulos/mcp/src/tools/local/vscode-remote-terminal.js`; PR #1880. Não criar segundo MCP, extensão, executor ou scheduler. Desktop Commander NÃO é requisito.
+
+**Contrato de fonte (não é prova de instalação):**
+
+- `vscode_remote_devices`: leitura de dispositivos explicitamente pareados, com `status`, `online` e `authenticated`; nunca expõe bearer/token. `CATALOG_ONLY` não equivale a terminal controlado.
+- `vscode_remote_terminals`: lê `pid`, nome e disponibilidade de Shell Integration do terminal EXISTENTE no VS Code.
+- `vscode_remote_echo`: `echo oi` fixo, somente após autorização modal local para o PID revalidado. Não recebe comando arbitrário.
+- `vscode_remote_execute`: comando único com consentimento local, correlação por requestId e hash, exitCode e readback limitado; permanece **em quarentena** no manifesto de destrutivas até E2E, compensação e gates aprovados.
+
+**Extensão já existente:** `centraldark-vscode-restore@0.1.5`. Comandos `centraldark.remoteTerminalPair` e `centraldark.remoteTerminalStatus` estão no `package.json` e `src/extension.ts`. O receptor só sobe após opt-in, pareamento e configuração, em `127.0.0.1:8719`; exposição remota somente via Tailscale Serve **privado**, nunca Funnel ou HTTP público. Tokens/segredos ficam no SecretStorage local e cofre autorizado; não versionar, ecoar nem pôr em recibos.
+
+**Registro no MCP:** `local-compute.js` inclui `...vscodeRemoteTerminalTools`; `mcp-admin.js` importa `localHybridTools` e publica a rota `VSCODE_TERMINAL_PAIRED` no **mesmo** catálogo. O `mcp_admin_catalog({filter:"vscode_remote_"})` e o `mcp_admin_call({tool:"vscode_remote_devices",input:{}})` devem encontrar a ferramenta somente quando o código estiver efetivamente carregado no runtime. O mesmo nome deve aparecer no catálogo público `/tools.json`. `SOURCE_IN_PR != RUNTIME_LOADED`; `TOOL_NAO_ENCONTRADA` não autoriza ferramenta paralela ou bypass.
+
+**Sequência de validação e prova:**
+1. Confirmar HEAD exato, revisão e CI same-SHA; rodar testes Node MCP e extensão, `npm run compile`/build VSIX e gate de catálogo. `skipped` ou `queued` nunca é PASS.
+2. Promover somente pelo fluxo canônico autorizado; reconciliar `main`, deploy MCP e versão VSIX instalada na Casa, sem `pull/reset` cego nem reinício fora do owner.
+3. Confirmar registro no `mcp_admin_catalog` e `/tools.json`, então listar devices pareados sem transmitir segredo.
+4. Validar `Tailscale Serve` privado e receptor local, medir o PID **atual** via `vscode_remote_terminals`; nunca reutilizar PID histórico.
+5. Aprovar localmente `vscode_remote_echo`, correlacionar `requestId | commandSha256 | pid | exitCode | observedAt`, obter ACK e readback independente. Um POST com timeout produz UNKNOWN: NÃO repetir.
+6. Registrar recibo no owner/PR #1880 com `MAIN_SHA | PR_HEAD | ACTIVE_WRITER | TESTS | CATALOG | INSTALLED | PAIRED | EXECUTION | PROOF | NEXT_CURSOR`. Nunca declarar MISSION_COMPLETE sem prova no mesmo SHA.
+
+**Estado observável em 21/10/2026 (fonte separada):** ferramentas presentes no código da PR #1880; MCP de produção consultado respondeu `TOOL_NAO_ENCONTRADA` para `vscode_remote_devices`; CI no SHA `2da1c6e7e847c1290382b8809abdd6d3400acae8` não estava verde; instalação/pareamento/readback na Casa seguem `UNKNOWN`. Este trecho **não** promove runtime, nem altera credenciais ou segurança.
+
+**NEXT_CURSOR:** `CI_SAME_HEAD → CATALOG_REGRESSION → REVIEW → CANONICAL_PROMOTION → MCP_RELOAD_PROOF → VSIX_INSTALLED → PRIVATE_PAIR → LIVE_PID → ECHO_ACK_READBACK → FIXED_POINT`.
+
+
+## 🪬 Porta privada Hermes Gateway original → túnel VS Code Remote-SSH
+
+INTENCAO=Forward temporário/privado para testar o Hermes **original**, usando o Remote-SSH **já existente**, sem publicar no Caddy, Cloudflare, Funnel, Tailscale Serve público ou iniciar outro Hermes.
+
+- **Alvo documental medido anteriormente na VPS:** Hermes `serve`/WebUI autenticado na **porta 9119** (não confundir com API Hermes `gateway run`, cuja porta padrão separada é 8642 quando API habilitada). O estado vivo da porta 9119 ainda exige readback; PID histórico não basta.
+- **Configuração no MESMO workspace:** `.vscode/settings.json` adiciona `remote.portsAttributes["9119"]` com label `Hermes Gateway original · privado (VPS)`, `onAutoForward:"silent"`, `protocol:"http"`, `remote.localPortHost:"localhost"`, `remote.restoreForwardedPorts:true`. Preserva os demais campos e não desliga autenticação. Esses atributos não são prova de túnel ativo; dependem do VS Code detectar ou encaminhar a porta em uma sessão Remote-SSH conectada ao host certo.
+- **Execução canônica no VS Code**: em janela **Remote-SSH: Segredo-VPS** autenticada, usar painel **Ports** → **Forward a Port** → `9119`; confirmar o endereço local efetivamente escolhido por VS Code (pode ser diferente) e o escopo **Local/Private**. Nunca mudar Port Visibility para Public. Não selecionar o endpoint de API separado `8642` automaticamente.
+- **Prova**: a partir da própria Casa, na URL `http://127.0.0.1:<porta_local>`, verificar resposta HTTP do mesmo serviço e redirecionamento/login existente; sem cookies/credenciais no receipt. Resposta `401` sem sessão significa autenticação preservada, não gateway quebrado; HTTP 200 da Tailscale isoladamente não prova o túnel. Readback mínimo: `WINDOW_REMOTE_AUTHORITY | REMOTE_HOST | PORT_REMOTE=9119 | PORT_LOCAL | VISIBILITY_PRIVATE | SERVICE_HTTP_STATUS | AUTH_GATE | OBSERVED_AT`.
+- **Contraprova**: `onAutoForward=silent` não pode gerar conclusão por si só; confirmar no painel Ports. `WINDOW_LOCAL`, `PORT_NOT_LISTENING`, `PORT_NOT_FORWARDED`, `HOST_MISMATCH` ou `AUTH_MISSING` devem permanecer `UNKNOWN/BLOCKED` conforme medidos. Não alterar firewall/ACL, bind, serviço systemd nem reiniciar VS Code/Hermes para este teste.
+- **Releitura de alvos**: gateway original 9119 VPS → janela/host Remote-SSH → túnel VS Code localhost → readback browser Casa; cruzar com `MCP_ADMIN`, PR_HEAD, `main`, CI e recibo existente. Um PASS de túnel não promove a PR #1880 nem instala a VSIX automaticamente.
+
+NEXT_CURSOR=SOURCE_SETTINGS_RECHECK → SAME_HEAD_TEST → REMOTE_SSH_WINDOW_READBACK → PORTS_PRIVATE_9119 → AUTHENTICATED_HTTP_READBACK → RECEIPT_OWNER_EXISTENTE.
+
 ## 🪬 ZENDRIVE como motor selecionável do Hermes (2026-10-18)
 
 **INTENÇÃO CANÔNICA:** selecionar ZENDRIVE como MOTOR DE INFERÊNCIA do Hermes; não reduzi-lo a uma função de foco, telemetria ou entrega de contexto. SOL coordena; Hermes continua agente executor; ZENDRIVE é a escolha explícita do backend de resposta. Não criar outra skill, runtime, navegador, daemon, gateway ou executor.
@@ -473,3 +539,35 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+
+## 🪬 CentralDark One-Click — linguagem natural e botão único (21/10/2026)
+
+O fluxo que antes exigia vários blocos PowerShell agora tem owner único em
+`tools/centraldark-oneclick.ps1`.
+
+Nome operacional: **CentralDark One-Click Bootstrap**.
+
+O comando executa, na ordem:
+`CALIBRAR → WORKTREE ISOLADO → TESTES → COMPILAR → EMPACOTAR VSIX →
+INSTALAR REMOTE-SSH/VSIX → PROVAR ALIAS SSH → READBACK VPS/API/MCP/HERMES →
+ABRIR JANELA NOVA → RECEIPT`.
+
+Ele preserva a árvore ativa: não faz `pull/reset/checkout` nela, não reescreve
+`~/.ssh/config` e não lê/copia a chave privada. O readback remoto usa script
+codificado em Base64 para evitar quebra de `bash -s` por colagem/CRLF.
+
+A extensão expõe o mesmo owner por:
+- botão **Preparar tudo** no painel `🪬 CentralDark · Vibe Coding`;
+- comando **CentralDark: Preparar tudo (calibrar + compilar + instalar + conectar)**;
+- linguagem natural: `prepara tudo`, `atualiza tudo`, `acordar`,
+  `calibrar e compilar`, `compila e conecta`, `one-click`.
+
+Dois erros observados na sessão anterior foram removidos do fluxo canônico:
+1. validação de extensão em PowerShell usando `-notmatch` sobre array, que gerava
+   falso negativo mesmo com `centraldark...@0.1.6` instalado;
+2. readback bash multiline fragilizado por colagem, substituído por transporte
+   Base64 antes de `bash`.
+
+`SOURCE_UPDATED != RUNTIME_PASS`: após alteração do PR, o One-Click deve rodar
+`npm test` + `npm run compile` + instalação/readback para promover o runtime.

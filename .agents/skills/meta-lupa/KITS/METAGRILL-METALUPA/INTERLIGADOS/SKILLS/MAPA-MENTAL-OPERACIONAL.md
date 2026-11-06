@@ -236,3 +236,18 @@ Antes de abrir owner, skill, router, workflow, painel, serviço ou superfície n
 
 🧠 **Regra visual:** nomes em MAIÚSCULAS + emojis são ganchos mentais. Os paths físicos continuam nos nomes atuais para não quebrar imports, hashes, consumers ou owners.
 
+## 🎨🧬 SUPER SKILL · VIBE CODING ↔ BRAINSTORMING ↔ CRISTAL
+
+**Gatilho de intenção:** `!CENTRALDARK #VIBECODING <objetivo>` (alias: `!VIBECODING`). O roteamento é uma **extensão sob demanda** do mesmo `!># INTERLIGADOS`; não muda o gatilho global nem o número histórico de 52 skills cristalizadas. Nova SuperSkill em `.agents/skills/centraldark-vibe-coding/SKILL.md`. Catálogo canônico e tags: `REGISTRY.json.creative_on_demand`.
+
+```text
+🎨 #VIBECODING → 🧠 BRAINSTORMING [ideia sem design]
+🧠 BRAINSTORMING → 🎨 #VIBECODING [design aprovado]
+🎨 #VIBECODING → 🎼 CAPABILITY-CONTRACT-ROUTER [menor conjunto sob demanda]
+🎨 #VIBECODING → 🪢 GIT-CONFLICT-RESOLVE-HOUSE-STANDARD [conflito]
+🎨 #VIBECODING → 🧿 META-LUPA [teste, contraprova, cristal]
+🧿 META-LUPA → 🎨 #VIBECODING [ajustar a casca, só a parte indicada]
+🎨 #VIBECODING → 💠 FIXED_POINT [prova material]
+```
+
+`CRIAR` monta casca reversível; `AJUSTAR <alvo>` altera somente o alvo; `RECOMEÇAR` descarta apenas o rascunho isolado após confirmação, nunca remove fontes, secrets ou trabalho aprovado. `RASCUNHO != DEPLOY`; `TOOL_LISTED != RUNTIME_ACTIVE`. Cada hipótese vira um **teste nomeado** com entrada, oráculo, evidência e contraprova — não se registra cadeia privada de pensamento.

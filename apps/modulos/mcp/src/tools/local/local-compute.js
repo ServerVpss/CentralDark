@@ -1,6 +1,7 @@
 // Ferramentas read-only para capacidade local híbrida da Casa.
 // A Casa/GPU/áudio/vídeo entram como sensor/capacidade autorizada, não como juiz.
 import { z } from "zod";
+import { vscodeRemoteTerminalTools } from "./vscode-remote-terminal.js";
 import { execFile, execFileSync } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
@@ -50,6 +51,7 @@ function maybeJson(text) {
 }
 
 export const localHybridTools = [
+  ...vscodeRemoteTerminalTools,
   ...nativeSpecs.map(([name, action, description, inputSchema]) => ({ name, description, inputSchema, annotations: { readOnlyHint: action !== "tts", destructiveHint: false, openWorldHint: false }, handler: input => nativeCall(action, input) })),
   {
     name: "local_compute_status",

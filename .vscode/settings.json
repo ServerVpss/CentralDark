@@ -69,5 +69,14 @@
     "**/.venv",
     "**/venv"
   ],
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "remote.portsAttributes": {
+    "9119": {
+      "label": "Hermes Gateway original · privado (VPS)",
+      "onAutoForward": "silent",
+      "protocol": "http"
+    }
+  },
+  "remote.localPortHost": "localhost",
+  "remote.restoreForwardedPorts": true
 }

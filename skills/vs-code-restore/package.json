@@ -1,5 +1,8 @@
 {
   "name": "centraldark-vscode-restore",
+  "displayName": "CentralDark VS Code Restore",
+  "description": "Restaura bancada e terminais; localiza PID e disponibiliza controle remoto autenticado, opt-in e privado por dispositivo.",
+  "version": "0.1.6",
   "displayName": "CentralDark · Vibe Coding",
   "description": "CentralDark VS Code: OAuth CentralDark compartilhado, bancada e pareamento por codigo.",
   "version": "0.2.1",
@@ -50,10 +53,32 @@
         "title": "CentralDark: Localizar VS Code por PID (PowerShell / terminal)"
       },
       {
+        "command": "centraldark.remoteTerminalPair",
+        "title": "CentralDark: Parear terminal remoto (dispositivo autorizado)"
+      },
+      {
+        "command": "centraldark.remoteTerminalStatus",
+        "title": "CentralDark: Status terminal remoto e PIDs (somente leitura)"
+      },
+      {
         "command": "centraldark.browserSurfacesCatalog",
         "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
       },
       {
+        "command": "centraldark.openVibeCoding",
+        "title": "CentralDark: Abrir Vibe Coding"
+      },
+      {
+        "command": "centraldark.buildExtension",
+        "title": "CentralDark: Compilar a extensão"
+      },
+      {
+        "command": "centraldark.naturalCommand",
+        "title": "CentralDark: Diga o que você quer fazer"
+      },
+      {
+        "command": "centraldark.prepareAll",
+        "title": "CentralDark: Preparar tudo (calibrar + compilar + instalar + conectar)"
         "command": "centraldark.pairVsCode",
         "title": "CentralDark: Parear este VS Code (SSH + MCP)"
       },
@@ -95,6 +120,7 @@
         "centraldark.restore.remoteTerminalEnabled": {
           "type": "boolean",
           "default": false,
+          "description": "Permite receptor local de comandos no terminal VS Code, apenas com pareamento e aprovacao explicita."
           "description": "Habilita receptor privado em localhost somente apos pareamento e consentimento local."
         },
         "centraldark.restore.remoteTerminalPort": {
@@ -102,6 +128,7 @@
           "minimum": 1024,
           "maximum": 65535,
           "default": 8719,
+          "description": "Porta HTTP em 127.0.0.1 para Tailscale Serve privado; nao abre interface publica."
           "description": "Porta HTTP em 127.0.0.1 para uso privado; nao expoe diretamente na rede."
         },
         "centraldark.restore.autoUpdate": {
@@ -121,6 +148,9 @@
     "views": {
       "explorer": [
         {
+          "type": "webview",
+          "id": "centraldark.vibeCoding",
+          "name": "🪬 CentralDark · Vibe Coding"
           "id": "centraldarkVibeCoding",
           "name": "CentralDark · Vibe Coding",
           "type": "webview"
@@ -130,7 +160,8 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -139,5 +170,13 @@
   },
   "extensionKind": [
     "ui"
-  ]
+  ],
+  "extensionDependencies": [
+    "ms-vscode-remote.remote-ssh"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ServerVpss/CentralDark.git",
+    "directory": "skills/vs-code-restore"
+  }
 }

@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { execFile } from 'child_process';
+import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
+import { CentralDarkVibeProvider, openCentralDarkVibe, runNaturalCentralDarkCommand } from './vibe-panel';
 import { randomBytes } from 'crypto';
 import { registerVsCodeAutoUpdate, checkVsCodeUpdates } from './autoUpdater';
 import { startRemoteTerminal, configureRemoteTerminal, remoteTerminalStatus } from './remote-terminal';
@@ -40,6 +42,10 @@ export function activate(context: vscode.ExtensionContext): void {
   traceOutput = vscode.window.createOutputChannel('CentralDark Trace');
   context.subscriptions.push(traceOutput);
   emitTrace('activate', 'PASS');
+  const vibeProvider = new CentralDarkVibeProvider(context);
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider('centraldark.vibeCoding', vibeProvider)
+  );
   context.subscriptions.push(
     vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)),
     vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)),
@@ -55,11 +61,21 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => configureRemoteTerminal(context)),
     vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => remoteTerminalStatus(context)),
     vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog),
+    vscode.commands.registerCommand('centraldark.buildExtension', buildExtension),
+    vscode.commands.registerCommand('centraldark.prepareAll', () => prepareAll(context)),
+    vscode.commands.registerCommand('centraldark.openVibeCoding', openCentralDarkVibe),
+    vscode.commands.registerCommand('centraldark.naturalCommand', () => runNaturalCentralDarkCommand()),
     vscode.commands.registerCommand('centraldark.showTrace', () => {
       emitTrace('show_trace', 'PASS');
       traceOutput?.show(true);
     })
   );
+  const vibeStatus = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+  vibeStatus.text = '$(sparkle) CentralDark';
+  vibeStatus.tooltip = 'Abrir CentralDark · Vibe Coding';
+  vibeStatus.command = 'centraldark.openVibeCoding';
+  vibeStatus.show();
+  context.subscriptions.push(vibeStatus);
   registerTerminalTelemetry(context);
   void startRemoteTerminal(context);
   registerVsCodeAutoUpdate(context, sshExecutable, VPS_ROUTES);
@@ -190,7 +206,7 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
   output.appendLine('[INFO] ZENDRIVE SSH: teste de leitura, sem Desktop Commander.');
   output.appendLine('[INFO] Primeiro Segredo-VPS pela VPN; fallback segredo-vpss publico. Host key estrita; config inalterado.');
   const binary = sshExecutable();
-  let succeeded: string | null = null;
+  let succeeded: (typeof VPS_ROUTES)[number] | null = null;
   for (const route of VPS_ROUTES) {
     output.appendLine('[TESTE] ' + route.name);
     const result = await checkSshRoute(binary, route.alias, route.options);
@@ -198,7 +214,7 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
       ? '[OK] ' + route.name + ' | host=' + result.host
       : '[AVISO] ' + route.name + ' | ' + result.status);
     if (result.ok) {
-      succeeded = route.name;
+      succeeded = route;
       break;
     }
   }
@@ -208,18 +224,34 @@ async function probeVpsSsh(connectAfter: boolean): Promise<void> {
     return;
   }
   if (!connectAfter) {
-    void vscode.window.showInformationMessage('CentralDark: teste SSH PASS pela rota ' + succeeded + '.');
+    void vscode.window.showInformationMessage(
+      'CentralDark: teste SSH PASS pela rota ' + succeeded.name + ' (' + succeeded.alias + ').');
     return;
+  }
+  const remoteSsh = vscode.extensions.getExtension('ms-vscode-remote.remote-ssh');
+  if (!remoteSsh) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: dependencia Remote - SSH ausente (ms-vscode-remote.remote-ssh).');
+    return;
+  }
+  if (!remoteSsh.isActive) {
+    await remoteSsh.activate();
   }
   const commands = await vscode.commands.getCommands(true);
-  if (!commands.includes('remote-ssh.connectToHost')) {
-    void vscode.window.showWarningMessage('CentralDark: instale/ative a extensao oficial Remote - SSH e use o alias segredo-vpss.');
+  const openCommand = commands.includes('opensshremotes.openEmptyWindow')
+    ? 'opensshremotes.openEmptyWindow'
+    : commands.includes('opensshremotes.openEmptyWindowInCurrentWindow')
+      ? 'opensshremotes.openEmptyWindowInCurrentWindow'
+      : null;
+  if (!openCommand) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: Remote - SSH ativo, mas a API de conexao esperada nao foi exposta.');
     return;
   }
-  // O picker respeita o alias SSH do usuario. O teste Tailscale nao reescreve
-  // o config SSH e nao altera implicitamente a rota usada pelo Remote-SSH.
-  await vscode.commands.executeCommand('remote-ssh.connectToHost',
-    succeeded === 'TAILSCALE' ? 'Segredo-VPS' : 'segredo-vpss');
+  // Usa exatamente o alias que acabou de passar no probe. Nao abre picker,
+  // nao corrige nome por heuristica e nao cria Host/IdentityFile paralelo.
+  output.appendLine('[CONECTAR] alias comprovado=' + succeeded.alias + ' | comando=' + openCommand);
+  await vscode.commands.executeCommand(openCommand, { host: succeeded.alias });
 }
 
 
@@ -317,6 +349,133 @@ function browserSurfacesCatalog(): void {
   out.appendLine('Owner MCP: apps/modulos/mcp/src/tools/core/mcp-admin.js');
   out.appendLine('Owner VS Code: skills/vs-code-restore/src/extension.ts');
   out.show(true);
+}
+
+
+function extensionOwnerPath(): string | undefined {
+  for (const folder of vscode.workspace.workspaceFolders ?? []) {
+    const root = folder.uri.fsPath;
+    const direct = path.join(root, 'package.json');
+    if (path.basename(root).toLowerCase() === 'vs-code-restore' && fs.existsSync(direct)) {
+      return root;
+    }
+    const nested = path.join(root, 'skills', 'vs-code-restore');
+    if (fs.existsSync(path.join(nested, 'package.json'))) {
+      return nested;
+    }
+  }
+  if (process.platform === 'win32') {
+    const canonical = 'K:\\skills\\vs-code-restore';
+    if (fs.existsSync(path.join(canonical, 'package.json'))) {
+      return canonical;
+    }
+  }
+  return undefined;
+}
+
+function runLogged(
+  binary: string,
+  args: string[],
+  cwd: string,
+  output: vscode.OutputChannel,
+  stdin?: string
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    output.appendLine('> ' + binary + ' ' + args.join(' '));
+    const child = execFile(binary, args, {
+      cwd, windowsHide: true, maxBuffer: 1024 * 1024 * 8
+    }, (error, stdout, stderr) => {
+      if (stdout) output.append(stdout);
+      if (stderr) output.append(stderr);
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve();
+    });
+    child.stdout?.on('data', chunk => output.append(String(chunk)));
+    child.stderr?.on('data', chunk => output.append(String(chunk)));
+    if (stdin) {
+      child.stdin?.end(stdin);
+    }
+  });
+}
+
+async function buildExtension(): Promise<void> {
+  const owner = extensionOwnerPath();
+  if (!owner) {
+    void vscode.window.showWarningMessage(
+      'CentralDark: abra o repositório que contém skills/vs-code-restore para compilar.'
+    );
+    return;
+  }
+  const output = vscode.window.createOutputChannel('CentralDark — Compilar extensão');
+  output.clear();
+  output.show(true);
+  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  try {
+    await vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'CentralDark: testando e compilando a extensão…',
+      cancellable: false
+    }, async () => {
+      await runLogged(npm, ['test'], owner, output);
+      await runLogged(npm, ['run', 'compile'], owner, output);
+      const pkg = JSON.parse(fs.readFileSync(path.join(owner, 'package.json'), 'utf8')) as { version?: string };
+      const version = String(pkg.version || 'unknown');
+      const vsix = path.join(owner, 'centraldark-vscode-restore-' + version + '.vsix');
+      await runLogged(npx, [
+        '--yes', '@vscode/vsce', 'package',
+        '--no-dependencies',
+        '--allow-missing-repository',
+        '--out', vsix
+      ], owner, output, 'y\n');
+      output.appendLine('\n[OK] VSIX=' + vsix);
+      void vscode.window.showInformationMessage('CentralDark: extensão ' + version + ' compilada e empacotada.');
+    });
+  } catch (error) {
+    output.appendLine('\n[ERRO] ' + String(error));
+    void vscode.window.showErrorMessage('CentralDark: compilação falhou. Veja “CentralDark — Compilar extensão”.');
+  }
+}
+
+
+async function prepareAll(context: vscode.ExtensionContext): Promise<void> {
+  const script = path.join(context.extensionPath, 'tools', 'centraldark-oneclick.ps1');
+  if (!fs.existsSync(script)) {
+    void vscode.window.showErrorMessage('CentralDark: bootstrap one-click nao encontrado no pacote instalado.');
+    return;
+  }
+  if (process.platform !== 'win32') {
+    void vscode.window.showWarningMessage('CentralDark: Preparar tudo foi definido para a Casa Windows.');
+    return;
+  }
+  const output = vscode.window.createOutputChannel('CentralDark — Preparar tudo');
+  output.clear();
+  output.show(true);
+  try {
+    await vscode.window.withProgress({
+      location: vscode.ProgressLocation.Notification,
+      title: 'CentralDark: calibrando, compilando, instalando e conectando…',
+      cancellable: false
+    }, async () => {
+      await runLogged(
+        'pwsh.exe',
+        ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script],
+        context.extensionPath,
+        output
+      );
+    });
+    void vscode.window.showInformationMessage(
+      'CentralDark: preparação concluída. Uma janela nova carrega a versão instalada.'
+    );
+  } catch (error) {
+    output.appendLine('\n[ERRO] ' + String(error));
+    void vscode.window.showErrorMessage(
+      'CentralDark: Preparar tudo falhou. Veja “CentralDark — Preparar tudo”.'
+    );
+  }
 }
 
 

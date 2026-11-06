@@ -42,3 +42,7 @@ SINAL MATERIAL
 Registrar somente `DECISÃO | EVIDÊNCIA | AÇÃO | RESULTADO | LACUNA | PRÓXIMO_TESTE`; nunca cadeia privada de pensamento.
 
 Mapa central: `../meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/SKILLS/MAPA-MENTAL-OPERACIONAL.md`.
+
+## 🎨 Vibe Coding — ponte recíproca da SuperSkill
+
+Gatilho `#VIBECODING` encaminha à skill `../centraldark-vibe-coding/SKILL.md` somente quando houver intenção criativa material; esta `brainstorming` continua responsável pelas perguntas e escolhas de design. Após decisão de design aprovada, retorna ao **mesmo** `#VIBECODING` para execução autorizada e testes; sem gerar outro owner. As arestas e tags bidirecionais vivem em `../meta-lupa/KITS/METAGRILL-METALUPA/INTERLIGADOS/SKILLS/REGISTRY.json`.
