@@ -212,9 +212,9 @@
         "cockpit_8080_religar": {
           "official": true,
           "command": "Start-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'",
-          "task_action": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"K:\\scripts\\casa\\instinto-cockpit-autostart.ps1\"",
-          "process": "\"C:\\Program Files\\nodejs\\node.exe\" \"K:\\apps\\instinto-superior\\node_modules\\vite\\bin\\vite.js\" --host 0.0.0.0 --port 8080 --strictPort",
-          "working_directory": "K:\\apps\\instinto-superior",
+          "task_action": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"instinto-cockpit-autostart.ps1\"",
+          "process": "\"node\" \"node_modules\\vite\\bin\\vite.js\" --host 0.0.0.0 --port 8080 --strictPort",
+          "working_directory": ".",
           "user": "NT AUTHORITY\\SYSTEM (sessão 0, RunLevel Highest)",
           "watchdog": "mesma tarefa: gatilhos boot + logon + tempo a cada 1 min, MultipleInstances=IgnoreNew",
           "readback": "Get-NetTCPConnection -State Listen -LocalPort 8080 e HTTP 200 em http://127.0.0.1:8080/sala-controle",
