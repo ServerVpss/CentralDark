@@ -79,3 +79,12 @@ Prova humana real: references/native-cursor-confirmation.json. A foto mostra exa
 ## Integracao canonica na Mae (2026-11-02)
 
 Owner: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md. Codigo WGC, overlay, monitores, capturas, cursor virtual Cua e provas neste mesmo diretorio. O plugin existente hermes-visual-computer-use permanece adaptador da runtime Hermes, nao e outra biblioteca. Testar tela por tela com scripts/blink_cursor.py --monitor N --mode blink e exigir observacao humana separada da execucao automatica. Nao declarar validacao humana sem confirmacao do CHEFE.
+
+
+## Descoberta dinamica de alvo pela janela e controle UIA (06/11/2026)
+
+Usar o mesmo owner e o mesmo `blink_cursor.py`; nao criar input, overlay, plugin nem Skill paralela. Para pedido explicito de clique, **preferir** `scripts/blink_cursor.py --mode click --window-title "Agente Hermes" --control-name "Novo bate-papo"` (titulos e nomes sao exemplos, devem corresponder a janela e controle atuais). O helper existente `../../scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl -WindowTitle "Agente Hermes" -ControlName "Novo bate-papo"` faz apenas descoberta: retorna PID, HWND, monitor humano, device e centro atual do controle UIAutomation, sem clique, teclado, captura ou movimento de cursor.
+
+O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo `GetWindowRect`, monitor e device WGC antes de invocar **somente Cua virtual** (`scope=window`, `delivery_mode=background`) e o overlay existente. `--monitor N` opcional no modo dinamico precisa coincidir com o monitor medido; o modo explicito anterior continua disponivel. Janela/controle ausente, ambiguo, desabilitado, fora da tela ou mudanca de monitor: bloquear sem clique, redescobrir somente sob nova intencao. CLI nao faz `SetCursorPos`, `mouse_event` nem `scope=desktop`. Depois do input: prova de efeito UI independente; chamada Cua bem-sucedida nao significa navegacao concluida.
+
+**Prova local 06/11:** o resolvedor UIA somente leitura identificou o botao `Novo bate-papo` da janela Hermes no monitor humano 4, retornando PID/HWND e coordenadas atuais, `input_dispatched=false`; PowerShell AST=PASS e Python `py_compile`=PASS. Clique real dessa rota dinamica nao foi realizado, portanto permanece **UNKNOWN**. Hardware diferente das quatro telas mapeadas na Casa exige novo binding, nao inferencia.
