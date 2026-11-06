@@ -1,7 +1,7 @@
 beautifulsoup4==4.14.3
 boto3==1.42.70
 botocore==1.42.70
-certifi==2026.2.25
+certifi==2026.10.18
 charset-normalizer==3.4.5
 click==8.3.1
 coloredlogs==15.0.1
@@ -20,7 +20,7 @@ mpmath==1.3.0
 numpy==2.4.3
 onnxruntime==1.20.1
 packaging==26.0
-pillow==12.3.0
+pillow==13.0.0
 playwright==1.56.0
 protobuf==7.34.0
 pyee==13.0.1
@@ -39,3 +39,7 @@ sympy==1.14.0
 typing_extensions==4.15.0
 urllib3==2.7.0
 xlsxwriter==3.2.9
+# Omni Router FastAPI runtime: required in Casa and VPS (missing from prior manifest).
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+pydantic>=2,<3

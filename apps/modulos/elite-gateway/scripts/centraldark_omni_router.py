@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# #OBSERVACOES# @owner: centraldark-omni-router @doc_ref: docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md
+# @last_updated: 2026-11-01T19:52:00.703528+00:00 @implementado: consome receipts existentes do HUB sem novo store; mantém NOT_REVALIDATED.
 """
 CentralDark Omni Router
 ONE_SYSTEM_ONLY: one entrypoint, multiple replaceable engines.
@@ -1532,6 +1534,7 @@ def vps_delta_stream(authorization: str = Header(default=None)) -> StreamingResp
     )
 
 
+@app.get("/api/omni/status")
 @app.get("/health")
 def health() -> Dict[str, Any]:
     providers = sorted(ENGINE_PROVIDERS)
@@ -1559,6 +1562,135 @@ def health() -> Dict[str, Any]:
     }
 
 
+# Local-first projection of the existing execution-fabric owner.
+# These endpoints read real files/Git; they DO NOT run agents or assert a proof.
+def _fabric_repo_root() -> Optional[Path]:
+    value = os.getenv("CENTRALDARK_ROOT", "").strip()
+    root = Path(value).expanduser() if value else Path(__file__).resolve().parents[4]
+    root = root.resolve()
+    marker = root / "apps" / "modulos" / "elite-gateway" / "scripts" / "centraldark_omni_router.py"
+    return root if marker.is_file() else None
+
+
+def _fabric_head(root: Optional[Path]) -> Optional[str]:
+    if root is None:
+        return None
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=3, check=False,
+        )
+        sha = result.stdout.strip() if result.returncode == 0 else ""
+        return sha if re.fullmatch(r"[0-9a-f]{40}", sha) else None
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+
+
+def _fabric_receipts(root: Optional[Path], limit: int = 24) -> List[Dict[str, Any]]:
+    if root is None:
+        return []
+    folders = (
+        root / "docs" / "CONSCIENCIA" / "MICRO-DEPLOY" / "RECEIPTS",
+        root / "docs" / "CONSCIENCIA" / "RECEIPTS",
+        root / "MODULES" / "HUB" / "receipts",
+    )
+    files: List[Path] = []
+    for folder in folders:
+        if folder.is_dir():
+            files.extend(folder.glob("*.md"))
+    files.sort(key=lambda item: item.stat().st_mtime if item.is_file() else 0, reverse=True)
+    rows: List[Dict[str, Any]] = []
+    for entry in files[:limit]:
+        try:
+            info = entry.stat()
+            rows.append({
+                "id": entry.stem[:110],
+                "path": entry.relative_to(root).as_posix(),
+                "modified_at": datetime.fromtimestamp(info.st_mtime, tz=timezone.utc).isoformat(),
+                "bytes": info.st_size,
+                "proof_state": "NOT_REVALIDATED",
+            })
+        except (OSError, ValueError):
+            continue
+    return rows
+
+
+@app.get("/fabric/live/status")
+@app.get("/api/live-fabric/status")
+def fabric_status() -> Dict[str, Any]:
+    root = _fabric_repo_root()
+    head = _fabric_head(root)
+    rows = _fabric_receipts(root, 1)
+    return {
+        "schema": "centraldark.live-execution-fabric.status.v1",
+        "owner": "centraldark-omni-router",
+        "service": "centraldark-omni-router",
+        "status": "ok" if head else "unknown",
+        "mode": "LOCAL_READ_ONLY_PROJECTION",
+        "git": {"head": head},
+        "receipts_sample_available": bool(rows),
+        "invocation_proven": False,
+        "runtime_mutation_performed": False,
+        "proof_state": "NOT_REVALIDATED",
+    }
+
+
+@app.get("/fabric/live/graph")
+@app.get("/api/live-fabric/graph")
+def fabric_graph() -> Dict[str, Any]:
+    root = _fabric_repo_root()
+    head = _fabric_head(root)
+    receipts = _fabric_receipts(root)
+    root_node = {"id": "centraldark-repo", "type": "repository", "sha": head}
+    nodes = [root_node] + [
+        {"id": "receipt:" + row["id"], "type": "receipt", "path": row["path"],
+         "proof_state": row["proof_state"]} for row in receipts
+    ]
+    edges = [
+        {"source": "centraldark-repo", "target": "receipt:" + row["id"],
+         "relation": "contains_record_not_execution_proof"} for row in receipts
+    ]
+    return {
+        "schema": "centraldark.live-execution-fabric.graph.v1",
+        "owner": "centraldark-omni-router",
+        "status": "ok" if head else "unknown",
+        "source": "local_git_and_receipts",
+        "graph_kind": "BOUNDED_DERIVED_RECEIPTS_NOT_FULL_EXECUTION_GRAPH",
+        "nodes": nodes,
+        "edges": edges,
+        "invocation_proven": False,
+        "proof_state": "NOT_REVALIDATED",
+    }
+
+
+@app.get("/api/microdeploy/receipts/index.json")
+def fabric_receipts_index() -> Dict[str, Any]:
+    root = _fabric_repo_root()
+    return {
+        "schema": "centraldark.microdeploy.receipts.index.v1",
+        "owner": "centraldark-omni-router",
+        "status": "ok" if root else "unknown",
+        "items": _fabric_receipts(root),
+        "proof_state": "NOT_REVALIDATED",
+        "mode": "READ_ONLY",
+    }
+
+
+@app.get("/heartbeat")
+def router_heartbeat() -> Dict[str, Any]:
+    # Process heartbeat, not Hermes/MCP/tool invocation proof.
+    return {
+        "schema": "centraldark.omni-router.heartbeat.v1",
+        "owner": "centraldark-omni-router",
+        "status": "ok",
+        "self": "alive",
+        "scope": "omni_router_http_process_only",
+        "observed_at": datetime.now(timezone.utc).isoformat(),
+        "provider_invocation_proven": False,
+    }
+
+
+@app.get("/api/omni/models")
 @app.get("/v1/models")
 def models(authorization: str = Header(default=None)) -> Dict[str, Any]:
     require_router_auth(authorization)

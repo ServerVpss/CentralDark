@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowUpRight, RefreshCw } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { lerEstadoOficina } from "@/lib/sync.functions";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
 
 type Sinal = "verde" | "amarelo" | "vermelho" | "neutro";
 const CORES: Record<Sinal, string> = {
@@ -57,9 +58,12 @@ export function MinhaOficina() {
           <p className="mt-1 max-w-xl text-xs text-muted-foreground">Nomes simples para o mesmo Git, CI e deploy. Esta visão consulta os owners reais; nenhum botão simula push, revisão, merge ou publicação.</p>
         </div>
         <div className="flex items-center gap-2">
-          <button type="button" onClick={() => void consulta.refetch()} disabled={consulta.isFetching} className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-2 text-xs hover:bg-muted/30" aria-label="Atualizar medições da Minha Oficina">
-            <RefreshCw className={`size-4 ${consulta.isFetching ? "animate-spin" : ""}`} /> Atualizar
-          </button>
+          <SyncActionButton
+            label="Atualizar"
+            onClick={() => void consulta.refetch()}
+            isFetching={consulta.isFetching}
+            aria-label="Atualizar medições da Minha Oficina"
+          />
           <a href="https://github.com/ServerVpss/CentralDark/pull/1873" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-2 text-xs hover:bg-muted/30">Abrir PR real <ArrowUpRight className="size-3" /></a>
         </div>
       </div>

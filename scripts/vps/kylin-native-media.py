@@ -2,6 +2,7 @@
 """Native media binding for the existing CentralDark local MCP owner."""
 import array, hashlib, json, math, os, subprocess, sys, time, urllib.request, uuid, wave
 from pathlib import Path
+import re, shutil, socket
 BASE="http://127.0.0.1:8000"
 CACHE=Path.home()/".hermes/audio_cache/centraldark"
 def request(path,data=None):
@@ -65,9 +66,130 @@ def video_analyze(path,frames=3):
         result["frames"].append({"timestamp":stamp,**image_analyze(p)})
     result["audio"]=transcribe(path) if any(x.get("codec_type")=="audio" for x in meta.get("streams",[])) else {"status":"NO_AUDIO_STREAM"}
     return result
+def _kylinbot_readonly(args):
+    """Read metadata only; never return provider account, auth tokens or memory entries."""
+    if not shutil.which("kylin-bot"):
+        return ""
+    try:
+        p = subprocess.run(
+            ["kylin-bot", *args], capture_output=True, text=True,
+            timeout=8, check=False, env={**os.environ, "NO_COLOR": "1"},
+        )
+        return re.sub(r"\x1b\[[0-9;]*m", "", p.stdout)
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+
+def _label(text, label):
+    match = re.search(r"(?m)^[^\r\n:]{0,32}\b" + re.escape(label) + r":\s*([^\r\n]+)", text)
+    return match.group(1).strip() if match else None
+
+def _kylinbot_capabilities():
+    """Observe an existing CLI; this is NOT an MCP bridge to the agent's actions."""
+    cli = shutil.which("kylin-bot")
+    if not cli:
+        return {"installed": False, "probe": "binary_not_found"}
+    status = _kylinbot_readonly(["status"])
+    mem = _kylinbot_readonly(["memory", "stats"])
+    auth = _kylinbot_readonly(["auth", "status"])
+    socket_path = Path.home() / ".kylinbot/gateway.sock"
+    socket_state = "absent"
+    if socket_path.is_socket():
+        socket_state = "present_not_proven_connected"
+        try:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
+                client.settimeout(0.5)
+                client.connect(str(socket_path))
+            socket_state = "accepting_connections"
+        except OSError:
+            socket_state = "not_accepting_connections"
+    memory_total = _label(mem, "Total")
+    memory_backend = _label(mem, "Backend")
+    memory_health = _label(mem, "Health")
+    provider = _label(status, "Provider")
+    model = _label(status, "Model")
+    daemon_state = _label(status, "Service")
+    return {
+        "installed": True,
+        "version": _label(status, "Version"),
+        "provider_reported": provider,
+        "model_reported": model,
+        "oauth_profile_present": bool(re.search(
+            r"openai-codex:default\s+kind=OAuth", auth)),
+        "oauth_profile_does_not_prove_live_inference": True,
+        "memory": {
+            "backend": memory_backend,
+            "health": memory_health,
+            "entries": int(memory_total) if memory_total and memory_total.isdigit() else None,
+            "autosave_reported": "auto-save: on" in status,
+        },
+        "gateway": {
+            "unix_socket": socket_state,
+            "pairing": "supported_by_cli; not performed",
+            "remote_access": "not_promoted_without_pairing_and_live_probe",
+        },
+        "acp": {
+            "transport": "JSON-RPC 2.0 over stdio",
+            "command": "kylin-bot acp",
+            "running_or_tested": False,
+        },
+        "daemon_service_reported": daemon_state,
+        "read_only": True,
+        "secrets_returned": False,
+    }
+
+def native_status():
+    """Extend the existing MCP tool; retain its original response keys."""
+    runtime = request("/v2")
+    models = request("/v2/repository/index", {"ready": False})
+    ready = [m["name"] for m in models if m.get("state") == "READY"]
+    names = {m["name"] for m in models}
+    groups = {
+        "asr": sorted(n for n in names if n.startswith(("asr_", "ensemble-asr_"))),
+        "tts": sorted(n for n in names if "tts_" in n),
+        "ocr": sorted(n for n in names if n.startswith("ocr_")),
+        "embedding": sorted(n for n in names if n.startswith(("embd_", "ensemble-embd_"))),
+        "segmentation": sorted(n for n in names if n.startswith(("seg_", "matting_"))),
+    }
+    libs = {
+        "nlp": "libkysdk-genai-nlp.so.1",
+        "image_generation": "libkysdk-genai-vision.so.1",
+        "speech": "libkysdk-coreai-speech.so.1",
+        "vision": "libkysdk-coreai-vision.so.1",
+    }
+    libdir = Path("/usr/lib/x86_64-linux-gnu")
+    return {
+        "runtime": runtime,
+        "models": models,
+        "capability_map": {
+            "schema": "centraldark.kylin-native-capabilities.v1",
+            "os_native_sdk_libraries": {
+                k: {"library": v, "present": (libdir / v).exists()}
+                for k, v in libs.items()
+            },
+            "triton": {
+                "registered_model_count": len(models),
+                "ready_model_count": len(ready),
+                "ready_model_names": ready,
+                "model_groups_registered": groups,
+                "model_registered_is_not_ready": True,
+                "triton_ready_is_not_local_chat_llm": True,
+            },
+            "kylinbot": _kylinbot_capabilities(),
+            "existing_mcp_tools": [
+                "kylin_native_status", "kylin_text_embedding",
+                "kylin_audio_synthesize", "kylin_audio_transcribe",
+                "kylin_image_analyze", "kylin_image_embedding",
+                "kylin_video_analyze",
+            ],
+            "mcp_tools_listed_not_individually_tested_here": True,
+            "no_new_daemon_or_provider": True,
+            "does_not_expose_paircodes_or_credentials": True,
+        },
+    }
+
 def main(a):
     action=a["action"]
-    if action=="status":return {"runtime":request("/v2"),"models":request("/v2/repository/index",{"ready":False})}
+    if action=="status":return native_status()
     if action in {"embedding","tts"}:
         text=a["text"]
         if not isinstance(text,str) or not 0<len(text)<=4000:raise ValueError("TEXT_LENGTH_INVALID")

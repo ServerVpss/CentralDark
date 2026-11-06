@@ -1,3 +1,19 @@
+---
+title: "00 — Comece aqui, IA"
+status: "CURRENT_COMPATIBILITY_POINTER"
+role: "DISCOVERY_POINTER"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+repository: "ServerVpss/CentralDark"
+default_branch: "main"
+tags:
+  - centraldark
+  - entrada
+  - compatibilidade
+  - soul-sol
+---
+
 # 🚪 00 — COMECE AQUI, IA
 
 status: CURRENT_COMPATIBILITY_POINTER

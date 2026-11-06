@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as McpAutorizarRouteImport } from './routes/mcp-autorizar'
 import { Route as CockpitRouteImport } from './routes/cockpit'
+import { Route as McpAutorizarRouteImport } from './routes/mcp-autorizar'
 import { Route as RepositorioRouteImport } from './routes/repositorio'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RoteadorRouteImport } from './routes/roteador'
@@ -34,14 +34,14 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const McpAutorizarRoute = McpAutorizarRouteImport.update({
-  id: '/mcp-autorizar',
-  path: '/mcp-autorizar',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CockpitRoute = CockpitRouteImport.update({
   id: '/cockpit',
   path: '/cockpit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpAutorizarRoute = McpAutorizarRouteImport.update({
+  id: '/mcp-autorizar',
+  path: '/mcp-autorizar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RepositorioRoute = RepositorioRouteImport.update({
@@ -72,10 +72,10 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/mcp-autorizar': typeof McpAutorizarRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -83,10 +83,10 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesByTo {
-  '/mcp-autorizar': typeof McpAutorizarRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -94,12 +94,12 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesById {
-  '/mcp-autorizar': typeof McpAutorizarRoute
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/cockpit': typeof CockpitRoute
+  '/mcp-autorizar': typeof McpAutorizarRoute
   '/repositorio': typeof RepositorioRoute
   '/reset-password': typeof ResetPasswordRoute
   '/roteador': typeof RoteadorRoute
@@ -133,9 +133,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/mcp-autorizar'
     | '/auth'
     | '/cockpit'
+    | '/mcp-autorizar'
     | '/repositorio'
     | '/reset-password'
     | '/roteador'
@@ -144,11 +144,11 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  McpAutorizarRoute: typeof McpAutorizarRoute
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
   CockpitRoute: typeof CockpitRoute
+  McpAutorizarRoute: typeof McpAutorizarRoute
   RepositorioRoute: typeof RepositorioRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   RoteadorRoute: typeof RoteadorRoute
@@ -177,18 +177,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/mcp-autorizar': {
-      id: '/mcp-autorizar'
-      path: '/mcp-autorizar'
-      fullPath: '/mcp-autorizar'
-      preLoaderRoute: typeof McpAutorizarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/cockpit': {
       id: '/cockpit'
       path: '/cockpit'
       fullPath: '/cockpit'
       preLoaderRoute: typeof CockpitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp-autorizar': {
+      id: '/mcp-autorizar'
+      path: '/mcp-autorizar'
+      fullPath: '/mcp-autorizar'
+      preLoaderRoute: typeof McpAutorizarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/repositorio': {

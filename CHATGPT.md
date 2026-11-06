@@ -1,3 +1,19 @@
+---
+title: "CHATGPT — adaptador CentralDark"
+status: "ADAPTER"
+role: "ENGINE_ADAPTER"
+engine: "CHATGPT"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "ChatGPT"
+tags:
+  - centraldark
+  - adapter
+  - chatgpt
+  - soul-sol
+---
+
 # ChatGPT — adaptador fino CentralDark
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->

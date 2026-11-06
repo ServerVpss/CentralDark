@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "nativeCaptureBorder": true,
+  "customOverlay": true,
+  "borderThickness": 10,
+  "borderColor": "#00D889",
+  "opacity": 0.3,
+  "shadow": true,
+  "shadowBlur": 28,
+  "roundedCorners": true,
+  "showMonitorNumber": true,
+  "showAgentStatus": true,
+  "animateActivation": true,
+  "clickThrough": true,
+  "monitorBindings": {
+    "\\\\.\\DISPLAY1": 1,
+    "\\\\.\\DISPLAY4": 2,
+    "\\\\.\\DISPLAY2": 3,
+    "\\\\.\\DISPLAY3": 4
+  }
+}

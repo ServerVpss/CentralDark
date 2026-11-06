@@ -64,7 +64,91 @@ function invalidInputResponse(input, parsed, destructive) {
         })),
     });
 }
+// CASA_COMMANDER_NATIVE_TOOLS_20261105
+// Fonte oficial: scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs.
+// Somente Tailscale privada; sem RDC, sem portas públicas, sem secrets nos receipts.
+// O dispatcher existente aplica OAuth admin e auditoria antes de chamar estas tools.
+const CASA_COMMANDER_READ_TOOLS = Object.freeze([
+    "list_directory", "read_file", "read_multiple_files", "get_file_info",
+    "list_processes", "list_sessions", "start_search", "get_more_search_results",
+    "list_searches", "read_process_output",
+]);
+function casaCommanderTarget() {
+    // Configurado pelo operador no MCP da Forja. Default é a rota Serve privada já existente.
+    const raw = process.env.CENTRALDARK_CASA_COMMANDER_URL?.trim()
+        || "http://windows-casa.tail6d7aa4.ts.net:9100";
+    const url = new URL(raw);
+    const host = url.hostname.toLowerCase();
+    if (url.username || url.password || url.pathname !== "/" || url.search || url.hash ||
+        url.protocol !== "http:" || !(
+            (host === "windows-casa.tail6d7aa4.ts.net" && url.port === "9100") ||
+            ((host === "127.0.0.1" || host === "localhost") && url.port === "9101")
+        )) throw Error("CASA_COMMANDER_PRIVATE_TARGET_INVALID");
+    return url.origin;
+}
+async function casaCommanderRequest(route, payload) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    try {
+        const response = await fetch(casaCommanderTarget() + route, {
+            method: payload ? "POST" : "GET",
+            headers: payload ? {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + (process.env.CENTRALDARK_CASA_BRIDGE_TOKEN || ""),
+            } : { Accept: "application/json" },
+            body: payload ? JSON.stringify(payload) : undefined,
+            redirect: "error",
+            signal: controller.signal,
+        });
+        const body = await response.json();
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+            return { ok: false, state: "INVALID_RESPONSE", http: response.status };
+        }
+        // Não retornar a resposta bruta em erro; mensagens de upstream podem incluir paths/segredos.
+        if (route === "/health") return {
+            ok: response.ok && body.ok === true && body.name === "CentralDark Casa Commander",
+            name: body.name === "CentralDark Casa Commander" ? body.name : "UNKNOWN",
+            engine_connected: body.engine_connected === true,
+            remote_vendor: body.remote_vendor === false ? false : "UNKNOWN",
+            http: response.status,
+            proof: "BRIDGE_HEALTH_ONLY_NOT_TOOL_EXECUTION",
+        };
+        if (response.status === 401) return { ok: false, state: "CASA_AUTH_REQUIRED", http: 401 };
+        if (response.status === 403) return { ok: false, state: "CASA_WRITE_DISABLED", http: 403 };
+        return { ok: response.ok && body.ok === true, http: response.status,
+            tool: body.tool ?? payload?.name, result: body.result ?? null,
+            proof: "UPSTREAM_TOOL_RESULT_VALIDATE_EFFECT_SEPARATELY" };
+    } catch (error) {
+        return { ok: false, state: "CASA_ROUTE_NOT_VERIFIED",
+            reason: error?.name === "AbortError" ? "TIMEOUT" : "NETWORK_OR_CONFIGURATION",
+            proof: "NOT_EXECUTED" };
+    } finally { clearTimeout(timeout); }
+}
+const nativeCasaCommanderTools = [
+    {
+        name: "casa_commander_status",
+        description: "Sonda a bridge nativa CentralDark Casa Commander pela Tailscale, sem executar ferramenta e sem depender do Desktop Commander remoto.",
+        inputSchema: z.object({}),
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Casa Commander: saúde" },
+        handler: async () => ok(await casaCommanderRequest("/health")),
+    },
+    {
+        name: "casa_commander_read",
+        description: "Despacha exclusivamente ferramentas locais de leitura do Casa Commander existente via Tailscale e Bearer armazenado no servidor; requer admin MCP autenticado e não habilita escrita.",
+        inputSchema: z.object({
+            name: z.enum(CASA_COMMANDER_READ_TOOLS),
+            arguments: z.record(z.string(), z.unknown()).default({}),
+        }),
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: false, openWorldHint: false, title: "Casa Commander: leitura autenticada" },
+        handler: async (input) => {
+            if (!process.env.CENTRALDARK_CASA_BRIDGE_TOKEN || process.env.CENTRALDARK_CASA_BRIDGE_TOKEN.length < 24)
+                return ok({ ok: false, state: "CASA_PAIRING_REQUIRED", proof: "NOT_EXECUTED" });
+            return ok(await casaCommanderRequest("/tool", { name: input.name, arguments: input.arguments }));
+        },
+    },
+];
 const runtimeTools = [
+    ...nativeCasaCommanderTools,
     ...localHybridTools,
     ...casaPrivateTools,
     codeReviewerToolDefinition,
@@ -107,10 +191,22 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+<<<<<<< HEAD
         // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains fallback, not a dependency.
         { id: "CASA_NATIVE_COMMANDER", transport: "TAILSCALE_TCP", binding: "SEGREDO:9100 -> 127.0.0.1:9101", capability: "CASA_NATIVE_FILES_PROCESSES", source: "scripts/remote-bridge/CentralDark-Casa-Agent.mjs", runtimeState: "MEASURE_AT_RUNTIME" },
         { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
+=======
+    // #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/core/mcp-admin.js
+    // @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
+    // @last_updated=2026-11-05T19:25:35.947Z
+    // @implementado=CATALOG_SOURCE_CASA_COMMANDER_9101_AND_RDC_EXPLICIT_OPT_IN
+    // @pendente=RUNTIME_DEPLOY_AND_NATIVE_POST_TOOL_UIA_E2E
+    // @next_cursor=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E
+    // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains explicit-opt-in fallback, not a dependency.
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", nativeCasaCommander: "127.0.0.1:9101", nativeCasaCommanderOwner: "scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs", nativeToolCall: "POST /tool (Bearer da bridge; write exige habilitacao e autorizacao)", nativeBrowserReadback: "CHATGPT_BROWSER_TABS_CONTEXT", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "EXPLICIT_CHEFE_OPT_IN_AND_PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
+>>>>>>> origin/main
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
@@ -170,7 +266,8 @@ const DELEGATED_PROVIDER_CAPABILITIES = Object.freeze([
     { id: "LOVABLE", label: "Lovable", responsibility: "Aplicações e interfaces geradas", provider: "Lovable", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "NOTION", label: "Notion", responsibility: "Páginas e bases de conhecimento", provider: "Notion", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
     { id: "POSTHOG", label: "PostHog", responsibility: "Eventos de produto e erros observados", provider: "PostHog", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
-    { id: "REMOTE_DESKTOP_COMMANDER", label: "Remote Desktop Commander", responsibility: "Computadores e sessões remotas autorizados", provider: "Remote Desktop Commander", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED" },
+    { id: "CENTRALDARK_CASA_COMMANDER", label: "CentralDark Casa Commander 9101", responsibility: "Acionar ferramentas locais autorizadas via MCP CentralDark/Tailscale e confirmar efeito; Browser separado faz leitura da aba", provider: "CentralDark Casa (bridge local existente)", authorization: "CASA_BRIDGE_BEARER_AND_WRITE_SCOPE_WHEN_APPLICABLE", runtimeState: "MEASURE_AT_RUNTIME", delegation: "scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs /tool; BROWSER_READBACK_SEPARATE" },
+    { id: "REMOTE_DESKTOP_COMMANDER", label: "Remote Desktop Commander", responsibility: "Computadores e sessões remotas autorizados", provider: "Remote Desktop Commander", authorization: "VERIFY_IN_CENTRALDARK", runtimeState: "UNKNOWN", delegation: "EXISTING_AUTHORIZED_ADAPTER_REQUIRED_EXPLICIT_OPT_IN_ONLY" },
     { id: "CHATGPT_BROWSER_TABS_CONTEXT", label: "ChatGPT Browser — Abas & Contexto", responsibility: "Listar abas acessíveis e ler contexto textual de aba autorizada; não inclui cliques nem shell", provider: "ChatGPT Browser conectado ao cliente", authorization: "CLIENT_CONNECTED_READ_SCOPE", runtimeState: "OBSERVED_CLIENT_SIDE_ONLY", delegation: "CLIENT_PLUGIN_LIST_TABS_GET_TAB_CONTEXT; NOT_AVAILABLE_TO_VPS_MCP" },
     { id: "ZENDRIVE_VSCODE_PID", label: "ZENDRIVE CLI — Janela VS Code por PID", responsibility: "Correlacionar PID do terminal e janela VS Code; VSIX 0.1.4 instalada na Casa em snapshot de 18/10/2026, comando ainda sem recibo", provider: "VS Code Extension API + Win32 CIM", authorization: "CASA_LOCAL_EXTENSION", runtimeState: "VSIX_INSTALLED_COMMAND_RUNTIME_UNPROVEN", delegation: "centraldark.locateVsCodeByPid" },
     { id: "ZENDRIVE_SSH_VPN", label: "Remote-SSH Casa pela VPN", responsibility: "Shell e arquivos na VPS com host key estrita e fallback publico; nao prova shell Windows na volta", provider: "VS Code Remote-SSH + OpenSSH + Tailscale", authorization: "EXISTING_SSH_KEY_OWNER", runtimeState: "SSH_AUTH_CASA_TO_VPS_PROVED_SNAPSHOT_REPLAY_REQUIRED", delegation: "centraldark.probeVpsSsh|centraldark.connectVpsSsh" },

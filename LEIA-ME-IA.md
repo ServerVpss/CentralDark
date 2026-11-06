@@ -6,6 +6,57 @@ source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
 updated: 2026-09-28
 ---
 
+
+<!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+## 🪬 Capacidade operacional única — Skill Mãe
+
+A execução de toda intenção segue o owner existente [centraldark-operational-method](.agents/skills/centraldark-operational-method/SKILL.md): **uma Skill Mãe, uma biblioteca `Skills/`, um organismo**. A entrada técnica continua sendo este `LEIA-ME-IA.md`; a Skill Mãe é o método operacional, não uma segunda porta de entrada. Reutilizar owner, sessão e receita; executar o delta autorizado sem micro-passos nem confirmações redundantes; medir efeito, contraprova, recibo e `NEXT_CURSOR`. A aprovação humana complementa a prova técnica quando exigida. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`.
+
+Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.md`, instruções de agentes no `AGENTS.md` e receitas na Skill Mãe. Não criar biblioteca paralela nem afirmar que a migração física ou o carregamento pelo Hermes já foram comprovados.
+<!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
@@ -96,6 +147,8 @@ REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
 ```
 
 A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização novamente por ferramenta, rota ou camada.
+
+**#OBSERVACOES# 2026-10-28 — correção da autoria do atrito.** O CHEFE não precisa disputar controle criativo com um modelo; **o assistente é quem deve parar de disputar esse controle**. Contrato detalhado em [RULES.md — Anti-fricção aplicada](RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28). O CHEFE decide quando explorar, quando executar e quando parar na Casa. **Não iniciar automações pela mera presença de ferramentas ou imagens.** Em exploração, ampliar ideias antes de oferecer ressalvas; em execução autorizada, reutilizar capacidades já conhecidas, realizar o menor delta e conferir somente o efeito pertinente. Falta de autenticação de uma ferramenta não é falta de autorização do CHEFE; falha local não justifica travar a missão inteira. Não esconder bloqueio material nem inventar resultado.
 
 
 Você é uma IA, agente, plugin, hub ou modelo que acabou de chegar no CentralDark. Leia isto antes de responder ou executar.
@@ -764,10 +817,17 @@ TRIGGER=!EXECUTOR_CENTRALDARK
 TRIGGER_DOES_NOT_GRANT_ACCESS=true
 TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
 PHYSICAL_HOUSE_EXECUTION_REQUIRES_AUTHORIZED_TOOL=true
-PRIMARY_HOUSE_TOOL=Remote Desktop Commander
+PRIMARY_HOUSE_TOOL=CentralDark Casa Commander 127.0.0.1:9101 (MCP CentralDark / Tailscale)
+BROWSER_READ_TOOL=Browser.list_tabs + Browser.get_tab_context
+BROWSER_ACTION_TOOL=CentralDark Casa Commander /tool (autenticado, autorizado e medido)
+BROWSER_VERIFY_TOOL=Browser.get_tab_context (mesma aba)
+REMOTE_DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false
+CASA_COMMANDER_BROWSER_E2E=UNKNOWN_UNTIL_TOOL_READBACK
 NO_HOUSE_ACCESS=CAPABILITY_UNAVAILABLE
 UNKNOWN_HOUSE_ACCESS=UNKNOWN
 ```
+
+**Regra para navegador (05/11/2026):** Browser lê a aba real, **CentralDark Casa Commander nativo** executa somente ações autorizadas e comprovadas, Browser relê a mesma aba e compara efeito. Consultar a receita existente em `.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md`. A sessão Hostinger confirmou Browser+UIA pelo executor de terceiro, **não** comprovou o envio pela rota Casa Commander; não presumir paridade nem ativar Remote Desktop Commander automaticamente. Gatilhos `!CENTRALDARK`, `!EXECUTOR_CENTRALDARK`, `#ACORDAR` e `!CALIBRAR` reutilizam a receita se o DELTA envolver navegador, sem novo trigger ou autorização.
 
 Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere executar o menor delta local em vez de devolver tutorial ao CHEFE, seguido de backcheck, reteste, Reality Judge e readback.
 
@@ -915,6 +975,22 @@ SUBIR
 Não pedir novamente autorização já concedida para o mesmo escopo/classe de ação. Estado que GitHub/VPS/Cloudflare/Contabo/tools conseguem medir é medido pela máquina.
 
 `LIVE` não é só HTTP 200, processo online, DNS ou workflow verde. Exige runtime/ação observável e caminho de diagnóstico/rollback.
+
+## 🔧 Correção vigente do CHEFE — entrega direto na main, sem CI obrigatória
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+O estado CURRENT deste escopo é DIRECT_COMMIT_PUSH_MAIN, sob
+MASTER-CYCLE.yml#current_delivery_policy. Não aguardar GitHub Actions,
+check de CI remoto, workflow de squash ou VPS offline para registrar delta
+documental/código comprovado localmente. Só registrar CI como
+NOT_APPLICABLE, não PENDING bloqueante, nesta modalidade.
+Os blocos abaixo ("Intenção autorizada -> squash main") descrevem
+SOMENTE a trilha condicional de PR. Commit direto na main NÃO tem squash.
+Antes da escrita: main atual, dono certo, writer único, diff/segredos,
+teste local afetado e colisão de escopo; depois: SHA readback + receipt.
+Para execução na VPS, tentar SSH direto quando disponível e autorizado;
+se estiver offline, marcar EXECUCAO_VPS=UNKNOWN/PENDENTE, não esperar
+para concluir o registro GitHub.
 
 ## 8. Intenção autorizada → squash main
 
@@ -1354,6 +1430,8 @@ LEGACY_IS_PRESERVED=true
 
 <!-- CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
 ## Comunicação natural obrigatória — texto e áudio
+
+**MODO CLAREZA — ASD-STE100 adaptado para português brasileiro | 80%.** Esta regra **faz parte de cada explicação existente**, inclusive de receitas, fluxogramas, documentos, erros, aulas, respostas por voz e instruções técnicas. Comece pela resposta principal. Use frases curtas, palavras comuns, voz ativa e uma ideia por frase. Mantenha o mesmo nome para o mesmo conceito. Explique termos técnicos quando precisos. Organize a sequência e dê exemplos ou passos só quando forem úteis. Corte repetições, sem perder informações importantes. O 80% é orientação flexível, não limite mecânico. No texto histórico, aplique na hora de explicar; ao revisar arquivo, melhore só o trecho necessário, preservando sentido e evidência. **O método operacional da Skill-Mãe acompanha cada explicação de operação; o estilo de clareza não exige recitar o método.** Veja `RULES.md` e `.agents/skills/centraldark-operational-method/SKILL.md`.
 
 Esta é uma regra de comportamento para todas as superfícies da CentralDark. Não basta registrar a preferência: cada executor que carregar esta porta de entrada deve aplicá-la às respostas que produz.
 

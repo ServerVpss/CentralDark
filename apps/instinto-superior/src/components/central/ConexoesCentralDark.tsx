@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { CircleAlert, KeyRound, Link2, RefreshCw, ShieldCheck, Users } from "lucide-react";
+import { CircleAlert, KeyRound, Link2, ShieldCheck, Users } from "lucide-react";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { rotuloTecnicoHumano } from "@/components/central/EstadoCentralDark";
 
 import { Button } from "@/components/ui/button";
 import { lerConexoesCentralDark, lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
@@ -125,13 +127,14 @@ export function ConexoesCentralDark() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => {
-            void q.refetch();
-            void saude.refetch();
-          }} disabled={q.isFetching || saude.isFetching}>
-            <RefreshCw className={q.isFetching || saude.isFetching ? "animate-spin" : ""} />
-            Atualizar
-          </Button>
+          <SyncActionButton
+            label="Atualizar"
+            onClick={() => {
+              void q.refetch();
+              void saude.refetch();
+            }}
+            isFetching={q.isFetching || saude.isFetching}
+          />
           <Button onClick={() => void conectar("cloudflare")} disabled={!dados?.userId}>
             <Link2 />
             Conectar Cloudflare
@@ -218,9 +221,9 @@ export function ConexoesCentralDark() {
           </a>
           <div className="rounded-lg border border-border bg-muted/20 p-4">
             <strong className="block text-sm">VPS CentralDark</strong>
-            <span className="mt-2 block text-xs text-muted-foreground">MCP: {saude.data?.mcp ?? "UNKNOWN"} · Hub: {saude.data?.hub ?? "UNKNOWN"}</span>
+            <span className="mt-2 block text-xs text-muted-foreground">MCP: {rotuloTecnicoHumano(saude.data?.mcp)} · Hub: {rotuloTecnicoHumano(saude.data?.hub)}</span>
             <span className="mt-2 block text-xs text-muted-foreground">
-              Catálogo: {saude.data?.mcpCatalogo ?? "UNKNOWN"} · {saude.data?.mcpToolCount ?? "?"} ferramentas
+              Catálogo: {rotuloTecnicoHumano(saude.data?.mcpCatalogo)} · {saude.data?.mcpToolCount ?? "quantidade não informada"} ferramentas
             </span>
             <span className="mt-2 block text-xs text-muted-foreground">
               Receita P0 (HTTP): {saude.data?.mcpRecipe ?? "UNKNOWN"} · {saude.data?.mcpRecipeStatus ?? "SEM_READBACK"}
@@ -237,7 +240,7 @@ export function ConexoesCentralDark() {
           <div className="rounded-lg border border-border bg-muted/20 p-4">
             <strong className="block text-sm">Cofre da VPS</strong>
             <span className="mt-2 block break-words text-xs text-muted-foreground">Vault-Cofre-CentralDark-20260930T105330Z.tar.gz</span>
-            <span className="mt-2 block text-[11px] text-gold">Referência de inventário · disponibilidade atual UNKNOWN</span>
+            <span className="mt-2 block text-[11px] text-gold">Referência de inventário · disponibilidade atual ainda não verificada</span>
           </div>
         </div>
         <p className="mt-3 text-[11px] text-muted-foreground">
@@ -297,7 +300,7 @@ export function ConexoesCentralDark() {
           <span className="mt-3 block font-mono text-[10px] text-muted-foreground uppercase">
             Broker
           </span>
-          <strong className="mt-1 block text-xl">{dados?.estado ?? "UNKNOWN"}</strong>
+          <strong className="mt-1 block text-xl" title={`Estado técnico: ${dados?.estado ?? "UNKNOWN"}`}>{rotuloTecnicoHumano(dados?.estado)}</strong>
         </article>
         <article className="panel p-5">
           <Users className="size-5 text-neon-blue" />
@@ -332,7 +335,7 @@ export function ConexoesCentralDark() {
         <div className="mt-5 flex gap-3 rounded-lg border border-gold/30 bg-gold/5 p-4 text-sm">
           <CircleAlert className="mt-0.5 size-4 shrink-0 text-gold" />
           <div>
-            <strong>Leitura não fechou verde.</strong>
+            <strong>Não foi possível confirmar todas as conexões.</strong>
             <p className="mt-1 text-muted-foreground">{dados.erro}</p>
           </div>
         </div>
@@ -367,20 +370,20 @@ export function ConexoesCentralDark() {
                       <span
                         className={`rounded-full border px-2 py-1 font-mono text-[9px] ${tom(conta.status)}`}
                       >
-                        {conta.status || "UNKNOWN"}
+                        {rotuloTecnicoHumano(conta.status)}
                       </span>
                     </div>
                     <dl className="mt-3 grid gap-2 text-xs text-muted-foreground">
                       <div className="flex justify-between gap-3">
                         <dt>último teste</dt>
-                        <dd className="font-mono">{conta.last_test_status || "UNKNOWN"}</dd>
+                        <dd>{rotuloTecnicoHumano(conta.last_test_status)}</dd>
                       </div>
                       <div className="flex justify-between gap-3">
                         <dt>expira</dt>
                         <dd className="font-mono">
                           {conta.expires_at
                             ? new Date(conta.expires_at).toLocaleString("pt-BR")
-                            : "UNKNOWN"}
+                            : "Vencimento não informado"}
                         </dd>
                       </div>
                     </dl>
@@ -406,26 +409,24 @@ export function ConexoesCentralDark() {
 
         {!q.isPending && (dados?.connections.length ?? 0) === 0 ? (
           <div className="panel p-6 text-sm text-muted-foreground">
-            Nenhuma conexão retornada pelo broker para esta identidade. UNKNOWN continua UNKNOWN.
+            Nenhuma conexão apareceu nesta consulta. Use "Atualizar" para verificar novamente.
           </div>
         ) : null}
       </div>
 
-      <div className="panel mt-7 p-5">
-        <h4 className="font-semibold">Fronteira atual</h4>
+      <details className="panel mt-7 p-5">
+        <summary className="cursor-pointer font-semibold">Ver detalhes técnicos das conexões</summary>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          ChatGPT accounts, Secure MCP Tunnels e Remote Desktop Commander não são inventados como
-          conexões do oauth-broker. Eles entram aqui somente quando houver adapter/receipt
-          autorizado. Até lá permanecem como superfícies externas preservadas, não como PASS.
+          ChatGPT accounts, Secure MCP Tunnels e Remote Desktop Commander não são cadastrados automaticamente como
+          conexões do oauth-broker. Eles entram aqui somente quando houver adapter/receipt autorizado.
         </p>
         <p className="mt-3 font-mono text-[10px] text-muted-foreground">
           NO_BLIND_DISCONNECT=true · MULTI_ACCOUNT_ALLOWED=true · UNKNOWN_IS_NOT_PASS=true
         </p>
-      </div>
-
-      <p className="mt-4 font-mono text-[10px] text-muted-foreground">
-        Fonte: {dados?.fonte ?? "UNKNOWN"} · medido em {dados?.medidoEm ?? "UNKNOWN"}
-      </p>
+        <p className="mt-3 font-mono text-[10px] text-muted-foreground">
+          Fonte: {dados?.fonte ?? "não informada"} · medido em {dados?.medidoEm ?? "não informado"}
+        </p>
+      </details>
     </section>
   );
 }

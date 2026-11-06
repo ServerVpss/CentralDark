@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { RefreshCw, Search, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { lerEstadoMcpIntegrado } from "@/lib/mcp-admin.functions";
+import { Search, ShieldCheck } from "lucide-react";
+import { SyncActionButton } from "@/components/central/SyncActionButton";
+import { salvarCredencialTunelLocal, lerTunelLocal, lerEstadoMcpIntegrado } from "@/lib/mcp-admin.functions";
 
 /**
  * Absorve a leitura operacional do legado mcp-admin-ui no Admin CentralDark.
@@ -43,13 +43,10 @@ export function McpAdminIntegrado() {
             sem outra página, senha textual ou segundo MCP.
           </p>
         </div>
-        <Button type="button" variant="outline" size="sm" disabled={q.isFetching}
-          onClick={() => void q.refetch()}>
-          <RefreshCw className={q.isFetching ? "mr-2 size-4 animate-spin" : "mr-2 size-4"} />
-          Atualizar MCP
-        </Button>
+        <SyncActionButton label="Atualizar MCP" onClick={() => void q.refetch()} isFetching={q.isFetching} />
       </div>
 
+      <CredencialTunelLocal />
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="rounded-md border border-border p-3">
           <p className="text-xs text-muted-foreground">Servidor MCP · saúde HTTP</p>
@@ -115,4 +112,39 @@ export function McpAdminIntegrado() {
       </div>
     </section>
   );
+}
+
+// #OBSERVACOES# @owner: instinto.admin.mcp @doc_ref: README.md
+// @last_updated: 2026-11-01T19:13:55.777094+00:00 @implementado: entrada privada, valor limpo apos envio, sem storage no navegador.
+function CredencialTunelLocal() {
+  const salvar = useServerFn(salvarCredencialTunelLocal);
+  const ler = useServerFn(lerTunelLocal);
+  const [key, setKey] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState('');
+  const estado = useQuery({queryKey: ['centraldark', 'tunnel-local'], queryFn: () => ler(), retry: false, refetchInterval: 15000});
+  async function enviar(event: React.FormEvent) {
+    event.preventDefault(); setBusy(true);
+    const value = key; setKey('');
+    try {
+      const result = await salvar({data: {key: value}});
+      setMessage(result.state === 'SAVED_RESTART_PENDING' ? 'Chave salva; ativação do serviço ainda pendente.' : 'Chave salva no Linux. Conexão com a OpenAI ainda em verificação.');
+      await estado.refetch();
+    } catch { setMessage('Não foi possível salvar. Verifique sua sessão admin e a chave informada.'); }
+    finally { setBusy(false); }
+  }
+  return <form onSubmit={(event) => void enviar(event)} className="rounded-md border border-border p-4 space-y-3">
+    <h4 className="font-semibold">Túnel OpenAI · Linux / STDIO</h4>
+    <p className="text-sm text-muted-foreground">Conecta o MCP privado desta Forja ao ChatGPT e Codex.</p>
+    <label htmlFor="openai-tunnel-key" className="block text-sm">Chave de runtime OpenAI (CONTROL_PLANE_API_KEY)</label>
+    <input id="openai-tunnel-key" type="password" autoComplete="new-password" spellCheck={false}
+      value={key} onChange={(event) => setKey(event.target.value)} required maxLength={503}
+      className="w-full rounded border border-border bg-background p-2" placeholder="Cole sua chave de runtime" />
+    <button type="submit" disabled={busy || !key || estado.data?.enabled !== true}
+      className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50">
+      {busy ? 'Salvando…' : 'Salvar e conectar no Linux'}</button>
+    <button type="button" className="ml-3 text-sm underline" onClick={() => void estado.refetch()}>Verificar conexão</button>
+    <p role="status" className="text-xs text-muted-foreground">{message || (estado.data?.state === 'READY_CHECK_PASSED' ? 'Cliente pronto; chamada pelo plugin ainda precisa de prova.' : estado.data?.enabled ? 'Túnel ainda não conectado. Informe a chave para iniciar.' : 'Acesso local pendente ou sessão admin não confirmada.')}</p>
+    <p className="text-xs text-muted-foreground">Valor guardado somente no serviço Linux e nunca devolvido ao navegador. Chave salva não comprova conexão.</p>
+  </form>;
 }

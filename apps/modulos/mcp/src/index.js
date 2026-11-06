@@ -21,7 +21,7 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, adminSentinelEvent, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
@@ -121,7 +121,7 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
 // Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
-app.use("/device", createDevicePairingRouter({ cookieAdmin: isCockpitAdmin }));
+// Um unico store para /device e /authorize.
 
 app.get("/admin/pairing", (_req, res) => {
     res.redirect(302, "https://admin.centralldark.com/sala-controle");
@@ -352,6 +352,7 @@ app.get("/admin/logout", adminLogout);
 app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
+app.post("/admin/api/sentinel/events", adminSentinelEvent);
 app.get("/admin/api/logs/LOGS-VS-CODE.log", adminVsCodeLog);
 app.get("/admin/api/metricas", adminMetricas);
 app.get("/admin/api/grok/control", adminGrokControlGet);
@@ -540,7 +541,7 @@ app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerM
 // Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
 const oauthDeviceStore = createDevicePairingStore();
 configureDevicePairingForOAuth(oauthDeviceStore);
-app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore }));
+app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore, cookieAdmin: isCockpitAdmin }));
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);
@@ -732,14 +733,14 @@ app.post("/api/mcp", (req, res) => {
 app.get("/api/mcp", (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-app.get("/admin/catalog", authAdmin, async (req, res) => {
-    try {
-        const result = await getAdminCatalog(req);
-        res.json(result);
-    } catch (err) {
-        log.error("admin_catalog_error", { error: String(err) });
-        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
-    }
+// getAdminCatalog() nunca foi implementado/importado neste arquivo; esta rota
+// ficou com referencias indefinidas (authAdmin + getAdminCatalog) que
+// derrubavam o carregamento do modulo inteiro. Guard alinhado ao padrao
+// isAdmin() usado pelas demais rotas /admin/*; a rota fica 501 ate alguem
+// implementar e importar getAdminCatalog de verdade.
+app.get("/admin/catalog", (req, res) => {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false, error: "AUTH_REQUIRED" }); return; }
+    res.status(501).json({ ok: false, error: "admin_catalog_nao_implementado", cid: req.cid });
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
