@@ -443,3 +443,8 @@ Quando a intenção citar WuzAPI, QR WhatsApp, grupos, foto de grupo, webhook, G
 
 ### WuzAPI + whatsmeow: regra de consulta aos donos (05/11/2026)
 Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webhook, mídia, grupos ou WhatsApp/Whatsmeow, ler **antes da operação** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md). Fontes upstream obrigatórias em dúvida ou divergência: [asternic/wuzapi](https://github.com/asternic/wuzapi) (API REST) e [tulir/whatsmeow](https://github.com/tulir/whatsmeow) (biblioteca/protocolo Go). **Método:** intenção → Swagger vivo Casa → dois repositórios oficiais conforme camada → comparar código, versão e configuração CentralDark → menor delta → contraprova → registrar receipt/owner. Reusar o Gateway e WuzAPI existentes; não misturar API REST, implementação Go ou estado de instância, nem criar proxy/chave ou parear telefone por mera inspeção. Capturas de 05/11 mostram formulário de instância com token, webhook/eventos, history, HMAC e opções proxy/S3, além de Add Proxy; são evidência de interface, não de sessões conectadas. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=UPSTREAM_COMPARE_BEFORE_CHANGE.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## META-RSI 40/40 integrado por metodo
+
+Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.

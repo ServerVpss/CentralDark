@@ -125,3 +125,8 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 - [Histórico das alterações](HISTORICO-MUDANCAS.jsonl)
 - [Método de autorreparo e evidência](../references/AUTO-MELHORIA-COM-PROVA.md)
 <!-- AUTOCATALOGO:FIM -->
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## META-RSI 40/40 integrado por metodo
+
+Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.

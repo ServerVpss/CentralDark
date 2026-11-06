@@ -2660,3 +2660,8 @@ NO_V1_V2_V3=true
 Consumidores operacionais devem resolver a raiz via `git rev-parse --show-toplevel` ou equivalente, validando identidade do repo (remote + HEAD). Caminhos fixos em docs/receipts/histórico são preservados (não operacionais).
 
 Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-method/SKILL.md) herda esta regra: descobrir raiz dinamicamente, validar, não criar bot paralelo.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## Entrada META-RSI
+
+A porta metodologica canonica e .agents/skills/centraldark-operational-method/SKILL.md, com Skills/meta-rsi e catalogo/META-RSI-40.md; Kimetsu conectado. Preservar entradas de .agents/skills e gatilhos ate testar todos os loaders. Sem motor paralelo nem alegacao de runtime 40/40 sem prova.
