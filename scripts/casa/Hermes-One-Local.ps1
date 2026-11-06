@@ -12,7 +12,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $PORT = 9119
-$OWNER = "K:\apps\modulos\HERMES-CORE"
+$OWNER = if ($env:HERMES_CORE_ROOT) { $env:HERMES_CORE_ROOT } else { Join-Path (Split-Path -Parent $PSScriptRoot) 'appsmodulosHERMES-CORE' }
 $EXE = Join-Path $env:LOCALAPPDATA "hermes\bin\hermes.exe"
 if (-not (Test-Path -LiteralPath $OWNER -PathType Container)) { throw "OWNER_NOT_FOUND:$OWNER" }
 function Get-OwnerListener {
