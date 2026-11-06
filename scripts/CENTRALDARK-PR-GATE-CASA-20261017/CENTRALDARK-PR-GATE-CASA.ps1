@@ -171,7 +171,7 @@ try {
     }
     Write-Host '[PRONTO_PARA_REVISAO] Todos os PRs abertos elegiveis; ainda falta merge e gate separado de deploy.' -ForegroundColor Green
     if ($Modo -eq 'Preparar') {
-        $probe = 'K:\scripts\remote-bridge\canonical\CENTRALDARK-VPS-UPDATE.ps1'
+        $probe = Join-Path $PSScriptRoot '..\..\remote-bridge\canonical\CENTRALDARK-VPS-UPDATE.ps1'
         if (Test-Path -LiteralPath $probe) {
             Write-Host ('[SONDA_READ_ONLY] Executando ' + $probe + ' -ProbeOnly')
             & $probe -ProbeOnly
