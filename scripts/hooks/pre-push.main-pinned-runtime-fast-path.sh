@@ -28,7 +28,7 @@ SKILL=".agents/skills/main-pinned-runtime-fast-path/SKILL.md"
 LIVE_MD="docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md"
 LIVE_JSON="docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json"
 LIVE_YML="docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml"
-LIVE_SKILL=".agents/skills/centraldark-live-editing-fabric/SKILL.md"
+LIVE_SKILL=".agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md"
 BOT="apps/bot-telegram/CENTRALDARK-MANDATORY-RULES.yml"
 BINDING="docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MICRO-DEPLOY-CONTINUO-BINDING.yml"
 

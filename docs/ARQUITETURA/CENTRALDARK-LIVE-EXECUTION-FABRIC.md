@@ -183,3 +183,10 @@ Portabilidade: `scripts/launch_omni_router_direct.py` descobre a raiz pelo camin
 ## Frase canonica
 
 > O Live Execution Fabric e a rota unica que transforma clique no painel ou comando Hermes em execucao real medida, com receipt, grafo vivo e continuidade por NEXT_TIK_TAK.
+
+
+## Binding da Forja Linux — 2026-11-01T19:53:38.439908+00:00
+
+@code_ref: apps/modulos/elite-gateway/scripts/centraldark_omni_router.py; apps/instinto-superior/src/lib/cockpit.functions.ts; apps/instinto-superior/src/components/central/StatusPanel.tsx
+@last_updated: 2026-11-01T19:53:38.439908+00:00
+Omni canônico em loopback8099 via launcher portátil e venv do módulo; cockpit8080 autentica catálogo local server-side. Sonda do site aceita papel CASA no Linux. Screenpipe oficial0.4.51 usa serviço nativo3030 e dados privados locais; KylinBot existente é reutilizado. A projeção consome também MODULES/HUB/receipts sem outro store e preserva NOT_REVALIDATED. Evidências e limites: MODULES/HUB/receipts/2026-11-01-forja-linux-mcp-cockpit.md. VPS permanece separada.

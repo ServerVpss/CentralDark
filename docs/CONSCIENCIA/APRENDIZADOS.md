@@ -2211,10 +2211,10 @@ O pacote registra que o agente:
 ✅ Identificou diferenças entre erro e restrição de segurança.
 ✅ Atualizou o código do MCP na `main`.
 ✅ Registrou o aprendizado #171.
-✅ Investigou os bloqueios.  
-✅ Identificou diferenças entre erro e restrição de segurança.  
-✅ Atualizou o código do MCP na `main`.  
-✅ Registrou o aprendizado #171.  
+✅ Investigou os bloqueios.
+✅ Identificou diferenças entre erro e restrição de segurança.
+✅ Atualizou o código do MCP na `main`.
+✅ Registrou o aprendizado #171.
 ✅ Preservou as proteções existentes.
 
 **O limite registrado:** a nova versão do MCP ainda não havia sido comprovada funcionando no servidor.
@@ -2227,10 +2227,10 @@ O pacote registra que o agente:
 ✅ Conferiu o código por SHA.
 ✅ Executou a varredura.
 ✅ Validou o JSON único.
-✅ Reuniu inventário e pulso no mesmo script.  
-✅ Conferiu o código por SHA.  
-✅ Executou a varredura.  
-✅ Validou o JSON único.  
+✅ Reuniu inventário e pulso no mesmo script.
+✅ Conferiu o código por SHA.
+✅ Executou a varredura.
+✅ Validou o JSON único.
 ✅ Preservou o script antigo enquanto verificava seus consumidores.
 
 O recibo do pacote traz o mesmo SHA-256 do reconciliador na VPS e no GitHub:
@@ -3354,6 +3354,21 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Gates permanentes:** `SOURCE != RUNTIME`; `MERGED != DEPLOYED`; `SSH_CASA_VPS != SHELL_VPS_CASA`; `VSIX_INSTALLED != VSCODE_TERMINAL_EXEC_ACK`; `HTTP200 != HEALTH_PASS`; `UNKNOWN != PASS`. Para afirmar lembrança compartilhada, cada consumer deve carregar a referência e devolver ACK/identidade/versão/receipt; memória não autoriza operações nem acesso por si só.
 - **Owner reaproveitado:** `LEIA-ME-IA.md` (entrada universal), este `APRENDIZADOS.md` (ouro do método), `CENTRALDARK-REMOTE-MCP-GATEWAY.md` (detalhe técnico), `mcp-admin.js` (inventário). Sem novo boot, serviço, memória ou conector.
 - **NEXT_CURSOR:** ler de volta main e ledger; em futuras operações do Hermes/VS Code/Cockpit verificar carregamento do entrypoint e consumo por ACK no executor, comparar live MCP e registro antes de promover o estado.
+
+
+### 220. Terminal visível SOL → Casa — conhost abre janela própria; `Start-Process powershell` vira aba do Windows Terminal; computer-use não digita em terminal
+- **Categoria:** erro-correcao, atalho, armadilha
+- **Data:** 2026-10-22
+- **Contexto:** CHEFE pediu pelo celular (Dispatch/Cowork) para VER no PC Windows (Casa, host SEGREDO, Windows 11) uma janela do PowerShell abrindo com um comando aparecendo e executando (`Get-Date; hostname; whoami`, só leitura). 1ª tentativa via Desktop Commander: `Start-Process powershell -ArgumentList '-NoExit',... -PassThru` → processo vivo na sessão interativa 1, mas `MainWindowHandle=0` e sem janela: o Windows 11 (Windows Terminal como terminal padrão) anexou o console como ABA no Windows Terminal já aberto. 2ª tentativa: `Start-Process conhost.exe -ArgumentList "powershell.exe -NoExit -NoProfile -EncodedCommand <b64>"` → janela própria com título `SOL -> Casa`, digitação simulada e saída real (`SEGREDO`, `segredo\administrador`), comprovada por screenshot do computer-use (22/10/2026 23:47).
+- **Aprendizado:** RECEITA para janela VISÍVEL na Casa: `Start-Process conhost.exe "powershell.exe -NoExit -NoProfile -EncodedCommand $b64"` (script em UTF-16LE base64 evita inferno de aspas); provar com `Get-Process | ? MainWindowTitle` (título esperado) + SessionId=1 + screenshot. ANTI-RECEITA: `Start-Process powershell ...` no Windows 11 com Windows Terminal padrão não garante janela — vira aba escondida (`MainWindowHandle=0`); processo vivo ≠ janela visível. LIMITE do computer-use: terminais/IDEs (Windows PowerShell, Terminal, VS Code) só são concedidos no tier `click` (ver e clicar; sem digitar, teclas, colar ou arrastar) — comando em terminal sai pelo executor (Desktop Commander/Hermes), nunca por digitação do computer-use; e janela fora da allowlist aparece mascarada no print, então pedir acesso ao app exato (`Windows PowerShell`) só para ver. Gates: `PROCESS_ALIVE != WINDOW_VISIBLE`; `DOCUMENTED != EXECUTED`.
+- **Owner reaproveitado:** este `APRENDIZADOS.md` (escritor único deste texto: sessão SOL/Cowork de 22/10/2026). A rota "Terminal visível SOL → Casa" registrada pela sessão do Harness referencia este item, sem duplicar.
+- **NEXT_CURSOR:** usar a receita conhost em toda demonstração visível Casa; se um dia o padrão do Windows Terminal mudar, remedir `MainWindowHandle`/título antes de afirmar janela.
+- **Contraprova ao vivo — 2026-10-26 (Casa/SEGREDO):** a tarefa `CentralDark-Runner-CASA-1` estava `Running` com logon `Interactive` e nível `Highest`; sua ação é `F:\_WORKER\CentralDark-Runners\CASA-1\iniciar-runner-casa.cmd`. O `cmd.exe` associado iniciou às 05:27:33 e `WindowsTerminal.exe` surgiu às 05:27:34 com título `C:\WINDOWS\SYSTEM32\cmd.exe` e `MainWindowHandle` diferente de zero. É a melhor pista atual para o terminal visível, mas não prova que toda janela identificada como PowerShell venha dessa tarefa; a captura visual causal ainda falta (`LIKELY_TERMINAL_SOURCE`, não `PROVEN_POWERSHELL_CAUSE`).
+- **Hermes / WSL / Claude — contraprova negativa:** a tarefa `Hermes_Gateway` estava `Ready` (última execução 05:14:45) e usa `wscript.exe` com execução oculta. Foram encontrados três shims de inicialização Hermes em um perfil de usuário; o shim `sol` contém um caminho malformado começando por `\c\Users\...`. Dois `pwsh.exe` eram filhos do `Hermes.exe`, sem janela principal/título observado. `wsl --list --verbose` mostrou `docker-desktop`, `openKylin` e `Ubuntu` como `Stopped`; não apareceu `Claude`, `vmmem` nem `wslhost` na amostra de processos. Os VHDX do Claude existentes no C: (rootfs 8,37 GB; rootfs compactado 1,20 GB; sessiondata 0,63 GB) provam presença em disco, não execução; não excluir nem mover manualmente.
+- **Espelho do runner:** o script `iniciar-runner-casa.cmd` em `K:\_WORKER\CentralDark-Runners\CASA-1` e em `F:\_WORKER\CentralDark-Runners\CASA-1` foi comparado byte a byte (`fc /b`: nenhuma diferença). A tarefa ativa ainda aponta para F:. Não migrar o runtime da tarefa até existir plano de troca e readback do runner.
+
+- **Gatilhos PowerShell recorrentes — leitura ao vivo 2026-10-26:** `CentralDark-Skill-Catalogo-Autocura` roda a cada 2 minutos, `Hidden=False`, com ação `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "K:\.agents\skills\centraldark-operational-method\scripts\atualizar-catalogo-self-healing.ps1"`; última execução 05:42:49, próxima 05:44:48, resultado 0. `CentralDark-Casa-Commander` roda no logon e a cada 5 minutos, também `Hidden=False`, com ação PowerShell sem `-WindowStyle Hidden`; última execução 05:40:37, próxima 05:45:36, resultado 0. São os candidatos mais fortes para janelas recorrentes porque iniciam PowerShell diretamente em sessão interativa e não pedem janela oculta; ainda falta correlacionar um PID/título com a janela exata para marcar causa como `PROVEN`.
+- **Outros gatilhos:** `Casa PDF Gate`, `Casa Remote Bridge`, `Casa Screenpipe Crystal`, `Casa System Sentinel` e `Casa Unified Build` também têm ações PowerShell sem `-WindowStyle Hidden`; a amostra indicou última execução 05:23:11 com resultado `4294770688`. Não foram desativados nem alterados nesta investigação.
 
 ### 22/10/2026 — ROTA_CASA_JEA_WINRM: Harness VPS → Casa fechado com JEA
 

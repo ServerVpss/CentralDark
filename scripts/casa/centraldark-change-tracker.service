@@ -1,0 +1,15 @@
+[Unit]
+Description=CentralDark Casa - rastreador recursivo de mudancas no workspace
+After=default.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/CentralDark
+ExecStart=/usr/bin/python3 %h/CentralDark/scripts/casa/centraldark-change-tracker.py watch
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+UMask=0077
+
+[Install]
+WantedBy=default.target
