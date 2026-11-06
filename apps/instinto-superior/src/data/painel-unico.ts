@@ -255,7 +255,7 @@ export const VAULT = {
     "Separar telepainel / CRM / Multizap / bot WhatsApp",
   ],
   diferenca:
-    "HUD.html é a projeção estática do vault; apps/modulos/obsidian-plugin-grafo-vivo é o plugin vivo. O cockpit é o único corpo visual (ONE_SYSTEM_ONLY).",
+    "HUD.html é origem histórica retirada da main; HudDeterministico.tsx é a projeção de inventário no cockpit. apps/modulos/obsidian-plugin-grafo-vivo preserva o plugin vivo. Paridade funcional e deploy continuam sem prova.",
 };
 
 export const PAINEIS_HISTORICOS = [

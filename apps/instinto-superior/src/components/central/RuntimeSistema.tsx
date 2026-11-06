@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Cpu, HardDrive, HeartPulse, MemoryStick, Monitor, Activity, Download } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
 import { lerMaquinaViva, operarOverlayRtssCasa, type GpuCasa, type RtssOverlayCasa } from "@/lib/maquina.functions";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
@@ -26,7 +26,7 @@ function Barra({ valor }: { valor: number | null }) {
 
 function gib(bytes: number | null | undefined) {
   return bytes == null || !Number.isFinite(bytes)
-    ? "UNKNOWN"
+    ? "Sem leitura"
     : `${(bytes / (1024 ** 3)).toFixed(2).replace(".", ",")} GiB`;
 }
 
@@ -114,7 +114,7 @@ function PainelRadeonCasa({ gpu }: { gpu: GpuCasa | undefined }) {
           <p className="mt-1 text-xs text-zinc-400">Dados reais do MSI Afterburner · somente leitura · atualização do cockpit a cada 5 s</p>
         </div>
         <span className={`rounded border px-3 py-1 font-mono text-xs ${vivo ? "border-emerald-500 text-emerald-400" : "border-amber-600 text-amber-300"}`}>
-          {vivo ? `● LIVE · ${sensores.length}/${gpu.anunciados ?? "?"} sensores` : `○ ${gpu?.estado ?? "UNKNOWN"}`}
+          {vivo ? `Funcionando · ${sensores.length}/${gpu.anunciados ?? "?"} sensores` : rotuloTecnicoHumano(gpu?.estado)}
         </span>
       </div>
       <div className="flex flex-wrap gap-0 border-b border-zinc-700 px-5" role="tablist" aria-label="Seções do monitor Radeon">
@@ -135,7 +135,7 @@ function PainelRadeonCasa({ gpu }: { gpu: GpuCasa | undefined }) {
         <article className="rounded border border-zinc-700 bg-[#242426] p-4">
           <h5 className="text-sm font-semibold">Estado da fonte</h5>
           <p className="mt-3 font-mono text-sm text-zinc-300">{gpu?.motivo ?? (vivo ? "MAHMSharedMemory · leitura atual" : "Aguardando coletor")}</p>
-          <p className="mt-2 text-xs text-zinc-400">Amostra: {gpu?.atualizadoEm ? new Date(gpu.atualizadoEm).toLocaleString("pt-BR") : "UNKNOWN"} · idade: {gpu?.idadeSeg ?? "?"} s</p>
+          <p className="mt-2 text-xs text-zinc-400">Última leitura: {gpu?.atualizadoEm ? new Date(gpu.atualizadoEm).toLocaleString("pt-BR") : "Sem leitura"}{gpu?.idadeSeg != null ? ` · há ${gpu.idadeSeg} s` : ""}</p>
           <p className="mt-2 text-xs text-zinc-400">Histórico no painel: {historico.length} amostras. Sem persistência automática.</p>
         </article>
       </div>}
@@ -157,7 +157,7 @@ function PainelRadeonCasa({ gpu }: { gpu: GpuCasa | undefined }) {
             {([['esquerda','Esquerda · Windows 3'],['centro-superior','Centro superior · Windows 2'],['centro-inferior','Centro inferior · Windows 4'],['direita','Direita · Windows 1']] as const).map(([target,label]) => <button key={target} type="button" onClick={() => void executarOverlay("move",target)} disabled={acaoOverlay !== null} className="rounded border border-[#fa315c]/60 bg-[#2b1a20] px-3 py-2 text-left text-xs font-semibold text-white hover:bg-[#41202a] disabled:opacity-50">{acaoOverlay === target ? "Movendo…" : label}</button>)}
           </div>
           <div className="mt-3 flex flex-wrap gap-2"><button type="button" onClick={() => void executarOverlay("open")} disabled={acaoOverlay !== null} className="rounded border border-zinc-500 px-3 py-1.5 text-xs hover:border-white disabled:opacity-50">Abrir host existente</button><button type="button" onClick={() => void executarOverlay("close")} disabled={acaoOverlay !== null || !overlay?.startedByCentralDark} className="rounded border border-amber-500/70 px-3 py-1.5 text-xs text-amber-200 hover:border-amber-300 disabled:opacity-50">Fechar host temporário</button></div>
-          <p role="status" aria-live="polite" className="mt-4 font-mono text-[11px] text-zinc-300">{!overlay ? "RTSS_OVERLAY=UNKNOWN · clique Atualizar estado" : `${overlay.state} · ${overlay.running ? `PID ${overlay.pid ?? "?"}` : "host fechado"}${overlay.rect ? ` · ${overlay.rect.x},${overlay.rect.y},${overlay.rect.width}×${overlay.rect.height}` : ""}`}</p>
+          <p role="status" aria-live="polite" className="mt-4 font-mono text-[11px] text-zinc-300">{!overlay ? "Ainda não verificado · clique em Atualizar estado" : `${rotuloTecnicoHumano(overlay.state)} · ${overlay.running ? "Overlay aberto" : "Overlay fechado"}`}</p>
           {overlay?.detail ? <p className="mt-2 text-xs text-amber-200">{overlay.detail}</p> : null}
           <p className="mt-2 text-[11px] text-zinc-500">Todas as telas e etiqueta individual permanecem bloqueadas até teste próprio; um clique nunca executa shell livre.</p>
         </section>
@@ -213,36 +213,36 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
 
   return (
     <section aria-labelledby="runtime-titulo">
-      <p className="font-mono text-[10px] tracking-[0.2em] text-neon-green uppercase">
-        Máquina viva · atualização 5s
+      <p className="text-[11px] tracking-[0.15em] text-neon-green uppercase">
+        Atualização automática a cada 5 segundos
       </p>
       <h3 id="runtime-titulo" className="mt-3 text-3xl font-semibold">
-        Runtime / Capabilities
+        Sistema e desempenho
       </h3>
       <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-        CPU e pulsação da VPS lidas no servidor do cockpit. Campo que a fonte não entrega fica
-        UNKNOWN; nada é estimado.
+        Mostra o que o computador e os sensores estão informando agora. Quando não houver leitura,
+        o painel mostra "Sem leitura" em vez de inventar um valor.
       </p>
 
       <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <article className="panel p-5">
           <Cpu className="size-5 text-neon-blue" />
-          <h4 className="mt-3 font-semibold">CPU da VPS</h4>
+          <h4 className="mt-3 font-semibold">Processador</h4>
           <p className="mt-2 font-mono text-2xl">
-            {m?.cpu.percentual != null ? `${m.cpu.percentual}%` : "UNKNOWN"}
+            {m?.cpu.percentual != null ? `${m.cpu.percentual}%` : "Sem leitura"}
           </p>
           <Barra valor={m?.cpu.percentual ?? null} />
           <p className="mt-3 text-xs text-muted-foreground">
             {m?.cpu.chave
-              ? `Campo medido: ${m.cpu.chave}`
-              : "A fonte ainda não expõe CPU no heartbeat/health."}
+              ? "Leitura atual recebida do sistema."
+              : "O sistema ainda não informou o uso do processador."}
           </p>
         </article>
         <article className="panel p-5">
           <MemoryStick className="size-5 text-neon-purple" />
           <h4 className="mt-3 font-semibold">Memória</h4>
           <p className="mt-2 font-mono text-2xl">
-            {m?.memoria.percentual != null ? `${m.memoria.percentual}%` : "UNKNOWN"}
+            {m?.memoria.percentual != null ? `${m.memoria.percentual}%` : "Sem leitura"}
           </p>
           <Barra valor={m?.memoria.percentual ?? null} />
           <p className="mt-3 text-xs text-muted-foreground">
@@ -250,7 +250,7 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
           </p>
         </article>
         <BlocoEstado
-          titulo="One Heart · heartbeat"
+          titulo="Sinal do sistema"
           estado={estadoHeart}
           codigo={
             m?.heartbeat.http
@@ -259,16 +259,16 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
           }
           detalhe={
             m?.frescor.idadeSeg != null
-              ? `Pulso do owner há ${m.frescor.idadeSeg}s (limite 15s).`
-              : "Sem horário medido pelo owner: a hora da consulta não prova pulsação."
+              ? `Última atualização recebida há ${m.frescor.idadeSeg} segundos.`
+              : "Ainda não recebemos uma atualização recente deste sinal."
           }
           icone={<HeartPulse className="size-5" />}
         />
         <BlocoEstado
-          titulo="API /health"
+          titulo="API CentralDark"
           estado={(m?.health.estado ?? "UNKNOWN") as EstadoOperacional}
           codigo={m?.health.http ? `HTTP ${m.health.http}` : (m?.health.erro ?? "Sem resposta")}
-          detalhe={m ? `Fonte: ${m.fonte}` : "Aguardando medição."}
+          detalhe={m ? "Conexão da API consultada pelo sistema." : "Aguardando a primeira leitura."}
           icone={<HeartPulse className="size-5" />}
         />
       </div>
@@ -277,10 +277,10 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h4 className="flex items-center gap-2 font-semibold">
               <HardDrive className="size-5 text-neon-blue" />
-              {m?.discoServidor.hostVpsConfirmado ? "💾 Disco da VPS" : "💾 Disco do servidor SSR"}
+              💾 Disco do servidor
             </h4>
-            <span className="font-mono text-[10px] text-muted-foreground">
-              {m?.discoServidor.estado === "PASS" ? "MEDIDO" : "UNKNOWN"}
+            <span className="text-[11px] text-muted-foreground">
+              {m?.discoServidor.estado === "PASS" ? "Leitura atual" : "Ainda não verificado"}
             </span>
           </div>
           <p className="mt-3 font-mono text-2xl">
@@ -298,16 +298,15 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
               <dd className="font-mono">{gib(m?.discoServidor.reservadoBytes)}</dd></div>
           </dl>
           <p className="mt-3 text-xs text-muted-foreground">
-            Fonte: statfs("/") no processo autenticado do cockpit · montagem /.
-            {m?.discoServidor.hostVpsConfirmado
-              ? " Host da VPS identificado."
-              : " Ainda não há prova de que este processo SSR esteja na VPS."}
-            {m?.discoServidor.erro ? ` ${m.discoServidor.erro}.` : ""}
-            {" "}Nenhuma limpeza é executada por este painel.
+            Este painel apenas mostra o espaço disponível. Ele não apaga arquivos nem executa limpeza.
           </p>
-          <p className="mt-2 font-mono text-[10px] text-muted-foreground">
-            Medição: {m?.discoServidor.medidoEm ?? "UNKNOWN"}
-          </p>
+          <details className="mt-3 rounded-md border border-border/70 p-2 text-xs text-muted-foreground">
+            <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+            <p className="mt-2">Fonte: statfs("/") no processo autenticado do cockpit · montagem /.
+              {m?.discoServidor.hostVpsConfirmado ? " Host remoto identificado." : " Host remoto não confirmado."}
+              {m?.discoServidor.erro ? ` ${m.discoServidor.erro}.` : ""}</p>
+            <p className="mt-1 font-mono">Medição: {m?.discoServidor.medidoEm ?? "não informada"}</p>
+          </details>
         </article>
         <article className="panel p-5" aria-label="Sensores da Casa e convergência com HUD">
           <div className="flex flex-wrap items-center justify-between gap-2">
@@ -315,51 +314,47 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
               <Monitor className="size-5 text-neon-purple" />
               🎮 Casa · GPU e sensores
             </h4>
-            <span className="font-mono text-[10px] text-muted-foreground">{m?.gpuCasa?.estado ?? "UNKNOWN"}</span>
+            <span className="text-[11px] text-muted-foreground">{rotuloTecnicoHumano(m?.gpuCasa?.estado)}</span>
           </div>
           <p className="mt-3 text-sm">
-            HUD canônico: Radeon RX 580 · {m?.gpuCasa?.estado === "LIVE" ? `${m.gpuCasa.sensores.length}/${m.gpuCasa.anunciados ?? "?"} sensores atuais` : "coleção histórica de sensores; LIVE não confirmado"}.
+            Radeon RX 580 · {m?.gpuCasa?.estado === "LIVE" ? `${m.gpuCasa.sensores.length}/${m.gpuCasa.anunciados ?? "?"} sensores com leitura atual` : "sensores sem leitura recente"}.
           </p>
           <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-            A leitura autenticada consulta o arquivo local do coletor existente, somente no servidor da Casa.
-            {" "}Quando a fonte vence ou o cockpit executa fora da Casa, todas as métricas viram UNKNOWN.
-            {" "}Motivo: {m?.gpuCasa?.motivo ?? "nenhum"}. Nenhum controle da GPU é alterado.
+            Esta área acompanha temperatura, uso e outros sensores. Ela não altera potência, ventoinha ou configuração da placa.
           </p>
-          <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/HUD/HUD.html"
-            target="_blank" rel="noopener noreferrer"
-            className="mt-4 inline-block text-sm text-neon-blue underline">
-            Consultar o mesmo HUD.html canônico ↗
-          </a>
-          <p className="mt-3 font-mono text-[10px] text-muted-foreground">
-            CONVERGÊNCIA: {m?.gpuCasa?.estado === "LIVE" ? "SENSOR FRESCO E AUTENTICADO" : "AGUARDANDO MEDIÇÃO LOCAL"}.
-          </p>
+          <details className="mt-3 rounded-md border border-border/70 p-2 text-xs text-muted-foreground">
+            <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+            <p className="mt-2">A leitura autenticada usa o coletor existente da Casa. Motivo: {m?.gpuCasa?.motivo ?? "nenhum informado"}.</p>
+            <a href="https://github.com/ServerVpss/CentralDark/blob/main/docs/HUD/HUD.html"
+              target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-neon-blue underline">Abrir referência técnica do HUD ↗</a>
+          </details>
         </article>
       </div>
 
       <PainelRadeonCasa gpu={m?.gpuCasa} />
 
-      <details className="panel mt-6 p-5" aria-label="Analytics de memória">
-        <summary className="cursor-pointer font-semibold">🧠 Analytics de memória</summary>
+      <details className="panel mt-6 p-5" aria-label="Detalhes de memória">
+        <summary className="cursor-pointer font-semibold">🧠 Detalhes de memória</summary>
         <div className="mt-4 grid gap-4 text-sm md:grid-cols-3">
           <div>
             <p className="text-xs text-muted-foreground">Memória da VPS</p>
             <p className="mt-1 font-mono text-xl">
-              {m?.memoria.percentual != null ? `${m.memoria.percentual}%` : "UNKNOWN"}
+              {m?.memoria.percentual != null ? `${m.memoria.percentual}%` : "Sem leitura"}
             </p>
             <p className="mt-1 font-mono text-[10px] text-muted-foreground">
-              Fonte: lerMaquinaViva · {m ? "atualiza a cada 5s" : "UNKNOWN"}
+              Fonte técnica: lerMaquinaViva · {m ? "atualiza a cada 5s" : "sem leitura"}
             </p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Memória física da Casa (Windows)</p>
-            <p className="mt-1 font-mono text-xl">SEM_FONTE</p>
+            <p className="mt-1 text-xl">Sem leitura</p>
             <p className="mt-1 font-mono text-[10px] text-muted-foreground">
               Sensor da Casa não autorizado neste owner. Nenhum número foi estimado.
             </p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Processos CentralDark (PID)</p>
-            <p className="mt-1 font-mono text-xl">SEM_FONTE</p>
+            <p className="mt-1 text-xl">Sem leitura</p>
             <p className="mt-1 font-mono text-[10px] text-muted-foreground">
               Sem coletor autorizado. Consumo não é atribuído sem PID comprovado.
             </p>
@@ -396,7 +391,7 @@ export function RuntimeSistema({ estado }: { estado: EstadoCentralDark | undefin
 
       <MapaOwners />
       <p className="mt-6 font-mono text-[10px] text-muted-foreground">
-        Código oficial: {estado?.sha?.slice(0, 12) ?? "UNKNOWN"}
+        Código oficial: {estado?.sha?.slice(0, 12) ?? "ainda não verificado"}
       </p>
     </section>
   );

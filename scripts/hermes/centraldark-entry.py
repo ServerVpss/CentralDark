@@ -56,7 +56,7 @@ def state():
         "receipt_sha256": d["current_sha256"],
         "verified_steps": d["verified"], "events": d["events"],
         "at": detail.get("at"), "plan_ready": can_run,
-        "dispatch_ready": (Path("/root/.local/bin/hermes").is_file() or shutil.which("hermes") is not None),
+        "dispatch_ready": ((Path.home() / ".local/bin/hermes").is_file() or shutil.which("hermes") is not None),
         "owner": "scripts/hermes/verified-checkpoint.py",
     }
 
@@ -99,7 +99,7 @@ def main():
             if not d.get("dispatch_ready"):
                 print(json.dumps({**d, "state": "HERMES_EXECUTOR_UNAVAILABLE"}, ensure_ascii=False))
                 raise SystemExit(5)
-            hermes = "/root/.local/bin/hermes" if Path("/root/.local/bin/hermes").is_file() else shutil.which("hermes")
+            hermes = str(Path.home() / ".local/bin/hermes") if (Path.home() / ".local/bin/hermes").is_file() else shutil.which("hermes")
             if not hermes:
                 raise SystemExit(5)
             key = "centraldark:resume:" + d["mission"] + ":" + d["receipt_sha256"][:16]
@@ -136,7 +136,7 @@ def main():
         plan = ROOT / d["mission"] / "active-plan.json"
         result = subprocess.run(
             [sys.executable, str(CHECKPOINT), "plan", "--mission", d["mission"], "--file", str(plan)],
-            cwd="/root" if Path("/root").exists() else str(Path.home()),
+            cwd=str(Path.home()),
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=180, check=False,
         )
         print(result.stdout[-6000:], end="" if result.stdout.endswith("\n") else "\n")

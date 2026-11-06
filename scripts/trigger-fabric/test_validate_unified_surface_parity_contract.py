@@ -23,9 +23,9 @@ ROOT = Path(__file__).resolve().parents[2]
 VALIDATOR = Path("scripts/trigger-fabric/validate_unified_surface_parity_contract.py")
 CONTRACT = Path("docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml")
 GRAMMAR = Path("docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md")
-SKILL = Path(".agents/skills/centraldark-unified-surface-parity/SKILL.md")
+SKILL = Path(".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md")
 VOICE_CLASSIFIER = Path(".claude/skills/synced/voice-semantic-classifier/SKILL.md")
-INTENT_ROUTER = Path(".agents/skills/centraldark-intent-deploy-router/SKILL.md")
+INTENT_ROUTER = Path(".agents/skills/centraldark-operational-method/Skills/centraldark-intent-deploy-router/SKILL.md")
 RECEIPT = Path("docs/RECEIPTS/2026-09-26-CENTRALDARK-UNIFIED-SURFACE-PARITY-01.md")
 
 

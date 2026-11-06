@@ -2,11 +2,15 @@
 
 **Entrada:** [SKILL.md](../SKILL.md) · **Mapa operacional:** [CATALOGO.md](CATALOGO.md) · **Delegação universal:** [HERMES-KANBAN-RECEITA-UNIVERSAL.md](../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md).
 
+## Conversar naturalmente sem abandonar a missão
+
+[Diálogo Reflexivo da Intenção](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): Reflective Intent Dialogue; escuta reflexiva; correção; conversa; DELTA != troca de missão; âncora; Hermes; SOL; NEXT_CURSOR. Em ações materiais acompanha [Michelin](../Skills/michelin-3-estrelas/SKILL.md) e [Kimetsu Remix](../../kimetsu-brainstorm/SKILL.md).
+
 ## Consulta rápida por intenção
 
 | Quero fazer... | Onde começar | Buscar por |
 |---|---|---|
-| Ativar `!michelin` / aplicar método 3 estrelas | [Skill Michelin](skills-integradas/michelin-3-estrelas/SKILL.md) + [Protocolo](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md) + receita da tarefa | `!michelin`, `MICHELIN_3_ESTRELAS`, `construir`, `integrar`, `provar` |
+| Ativar `!michelin` / aplicar método 3 estrelas | [Skill Michelin](../Skills/michelin-3-estrelas/SKILL.md) + [Protocolo](../references/MICHELIN-3-ESTRELAS-PROTOCOLO.md) + receita da tarefa | `!michelin`, `MICHELIN_3_ESTRELAS`, `construir`, `integrar`, `provar` |
 | Encontrar Lembrança e Aprendizado Michelin | Fonte `docs/LEMBRANCAS/metodo-chefe-conformidade-michelin-20261019.md` e registro `docs/CONSCIENCIA/APRENDIZADOS/2026-10-24-MICHELIN-3-ESTRELAS-SKILL-HERMES-CASA.md` | `MICHELIN`, `LEMBRANCAS`, `APRENDIZADOS` |
 | Delegar qualquer missão ao Hermes | Receita universal | `kanban`, `create`, `assignee` |
 | Selecionar diretório Windows/Linux na hora | Receita universal, seção de variáveis/rotas | `WORKSPACE_ALVO`, `WORKSPACE_TARGET` |
@@ -17,6 +21,8 @@
 | Descobrir ferramenta/capacidade | Capability HUD | `capability`, `preflight` |
 | Localizar dono e evitar duplicação | Reuse Runtime | `reuse`, `owner` |
 | Operar Cockpit/boot | Boot, Intent Router e Live Editing | `boot`, `HUD`, `Cockpit` |
+
+| Ler aba, enviar Goal ou clicar no navegador com o Commander nativo | [Browser → Casa Commander → Browser](../references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) + [Skill-Mãe](../SKILL.md) | `navegador`, `aba`, `browser`, `siga o roteiro`, `mande um goal`, `botão focado`, `!CENTRALDARK`, `!EXECUTOR_CENTRALDARK` |
 | Deploy, esteira, GitHub e VPS | Esteira Motor + Intent Router | `workflow`, `VPS`, `CI` |
 | Integrar VS Code e observabilidade | VS Code Log Bridge | `vscode`, `log` |
 
@@ -24,12 +30,12 @@
 
 | Intenção | Pasta integrada |
 |---|---|
-| Atualizar notas vivas | [centraldark-note-maintenance](skills-integradas/centraldark-note-maintenance/SKILL.md) |
-| Operar o Hermes, cron e conexões | [centraldark-hermes-operations](skills-integradas/centraldark-hermes-operations/SKILL.md) |
-| Reconciliar checklist diário | [reconciliacao-diaria-centraldark](skills-integradas/reconciliacao-diaria-centraldark/SKILL.md) |
-| Comparar prova, fonte e runtime | [centraldark-evidence-reconciliation](skills-integradas/centraldark-evidence-reconciliation/SKILL.md) |
-| Operar Casa, GitHub e VPS | [centraldark-ops](skills-integradas/centraldark-ops/SKILL.md) |
-| Consultar Oracle/Preview | [centraldark-oracle-surface](skills-integradas/centraldark-oracle-surface/SKILL.md) |
+| Atualizar notas vivas | [centraldark-note-maintenance](../Skills/centraldark-note-maintenance/SKILL.md) |
+| Operar o Hermes, cron e conexões | [centraldark-hermes-operations](../Skills/centraldark-hermes-operations/SKILL.md) |
+| Reconciliar checklist diário | [reconciliacao-diaria-centraldark](../Skills/reconciliacao-diaria-centraldark/SKILL.md) |
+| Comparar prova, fonte e runtime | [centraldark-evidence-reconciliation](../Skills/centraldark-evidence-reconciliation/SKILL.md) |
+| Operar Casa, GitHub e VPS | [centraldark-ops](../Skills/centraldark-ops/SKILL.md) |
+| Consultar Oracle/Preview | [centraldark-oracle-surface](../Skills/centraldark-oracle-surface/SKILL.md) |
 
 **Todas as demais capacidades CentralDark** seguem na [lista de módulos](CATALOGO.md) e no [índice completo de arquivos](INDICE-VIVO.md). Quando houver `scripts/` ou `references/` de um módulo, estão dentro da pasta desse módulo. Evitar escolher por nome parecido sem ler a intenção.
 
@@ -63,7 +69,13 @@ Troque `'kanban'` pela palavra da intenção. A busca cobre o conteúdo da skill
 <!-- AUTOCATALOGO:INICIO -->
 ## Índice vivo (gerado automaticamente)
 
-**Última verificação:** 2026-10-29 12:21:30 -03:00; 98 arquivos catalogados; 18 skills.
+**Última verificação:** 2026-11-04 23:57:26 -03:00; 146 arquivos catalogados; 23 skills.
 
 Consulte [INDICE-VIVO.md](INDICE-VIVO.md) para **criação, modificação e SHA de cada arquivo**, e [VALIDACAO-AUTOMATICA.md](VALIDACAO-AUTOMATICA.md) para alertas.
 <!-- AUTOCATALOGO:FIM -->
+
+### WuzAPI, WhatsApp QR, grupos, webhook, MultiZap Gateway e Hermes (05/11/2026)
+Fonte operacional existente: [docs/WUZAPI-API-OPERACIONAL.md](../../../../docs/WUZAPI-API-OPERACIONAL.md), relacionada a [MAPA_EVENTOS_WUZAPI.md](../../../../docs/MAPA_EVENTOS_WUZAPI.md). Buscar aqui antes de operar: auth admin/usuário, dashboard 127.0.0.1:8081, Swagger /api, /session/qr, /group/photo, /webhook, Gateway /webhooks/wuzapi e CRM /api/public/wuzapi/webhook. Reutilizar sem duplicar agentes ou alterar sessão sem intenção.
+
+### Referência upstream WuzAPI / whatsmeow, método de comparação (2026-11-05)
+Entrada: [WUZAPI-API-OPERACIONAL.md](../../../../docs/WUZAPI-API-OPERACIONAL.md) e [MAPA_EVENTOS_WUZAPI.md](../../../../docs/MAPA_EVENTOS_WUZAPI.md). **Sempre que houver dúvida ou mudança**, consultar diretamente [WuzAPI upstream](https://github.com/asternic/wuzapi) e [whatsmeow upstream](https://github.com/tulir/whatsmeow), por camada, comparar com Swagger 127.0.0.1:8081/api e implementação Casa/Gateway antes de mudar. Capturas da UI: Add Instance (token, URL webhook, events, history, HMAC, proxy, S3) e Add Proxy; sem evidência de instância pareada. Skill-Mãe tem gatilho contextual; reuse-before-create, escritor único, receipt com evidência e sem secrets.

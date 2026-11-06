@@ -8,7 +8,7 @@
  */
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -54,7 +54,7 @@ import { PainelHermes } from "@/components/central/HermesPet";
 import { MapaMetabolicoCristal } from "@/components/central/MapaMetabolicoCristal";
 import { DesignCenter, usePeleCockpit } from "@/components/central/DesignCenter";
 import { Ledger } from "@/components/central/Ledger";
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { SyncCenter } from "@/components/central/SyncCenter";
 import { SistemaCentralDark } from "@/components/central/SistemaCentralDark";
 import { MapaOwners } from "@/components/central/MapaOwners";
@@ -77,8 +77,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
+import { CodexHaloHarness } from "@/components/central/CodexHaloHarness";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -106,6 +108,62 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
 }
 
+const NAVEGACAO_PASTAS = [
+  { pasta: "Começar aqui", icone: "✦", itens: [
+    { valor: "visao", nome: "Resumo", ajuda: "Como está tudo agora, num olhar só.", soAdmin: false },
+    { valor: "jornada", nome: "Aprender jogando", ajuda: "Um passo a passo para entender o sistema.", soAdmin: false },
+    { valor: "portal", nome: "Portal", ajuda: "A porta de entrada para os seus produtos.", soAdmin: false },
+  ] },
+  { pasta: "Acompanhar", icone: "◉", itens: [
+    { valor: "sistema", nome: "Saúde do sistema", ajuda: "Avisos, cofre e estado em um lugar.", soAdmin: true },
+    { valor: "admin", nome: "Administração", ajuda: "Contas e permissões de acesso.", soAdmin: true },
+    { valor: "sync", nome: "Minha oficina", ajuda: "O que mudou no código e quando.", soAdmin: false },
+    { valor: "recibos", nome: "Comprovantes", ajuda: "Provas do que foi feito.", soAdmin: false },
+    { valor: "raioxvivo", nome: "Raio-X", ajuda: "Olhar por dentro, peça por peça.", soAdmin: false },
+  ] },
+  { pasta: "Criar e montar", icone: "◇", itens: [
+    { valor: "builder-bolt", nome: "Construtor", ajuda: "Monte telas e funções novas.", soAdmin: false },
+    { valor: "aionui", nome: "Estúdio", ajuda: "Sua mesa de trabalho criativa.", soAdmin: false },
+    { valor: "design", nome: "Aparência", ajuda: "Cores, peles e visual.", soAdmin: false },
+    { valor: "arquitetura", nome: "Mapa do sistema", ajuda: "Como as partes se conectam.", soAdmin: false },
+    { valor: "agent-mode", nome: "Modo assistente", ajuda: "Deixe a IA executar tarefas.", soAdmin: false },
+    { valor: "html-consolidation", nome: "Histórico de páginas", ajuda: "Páginas antigas já unificadas.", soAdmin: false },
+  ] },
+  { pasta: "Forja (ferramentas)", icone: "⚒", itens: [
+    { valor: "forja", nome: "Forja", ajuda: "Ferramentas para construir e conferir.", soAdmin: false },
+    { valor: "forja-regras", nome: "Regras", ajuda: "Como a forja trabalha.", soAdmin: false },
+    { valor: "forja-inventario", nome: "Inventário", ajuda: "O que já existe na oficina.", soAdmin: false },
+    { valor: "gram-permissions", nome: "Permissões", ajuda: "Quem pode usar cada ferramenta.", soAdmin: true },
+  ] },
+  { pasta: "Assistentes e ideias", icone: "✧", itens: [
+    { valor: "hermes", nome: "Hermes", ajuda: "Seu ajudante animado.", soAdmin: false },
+    { valor: "goals", nome: "Metas", ajuda: "O que estamos buscando agora.", soAdmin: false },
+    { valor: "dream-reviewer", nome: "Revisão noturna", ajuda: "Ideias revisadas com calma.", soAdmin: false },
+    { valor: "genesis", nome: "Gênesis", ajuda: "A origem e a evolução do sistema.", soAdmin: true },
+    { valor: "obsidian", nome: "Obsidian", ajuda: "Abra suas anotações.", soAdmin: false },
+    { valor: "pr1873", nome: "Mapa de mudanças", ajuda: "Veja os registros das alterações.", soAdmin: false },
+  ] },
+  { pasta: "Mensagens e arquivos", icone: "✉", itens: [
+    { valor: "gram", nome: "Mensagens", ajuda: "Suas conversas no Gram.", soAdmin: true },
+    { valor: "unigram", nome: "Unigram", ajuda: "Seu aplicativo de mensagens.", soAdmin: false },
+    { valor: "downloads", nome: "Baixar arquivos", ajuda: "Pacotes e instaladores.", soAdmin: false },
+  ] },
+] as const;
+
+const ROTULOS_ESTADO = {
+  PASS: { rotulo: "Tudo certo", ajuda: "A fonte consultada confirmou o resultado." },
+  RUNNING: { rotulo: "Trabalhando", ajuda: "O processo está em andamento." },
+  AUTH_REQUIRED: { rotulo: "Precisa de login", ajuda: "Entre na conta para continuar." },
+  BLOCKED: { rotulo: "Travado", ajuda: "Existe um impedimento registrado." },
+  UNKNOWN: { rotulo: "Sem informação", ajuda: "Ainda não há prova suficiente." },
+  FAIL: { rotulo: "Com erro", ajuda: "A fonte retornou uma falha." },
+} as const;
+
+function FecharMenuNoCelular({ children }: { children: ReactNode }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  return <div onClick={() => { if (isMobile) setOpenMobile(false); }}>{children}</div>;
+}
+
 const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
   { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
@@ -116,6 +174,7 @@ const HARNESS_DESTINOS = [
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "codex-halo", titulo: "Codex Halo", icone: "🌈", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -269,12 +328,16 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
           <Button type="button" variant="outline" size="sm" onClick={abrirAdmin}>Admin dos bots</Button>
         </div>
       </div>
-      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado MTProto autenticado no servidor">
-        <div><span className="text-muted-foreground">Gateway VPS</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.gateway ?? "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Configurado</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.configurado === true ? "SIM" : mtproto.data?.configurado === false ? "NÃO" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Sessão MTProto</span><p className="mt-1 font-mono font-semibold">{mtproto.data?.sessaoPresente === true ? "PRESENTE" : mtproto.data?.sessaoPresente === false ? "AUSENTE" : "UNKNOWN"}</p></div>
-        <div><span className="text-muted-foreground">Telegram autorizado</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-mono font-semibold text-emerald-500" : "mt-1 font-mono font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "CONFIRMADO" : mtproto.data?.autorizado === false ? "NÃO AUTORIZADO" : "UNKNOWN"}</p></div>
-        <p className="text-muted-foreground sm:col-span-4">Fonte: centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "Consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "Sem consulta autenticada"}{mtproto.isError ? " · AUTH_REQUIRED ou conexão indisponível" : ""}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Consulta não comprova entrega de mensagens.</p>
+      <div className="grid gap-2 border-b border-border bg-muted/10 px-5 py-3 text-xs sm:grid-cols-4" aria-label="Estado da conexão com Telegram">
+        <div><span className="text-muted-foreground">Servidor de mensagens</span><p className="mt-1 font-semibold">{mtproto.data?.gateway ? "Encontrado" : "Ainda não verificado"}</p></div>
+        <div><span className="text-muted-foreground">Configuração</span><p className="mt-1 font-semibold">{mtproto.data?.configurado === true ? "Pronta" : mtproto.data?.configurado === false ? "Precisa configurar" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Sessão Telegram</span><p className="mt-1 font-semibold">{mtproto.data?.sessaoPresente === true ? "Conectada" : mtproto.data?.sessaoPresente === false ? "Desconectada" : "Ainda não verificada"}</p></div>
+        <div><span className="text-muted-foreground">Autorização</span><p className={mtproto.data?.autorizado === true ? "mt-1 font-semibold text-emerald-500" : "mt-1 font-semibold text-amber-500"}>{mtproto.data?.autorizado === true ? "Conectado" : mtproto.data?.autorizado === false ? "Precisa autorizar" : "Ainda não verificada"}</p></div>
+        {mtproto.isError ? <p className="text-amber-500 sm:col-span-4">Não foi possível verificar a conexão com o Telegram. Tente atualizar.</p> : null}
+        <details className="text-muted-foreground sm:col-span-4">
+          <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+          <p className="mt-2">Gateway: {mtproto.data?.gateway ?? "não informado"} · serviço centraldark-telegram-mtproto.service · VPS 127.0.0.1:8790 · {mtproto.data?.consultaEm ? "consultado em " + new Date(mtproto.data.consultaEm).toLocaleString("pt-BR") : "sem consulta autenticada"}{mtproto.data?.motivo ? " · " + mtproto.data.motivo : ""}. Esta consulta não comprova entrega de mensagens.</p>
+        </details>
       </div>
       <div className="grid min-h-[28rem] md:grid-cols-[minmax(13rem,0.38fr)_minmax(0,1fr)]">
         <aside className="border-b border-border md:border-b-0 md:border-r" aria-label="Lista de conversas e bots">
@@ -289,7 +352,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             {consulta.loading ? <p className="p-3 text-sm text-muted-foreground">Consultando owner Telegram…</p> : null}
             {consulta.erro ? (
               <p className="rounded border border-amber-500/40 p-3 text-xs text-amber-500">
-                AUTH_REQUIRED / consulta bloqueada: {consulta.erro}
+                Não foi possível consultar os bots. Atualize a conexão e tente novamente.
               </p>
             ) : null}
             {!consulta.loading && !consulta.erro && encontrados.length === 0 ? (
@@ -317,22 +380,22 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
             <div className="min-w-0">
               <h3 className="font-semibold">{selecionado?.name ?? "CentralDark Gram"}</h3>
               <p className="text-xs text-muted-foreground">
-                {selecionado ? "Cadastro: " + (selecionado.is_active ? "ativo" : "inativo") + " · Saúde: " + (selecionado.health_status ?? "UNKNOWN") : "Selecione um bot. O estado MTProto da VPS aparece acima; conversas ainda não integradas."}
+                {selecionado ? "Cadastro " + (selecionado.is_active ? "ativo" : "inativo") + " · " + rotuloTecnicoHumano(selecionado.health_status) : "Selecione um bot. O estado da conexão aparece acima; conversas ainda não estão integradas."}
               </p>
             </div>
-            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500">Mensageria: UNKNOWN</span>
+            <span className="ml-auto rounded border border-amber-500/40 px-2 py-1 text-xs text-amber-500" title="Estado técnico: mensageria UNKNOWN">Envio ainda não conectado</span>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-10 text-center">
             <MessagesSquare className="size-10 text-muted-foreground" aria-hidden="true" />
             <p className="max-w-md font-semibold">Tua interface Gram está dentro do mesmo cockpit.</p>
             <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-              Busca, seleção e atualização de bots usam o owner de cadastro. O status da sessão MTProto vem diretamente do servidor autenticado na VPS.
-              Este serviço existente oferece /health, /status, /start, /confirm e /logout; ainda não oferece endpoints de conversas, mídia ou envio. Essas ações ficam desativadas.
+              Você já pode buscar e consultar os bots cadastrados. O envio de mensagens ainda não está conectado nesta tela.
+              Quando a conexão de envio estiver disponível, o campo abaixo poderá ser ativado sem criar outra interface.
             </p>
             <Button type="button" variant="outline" onClick={abrirSync}>Abrir contraprova no Sync Center</Button>
           </div>
           <div className="flex items-center gap-2 border-t border-border bg-muted/20 p-3">
-            <input aria-label="Campo de mensagem indisponível" placeholder="Envio desativado · API Telegram/MTProto não comprovada" disabled
+            <input aria-label="Campo de mensagem indisponível" placeholder="Envio ainda não conectado" disabled
               className="min-h-11 min-w-0 flex-1 rounded-md border border-border bg-background/40 px-3 text-sm opacity-70" />
             <Button type="button" disabled title="Envio indisponível sem API autorizada e sessão comprovada">Enviar</Button>
           </div>
@@ -365,8 +428,51 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const { pele, selecionar } = usePeleCockpit();
   const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [buscaNavegacao, definirBuscaNavegacao] = useState("");
+  const [menuAberto, definirMenuAberto] = useState(true);
+  const [abaRestaurada, definirAbaRestaurada] = useState(false);
+  useEffect(() => {
+    const restaurar = () => {
+      const url = new URLSearchParams(window.location.search).get("aba");
+      const salva = window.localStorage.getItem("centraldark.cockpit.ultima-aba");
+      const candidata = url ?? salva ?? "visao";
+      if (NAVEGACAO_PASTAS.some((p) => p.itens.some((i) => i.valor === candidata && (!i.soAdmin || autenticado)))) definirAbaAtiva(candidata);
+      definirAbaRestaurada(true);
+    };
+    restaurar();
+    window.addEventListener("popstate", restaurar);
+    return () => window.removeEventListener("popstate", restaurar);
+  }, [autenticado]);
+  useEffect(() => {
+    if (typeof window === "undefined" || !abaRestaurada) return;
+    if (!NAVEGACAO_PASTAS.some((p) => p.itens.some((i) => i.valor === abaAtiva && (!i.soAdmin || autenticado)))) return;
+    window.localStorage.setItem("centraldark.cockpit.ultima-aba", abaAtiva);
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("aba") !== abaAtiva) {
+      url.searchParams.set("aba", abaAtiva);
+      window.history.replaceState(window.history.state, "", url.toString());
+    }
+  }, [abaAtiva, autenticado, abaRestaurada]);
+  const [navegacaoCompacta, definirNavegacaoCompacta] = useState(false);
   const [hermesOneAberto, definirHermesOneAberto] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let quadro: number | null = null;
+    const atualizarNavegacao = () => {
+      quadro = null;
+      definirNavegacaoCompacta(window.scrollY > 24);
+    };
+    const aoRolar = () => {
+      if (quadro !== null) return;
+      quadro = window.requestAnimationFrame(atualizarNavegacao);
+    };
+    atualizarNavegacao();
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", aoRolar);
+      if (quadro !== null) window.cancelAnimationFrame(quadro);
+    };
+  }, []);
   // A barra fixa pode rolar horizontalmente com a rodinha, sem prender a pagina
   // quando nao existe conteudo para deslocar. Nao intercepta zoom nem Shift.
   useEffect(() => {
@@ -404,7 +510,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       definirEstadoEstudio(resposta.ok ? "API HTTP_ACK" : "API HTTP_" + resposta.status);
     } catch {
       // Bloqueio CORS e falta de rede são inconclusivos, não equivalem a OFFLINE.
-      definirEstadoEstudio("UNKNOWN · rede ou CORS");
+      definirEstadoEstudio("Não foi possível conectar à prévia.");
     }
   }
   function abrirEstudio() {
@@ -434,7 +540,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     definirHermesOneAberto(false);
     definirPlayerAberto(true);
   }
-  const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
+  const pastaAtiva = NAVEGACAO_PASTAS.find((p) => p.itens.some((i) => i.valor === abaAtiva));
+  const itemAtivo = pastaAtiva?.itens.find((i) => i.valor === abaAtiva);
+  const tituloAbaAtiva = itemAtivo?.nome ?? COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -487,7 +595,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
     >
       {harnessVisivel && gaveta === null ? (
         <nav
@@ -502,7 +610,10 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
-      <header className="relative z-50 border-b border-border bg-background/95 px-4 py-3 sm:px-6">
+      <header
+        className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
+        style={{ transform: navegacaoCompacta ? "translateY(-100%)" : "translateY(0)" }}
+      >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
@@ -513,14 +624,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
             </span>
           </div>
-          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+          <div className="ml-auto flex w-full min-w-0 max-w-full flex-wrap items-center justify-start gap-2 sm:w-auto sm:justify-end">
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
               type="button"
               variant="outline"
               size="sm"
               aria-expanded={estudioAberto}
-              aria-controls="centraldark-estudio"
+              aria-controls={estudioAberto ? "centraldark-estudio" : undefined}
               onClick={abrirEstudio}
               disabled={modulos.aionui === "desativado"}
             >
@@ -571,8 +682,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           </div>
         </div>
       </header>
+      <div aria-hidden="true" className="h-12" />
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral esquerdo" data-cd-harness="left-rail" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -580,14 +692,14 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral direito" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness lateral direito" data-cd-harness="right-rail" className="fixed right-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness superior" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
             definirAbaAdminInicial("notificacoes");
@@ -598,7 +710,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </nav>
       ) : null}
       {harnessVisivel ? (
-        <nav aria-label="Harness inferior" className="fixed bottom-2 left-1/2 z-40 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness inferior" data-cd-harness="bottom-rail" className="fixed bottom-2 left-1/2 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur z-40">
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("sync")}><SyncLoopIcon autoSyncEnabled={false} isFetching={false} size={16} className="mr-1" /> Sync</Button>
           <Button size="sm" variant="ghost" onClick={() => abrirDestino("downloads")}><Download className="mr-1 size-4" /> Pacotes</Button>
           <Button size="icon" variant="ghost" title="Configurar moldura" aria-label="Configurar moldura" onClick={() => definirGaveta("bottom")}><Wrench className="size-4" /></Button>
@@ -792,61 +904,60 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
-            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
-              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-                  <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
-                  <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "jornada" ? "default" : "ghost"} onClick={() => abrirDestino("jornada")}>🎮 Jornada</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
-                </div>
-                <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
-                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as áreas ▾</summary>
-                  <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
-                    <TabsList ref={tabsScrollRef} className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
-                <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
-                <TabsTrigger value="jornada" data-cd-flow="instinto.CockpitShell.aba.jornada">🎮 Jornada</TabsTrigger>
-                <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
-                <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
-                <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram" data-cd-flow="instinto.CockpitShell.aba.gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync" data-cd-flow="instinto.CockpitShell.aba.sync">🛠️ Minha Oficina</TabsTrigger>
-                <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
-                <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
-                {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
-                <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
-                <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
-                <TabsTrigger value="recibos" data-cd-flow="instinto.CockpitShell.aba.recibos">📊 Recibos</TabsTrigger>
-                <TabsTrigger value="forja" data-cd-flow="instinto.CockpitShell.aba.forja">🔧 Forja</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram-permissions" data-cd-flow="instinto.CockpitShell.aba.gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
-                {autenticado ? <TabsTrigger value="admin" data-cd-flow="instinto.CockpitShell.aba.admin">Admin CentralDark</TabsTrigger> : null}
-                {autenticado ? (
-                  <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
-                ) : null}
-                <TabsTrigger value="hermes">Hermes</TabsTrigger>
-                <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
-                <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
-                <TabsTrigger value="unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads">Downloads</TabsTrigger>
-                <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
-                <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario" data-cd-flow="instinto.CockpitShell.aba.forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode" data-cd-flow="instinto.CockpitShell.aba.agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation" data-cd-flow="instinto.CockpitShell.aba.html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads" data-cd-flow="instinto.CockpitShell.aba.downloads">Downloads</TabsTrigger>
-              </TabsList>
+          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full">
+            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
+              <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
+                <SidebarHeader className="border-b border-border px-3 py-4">
+                  <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:hidden">🪬 CentralDark</span>
+                  <label htmlFor="busca-navegacao" className="text-xs text-muted-foreground group-data-[collapsible=icon]:sr-only">Procurar ferramenta</label>
+                  <input id="busca-navegacao" type="search" value={buscaNavegacao} onChange={(e) => definirBuscaNavegacao(e.target.value)}
+                    placeholder="Procurar: senha, cor, Hermes..."
+                    className="mt-2 min-h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-offset-2 group-data-[collapsible=icon]:hidden" />
+                </SidebarHeader>
+                <SidebarContent className="px-2 py-3">
+                  <TabsList className="flex h-auto w-full flex-col items-stretch justify-start gap-4 bg-transparent p-0" aria-label="Seis pastas da Sala de Controle">
+                    {NAVEGACAO_PASTAS.map((pasta) => {
+                      const encontrados = pasta.itens.filter((item) =>
+                        (!item.soAdmin || autenticado) &&
+                        (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR"))
+                      );
+                      if (encontrados.length === 0) return null;
+                      return <section key={pasta.pasta} className="w-full space-y-1" aria-label={pasta.pasta}>
+                        <p className="px-2 pb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground group-data-[collapsible=icon]:hidden">{pasta.icone} {pasta.pasta}</p>
+                        {encontrados.map((item) => (
+                          <FecharMenuNoCelular key={item.valor}>
+                            <TabsTrigger value={item.valor} title={item.ajuda}
+                              data-cd-flow={"instinto.CockpitShell.aba." + item.valor}
+                              className="flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+                              <span aria-hidden="true" className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0">{pasta.icone}</span>
+                              <span className="min-w-0 group-data-[collapsible=icon]:sr-only">
+                                <span className="block font-medium">{item.nome}</span>
+                                <span className="block text-[11px] font-normal leading-snug text-muted-foreground">{item.ajuda}</span>
+                              </span>
+                            </TabsTrigger>
+                          </FecharMenuNoCelular>
+                        ))}
+                      </section>;
+                    })}
+                  </TabsList>
+                  {buscaNavegacao && !NAVEGACAO_PASTAS.some((pasta) => pasta.itens.some((item) => (!item.soAdmin || autenticado) && (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR")))) ?
+                    <p className="p-3 text-xs text-muted-foreground">Nenhuma ferramenta encontrada.</p> : null}
+                </SidebarContent>
+              </Sidebar>
+              <div className="min-w-0 flex-1">
+                <div className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4"
+                     aria-label="Localização e estado da Sala de Controle">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <SidebarTrigger aria-label="Abrir ou recolher menu" className="size-10 shrink-0" />
+                    <SidebarTrigger aria-label="Abrir menu lateral" className="fixed bottom-20 left-3 z-[70] size-12 rounded-full border border-border bg-background shadow-xl md:hidden" />
+                    <span className="truncate text-sm font-semibold">{pastaAtiva?.pasta ?? "Sala de Controle"} › {tituloAbaAtiva}</span>
                   </div>
-                </details>
-              </div>
-            </div>
+                  {(() => {
+                    const codigo = estado.isError ? "FAIL" : estado.isPending ? "UNKNOWN" : estado.isFetching ? "RUNNING" : (dado?.heartbeat ?? "UNKNOWN");
+                    const descricao = ROTULOS_ESTADO[codigo as keyof typeof ROTULOS_ESTADO] ?? ROTULOS_ESTADO.UNKNOWN;
+                    return <span role="status" title={descricao.ajuda} className="shrink-0 rounded-full border border-border bg-muted/30 px-2 py-1 text-[11px] font-medium">{descricao.rotulo}</span>;
+                  })()}
+                </div>
             <TabsContent value="pr1873" className="mt-8">
               <PainelPR1873 />
             </TabsContent>
@@ -858,6 +969,27 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
+              <section aria-label="Resumo da Sala de Controle" className="mb-6 space-y-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {([
+                    { titulo: "Código", valor: (dado?.github ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Site no ar", valor: (dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Montagem", valor: (dado?.build ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Acesso", valor: (autenticado ? "PASS" : "AUTH_REQUIRED") as EstadoOperacional },
+                  ]).map((cartao) => {
+                    const selo = ROTULOS_ESTADO[cartao.valor as keyof typeof ROTULOS_ESTADO] ?? ROTULOS_ESTADO.UNKNOWN;
+                    return <article key={cartao.titulo} className="rounded-xl border border-border bg-card p-4">
+                      <h2 className="text-base font-semibold">{cartao.titulo}</h2>
+                      <p title={selo.ajuda} className="mt-3 text-sm text-muted-foreground">{selo.rotulo}</p>
+                    </article>;
+                  })}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("sistema")} disabled={!autenticado}>Ver saúde do sistema</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("design")}>Mudar aparência</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("downloads")}>Baixar o Hermes</Button>
+                </div>
+              </section>
               <div className="mb-6"><CartaoDiscosForja /></div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <BlocoEstado
@@ -871,20 +1003,24 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
-                  estado="UNKNOWN"
+                  estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
                   codigo={
-                    dado?.atualizadoEm
-                      ? `Consulta: ${new Date(dado.atualizadoEm).toLocaleString("pt-BR")}`
-                      : "Sem consulta"
+                    dado?.heartbeatHttp
+                      ? `HTTP ${dado.heartbeatHttp} · self=${dado.heartbeatSelf ?? "UNKNOWN"}`
+                      : "Sem resposta medida"
                   }
-                  detalhe="Horário da consulta não comprova heartbeat. Sem measured_at do owner One Heart, a pulsação permanece UNKNOWN."
+                  detalhe={dado?.heartbeatErro
+                    ? `Fonte: /heartbeat · MOTIVO: ${dado.heartbeatErro}`
+                    : "Fonte: /heartbeat · leitura real do owner consultado agora."}
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado
                   titulo="Grafo vivo"
                   estado={dado?.grafoVivo ?? "UNKNOWN"}
                   codigo={dado?.grafoHttp ? `HTTP ${dado.grafoHttp}` : "Sem resposta medida"}
-                  detalhe="Projeção da capacidade Live Fabric existente; nenhum segundo motor de grafo."
+                  detalhe={dado?.grafoErro
+                    ? `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · MOTIVO: ${dado.grafoErro}`
+                    : `Fonte: ${dado?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida"} · rota medida; execução ainda depende de contraprova.`}
                   icone={<Radar className="size-5" />}
                 />
               </div>
@@ -1088,6 +1224,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </>
               )}
             </TabsContent>
+            <TabsContent value="codex-halo" className="mt-10">
+              <div className="mb-6">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">Harness · capacidade nativa</p>
+                <h2 className="mt-3 text-3xl font-semibold">Codex Halo</h2>
+                <p className="mt-3 text-sm text-muted-foreground">Overlay original reutilizado no próprio owner, com estados do Harness e passagem de cliques preservada.</p>
+              </div>
+              <CodexHaloHarness estado={(dado?.status ?? "UNKNOWN") as EstadoOperacional} />
+              <div className="mt-6 rounded-lg border border-border p-4 text-xs text-muted-foreground">
+                Azul = trabalhando · amarelo = atenção · verde = concluído. O Halo é visual e não substitui Hermes, Cua ou qualquer executor.
+              </div>
+            </TabsContent>
             <TabsContent value="aionui" className="mt-10">
               <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">
                 <p className="font-mono text-[10px] tracking-[0.18em] text-neon-blue uppercase">
@@ -1179,7 +1326,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     <Send className="size-4" aria-hidden /> Abrir Unigram original
                   </Button>
                   <span role="status" aria-live="polite" className="text-xs text-muted-foreground">
-                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: UNKNOWN"
+                    {unigramLaunch === "IDLE" ? "Disponibilidade do aplicativo: ainda não verificada"
                       : unigramLaunch === "PENDING" ? "Solicitando abertura…"
                       : unigramLaunch === "REQUESTED" ? "Solicitação enviada ao Windows · janela não comprovada"
                       : unigramLaunch === "UNAVAILABLE" ? "Esta ação requer o CentralDark.exe no Windows; navegador não abre apps locais"
@@ -1372,7 +1519,7 @@ REUSE: before_create (sem duplicação)`}
                     </div>
                     <div>
                       <dt className="text-muted-foreground">Terminal Condition</dt>
-                      <dd className="mt-1 font-mono">UNKNOWN · exige contraprova</dd>
+                      <dd className="mt-1">Ainda não verificado</dd>
                     </div>
                   </dl>
                 </div>
@@ -1511,7 +1658,7 @@ REUSE: before_create (sem duplicação)`}
                 </div>
 
                 <div className="rounded-lg border border-emerald-700/50 bg-emerald-950/20 p-6">
-                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · RUNTIME UNKNOWN</p>
+                  <p className="text-sm font-semibold text-emerald-400">🟡 RESULTADO HISTÓRICO · ESTADO ATUAL NÃO VERIFICADO</p>
                   <ul className="mt-3 space-y-1 text-xs text-emerald-400">
                     <li>✅ Consolidação 100% bem-sucedida</li>
                     <li>✅ Zero perda de dados</li>
@@ -1559,7 +1706,7 @@ REUSE: before_create (sem duplicação)`}
                       </div>
                     </dl>
                     <p className="mt-5 break-all font-mono text-[10px] text-muted-foreground">
-                      SHA-256 UNKNOWN · sem hash derivado do arquivo nesta medição
+                      Hash do arquivo ainda não verificado nesta medição
                     </p>
                     <Button data-cd-flow="instinto.CockpitShell.botao-06" asChild className="mt-6">
                       <a href={pacoteHermes.url} download>
@@ -1603,7 +1750,9 @@ REUSE: before_create (sem duplicação)`}
                 </div>
               </section>
             </TabsContent>
-          </Tabs>
+              </div>
+            </Tabs>
+          </SidebarProvider>
         </div>
       </section>
     </main>

@@ -122,7 +122,13 @@ export const solicitarPromocaoSegura = createServerFn({ method: "POST" })
     if (error) throw new Response("ADMIN_ROLE_CHECK_UNAVAILABLE", { status: 503 });
     if (!data) throw new Response("FORBIDDEN", { status: 403 });
 
-    const token = process.env['CENTRALDARK_GITHUB_DISPATCH_TOKEN'];
+    // Reutilizar a credencial de servidor já carregada pela Forja (vite.config.ts).
+    // Nunca expor o token ao cliente; papel admin Supabase continua obrigatório.
+    const token = [
+      process.env['CENTRALDARK_GITHUB_DISPATCH_TOKEN'],
+      process.env['GITHUB_TOKEN'],
+      process.env['GH_TOKEN'],
+    ].map((value) => value?.trim()).find(Boolean);
     if (!token) return { state: "BLOCKED" as const, reason: "DISPATCH_TOKEN_NOT_CONFIGURED" };
     try {
       const response = await fetch(

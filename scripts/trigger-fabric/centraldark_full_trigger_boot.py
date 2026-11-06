@@ -50,6 +50,7 @@ CANONICAL_CONSUMPTION_GATE = Path("scripts/centraldark/canonical-consumption-gat
 CANONICAL_LEARNINGS = Path("docs/CONSCIENCIA/APRENDIZADOS.md")
 COGNITIVE_CAPABILITIES = Path("docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md")
 METACOGNITION = Path("docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md")
+CONTINUITY_ENTRY = Path("scripts/hermes/centraldark-entry.py")
 DEFAULT_REGISTRY = FABRIC / "PROVEN-CLAIMS.lock.json"
 PROVEN_PATH_MUST_NOT_BE_REINTERPRETED_FROM_ZERO = True
 
@@ -262,6 +263,20 @@ def require_files(repo: Path) -> dict[str, str]:
 
 
 
+def discover_boot_repo(repo_hint: str | Path | None = None) -> Path:
+    """Resolve this boot loader's repository root without assuming a drive path."""
+    script_path = Path(__file__).resolve()
+    start = Path(repo_hint).expanduser() if repo_hint else script_path.parent
+    if start.is_file():
+        start = start.parent
+    for candidate in (start, *start.parents):
+        boot = candidate / BOOT
+        loader = candidate / "scripts" / "trigger-fabric" / "centraldark_full_trigger_boot.py"
+        if boot.is_file() and loader.is_file() and loader.resolve() == script_path:
+            return candidate.resolve()
+    raise SystemExit("CENTRALDARK_REPO_ROOT_NOT_FOUND")
+
+
 def fixed_point_pack_state(repo: Path) -> dict:
     """Read/hash 7 canonical references from MASTER; hash != semantic use or proof."""
     result = {
@@ -356,7 +371,8 @@ def canonical_consumption_gate_state(repo: Path) -> dict:
     gate = repo / CANONICAL_CONSUMPTION_GATE
     command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT"]
     try:
-        proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, timeout=15, check=False)
+        proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, encoding="utf-8",
+                               errors="replace", timeout=15, check=False)
     except (FileNotFoundError, subprocess.TimeoutExpired) as exc:
         return {
             "status": "ADVISORY_UNAVAILABLE",
@@ -679,8 +695,8 @@ def hud_first_gate(repo: Path) -> dict:
     def git(*args: str) -> str | None:
         try:
             cmd = ["git", "-C", str(repo), *args]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=12,
-                                    env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+            result = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                    timeout=12, env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
             return result.stdout.strip() if result.returncode == 0 else None
         except (OSError, subprocess.TimeoutExpired):
             return None
@@ -698,14 +714,21 @@ def hud_first_gate(repo: Path) -> dict:
     if not head or not live_main or head != live_main:
         evidence["reason"] = "MAIN_REMOTE_UNVERIFIED_OR_NOT_CURRENT"
         return evidence
-    # Text-mode git output is not a byte proof; compare binary blob exactly.
+    # Compare the worktree through Git's configured clean filter (including
+    # core.autocrlf), then compare any runtime mirror to the exact main blob.
     try:
+        main_blob_oid = git("rev-parse", f"{head}:{rel}")
+        worktree_blob_oid = git("hash-object", f"--path={rel}", str(source))
         result = subprocess.run(["git", "-C", str(repo), "show", f"{head}:{rel}"],
                                 stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                 timeout=12, check=False)
-        if result.returncode != 0 or result.stdout != current_bytes:
+        if result.returncode != 0 or not main_blob_oid or worktree_blob_oid != main_blob_oid:
             evidence["reason"] = "HUD_DISK_DIFFERS_FROM_PINNED_MAIN"
             return evidence
+        main_bytes = result.stdout
+        evidence["source_sha256"] = hashlib.sha256(main_bytes).hexdigest()
+        evidence["checkout_sha256"] = hashlib.sha256(current_bytes).hexdigest()
+        evidence["source_blob_oid"] = main_blob_oid
     except (OSError, subprocess.TimeoutExpired):
         evidence["reason"] = "HUD_COMMIT_BLOB_UNREADABLE"
         return evidence
@@ -720,7 +743,7 @@ def hud_first_gate(repo: Path) -> dict:
             evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_READ_FAILED"
             return evidence
         evidence["runtime_sha256"] = hashlib.sha256(runtime_bytes).hexdigest()
-        if current_bytes != runtime_bytes:
+        if main_bytes != runtime_bytes:
             evidence["reason"] = "HUD_EXPLICIT_RUNTIME_MIRROR_SHA_MISMATCH"
             return evidence
     evidence.update({"status": "PASS", "reason": "COCKPIT_OWNER_SOURCE_VERIFIED",
@@ -728,45 +751,169 @@ def hud_first_gate(repo: Path) -> dict:
     return evidence
 
 
+def operational_reconcile_preflight(repo: Path, continuity: dict) -> dict:
+    # Read-only reconciliation before any trigger boot continuation.
+    def git(*args):
+        try:
+            p = subprocess.run(["git", "-C", str(repo), *args], capture_output=True,
+                               text=True, encoding="utf-8", errors="replace",
+                               timeout=12, env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+            return p.stdout.strip() if p.returncode == 0 else "UNKNOWN"
+        except (OSError, subprocess.TimeoutExpired):
+            return "UNKNOWN"
+    mission = continuity.get("mission", "UNKNOWN")
+    lock = Path(os.environ.get("CENTRALDARK_HERMES_CHECKPOINTS", str(Path.home() / ".hermes/centraldark/verified-execution"))).expanduser() / mission / ".lock"
+    dirty = git("status", "--porcelain=v1")
+    return {
+        "git_head": git("rev-parse", "HEAD"),
+        "git_origin_main": git("rev-parse", "origin/main"),
+        "git_dirty": bool(dirty and dirty != "UNKNOWN"),
+        "git_changes_preserved": dirty if dirty != "UNKNOWN" else "UNKNOWN",
+        "owner": continuity.get("owner", CONTINUITY_ENTRY.as_posix()),
+        "active_writer": "UNKNOWN_LOCK_PRESENT" if lock.exists() else "NONE",
+        "writer_lock_path": str(lock),
+        "runtime": {
+            "hermes_dispatch_ready": bool(continuity.get("dispatch_ready")),
+            "verified_plan_ready": bool(continuity.get("plan_ready")),
+            "state": "READY_FOR_NEXT_CURSOR" if continuity.get("ok") else "BLOCKED",
+        },
+        "status": "DIRTY_PRESERVED" if dirty and dirty != "UNKNOWN" else "RECONCILED",
+    }
+
+def hermes_continuity_preflight(repo: Path) -> dict:
+    # Recover the latest verified mission before trigger boot continues.
+    entry = repo / CONTINUITY_ENTRY
+    result = {"status": "BLOCKED", "owner": CONTINUITY_ENTRY.as_posix(),
+              "source": "centraldark-entry.py -> verified-checkpoint.py",
+              "integrity": "UNKNOWN", "reason": "ENTRY_NOT_FOUND"}
+    if not entry.is_file() or entry.is_symlink():
+        return result
+    try:
+        proc = subprocess.run(["python3", str(entry), "--status"], cwd=str(repo),
+                              capture_output=True, text=True, encoding="utf-8", errors="replace",
+                              timeout=20, env=os.environ.copy())
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        result["reason"] = type(exc).__name__
+        return result
+    try:
+        payload = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        result["reason"] = "ENTRY_OUTPUT_INVALID"
+        return result
+    result.update(payload)
+    result["integrity"] = ("HASH_CHAIN_PASS" if payload.get("ok") and
+                            payload.get("state") == "VERIFIED_CHECKPOINT_FOUND" else "FAILED")
+    result["preflight_exit"] = proc.returncode
+    if proc.returncode != 0 or not payload.get("ok"):
+        result["reason"] = payload.get("state", "CHECKPOINT_UNAVAILABLE")
+        return result
+    result["status"] = "RECOVERED"
+    result["reason"] = "LATEST_VERIFIED_CHECKPOINT_RECOVERED_BEFORE_TRIGGER_BOOT"
+    return result
+
+
+def canonical_boot_snapshot(repo: Path) -> dict:
+    """Read canonical contracts before optional mission-resume and runtime gates."""
+    return {
+        "source_sha256": require_files(repo),
+        "fixed_point_pack": fixed_point_pack_state(repo),
+        "discovered": discover_registry(repo),
+        "cognitive_bios": cognitive_bios_state(repo),
+        "runtime_preflight_contract": runtime_preflight_contract_state(repo),
+        "canonical_consumption": canonical_consumption_gate_state(repo),
+        "active_session_application": "UNKNOWN_NOT_PROVEN_BY_LOCAL_BOOT",
+        "source_authority": "UNBOUND_LOCAL_CHECKOUT",
+    }
+
+
 def cmd_boot(args: argparse.Namespace) -> int:
-    repo = Path(args.repo).resolve()
-    # First operation: use the canonical HUD. No stale or missing HUD can
-    # start the CentralDark control-plane boot; optional failures stay plaques.
+    repo = discover_boot_repo(getattr(args, "repo", None))
+    active = explicit_command_context(args.input)
+
+    # Read the canonical contract first. Runtime and mission gates may limit
+    # continuation, but must not erase this read-only result.
+    canonical = canonical_boot_snapshot(repo)
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
-        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
-                          "status": "FAIL_CLOSED",
-                          "hud_first": hud_first,
-                          "boot_executed": False}, ensure_ascii=False, indent=2))
-        return 16
-    fixed_point_pack = fixed_point_pack_state(repo)
+        print(json.dumps({
+            "schema": "centraldark.full-trigger-boot.v1",
+            "status": "LOCAL_CONTRACTS_READ_CONTROL_PLANE_BLOCKED",
+            "canonical_boot": canonical,
+            "hud_first": hud_first,
+            "mission_resume": {"status": "NOT_ATTEMPTED", "reason": "HUD_GATE_BLOCKED"},
+            "canonical_boot_loaded": True,
+            "operational_boot_executed": False,
+        }, ensure_ascii=True, indent=2))
+        return 0
+
+    canonical["source_authority"] = "SERVERVPSS_CENTRALDARK_MAIN"
+    continuity = hermes_continuity_preflight(repo) if active else {
+        "status": "NOT_APPLICABLE", "owner": CONTINUITY_ENTRY.as_posix(),
+        "integrity": "NOT_APPLICABLE", "reason": "NO_EXPLICIT_TRIGGER",
+    }
+    if active and continuity["status"] != "RECOVERED":
+        print(json.dumps({
+            "schema": "centraldark.full-trigger-boot.v1",
+            "status": "CANONICAL_MAIN_LOADED_RESUME_BLOCKED",
+            "canonical_boot": canonical,
+            "hud_first": hud_first,
+            "continuity_preflight": continuity,
+            "mission_resume": {
+                "status": "BLOCKED",
+                "reason": continuity.get("reason", "CHECKPOINT_UNAVAILABLE"),
+            },
+            "canonical_boot_loaded": True,
+            "operational_boot_executed": False,
+        }, ensure_ascii=True, indent=2))
+        return 0
+
+    operational_context = operational_reconcile_preflight(repo, continuity)
+    fixed_point_pack = canonical["fixed_point_pack"]
     if fixed_point_pack["status"] != "BOUND":
-        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
-                          "status": "FAIL_CLOSED",
-                          "fixed_point_pack": fixed_point_pack,
-                          "boot_executed": False}, ensure_ascii=False, indent=2))
+        print(json.dumps({
+            "schema": "centraldark.full-trigger-boot.v1",
+            "status": "CANONICAL_MAIN_CONTRACT_INCOMPLETE",
+            "canonical_boot": canonical,
+            "fixed_point_pack": fixed_point_pack,
+            "operational_boot_executed": False,
+        }, ensure_ascii=True, indent=2))
         return 17
-    source_hashes = require_files(repo)
-    registry = discover_registry(repo)
-    bios = cognitive_bios_state(repo)
-    preflight_contract = runtime_preflight_contract_state(repo)
-    canonical_consumption = canonical_consumption_gate_state(repo)
-    active = explicit_command_context(args.input)
+
+    source_hashes = canonical["source_sha256"]
+    registry = canonical["discovered"]
+    bios = canonical["cognitive_bios"]
+    preflight_contract = canonical["runtime_preflight_contract"]
+    canonical_consumption = canonical["canonical_consumption"]
     normalized = normalize_command(args.input.splitlines()[0].split()[0]) if args.input.strip() else ""
     result = {
         "schema": "centraldark.full-trigger-boot.v1",
+        "status": "CANONICAL_MAIN_LOADED",
         "active": active,
         "input_normalized": normalized,
         "load_full_registry": True,
         "execute_all_phases_blindly": False,
         "canonical_chain": CANONICAL_CHAIN,
+        "canonical_boot": canonical,
         "fixed_point_pack": fixed_point_pack,
         "discovered": registry,
         "source_sha256": source_hashes,
+        "continuity_preflight": continuity,
+        "operational_reconcile": operational_context,
+        "continuity_contract": {
+            "INTENT_ID": continuity.get("intent_id", "UNKNOWN_NOT_STORED_IN_CHECKPOINT"),
+            "GOAL": continuity.get("goal", continuity.get("intent", "UNKNOWN")),
+            "OWNER": operational_context.get("owner", "UNKNOWN"),
+            "MAIN_SHA": operational_context.get("git_head", "UNKNOWN"),
+            "ACTIVE_WRITER": operational_context.get("active_writer", "UNKNOWN"),
+            "RECEIPT": continuity.get("receipt_sha256", "UNKNOWN"),
+            "NEXT_CURSOR": continuity.get("next_cursor", "UNKNOWN"),
+        },
         "feedback": classify_realtime_feedback(args.input),
         "cognitive_bios": bios,
         "runtime_preflight_contract": preflight_contract,
         "canonical_consumption": canonical_consumption,
+        "active_session_application": canonical["active_session_application"],
+        "source_authority": canonical["source_authority"],
         "hud": bios["hud"],
         "hud_first": hud_first,
         "rules": {
@@ -793,7 +940,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "proof_divergence": "DELTA_NEW",
         },
     }
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(result, indent=2, ensure_ascii=True))
     if not active:
         return 4
     return 0
@@ -1236,7 +1383,7 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="cmd", required=True)
 
     b = sub.add_parser("boot")
-    b.add_argument("--repo", default=".")
+    b.add_argument("--repo", default=None)
     b.add_argument("--input", required=True)
     b.set_defaults(func=cmd_boot)
 
