@@ -1,0 +1,63 @@
+{
+  "tipo": "genesis_operational_replay",
+  "status": "OBSERVED",
+  "intent_id": "CENTRALDARK_GENESIS_COCKPIT_SAFE_REPLAY_20261030",
+  "run_id": "RUN-20261030-MCP-LOCAL-STATUS-READBACK-01",
+  "owner": "K:\\apps\\instinto-superior",
+  "surface": "Cockpit / MCP CentralDark Casa",
+  "observacoes": [
+    {
+      "area": "MCP oficial",
+      "selector_aria_data_cd_flow": "mcp__codex_apps__centraldark_mcp_casa_mcp_status",
+      "antes": "sessao oficial disponivel; sem alteracao solicitada",
+      "clique_ou_acao": "chamada mcp_status somente leitura",
+      "depois": "ok=true; runtimeTools=149; routeCount=17; auditStartupReady=false",
+      "efeito": "catalogo e estado do MCP retornados",
+      "fingerprint": "mcp_status|ok=true|tools=149|routes=17",
+      "receipt": "OBSERVED-MCP-STATUS-20261030T204009Z",
+      "correlation_id": "UNKNOWN",
+      "tool_call_id": "UNKNOWN",
+      "status": "OBSERVED"
+    },
+    {
+      "area": "Kylin native",
+      "selector_aria_data_cd_flow": "mcp__codex_apps__centraldark_mcp_casa_kylin_native_status",
+      "antes": "canal nativo sem inicializacao MCP concluida",
+      "clique_ou_acao": "tentativa de leitura somente leitura",
+      "depois": "MCP server is not initialized",
+      "efeito": "sem readback operacional; sem mutacao",
+      "fingerprint": "kylin_native_status|not_initialized",
+      "receipt": "UNKNOWN-KYLIN-NATIVE-20261030T204009Z",
+      "correlation_id": "UNKNOWN",
+      "tool_call_id": "UNKNOWN",
+      "status": "UNKNOWN"
+    },
+    {
+      "area": "Cockpit safe navigation",
+      "selector_aria_data_cd_flow": "button[role=button][name=Visão]",
+      "antes": "Cockpit CentralDark /sala-controle; aba Visão geral disponível",
+      "clique_ou_acao": "clique seguro na aba Visão",
+      "depois": "button Visão [active]; tabpanel Visão geral presente no DOM",
+      "efeito": "navegação local de aba confirmada; nenhum efeito remoto",
+      "fingerprint": "cockpit_replay|tab=Visão|active=true|tabpanel=Visão geral",
+      "receipt": "OBSERVED-COCKPIT-VISAO-20261030T204227Z",
+      "correlation_id": "UNKNOWN",
+      "tool_call_id": "UNKNOWN",
+      "status": "OBSERVED"
+    }
+  ],
+  "contraprova": [
+    "nenhum endpoint /status.json foi criado ou usado",
+    "nenhuma ferramenta mutavel foi chamada",
+    "nenhum arquivo do owner de runtime foi alterado"
+  ],
+  "rollback": "nao aplicavel; somente leitura",
+  "readback": {
+    "surface": "Microsoft Edge / Cockpit CentralDark",
+    "url": "http://127.0.0.1:8080/sala-controle",
+    "dom": "button Visão [active]; tabpanel Visão geral",
+    "screenshot": "captured_by_cua_current_turn",
+    "status": "TESTED_LOCAL_NAVIGATION_ONLY"
+  },
+  "next_cursor": "GENESIS_COCKPIT_SAFE_REPLAY_NEXT_SAFE_TAB"
+}

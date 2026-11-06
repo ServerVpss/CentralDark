@@ -7,6 +7,14 @@ updated: 2026-10-24
 ---
 
 
+<!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+## 🪬 Capacidade operacional única — Skill Mãe
+
+A execução de toda intenção segue o owner existente [centraldark-operational-method](.agents/skills/centraldark-operational-method/SKILL.md): **uma Skill Mãe, uma biblioteca `Skills/`, um organismo**. A entrada técnica continua sendo este `LEIA-ME-IA.md`; a Skill Mãe é o método operacional, não uma segunda porta de entrada. Reutilizar owner, sessão e receita; executar o delta autorizado sem micro-passos nem confirmações redundantes; medir efeito, contraprova, recibo e `NEXT_CURSOR`. A aprovação humana complementa a prova técnica quando exigida. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `UNKNOWN != PASS`.
+
+Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.md`, instruções de agentes no `AGENTS.md` e receitas na Skill Mãe. Não criar biblioteca paralela nem afirmar que a migração física ou o carregamento pelo Hermes já foram comprovados.
+<!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
@@ -822,10 +830,17 @@ TRIGGER=!EXECUTOR_CENTRALDARK
 TRIGGER_DOES_NOT_GRANT_ACCESS=true
 TRIGGER_DOES_NOT_EXPAND_AUTHORITY=true
 PHYSICAL_HOUSE_EXECUTION_REQUIRES_AUTHORIZED_TOOL=true
-PRIMARY_HOUSE_TOOL=Remote Desktop Commander
+PRIMARY_HOUSE_TOOL=CentralDark Casa Commander 127.0.0.1:9101 (MCP CentralDark / Tailscale)
+BROWSER_READ_TOOL=Browser.list_tabs + Browser.get_tab_context
+BROWSER_ACTION_TOOL=CentralDark Casa Commander /tool (autenticado, autorizado e medido)
+BROWSER_VERIFY_TOOL=Browser.get_tab_context (mesma aba)
+REMOTE_DESKTOP_COMMANDER_THIRD_PARTY_REQUIRED=false
+CASA_COMMANDER_BROWSER_E2E=UNKNOWN_UNTIL_TOOL_READBACK
 NO_HOUSE_ACCESS=CAPABILITY_UNAVAILABLE
 UNKNOWN_HOUSE_ACCESS=UNKNOWN
 ```
+
+**Regra para navegador (05/11/2026):** Browser lê a aba real, **CentralDark Casa Commander nativo** executa somente ações autorizadas e comprovadas, Browser relê a mesma aba e compara efeito. Consultar a receita existente em `.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md`. A sessão Hostinger confirmou Browser+UIA pelo executor de terceiro, **não** comprovou o envio pela rota Casa Commander; não presumir paridade nem ativar Remote Desktop Commander automaticamente. Gatilhos `!CENTRALDARK`, `!EXECUTOR_CENTRALDARK`, `#ACORDAR` e `!CALIBRAR` reutilizam a receita se o DELTA envolver navegador, sem novo trigger ou autorização.
 
 Quando a ferramenta autorizada da Casa estiver disponível, o modo prefere executar o menor delta local em vez de devolver tutorial ao CHEFE, seguido de backcheck, reteste, Reality Judge e readback.
 

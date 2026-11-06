@@ -44,8 +44,6 @@ export interface McpStatus {
   [key: string]: any;
 }
 
-const STATUS_URL = "https://mcp.centralldark.com/status.json";
-
 export function useMcpStatus(intervalMs = 30_000) {
   const [data, setData] = useState<McpStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -55,21 +53,10 @@ export function useMcpStatus(intervalMs = 30_000) {
   const fetchStatus = useCallback(async () => {
     setError(null);
     try {
-      // Tenta fetch direto (CORS deve estar liberado conforme briefing)
-      let json: any | null = null;
-      try {
-        const r = await fetch(STATUS_URL, { cache: "no-store" });
-        if (r.ok) json = await r.json();
-      } catch {
-        /* cai no proxy */
-      }
-      // Fallback via edge proxy (resolve CORS se bloqueado)
-      if (!json) {
-        const { data: proxied, error: pErr } = await supabase.functions.invoke("mcp-status-proxy");
-        if (pErr) throw pErr;
-        json = proxied;
-      }
-      setData(json as McpStatus);
+      // Rota única existente; evita probe direto cross-origin no navegador.
+      const { data: proxied, error: pErr } = await supabase.functions.invoke("mcp-status-proxy");
+      if (pErr) throw pErr;
+      setData(proxied as McpStatus);
       setLastUpdated(new Date());
     } catch (e: any) {
       setError(e?.message ?? String(e));

@@ -35,3 +35,6 @@ O WuzAPI envia alertas para a nossa Telefonista (Gateway) sempre que algo aconte
 - **Nome leigo:** Celular Ligado / Celular Desligado da Tomada.
 - **Explicação:** Avisa a saúde do aparelho. Se a bateria acabar ou a Meta banir o número, ele grita "Desconectado".
 - **Onde salva:** Na tabela de `connections` / `instances`.
+
+## Índice operacional de rotas e Swagger
+Para operar sessão, QR Code, webhook, foto de grupo e autenticação, consultar primeiro [WUZAPI-API-OPERACIONAL.md](WUZAPI-API-OPERACIONAL.md). Este mapa registra eventos; o outro documento registra API, ambientes, autenticação e fluxo WuzAPI → Gateway → Lovable → Hermes.

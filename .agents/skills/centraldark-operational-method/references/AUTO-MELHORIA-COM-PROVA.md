@@ -85,6 +85,6 @@ Foi promovida uma prova real já concluída: `t_26e02a16` (TXT excluído) em `ca
 
 - Criação de TXT por Hermes da Casa: `t_2805243c`, `DONE`, conteúdo lido.
 - Exclusão do TXT pelo mesmo Kanban: `t_26e02a16`, `DONE`, arquivo ausente.
-- `!michelin`: método fonte preservado em `docs/LEMBRANCAS` e skill operacional em `catalogo/skills-integradas/michelin-3-estrelas/SKILL.md`.
+- `!michelin`: método fonte preservado em `docs/LEMBRANCAS` e skill operacional em `Skills/michelin-3-estrelas/SKILL.md`.
 
 **Política de segurança operacional:** nenhuma exclusão, reinicialização, alteração global de modelo, GitHub push/merge ou chamada à VPS é consequência automática de sincronizar documentação. A atualização automática só atua **dentro da própria skill canônica** e somente nos arquivos de índice e registro sob seu controle.

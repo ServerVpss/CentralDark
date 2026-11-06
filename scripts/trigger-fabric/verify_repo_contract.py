@@ -269,7 +269,7 @@ check('docs/CONSCIENCIA/APRENDIZADOS.md',[
  'NO_V1_V2_V3_CHANNEL_FALLBACK=true',
 ], classification='CHANNEL_LIMIT_RECOVERABLE_COMPRESSION_LEARNING_144')
 
-check('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md',[
  'CHAT_GLOBAL = classe de qualquer superfície conversacional conectada à CentralDark',
  'BRAND != SURFACE_CLASS',
  'SURFACE != CAPABILITY',
@@ -432,7 +432,7 @@ check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-CHAT-GLOBAL-SURFACE-CAPABILITY-EVI
  '# 2026-10-02 — CHAT_GLOBAL, superfície, capability, estado e prova',
  'PROVENANCE_SPECIFIC_BRAND_MUST_BE_PRESERVED=true',
 ], classification='CHAT_GLOBAL_REMEMBRANCE_EXPANSION')
-check_absent('.agents/skills/centraldark-unified-surface-parity/SKILL.md',[
+check_absent('.agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md',[
  r'ChatGPT Texto = oráculo \+ executor quando tool aparece',
 ], classification='CHAT_GLOBAL_NO_BRAND_AS_GLOBAL_ROLE_SKILL')
 check_absent('docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md',[
@@ -1257,7 +1257,7 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml',[
  'direct_main_allowed_when_authorized: true',
  'rule: PROVEN_CRYSTAL_REPLAY_BEFORE_REDISCOVERY',
  'docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml',
- '.agents/skills/centraldark-unified-surface-parity/SKILL.md',
+ '.agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md',
 ], classification='PROVEN_CRYSTAL_MAIN_FAST_PATH_CONTRACT')
 
 check('CENTRALDARK_AI_BOOT.yaml',[

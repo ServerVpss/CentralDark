@@ -208,7 +208,7 @@ bot_entry:
     - docs/CONSCIENCIA/PADRAO-EMOJIS.md
     - docs/CONSCIENCIA/MULTIBUSSOLA.md
     - .agents/skills/meta-lupa/SKILL.md
-    - .agents/skills/centraldark-unified-surface-parity/SKILL.md
+    - .agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md
     - docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
   install_semantics: LOAD_CANONICAL_REFERENCE_NOT_COPY_BRAIN
   runtime_activation_requires_observation: true
@@ -268,7 +268,7 @@ proven_crystal_main_fast_path:
   marker: PROVEN_CRYSTAL_MAIN_FAST_PATH
   trigger: CHEFE_REGISTRA_ON_PROVEN_CRYSTAL
   source_contract: docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml
-  skill_owner: .agents/skills/centraldark-unified-surface-parity/SKILL.md
+  skill_owner: .agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md
   same_fingerprint: PASSAGE_OPEN
   reproof_policy: AFFECTED_CONE_ONLY
   full_ci_reproof_for_unchanged_proven_crystal: false

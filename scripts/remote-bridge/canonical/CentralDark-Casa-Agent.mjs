@@ -6,6 +6,7 @@ import { spawn } from "node:child_process";
 import { timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
+import { hostname } from "node:os";
 
 const ENGINE = "@wonderwhy-er/desktop-commander@0.2.48";
 const TOKEN = process.env.CENTRALDARK_CASA_BRIDGE_TOKEN || "";
@@ -17,6 +18,56 @@ export const READ_ONLY_TOOLS = new Set([
 let upstream = null;
 let connecting = null;
 let ready = false;
+let lastAuthorizedTool = null; // ephemeral receipt, never a credential or file content
+
+// MQTT is an OPTIONAL transport of presence/receipts within the SAME Casa agent.
+// No broker, secondary executor, implicit remote mutation or public port is created.
+// Requires an authenticated TLS broker and mqtt.js installed beside this agent.
+// Keep command execution on the existing authenticated /tool path until approved.
+const MQTT_ENABLED = process.env.CENTRALDARK_CASA_MQTT_ENABLED === "true";
+const MQTT_TOPIC = "centraldark/casa/" + hostname().toLowerCase().replace(/[^a-z0-9-]/g, "-").slice(0,64);
+let mqttConnection = null;
+let mqttState = MQTT_ENABLED ? "NOT_CONFIGURED" : "DISABLED";
+function mqttPublish(kind, detail, retain = false) {
+  if (!mqttConnection?.connected) return false;
+  mqttConnection.publish(MQTT_TOPIC + "/" + kind, JSON.stringify({
+    schema: "centraldark.casa.mqtt.v1",
+    device: hostname(), at: new Date().toISOString(),
+    engine_connected: ready, detail
+  }), { qos: 1, retain });
+  return true;
+}
+async function startCasaMqtt() {
+  if (!MQTT_ENABLED) return;
+  const url = process.env.CENTRALDARK_CASA_MQTT_URL || "";
+  const username = process.env.CENTRALDARK_CASA_MQTT_USERNAME || "";
+  const password = process.env.CENTRALDARK_CASA_MQTT_PASSWORD || "";
+  if (!/^(mqtts|wss):\/\//.test(url) || !username || !password) {
+    mqttState = "TLS_OR_AUTH_NOT_CONFIGURED";
+    return;
+  }
+  try {
+    const { connect } = await import("mqtt");
+    const client = connect(url, {
+      username, password,
+      clientId: "centraldark-casa-" + hostname().replace(/[^a-zA-Z0-9-]/g, "-") + "-" + process.pid,
+      reconnectPeriod: 3000, connectTimeout: 10000, rejectUnauthorized: true,
+      will: { topic: MQTT_TOPIC + "/presence", payload: JSON.stringify({ online: false }), qos: 1, retain: true }
+    });
+    mqttConnection = client;
+    mqttState = "CONNECTING";
+    client.on("connect", () => {
+      mqttState = "CONNECTED";
+      mqttPublish("presence", { online: true }, true);
+    });
+    client.on("close", () => { mqttState = "DISCONNECTED"; });
+    client.on("error", () => { mqttState = "ERROR"; });
+    setInterval(() => mqttPublish("heartbeat", { online: true }), 15000).unref();
+  } catch {
+    mqttState = "MODULE_UNAVAILABLE";
+  }
+}
+
 let serial = 0;
 let partial = "";
 const inflight = new Map();
@@ -100,7 +151,9 @@ export function createCasaAgent(){
   if(TOKEN.length<24) throw Error("CENTRALDARK_CASA_BRIDGE_TOKEN_MISSING_OR_SHORT");
   return createServer(async(req,res)=>{
     if(req.method==="GET"&&req.url==="/health")
-      return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false});
+      return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false,
+        last_authorized_tool:lastAuthorizedTool,
+        mqtt:{enabled:MQTT_ENABLED,connected:mqttConnection?.connected===true,state:mqttState}});
     if(req.method!=="POST"||req.url!=="/tool")
       return send(res,404,{ok:false,error:"ROUTE_NOT_FOUND"});
     if(!authorized(req.headers.authorization))
@@ -115,6 +168,13 @@ export function createCasaAgent(){
     try{
       await engine();
       const value=await rpc("tools/call",{name,arguments:input.arguments});
+      if (value?.isError !== true) {
+        lastAuthorizedTool = {
+          tool: name, kind: READ_ONLY_TOOLS.has(name) ? "READ_ONLY" : "MUTATION",
+          at: new Date().toISOString(), verified: true,
+        };
+        mqttPublish("receipt", lastAuthorizedTool);
+      }
       send(res,200,{ok:value?.isError!==true,tool:name,result:value,execution:"CASA_ENGINE_RESULT"});
     }catch(e){send(res,502,{ok:false,error:String(e.message).slice(0,800),execution:"NOT_PROVEN"});}
   });
@@ -123,4 +183,5 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).hr
   createCasaAgent().listen(9101,"127.0.0.1",()=>{
     process.stdout.write("CENTRALDARK_CASA_LISTEN=127.0.0.1:9101\n");
   });
+  void startCasaMqtt();
 }

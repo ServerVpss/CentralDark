@@ -166,6 +166,8 @@ EXECUTOR_CANNOT_SELF_APPROVE=true
 
 **Intenção e autoridade.** Identifique se a fala é relato, pergunta ou ordem. Nova fala é DELTA da intenção vigente por padrão. Relato não é autorização de mutação; pergunta pede resposta; ordem clara em escopo autorizado pede execução direta, sem menu nem confirmação redundante. Só solicite decisão quando faltar informação indispensável, autorização de classe material, acesso ou escolha humana irredutível. Não confunda automação com autorização ilimitada; preserve políticas de segurança, branch protection, locks, segredo e escritor único.
 
+**Método operacional vivo:** aplicar a [Skill Mãe](.agents/skills/centraldark-operational-method/SKILL.md#protocolo-operacional-aprovado-pelo-chefe--execução-direta-e-contraprova-02112026) para execução direta, prova técnica, contraprova humana aplicável e registro posterior. Não repetir o protocolo nesta entrada nem reabrir aprovação já concedida.
+
 **Circuito obrigatório proporcional ao alvo:**
 
 ```text
@@ -182,9 +184,9 @@ CHEFE_INTENT / DELTA
 → FIXED_POINT_IF_GOAL_SUFFICIENT
 ```
 
-**🔴 PR DOS RED — Tool Call independente de modelo (2026-10-22).** Toda sessão Cline/ZENDRIVE/Codex/Claude/Gemini que executa o Goal Michelin deve recuperar a secao `Red Loop` de `.agents/skills/centraldark-live-editing-fabric/SKILL.md` quando receber `AI_NoSuchToolError` ou rejeicao `before execution`. Os REDs sao registrados cumulativamente no **mesmo** PR `🧠 PR DOS RED 🔴`, com fingerprints e readback; so criar novo ID se existir causa distinta. Nome de ferramenta deve vir EXATAMENTE do esquema da sessao ativa **e** do seu resolver; nao traduzir `read_files` para `read_file` nem alucinar aliases. Se a ferramenta aparece em `Available tools` mas o dispatcher a rejeita, classificar `ADVERTISED_BUT_REJECTED` e parar o loop, investigar adapter/registry/sessao — nao repetir com 8 variacoes. Regra pura + testes: `scripts/ci/centraldark-toolcall-red-guard.{mjs,test.mjs}`; **script commitado ainda nao e hook instalado no Cline**. Prova: call real autorizada, schema valido e resultado independente; sem isso `UNKNOWN`, nunca tres estrelas. Preservar o GOAL 50 passos, writer unico Casa e checkpoints comprovados.
+**🔴 PR DOS RED — Tool Call independente de modelo (2026-10-22).** Toda sessão Cline/ZENDRIVE/Codex/Claude/Gemini que executa o Goal Michelin deve recuperar a secao `Red Loop` de `.agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md` quando receber `AI_NoSuchToolError` ou rejeicao `before execution`. Os REDs sao registrados cumulativamente no **mesmo** PR `🧠 PR DOS RED 🔴`, com fingerprints e readback; so criar novo ID se existir causa distinta. Nome de ferramenta deve vir EXATAMENTE do esquema da sessao ativa **e** do seu resolver; nao traduzir `read_files` para `read_file` nem alucinar aliases. Se a ferramenta aparece em `Available tools` mas o dispatcher a rejeita, classificar `ADVERTISED_BUT_REJECTED` e parar o loop, investigar adapter/registry/sessao — nao repetir com 8 variacoes. Regra pura + testes: `scripts/ci/centraldark-toolcall-red-guard.{mjs,test.mjs}`; **script commitado ainda nao e hook instalado no Cline**. Prova: call real autorizada, schema valido e resultado independente; sem isso `UNKNOWN`, nunca tres estrelas. Preservar o GOAL 50 passos, writer unico Casa e checkpoints comprovados.
 
-**🍒 Cockpit-in-the-Loop — obrigação proporcional para Cline/VS Code e demais Writers UI (CHEFE, 2026-10-21).** Quando a missão alterar controles, tela, navegação, integração visível ou estados do Cockpit, antes de declarar conclusão **carregar** `.agents/skills/centraldark-live-editing-fabric/SKILL.md`, seção `Cockpit-in-the-Loop`. O Cline na Casa usa o navegador/preview autenticado já aberto (URL medida nesta missão: `http://127.0.0.1:8080/sala-controle`) ou automação UI autorizada para mapear somente os botões/abas do escopo e medir T0. Após o delta e testes/build pertinentes, atualizar a página, operar os controles **seguros e autorizados** do escopo, medir T1 e contraprovar resultado, registrando `OWNER+SHA+URL/HOST+CONTROLE+AÇÃO+T0/T1+RESULTADO+RECEIPT`. Ações mutantes (`Sincronizar Tudo`, `Executar Automação`, deploy, sair, permissões) não são testes genéricos; exigem intenção/gates próprios. `HTTP_200 != UI_CLICK_PASS`; `UI_PRESENT != CLICK_ACK != EFFECT_PROVED`; browser read-only/sem sessão executora ⇒ `UI_E2E_PENDING`, jamais verde simulado. Não varrer todos os botões a cada tarefa; aplicar apenas o cone afetado. `127.0.0.1` da VPS não é o da Casa. O Desktop Commander externo não é pré-requisito. A presença desta instrução na `main` **não comprova** consumo na sessão local do Cline; verificar a sincronização e o ACK antes de afirmar aplicação física.
+**🍒 Cockpit-in-the-Loop — obrigação proporcional para Cline/VS Code e demais Writers UI (CHEFE, 2026-10-21).** Quando a missão alterar controles, tela, navegação, integração visível ou estados do Cockpit, antes de declarar conclusão **carregar** `.agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md`, seção `Cockpit-in-the-Loop`. O Cline na Casa usa o navegador/preview autenticado já aberto (URL medida nesta missão: `http://127.0.0.1:8080/sala-controle`) ou automação UI autorizada para mapear somente os botões/abas do escopo e medir T0. Após o delta e testes/build pertinentes, atualizar a página, operar os controles **seguros e autorizados** do escopo, medir T1 e contraprovar resultado, registrando `OWNER+SHA+URL/HOST+CONTROLE+AÇÃO+T0/T1+RESULTADO+RECEIPT`. Ações mutantes (`Sincronizar Tudo`, `Executar Automação`, deploy, sair, permissões) não são testes genéricos; exigem intenção/gates próprios. `HTTP_200 != UI_CLICK_PASS`; `UI_PRESENT != CLICK_ACK != EFFECT_PROVED`; browser read-only/sem sessão executora ⇒ `UI_E2E_PENDING`, jamais verde simulado. Não varrer todos os botões a cada tarefa; aplicar apenas o cone afetado. `127.0.0.1` da VPS não é o da Casa. O Desktop Commander externo não é pré-requisito. A presença desta instrução na `main` **não comprova** consumo na sessão local do Cline; verificar a sincronização e o ACK antes de afirmar aplicação física.
 
 **Execução.** Quando houver ferramenta e autorização válidas, execute e capture erro, saída e estado; não troque ação por plano, documentação ou comando para o CHEFE copiar. Use Hermes original quando esse for o alvo e houver rota comprovada; não simule resposta bruta, sessão, continuidade entre contas ou shell. Sem ferramenta executora, classifique a limitação da superfície e entregue o handoff mínimo ao mesmo owner, sem declarar que agiu no runtime.
 
@@ -419,7 +421,7 @@ META_LUPA_FOR_CRITICAL_SCOPE=SIM
 META_LUPA_PATH=.agents/skills/meta-lupa/SKILL.md
 META_LUPA_IDENTITY_PATH=.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA
 ESTEIRA_MOTOR_FOR_DEPLOY_RUNNER_HERMES=SIM
-ESTEIRA_MOTOR_PATH=.agents/skills/centraldark-esteira-motor/SKILL.md
+ESTEIRA_MOTOR_PATH=.agents/skills/centraldark-operational-method/Skills/centraldark-esteira-motor/SKILL.md
 GIT_CONFLICT_SINGLE_STANDARD=SIM
 GIT_CONFLICT_STANDARD_PATH=.agents/skills/git-conflict-resolve-house-standard/SKILL.md
 GIT_CONFLICT_ENGINE_PATH=scripts/dependabot/resolve-conflicts.sh
@@ -2093,7 +2095,7 @@ FIXED_POINT_CLOSES_CURRENT_DELTA_NOT_CENTRALDARK=true
 MATERIAL_DELTA_MUST_NOT_DIE_IN_CHAT=true
 PERSIST_BEFORE_FINAL_REPORT=true
 PERSIST_TO_EXISTING_CANONICAL_OWNER=true
-PERSISTENCE_OWNER=.agents/skills/centraldark-esteira-motor/SKILL.md
+PERSISTENCE_OWNER=.agents/skills/centraldark-operational-method/Skills/centraldark-esteira-motor/SKILL.md
 RECEIPT_RETURNS_TO_1757=true
 OPERATIONAL_STATUS_USER_TOUR_FIRST=true
 USER_MEANING_BEFORE_RAW_TELEMETRY=true
@@ -2505,7 +2507,7 @@ A instância específica `CENTRALDARK · MISSÃO MCP` usa dez missões e o HUD e
 
 **É um modo de operação dos owners existentes, não outro modelo, app, cérebro, gateway ou permissão.** Quando o CHEFE pedir `ZENDRIVE CLI` ou interação direta com terminal, SOL/ChatGPT organiza a intenção como uma sessão CLI: identifica alvo, envia um comando por vez no terminal autorizado, lê retorno real, reconcilia e segue. Hermes continua executor/contraprovador na rota oficial; nunca presumir que uma conversa ChatGPT web é uma sessão API autenticada.
 
-**Owners para qualquer agente/Hermes consultar:** `skills/vs-code-restore/SKILL.md` (comando `centraldark.zendriveCli` na extensão `centraldark.centraldark-vscode-restore@0.1.1`, foco no terminal existente e eventos de shell sanitizados); `.agents/skills/centraldark-vscode-log-bridge/SKILL.md` no PR #1820 (coleta Casa); `apps/modulos/mcp/src/log-funnel.js` (um único funil); `apps/modulos/HERMES-CORE` (execução); `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` (alias Zendrive `zendrive-chatgpt-local`, historicamente simulado).
+**Owners para qualquer agente/Hermes consultar:** `skills/vs-code-restore/SKILL.md` (comando `centraldark.zendriveCli` na extensão `centraldark.centraldark-vscode-restore@0.1.1`, foco no terminal existente e eventos de shell sanitizados); `.agents/skills/centraldark-operational-method/Skills/centraldark-vscode-log-bridge/SKILL.md` no PR #1820 (coleta Casa); `apps/modulos/mcp/src/log-funnel.js` (um único funil); `apps/modulos/HERMES-CORE` (execução); `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py` (alias Zendrive `zendrive-chatgpt-local`, historicamente simulado).
 
 **Fluxo fixo:** `INTENÇÃO → JANELA/TERMINAL EXISTENTE → FOCO CONFIRMADO → COMANDO AUTORIZADO → READBACK → METADADO SANITIZADO → FUNIL ÚNICO → CONTRAPROVA → RECEIPT/NEXT_CURSOR`. Não criar outro Hermes/terminal automaticamente; não registrar comando, stdout, prompt, conversa, token ou cookie; não fingir execução se só houve envio. Se shell integration não estiver ativa, `UNKNOWN` só para essa captura; a Casa continua operável. Coletor atual é periódico (1 min), não streaming instantâneo.
 
@@ -2605,3 +2607,36 @@ FIXED_POINT_HEADER_ALL_TEN_PASS_AND_GOAL_RECEIPT=USED_AND_FIXED_POINT
 HEADER_TEXT_OR_BADGE_ALONE_IS_NOT_EXECUTION_PROOF=true
 UNKNOWN_IS_NOT_PASS=true
 ACTION_IS_NOT_PROOF=true
+## Regra canônica global — portabilidade de scripts
+
+<!-- @owner: AGENTS.md + RULES.md + scripts/checker/_lib.sh | @last_updated: 2026-11-02T13:38:34.413Z | @status: IMPLEMENTADO_NO_DELTA_LOCAL -->
+
+Qualquer script novo ou modificado deve ser independente do diretório atual,
+usuário, hostname, letra de unidade, IP e caminho absoluto do ambiente onde
+vive. Antes de criar um resolvedor, reutilizar o owner existente: em Bash,
+`scripts/checker/_lib.sh`; em outras linguagens, o mecanismo idiomático de
+localização do próprio arquivo (`__file__`, `$PSScriptRoot`, equivalente) e os
+validadores já existentes.
+
+Contrato mínimo obrigatório:
+
+- localizar o script real e derivar a raiz pelo checkout/owner canônico;
+- aceitar configuração externa apenas como entrada candidata, validando-a
+  contra a raiz descoberta e bloqueando escape por `..`, symlink ou árvore irmã;
+- não introduzir `/root/...`, `C:\...`, `K:\...`, IP ou usuário como binding
+  operacional padrão;
+- regex dinâmica deve ser literal/escapada ou validada antes do uso; regex
+  inválida comprovada corrige-se no owner afetado, sem reescrever legados em
+  massa;
+- adicionar ou atualizar o teste/validator do owner e registrar a prova. A
+  ausência de prova permanece `UNKNOWN`.
+
+Esta regra vale daqui para frente e para arquivos tocados por um delta. Scripts
+legados fora do cone afetado permanecem preservados até existir causa e teste
+para uma migração específica.
+
+<!-- CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
+## Diálogo Reflexivo da Intenção - SOL, Hermes e agentes CentralDark
+
+Sempre que o CHEFE conversar sobre CentralDark, consultar a [skill canônica](.agents/skills/centraldark-operational-method/Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): distinguir ato da fala, preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; uma nova ideia é DELTA até existir mudança explícita de missão. Reparar mal-entendidos com explicação natural sem abandonar o trabalho. Para ação material, aplicar Skill Mãe + Kimetsu Remix + Michelin 3 Estrelas com evidência e contraprova. Documento salvo != Hermes consumiu no runtime.
+<!-- /CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->

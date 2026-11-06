@@ -1,3 +1,19 @@
+---
+title: "CODEX — adaptador CentralDark"
+status: "ADAPTER"
+role: "ENGINE_ADAPTER"
+engine: "CODEX"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "Codex"
+tags:
+  - centraldark
+  - adapter
+  - codex
+  - soul-sol
+---
+
 # Codex — adaptador fino CentralDark
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->

@@ -1293,3 +1293,17 @@ Owner visual REUSE: `apps/instinto-superior/src/components/central/DesignCenter.
 `NEXT_CURSOR=RECONCILIAR_OWNER_HEAD_PR → ADMIN_AUTH_READBACK → CAPTURAR_ERRO_EXATO_POWERSHELL → MEDIR_SSR_ENOSPC_MCP → MENOR_DELTA → TESTE_BUILD_AUTH_MARKETPLACE → RUNTIME_RECEIPT`
 
 **Estado deste registro:** `SCOPE_RECORDED=YES`; `ADMIN_CONFIRMED_BY_CHEFE=YES`; `ADMIN_SESSION_PROVEN=UNKNOWN`; `SCREENSHOT_SOURCE=CONVERSA_NAO_VERSIONADA`; `NEW_BUILD_OR_DEPLOY=NOT_EXECUTED`. `DOCUMENTED != EXECUTED`.
+
+<!-- CENTRALDARK_KYLIN_MENU_INCREMENTAL_20261101 -->
+## 🐧🍒 Forja openKylin — menu de diagnóstico incremental no reconciliador único
+
+**Atualizado (UTC):** 2026-11-01T02:16:10.695Z. **Owner de código único:** `scripts/centraldark-inventory-reconcile.sh`.
+
+**Decisão do CHEFE:** cada melhoria evolui esse MESMO script; nenhum segundo inventário, menu, daemon, cérebro ou executor. `--menu` (alias `--kylin-menu`) acrescenta um painel interativo de leitura que pode ser levado à Forja openKylin após migração da source. Os caminhos legados `--pulse`, `--inventory`, `--diff` e `--scan` foram preservados. **Commit/documentação não equivale a instalar ou executar a versão nova na Forja.**
+
+**Itens do mesmo menu:** 01 🐧 SO; 02 🔐 SSH; 03 🧠 pacotes nativos; 04 ⚙️ processos; 05 🤖 KyTensor HTTP/READY; 06 🦀 status KylinBot; 07 💬 conversa (somente escolha humana explícita; pode invocar provedor externo); 08 📊 diagnóstico de leitura; 09 📝 resumo de recibos já existentes; 00 🚪 sair. O menu não ativa serviços, instala pacotes, cria credenciais, sobrescreve o disco nem publica na VPS. Mostrar status somente conforme o resultado de cada comando.
+
+**Evidências T0 trazidas pelo CHEFE (01/11/2026):** `openKylin 3.0` no disco físico; `kylin-bot 0.7.5-ok1.9` e `kylin-ai-runtime` instalados; `kytensor` e `kylin-bot daemon` observados em processos; KyTensor `/v2/health/ready` retornou HTTP 200; modelos READY `ensemble-tts_melo`, `tts_melo` e `model_bank`. Em `kylin-bot status`, o provedor era `openrouter`, `model=(default)` e `Service: stopped`; o teste `kylin-bot agent -m` falhou com `OpenRouter API key not set` (sem resposta textual produzida). Esses dados são da sessão observada, não um diagnóstico runtime novo. Não copiar/registrar segredos no Git.
+
+**Validação planejada no ambiente real:** executar `bash scripts/centraldark-inventory-reconcile.sh --menu` no Linux quando a mesma source for disponibilizada; conferir opções 01–09 e ausência de mutações. Atualizar o mesmo owner ao longo das próximas descobertas, readback e SHA por incremento. **NEXT_CURSOR:** `MENU_COMMITADO_GITHUB → SOURCE_NA_FORJA → MENU_LINUX_SMOKE → PROXIMO_DELTA_MESMO_SCRIPT`.
+<!-- /CENTRALDARK_KYLIN_MENU_INCREMENTAL_20261101 -->

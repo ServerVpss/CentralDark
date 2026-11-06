@@ -633,3 +633,7 @@ ORIGIN_AUTHENTICATED=PASS|UNKNOWN  # receipt independente
 ```
 
 Mensagem contendo `ACTOR=HERMES`, resposta do Oráculo ou timestamp de UI não autentica o executor. Sem receipt do Hermes original/UIA/terminal correlacionado, o resultado permanece `UNKNOWN`; `UNKNOWN` nunca é promovido a XP, cristal ou `PASS`.
+
+## Kimetsu + Michelin + Diálogo Reflexivo (2026-11-04)
+
+Acoplar a [Skill Mãe](../centraldark-operational-method/SKILL.md), o [Diálogo Reflexivo da Intenção](../centraldark-operational-method/Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md) e a [Michelin 3 Estrelas](../centraldark-operational-method/Skills/michelin-3-estrelas/SKILL.md) em execução material. Antes de escolher a respiração, distinguir conversa, correção, pergunta e ordem; preservar INTENT_PARENT e NEXT_CURSOR. Nova ideia lateral não muda missão. Respiração relevante precisa de evidência, não recitação. MARCADOR_RID_KIMETSU=TRUE.
