@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/_lib.sh" 2>/dev/null || true
 
-CF_ENV="${CF_ENV_FILE:-/root/CentralDark/secrets/cloudflare.env}"
+CF_ENV="${CF_ENV_FILE:-$CK_CENTRALDARK_ROOT/secrets/cloudflare.env}"
 ZONE=""
 IP=""
 if [ -f "$CF_ENV" ]; then

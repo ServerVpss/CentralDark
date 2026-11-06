@@ -1,5 +1,20 @@
 # CENTRALDARK — TRIGGER FABRIC FULL PACKAGE
 
+<!-- #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_DEBUGGER | @code_ref: scripts/trigger-fabric/centraldark_master_cycle.py | @code_ref: scripts/trigger-fabric/test_centraldark_master_cycle.py | @last_updated: 2026-11-02T02:20:39.000Z -->
+
+## Auréola acionável e depuração visual
+
+`⭕ !AURÉOLA CANÔNICA` (aliases `!AUREOLA`, `!AUREULA` e variantes já
+cristalizadas em `docs/SEGURANCA/ADM-GATILHOS-OPERACIONAIS.json`) é entrada
+explícita do Trigger Fabric, atendida pelo resolvedor existente. A saída mostra
+cada gatilho como `RECONHECIDO`, `OBSERVADO` ou `NÃO ACIONADO`, separando esse
+reconhecimento do status de execução (`PASS`, `FAIL`, `UNKNOWN` etc.). Sem
+telemetria, o estágio reconhecido fica `UNKNOWN`; a trilha não é prova de
+execução nem concede autoridade de mutação.
+
+Regra global de validação e limpeza após recibo: `RULES.md`, seção
+**LEI GLOBAL — AUTOR EXECUTA E PROVA A SUÍTE**.
+
 Família canônica para interligar gatilhos, owners, motores, evidência e evolução
 da Casa sem criar cérebro concorrente, dispatcher, MCP, router, promotor ou
 workflow paralelo.

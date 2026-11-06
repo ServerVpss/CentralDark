@@ -580,3 +580,26 @@ PROVEN_HANDOFF_ROUTE=GUEST_EVIDENCE -> SESSION_COORDINATOR -> AUTHORIZED_GITHUB_
 ```
 
 Regra: não criar `.git` fake, não transformar pasta vazia em checkout e não clonar só para satisfazer ritual. Se a missão exige escrita canônica e existe writer autorizado com acesso à main, usar o handoff com evidência; materializar checkout somente quando a execução local realmente precisar dele.
+
+## 2026-11-03 | Cristal KylinBot + SDK + KyTensor no MCP CentralDark
+
+**Owner unico:** scripts/vps/kylin-native-media.py -> apps/modulos/mcp/src/tools/local/local-compute.js -> ferramenta existente kylin_native_status. Sem MCP paralelo, sem login duplicado, sem subprocesso permanente ou instalacao.
+
+**Menor delta:** kylin_native_status preserva result.runtime e result.models e acrescenta result.capability_map com schema centraldark.kylin-native-capabilities.v1. Status e observacao somente leitura, sem retornar account OAuth, paircode, senha, token ou conteudo das memorias.
+
+**Sete ferramentas nativas ja existentes no MCP:** kylin_native_status (Triton e capacidade); kylin_text_embedding (GTE); kylin_audio_synthesize (TTS/WAV); kylin_audio_transcribe (ASR); kylin_image_analyze (OCR e metadados); kylin_image_embedding (CLIP); kylin_video_analyze (OCR de frames + ASR). A tool de imagem nao e gerador visual e a tool de video nao gera video. ZH/EN TTS conhecidos, PT-BR nao comprovado. Modelo registrado nao implica READY.
+
+**CURRENT VM openKylin 03/11/2026:**
+- kylin-bot 0.7.5 no PATH, provider reportado openai-codex, modelo reportado gpt-5.6-sol, perfil OAuth openai-codex:default presente. Auth presente != inferencia viva; commit historico 69f994de56 registra inferencia aprovada em 01/11.
+- Memoria KylinBot: SQLite, healthy, 6 entradas, autosave on; apenas contagem consultada, nao o conteudo. Comando ACP existente: kylin-bot acp, JSON-RPC 2.0 em stdio. CLI ACP disponivel != ACP conectado ao MCP.
+- Gateway KylinBot: socket ~/.kylinbot/gateway.sock presente, mas nao aceitando conexoes; CLI declara Service: stopped. Nao ligar daemon ou gerar pairing apenas para mapeamento.
+- Triton nativo 2.49.0, /v2/health/live e /ready com HTTP 200. /v2/repository/index registra 30 nomes, apenas ensemble-tts_melo em READY nesta amostra. Grupos: ASR, TTS, OCR, embedding GTE/CLIP, segmentacao SAM e matting.
+- SDK bibliotecas instaladas: libkysdk-genai-nlp.so.1, libkysdk-genai-vision.so.1, libkysdk-coreai-speech.so.1, libkysdk-coreai-vision.so.1. Simbolos nativos genai_text_create_session, genai_text_init_session, genai_text_chat_async e tool choice/handler exportados; presencia de ABI nao implica binding/modelo de chat corrente.
+- MCP CentralDark respondeu com 149 ferramentas, das quais 7 Kylin nativas ja declaradas no owner local-compute.js. Este delta NAO precisa registrar uma oitava ferramenta nem alterar o catalogo.
+- Receita historica docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-KYLIN-CURRENT-BINDING-TRITON-EMBEDDING-CONTINUIDADE.md apontou INIT_FAILED:10 em outro estado. Nao converter historia da VPS em status do VMware.
+
+**Prova:** 2 testes offline passaram no adapter staged, preservando contrato e barrando conta OAuth do JSON. A execucao real do staged adapter pelo SSH guest respondeu schema v1, runtime Triton, 30 modelos, 1 READY, CLI KylinBot, OAuth presente, memoria SQLite 6, 4 bibliotecas e 7 bindings. Teste de proxy/MCP em producao exige chamada do mesmo kylin_native_status apos promover bytes do adapter canonicamente ao guest; MERGED != DEPLOYED.
+
+**Owners/refs:** Skill Mae .agents/skills/centraldark-operational-method/SKILL.md, docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md, scripts/vps/kylin-native-media.py, scripts/vps/test_kylin_native_media_status.py. Nenhum segredo, conteudo de memoria, auth URL ou codigo de pareamento versionado.
+
+**NEXT_CURSOR:** MCP result.capability_map.schema vivo em producao -> escolher a primeira capacidade util e validar inferencia real especifica -> conectar ACP somente com owner, autorizacao, pareamento e teste exigidos, sem nova stack, sem alterar Linux GUI, sem repetir a instalacao de KylinBot.

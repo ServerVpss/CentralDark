@@ -174,7 +174,7 @@ export async function POST(req: Request) {
     if (action === 'update_location_status' && location && newStatus) {
       // Atualizar status de locação (Casa/VPS/Main)
       const previousState = machineState.previousState
-      machineState[location as keyof MachineState] = newStatus
+      machineState[location as "casa" | "vps" | "main"] = newStatus as any
       machineState.previousState = previousState
       machineState.lastStateChange = new Date().toISOString()
 

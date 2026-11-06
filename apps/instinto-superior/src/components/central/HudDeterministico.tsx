@@ -206,7 +206,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
   const chosenForge = forgeAliases.find(action => action.id === forgeSelected);
   const integrity = useMemo(() => nodes.every((n, i) =>
     i === 0 ? n.uid === "L000" && n.prev_uid == null :
-    n.prev_uid === nodes[i - 1].uid && nodes[i - 1].next_uid === n.uid
+    n.prev_uid === nodes[i - 1]!.uid && nodes[i - 1]!.next_uid === n.uid
   ) && nodes.at(-1)?.next_uid === "PENDING_NEXT_CURSOR", []);
   useEffect(() => {
     if (!playing || !integrity) return;
@@ -218,7 +218,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
     }, 180);
     return () => window.clearInterval(id);
   }, [playing, integrity]);
-  const item = nodes[cursor];
+  const item = nodes[cursor]!;
   const done = integrity && cursor === nodes.length - 1;
   const selectedNode = nodes.find(node => node.uid === selected);
   const recipe = selectedNode ? [
@@ -731,6 +731,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           Fixed Point e autorização dos formulários privados. Manter uma função por owner.
         </p>
       </section>
+<<<<<<< HEAD
       <section className="panel p-6" aria-labelledby="cd-genesis-regressoes" data-cd-owner="genesis-regressao">
         <h3 id="cd-genesis-regressoes" className="text-lg font-semibold">🧪 Gênesis · regressões antes da produção</h3>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -779,6 +780,9 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         </p>
       </section>
       <GavetaForja mainShaAtual={estado?.mainSha} />
+=======
+      <GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />
+>>>>>>> origin/main
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
         source SHA {lineage.source_blob_sha.slice(0, 12)}.
