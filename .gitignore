@@ -70,6 +70,11 @@ docs/BRAIN/Excalidraw/*.excalidraw.md
 secrets/
 *.env
 !*.env.example
+# Bloqueio explícito para .env na raiz e em qualquer módulo.
+# Os exemplos continuam permitidos para documentação sem segredo.
+**/.env
+**/.env.*
+!**/.env.example
 .backups/
 
 # Dados de sistema / runtime que vazaram pra estrutura do repo (30/06/2026)
@@ -197,3 +202,31 @@ id_dsa
 # Status runtime do auto-sync (scripts/vps/auto-sync-main.sh); reescrito a cada ciclo.
 # Versionado ele sujava /root/CentralDark e o proprio auto-sync ficava BLOCKED.
 logs/auto-sync-status.json
+
+# Obsidian Git: backup de VM/WSL, caches locais e estado volátil nunca são fonte Git.
+# K:\WSL contém discos do sistema openKylin; nunca enviar o conteúdo pesado ao Git.
+# Gitignore atua só sobre arquivos ainda não rastreados; histórico existente é preservado.
+/WSL/*.tar
+/WSL/*.tar.gz
+/WSL/**/*.tar
+/WSL/**/*.tar.*
+# WSL virtual disks are local runtime state; never stage new VHDX images.
+/WSL/**/*.vhdx
+/WSL/**/*.vhdx.*
+/**/.centraldark-fp/
+/centraldark-desktop/
+/Remote-Tray/_build/
+/Remote-Tray/*.exe
+/.codeagentswarm/mcp-servers/codeagentswarm-tasks/data/
+/docs/.claudian/
+# Saídas de investigação local (nomes de chaves/diagnósticos), não receitas canônicas.
+/core_keys_*.txt
+/*_keys.txt
+/*_namespace_matches.txt
+/meta-lupa-gate*.json
+/gate-prova-consolidado-meta-lupa.json
+
+# Local agent runtime/cache and temporary embedded worktrees; never Git source.
+/.codeagentswarm/
+/c/
+/k/hermes-desktop-src/

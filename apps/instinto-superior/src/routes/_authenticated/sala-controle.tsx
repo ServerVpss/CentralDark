@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect } from "react";
@@ -9,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { verificarAdmin } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/sala-controle")({
+  validateSearch: z.object({ aba: z.string().max(64).optional() }).passthrough().catch({}),
   component: SalaControle,
   head: () => ({
     meta: [

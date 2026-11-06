@@ -14,7 +14,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-import { BlocoEstado, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
+import { BlocoEstado, rotuloEstadoHumano, rotuloTecnicoHumano, type EstadoOperacional } from "@/components/central/EstadoCentralDark";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { useNotificationsLog } from "@/hooks/useNotificationsLog";
@@ -25,7 +25,7 @@ export const SEM_FONTE = "Sem fonte operacional autorizada nesta superfície.";
 export function RotuloEstado({ estado }: { estado: EstadoOperacional }) {
   return (
     <span className="rounded-md border border-border bg-muted/50 px-2 py-1 font-mono text-[10px] text-muted-foreground">
-      {estado}
+      {rotuloEstadoHumano(estado)}
     </span>
   );
 }
@@ -58,7 +58,7 @@ function ProvedoresInfraSeguranca({ estado }: { estado: EstadoCentralDark | unde
   const medidoEm = estado?.atualizadoEm ? Date.parse(estado.atualizadoEm) : NaN;
   const fresco =
     Number.isFinite(medidoEm) && Date.now() - medidoEm >= 0 && Date.now() - medidoEm < 60_000;
-  const valorVivo = (v: string | undefined) => (fresco && v ? v : "UNKNOWN");
+  const valorVivo = (v: string | undefined) => (fresco && v ? rotuloTecnicoHumano(v) : "Ainda não verificado");
 
   const botoes: { id: ProvedorInfra; nome: string; icone: typeof Database }[] = [
     { id: "supabase", nome: "Supabase", icone: Database },
@@ -183,7 +183,7 @@ function ProvedoresInfraSeguranca({ estado }: { estado: EstadoCentralDark | unde
             <p>
               {provedor === "supabase"
                 ? "Há alertas conhecidos no Supabase, mas a quantidade atual não está sendo consultada nesta tela."
-                : "Dados de segurança do provedor ainda não conectados; estado UNKNOWN."}
+                : "Os dados de segurança deste provedor ainda não estão conectados nesta tela."}
             </p>
           </div>
           <p className="mt-3 text-sm text-white/60">
@@ -285,7 +285,7 @@ function CredenciaisCofre() {
     } catch {
       setLoaded(false);
       setItems([]);
-      setStatus("AUTH_REQUIRED / UNKNOWN — cofre Supabase não comprovado nesta sessão.");
+      setStatus("Não foi possível acessar o cofre nesta sessão. Entre novamente e tente atualizar.");
     }
   }
   useEffect(() => {

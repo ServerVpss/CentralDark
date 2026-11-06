@@ -216,8 +216,10 @@ export const CRISTAL = {
 };
 
 export const VAULT = {
-  raiz: "Obsidian Vault › 🪬Centraldark -HUD🪬",
-  notas: ["HUD.html", "Home.md", "Pendências.md", "Bem-vindo.md"],
+  // Obsidian is a consumer of normal notes/scripts, not the HUD owner.
+  ownerCockpit: "apps/instinto-superior/src/components/central/HudDeterministico.tsx",
+  raiz: "docs/HUD + docs/BRAIN",
+  notas: ["docs/HUD/README.md", "docs/HUD/HUD-CONVERSA-2026-10-15.md"],
   pluginsComunidade: [
     "obsidian-git",
     "dataview",
@@ -253,7 +255,7 @@ export const VAULT = {
     "Separar telepainel / CRM / Multizap / bot WhatsApp",
   ],
   diferenca:
-    "HUD.html é a projeção estática do vault; apps/modulos/obsidian-plugin-grafo-vivo é o plugin vivo. O cockpit é o único corpo visual (ONE_SYSTEM_ONLY).",
+    "HUD.html é origem histórica retirada da main; HudDeterministico.tsx é a projeção de inventário no cockpit. apps/modulos/obsidian-plugin-grafo-vivo preserva o plugin vivo. Paridade funcional e deploy continuam sem prova.",
 };
 
 export const PAINEIS_HISTORICOS = [

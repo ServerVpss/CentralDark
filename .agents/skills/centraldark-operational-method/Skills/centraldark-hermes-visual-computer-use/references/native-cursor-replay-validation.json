@@ -1,0 +1,58 @@
+{
+  "cleanup": "completed",
+  "receipt": {
+    "session": "hermes-visual-blink-6184ebbf3a",
+    "mode": "native_cua_cursor_and_monitor_preview",
+    "monitors": [
+      {
+        "number": 1,
+        "device": "\\\\.\\DISPLAY1",
+        "cursor_origin": [
+          2460.0,
+          -159.0
+        ],
+        "cycles": 3,
+        "execution": "completed",
+        "visual_confirmation": "requires_human_or_independent_evidence"
+      },
+      {
+        "number": 2,
+        "device": "\\\\.\\DISPLAY4",
+        "cursor_origin": [
+          960.0,
+          -702.0
+        ],
+        "cycles": 3,
+        "execution": "completed",
+        "visual_confirmation": "requires_human_or_independent_evidence"
+      },
+      {
+        "number": 3,
+        "device": "\\\\.\\DISPLAY2",
+        "cursor_origin": [
+          -540.0,
+          -156.0
+        ],
+        "cycles": 3,
+        "execution": "completed",
+        "visual_confirmation": "requires_human_or_independent_evidence"
+      },
+      {
+        "number": 4,
+        "device": "\\\\.\\DISPLAY3",
+        "cursor_origin": [
+          960.0,
+          378.0
+        ],
+        "cycles": 3,
+        "execution": "completed",
+        "visual_confirmation": "requires_human_or_independent_evidence"
+      }
+    ],
+    "cursor_session": "hermes-8c54569d6487",
+    "completed": true
+  },
+  "skill_discovery": "PASS: real Hermes skill_view",
+  "original_tools": "PASS: all six registered",
+  "visual_confirmation": "Previous native cursor rendering confirmed by CHEFE photo; current four-monitor replay execution completed, human confirmation pending."
+}

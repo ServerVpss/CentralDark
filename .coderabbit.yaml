@@ -1,182 +1,401 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# 🐰 CENTRALDARK | LEGENDA OPERACIONAL DO CODERABBIT
+# Configuração oficial mantida; este delta apenas acrescenta comentários em PT-BR.
+# Como ler: função, decisão e efeito esperado de cada opção.
+# O JUDGE sugere; Writer autorizado escreve; evidência decide. UNKNOWN != PASS.
+#
+# HERANÇA
+# Mantém a configuração compartilhada do CodeRabbit quando aplicável.
+# Não alterar sem avaliar regras herdadas fora deste arquivo.
 inheritance: true
+# IDIOMA
+# Respostas e recomendações em português brasileiro.
+# Nomes técnicos, chaves e caminhos permanecem como no código.
 language: "pt-BR"
+# TOM CENTRALDARK
+# Prioriza problemas P0/P1, causa, impacto, teste e rollback.
+# UNKNOWN ou SKIPPED não significam PASS; prova sempre vence narrativa.
 tone_instructions: "Direto, técnico e orientado a evidência. Priorize P0/P1, causa, impacto, teste, contraprova, rollback e receipt. Não transforme UNKNOWN, SKIPPED ou ausência de prova em PASS."
+# RECURSOS ANTECIPADOS
+# Mantém a escolha existente por recursos novos do fornecedor.
+# Mudanças podem alterar funcionalidades disponíveis.
 early_access: true
+# PLANO GRATUITO
+# Preserva a compatibilidade configurada com o nível gratuito.
+# Não pressupõe cota, custo ou acesso efetivo da conta.
 enable_free_tier: true
 
+# REVISÃO DOS PRS
+# O CodeRabbit é um JUDGE consultivo, nunca Writer ou Promotor.
+# Seus pareceres não substituem aprovação humana nem testes do SHA.
 reviews:
+  # INTENSIDADE DA REVISÃO
+  # Assertive favorece mais achados; chill costuma gerar menos ruído.
+  # A decisão atual é priorizar cobertura com critérios próprios de severidade.
   profile: "assertive"
+  # BLOQUEIO AUTOMÁTICO
+  # False evita o fluxo automático de solicitar mudanças pelo revisor.
+  # Os gates obrigatórios continuam sob controle do repositório.
   request_changes_workflow: false
+  # RESUMO DO PR
+  # Mostra a finalidade e o impacto global da alteração.
   high_level_summary: true
+  # RESUMO NO WALKTHROUGH
+  # Coloca o contexto junto ao passeio pelos arquivos modificados.
   high_level_summary_in_walkthrough: true
+  # SITUAÇÃO DA REVISÃO
+  # Exibe o estado do revisor, não aprovação de código.
   review_status: true
+  # DETALHES DA REVISÃO
+  # Facilita conferir o que foi examinado e quais achados restam.
   review_details: true
+  # PROGRESSO DA REVISÃO
+  # Visibilidade do andamento, distinta dos checks de CI.
   review_progress: true
   # review_progress sozinho nao garante que uma falha do mecanismo de revisao
   # vire falha visivel no commit status; fail_commit_status fecha esse gap.
+  # STATUS DE FALHA
+  # Se o mecanismo da revisão falhar, o commit status torna isso visível.
+  # Não se confunde com erro de build, teste ou deploy.
   fail_commit_status: true
+  # ARQUIVOS ALTERADOS
+  # Visão rápida do delta para inspecionar o escopo real.
   changed_files_summary: true
+  # DIAGRAMAS DE FLUXO
+  # Auxiliam na compreensão de interações entre módulos.
+  # Não comprovam que uma integração funciona no runtime.
   sequence_diagrams: true
+  # ESFORÇO ESTIMADO
+  # Indica complexidade provável de revisão, não horas reais medidas.
   estimate_code_review_effort: true
+  # ISSUES VINCULADAS
+  # Compara a mudança com o objetivo das issues citadas.
   assess_linked_issues: true
+  # ISSUES RELACIONADAS
+  # Ajuda a achar antecedentes e requisitos próximos.
   related_issues: true
+  # PRS RELACIONADOS
+  # Evita deixar passar correções que já existem em PR equivalente.
   related_prs: true
+  # SUGESTÃO DE RÓTULOS
+  # Classificação consultiva sem permissão de escrita automática.
   suggested_labels: true
+  # SUGESTÃO DE REVISORES
+  # Não substitui CODEOWNERS nem aprovação obrigatória.
   suggested_reviewers: true
+  # SEM POESIA
+  # Reduz ruído e mantém a revisão objetiva.
   poem: false
+  # ORIENTAÇÃO PARA AGENTES
+  # Sugestões do revisor não autorizam alteração automática por outro ator.
   enable_prompt_for_ai_agents: true
+  # AUTO-REVISÃO
+  # Controla quando o bot examina o PR e atualizações posteriores.
   auto_review:
+    # ATIVAÇÃO
+    # True inicia revisões elegíveis automaticamente.
     enabled: true
+    # DRAFTS
+    # True permite encontrar problemas antes de o PR estar pronto.
+    # Não promove rascunhos nem libera merge.
     drafts: true
+    # REVISÃO INCREMENTAL
+    # Verifica novas alterações após pushes, sem congelar no diff inicial.
     auto_incremental_review: true
     # Branches ativas geram muitos pushes. 2 preserva revisao incremental e
     # evita que cada commit consuma a cota ate bater rate/spending cap.
+    # CONTROLE DE COTA
+    # O limite 2 reduz gasto e repetição em branches de muitos commits.
+    # Pausa automática não é sinal de revisão concluída.
     auto_pause_after_reviewed_commits: 2
   # O revisor externo deve gastar contexto em achados consequenciais. Higiene
   # generica de titulo/body/docstring/issue ja e governada pelos contratos e
   # gates determinísticos do repositorio, portanto nao duplica bloqueio aqui.
+  # CHECKS EDITORIAIS
+  # Os checks genéricos abaixo ficam desligados; o projeto mantém CI,
+  # proteção de branch e validações determinísticas próprias.
   pre_merge_checks:
     docstrings:
+      # DOCSTRINGS
+      # Off: não bloquear por exigência editorial genérica.
       mode: "off"
     title:
+      # TÍTULO DO PR
+      # Off: deixa o gate de metadados ao contrato existente.
       mode: "off"
     description:
+      # DESCRIÇÃO DO PR
+      # Off: não criar bloqueio redundante de escrita editorial.
       mode: "off"
     issue_assessment:
+      # AVALIAÇÃO DE ISSUE
+      # Off: não duplicar políticas específicas de issues.
       mode: "off"
   # Recursos capazes de ESCREVER (commit, PR, alteracao de codigo) ficam
   # desligados explicitamente: por omissao vinham habilitados, o que viola o
   # modo somente leitura do revisor e contorna o WRITER_HANDOFF (writer unico
   # por escopo). Revisor le e aponta; quem escreve e o Writer autorizado.
+  # JUDGE EM SOMENTE LEITURA
+  # Desativa edições, correções e testes criados pelo revisor.
+  # Só o Writer autorizado pode fazer commit, obedecendo gates e receipts.
   finishing_touches:
     docstrings:
+      # DOCSTRINGS AUTOMÁTICAS
+      # False: o bot não reescreve documentação de funções.
       enabled: false
     autofix:
+      # AUTOFIX
+      # False: sugestões exigem decisão e execução por Writer.
       enabled: false
     fix_ci:
+      # CORREÇÃO DE CI
+      # False: revisor não modifica código para consertar jobs.
       enabled: false
     resolve_merge_conflict:
+      # CONFLITOS
+      # False: revisor não escolhe lado nem reescreve árvore Git.
       enabled: false
     unit_tests:
+      # TESTES AUTOMÁTICOS
+      # False: não adiciona testes diretamente ao PR.
       enabled: false
+  # REGRAS POR CAMINHO
+  # As instruções abaixo protegem owners e políticas da CentralDark.
+  # São critérios de revisão, não permissão de modificar esses arquivos.
   path_instructions:
+    # AGENTS.MD
+    # Regras de autoridade, boot e único Writer por escopo.
     - path: "AGENTS.md"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Verifique autoridade, ordem de boot, escritor único por escopo,
         separação Writer/Judge/Promotor, fail-closed e compatibilidade com
         LEIA-ME-IA.md. Não aceite UNKNOWN, SKIPPED ou ausência de prova como PASS.
+    # LEIA-ME-IA
+    # Entrada canônica; impedir autoridade ou fallback concorrente.
     - path: "LEIA-ME-IA.md"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Trate como contrato canônico de entrada. Sinalize qualquer mudança que
         crie autoridade concorrente, fallback silencioso ou desvio do mapa atual.
+    # ARQUITETURA
+    # Evitar V2/V3, entrypoints e sistemas paralelos.
     - path: "docs/ARQUITETURA/**"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Confronte a documentação com AGENTS.md, LEIA-ME-IA.md e o mapa canônico.
         Sinalize contradições de autoridade, entrypoints concorrentes e versões
         paralelas V2/V3/NOVO/FINAL/COPY/BACKUP.
+    # PLANO MESTRE
+    # Conferir PRs dependentes, runtime e continuidade.
     - path: "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Verifique se o delta respeita o programa vivo, as dependências entre
         PRs-filhos, a separação Casa/VPS/GitHub e os gates humanos existentes.
+    # ACTIONS
+    # Privilégios mínimos, SHA esperado e separação Writer/Judge/Promotor.
     - path: ".github/workflows/**"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Verifique menor privilégio, separação de credenciais entre Writer, Judge
         e Promotor, checkout preso ao SHA esperado, ausência de código não
         confiável com token privilegiado e nenhum fallback silencioso.
+    # DEPENDABOT
+    # Registry consultivo; nada de resolver conflito desconhecido por suposição.
     - path: "scripts/dependabot/known-conflict-patterns.json"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Trate como registry estruturado e consultivo de conflitos recorrentes do
         motor único Dependabot. Não aceite política paralela: a resolução
         continua em scripts/dependabot/resolve-conflicts.sh. Conflito desconhecido
         deve bloquear como UNKNOWN_CONFLICT_PATH, não ser auto-resolvido.
+    # SCRIPTS
+    # Timeout, prova, rollback e segredos sanitizados.
     - path: "scripts/**"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Exija evidência reproduzível, timeout explícito, erro fail-closed,
         sanitização de secrets, dry-run, rollback e receipt preso ao HEAD testado.
+    # COCKPIT E APLICATIVOS
+    # Reutilização e compatibilidade antes de duplicar módulo.
     - path: "apps/**"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Sinalize duplicação de módulos ou entrypoints, mudança fora do mapa,
         efeitos colaterais sem autorização e regressões de compatibilidade.
+    # CRM
+    # Módulo integrado, não produto paralelo.
     - path: "src/apps/modulos/crm/**"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Trate CRM como módulo do sistema único, não como produto concorrente.
         Exija contratos de integração, migração reversível e ausência de duplicação.
+    # REGRA TRANSVERSAL
+    # Verificar Learnings e classificar FACT/INFERENCE/UNKNOWN.
     - path: "**/*"
+      # CONTRATO DO CAMINHO
+      # A revisão aplica a regra deste escopo sem inventar novos owners.
       instructions: >-
         Antes de concluir, confronte os Learnings aplicáveis, issues relacionadas,
         PRs anteriores e guidelines canônicas. Classifique achados como FACT,
         INFERENCE ou UNKNOWN e priorize apenas lacunas consequenciais.
 
+# INTERAÇÃO COM O BOT
+# Comentários seguem a política de acesso da organização.
 chat:
   # Usuario externo a organizacao nao interage com o revisor deste repositorio.
   # allow_non_org_members vinha true por padrao; explicitado como false para
   # nao depender de heranca nem de default do fornecedor.
+  # ACESSO EXTERNO
+  # False preserva a restrição existente para não membros da organização.
   allow_non_org_members: false
+  # RESPOSTA AUTOMÁTICA
+  # True permite resposta a interlocutores autorizados.
   auto_reply: true
 
+# BASE DE CONHECIMENTO
+# Ajuda a analisar código com contexto, sem substituir a main viva.
 knowledge_base:
+  # CONHECIMENTO DO FORNECEDOR
+  # False mantém a participação da base configurada; mudança exige
+  # avaliar privacidade e efeitos de compartilhamento de contexto.
   opt_out: false
+  # PESQUISA EXTERNA
+  # Consulta pública complementa a documentação, não substitui evidência da Casa.
   web_search:
+    # WEB SEARCH
+    # True permite buscar contexto técnico ao revisar.
     enabled: true
+  # DIRETRIZES CANÔNICAS
+  # Carrega instruções versionadas do próprio organismo.
   code_guidelines:
+    # LEITURA DE GUIDELINES
+    # True mantém o uso das diretrizes a seguir.
     enabled: true
+    # ARQUIVOS GUIA
+    # LEIA-ME-IA, arquitetura e plano mestre orientam análise.
+    # Documentação não equivale a execução comprovada.
     filePatterns:
       - "LEIA-ME-IA.md"
       - "docs/ARQUITETURA/**/*.md"
       - "docs/PLANO-MESTRE-RETOMADA-CASA-METALUPA-APIS-NEGOCIOS.md"
+  # APRENDIZADOS
+  # Reuso de observações relevantes em revisões deste projeto.
   learnings:
+    # ESCOPO LOCAL
+    # Não confundir aprendizados da CentralDark com outros repositórios.
     scope: "local"
+  # HISTÓRICO DE ISSUES
+  # Consulta problemas anteriores para evitar redescoberta.
   issues:
+    # ESCOPO LOCAL
+    # Usa issues do próprio repositório.
     scope: "local"
+  # HISTÓRICO DE PRS
+  # Consulta propostas anteriores; aberto não significa merged.
   pull_requests:
+    # ESCOPO LOCAL
+    # Usa PRs deste repositório.
     scope: "local"
   # MCP desativado por decisao de seguranca (finding do PR 585).
   # "enabled" com disabled_servers vazio herda TODOS os servidores MCP —
   # incluindo ferramentas mutaveis (execute_command, escrita, deploy, PM2).
   # Permanece desativado ate existir allowlist explicita, versionada, testada
   # e deny-by-default. Nao reativar sem esse gate.
+  # MCP DESABILITADO
+  # Achado de segurança do PR #585: não expor comandos, deploy ou VPS ao JUDGE.
+  # Qualquer ativação exige allowlist explícita e prova independente.
   mcp:
+    # DESLIGAMENTO DO MCP
+    # Disabled impede o revisor de utilizar os MCPs da CentralDark.
     usage: "disabled"
+    # LISTA DE BLOQUEIO
+    # Vazia não significa acesso liberado, pois usage segue disabled.
+    # Não trocar por enabled sem negar por padrão.
     disabled_servers: []
 
+# PLANEJAMENTO DE ISSUES
+# Organiza propostas sem modificar a infraestrutura.
 issue_enrichment:
   # Publicacao automatica de enrichment fica desligada por padrao (revisor
   # somente-leitura); planning.enabled continua true, mas auto_planning fica
   # desligado ate existir aprovacao explicita para o revisor abrir plano sozinho.
+  # ENRIQUECIMENTO AUTOMÁTICO
+  # Publicação automática permanece desativada.
   auto_enrich:
+    # SEM PUBLICAÇÃO AUTOMÁTICA
+    # False preserva decisão humana.
     enabled: false
+  # PLANEJAMENTO
+  # Recurso disponível, execução automática separadamente controlada.
   planning:
+    # PLANEJAMENTO DISPONÍVEL
+    # True permite usar capacidade de planejamento.
     enabled: true
+    # AUTO-PLANEJAMENTO
+    # Controla se o revisor cria planos espontaneamente.
     auto_planning:
+      # PLANEJAMENTO NÃO AUTOMÁTICO
+      # False: sem planos autogerados sem solicitação.
       enabled: false
+      # RÓTULOS DE PLANEJAMENTO
+      # Mantidos os nomes atuais; não são permissão para executar.
       labels:
         - "plan-me"
         - "!no-plan"
         - "!blocked"
+  # CATEGORIAS DE ISSUES
+  # A taxonomia ajuda encaminhar trabalho ao owner correto.
   labeling:
+    # APLICAÇÃO DE RÓTULOS
+    # False: o revisor sugere, mas não altera automaticamente.
     auto_apply_labels: false
+    # DESCRIÇÕES DAS CATEGORIAS
+    # Preservam significado dos rótulos sem mudança de workflow.
     labeling_instructions:
+      # PLANEJAR
+      # Missão ampla com decomposição, dependências e owners.
       - label: "plan-me"
         instructions: >-
           Missão ou mudança ampla que exige pesquisa do repositório, decomposição,
           ownership por escopo, dependências e plano agent-ready antes da escrita.
+      # BLOQUEADO
+      # Falta gate, autorização, prova ou dependência.
       - label: "blocked"
         instructions: >-
           Existe dependência, conflito de writer, ausência de prova crítica ou gate
           humano obrigatório que impede avanço seguro.
+      # SEGURANÇA
+      # Credenciais, autenticação, exposição, menores privilégios.
       - label: "security"
         instructions: >-
           Mudança ou achado relacionado a credenciais, permissões, exposição,
           autenticação, sandbox, secret scan ou menor privilégio.
+      # SOL
+      # Interação, desktop, voz, Codex ou bridge.
       - label: "sol"
         instructions: >-
           Mudança relacionada ao SOL Desktop, voz, Codex, bridge, interface ou
           experiência voice-first.
+      # VPS E LINUX
+      # Serviços, PM2, Docker, systemd, proxy e rede.
       - label: "vps"
         instructions: >-
           Mudança relacionada a Linux, Docker, PM2, systemd, Caddy, firewall,
           Portainer, observabilidade ou execução na VPS.
+      # DELTA
+      # Handoff, recibo, memória, continuidade e NEXT_CURSOR.
       - label: "delta"
         instructions: >-
           Mudança relacionada ao contrato Delta, ledger append-only, handoff,

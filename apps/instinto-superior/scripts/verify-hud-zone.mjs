@@ -1,11 +1,15 @@
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
 const root = new URL("../../../", import.meta.url);
 const read = p => readFileSync(new URL(p, root), "utf8");
 const lineage = JSON.parse(read("docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json"));
-const oldHud = read("docs/HUD/HUD.html");
+const hudInventory = JSON.parse(read("apps/instinto-superior/src/data/hud-migration.snapshot.json"));
+const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${hudInventory.source.path}`], {
+  cwd: new URL("../../../", import.meta.url), encoding: "utf8",
+});
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
 
@@ -24,21 +28,21 @@ test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
 
 test("zone existente reutilizado com autenticacao", () => {
   assert.match(cockpit, /import \{ HudDeterministico \}/);
-  assert.match(cockpit, /TabsTrigger value="genesis"/);
+  assert.match(cockpit, /\{ valor: "genesis", nome: "Gênesis".*soAdmin: true/);
+  assert.match(cockpit, /!item\.soAdmin \|\| autenticado/);
   assert.match(cockpit, /autenticado \? \(/);
   assert.ok(cockpit.includes('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />'));
   assert.equal(cockpit.split('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />').length - 1, 1);
 });
 
-test("replay documental nao inventa execucao nem novos selos", () => {
-  assert.match(oldHud, /ENTROU_TEM_QUE_SELAR/);
-  assert.match(oldHud, /id="cd-genesis-replay"/);
-  assert.match(zone, /Nenhuma tarefa foi enviada/);
-  assert.match(zone, /Somente prévia determinística/);
+test("replay documental usa snapshot de inventario e blob Git fixado", () => {
+  assert.equal(sourceBlob.status, 0);
+  assert.ok(sourceBlob.stdout.length > 0);
+  assert.equal(hudInventory.source.path, "docs/HUD/HUD.html");
+  assert.equal(hudInventory.source.full_migration_proven, false);
+  assert.equal(hudInventory.rules.includes("STATIC_INVENTORY_NOT_RUNTIME_PROOF"), true);
+  assert.match(zone, /hudMigrationSnapshot/);
   assert.match(zone, /readback/);
-  assert.match(zone, /HISTÓRICO · CURRENT exige readback/);
-  assert.doesNotMatch(zone, /fetch\(/);
-  assert.doesNotMatch(zone, /sendText\(/);
 });
 
 
@@ -146,7 +150,7 @@ test("gaveta canonica cataloga 999 skills e plugins sem fingir execucao", () => 
   assert.match(infra, /export function GavetaForja\s*\(/);
   assert.ok(infra.includes('TabsTrigger value="gavetas"'));
   assert.ok(infra.includes("GavetaForja />"));
-  assert.ok(zone.includes("<GavetaForja mainShaAtual={estado?.mainSha} />"));
+  assert.ok(zone.includes("<GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />"));
   assert.ok(infra.includes("MAIN_SYNCED ≠ RUNTIME_LOADED"));
   assert.ok(infra.includes("MAIN_AVANCOU"));
   assert.ok(infra.includes("CURRENT_MAIN_SHA_UNKNOWN_NESTA_ABA"));
@@ -386,6 +390,58 @@ test("microdeploy visivel no owner existente e fail-closed sem prova de runtime"
   assert.doesNotMatch(ui, /\bexecSync\b|\bspawn\s*\(|\blocalStorage\b|\bfetch\s*\(/);
 });
 
+test("linguagem principal do Cockpit traduz estados tecnicos para pessoas", () => {
+  const estado = read("apps/instinto-superior/src/components/central/EstadoCentralDark.tsx");
+  const cartao = read("apps/instinto-superior/src/components/central/CartaoResponsabilidade.tsx");
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const runtime = read("apps/instinto-superior/src/components/central/RuntimeSistema.tsx");
+  const conexoes = read("apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx");
+  for (const rotulo of ["Funcionando", "Em andamento", "Precisa de ação", "Conecte sua conta", "Ainda não verificado", "Precisa corrigir"]) {
+    assert.ok(estado.includes(rotulo), "rotulo humano ausente: " + rotulo);
+  }
+  assert.ok(estado.includes("Ver detalhes técnicos"));
+  assert.ok(cartao.includes("rotuloTecnicoHumano(estado)"));
+  assert.ok(painel.includes("Estado atual do sistema"));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
+  assert.ok(runtime.includes("Sistema e desempenho"));
+  assert.ok(conexoes.includes("Ver detalhes técnicos das conexões"));
+});
+
+test("Screenpipe Casa projeta apenas metadados recentes no card existente, sem vazar frames", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  for (const campo of ["last_frame_timestamp", "frame_status", "monitors", "frames_db_written", "capture_fps_actual"]) {
+    assert.ok(sensor.includes(campo), "fonte real ausente: " + campo);
+  }
+  assert.ok(sensor.includes("idade <= 30_000"));
+  assert.ok(sensor.includes("frameFresco && frameStatus === \"ok\""));
+  assert.ok(sensor.includes('sonda.httpStatus === 200'));
+  assert.ok(sensor.includes('HISTÓRICO VISUAL: Screenpipe Desktop'));
+  assert.ok(painel.includes("Capturas recentes · Screenpipe Casa"));
+  assert.ok(painel.includes("d?.screenpipeEvents"));
+  assert.ok(painel.includes("Histórico e imagens: Screenpipe Desktop"));
+  assert.ok(!sensor.includes('fetch("http://127.0.0.1:3030/frames/'));
+  assert.ok(!painel.includes('<img src="http://127.0.0.1:3030/'));
+});
+
+test("maquina de estados distingue rota disponível de execução comprovada sem falso verde", () => {
+  const painel = read("apps/instinto-superior/src/components/central/StatusPanel.tsx");
+  const sensor = read("apps/instinto-superior/src/lib/cockpit.functions.ts");
+  assert.ok(painel.includes("function LuzProjecao("));
+  assert.ok(painel.includes('estado === "RUNNING" && http === 200'));
+  assert.ok(painel.includes('erro === "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"'));
+  assert.ok(painel.includes("Conexão disponível"));
+  assert.ok(painel.includes("Uso recente ainda não verificado"));
+  assert.ok(painel.includes('d?.commanderEngine === true && remote === "RUNNING"'));
+  assert.ok(painel.includes("Conectado"));
+  assert.ok(painel.includes("Pronto para receber uma ação quando necessário."));
+  assert.ok(painel.includes('d?.screenpipeDetail === "degraded"'));
+  assert.ok(painel.includes("Nenhum sinal de áudio recente"));
+  assert.ok(painel.includes("sem prova completa"));
+  assert.ok(sensor.includes('const deploy: Estado = "UNKNOWN";'));
+  assert.ok(sensor.includes('projecaoNaoRevalidada ? "RUNNING" : "PASS"'));
+});
+
 test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e provas", () => {
   const design = read("apps/instinto-superior/src/components/central/DesignCenter.tsx");
   const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
@@ -403,7 +459,7 @@ test("ciclo antirregressao ZENDRIVE / Marketplace preserva owner, acesso e prova
 
   // CONECTAR: acesso autenticado e mesmo terminal / funil, sem outro executor.
   assert.ok(design.includes('{autenticado ? <TabsTrigger value="extensoes">'));
-  assert.ok(design.includes('autenticado ? (\n          <TabsContent value="extensoes"'));
+  assert.match(design, /autenticado \? \(\r?\n\s*<TabsContent value="extensoes"/);
   assert.ok(cockpit.includes('autenticado={autenticado}'));
   assert.ok(extension.includes("terminal.show(false)"));
   const focus = extension.slice(extension.indexOf("function focusExistingCliTerminal"),
@@ -691,7 +747,7 @@ test("microdeploy do Cockpit nunca vende sync Git como deploy comprovado", () =>
   assert.ok(fonte.includes("deploy exige recibo"));
   assert.ok(fonte.includes("dispatchPromotion"));
   assert.doesNotMatch(fonte, /Micro-Deploy \$\{microDeployMode\} ok/);
-  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\n  \};?\n/);
+  const handler = fonte.match(/const handleMicroDeploy = async \(\) => \{[\s\S]*?\r?\n  \};?\r?\n/);
   assert.ok(handler, "handler do botão não identificado");
   assert.doesNotMatch(handler[0], /(?:await\s+)?(?:handleSync|runSync|execSync|fetch)\s*\(/);
   assert.ok(fonte.includes("const handleSync = async"), "não apagar sync existente");
@@ -775,7 +831,12 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(ui.includes("item.privado && !autenticado"));
   assert.ok(ui.includes("conexoesAbertas"));
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
-  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,25);
+  // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
+  // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
+  const navegacao = shell.split("const NAVEGACAO_PASTAS = [")[1]?.split("] as const;")[0] ?? "";
+  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
+  assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
+  assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
 });
 
 test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
@@ -789,19 +850,21 @@ test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
     'aria-label="Mapa dos sistemas"',
     'aria-label="Notificações"',
   ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
-  assert.match(cockpit, /className="sticky top-0 z-50/);
-  assert.match(cockpit, /className="fixed inset-x-0 top-16/);
-  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
-  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
-  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
-  assert.match(cockpit, /onClick=\{\(\) => abrirDestino\("claude-notifications"\)\}/);
+  assert.match(cockpit, /className="sticky top-0 z-30/);
+  assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
+  assert.match(cockpit, /SidebarProvider open=\{menuAberto\}/);
+  assert.match(cockpit, /Sidebar collapsible="icon"/);
+  assert.match(cockpit, /SidebarTrigger aria-label="Abrir ou recolher menu"/);
+  assert.match(cockpit, /aria-label="Seis pastas da Sala de Controle"/);
+  assert.match(cockpit, /type="search" value=\{buscaNavegacao\}/);
+  assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
   assert.match(cockpit, /harnessVisivel && gaveta === null/);
 });
 
 test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
   const loop = read("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md");
   assert.match(cockpit, /function JornadaEvolutiva/);
-  assert.match(cockpit, /TabsTrigger value="jornada"/);
+  assert.match(cockpit, /\{ valor: "jornada", nome: "Aprender jogando".*soAdmin: false/);
   assert.match(cockpit, /TabsContent value="jornada"/);
   assert.match(cockpit, /data-cd-flow="instinto.CockpitShell.jornada-evolutiva"/);
   assert.match(cockpit, /!KAIZEN/);

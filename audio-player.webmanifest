@@ -1,0 +1,11 @@
+{
+  "name": "CentralDark Player local",
+  "short_name": "CD Player",
+  "lang": "pt-BR",
+  "start_url": "./audio-player.html",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#111827",
+  "description": "Player local simples para testar fontes de áudio compatíveis com navegador.",
+  "icons": []
+}

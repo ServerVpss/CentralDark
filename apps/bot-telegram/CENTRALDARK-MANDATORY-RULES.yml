@@ -110,7 +110,7 @@ mandatory_rules:
     canonical_human: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md
     canonical_machine: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.json
     canonical_binding: docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.yml
-    agent_skill: .agents/skills/centraldark-live-editing-fabric/SKILL.md
+    agent_skill: .agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md
     operational_default: true
     formula:
     - CHEFE_EDITA
