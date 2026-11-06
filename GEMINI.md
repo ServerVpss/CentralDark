@@ -1,3 +1,19 @@
+---
+title: "GEMINI — adaptador CentralDark"
+status: "ADAPTER"
+role: "ENGINE_ADAPTER"
+engine: "GEMINI"
+canonical_source: "LEIA-ME-IA.md"
+governance_owner: "AGENTS.md"
+soul_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+consumer: "Gemini"
+tags:
+  - centraldark
+  - adapter
+  - gemini
+  - soul-sol
+---
+
 # Gemini — adaptador fino CentralDark
 
 **Gatilho:** `!CENTRALDARK`/`!Centraldark` requer ler o último checkpoint de execução verificado pelo `scripts/hermes/centraldark-entry.py`, conforme `LEIA-ME-IA.md`, retomando o `NEXT_CURSOR` por rota real em vez de iniciar investigação nova.

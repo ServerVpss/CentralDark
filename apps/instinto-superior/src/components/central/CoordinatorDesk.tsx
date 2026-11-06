@@ -15,9 +15,9 @@ const STAGES: CoordinatorStage[] = [
 ];
 
 function badge(status: CoordinatorStage["status"]) {
-  if (status === "READY") return "🟢 READY";
-  if (status === "WAITING_RECEIPT") return "🟡 WAITING_RECEIPT";
-  return "⚪ UNKNOWN";
+  if (status === "READY") return "Pronto";
+  if (status === "WAITING_RECEIPT") return "Aguardando confirmação";
+  return "Ainda não verificado";
 }
 
 export function CoordinatorDesk() {

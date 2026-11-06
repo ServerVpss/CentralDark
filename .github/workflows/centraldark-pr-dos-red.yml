@@ -75,9 +75,9 @@ jobs:
       - name: Persistir RED no mesmo PR e projetar no Supabase
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }
-          CENTRALDARK_SUPABASE_URL: ${{ vars.CENTRALDARK_SUPABASE_URL }
-          CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY }
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CENTRALDARK_SUPABASE_URL: ${{ vars.CENTRALDARK_SUPABASE_URL }}
+          CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.CENTRALDARK_SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           set -euo pipefail
           node scripts/ci/centraldark-red-publish.mjs

@@ -137,29 +137,11 @@ type Props =
 export function CentralNotificacoes(props: Props) {
   const [periodo, setPeriodo] = useState<PeriodoFiltro>("24h");
   const [soReds, definirSoReds] = useState(false);
-  const [preferenciasCarregadas, definirPreferenciasCarregadas] = useState(false);
   const [fontesAtivas, definirFontesAtivas] = useState<Record<FonteNotificacao, boolean>>({
     claude: true, powershell: true, hermes: true, dream: true, sistema: true,
   });
   const [vistoAte, setVistoAte] = useState<number | null>(null);
-  // Preferencias locais de EXIBICAO, nao da entrega: sem credenciais no storage.
-  useEffect(() => {
-    try {
-      const gravadas = JSON.parse(window.localStorage.getItem("centraldark-notify-fontes-v1") || "{}") as Record<string, unknown>;
-      definirFontesAtivas((atuais) => {
-        const novas = { ...atuais };
-        for (const fonte of FONTES)
-          if (typeof gravadas[fonte.id] === "boolean") novas[fonte.id] = gravadas[fonte.id] as boolean;
-        return novas;
-      });
-    } catch { /* Sem storage: preferencias somente nesta montagem. */ }
-    definirPreferenciasCarregadas(true);
-  }, []);
-  useEffect(() => {
-    if (!preferenciasCarregadas) return;
-    try { window.localStorage.setItem("centraldark-notify-fontes-v1", JSON.stringify(fontesAtivas)); }
-    catch { /* storage opcional */ }
-  }, [preferenciasCarregadas, fontesAtivas]);
+  // Filtros de exibicao locais a esta montagem; sem armazenamento paralelo.
   const { items, loading, erro, lastEventAt, realtimeStatus, refresh } =
     useNotificationsLog(periodo);
   useEffect(() => {
@@ -172,18 +154,18 @@ export function CentralNotificacoes(props: Props) {
   const novosReds =
     vistoAte === null ? 0 : reds.filter((item) => Date.parse(item.created_at) > vistoAte).length;
   const estado = erro
-    ? "FALHA DE LEITURA"
+    ? "Não foi possível carregar as notificações"
     : loading
-      ? "CONSULTANDO"
+      ? "Atualizando notificações…"
       : realtimeStatus === "LIVE"
-        ? "CANAL REALTIME CONECTADO · ENTREGA AINDA DEPENDE DE EVENTO"
-        : "REALTIME NÃO COMPROVADO · CONSULTA DE RECUPERAÇÃO ATIVA";
+        ? "Atualizações em tempo real conectadas"
+        : "Atualização automática ainda não confirmada · consulta periódica ativa";
   const prova = lastEventAt
     ? lastEventAt.toLocaleString("pt-BR")
     : "Sem evento confirmado na janela";
   const lista = erro ? (
     <p role="alert" className="text-xs text-destructive">
-      Leitura indisponível. UNKNOWN; não presumir lista vazia.
+      Não foi possível carregar a lista. Use "Atualizar" para tentar novamente.
     </p>
   ) : (
     <Eventos items={props.modo === "painel" && soReds ? reds : visiveis}
@@ -284,7 +266,7 @@ export function CentralNotificacoes(props: Props) {
       <div className="flex flex-wrap items-center gap-2" aria-label="Filtro do PR dos RED">
         <Button size="sm" type="button" variant={soReds ? "default" : "outline"}
           aria-pressed={soReds} onClick={() => definirSoReds(!soReds)}>
-          🔴 PR DOS RED · {erro ? "UNKNOWN" : reds.length}
+          🔴 PR DOS RED · {erro ? "indisponível" : reds.length}
         </Button>
         <span className="text-[11px] text-muted-foreground">
           Origem: Supabase / notifications_log · PR #1903 · somente leitura
@@ -292,12 +274,14 @@ export function CentralNotificacoes(props: Props) {
       </div>
       {lista}
       <div className="border-t border-border pt-3 text-xs text-muted-foreground">
-        <p>Responsabilidade: receber e mostrar avisos autorizados; não executar comandos.</p>
-        <p>Fonte: notifications_log com RLS e Realtime. Telegram usa notification_routes.</p>
-        <p>
-          Roteamento para setor, Hermes ou Harness ainda depende de adapter autorizado e recibo;
-          single/parallel não são execução comprovada.
-        </p>
+        <p>Esta área recebe e mostra avisos. Ela não executa comandos.</p>
+        <details className="mt-2 rounded-md border border-border/70 p-2">
+          <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
+          <div className="mt-2 space-y-1">
+            <p>Fonte: notifications_log com RLS e Realtime. Telegram usa notification_routes.</p>
+            <p>Roteamento para setor, Hermes ou Harness depende de adapter autorizado e recibo; single/parallel não são execução comprovada.</p>
+          </div>
+        </details>
       </div>
     </section>
   );

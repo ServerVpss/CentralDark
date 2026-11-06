@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, ExternalLink, Eye, Monitor, Puzzle, RotateCcw, Smartphone, TerminalSquare, TriangleAlert } from "lucide-react";
 
 import { SeloEstado } from "@/components/central/EstadoCentralDark";
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { tempoDecorrido, useRelogioVivo } from "@/hooks/useRelogioVivo";
 
 export type PeleCockpit = "default" | "ouro" | "ops" | "esmeralda";
 const CHAVE_PELE = "centraldark.cockpit.pele";
@@ -180,6 +181,10 @@ function inspecionarDomAtual(): LeituraDom {
     for (const attribute of ["aria-labelledby", "aria-describedby", "aria-controls"]) {
       const value = el.getAttribute(attribute);
       if (!value) continue;
+      // Radix Tabs monta o conteúdo sob demanda. Um gatilho de aba inativa
+      // pode apontar para um painel ainda não presente no DOM; isso é válido
+      // e não representa um alvo ARIA quebrado.
+      if (attribute === "aria-controls" && el.getAttribute("role") === "tab" && el.getAttribute("aria-selected") !== "true") continue;
       for (const id of value.trim().split(/\s+/)) {
         if (!document.getElementById(id)) {
           achados.push({
@@ -202,12 +207,25 @@ function inspecionarDomAtual(): LeituraDom {
   }
   // Sondar APENAS controles visíveis. Elemento sobreposto é uma suspeita,
   // porque popovers/modais podem obstruir intencionalmente outros botões.
+  const estaRenderizado = (el: HTMLElement) => {
+    if (!el.getClientRects().length) return false;
+    let atual: HTMLElement | null = el;
+    while (atual) {
+      if (atual.hidden) return false;
+      const estilo = window.getComputedStyle(atual);
+      if (estilo.display === "none" || estilo.visibility === "hidden" || estilo.visibility === "collapse") return false;
+      if (atual.tagName === "DETAILS" && !(atual as HTMLDetailsElement).open) return false;
+      atual = atual.parentElement;
+    }
+    return true;
+  };
   const controles = sample.filter(el => el.matches("button, a[href], input, select, textarea, [role='button']"));
   let vistos = 0;
   for (const el of controles) {
     if (vistos >= 180) break;
+    if (el.closest("[data-cd-harness]")) continue;
     const r = el.getBoundingClientRect();
-    if (r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
+    if (!estaRenderizado(el) || r.width < 5 || r.height < 5 || r.bottom <= 0 || r.right <= 0 ||
         r.top >= window.innerHeight || r.left >= window.innerWidth) continue;
     const style = window.getComputedStyle(el);
     if (style.visibility !== "visible" || style.display === "none" || style.pointerEvents === "none") continue;
@@ -216,7 +234,9 @@ function inspecionarDomAtual(): LeituraDom {
     if (x < r.left || x >= r.right || y < r.top || y >= r.bottom) continue;
     vistos++;
     const sobreposto = document.elementFromPoint(x, y);
-    if (sobreposto && !el.contains(sobreposto) && !sobreposto.contains(el)) {
+    const sobrepostoInterativo = sobreposto?.matches("button, a[href], input, select, textarea, [role='button']") ?? false;
+    if (sobreposto?.closest("[data-cd-harness]")) continue;
+    if (sobrepostoInterativo && !el.contains(sobreposto) && !sobreposto.contains(el)) {
       const tag = el.tagName.toLowerCase();
       achados.push({
         tipo: "CONTROLE_ENCOBERTO",
@@ -283,13 +303,23 @@ export function DesignCenter({
   const [domAtivo, definirDomAtivo] = useState(false);
   const [domMedido, definirDomMedido] = useState<LeituraDom | null>(null);
   const [copiaDom, definirCopiaDom] = useState<"idle" | "ok" | "fail">("idle");
+  const relogio = useRelogioVivo();
+  const ultimoPulsoDom = useRef<number | null>(null);
   useEffect(() => {
     if (!autenticado || !domAtivo) return;
-    const medir = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
-    medir();
-    const timer = window.setInterval(medir, 3000);
-    window.addEventListener("resize", medir);
-    return () => { window.clearInterval(timer); window.removeEventListener("resize", medir); };
+    if (relogio === null) return;
+    const segundo = Math.floor(relogio / 1000);
+    // O relógio vivo compartilhado é o único pulso; a leitura acompanha
+    // a mesma batida operacional de 15 s do StatusPanel.
+    if (ultimoPulsoDom.current !== null && segundo % 15 !== 0) return;
+    ultimoPulsoDom.current = segundo;
+    if (!document.hidden) definirDomMedido(inspecionarDomAtual());
+  }, [autenticado, domAtivo, relogio]);
+  useEffect(() => {
+    if (!autenticado || !domAtivo) return;
+    const medirAoRedimensionar = () => { if (!document.hidden) definirDomMedido(inspecionarDomAtual()); };
+    window.addEventListener("resize", medirAoRedimensionar);
+    return () => window.removeEventListener("resize", medirAoRedimensionar);
   }, [autenticado, domAtivo]);
 
   return (
@@ -519,14 +549,14 @@ export function DesignCenter({
                       </p>
                       <h4 className="mt-1 text-lg font-semibold">🪬 ZENDRIVE CLI</h4>
                       <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        centraldark.centraldark-vscode-restore · fonte 0.1.4 no PR #1842
-                        centraldark.centraldark-vscode-restore · fonte 0.1.3
+                        centraldark.centraldark-vscode-restore · fonte 0.2.1 (manifesto local)
+                        Histórico: fonte 0.1.4 no PR #1842; 0.1.3 anterior
                       </p>
                     </div>
                   </div>
                   <span className="rounded-md border border-border px-2 py-1 font-mono text-[10px] text-muted-foreground">
-                    Casa: versão instalada exige leitura do VS Code · pacote 0.1.4 em preparação
-                    Fonte main 0.1.3 · Casa 0.1.3 instalada em 16/10
+                    Fonte do manifesto Git: 0.2.1 · Casa: instalação exige leitura no VS Code
+                    Sem readback da versão instalada nesta consulta
                   </span>
                 </div>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -566,7 +596,7 @@ export function DesignCenter({
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-pr">
                     <a href="https://github.com/ServerVpss/CentralDark/pull/1842" target="_blank" rel="noopener noreferrer">
-                      Versão 0.1.4 · PR / atualizar <ExternalLink />
+                      Histórico 0.1.4 · PR #1842 <ExternalLink />
                     </a>
                   </Button>
                   <Button asChild size="sm" variant="outline" data-cd-flow="instinto.DesignCenter.extensao-zendrive-vsix-instructions">
@@ -642,7 +672,7 @@ export function DesignCenter({
                   </Button>
                   <Button type="button" size="sm" variant={domAtivo ? "default" : "outline"}
                     aria-pressed={domAtivo} onClick={() => definirDomAtivo(!domAtivo)}>
-                    {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · 3s"}
+                    {domAtivo ? "⏸ Pausar" : "▶ Ao vivo · pulso 15s"}
                   </Button>
                 </div>
               </div>
@@ -651,6 +681,7 @@ export function DesignCenter({
                   ? "LIDO " + new Date(domMedido.em).toLocaleString("pt-BR") +
                     " · elementos " + domMedido.elementos +
                     " · achados " + domMedido.achados.length +
+                     " · medido " + tempoDecorrido(domMedido.em, relogio) +
                     (domMedido.amostraLimitada ? " · AMOSTRA LIMITADA" : "")
                   : "AGUARDANDO LEITURA NESTA ABA"}
               </p>

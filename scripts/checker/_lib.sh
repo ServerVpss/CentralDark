@@ -33,10 +33,13 @@ has_cmd() { command -v "$1" >/dev/null 2>&1; }
 # Roda comando e retorna saída (best-effort, não quebra em erro)
 safe_run() { "$@" 2>&1 || true; }
 
-# Fronteira canônica da VPS. A raiz é fixa: override externo não muda autoridade.
-# Caminho candidato é resolvido antes da comparação para bloquear ../ e symlink escape.
-CK_CANONICAL_ROOT='/root/CentralDark'
-CK_REQUESTED_REPO_ROOT="${CK_REPO_ROOT:-$CK_CANONICAL_ROOT}"
+# Fronteira canônica do checkout: definida pela localização desta biblioteca
+# (não por cwd, hostname, nome de usuário ou variável externa). Overrides
+# externos continuam bloqueados se escaparem da raiz física conhecida.
+# CONTRATO_PORTABILIDADE_GLOBAL: scripts Bash novos/modificados reutilizam este
+# resolver; não criar outro resolvedor por script.
+CK_CANONICAL_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
+CK_REQUESTED_REPO_ROOT="${CK_REPO_ROOT:-${CENTRALDARK_ROOT:-$CK_CANONICAL_ROOT}}"
 export CK_CENTRALDARK_ROOT="$CK_CANONICAL_ROOT"
 export CK_REPO_ROOT="$CK_CANONICAL_ROOT"
 export CK_EXTERNAL_ROOT_POLICY="OUT_OF_SCOPE"

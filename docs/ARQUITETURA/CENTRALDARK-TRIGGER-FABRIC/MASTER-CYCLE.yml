@@ -111,11 +111,12 @@ expands_to:
   - RASTRO
   - HANDOFF
   - BOOT
+  - ATUALIZAR_NOTAS_VIVAS
 
-canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !MICHELIN -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !BOOT"
-canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
-canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> HANDOFF -> BOOT"
-canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 🌟 !MICHELIN → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 🚀 !BOOT"
+canonical_human_chain: "#CENTRALDARK -> #ACORDAR -> !CALIBRAR -> !MULTIBUSSOLA -> !META_LUPA -> !RECONCILIAR -> !DELTAUTIL -> !CONTRAPROVA -> !REMEDICAO -> !MICHELIN -> !FIXED_POINT -> !REGISTRA -> !RASTRO -> !ATUALIZAR_NOTAS_VIVAS -> !BOOT"
+canonical_machine_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> ATUALIZAR_NOTAS_VIVAS -> HANDOFF -> BOOT"
+canonical_chain: "!CENTRALDARK -> TLC23_OPEN -> DESTINATION_LOCK -> ACORDAR -> CALIBRAR -> MULTIBUSSOLA -> PEGATUDO -> DEBITO_COGNITIVO -> READERS_MEASURE -> META_LUPA -> RENDEZVOUS -> RECONCILE -> DELTA_UTIL -> OWNER -> ONE_WRITER -> PATCH -> TESTE -> CONTRAPROVA -> REMEDICAO -> REALITY_JUDGE -> MICHELIN -> FIXED_POINT -> TLC23_CLOSE -> REGISTRA -> RASTRO -> ATUALIZAR_NOTAS_VIVAS -> HANDOFF -> BOOT"
+canonical_visual_chain: "⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 #ACORDAR → 🎯 !CALIBRAR → 🧭 !MULTIBUSSOLA → 🔎 !META_LUPA → 🔄 !RECONCILIAR → 💎 !DELTAUTIL → 🧪 !CONTRAPROVA → 📏 !REMEDICAO → 🌟 !MICHELIN → 📍 !FIXED_POINT → 🧾 !REGISTRA → 🔏 !RASTRO → 📝 !ATUALIZAR_NOTAS_VIVAS → 🚀 !BOOT"
 fixed_point_execution_header:
   marker: FIXED_POINT_EXECUTION_HEADER_REQUIRED
   required: true
@@ -318,6 +319,31 @@ phase_contracts:
       no_bulk_rewrite_or_new_note_folders: true
       note_change_requires_authorized_owner_writer: true
       runtime_all_agents_enforcement: UNKNOWN_UNTIL_INTEGRATION_PROVED
+
+
+  ATUALIZAR_NOTAS_VIVAS:
+    meaning: RECONCILIAR NOTAS COM 10 PROPRIEDADES OBRIGATORIAS E GRUPOS
+    token: "!ATUALIZAR_NOTAS_VIVAS"
+    owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md + .agents/skills/centraldark-operational-method/Skills/centraldark-note-maintenance/SKILL.md"
+    emoji: "📝"
+    phase_type: MANDATORY_EVERY_CYCLE
+    execution: IMMEDIATE_AFTER_RASTRO_BEFORE_BOOT
+    contract:
+      required_properties: [data_criacao, ultima_atualizacao, ultima_modificacao, ultima_verificacao, fuso_horario, hash_conteudo, rastro, grupo_notas, relacionado_a, estado_evidencia]
+      hash_algorithm: SHA256_CONTENT
+      timezone: America/Sao_Paulo
+      groups: [01-cabeca-intencao, 02-loop-mestre, 03-evidencias-contraprovas, 04-pendencias-bloqueios, 05-aprendizados-kaizen]
+      preserve_creation_date: true
+      track_timestamps_separately: true
+      rastro_append_only: true
+      estado_evidencia_values: [PROVED, UNKNOWN, PENDING, BLOCKED]
+      replay_logic: EXTEND_PROVEN_CRYSTAL
+    verification:
+      fiscal_script: scripts/trigger-fabric/rastro_fiscal.py
+      check: ALL_NOTES_HAVE_10_PROPS_AND_VALID_HASH
+      pass_condition: ZERO_NOTES_MISSING_PROPS
+    hud_field: NOTAS_DESATUALIZADAS
+    hud_source: "Fixed Point note reconciliation delta"
 
   BOOT:
     meaning: RETURN_NEXT_CYCLE_RECOVERABLE

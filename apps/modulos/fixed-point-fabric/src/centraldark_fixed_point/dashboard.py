@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import html
 import json
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 def _page(state: dict) -> bytes:
@@ -37,4 +37,4 @@ def serve(store, host: str, port: int) -> None:
         def log_message(self, *_args):
             return
 
-    ThreadingHTTPServer((host, port), Handler).serve_forever()
+    HTTPServer((host, port), Handler).serve_forever()

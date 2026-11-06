@@ -2,7 +2,7 @@
 title: "Biblioteca Cognitiva — CentralDark"
 status: CANONICO
 date: 2026-10-05
-updated: 2026-10-05T02:31:00-03:00
+updated: 2026-10-27T11:59:22.085Z
 tags: ["brain", "biblioteca", "fontes", "cognicao", "skills", "grafo"]
 category: BRAIN_LIBRARY
 sensitivity: INTERNAL
@@ -542,3 +542,43 @@ O CHEFE pediu que **tudo que foi debatido sobre o Harness compacto** apareça no
 **Contraprova de código:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` contém testes estáticos dos sete nomes, do diagnóstico histórico, da passagem do estado `autenticado` e da RPC canônica, sem estabelecer execução do build. Estado: `SOURCE_READBACK=PASS`, `CI_SAME_SHA=QUEUED/PENDING`, `CASA_APPLIED=NO`, `VPS_DEPLOYED=NO`, `AUTH_CLICK_E2E=UNKNOWN`.
 
 **Próximo passo:** CI/build no SHA exato → reconciliar a Casa K:\ sem sobrescrever writer → conferir a UI topo/contraprova → readback de checkpoint com sessão admin real → só então promover.
+---
+
+## 📄 Lei da Biblioteca Obsidian — PDFs de qualquer natureza (2026-10-27)
+
+<!-- #OBSERVACOES# | CENTRALDARK.OBSIDIAN.PDF.LIBRARY
+@owner: docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md
+@last_updated: 2026-10-27T11:59:22.085Z
+@escopo: Biblioteca documental da CentralDark; vault Obsidian existente
+@estado: PDF_DE_EXEMPLO_MATERIALIZADO_E_HASH_VERIFICADO; AUTOMATIZACAO_UNIVERSAL_PENDENTE
+@next_cursor: ampliar o ingest/roteador existentes com prova end-to-end sem segundo owner
+-->
+
+**Intenção do CHEFE:** todo PDF recebido ou produzido pela CentralDark deve entrar na **Biblioteca Cognitiva do Obsidian**, ser classificado e pesquisável, e ter histórico de preservação no **Git**. Este arquivo é o índice proprietário já existente da biblioteca; não criar vault, biblioteca, gateway ou repositório paralelo.
+
+- **Fonte canônica do acervo documental:** vault/BRAIN do Obsidian, materializado no repositório `ServerVpss/CentralDark` e versionado pelo Git. **Código e contratos executáveis** continuam canônicos na `main` do mesmo repositório; um PDF externo é fonte de estudo, não regra autorizada por si só.
+- **Entrada universal:** PDF enviado pelo CHEFE, gerado por sistema, recebido via apps/Drive/CLI ou descoberto no processo de trabalho entra pelo **mesmo ingest já existente**, sem assumir que um chat ou drive inacessível foi sincronizado. `RECEBER → IDENTIFICAR FONTE → SHA256 → CLASSIFICAR ASSUNTO/SENSIBILIDADE/LICENÇA → DEDUPLICAR POR HASH → PRESERVAR ORIGINAL → INDEXAR → CRIAR LINKS OBSIDIAN → VERSIONAR/RECEIPT`.
+- **Organização preservativa:** aproveitar os setores e diretórios de assunto existentes; só criar novo setor mediante necessidade real provada. Nome simples, ASCII legível com hífen, sem `final-final-v2`; manter original imutável e metadados da edição/fonte. Não renomear ou mover legados em massa.
+- **Git como backup verificável:** arquivos públicos/autorizados podem ter os bytes originais versionados no mesmo repositório privado, com SHA/commit/readback. Documentos pessoais, confidenciais, com credenciais ou com redistribuição restrita devem permanecer no **vault/cofre privado autorizado**, com manifesto sanitizado (hash, owner, classificação e localizador privado) versionável, **nunca conteúdo sensível/segredos publicados no GitHub**. Ausência de autorização para versionar bytes não é licença para ignorar o PDF.
+- **Distinções:** `FILE_IN_LIBRARY != CONTENT_INDEXED`; `INDEXED != USED_BY_HERMES`; `GIT_COMMIT != CI_PASS`; `PDF_EXTERNAL != CENTRALDARK_RULE`; `GIT_VERSIONED != PUBLIC_RELEASE`. Manter `UNKNOWN` até prova de sincronização e consumo.
+- **Conformidade:** manter `scripts/memory-linker/library-router.mjs` e testes/índices existentes como owners técnicos, sem segundo roteador. Remoção/migração somente após checksum, mapa de referências e contraprova.
+
+### Documento incorporado e verificado
+
+| Campo | Valor |
+|---|---|
+| Obra | *Manual de Boas Práticas para Gestão de Pastas e Arquivos Digitais* |
+| Instituição/autoria | Tribunal de Contas da União (TCU), 2019 |
+| Tema | Organização documental, nomeação, versionamento, classificação, preservação digital |
+| PDF físico | [Boas-praticas-para-pastas-e-arquivos-digitais.pdf](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf) |
+| Origem da solicitação | PDF fornecido pelo CHEFE neste chat; cópia pública byte-idêntica obtida pela Casa em 2026-10-27 |
+| Referência externa | https://www.legiscompliance.com.br/images/pdf/Boas-praticas-para-pastas-e-arquivos-digitais.pdf |
+| SHA-256 do original | `0caf39a4f78388a8d4221f4b53d90c81b6c1f81d1f1e0207bcfa70aa0abebba8` |
+| Tamanho | 933490 bytes |
+| Formato | PDF 1.5, 10 páginas |
+| Classificação | `PUBLIC_STUDY_CANDIDATE` |
+| Prova atual | `RAW_SAVED=PASS; SHA256_READBACK=PASS; INDEX_LINKED=PASS; CI/RAG/EXECUTION=UNKNOWN` |
+
+### Aprendizado associado
+
+[[../../07-APRENDIZADOS-MEMORIAS/README|Código autoauditável, rastro de modificação e porta de entrada]].

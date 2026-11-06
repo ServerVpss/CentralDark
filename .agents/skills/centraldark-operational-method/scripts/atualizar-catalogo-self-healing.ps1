@@ -1,5 +1,59 @@
-﻿param([switch]$SomenteVerificar)
+﻿param([switch]$SomenteVerificar, [switch]$SincronizarSkillsCentralDark)
 $ErrorActionPreference = 'Stop'
+
+# CentralDark-only sync. Reuses this catalog owner; originals remain valid compatibility paths.
+# Opt-in mode: never import unrelated global skills or overwrite local changes to imported files.
+if ($SincronizarSkillsCentralDark) {
+  if ($SomenteVerificar) { throw 'Use -SincronizarSkillsCentralDark without -SomenteVerificar for the explicit import.' }
+  $skillsRoot = Split-Path -Parent $PSScriptRoot | Split-Path -Parent
+  $repoRoot = (Resolve-Path (Join-Path $skillsRoot '..\..')).Path
+  $motherRoot = Join-Path $skillsRoot 'centraldark-operational-method'
+  $targetRoot = Join-Path $motherRoot 'catalogo\skills-integradas'
+  $sources = @(
+    Get-ChildItem -LiteralPath $skillsRoot -Directory |
+      Where-Object { $_.Name -like 'centraldark-*' -and $_.Name -ne 'centraldark-operational-method' }
+  )
+  foreach ($group in @('devops', 'software-development')) {
+    $groupPath = Join-Path $skillsRoot $group
+    if (Test-Path -LiteralPath $groupPath) {
+      $sources += @(Get-ChildItem -LiteralPath $groupPath -Directory |
+        Where-Object { $_.Name -like 'centraldark-*' -or $_.Name -eq 'reconciliacao-diaria-centraldark' })
+    }
+  }
+  $sources = @($sources | Sort-Object FullName -Unique)
+  $hash = [System.Security.Cryptography.SHA256]::Create()
+  $added = 0; $refreshed = 0; $unchanged = 0
+  try {
+    foreach ($origin in $sources) {
+      $destDir = Join-Path $targetRoot $origin.Name
+      foreach ($sourceFile in @(Get-ChildItem -LiteralPath $origin.FullName -File -Recurse -Force)) {
+        $relative = $sourceFile.FullName.Substring($origin.FullName.Length + 1)
+        $destination = Join-Path $destDir $relative
+        $shaSource = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($sourceFile.FullName)))
+        $exists = Test-Path -LiteralPath $destination -PathType Leaf
+        if ($exists) {
+          $shaTarget = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($destination)))
+          if ($shaSource -eq $shaTarget) { $unchanged++; continue }
+          $gitRelative = $destination.Substring($repoRoot.Length).TrimStart('\').Replace('\','/')
+          $gitDirty = @(& git -C $repoRoot status --porcelain -- $gitRelative)
+          if ($LASTEXITCODE -ne 0 -or $gitDirty.Count -gt 0) {
+            throw "IMPORT_TARGET_DIRTY: $gitRelative (not overwritten)"
+          }
+        }
+        $parent = Split-Path -Parent $destination
+        if (-not (Test-Path -LiteralPath $parent)) {
+          New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+        Copy-Item -LiteralPath $sourceFile.FullName -Destination $destination -Force
+        $shaAfter = [BitConverter]::ToString($hash.ComputeHash([IO.File]::ReadAllBytes($destination)))
+        if ($shaSource -ne $shaAfter) { throw "IMPORT_SHA_MISMATCH: $destination" }
+        if ($exists) { $refreshed++ } else { $added++ }
+      }
+    }
+  } finally { $hash.Dispose() }
+  Write-Output ("CENTRALDARK_IMPORT=PASS SOURCES=$($sources.Count) ADDED=$added REFRESHED=$refreshed UNCHANGED=$unchanged ORIGINALS_PRESERVED=true")
+}
+
 $raiz = Split-Path -Parent $PSScriptRoot
 $catalogo = Join-Path $raiz 'catalogo'
 $estadoPath = Join-Path $catalogo 'ESTADO-AUTOCURA.json'
@@ -49,6 +103,24 @@ if (Test-Path -LiteralPath $diretorioProvas) {
   foreach ($arquivoProva in @(Get-ChildItem -LiteralPath $diretorioProvas -Filter '*.json' -File | Sort-Object Name)) {
     try {
       $prova = Get-Content -LiteralPath $arquivoProva.FullName -Raw -Encoding UTF8 | ConvertFrom-Json
+      # Genesis registra observacoes imediatamente: recibo OBSERVED nao se passa por prova PROVADO.
+      # Continua indexado como arquivo vivo; so o verificador do Hermes promove comprovacoes.
+      if ($prova.tipo -eq 'genesis_operational_replay') {
+        $requiredTrace = @('intent_id','run_id','owner','surface','next_cursor')
+        $missingTrace = @($requiredTrace | Where-Object { [string]::IsNullOrWhiteSpace([string]$prova.$_) })
+        $validTraceStates = @('OBSERVED','TESTED','PROVEN','REFUTED','UNKNOWN')
+        $steps = @($prova.observacoes)
+        $invalidSteps = @($steps | Where-Object {
+          [string]::IsNullOrWhiteSpace([string]$_.area) -or
+          [string]::IsNullOrWhiteSpace([string]$_.clique_ou_acao) -or
+          [string]::IsNullOrWhiteSpace([string]$_.status)
+        })
+        if ($missingTrace.Count -gt 0 -or $prova.status -notin $validTraceStates -or
+            $steps.Count -eq 0 -or $invalidSteps.Count -gt 0) {
+          [void]$problemas.Add("TRILHA_OBSERVADA_INCOMPLETA: $($arquivoProva.Name)")
+        }
+        continue
+      }
       $campos = @('missao','acao','arquivo','criado_em','por_que_fazer','por_que_nao_fazer_outra_coisa','por_que_usar','por_que_modificar','o_que_mudou','contraprova')
       $faltando = @($campos | Where-Object { [string]::IsNullOrWhiteSpace([string]$prova.$_) })
       if ($prova.veredito -ne 'PROVADO' -or $prova.verificador -ne 'registrar-prova-hermes-casa.ps1' -or $faltando.Count -gt 0) {
