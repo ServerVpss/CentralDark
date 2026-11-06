@@ -189,6 +189,9 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+<<<<<<< HEAD
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "LEGACY_REFERENCE_ONLY_NOT_REQUIRED_FOR_CASA", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "RETIRED_BY_CHEFE_NO_RUNTIME_DEPENDENCY" },
+=======
     // #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/core/mcp-admin.js
     // @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
     // @last_updated=2026-11-05T19:25:35.947Z
@@ -198,9 +201,11 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains explicit-opt-in fallback, not a dependency.
     { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", nativeCasaCommander: "127.0.0.1:9101", nativeCasaCommanderOwner: "scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs", nativeToolCall: "POST /tool (Bearer da bridge; write exige habilitacao e autorizacao)", nativeBrowserReadback: "CHATGPT_BROWSER_TABS_CONTEXT", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "EXPLICIT_CHEFE_OPT_IN_AND_PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
+>>>>>>> origin/main
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "CASA_NATIVE_PID_INVENTORY", transport: "CASA_LOCAL_POWERSHELL", binding: "Casa Windows: scripts/casa/discover-operational-channels.ps1 -IncludeRuntime -Json", capability: "READ_ONLY_SSHD_PID_HERMES_VSCODE_TOPOLOGY", source: "scripts/casa/discover-operational-channels.ps1", runtimeState: "SOURCE_ONLY_CASA_ACK_REQUIRED", readOnly: true, canDispatch: false, nextCursor: "CASA_AUTHENTICATED_RUN_AND_PROCESS_RECEIPT" },
     { id: "ZENDRIVE_VSCODE_REMOTE_SSH", transport: "VSCODE_REMOTE_SSH", binding: "SEGREDO:Segredo-VPS -> Tailscale -> CENTRALDARK-OS", capability: "CASA_TO_VPS_SSH_AUTH_TERMINAL_FILES_PROCESS", source: "skills/vs-code-restore/src/extension.ts", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_CASA_TO_VPS", transport: "MCP", binding: "MCP_CASA", capability: "execute_command|vps_run_once_script", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
