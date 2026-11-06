@@ -50,8 +50,10 @@
       "destination": "/k/apps/modulos/cockpit-unified/status",
       "files": 28,
       "size_mb": 0.375,
-      "status": "CONSOLIDATED_VALIDATED",
-      "hash_destination": "cda93fc2a362d64a..."
+      "status": "RETIRED_DUPLICATE",
+      "hash_destination": "cda93fc2a362d64a...",
+      "canonical_owner": "apps/modulos/status",
+      "retirement_basis": "Static reference audit: all declared writes and consumers resolve to apps/modulos/status; copied painel-data.json is stale."
     }
   ],
   "archive_folders": [

@@ -10,6 +10,7 @@
  */
 import { readFile } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
+import { validateFixedPointExecutionHeader } from "./lupa/horn-reuse-fixed-point.mjs";
 
 const PROTOCOL = "CENTRALDARK_AGENT_CALL_V1";
 const GLOBAL_CONTRACT_SCOPE_ID = "canon/centraldark-universal-contract-20260919";
@@ -402,6 +403,19 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
   if (state?.head?.sha && gate.observed_head !== state.head.sha) {
     return status("BLOCKED_STALE_HEAD", { expected_head: state.head.sha });
   }
+  const fixedPointHeader = validateFixedPointExecutionHeader(
+    gate.fixed_point_execution_header,
+    {
+      expectedMissionId: gate.mission_id || state?.mission_id,
+      expectedHead: gate.observed_head,
+    },
+  );
+  if (fixedPointHeader.accepted !== true) {
+    return status(fixedPointHeader.status || "BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_USED", {
+      fixed_point_execution_header: fixedPointHeader,
+      next_cursor: "EMIT_CURRENT_TEN_CRITERION_HEADER",
+    });
+  }
   if (!nonEmpty(gate.trace_id)) return status("BLOCKED_GLOBAL_CONTRACT_TRACE_MISSING");
   if (!nonEmpty(gate.next_cursor) && gate.fixed_point !== true) return status("BLOCKED_GLOBAL_CONTRACT_NEXT_CURSOR_MISSING");
 
@@ -431,6 +445,11 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
       return status("BLOCKED_GLOBAL_CONTRACT_SAME_HEAD_CI");
     }
     if (gate.fixed_point === true && gate.aggregate_fixed_point_pass !== true) return status("BLOCKED_GLOBAL_CONTRACT_FALSE_FIXED_POINT");
+    if (gate.fixed_point === true && fixedPointHeader.header_usage !== "USED_AND_FIXED_POINT") {
+      return status("BLOCKED_GLOBAL_CONTRACT_FIXED_POINT_HEADER_NOT_SEALED", {
+        fixed_point_execution_header: fixedPointHeader,
+      });
+    }
   }
   return {
     protocol: PROTOCOL,
@@ -445,6 +464,8 @@ export function validateGlobalContractGate(gate, state = null, expectedPhase = "
     trace_id: gate.trace_id,
     next_cursor: gate.next_cursor || null,
     fixed_point: gate.fixed_point === true,
+    fixed_point_execution_header_status: fixedPointHeader.status,
+    fixed_point_header_usage: fixedPointHeader.header_usage,
   };
 }
 
@@ -916,6 +937,17 @@ export function validateAgentCall(call, state, now = Date.now()) {
     return fail("BLOCKED_STALE_HEAD", call, { expected_head: liveHead || "UNKNOWN" });
   }
 
+  const fixedPointHeader = validateFixedPointExecutionHeader(
+    call.fixed_point_execution_header,
+    { expectedMissionId: call.mission_id, expectedHead: call.observed_head, expectedAgentId: call.from },
+  );
+  if (fixedPointHeader.accepted !== true) {
+    return fail(fixedPointHeader.status || "BLOCKED_FIXED_POINT_EXECUTION_HEADER_NOT_USED", call, {
+      fixed_point_execution_header: fixedPointHeader,
+      next_cursor: "EMIT_CURRENT_TEN_CRITERION_HEADER",
+    });
+  }
+
   const routeId = state?.trail?.route_id || null;
   if (routeId) {
     if (!call.trail_id) return fail("BLOCKED_MISSING_TRAIL", call, { expected_trail: routeId });
@@ -1006,6 +1038,8 @@ export function validateAgentCall(call, state, now = Date.now()) {
     meta_lupa: true,
     breaths_total: 17,
     delta_minimum: true,
+    fixed_point_execution_header: fixedPointHeader,
+    fixed_point_header_usage: fixedPointHeader.header_usage,
     return_mode: "DELTA_MESSAGE",
     radio_mode: "DELTA_ONLY",
   };

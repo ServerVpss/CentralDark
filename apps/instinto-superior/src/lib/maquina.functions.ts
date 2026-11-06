@@ -1,6 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
-import { statfs } from "node:fs/promises";
+import { readFile, stat, statfs } from "node:fs/promises";
+import { join } from "node:path";
 import { hostname, platform } from "node:os";
+import { existsSync } from "node:fs";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { apiBase, type Estado } from "@/lib/cockpit.functions";
 
@@ -23,6 +28,31 @@ export type SondaViva = {
 
 type SondaInterna = SondaViva & { dados: Json | null };
 
+export type GpuCasa = {
+  estado: "LIVE" | "STALE" | "UNKNOWN";
+  fonte: "MAHMSharedMemory";
+  atualizadoEm: string | null;
+  idadeSeg: number | null;
+  anunciados: number | null;
+  sensores: Array<{ nome: string; unidade: string; valor: number }>;
+  motivo: string | null;
+};
+
+export type RtssOverlayCasa = {
+  ok: boolean;
+  state: string;
+  measuredAt: string;
+  running: boolean;
+  pid: number | null;
+  visible: boolean;
+  rect: { x: number; y: number; width: number; height: number } | null;
+  displays: Array<{ device: string; x: number; y: number; width: number; height: number; primary: boolean }>;
+  aliases: Record<string, { device: string; x: number; y: number; width: number; height: number; primary: boolean }>;
+  target?: string;
+  startedByCentralDark?: boolean;
+  detail?: string;
+};
+
 export type MaquinaViva = {
   fonte: string;
   medidoEm: string;
@@ -31,6 +61,7 @@ export type MaquinaViva = {
   cpu: { percentual: number | null; chave: string | null };
   memoria: { percentual: number | null; chave: string | null };
   carga: number[] | null;
+  gpuCasa: GpuCasa;
   discoServidor: {
     estado: Estado;
     host: string | null;
@@ -50,6 +81,48 @@ export type MaquinaViva = {
 
 function ehObjeto(v: unknown): v is Json {
   return !!v && typeof v === "object" && !Array.isArray(v);
+}
+
+async function exigirAdmin(context: { supabase: { from: (name: string) => any }; userId: string }) {
+  const { data } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+  if (!data) throw new Response("Proibido", { status: 403 });
+}
+
+const rtssInput = z.object({
+  action: z.enum(["status", "open", "move", "close"]),
+  target: z.enum(["esquerda", "centro-superior", "centro-inferior", "direita"]).optional(),
+}).superRefine((data, ctx) => {
+  if (data.action === "move" && !data.target) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target"], message: "Alvo físico obrigatório para mover" });
+  if (data.action !== "move" && data.target) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["target"], message: "Alvo só é permitido ao mover" });
+});
+
+let rtssHostTemporarioPid: number | null = null;
+const rtssScript = process.env["CENTRALDARK_RTSS_OVERLAY_SCRIPT"] ?? "K:\\scripts\\casa\\CentralDark-RtssOverlay.ps1";
+
+function rtssIndisponivel(state: string): RtssOverlayCasa {
+  return { ok: false, state, measuredAt: new Date().toISOString(), running: false, pid: null, visible: false, rect: null, displays: [], aliases: {} };
+}
+
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/maquina.functions.ts @doc_ref=docs/HUD/README.md @last_updated=2026-10-28T17:32:00.000Z
+// Bridge estrita: somente o script Casa allowlisted recebe acao/alias tipados. Sem shell livre vindo do navegador; fora da Casa retorna UNKNOWN operacional.
+async function executarRtssOverlay(input: z.infer<typeof rtssInput>): Promise<RtssOverlayCasa> {
+  if (platform() !== "win32" || hostname().toUpperCase() !== "SEGREDO") return rtssIndisponivel("RUNTIME_NAO_E_CASA_WINDOWS");
+  if (!existsSync(rtssScript)) return rtssIndisponivel("RTSS_OWNER_SCRIPT_ABSENT");
+  if (input.action === "close" && rtssHostTemporarioPid == null) return rtssIndisponivel("REFUSE_CLOSE_NOT_OWNED");
+  const args = ["-NoLogo", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", rtssScript, "-Action", input.action];
+  if (input.target) args.push("-Target", input.target);
+  if (input.action === "close") args.push("-ExpectedPid", String(rtssHostTemporarioPid));
+  try {
+    const { stdout } = await promisify(execFile)("powershell.exe", args, { timeout: 8_000, maxBuffer: 64 * 1024, windowsHide: true });
+    const result: unknown = JSON.parse(stdout.trim());
+    if (!ehObjeto(result) || typeof result["ok"] !== "boolean" || typeof result["state"] !== "string") return rtssIndisponivel("RTSS_OWNER_RESPONSE_INVALID");
+    const view = result as unknown as RtssOverlayCasa;
+    if (view.ok && view.startedByCentralDark && typeof view.pid === "number") rtssHostTemporarioPid = view.pid;
+    if (input.action === "close" && view.ok) rtssHostTemporarioPid = null;
+    return view;
+  } catch {
+    return rtssIndisponivel("RTSS_OWNER_RUNTIME_UNREACHABLE");
+  }
 }
 
 async function sondar(caminho: string): Promise<SondaInterna> {
@@ -165,18 +238,56 @@ async function medirDiscoServidor(): Promise<MaquinaViva["discoServidor"]> {
   }
 }
 
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/maquina.functions.ts @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:36:38.462Z
+// Motivo: utilizar o coletor read-only MAHMSharedMemory que a Casa já tem; sem novo serviço, controle de GPU ou exposição de filesystem ao navegador.
+async function medirGpuCasa(): Promise<GpuCasa> {
+  const desconhecido = (motivo: string, estado: GpuCasa["estado"] = "UNKNOWN", atualizadoEm: string | null = null, idadeSeg: number | null = null): GpuCasa =>
+    ({estado, fonte:"MAHMSharedMemory", atualizadoEm, idadeSeg, anunciados:null, sensores:[], motivo});
+  if (platform() !== "win32" || hostname().toUpperCase() !== "SEGREDO" || !process.env["LOCALAPPDATA"])
+    return desconhecido("RUNTIME_NAO_E_CASA_WINDOWS");
+  const arquivo = join(process.env["LOCALAPPDATA"], "CentralDark", "CENTRALDARK-AFTERBURNER-LIVE.js");
+  try {
+    const info = await stat(arquivo);
+    if (!info.isFile() || info.size < 40 || info.size > 262144)
+      return desconhecido("FEED_INVALIDO_OU_MUITO_GRANDE");
+    const bruto = await readFile(arquivo, "utf8");
+    const prefixo = "window.CENTRALDARK_AFTERBURNER_LIVE=";
+    if (!bruto.startsWith(prefixo)) return desconhecido("FEED_SEM_ASSINATURA");
+    const texto = bruto.slice(prefixo.length).trim().replace(/;\s*$/, "");
+    const amostra: unknown = JSON.parse(texto);
+    if (!ehObjeto(amostra) || amostra["schema"] !== "centraldark.afterburner.v1" ||
+        amostra["origin"] !== "CASA_SEGREDO" || amostra["source"] !== "MAHMSharedMemory" ||
+        !Array.isArray(amostra["sensors"]) || amostra["sensors"].length > 128 ||
+        typeof amostra["sourceUpdatedAt"] !== "string")
+      return desconhecido("FEED_FORA_DO_CONTRATO");
+    const tempo = Date.parse(amostra["sourceUpdatedAt"]);
+    const idadeMs = Date.now() - tempo;
+    if (!Number.isFinite(tempo) || idadeMs < -15000) return desconhecido("FONTE_SEM_TEMPO_VALIDO");
+    const idadeSeg = Math.max(0, Math.round(idadeMs / 1000));
+    if (idadeMs > 30000) return desconhecido("FONTE_VENCIDA", "STALE", amostra["sourceUpdatedAt"], idadeSeg);
+    const sensores = amostra["sensors"].flatMap((s: unknown) => {
+      if (!ehObjeto(s) || typeof s["name"] !== "string" || s["name"].length > 100 ||
+          typeof s["unit"] !== "string" || s["unit"].length > 32 ||
+          typeof s["value"] !== "number" || !Number.isFinite(s["value"]) || Math.abs(s["value"]) > 1e8)
+        return [];
+      return [{nome: s["name"], unidade: s["unit"], valor: s["value"]}];
+    });
+    if (!sensores.some((s: {nome:string}) => s.nome === "GPU usage"))
+      return desconhecido("SENSOR_GPU_PRINCIPAL_AUSENTE");
+    return {estado:"LIVE", fonte:"MAHMSharedMemory", atualizadoEm:amostra["sourceUpdatedAt"],
+      idadeSeg, anunciados:typeof amostra["announcedCount"] === "number" ? amostra["announcedCount"] : null,
+      sensores, motivo:null};
+  } catch {
+    return desconhecido("COLETOR_LOCAL_INDISPONIVEL");
+  }
+}
+
 export const lerMaquinaViva = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MaquinaViva> => {
-    const { data } = await context.supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", context.userId)
-      .eq("role", "admin")
-      .maybeSingle();
-    if (!data) throw new Response("Proibido", { status: 403 });
+    await exigirAdmin(context);
 
-    const [heartbeat, health, discoServidor] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor()]);
+    const [heartbeat, health, discoServidor, gpuCasa] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor(), medirGpuCasa()]);
     const fontes = [heartbeat.dados, health.dados];
     const primeiro = <T>(fn: (d: unknown) => T | null) => {
       for (const f of fontes) {
@@ -227,10 +338,19 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
       memoria,
       carga,
       discoServidor,
+      gpuCasa,
       frescor: {
         idadeSeg,
         fresco: idadeSeg == null ? null : idadeSeg <= LIMITE_FRESCOR_SEG,
         medidoPeloOwner,
       },
     };
+  });
+
+export const operarOverlayRtssCasa = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => rtssInput.parse(data))
+  .handler(async ({ context, data }): Promise<RtssOverlayCasa> => {
+    await exigirAdmin(context);
+    return executarRtssOverlay(data);
   });

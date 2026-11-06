@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { rotuloTecnicoHumano } from "@/components/central/EstadoCentralDark";
 import { supabase } from "@/integrations/supabase/client";
 import {
   continuarUltimaMissaoCentralDark,
@@ -54,8 +55,8 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
   const checkpoint = ultimo.data;
   const disponivel = checkpoint?.ok === true;
   const label = ultimo.isPending ? "Consultando…" :
-    ultimo.isError ? "UNKNOWN · não foi possível medir" :
-    disponivel ? "CHECKPOINT VERIFICADO" : (checkpoint?.state ?? "UNKNOWN");
+    ultimo.isError ? "Não foi possível verificar" :
+    disponivel ? "Pronto para continuar" : rotuloTecnicoHumano(checkpoint?.state);
 
   return (
     <section aria-label="CentralDark checkpoint e continuidade" className="mb-6 rounded-xl border border-border bg-background/80 p-4 sm:p-5">
@@ -78,8 +79,8 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
           <dl className="mt-4 grid gap-3 rounded-lg bg-muted/20 p-3 text-sm sm:grid-cols-2">
             <div><dt className="text-xs text-muted-foreground">Missão vigente</dt><dd className="mt-1 break-words font-medium">{checkpoint?.mission ?? "Não medida"}</dd></div>
             <div><dt className="text-xs text-muted-foreground">Último êxito</dt><dd className="mt-1 break-words font-medium">{checkpoint?.last_step ?? "Não medido"}</dd></div>
-            <div><dt className="text-xs text-muted-foreground">Próxima execução</dt><dd className="mt-1 break-words font-medium">{checkpoint?.next_cursor ?? "UNKNOWN"}</dd></div>
-            <div><dt className="text-xs text-muted-foreground">Provas válidas</dt><dd className="mt-1 font-medium">{disponivel ? `${checkpoint?.verified_steps ?? 0} / ${checkpoint?.events ?? 0} eventos` : "UNKNOWN"}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Próxima execução</dt><dd className="mt-1 break-words font-medium">{checkpoint?.next_cursor ?? "Ainda não definida"}</dd></div>
+            <div><dt className="text-xs text-muted-foreground">Confirmações válidas</dt><dd className="mt-1 font-medium">{disponivel ? `${checkpoint?.verified_steps ?? 0} / ${checkpoint?.events ?? 0} eventos` : "Ainda não verificadas"}</dd></div>
           </dl>
           <p className="mt-3 break-words text-sm">{disponivel ? checkpoint?.intent : "Aguardar uma leitura comprovada do owner da VPS."}</p>
           {checkpoint?.receipt_sha256 ? (

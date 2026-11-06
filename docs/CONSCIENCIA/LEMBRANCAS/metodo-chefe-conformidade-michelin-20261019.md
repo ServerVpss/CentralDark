@@ -15,6 +15,21 @@ O CHEFE aprovou o método de trabalho iterativo da CentralDark: intenção exata
 ## Conformidade
 O CHEFE declarou 100% de conformidade com sua intenção na experiência de colaboração e mapeamento de 19/10/2026. Isso não comprova 100% de conformidade técnica global. A melhoria observada foi a facilidade de acompanhar resultados sem supervisionar cada microedição. Esse princípio pode beneficiar outras pessoas que prefiram fluxos simples, sem pressupor adequação universal.
 
+
+## 🍒+1 Detalhamento do método aprovado em 19/10/2026 (COSTURA #1875)
+
+**Natureza histórica:** a aprovação de 100% pelo CHEFE foi para a experiência de **mapeamento e cooperação daquela etapa**, não para migração, integração técnica global ou deploy. `CONFORMIDADE_TECNICA_GLOBAL=UNKNOWN` sem prova independente. Fonte primária: PR #1875, cujo arquivo legado continua no histórico Git, sem restaurar a pasta aposentada.
+
+- **INTENT_FIRST:** seguir intenção, owner e limites, sem inventar PR, agente, painel ou tarefa paralela.
+- **SCRIPT_BEFORE_MODEL / REUSE_BEFORE_CREATE:** reutilizar automações, medir antes de editar, proteger o último verde e evitar segundo executor.
+- **AUTONOMIA_NO_ESCOPO:** medir, editar, testar, corrigir, contraprovar e registrar sem interromper o CHEFE a cada microajuste já autorizado. Novo escopo, credenciais e alterações destrutivas exigem seu controle próprio.
+- **CASA_MAIN_BIDIRECIONAL:** sincronizar alterações aprovadas com gates e readback em cada lado, preservar trabalho alheio e não usar force push ou reset destrutivo.
+- **FORJA_DISCOS (contexto histórico de 19/10):** `K:` patrimônio/código/dados persistentes; `F:` transitórios; `C:` Windows e exceções. A configuração atual exige medição própria.
+- **AGENTES:** um Hermes original, um Claude oficial, uma CentralDark. Reutilizar owners; não duplicar agentes.
+- **REALIDADE_JUIZ:** distinguir PROVADO, PARCIAL, FAIL e UNKNOWN com escopo, SHA, data e contraprova. Interface visível ou HTTP 200 não comprovam integração E2E.
+
+**Aplicação:** intenção → owner existente → menor delta → quem alterou executa a suíte pertinente → readback/contraprova → receipt → limpeza segura. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`.
+
 ## 🌟 !MICHELIN — integração no mesmo Loop Mestre (2026-10-21)
 
 @last_updated: 2026-10-22T00:31:00.000Z

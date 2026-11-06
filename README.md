@@ -5,11 +5,153 @@ NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
 
+
+
+<!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
+## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
+**docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
+seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
+sem obrigar o CHEFE a repetir sete links em cada missão. O boot existente
+**scripts/trigger-fabric/centraldark_full_trigger_boot.py** lê e verifica
+hashes dos sete arquivos; depois consulta o conteúdo pertinente ao objetivo.
+Não executa cegamente todas as fases e não confunde presença de arquivo com
+compreensão ou prova de runtime.
+
+HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
+As estrelas desse título são **identidade visual, não estrelas conquistadas**.
+Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
+FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
+não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
+indisponível e nunca afirmar carregamento automático.
+
+Atualização deste ponteiro: **2026-10-26T21:05:02Z**. Sem segundo router, HUD ou scheduler.
+<!-- /FIX_POINT_7_CANONICAL_REFS_V1 -->
+
+## 🔧 Política de entrega atual (CHEFE)
+
+MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
+Neste escopo, a CentralDark usa commit e push diretamente na main,
+com testes locais pertinentes, readback SHA e receipt; sem aguardar CI
+ou squash de PR. SSH direto na VPS quando estiver online; VPS indisponível
+não bloqueia edição/versionamento na main. Os gates de PR/squash de
+documentos legados são condicionais à trilha de PR — não ao fast path.
+Owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml
+seção current_delivery_policy.
+
+
+
+<!-- CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+## 🪬 CentralDark — Circuito Vivo e Skill Mãe (26/10/2026)
+
+**Contrato e receitas:** [CentralDark: Circuito Vivo, Conexões e Realtime](docs/ARQUITETURA/CENTRALDARK-CIRCUITO-VIVO-CONEXOES-20261026.md).
+Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que trabalham na CentralDark. **README é o índice humano; LEIA-ME-IA é a entrada técnica existente; AGENTS, CLAUDE e a Skill Mãe apontam para o mesmo contrato sem duplicar arquitetura.** Documentos detalhados permanecem bibliotecas rastreáveis.
+
+- Ordem de validação: **Cockpit → GitHub main → Casa/VPS → Supabase/Edge/API → retorno ao Cockpit**, com recibo e SHA.
+- API de cada conector mantém owner, autenticação, destino, rota e inventário. **Screenpipe nativo na porta 3030**, Cockpit Casa na 8080; rota de produto api/screenpipe é alvo até implantação autenticada e prova.
+- **Realtime** só representa evento realmente emitido. Novo **Feed Vivo** está no Sync Center, lendo os ledgers existentes agent_events e hub_mission_events (com RLS), sem promover conexão WebSocket a execução concluída.
+- **SSH bidirecional** é testado por ida e volta; VM nova segue a mesma receita e inventaria dependências, sem clonar chaves ou abrir roteador paralelo.
+- **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
+- Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
+
+**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+<!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
+
 # 🪬 CentralDark — Instinto Superior
 
 **Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, AionUi, Rakazo, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
+
+
+## Navegação operacional — Casa, Forja 1, GitHub e VPS
+
+> **Mapa físico dos diretórios do `K:\` (25/10/2026).** Presença de arquivo ≠ execução, skill carregada ou sincronização comprovada. Preservar contratos e histórico nas seções seguintes.
+
+### Por onde uma IA deve começar
+
+| Ordem | Fonte | Por quê |
+|---|---|---|
+| 1 | [`LEIA-ME-IA.md`](LEIA-ME-IA.md) e [`AGENTS.md`](AGENTS.md) | Boot, autoridade, intenção e segurança. |
+| 2 | [Método operacional](.agents/skills/centraldark-operational-method/SKILL.md) | Owner, execução, evidência, contraprova e continuidade. |
+| 3 | [Kimetsu](.agents/skills/kimetsu-brainstorm/SKILL.md) | Classificação e técnica antes de agir. |
+| 4 | [Hermes](.agents/skills/autonomous-ai-agents/hermes-agent/SKILL.md) e [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) | Reutilizar executor e procedimentos. |
+| 5 | [Skill Synchronization](.agents/skills/skill-synchronization/SKILL.md) | Skills opt-in, locks, hashes, proteção contra drift. |
+| 6 | [Arquitetura](docs/ARQUITETURA/) e [Memória](docs/CONSCIENCIA/) | Conhecimento, decisões, histórico e receipts. |
+
+**ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE.** Não duplicar Hermes, MCP, gateway, cockpit, skill-mãe, catálogo ou sincronizador.
+
+### Estrutura atual: pastas principais da Casa
+
+```text
+K:\                                      # Raiz CentralDark / Casa
+├── README.md                             # Índice humano e para IAs
+├── LEIA-ME-IA.md                         # Porta de boot canônica
+├── AGENTS.md                             # Contrato do workspace
+├── .agents\skills\
+│   ├── centraldark-operational-method\   # Método e referências
+│   ├── kimetsu-brainstorm\               # Técnicas e gates
+│   ├── skill-synchronization\            # Sync de skills
+│   └── autonomous-ai-agents\hermes-agent\ # Contrato Hermes
+├── apps\
+│   ├── instinto-superior\                # Admin/Cockpit
+│   └── modulos\
+│       ├── HERMES-CORE\                  # Núcleo tipado executor
+│       └── mcp\                          # Barramento MCP
+├── docs\
+│   ├── ARQUITETURA\                      # Contratos
+│   ├── BRAIN\                            # Memória canônica versionável
+│   ├── CONSCIENCIA\                      # Aprendizados, lembranças e provas
+│   └── HUD\                              # Visualização e observabilidade
+├── scripts\
+│   ├── casa\                             # Casa, Obsidian e sync
+│   └── vps\                              # VPS, sync e deploy
+├── WSL\openKylin\                        # Forja 1 / WSL2, disco K:
+├── .obsidian\                            # Configuração local Obsidian
+├── infra\                                # Infraestrutura
+├── tests\                                # Testes
+└── skills\                               # Skills portáteis
+```
+
+Índice **selecionado e verificado**; outras pastas, backups, caches, dados privados e segredos existem, mas não são automaticamente publicáveis ou sincronizáveis.
+
+### Fluxo operacional: Casa ↔ GitHub ↔ VPS
+
+```text
+CHEFE / Windows — autoridade e aceite
+         ↕
+openKylin / FORJA 1 — WSL2 no K: ↔ Obsidian / BRAIN
+         │ HERMES-CORE + scripts tipados + MCP
+         │ POMBO/checksum, testes, receipts, contraprova
+         ▼ somente o delta aprovado
+Git/GitHub main — CRISTAL (código, documentos, aprendizados)
+         ↕ sincronização bidirecional reconciliada
+openKylin / VPS — mesmas receitas, readback no destino
+```
+
+**Objetivo:** sync automático bidirecional disciplinado, não cópia indiscriminada. Obsidian guarda memória editável da Casa; GitHub mantém cristal versionado após aceite; a VPS executa o que foi efetivamente promovido. Alterações conflitantes conservam ambos os lados; não publicar brutos privados, segredos ou tokens. Checksum prova identidade de bytes; resultado real exige contraprova. A presença dos scripts abaixo **não prova que o sync E2E está rodando agora**.
+
+| Função | Owner existente |
+|---|---|
+| Golden Capsule / Casa e VPS | [Matriz bidirecional](docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/CENTRALDARK-MATRIZ-BIDIRECIONAL-GOLDEN-CAPSULE.md) |
+| Obsidian ↔ BRAIN | [Contrato](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md) · [script](scripts/casa/sync-hermes-obsidian.ps1) |
+| Skills da main ↔ Hermes runtime | [Skill sync](.agents/skills/skill-synchronization/SKILL.md) · [script](scripts/skill-sync-check.sh) |
+| VPS ↔ `origin/main` | [Auto-sync VPS](scripts/vps/auto-sync-main.sh) |
+| POMBO com checksum / rastro | [Verificador](scripts/verify_pombo_evolution.py) · [Lei do Rastro](docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md) |
+| Executor tipado | [HERMES-CORE](apps/modulos/HERMES-CORE/) · [delegação tipada](.agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json) |
+
+`SOURCE_PRESENT != RUNNING` · `SYNCED != LOADED` · `COMMIT != DEPLOY` · `UNKNOWN != PASS`.
+
+### Pacote de skills e referência em português
+
+- **Nosso pacote:** [`K:\.agents\skills\centraldark-operational-method\`](.agents/skills/centraldark-operational-method/), junto com Kimetsu e o owner de sincronização.
+- **Complemento externo:** [Hermes Brasil](https://github.com/Hermes-brasil/hermes-brasil) contém `skills/`, `guides/`, README e CONTRIBUTING em português. É fonte de estudo; não substitui o Hermes ou o método da CentralDark.
+- **Ciclo de qualquer agente:** boot → intenção → descoberta do owner → estado vivo → menor delta → testes → recibo/contraprova → aceite quando promover → readback Casa/GitHub/VPS.
+
+---
 
 ## 🏛️ Mapa de responsabilidades — Instinto Superior primeiro
 

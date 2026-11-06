@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { lerMcpRuntimeAoVivo } from "@/lib/cockpit.functions";
+import { FocusTelemetryPanel } from "@/components/central/FocusTelemetryPanel";
 import { BookOpen, Boxes, Gem, Lock } from "lucide-react";
 import gavetaCatalogo from "@/data/forja-gaveta.snapshot.json";
 import moduloCatalogo from "../../../config/harness-module-registry.json";
@@ -303,7 +304,7 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
   const terminalRota = {
     nome: "Terminal integrado VS Code → RDC CentralDark",
     owner: "skills/vs-code-restore/SKILL.md",
-    codigoFonte: ".agents/skills/centraldark-vscode-log-bridge/SKILL.md",
+    codigoFonte: ".agents/skills/centraldark-operational-method/Skills/centraldark-vscode-log-bridge/SKILL.md",
     registroMcp: "RDC_DESKTOP_COMMANDER",
     estado: "UIA_IDENTIFICADA_SESSAO_NAO_VINCULADA",
   } as const;
@@ -334,6 +335,16 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
           Inventário completo dos documentos SKILL.md rastreados na main medida.
           Catálogo é fonte documental: não significa skill instalada, carregada ou executada.
         </p>
+        <div className="mt-3 grid gap-2 lg:grid-cols-2">
+          <p className="rounded-md border border-border bg-background/40 p-3 text-xs text-muted-foreground">
+            <strong className="text-foreground">🧠 Gênesis em uma frase:</strong>{" "}
+            usa os aprendizados do NeuroLink como ponto de partida; a execução fica com o Hermes.
+          </p>
+          <p className="rounded-md border border-border bg-background/40 p-3 text-xs text-muted-foreground">
+            <strong className="text-foreground">📊 Status operacional:</strong>{" "}
+            catálogo de skills observado; contagem real de uso por skill depende de telemetria verificável.
+          </p>
+        </div>
         <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
           <div className="rounded-md border border-border p-3">
             <strong className="text-lg">{TOTAL_SKILLS_GAVETA}</strong>
@@ -369,6 +380,8 @@ export function GavetaForja({ mainShaAtual }: { mainShaAtual?: string | null } =
           {" "}MAIN_SYNCED ≠ RUNTIME_LOADED.
         </p>
       </header>
+
+      <FocusTelemetryPanel />
 
       <section className="panel p-5" aria-labelledby="gaveta-inventario-fisico">
         <h5 id="gaveta-inventario-fisico" className="font-semibold">
