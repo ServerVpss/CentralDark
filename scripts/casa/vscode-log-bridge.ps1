@@ -14,8 +14,8 @@ $ErrorActionPreference = "Stop"
 # A unica origem Casa e a raiz Git K:\; K:\ e C:\CentralDark sao legados.
 # O perfil Windows (e seu cache ms-playwright) permanece independente da raiz Git.
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')).TrimEnd('\')
-if ($env:OS -eq 'Windows_NT' -and $repoRoot -ine 'K:') {
-  Write-Error 'CASA_ROOT=BLOCKED_LEGACY_OR_NONCANONICAL_PATH; EXPECTED=K:\'
+if ($env:OS -eq 'Windows_NT' -and -not (Test-Path (Join-Path $repoRoot '.git'))) {
+  Write-Error 'CASA_ROOT=BLOCKED_LEGACY_OR_NONCANONICAL_PATH; EXPECTED_DYNAMIC_ROOT'
   exit 20
 }
 # On-demand, four-stage bootstrap of the SAME existing scheduled collector.
