@@ -11,9 +11,15 @@
 set -uo pipefail
 
 BLOCO="install-https"
+CHECKER_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+CHECKOUT_ROOT="$(cd "$CHECKER_DIR/../.." && pwd -P)"
 ZONE="${ZONE:-centralldark.com}"
 FQDN="install.${ZONE}"
-IP_ESPERADO="${IP_ESPERADO:-89.117.78.124}"
+IP_ESPERADO="${IP_ESPERADO:-}"
+CF_ENV="${CF_ENV_FILE:-$CHECKOUT_ROOT/secrets/cloudflare.env}"
+if [ -z "$IP_ESPERADO" ] && [ -r "$CF_ENV" ]; then
+  IP_ESPERADO="$(grep -E '^CF_TARGET_IP=' "$CF_ENV" | tail -1 | cut -d= -f2- | tr -d '"')"
+fi
 PORTA_BACKEND="${PORTA_BACKEND:-9200}"
 
 # --- 1) DNS wildcard ---
@@ -21,7 +27,9 @@ probe="probe-$(date +%s%N | cut -c1-12).${ZONE}"
 got_probe="$(curl -s "https://1.1.1.1/dns-query?name=${probe}&type=A" \
   -H 'accept: application/dns-json' \
   | python3 -c "import sys,json;d=json.load(sys.stdin);print(','.join(a['data'] for a in d.get('Answer',[]) if a.get('type')==1) or '')")"
-if [ "$got_probe" = "$IP_ESPERADO" ]; then
+if [ -z "$IP_ESPERADO" ]; then
+  echo "ALERTA|${BLOCO}|IP esperado não configurado; comparação do wildcard inconclusiva"
+elif [ "$got_probe" = "$IP_ESPERADO" ]; then
   echo "OK|${BLOCO}|DNS wildcard vivo (${probe} → ${got_probe})"
 else
   echo "ERRO|${BLOCO}|DNS wildcard falhou (${probe} → '${got_probe:-vazio}', esperado ${IP_ESPERADO})"
@@ -31,14 +39,16 @@ fi
 got_install="$(curl -s "https://1.1.1.1/dns-query?name=${FQDN}&type=A" \
   -H 'accept: application/dns-json' \
   | python3 -c "import sys,json;d=json.load(sys.stdin);print(','.join(a['data'] for a in d.get('Answer',[]) if a.get('type')==1) or '')")"
-if [ "$got_install" = "$IP_ESPERADO" ]; then
+if [ -z "$IP_ESPERADO" ]; then
+  echo "ALERTA|${BLOCO}|IP esperado não configurado; resolução DNS sem comparação"
+elif [ "$got_install" = "$IP_ESPERADO" ]; then
   echo "OK|${BLOCO}|${FQDN} → ${got_install}"
 else
   echo "ERRO|${BLOCO}|${FQDN} resolve pra '${got_install:-vazio}'"
 fi
 
 # --- 3) Snippet Caddy esperado ---
-SNIPPET="/root/CentralDark/infra/caddy/install.Caddyfile"
+SNIPPET="${CENTRALDARK_INSTALL_CADDYFILE:-$CHECKOUT_ROOT/infra/caddy/install.Caddyfile}"
 if [ -f "$SNIPPET" ] && grep -q "${FQDN}" "$SNIPPET" && grep -q "127.0.0.1:${PORTA_BACKEND}" "$SNIPPET"; then
   echo "OK|${BLOCO}|Snippet Caddy ok (${FQDN} → 127.0.0.1:${PORTA_BACKEND})"
 elif [ -f "$SNIPPET" ]; then

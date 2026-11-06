@@ -51,7 +51,7 @@ const urlEncoded=(data,cookie='',origin='http://127.0.0.1')=>({
 const json=(data)=>({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
 async function adminCookie(){
   const res=await request('/admin/login',
-    urlEncoded({password:process.env.MCP_ADMIN_PASSWORD}));
+    {...urlEncoded({password:process.env.MCP_ADMIN_PASSWORD}),headers:{...urlEncoded({password:process.env.MCP_ADMIN_PASSWORD}).headers,Accept:"text/html"}});
   assert.equal(res.status,302);
   const full=res.headers.get('set-cookie');
   assert.match(full,/^cd_admin=/);
@@ -75,12 +75,13 @@ test('Hermes: o MESMO /authorize conserva formulário original OAuth 2.1 e PKCE'
     code_challenge_method:'S256',scope:'mcp',state:'TEST_ONLY_HERMES_STATE'
   });
   const page=await request('/authorize?'+params);
-  assert.equal(page.status,200);
-  const html=await page.text();
-  assert.match(html,/Hermes Agent/);
-  assert.match(html,/name="password" placeholder="Senha do admin"/);
-  assert.match(html,/>Allow<\/button>/);
-  assert.doesNotMatch(html,/class="pair-code"/);
+  assert.equal(page.status,302);
+  const ownerConsent=new URL(page.headers.get('location'));
+  assert.equal(ownerConsent.origin,'https://admin.centralldark.com');
+  assert.equal(ownerConsent.pathname,'/mcp-autorizar');
+  assert.equal(ownerConsent.searchParams.get('client_name'),'Hermes Agent');
+  assert.equal(ownerConsent.searchParams.get('code_challenge'),'TEST_ONLY_PKCE_CHALLENGE');
+  assert.ok(!ownerConsent.searchParams.has('pair_code'));
 
   const inputs={
     client_id:client.client_id,redirect_uri:base+'/callback',
@@ -89,8 +90,9 @@ test('Hermes: o MESMO /authorize conserva formulário original OAuth 2.1 e PKCE'
     state:'TEST_ONLY_HERMES_STATE',password:process.env.MCP_ADMIN_PASSWORD
   };
   const denied=await request('/authorize',urlEncoded({...inputs,password:'incorrect'}));
-  assert.equal(denied.status,200);
-  assert.match(await denied.text(),/Senha inv/);
+  assert.equal(denied.status,302);
+  const deniedConsent=new URL(denied.headers.get('location'));
+  assert.match(deniedConsent.searchParams.get('error') || '',/Senha inv/);
   const approved=await request('/authorize',urlEncoded(inputs));
   assert.equal(approved.status,302);
   const target=new URL(approved.headers.get('location'));
@@ -113,24 +115,24 @@ test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código 
     client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id
   });
   const consent=await request(url);
-  assert.equal(consent.status,200);
-  const noOwner=await consent.text();
-  assert.match(noOwner,/CentralDark · Vibe Coding/);
-  assert.match(noOwner,/Confirmar pareamento/);
-  assert.ok(noOwner.includes(pair.code));
-  assert.doesNotMatch(noOwner,/name="password"/);
+  assert.equal(consent.status,302);
+  const noOwner=new URL(consent.headers.get('location'));
+  assert.equal(noOwner.origin,'https://admin.centralldark.com');
+  assert.equal(noOwner.pathname,'/mcp-autorizar');
+  assert.equal(noOwner.searchParams.get('pair_id'),pair.pair_id);
+  assert.equal(noOwner.searchParams.get('pair_code'),pair.code);
+  assert.ok(noOwner.searchParams.get('pair_nonce'));
+  assert.ok(!noOwner.searchParams.has('pair_secret'));
   const cookie=await adminCookie();
   const page=await request(url,{headers:{Cookie:cookie}});
-  assert.equal(page.status,200);
-  const html=await page.text();
-  assert.match(html,/Confirmar pareamento/);
-  assert.ok(html.includes(pair.code));
-  assert.doesNotMatch(html,/name="password"/);
+  assert.equal(page.status,302);
+  const ownerPage=new URL(page.headers.get('location'));
+  assert.equal(ownerPage.searchParams.get('pair_code'),pair.code);
   const body={
     client_id:'centraldark.centraldark-vscode-restore',
-    pair_id:getHidden(html,'pair_id'),
-    pair_code:getHidden(html,'pair_code'),
-    pair_nonce:getHidden(html,'pair_nonce')
+    pair_id:ownerPage.searchParams.get('pair_id'),
+    pair_code:ownerPage.searchParams.get('pair_code'),
+    pair_nonce:ownerPage.searchParams.get('pair_nonce')
   };
   const before=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
   assert.equal((await before.json()).status,'pending');
@@ -141,8 +143,9 @@ test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código 
   const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'FFFF-FFFF'},cookie));
   assert.equal(invalidCode.status,403);
   const confirmed=await request('/authorize',urlEncoded(body,cookie));
-  assert.equal(confirmed.status,200);
-  assert.match(await confirmed.text(),/Pareamento confirmado/);
+  assert.equal(confirmed.status,302);
+  const confirmPage=new URL(confirmed.headers.get('location'));
+  assert.equal(confirmPage.searchParams.get('success'),'1');
   const replay=await request('/authorize',urlEncoded(body,cookie));
   assert.equal(replay.status,404);
   const completed=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
@@ -173,4 +176,34 @@ test('Expired pair cannot be confirmed; code alone never issues token',()=>{
   assert.equal(isolated.approveWeb({pairId:p.pairId,code:p.code,nonce:consent.nonce}).ok,false);
 });
 
+test('Integracao /device e /authorize tem um unico store no src e dist',async()=>{
+  const {readFileSync}=await import('node:fs');
+  for(const f of ['../src/index.js','../dist/index.js']){
+    const source=readFileSync(new URL(f,import.meta.url),'utf8');
+    assert.equal((source.match(/app\.use\("\/device", createDevicePairingRouter/g)||[]).length,1);
+    assert.match(source,/createDevicePairingRouter\(\{ store: oauthDeviceStore, cookieAdmin: isCockpitAdmin \}\)/);
+    assert.match(source,/configureDevicePairingForOAuth\(oauthDeviceStore\)/);
+  }
+});
+
+test('Cockpit mostra o codigo da tentativa e exige clique humano',async()=>{
+  const {readFileSync}=await import('node:fs');
+  const page=readFileSync(new URL('../../../instinto-superior/src/routes/mcp-autorizar.tsx',import.meta.url),'utf8');
+  assert.match(page,/params\.get\("pair_code"\)/);
+  assert.match(page,/"pair_nonce"/);
+  assert.match(page,/type="hidden" name="pair_code"/);
+  assert.match(page,/Confirmar pareamento/);
+  assert.match(page,/type="submit"/);
+});
+test('extensao distribuida contem o pareamento e dependencias compiladas',async()=>{
+  const {readFileSync,existsSync}=await import('node:fs');
+  const entry=new URL('../../../../skills/vs-code-restore/out/extension.js',import.meta.url);
+  const compiled=readFileSync(entry,'utf8');
+  assert.match(compiled,/async function pairVsCode/);
+  assert.match(compiled,/vscode\.env\.openExternal\(approvedUri\)/);
+  assert.match(compiled,/centraldark\.pairVsCode/);
+  assert.doesNotMatch(compiled,/modal:\s*true/);
+  assert.ok(existsSync(new URL('../../../../skills/vs-code-restore/out/autoUpdater.js',import.meta.url)));
+  assert.ok(existsSync(new URL('../../../../skills/vs-code-restore/out/remote-terminal.js',import.meta.url)));
+});
 test.after(()=>server.close());

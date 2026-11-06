@@ -8,9 +8,14 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
+import io
 import importlib.util
 import json
+import hashlib
+import subprocess
 import tempfile
+from unittest.mock import patch
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -554,6 +559,145 @@ def test_fixed_point_seven_sources_fail_closed():
     assert "MASTER_CYCLE_MISSING" in result["unknowns"]
 
 
+
+def test_boot_discovers_repository_root_without_fixed_drive_path():
+    assert mod.discover_boot_repo() == REPO.resolve()
+    assert mod.discover_boot_repo(HERE) == REPO.resolve()
+
+
+
+def test_hud_gate_accepts_git_normalized_windows_line_endings():
+    rel = "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
+    main_bytes = b"import React from 'react';" + bytes([10]) + b"const hudMigrationSnapshot = {};" + bytes([10])
+    checkout_bytes = main_bytes.replace(bytes([10]), bytes([13, 10]))
+    blob_oid = "abc123"
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        source = repo / rel
+        source.parent.mkdir(parents=True)
+        source.write_bytes(checkout_bytes)
+
+        def fake_run(command, **kwargs):
+            if command[0] != "git":
+                raise AssertionError(f"Unexpected command: {command}")
+            args = command[3:]
+            if args == ["remote", "get-url", "origin"]:
+                return subprocess.CompletedProcess(command, 0, "https://github.com/ServerVpss/CentralDark.git", "")
+            if args == ["rev-parse", "HEAD"]:
+                return subprocess.CompletedProcess(command, 0, "main-sha", "")
+            if args == ["ls-remote", "--exit-code", "origin", "refs/heads/main"]:
+                return subprocess.CompletedProcess(command, 0, "main-sha refs/heads/main", "")
+            if args == ["rev-parse", f"main-sha:{rel}"]:
+                return subprocess.CompletedProcess(command, 0, blob_oid, "")
+            if args == ["hash-object", f"--path={rel}", str(source)]:
+                return subprocess.CompletedProcess(command, 0, blob_oid, "")
+            if args == ["show", f"main-sha:{rel}"]:
+                return subprocess.CompletedProcess(command, 0, main_bytes, b"")
+            raise AssertionError(f"Unexpected git args: {args}")
+
+        with patch.object(mod.subprocess, "run", side_effect=fake_run):
+            result = mod.hud_first_gate(repo)
+    assert result["status"] == "PASS"
+    assert result["source_blob_oid"] == blob_oid
+    assert result["source_sha256"] == hashlib.sha256(main_bytes).hexdigest()
+    assert result["checkout_sha256"] == hashlib.sha256(checkout_bytes).hexdigest()
+
+
+
+
+
+def test_hud_gate_rejects_normalized_content_drift():
+    rel = "apps/instinto-superior/src/components/central/HudDeterministico.tsx"
+    main_bytes = b"import React from 'react';" + bytes([10]) + b"const hudMigrationSnapshot = {};" + bytes([10])
+    checkout_bytes = main_bytes.replace(bytes([10]), bytes([13, 10]))
+    main_blob_oid = "abc123"
+    drift_blob_oid = "different-oid"
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        source = repo / rel
+        source.parent.mkdir(parents=True)
+        source.write_bytes(checkout_bytes)
+
+        def fake_run(command, **kwargs):
+            args = command[3:]
+            if args == ["remote", "get-url", "origin"]:
+                return subprocess.CompletedProcess(command, 0, "https://github.com/ServerVpss/CentralDark.git", "")
+            if args == ["rev-parse", "HEAD"]:
+                return subprocess.CompletedProcess(command, 0, "main-sha", "")
+            if args == ["ls-remote", "--exit-code", "origin", "refs/heads/main"]:
+                return subprocess.CompletedProcess(command, 0, "main-sha refs/heads/main", "")
+            if args == ["rev-parse", f"main-sha:{rel}"]:
+                return subprocess.CompletedProcess(command, 0, main_blob_oid, "")
+            if args == ["hash-object", f"--path={rel}", str(source)]:
+                return subprocess.CompletedProcess(command, 0, drift_blob_oid, "")
+            if args == ["show", f"main-sha:{rel}"]:
+                return subprocess.CompletedProcess(command, 0, main_bytes, b"")
+            raise AssertionError(f"Unexpected git args: {args}")
+
+        with patch.object(mod.subprocess, "run", side_effect=fake_run):
+            result = mod.hud_first_gate(repo)
+    assert result["status"] == "FAIL_CLOSED"
+    assert result["reason"] == "HUD_DISK_DIFFERS_FROM_PINNED_MAIN"
+
+
+def test_missing_checkpoint_blocks_resume_after_canonical_main_read():
+    order = []
+    canonical = {
+        "source_sha256": {"CENTRALDARK_AI_BOOT.yaml": "sha256"},
+        "fixed_point_pack": {"status": "BOUND"},
+        "discovered": {"tokens": ["!CENTRALDARK"]},
+        "cognitive_bios": {"status": "LOADED", "hud": {"COGNITIVE_BIOS_STATUS": "LOADED"}},
+        "runtime_preflight_contract": {"status": "BOUND"},
+        "canonical_consumption": {"status": "BOUND"},
+        "active_session_application": "UNKNOWN_NOT_PROVEN_BY_LOCAL_BOOT",
+        "source_authority": "UNBOUND_LOCAL_CHECKOUT",
+    }
+    hud = {"status": "PASS", "head": "main-sha", "main_live": "main-sha"}
+    with patch.object(mod, "canonical_boot_snapshot", side_effect=lambda _repo: order.append("canonical") or dict(canonical)), \
+         patch.object(mod, "hud_first_gate", side_effect=lambda _repo: order.append("hud") or hud), \
+         patch.object(mod, "hermes_continuity_preflight", side_effect=lambda _repo: order.append("checkpoint") or {
+             "status": "BLOCKED", "reason": "CHECKPOINT_UNAVAILABLE",
+         }):
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = mod.cmd_boot(argparse.Namespace(repo=None, input="!CENTRALDARK"))
+    payload = json.loads(output.getvalue())
+    assert code == 0
+    assert order == ["canonical", "hud", "checkpoint"]
+    assert payload["status"] == "CANONICAL_MAIN_LOADED_RESUME_BLOCKED"
+    assert payload["canonical_boot_loaded"] is True
+    assert payload["canonical_boot"]["source_authority"] == "SERVERVPSS_CENTRALDARK_MAIN"
+    assert payload["mission_resume"]["status"] == "BLOCKED"
+    assert payload["hud_first"]["status"] == "PASS"
+    assert payload["canonical_boot"]["active_session_application"] == "UNKNOWN_NOT_PROVEN_BY_LOCAL_BOOT"
+
+
+def test_hud_failure_keeps_canonical_readback_and_skips_resume():
+    canonical = {
+        "source_sha256": {"CENTRALDARK_AI_BOOT.yaml": "sha256"},
+        "fixed_point_pack": {"status": "BOUND"},
+        "discovered": {"tokens": ["!CENTRALDARK"]},
+        "cognitive_bios": {"status": "LOADED", "hud": {"COGNITIVE_BIOS_STATUS": "LOADED"}},
+        "runtime_preflight_contract": {"status": "BOUND"},
+        "canonical_consumption": {"status": "BOUND"},
+        "active_session_application": "UNKNOWN_NOT_PROVEN_BY_LOCAL_BOOT",
+        "source_authority": "UNBOUND_LOCAL_CHECKOUT",
+    }
+    with patch.object(mod, "canonical_boot_snapshot", return_value=canonical), \
+         patch.object(mod, "hud_first_gate", return_value={"status": "FAIL_CLOSED", "reason": "HUD_MAIN_SOURCE_MISSING_OR_LINK"}), \
+         patch.object(mod, "hermes_continuity_preflight") as continuity:
+        output = io.StringIO()
+        with contextlib.redirect_stdout(output):
+            code = mod.cmd_boot(argparse.Namespace(repo=None, input="!CENTRALDARK"))
+    payload = json.loads(output.getvalue())
+    assert code == 0
+    assert payload["status"] == "LOCAL_CONTRACTS_READ_CONTROL_PLANE_BLOCKED"
+    assert payload["canonical_boot_loaded"] is True
+    assert payload["canonical_boot"]["source_sha256"]["CENTRALDARK_AI_BOOT.yaml"] == "sha256"
+    assert payload["mission_resume"]["status"] == "NOT_ATTEMPTED"
+    continuity.assert_not_called()
+
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -587,6 +731,11 @@ if __name__ == "__main__":
         test_canonical_chain_contains_full_core_flow,
         test_fixed_point_seven_canonical_refs,
         test_fixed_point_seven_sources_fail_closed,
+        test_boot_discovers_repository_root_without_fixed_drive_path,
+        test_hud_gate_accepts_git_normalized_windows_line_endings,
+        test_hud_gate_rejects_normalized_content_drift,
+        test_missing_checkpoint_blocks_resume_after_canonical_main_read,
+        test_hud_failure_keeps_canonical_readback_and_skips_resume,
     ]
     for test in tests:
         test()

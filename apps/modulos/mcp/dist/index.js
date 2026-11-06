@@ -122,7 +122,7 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 // V2: Correlation-ID + request logger estruturado (rastreia OAuth→token→tools/list→SSE)
 app.use(correlationMiddleware);
 // Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
-app.use("/device", createDevicePairingRouter({ cookieAdmin: isCockpitAdmin }));
+// Um unico store para /device e /authorize.
 
 app.get("/admin/pairing", (_req, res) => {
     res.redirect(302, "https://admin.centralldark.com/sala-controle");
@@ -542,7 +542,7 @@ app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerM
 // Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
 const oauthDeviceStore = createDevicePairingStore();
 configureDevicePairingForOAuth(oauthDeviceStore);
-app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore }));
+app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore, cookieAdmin: isCockpitAdmin }));
 // ───────────────────────── OAuth endpoints (MCP) ─────────────────────────
 app.post("/register", postRegister);
 app.get("/authorize", handleAuthorize);

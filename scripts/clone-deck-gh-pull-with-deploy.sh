@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 # Nome legado preservado por compatibilidade de chamadores. O comportamento
-# canônico é exclusivamente ServerVpss/CentralDark em /root/CentralDark.
+# canônico é exclusivamente ServerVpss/CentralDark, no mesmo checkout do owner.
 set -Eeuo pipefail
 
-REPO_DIR="${CENTRALDARK_ROOT:-/root/CentralDark}"
+SELF_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd -P)"
+REPO_DIR="${CENTRALDARK_ROOT:-$SELF_DIR}"
 BRANCH="main"
 
-case "$REPO_DIR" in
-  /root/CentralDark) ;;
-  *) printf '[ERRO] ROOT_FORA_DA_CENTRALDARK=%s\n' "$REPO_DIR" >&2; exit 20 ;;
-esac
+# Preserve a fronteira original sem fixar /root ou o nome de host.
+if [[ "$(realpath -m -- "$REPO_DIR")" != "$SELF_DIR" ]]; then
+  printf '[ERRO] ROOT_FORA_DA_CENTRALDARK=%s\n' "$REPO_DIR" >&2
+  exit 20
+fi
 
 DISPATCHER="$REPO_DIR/scripts/vps/deploy-guards-dispatcher.sh"
 [ -x "$DISPATCHER" ] || { printf '[ERRO] CANONICAL_DEPLOY_GATE_MISSING\n' >&2; exit 28; }

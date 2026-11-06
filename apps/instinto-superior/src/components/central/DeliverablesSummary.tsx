@@ -85,7 +85,7 @@ const STATUS_CONFIG = {
 export function DeliverablesSummary() {
   const completed = DELIVERABLES.filter(d => d.status === "completed").length;
   const inProgress = DELIVERABLES.filter(d => d.status === "in_progress").length;
-  const pending = DELIVERABLES.filter(d => d.status === "pending").length;
+  const pending = DELIVERABLES.filter(d => (d.status as string) === "pending").length;
   const total = DELIVERABLES.length;
   const percentage = Math.round((completed / total) * 100);
 

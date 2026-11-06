@@ -1,13 +1,28 @@
+// #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
+// @last_updated: 2026-11-01T19:41:24.979255+00:00 @implementado: autenticação do Omni local server-side, rótulo Forja Linux; sem promoção de projeções a execução.
+// #OBSERVACOES# @owner: instinto.cockpit @doc_ref: README.md
+// @last_updated: 2026-11-01T19:22:05.143254+00:00 @implementado: sondas nativas Linux e papel CASA explícito; sem inferir VPS por hostname.
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { execFile } from "node:child_process";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const GATEWAY = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API = "https://api.github.com";
+<<<<<<< HEAD
 const DEFAULT_API_BASE = "https://api.centralldark.com";
 const DEFAULT_MCP_BASE = "https://mcp.centralldark.com";
+=======
+// A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
+const DEFAULT_API_BASE = "http://127.0.0.1:8099";
+const DEFAULT_CASA_COMMANDER_HEALTH_BASE = "http://127.0.0.1:9101";
+const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
+>>>>>>> origin/main
 const REQUEST_TIMEOUT_MS = 8_000;
+
+function carregarEnvForja() {
+  if (typeof process.loadEnvFile !== "function") return;
+  try { process.loadEnvFile(process.env["CENTRALDARK_ENV_FILE"] || "K:\\.env"); } catch { /* Fonte indisponível mantém UNKNOWN */ }
+}
 
 export type Estado = "PASS" | "RUNNING" | "BLOCKED" | "AUTH_REQUIRED" | "UNKNOWN" | "FAIL";
 
@@ -26,10 +41,26 @@ type CommitCentralDark = {
   data: string;
 };
 
+export type PortaCentralDark = {
+  id: string;
+  origem: "Casa Windows" | "openKylin";
+  transporte: "TCP" | "UDP" | "stdio";
+  bind: string;
+  estado: Estado;
+  processo: string;
+  pid: string | null;
+  protocolo: "TCP" | "UDP";
+  categoria: "CentralDark" | "Sistema";
+  detalhe: string;
+};
+
 export type EstadoCentralDark = {
   gmail: Estado;
   githubLovable: Estado;
   desktop: Estado;
+  commanderEngine: boolean | null;
+  commanderHttp: number | null;
+  commanderToolProof: { tool: string; kind: string; at: string } | null;
   repositorio: "ServerVpss/CentralDark";
   branch: "main";
   vpsSha: string | null;
@@ -105,8 +136,10 @@ export type EstadoCentralDark = {
   omniModelsHttp: number | null;
   receiptsHttp: number | null;
   casaSiteHttp: number | null;
+  casaSiteFonte: string;
   screenpipeHttp: number | null;
   screenpipeDetail: string | null;
+  screenpipeAudioStatus: string | null;
   screenpipeFonte: string;
   screenpipeEvents: string[];
   screenpipeVpsHttp: number | null;
@@ -123,9 +156,12 @@ export type EstadoCentralDark = {
   actionsErro: string | null;
   gmailFonte: string;
   desktopFonte: string;
+  portas: PortaCentralDark[];
+  portasTotais: PortaCentralDark[];
 };
 
 function acessoGitHub() {
+  carregarEnvForja();
   const token = process.env["GITHUB_TOKEN"];
   if (token) {
     return {
@@ -139,26 +175,20 @@ function acessoGitHub() {
     };
   }
 
-  const lovable = process.env["LOVABLE_API_KEY"];
-  const github = process.env["GITHUB_API_KEY"];
-  if (!lovable || !github) return null;
-  return {
-    base: GATEWAY,
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${lovable}`,
-      "X-Connection-Api-Key": github,
-    },
-    fonte: "Conector GitHub",
-  };
+  return null;
 }
 
 export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
 
+<<<<<<< HEAD
 function mcpBase() {
   return (process.env["CENTRALDARK_MCP_BASE_URL"] ?? DEFAULT_MCP_BASE).replace(/\/$/, "");
+=======
+function casaCommanderHealthBase() {
+  return (process.env["CENTRALDARK_ROUTER_HEALTH_URL"] ?? DEFAULT_CASA_COMMANDER_HEALTH_BASE).replace(/\/$/, "");
+>>>>>>> origin/main
 }
 
 function objetoJson(valor: unknown): valor is JsonObject {
@@ -174,8 +204,18 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+<<<<<<< HEAD
     const resposta = await fetch(`${base}${path}`, {
       headers: { accept: "application/json" },
+=======
+    carregarEnvForja();
+    const headers: Record<string, string> = { accept: "application/json" };
+    const localOwner = base === apiBase() && ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname);
+    const routerToken = process.env['CENTRALDARK_ROUTER_TOKEN'];
+    if (localOwner && routerToken) headers['authorization'] = `Bearer ${routerToken}`;
+    const resposta = await fetch(`${base}${path}`, {
+      headers,
+>>>>>>> origin/main
       cache: "no-store",
       signal: controller.signal,
     });
@@ -204,10 +244,19 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
     const status = texto(candidato["status"])?.toLowerCase();
     const saudavel = candidato["ok"] === true || status === "ok" || status === "healthy";
     const falhou = candidato["ok"] === false || ["fail", "failed", "error", "unhealthy"].includes(status ?? "");
+    // Fabric graph/receipts are truthful read-only projections; connectivity is
+    // measured but a file/receipt list must not be called executed or counterproven.
+    const projecaoNaoRevalidada = candidato["proof_state"] === "NOT_REVALIDATED"
+      && ["/api/live-fabric/status", "/api/live-fabric/graph", "/api/microdeploy/receipts/index.json"].includes(path);
+    const modelosCatalogados = path === "/api/omni/models"
+      && candidato["object"] === "list" && Array.isArray(candidato["data"]);
     return {
-      estado: falhou ? "FAIL" : saudavel ? "PASS" : "RUNNING",
+      estado: falhou ? "FAIL" : saudavel ? (projecaoNaoRevalidada ? "RUNNING" : "PASS")
+        : modelosCatalogados ? "RUNNING" : "UNKNOWN",
       httpStatus: resposta.status,
-      erro: !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
+      erro: projecaoNaoRevalidada ? "PROJECAO_LOCAL_SEM_CONTRAPROVA_DE_EXECUCAO"
+        : modelosCatalogados ? "CATALOGO_MEDIDO_SEM_INVOCACAO_DE_MODELO"
+        : !falhou && !saudavel ? "JSON sem status de saúde reconhecido" : null,
       dados: candidato,
     };
   } catch (erro) {
@@ -222,9 +271,9 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   }
 }
 
-async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
-  if (casaOnly && process.platform !== "win32") {
-    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
+async function medirReachable(url: string, casaOnly = false, siteCheck = false): Promise<Probe> {
+  if (casaOnly && origemLocalScreenpipe() !== "CASA") {
+    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_HOST_NOT_CONFIRMED", dados: null };
   }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -255,7 +304,9 @@ async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
         ? "FAIL"
         : dados?.["ok"] === true || status === "healthy"
           ? "PASS"
-          : "RUNNING";
+          : siteCheck
+            ? "PASS"
+            : "RUNNING";
     return { estado, httpStatus: resposta.status, erro: null, dados };
   } catch (erro) {
     return {
@@ -305,6 +356,29 @@ function saidaScreenpipe(sonda: Probe): string[] {
     const estado = texto(valor["status"]);
     if (estado && /^[a-zA-Z0-9 _-]{1,32}$/.test(estado)) saida.push(`${nome}: ${estado}`);
   }
+  // Metadados do gravador local, sem expor OCR, imagem, áudio ou conteúdo privado.
+  // HEALTH 200 e FRAME FRESH são provas diferentes; áudio degradado não apaga frame vivo.
+  const quadro = texto(sonda.dados?.["last_frame_timestamp"]);
+  const idade = quadro ? Date.now() - Date.parse(quadro) : Number.NaN;
+  const frameFresco = sonda.httpStatus === 200 && Number.isFinite(idade) && idade >= -5_000 && idade <= 30_000;
+  const frameStatus = texto(sonda.dados?.["frame_status"])?.toLowerCase();
+  const frameProven = frameFresco && frameStatus === "ok";
+  saida.push(`CAPTURA VISUAL: ${frameProven ? "FRESH" : "UNKNOWN/STALE"} · frame_status=${frameStatus ?? "UNKNOWN"}`);
+  saida.push(`ÚLTIMO FRAME: ${quadro ?? "UNKNOWN"}`);
+  const monitores = Array.isArray(sonda.dados?.["monitors"])
+    ? sonda.dados["monitors"].filter((v): v is string => typeof v === "string").slice(0, 8)
+    : [];
+  saida.push(`MONITORES DETECTADOS: ${sonda.httpStatus === 200 ? monitores.length : "UNKNOWN"}`);
+  if (sonda.httpStatus === 200) monitores.forEach((monitor, i) => {
+    saida.push(`MONITOR ${i + 1}: ${monitor.replace(/[^a-zA-Z0-9 ()x-]/g, "").slice(0, 64)}`);
+  });
+  const pipeline = objetoJson(sonda.dados?.["pipeline"]) ? sonda.dados["pipeline"] : null;
+  const gravados = pipeline?.["frames_db_written"];
+  const fps = pipeline?.["capture_fps_actual"];
+  saida.push(`FRAMES NO HISTÓRICO ATUAL: ${typeof gravados === "number" && Number.isFinite(gravados) && gravados >= 0 ? gravados : "UNKNOWN"}`);
+  saida.push(`FREQUÊNCIA MEDIDA: ${typeof fps === "number" && Number.isFinite(fps) && fps >= 0 ? fps.toFixed(2) + " fps" : "UNKNOWN"}`);
+  saida.push(`ÁUDIO: ${texto(sonda.dados?.["audio_status"]) ?? "UNKNOWN"} · independente da captura visual`);
+  saida.push("HISTÓRICO VISUAL: Screenpipe Desktop → Timeline; imagens e OCR não publicados no Cockpit.");
   return saida;
 }
 
@@ -480,17 +554,18 @@ type HostScreenpipe = "CASA" | "VPS" | "UNKNOWN";
 type TailscaleProbe = { estado: Estado; casaOnline: boolean | null; vpsOnline: boolean | null; peers: number | null; erro: string | null };
 function origemLocalScreenpipe(): HostScreenpipe {
   const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
-  if (origemDeclarada === "CASA" && process.platform === "win32") return "CASA";
+  if (origemDeclarada === "CASA") return "CASA";
   if (origemDeclarada === "VPS" && process.platform !== "win32") return "VPS";
   const host = hostname().toUpperCase();
   if (process.platform === "win32" && (host === "SEGREDO" || host === "WINDOWS-CASA")) return "CASA";
-  return process.platform !== "win32" && host === "CENTRALDARK-OS" ? "VPS" : "UNKNOWN";
+  return "UNKNOWN";
 }
 
 const SONDA_NAO_EXECUTADA: Probe = {
   estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
 };
 
+<<<<<<< HEAD
 function medirCasaCommanderRaw(host: HostScreenpipe): Promise<Probe> {
   if (host === "CASA") return medirReachable("http://127.0.0.1:9101/health", true);
   if (host === "VPS") {
@@ -541,6 +616,202 @@ async function medirTailscalePeers(): Promise<TailscaleProbe> {
     return { estado, casaOnline, vpsOnline, peers: devices.length, erro: estado === "PASS" ? null : "TAILSCALE_PEER_NOT_PROVEN_ON_BOTH_HOSTS" };
   } catch {
     return { estado: "UNKNOWN", casaOnline: null, vpsOnline: null, peers: null, erro: "TAILSCALE_JSON_INVALID" };
+=======
+function portaEstado(bind: string, processo: string): Estado {
+  return bind && processo ? "PASS" : "UNKNOWN";
+}
+
+function portasOpenKylin(textoSs: string): PortaCentralDark[] {
+  const portas: PortaCentralDark[] = [];
+  for (const linha of textoSs.split(/\r?\n/)) {
+    if (!/LISTEN/.test(linha) || !/(tunnel-client|mcp-server|node)/i.test(linha)) continue;
+    const match = linha.match(/(?:^|\s)([^\s]+):(\d+)(?:\s|$)/);
+    if (!match || !match[1] || !match[2]) continue;
+    const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo identificado";
+    const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
+    portas.push({
+      id: `openkylin-tcp-${match[2]}`,
+      origem: "openKylin",
+      transporte: "TCP",
+      protocolo: "TCP",
+      categoria: "CentralDark",
+      bind: `${match[1]}:${match[2]}`,
+      estado: portaEstado(match[1], processo),
+      processo,
+      pid,
+      detalhe: "LISTEN medido por ss; origem local openKylin",
+    });
+  }
+  return portas;
+}
+
+async function portaOpenKylin8742(): Promise<PortaCentralDark | null> {
+  const health = await medirReachable("http://127.0.0.1:8742/health");
+  if (health.httpStatus !== 200) return null;
+  const runtime = objetoJson(health.dados?.["runtime"]) ? health.dados["runtime"] : null;
+  const lifecycle = texto(runtime?.["lifecycle"]);
+  return {
+    id: "openkylin-tcp-8742",
+    origem: "openKylin",
+    transporte: "TCP",
+    protocolo: "TCP",
+    categoria: "CentralDark",
+    bind: "127.0.0.1:8742",
+    estado: "PASS",
+    processo: "tunnel-client",
+    pid: null,
+    detalhe: `MCP tunnel health HTTP 200${lifecycle ? ` · lifecycle=${lifecycle}` : ""}`,
+  };
+}
+
+async function inventarioPortasCentralDark(): Promise<PortaCentralDark[]> {
+  const portas: PortaCentralDark[] = [];
+  if (process.platform === "win32") {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([
+      import("node:child_process"),
+      import("node:util"),
+    ]);
+    const execFile = promisify(execFileCallback);
+    try {
+      const { stdout } = await execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ss -ltnpH 2>/dev/null"], { timeout: 4_000, windowsHide: true });
+      portas.push(...portasOpenKylin(stdout));
+    } catch {
+      // A ausência da sonda não inventa uma porta; o card mostra UNKNOWN na leitura.
+    }
+    try {
+      const script = "Get-NetTCPConnection -State Listen | ForEach-Object { $p = Get-CimInstance Win32_Process -Filter ('ProcessId=' + $_.OwningProcess) -ErrorAction SilentlyContinue; if ($p.CommandLine -match 'CentralDark|tunnel|mcp|commander|screenpipe') { '{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.Name } }";
+      const { stdout } = await execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", script], { timeout: 5_000, windowsHide: true });
+      for (const linha of stdout.split(/\r?\n/).filter(Boolean)) {
+        const [bind, port, pid, processo] = linha.split("|");
+        if (!bind || !port) continue;
+        portas.push({
+          id: `casa-tcp-${port}`,
+          origem: "Casa Windows",
+          transporte: "TCP",
+          protocolo: "TCP",
+          categoria: "CentralDark",
+          bind: `${bind}:${port}`,
+          estado: portaEstado(bind, processo ?? ""),
+          processo: processo || `PID ${pid}`,
+          pid: pid || null,
+          detalhe: `LISTEN medido por Get-NetTCPConnection; PID ${pid}`,
+        });
+      }
+    } catch {
+      // Windows pode negar a enumeração; a prova permanece UNKNOWN, nunca PASS.
+    }
+  }
+  if (process.platform === "win32") {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const execFile = promisify(execFileCallback);
+    let pidStdio: string | null = null;
+    try {
+      const { stdout } = await execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ps -eo pid=,args= | grep '[m]cp-server.js' | grep -- '--stdio' | grep -oE '^[[:space:]]*[0-9]+' | tr -d ' ' | head -n 1"], { timeout: 4_000, windowsHide: true });
+      pidStdio = stdout.trim() || null;
+    } catch { /* PID stdio fica explicitamente não medido */ }
+    portas.push({
+      id: "openkylin-mcp-stdio",
+      origem: "openKylin",
+      transporte: "stdio",
+      protocolo: "TCP",
+      categoria: "CentralDark",
+      bind: "sem porta TCP",
+      estado: "PASS",
+      processo: "mcp-server.js",
+      pid: pidStdio,
+      detalhe: "MCP observado como processo stdio; não é listener HTTP",
+    });
+  }
+  if (process.platform === "linux") {
+    const [{ execFile: callback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const exec = promisify(callback);
+    try {
+      const { stdout } = await exec("ss", ["-ltnpH"], { timeout: 4000 });
+      portas.push(...portasTotaisOpenKylin(stdout).filter(p => /:(8080|8742|8000|8001|8002)$/.test(p.bind) || /tunnel|mcp/i.test(p.processo)));
+    } catch { /* Falha da sonda mantém inventário desconhecido. */ }
+    try {
+      const { stdout } = await exec("pgrep", ["-f", "^/usr/local/bin/node /home/CentralDark-OS/CentralDark/apps/modulos/mcp/src/mcp-server.js --stdio"], { timeout: 3000 });
+      const pid = stdout.trim().split(/\s+/)[0];
+      if (pid) portas.push({id: 'openkylin-mcp-stdio', origem: 'openKylin', transporte: 'stdio', protocolo: 'TCP', categoria: 'CentralDark', bind: 'sem porta TCP', estado: 'RUNNING', processo: 'mcp-server.js', pid, detalhe: 'Processo STDIO medido localmente; execução MCP exige chamada própria.'});
+    } catch { /* Ausência de PID não vira PASS. */ }
+  }
+  const tunnel = await portaOpenKylin8742();
+  if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
+  return portas.filter((porta, index, todas) => todas.findIndex((outra) => outra.id === porta.id) === index);
+}
+
+function portasTotaisOpenKylin(textoSs: string): PortaCentralDark[] {
+  return textoSs.split(/\r?\n/).flatMap((linha, index) => {
+    const protocolo = /UNCONN/.test(linha) ? "UDP" : /LISTEN/.test(linha) ? "TCP" : null;
+    if (!protocolo) return [];
+    const match = linha.match(/(?:^|\s)(\[[^\]]+\]|[^\s:]+):(\d+)\s/);
+    if (!match) return [];
+    const processo = linha.match(/users:\(\("([^"]+)"/)?.[1] ?? "processo não identificado";
+    const pid = linha.match(/pid=(\d+)/)?.[1] ?? null;
+    const categoria = /(tunnel-client|mcp-server|centraldark|commander|screenpipe)/i.test(`${processo} ${linha}`) ? "CentralDark" : "Sistema";
+    return [{
+      id: `openkylin-${protocolo.toLowerCase()}-${match[2]}-${index}`,
+      origem: "openKylin",
+      transporte: protocolo,
+      protocolo,
+      categoria,
+      bind: `${match[1]}:${match[2]}`,
+      estado: "PASS",
+      processo,
+      pid,
+      detalhe: `${protocolo} ${/LISTEN/.test(linha) ? "LISTEN" : "UNCONN"} medido por ss; origem local openKylin`,
+    } satisfies PortaCentralDark];
+  });
+}
+
+function portasTotaisWindows(textoPs: string): PortaCentralDark[] {
+  return textoPs.split(/\r?\n/).flatMap((linha, index) => {
+    const [protocolo, bind, port, pid, processo] = linha.split("|");
+    if ((protocolo !== "TCP" && protocolo !== "UDP") || !bind || !port) return [];
+    const nome = processo || "processo não identificado";
+    const categoria = /(centraldark|tunnel|mcp|commander|screenpipe)/i.test(nome)
+      || ["3030", "8080", "8099", "8742", "9101"].includes(port)
+      ? "CentralDark" : "Sistema";
+    return [{
+      id: `windows-${protocolo.toLowerCase()}-${port}-${pid || "unknown"}-${index}`,
+      origem: "Casa Windows",
+      transporte: protocolo,
+      protocolo,
+      categoria,
+      bind: `${bind}:${port}`,
+      estado: "PASS",
+      processo: nome,
+      pid: pid || null,
+      detalhe: `Windows ${protocolo} listener; processo medido por PID${port === "8099" ? " · tarefa CentralDark-Casa-Cockpit-Hermes-One" : ""}`,
+    } satisfies PortaCentralDark];
+  });
+}
+
+async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
+  if (process.platform === "linux") {
+    try {
+      const [{ execFile: callback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+      const { stdout } = await promisify(callback)("ss", ["-ltunpH"], {timeout: 4000});
+      return portasTotaisOpenKylin(stdout);
+    } catch { return []; }
+  }
+  if (process.platform !== "win32") return [];
+  try {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([import("node:child_process"), import("node:util")]);
+    const execFile = promisify(execFileCallback);
+    const sondas = await Promise.allSettled([
+      execFile("wsl.exe", ["-d", "openKylin", "--", "bash", "-lc", "ss -ltnupH 2>/dev/null"], { timeout: 5_000, windowsHide: true }),
+      execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", "$items=@(); Get-NetTCPConnection -State Listen | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('TCP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; Get-NetUDPEndpoint | ForEach-Object { $p=Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue; $items += ('UDP|{0}|{1}|{2}|{3}' -f $_.LocalAddress,$_.LocalPort,$_.OwningProcess,$p.ProcessName) }; $items"], { timeout: 20_000, windowsHide: true }),
+    ]);
+    const openKylin = sondas[0].status === "fulfilled" ? sondas[0].value.stdout : "";
+    const windows = sondas[1].status === "fulfilled" ? sondas[1].value.stdout : "";
+    const portas = [...portasTotaisOpenKylin(openKylin), ...portasTotaisWindows(windows)];
+  const tunnel = await portaOpenKylin8742();
+    if (tunnel && !portas.some((porta) => porta.id === tunnel.id)) portas.push(tunnel);
+    return portas;
+  } catch {
+    return [];
+>>>>>>> origin/main
   }
 }
 
@@ -549,7 +820,13 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoCentralDark> => {
     const hostScreenpipe = origemLocalScreenpipe();
     const origemHttp = apiBase();
+    const origemHealth = casaCommanderHealthBase();
+    const casaSiteUrl = process.env["CENTRALDARK_CASA_SITE_URL"]?.trim() || DEFAULT_CASA_SITE_URL;
     const consultaEm = new Date().toISOString();
+    const commanderHealthUrl = process.platform === "win32"
+      ? "http://127.0.0.1:9101/health"
+      : (process.env["CENTRALDARK_CASA_COMMANDER_HEALTH_URL"]?.trim()
+        || "http://windows-casa.tail6d7aa4.ts.net:9100/health");
     const [
       github,
       liveFabric,
@@ -562,34 +839,55 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       casaSite,
       screenpipe,
       screenpipeRemotoCasa,
+      commanderCasa,
       actions,
+<<<<<<< HEAD
       mcpHealthRaw,
       mcpRoutesRaw,
       mcpStatusRaw,
       apiRootRaw,
       casaCommanderRaw,
+=======
+      portas,
+      portasTotais,
+>>>>>>> origin/main
     ] = await Promise.all([
       medirGithub(),
       medirApi("/api/live-fabric/status"),
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
+<<<<<<< HEAD
       medirApi("/health"),
       medirApi("/heartbeat", mcpBase()),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable("http://127.0.0.1:8080/sala-controle", true),
+=======
+      medirApi("/health", origemHealth),
+      medirApi("/heartbeat"),
+      medirApi("/api/omni/models"),
+      medirApi("/api/microdeploy/receipts/index.json"),
+      medirReachable(casaSiteUrl, true, true),
+>>>>>>> origin/main
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
       hostScreenpipe === "VPS"
         ? medirReachable(`http://${process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25"}:3030/health`)
         : Promise.resolve(SONDA_NAO_EXECUTADA),
+      // Servidor do Cockpit na Forja: ponte privada da Casa, nunca localhost da VM.
+      medirReachable(commanderHealthUrl),
       medirActions(),
+<<<<<<< HEAD
       medirApi("/health", mcpBase()),
       medirApi("/health/routes", mcpBase()),
       medirApi("/status.json", mcpBase()),
       medirApi("/api"),
       medirCasaCommanderRaw(hostScreenpipe),
+=======
+      inventarioPortasCentralDark(),
+      inventarioTotalPortas(),
+>>>>>>> origin/main
     ]);
     const mcpRouteProbes = Array.isArray(mcpRoutesRaw.dados?.["probes"]) ? mcpRoutesRaw.dados["probes"].filter(objetoJson) : [];
     const mcpRouteReachable = mcpRouteProbes.filter((probe) => probe["state"] === "HTTP_REACHABLE" && probe["httpStatus"] === 200);
@@ -613,7 +911,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
-      ? "Casa Windows · Screenpipe 3030/health · HTTP e status real"
+      ? `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · Screenpipe 3030/health · HTTP e status real`
       : hostScreenpipe === "VPS"
         ? "Casa Windows · Tailscale privado · Screenpipe 3030/health · HTTP e status real"
         : "Casa Windows · sem adapter/medição remota neste servidor";
@@ -635,13 +933,15 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
-    const vpsSha = texto(gitLive?.["head"]);
+    // A leitura local do Omni Router mede a Casa; nunca publicar o SHA da Casa como VPS.
+    const vpsSha = hostScreenpipe === "VPS" ? texto(gitLive?.["head"]) : null;
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
+<<<<<<< HEAD
     // Um fio de leitura: Cockpit consome exclusivamente MCP /heartbeat, sem consultar Supabase de novo.
     const supabaseRaw = objetoJson(heartbeatRaw.dados?.["supabase"]) ? heartbeatRaw.dados["supabase"] : null;
     const edgeRaw = objetoJson(supabaseRaw?.["edge_functions"]) ? supabaseRaw["edge_functions"] : null;
@@ -649,10 +949,32 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const sinalBruto = texto(supabaseRaw?.["state"]);
     const supabaseSignals: Estado = heartbeat.estado === "PASS" && (sinalBruto === "PASS" || sinalBruto === "FAIL")
       ? sinalBruto : "UNKNOWN";
+=======
+    const lastToolCandidate = commanderCasa.dados?.["last_authorized_tool"];
+    const lastTool = objetoJson(lastToolCandidate) ? lastToolCandidate : null;
+    const lastToolAt = texto(lastTool?.["at"]);
+    const lastToolAge = lastToolAt ? Date.now() - Date.parse(lastToolAt) : Number.NaN;
+    const toolProof = lastTool?.["verified"] === true
+      && ["READ_ONLY", "MUTATION"].includes(String(lastTool["kind"]))
+      && typeof lastTool["tool"] === "string"
+      && Number.isFinite(lastToolAge) && lastToolAge >= -5_000 && lastToolAge < 600_000;
+    const commanderIdentity = commanderCasa.dados?.["name"] === "CentralDark Casa Commander"
+      && commanderCasa.dados?.["ok"] === true && commanderCasa.dados?.["remote_vendor"] === false;
+    const commanderConnected = commanderIdentity && commanderCasa.dados?.["engine_connected"] === true;
+>>>>>>> origin/main
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
-      desktop: "UNKNOWN",
+      // HTTP 200 mede somente a ponte. O card só fica verde quando o motor
+      // também confirma conexão; isso evita promover A para B/C.
+      desktop: commanderConnected ? (toolProof ? "PASS" : "RUNNING") : "UNKNOWN",
+      commanderEngine: typeof commanderCasa.dados?.["engine_connected"] === "boolean" ? commanderCasa.dados["engine_connected"] as boolean : null,
+      commanderHttp: commanderCasa.httpStatus,
+      commanderToolProof: toolProof ? {
+        tool: String(lastTool?.["tool"]).slice(0, 64),
+        kind: String(lastTool?.["kind"]).slice(0, 24),
+        at: lastToolAt!,
+      } : null,
       repositorio: "ServerVpss/CentralDark",
       branch: "main",
       vpsSha,
@@ -728,8 +1050,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
+      casaSiteFonte: `${process.platform === "linux" ? "Forja Linux" : "Casa Windows"} · GET ${casaSiteUrl} · só HTTP (não prova motor)`,
       screenpipeHttp: screenpipeCasa.httpStatus,
       screenpipeDetail: texto(screenpipeCasa.dados?.["status"]),
+      screenpipeAudioStatus: texto(screenpipeCasa.dados?.["audio_status"]),
       screenpipeFonte: screenpipeCasaFonte,
       screenpipeEvents: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeCasa) : ["NÃO MEDIDO · exige sensor na Casa"],
       screenpipeVpsHttp: screenpipeVps.httpStatus,
@@ -738,14 +1062,16 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeVpsEvents: hostScreenpipe === "VPS" ? saidaScreenpipe(screenpipeVps) : ["NÃO MEDIDO · exige sensor na VPS"],
       screenpipeCasaMedidoEm: hostScreenpipe === "CASA" || hostScreenpipe === "VPS" ? consultaEm : null,
       screenpipeVpsMedidoEm: hostScreenpipe === "VPS" ? consultaEm : null,
-      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side`,
+      apiHealthFonte: `origem=${hostname()} · destino=${origemHttp}/health · GET server-side · API/Omni 8099`,
       apiHealthServico: apiServico.slice(0, 100),
       apiHealthMedidoEm: consultaEm,
       desktopVpsFonte: "Remote Desktop Commander VPS · sensor externo não consultado neste servidor; offline do conector não prova VPS parada",
       actionsFonte: actions.fonte,
       actionsErro: actions.erro,
       gmailFonte: "Sensor externo Gmail/ChatGPT · adapter do Cockpit ainda não ligado",
-      desktopFonte: "Remote Desktop Commander Casa · sensor externo não consultado pelo app; cota de ferramenta ≠ saúde da Casa",
+      desktopFonte: commanderHealthUrl + " · somente saúde e último recibo autenticado (10 min)",
+      portas,
+      portasTotais,
     };
 
     // Fire-and-forget: gravar pulsos no Supabase para o radar Realtime
@@ -779,7 +1105,10 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
           host,
           ttl_seconds: 120,
         }));
-        await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        const { error } = await supabaseAdmin.from("radar_pulses" as any).insert(linhas as any);
+        if (error) {
+          console.error("[radar-pulses] publicação falhou:", error.code ?? "UNKNOWN");
+        }
       } catch (e) {
         console.error("[radar-pulses] fire-and-forget falhou:", e);
       }
@@ -854,6 +1183,7 @@ export const lerMcpRuntimeAoVivo = createServerFn({ method: "GET" })
       erro: recente ? null : leitura.erro ?? (assinaturaValida ? "AMOSTRA_FORA_DA_JANELA_30S" : "SCHEMA_OU_ORIGEM_NAO_COMPROVADA"),
     };
   });
+<<<<<<< HEAD
 
 export type CircuitoPrivado = {
   hostRole: "CASA" | "VPS" | "UNKNOWN";
@@ -908,3 +1238,5 @@ export const lerCircuitoPrivado = createServerFn({ method: "GET" })
       vpsToCasaSsh: "UNKNOWN", vpsToCasaSshErro: "DIRECT_REVERSE_SSH_NOT_PROVEN; native bridge measured separately",
     };
   });
+=======
+>>>>>>> origin/main

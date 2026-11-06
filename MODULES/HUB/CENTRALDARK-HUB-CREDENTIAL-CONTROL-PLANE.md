@@ -132,3 +132,10 @@ OPEN_HUB
 → RECEIPT_WITHOUT_SECRET_VALUE
 → ROTATE_OR_DISCARD_WHEN_DONE
 ```
+
+
+## Consumo na Forja Linux — 2026-11-01T19:31:55.999507+00:00
+
+Owner visual atual reutilizado: apps/instinto-superior/src/components/central/McpAdminIntegrado.tsx. Owner servidor: apps/instinto-superior/src/lib/mcp-admin.functions.ts. @code_ref: ambos; @last_updated: 2026-11-01T19:31:55.999507+00:00. Entrada CONTROL_PLANE_API_KEY autentica por Supabase e papel admin, grava somente no owner privado local do tunnel-client (0600), reinicia exclusivamente sua unit e devolve apenas estado. O Cofre Supabase existente segue dono das demais credenciais. Não há novo vault ou MCP.
+
+Forja: /home/CentralDark-OS/CentralDark. Servidor compilado local :8080, túnel OpenAI STDIO :8742 loopback. Configuração integral importada de C:\BACKUP\.env com hash idêntico, ignorada pelo Git; bindings antigos de logs são sobrescritos apenas no ambiente do serviço Linux. Preservar o arquivo original. Tests: gates admin/input/owner, atomicidade 0600, comando fixo sem segredo e falha parcial de restart PASS; build node-server PASS; scan de valores secretos no bundle público zero ocorrências. Sessão humana admin e Tailscale Linux ainda precisam de autenticação para prova UI/E2E final.

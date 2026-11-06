@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 405, message: "Método não permitido" });
   }
 
-  const goal: GOALObject = await readBody(event);
+  const goal = await readBody(event) as GOALObject;
 
   // Validar GOAL
   if (!goal.id || !goal.executor || !goal.ambiente) {
