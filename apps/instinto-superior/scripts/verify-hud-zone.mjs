@@ -28,7 +28,8 @@ test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
 
 test("zone existente reutilizado com autenticacao", () => {
   assert.match(cockpit, /import \{ HudDeterministico \}/);
-  assert.match(cockpit, /TabsTrigger value="genesis"/);
+  assert.match(cockpit, /\{ valor: "genesis", nome: "Gênesis".*soAdmin: true/);
+  assert.match(cockpit, /!item\.soAdmin \|\| autenticado/);
   assert.match(cockpit, /autenticado \? \(/);
   assert.ok(cockpit.includes('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />'));
   assert.equal(cockpit.split('HudDeterministico estado={dado} atualizar={() => void estado.refetch()} />').length - 1, 1);
@@ -575,7 +576,10 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(shell.includes("<MapaOwners onNavigate={definirAbaAtiva} autenticado={autenticado} />"));
   // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
   // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
-  assert.equal((shell.match(/<TabsTrigger value=/g) || []).length,27);
+  const navegacao = shell.split("const NAVEGACAO_PASTAS = [")[1]?.split("] as const;")[0] ?? "";
+  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
+  assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
+  assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
 });
 
 test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
@@ -591,9 +595,11 @@ test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
   ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
   assert.match(cockpit, /className="sticky top-0 z-30/);
   assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
-  assert.match(cockpit, /ref=\{tabsScrollRef\}/);
-  assert.match(cockpit, /barra\.addEventListener\("wheel", rolarAbas, \{ passive: false \}\)/);
-  assert.match(cockpit, /barra\.removeEventListener\("wheel", rolarAbas\)/);
+  assert.match(cockpit, /SidebarProvider open=\{menuAberto\}/);
+  assert.match(cockpit, /Sidebar collapsible="icon"/);
+  assert.match(cockpit, /SidebarTrigger aria-label="Abrir ou recolher menu"/);
+  assert.match(cockpit, /aria-label="Seis pastas da Sala de Controle"/);
+  assert.match(cockpit, /type="search" value=\{buscaNavegacao\}/);
   assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
   assert.match(cockpit, /harnessVisivel && gaveta === null/);
 });
@@ -601,7 +607,7 @@ test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
 test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
   const loop = read("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md");
   assert.match(cockpit, /function JornadaEvolutiva/);
-  assert.match(cockpit, /TabsTrigger value="jornada"/);
+  assert.match(cockpit, /\{ valor: "jornada", nome: "Aprender jogando".*soAdmin: false/);
   assert.match(cockpit, /TabsContent value="jornada"/);
   assert.match(cockpit, /data-cd-flow="instinto.CockpitShell.jornada-evolutiva"/);
   assert.match(cockpit, /!KAIZEN/);

@@ -2,6 +2,10 @@
 
 **Entrada:** [SKILL.md](../SKILL.md) · **Mapa operacional:** [CATALOGO.md](CATALOGO.md) · **Delegação universal:** [HERMES-KANBAN-RECEITA-UNIVERSAL.md](../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md).
 
+## Conversar naturalmente sem abandonar a missão
+
+[Diálogo Reflexivo da Intenção](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): Reflective Intent Dialogue; escuta reflexiva; correção; conversa; DELTA != troca de missão; âncora; Hermes; SOL; NEXT_CURSOR. Em ações materiais acompanha [Michelin](../Skills/michelin-3-estrelas/SKILL.md) e [Kimetsu Remix](../../kimetsu-brainstorm/SKILL.md).
+
 ## Consulta rápida por intenção
 
 | Quero fazer... | Onde começar | Buscar por |
@@ -17,6 +21,8 @@
 | Descobrir ferramenta/capacidade | Capability HUD | `capability`, `preflight` |
 | Localizar dono e evitar duplicação | Reuse Runtime | `reuse`, `owner` |
 | Operar Cockpit/boot | Boot, Intent Router e Live Editing | `boot`, `HUD`, `Cockpit` |
+
+| Ler aba, enviar Goal ou clicar no navegador com o Commander nativo | [Browser → Casa Commander → Browser](../references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) + [Skill-Mãe](../SKILL.md) | `navegador`, `aba`, `browser`, `siga o roteiro`, `mande um goal`, `botão focado`, `!CENTRALDARK`, `!EXECUTOR_CENTRALDARK` |
 | Deploy, esteira, GitHub e VPS | Esteira Motor + Intent Router | `workflow`, `VPS`, `CI` |
 | Integrar VS Code e observabilidade | VS Code Log Bridge | `vscode`, `log` |
 
@@ -63,7 +69,13 @@ Troque `'kanban'` pela palavra da intenção. A busca cobre o conteúdo da skill
 <!-- AUTOCATALOGO:INICIO -->
 ## Índice vivo (gerado automaticamente)
 
-**Última verificação:** 2026-10-31 09:47:20 -03:00; 112 arquivos catalogados; 18 skills.
+**Última verificação:** 2026-11-04 23:57:26 -03:00; 146 arquivos catalogados; 23 skills.
 
 Consulte [INDICE-VIVO.md](INDICE-VIVO.md) para **criação, modificação e SHA de cada arquivo**, e [VALIDACAO-AUTOMATICA.md](VALIDACAO-AUTOMATICA.md) para alertas.
 <!-- AUTOCATALOGO:FIM -->
+
+### WuzAPI, WhatsApp QR, grupos, webhook, MultiZap Gateway e Hermes (05/11/2026)
+Fonte operacional existente: [docs/WUZAPI-API-OPERACIONAL.md](../../../../docs/WUZAPI-API-OPERACIONAL.md), relacionada a [MAPA_EVENTOS_WUZAPI.md](../../../../docs/MAPA_EVENTOS_WUZAPI.md). Buscar aqui antes de operar: auth admin/usuário, dashboard 127.0.0.1:8081, Swagger /api, /session/qr, /group/photo, /webhook, Gateway /webhooks/wuzapi e CRM /api/public/wuzapi/webhook. Reutilizar sem duplicar agentes ou alterar sessão sem intenção.
+
+### Referência upstream WuzAPI / whatsmeow, método de comparação (2026-11-05)
+Entrada: [WUZAPI-API-OPERACIONAL.md](../../../../docs/WUZAPI-API-OPERACIONAL.md) e [MAPA_EVENTOS_WUZAPI.md](../../../../docs/MAPA_EVENTOS_WUZAPI.md). **Sempre que houver dúvida ou mudança**, consultar diretamente [WuzAPI upstream](https://github.com/asternic/wuzapi) e [whatsmeow upstream](https://github.com/tulir/whatsmeow), por camada, comparar com Swagger 127.0.0.1:8081/api e implementação Casa/Gateway antes de mudar. Capturas da UI: Add Instance (token, URL webhook, events, history, HMAC, proxy, S3) e Add Proxy; sem evidência de instância pareada. Skill-Mãe tem gatilho contextual; reuse-before-create, escritor único, receipt com evidência e sem secrets.
