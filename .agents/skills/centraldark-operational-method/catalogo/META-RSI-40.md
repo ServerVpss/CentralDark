@@ -84,3 +84,13 @@
 | META-MATERIALIZACAO | docs/CONSCIENCIA/MULTIBUSSOLA.md | [skill](../Skills/meta-materializacao/SKILL.md) |
 | META-REGIONAL | docs/CONSCIENCIA/MULTIBUSSOLA.md | [skill](../Skills/meta-regional/SKILL.md) |
 | META-TEACHER | docs/CONSCIENCIA/MULTIBUSSOLA.md | [skill](../Skills/meta-teacher/SKILL.md) |
+
+## Prova do carregador Hermes na Casa (06/11/2026)
+
+- **Fonte verificada:** Hermes instalado em \`C:\Users\Administrador\AppData\Local\hermes\hermes-agent\`, módulo nativo \`tools.skills_tool\`. Execução real somente-leitura, iniciada com diretório atual \`F:\CentralDark\`.
+- **Rota oficial de confiança:** \`hermes skills trust F:\CentralDark\`; exit 0. O perfil reportou 1068 skills de projeto possíveis, com quarentena nativa ativa para entradas sinalizadas.
+- **Busca:** \`skill_search_dirs()\` retornou \`F:\CentralDark\.agents\skills\` como tier de projeto. \`find_all_skills()\` resolveu **65/65** entradas esperadas da matriz (40 Self, 24 adaptadores, META-RSI); total geral 1061 entradas disponíveis após resolução e controles.
+- **Leitura direta:** \`skill_view(..., preprocess=False)\` retornou \`success=true\` para \`centraldark-meta-rsi\`, \`centraldark-self-focus\`, \`centraldark-meta-grill-adapter\` e \`centraldark-kimetsu-brainstorm-adapter\`.
+- **Bloqueio separado:** a Skill Mãe \`centraldark-operational-method/SKILL.md\` foi classificada \`dangerous\` pelo auditor nativo (306 achados). Seu carregamento permanece **BLOCKED**, mesmo com os 65 métodos visíveis. Não suprimir, contornar ou falsificar esse gate.
+- **Validador operacional:** \`scripts/atualizar-catalogo-self-healing.ps1 -VerificarCarregadores\` invoca o \`scripts/validate_meta_rsi_catalog.py --loader-check\` usando o Python do Hermes. Deve falhar explicitamente na quarentena do owner; \`--loader-check\` não envia input, não altera permissões, não executa skills e não substitui o carregador nativo.
+- **Fronteira:** capacidade documental e \`skill_view\` passam para as 65 entradas no processo de teste; o carregamento pela sessão Desktop já aberta, a execução contínua META-RSI e o runtime 40/40 **não foram comprovados**. \`NEXT_CURSOR=RECONCILE_MOTHER_NATIVE_QUARANTINE_WITHOUT_BYPASS\`.
