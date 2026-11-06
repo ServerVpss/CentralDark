@@ -1,4 +1,5 @@
 import { localHybridTools } from "../local/local-compute.js";
+import { casaPrivateTools } from "../casa/casa-private.js";
 import { adminVaultTools } from "../../modes/admin/tools/admin-vault.js";
 import { adminFileTools } from "../../modes/admin/tools/admin-files.js";
 import { adminPm2Tools } from "../../modes/admin/tools/admin-pm2.js";
@@ -149,6 +150,7 @@ const nativeCasaCommanderTools = [
 const runtimeTools = [
     ...nativeCasaCommanderTools,
     ...localHybridTools,
+    ...casaPrivateTools,
     codeReviewerToolDefinition,
     ...aprendizadoTools,
     ...conscienciaTools,
@@ -189,6 +191,12 @@ const runtimeTools = [
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "MCP_REMOTE_OAUTH", transport: "MCP_OAUTH", binding: "mcp.centralldark.com/mcp", capability: "REMOTE_MCP_BRIDGE", source: ".agents/skills/centraldark-operational-method/references/centraldark-remote-bridge.md", runtimeState: "MEASURE_AT_RUNTIME" },
+<<<<<<< HEAD
+    // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains fallback, not a dependency.
+    { id: "CASA_NATIVE_COMMANDER", transport: "TAILSCALE_TCP", binding: "SEGREDO:9100 -> 127.0.0.1:9101", capability: "CASA_NATIVE_FILES_PROCESSES", source: "scripts/remote-bridge/CentralDark-Casa-Agent.mjs", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
+    { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
+=======
     // #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/core/mcp-admin.js
     // @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
     // @last_updated=2026-11-05T19:25:35.947Z
@@ -198,6 +206,7 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     // Casa route order: private Tailscale transport + native CentralDark MCP/Hermes; RDC remains explicit-opt-in fallback, not a dependency.
     { id: "TAILSCALE_PRIVATE_ROUTE", transport: "TAILSCALE", binding: "DISCOVER_AT_RUNTIME", capability: "PRIVATE_TRANSPORT", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", nativeCasaCommander: "127.0.0.1:9101", nativeCasaCommanderOwner: "scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs", nativeToolCall: "POST /tool (Bearer da bridge; write exige habilitacao e autorizacao)", nativeBrowserReadback: "CHATGPT_BROWSER_TABS_CONTEXT", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "RDC_DESKTOP_COMMANDER", transport: "REMOTE_DESKTOP_COMMANDER", binding: "SEGREDO|mcp.desktopcommander.app/mcp", capability: "CASA_DESKTOP_SHELL_FILES_PROCESS_CONTROL", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME", priority: "FALLBACK_ONLY", fallbackRequires: "EXPLICIT_CHEFE_OPT_IN_AND_PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE" },
+>>>>>>> origin/main
     { id: "SCREENPIPE_LOCAL_SENSOR", transport: "SCREENPIPE_HTTP", binding: "SEGREDO:127.0.0.1:3030", capability: "CASA_VISUAL_AUDIO_DESKTOP_SENSOR", source: "docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SCREENPIPE_CLI_RECORDER", transport: "SCREENPIPE_CLI", binding: "${SCREENPIPE_CLI:-bun x screenpipe@latest}", capability: "ALWAYS_ON_LOCAL_CAPTURE_STATUS_SEARCH_PIPES", source: "docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "SSH_VPS_DIRECT", transport: "SSH", binding: "Segredo-VPS(VPN)|segredo-vpss(fallback-publico)", capability: "VPS_CONTROL_PLANE", source: "docs/CONSCIENCIA/VPS-IA-NATIVA-ROTAS.md", runtimeState: "MEASURE_AT_RUNTIME" },
