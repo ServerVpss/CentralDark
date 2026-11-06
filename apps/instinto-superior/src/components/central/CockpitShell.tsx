@@ -8,7 +8,7 @@
  */
 import { HudDeterministico } from "@/components/central/HudDeterministico";
 import { EstudoPorCriterios } from "@/components/central/EstudoPorCriterios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -77,8 +77,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { useTelegramBotsResumo } from "@/hooks/useTelegramBotsResumo";
 import { lerStatusGramMTProto } from "@/lib/admin.functions";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
+import { CodexHaloHarness } from "@/components/central/CodexHaloHarness";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -106,6 +108,62 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
   return (window as Window & { centraldark?: NativeUnigramBridge }).centraldark;
 }
 
+const NAVEGACAO_PASTAS = [
+  { pasta: "Começar aqui", icone: "✦", itens: [
+    { valor: "visao", nome: "Resumo", ajuda: "Como está tudo agora, num olhar só.", soAdmin: false },
+    { valor: "jornada", nome: "Aprender jogando", ajuda: "Um passo a passo para entender o sistema.", soAdmin: false },
+    { valor: "portal", nome: "Portal", ajuda: "A porta de entrada para os seus produtos.", soAdmin: false },
+  ] },
+  { pasta: "Acompanhar", icone: "◉", itens: [
+    { valor: "sistema", nome: "Saúde do sistema", ajuda: "Avisos, cofre e estado em um lugar.", soAdmin: true },
+    { valor: "admin", nome: "Administração", ajuda: "Contas e permissões de acesso.", soAdmin: true },
+    { valor: "sync", nome: "Minha oficina", ajuda: "O que mudou no código e quando.", soAdmin: false },
+    { valor: "recibos", nome: "Comprovantes", ajuda: "Provas do que foi feito.", soAdmin: false },
+    { valor: "raioxvivo", nome: "Raio-X", ajuda: "Olhar por dentro, peça por peça.", soAdmin: false },
+  ] },
+  { pasta: "Criar e montar", icone: "◇", itens: [
+    { valor: "builder-bolt", nome: "Construtor", ajuda: "Monte telas e funções novas.", soAdmin: false },
+    { valor: "aionui", nome: "Estúdio", ajuda: "Sua mesa de trabalho criativa.", soAdmin: false },
+    { valor: "design", nome: "Aparência", ajuda: "Cores, peles e visual.", soAdmin: false },
+    { valor: "arquitetura", nome: "Mapa do sistema", ajuda: "Como as partes se conectam.", soAdmin: false },
+    { valor: "agent-mode", nome: "Modo assistente", ajuda: "Deixe a IA executar tarefas.", soAdmin: false },
+    { valor: "html-consolidation", nome: "Histórico de páginas", ajuda: "Páginas antigas já unificadas.", soAdmin: false },
+  ] },
+  { pasta: "Forja (ferramentas)", icone: "⚒", itens: [
+    { valor: "forja", nome: "Forja", ajuda: "Ferramentas para construir e conferir.", soAdmin: false },
+    { valor: "forja-regras", nome: "Regras", ajuda: "Como a forja trabalha.", soAdmin: false },
+    { valor: "forja-inventario", nome: "Inventário", ajuda: "O que já existe na oficina.", soAdmin: false },
+    { valor: "gram-permissions", nome: "Permissões", ajuda: "Quem pode usar cada ferramenta.", soAdmin: true },
+  ] },
+  { pasta: "Assistentes e ideias", icone: "✧", itens: [
+    { valor: "hermes", nome: "Hermes", ajuda: "Seu ajudante animado.", soAdmin: false },
+    { valor: "goals", nome: "Metas", ajuda: "O que estamos buscando agora.", soAdmin: false },
+    { valor: "dream-reviewer", nome: "Revisão noturna", ajuda: "Ideias revisadas com calma.", soAdmin: false },
+    { valor: "genesis", nome: "Gênesis", ajuda: "A origem e a evolução do sistema.", soAdmin: true },
+    { valor: "obsidian", nome: "Obsidian", ajuda: "Abra suas anotações.", soAdmin: false },
+    { valor: "pr1873", nome: "Mapa de mudanças", ajuda: "Veja os registros das alterações.", soAdmin: false },
+  ] },
+  { pasta: "Mensagens e arquivos", icone: "✉", itens: [
+    { valor: "gram", nome: "Mensagens", ajuda: "Suas conversas no Gram.", soAdmin: true },
+    { valor: "unigram", nome: "Unigram", ajuda: "Seu aplicativo de mensagens.", soAdmin: false },
+    { valor: "downloads", nome: "Baixar arquivos", ajuda: "Pacotes e instaladores.", soAdmin: false },
+  ] },
+] as const;
+
+const ROTULOS_ESTADO = {
+  PASS: { rotulo: "Tudo certo", ajuda: "A fonte consultada confirmou o resultado." },
+  RUNNING: { rotulo: "Trabalhando", ajuda: "O processo está em andamento." },
+  AUTH_REQUIRED: { rotulo: "Precisa de login", ajuda: "Entre na conta para continuar." },
+  BLOCKED: { rotulo: "Travado", ajuda: "Existe um impedimento registrado." },
+  UNKNOWN: { rotulo: "Sem informação", ajuda: "Ainda não há prova suficiente." },
+  FAIL: { rotulo: "Com erro", ajuda: "A fonte retornou uma falha." },
+} as const;
+
+function FecharMenuNoCelular({ children }: { children: ReactNode }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+  return <div onClick={() => { if (isMobile) setOpenMobile(false); }}>{children}</div>;
+}
+
 const HARNESS_DESTINOS = [
   { id: "visao", titulo: "Visão geral", icone: "🧿", privado: false },
   { id: "portal", titulo: "Portal", icone: "🌐", privado: false },
@@ -116,6 +174,7 @@ const HARNESS_DESTINOS = [
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+  { id: "codex-halo", titulo: "Codex Halo", icone: "🌈", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -369,6 +428,31 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const { pele, selecionar } = usePeleCockpit();
   const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
+  const [buscaNavegacao, definirBuscaNavegacao] = useState("");
+  const [menuAberto, definirMenuAberto] = useState(true);
+  const [abaRestaurada, definirAbaRestaurada] = useState(false);
+  useEffect(() => {
+    const restaurar = () => {
+      const url = new URLSearchParams(window.location.search).get("aba");
+      const salva = window.localStorage.getItem("centraldark.cockpit.ultima-aba");
+      const candidata = url ?? salva ?? "visao";
+      if (NAVEGACAO_PASTAS.some((p) => p.itens.some((i) => i.valor === candidata && (!i.soAdmin || autenticado)))) definirAbaAtiva(candidata);
+      definirAbaRestaurada(true);
+    };
+    restaurar();
+    window.addEventListener("popstate", restaurar);
+    return () => window.removeEventListener("popstate", restaurar);
+  }, [autenticado]);
+  useEffect(() => {
+    if (typeof window === "undefined" || !abaRestaurada) return;
+    if (!NAVEGACAO_PASTAS.some((p) => p.itens.some((i) => i.valor === abaAtiva && (!i.soAdmin || autenticado)))) return;
+    window.localStorage.setItem("centraldark.cockpit.ultima-aba", abaAtiva);
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("aba") !== abaAtiva) {
+      url.searchParams.set("aba", abaAtiva);
+      window.history.replaceState(window.history.state, "", url.toString());
+    }
+  }, [abaAtiva, autenticado, abaRestaurada]);
   const [navegacaoCompacta, definirNavegacaoCompacta] = useState(false);
   const [hermesOneAberto, definirHermesOneAberto] = useState(false);
   const tabsScrollRef = useRef<HTMLDivElement>(null);
@@ -456,7 +540,9 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
     definirHermesOneAberto(false);
     definirPlayerAberto(true);
   }
-  const tituloAbaAtiva = COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
+  const pastaAtiva = NAVEGACAO_PASTAS.find((p) => p.itens.some((i) => i.valor === abaAtiva));
+  const itemAtivo = pastaAtiva?.itens.find((i) => i.valor === abaAtiva);
+  const tituloAbaAtiva = itemAtivo?.nome ?? COCKPIT_ABAS.find(item => item.id === abaAtiva)?.titulo ?? "Área sem cadastro";
   const [gaveta, definirGaveta] = useState<"left" | "right" | "top" | "bottom" | null>(null);
   const [buscaHarness, definirBuscaHarness] = useState("");
   const [harnessVisivel, definirHarnessVisivel] = useState(true);
@@ -509,7 +595,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
     >
       {harnessVisivel && gaveta === null ? (
         <nav
@@ -538,7 +624,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
             </span>
           </div>
-          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+          <div className="ml-auto flex w-full min-w-0 max-w-full flex-wrap items-center justify-start gap-2 sm:w-auto sm:justify-end">
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
               type="button"
@@ -818,64 +904,60 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
-            <div
-              className="sticky top-0 z-30 fixed min-w-0 border-y border-border bg-background/95 px-3 py-2 shadow-[0_8px_24px_-20px_hsl(var(--primary)/0.8)] backdrop-blur transition-[top,border-radius,box-shadow] duration-300 ease-out sm:border"
-              style={{
-                position: "fixed",
-                top: navegacaoCompacta ? 0 : "4.5rem",
-                left: 0,
-                right: 0,
-                borderRadius: navegacaoCompacta ? "0 0 0.75rem 0.75rem" : undefined,
-              }}
-              aria-label="Navegação do cockpit"
-            >
-              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
-                <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-                  <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
-                  <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "jornada" ? "default" : "ghost"} onClick={() => abrirDestino("jornada")}>🎮 Jornada</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
-                  <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
-                </div>
-                <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
-                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as áreas ▾</summary>
-                  <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
-                    <TabsList ref={tabsScrollRef} className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
-                <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
-                <TabsTrigger value="jornada" data-cd-flow="instinto.CockpitShell.aba.jornada">🎮 Jornada</TabsTrigger>
-                <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
-                <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
-                <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram" data-cd-flow="instinto.CockpitShell.aba.gram">✉️ CentralDark Gram</TabsTrigger> : null}
-                <TabsTrigger value="sync" data-cd-flow="instinto.CockpitShell.aba.sync">🛠️ Minha Oficina</TabsTrigger>
-                <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
-                <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
-                {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
-                <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
-                <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
-                <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
-                <TabsTrigger value="recibos" data-cd-flow="instinto.CockpitShell.aba.recibos">📊 Recibos</TabsTrigger>
-                <TabsTrigger value="forja" data-cd-flow="instinto.CockpitShell.aba.forja">🔧 Forja</TabsTrigger>
-                {autenticado ? <TabsTrigger value="gram-permissions" data-cd-flow="instinto.CockpitShell.aba.gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
-                {autenticado ? <TabsTrigger value="admin" data-cd-flow="instinto.CockpitShell.aba.admin">Admin CentralDark</TabsTrigger> : null}
-                {autenticado ? (
-                  <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
-                ) : null}
-                <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
-                <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
-                <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
-                <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
-                <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
-                <TabsTrigger value="forja-inventario" data-cd-flow="instinto.CockpitShell.aba.forja-inventario">Inventário</TabsTrigger>
-                <TabsTrigger value="agent-mode" data-cd-flow="instinto.CockpitShell.aba.agent-mode">Agent Mode</TabsTrigger>
-                <TabsTrigger value="html-consolidation" data-cd-flow="instinto.CockpitShell.aba.html-consolidation">HTML Consolidation</TabsTrigger>
-                <TabsTrigger value="downloads" data-cd-flow="instinto.CockpitShell.aba.downloads">Downloads</TabsTrigger>
-              </TabsList>
+          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full">
+            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
+              <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
+                <SidebarHeader className="border-b border-border px-3 py-4">
+                  <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:hidden">🪬 CentralDark</span>
+                  <label htmlFor="busca-navegacao" className="text-xs text-muted-foreground group-data-[collapsible=icon]:sr-only">Procurar ferramenta</label>
+                  <input id="busca-navegacao" type="search" value={buscaNavegacao} onChange={(e) => definirBuscaNavegacao(e.target.value)}
+                    placeholder="Procurar: senha, cor, Hermes..."
+                    className="mt-2 min-h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-offset-2 group-data-[collapsible=icon]:hidden" />
+                </SidebarHeader>
+                <SidebarContent className="px-2 py-3">
+                  <TabsList className="flex h-auto w-full flex-col items-stretch justify-start gap-4 bg-transparent p-0" aria-label="Seis pastas da Sala de Controle">
+                    {NAVEGACAO_PASTAS.map((pasta) => {
+                      const encontrados = pasta.itens.filter((item) =>
+                        (!item.soAdmin || autenticado) &&
+                        (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR"))
+                      );
+                      if (encontrados.length === 0) return null;
+                      return <section key={pasta.pasta} className="w-full space-y-1" aria-label={pasta.pasta}>
+                        <p className="px-2 pb-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground group-data-[collapsible=icon]:hidden">{pasta.icone} {pasta.pasta}</p>
+                        {encontrados.map((item) => (
+                          <FecharMenuNoCelular key={item.valor}>
+                            <TabsTrigger value={item.valor} title={item.ajuda}
+                              data-cd-flow={"instinto.CockpitShell.aba." + item.valor}
+                              className="flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+                              <span aria-hidden="true" className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0">{pasta.icone}</span>
+                              <span className="min-w-0 group-data-[collapsible=icon]:sr-only">
+                                <span className="block font-medium">{item.nome}</span>
+                                <span className="block text-[11px] font-normal leading-snug text-muted-foreground">{item.ajuda}</span>
+                              </span>
+                            </TabsTrigger>
+                          </FecharMenuNoCelular>
+                        ))}
+                      </section>;
+                    })}
+                  </TabsList>
+                  {buscaNavegacao && !NAVEGACAO_PASTAS.some((pasta) => pasta.itens.some((item) => (!item.soAdmin || autenticado) && (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR")))) ?
+                    <p className="p-3 text-xs text-muted-foreground">Nenhuma ferramenta encontrada.</p> : null}
+                </SidebarContent>
+              </Sidebar>
+              <div className="min-w-0 flex-1">
+                <div className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4"
+                     aria-label="Localização e estado da Sala de Controle">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <SidebarTrigger aria-label="Abrir ou recolher menu" className="size-10 shrink-0" />
+                    <SidebarTrigger aria-label="Abrir menu lateral" className="fixed bottom-20 left-3 z-[70] size-12 rounded-full border border-border bg-background shadow-xl md:hidden" />
+                    <span className="truncate text-sm font-semibold">{pastaAtiva?.pasta ?? "Sala de Controle"} › {tituloAbaAtiva}</span>
                   </div>
-                </details>
-              </div>
-            </div>
+                  {(() => {
+                    const codigo = estado.isError ? "FAIL" : estado.isPending ? "UNKNOWN" : estado.isFetching ? "RUNNING" : (dado?.heartbeat ?? "UNKNOWN");
+                    const descricao = ROTULOS_ESTADO[codigo as keyof typeof ROTULOS_ESTADO] ?? ROTULOS_ESTADO.UNKNOWN;
+                    return <span role="status" title={descricao.ajuda} className="shrink-0 rounded-full border border-border bg-muted/30 px-2 py-1 text-[11px] font-medium">{descricao.rotulo}</span>;
+                  })()}
+                </div>
             <TabsContent value="pr1873" className="mt-8">
               <PainelPR1873 />
             </TabsContent>
@@ -887,6 +969,27 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
             <TabsContent value="visao" className="mt-8">
+              <section aria-label="Resumo da Sala de Controle" className="mb-6 space-y-4">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {([
+                    { titulo: "Código", valor: (dado?.github ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Site no ar", valor: (dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Montagem", valor: (dado?.build ?? "UNKNOWN") as EstadoOperacional },
+                    { titulo: "Acesso", valor: (autenticado ? "PASS" : "AUTH_REQUIRED") as EstadoOperacional },
+                  ]).map((cartao) => {
+                    const selo = ROTULOS_ESTADO[cartao.valor as keyof typeof ROTULOS_ESTADO] ?? ROTULOS_ESTADO.UNKNOWN;
+                    return <article key={cartao.titulo} className="rounded-xl border border-border bg-card p-4">
+                      <h2 className="text-base font-semibold">{cartao.titulo}</h2>
+                      <p title={selo.ajuda} className="mt-3 text-sm text-muted-foreground">{selo.rotulo}</p>
+                    </article>;
+                  })}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("sistema")} disabled={!autenticado}>Ver saúde do sistema</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("design")}>Mudar aparência</Button>
+                  <Button type="button" variant="outline" onClick={() => abrirDestino("downloads")}>Baixar o Hermes</Button>
+                </div>
+              </section>
               <div className="mb-6"><CartaoDiscosForja /></div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <BlocoEstado
@@ -1120,6 +1223,17 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               </div>
                 </>
               )}
+            </TabsContent>
+            <TabsContent value="codex-halo" className="mt-10">
+              <div className="mb-6">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">Harness · capacidade nativa</p>
+                <h2 className="mt-3 text-3xl font-semibold">Codex Halo</h2>
+                <p className="mt-3 text-sm text-muted-foreground">Overlay original reutilizado no próprio owner, com estados do Harness e passagem de cliques preservada.</p>
+              </div>
+              <CodexHaloHarness estado={(dado?.status ?? "UNKNOWN") as EstadoOperacional} />
+              <div className="mt-6 rounded-lg border border-border p-4 text-xs text-muted-foreground">
+                Azul = trabalhando · amarelo = atenção · verde = concluído. O Halo é visual e não substitui Hermes, Cua ou qualquer executor.
+              </div>
             </TabsContent>
             <TabsContent value="aionui" className="mt-10">
               <section className="panel space-y-4 p-6" aria-labelledby="centraldark-estudio-title">
@@ -1636,7 +1750,9 @@ REUSE: before_create (sem duplicação)`}
                 </div>
               </section>
             </TabsContent>
-          </Tabs>
+              </div>
+            </Tabs>
+          </SidebarProvider>
         </div>
       </section>
     </main>

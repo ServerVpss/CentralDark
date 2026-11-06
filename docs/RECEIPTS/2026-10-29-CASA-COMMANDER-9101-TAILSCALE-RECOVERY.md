@@ -33,3 +33,23 @@ A porta 9101 é API HTTP própria com `GET /health` e `POST /tool` autenticado c
 Não registrar nem exibir token DPAPI/Bearer. Não abrir 9101 à Internet, não criar daemon paralelo, não alterar particionamento, não usar token de GitHub no ChatGPT. Preservar mudanças preexistentes do workspace e o WSL em andamento.
 
 NEXT_CURSOR=CASA_9101_TOOL_E2E_READBACK_THEN_TAILSCALE_CLIENT_PROOF
+
+<!-- CASA_COMMANDER_NATIVE_MCP_COCKPIT_DELTA_20261105 -->
+## 2026-11-05 — Integração SOURCE CentralDark MCP + Casa Commander + Cockpit
+
+**Intenção:** Casa Commander é o executor nativo do organismo, DesktopCommanderMCP MIT apenas engine local stdio; MCP CentralDark é control plane, OneShot/Tray permanece owner, Hermes coordena comandos permitidos. Não usar conector Remote Desktop Commander para esta integração.
+
+**Commits aplicados diretamente na main:** `cf1cc4b0` (novas tools do dispatcher existente), `10e48f2f` (último recibo autenticado efêmero da bridge), `0799448d` (teste negativo), `07e0446b` + `2ff5e126` + `85c34655` (Cockpit, fonte Tailscale e tipo do recibo).
+
+**Contratos source:**
+- `mcp_admin_call(tool=casa_commander_status)`: GET `http://windows-casa.tail6d7aa4.ts.net:9100/health` (tailnet); não invoca ferramentas.
+- `mcp_admin_call(tool=casa_commander_read, input={name,arguments})`: `POST /tool` com lista estrita de ferramentas de leitura já permitidas na Casa. Requer OAuth admin do dispatcher e `CENTRALDARK_CASA_BRIDGE_TOKEN` no processo MCP (nunca enviar ao chat, Git ou cliente); sem token retorna `CASA_PAIRING_REQUIRED`. A Casa continua `CENTRALDARK_CASA_WRITE_ENABLED` false por padrão.
+- `Casa-Agent.mjs`: GET `/health` expõe `last_authorized_tool` efêmero com somente `tool,kind,at,verified` após `tools/call` retornar sem `isError`. Nunca armazena argumento, conteúdo de arquivo, segredo ou texto de comando no recibo.
+- `cockpit.functions.ts`: em Linux usa a URL tailnet privada, em Windows usa loopback; só devolve `desktop=PASS` quando identidade, engine e recibo de ferramenta recente (10 min) foram observados; sem recibo, `RUNNING` e não verde. `StatusPanel.tsx` exibe o recibo com nome e horário.
+- O executável `CentralDarkBridge.exe` e a tarefa `CentralDark-Casa-Commander` não foram reiniciados ou recompilados nesta ação; o OneShot tem source pin fixo próprio e deve ser reconciliado somente depois de testes.
+- A matriz de testes da bridge manteve negação sem bearer e bloqueio de escrita; teste novo protege `last_authorized_tool=null` antes de execução.
+
+**Prova/limites:** readback GitHub main de 5 arquivos: guardas estáticos presentes. `node --test`, build TypeScript, execução pela rota 9100, pareamento do Bearer, instalação/reload e chamada de volta pelo ChatGPT **NÃO foram executados nem comprovados aqui**. Não há aprovação Run/Cancel própria ainda; o único comportamento válido de mutação é `CASA_WRITE_DISABLED` ou políticas de admin existentes.
+
+**NEXT_CURSOR:** reconciliar versão instalada da Casa/OneShot com source; executar testes no checkout limpo sem descartar worktree, configurar o token de pareamento já existente no MCP sem exibir segredo, atualizar MCP e Cockpit pelo owner de deploy, provar `casa_commander_status` e `casa_commander_read` via admin, verificar recibo/indicador. Para mutativas, integrar aprovação presencial ao OneShot/Tray e auditoria do dispatcher sem se apoiar no painel proprietário de review.
+<!-- /CASA_COMMANDER_NATIVE_MCP_COCKPIT_DELTA_20261105 -->
