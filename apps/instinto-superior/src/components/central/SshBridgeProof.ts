@@ -16,8 +16,8 @@ async function lerEventosSsh(): Promise<Consulta> {
   const { data, error } = await supabase.auth.getSession();
   if (error) throw Error("SESSAO_INDISPONIVEL");
   if (!data.session?.access_token) return { acesso: "AUTH_REQUIRED", eventos: [] };
-  const base = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-  const chave = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+  const base = import.meta.env['VITE_SUPABASE_URL'] as string | undefined;
+  const chave = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] as string | undefined;
   if (!base || !chave) throw Error("SUPABASE_CONFIG_AUSENTE");
   const params = new URLSearchParams({
     select: "ts,status,metadata",
@@ -46,17 +46,17 @@ async function lerEventosSsh(): Promise<Consulta> {
 }
 
 function resumirDirecao(direcao: Direcao, eventos: Evento[]): ProvaSsh {
-  const registro = eventos.find((e) => e.metadata?.direction === direcao);
+  const registro = eventos.find((e) => e.metadata?.['direction'] === direcao);
   if (!registro) return { status: "SEM_PROVA", detalhe: "Sem prova SSH registrada para esta direção." };
-  const observado = typeof registro.metadata?.proof_run_ended_at === "string"
-    ? registro.metadata.proof_run_ended_at : registro.ts;
+  const observado = typeof registro.metadata?.['proof_run_ended_at'] === "string"
+    ? registro.metadata?.['proof_run_ended_at'] : registro.ts;
   const at = Date.parse(observado);
-  const ttl = Number(registro.metadata?.ttl_seconds ?? 0);
+  const ttl = Number(registro.metadata?.['ttl_seconds'] ?? 0);
   const ativo = Number.isFinite(at) && at <= Date.now() &&
     Number.isFinite(ttl) && ttl > 0 && ttl <= 86400 &&
     Date.now() - at <= ttl * 1000;
   const quando = Number.isFinite(at) ? new Date(at).toLocaleString("pt-BR") : "horário desconhecido";
-  const resumo = typeof registro.metadata?.summary === "string" ? registro.metadata.summary : "Sem detalhe do teste.";
+  const resumo = typeof registro.metadata?.['summary'] === "string" ? registro.metadata?.['summary'] : "Sem detalhe do teste.";
   if (!ativo) return { status: "SEM_PROVA", detalhe: "Último teste em " + quando + " expirou; refazer leitura SSH." };
   if (registro.status.toLowerCase() !== "pass")
     return { status: "ROTA_FALHOU", detalhe: "Falha de leitura em " + quando + ": " + resumo };

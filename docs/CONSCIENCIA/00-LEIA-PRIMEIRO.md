@@ -2,6 +2,12 @@
 title: "00 — Leia primeiro (compatibilidade)"
 status: "REDIRECT_CANONICO"
 updated: 2026-08-14
+soul_owner: "CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+tags:
+  - consciencia
+  - entrada
+  - compatibilidade
+  - soul-sol
 ---
 
 # 00 — Leia primeiro

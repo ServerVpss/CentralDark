@@ -13,6 +13,43 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+<!-- CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+## 🧹 Lei oficial: baixar só o necessário, testar o que alterou, limpar após recibo
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@last_updated: 2026-11-02T02:20:23.099Z
+@escopo: todas as superfícies e executores que leem as RULES da CentralDark
+@implementado: contrato canônico de aquisição mínima, responsabilidade de testes e limpeza segura pós-recibo
+@pendente: provar consumo desta revisão nos runtimes e em CI quando aplicável
+@next_cursor: VALIDATE_OWNER_SUITE_AND_SAFE_TEMP_CLEANUP_PER_DELTA
+-->
+
+**DOWNLOAD_MINIMO_OBRIGATORIO:** proibido baixar/clonar todo o código por padrão se o CHEFE não solicitou isso e a tarefa não exige. Primeiro usar GitHub API, leitura por arquivo, referências Git, comparação, `git fetch --filter=blob:none`, checkout esparso ou equivalente para obter **somente** objetos/arquivos do escopo. Download total só com solicitação expressa ou necessidade técnica demonstrada; registrar por que a rota parcial é insuficiente. Não transformar exceção em padrão. Preservar fontes existentes e evitar download duplicado.
+
+**QUEM ALTERA, TESTA:** quem cria ou altera script/código é responsável por executar a **suíte pertinente ao cone alterado** (lint, sintaxe, testes direcionados, regressão e contraprova quando aplicáveis), conferir o mesmo SHA/artefato e relatar o resultado **real** com comando, alvo e evidência. `PASS`, `FAIL`, `UNAVAILABLE`, `NOT_RUN` e `PENDING` são estados diferentes. Falha, ambiente indisponível ou suíte não executada ficam explícitos; **nunca** deduzir PASS a partir de edição, commit, push, resolução de conflito ou ausência de erro visível. CI no mesmo HEAD é um gate separado quando exigido.
+
+**FAXINA SEGURA PÓS-RECIBO:** o agente/executor que criou arquivos temporários, worktrees ou scripts auxiliares fica responsável por removê-los **somente depois** de validar o resultado e registrar recibo/rastro recuperável. Antes de limpar: provar que o temporário foi criado pela operação, está dentro de caminho isolado autorizado, não contém alterações exclusivas sem salvamento e não está em uso; conferir leitura de volta do commit/artefato preservado. Nunca apagar backups, worktrees preexistentes, arquivos do usuário, logs/receipts necessários ou conteúdo desconhecido. Reutilizar `scripts/lupa/worktree-teardown-gate.mjs` onde aplicável; não executar `git clean -fdx`, `reset --hard` ou remoção ampla como "faxina". Se a prova faltar, **preservar e informar PENDING_CLEANUP**, sem falso verde.
+
+**REGRA GLOBAL DE CICLO DO WORKTREE:** todo worktree criado pelo executor nesta operação é temporário por padrão e deve ser removido na mesma operação após `RECEIPT + READBACK` do resultado publicado. O executor deve registrar o caminho, o SHA preservado e a confirmação de que o worktree está limpo antes do teardown; então deve executar o teardown seguro, confirmar que o caminho e o registro Git foram removidos e marcar `WORKTREE_CLEANUP=PASS`. Exceções somente para worktree explicitamente pertencente ao CHEFE/outro escritor, prova ainda pendente, alteração local não salva ou bloqueio de remoção; nesses casos, `WORKTREE_CLEANUP=PENDING` com caminho e motivo obrigatório. Worktree temporário não pode permanecer por conveniência, e ausência de teardown não pode ser declarada como limpeza.
+
+**Contrato obrigatório:** `NECESSIDADE → DOWNLOAD_MINIMO → OWNER → MENOR_DELTA → SUITE_PERTINENTE → RESULTADO_REAL → CONTRAPROVA → RECEIPT → LIMPEZA_SEGURA → READBACK → FIXED_POINT | NEXT_CURSOR`. `UNKNOWN != PASS`; `CLEANUP_BEFORE_RECEIPT=FORBIDDEN`; `FULL_CLONE_WITHOUT_NEED=FORBIDDEN`; `TEST_OWNER=CODE_WRITER`.
+<!-- /CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+
+
+## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
+
+<!-- @owner: documentos canônicos existentes | @updated_utc: 2026-11-01T02:33:57.429Z | @status: DOCUMENTED_NOT_RUNTIME_PROVEN -->
+
+**RUNTIME PRINCIPAL:** openKylin na Forja física (antigo disco K:). Source, compilação, testes, scripts, Hermes CLI, gateway, serviços, Git e gh devem operar **diretamente no Linux**, por SSH ou pelo próprio terminal Linux. O Windows deixa de ser executor e dependência da CentralDark; pode ser somente cliente temporário de acesso/transferência. O VMware permanece como meio atual de boot/acesso, não como proprietário de execução. A VPS recebe promoção **somente sob ordem do CHEFE**, nunca por sincronização automática presumida.
+
+**REGRA DE CONVERSÃO DE REFERÊNCIAS:** toda referência a Windows, Casa, K:\\, C:\\, F:\\, PowerShell ou componentes equivalentes que esteja sendo usada como **binding ativo de execução** deve ser avaliada no mesmo owner e, quando existir rota Linux comprovada, trocada incrementalmente pelo caminho, serviço ou runtime real do openKylin. Não fazer substituição textual em massa. Preservar históricos, logs, provas, backups e usos do Windows como cliente. Não adivinhar que `K:\\` virou `/data/CentralDark`: validar a localização real no Linux. Se a migração não estiver comprovada, manter PENDENTE, não declarar PASS.
+
+**RECEITA:** `OWNER EXISTENTE → IDENTIFICAR REFERÊNCIA OPERACIONAL WINDOWS → MEDIR DESTINO REAL LINUX → MENOR DELTA → TESTE → READBACK → COMMIT/SHA → KAIZEN`. Código-fonte, Hermes e gateway só serão declarados rodando no Linux quando isso for medido no destino.
+
+**NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
+
+
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
 
 Estas regras existem para manter a CentralDark viva, útil, verificável e fiel à intenção do SEGREDO/CHEFE.
@@ -435,6 +472,22 @@ Nunca imprimir token, senha, cookie, chave privada ou valor secreto em Git, chat
 
 ## Prova, contraprova e fixed point
 
+### 🧹 Lei de responsabilidade por alterações e limpeza segura (2026-11-01)
+
+**Quem cria ou altera script, teste, automação, configuração executável ou código é responsável por executar a suíte pertinente ao delta e informar o resultado real.** O Writer pode delegar a execução a uma rota autorizada, mas conserva a responsabilidade pelo receipt. A suíte deve incluir os testes existentes que verificam a parte tocada e a contraprova discriminante necessária, sem repetir verificações sem efeito material.
+
+**Recibo obrigatório no owner ou PR existente:** registrar alvo e SHA/versão testada, comando ou método realmente executado, escopo da suíte, resultado observado (`PASS`, `FAIL`, `SKIPPED`, `BLOCKED` ou `UNKNOWN`), falhas e limites, e `NEXT_CURSOR` quando houver pendência. **Falha, runner offline, suíte ausente ou indisponível não viram PASS nem execução presumida.** Se o trabalho foi somente documental, declarar isso e fazer a validação pertinente ao texto/contrato alterado, sem inventar build ou CI.
+
+**Limpeza segura é a última etapa, não a primeira:** `ALTERAR → EXECUTAR TESTES PERTINENTES → CONTRAPROVAR → REGISTRAR RECEIPT → LIMPAR TEMPORÁRIOS PRÓPRIOS → CONFERIR O QUE RESTOU`. Após validação e receipt, o executor remove **somente** temporários descartáveis que ele próprio criou nesta operação, identificados pelo caminho e escopo, sem apagar evidência necessária para diagnóstico ou continuidade. Preservar backups, históricos Git, arquivos do CHEFE, workspaces/worktrees de outros escritores, fontes, logs e recibos. Se algum temporário precisar ser preservado por falha ou prova pendente, informar caminho e motivo; **limpeza não comprovada = PENDENTE**, nunca alegar conclusão.
+
+```text
+CODE_CHANGED_REQUIRES_RELEVANT_TEST_EXECUTION_AND_REAL_REPORT=true
+TEST_UNAVAILABLE_OR_FAILED_IS_NOT_PASS=true
+RECEIPT_BEFORE_OWN_TEMP_CLEANUP=true
+CLEANUP_ONLY_OWN_DISPOSABLE_TEMP_AFTER_VALIDATION=true
+PRESERVE_USER_FILES_BACKUPS_HISTORY_AND_EVIDENCE=true
+```
+
 A CentralDark não aceita verde por aparência.
 
 ```text
@@ -773,3 +826,25 @@ O CHEFE aprovou na PR #1804 a apresentação em que o resultado real aparece em 
 
  Exemplo: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
  <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
+## Portabilidade ambiental — regra global para scripts
+
+<!-- @owner: RULES.md + AGENTS.md + scripts/checker/_lib.sh | @last_updated: 2026-11-02T13:38:34.413Z | @status: IMPLEMENTADO_NO_DELTA_LOCAL -->
+
+`SCRIPT_PORTABILITY_GLOBAL=ENFORCED_INCREMENTALLY`.
+
+Todo script novo ou modificado deve descobrir o local do próprio arquivo,
+derivar a raiz/owner existente e funcionar fora do diretório corrente em
+Windows, Linux, VMware ou VPS, sem transformar ambiente em identidade. O
+resolvedor Bash canônico é `scripts/checker/_lib.sh`; validadores existentes
+devem ser estendidos antes de qualquer biblioteca nova.
+
+`ABSOLUTE_MACHINE_PATH|FIXED_USER|FIXED_HOST|FIXED_IP` não podem ser bindings
+operacionais padrão. Variáveis externas são apenas candidatas e devem passar
+por validação de fronteira; escapes por caminho relativo, symlink ou árvore
+irmã devem falhar fechado. Regexes dinâmicas devem ser escapadas/compiladas no
+owner afetado; corrigir somente regex inválida comprovada no cone, preservando
+scripts legados fora do delta.
+
+Aceite mínimo: teste/validator não destrutivo executado a partir de diretório
+externo, readback da raiz/owner resolvido, contraprova de override fora da
+fronteira e receipt com SHA. `DOCUMENTED != EXECUTED` e `UNKNOWN != PASS`.

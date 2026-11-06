@@ -20,6 +20,7 @@ import { getHarnessWeeklySummary, queryCentralLogs } from "./agent-observability
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 import { subscribeAuditEvents } from "./audit-logger.js";
+import { appendCentralEvent } from "./log-funnel.js";
 
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
@@ -266,6 +267,7 @@ export function adminRotas(req, res) {
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
+            { metodo: "POST", path: "/admin/api/sentinel/events", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
             { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
             { metodo: "GET", path: "/admin/api/linear", protegido: true },
@@ -273,6 +275,90 @@ export function adminRotas(req, res) {
             { metodo: "GET", path: "/linear/status", protegido: false },
         ],
     });
+}
+
+function sentinelSupabaseConfig() {
+    const url = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const key = String(process.env.HUB_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "").trim();
+    return { url, key };
+}
+
+function sentinelText(value, max = 500) {
+    if (typeof value !== "string") return null;
+    return value
+        .replace(/Bearer\s+[^\s,;&]+/gi, "Bearer [REDACTED]")
+        .replace(/((?:["']?(?:password|token|secret|api[_-]?key|authorization)["']?)\s*[:=]\s*["']?)[^\s,;&"'}]+/gi, "$1[REDACTED]")
+        .replace(/https?:\/\/[^\s"'<>)]+/gi, (url) => url.split(/[?#]/, 1)[0])
+        .slice(0, max);
+}
+
+function sentinelEvent(input = {}) {
+    const metadata = input.metadata && typeof input.metadata === "object" && !Array.isArray(input.metadata) ? input.metadata : {};
+    const kinds = ["code", "promise", "console", "resource", "network", "xhr", "manual"];
+    const allowed = {
+        schema: "centraldark.sentinel.event.v2",
+        event_id: null,
+        status: input.status === "UNKNOWN" ? "UNKNOWN" : "FAIL",
+        correlation_id: sentinelText(input.correlation_id, 160),
+        fingerprint: sentinelText(input.fingerprint, 80),
+        severity: ["CRITICAL", "HIGH", "MEDIUM", "LOW"].includes(input.severity) ? input.severity : "UNKNOWN",
+        kind: kinds.includes(input.kind) ? input.kind : null,
+        page: sentinelText(input.page, 200),
+        route: sentinelText(input.route, 200),
+        control: sentinelText(input.control, 160),
+        source: "cockpit-sentinel",
+        message: sentinelText(input.message, 500),
+        simplified_message: sentinelText(input.simplified_message, 300),
+        http_status: Number.isInteger(input.http_status) ? input.http_status : null,
+        method: sentinelText(input.method, 12),
+        duration_ms: Number.isFinite(Number(input.duration_ms)) ? Math.max(0, Math.min(120000, Number(input.duration_ms))) : null,
+        first_seen: sentinelText(input.first_seen, 40),
+        last_seen: sentinelText(input.last_seen, 40),
+        occurrences: Number.isInteger(input.occurrences) ? Math.max(1, Math.min(100000, input.occurrences)) : 1,
+        sentinel_version: sentinelText(input.sentinel_version, 32),
+    };
+    const safeMetadata = Object.fromEntries(Object.entries(metadata).slice(0, 30).map(([key, value]) => [String(key).slice(0, 60), sentinelText(typeof value === "string" ? value : JSON.stringify(value), 500)]));
+    return { ...allowed, metadata: safeMetadata };
+}
+
+function sameOriginSentinel(req) {
+    try {
+        const origin = new URL(String(req.headers.origin || ""));
+        const host = String(req.headers.host || "").toLowerCase();
+        if (origin.host.toLowerCase() !== host) return false;
+        if (origin.protocol === "https:") return true;
+        return origin.protocol === "http:" && ["localhost", "127.0.0.1", "[::1]"].includes(origin.hostname);
+    } catch { return false; }
+}
+
+export async function adminSentinelEvent(req, res) {
+    if (!isAdmin(req)) { res.status(401).json({ ok: false, error: "AUTH_REQUIRED" }); return; }
+    if (req.method !== "POST") { res.setHeader("Allow", "POST"); res.status(405).json({ ok: false, error: "METHOD_NOT_ALLOWED" }); return; }
+    if (!sameOriginSentinel(req)) { res.status(403).json({ ok: false, error: "SAME_ORIGIN_REQUIRED" }); return; }
+    if (Buffer.byteLength(JSON.stringify(req.body || {}), "utf8") > 32768) { res.status(413).json({ ok: false, error: "SENTINEL_EVENT_TOO_LARGE" }); return; }
+    const event = sentinelEvent(req.body || {});
+    if (!event.correlation_id || !event.fingerprint || !event.kind || !event.page) {
+        res.status(400).json({ ok: false, error: "SENTINEL_EVENT_REQUIRED_FIELDS" }); return;
+    }
+    const eventId = crypto.randomUUID();
+    event.event_id = eventId;
+    const local = appendCentralEvent({
+        event_id: eventId, sector: "control", service: "cockpit-sentinel", source: event.source,
+        actor: "cockpit-sentinel", kind: "sentinel_error", level: event.severity === "CRITICAL" || event.severity === "HIGH" ? "error" : "warn",
+        key: `sentinel:${event.fingerprint}`, tags: ["sentinel", event.kind, event.severity.toLowerCase()], correlation_id: event.correlation_id,
+        message: event.simplified_message || event.message, data: event,
+    });
+    const { url, key } = sentinelSupabaseConfig();
+    if (!url || !key) { res.status(503).json({ ok: false, error: "SUPABASE_SERVER_CREDENTIALS_MISSING", event_id: eventId, local }); return; }
+    const response = await fetch(`${url}/rest/v1/agent_events`, {
+        method: "POST",
+        headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+        body: JSON.stringify({ agent: "cockpit-sentinel", area: event.page, acao: event.kind, alvo: event.route || event.control || "cockpit", status: event.status, metadata: event }),
+        signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) { pushAdminLog("error", "sentinel_supabase_ingest_fail", { cid: req.cid, status: response.status, correlation_id: event.correlation_id }); res.status(502).json({ ok: false, error: "SUPABASE_INGEST_FAILED", event_id: eventId }); return; }
+    pushAdminLog("warn", "sentinel_event_ingested", { cid: req.cid, event_id: eventId, correlation_id: event.correlation_id, fingerprint: event.fingerprint, severity: event.severity });
+    res.status(201).json({ ok: true, event_id: eventId, correlation_id: event.correlation_id, received_at: new Date().toISOString() });
 }
 
 function inferirCategoria(t) {
@@ -332,14 +418,15 @@ function probeCommanderTcp(host, port) {
         socket.connect(port, host);
     });
 }
+const COMMANDER_HEALTH_PORT = 9101;
 async function probeCommanderHttp(host) {
     try {
-        const response = await fetch("http://" + host + ":3000/", {
+        const response = await fetch("http://" + host + ":" + COMMANDER_HEALTH_PORT + "/health", {
             cache: "no-store", redirect: "manual", signal: AbortSignal.timeout(2300),
         });
-        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
+        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX", route: "9101/health" };
     } catch {
-        return { httpStatus: null, state: "NOT_REACHABLE" };
+        return { httpStatus: null, state: "NOT_REACHABLE", route: "9101/health" };
     }
 }
 export async function measureNativeCommander() {
@@ -370,7 +457,7 @@ export async function measureNativeCommander() {
             ips: snapshot.Self?.TailscaleIPs || [] },
         home: { host: home?.HostName || "SEGREDO", ip, online: home?.Online === true,
             ssh_22: ssh, winrm_5985: winrm, screenpipe_3030: screenpipe,
-            cockpit_3000: cockpit, rdp_3389: rdp },
+            commander_9101: cockpit, rdp_3389: rdp },
         commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
             controlPlane: "MCP_CENTRALDARK", transport: "TAILSCALE_PRIVATE",
             commandExecution: "UNPROVEN", authenticatedWindowsSession: false,

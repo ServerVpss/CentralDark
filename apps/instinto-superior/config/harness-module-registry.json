@@ -7,6 +7,15 @@
   "reuse_before_create": true,
   "modules": [
     {
+      "id": "codex-halo",
+      "owner": "apps/modulos/codex-halo-main",
+      "transport": "native-cockpit-import",
+      "runtime_status": "UNKNOWN",
+      "integration_owner": "apps/instinto-superior/src/components/central/CodexHaloHarness.tsx",
+      "state_mapping": { "RUNNING": "working", "PASS": "completed", "BLOCKED": "attention", "AUTH_REQUIRED": "attention", "FAIL": "attention", "UNKNOWN": "idle" },
+      "interaction_policy": "pointer-events-none; Hermes/Cua remains the executor"
+    },
+    {
       "id": "deepseek",
       "owner": "apps/modulos/deepseek-harness",
       "transport": "existing-owner",
@@ -82,7 +91,9 @@
       "owner": "apps/instinto-superior",
       "transport": "Vite localhost → Tailscale private serve",
       "runtime_status": "PORT_PROCESS_PROVEN",
-      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md"
+      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md",
+      "last_evidence_status": "DEGRADED_NO_LISTENER_127_0_0_1_3000_MEDIDO_22_10_2026",
+      "last_evidence_ref": "apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm.measured_routes"
     },
     {
       "id": "notifications-recipe",
@@ -137,6 +148,172 @@
       "runtime_status": "HISTORICAL_INSTALL_AND_TRANSPORT_PROVEN_CURRENT_UNKNOWN",
       "evidence_owner": "docs/receipts/SSH-CASA-VPS-LOCK-20261014.md",
       "paired_capability": "scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1"
+    },
+    {
+      "id": "casa-jea-winrm",
+      "label": "Casa JEA via Tailscale (WinRM 5985) — Hermes skill devops/centraldark-casa-jea",
+      "owner": "Hermes skill devops/centraldark-casa-jea (/root/.hermes/skills/devops/centraldark-casa-jea)",
+      "transport": "VPS Hermes 100.90.199.124 → Tailscale → Casa SEGREDO 100.123.93.25:5985 WinRM HTTP (NTLM + criptografia de mensagem) → JEA CentralDark-Harness",
+      "runtime_status": "PROVEN",
+      "proof_lock": "PROVEN_LOCKED",
+      "proven_at": "22/10/2026 23:38:13 BRT",
+      "evidence_owner": "docs/ARQUITETURA/INSTINTO-SUPERIOR-HARNESS-MODULOS.md#rota-casa-jea-winrm",
+      "sensor": "scripts/lupa/validar-harness-casa-jea.mjs",
+      "authorization": "PERMITO SEGREDO do CHEFE em 22/10/2026 (passos 1-4 e primeiro MEXER no Cockpit 8080)",
+      "capabilities": {
+        "ver": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "commands": [
+            "Get-Process",
+            "Get-Service",
+            "Get-NetTCPConnection"
+          ],
+          "evidence": "T1 ps ok=True 438 processos; T2 tcp ok=True 79 portas em escuta (rerun 22/10/2026 23:38:13 BRT)"
+        },
+        "pedir": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "commands": [
+            "Stop-HarnessProcess -Id",
+            "Restart-HarnessService -Name"
+          ],
+          "evidence": "T4 Get-ChildItem, T5 Stop-Process, T6 Invoke-Expression → 'is not recognized'; T7 stop PID 4 → NEGADO_ALLOWLIST; T8 restart Spooler → NEGADO_ALLOWLIST"
+        },
+        "mexer": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "evidence": "22/10/2026 23:37:33 BRT stop PID 17056 (regra cockpit-vite-8080) ok=True; 8080 parou em <1s; transcrição PowerShell_transcript.SEGREDO.2rlvhVmv.20261022233732.txt (Username SEGREDO\\cd-harness, STOPPED|17056|node); religado pela receita oficial: 8080 escutando PID 33620 e HTTP 200 em / e /sala-controle às 23:37:53 BRT"
+        },
+        "allow": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "evidence": "T3 allow ok=True com JSON válido: processes=[hermes-gateway-casa, screenpipe-app, cockpit-vite-8080], services=[]",
+          "history": "respondia None até a correção [string] na função Get-HarnessAllowlist em 22/10/2026"
+        }
+      },
+      "audit": {
+        "vps_log": "/var/log/centraldark/casa-jea.jsonl",
+        "casa_transcripts": "C:\\CentralDark\\audit\\jea\\",
+        "transcripts_at_proof": 25,
+        "leak_check": "LEAK_LOG_VPS=0; LEAK_SKILL=0"
+      },
+      "allowlist": "C:\\CentralDark\\harness\\allowlist.json",
+      "credential_ref": "/etc/centraldark/secrets/casa-jea.env (600 root; conteúdo nunca versionado)",
+      "guards": {
+        "firewall_rule": "WINRM-HTTP-In-TCP-NoScope RemoteAddress=100.90.199.124 (perfis Domain,Private; Tailscale=Private, Ethernet=Public)",
+        "account": "SEGREDO\\cd-harness sem grupos locais; acesso só pelo endpoint CentralDark-Harness",
+        "runas": "conta virtual WinRM",
+        "language_mode": "NoLanguage",
+        "role_capability": "C:\\Program Files\\WindowsPowerShell\\Modules\\CentralDarkHarness\\RoleCapabilities\\HarnessOperator.psrc",
+        "session_configuration": "C:\\CentralDark\\harness\\CentralDark-Harness.pssc"
+      },
+      "recipes": {
+        "cockpit_8080_religar": {
+          "official": true,
+          "command": "Start-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'",
+          "task_action": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"K:\\scripts\\casa\\instinto-cockpit-autostart.ps1\"",
+          "process": "\"C:\\Program Files\\nodejs\\node.exe\" \"K:\\apps\\instinto-superior\\node_modules\\vite\\bin\\vite.js\" --host 0.0.0.0 --port 8080 --strictPort",
+          "working_directory": "K:\\apps\\instinto-superior",
+          "user": "NT AUTHORITY\\SYSTEM (sessão 0, RunLevel Highest)",
+          "watchdog": "mesma tarefa: gatilhos boot + logon + tempo a cada 1 min, MultipleInstances=IgnoreNew",
+          "readback": "Get-NetTCPConnection -State Listen -LocalPort 8080 e HTTP 200 em http://127.0.0.1:8080/sala-controle",
+          "backup": "C:\\CentralDark\\harness\\backup\\task-CentralDark-Cockpit-8080-20261022.xml",
+          "measured": "22/10/2026 23:37:34 BRT start → 23:37:48 escutando PID 33620 → 23:37:53 HTTP 200"
+        }
+      },
+      "rollback": {
+        "casa": "Unregister-PSSessionConfiguration CentralDark-Harness -Force; Remove-LocalUser cd-harness; Set-NetFirewallRule -Name WINRM-HTTP-In-TCP-NoScope -RemoteAddress Any",
+        "vps": "rm -rf /root/.hermes/skills/devops/centraldark-casa-jea /etc/centraldark/secrets/casa-jea.env",
+        "firewall_backup": "C:\\CentralDark\\harness\\backup\\fw-WINRM-HTTP-In-TCP-NoScope-20261022-231904.clixml"
+      },
+      "live_policy": "Sessão ao vivo é camada separada: o sensor mostra ⚠️ com causa (TAILSCALE_OU_VPN, WINRM_PARADO, CREDENCIAL_REJEITADA, JEA_NAO_REGISTRADO, CREDENCIAL_OU_SKILL_AUSENTE) sem rebaixar o PROVEN.",
+      "measured_routes": [
+        {
+          "route": "tailscale-serve-9100",
+          "state": "FAIL",
+          "measured_on": "22/10/2026",
+          "cause": "Serve aponta para 127.0.0.1:9100, sem listener na Casa"
+        },
+        {
+          "route": "tailscale-serve-3000-443",
+          "state": "FAIL",
+          "measured_on": "22/10/2026",
+          "cause": "Serve aponta para 127.0.0.1:3000, sem listener; VPS recebeu HTTP 404 (3000) e 502 (443)"
+        },
+        {
+          "route": "ssh-reverso-casa",
+          "state": "FAIL",
+          "measured_on": "22/10/2026",
+          "cause": "o processo é ssh -D 49646 segredo-vpss: SOCKS Casa→VPS, sem -R; sshd da Casa parado; porta 22 fechada"
+        },
+        {
+          "route": "cockpit-8080",
+          "state": "NOT_EXECUTOR",
+          "measured_on": "22/10/2026",
+          "cause": "Vite dev do Instinto Superior em 0.0.0.0: painel, não executor"
+        },
+        {
+          "route": "remote-desktop-commander-vps",
+          "state": "FAIL_FOR_DIRECTION",
+          "measured_on": "22/10/2026",
+          "cause": "os serviços expõem a VPS para a nuvem; conta2 aguardando autorização de dispositivo"
+        },
+        {
+          "route": "rdp-3389",
+          "state": "PASS_GUI_ONLY",
+          "measured_on": "22/10/2026",
+          "cause": "tela, não automação"
+        }
+      ],
+      "hud_routes_note": "HUD numerado 05/06/15/21 não existe neste registro. A linha 'WinRM Casa' do admin (apps/modulos/mcp/src/admin.js) é leitura ao vivo de j.home.winrm_5985 e não foi alterada."
+    },
+    {
+      "id": "terminal-visivel-sol-casa",
+      "label": "Terminal visível SOL → Casa (Desktop Commander + conhost)",
+      "owner": "Desktop Commander na Casa SEGREDO, acionado por tarefa Cowork/Dispatch",
+      "transport": "Dispatch (celular do CHEFE) → tarefa Cowork → Desktop Commander start_process → conhost.exe → PowerShell visível na sessão 1 (desktop do usuário)",
+      "runtime_status": "PROVEN",
+      "proof_lock": "PROVEN_LOCKED",
+      "proven_at": "22/10/2026 23:47 BRT",
+      "scope": "somente leitura (Get-Date, hostname, whoami)",
+      "capabilities": {
+        "visivel": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "evidence": "janela própria com título 'SOL -> Casa' na sessão 1, faixa exibida e digitação do comando simulada na tela"
+        },
+        "executa_leitura": {
+          "state": "PROVEN",
+          "lock": "🟢🔒",
+          "evidence": "Get-Date executado; hostname = SEGREDO; whoami = segredo\\administrador"
+        },
+        "executa_escrita": {
+          "state": "UNKNOWN",
+          "evidence": "nunca executado por esta rota"
+        }
+      },
+      "evidence_source": "outra sessão Cowork em 22/10/2026 23:47 BRT, com confirmação visual do CHEFE por foto. O screenshot fica na sessão e não é versionado (só referência). Não foi remedido pelo agente que registrou.",
+      "recipes": {
+        "terminal_visivel": {
+          "official": true,
+          "command": "Start-Process conhost.exe \"powershell.exe -NoExit -Command <script>\"",
+          "via": "Desktop Commander start_process na Casa",
+          "window_title": "SOL -> Casa",
+          "session": "1 (desktop do usuário)"
+        }
+      },
+      "anti_recipes": [
+        {
+          "command": "Start-Process powershell",
+          "why": "no Windows 11 vira aba do Windows Terminal já aberto, não abre janela própria"
+        },
+        {
+          "command": "computer-use digitando no terminal",
+          "why": "terminais e IDEs ficam no tier click: digitação bloqueada. A rota é Desktop Commander + conhost, não teclado"
+        }
+      ],
+      "aprendizado_ref": "docs/CONSCIENCIA/APRENDIZADOS.md — '22/10/2026 — TERMINAL_VISIVEL_SOL_CASA' (escritor único: sessão 'PowerShell visível no PC', PR próprio)"
     }
   ],
   "loop": [
@@ -165,7 +342,8 @@
     "Notificação breve abre a receita; envio direto depende de broker autenticado; voz capturada não comprova transcrição nem áudio healthy.",
     "Prova de 14/10 e screenshots 17/10 é HISTORICAL, não CURRENT. Na última consulta 17/10, dispositivos RDC SEGREDO e CENTRALDARK-OS offline; isso não revoga SSH Tailscale previamente provado.",
     "Status do sensor só pode piscar verde com timestamp fresco e verificação de sessão/ACK do owner, não com texto estático do catálogo.",
-    "A UI Instinto usa client VITE_SUPABASE_URL e o HUB tem client dedicado lyoigsqluyktoclwdaft. NÃO assumir sessão de autenticação compartilhada entre projetos; hub-command exige JWT de usuário do HUB + has_role admin, registra missão pending e não autoexecuta."
+    "A UI Instinto usa client VITE_SUPABASE_URL e o HUB tem client dedicado lyoigsqluyktoclwdaft. NÃO assumir sessão de autenticação compartilhada entre projetos; hub-command exige JWT de usuário do HUB + has_role admin, registra missão pending e não autoexecuta.",
+    "Rota casa-jea-winrm: PROVEN travado (🟢🔒) por capacidade; sessão ao vivo só pelo sensor scripts/lupa/validar-harness-casa-jea.mjs, que mostra ⚠️ com causa sem rebaixar o PROVEN."
   ],
   "cognitive_lexicon": {
     "schema": "centraldark.cognitive-vocabulary.v1",

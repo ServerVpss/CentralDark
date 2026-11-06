@@ -17,7 +17,7 @@
   },
   "capability_hud_boot": {
     "canonical": ".agents/CAPABILITY-HUD-BOOT.json",
-    "skill": ".agents/skills/centraldark-capability-hud/SKILL.md",
+    "skill": ".agents/skills/centraldark-operational-method/Skills/centraldark-capability-hud/SKILL.md",
     "required_before_claiming_tool_limitation": true,
     "required_before_returning_early": true,
     "probe_relevant_tool_before_asking": true,
@@ -46,28 +46,28 @@
       "when": "trigger_is_acordar",
       "then": [
         ".agents/CAPABILITY-HUD-BOOT.json",
-        ".agents/skills/centraldark-capability-hud/SKILL.md",
+        ".agents/skills/centraldark-operational-method/Skills/centraldark-capability-hud/SKILL.md",
         "PROBE_RELEVANT_TOOL_FIRST"
       ]
     },
     {
       "when": "tool_or_route_uncertain_or_claiming_cannot",
       "then": [
-        ".agents/skills/centraldark-capability-hud/SKILL.md",
+        ".agents/skills/centraldark-operational-method/Skills/centraldark-capability-hud/SKILL.md",
         "PROBE_RELEVANT_TOOL_FIRST"
       ]
     },
     {
       "when": "delta_involves_runtime_site_panel_feature",
       "then": [
-        ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
+        ".agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md",
         ".agents/skills/main-pinned-runtime-fast-path/SKILL.md"
       ]
     },
     {
       "when": "delta_involves_hub_provider_secret_oauth_model",
       "then": [
-        ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md"
+        ".agents/skills/centraldark-operational-method/Skills/centraldark-hub-credential-control-plane/SKILL.md"
       ]
     },
     {
@@ -80,13 +80,13 @@
     }
   ],
   "canonical_skills": [
-    ".agents/skills/centraldark-capability-hud/SKILL.md",
-    ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
-    ".agents/skills/centraldark-live-editing-fabric/SKILL.md",
+    ".agents/skills/centraldark-operational-method/Skills/centraldark-capability-hud/SKILL.md",
+    ".agents/skills/centraldark-operational-method/Skills/centraldark-intent-deploy-router/SKILL.md",
+    ".agents/skills/centraldark-operational-method/Skills/centraldark-live-editing-fabric/SKILL.md",
     ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
-    ".agents/skills/centraldark-hub-credential-control-plane/SKILL.md",
+    ".agents/skills/centraldark-operational-method/Skills/centraldark-hub-credential-control-plane/SKILL.md",
     ".agents/skills/centraldark-operational-method/SKILL.md",
-    ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+    ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md",
     ".claude/skills/synced/voice-semantic-classifier/SKILL.md"
   ],
   "minimum_probe_contract": {
@@ -143,9 +143,9 @@
   "invocation_grammar_binding": {
     "id": "CENTRALDARK_INVOCATION_GRAMMAR_01",
     "canonical_contract": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.invocation-grammar.md",
-    "unified_surface_owner": ".agents/skills/centraldark-unified-surface-parity/SKILL.md",
+    "unified_surface_owner": ".agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md",
     "voice_classifier_owner": ".claude/skills/synced/voice-semantic-classifier/SKILL.md",
-    "intent_router_owner": ".agents/skills/centraldark-intent-deploy-router/SKILL.md",
+    "intent_router_owner": ".agents/skills/centraldark-operational-method/Skills/centraldark-intent-deploy-router/SKILL.md",
     "no_second_parser": true,
     "wake_word_is_conditional_not_ritual": true,
     "normalized_intent_shared_across_surfaces": true,

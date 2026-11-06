@@ -13,7 +13,7 @@ VERIFIER_DIR="$REPO_DIR/apps/modulos/HERMES-CORE/agents/Log-Verificador"
 PM2_APP="CentralDark-HermesVerificador"
 GLOBAL_GATE_RECEIPT_DIR="${GLOBAL_GATE_RECEIPT_DIR:-/tmp/centraldark-global-contract}"
 # CENTRALDARK_GLOBAL_CONTRACT_ENFORCER_REQUIRED
-POLICY_PATH=".agents/skills/centraldark-esteira-motor/SKILL.md"
+POLICY_PATH=".agents/skills/centraldark-operational-method/Skills/centraldark-esteira-motor/SKILL.md"
 SOURCE_DEPLOY_PATH="scripts/vps/centraldark-deploy.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CANONICAL_DEPLOY_GATE="scripts/vps/deploy-guards-dispatcher.sh"

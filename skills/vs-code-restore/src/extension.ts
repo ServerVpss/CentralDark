@@ -700,17 +700,16 @@ async function pairVsCode(context: vscode.ExtensionContext): Promise<void> {
     });
     if (!request.ok || !/^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(request.code) ||
         !request.pair_id || !request.pair_secret) throw Error('PAIRING_START_INVALID');
-    const go = await vscode.window.showInformationMessage(
-      'CentralDark: codigo de pareamento ' + request.code +
-      '. Confirme este mesmo codigo no MCP. Nenhuma senha deve ser digitada aqui.',
-      {modal: true}, 'Abrir confirmação');
-    if (go !== 'Abrir confirmação') return;
     const approvedUri = vscode.Uri.parse(
       'https://mcp.centralldark.com/authorize?client_id=' +
       encodeURIComponent('centraldark.centraldark-vscode-restore') +
       '&pair_id=' + encodeURIComponent(request.pair_id));
     const opened = await vscode.env.openExternal(approvedUri);
     if (!opened) throw Error('PAIRING_BROWSER_NOT_OPENED');
+    // Abrir pagina imediatamente sem gastar o TTL de 120s em um modal.
+    // Exigir a conferencia do codigo e o clique humano no Cockpit.
+    void vscode.window.showInformationMessage(
+      'CentralDark: código ' + request.code + '. Confira na página aberta e clique em Confirmar pareamento.');
     const result = await vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
       title: 'CentralDark: aguardando Confirmar pareamento no MCP (' + request.code + ')',

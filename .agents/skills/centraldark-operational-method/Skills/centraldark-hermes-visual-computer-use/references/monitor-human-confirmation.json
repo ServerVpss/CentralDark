@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-02",
+  "source": "explicit CHEFE confirmations in current conversation",
+  "scope": "Casa SEGREDO existing four-monitor arrangement",
+  "monitors": [
+    {
+      "number": 1,
+      "position": "direita",
+      "confirmed": true
+    },
+    {
+      "number": 2,
+      "position": "centro-superior",
+      "confirmed": true
+    },
+    {
+      "number": 3,
+      "position": "esquerda",
+      "confirmed": true
+    },
+    {
+      "number": 4,
+      "position": "centro-inferior",
+      "confirmed": true
+    }
+  ],
+  "executed": {
+    "cycles_each": 3,
+    "on_seconds": 0.65,
+    "off_seconds": 0.35,
+    "final_overlay": false,
+    "final_capture": false
+  },
+  "limits": [
+    "not a test of physical 1/2/3 monitor topologies",
+    "not a new cursor test",
+    "not permission for capture or input"
+  ]
+}
