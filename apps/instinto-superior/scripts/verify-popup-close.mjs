@@ -39,6 +39,23 @@ test("Jarvis uses identical close button, not a duplicated button style", () => 
   assert.match(cockpit, /bg-transparent/);
 });
 
+test("Jarvis audio sends and receives independently without changing role", () => {
+  const player = source("central/PlayerLocalJarvis.tsx");
+  assert.match(player, /useState\(\(\) => crypto\.randomUUID\(\)\)/);
+  assert.match(player, /const listeningRef = useRef\(false\)/);
+  assert.match(player, /const sendingRef = useRef\(false\)/);
+  assert.match(player, /if \(!listeningRef\.current\) return/);
+  assert.match(player, /if \(!sendingRef\.current \|\| !stream/);
+  assert.match(player, /\}, \[peerId\]\)/);
+  assert.match(player, /Parar de ouvir/);
+  assert.match(player, /Parar de enviar/);
+  assert.match(player, /audio\.srcObject = stream/);
+  assert.match(player, /getDisplayMedia\(\{ video: true, audio: true \}\)/);
+  assert.match(player, /echoCancellation: !isLoopback/);
+  assert.doesNotMatch(player, /setRole\(/);
+  assert.doesNotMatch(player, /shared\.getVideoTracks\(\)\.forEach\(\(track\) => track\.stop\(\)\)/);
+});
+
 test("confirmation dialogs keep explicit cancellation semantics", () => {
   const confirmation = source("ui/alert-dialog.tsx");
   assert.doesNotMatch(confirmation, /PopupCloseButton/);

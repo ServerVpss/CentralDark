@@ -2634,3 +2634,9 @@ Contrato mínimo obrigatório:
 Esta regra vale daqui para frente e para arquivos tocados por um delta. Scripts
 legados fora do cone afetado permanecem preservados até existir causa e teste
 para uma migração específica.
+
+<!-- CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
+## Diálogo Reflexivo da Intenção - SOL, Hermes e agentes CentralDark
+
+Sempre que o CHEFE conversar sobre CentralDark, consultar a [skill canônica](.agents/skills/centraldark-operational-method/Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): distinguir ato da fala, preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; uma nova ideia é DELTA até existir mudança explícita de missão. Reparar mal-entendidos com explicação natural sem abandonar o trabalho. Para ação material, aplicar Skill Mãe + Kimetsu Remix + Michelin 3 Estrelas com evidência e contraprova. Documento salvo != Hermes consumiu no runtime.
+<!-- /CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
