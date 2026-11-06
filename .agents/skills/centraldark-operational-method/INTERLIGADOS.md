@@ -21,6 +21,11 @@
 
 O método chama somente as skills materiais ao escopo. `INTERLIGADOS != CARREGAR TUDO`.
 
+## Diálogo Reflexivo da Intenção nos interligados
+
+[Skill canônica](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md) e [aprendizado da sessão](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-11-04-DIALOGO-REFLEXIVO-DA-INTENCAO.md).
+Sempre que a conversa for sobre CentralDark, reconhecer ato de fala, preservar INTENT_PARENT/NEXT_CURSOR e reparar mal-entendido sem trocar missão. Acoplar **Skill Mãe + Kimetsu Remix + Michelin 3 Estrelas** apenas com esforço proporcional ao trabalho; não exigir ritual em conversa humana. GANCHO_RID_INTERLIGADOS=TRUE.
+
 ## Handoff vivo entre agentes sem duplicação
 
 **CentralDark-Remote:** [HANDOFF-CENTRALDARK-REMOTE-20261024.md](references/HANDOFF-CENTRALDARK-REMOTE-20261024.md). Antes de assumir, ler e verificar o cartão Hermes `t_5b386368`, a tarefa Windows `CentralDark-Casa-Commander` e `engine_connected`; não editar arquivo que outro worker esteja executando. Intenção do CHEFE é única, estados das contas não se propagam automaticamente. Comunicar no HUD game fixo com PASS e PENDENTE separados.

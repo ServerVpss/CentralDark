@@ -280,6 +280,66 @@ echo "=== VPS SYNC DONE ==="
   }
 }
 
+
+/* ── diagnóstico read-only do rastreador Casa / openKylin ── */
+export type EstadoRastreadorCasa = {
+  at: string | null;
+  tracker: 'active' | 'inactive' | 'unknown';
+  ssh: boolean | null;
+  githubAuthenticated: boolean | null;
+  head: string | null;
+  githubMain: string | null;
+  sameSha: boolean | null;
+  dirtyTracked: boolean | null;
+  lastEventAt: string | null;
+};
+
+export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<EstadoRastreadorCasa> => {
+    const empty: EstadoRastreadorCasa = {
+      at: null, tracker: 'unknown', ssh: null, githubAuthenticated: null,
+      head: null, githubMain: null, sameSha: null, dirtyTracked: null, lastEventAt: null,
+    };
+    const script = path.join(CENTRALDARK_ROOT, 'scripts', 'casa', 'centraldark-change-tracker.py');
+    if (!fs.existsSync(script)) return empty;
+    try {
+      const raw = execFileSync('python3', [script, 'doctor'], {
+        encoding: 'utf8', timeout: 25000,
+      });
+      const data = JSON.parse(raw) as {
+        at?: unknown;
+        tracker_service?: unknown;
+        ssh_active?: unknown;
+        github_authenticated_and_accessible?: unknown;
+        head?: unknown;
+        github_main?: unknown;
+        same_sha?: unknown;
+        git_dirty_tracked?: unknown;
+        last_events?: unknown;
+      };
+      const events = Array.isArray(data.last_events) ? data.last_events as { at?: unknown }[] : [];
+      const lastEvent = [...events].reverse().find((event) => typeof event.at === 'string');
+      const tracker: EstadoRastreadorCasa['tracker'] = data.tracker_service === 'active'
+        ? 'active' : data.tracker_service === 'inactive' ? 'inactive' : 'unknown';
+      const validSha = typeof data.github_main === 'string' && data.github_main !== 'UNKNOWN';
+      return {
+        at: typeof data.at === 'string' ? data.at : null,
+        tracker,
+        ssh: typeof data.ssh_active === 'boolean' ? data.ssh_active : null,
+        githubAuthenticated: typeof data.github_authenticated_and_accessible === 'boolean'
+          ? data.github_authenticated_and_accessible : null,
+        head: typeof data.head === 'string' && data.head !== 'UNKNOWN' ? data.head : null,
+        githubMain: validSha ? data.github_main as string : null,
+        sameSha: validSha && typeof data.same_sha === 'boolean' ? data.same_sha : null,
+        dirtyTracked: typeof data.git_dirty_tracked === 'boolean' ? data.git_dirty_tracked : null,
+        lastEventAt: typeof lastEvent?.at === 'string' ? lastEvent.at : null,
+      };
+    } catch {
+      return empty;
+    }
+  }
+);
+
 /* ── GET status ── */
 export const lerStatusSync = createServerFn({ method: "GET" }).handler(
   async (): Promise<SyncStatus> => {
@@ -300,7 +360,7 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
         human_readable: registroVps
           ? `Última tentativa VPS ${ultimoResultado} em ${formatTimestamp(raw.last_sync)} · histórico, não estado atual`
           : formatTimestamp(raw.last_sync),
-        target: registroVps ? "vps" : undefined,
+        ...(registroVps ? { target: "vps" } : {}),
         details: raw.details ?? undefined,
       };
     } catch {

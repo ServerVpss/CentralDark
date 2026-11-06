@@ -100,3 +100,7 @@ O CHEFE definiu **50 micro-passos comprovados como objetivo**, não como contado
 **Next cursor:** apenas o que falta, se houver.
 
 **Nunca:** alterar a Lembrança fonte; duplicar Hermes, gateways ou skills; inventar diretórios; tocar main, VPS ou Cockpit fora da intenção.
+
+## Michelin + Kimetsu + Diálogo Reflexivo da Intenção (2026-11-04)
+
+Para qualquer operação CentralDark, aplicar a [Skill Mãe](../../SKILL.md), o [Kimetsu Brainstorm Remix](../../../kimetsu-brainstorm/SKILL.md) e o [Diálogo Reflexivo da Intenção](../centraldark-dialogo-reflexivo-da-intencao/SKILL.md). A primeira estrela entende a intenção CONTÍNUA, a segunda integra sem abandonar o fio, a terceira comprova o efeito. Observação lateral não cancela a missão anterior. Em conversa simples, sem cerimônia. MARCADOR_RID_MICHELIN=TRUE.

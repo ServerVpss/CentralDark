@@ -281,3 +281,7 @@ UPDATE_STATE=
 FIXED_POINT=
 UNKNOWN=
 ```
+
+## Hermes: Diálogo Reflexivo da Intenção (2026-11-04)
+
+Em conversas CentralDark, carregar a [skill de diálogo reflexivo](../centraldark-dialogo-reflexivo-da-intencao/SKILL.md) com a Skill Mãe e preservar INTENT_PARENT/NEXT_CURSOR. Não converter observação em novo Goal. Kimetsu Remix e Michelin 3 Estrelas entram de modo proporcional ao trabalho. O Hermes original segue executor único. MARCADOR_RID_HERMES=TRUE.

@@ -83,6 +83,29 @@ $form.StartPosition = 'CenterScreen'
 $form.BackColor = $bg
 $form.ForeColor = $light
 $form.Font = New-Object Drawing.Font('Segoe UI',10)
+# CORPO UNICO TRAY: one NotifyIcon in the existing WinForms HUD process.
+$script:TrayExitRequested=$false
+$script:CorpoUnicoTray=New-Object Windows.Forms.NotifyIcon
+$script:CorpoUnicoTray.Icon=[Drawing.SystemIcons]::Application
+$script:CorpoUnicoTray.Text='CENTRALDARK | CORPO UNICO'
+$script:CorpoUnicoMenu=New-Object Windows.Forms.ContextMenuStrip
+$openHud=[Windows.Forms.ToolStripMenuItem]::new('Abrir Corpo Unico')
+$openHud.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate()})
+[void]$script:CorpoUnicoMenu.Items.Add($openHud)
+$openCockpit=[Windows.Forms.ToolStripMenuItem]::new('Abrir Cockpit CentralDark')
+$openCockpit.Add_Click({try{Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle'|Out-Null}catch{}})
+[void]$script:CorpoUnicoMenu.Items.Add($openCockpit)
+$verifyCasa=[Windows.Forms.ToolStripMenuItem]::new('Conferir Casa Commander')
+$verifyCasa.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate();Refresh-DesktopCommander})
+[void]$script:CorpoUnicoMenu.Items.Add($verifyCasa)
+[void]$script:CorpoUnicoMenu.Items.Add((New-Object Windows.Forms.ToolStripSeparator))
+$exitCorpo=[Windows.Forms.ToolStripMenuItem]::new('Sair do Corpo Unico')
+$exitCorpo.Add_Click({$script:TrayExitRequested=$true;$form.Close()})
+[void]$script:CorpoUnicoMenu.Items.Add($exitCorpo)
+$script:CorpoUnicoTray.ContextMenuStrip=$script:CorpoUnicoMenu
+$script:CorpoUnicoTray.Visible=$true
+$script:CorpoUnicoTray.Add_DoubleClick({$form.Show();$form.WindowState='Normal';$form.Activate()})
+$form.Add_Resize({if($form.WindowState -eq 'Minimized'){$form.Hide()}})
 $header = New-Object Windows.Forms.Panel
 $header.Dock = 'Top'; $header.Height = 116; $header.BackColor = $panel
 $form.Controls.Add($header)
@@ -92,7 +115,7 @@ $title.ForeColor = $cyan; $title.Font = New-Object Drawing.Font('Segoe UI Semibo
 $title.AutoSize = $true; $title.Location = New-Object Drawing.Point(20,9)
 $header.Controls.Add($title)
 $subtitle = New-Object Windows.Forms.Label
-$subtitle.Text = 'Casa + Tailscale + Screenpipe + Hermes + VPS + Supabase + Desktop Commander + HUD | somente leitura'
+$subtitle.Text = 'Casa Commander + MCP CentralDark + Hermes + Tailscale + Screenpipe + VPS + HUD | somente leitura'
 $subtitle.ForeColor=$dim;$subtitle.AutoSize=$true;$subtitle.Location=New-Object Drawing.Point(22,45)
 $header.Controls.Add($subtitle)
 # ACTION STRIP: mesma janela WinForms, visual preservado, login sempre humano no provedor.
@@ -112,10 +135,10 @@ function New-HudAction([string]$Caption,[int]$Width) {
   $actions.Controls.Add($b)
   return $b
 }
-$script:BtnProfile1=New-HudAction '🔐 Conta 1' 133
-$script:BtnProfile2=New-HudAction '🔐 Conta 2' 133
-$script:BtnScreenpipe=New-HudAction '👁 Screenpipe' 140
-$script:BtnDesktop=New-HudAction '🖥 Desktop Commander' 183
+$script:BtnProfile1=New-HudAction '🔐 MCP CentralDark' 158
+$script:BtnProfile2=New-HudAction '🔑 Parear Casa' 145
+$script:BtnScreenpipe=New-HudAction '👁 Screenpipe' 135
+$script:BtnDesktop=New-HudAction '🖥 Casa Commander' 166
 $script:BtnVerify=New-HudAction '🔄 Conferir' 118
 
 $footer = New-Object Windows.Forms.Panel
@@ -139,7 +162,7 @@ $top.ColumnStyles.Add((New-Object Windows.Forms.ColumnStyle([Windows.Forms.SizeT
 for($i=0;$i -lt 5;$i++){ $top.RowStyles.Add((New-Object Windows.Forms.RowStyle([Windows.Forms.SizeType]::Percent,20))) | Out-Null }
 $split.Panel1.Controls.Add($top)
 $script:Cards=@{}
-$sectors=@('CASA / WINDOWS','TAILSCALE / MALHA','SCREENPIPE / TELA','HERMES / SSH','VPS / CORACAO','RUNTIME / PORTAS','HUD / OBSIDIAN','PROVA / ARQUIVO','DESKTOP COMMANDER','SUPABASE / PLUGIN')
+$sectors=@('CASA / WINDOWS','TAILSCALE / MALHA','SCREENPIPE / TELA','HERMES / SSH','VPS / CORACAO','RUNTIME / PORTAS','HUD / OBSIDIAN','PROVA / ARQUIVO','CASA COMMANDER','SUPABASE / PLUGIN')
 for($i=0;$i -lt $sectors.Count;$i++){
   $cell=New-Object Windows.Forms.Panel
   $cell.Margin=New-Object Windows.Forms.Padding(4)
@@ -358,17 +381,27 @@ $script:SupabaseProject='lyoigsqluyktoclwdaft'
 $script:SupabaseBridgeUrl='https://lyoigsqluyktoclwdaft.supabase.co/functions/v1/centraldark-bridge'
 $script:SupabaseLast=[datetime]::MinValue
 function Refresh-DesktopCommander {
-  try{
-    $running=@(Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction Stop |
-      Where-Object {$_.CommandLine -match '(?i)desktop-commander.*remote'})
-    if($running.Count -gt 0){
-      $pids=($running | ForEach-Object {[string]$_.ProcessId}) -join ','
-      Set-Card 'DESKTOP COMMANDER' 'PASS' ('processo PID='+$pids+'; execucao remota medida separadamente')
-    }else{
-      Set-Card 'DESKTOP COMMANDER' 'UNKNOWN' 'processo remoto local nao encontrado'
+  # Native CentralDark Casa Commander only. Vendor remote process never counts as health.
+  try {
+    $health=Invoke-RestMethod -Uri 'http://127.0.0.1:9101/health' -TimeoutSec 3 -ErrorAction Stop
+    if($health.ok -ne $true -or $health.name -ne 'CentralDark Casa Commander' -or $health.remote_vendor -ne $false) {
+      Set-Card 'CASA COMMANDER' 'UNKNOWN' 'identidade da ponte nao confirmada'
+      return
     }
-  }catch{
-    Set-Card 'DESKTOP COMMANDER' 'UNKNOWN' 'consulta local indisponivel'
+    if($health.engine_connected -ne $true) {
+      Set-Card 'CASA COMMANDER' 'WARN' 'ponte ativa; engine stdio ainda nao confirmado'
+      return
+    }
+    $receipt=$health.last_authorized_tool
+    $fresh=$false
+    if($receipt -and $receipt.verified -eq $true -and $receipt.at) {
+      try { $age=((Get-Date).ToUniversalTime()-([datetime]::Parse([string]$receipt.at)).ToUniversalTime()).TotalMinutes
+        $fresh=($age -ge 0 -and $age -le 10) } catch {}
+    }
+    if($fresh){Set-Card 'CASA COMMANDER' 'PASS' ('/tool autenticado: '+$receipt.tool)}
+    else{Set-Card 'CASA COMMANDER' 'WARN' 'engine online; sem recibo /tool fresco'}
+  } catch {
+    Set-Card 'CASA COMMANDER' 'UNKNOWN' 'http://127.0.0.1:9101/health indisponivel'
   }
 }
 function Refresh-Supabase {
@@ -679,21 +712,34 @@ function Open-DesktopAccount([string]$Profile) {
   Start-AccountProbe -StartProfile $chosen
   foreach($page in $tab.TabPages) {if($page.Text -eq 'DESKTOP'){$tab.SelectedTab=$page;break}}
 }
-$script:BtnProfile1.Add_Click({ Open-DesktopAccount 'CONTA 1' })
-$script:BtnProfile2.Add_Click({ Open-DesktopAccount 'CONTA 2' })
+$script:BtnProfile1.Add_Click({
+  Add-Log 'RUNTIME' 'INFO' 'Abrindo cockpit CentralDark; autenticacao humana preservada'
+  try { Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle' | Out-Null }
+  catch { Add-Log 'RUNTIME' 'WARN' 'Cockpit nao abriu; conexao privada pode estar indisponivel' }
+})
+$script:BtnProfile2.Add_Click({
+  try {
+    $h=Invoke-RestMethod -Uri 'http://127.0.0.1:9101/health' -TimeoutSec 3 -ErrorAction Stop
+    $status=if($h.engine_connected -eq $true){'Motor conectado'}else{'Bridge ativa; motor aguardando conexao'}
+    Refresh-DesktopCommander
+  } catch { $status='Bridge indisponivel neste momento' }
+  [Windows.Forms.MessageBox]::Show(
+    "CentralDark Casa Commander: $status`n`nO pareamento requer a sessao admin do MCP CentralDark e o token ja protegido pela DPAPI na Casa. Nao exibir nem copiar o segredo nesta interface.",
+    'CentralDark | Pareamento Casa','OK','Information') | Out-Null
+})
 $script:BtnScreenpipe.Add_Click({
   Add-Log 'SCREENPIPE' 'INFO' 'Abrindo Screenpipe local, sem iniciar captura duplicada'
   try { Start-Process 'http://127.0.0.1:3030' -ErrorAction Stop | Out-Null }
   catch { Add-Log 'SCREENPIPE' 'WARN' 'Navegador indisponivel' }
 })
 $script:BtnDesktop.Add_Click({
-  Add-Log 'DESKTOP' 'INFO' 'Abrindo painel oficial; troque de conta no site antes de confirmar a segunda'
-  try { Start-Process 'https://mcp.desktopcommander.app/' -ErrorAction Stop | Out-Null }
-  catch { Add-Log 'DESKTOP' 'WARN' 'Navegador indisponivel' }
+  Add-Log 'RUNTIME' 'INFO' 'Conferindo Casa Commander nativo na porta local 9101'
+  Refresh-DesktopCommander
+  foreach($page in $tab.TabPages) { if($page.Text -eq 'RUNTIME'){$tab.SelectedTab=$page;break} }
 })
 $script:BtnVerify.Add_Click({
-  Add-Log 'DESKTOP' 'INFO' 'Conferindo dois perfis sem reiniciar servicos ativos'
-  Start-AccountProbe -StartProfile 'none'
+  Add-Log 'RUNTIME' 'INFO' 'Medindo a bridge nativa sem executar comandos'
+  Refresh-DesktopCommander
 })
 $timer=New-Object Windows.Forms.Timer
 $timer.Interval=10000
@@ -717,9 +763,16 @@ $form.Add_Shown({
   $timer.Start()
 })
 $form.Add_FormClosing({
+  param($sender,$eventArgs)
+  if(-not $script:TrayExitRequested -and $eventArgs.CloseReason -eq [Windows.Forms.CloseReason]::UserClosing) {
+    $eventArgs.Cancel=$true
+    $form.Hide()
+    return
+  }
   $timer.Stop()
   if($script:RemoteJob){Stop-Job $script:RemoteJob -ErrorAction SilentlyContinue;Remove-Job $script:RemoteJob -Force -ErrorAction SilentlyContinue}
   if($script:AccountProbeJob){Stop-Job $script:AccountProbeJob -ErrorAction SilentlyContinue;Remove-Job $script:AccountProbeJob -Force -ErrorAction SilentlyContinue}
+  try{$script:CorpoUnicoTray.Visible=$false;$script:CorpoUnicoTray.Dispose();$script:CorpoUnicoMenu.Dispose()}catch{}
   try{$mutex.ReleaseMutex()}catch{}
   $mutex.Dispose()
 })

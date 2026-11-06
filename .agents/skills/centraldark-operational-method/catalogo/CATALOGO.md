@@ -2,6 +2,10 @@
 
 **Owner único:** `centraldark-operational-method`. Cópias importadas com SHA-256; originais preservados para manter compatibilidade.
 
+## Diálogo Reflexivo da Intenção
+
+[Reflective Intent Dialogue](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): escuta reflexiva, reparo conversacional, metacomunicação e continuidade da intenção. Seleção: qualquer conversa CentralDark, correção, nova ideia lateral, ou observação que não deve interromper missão ativa. Sempre conectado à Skill Mãe; operacionalmente junto de Kimetsu Remix + Michelin 3 Estrelas. Skill catalogada não comprova consumo do Hermes.
+
 ## Roteamento por intenção
 
 1. Ler o pedido atual: **AÇÃO**, **ALVO**, **AMBIENTE**, **CRITÉRIO DE ACEITE**.
@@ -85,30 +89,35 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 <!-- AUTOCATALOGO:INICIO -->
 ## Inventário vivo com horários e rastreabilidade
 
-**Última sincronização (Casa):** 2026-10-31 09:47:20 -03:00. **Arquivos:** 112. **Skills:** 18.
+**Última sincronização (Casa):** 2026-11-04 23:57:26 -03:00. **Arquivos:** 146. **Skills:** 23.
 
 Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; SHA indica mudança de bytes. Verificação funcional requer prova separada.
 
 | Skill | Criada em (Casa) | Modificada em (Casa) | SHA-256 (12) |
 |---|---|---|---|
-| `Skills/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 6b85b31d4b9d |
-| `Skills/centraldark-boot/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-27T12:22:45-03:00 | 4d00d4976189 |
-| `Skills/centraldark-capability-hud/SKILL.md` | 2026-10-29T12:18:58-03:00 | 2026-10-29T12:18:58-03:00 | 6a5523d34828 |
-| `Skills/centraldark-esteira-motor/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 49745155400e |
-| `Skills/centraldark-evidence-reconciliation/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-15T13:26:01-03:00 | 2aa36f69bf5e |
-| `Skills/centraldark-hermes-operations/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-29T09:31:40-03:00 | eb1700fedac4 |
-| `Skills/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
-| `Skills/centraldark-intent-deploy-router/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | ff847288dd61 |
-| `Skills/centraldark-live-editing-fabric/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:01:30-03:00 | 23484d80e412 |
-| `Skills/centraldark-note-maintenance/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-27T00:26:07-03:00 | 2ac916d6324e |
-| `Skills/centraldark-ops/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T09:46:42-03:00 | b7163181023d |
-| `Skills/centraldark-oracle-surface/SKILL.md` | 2026-10-28T10:39:34-03:00 | 2026-10-29T10:46:50-03:00 | 4b8a7ca948be |
-| `Skills/centraldark-reuse-runtime/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | 7be349147606 |
-| `Skills/centraldark-unified-surface-parity/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-29T09:31:40-03:00 | 16f68fa7db6f |
-| `Skills/centraldark-vscode-log-bridge/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-25T04:03:31-03:00 | d28db794b3a1 |
-| `Skills/michelin-3-estrelas/SKILL.md` | 2026-10-25T04:03:31-03:00 | 2026-10-26T16:35:50-03:00 | 152636701508 |
-| `Skills/reconciliacao-diaria-centraldark/SKILL.md` | 2026-10-28T10:39:33-03:00 | 2026-10-25T04:01:30-03:00 | cdb5809ce228 |
-| `SKILL.md` | 2026-10-30T22:09:36-03:00 | 2026-10-31T09:46:58-03:00 | 8342963ce7fe |
+| `catalogo/skills-integradas/centraldark-hub-credential-control-plane/SKILL.md` | 2026-10-24T18:41:19-03:00 | 2026-10-12T02:29:56-03:00 | f907162e7819 |
+| `SKILL.md` | 2026-11-04T23:57:26-03:00 | 2026-11-04T23:57:26-03:00 | 57a11a7e6425 |
+| `Skills/centraldark-autonomous-conflict-costura/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 6b2d8b4019b4 |
+| `Skills/centraldark-boot/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | c80518473e62 |
+| `Skills/centraldark-capability-hud/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | e087a4fd1efa |
+| `Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md` | 2026-11-04T23:51:34-03:00 | 2026-11-04T23:55:32-03:00 | 6f36aa57d19b |
+| `Skills/centraldark-esteira-motor/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 49745155400e |
+| `Skills/centraldark-evidence-reconciliation/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 2aa36f69bf5e |
+| `Skills/centraldark-hermes-operations/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T23:55:32-03:00 | 3c951071727b |
+| `Skills/centraldark-hermes-visual-computer-use/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | a9b8af89517d |
+| `Skills/centraldark-hub-credential-control-plane/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | f907162e7819 |
+| `Skills/centraldark-integration-verification/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 8465c3d03342 |
+| `Skills/centraldark-intent-deploy-router/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 5d84730741eb |
+| `Skills/centraldark-linux-vmware-rawdisk/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | e2bb7af00c78 |
+| `Skills/centraldark-live-editing-fabric/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 23484d80e412 |
+| `Skills/centraldark-note-maintenance/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 101065acde8a |
+| `Skills/centraldark-ops/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | b7163181023d |
+| `Skills/centraldark-oracle-surface/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 4b8a7ca948be |
+| `Skills/centraldark-reuse-runtime/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 7be349147606 |
+| `Skills/centraldark-unified-surface-parity/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | 1c8439a3c1f6 |
+| `Skills/centraldark-vscode-log-bridge/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | d28db794b3a1 |
+| `Skills/michelin-3-estrelas/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T23:55:32-03:00 | d600f9334729 |
+| `Skills/reconciliacao-diaria-centraldark/SKILL.md` | 2026-11-04T04:09:28-03:00 | 2026-11-04T04:09:28-03:00 | cdb5809ce228 |
 
 - [Índice de todos os arquivos com datas](INDICE-VIVO.md)
 - [Inventário técnico de hashes e referências](ARQUIVOS-VIVOS.json)
