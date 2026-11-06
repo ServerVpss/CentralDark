@@ -15,6 +15,9 @@ test("Casa agent is loopback-only, requires bearer, and blocks mutation by defau
     assert.equal(initial.remote_vendor,false);
     assert.equal(initial.name,"CentralDark Casa Commander");
     assert.equal(initial.last_authorized_tool,null, "Nao inventar recibo antes de uma ferramenta real");
+    assert.equal(initial.mqtt.enabled,false, "MQTT opt-in: off by default");
+    assert.equal(initial.mqtt.connected,false);
+    assert.equal(initial.mqtt.state,"DISABLED");
     const denied = await fetch(base+"/tool",{
       method:"POST",headers:{"content-type":"application/json"},
       body:JSON.stringify({name:"list_directory",arguments:{path:"F:\\_worktrees"}})
