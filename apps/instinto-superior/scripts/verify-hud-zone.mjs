@@ -607,7 +607,7 @@ test("casca preserva sidebar com busca e toggle sem controles centrais duplicado
   assert.match(cockpit, /role="separator"/);
   assert.match(cockpit, /aria-label="Arrastar para ajustar largura da barra lateral"/);
   const scrollbarStyles = read("apps/instinto-superior/src/styles.css");
-  assert.match(scrollbarStyles, /CENTRALDARK\\.SCROLLBAR\\.UNICA/);
+  assert.ok(scrollbarStyles.includes("CENTRALDARK.SCROLLBAR.UNICA"));
   assert.ok(scrollbarStyles.includes('html:has(main[data-pele-cockpit]) body *'));
   assert.ok(scrollbarStyles.includes('scrollbar-color:'));
   assert.ok(scrollbarStyles.includes('scrollbar-gutter: stable'));
