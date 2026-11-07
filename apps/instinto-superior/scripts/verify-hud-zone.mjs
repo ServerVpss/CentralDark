@@ -493,7 +493,7 @@ test("Casa canonical K and four-stage collector receipt", () => {
   // Contrato vigente (migracao controlada 2026-10-20): raiz K:\, guarda de checkout Git, porta fixa 8080 no autostart,
   // sem npm install nem kill.
   const autostart = read("scripts/casa/instinto-cockpit-autostart.ps1");
-  for (const field of ['set "ROOT=K:\\"', "rev-parse --is-inside-work-tree", "instinto-cockpit-autostart.ps1"]) {
+  for (const field of ['%~dp0', "rev-parse --is-inside-work-tree", "instinto-cockpit-autostart.ps1"]) {
     assert.ok(launcher.includes(field), field);
   }
   for (const field of ["$port = 8080", "--strictPort"]) assert.ok(autostart.includes(field), field);

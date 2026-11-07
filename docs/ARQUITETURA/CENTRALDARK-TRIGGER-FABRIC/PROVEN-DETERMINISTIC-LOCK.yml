@@ -464,7 +464,7 @@ session_crystallization_2026_09_25:
 
 session_crystallization_2026_09_25_completion:
   marker: SESSION_PROVEN_PATH_EXECUTABLE_REGISTRY
-  criteria_contract_ref: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md
+  criteria_contract_ref: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md
   executable_registry: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PROVEN-CLAIMS.lock.json
   criteria_coverage:
     - BOOT_BEFORE_MUTATION

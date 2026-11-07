@@ -112,3 +112,26 @@ test('notificação de write não promete sync físico Obsidian sem canal provad
   assert.match(source, /Persistido no BRAIN do repositório/);
   assert.match(source, /Sync físico com Obsidian: depende do canal local medido/);
 });
+
+test('heranca Kaizen para notas BRAIN 07, sem prometer runtime', () => {
+  const meta = _test.buildFrontmatter('Sessao de aprendizado', '02-SESSOES');
+  assert.match(meta, /centraldark_note_schema: "brain07.v1"/);
+  assert.match(meta, /centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"/);
+  assert.match(meta, /centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"/);
+  assert.match(meta, /centraldark_metabolic_roles:/);
+  const nonBrain = _test.buildFrontmatter('Outra nota', '06-REUNIOES-NOTAS');
+  assert.doesNotMatch(nonBrain, /centraldark_kaizen_trigger/);
+});
+
+test('META-RSI liga 40 SELF existentes, sem duplicar catalogo', () => {
+  const md = fs.readFileSync(path.resolve(__dirname, '../../../../.agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md'), 'utf8');
+  const all = _test.parseMetaRsiCatalog(md);
+  assert.equal(all.length, 40);
+  assert.equal(new Set(all.map(x => x.skillPath)).size, 40);
+});
+test('nota gera ligacoes SELF; busca devolve apenas candidatos', () => {
+  const fm = _test.buildFrontmatter('Historia e memoria', '04-MEMORIAS', [], 'Lembrancas do CHEFE');
+  assert.match(fm, /centraldark_self_primary: "Self-Memory"/);
+  assert.equal(_test.readSelfNoteMetadata(fm + '# Historia').self_primary, 'Self-Memory');
+  assert.doesNotMatch(_test.buildFrontmatter('Outro', '06-REUNIOES-NOTAS'), /centraldark_self_primary/);
+});

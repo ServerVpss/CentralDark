@@ -1,5 +1,9 @@
 # CentralDark Remote Bridge — entrada unica, LOCAL-FIRST
 
+## Rota atual da Forja openKylin — verificada em 2026-11-07
+
+**CURRENT:** `192.168.35.130` (VMware NAT/VMnet8). Usar o alias SSH existente `openkylin-vm` / `CentralDark-OS-VM`, que resolve para `192.168.35.130`, usuário `CentralDark-OS`. O IP `.128` nas medições abaixo é **histórico**, não deve ser reutilizado como destino atual; preservar recibos antigos sem apagar. Prova ao vivo: SSH autenticado, `centraldark-mcp-tunnel.service` active/running/enabled e `http://127.0.0.1:8742/readyz` HTTP 200 (`ready`); cockpit `:8080` HTTP 200. A resposta do cliente OpenAI ponta a ponta ainda exige contraprova separada.
+
 **Um produto, uma base de código, vários ambientes de execução.** A Forja oficial é o **openKylin Linux CentralDark-OS**; a Casa Windows/Remote Desktop Commander é somente cliente/andaime transitório. O GitHub `ServerVpss/CentralDark@main` é a fonte canônica; a VPS é uma projeção Linux opcional do mesmo core lógico, promovida apenas sob ordem do CHEFE e depois de provas de compatibilidade/SHA. O Bridge da Casa descrito nas seções históricas abaixo não constitui runtime atual nem segundo gateway.
 
 ## Diagnostico da rede local (SEM mutacao)

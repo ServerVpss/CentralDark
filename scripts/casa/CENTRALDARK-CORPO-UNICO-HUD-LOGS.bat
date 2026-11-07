@@ -281,7 +281,7 @@ function Refresh-Scripts {
 # Derived same-directory script is data only; never opens a network port or changes GPU controls.
 # #OBSERVACOES# @owner=scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat @doc_ref=docs/HUD/README.md @last_updated=2026-10-27T14:28:17.879Z
 # Motivo: o owner canônico é o Cockpit; o feed é dado efêmero, jamais commitado.
-$script:ABHudOwner = 'K:\apps\instinto-superior\src\components\central\HudDeterministico.tsx'
+$script:ABHudOwner = if ($env:CENTRALDARK_ROOT) { Join-Path $env:CENTRALDARK_ROOT 'apps\instinto-superior\src\components\central\HudDeterministico.tsx' } else { Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) 'apps\instinto-superior\src\components\central\HudDeterministico.tsx' }
 # Feed volatile lives in LocalAppData (Casa runtime), never beside Git-tracked source. Cockpit consumes via authorized reader only.
 $script:ABFeedFile = Join-Path $script:LogRoot 'CENTRALDARK-AFTERBURNER-LIVE.js'
 $script:ABLastStatus = 'UNKNOWN'

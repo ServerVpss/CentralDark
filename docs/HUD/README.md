@@ -1,3 +1,114 @@
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+## HUD operacional conversacional — ponto fixo de apresentacao
+
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+
+Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark-operational-method`. Chamar `!HUD` ou `#HUD`; usar exatamente um quadro monoespacado NO TOPO da resposta e a resposta operacional ABAIXO. Preservar quesitos numerados, textos completos, status e provas. Cada nova missao substitui apenas o conteudo ATIVO do quadro; preservar historico das missoes neste mesmo owner. So alterar estado de quesito apos conclusao e contraprova. `FORMATO_APROVADO` nao significa missao concluida. Fora do repo/contexto, `HUD_SOURCE=UNKNOWN`; nao afirmar memoria ou sincronizacao entre conversas sem readback. Reconciliador unico: `scripts/centraldark-inventory-reconcile.sh`. O bloco Hermes que segue e o checkpoint vigente, nao um HUD paralelo.
+
+<!-- CASA_MAIN_RECONCILIATION_RECEIPT_20261107 -->
+**RECIBO DE RECONCILIAÇÃO CASA ↔ MAIN — 07/11/2026 (medição, não selo de conclusão).**
+
+- **CURRENT antes do recibo:** Casa `F:\CentralDark` em `main@3abb839991ec829a5cdba1217a5d894541978cb0`; `origin/main@e62bb539bfd7bbffe6ee9fcc6baf5fdea8378de4`; `ahead=0 / behind=57`. O `git fetch origin main` terminou com saída 0; atualizou somente a referência remota, NÃO o checkout.
+- **Diferenças comprovadas:** 47 arquivos rastreados com alterações locais (incluindo 2 exclusões), 203 arquivos locais sem rastreamento sobre caminhos acrescentados na `main`. Dos 22 rastreados modificados em ambos os lados, 5 têm conteúdo igual ao da `main` e 17 diferem. Dos 203 não rastreados coincidentes, 196 têm conteúdo igual ao da `main` e 7 diferem. Demais arquivos não rastreados, fora do cone do merge, não foram modificados.
+- **Trava:** `.git/index.lock` com 0 bytes, sem atualização desde 05/11/2026, não estava aberto por outro processo (abertura exclusiva comprovada); sem Git writer ativo, foi **movido e preservado** em `F:\_WORKER\CENTRALDARK-index-lock-stale-20261107-074349.lock`. Não se matou processo nem se removeu outra trava.
+- **Salvaguarda verificada:** backup privado `F:\_WORKER\CENTRALDARK-CASA-main-reconcile-20261107-074657.zip`; SHA-256 `e6e266c339e6aaff9d571dd0154ca519ecef8860a396cead6c060ed9648f90d1`; 248 arquivos presentes e os 2 excluídos registrados no manifesto; `248/248` hashes internos conferidos, `0` divergências. Esse ZIP NÃO deve ser publicado, pois contém estado local.
+- **Tentativa sem perda:** `git merge --ff-only origin/main` retornou `exit 1` recusando sobrescrever arquivos locais rastreados e não rastreados. HEAD permaneceu `3abb839991ec829a5cdba1217a5d894541978cb0`; nenhuma mudança do checkout foi descartada. Tentativa de merge em cópias temporárias identificou múltiplos conflitos; nenhum conteúdo conflitante foi automaticamente escolhido.
+- **VEREDITO:** `CASA_MAIN_SYNC=BLOCKED_PENDING_RECONCILIATION`; `HEAD_CURRENT=NO`; `ZERO_DATA_LOSS=NO_DESTRUCTIVE_ACTION_OBSERVED`; `NEXT_CURSOR=RECONCILIAR_17_TRACKED_E_7_UNTRACKED_POR_OWNER_DEPOIS_REMEDIR_CONFLITOS_E_FAZER_FF_READBACK`. Sem `reset --hard`, `git clean`, stash destrutivo, commit em massa ou ramo paralelo; atualizar esse mesmo recibo após a convergência verdadeira.
+<!-- /CASA_MAIN_RECONCILIATION_RECEIPT_20261107 -->
+
+### CENTRALDARK_MISSION_HUD_33_20261107 — quadro ativo único (01–33)
+
+**INTENÇÃO:** conservar o mesmo HUD quadrado, agora com 33 quesitos numerados e o Corpo Único integrado ao fio operacional. Este bloco é o quadro ATIVO no owner existente; não é outro HUD, programa, rota, executor ou checkpoint. Estados 🟢 de fonte/histórico não significam runtime atual; estados 🟡 não viram PASS sem medição. A numeração 01–13 foi preservada e 14–33 é delta da missão Corpo Único / Electron / MCP Casa. Não substituir outros registros do README.
+
+```text
+╔═════════════════════════════════════════════════════════════════╗
+║ 🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐                                  ║
+║ 👑 CHEFE → SOL → HERMES → REALIDADE → KAIZEN                    ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🎯 MISSÃO: HUD CANÔNICO + CORPO ÚNICO + ELECTRON                ║
+║ 🧠 FASE: DOCUMENTAÇÃO, CONTINUIDADE E CONTRAPROVA               ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 📋 01–13 · PROTOCOLO E CONTINUIDADE                             ║
+║ 01 🟢 Localizar o proprietário do HUD                           ║
+║ 02 🟢 Ler a receita de apresentação                             ║
+║ 03 🟢 Confirmar a fonte na main                                 ║
+║ 04 🟢 Preservar um único quadro operacional                     ║
+║ 05 🟢 Exibir intenção, fase e estados                           ║
+║ 06 🟢 Exibir provas e pendências                                ║
+║ 07 🟡 Sincronizar checkout da Casa                              ║
+║ 08 🟡 Validar boot operacional completo                         ║
+║ 09 🟡 Comprovar consumo pela Skill Mãe                          ║
+║ 10 🟡 Validar runtime Hermes                                    ║
+║ 11 🟡 Confirmar continuidade entre sessões                      ║
+║ 12 🟡 Executar contraprova do ciclo                             ║
+║ 13 🟡 Confirmar FIXED_POINT                                     ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🏠 14–22 · CORPO ÚNICO / CASA                                   ║
+║ 14 🟢 Aplicativo Tray existente (fonte histórica)               ║
+║ 15 🟢 Owner Remote Bridge identificado                          ║
+║ 16 🟡 Cloudflare integrado ao Corpo Único                       ║
+║ 17 🟡 Túnel automático ao iniciar Windows                       ║
+║ 18 🟡 Indicador Cloudflare no HUD superior                      ║
+║ 19 🟡 Logs e TRACE dentro do Corpo Único                        ║
+║ 20 🟡 Integração das capacidades existentes                     ║
+║ 21 🟡 Pareamento MCP Casa ↔ ChatGPT                             ║
+║ 22 🟡 Substituição do Desktop Commander                         ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🖥️ 23–28 · CENTRALDARK DESKTOP / ELECTRON                      ║
+║ 23 🟡 Cockpit como página inicial do Electron                   ║
+║ 24 🟡 Chromium integrado ao Electron                            ║
+║ 25 🟡 Hermes One dentro da mesma janela                         ║
+║ 26 🟡 Codex / Claude / DeepSeek / VS Code                       ║
+║ 27 🟡 Terminal e navegador internos                             ║
+║ 28 🟡 Chat principal orquestrando capacidades                   ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🔗 29–33 · CONECTIVIDADE / MCP                                  ║
+║ 29 🟢 Rota MCP /mcp no agente (fonte local)                     ║
+║ 30 🟢 Bloqueio HTTP 401 (teste histórico)                       ║
+║ 31 🟡 Autenticação real pelo ChatGPT                            ║
+║ 32 🟡 Tailscale + Cloudflare reconciliados                      ║
+║ 33 🟡 Acesso independente de máquina                            ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🟢 = PROVA DE FONTE OU TESTE HISTÓRICO                          ║
+║ 🟡 = PENDENTE DE CONSUMO/CONTRAPROVA VIVA                       ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🎯 VEREDITO: FONTE REGISTRADA; RUNTIME NÃO SELADO               ║
+║ 🟡 FIXED_POINT=PENDING · NÍVEL=UNKNOWN · XP=UNKNOWN             ║
+║ ➡️ NEXT_CURSOR: RECONCILIAR CASA ↔ MAIN SEM PERDA               ║
+╚═════════════════════════════════════════════════════════════════╝
+```
+
+**OWNER DO HUD:** `docs/HUD/README.md`; **MÉTODO:** `.agents/skills/centraldark-operational-method/SKILL.md`; **EXECUÇÃO CASA:** owners existentes em `scripts/remote-bridge/` e `scripts/casa/`; **EXECUÇÃO DESKTOP:** owner Hermes/Electron existente. **EVIDÊNCIA:** fotografia dos 33 estados apresentada na conversa em 07/11/2026; green = fonte já conferida ou observação histórica, não uma sondagem global atual. **CURRENT CASA:** checkout local `main` 51 commits atrás de `origin/main`, com mudanças de outros owners ainda sujas; `.git/index.lock` antigo impede commit local sem intervenção cautelosa. **REGRA:** não forçar `git pull`, apagar lock, alterar arquivos alheios, promover estado sem contraprova ou criar branch/PR paralelo. **NEXT_CURSOR:** reconciliar checkout de forma preservadora; medir 16–22 no Corpo Único, depois 23–33, e registrar os efeitos no quadro existente.
+
+### CENTRALDARK_MCP_CASA_PLUGIN_AUTH_CHECKPOINT_20261107 — plugin existente, sem duplicar
+
+**INTENÇÃO:** corrigir o ZIP `plugin(1).zip` que já contém o aplicativo `CentralDark MCP Casa`, não criar outra identidade. O pacote editado nesta conversa preserva o mesmo `.app.json` e seu app ID; muda `author.name` e `interface.developerName` para `SegredoiDev`, versão `1.0.1`, e acrescenta o ponteiro `.mcp.json` com `https://mcp.centralldark.com/mcp` e OAuth/DCR. **ARTEFATO DA CONVERSA:** `CentralDark-MCP-Casa-SegredoiDev-1.0.1.zip`; SHA256 `64a5b1dd7e934f5fe19c4983fa8bcca8eb20f6621c293c28cd744939ce691e42`. O ZIP não contém credenciais. O ZIP não foi instalado nem prova conectividade.
+
+**PROVA VIVA PARCIAL (Casa SEGREDO, 07/11/2026):** GET HTTPS para `/mcp` devolveu `401` sem credencial (proteção esperada, `MCP_AUTH_REQUIRED` relatado pelo CHEFE); `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `/.well-known/oauth-protected-resource/mcp`, `/authorize`, `/token` e `/register` devolveram `404` em GET. **LIMITAÇÃO:** métodos GET em `/token` e `/register` não comprovam POST; mas metadados discovery 404 impedem declarar fluxo OAuth configurado. **STATUS Q21/Q31:** PENDING, pois `MCP_AUTH_REQUIRED != PLUGIN_CONECTADO` e `ZIP_VALIDO != OAUTH_PASS`. **NEXT_CURSOR:** no owner MCP CentralDark existente validar discovery OAuth e fluxo PKCE/DCR com resposta HTTP e autenticação legítima; reimportar/atualizar o plugin existente e provar `tools/list` autenticado. Não divulgar tokens e não abrir conexão anônima para contornar 401.
+
+### CENTRALDARK_HUD_VSCODE_CHROMIUM_CONTINUITY_20261107 — superficie habitual do CHEFE
+
+Intencao informada pelo CHEFE (07/11/2026): ChatGPT usado dentro do Chromium/Electron integrado ao VS Code para programar, mantendo a conversa na mesma bancada. Essa interface de conversa NAO e automaticamente o renderer Hermes Desktop, nem o owner do HUD. Preferir reconhecer e reutilizar a janela/aba atual; nao abrir segunda instancia nem trocar a interface. A continuidade depende do workspace/sessao restauravel, NAO de PID estavel (PIDs mudam entre inicializacoes).
+
+Evidencia viva, Casa Windows SEGREDO: titulo da janela do processo Code.exe PID 31056 = `Modo clareza ativado (chatgpt.com) - Bolt - Visual Studio Code [Administrador]`. O sufixo `Bolt` e titulo da janela/workspace e NAO autorizacao para usar a interface Bolt. A lista de abas nativa do navegador conectado nao ficou acessivel (`Browser access requires the originating browser context`); nao declarar leitura dessas abas. Por rota local existente de Chrome DevTools, endpoint read-only `http://127.0.0.1:9222/json/list` devolveu 17 targets, com titulos/origens observados: `ChatGPT` (chatgpt.com), `Cockpit CentralDark - Sala de Controle` (192.168.35.130:8080) e `Historico | Hostinger` (hpanel.hostinger.com). Metadados de targets Chrome NAO provam que essas paginas sejam abas internas do VS Code. Nenhum conteudo de conversas, cookies, tokens ou parametros de URLs foi registrado. O editor mostrou `README.md` aberto e o CHEFE forneceu captura da tela; readback documental anterior confirmado.
+
+NEXT_CURSOR operacional preservado: aproveitar a bancada VS Code + Chromium ja aberta para localizar logs de execucao/porta do Hermes sem misturar navegadores; no repo Hermes diferenciar `browser-host` (9120), `Vite` (5174) e o dashboard legado (8787). Se outra conversa chamar `!HUD`/`#HUD`, ler AGENTS.md + Skill Mae + este mesmo README; sem acesso, anunciar SOURCE_UNKNOWN. Proxima descoberta adiciona delta aqui, sem mudar status dos 13 quesitos sem contraprova.
+### CENTRALDARK_HUD_VISUAL_OVERLAY_MOUSE_RECIPE — receita vinculada ao owner existente
+
+OWNER DO METODO: `.agents/skills/centraldark-operational-method/SKILL.md` (`Metodo unico: contexto vivo, navegador, monitores e edicao visual`). OWNER DA IMPLEMENTACAO VISUAL: `.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md` (secoes `Cursor nativo integrado` e `Modo operacional visual: clique com cursor virtual Cua + overlay`). REFERENCIAS: `references/native-cursor.md`, `scripts/blink_cursor.py` na MESMA pasta da skill visual. O HUD documenta e aponta, nunca cria outro motor, overlay, mouse ou capturador.
+
+RECEITA DE LOCALIZACAO VISUAL: (1) recuperar janela/sessao existente do VS Code/Chromium, titulo, PID e HWND atuais; (2) enumerar monitores pelo metodo operacional existente e reconciliar numero humano, coordenadas e MonitorFromWindow sem presumir geometria antiga; (3) selecionar janela/aba e confirmar o alvo por acessibilidade/captura autorizada; (4) para APRESENTAR, usar `blink_cursor.py --mode position --monitor N`: cursor virtual Cua e overlay Hermes juntos, sem mover mouse fisico nem clicar; (5) para PISCAR, `--mode blink --monitor N`; (6) somente apos ordem explicita de clicar, usar `--mode click --monitor N --pid PID --hwnd HWND --x X --y Y` com coordenadas observadas; (7) verificar efeito real e, no finally, encerrar o overlay e a sessao propria, sem interromper a janela do CHEFE. Preferir UIA e hit-test; nao repetir clique incerto.
+
+ESTADOS DE PROVA: `SOURCE_FOUND` para receita presente; `OVERLAY_VISIBLE` somente com confirmacao visual; `VIRTUAL_CURSOR_VISIBLE` somente com confirmacao visual; `CLICK_EFFECT_PASS` somente com contraprova do controle; `IDLE` apos encerramento confirmado. `SCRIPT_EXISTS != UI_EXECUTED`, `CUA_CALL_OK != UI_EFFECT_PROVEN`. Nunca usar `scope=desktop`, `SetCursorPos`, `mouse_event` nem criar daemon novo. A localizacao de ChatGPT em VS Code e dado de monitoramento; nao prova acesso ao conteudo da aba.
+
+NEXT_CURSOR: localizar a janela ativa e sua tela atual, apresentar overlay + cursor virtual pelo mesmo helper existente, observar e documentar o resultado; manter o quesito 10 (Hermes porta historica) pendente ate prova propria.
+HERMES_OVERLAY_MOUSE_MONITOR1_RECEIPT_20261107: identificador existente `Identify-CentralDarkMonitors.ps1 -ListWindows` enumerou 4 telas e localizou VS Code `Code.exe` PID 31056 / HWND 329050 no monitor humano 1 (direita vertical, DISPLAY1, X=1920 Y=-831 Width=1080 Height=1920). Cua-driver daemon preexistente RUNNING (PID 17844). Executado SEM CLIQUE o helper preexistente `.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode position --monitor 1`: resultado `execution=completed`, `cursor=native_cua_virtual`, coordenada absoluta `[2460,-159]`, `cycles=1`, sessao `hermes-visual-cursor-985065d03d`, `cleanup=completed`, exit code 0. Overlay+cursor virtual solicitados pelo mesmo metodo, sem mover mouse fisico, sem criar processo persistente nem clicar. Confirmacao humana da visibilidade = PENDING; portanto nao declarar VISIBLE_PASS nem alterar estado do quesito 10 (porta historica). NEXT_CURSOR: receber contraprova visual se necessaria e seguir com rastreio das portas 8787/9120; nao confundir demonstracao de overlay com servidor web Hermes ativo.<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # 🪬 HUD histórico → Instinto Superior · documento de migração
 
 **Intenção do CHEFE (15/10/2026):** o `docs/HUD/HUD.html` é a **fonte de capacidades legado**. Todas as capacidades devem convergir para o **zone de navegação existente** no Instinto Superior. `docs/HUD` fica como referência, ensinamento, template e prova de paridade até que as funções sejam comprovadamente migradas. Nenhuma exclusão antes do inventário e do teste de paridade.
@@ -248,3 +359,127 @@ Build/CI da PR isolada → corrigir apenas falhas reais do owner → readback em
 **Gates para microdeploy:** PR #1838 no HEAD exato + dependências das PRs #1842/#1843 conforme owner → suíte `apps/instinto-superior/scripts/verify-hud-zone.mjs` + build → CI no mesmo SHA → readback autenticado do cockpit e das quatro peles → deploy seletivo com prova de SHA e rollback → receipt. Os workflows atuais usam runners self-hosted que podem estar intencionalmente pausados pela migração; `QUEUED` não é `DEPLOYED`. O fallback MAIN-PINNED existente lista owners `mcp/hub_bot/hermes/oauth_broker`, **não autoriza usar owner falso para publicar Instinto Superior**.
 
 **CURRENT:** `DOCUMENTED_MAIN=PASS_AFTER_READBACK` (quando o commit for comprovado); `UI_SOURCE_PR1838=NEEDS_WRITER`; `CI=UNKNOWN`; `MICRODEPLOY=NOT_PROVEN`; `RUNTIME_VISUAL=UNKNOWN`. **NEXT_CURSOR:** responsável pela PR #1838 consome este índice, implementa menor delta e prova build/deploy na rota aprovada após o runner voltar, preservando trabalhos locais e a cópia VPS 4.
+
+## CENTRALDARK_HERMES_DESKTOP_WEBAPP_INVENTORY_20261106 — HUD incremental (PENDING)
+
+Intencao CHEFE: preservar exatamente a interface do Hermes Desktop em execucao na Casa, reproduzi-la no navegador com o renderer existente, e somente depois incorporar capacidades do Bolt sem usar sua interface. Nao criar outro app, HUD, builder ou arquitetura.
+
+| Evidencia | Estado | Fonte / prova |
+| --- | --- | --- |
+| Hermes Desktop local | FOUND | C:\Users\Administrador\AppData\Local\hermes\hermes-agent\apps\desktop; Hermes.exe observado em execucao |
+| Git local Hermes | FOUND | branch centraldark/whatsapp-group-directory-michelin-20261103; fork segredounlock/hermes-agent; upstream NousResearch/hermes-agent |
+| Alteracoes Hermes preservadas | FOUND | 3 modificados e 5 nao rastreados no git status; nao sobrescrever |
+| Renderer React/Vite | SOURCE_FOUND | apps/desktop/src; apps/desktop/vite.config.ts; package.json dev:renderer na porta 5174 |
+| Webapp browser host | HISTORY_FOUND | commits 7ac4cf552c (2026-10-19), 3883e02935 (2026-10-27), 51c8cba024 (2026-10-27), 7062229090 (2026-11-05) |
+| Atualizador nativo | SOURCE_FOUND | apps/desktop/electron/app-updater.ts, update-gate.ts; e2e/update; nao equivale a push=atualizacao |
+| Webapp local acessivel | NOT_PROVEN | portas 9120 e 5174 sem listener na sondagem; tentativa Vite local falhou por executavel ausente no caminho esperado |
+| Interface web identica a Desktop | NOT_PROVEN | requer navegador, autenticacao, sessoes e comparacao visual |
+| URL/porta historica usada pelo CHEFE | NOT_FOUND | historico de navegador e logs locais ainda nao examinados |
+| CentralDark repo F: | FOUND | F:\CentralDark, main atras 33 commits de origin/main, dirty; preservar |
+| Bolt | DEFERRED | capacidade futura apenas, nao usar sua interface |
+
+Invariantes: REUSE_BEFORE_CREATE; ONE_SYSTEM_ONLY; ONE_WRITER_PER_SCOPE; UNKNOWN != PASS; ACTION != PROOF; MERGED != DEPLOYED; ZERO_REGRESSION. O inventario operacional permanece no owner scripts/centraldark-inventory-reconcile.sh; este registro e delta no HUD documental existente, nao segundo reconciliador. Nenhum servico foi iniciado nem atualizacao aplicada.
+
+NEXT_CURSOR: buscar no historico do navegador e nos logs existentes o endereco/porta webapp anteriormente aberto; identificar o comando oficial compativel com a instalacao atual; iniciar apenas o renderer/webapp existente sem parar Hermes.exe; comparar visualmente Desktop e navegador; medir atualizador com contraprova; atualizar este mesmo bloco ate aceite explicito do CHEFE. FIXED_POINT=PENDING.
+
+HERMES_PORT_TRACE_20261106 (delta do mesmo HUD; quesitos 09/10 permanecem PENDING): Casa SEGREDO, Tailscale status => windows-casa 100.123.93.25; serve HTTP tailnet:443 encaminha a 127.0.0.1:8787, que recusou conexao local; TCP tailnet:9100 encaminha a 127.0.0.1:9101, que aceitou TCP (sem prova de app). 9120/5174/8787 CLOSED. Identidade da rota 8787 encontrada no owner preexistente F:\CentralDark\scripts\remote-bridge\CentralDark-Remote-One.go linhas 110-113 e README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md linha 39: rotulo hermes-dashboard, nao prova de paridade com renderer Hermes Desktop; codigo historico ainda apontava 9100->9100, diferente de configuracao Tailscale viva 9100->9101. No repositorio Hermes, apps/desktop/scripts/smoke-browser-host.mjs linha 14 usa http://127.0.0.1:9120 como default; webapp/launch tambem usa 9120. Prova: inspecao read-only de portas, Tailscale serve status e fontes locais; nao ha servidor web Hermes confirmado ativo. NEXT_CURSOR: investigar o processo/registro historico que abria 8787 e o host browser 9120; preservar a configuracao viva, sem iniciar novos servicos ate identificar o executor original.
+
+HERMES_NOTEPAD_LOCALSTATE_TRACE_20261106 — evidência incremental somente leitura. Handoff fornecido pelo CHEFE medido historicamente em 2026-08-28T15:07Z (branch fix/git-conflict-padrao-unico, HEAD c4d713fbe3...), NAO estado atual. Reinspecao na Casa SEGREDO em 2026-11-06: `%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\LocalState` existe; TabState possui 272 arquivos .bin (total 2.017.032 bytes), WindowState possui 2 arquivos .bin; numero historico 30 abas NAO substitui inventario atual. `session-intelligence-harvester` ja existe em `.agents/skills/session-intelligence-harvester/SKILL.md` e estabelece HISTORICAL != CURRENT / SAME_VISUAL_SURFACE != SAME_BACKEND. Varredura read-only de bytes UTF-8 e UTF-16 em 272 .bin buscando literalmente 8787, 9120, 5174, webapp, tailscale e hermes: 0 arquivos com termos visiveis nessa codificacao, SEM afirmar ausencia dos dados (formato .bin pode ser estruturado/compactado). Nenhum conteudo sensivel de abas foi exposto, copiado ou persistido. Handoff cita `LocalState.zip` legado, mas a listagem da raiz atual so exibiu TabState/WindowState; zip historico ainda nao confirmado no host atual. Rota 8787 via Tailscale continua evidencia mais concreta; quesitos 09 e 10 PENDING. NEXT_CURSOR: investigar logs do executor preexistente de 8787/9120; se preciso, decodificar TabState pelo owner existente, sem escrever outro coletor.
+
+HERMES_NOTEPAD_METHOD_GIT_COMMIT_07942A25 — #ACORDAR !CALIBRAR !BOT, lookup no repositório GitHub ServerVpss/CentralDark por histórico de commits: commit `07942a25af3ca2c0ea9cc3f33dfd3687678910b2`, 2026-08-22, titulo `GRAVAR MINERAÇÃO DO NOTEPAD LOCALSTATE COMO FONTE HISTÓRICA`, modificou o OWNER EXISTENTE `.agents/skills/session-intelligence-harvester/SKILL.md` com secao `Windows Notepad LocalState — mineração em lote`. Metodo DOCUMENTADO: LOCALSTATE -> INVENTARIAR WindowState/TabState -> RECONSTRUIR abas/janelas -> EXTRAIR texto/caminho -> DEREFERENCIAR quando permitido -> DEDUPLICAR -> CLASSIFICAR -> QUARENTENAR sensivel -> CRISTALIZAR somente inteligencia util. Contrato de evidencias: SOURCE, WINDOWS_FOUND, TABS_FOUND, UNSAVED_TABS, FILE_BACKED_TABS, DEDUPED_ITEMS, SENSITIVE_QUARANTINED, HISTORICAL_ITEMS, CURRENT_CANDIDATES, FORMAT_VERIFIED. RAW_LOCALSTATE -> DO_NOT_COMMIT; HISTORICAL != CURRENT; nenhum segredo no HUD. Link: https://github.com/ServerVpss/CentralDark/commit/07942a25af3ca2c0ea9cc3f33dfd3687678910b2 . A skill foi comprovada em GitHub e em F:; decoder executavel que recupere 100% dos .bin ainda NAO COMPROVADO. Quesito 10 permanece PENDING. NEXT_CURSOR: reutilizar o metodo desta skill para recuperar referencias de portas nas abas com comprovacao de formato; depois contrapor aos logs 8787/9120 e medir HTTP.
+
+### CENTRALDARK_HUD_NATIVE_HALO_RECIPE — delta de integracao visual
+
+RECEITA UNICA: `!CENTRALDARK`/`#HUD` -> recuperar checkpoint e quadro fixo -> `centraldark-operational-method/scripts/Identify-CentralDarkMonitors.ps1` localiza janela, processo, HWND e monitor -> `centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode working --monitor N --renderer halo` usa Cua virtual e REUTILIZA `CodexHalo.exe` da bandeja como unica fonte do halo verdadeiro -> watcher/estado nativo Halo comanda luzes/temas (sem desenhar outro overlay) -> contraprova -> mesmo HUD e NEXT_CURSOR. Fonte da renderizacao: `apps/modulos/codex-halo-main/src/components/HaloOverlay.tsx`, `src/effects/FullEdgeEffect.tsx`, `src/App.css` e app instalada em `apps/modulos/Codex-Halo-Windows-x64-v0.1.8/CodexHalo.exe`. `PROCESS_EXISTS != OVERLAY_VISIBLE`: teste local no monitor 1 RC0 e cleanup concluido, porem estado Halo=idle, visual ativo NAO comprovado. Nao tratar demo/teste como atividade real e nao marcar fixed point da missao. Sem segundo cursor, overlay ou daemon.
+### CENTRALDARK_HALO_BRANDING_SOURCE_FIRST_20261107 — nomes primeiro, antes da execucao
+
+Por ordem do CHEFE, interrompida nova execucao do aplicativo. O source ORIGINAL existente em apps/modulos/codex-halo-main foi corrigido para branding CentralDark Halo no productName de src-tauri/tauri.conf.json, no titulo HTML index.html, nas mensagens/app_name de src-tauri/src/lib.rs e no menu/tooltip de src-tauri/src/tray.rs. JSON validado e readback local concluido. CentralDarkHalo.exe ja existe, mas o arquivo compilado possui metadata legada Codex Halo; source editado NAO equivale a exe recompilado. cargo nao esta em PATH, nao houve build, deploy nem reinicio. Preservados dev.qcoding.codexhalo, diretorio de dados Codex Halo e nomes de integracao legados para nao perder settings, auto-start e watchers. Nenhuma exclusao ou renomeacao de caminho em uso. Processo anterior CentralDarkHalo PID 46696 nao foi interrompido. NEXT_CURSOR: reconciliar scripts de instalacao/verificacao e referencias ao nome final sem migrar armazenamento, verificar toolchain Rust existente, build da MESMA source e contraprova do binario so depois, respeitando autorizacao CHEFE.
+
+### CENTRALDARK_HALO_BUILD_AND_RENAME_READBACK_20261107 — NEXT_CURSOR provado
+
+DELTA DE NOMES NA CASA: executavel original ja renomeado pelo CHEFE como `CentralDarkHalo.exe`; pasta do PACOTE movida no mesmo lugar de `apps/modulos/Codex-Halo-Windows-x64-v0.1.8` para `apps/modulos/CentralDark-Halo-Windows-x64-v0.1.8` apos confirmar zero processo usando a pasta anterior; sem copia nem delecao. Scripts de instalacao, verificacao, desinstalacao, suporte e hook historico renomeados de forma correspondente NA SOURCE ORIGINAL `apps/modulos/codex-halo-main` e no PACOTE, preservando state/registries antigos. `package-windows.ps1` ja aponta para `CentralDarkHalo.exe`/scripts novos/zip CentralDark; `blink_cursor.py` reconhece `CentralDarkHalo.exe` e recusa iniciacao automatica de binary de metadata antiga. Owners existentes mantidos.
+
+CONTRAPROVA: parser de PowerShell => 11 scripts validos, 0 erros; configuracao Tauri JSON => PASS; Python `py_compile` => PASS. Tentativa protegida de build (`package-windows.ps1`) => `CENTRALDARK_HALO_BUILD_TOOLCHAIN_MISSING: cargo, pnpm`; stage anterior nao alterado. Instalador protegia contra EXE nao recompilado => `BLOCKED_UNBUILT_HALO: binary ProductName=Codex Halo`; abortado ANTES de tocar processo ou arquivos de instalacao. `CentralDarkHalo.exe` ainda tem ProductName/FileDescription `Codex Halo` nos metadados internos; portanto NOME EXTERNO != BINARIO RECOMPILADO, e UI DE TRAY ATUALIZADA != PROVADA. Ultima consulta de processos: CentralDarkHalo nao estava rodando; nao houve novo start, restart ou teste visual. Nao promover status dos quesitos 09/10 da missao Hermes. HELPER_SAFE_GATE_READBACK_20261107: execucao real do Python existente `blink_cursor.py --monitor 1 --mode working --duration 1 --renderer halo` recusada com `CENTRALDARK_HALO_BUILD_NOT_VERIFIED` (exit 1) ANTES de iniciar CentralDarkHalo.exe; readback: 0 processos Halo. Protecao foi efetiva e nao houve overlay/sessao nova. NEXT_CURSOR: toolchain Cargo+pnpm disponivel/autorizado -> rebuild da SOURCE existente -> metadados ProductName CentralDark Halo -> teste do installer/Verify e efeito real sem sobreposicao, mantendo Cua + HUD canonicos.
+### VSCODE_VIBE_PROJECT_FOLDERS_OWNER_READBACK_20261107 — extenso nativa existente
+
+OWNER CANONICO no GitHub `ServerVpss/CentralDark@main`: `skills/vs-code-restore/package.json`, `src/extension.ts`, `media/vibe.html` e `out/extension.js`; a `main` consultada tinha somente a view `centraldarkVibeCoding` e NAO continha `centraldarkWorkspaceFolders`. INSTALACAO LOCAL do mesmo ID `centraldark.centraldark-vscode-restore@0.2.1`: `%USERPROFILE%\.vscode\extensions\centraldark.centraldark-vscode-restore-0.2.1`.
+
+DELTA LOCAL NO MESMO OWNER: adicionada view `Pastas do projeto` (`centraldarkWorkspaceFolders`) ao Explorer existente, sem `when=workspaceFolderCount>0` (condicao podia ocultar o painel); provider nativo lista arquivos e diretorios e permite `vscode.open` ao clicar em arquivos, nunca altera workspace; procura ancestor `F:\CentralDark` quando a janela aberta usa subpasta `F:\CentralDark\apps\modulos\Bolt`. Adicionado o comando `centraldark.showProjectFolders` e o botao `Mostrar pastas do projeto` no `vibe.html` atual. Build `tsc -p skills/vs-code-restore` => exit 0. `git diff --check` => exit 0. Instalacao feita por readback SHA256 identico de `package.json`, `out/extension.js`, `media/vibe.html` na MESMA extensao instalada; nenhum VSIX, extensao paralela ou workspace novo criado.
+
+PENDENCIA DE CONSUMO/VISUAL: as tentativas de foco/reload da janela `Code.exe` PID 31056 foram bloqueadas porque a foreground real estava em Chrome/ChatGPT; NAO foram enviadas teclas para a janela errada. `INSTALLED != LOADED != VISIBLE`. Proxima acao: ao focar a janela de VS Code EXISTENTE, executar `Developer: Reload Window`, clicar `Mostrar pastas do projeto` e contraprovar a arvore renderizada abaixo de Vibe Coding. Ate tal prova, manter estado visual PENDENTE. Nenhuma publicaçao desta alteracao na main comprovada.
+### CENTRALDARK_VSCODE_RELEASE_0_2_2_READBACK_20261107 — SAME OWNER / PROVA REMOTA
+
+- INTENCAO: evoluir `skills/vs-code-restore`, sem workspace/extensao paralela; exibir pastas CentralDark + Bolt abaixo do Vibe Coding.
+- PROVA VISUAL: CHEFE confirmou a arvore; UIA identificou `Pastas do projeto` com tipo Tree no VS Code existente.
+- GITHUB: PR #1993 `https://github.com/ServerVpss/CentralDark/pull/1993`, branch `feat/vscode-vibe-project-folders-20261107`, commit remoto `7fd4c0a192e21c85fc518bbcf33a8652ea2f8a6a`, 7 arquivos somente no mesmo owner. Readback de manifesto/TS/HTML na branch realizado. `main` permaneceu inalterada.
+- RELEASE: `https://github.com/ServerVpss/CentralDark/releases/tag/centraldark-vscode-v0.2.2` criado como **PRE-RELEASE** vinculado ao mesmo SHA (nao atualizar automaticamente ate promocao).
+- VSIX: asset `centraldark-vscode-restore-0.2.2.vsix` tamanho 78.872 bytes; hash SHA256 `648e97fc1d054183665b487bf34f80985e2b57f93eb14c85442cc65d918930cc`. Digest remoto `sha256:` identico via GitHub Releases API, estado `uploaded`.
+- TESTES: `tsc=0`, diff check=0, testes focados 6/6 PASS; suite completa 7/8, falha historica de `test/browser-pairing.test.cjs` por rotulo ja ausente na main; nao escamotear falha.
+- GATES: `Supabase Preview=SKIPPED`, combined status `PENDING`; `PR_OPEN != MAIN_MERGED`; `PRERELEASE != RELEASE_STABLE`; fixed point local da view `PASS`, fixed point publicacao estavel `PENDING`.
+- NEXT_CURSOR: checks aprovados no mesmo HEAD -> revisao -> merge autorizado -> readback main -> promover esta release existente a estavel, sem criar release duplicado.
+
+<!-- CENTRALDARK_HERMES_ENVELOPE_VERIFIED_CHECKPOINT_20261107 -->
+- **DECISAO DO CHEFE (07/11/2026):** a futura mudanca para `.centraldark/.hermes` so sera implementada quando reabrirmos a **source completa do Hermes Desktop/Electron+Chromium** para integrar o Cockpit como landing page. Esta etapa e **CHECKPOINT + DOCUMENTACAO + COMMIT**, nao e migracao de dados, modificacao do Hermes, mudanca de path ativo, compilacao Electron, instalacao ou deploy. Reutilizar o owner existente, preservar todas as missoes e continuar pelo menor delta.
+### 🪬 CentralDark Desktop — Hermes original em `.centraldark/.hermes` (checkpoint de plano, 07/11/2026)
+
+- **INTENCAO DO CHEFE:** uma CentralDark; Cockpit por fora; mesmo Hermes original por dentro de `.centraldark/.hermes`, preservando configuracoes, sessoes, historico, commits e motor. **NAO executar migracao destrutiva ou criar Hermes paralelo.**
+- **FONTE VIVA DO CHECKPOINT (atual, ainda nao migrada):** `C:\Users\Administrador\.hermes\centraldark\verified-execution\centraldark-hermes-envelope-20261107\current.json`; log: `events.jsonl`. Owner: `scripts/hermes/verified-checkpoint.py`; reader existente: `scripts/hermes/centraldark-entry.py`.
+- **MISSAO:** `centraldark-hermes-envelope-20261107`. **LAST_VERIFIED_STEP:** `baseline-owner-e-estado`. **RECEIPT_SHA256:** `c36c325caf0621d03178929c24f891d357142c5995d727b2e810079f9606880b`. **AT_UTC:** `2026-11-07T04:54:44.323821+00:00`.
+- **PROVA:** comandos fonte e storage existentes, read-only; run exit 0; `HASH_CHAIN_PASS` (1 evento); `status --mission centraldark-hermes-envelope-20261107` e `centraldark-entry.py --status` recuperaram esta missao, mesmo SHA e cursor. **Somente baseline foi verificada**, migracao NAO foi realizada; plano executavel NAO registrado (`plan_ready=false`).
+- **NEXT_CURSOR:** `RECONCILIAR_DOTCENTRALDARK_DOTHERMES_SEM_PERDER_ESTADO` → inventariar consumidores do HOME e caminhos, preservar estado original, definir compatibilidade reversivel, testar leitor/checkpoints e consumo no HUD existente, so depois considerar a troca do storage.
+- **HUD:** referencia documental pronta para a missao. A UI existente `apps/instinto-superior/src/components/central/CheckpointCentralDark.tsx` exibe missao/NEXT_CURSOR/SHA e consulta a cada 30 s, mas seu leitor `apps/instinto-superior/src/lib/checkpoint.functions.ts` linhas 40 e 81 usa a rota na VPS `/root/.hermes/centraldark/bin/centraldark-entry.py`. O checkpoint desta operacao foi escrito na **Casa Windows**: NAO afirmar sincronizacao com a VPS. **HUD_UI_CONSUMER=SOURCE_PRESENT / CROSS_HOST_READBACK_PENDING**; reconciliar pela rota autorizada existente e provar na tela autenticada. `docs/HUD/README.md` nao e banco do checkpoint, sem novo painel ou rota.
+- **INVARIANTES:** `SOURCE_EXISTS != MIGRATED`; `CHECKPOINT_VERIFIED != GOAL_COMPLETE`; `LAST_VERIFIED != LATEST_USER_INTENT`; missao isolada e preservada; nenhuma exclusao, reparenting ou movimentacao no HOME.
+<!-- /CENTRALDARK_HERMES_ENVELOPE_VERIFIED_CHECKPOINT_20261107 -->
+
+
+### CENTRALDARK_HALO_REBRAND_HERO_PARITY_20261107
+OWNER: apps/modulos/centraldark-halo-main. Active component: CentralOverlay.tsx.
+Cockpit integration: CentralDarkHaloHarness.tsx. Product: CentralDark Halo.
+Hero parity source includes decorative window, center logo/message, edge timing,
+transparent background, click-through. No second engine. Existing user data
+and external Codex integration remain compatible; historical records preserved.
+SOURCE_ONLY; native rebuild, UI verification, Casa-main reconciliation PENDING.
+NEXT_CURSOR: CHECK_TESTS_READBACK -> MAIN_COMMIT -> CASA_RECONCILE -> UI_COUNTERPROOF.
+
+
+### CENTRALDARK_HALO_COMPAT_PROTECTION_20261107
+Code refs: apps/modulos/centraldark-halo-main/scripts/windows/Install-CentralDark-Halo.ps1,
+scripts/release/package-windows.ps1, and README.md.
+Reconciled existing Casa protections: native executable ProductName must match
+CentralDark Halo before installation and cargo/pnpm must exist before release staging.
+Legacy hook cleanup remains targeted. README download links now use the local release
+guide and current Hero HTML instead of an unrelated upstream release package.
+SOURCE_ONLY; rebuild, runtime, visual confirmation and Casa-main sync remain PENDING.
+NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.
+
+<!-- CENTRALDARK_MCP_PAIRING_ROUTE_20261107 -->
+### MCP CentralDark + Casa — tunnel STDIO versus OAuth HTTPS (07/11/2026)
+
+**CHEFE_INTENT:** manter Corpo Unico, conservar o tunnel e o token autorizados, usar no Cockpit o pareamento de codigo proprio em vez da tela externa `mcp.desktopcommander.app/verify-device`; concluir ChatGPT -> OAuth MCP -> Casa via owners existentes sem outro tunnel/servico/owner.
+
+**CURRENT MEDIDO (07/11/2026, apenas leitura e testes focados):**
+- **Forja openKylin** `openkylin-vm` no IP atual `192.168.35.130`; checkout `/home/CentralDark-OS/CentralDark` no HEAD `be787cf3df9a422aaa6c695c80d6fb142faa4300`; `centraldark-mcp-tunnel.service` **active/running** com cliente STDIO `tunnel-client` e subprocesso `apps/modulos/mcp/src/mcp-server.js --stdio --compact --admin`. `http://127.0.0.1:8742/readyz` **HTTP 200**. Nao afirmar que status do servico equivale a chamada autorizada do plugin.
+- **Cloudflare**: tunnel ja existente `centraldark-casa-mcp`, estado **healthy**, ingress de `mcp.centralldark.com` -> `http://127.0.0.1:9101` no connector Windows. **Nao alterar/duplicar** esse tunnel sem upstream OAuth provado.
+- **Casa**: `127.0.0.1:9101/health` apresenta `engine_connected=true` e recibo `list_directory` verificado; Tailscale Serve da Casa `:9100 -> 127.0.0.1:9101`; OAuth nao faz parte do Casa Agent. Pela rota publica `/health=200`, `/mcp` anonimo `401` esperado, mas `/tools.json=404` e `/.well-known/oauth-authorization-server=404`: catalogo e OAuth nao chegam ao servidor MCP completo.
+- **MCP HTTP completo**: `apps/modulos/mcp/dist/index.js` existe na VM, com dependencias; porta `127.0.0.1:9100` **sem listener**, e `centraldark-native-mcp-http.service` **nao instalado/ativo como unidade user da VM**. Nao iniciar segunda instancia de writer enquanto o owner canonical VPS nao estiver reconciliado. Origem VPS `89.117.78.124:22` e `100.90.199.124:22`: TIMEOUT neste probe, `admin.centralldark.com` HTTP 523; isso nao prova o estado interno da VPS.
+- **Pareamento proprio ja implementado** em `apps/modulos/mcp/src/device-pairing.js` e `apps/modulos/mcp/src/oauth.js`, com tela `apps/instinto-superior/src/routes/mcp-autorizar.tsx`. Testes na VM: `LOG_DIR=/home/CentralDark-OS/CentralDark/logs node --test tests/device-pairing.test.mjs tests/pairing-consent-flow.test.mjs` -> **12 PASS / 0 FAIL**; sem `LOG_DIR`, teste falha por diretório padrao legado `/root/CentralDark/logs/mcp` inacessivel ao usuario da VM. Teste de fonte nao equivale a OAuth publicado.
+- **Distincao de autenticacao**: o codigo do fornecedor Desktop Commander nao autoriza CentralDark. O proprio OAuth 2.1+PKCE/DCR do MCP deve emitir/validar autorizacao; o tunel STDIO OpenAI em `:8742` e o Cloudflare `:9101` sao transportes separados. Nao mostrar, copiar ou reutilizar tokens nem inserir um segundo login paralelo.
+
+**FIXED_POINT = PENDING**; **NEXT_CURSOR**: recuperar a rota de acesso ao **MCP HTTP completo ja existente** (sem duplicar instancia nem derrubar o Casa Agent); provar `/.well-known/oauth-authorization-server` + `/tools.json` no mesmo hostname HTTPS; confirmar consentimento admin via `/mcp-autorizar` e `/token`; executar `initialize`, `tools/list` e `casa_commander_read` no MCP autenticado atraves da ponte Casa; salvar receipt e readback. O clique humano de consentimento nao e substituido por automacao.
+<!-- /CENTRALDARK_MCP_PAIRING_ROUTE_20261107 -->
+
+<!-- CENTRALDARK_MCP_PAIRING_COCKPIT_DELTA_20261107 -->
+### Corpo Unico — pareamento a partir do Cockpit, sem falso amarelo (07/11/2026)
+
+**Intencao:** o botao de pareamento no HUD/Cockpit deve conduzir a tela MCP Dispositivos existente; o token de STDIO ja salvo nao deve aparentar inativo quando `/readyz=200`. Preservar Cloudflare, Tailscale, Casa Agent e consentimento administrativo.
+
+**Source e prova:**
+- `apps/instinto-superior/src/components/central/McpAdminIntegrado.tsx`: apos salvar, consulta estado real; se `READY_CHECK_PASSED`, exibe "Tunel STDIO ativo" e separa OAuth do plugin. Novo atalho "Abrir pareamento no MCP", sem segunda tela/senha.
+- `apps/instinto-superior/src/components/central/McpConsoleCentralDark.tsx`: mesmo painel Dispositivos, ativado pelo evento `centraldark:mcp-open-pairing` ou query `mcp-pareamento=1`. Nenhum codigo foi fabricado e nenhum token/credencial exposto.
+- **Main commits:** `701f3701fd3e8b04ee77d304030a33c4afdab047` e `6c99575b8aab0938b7db66637c07dc692b06d7ae`.
+- **Forja:** HEAD `6c99575b8aab0938b7db66637c07dc692b06d7ae`; `npm run verify:hud` **33 PASS / 0 FAIL / 1 TODO**; `npm run build:vps` **exit 0**; reinicio **somente** `centraldark-instinto-superior.service` exit 0; `8080/sala-controle=200`, `8080/mcp-autorizar=200`, `8742/readyz=200`, unidade app **active**, novo botao presente no asset compilado.
+- **Casa HUD owner local** `F:\CentralDark\scripts\remote-bridge\CENTRALDARK-CORPO-UNICO-HUD.bat`: mesmo BAT alterado, botao "Parear Casa" agora abre o Cockpit pelo alias SSH `openkylin-vm`, query `mcp-pareamento=1`; SHA256 `b395b33eaa3bd6c3b0820f6c2c6840102f1227a0ad573041c352fbd15d3abd9e`, parser PowerShell **0 erros**. Arquivo local NAO rastreado no checkout Git; nova acao so aparece apos reabrir o HUD. Nao afirmar deploy/commit do BAT.
+- **Nao resolvido:** `mcp.centralldark.com/.well-known/oauth-authorization-server=404` e `/tools.json=404`; publico atende Casa Agent `:9101`, nao o backend OAuth HTTP completo. Botao abre painel real, mas **codigo OAuth e chamada ChatGPT -> Casa ainda nao comprovados**. `STDIO_READY != MCP_PUBLIC_OAUTH_PASS`.
+
+**NEXT_CURSOR:** restaurar roteamento HTTPS do MCP HTTP canônico sem sobrescrever tunnel saudável; autenticar com consentimento real no painel existente, validar `/register`, `/authorize`, `/token`, `tools/list`, e `casa_commander_read` autenticado; publicar/registrar o BAT no owner com gates, sem duplicar script e sem descartar o historico. FIXED_POINT_GLOBAL=PENDING.
+<!-- /CENTRALDARK_MCP_PAIRING_COCKPIT_DELTA_20261107 -->

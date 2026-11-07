@@ -1,6 +1,14 @@
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
 seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
@@ -2640,3 +2648,28 @@ para uma migração específica.
 
 Sempre que o CHEFE conversar sobre CentralDark, consultar a [skill canônica](.agents/skills/centraldark-operational-method/Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): distinguir ato da fala, preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; uma nova ideia é DELTA até existir mudança explícita de missão. Reparar mal-entendidos com explicação natural sem abandonar o trabalho. Para ação material, aplicar Skill Mãe + Kimetsu Remix + Michelin 3 Estrelas com evidência e contraprova. Documento salvo != Hermes consumiu no runtime.
 <!-- /CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
+
+## CENTRALDARK_ROOT_DISCOVERY_GLOBAL
+
+Regra global: raiz operacional descoberta dinamicamente a partir do arquivo executado + identidade Git, nunca hardcoded.
+
+```text
+CENTRALDARK_ROOT_DISCOVERY_GLOBAL=true
+ROOT_FROM_EXECUTABLE_FILE=true
+VALIDATE_GIT_IDENTITY=true
+CENTRALDARK_ROOT_ONLY_WITH_VALIDATION=true
+NO_HARDCODED_K_OR_F_OR_E_PATHS_IN_OPERATIONAL_CONSUMERS=true
+WINDOWS_LINUX_OPENKYLIN_CASA_DOCKER_VPS_PARITY=true
+REUSE_BEFORE_CREATE=true
+NO_PARALLEL_ARCHITECTURE=true
+NO_V1_V2_V3=true
+```
+
+Consumidores operacionais devem resolver a raiz via `git rev-parse --show-toplevel` ou equivalente, validando identidade do repo (remote + HEAD). Caminhos fixos em docs/receipts/histórico são preservados (não operacionais).
+
+Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-method/SKILL.md) herda esta regra: descobrir raiz dinamicamente, validar, não criar bot paralelo.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## Entrada META-RSI
+
+A porta metodologica canonica e .agents/skills/centraldark-operational-method/SKILL.md, com Skills/meta-rsi e catalogo/META-RSI-40.md; Kimetsu conectado. Preservar entradas de .agents/skills e gatilhos ate testar todos os loaders. Sem motor paralelo nem alegacao de runtime 40/40 sem prova.

@@ -11,9 +11,9 @@ param(
 # CONFIGURAÇÃO RAIZ
 # ═══════════════════════════════════════════════════════════════════════════
 
-$FORJA_ROOT = "K:\apps\modulos"
-$CASA_ROOT = "K:\apps\instinto-superior"
-$GIT_ROOT = "K:\"
+$FORJA_ROOT = if ($env:CENTRALDARK_ROOT) { Join-Path $env:CENTRALDARK_ROOT 'apps\modulos' } else { Join-Path (Split-Path -Parent $PSScriptRoot) 'apps\modulos' }
+$CASA_ROOT = if ($env:CENTRALDARK_ROOT) { Join-Path $env:CENTRALDARK_ROOT 'apps\instinto-superior' } else { Join-Path (Split-Path -Parent $PSScriptRoot) 'apps\instinto-superior' }
+$GIT_ROOT = if ($env:CENTRALDARK_ROOT) { $env:CENTRALDARK_ROOT } else { Split-Path -Parent $PSScriptRoot }
 $VPS_REMOTE = "origin"
 $LOG_FILE = "$FORJA_ROOT\.forja-executor.log"
 
