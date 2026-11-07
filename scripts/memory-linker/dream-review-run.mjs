@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+// #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
+// @owner: scripts/memory-linker/dream-review-run.mjs
+// @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+// @last_updated: 2026-10-28T00:29:42.831Z
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,10 +18,11 @@ import {
   enrichDreamProposal,
   validatePatternDiscovery,
 } from './pattern-discovery.mjs';
-import { updatePatternLibrary } from './pattern-library.mjs';
+import { updatePatternLibrary, readPatternLibrary } from './pattern-library.mjs';
 import { loadMemoryReserveEvents } from './memory-reserve-events.mjs';
 import { attachSemanticIntentPrefilter } from './semantic-intent-adapter.mjs';
 import { compileArtifactToDreamEvent, loadArtifactForMining } from './artifact-capability.mjs';
+import { runMetacognitiveMetabolism, learningFingerprint } from './metacognitive-metabolism.mjs';
 
 const WRITE_ROLES = new Set(['EXECUTOR', 'HERMES']);
 const AGENT_CALL_PROTOCOL = 'CENTRALDARK_AGENT_CALL_V1';
@@ -66,6 +71,10 @@ export function routePatternAutonomy(proposal, state) {
       writer_handoff_required: false,
       pattern_id: item.pattern_id,
       evidence_candidate_ids: item.member_candidate_ids,
+      // Reuse the actual measured header from the existing entry gate; never fabricate PASS.
+      ...(state?.global_contract_entry?.fixed_point_execution_header
+        ? { fixed_point_execution_header: state.global_contract_entry.fixed_point_execution_header }
+        : {}),
       ...(routeId ? { trail_id: routeId } : {}),
     };
 
@@ -104,6 +113,9 @@ export function buildDreamReviewWithPatterns(events, {
   headSha,
   parseRejections = [],
   jarvisState = null,
+  knownFingerprints = [],
+  previousDigest = null,
+  experiment = null,
 } = {}) {
   const baseProposal = buildDreamProposal(events, { headSha, parseRejections });
   const baseValidation = validateDreamProposal(baseProposal);
@@ -123,7 +135,15 @@ export function buildDreamReviewWithPatterns(events, {
       autonomy_routing: routePatternAutonomy(enriched, jarvisState),
     };
   }
-  return enriched;
+  return {
+    ...enriched,
+    metacognitive_metabolism: runMetacognitiveMetabolism(enriched, {
+      allowedTargets: Array.isArray(jarvisState?.scope?.allowed) ? jarvisState.scope.allowed : [],
+      knownFingerprints,
+      previousDigest,
+      experiment,
+    }),
+  };
 }
 
 function parseArgs(argv) {
@@ -186,7 +206,7 @@ export function compileArtifactForDreamReview(artifactInput, {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   if (!args.output || !args.head) {
-    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref>] [--memory-reserve <LEMBRANCAS.md>] [--skip-memory-reserve true] [--state <jarvis-state.json>] [--library <pattern-library.json>]');
+    throw new Error('USAGE: dream-review-run.mjs --output <proposal.json> --head <40-hex-sha> [--input <events.jsonl>] [--artifact <file> --target <owner> --source <ref>] [--memory-reserve <LEMBRANCAS.md>] [--skip-memory-reserve true] [--state <jarvis-state.json>] [--library <pattern-library.json>] [--experiment <experiment.json>]');
   }
 
   const outputPath = path.resolve(args.output);
@@ -232,10 +252,19 @@ async function main() {
   const jarvisState = args.state
     ? JSON.parse(fs.readFileSync(path.resolve(args.state), 'utf8'))
     : null;
+  // Existing pattern library is the longitudinal memory. Read BEFORE its update.
+  const historical = readPatternLibrary(args.library || '');
+  const historicalCandidates = historical.candidates || [];
+  const historicalDigest = historicalCandidates.length > 0 ? learningFingerprint(historicalCandidates) : null;
+  const experiment = args.experiment
+    ? JSON.parse(fs.readFileSync(path.resolve(args.experiment), 'utf8')) : null;
   let proposal = buildDreamReviewWithPatterns(events, {
     headSha: args.head,
     parseRejections,
     jarvisState,
+    knownFingerprints: historicalCandidates.map(item => item.fingerprint),
+    previousDigest: historicalDigest,
+    experiment,
   });
   proposal = attachSemanticIntentPrefilter(proposal);
   proposal = {
@@ -260,6 +289,8 @@ async function main() {
     `DREAM_REVIEW_RUN=${proposal.status} HEAD_SHA=${proposal.head_sha} ` +
     `CANDIDATES=${proposal.candidate_count} PATTERNS=${discovery.pattern_count} ` +
     `AUTO_HANDOFF=${discovery.autonomy_handoff_eligible_count} ` +
+    `METABOLIC_PROBES=${proposal.metacognitive_metabolism.probe_count} ` +
+    `METABOLIC_ACTION=${proposal.metacognitive_metabolism.action} ` +
     `MEMORY_RESERVE=${memoryReserve.status} MEMORY_EVENTS=${memoryReserve.events.length} ` +
     `MEMORY_UNKNOWN_SESSIONS=${proposal.memory_reserve.unknown_session_count} ` +
     `LIBRARY=${libraryResult.status} LIBRARY_PATTERNS=${libraryResult.library.pattern_count} ` +

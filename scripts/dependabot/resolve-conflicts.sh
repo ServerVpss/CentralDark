@@ -16,7 +16,7 @@ PR_NUM="${1:?Uso: $0 <PR_NUMBER>}"
 PR_HEAD_REF="${PR_HEAD_REF:-}"
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
-WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
+WORKTREE_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${CENTRALDARK_WORKTREE_ROOT:-${TMPDIR:-/tmp}/centraldark-worktrees}}"
 WORKTREE="${WORKTREE_ROOT}/pr-${PR_NUM}-$$"
 # Roteamento fixo pelo checkout confiável que contém o motor; nunca executar
 # helpers ou registry fornecidos pela branch de PR sob pull_request_target.
@@ -56,8 +56,12 @@ mkdir -p "$WORKTREE_ROOT"
 
 cleanup() {
   set +e
-  git -C "$REPO_DIR" worktree remove --force "$WORKTREE" >/dev/null 2>&1 || true
-  git -C "$REPO_DIR" worktree prune >/dev/null 2>&1 || true
+  if [ -d "$WORKTREE" ]; then
+    node "$TRUSTED_OWNER_ROOT/scripts/lupa/worktree-teardown-gate.mjs" \
+      --repo "$REPO_DIR" --target "$WORKTREE" \
+      --allowed-root "$WORKTREE_ROOT" --published-ref "$PR_HEAD_REF" --apply \
+      || echo "RESOLVER_WORKTREE_KEEP_ACTIVE=$WORKTREE"
+  fi
 }
 trap cleanup EXIT
 
@@ -79,6 +83,66 @@ fi
 
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
+# Preflight leve no mesmo motor: nao criar 12 mil arquivos antes de saber
+# se o historico existe e se os conflitos ja exigem um discriminante humano.
+# Clone shallow/partial nao significa historicos independentes (Git 128).
+if ! git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+  if [ "$(git -C "$REPO_DIR" rev-parse --is-shallow-repository)" = "true" ]; then
+    echo "PREFLIGHT_SHALLOW_HISTORY=DEEPEN_BOUNDED"
+    for depth in 64 256; do
+      git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch "--deepen=$depth" origin main "refs/pull/${PR_NUM}/head:${FETCH_REF}" || {
+        echo "BLOCKED_SHALLOW_FETCH_FAILED depth=$depth"
+        exit 22
+      }
+      if git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+        break
+      fi
+    done
+  fi
+  if ! git -C "$REPO_DIR" merge-base "$FETCH_REF" origin/main >/dev/null 2>&1; then
+    echo "BLOCKED_MERGE_BASE_UNAVAILABLE shallow=$(git -C "$REPO_DIR" rev-parse --is-shallow-repository)"
+    echo "NO_WORKTREE_NO_PUSH=1"
+    exit 22
+  fi
+fi
+
+# merge-tree examina a mesma fonte e base sem checkout, branch ou push.
+# --name-only devolve SHA da arvore, caminhos conflitantes e, depois de
+# uma linha vazia, diagnosticos. UNKNOWN bloqueia ANTES do checkout caro.
+set +e
+PREFLIGHT_MERGE_TREE="$(git -C "$REPO_DIR" merge-tree --write-tree --name-only "$FETCH_REF" origin/main 2>&1)"
+PREFLIGHT_STATUS=$?
+set -e
+if [ "$PREFLIGHT_STATUS" -gt 1 ]; then
+  echo "BLOCKED_PREFLIGHT_MERGE_TREE status=$PREFLIGHT_STATUS"
+  exit 23
+fi
+if [ "$PREFLIGHT_STATUS" -eq 1 ]; then
+  PREFLIGHT_PATHS="$(printf '%s\n' "$PREFLIGHT_MERGE_TREE" | awk 'NR == 1 { next } NF == 0 { exit } { print }')"
+  if [ -z "$PREFLIGHT_PATHS" ]; then
+    echo "BLOCKED_PREFLIGHT_CONFLICT_PATHS_MISSING"
+    exit 23
+  fi
+  PREFLIGHT_YELLOW=0
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    RESULT="$(node "$CLASSIFIER" "$path")" || {
+      echo "BLOCKED_PREFLIGHT_CLASSIFIER_FAILED path=$path"
+      exit 23
+    }
+    ACTION="$(node -e 'process.stdout.write(JSON.parse(process.argv[1]).action)' "$RESULT")"
+    echo "PREFLIGHT_CONFLICT path=$path action=$ACTION"
+    if [ "$ACTION" = "YELLOW" ]; then
+      PREFLIGHT_YELLOW=$((PREFLIGHT_YELLOW + 1))
+    fi
+  done <<< "$PREFLIGHT_PATHS"
+  if [ "$PREFLIGHT_YELLOW" -gt 0 ]; then
+    echo "PREFLIGHT_UNREGISTERED_CONFLICTS=$PREFLIGHT_YELLOW"
+    echo "NO_WORKTREE_NO_PUSH=1"
+    exit 20
+  fi
+fi
+
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
@@ -102,6 +166,20 @@ if ! grep -q "CONFLICT" <<<"$MERGE_OUTPUT"; then
 fi
 
 echo "CONFLICT_DETECTED"
+# Scan Git type signatures and the unmerged index: string matching never authorizes resolution.
+CONFLICT_DIAGNOSIS="$(printf '%s\n' "$MERGE_OUTPUT" | node "$CLASSIFIER" --diagnose)" || {
+  echo "BLOCKED_CONFLICT_DIAGNOSIS_FAILED"
+  git merge --abort 2>/dev/null || true
+  exit 20
+}
+echo "CONFLICT_DIAGNOSIS_JSON=$CONFLICT_DIAGNOSIS"
+SCAN_ALLOWED="$(node -e 'const d=JSON.parse(process.argv[1]);process.stdout.write(d.auto_resolve_allowed===true?"yes":"no")' "$CONFLICT_DIAGNOSIS")"
+if [ "$SCAN_ALLOWED" != "yes" ]; then
+  echo "BLOCKED_COMPLEX_CONFLICT_NEEDS_INDEPENDENT_REVIEW=1"
+  echo "NO_PUSH_ON_YELLOW=1"
+  git merge --abort 2>/dev/null || true
+  exit 20
+fi
 mapfile -t CONFLICTS < <(git diff --name-only --diff-filter=U)
 
 if [ "${#CONFLICTS[@]}" -eq 0 ]; then

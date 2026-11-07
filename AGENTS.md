@@ -1,3 +1,9 @@
+<!-- CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
+Todo executor encerra sua bancada pelo gate unico indicado em RULES.md;
+registra REMOVED_VERIFIED ou KEEP_ACTIVE com causa. Nao criar motor,
+scheduler, memoria, recibo ou worktree paralelo para encerrar uma tarefa.
+<!-- /CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 

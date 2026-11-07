@@ -198,11 +198,18 @@ info "deploy auth: ephemeral_git=$HAS_EPHEMERAL_GIT_AUTH ssh_key=$([[ -f "$SSH_K
 
 # ─── TLC23 / Universal Method: validar o SHA alvo antes de mutação ──────
 log "=== TLC23 / UNIVERSAL PRE-FLIGHT ==="
-GATE_ROOT="$(mktemp -d /tmp/centraldark-tlc23-deploy.XXXXXX)"
+CENTRALDARK_WORKTREE_ROOT="${CENTRALDARK_WORKTREE_ROOT:-${TMPDIR:-/tmp}/centraldark-worktrees}"
+mkdir -p -m 700 "$CENTRALDARK_WORKTREE_ROOT"
+GATE_ROOT="$(mktemp -d "$CENTRALDARK_WORKTREE_ROOT/centraldark-tlc23-deploy.XXXXXX")"
 GATE_TMP="$GATE_ROOT/worktree"
 CONTRACT_RECEIPT="$GATE_ROOT/repo-contract.txt"
 cleanup_gate_tmp() {
-  git worktree remove --force "$GATE_TMP" >/dev/null 2>&1 || true
+  if [ -d "$GATE_TMP" ]; then
+    node "$REPO_DIR/scripts/lupa/worktree-teardown-gate.mjs" \
+      --repo "$REPO_DIR" --target "$GATE_TMP" \
+      --allowed-root "$GATE_ROOT" --published-ref "$BRANCH" --apply \
+      || { echo "DEPLOY_GATE_WORKTREE_KEEP_ACTIVE=$GATE_TMP"; return 0; }
+  fi
   rm -rf "$GATE_ROOT" >/dev/null 2>&1 || true
 }
 trap cleanup_gate_tmp EXIT

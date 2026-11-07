@@ -74,6 +74,43 @@ O propositor não altera sessão bruta, documento canônico, skill ou memória f
 
 Contrato conceitual: `docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md`.
 
+**Extensão de metabolismo metacognitivo (2026-10-27):** `dream-review-run.mjs` chama
+`metacognitive-metabolism.mjs` em todas as propostas enriquecidas. A projeção
+`metacognitive_metabolism` executa 50 probes determinísticos (10 domínios x 5):
+sensores, normalização, tempo, proveniência, verificação, memória, padrões,
+orçamento, causalidade com grupo-controle/holdout e governança. Cada probe
+produz valor observável ou `null` explicitamente desconhecido. O resultado
+contém `receipt_sha256`, `action` e `next_cursor`. A prova de hash atesta
+integridade do relatório, não verdade externa. `proposal_only=true` e
+`automatic_canonical_promotion=false`; a eventual promoção reutiliza a
+MetaLupa e o Writer existentes, sem segundo pipeline. Testes:
+`node --test scripts/memory-linker/metacognitive-metabolism.test.mjs`.
+
+
+
+### Receita plug-and-play (sem reteste manual)
+
+O entrypoint **já chama as 50 sondas automaticamente** no mesmo processo.
+O aprendizado medido e a deduplicação vêm do `--library` (biblioteca existente);
+na execução idêntica seguinte, o próprio módulo devolve `NO_NEW_INFORMATION`.
+Uma experiência causal é opcional e, se informada, só produz **candidato**:
+
+```bash
+node scripts/memory-linker/dream-review-run.mjs \
+  --head "$MAIN_SHA" \
+  --input /caminho/autorizado/eventos.jsonl \
+  --output /caminho/autorizado/proposta.json \
+  --library /caminho/autorizado/pattern-library.json \
+  --experiment /caminho/autorizado/experimento.json
+```
+
+`--experiment` aceita `treatment`, `control`, `holdout` com
+`before/after = {passed,total}`, `critical_regressions`, `evidence_refs`,
+`before_ref` e `after_ref`. Sem dados, as sondas de causalidade retornam
+`null`, não um falso ganho. `--state` continua opcional para handoff, mas
+a chamada ao Writer somente é validada quando o estado contém header do
+gate canônico e escopo autorizado; sem ele o CALL fica bloqueado.
+
 ## Descoberta determinística de padrão e autonomia
 
 `pattern-discovery.mjs` **não cria outro cérebro nem outro minerador**. Ele recebe somente candidatos já sanitizados pelo Dream Review e procura recorrência entre **fingerprints diferentes** no mesmo `kind` + mesmo `target`.

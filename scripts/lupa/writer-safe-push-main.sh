@@ -44,6 +44,9 @@ MAX_TRIES="${MAX_TRIES:-3}"
 GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-CentralDark Bot}"
 GIT_AUTHOR_EMAIL="${GIT_AUTHOR_EMAIL:-bot@centralldark.com}"
 SOURCE_ROOT="${SOURCE_ROOT:-$(pwd)}"
+# Uma raiz por host; cada owner/escopo possui seu proprio scratch isolado.
+CENTRALDARK_WORKTREE_ROOT="${CENTRALDARK_WORKTREE_ROOT:-${RUNNER_TEMP:-/tmp}/centraldark-worktrees}"
+mkdir -p -m 700 "$CENTRALDARK_WORKTREE_ROOT"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
 
@@ -155,7 +158,7 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   echo "🔄 ${WRITER_TAG} tentativa $TRY/$MAX_TRIES"
   git fetch --no-tags origin refs/heads/main
   BASE_SHA="$(git rev-parse FETCH_HEAD)"
-  WORKTREE="${RUNNER_TEMP:-/tmp}/writer-wt-${WRITER_TAG}-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${TRY}-$$"
+  WORKTREE="$CENTRALDARK_WORKTREE_ROOT/writer-wt-${WRITER_TAG}-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${TRY}-$$"
 
   if [ -e "$WORKTREE" ]; then
     echo "❌ WORKTREE_TEMP_JA_EXISTE=$WORKTREE"
@@ -261,9 +264,11 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   STATUS=$?
   set -e
 
-  if ! git worktree remove --force "$WORKTREE" 2>/dev/null; then
-    rm -rf "$WORKTREE" || true
-    git worktree prune || true
+  if [ -d "$WORKTREE" ]; then
+    node "$REPO_ROOT/scripts/lupa/worktree-teardown-gate.mjs" \
+      --repo "$REPO_ROOT" --target "$WORKTREE" \
+      --allowed-root "$CENTRALDARK_WORKTREE_ROOT" --published-ref main --apply \
+      || echo "${WRITER_TAG}_WORKTREE_KEEP_ACTIVE=$WORKTREE"
   fi
 
   if [ "$STATUS" -eq 0 ]; then
