@@ -1,3 +1,19 @@
+---
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "02-SESSOES"
+centraldark_kind: "CRISTAL_DE_SESSAO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "💎 Cristal da sessão — caminhos provados e receitas executáveis — 2026-09-25"
+centraldark_agent_recall: "Recuperar intencao, correcoes, evidencia e NEXT_CURSOR antes de retomar; historico nao prova runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "1164fbc75c13e375511903cbcf5228acc858c14c"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md"
+---
 # 💎 Cristal da sessão — caminhos provados e receitas executáveis — 2026-09-25
 
 Status: **SESSION_CRYSTAL_WITH_EXECUTABLE_PROVEN_PATH_REGISTRY**  
