@@ -19,6 +19,11 @@ let upstream = null;
 let connecting = null;
 let ready = false;
 let lastAuthorizedTool = null; // ephemeral receipt, never a credential or file content
+function emitOperationalEvent(event, detail = "") {
+  // Only fixed status and validated tool names, never tokens or raw stderr.
+  process.stdout.write("[MCP_CASA] [" + new Date().toISOString() + "] [" + event + "]" +
+    (detail ? " " + detail : "") + "\n");
+}
 
 // MQTT is an OPTIONAL transport of presence/receipts within the SAME Casa agent.
 // No broker, secondary executor, implicit remote mutation or public port is created.
@@ -117,16 +122,19 @@ async function engine() {
       ? spawn(process.env.ComSpec || "cmd.exe",["/d","/s","/c","npx.cmd -y "+ENGINE],{windowsHide:true,stdio:["pipe","pipe","pipe"]})
       : spawn("npx",["-y",ENGINE],{stdio:["pipe","pipe","pipe"]});
     partial="";
+    emitOperationalEvent("ENGINE_STARTING", "LOCAL_STDIO");
     upstream.stdout.on("data",onData);
-    upstream.stderr.on("data",()=>{});
-    upstream.on("error",err=>invalidate("MCP_UPSTREAM_SPAWN:"+err.message));
-    upstream.on("exit",code=>{upstream=null;invalidate("MCP_UPSTREAM_EXIT:"+code);});
+    // Raw stderr may include sensitive data. Do not echo it to the HUD.
+    upstream.stderr.on("data",()=>{ emitOperationalEvent("ENGINE_STDERR", "DETAILS_REDACTED"); });
+    upstream.on("error",err=>{emitOperationalEvent("ENGINE_SPAWN_FAILED", "NOT_PROVEN");invalidate("MCP_UPSTREAM_SPAWN:"+err.message);});
+    upstream.on("exit",code=>{upstream=null;emitOperationalEvent("ENGINE_EXIT", Number.isInteger(code) ? String(code) : "UNKNOWN");invalidate("MCP_UPSTREAM_EXIT:"+code);});
     await rpc("initialize",{
       protocolVersion:"2025-06-18",capabilities:{},
       clientInfo:{name:"CentralDark Casa Commander",version:"1.0.0"}
     });
     upstream.stdin.write(JSON.stringify({jsonrpc:"2.0",method:"notifications/initialized",params:{}})+"\n");
     ready=true;
+    emitOperationalEvent("MCP_INITIALIZE", "PASS");
   })();
   try { await connecting; } finally { connecting=null; }
 }
@@ -166,6 +174,7 @@ export function createCasaAgent(){
     if(!READ_ONLY_TOOLS.has(name)&&process.env.CENTRALDARK_CASA_WRITE_ENABLED!=="true")
       return send(res,403,{ok:false,error:"CASA_WRITE_DISABLED"});
     try{
+      emitOperationalEvent("TOOL_REQUEST", name);
       await engine();
       const value=await rpc("tools/call",{name,arguments:input.arguments});
       if (value?.isError !== true) {
@@ -175,8 +184,12 @@ export function createCasaAgent(){
         };
         mqttPublish("receipt", lastAuthorizedTool);
       }
+      emitOperationalEvent("TOOL_RESULT", name + " " + (value?.isError === true ? "FAILED" : "PASS"));
       send(res,200,{ok:value?.isError!==true,tool:name,result:value,execution:"CASA_ENGINE_RESULT"});
-    }catch(e){send(res,502,{ok:false,error:String(e.message).slice(0,800),execution:"NOT_PROVEN"});}
+    }catch(e){
+      emitOperationalEvent("TOOL_RESULT", name + " NOT_PROVEN");
+      send(res,502,{ok:false,error:String(e.message).slice(0,800),execution:"NOT_PROVEN"});
+    }
   });
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
