@@ -6,6 +6,9 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar o modo HUD. QUADRO FIXO COMPLETO no topo da resposta; explicacao abaixo. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
+<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
@@ -469,3 +472,55 @@ Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI
 
 **Critério de saída:** menos esforço humano, mesma ou maior capacidade, nenhuma duplicação estrutural; se a melhoria acrescentar mais complexidade do que retirar, NOOP e seguir. Registrar mudanças materiais no receipt/owner existente.
 <!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+
+<!-- CENTRALDARK_DESKTOP_CODE_OSS_BUILD_RECIPE_20261107 -->
+## Receita canônica de build — CENTRALDARK DESKTOP sobre microsoft/vscode (07/11/2026)
+
+**INTENÇÃO / IDENTIDADE:** o produto FINAL chama-se **CENTRALDARK DESKTOP**. Preservar a interface de VS Code que o CHEFE mostrou — título/barra, menus, abas superiores, explorador, navegador integrado, painéis inferiores, terminal, atalhos e Vibe Coding. Não criar segunda shell nem redesenhar a tela. O **Cockpit** deve ser a primeira aba/landing page com autenticação real e painel administrativo; **Hermes** é o motor original interno, aberto pelo botão na mesma aplicação. Codex, Claude Code e **um único Harness** são integrações internas existentes, não novos produtos paralelos. “Hermes Desktop” designa SOMENTE a source histórica a ser reaproveitada; o produto final não usará esse nome.
+
+**Fonte correta e licença:** `https://github.com/microsoft/vscode` é a SOURCE aberta que identifica seu produto como `Code - OSS` (`product.json`) e publica o código sob MIT. O binário oficial Microsoft Visual Studio Code **não** é redistribuível automaticamente sob MIT; suas personalizações, algumas extensões, serviços e marcas podem ter condições próprias. Não prometer replicação de extensões proprietárias antes de inventariar licenças. O ZIP `Source code (zip)` da release é útil para estudo/build, mas a evolução contínua deve manter versão/tag/SHA e origem Git documentados; preservar a source e o estado locais existentes.
+
+### Fontes de referência verificadas (abrir e reutilizar antes de qualquer rebuild)
+
+| Fonte | Link canônico | Aplicação na CentralDark |
+| --- | --- | --- |
+| Source e identidade Microsoft | https://github.com/microsoft/vscode | Base Code-OSS/Electron/workbench, sem reimplementar VS Code |
+| Licença do código | https://github.com/microsoft/vscode/blob/main/LICENSE.txt | Preservar licença MIT e avisos exigidos |
+| Microsoft: How to Contribute | https://github.com/microsoft/vscode-wiki/blob/main/How-to-Contribute.md | Pré-requisitos, `npm install`, watch, build de desenvolvimento e `scripts/code.bat` |
+| Microsoft: tarefas de desenvolvimento | https://github.com/microsoft/vscode/blob/main/.vscode/tasks.json | Build dentro do próprio editor: Install & Watch / Compile / Run VS Code; conferir tasks da versão exata |
+| VS Code: navegador integrado | https://code.visualstudio.com/docs/debugtest/integrated-browser | Abrir Cockpit dentro de aba do editor, navegação e autenticação, mantendo abas e workbench |
+| VS Code: browser tools com agente | https://code.visualstudio.com/docs/agents/run/browser-tools | Observação e verificação visual de fluxo no browser integrado |
+| VS Code: perfis | https://code.visualstudio.com/docs/configure/profiles | Preservação de configurações/extensões por perfil sem mover diretórios às cegas |
+| Void: contribuição / compilação | https://github.com/voideditor/void/blob/main/HOW_TO_CONTRIBUTE.md | Exemplo real de build `Ctrl+Shift+B` + `scripts/code.bat` e editor próprio |
+| Void: guia de arquitetura | https://github.com/voideditor/void/blob/main/VOID_CODEBASE_GUIDE.md | Mapa `src/vs/workbench`, Electron main/browser, modelos, IPC e CSP; referência, não copiar motor |
+| Void: estado do projeto | https://github.com/voideditor/void/blob/main/README.md | Fork de VS Code para IA; projeto DEPRECATED/arquivado em 2026, uso apenas como estudo |
+| VSCodium: guia de build | https://github.com/VSCodium/vscodium/blob/master/docs/howto-build.md | Exemplo de distribuição/branding, patch/update, build no Windows com Git Bash |
+| Microsoft: diferenças Code-OSS / VS Code | https://code.visualstudio.com/docs/supporting/faq | Limites de componentes proprietários, Marketplace e extensões |
+| Microsoft: licenças de extensões | https://code.visualstudio.com/docs/supporting/oss-extensions | Verificar autorização de redistribuição por extensão |
+| Electron: segurança | https://www.electronjs.org/docs/latest/tutorial/security | Login, isolamento de conteúdo remoto, CSP, IPC, não habilitar Node em sites externos |
+
+Esses são links de documentação/source, **não comprovação de que a CentralDark já compilou**. Se upstream mudar, validar arquivo/tag/SHA novamente, sem substituir comprovantes históricos.
+
+### CURRENT medido na Casa e no GitHub
+
+- A bancada VS Code atual da captura já apresenta abas, navegador integrado, terminal e extensão **CentralDark Vibe Coding**; owner da extensão existente: `skills/vs-code-restore`, com ativação `onStartupFinished` e comando `centraldark.showProjectFolders`. A capacidade de extensão está presente; Cockpit como landing **ainda não foi comprovado**.
+- Source Cockpit existente: `apps/instinto-superior`. Source Hermes original observada anteriormente na Casa: `C:\Users\Administrador\AppData\Local\hermes\hermes-agent\apps\desktop`. Antes de alterar, medir HEAD e alterações locais nos DOIS owners. Não interromper motor em uso.
+- `BUILD-CENTRALDARK-DESKTOP.cmd` **já existe, mas seu alvo histórico é `apps/modulos/Bolt/source` (Electron do Bolt), não `microsoft/vscode`**. No GitHub PR #1994 o script segue com referência K: histórica; na Casa houve uma revisão local ainda não publicada. **Não substituir nem executar esse builder supondo que já compila Code-OSS; reconciliar o mesmo owner antes.**
+- O CHEFE mostrou na página Microsoft o ZIP de release **1.145.2**; isso é uma referência visual, **não prova de ZIP baixado, extraído, checksum medido, dependências instaladas nem source compilada**.
+- O checkpoint existente `scripts/hermes/verified-checkpoint.py` + `centraldark-entry.py` já registra missões fora do Git. Missão de referência `centraldark-hermes-envelope-20261107`; não confundir receipt textual deste documento com checkpoint vivo.
+
+### Sequência padrão REUTILIZÁVEL (um source, um aplicativo, deltas por owner)
+
+1. **Reencontrar o checkout real:** confirmar source `microsoft/vscode`, release/tag/SHA, arquivos `.nvmrc`, `package.json`, `product.json` e `.vscode/tasks.json`; inventariar alterações, perfis/extensões e licenças. Se somente ZIP estiver disponível, validar a versão e preservar íntegra a extração; não criar cópias paralelas quando a pasta já existir. Não presumir que a instalação binária Microsoft é source.
+2. **Testar a casca exatamente como está:** na própria VS Code, abrir pasta da source e verificar pré-requisitos do README/`.nvmrc` da versão (Node adequado, npm, Git, Python/compilador C++ nativo no Windows conforme necessário). Receita Microsoft: `npm install` → tarefa `Ctrl+Shift+B` ou `npm run watch` → iniciar **build de desenvolvimento** com `.\scripts\code.bat`. Não usar comandos destrutivos de limpeza contra checkout com deltas; não instalar dependências cegamente sem verificar estado e consentimento operacional.
+3. **Conferir paridade visual e funcional:** janelas, abas, navegador, login em página local, menu, explorer, terminal, extensões permitidas, perfil, restauração e comandos Vibe Coding; executar em instância de teste com armazenamento separado para não sobrescrever a sessão ativa. `BUILDS != WORKBENCH_PARITY`. Aceitação visual do CHEFE e readback antes de promover.
+4. **Landing primeiro, sem mexer na interface:** reaproveitar a extensão `skills/vs-code-restore` e o Cockpit `apps/instinto-superior` para abrir o Cockpit na primeira aba ao iniciar. A autenticação protege operações administrativas no servidor; não apenas renderizar tela de login. Rota e menu existentes, sem nova página/botão sem owner e prova. Permanecem os menus e abas originais.
+5. **Depois Hermes por dentro:** mapear a source ORIGINAL do Hermes Desktop, integrar um único comando/botão na shell CentralDark que abre a interface Hermes já existente; não iniciar motor duplicado. Hermes Desktop como nome de produto se torna legado; o motor, código, sessão e checkpoints permanecem.
+6. **Brand/build de distribuição depois da paridade:** adaptar `product.json` e o empacotamento Code-OSS **no mesmo owner de build**, após validar licenças, nome, assinatura, update/rollback e testes. Consultar VSCodium/Void apenas como receitas; não criar builder paralelo. Diferenciar `DEV_RUN`, `APP_PACKAGED` e `INSTALLED/DEPLOYED`.
+7. **Casca mutável / dados persistentes:** futuro layout do aplicativo `~/.centraldark/.hermes/`, `~/.centraldark/.vscode/` e integrações gerenciadas de Claude/CodeX, sem mover automaticamente `~/.hermes`/`~/.vscode`/`~/.claude`/`~/.codex`. Inventariar consumidores, garantir compatibilidade e cópia reversível com SHA, perfis, sessões, checkpoints por missão e rollback. Somente depois migrar.
+8. **Casa + VPS:** executores complementares; selecionar conforme SO/capacidade/online e autorização, não concatenar etiquetas Windows+Linux no mesmo `runs-on`. Checkpoint e HUD só ficam verdes após contraprova real; aprovação do CHEFE não falsifica job GitHub Actions. Não criar runner, motor ou gate paralelo.
+
+### Prova por fase / repetibilidade
+
+`SOURCE_PINNED_SHA | DEPS_MATCH_VERSION | DEV_RUN_OK | WORKBENCH_PARITY | COCKPIT_FIRST_TAB_AND_AUTH | HERMES_SINGLE_ENGINE | EXTENSIONS_LICENSE_CHECKED | USER_DATA_PRESERVED | BUILD_SHA | PACKAGE_READBACK | HUD_CONSUMER_VERIFIED | NEXT_CURSOR`. Cada campo `PASS/FAIL/PENDING/UNKNOWN` com recibo; `DOCUMENTED != EXECUTED`. Sempre retomar pelo estado verificado sem repetir passos verdes. **NEXT_CURSOR_ATUAL: localizar source Microsoft já extraída (se existir), testar Code-OSS em modo desenvolvimento, depois implementar somente Cockpit na primeira aba.**
+<!-- /CENTRALDARK_DESKTOP_CODE_OSS_BUILD_RECIPE_20261107 -->
