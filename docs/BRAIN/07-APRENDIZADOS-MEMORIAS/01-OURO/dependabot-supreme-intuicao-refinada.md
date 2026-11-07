@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "4103492530e0fe6c17073c8f9d1507d6737b1d3c"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Prediction"
+centraldark_self_related: ["Self-Assessment","Self-Calibration"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-prediction/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-assessment/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-calibration/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # Intuição Refinada do Sistema Dependabot
 

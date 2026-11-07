@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "dd3857c11e670b9e9f4bea8141d761f314916cfa"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Verification"
+centraldark_self_related: ["Self-Consistency","Self-Auditing"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-verification/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-consistency/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-auditing/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # Ponto Fixo Alcançado — Sistema Dependabot Supremo
 

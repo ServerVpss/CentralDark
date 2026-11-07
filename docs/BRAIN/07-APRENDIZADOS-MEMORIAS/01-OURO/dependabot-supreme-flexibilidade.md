@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "ffe7a7a83f28f4be648faaa70184c03bc10dd6c0"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Optimization"
+centraldark_self_related: ["Self-Adaptation","Self-Iteration"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-optimization/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-adaptation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-iteration/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # Flexibilidade do Sistema Dependabot
 

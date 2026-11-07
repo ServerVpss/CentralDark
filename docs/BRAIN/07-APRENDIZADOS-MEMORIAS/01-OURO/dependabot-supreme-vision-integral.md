@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "063f06e49896a9a843c9a4353e63a90d3820ba57"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Recursive Cognitive Amplification"
+centraldark_self_related: ["Self-Modeling","Self-Improvement"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/recursive-cognitive-amplification/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-modeling/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-improvement/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # Visão Completa do Sistema Dependabot — Respiração do Eclipse
 
