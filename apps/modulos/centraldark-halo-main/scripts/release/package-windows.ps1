@@ -6,6 +6,13 @@ $Output = Join-Path $Root "dist\release"
 $Stage = Join-Path $Output "windows"
 $Zip = Join-Path $Output "CentralDark-Halo-Windows-x64-v$Version.zip"
 
+# #OBSERVACOES# @owner: centraldark-halo-main @doc_ref: docs/ARCHITECTURE.md
+# Guard the release stage before any destructive staging operation.
+$MissingTools = @("cargo", "pnpm") | Where-Object { -not (Get-Command $_ -ErrorAction SilentlyContinue) }
+if ($MissingTools.Count -gt 0) {
+    throw ("CENTRALDARK_HALO_BUILD_TOOLCHAIN_MISSING: " + ($MissingTools -join ", "))
+}
+
 Push-Location $Root
 try {
     Write-Host "[1/3] Building Windows x64 binary..."

@@ -3,23 +3,23 @@
 </p>
 
 <p align="center">
-  <strong>Give Codex a breathing light — know it is working from any window.</strong><br>
+  <strong>CentralDark Halo: live status — know it is working from any window.</strong><br>
   A local-only screen-edge signal for working, waiting, and done.
 </p>
 
 <p align="center">
-  <a href="https://github.com/qcodingdev/codex-halo/releases/latest"><img alt="Download for macOS" src="https://img.shields.io/badge/Download_for-macOS-00bfd8?style=for-the-badge"></a>
-  <a href="https://github.com/qcodingdev/codex-halo/releases/latest"><img alt="Download for Windows" src="https://img.shields.io/badge/Download_for-Windows-00bfd8?style=for-the-badge"></a>
+  <a href="docs/RELEASE.md"><img alt="Download for macOS" src="https://img.shields.io/badge/Download_for-macOS-00bfd8?style=for-the-badge"></a>
+  <a href="docs/RELEASE.md"><img alt="Download for Windows" src="https://img.shields.io/badge/Download_for-Windows-00bfd8?style=for-the-badge"></a>
   <a href="README_CN.md"><img alt="中文" src="https://img.shields.io/badge/文档-中文-ff5d96?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <img src="assets/previews/hero.gif" alt="CentralDark Halo cycles through working, attention, and completed states" width="960">
+  <a href="demo/hero.html">Hero preview - CentralDark Halo source</a>
 </p>
 
 ## One glance. Zero interruption.
 
-| Codex state | Halo | Meaning |
+| Operational state | Halo | Meaning |
 |---|---|---|
 | **Working** | Cyan-blue flow | Your turn is actively running |
 | **Needs you** | Amber pulse + notification | A permission decision is waiting |
@@ -31,17 +31,17 @@ underneath it. Every connected display gets its own synchronized edge overlay.
 When idle, all overlay windows are hidden. Native filesystem events are backed
 by a bounded check of only the eight most recent session files.
 
-## Download
+## Local release packages
 
 | Platform | Package |
 |---|---|
-| macOS 11+ (Intel + Apple Silicon) | [Download for macOS](https://github.com/qcodingdev/codex-halo/releases/latest) |
-| Windows 10/11 | [Download for Windows](https://github.com/qcodingdev/codex-halo/releases/latest) |
+| macOS 11+ (Intel + Apple Silicon) | [Download for macOS](docs/RELEASE.md) |
+| Windows 10/11 | [Download for Windows](docs/RELEASE.md) |
 
 The first release is unsigned. On macOS, right-click **CentralDark Halo.app** and
 choose **Open** the first time. Real-device smoke testing is complete on macOS
 Intel; Apple Silicon and Windows packages are built in CI and are explicitly
-not presented as real-hardware validation. The macOS download is one app that
+not presented as real-hardware validation. The macOS package is one app that
 contains both Intel `x86_64` and Apple Silicon `arm64` code.
 
 ## Install in under a minute
@@ -51,7 +51,7 @@ contains both Intel `x86_64` and Apple Silicon `arm64` code.
 1. Download and extract `CentralDark-Halo-macOS-Universal-v0.1.8.zip`.
 2. Run **Install CentralDark Halo.command**.
 3. Right-click **CentralDark Halo.app** → **Open** on first launch.
-4. Use Codex normally. Halo begins breathing automatically on the next task.
+4. Use a configured compatible activity source. Halo follows its lifecycle events.
 5. Choose **Demo Mode** from the menu-bar icon.
 
 The per-user installer copies the app to `~/Applications`. It does not add a
@@ -62,7 +62,7 @@ its own marked hooks, the installer removes only those obsolete entries.
 
 1. Download and extract `CentralDark-Halo-Windows-x64-v0.1.8.zip`.
 2. Run `Install-CentralDark-Halo.ps1` with PowerShell.
-3. Use Codex normally; no file, Hook, or trust configuration is required.
+3. Use the configured local integration; no additional Hook is required.
 4. Choose **Demo Mode** from the tray icon.
 
 No administrator permission or system-level `Program Files` write is required.

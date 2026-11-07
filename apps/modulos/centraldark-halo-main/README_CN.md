@@ -8,8 +8,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/qcodingdev/codex-halo/releases/latest"><img alt="下载 macOS" src="https://img.shields.io/badge/下载-macOS-00bfd8?style=for-the-badge"></a>
-  <a href="https://github.com/qcodingdev/codex-halo/releases/latest"><img alt="下载 Windows" src="https://img.shields.io/badge/下载-Windows-00bfd8?style=for-the-badge"></a>
+  <a href="docs/RELEASE.md"><img alt="下载 macOS" src="https://img.shields.io/badge/下载-macOS-00bfd8?style=for-the-badge"></a>
+  <a href="docs/RELEASE.md"><img alt="下载 Windows" src="https://img.shields.io/badge/下载-Windows-00bfd8?style=for-the-badge"></a>
   <a href="README.md"><img alt="English" src="https://img.shields.io/badge/Docs-English-263238?style=for-the-badge"></a>
 </p>
 
@@ -34,8 +34,8 @@ Halo 的透明窗口不会获取焦点，所有鼠标操作都会穿透到下面
 
 | 平台 | 发布包 |
 |---|---|
-| macOS 11+（Intel + Apple Silicon） | [下载 macOS 版](https://github.com/qcodingdev/codex-halo/releases/latest) |
-| Windows 10/11 | [下载 Windows 版](https://github.com/qcodingdev/codex-halo/releases/latest) |
+| macOS 11+（Intel + Apple Silicon） | [下载 macOS 版](docs/RELEASE.md) |
+| Windows 10/11 | [下载 Windows 版](docs/RELEASE.md) |
 
 首版暂未签名。macOS 第一次打开时，请右键 **CentralDark Halo.app**，选择
 **打开**。macOS Intel 已完成真机验收；Apple Silicon 和 Windows 当前

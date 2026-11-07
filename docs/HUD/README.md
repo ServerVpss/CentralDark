@@ -440,3 +440,14 @@ transparent background, click-through. No second engine. Existing user data
 and external Codex integration remain compatible; historical records preserved.
 SOURCE_ONLY; native rebuild, UI verification, Casa-main reconciliation PENDING.
 NEXT_CURSOR: CHECK_TESTS_READBACK -> MAIN_COMMIT -> CASA_RECONCILE -> UI_COUNTERPROOF.
+
+
+### CENTRALDARK_HALO_COMPAT_PROTECTION_20261107
+Code refs: apps/modulos/centraldark-halo-main/scripts/windows/Install-CentralDark-Halo.ps1,
+scripts/release/package-windows.ps1, and README.md.
+Reconciled existing Casa protections: native executable ProductName must match
+CentralDark Halo before installation and cargo/pnpm must exist before release staging.
+Legacy hook cleanup remains targeted. README download links now use the local release
+guide and current Hero HTML instead of an unrelated upstream release package.
+SOURCE_ONLY; rebuild, runtime, visual confirmation and Casa-main sync remain PENDING.
+NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.

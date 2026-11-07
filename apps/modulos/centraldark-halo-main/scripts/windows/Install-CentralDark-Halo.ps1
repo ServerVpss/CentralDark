@@ -23,6 +23,13 @@ foreach ($Required in @($AppSource, $ManagerSource)) {
     if (-not (Test-Path $Required)) { throw "Release file is missing: $Required" }
 }
 
+# #OBSERVACOES# @owner: centraldark-halo-main @doc_ref: docs/ARCHITECTURE.md
+# SOURCE_FIRST_GATE: a renamed executable alone is not a rebuilt CentralDark Halo.
+$BuiltProduct = [Diagnostics.FileVersionInfo]::GetVersionInfo($AppSource).ProductName
+if ($BuiltProduct -ne "CentralDark Halo") {
+    throw "BLOCKED_UNBUILT_HALO: executable metadata mismatches current source; rebuild first."
+}
+
 New-Item -ItemType Directory -Force -Path $InstallDir, $HaloDir, $CodexDir | Out-Null
 Copy-Item $ManagerSource $ManagerDest -Force
 
@@ -40,7 +47,7 @@ if ([int]$ExistingCount -ne 0) {
     if ([int]$Count -ne 0) { throw "Legacy Halo hook removal was incomplete." }
     Write-Host "[PASS] Removed obsolete Halo hooks; desktop lifecycle detection is built in" -ForegroundColor Green
 }
-Remove-Item (Join-Path $HaloDir "centraldark-halo-hook.ps1") -Force -ErrorAction SilentlyContinue
+Remove-Item (Join-Path $HaloDir "codex-halo-hook.ps1") -Force -ErrorAction SilentlyContinue
 
 if (Test-Path $LegacyHooksFile) {
     $LegacyBackup = "$LegacyHooksFile.backup.$(Get-Date -Format 'yyyyMMdd-HHmmss')"
@@ -51,7 +58,7 @@ if (Test-Path $LegacyHooksFile) {
     Write-Host "[PASS] Removed legacy Halo hooks from hooks.json; other hooks were preserved" -ForegroundColor Green
 }
 
-Get-Process CentralDarkHalo -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process CentralDarkHalo, CodexHalo -ErrorAction SilentlyContinue | Stop-Process -Force
 Copy-Item $AppSource $AppDest -Force
 Write-Host "[PASS] Installed $AppDest" -ForegroundColor Green
 
@@ -70,5 +77,5 @@ try {
 Start-Process $AppDest
 Write-Host ""
 Write-Host "Installation complete."
-Write-Host "Open Codex normally — Halo detects local lifecycle events automatically."
+Write-Host "CentralDark Halo detects supported local activity events."
 Write-Host "Use the tray icon > Demo Mode for the 8-second preview."
