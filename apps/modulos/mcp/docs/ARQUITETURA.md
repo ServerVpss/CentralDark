@@ -203,3 +203,19 @@ autorização e a regra de que representação visual não substitui realidade m
 O mapeamento integral Desktop Commander → auditoria MCP → Tool Call Lens → Cockpit, com os dois perfis systemd, a matriz de owners, a fronteira entre chamada externa e audit interno, testes, botões, PID/CID, gates e rollback, está registrado em [`2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md`](../../../../docs/CONSCIENCIA/RECEIPTS/2026-10-17-TOOL-CALL-LENS-DESKTOP-COMMANDER-RECEITA.md).
 
 SOURCE_COMMITTED nos PRs #1842 e #1838 não é prova de runtime instalado.
+
+
+## Convergência do `mcp-admin-ui` legado — 2026-11-07
+
+**Owner técnico preservado:** `apps/modulos/mcp/`; endpoints OAuth, `/api/mcp`, audit-logger, SSE, logs, catálogo e políticas não são movidos. **Único owner visual:** `apps/instinto-superior/` (PR #1946, commit `922e1c6`).
+
+| Capacidade do frontend independente | Destino canônico ou descarte justificado |
+| --- | --- |
+| `AuditTab` (consultas a `/admin/api/logs`) | `ObservabilidadeCentralDark.tsx` → Tool Call Lens, Central de Logs; filtragem backend `cid/rota/level/q` continua em `src/admin.js` |
+| `OperationalHud` (timeline de amostra e botões sem handlers) | Instinto Superior: observabilidade real; **não** copiar timeline estática ou simular botões funcionais |
+| `ToolsTab`, `MetricCard`, `OverviewTab` | `McpAdminIntegrado.tsx` + `McpConsoleCentralDark.tsx`; apenas métricas observadas, nunca `tools ativas = total` presumido |
+| `ConnectorTab` | `McpConsoleCentralDark.tsx` documenta `https://mcp.centralldark.com/api/mcp`; snippets legados `/mcp` não são reintroduzidos |
+| `OAuthClientsTab`, `KeysTab` | placeholders sem backend de listagem de clientes/chaves dedicadas; OAuth `/authorize`, `/token`, `/register` permanece no MCP; não declarar emissão de chaves pronta |
+| `App`, páginas Login/Admin, componentes visuais e configuração Vite | Casca/entrada Admin únicas do Instinto Superior; sem servidor ou login duplicado |
+
+**Condição de prova:** retirada do source em branch/commit não comprova deploy; E2E OAuth 404 e captura de Commander externo permanecem independentes. Preservar os recibos/lembranças históricas e validar consumidores antes de remover o diretório físico de checkouts divergentes. `UNKNOWN != PASS`.
