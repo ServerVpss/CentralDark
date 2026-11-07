@@ -430,3 +430,13 @@ PENDENCIA DE CONSUMO/VISUAL: as tentativas de foco/reload da janela `Code.exe` P
 - **HUD:** referencia documental pronta para a missao. A UI existente `apps/instinto-superior/src/components/central/CheckpointCentralDark.tsx` exibe missao/NEXT_CURSOR/SHA e consulta a cada 30 s, mas seu leitor `apps/instinto-superior/src/lib/checkpoint.functions.ts` linhas 40 e 81 usa a rota na VPS `/root/.hermes/centraldark/bin/centraldark-entry.py`. O checkpoint desta operacao foi escrito na **Casa Windows**: NAO afirmar sincronizacao com a VPS. **HUD_UI_CONSUMER=SOURCE_PRESENT / CROSS_HOST_READBACK_PENDING**; reconciliar pela rota autorizada existente e provar na tela autenticada. `docs/HUD/README.md` nao e banco do checkpoint, sem novo painel ou rota.
 - **INVARIANTES:** `SOURCE_EXISTS != MIGRATED`; `CHECKPOINT_VERIFIED != GOAL_COMPLETE`; `LAST_VERIFIED != LATEST_USER_INTENT`; missao isolada e preservada; nenhuma exclusao, reparenting ou movimentacao no HOME.
 <!-- /CENTRALDARK_HERMES_ENVELOPE_VERIFIED_CHECKPOINT_20261107 -->
+
+
+### CENTRALDARK_HALO_REBRAND_HERO_PARITY_20261107
+OWNER: apps/modulos/centraldark-halo-main. Active component: CentralOverlay.tsx.
+Cockpit integration: CentralDarkHaloHarness.tsx. Product: CentralDark Halo.
+Hero parity source includes decorative window, center logo/message, edge timing,
+transparent background, click-through. No second engine. Existing user data
+and external Codex integration remain compatible; historical records preserved.
+SOURCE_ONLY; native rebuild, UI verification, Casa-main reconciliation PENDING.
+NEXT_CURSOR: CHECK_TESTS_READBACK -> MAIN_COMMIT -> CASA_RECONCILE -> UI_COUNTERPROOF.

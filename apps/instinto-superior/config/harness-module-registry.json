@@ -7,11 +7,11 @@
   "reuse_before_create": true,
   "modules": [
     {
-      "id": "codex-halo",
-      "owner": "apps/modulos/codex-halo-main",
+      "id": "centraldark-halo",
+      "owner": "apps/modulos/centraldark-halo-main",
       "transport": "native-cockpit-import",
       "runtime_status": "UNKNOWN",
-      "integration_owner": "apps/instinto-superior/src/components/central/CodexHaloHarness.tsx",
+      "integration_owner": "apps/instinto-superior/src/components/central/CentralDarkHaloHarness.tsx",
       "state_mapping": { "RUNNING": "working", "PASS": "completed", "BLOCKED": "attention", "AUTH_REQUIRED": "attention", "FAIL": "attention", "UNKNOWN": "idle" },
       "interaction_policy": "pointer-events-none; Hermes/Cua remains the executor"
     },
