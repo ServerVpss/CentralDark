@@ -20,6 +20,14 @@ function activate(context) {
     emitTrace('activate', 'PASS');
     context.subscriptions.push(vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)), vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)), vscode.commands.registerCommand('centraldark.showProjectFolders', async () => {
         await vscode.commands.executeCommand('centraldarkWorkspaceFolders.focus');
+    }),
+    // Reparacao pontual do layout original: a API interna abre o seletor
+    // de destino para esta unica view, sem resetar as demais localizacoes.
+    vscode.commands.registerCommand('centraldark.restoreNativeExplorer', async () => {
+        // O comando do proprio VS Code restaura SOMENTE a view original.
+        // Nao usa "Reset View Locations" global e nao toca no state.vscdb.
+        await vscode.commands.executeCommand('workbench.explorer.fileView.resetViewLocation');
+        await vscode.commands.executeCommand('workbench.view.explorer');
     }), vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
     vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal), vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)), vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)), vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid), vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)), vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)), vscode.commands.registerCommand('centraldark.checkUpdates', () => (0, autoUpdater_1.checkVsCodeUpdates)(context, sshExecutable, VPS_ROUTES, true)), vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => (0, remote_terminal_1.configureRemoteTerminal)(context)), vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => (0, remote_terminal_1.remoteTerminalStatus)(context)), vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog), vscode.commands.registerCommand('centraldark.showTrace', () => {

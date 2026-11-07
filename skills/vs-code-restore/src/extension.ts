@@ -46,6 +46,13 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('centraldark.showProjectFolders', async () => {
       await vscode.commands.executeCommand('centraldarkWorkspaceFolders.focus');
     }),
+    // Recupera somente a view nativa Arquivos, sem reset global.
+    vscode.commands.registerCommand('centraldark.restoreNativeExplorer', async () => {
+      // O comando do proprio VS Code restaura SOMENTE a view original.
+      // Respeita as demais personalizacoes e o storage existente.
+      await vscode.commands.executeCommand('workbench.explorer.fileView.resetViewLocation');
+      await vscode.commands.executeCommand('workbench.view.explorer');
+    }),
     vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
     vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal),

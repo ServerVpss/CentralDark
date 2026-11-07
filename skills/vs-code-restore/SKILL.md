@@ -492,3 +492,15 @@ ACHADO VIVO: em %APPDATA%/Code/User/globalStorage/state.vscdb (somente leitura),
 PROVA/ESTADO: MANIFEST_SPLIT + TSC + TEST + VSIX + INSTALLED_ID + UIA_ICON + NATIVE_FILES_IN_EXPLORER s?o comprova??es independentes. S? marcar como PASS os itens efetivamente medidos. Sem mexer nas sess?es e na source original do VS Code.
 NEXT_CURSOR: compilar extens?o, empacotar VSIX do mesmo owner, instalar no VS Code da Casa sem reiniciar a bancada, observar ?cone pr?prio e restaurar somente a view nativa Arquivos por interface autorizada.
 <!-- /CENTRALDARK_NATIVE_EXPLORER_SEPARATE_ACTIVITYBAR_20261107 -->
+
+
+<!-- CENTRALDARK_NATIVE_EXPLORER_RESTORED_UIA_20261107 -->
+## Restitui??o do Explorador oficial via comando nativo (07/11/2026)
+
+- INTEN??O: restaurar a visualiza??o Arquivos ? localiza??o original SEM modificar Vibe Coding, abas, navegador, perfis, sess?es nem outras visualiza??es reposicionadas pelo CHEFE.
+- OWNER EXISTENTE: skills/vs-code-restore (mesmo ID da extens?o centraldark.centraldark-vscode-restore). A vers?o 0.2.5 acrescenta ao comando j? registrado centraldark.restoreNativeExplorer a a??o individual workbench.explorer.fileView.resetViewLocation, seguida de foco em workbench.view.explorer. N?O executar workbench.action.resetViewLocations global.
+- EXECU??O REAL (Casa SEGREDO): TypeScript PASS; teste de cone 8/8 PASS; empacotado centraldark-vscode-restore-0.2.5.vsix (80.902 bytes, SHA256 51e702660301687e2d216c3f3ffb0ebd6a3214b0ed09032d41ce87a85c7192f9); instala??o code.cmd --install-extension --force EXIT 0; lista de extens?es confirmou @0.2.5; recarregamento da janela existente; comando localizado/invocado por UIAutomation autorizado.
+- CONTRAPROVA: globalStorage/state.vscdb lido SOMENTE em read-only mostrou workbench.explorer.fileView fora do mapa de customiza??es, portanto DEFAULT_NATIVE_EXPLORER; nenhuma mudan?a via SQL. O mesmo UIAutomation identificou simultaneamente as abas de atividade Explorador (Ctrl+Shift+E) e CentralDark Vibe Coding, o bot?o Atualizar Explorador e a ?rvore Explorador de Arquivos. As demais posi??es personalizadas permaneceram com dez entradas no mapa de viewLocations. READBACK_UI_NATIVE_EXPLORER=PASS; READBACK_UI_CENTRALDARK_ICON=PASS; CHECKPOINT/HUD remoto separado.
+- O registro do estado GUI ? diferente da publica??o no GitHub: ainda exigir SHA/readback do commit desta vers?o e diferenciar branch PR #1993, main, release e instala??o.
+- NEXT_CURSOR: preservar o menor delta na branch da PR #1993, conferir SHA/arquivos no GitHub; manter release hist?rico 0.2.2 intacto e n?o publicar automaticamente 0.2.5 sem prova/gates.
+<!-- /CENTRALDARK_NATIVE_EXPLORER_RESTORED_UIA_20261107 -->

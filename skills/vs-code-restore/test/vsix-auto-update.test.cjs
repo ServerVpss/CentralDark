@@ -37,3 +37,13 @@ test('same CentralDark extension owns a separate Activity Bar icon, not native E
   assert.deepEqual(c.views[container.id].map(v => v.id), ['centraldarkVibeCoding', 'centraldarkWorkspaceFolders']);
   assert.equal(c.views[container.id][0].type, 'webview');
 });
+
+
+test('native Files view is restored only via its own VS Code reset command', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  const src = fs.readFileSync(path.join(root, 'src', 'extension.ts'), 'utf8');
+  const cmd = pkg.contributes.commands.find(c => c.command === 'centraldark.restoreNativeExplorer');
+  assert.ok(cmd, 'existing extension must expose targeted restore command');
+  assert.match(src, /executeCommand\('workbench\.explorer\.fileView\.resetViewLocation'\)/);
+  assert.doesNotMatch(src, /resetViewLocations|state\.vscdb|globalStorage\state/);
+});
