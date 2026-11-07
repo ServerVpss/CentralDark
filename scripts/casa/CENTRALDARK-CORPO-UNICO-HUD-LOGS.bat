@@ -257,7 +257,9 @@ function Refresh-Scripts {
   }
   $known=@(
     (Join-Path $env:TEMP 'centraldark-hud-unified\centraldark-hud-live.log'),
-    'F:\Bridge\logs\bridge.log'
+    'F:\Bridge\logs\bridge.log',
+    # Existing Casa bridge redirects agent stdout to this log.
+    (Join-Path $env:LOCALAPPDATA 'CentralDark\Remote-Tray\receipts\remote-bridge\casa-commander.stdout.log')
   )
   foreach($path in $known) {
     if(Test-Path -LiteralPath $path -PathType Leaf) {
