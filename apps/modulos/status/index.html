@@ -240,7 +240,85 @@
         <div class="section-title">
           <div><p class="eyebrow">Time de bots</p><h2>🤖 Bots especialistas</h2></div>
         </div>
-        <div class="card-grid" id="botCardsList"></div>
+        <!-- Prévia somente visual: registros reais do histórico de agosto/2026.
+             Não representa saúde atual, não executa bots, não substitui o feed vivo. -->
+        <div style="margin:10px 0 16px;padding:12px 14px;border:1px solid #c9973b;border-radius:12px;background:rgba(201,151,59,.08)">
+          <strong style="display:block;margin-bottom:4px">📜 Como este setor aparecia · agosto/2026</strong>
+          <small>5 cartões do commit 9fce580e8b0d · status e progresso históricos, inclusive erros.
+          Nenhum estado abaixo comprova funcionamento atual.</small>
+        </div>
+        <div class="card-grid" id="botCardsHistoricalPreview" aria-label="Prévia histórica dos cinco bots">
+          <article class="av-card" data-historico-bot="bot-telegram">
+            <div class="av-head"><h3>CentralDark TelegramBot</h3><span class="av-badge p3">p3</span></div>
+            <p>@srver1bot online · polling · script restaurado do git + bootstrap Multizap removido (28/06)</p>
+            <div class="bar"><i style="width:98%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Telegram</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">98%</span>
+              <span class="av-badge">PM2: CentralDark-TelegramBot</span>
+            </div>
+            <p class="av-next">▶ Monitorar uptime via PM2</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-botserver">
+            <div class="av-head"><h3>CentralDark BotServer</h3><span class="av-badge p3">p3</span></div>
+            <p>Servidor de bot online. Lote 11 pendente (Issue #128).</p>
+            <div class="bar"><i style="width:90%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">API</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">90%</span>
+              <span class="av-badge">PM2: CentralDark-BotServer</span>
+            </div>
+            <p class="av-next">▶ Aplicar Lote 11 na VPS (Issue #128)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-multizap">
+            <div class="av-head"><h3>MultiZap-BOT</h3><span class="av-badge p1">p1</span></div>
+            <p>PM2 status: errored. Causa raiz não investigada (baixa prioridade — P4).</p>
+            <div class="bar"><i style="width:0%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-erro">erro</span>
+              <span class="av-badge">WhatsApp</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">0%</span>
+              <span class="av-badge">PM2: MultiZap-BOT</span>
+            </div>
+            <p class="av-next">▶ Investigar causa raiz — aguardar pedido do Pivete (P4)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-deploy">
+            <div class="av-head"><h3>DEPLOY Webhook</h3><span class="av-badge p3">p3</span></div>
+            <p>Recebe push do GitHub via webhook e puxa código novo automaticamente.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">CI/CD</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: CentralDark-DEPLOY</span>
+            </div>
+            <p class="av-next">▶ Monitorar deploys</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-vigia">
+            <div class="av-head"><h3>Vigia (monitor_tarefas)</h3><span class="av-badge p3">p3</span></div>
+            <p>Monitora serviços e notifica canal Telegram em caso de alerta.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Monitoramento</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: monitor_tarefas</span>
+            </div>
+            <p class="av-next">▶ Monitorar alertas</p>
+          </article>
+        </div>
+        <details style="margin-top:16px">
+          <summary style="cursor:pointer;font-weight:600">🔎 Dados vivos deste setor (se disponíveis)</summary>
+          <p style="font-size:12px;opacity:.75;margin:8px 0">Esta lista continua recebendo painel-data.json; quando não houver botCards, a ausência permanece visível.</p>
+          <div class="card-grid" id="botCardsList"></div>
+        </details>
       </section>
 
       <section class="panel wide" id="healthcheckPanel">
