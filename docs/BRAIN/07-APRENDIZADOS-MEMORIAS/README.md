@@ -23,6 +23,17 @@ centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA
 | [03-APRENDIZADOS](03-APRENDIZADOS/) | Correções, soluções, erros, contratos e contraprovas | Aprender a causa, aplicar menor delta e revalidar só onde necessário |
 | [04-MEMORIAS](04-MEMORIAS/) | História, experiências e evolução narrada pelo CHEFE | Contextualizar com respeito, sem presumir sentimentos ou permissões |
 
+## 🧠 META-RSI 40/40: índice SELF das lembranças
+
+Cada nota preserva `centraldark_self_primary`, `centraldark_self_related`, `centraldark_self_skill_refs` e `centraldark_self_catalog`, apontando à [matriz META-RSI oficial](../../../.agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md). O escritor existente atribui SELF pertinentes às notas novas; a busca devolve seus SELF e contexto para o consumidor. O [método 40/40](../../../.agents/skills/centraldark-operational-method/Skills/meta-rsi/SKILL.md) determina revisar as 40 capacidades como `APPLIED` ou `NOOP_JUSTIFIED`. **Metadado não autoriza modificar código:** execução cabe ao Hermes existente, com writer único, teste, contraprova, recibo e NEXT_CURSOR. A quarentena documentada do carregador permanece intacta.
+
+```dataview
+TABLE centraldark_self_primary AS "SELF", centraldark_self_related AS "Relacionados"
+FROM "07-APRENDIZADOS-MEMORIAS"
+WHERE centraldark_self_primary
+SORT centraldark_self_primary ASC
+```
+
 ## Propriedades herdadas pelas notas
 
 `centraldark_note_schema` (contrato), `centraldark_category` (gaveta), `centraldark_kind` (tipo), `centraldark_context_owner` (CHEFE), `centraldark_intent_anchor` (assunto humano), `centraldark_agent_recall` (como recuperar), `centraldark_metabolic_roles` (papéis funcionais), `centraldark_kaizen_phase` ou `centraldark_kaizen_trigger` (laço de aprendizado), `centraldark_kaizen_policy` (fonte do Kaizen), `centraldark_kaizen_runtime` (limite da prova), `centraldark_previous_path` e `centraldark_previous_blob_sha` (proveniência quando aplicável).
