@@ -1,0 +1,211 @@
+# CentralDark ROV — Michelin: multimodal, MCP e Hermes Visual
+schema: centraldark.rov.v1
+id: ROV-20-MICHELIN-IA-MCP-HERMES-VISUAL
+versao: "1.0"
+idioma: pt-BR
+estado_documental: DOCUMENTADO_NAO_EXECUTADO
+data_referencia: "2026-11-07"
+
+INTENÇÃO:
+  objetivo: >-
+    Receber a ordem do CHEFE, interpretar o contexto multimodal,
+    localizar o controle real na janela autorizada, acionar somente
+    o executor visual existente e provar o efeito por readback.
+  exemplo: "Abra Estado do MCP na Sala de Controle."
+  criterio_de_pronto: "Objetivo confirmado por prova visual e independente; nao basta enviar clique."
+
+OWNER:
+  repositorio: ServerVpss/CentralDark
+  branch: main
+  entrada: LEIA-ME-IA.md
+  regras: RULES.md
+  agentes: AGENTS.md
+  skill_mae: .agents/skills/centraldark-operational-method/SKILL.md
+  hermes_visual: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md
+  identificador: .agents/skills/centraldark-operational-method/scripts/Identify-CentralDarkMonitors.ps1
+  clique: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py
+  transporte: apps/modulos/mcp/
+  interface: apps/instinto-superior/
+  comprovacao: "Usar receipts e checkpoints do mesmo owner; nao criar segundo ledger."
+
+CURRENT:
+  historico_nao_equivale_a_estado_vivo: true
+  observado_anteriormente:
+    - "UIAutomation identificou o controle Estado do MCP na Casa."
+    - "Cursor Cua com overlay executou clique; readback confirmou navegacao."
+    - "O painel depois exibiu Failed to fetch; backend nao foi comprovado."
+    - "MCP publico OAuth e tools/list por plugin permaneciam pendentes."
+  revalidar:
+    - "HEAD e worktree atual"
+    - "janela, monitor, PID e HWND atuais"
+    - "alvo UIAutomation unico e visivel"
+    - "Cua ativo com overlay"
+    - "OAuth, tools/list e tool call reais, quando o pedido exigir MCP"
+  principio: "DOCUMENTED != EXECUTED; DISPATCHED != EFFECT_PROVEN; UNKNOWN != PASS"
+
+ESCOPO:
+  incluir:
+    - "Interpretar ordem do CHEFE sem ampliar o alvo."
+    - "Observar screenshot/UIAutomation/Browser por rotas autorizadas existentes."
+    - "Resolver controle atual, monitor e janela antes de clicar."
+    - "Chamar somente Hermes Visual e Cua ja instalados."
+    - "Comparar antes/depois e backend quando pertinente."
+    - "Emitir recibo no contrato existente e NEXT_CURSOR."
+  excluir:
+    - "novo motor, novo MCP, novo HUD, nova ponte ou segundo escritor"
+    - "alteracao de Cloudflare, OAuth, secrets ou runtime sem diagnostico e autorizacao"
+    - "reset, clean, force push, delecao de worktrees, merge e deploy implicitos"
+
+AMBIENTE:
+  alvo_visual: "Casa SEGREDO — Windows, PowerShell, UIAutomation e Cua"
+  checkout_referencia: 'F:\CentralDark'
+  forja: "openKylin/Linux — apenas sondagem SSH/Bash quando explicitamente pertinente"
+  modelo: "ChatGPT/IA multimodal decide; nao faz clique sem ferramenta conectada."
+  plugin: "Ponto de entrada opcional do ChatGPT; nao e executor."
+  mcp: "Protocolo de chamadas; autenticacao e ferramentas exigem prova real."
+  skill: "Metodo operacional reutilizado."
+  hermes: "Executor visual existente."
+
+CLASSIFICAÇÃO: BOUNDED
+RISCO: MEDIUM
+BLAST_RADIUS: "Uma janela e um controle; mutacao visual somente com autorizacao."
+PRÉ_CONDIÇÕES:
+  - "Checkout e paths dos owners acessiveis."
+  - "Sessao Windows autorizada e identificavel; nenhum outro writer na mesma janela."
+  - "Ordem de clique explicitamente autorizada, quando modo CLICK."
+  - "Alvo UIAutomation unico; titulo, PID, HWND e monitor atuais."
+  - "Cua ativo e pronto com overlay; nao iniciar daemon paralelo."
+  - "Receita Kimetsu/Michelin consultada no owner antes de mutar."
+
+AÇÕES_PROIBIDAS:
+  - "Clicar quando alvo for ausente, duplicado, invisivel ou stale."
+  - "Usar coordenadas ou PIDs gravados historicamente."
+  - "Substituir Cua virtual por mouse fisico ou bypass de auth."
+  - "Repetir clique por falta de resposta sem reobservar."
+  - "Copiar tokens, cookies, screenshots privadas ou segredos para receipts."
+  - "Declarar PASS por retorno de CLI, commit ou tela isolada."
+
+COMANDO_EXECUTÁVEL:
+  shell: powershell
+  modo_padrao: AUDIT
+  instrucao: "Na Casa, editar somente variaveis iniciais; por padrao NENHUM clique."
+  script: |
+    $ErrorActionPreference = 'Stop'
+    $Repo = 'F:\CentralDark'
+    $WindowTitle = 'CentralDark'
+    $ControlName = 'Estado do MCP'
+    $Mode = 'AUDIT'          # AUDIT ou CLICK
+    $Autorizacao = ''        # Para CLICK: CHEFE_AUTORIZOU_CLIQUE
+
+    $Method = Join-Path $Repo '.agents\skills\centraldark-operational-method'
+    $Owner = Join-Path $Method 'SKILL.md'
+    $Resolver = Join-Path $Method 'scripts\Identify-CentralDarkMonitors.ps1'
+    $Cursor = Join-Path $Method 'Skills\centraldark-hermes-visual-computer-use\scripts\blink_cursor.py'
+    foreach ($p in @($Repo,$Owner,$Resolver,$Cursor)) {
+      if (-not (Test-Path -LiteralPath $p)) { throw "UNKNOWN: caminho ausente: $p" }
+    }
+    $Head = (& git -C $Repo rev-parse HEAD)
+    if ($LASTEXITCODE -ne 0) { throw 'UNKNOWN: Git nao respondeu' }
+    $Before = @(& powershell.exe -NoProfile -NonInteractive -File $Resolver -ResolveControl -WindowTitle $WindowTitle -ControlName $ControlName)
+    if ($LASTEXITCODE -ne 0 -or $Before.Count -eq 0) { throw 'BLOCKED: alvo nao comprovado' }
+    try { $Target = $Before[-1] | ConvertFrom-Json }
+    catch { throw 'BLOCKED: resultado UIAutomation invalido' }
+    if ($Target.input_dispatched -ne $false -or [int]$Target.pid -le 0 -or [int]$Target.hwnd -le 0 -or [int]$Target.monitor -le 0) {
+      throw 'BLOCKED: janela/monitor/alvo sem prova atual'
+    }
+
+    $ActionStatus = 'AUDIT_ONLY'
+    if ($Mode -eq 'CLICK') {
+      if ($Autorizacao -ne 'CHEFE_AUTORIZOU_CLIQUE') { throw 'BLOCKED: falta autorizacao explicita' }
+      & python $Cursor --mode click --window-title $WindowTitle --control-name $ControlName
+      if ($LASTEXITCODE -ne 0) { throw 'FAIL: executor Cua retornou erro' }
+      $ActionStatus = 'DISPATCHED_EFFECT_UNKNOWN'
+    } elseif ($Mode -ne 'AUDIT') {
+      throw 'BLOCKED: modo desconhecido'
+    }
+    [pscustomobject]@{
+      schema = 'centraldark.rov.receipt.v1'
+      objetivo = $ControlName
+      head = ($Head | Select-Object -First 1)
+      window = $WindowTitle
+      pid = $Target.pid
+      hwnd = $Target.hwnd
+      monitor = $Target.monitor
+      modo = $Mode
+      resultado_execucao = $ActionStatus
+      readback_visual = 'UNKNOWN'
+      prova_runtime = 'UNKNOWN'
+      time_utc = [datetime]::UtcNow.ToString('o')
+    } | ConvertTo-Json -Depth 5
+
+LÓGICA_DO_COMANDO:
+  - "01 Verifica os owners reais e coleta HEAD sem tocar no checkout."
+  - "02 Usa ResolveControl do script canônico para identificar janela e botão."
+  - "03 Bloqueia alvo ambiguo, ausente ou sem IDs reais."
+  - "04 Em AUDIT apenas informa identidade e contexto."
+  - "05 Em CLICK autorizado, chama blink_cursor.py existente com resolucao dinamica."
+  - "06 Retorno do clique fica DISPATCHED_EFFECT_UNKNOWN ate contraprova."
+
+CRITÉRIOS_PASS:
+  auditoria: "Owners presentes, alvo unico, valores atuais e verificacao sem erro."
+  execucao: "Autorizacao, Cua sem erro e rastro de chamada."
+  objetivo: "Estado visual posterior e fonte independente confirmam a intencao."
+CRITÉRIOS_FAIL:
+  - "Executor com erro, clique em alvo errado, alteracao incorreta ou backend com erro."
+CRITÉRIOS_UNKNOWN:
+  - "Sem readback, janela inacessivel, monitor ambiguo, OAuth ausente ou plugin desconectado."
+  - "Execucao despachada sem evidência do efeito."
+
+RECIBO:
+  destino: "Checkpoint/receipt canônico da Skill Mãe e docs/HUD/README.md para resumo documental."
+  gravacao_automatica_por_este_comando: false
+  formato: "JSON com timestamp UTC"
+  campos:
+    - intent_id
+    - owner
+    - head
+    - dispositivo
+    - window
+    - pid
+    - hwnd
+    - monitor
+    - alvo
+    - autorizacao
+    - antes
+    - acao
+    - depois_visual
+    - prova_backend
+    - counterproof
+    - verdict
+    - next_cursor
+
+CONTRAPROVA:
+  visual: "Reler a mesma janela via UIAutomation e, quando disponivel, Browser.get_tab_context."
+  independente: "Verificar resposta do backend ou efeito real pelo owner pertinente."
+  mcp_publico: "Provar OAuth discovery -> tools/list -> tool call autorizado -> logs correlacionados."
+  teste_de_falsificacao: "Se clicou mas backend falhou, marcar PARTIAL ou FAIL, nao PASS completo."
+  estados: [PASS, FAIL, PARTIAL, UNKNOWN, BLOCKED]
+  regressao: "Verificar que nenhuma janela ou arquivo fora de escopo mudou."
+
+NEXT_CURSOR:
+  - "Medir ferramentas visuais ja expostas no catalogo MCP."
+  - "Identificar somente lacunas; reutilizar owner e transporte existentes."
+  - "Provar uma chamada visual autorizada pelo caminho ChatGPT -> MCP -> Hermes."
+  - "Fazer readback visual e independente; registrar receipt e fixed point."
+  - "Sem alterar OAuth ou deploy sem ordem e contraprova."
+
+REGRAS:
+  - REUSE_BEFORE_CREATE
+  - ONE_SYSTEM_ONLY
+  - ONE_WRITER_PER_SCOPE
+  - ZERO_REGRESSION
+  - UNKNOWN_NE_PASS
+  - ACTION_NE_PROOF
+  - DOCUMENTED_NE_EXECUTED
+  - MERGED_NE_DEPLOYED
+  - "A prova visual nao substitui protecoes tecnicas obrigatorias da main."
+
+SELO:
+  identidade: "MICHELIN TRÊS ESTRELAS"
+  julgamento: "Somente receipts e verificacoes reais atribuem PASS."
+  atual: "DOCUMENTADO; EXECUCAO DE CLIQUE E2E PELO MCP PUBLICO UNKNOWN."
