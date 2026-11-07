@@ -168,6 +168,68 @@ export function createCasaAgent(){
       return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false,
         last_authorized_tool:lastAuthorizedTool,
         mqtt:{enabled:MQTT_ENABLED,connected:mqttConnection?.connected===true,state:mqttState}});
+    // Streamable HTTP MCP: preserve the proven Casa runtime /mcp contract
+    // on the same process, loopback socket and existing Bearer authorization.
+    if(req.url==="/mcp"){
+      if(!authorized(req.headers.authorization))
+        return send(res,401,{jsonrpc:"2.0",id:null,error:{code:-32001,message:"MCP_AUTH_REQUIRED"}});
+      if(req.method!=="POST"){
+        res.setHeader("Allow","POST");
+        return send(res,405,{jsonrpc:"2.0",id:null,error:{code:-32600,message:"MCP_POST_REQUIRED"}});
+      }
+      let input;
+      try{input=await body(req);}catch{
+        return send(res,400,{jsonrpc:"2.0",id:null,error:{code:-32700,message:"MCP_INVALID_JSON"}});
+      }
+      const id=Object.hasOwn(input||{},"id")?input.id:null;
+      if(input?.jsonrpc!=="2.0"||typeof input.method!=="string")
+        return send(res,400,{jsonrpc:"2.0",id,error:{code:-32600,message:"MCP_INVALID_REQUEST"}});
+      if(input.method==="notifications/initialized"){
+        res.writeHead(202,{"cache-control":"no-store"});return res.end();
+      }
+      const ok=result=>send(res,200,{jsonrpc:"2.0",id,result});
+      const err=(code,message)=>send(res,200,{jsonrpc:"2.0",id,error:{code,message}});
+      try{
+        if(input.method==="initialize")
+          return ok({protocolVersion:"2025-06-18",capabilities:{tools:{listChanged:false}},
+            serverInfo:{name:"CentralDark Casa Commander",version:"1.0.0"}});
+        if(input.method==="ping")return ok({});
+        if(input.method==="tools/list"){
+          emitOperationalEvent("MCP_TOOLS_LIST", "REQUESTED");
+          await engine();
+          const catalog=await rpc("tools/list",{});
+          const allowWrite=process.env.CENTRALDARK_CASA_WRITE_ENABLED==="true";
+          const tools=(Array.isArray(catalog?.tools)?catalog.tools:[])
+            .filter(tool=>READ_ONLY_TOOLS.has(tool.name)||allowWrite);
+          emitOperationalEvent("MCP_TOOLS_LIST", "PASS");
+          return ok({tools});
+        }
+        if(input.method==="tools/call"){
+          const name=String(input.params?.name||"");
+          const args=input.params?.arguments;
+          if(!/^[a-z_]{3,64}$/.test(name)||!args||typeof args!=="object"||Array.isArray(args))
+            return err(-32602,"MCP_TOOL_INPUT_INVALID");
+          if(!READ_ONLY_TOOLS.has(name)&&process.env.CENTRALDARK_CASA_WRITE_ENABLED!=="true")
+            return err(-32003,"CASA_WRITE_DISABLED");
+          emitOperationalEvent("TOOL_REQUEST",name);
+          await engine();
+          const result=await rpc("tools/call",{name,arguments:args});
+          if(result?.isError!==true){
+            lastAuthorizedTool={
+              tool:name,kind:READ_ONLY_TOOLS.has(name)?"READ_ONLY":"MUTATION",
+              at:new Date().toISOString(),verified:true,
+            };
+            mqttPublish("receipt",lastAuthorizedTool);
+          }
+          emitOperationalEvent("TOOL_RESULT",name+" "+(result?.isError===true?"FAILED":"PASS"));
+          return ok(result);
+        }
+        return err(-32601,"MCP_METHOD_NOT_FOUND");
+      }catch{
+        emitOperationalEvent("MCP_REQUEST_FAILED", "NOT_PROVEN");
+        return err(-32603,"MCP_UPSTREAM_NOT_PROVEN");
+      }
+    }
     if(req.method!=="POST"||req.url!=="/tool")
       return send(res,404,{ok:false,error:"ROUTE_NOT_FOUND"});
     if(!authorized(req.headers.authorization))
