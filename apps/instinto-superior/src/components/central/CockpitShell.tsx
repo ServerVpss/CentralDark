@@ -430,6 +430,20 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const [abaAtiva, definirAbaAtiva] = useState("visao");
   const [buscaNavegacao, definirBuscaNavegacao] = useState("");
   const [menuAberto, definirMenuAberto] = useState(true);
+  const focarBuscaAoAbrir = useRef(false);
+  useEffect(() => {
+    if (!menuAberto || !focarBuscaAoAbrir.current) return;
+    focarBuscaAoAbrir.current = false;
+    document.getElementById("busca-navegacao")?.focus();
+  }, [menuAberto]);
+  const abrirBuscaNavegacao = () => {
+    if (menuAberto) {
+      document.getElementById("busca-navegacao")?.focus();
+      return;
+    }
+    focarBuscaAoAbrir.current = true;
+    definirMenuAberto(true);
+  };
   const [abaRestaurada, definirAbaRestaurada] = useState(false);
   useEffect(() => {
     const restaurar = () => {
@@ -597,18 +611,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       data-pele-cockpit={pele}
       className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
     >
-      {harnessVisivel && gaveta === null ? (
-        <nav
-          aria-label="Harness flutuante superior"
-          data-cd-harness="top-floating"
-          className="fixed left-1/2 top-1 z-[60] hidden -translate-x-1/2 items-center gap-1 rounded-2xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur sm:flex"
-        >
-          <Button size="sm" variant="ghost" title="CentralDark" aria-label="CentralDark · visão geral" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-          <Button size="icon" variant="ghost" title="Lupa · buscar ferramentas" aria-label="Lupa · buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
-          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("right")}><Layers3 className="size-4" /></Button>
-          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => { definirAbaAdminInicial("notificacoes"); abrirDestino("admin"); }}><Bell className="size-4" /></Button>
-        </nav>
-      ) : null}
       {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
       <header
         className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
@@ -700,13 +702,11 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       ) : null}
       {harnessVisivel ? (
         <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
-          <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
           {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
             definirAbaAdminInicial("notificacoes");
             definirVersaoAdmin((n) => n + 1);
             abrirDestino("admin");
           }} /> : null}
-          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
@@ -908,7 +908,13 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
               <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
                 <SidebarHeader className="border-b border-border px-3 py-4">
-                  <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:hidden">🪬 CentralDark</span>
+                  <div className="flex min-h-9 items-center justify-between gap-1">
+                    <span className="min-w-0 truncate text-sm font-semibold group-data-[collapsible=icon]:sr-only">🪬 CentralDark</span>
+                    <div className="flex shrink-0 items-center gap-0.5 group-data-[collapsible=icon]:flex-col">
+                      <Button type="button" size="icon" variant="ghost" title="Pesquisar ferramentas" aria-label="Pesquisar ferramentas" onClick={abrirBuscaNavegacao} className="size-8"><Search className="size-4" /></Button>
+                      <SidebarTrigger title="Ocultar ou mostrar barra lateral" aria-label="Ocultar ou mostrar barra lateral" className="size-8" />
+                    </div>
+                  </div>
                   <label htmlFor="busca-navegacao" className="text-xs text-muted-foreground group-data-[collapsible=icon]:sr-only">Procurar ferramenta</label>
                   <input id="busca-navegacao" type="search" value={buscaNavegacao} onChange={(e) => definirBuscaNavegacao(e.target.value)}
                     placeholder="Procurar: senha, cor, Hermes..."
@@ -948,8 +954,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <div className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4"
                      aria-label="Localização e estado da Sala de Controle">
                   <div className="flex min-w-0 items-center gap-3">
-                    <SidebarTrigger aria-label="Abrir ou recolher menu" className="size-10 shrink-0" />
-                    <SidebarTrigger aria-label="Abrir menu lateral" className="fixed bottom-20 left-3 z-[70] size-12 rounded-full border border-border bg-background shadow-xl md:hidden" />
                     <span className="truncate text-sm font-semibold">{pastaAtiva?.pasta ?? "Sala de Controle"} › {tituloAbaAtiva}</span>
                   </div>
                   {(() => {
