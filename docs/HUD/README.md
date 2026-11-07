@@ -1,6 +1,14 @@
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 ## HUD operacional conversacional — ponto fixo de apresentacao
 
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+
 Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark-operational-method`. Chamar `!HUD` ou `#HUD`; usar exatamente um quadro monoespacado NO TOPO da resposta e a resposta operacional ABAIXO. Preservar quesitos numerados, textos completos, status e provas. Cada nova missao substitui apenas o conteudo ATIVO do quadro; preservar historico das missoes neste mesmo owner. So alterar estado de quesito apos conclusao e contraprova. `FORMATO_APROVADO` nao significa missao concluida. Fora do repo/contexto, `HUD_SOURCE=UNKNOWN`; nao afirmar memoria ou sincronizacao entre conversas sem readback. Reconciliador unico: `scripts/centraldark-inventory-reconcile.sh`. O bloco Hermes que segue e o checkpoint vigente, nao um HUD paralelo.
 
 ### CENTRALDARK_MISSION_HUD_33_20261107 — quadro ativo único (01–33)
