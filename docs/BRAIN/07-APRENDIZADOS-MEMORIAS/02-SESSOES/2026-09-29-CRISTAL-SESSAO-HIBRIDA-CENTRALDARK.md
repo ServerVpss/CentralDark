@@ -20,6 +20,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "f4fcdcfa5176c665054fc75909324b6ba9d2c89a"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-CRISTAL-SESSAO-HIBRIDA-CENTRALDARK.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Orientation"
+centraldark_self_related: ["Self-Integration","Self-Regulation"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-orientation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-integration/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-regulation/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # Núcleo — cristal da sessão híbrida 2026-09-29

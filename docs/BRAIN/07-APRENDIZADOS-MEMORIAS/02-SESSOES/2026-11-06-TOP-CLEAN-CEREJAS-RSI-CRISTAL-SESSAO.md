@@ -25,6 +25,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "dfb38f0c60d33e86957fd24278cb92becfd3b673"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-11-06-TOP-CLEAN-CEREJAS-RSI-CRISTAL-SESSAO.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Recursive Self-Improvement"
+centraldark_self_related: ["Self-Improvement","Self-Improvement Loop"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/recursive-self-improvement/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-improvement/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-improvement-loop/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # 🍒 TOP CLEAN CEREJAS — descobertas e memória viva (06/11/2026)

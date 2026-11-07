@@ -13,6 +13,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "7dab9fd6b2647edbfc3e328f9e605e4039cdde4d"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-14-CRISTAL-HERMES-HARNESS.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Simulation"
+centraldark_self_related: ["Self-Testing","Self-Calibration"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-simulation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-testing/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-calibration/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # 🔒 CRISTAL — HERMES HARNESS / 2026-09-14
 

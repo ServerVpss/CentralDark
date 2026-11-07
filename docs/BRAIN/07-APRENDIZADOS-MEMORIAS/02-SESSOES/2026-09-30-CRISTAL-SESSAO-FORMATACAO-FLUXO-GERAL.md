@@ -22,6 +22,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "ba3fd289f6be507383f31cc6cc493c93140b59b6"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-30-CRISTAL-SESSAO-FORMATACAO-FLUXO-GERAL.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Refactoring"
+centraldark_self_related: ["Self-Documentation","Self-Optimization"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-refactoring/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-documentation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-optimization/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # Núcleo — cristal da sessão 2026-09-30 → 2026-10-01

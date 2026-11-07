@@ -13,6 +13,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "1164fbc75c13e375511903cbcf5228acc858c14c"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Assessment"
+centraldark_self_related: ["Self-Verification","Self-Evaluation"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-assessment/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-verification/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-evaluation/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # 💎 Cristal da sessão — caminhos provados e receitas executáveis — 2026-09-25
 
