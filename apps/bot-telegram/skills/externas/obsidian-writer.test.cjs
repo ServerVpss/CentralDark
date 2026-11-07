@@ -112,3 +112,13 @@ test('notificação de write não promete sync físico Obsidian sem canal provad
   assert.match(source, /Persistido no BRAIN do repositório/);
   assert.match(source, /Sync físico com Obsidian: depende do canal local medido/);
 });
+
+test('heranca Kaizen para notas BRAIN 07, sem prometer runtime', () => {
+  const meta = _test.buildFrontmatter('Sessao de aprendizado', '02-SESSOES');
+  assert.match(meta, /centraldark_note_schema: "brain07.v1"/);
+  assert.match(meta, /centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"/);
+  assert.match(meta, /centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"/);
+  assert.match(meta, /centraldark_metabolic_roles:/);
+  const nonBrain = _test.buildFrontmatter('Outra nota', '06-REUNIOES-NOTAS');
+  assert.doesNotMatch(nonBrain, /centraldark_kaizen_trigger/);
+});

@@ -1,111 +1,72 @@
 ---
-title: Aprendizados & Memórias do Pivete
+title: "BRAIN 07 — Aprendizados, Memórias e Ouro"
 date: 2026-06-29
-tags:
-  - pessoal
-  - aprendizado
-  - memorias
-  - lembrancas
-  - aprender
-  - ACORDAR
-  - casa
-  - bugs
-  - engenharia
-updated: 2026-10-27
+updated: 2026-11-06
+tags: ["brain","indice","aprendizados","memorias","ouro","kaizen","centraldark"]
+category: "BRAIN07_INDEX"
+status: "CANONICO_DERIVADO"
+owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md"
+centraldark_note_schema: "brain07.v1"
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
 ---
 
-# 🧠 Aprendizados & Memórias
+# 🧠 07 · Aprendizados e Memórias
 
-> Coisas que você aprendeu, gostou, não quer esquecer. Momentos bons. Descobertas.
+**Na raiz fica somente este README.** Cada nota preserva a história do CHEFE, mas aponta para sua categoria, seu contexto e o aprendizado reutilizável sem duplicar sistemas.
 
----
+## Categorias e subcategorias
 
-## Como registrar
+| Pasta | Conteúdo | Para que o agente utiliza |
+|---|---|---|
+| [01-OURO](01-OURO/) | Métodos valiosos, sínteses e ouro histórico | Reaproveitar capacidade comprovada, preservando fonte e escopo |
+| [02-SESSOES](02-SESSOES/) | Cristais, sessões, deltas e NEXT_CURSOR | Retomar a intenção sem recomeçar a conversa |
+| [03-APRENDIZADOS](03-APRENDIZADOS/) | Correções, soluções, erros, contratos e contraprovas | Aprender a causa, aplicar menor delta e revalidar só onde necessário |
+| [04-MEMORIAS](04-MEMORIAS/) | História, experiências e evolução narrada pelo CHEFE | Contextualizar com respeito, sem presumir sentimentos ou permissões |
 
-Fale pelo Telegram de qualquer jeito:
+## Propriedades herdadas pelas notas
 
-- _"aprendi que o Obsidian Git resolve conflito com Their changes"_
-- _"que coisa boa, aprendi a fazer X hoje"_
-- _"nunca vou esquecer isso: o problema era Y"_
-- _"gostei muito de como funcionou o agente de issues"_
-- _"lembrança boa: quando o bot funcionou pela primeira vez"_
+`centraldark_note_schema` (contrato), `centraldark_category` (gaveta), `centraldark_kind` (tipo), `centraldark_context_owner` (CHEFE), `centraldark_intent_anchor` (assunto humano), `centraldark_agent_recall` (como recuperar), `centraldark_metabolic_roles` (papéis funcionais), `centraldark_kaizen_phase` ou `centraldark_kaizen_trigger` (laço de aprendizado), `centraldark_kaizen_policy` (fonte do Kaizen), `centraldark_kaizen_runtime` (limite da prova), `centraldark_previous_path` e `centraldark_previous_blob_sha` (proveniência quando aplicável).
 
----
+**O código existente `apps/bot-telegram/skills/externas/obsidian-writer.cjs` insere propriedades Kaizen em novas notas criadas nas quatro gavetas.** Isso não significa captura automática de toda conversa nem propagação garantida para uma VPS desatualizada.
 
-## Índice
+## Metabolismo da CentralDark: os símbolos são funções
+
+| Referência | Função técnica expressa no mapa |
+|---|---|
+| 👑 CHEFE | Intenção, direção, decisão e autorização humanas |
+| 🫀 Yuji | Identidade e continuidade acima do motor substituível |
+| 🔥 Sukuna | Potência computacional subordinada a controle e autorização |
+| 👁️ Gojo | Seis Olhos, observação, proteção, skill Oráculo e contraprova |
+| 🪽 Whis | Orientação, precisão, conselho e antecipação sem escritor paralelo |
+| 🐈 Beerus/Bills | Poda crítica e equilíbrio; jamais licença para destruição por metáfora |
+| ♾️ Goku | Percepção/adaptação; face Instinto Superior do mesmo Hermes |
+| 💜 Vegeta | Resiliência/correção; face Ego Superior do mesmo Hermes |
+| 💎 Vegetto/Gogeta | Integração cognitiva e funcional num único organismo |
+| 🫀 Kaizen | Vive → descobre → melhora → comprova → aprende → reutiliza → continua |
+
+A fonte original das funções é [Intenção Viva e Kaizen Contínuo](../../CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md), projetada na [landing e no Cockpit](../../../apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx). **Personagem e metáfora representam contratos operacionais, não agentes separados, consciência artificial comprovada ou prova de runtime.**
+
+## Roteamento de uma fala material
+
+INTENÇÃO DO CHEFE → CONTEXTO/PROVENIÊNCIA → CATEGORIA → OWNER EXISTENTE → NOTA/SUBCATEGORIA → MEMÓRIA/OURO + WIKILINKS → PROVA QUANDO TÉCNICA → KAIZEN → RECEIPT/NEXT_CURSOR.
+
+Não registrar segredo no acervo cognitivo. Não copiar o histórico inteiro numa nova nota; recuperar o vínculo, guardar só o delta e preservar o original. Sem consumidor ativo, o registro é contrato/documentação, não automação comprovada.
+
+## Consulta Obsidian
 
 ```dataview
-TABLE file.ctime AS "Registrado em", tags AS "Tags"
+TABLE centraldark_category AS "Gaveta", centraldark_intent_anchor AS "Intenção", centraldark_kaizen_runtime AS "Consumo"
 FROM "07-APRENDIZADOS-MEMORIAS"
-SORT file.ctime DESC
+WHERE file.name != "README"
+SORT file.mtime DESC
 ```
 
----
+## Ligações existentes
 
-*Atualizado automaticamente via bot @srver1bot.*
+- [[BRAIN]] e [[MAPA-OBSIDIAN-BRAIN]]: navegação semântica.
+- [[BIBLIOTECA]]: fontes, estudo e proveniência, diferente de lembrança humana.
+- [Lembranças](../../CONSCIENCIA/LEMBRANCAS/README.md): memória cruzada e recuperação.
+- [Skill Mãe](../../../.agents/skills/centraldark-operational-method/SKILL.md): método operacional; [Kaizen Sistema Um](../../../.agents/skills/kaizen-sistema-um/SKILL.md): aprendizado e herança.
+- [Cristal TOP CLEAN CEREJAS](02-SESSOES/2026-11-06-TOP-CLEAN-CEREJAS-RSI-CRISTAL-SESSAO.md) e [aprendizado anterior do índice](03-APRENDIZADOS/2026-10-27-CODIGO-AUTOAUDITAVEL-E-PORTA-DE-ENTRADA.md).
 
----
-
-## Conexões Rápidas
-
-- [[06-REUNIOES-NOTAS]] — notas que geraram esses aprendizados
-- [[APRENDIZADOS]] — aprendizados técnicos (CONSCIENCIA)
-- [[BRAIN]] — raiz do vault (00-MAPA-SISTEMA)
-
----
-
-## 🪬 Aprendizado recuperado — Código autoauditável e porta de entrada (2026-10-27)
-
-> **Registro no owner existente da biblioteca Obsidian/BRAIN**, sem segundo sistema de documentação.
-> **@owner:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md`
-> **@last_updated:** `2026-10-27T11:50:42.264Z`
-> **@truth_scope:** `RECONCILIACAO_DE_REGRA_E_MEDICAO_PARCIAL`
-> **@estado:** `REGRA_CANONICA_EXISTE; GATE_TESTADO_LOCALMENTE; ADERENCIA_UNIVERSAL_NAO_PROVADA`
-
-### Produto e intenção preservada
-
-A CentralDark deve ser **um produto com core compartilhado** e edições Desktop/Electron, OS bootável sobre Linux/openKylin e pesquisa de kernel nativo, mantendo cockpit, Hermes, MCP, memória, identidade e provas. A capacidade local não depende de contratar uma VPS mais potente; a infraestrutura remota é alvo/adaptador opcional, não segundo cérebro. **Kernel nativo próprio permanece trilha de pesquisa, não build/boot comprovado.**
-
-### Lei «tocou → rastreou → documentou → testou → selou»
-
-1. Toda modificação material de source precisa registrar **para que serve o componente**, **por que a decisão foi tomada**, **o que mudou**, **owner**, **referência documental**, **data/hora UTC ISO 8601 com milissegundos**, teste e recibo. O Git preserva a genealogia verificável: commit SHA, diff, autor efetivo e motivação do commit.
-2. Em código comentável, usar `#OBSERVACOES#` e campos `@owner`, `@doc_ref`, `@last_updated`; completar `@escopo`, `@implementado`, `@pendente`, `@estado`, `@next_cursor` quando pertinente. Linguagens usam sua sintaxe válida (`//`, `#`, `/* */`, `{/* */}`). **JSON não admite comentários**: registrar no documento proprietário.
-3. A nota canônica associada deve ter `@code_ref`, novo `@last_updated`, descrição concreta do efeito e contraprova **no mesmo delta Git**. Código removido requer `@removed: true` no documento. **Não simular carimbo, autoria, execução ou teste.**
-4. `TODO`, `FIXME`, `NOTE`, comentários de racional/segurança, docstrings, JSDoc/TSDoc, divisão em seções e headers de licença são instrumentos úteis **quando agregam informação**; não comentar mecanicamente cada variável, não guardar código morto comentado e não afirmar que comentários são garantia de segurança. Explicar invariantes, efeitos visuais, parâmetros, interfaces e causalidade. Para arquivos `.tsx`, descrever contratos de componentes e handlers críticos sem poluir a renderização.
-5. A porta de entrada deve fazer `REUSE_OWNER → DELTA_MINIMO → RASTRO_INLINE + DOC_SYNC → TESTE → CONTRAPROVA → RECEIPT → SELO`. Refatoração **string por string** significa preservar contratos e alterar incrementalmente com testes de regressão; nunca replace global cego.
-6. Organização de source: owner único e diretórios por domínio/responsabilidade, documentação vizinha do código e índices navegáveis, metadados legíveis por máquina; não criar segunda biblioteca, duplicar rules ou empurrar alterações de runtime como se fossem documentais.
-
-### Fonte canônica e auditoria realizada
-
-- **PR de origem:** [#1836 — Governança de rastro datado](https://github.com/ServerVpss/CentralDark/pull/1836), aberto em **2026-10-16**, incorporado em **2026-10-18** (`a2984c61a1`).
-- **Norma vigente:** [RULES.md](https://github.com/ServerVpss/CentralDark/blob/main/RULES.md), seção «Rastro semântico obrigatório — código e documentação juntos».
-- **Fiscal reutilizado:** `scripts/lupa/diagram-route-gate.mjs#validateDiffCoverage` + `scripts/lupa/diagram-route-gate.test.mjs`, executados por `.github/workflows/porta-de-entrada.yml`.
-- **Prova local nesta sessão:** `node --test scripts/lupa/diagram-route-gate.test.mjs` → **19/19 PASS** na Casa. **Não equivale a CI/deploy aprovado.**
-- **Lacuna medida:** comparação `a2984c61a1..4699d474f0` levantou 1.547 caminhos com extensões de código entre mudanças; 242 no filtro atual do fiscal e 1.305 fora dele (**inclui arquivos legados/arquivados e outros formatos; números de triagem, não veredito universal**). Entre os arquivos verificáveis amostrados dentro do filtro, 209 não exibiam `#OBSERVACOES#` no início. Analisar por commit/owner antes de declarar infração.
-- **Limites:** o fiscal não cobre, por exemplo, `.ps1`, `.bat`, `.cmd`, `.cs`, `.vue` e parte de diretórios de origem; verifica formato e mudança documental, **não a veracidade dos comentários**. A API de proteção da branch `main` retornou HTTP 403; portanto bloqueio universal por branch protection **não comprovado**. A execução CI consultada para `4699d474f0` estava pendente/enfileirada no momento da leitura.
-
-### Próximo cursor
-
-**Não criar gate paralelo.** Auditar commits específicos após #1836, classificar artefatos de origem versus arquivos gerados/arquivo morto, ampliar o escopo do fiscal existente às linguagens relevantes (PowerShell/Windows/React), com testes negativos por linguagem, e provar a obrigatoriedade efetiva do workflow antes de declarar conformidade.
-
-**Biblioteca Obsidian/BRAIN = referência canônica do acervo documental; Git/GitHub = versionamento, preservação e fonte canônica do código executável.** O PDF de referência sobre organização foi preservado no [owner existente da Biblioteca](../03-DOCUMENTACAO/02-BIBLIOTECA/README.md), com bytes originais e SHA-256, sem criar outro vault.
-
-### 🪬 Continuidade CentralDark-OS local-first — aprendizado ligado ao owner (2026-10-27)
-
-<!-- #OBSERVACOES#
-@owner: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md
-@doc_ref: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md; docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md
-@last_updated: 2026-10-27T12:16:16.618Z
-@estado: CONTRATO_DOCUMENTADO; FAILOVER_E2E_DESCONHECIDO; REPLAY_VPS_PENDENTE
-@next_cursor: testar VPS off / Casa online, reconectar e comparar SHA + receipt sem repetir trabalho verde
--->
-
-**Intenção:** parar de apresentar VPS como condição de funcionamento da CentralDark. O produto é **CentralDark-OS**, cujo core pode rodar na **Casa/Forja local** e em cápsulas remotas como a VPS quando existirem. Desligamento da VPS não cancela a missão local, não apaga memória, não autoriza novo cérebro nem exige rede para registrar novos deltas locais. Ao retornar a conectividade, reconciliar estados/SHAs/owners, aplicar somente alterações aprovadas e fazer contraprova no destino.
-
-**Loop original e janela móvel:** CHEFE_INTENT → CONTEXT → META-GRILL → CURRENT/GREEN_STATE → GOAL → OWNER → MENOR_DELTA → HERMES/EXECUTE → OBSERVE → TEST → COUNTERPROOF → REALITY_JUDGE → RECEIPT → FIXED_POINT/NEXT_CURSOR → KAIZEN → CONTINUAR. BACKCHECK: editar → avançar → voltar algumas casas → conferir → corrigir menor causa → retestar cone afetado → continuar no mesmo trilho.
-
-**Nomes:** interfaces/prompts de identidade devem dizer `CentralDark-OS`; referências técnicas reais de `VPS` (SSH, PID, host, `scripts/vps/`, deploy) permanecem `VPS`. `VPS_OFFLINE != CENTRALDARK_OS_OFFLINE`; porém `OFFLINE_LOCAL_CONTINUITY`, `QUEUE_AND_REPLAY` e `24_7_UPTIME` exigem prova de serviço, persistência, fila e sincronização. Local-first é contrato novo, não prova de automação já concluída.
-
-**Links bidirecionais:** [JARVIS §6.0.A](../../ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md) · [CentralDark-OS e kernel](../../ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) · [Biblioteca de PDFs](../03-DOCUMENTACAO/02-BIBLIOTECA/README.md).
-
-**Nenhum novo vault, kernel, serviço, executor ou sincronizador foi criado por este aprendizado.**
+**Estado:** arquivo e grafo versionados no Git; sincronização Casa/VPS e consumo pelo Hermes dependem de leitura e teste no runtime correspondente.

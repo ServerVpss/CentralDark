@@ -61,11 +61,41 @@ function injectLinks(content) {
 function buildFrontmatter(title, folderName, tags = []) {
   const date = new Date().toISOString().split('T')[0];
   const autoTags = [folderName.replace(/^\d+ - /, '').toLowerCase().replace(/ /g, '-'), ...tags];
-  return `---\ntitle: "${title}"\ndate: ${date}\ntags: [${autoTags.map(t => `"${t}"`).join(', ')}]\n---\n\n`;
+  const brain07 = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(folderName);
+  const roleMap = {
+    '01-OURO': ['gojo-seis-olhos','whis-orientacao','vegetto-gogeta-convergencia','kaizen-continuo'],
+    '02-SESSOES': ['yuji-identidade-e-continuidade','gojo-seis-olhos','goku-instinto-superior','kaizen-continuo'],
+    '03-APRENDIZADOS': ['gojo-seis-olhos','whis-orientacao','vegeta-resiliencia','beerus-autolimpeza','kaizen-continuo'],
+    '04-MEMORIAS': ['yuji-identidade-e-continuidade','whis-orientacao','kaizen-continuo'],
+  };
+  // Propriedades ligam a nota ao Kaizen; nao provam consumo automatico fora do writer.
+  const extra = brain07 ? [
+    'centraldark_note_schema: "brain07.v1"',
+    'centraldark_category: ' + JSON.stringify(folderName),
+    'centraldark_context_owner: "SEGREDO/CHEFE"',
+    'centraldark_intent_anchor: ' + JSON.stringify(title),
+    'centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"',
+    'centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"',
+    'centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"',
+    'centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"',
+    'centraldark_metabolic_roles: ' + JSON.stringify(roleMap[folderName]),
+    'centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"',
+    'centraldark_agent_recall: "Recuperar intencao, memoria, causa e NEXT_CURSOR sem reprocessar o que esta provado."',
+  ].join('\n') + '\n' : '';
+  return '---\ntitle: ' + JSON.stringify(title) + '\ndate: ' + date +
+    '\ntags: [' + autoTags.map(t => JSON.stringify(t)).join(', ') + ']\n' + extra + '---\n\n';
 }
 
 function resolveFolder(folder) {
   if (!folder) return BRAIN_DIR;
+  const requested = String(folder).trim();
+  const cat = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(requested) ? requested : null;
+  const selected = /^(?:07|07-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
+  if (selected) {
+    const target = path.join(BRAIN_DIR, '07-APRENDIZADOS-MEMORIAS', selected);
+    fs.mkdirSync(target, { recursive: true });
+    return target;
+  }
   const entries = fs.readdirSync(BRAIN_DIR, { withFileTypes: true })
     .filter(e => e.isDirectory());
   const match = entries.find(e =>
@@ -387,6 +417,7 @@ module.exports = {
   },
 
   _test: {
+    buildFrontmatter,
     extractWikiLinks,
     buildBrainGraph,
     searchBrain,
