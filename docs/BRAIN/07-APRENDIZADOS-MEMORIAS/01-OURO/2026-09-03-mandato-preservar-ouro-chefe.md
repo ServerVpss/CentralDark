@@ -16,6 +16,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "49642c3eb32d2e4a0138bc264578df6fc839219e"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Focus"
+centraldark_self_related: ["Self-Regulation","Self-Memory"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-focus/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-regulation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-memory/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # 🟣 Mandato — vault é do CHEFE e do agente

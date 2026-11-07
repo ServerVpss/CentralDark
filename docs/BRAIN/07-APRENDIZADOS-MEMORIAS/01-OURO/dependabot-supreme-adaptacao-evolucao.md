@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "84c540fe8028fb408a27eaf2944dee1b460628bd"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Adaptation"
+centraldark_self_related: ["Self-Monitoring","Self-Healing"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-adaptation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-monitoring/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-healing/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # Adaptação e Evolução do Sistema Dependabot
 

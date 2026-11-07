@@ -40,6 +40,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "dbeb58511fd96a8a01ac03f1ef1ac99332791590"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Memory"
+centraldark_self_related: ["Self-Learning","Self-Documentation"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-memory/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-learning/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-documentation/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # APRENDIZADOS COM O SEGREDO/CHEFE
