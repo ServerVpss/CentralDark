@@ -205,8 +205,8 @@ const ICONES_NAVEGACAO = {
 function IconeItemNavegacao({ valor }: { valor: keyof typeof ICONES_NAVEGACAO }) {
   const Icone = ICONES_NAVEGACAO[valor];
   return (
-    <span aria-hidden="true" className="mr-2 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 transition-colors group-hover/menuitem:border-primary/40 group-data-[collapsible=icon]:mr-0">
-      <Icone className="size-4 text-gold transition-colors group-hover/menuitem:text-neon-green group-data-[state=active]/menuitem:text-primary" />
+    <span aria-hidden="true" className="mr-2 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 shadow-sm transition-[transform,background-color,border-color,box-shadow] duration-200 ease-out group-hover/menuitem:-translate-y-0.5 group-hover/menuitem:scale-105 group-hover/menuitem:border-primary/50 group-hover/menuitem:bg-primary/10 group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)] group-focus-within/menuitem:border-primary/50 group-data-[collapsible=icon]:mr-0 motion-reduce:transform-none motion-reduce:transition-none">
+      <Icone className="size-4 text-gold transition-[color,transform] duration-200 ease-out group-hover/menuitem:scale-110 group-hover/menuitem:text-neon-green group-focus-within/menuitem:text-primary group-data-[state=active]/menuitem:text-primary motion-reduce:transform-none motion-reduce:transition-none" />
     </span>
   );
 }
@@ -1014,7 +1014,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                           <FecharMenuNoCelular key={item.valor}>
                             <TabsTrigger value={item.valor} title={item.ajuda}
                               data-cd-flow={"instinto.CockpitShell.aba." + item.valor}
-                              className="group/menuitem flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+                              className="group/menuitem flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal transition-colors duration-200 hover:bg-primary/10 focus-visible:bg-primary/10 data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 motion-reduce:transition-none">
                               <IconeItemNavegacao valor={item.valor} />
                               <span className="min-w-0 group-data-[collapsible=icon]:sr-only">
                                 <span className="block font-medium">{item.nome}</span>
