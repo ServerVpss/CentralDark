@@ -46,6 +46,22 @@ centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA
 
 A fonte original das funções é [Intenção Viva e Kaizen Contínuo](../../CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md), projetada na [landing e no Cockpit](../../../apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx). **Personagem e metáfora representam contratos operacionais, não agentes separados, consciência artificial comprovada ou prova de runtime.**
 
+## Binding funcional dos papéis existentes
+
+Os nomes da landing são um **mapa de funções do organismo**, não serviços novos. Para cada papel, consumir o owner abaixo antes de operar:
+
+| Papel semântico | Owner/capacidade existente a consultar |
+|---|---|
+| Yuji: identidade | [SOUL-SOL](../../CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md) e memória de continuidade |
+| Sukuna: potência com limites | Modelo substituível sob [RULES](../../../RULES.md), sem receber autoridade |
+| Gojo: Seis Olhos e contraprova | [Skill Oráculo existente](../../../.agents/skills/software-development/centraldark-oracle-surface/SKILL.md) e Reality Judge |
+| Whis: orientação | [Intenção Devolvida + Loop Mestre](../../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) |
+| Beerus: refutação e poda | [Horn/Reuso/Fixed Point](../../../scripts/lupa/horn-reuse-fixed-point.mjs), sem autorização destrutiva por símbolo |
+| Goku / Vegeta: adaptação e resiliência | [Hermes PET existente](../../../apps/instinto-superior/src/components/central/HermesPet.tsx), duas faces visuais do mesmo executor |
+| Vegetto / Gogeta: integração | [Metabolismo cognitivo e funcional do Kaizen](../../CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md) + Hermes existente |
+| Kaizen: aprendizado contínuo | [Skill Kaizen Sistema Um](../../../.agents/skills/kaizen-sistema-um/SKILL.md) + [Obsidian Writer](../../../apps/bot-telegram/skills/externas/obsidian-writer.cjs) |
+
+A ligação declarativa dessas notas não aciona esses owners sem consumidor de fato conectado; não confundir integração de referências com automação E2E provada.
 ## Roteamento de uma fala material
 
 INTENÇÃO DO CHEFE → CONTEXTO/PROVENIÊNCIA → CATEGORIA → OWNER EXISTENTE → NOTA/SUBCATEGORIA → MEMÓRIA/OURO + WIKILINKS → PROVA QUANDO TÉCNICA → KAIZEN → RECEIPT/NEXT_CURSOR.
