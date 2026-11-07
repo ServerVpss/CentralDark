@@ -450,6 +450,9 @@ Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webh
 Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.
 
 <!-- CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+**Memorial contextual da sessão:** [TOP CLEAN CEREJAS, META-RSI e autonomia (2026-11-06)](references/MEMORIAL-SESSAO-TOP-CLEAN-CEREJAS-20261106.md). Preserva raciocínio, fatos, hipóteses, lições e NEXT_CURSOR; não é prova de runtime.
+
+
 ## 🍒 TOP CLEAN CEREJAS — filtro de melhoria da Skill Mãe
 
 **Lei mestra:** Retém o bem. Elimina o atrito. Preserva o segredo. Automatiza o caminho.
