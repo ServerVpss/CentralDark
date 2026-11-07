@@ -597,7 +597,14 @@ test("casca preserva sidebar com busca e toggle sem controles centrais duplicado
   assert.match(cockpit, /focarBuscaAoAbrir/);
   assert.match(cockpit, /data-cd-harness="left-rail"/);
   assert.match(cockpit, /data-cd-harness="right-rail"/);
-  assert.match(cockpit, /modo="sininho"/);
+  assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
+  assert.match(cockpit, /data-cd-sidebar-resize/);
+  assert.match(cockpit, /role="separator"/);
+  assert.match(cockpit, /aria-label="Arrastar para ajustar largura da barra lateral"/);
+  assert.match(cockpit, /cd-sidebar-scrollbar/);
+  assert.match(cockpit, /--cd-sidebar-width/);
+  assert.match(cockpit, /centraldark\.cockpit\.sidebar-width/);
+  assert.doesNotMatch(cockpit, /data-cd-harness="top-rail"/);
   assert.doesNotMatch(cockpit, /data-cd-harness="top-floating"/);
   assert.doesNotMatch(cockpit, /aria-label="Lupa · buscar ferramentas"/);
 });
