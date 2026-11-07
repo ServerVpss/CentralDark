@@ -118,7 +118,12 @@ async function engine() {
   if (connecting) return connecting;
   connecting = (async()=>{
     const win = process.platform === "win32";
-    upstream = win
+    // Reuse the same pinned local engine entry recovered by the existing
+    // Casa launcher; never prefer network npx over the verified local copy.
+    const pinned = process.env.CENTRALDARK_CASA_ENGINE_ENTRY;
+    upstream = pinned
+      ? spawn(process.execPath,[pinned],{windowsHide:true,stdio:["pipe","pipe","pipe"]})
+      : win
       ? spawn(process.env.ComSpec || "cmd.exe",["/d","/s","/c","npx.cmd -y "+ENGINE],{windowsHide:true,stdio:["pipe","pipe","pipe"]})
       : spawn("npx",["-y",ENGINE],{stdio:["pipe","pipe","pipe"]});
     partial="";
