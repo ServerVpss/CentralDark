@@ -26,6 +26,26 @@ import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
+  type LucideIcon,
+  Eye,
+  BookOpen,
+  Globe,
+  GitBranch,
+  FileCheck2,
+  ScanSearch,
+  Hammer,
+  PanelsTopLeft,
+  Palette,
+  Network,
+  History,
+  BookCheck,
+  Boxes,
+  KeyRound,
+  Target,
+  Moon,
+  Dna,
+  Gem,
+  GitPullRequest,
   Download,
   ExternalLink,
   Github,
@@ -148,6 +168,47 @@ const NAVEGACAO_PASTAS = [
     { valor: "downloads", nome: "Baixar arquivos", ajuda: "Pacotes e instaladores.", soAdmin: false },
   ] },
 ] as const;
+
+// Mesmo padrão de ícones Lucide da landing /: quadrado, borda e cor por token da pele.
+// As 27 rotas e seus owners continuam exclusivamente em NAVEGACAO_PASTAS.
+const ICONES_NAVEGACAO = {
+  visao: Eye,
+  jornada: BookOpen,
+  portal: Globe,
+  sistema: Activity,
+  admin: ShieldCheck,
+  sync: GitBranch,
+  recibos: FileCheck2,
+  raioxvivo: ScanSearch,
+  "builder-bolt": Hammer,
+  aionui: PanelsTopLeft,
+  design: Palette,
+  arquitetura: Network,
+  "agent-mode": Bot,
+  "html-consolidation": History,
+  forja: Wrench,
+  "forja-regras": BookCheck,
+  "forja-inventario": Boxes,
+  "gram-permissions": KeyRound,
+  hermes: Bot,
+  goals: Target,
+  "dream-reviewer": Moon,
+  genesis: Dna,
+  obsidian: Gem,
+  pr1873: GitPullRequest,
+  gram: MessagesSquare,
+  unigram: Send,
+  downloads: Download,
+} satisfies Record<(typeof NAVEGACAO_PASTAS)[number]["itens"][number]["valor"], LucideIcon>;
+
+function IconeItemNavegacao({ valor }: { valor: keyof typeof ICONES_NAVEGACAO }) {
+  const Icone = ICONES_NAVEGACAO[valor];
+  return (
+    <span aria-hidden="true" className="mr-2 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 transition-colors group-hover/menuitem:border-primary/40 group-data-[collapsible=icon]:mr-0">
+      <Icone className="size-4 text-gold transition-colors group-hover/menuitem:text-neon-green group-data-[state=active]/menuitem:text-primary" />
+    </span>
+  );
+}
 
 const ROTULOS_ESTADO = {
   PASS: { rotulo: "Tudo certo", ajuda: "A fonte consultada confirmou o resultado." },
@@ -952,8 +1013,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                           <FecharMenuNoCelular key={item.valor}>
                             <TabsTrigger value={item.valor} title={item.ajuda}
                               data-cd-flow={"instinto.CockpitShell.aba." + item.valor}
-                              className="flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-                              <span aria-hidden="true" className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0">{pasta.icone}</span>
+                              className="group/menuitem flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+                              <IconeItemNavegacao valor={item.valor} />
                               <span className="min-w-0 group-data-[collapsible=icon]:sr-only">
                                 <span className="block font-medium">{item.nome}</span>
                                 <span className="block text-[11px] font-normal leading-snug text-muted-foreground">{item.ajuda}</span>
