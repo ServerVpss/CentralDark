@@ -4,6 +4,8 @@
 // @last_updated: 2026-11-01T19:22:05.143254+00:00 @implementado: sondas nativas Linux e papel CASA explícito; sem inferir VPS por hostname.
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GITHUB_API = "https://api.github.com";
@@ -71,6 +73,9 @@ export type EstadoCentralDark = {
   omniModels: Estado;
   receipts: Estado;
   casaSite: Estado;
+  casaPeerOnline: boolean | null;
+  casaPeerFonte: string;
+  casaPeerMedidoEm: string | null;
   screenpipe: Estado; // Alias legado: exclusivamente Screenpipe Casa.
   screenpipeVps: Estado;
   desktopVps: Estado;
@@ -152,8 +157,14 @@ export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
 
+<<<<<<< HEAD
+// O batimento operacional pertence ao MCP, não ao proxy público do Hermes.
+export function mcpBase() {
+  return (process.env["CENTRALDARK_MCP_BASE_URL"] ?? "https://mcp.centralldark.com").replace(/\/$/, "");
+=======
 function casaCommanderHealthBase() {
   return (process.env["CENTRALDARK_ROUTER_HEALTH_URL"] ?? DEFAULT_CASA_COMMANDER_HEALTH_BASE).replace(/\/$/, "");
+>>>>>>> origin/main
 }
 
 function objetoJson(valor: unknown): valor is JsonObject {
@@ -169,6 +180,10 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+<<<<<<< HEAD
+    const resposta = await fetch(`${base}${path}`, {
+      headers: { accept: "application/json" },
+=======
     carregarEnvForja();
     const headers: Record<string, string> = { accept: "application/json" };
     const localOwner = base === apiBase() && ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname);
@@ -176,6 +191,7 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
     if (localOwner && routerToken) headers['authorization'] = `Bearer ${routerToken}`;
     const resposta = await fetch(`${base}${path}`, {
       headers,
+>>>>>>> origin/main
       cache: "no-store",
       signal: controller.signal,
     });
@@ -231,9 +247,25 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   }
 }
 
+<<<<<<< HEAD
+function apiHealthIdentificada(sonda: Probe): Probe {
+  if (sonda.estado === "UNKNOWN" || sonda.estado === "FAIL") return sonda;
+  const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  const servico = texto(sonda.dados?.["servico"])?.toLowerCase();
+  if (sonda.httpStatus === 200 && status === "ok" && servico === "hermes-core") {
+    return { ...sonda, estado: "PASS", erro: null };
+  }
+  return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_HERMES_CORE" };
+}
+
+async function medirReachable(url: string, casaOnly = false): Promise<Probe> {
+  if (casaOnly && process.platform !== "win32") {
+    return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_ONLY_WINDOWS", dados: null };
+=======
 async function medirReachable(url: string, casaOnly = false, siteCheck = false): Promise<Probe> {
   if (casaOnly && origemLocalScreenpipe() !== "CASA") {
     return { estado: "UNKNOWN", httpStatus: null, erro: "CASA_HOST_NOT_CONFIRMED", dados: null };
+>>>>>>> origin/main
   }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -264,7 +296,13 @@ async function medirReachable(url: string, casaOnly = false, siteCheck = false):
         ? "FAIL"
         : dados?.["ok"] === true || status === "healthy"
           ? "PASS"
+<<<<<<< HEAD
+          : casaOnly && resposta.status === 200 &&
+            resposta.headers.get("content-type")?.includes("text/html")
+            // O HTML 200 comprova APENAS a página acessível, não login ou backend.
+=======
           : siteCheck
+>>>>>>> origin/main
             ? "PASS"
             : "RUNNING";
     return { estado, httpStatus: resposta.status, erro: null, dados };
@@ -283,7 +321,28 @@ async function medirReachable(url: string, casaOnly = false, siteCheck = false):
 // Saúde da rota Screenpipe. Status explícito determina a cor; dependências
 // são detalhes opcionais, nunca requisito artificial para a rota responder.
 function screenpipeIdentificado(sonda: Probe): Probe {
+  // ffmpeg/dependencies nao e obrigatorio nas varias versoes do Screenpipe.
+  // HTTP 200 por si so nao identifica o aplicativo nem o dispositivo.
   if (sonda.estado === "UNKNOWN") return sonda;
+  if (sonda.httpStatus !== 200) {
+    return { ...sonda, estado: "UNKNOWN", erro: "SCREENPIPE_HEALTH_NAO_IDENTIFICADO_NESTE_HOST" };
+  }
+  const status = texto(sonda.dados?.["status"])?.toLowerCase();
+  const dependencias = objetoJson(sonda.dados?.["dependencies"])
+    ? sonda.dados["dependencies"] : null;
+  const assinatura = [
+    "frame_status", "audio_status", "capture_status", "last_frame_timestamp",
+    "device_status_details", "ui_recorder",
+  ].some(campo => sonda.dados?.[campo] != null)
+    || (dependencias !== null && objetoJson(dependencias["ffmpeg"]));
+  if (!assinatura || !["healthy", "unhealthy", "error"].includes(status ?? "")) {
+    return { ...sonda, estado: "UNKNOWN", erro: "HEALTH_SEM_ASSINATURA_SCREENPIPE" };
+  }
+  return {
+    ...sonda,
+    estado: status === "healthy" ? "PASS" : "FAIL",
+    erro: status === "healthy" ? null : "SCREENPIPE_REPORTOU_" + status!.toUpperCase(),
+  };
   if (sonda.httpStatus !== 200) return { ...sonda, estado: "FAIL" };
   const status = texto(sonda.dados?.["status"])?.toLowerCase();
   if (status === "healthy") return { ...sonda, estado: "PASS", erro: null };
@@ -299,6 +358,9 @@ function screenpipeIdentificado(sonda: Probe): Probe {
 function saidaScreenpipe(sonda: Probe): string[] {
   const saida = [`GET /health → HTTP ${sonda.httpStatus ?? "sem resposta"} · ${sonda.estado}`];
   if (sonda.erro) saida.push(`SENSOR: ${sonda.erro.slice(0, 96)}`);
+  for (const campo of ["status", "capture_status", "frame_status", "audio_status"]) {
+    const valor = texto(sonda.dados?.[campo]);
+    if (valor && /^[a-zA-Z0-9 _-]{1,32}$/.test(valor)) saida.push(`${campo}: ${valor}`);
   const mensagem = texto(sonda.dados?.["message"]);
   if (mensagem && sonda.estado !== "PASS") saida.push(`MOTIVO: ${mensagem.slice(0, 160)}`);
   const motivos = Array.isArray(sonda.dados?.["unhealthy_reasons"]) ? sonda.dados["unhealthy_reasons"] : null;
@@ -524,6 +586,43 @@ const SONDA_NAO_EXECUTADA: Probe = {
   estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
 };
 
+<<<<<<< HEAD
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/cockpit.functions.ts
+// @doc_ref=apps/instinto-superior/README.md
+// @last_updated=2026-10-17 · Fonte CURRENT/ HISTORICO separadas.
+// Diagnostica APENAS a presença da Casa na malha Tailscale do host servidor.
+// Tailscale peer offline != prova de processo desligado ou de site/serviço caído.
+// Não lê chave, token, IP de peer, shell interativo ou estado da conta do usuário.
+async function medirPeerCasa(): Promise<{
+  online: boolean | null; fonte: string; medidoEm: string | null;
+}> {
+  if (process.platform === "win32") {
+    return { online: null, fonte: "Host Windows · status da malha remota não consultado", medidoEm: null };
+  }
+  try {
+    const { stdout } = await promisify(execFile)("tailscale", ["status", "--json"], {
+      timeout: 2_500, maxBuffer: 512_000, windowsHide: true,
+    });
+    const dados: unknown = JSON.parse(stdout);
+    if (!objetoJson(dados) || !objetoJson(dados["Peer"])) {
+      return { online: null, fonte: "Tailscale · sem lista válida de peers", medidoEm: null };
+    }
+    const casa = Object.values(dados["Peer"]).find((peer) => {
+      if (!objetoJson(peer)) return false;
+      const host = texto(peer["HostName"])?.toLowerCase() ?? "";
+      return host === "segredo";
+    });
+    if (!objetoJson(casa) || typeof casa["Online"] !== "boolean") {
+      return { online: null, fonte: "Tailscale · Casa não identificada neste host", medidoEm: null };
+    }
+    return {
+      online: casa["Online"],
+      fonte: "Tailscale local · peer Casa · disponibilidade na malha, não site",
+      medidoEm: new Date().toISOString(),
+    };
+  } catch {
+    return { online: null, fonte: "Tailscale indisponível neste servidor · sem conclusão", medidoEm: null };
+=======
 function portaEstado(bind: string, processo: string): Estado {
   return bind && processo ? "PASS" : "UNKNOWN";
 }
@@ -718,6 +817,7 @@ async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
     return portas;
   } catch {
     return [];
+>>>>>>> origin/main
   }
 }
 
@@ -743,6 +843,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniModels,
       receipts,
       casaSite,
+      casaPeer,
       screenpipe,
       screenpipeRemotoCasa,
       commanderCasa,
@@ -754,11 +855,20 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       medirApi("/api/live-fabric/status"),
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
+<<<<<<< HEAD
+      medirApi("/health"),
+      medirApi("/heartbeat", mcpBase()),
+      medirApi("/api/omni/models"),
+      medirApi("/api/microdeploy/receipts/index.json"),
+      medirReachable("http://127.0.0.1:4175/", true),
+      medirPeerCasa(),
+=======
       medirApi("/health", origemHealth),
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable(casaSiteUrl, true, true),
+>>>>>>> origin/main
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
@@ -772,6 +882,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       inventarioTotalPortas(),
     ]);
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
+    const apiHealthMedido = apiHealthIdentificada(apiHealth);
+    const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
     const screenpipeCasaFonte = hostScreenpipe === "CASA"
@@ -787,11 +899,19 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       ?? texto(apiHealth.dados?.["servico"])
       ?? texto(apiHealth.dados?.["name"])
       ?? "Serviço não identificado pelo /health";
-    const heartbeatSelf = texto(heartbeatRaw.dados?.["self"]);
-    const heartbeat: Probe =
-      heartbeatSelf === "stale"
-        ? { ...heartbeatRaw, estado: "FAIL", erro: "self=stale" }
-        : heartbeatRaw;
+    // HTTP 200 só promove o batimento se vier do MCP e com identidade verificável.
+    const heartbeatIdentificado: Probe =
+      heartbeatRaw.httpStatus === 200 &&
+      texto(heartbeatRaw.dados?.["service"]) === "mcp-centraldark" &&
+      heartbeatRaw.dados?.["ok"] === true
+        ? heartbeatRaw
+        : { ...heartbeatRaw, estado: "UNKNOWN", erro: "HEARTBEAT_SEM_ASSINATURA_MCP" };
+    const heartbeatSelf = texto(heartbeatIdentificado.dados?.["self"]);
+    const heartbeat: Probe = heartbeatSelf === "stale"
+      ? { ...heartbeatIdentificado, estado: "FAIL", erro: "self=stale" }
+      : heartbeatSelf === "alive"
+        ? { ...heartbeatIdentificado, estado: "PASS", erro: null }
+        : { ...heartbeatIdentificado, estado: "UNKNOWN", erro: "HEARTBEAT_SELF_SEM_PROVA" };
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
@@ -800,6 +920,8 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const mainSha = atual?.sha ?? null;
     const sincronizado = !!mainSha && !!vpsSha && mainSha === vpsSha;
     const deltaVps = await medirDelta(vpsSha, mainSha);
+    // SHA desigual mede divergência Git, não prova falha do serviço publicado.
+    // PASS de deploy exige receipt do mesmo SHA + health + efeito no navegador.
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
@@ -838,11 +960,14 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       liveFabric: liveFabric.estado,
       grafoVivo: grafoVivo.estado,
       omniRouter: omniRouter.estado,
-      apiHealth: apiHealth.estado,
+      apiHealth: apiHealthMedido.estado,
       heartbeat: heartbeat.estado,
       omniModels: omniModels.estado,
       receipts: receipts.estado,
       casaSite: casaSite.estado,
+      casaPeerOnline: casaPeer.online,
+      casaPeerFonte: casaPeer.fonte,
+      casaPeerMedidoEm: casaPeer.medidoEm,
       screenpipe: screenpipeCasa.estado,
       screenpipeVps: screenpipeVps.estado,
       desktopVps: "UNKNOWN",
@@ -866,6 +991,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       omniHttp: omniRouter.httpStatus,
       nextCursor: texto(liveFabric.dados?.["next_cursor"]),
       erroLiveFabric: liveFabric.erro,
+      apiHealthHttp: apiHealthMedido.httpStatus,
       casaSiteErro: casaSite.erro,
       apiHealthErro: apiHealth.erro,
       grafoErro: grafoVivo.erro,

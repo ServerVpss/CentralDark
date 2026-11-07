@@ -1004,6 +1004,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <BlocoEstado
                   titulo="One Heart · heartbeat"
                   estado={(dado?.heartbeat ?? "UNKNOWN") as EstadoOperacional}
+<<<<<<< HEAD
+                  codigo={dado?.heartbeatSelf
+                    ? `MCP self=${dado.heartbeatSelf} · HTTP ${dado.heartbeatHttp ?? "UNKNOWN"}`
+                    : "Heartbeat MCP sem medição"}
+                  detalhe="Estado medido no MCP canônico. Stale permanece FAIL; sem identidade ou leitura, UNKNOWN."
+=======
                   codigo={
                     dado?.heartbeatHttp
                       ? `HTTP ${dado.heartbeatHttp} · self=${dado.heartbeatSelf ?? "UNKNOWN"}`
@@ -1012,6 +1018,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   detalhe={dado?.heartbeatErro
                     ? `Fonte: /heartbeat · MOTIVO: ${dado.heartbeatErro}`
                     : "Fonte: /heartbeat · leitura real do owner consultado agora."}
+>>>>>>> origin/main
                   icone={<Activity className="size-5" />}
                 />
                 <BlocoEstado

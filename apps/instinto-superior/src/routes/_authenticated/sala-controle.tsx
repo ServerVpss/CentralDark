@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { useEffect } from "react";
 import { ShieldAlert } from "lucide-react";
 import { CockpitShell } from "@/components/central/CockpitShell";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,14 @@ function SalaControle() {
     retry: false,
   });
 
+  useEffect(() => {
+    if (!q.isError) return;
+    const timer = window.setTimeout(() => {
+      window.location.replace("/auth?renovar=1");
+    }, 1800);
+    return () => window.clearTimeout(timer);
+  }, [q.isError]);
+
   if (q.isPending)
     return (
       <main className="grid min-h-dvh place-items-center">
@@ -60,6 +69,12 @@ function SalaControle() {
               ? "Sessão ausente ou expirada. Volte ao acesso para renovar."
               : "A consulta do papel administrativo falhou. Isto não significa que a conta perdeu o acesso."}
           </p>
+          <p role="status" className="mt-3 text-xs text-muted-foreground">
+            Redirecionando automaticamente para renovar o acesso…
+          </p>
+          <Button asChild variant="outline" className="mt-6">
+            <Link to="/auth" search={{ renovar: "1" }}>Voltar ao acesso</Link>
+          </Button>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button type="button" onClick={() => void q.refetch()} disabled={q.isFetching}>
               {q.isFetching ? "Consultando…" : "↻ Verificar novamente"}
