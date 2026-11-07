@@ -124,8 +124,14 @@ async function engine() {
     partial="";
     emitOperationalEvent("ENGINE_STARTING", "LOCAL_STDIO");
     upstream.stdout.on("data",onData);
-    // Raw stderr may include sensitive data. Do not echo it to the HUD.
-    upstream.stderr.on("data",()=>{ emitOperationalEvent("ENGINE_STDERR", "DETAILS_REDACTED"); });
+    // Raw stderr may contain sensitive data: one signal per engine run.
+    let stderrObserved = false;
+    upstream.stderr.on("data",()=>{
+      if (!stderrObserved) {
+        stderrObserved = true;
+        emitOperationalEvent("ENGINE_STDERR", "DETAILS_REDACTED");
+      }
+    });
     upstream.on("error",err=>{emitOperationalEvent("ENGINE_SPAWN_FAILED", "NOT_PROVEN");invalidate("MCP_UPSTREAM_SPAWN:"+err.message);});
     upstream.on("exit",code=>{upstream=null;emitOperationalEvent("ENGINE_EXIT", Number.isInteger(code) ? String(code) : "UNKNOWN");invalidate("MCP_UPSTREAM_EXIT:"+code);});
     await rpc("initialize",{
