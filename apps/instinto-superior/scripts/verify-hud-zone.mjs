@@ -328,7 +328,9 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.ok(src.includes("providerCapabilitiesReturned"));
   assert.ok(src.includes("CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED"));
   assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
-  assert.ok(cockpit.includes('{autenticado ? <span className="[&_button]:!size-8">'));
+  assert.ok(cockpit.includes('data-cd-header-bell="right-of-account"'));
+  assert.ok(cockpit.indexOf('data-cd-header-bell="right-of-account"') > cockpit.indexOf('onSair={sair}'));
+  assert.ok(!cockpit.includes('{autenticado ? <span className="[&_button]:!size-8">'));
   assert.ok(cockpit.includes('data-cd-sidebar-resize'));
   assert.ok(cockpit.includes('definirAbaAdminInicial("notificacoes")'));
   assert.ok(cockpit.includes('abaInicial={abaAdminInicial}'));
@@ -600,6 +602,7 @@ test("casca preserva sidebar com busca e toggle sem controles centrais duplicado
   assert.match(cockpit, /data-cd-harness="left-rail"/);
   assert.match(cockpit, /data-cd-harness="right-rail"/);
   assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
+  assert.ok(cockpit.includes('data-cd-header-bell="right-of-account"'));
   assert.match(cockpit, /data-cd-sidebar-resize/);
   assert.match(cockpit, /role="separator"/);
   assert.match(cockpit, /aria-label="Arrastar para ajustar largura da barra lateral"/);
