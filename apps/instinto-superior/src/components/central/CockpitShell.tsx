@@ -429,6 +429,24 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const [abaAtiva, definirAbaAtiva] = useState("visao");
   const [buscaNavegacao, definirBuscaNavegacao] = useState("");
   const [menuAberto, definirMenuAberto] = useState(true);
+  const [larguraSidebar, definirLarguraSidebar] = useState(256);
+  const larguraSidebarAtual = useRef(256);
+  const [arrastandoSidebar, definirArrastandoSidebar] = useState(false);
+  const limitarLarguraSidebar = (valor: number) => Math.max(240, Math.min(440, Math.round(valor)));
+  const ajustarLarguraSidebar = (valor: number, persistir = false) => {
+    const proxima = limitarLarguraSidebar(valor);
+    larguraSidebarAtual.current = proxima;
+    definirLarguraSidebar(proxima);
+    if (persistir && typeof window !== "undefined") {
+      try { window.localStorage.setItem("centraldark.cockpit.sidebar-width", String(proxima)); } catch { /* storage indisponível */ }
+    }
+  };
+  useEffect(() => {
+    try {
+      const salva = Number(window.localStorage.getItem("centraldark.cockpit.sidebar-width"));
+      if (Number.isFinite(salva) && salva >= 240 && salva <= 440) ajustarLarguraSidebar(salva);
+    } catch { /* mantém a largura padrão */ }
+  }, []);
   const focarBuscaAoAbrir = useRef(false);
   useEffect(() => {
     if (!menuAberto || !focarBuscaAoAbrir.current) return;
@@ -608,7 +626,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-[var(--cd-sidebar-width)]" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
+      style={{ "--cd-sidebar-width": `${larguraSidebar}px` } as React.CSSProperties}
     >
       {/* Cabeçalho superior: ações existentes; identidade única no menu lateral. */}
       <header
@@ -688,15 +707,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
-        </nav>
-      ) : null}
-      {harnessVisivel ? (
-        <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
-          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
-            definirAbaAdminInicial("notificacoes");
-            definirVersaoAdmin((n) => n + 1);
-            abrirDestino("admin");
-          }} /> : null}
         </nav>
       ) : null}
       {harnessVisivel ? (
@@ -894,12 +904,13 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full">
-            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
+          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full"
+            style={{ "--sidebar-width": `${larguraSidebar}px` } as React.CSSProperties}>
+            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-[var(--cd-sidebar-width)]" : "md:-ml-12"}`} id="centraldark-harness-abas">
               <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
-                <SidebarHeader className="border-b border-border px-3 py-4">
+                <SidebarHeader className="border-b border-border px-2 py-4">
                   <div className="flex min-h-9 items-center justify-between gap-1">
-                    <div className="flex min-w-0 items-center gap-2 overflow-hidden group-data-[collapsible=icon]:justify-center">
+                    <div className="flex min-w-0 items-center gap-1 overflow-hidden group-data-[collapsible=icon]:justify-center">
                       <span className="relative flex size-8 shrink-0 items-center justify-center rounded-md border border-primary/40 bg-surface" aria-hidden="true">
                         <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
                       </span>
@@ -908,8 +919,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                         <span className="truncate font-mono text-[9px] tracking-[0.1em] text-muted-foreground uppercase">Instinto Superior</span>
                       </span>
                     </div>
-                    <div className="flex shrink-0 items-center gap-0.5 group-data-[collapsible=icon]:flex-col">
+                    <div className="flex shrink-0 items-center gap-0 group-data-[collapsible=icon]:flex-col">
                       <Button type="button" size="icon" variant="ghost" title="Pesquisar ferramentas" aria-label="Pesquisar ferramentas" onClick={abrirBuscaNavegacao} className="size-8"><Search className="size-4" /></Button>
+                      {autenticado ? <span className="[&_button]:!size-8">
+                        <CentralNotificacoes modo="sininho" abrirCentral={() => {
+                          definirAbaAdminInicial("notificacoes");
+                          definirVersaoAdmin((n) => n + 1);
+                          abrirDestino("admin");
+                        }} />
+                      </span> : null}
                       <SidebarTrigger title="Ocultar ou mostrar barra lateral" aria-label="Ocultar ou mostrar barra lateral" className="size-8" />
                     </div>
                   </div>
@@ -918,7 +936,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     placeholder="Procurar: senha, cor, Hermes..."
                     className="mt-2 min-h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-offset-2 group-data-[collapsible=icon]:hidden" />
                 </SidebarHeader>
-                <SidebarContent className="px-2 py-3">
+                <SidebarContent className="cd-sidebar-scrollbar px-2 py-3">
                   <TabsList className="flex h-auto w-full flex-col items-stretch justify-start gap-4 bg-transparent p-0" aria-label="Seis pastas da Sala de Controle">
                     {NAVEGACAO_PASTAS.map((pasta) => {
                       const encontrados = pasta.itens.filter((item) =>
@@ -947,6 +965,43 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   {buscaNavegacao && !NAVEGACAO_PASTAS.some((pasta) => pasta.itens.some((item) => (!item.soAdmin || autenticado) && (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR")))) ?
                     <p className="p-3 text-xs text-muted-foreground">Nenhuma ferramenta encontrada.</p> : null}
                 </SidebarContent>
+                <div
+                  role="separator"
+                  aria-label="Arrastar para ajustar largura da barra lateral"
+                  aria-orientation="vertical"
+                  aria-valuemin={240}
+                  aria-valuemax={440}
+                  aria-valuenow={larguraSidebar}
+                  tabIndex={menuAberto ? 0 : -1}
+                  title="Arraste para redimensionar · setas do teclado para ajustar"
+                  data-cd-sidebar-resize
+                  data-dragging={arrastandoSidebar ? "true" : "false"}
+                  className="group-data-[collapsible=icon]:hidden absolute inset-y-0 right-0 z-50 hidden w-2 cursor-col-resize touch-none outline-none md:block after:absolute after:inset-y-0 after:right-0 after:w-[2px] after:rounded-full after:bg-transparent hover:after:bg-primary/60 focus-visible:after:bg-primary/70 data-[dragging=true]:after:bg-primary"
+                  onPointerDown={(event) => {
+                    if (event.button !== 0 || !menuAberto) return;
+                    event.preventDefault();
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                    definirArrastandoSidebar(true);
+                  }}
+                  onPointerMove={(event) => {
+                    if (arrastandoSidebar) ajustarLarguraSidebar(event.clientX);
+                  }}
+                  onPointerUp={(event) => {
+                    if (!arrastandoSidebar) return;
+                    definirArrastandoSidebar(false);
+                    ajustarLarguraSidebar(larguraSidebarAtual.current, true);
+                    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+                  }}
+                  onPointerCancel={() => definirArrastandoSidebar(false)}
+                  onLostPointerCapture={() => definirArrastandoSidebar(false)}
+                  onDoubleClick={() => ajustarLarguraSidebar(256, true)}
+                  onKeyDown={(event) => {
+                    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                      event.preventDefault();
+                      ajustarLarguraSidebar(larguraSidebarAtual.current + (event.key === "ArrowRight" ? 16 : -16), true);
+                    }
+                  }}
+                />
               </Sidebar>
               <div className="min-w-0 flex-1">
                 <div className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4"
