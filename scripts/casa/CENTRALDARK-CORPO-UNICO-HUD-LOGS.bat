@@ -95,6 +95,10 @@ $openHud.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate()})
 $openCockpit=[Windows.Forms.ToolStripMenuItem]::new('Abrir Cockpit CentralDark')
 $openCockpit.Add_Click({try{Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle'|Out-Null}catch{}})
 [void]$script:CorpoUnicoMenu.Items.Add($openCockpit)
+# Existing CentralDark OAuth helper; no duplicate Tray, login or credential store.
+$oauthTray=[Windows.Forms.ToolStripMenuItem]::new('Autenticar MCP CentralDark')
+$oauthTray.Add_Click({Invoke-ExistingCentralDarkOAuth})
+[void]$script:CorpoUnicoMenu.Items.Add($oauthTray)
 $verifyCasa=[Windows.Forms.ToolStripMenuItem]::new('Conferir Casa Commander')
 $verifyCasa.Add_Click({$form.Show();$form.WindowState='Normal';$form.Activate();Refresh-DesktopCommander})
 [void]$script:CorpoUnicoMenu.Items.Add($verifyCasa)
@@ -712,10 +716,33 @@ function Open-DesktopAccount([string]$Profile) {
   Start-AccountProbe -StartProfile $chosen
   foreach($page in $tab.TabPages) {if($page.Text -eq 'DESKTOP'){$tab.SelectedTab=$page;break}}
 }
+# Same OAuth helper used by MENU-OPERACIONAL-TRAY.ps1.
+# The embedded PowerShell payload runs from TEMP, so resolve from the BAT source.
+function Invoke-ExistingCentralDarkOAuth {
+  $source=[string]$env:CD_MONITOR_SOURCE
+  if([string]::IsNullOrWhiteSpace($source) -or -not (Test-Path -LiteralPath $source)) {
+    Add-Log 'RUNTIME' 'WARN' 'OAUTH_SOURCE_NOT_FOUND'
+    return
+  }
+  $scriptsRoot=Split-Path -Parent (Split-Path -Parent $source)
+  $oauth=Join-Path $scriptsRoot 'remote-bridge\canonical\CENTRALDARK-OAUTH-TRAY.ps1'
+  if(-not (Test-Path -LiteralPath $oauth -PathType Leaf)) {
+    Add-Log 'RUNTIME' 'WARN' 'CENTRALDARK_OAUTH_SCRIPT_MISSING'
+    return
+  }
+  try {
+    # Hidden helper process; the legitimate provider consent opens in the browser.
+    # Process started != OAuth authenticated: await MCP readback.
+    $proc=Start-Process -FilePath 'powershell.exe' -ArgumentList @(
+      '-NoProfile','-ExecutionPolicy','Bypass','-File',('"' + $oauth + '"')
+    ) -WindowStyle Hidden -PassThru -ErrorAction Stop
+    Add-Log 'RUNTIME' 'INFO' ('MCP OAuth iniciado PID='+$proc.Id+' | AUTH_RESULT=PENDING')
+  } catch {
+    Add-Log 'RUNTIME' 'WARN' ('MCP_OAUTH_START_FAILED: '+$_.Exception.Message)
+  }
+}
 $script:BtnProfile1.Add_Click({
-  Add-Log 'RUNTIME' 'INFO' 'Abrindo cockpit CentralDark; autenticacao humana preservada'
-  try { Start-Process 'https://windows-casa.tail6d7aa4.ts.net:8443/sala-controle' | Out-Null }
-  catch { Add-Log 'RUNTIME' 'WARN' 'Cockpit nao abriu; conexao privada pode estar indisponivel' }
+  Invoke-ExistingCentralDarkOAuth
 })
 $script:BtnProfile2.Add_Click({
   try {
