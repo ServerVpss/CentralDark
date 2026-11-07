@@ -766,7 +766,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       </header>
       <div aria-hidden="true" className="h-12" />
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" data-cd-harness="left-rail" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness auxiliar à direita" data-cd-harness="left-rail" className="fixed right-14 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
