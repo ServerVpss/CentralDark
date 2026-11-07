@@ -482,3 +482,13 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+
+<!-- CENTRALDARK_NATIVE_EXPLORER_SEPARATE_ACTIVITYBAR_20261107 -->
+## Explorador nativo e Vibe Coding separados (07/11/2026)
+INTEN??O: preservar o Explorador original do VS Code com suas views nativas (Arquivos, Editores Abertos, Estrutura de T?picos e Linha do Tempo) e oferecer a mesma extens?o CentralDark com icone independente na Activity Bar. Sem segunda extens?o e sem resetar toda a interface.
+DELTA: mover apenas as contribuicoes centraldarkVibeCoding (webview) e centraldarkWorkspaceFolders (arvore) de contributes.views.explorer para contributes.views.centraldarkVibe, declarado no mesmo manifesto em contributes.viewsContainers.activitybar. IDs das views, comandos, storage, renderer, logs e motor permanecem os mesmos. ?cone ?nico em media/centraldark-activity.svg. Vers?o 0.2.3 para atualiza??o do mesmo ID centraldark.centraldark-vscode-restore.
+ACHADO VIVO: em %APPDATA%/Code/User/globalStorage/state.vscdb (somente leitura), views.customizations.viewLocations.workbench.explorer.fileView == workbench.panel.chat: a view nativa Arquivos foi movida historicamente para o Chat; workbench.explorer.views.state.hidden declara isHidden=false. A extens?o n?o apagou a view. A altera??o de manifesto separa as contribui??es, MAS a visualiza??o nativa continua exigindo uma migra??o de layout individual via comando VS Code Exibir: Mover Exibi??o => Arquivos => Explorador, ou mecanismo existente equivalente. Nunca alterar banco SQLite do VS Code enquanto aberto, nem usar Reset View Locations global.
+PROVA/ESTADO: MANIFEST_SPLIT + TSC + TEST + VSIX + INSTALLED_ID + UIA_ICON + NATIVE_FILES_IN_EXPLORER s?o comprova??es independentes. S? marcar como PASS os itens efetivamente medidos. Sem mexer nas sess?es e na source original do VS Code.
+NEXT_CURSOR: compilar extens?o, empacotar VSIX do mesmo owner, instalar no VS Code da Casa sem reiniciar a bancada, observar ?cone pr?prio e restaurar somente a view nativa Arquivos por interface autorizada.
+<!-- /CENTRALDARK_NATIVE_EXPLORER_SEPARATE_ACTIVITYBAR_20261107 -->
