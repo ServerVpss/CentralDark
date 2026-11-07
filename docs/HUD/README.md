@@ -467,3 +467,19 @@ NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.
 
 **FIXED_POINT = PENDING**; **NEXT_CURSOR**: recuperar a rota de acesso ao **MCP HTTP completo ja existente** (sem duplicar instancia nem derrubar o Casa Agent); provar `/.well-known/oauth-authorization-server` + `/tools.json` no mesmo hostname HTTPS; confirmar consentimento admin via `/mcp-autorizar` e `/token`; executar `initialize`, `tools/list` e `casa_commander_read` no MCP autenticado atraves da ponte Casa; salvar receipt e readback. O clique humano de consentimento nao e substituido por automacao.
 <!-- /CENTRALDARK_MCP_PAIRING_ROUTE_20261107 -->
+
+<!-- CENTRALDARK_MCP_PAIRING_COCKPIT_DELTA_20261107 -->
+### Corpo Unico — pareamento a partir do Cockpit, sem falso amarelo (07/11/2026)
+
+**Intencao:** o botao de pareamento no HUD/Cockpit deve conduzir a tela MCP Dispositivos existente; o token de STDIO ja salvo nao deve aparentar inativo quando `/readyz=200`. Preservar Cloudflare, Tailscale, Casa Agent e consentimento administrativo.
+
+**Source e prova:**
+- `apps/instinto-superior/src/components/central/McpAdminIntegrado.tsx`: apos salvar, consulta estado real; se `READY_CHECK_PASSED`, exibe "Tunel STDIO ativo" e separa OAuth do plugin. Novo atalho "Abrir pareamento no MCP", sem segunda tela/senha.
+- `apps/instinto-superior/src/components/central/McpConsoleCentralDark.tsx`: mesmo painel Dispositivos, ativado pelo evento `centraldark:mcp-open-pairing` ou query `mcp-pareamento=1`. Nenhum codigo foi fabricado e nenhum token/credencial exposto.
+- **Main commits:** `701f3701fd3e8b04ee77d304030a33c4afdab047` e `6c99575b8aab0938b7db66637c07dc692b06d7ae`.
+- **Forja:** HEAD `6c99575b8aab0938b7db66637c07dc692b06d7ae`; `npm run verify:hud` **33 PASS / 0 FAIL / 1 TODO**; `npm run build:vps` **exit 0**; reinicio **somente** `centraldark-instinto-superior.service` exit 0; `8080/sala-controle=200`, `8080/mcp-autorizar=200`, `8742/readyz=200`, unidade app **active**, novo botao presente no asset compilado.
+- **Casa HUD owner local** `F:\CentralDark\scripts\remote-bridge\CENTRALDARK-CORPO-UNICO-HUD.bat`: mesmo BAT alterado, botao "Parear Casa" agora abre o Cockpit pelo alias SSH `openkylin-vm`, query `mcp-pareamento=1`; SHA256 `b395b33eaa3bd6c3b0820f6c2c6840102f1227a0ad573041c352fbd15d3abd9e`, parser PowerShell **0 erros**. Arquivo local NAO rastreado no checkout Git; nova acao so aparece apos reabrir o HUD. Nao afirmar deploy/commit do BAT.
+- **Nao resolvido:** `mcp.centralldark.com/.well-known/oauth-authorization-server=404` e `/tools.json=404`; publico atende Casa Agent `:9101`, nao o backend OAuth HTTP completo. Botao abre painel real, mas **codigo OAuth e chamada ChatGPT -> Casa ainda nao comprovados**. `STDIO_READY != MCP_PUBLIC_OAUTH_PASS`.
+
+**NEXT_CURSOR:** restaurar roteamento HTTPS do MCP HTTP canônico sem sobrescrever tunnel saudável; autenticar com consentimento real no painel existente, validar `/register`, `/authorize`, `/token`, `tools/list`, e `casa_commander_read` autenticado; publicar/registrar o BAT no owner com gates, sem duplicar script e sem descartar o historico. FIXED_POINT_GLOBAL=PENDING.
+<!-- /CENTRALDARK_MCP_PAIRING_COCKPIT_DELTA_20261107 -->
