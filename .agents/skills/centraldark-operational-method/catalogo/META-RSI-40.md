@@ -94,3 +94,12 @@
 - **Bloqueio separado:** a Skill Mãe \`centraldark-operational-method/SKILL.md\` foi classificada \`dangerous\` pelo auditor nativo (306 achados). Seu carregamento permanece **BLOCKED**, mesmo com os 65 métodos visíveis. Não suprimir, contornar ou falsificar esse gate.
 - **Validador operacional:** \`scripts/atualizar-catalogo-self-healing.ps1 -VerificarCarregadores\` invoca o \`scripts/validate_meta_rsi_catalog.py --loader-check\` usando o Python do Hermes. Deve falhar explicitamente na quarentena do owner; \`--loader-check\` não envia input, não altera permissões, não executa skills e não substitui o carregador nativo.
 - **Fronteira:** capacidade documental e \`skill_view\` passam para as 65 entradas no processo de teste; o carregamento pela sessão Desktop já aberta, a execução contínua META-RSI e o runtime 40/40 **não foram comprovados**. \`NEXT_CURSOR=RECONCILE_MOTHER_NATIVE_QUARANTINE_WITHOUT_BYPASS\`.
+
+## Memória operacional BRAIN 07 · referências bidirecionais (2026-11-06)
+
+- **Nota → SELF:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/{01-OURO,02-SESSOES,03-APRENDIZADOS,04-MEMORIAS}/*.md` usa `centraldark_self_primary`, `centraldark_self_related` e `centraldark_self_skill_refs` com os nomes e caminhos deste catálogo.
+- **SELF → nota:** via `apps/bot-telegram/skills/externas/obsidian-writer.cjs` com `op=search, query="Self-..."` e/ou termo do objetivo; o resultado de busca contém `self_primary`, `self_related`, `self_skill_refs`. Esse mesmo escritor é o owner de criação de notas; não adicionar outro índice, banco, scheduler ou bot.
+- **Correção incremental:** ao notar algo fora do lugar, recuperar contexto e medir o estado vivo primeiro. O META-RSI 40/40 decide `APPLIED` ou `NOOP_JUSTIFIED`; se o patch for necessário e autorizado, Hermes e o writer existente fazem a melhoria com teste, contraprova, receipt e `NEXT_CURSOR`.
+- **Estado:** 41 notas vinculadas na `main`; contrato de roteamento e recuperação no source. Não há evidência aqui de adaptação 40/40 automática no Hermes; respeitar o bloqueio de quarentena já documentado acima. `DOCUMENTED != RUNTIME_PROVED`.
+
+[BRAIN 07 · índice das notas](../../../../docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md).
