@@ -593,6 +593,12 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
   assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
   assert.ok(shell.includes("group-data-[state=active]/menuitem:text-primary"));
+  assert.ok(shell.includes("group-hover/menuitem:-translate-y-0.5"));
+  assert.ok(shell.includes("group-hover/menuitem:scale-105"));
+  assert.ok(shell.includes("group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)]"));
+  assert.ok(shell.includes("group-hover/menuitem:text-neon-green"));
+  assert.ok(shell.includes("group-focus-within/menuitem:text-primary"));
+  assert.ok(shell.includes("motion-reduce:transform-none"));
   assert.ok(!shell.includes('className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0"'));
   const landing = read("apps/instinto-superior/src/routes/index.tsx");
   assert.ok(landing.includes('rounded-lg border border-border bg-surface-2'));
