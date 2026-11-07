@@ -13,6 +13,7 @@ const PAINEIS = [
   { id: "rotas", title: "Rotas", publico: false, endpoint: "/admin/api/rotas" },
   { id: "tools", title: "Ferramentas", publico: false, endpoint: "/admin/api/tools" },
   { id: "logs", title: "Logs", publico: false, endpoint: "/admin/api/logs" },
+  { id: "auditoria", title: "Auditoria detalhada", publico: false, endpoint: "/admin/api/logs" },
   { id: "metricas", title: "Métricas", publico: false, endpoint: "/admin/api/metricas" },
   { id: "snapshot", title: "Observabilidade", publico: false, endpoint: "/admin/api/operational-snapshot" },
   { id: "grok", title: "Grok", publico: false, endpoint: "/admin/api/grok/control" },
@@ -54,6 +55,67 @@ function JanelaJson({ dados }: { dados: unknown }) {
       {JSON.stringify(dados, null, 2)}
     </pre>
   );
+}
+
+
+/** Audita pelo backend MCP existente. Não captura chamadas externas automaticamente. */
+type LinhaAuditoria = { t?: string; level?: string; rota?: string; cid?: string; msg?: string; meta?: { toolName?: string; call_id?: string; correlation_id?: string; status?: string; durationMs?: number } };
+function McpAuditoriaFiltrada() {
+  const inicial = { rota: "", cid: "", level: "", q: "" };
+  const [filtros, setFiltros] = useState(inicial);
+  const [logs, setLogs] = useState<LinhaAuditoria[]>([]);
+  const [estado, setEstado] = useState("SEM_CONSULTA");
+  const [busy, setBusy] = useState(false);
+  async function consultar(f = filtros) {
+    setBusy(true);
+    const params = new URLSearchParams({ limit: "200" });
+    Object.entries(f).forEach(([key, value]) => { if (value.trim()) params.set(key, value.trim()); });
+    try {
+      const data = await solicitar("/admin/api/logs?" + params.toString());
+      if (!Array.isArray(data.logs)) throw Error("MCP_LOG_SCHEMA_UNKNOWN");
+      setLogs(data.logs as LinhaAuditoria[]);
+      setEstado("LOGS_RETORNADOS=" + data.logs.length);
+    } catch (error) {
+      setLogs([]); setEstado(error instanceof Error ? error.message : "MCP_LOG_UNAVAILABLE");
+    } finally { setBusy(false); }
+  }
+  useEffect(() => { void consultar(inicial); }, []);
+  return <section className="space-y-3" aria-label="Auditoria de chamadas MCP">
+    <p className="text-xs text-muted-foreground">Filtro por rota, CID, nível e texto · /admin/api/logs. Buffer desde último reinício; Tool Call Lens completo permanece em Observabilidade.</p>
+    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <input aria-label="Rota" placeholder="Rota" value={filtros.rota} onChange={e => setFiltros(f => ({...f, rota: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+      <input aria-label="CID" placeholder="CID / correlação" value={filtros.cid} onChange={e => setFiltros(f => ({...f, cid: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+      <select aria-label="Nível" value={filtros.level} onChange={e => setFiltros(f => ({...f, level: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm"><option value="">Todos</option><option value="error">ERROR</option><option value="warn">WARN</option><option value="info">INFO</option><option value="debug">DEBUG</option></select>
+      <input aria-label="Texto livre" placeholder="Buscar texto" value={filtros.q} onChange={e => setFiltros(f => ({...f, q: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+    </div>
+    <div className="flex gap-2">
+      <Button type="button" size="sm" onClick={() => void consultar()} disabled={busy}>Buscar</Button>
+      <Button type="button" size="sm" variant="outline" onClick={() => { setFiltros(inicial); void consultar(inicial); }} disabled={busy}>Limpar</Button>
+    </div>
+    <p role="status" className="text-xs">{busy ? "CONSULTANDO" : estado}</p>
+    <div role="log" className="max-h-96 overflow-y-auto rounded border border-border p-3 font-mono text-xs">
+      {logs.map((l,i) => <p key={String(l.t ?? i) + String(i)} className="border-b border-border/50 py-1">
+        {l.t ?? "SEM_DATA"} · {l.level ?? "UNKNOWN"} · {l.rota ?? "-"} · CID {l.cid ?? l.meta?.correlation_id ?? "-"} · {l.meta?.toolName ?? ""} {l.meta?.status ?? ""} {l.meta?.durationMs ?? ""}ms · {l.msg ?? ""}
+      </p>)}
+      {!logs.length && !busy ? <p className="text-muted-foreground">Sem resultados nesta leitura.</p> : null}
+    </div>
+  </section>;
+}
+function McpFerramentasPorCategoria({ data }: { data: Resultado | null }) {
+  const [busca, setBusca] = useState("");
+  const raw = data?.categorias;
+  const groups = raw && typeof raw === "object" && !Array.isArray(raw) ? Object.entries(raw as Record<string, unknown>) : [];
+  return <section className="space-y-3">
+    <p className="text-xs text-muted-foreground">{typeof data?.total === "number" ? data.total : "UNKNOWN"} ferramentas declaradas. TOOL_LISTED != TOOL_ACTIVE.</p>
+    <input aria-label="Buscar ferramenta MCP" placeholder="Buscar ferramentas por nome ou descrição" value={busca} onChange={e => setBusca(e.target.value)} className="w-full rounded border border-border bg-background p-2 text-sm" />
+    {groups.map(([categoria, itens]) => {
+      const tools = Array.isArray(itens) ? (itens as {name: string; description?: string}[]).filter(t => String(t.name || "").toLowerCase().includes(busca.toLowerCase()) || String(t.description || "").toLowerCase().includes(busca.toLowerCase())) : [];
+      return tools.length ? <div key={categoria} className="rounded border border-border p-3"><strong className="text-sm">{categoria} ({tools.length})</strong>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">{tools.map(t => <div key={t.name} className="rounded bg-background/50 p-2 text-xs"><code className="font-bold">{t.name}</code><p className="mt-1 text-muted-foreground">{t.description || "Descrição indisponível"}</p></div>)}</div>
+      </div> : null;
+    })}
+    {!groups.length ? <p className="text-xs">Catálogo indisponível nesta sessão.</p> : null}
+  </section>;
 }
 
 export function McpConsoleCentralDark() {
@@ -195,7 +257,7 @@ export function McpConsoleCentralDark() {
             Executar diagnóstico MCP E2E
           </Button>
         ) : null}
-        {conteudo ? <JanelaJson dados={conteudo} /> : (
+        {aba.id === "auditoria" && autenticado ? <McpAuditoriaFiltrada /> : aba.id === "tools" && autenticado ? <McpFerramentasPorCategoria data={conteudo} /> : conteudo ? <JanelaJson dados={conteudo} /> : (
           <p className="rounded-xl border border-border px-4 py-6 text-sm text-muted-foreground">
             {ocupado ? "Consultando API…" : "Sem dados desta leitura."}
           </p>
