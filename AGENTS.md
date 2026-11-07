@@ -1,6 +1,14 @@
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
 seção **fix_point_reference_pack**. Essa tag indexa as **sete fontes canônicas**
