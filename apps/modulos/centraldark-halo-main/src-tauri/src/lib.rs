@@ -190,8 +190,8 @@ fn apply_state(
     if state != previous {
         log::info!("State: {previous} -> {state}");
         match state {
-            HaloState::Attention => notify(app, "Codex needs your attention"),
-            HaloState::Completed => notify(app, "Codex turn completed"),
+            HaloState::Attention => notify(app, "CentralDark precisa da sua atencao"),
+            HaloState::Completed => notify(app, "CentralDark concluiu a etapa"),
             HaloState::Idle | HaloState::Working => {}
         }
     }
