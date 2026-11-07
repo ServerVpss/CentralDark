@@ -938,7 +938,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     placeholder="Procurar: senha, cor, Hermes..."
                     className="mt-2 min-h-10 w-full rounded-md border border-border bg-background px-3 text-sm outline-offset-2 group-data-[collapsible=icon]:hidden" />
                 </SidebarHeader>
-                <SidebarContent className="cd-sidebar-scrollbar px-2 py-3">
+                <SidebarContent className="px-2 py-3">
                   <TabsList className="flex h-auto w-full flex-col items-stretch justify-start gap-4 bg-transparent p-0" aria-label="Seis pastas da Sala de Controle">
                     {NAVEGACAO_PASTAS.map((pasta) => {
                       const encontrados = pasta.itens.filter((item) =>
