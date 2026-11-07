@@ -690,6 +690,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 onSair={sair}
               />
             )}
+            {autenticado ? (
+              <span data-cd-header-bell="right-of-account" className="shrink-0 [&_button]:!size-9 [&_button]:rounded-md [&_button]:border [&_button]:border-border">
+                <CentralNotificacoes modo="sininho" abrirCentral={() => {
+                  definirAbaAdminInicial("notificacoes");
+                  definirVersaoAdmin((n) => n + 1);
+                  abrirDestino("admin");
+                }} />
+              </span>
+            ) : null}
           </div>
         </div>
       </header>
@@ -921,13 +930,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     </div>
                     <div className="flex shrink-0 items-center gap-0 group-data-[collapsible=icon]:flex-col">
                       <Button type="button" size="icon" variant="ghost" title="Pesquisar ferramentas" aria-label="Pesquisar ferramentas" onClick={abrirBuscaNavegacao} className="size-8"><Search className="size-4" /></Button>
-                      {autenticado ? <span className="[&_button]:!size-8">
-                        <CentralNotificacoes modo="sininho" abrirCentral={() => {
-                          definirAbaAdminInicial("notificacoes");
-                          definirVersaoAdmin((n) => n + 1);
-                          abrirDestino("admin");
-                        }} />
-                      </span> : null}
                       <SidebarTrigger title="Ocultar ou mostrar barra lateral" aria-label="Ocultar ou mostrar barra lateral" className="size-8" />
                     </div>
                   </div>
