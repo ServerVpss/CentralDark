@@ -8,6 +8,20 @@ source_class: SESSION_CRYSTAL
 pr_mother: 1562
 child_pr: 1723
 tags: [centraldark-os, dependabot, update-branch, cleanup, ephemeral-workspace, preformat, general, visual-identity, session-crystal]
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "02-SESSOES"
+centraldark_kind: "CRISTAL_DE_SESSAO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Núcleo — cristal da sessão 2026-09-30 → 2026-10-01"
+centraldark_agent_recall: "Recuperar a intencao, os limites e NEXT_CURSOR desta sessao antes de continuar; historico nao prova runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","vegetto-gogeta-convergencia","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "ba3fd289f6be507383f31cc6cc493c93140b59b6"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-30-CRISTAL-SESSAO-FORMATACAO-FLUXO-GERAL.md"
 ---
 
 # Núcleo — cristal da sessão 2026-09-30 → 2026-10-01

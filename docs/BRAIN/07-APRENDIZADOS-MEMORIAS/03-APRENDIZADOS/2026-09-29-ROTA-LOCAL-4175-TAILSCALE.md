@@ -4,6 +4,20 @@ date: 2026-09-29
 status: PROVED_SCOPED_ROUTE
 tags: [centraldark-os, local-first, tailscale, casa, mvp, porta-4175, interligados]
 owner: "🔗 !># INTERLIGADOS"
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "03-APRENDIZADOS"
+centraldark_kind: "APRENDIZADO_OPERACIONAL"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Rota local 4175 → Casa via Tailscale"
+centraldark_agent_recall: "Recuperar causa, correcao, efeito e contraprova antes de repetir trabalho."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resiliencia","beerus-autolimpeza","kaizen-continuo","sukuna-potencia-sob-controle"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "0848d8ae675515dcccff4d1fa72203326414c746"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-ROTA-LOCAL-4175-TAILSCALE.md"
 ---
 
 # Rota local 4175 → Casa via Tailscale

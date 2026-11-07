@@ -91,7 +91,7 @@
       "owner": "apps/instinto-superior",
       "transport": "Vite localhost → Tailscale private serve",
       "runtime_status": "PORT_PROCESS_PROVEN",
-      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md",
+      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/03-APRENDIZADOS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md",
       "last_evidence_status": "DEGRADED_NO_LISTENER_127_0_0_1_3000_MEDIDO_22_10_2026",
       "last_evidence_ref": "apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm.measured_routes"
     },

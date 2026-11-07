@@ -10,6 +10,20 @@ sensitivity: "INTERNAL"
 source: "PR #1549 + scripts/memory-linker/"
 source_class: "INTERNAL"
 owner: "scripts/memory-linker/"
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "04-MEMORIAS"
+centraldark_kind: "CONTEXTO_HUMANO_HISTORICO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Pontos & Níveis do CHEFE — progressão simbólica"
+centraldark_agent_recall: "Respeitar autoria e contexto expressos pelo CHEFE sem inventar intimidade ou estados emocionais."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","whis-orientacao","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "39852e10c9977e0fb061f99720115ab0458a1cd2"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md"
 ---
 
 # 🎮 Pontos & Níveis do CHEFE

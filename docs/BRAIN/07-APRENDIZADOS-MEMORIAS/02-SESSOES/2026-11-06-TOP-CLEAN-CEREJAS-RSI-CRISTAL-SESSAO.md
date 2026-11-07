@@ -11,6 +11,20 @@ related:
   - "[[BIBLIOTECA]]"
   - "[[MAPA-OBSIDIAN-BRAIN]]"
   - "[[LEMBRANCAS]]"
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "02-SESSOES"
+centraldark_kind: "CRISTAL_DE_SESSAO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "🍒 Cristal da sessão — TOP CLEAN CEREJAS + META-RSI 40/40"
+centraldark_agent_recall: "Recuperar a intencao, os limites e NEXT_CURSOR desta sessao antes de continuar; historico nao prova runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","vegetto-gogeta-convergencia","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "dfb38f0c60d33e86957fd24278cb92becfd3b673"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-11-06-TOP-CLEAN-CEREJAS-RSI-CRISTAL-SESSAO.md"
 ---
 
 # 🍒 TOP CLEAN CEREJAS — descobertas e memória viva (06/11/2026)
@@ -38,11 +52,11 @@ A conversa percebeu que criar mais não significa necessariamente evoluir. **É 
 - Memorial extenso da sessão: `.agents/skills/centraldark-operational-method/references/MEMORIAL-SESSAO-TOP-CLEAN-CEREJAS-20261106.md` (commit `0877fdc715757f869d72c371d6293e37e84478fb`); ponte na Skill Mãe commit `3ab9dc10927827a3f121c62e21386c66a5995cc4`.
 
 ## Vínculos canônicos e semântica
-- **Fontes e estudos**: [Biblioteca Cognitiva](../03-DOCUMENTACAO/02-BIBLIOTECA/README.md) e [[BIBLIOTECA]]; catalogar fontes por proveniência, não declarar descoberta humana automaticamente como fonte científica.
-- **Memórias e descobertas da sessão**: este arquivo na pasta `07-APRENDIZADOS-MEMORIAS`; [índice](README.md).
-- **Lembranças cruzadas**: [LEMBRANCAS](../../CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md).
-- **Método executor**: [Skill Mãe](../../../.agents/skills/centraldark-operational-method/SKILL.md), Kimetsu e META-RSI nas referências já existentes, sem criar skill duplicada.
-- **Mapa semântico**: [Obsidian/BRAIN](../00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md).
+- **Fontes e estudos**: [Biblioteca Cognitiva](../../03-DOCUMENTACAO/02-BIBLIOTECA/README.md) e [[BIBLIOTECA]]; catalogar fontes por proveniência, não declarar descoberta humana automaticamente como fonte científica.
+- **Memórias e descobertas da sessão**: este arquivo na pasta `07-APRENDIZADOS-MEMORIAS`; [índice](../README.md).
+- **Lembranças cruzadas**: [LEMBRANCAS](../../../CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md).
+- **Método executor**: [Skill Mãe](../../../../.agents/skills/centraldark-operational-method/SKILL.md), Kimetsu e META-RSI nas referências já existentes, sem criar skill duplicada.
+- **Mapa semântico**: [Obsidian/BRAIN](../../00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md).
 
 ## NEXT_CURSOR
 Ao recuperar TOP CLEAN CEREJAS, ler primeiro esta nota, seguir ao memorial completo só quando necessário e aplicar a regra no owner relevante. Fazer dedupe, usar o que já existe e evitar releitura integral desnecessária. RUNTIME_AUTOCONSUMPTION=UNKNOWN; GITHUB_WRITE != RUNTIME_READY.

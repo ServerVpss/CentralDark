@@ -8,6 +8,20 @@ sensitivity: "INTERNAL_NO_SECRETS"
 owner: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md"
 main_related_commits: ["f4a3026b5a36389f26d53859396b5bb274aba0db", "0e6c45c74ce21c4e24b48aea31a9f613c0114ad0"]
 pr_ledger: 1832
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "03-APRENDIZADOS"
+centraldark_kind: "APRENDIZADO_OPERACIONAL"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "🪬 Circuito móvel selado — iPhone SEGREDO → Tailscale → Casa → Cockpit"
+centraldark_agent_recall: "Recuperar causa, correcao, efeito e contraprova antes de repetir trabalho."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resiliencia","beerus-autolimpeza","kaizen-continuo","sukuna-potencia-sob-controle"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "cf7487d68555768510102fa58e764b0622003024"
+centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md"
 ---
 
 # 🪬 Circuito fechado — iPhone SEGREDO → Tailscale → Casa → Instinto Superior
@@ -67,8 +81,8 @@ A rota não tem `funnel` público. O navegador do iPhone deve ter Tailscale cone
 
 ## Equivalentes canônicos, sem segunda memória
 
-- Arquitetura física e sync: [Hermes Casa + Obsidian](../../ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md).
-- Mapa Obsidian/BRAIN: [Mapa Obsidian — BRAIN](../00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md).
+- Arquitetura física e sync: [Hermes Casa + Obsidian](../../../ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md).
+- Mapa Obsidian/BRAIN: [Mapa Obsidian — BRAIN](../../00-MAPA-SISTEMA/02-GRAFOS/MAPA-OBSIDIAN-BRAIN.md).
 - Ledger/GOAL e continuidade: [PR #1832](https://github.com/ServerVpss/CentralDark/pull/1832).
 - Não criar outro bot, proxy, API, vault ou HUD. Memória é arquivo Markdown indexado no vault BRAIN; contrato do sincronizador atual continua prevalecendo.
 
