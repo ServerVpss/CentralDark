@@ -448,3 +448,21 @@ Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webh
 ## META-RSI 40/40 integrado por metodo
 
 Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.
+
+<!-- CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+## 🍒 TOP CLEAN CEREJAS — filtro de melhoria da Skill Mãe
+
+**Lei mestra:** Retém o bem. Elimina o atrito. Preserva o segredo. Automatiza o caminho.
+**Regra suprema:** Uma cereja só merece existir quando elimina mais complexidade do que acrescenta, preservando capacidades úteis.
+**Zero cerimônia:** Se o executor autorizado já sabe o próximo passo, não devolver trabalho repetitivo ao CHEFE. Intenção → reutilização → simplificação → execução → resultado → 🍒.
+**Michelin ⭐⭐⭐:** reutilizou, simplificou, preservou e entregou valor observável? Ganhou uma cereja. Não criar HUD, skill, daemon, executor ou biblioteca paralelos.
+**Autolimpeza:** incorporar, deduplicar ou retirar cerimônia obsoleta sem apagar capacidade nem alterar contratos superiores. Self-Pruning é critério transversal, não um 41º processo.
+
+**Interligados:** esta Skill Mãe coordena com o Kimetsu Brainstorm Remix e o método operacional CentralDark já referenciados acima. SOL interpreta intenção e coordena; Hermes é executor existente; CHEFE decide. Aplicar o menor delta útil no owner atual, respeitando escritor único e NEXT_CURSOR.
+
+**SELF 40/40:** reutilizar a matriz canônica [META-RSI 40/40](catalogo/META-RSI-40.md) e [META-RSI](Skills/meta-rsi/SKILL.md), sem gerar outra lista ou 40 agentes. Famílias de aplicação: consciência, aprendizado, recuperação, autonomia, organização, evolução, continuidade e inteligência. Cada variante é uma técnica candidata (APPLIED ou NOOP_JUSTIFIED), não obrigação de rodar. Self-Testing, Self-Healing, Self-Looping, Self-Provisioning e Self-Pruning só se aplicam quando reduzem atrito real.
+
+**MVP:** funcionalidade primeiro, correções incrementais depois. Auditoria ampla fica para fase posterior decidida pelo CHEFE; evitar transformar cada demonstração em exigência repetida de prova. Para credenciais, reutilizar cofre e autenticação existentes sem ecoar valores no chat, logs ou commits. Preservar autorizações e regras superiores.
+
+**Critério de saída:** menos esforço humano, mesma ou maior capacidade, nenhuma duplicação estrutural; se a melhoria acrescentar mais complexidade do que retirar, NOOP e seguir. Registrar mudanças materiais no receipt/owner existente.
+<!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
