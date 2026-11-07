@@ -34,6 +34,20 @@ REFERENCIAS / TRECHOS INDEXADOS QUANDO DISPONIVEIS
 💎 CRISTAL quando houver prova + reuso
 ```
 
+## 💙 Biblioteca de experiências — todas as provocações que realmente ensinarem algo
+
+**Owner preservado:** esta Biblioteca já existe. Não criar biblioteca “SOL”, biblioteca “GPT”, biblioteca “Hermes” ou Dream Brain concorrente. SOL, ChatGPT, Hermes e outros modelos fornecem experiências e referências com proveniência; **a CentralDark mantém uma Biblioteca única e recupera apenas o setor relevante**.
+
+**Caminho canônico:** episódio disponibilizado por fonte autorizada → `session-intelligence-harvester` → `scripts/memory-linker/dream-review-run.mjs` → `pattern-library.mjs` → revisão/contraprova → vínculo aqui por `source_id`, origem, digest/hash quando disponível, `tags`, `owner`, `learning_ref`, data do fato e da observação. Materiais brutos não são copiados por padrão, nem se registra cadeia privada de raciocínio da IA.
+
+**Entrada ampla, cristalização criteriosa:** desafios, correções, objeções e contraprovas do CHEFE **não ficam limitados a duas imagens**. Cada episódio novo pode virar `LEARNING_CANDIDATE` no mesmo funil; repetição, opinião sem novidade, documento sem execução e alegação sem prova continuam fora do aprendizado confirmado. Não inferir acesso a todas as conversas só porque existe memória resumida. O primeiro caso documentado é o par Hermes **com/sem capacete**, guardado no owner de comunicação existente; o próximo episódio não deve recriar esse ensinamento sem critério material novo.
+
+**Quando o Hermes “dorme”:** o review ocioso analisa registros disponibilizados e emite candidatos, **sem escrita direta nas regras**. A execução automática/noturna e o carregamento na voz permanecem `NÃO COMPROVADOS` até prova do scheduler e da resposta real do Hermes. A biblioteca é referência/índice; **não** altera automaticamente pesos de GPT, Claude ou Hermes.
+
+**Estados visíveis em português:** `Material recebido`, `Em análise`, `Aprendizado sugerido`, `Aguardando confirmação`, `Aprendizado registrado`, `Hermes utilizou`. A explicação técnica pode citar `candidate`, `writer`, `receipt` ou `Dream Review` em texto pequeno. Só mostrar “Hermes utilizou” com readback do consumidor.
+
+**NEXT_CURSOR:** `EPISÓDIO_AUTORIZADO → DEDUPE → CRITÉRIO_REVISADO → PROVA → INDEXAÇÃO_EXISTENTE → CONSUMO_MEDIDO`.
+
 ## Uma fonte, várias representações
 
 PDF, EPUB e JWPUB são adaptadores de entrada da mesma obra quando edição/conteúdo puderem ser reconciliados. Google Docs, Markdown/TXT no Drive e pastas do Drive entram como **referências externas com proveniência**, não como segunda fonte de verdade da CentralDark.
@@ -476,6 +490,58 @@ PUBLIC_PDF_CONTENT_UPLOAD=NO
 **NEXT_CURSOR:** classificar direitos/sensibilidade e selecionar apenas os PDFs realmente pertinentes; então aplicar o leitor/roteador da Biblioteca num ensaio controlado, indexando somente conteúdo autorizado, com readback e contraprova. Integração runtime e replay permanecem `UNKNOWN`.
 
 
+
+## 📚 Biblioteca no Dream Reviewer do Instinto Superior — 20/10/2026
+
+**Intenção do CHEFE:** a Biblioteca tem que aparecer dentro do cockpit existente, com ícones bonitos, acesso pelo menu e ferramentas para conferir quando o Hermes realmente usar um aprendizado. Referências de composição pesquisadas: shadcn/ui `Tabs + Cards`, ícones Lucide com texto legível, grade responsiva, foco visível e divulgação progressiva dos detalhes.
+
+**Owners de UI reutilizados:** `apps/instinto-superior/src/components/central/CockpitShell.tsx` (já tem aba `dream-reviewer`; recebe **somente** destino no Harness, título PT-BR e os callbacks `Abrir Hermes`/`Conferir recibos`) + `apps/instinto-superior/src/components/central/DreamReviewer.tsx` (componente já existe; recebe grade de **nove peças** com origem, finalidade, ícone e estado fiel). A Biblioteca canônica continua aqui; o Dream Reviewer apenas **projetará suas referências**, sem duplicar banco, API ou engine.
+
+**Peças visíveis:** garimpo de sessões; inbox de experiências; Dream Review; descoberta de padrões; biblioteca de padrões; Biblioteca CentralDark; Self-Evolution; prompt Hermes consumidor; gatilho/agendamento. `Ver origem` abre o arquivo real de cada peça no repositório. `Abrir Hermes` e `Conferir recibos` navegam para as **abas existentes** do mesmo cockpit e **não** certificam consumo. Sem acesso às provas reais, a UI informa `Ainda não verificado`; fontes apenas no repositório ficam `Código localizado · uso a verificar`.
+
+**Correção de prova visual:** o componente antigo continha números ilustrativos (94%, sessões e padrões) e dizia que o Hermes dormia/aprendia, sem sensor que sustentasse esses estados. O delta remove o 94% e as contagens fictícias do resumo, recolhe os exemplos antigos atrás de `Ver dados ilustrativos — PRÉVIA, não são medições reais` e proíbe pintar como comprovado. Nenhum comando silencioso, timer paralelo, coleta de conversa, segredo ou scheduler novo foi adicionado.
+
+```text
+SOURCE_UI = apps/instinto-superior/src/components/central/DreamReviewer.tsx
+OWNER_COCKPIT = apps/instinto-superior/src/components/central/CockpitShell.tsx
+TEST_OWNER = apps/instinto-superior/scripts/verify-hud-zone.mjs
+CODE_REFERENCES = NOVE_ORIGENS_ESTRUTURADAS
+NAVEGACAO_HERMES_E_RECIBOS = BOTAO_EXISTENTE
+CONSUMO_REAL_HERMES = AINDA_NAO_VERIFICADO
+DREAM_REVIEW_SCHEDULE = AINDA_NAO_VERIFICADO
+LIVE_RUNTIME_AFTER_MERGE = AINDA_NAO_VERIFICADO
+NEXT_CURSOR = CI_MESMO_SHA -> CASA_RECONCILIAR_OWNER_LOCAL -> TESTE_VISUAL_8080 -> HERMES_CONSUMO_PROVADO -> MAIN_GATES -> VPS_DEPOIS
+```
+
+<!-- #OBSERVACOES# @owner=docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md @code_ref=apps/instinto-superior/src/components/central/DreamReviewer.tsx @code_ref=apps/instinto-superior/src/components/central/CockpitShell.tsx @code_ref=apps/instinto-superior/scripts/verify-hud-zone.mjs @last_updated=2026-10-20 -->
+
+
+## 🪬 Continuidade do Hermes no cartão Auto Sync — 20/10/2026
+
+O CHEFE mostrou a foto do topo do cockpit e pediu menos dispersão e melhor contraste. O owner já existente `apps/instinto-superior/src/components/central/AutoSyncButton.tsx` **continua o mesmo**, mas agora apresenta uma superfície compacta azul-escura reunindo Auto Sync, Micro-Deploy protegido e continuidade do Hermes; controles antigos ficam numa gaveta expansível. O `CockpitShell.tsx` apenas repassa a navegação já existente para abas Hermes, Recibos e Dream Reviewer.
+
+**Quatro indicadores visuais da continuidade**: sessão atual, fila/tarefas, último recibo e revisão Dream Review. **Sem sensor integrado para essas medições neste componente**, os indicadores dizem `Aguardando recibo do Hermes`, `Sem leitura da fila`, `Não consultado` e `Consumo não medido`, não uma porcentagem inventada. A leitura do status Auto Sync vem do owner `lerStatusSync`. O botão Micro-Deploy preserva a trava: sincronização Git não autoriza afirmar deploy ou chamar executor indisponível.
+
+**Design**: alto contraste sobre `#0b1426` → `#122743`, cards responsivos com ícones Lucide, tipografia legível, ações secundárias recolhidas sob `<details>`, foco e navegação reais para as abas existentes. Nenhum runtime/processo, scheduler, fila ou memória paralelos. A cor viva mostra agrupamento visual, não saúde medida.
+
+**Regressão no mesmo dono:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` verifica textos, contrato de não inventar recibos e ligações para as abas. A observação definitiva deve ocorrer no build e no clique real do cockpit com alterações locais da Casa preservadas antes de merge/deploy.
+
+`NEXT_CURSOR=VERIFICAR_CI_SAME_SHA → RECONCILIAR_CASA_SEM_SOBRESCREVER → RENDERIZAR_CARTAO_EXISTENTE → COMPROVAR_LEITURA_HERMES_COM_RECEIPT → PROMOVER_CONFORME_GATES`.
+
+
+## 🧠 Sete funções + checkpoint/Cline no topo do cockpit — 20/10/2026
+
+O CHEFE pediu que **tudo que foi debatido sobre o Harness compacto** apareça nos **cartões do topo do Instinto Superior**, em vez de ficar disperso em chats, terminais ou diagramas. Reaproveitado `AutoSyncButton.tsx` (o cartão na primeira faixa do `CockpitShell.tsx`) e o componente **`CheckpointCentralDark.tsx`**, que já possui leitura RPC com `requireSupabaseAuth` e papel `admin`. Sem novo endpoint, nova memória, status sintético ou backend Cline.
+
+**Frente compacta:** CHEFE → COCKPIT → MCP (Descobrir/PID/Solicitar) → RECIBO, mais sessão/fila/último recibo/Dream Review. **Verso expandido:** as sete capacidades nomeadas `Mente Clara`, `Visão Contraprova`, `Selo da Realidade`, `Trilho de Execução`, `Pulso de Continuidade`, `Guardião Silencioso`, `Memória Viva`. Mantêm Tailscale, autorização no VS Code, PID e recibo sem transformá-los em sete ligações simultâneas.
+
+**Cartão de investigação Cline (histórico, não telemetria):** SSH Casa→VPS observado em registro de 20/10; CRLF PowerShell→Bash; falha `verify_argv` com AssertionError em release esperado; componente checkpoint existente sem montagem detectada no CockpitShell investigado. Os quatro itens estão rotulados como **evidência recebida**, sem declarar falha atual no runtime nem solução executada. Reutilizar logs anteriores; `REPEATED_RESEARCH_FORBIDDEN`.
+
+**Cartão checkpoint raiz real:** um `<details>` aciona **lazy loading** do `CheckpointCentralDark` apenas quando aberto. O mesmo owner no servidor lê `/root/.hermes/centraldark/bin/centraldark-entry.py --status`, expondo missão, último PASS, NEXT_CURSOR e SHA apenas sob autenticação admin. Não importar arquivo privado diretamente para frontend e não tentar recriar `current.json`. Botão de continuar já possui gate de `dispatch_ready/plan_ready`; `DISPATCHED_AWAITING_RECEIPT != PASS`. A localização canônica `/root/.hermes/centraldark/verified-execution/<missão>/current.json` é operada pelo código existente.
+
+**Contraprova de código:** `apps/instinto-superior/scripts/verify-hud-zone.mjs` contém testes estáticos dos sete nomes, do diagnóstico histórico, da passagem do estado `autenticado` e da RPC canônica, sem estabelecer execução do build. Estado: `SOURCE_READBACK=PASS`, `CI_SAME_SHA=QUEUED/PENDING`, `CASA_APPLIED=NO`, `VPS_DEPLOYED=NO`, `AUTH_CLICK_E2E=UNKNOWN`.
+
+**Próximo passo:** CI/build no SHA exato → reconciliar a Casa K:\ sem sobrescrever writer → conferir a UI topo/contraprova → readback de checkpoint com sessão admin real → só então promover.
 ---
 
 ## 📄 Lei da Biblioteca Obsidian — PDFs de qualquer natureza (2026-10-27)

@@ -299,3 +299,58 @@ test('validador bloqueia auto-absorcao sem consumidor e dono evidenciados', () =
 test('HEAD invalido falha fechado', () => {
   assert.throws(() => buildDreamProposal([event()], { headSha: 'curto' }), /HEAD_SHA_INVALID/);
 });
+
+test('provocacoes do CHEFE: duas contraprovas ficam distintas sem virarem regra executada', () => {
+  const target = 'docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md';
+  const observacoes = [
+    event({
+      kind: 'MEMORY',
+      target,
+      source: 'chat:chefe-sol-imagens',
+      source_class: 'HUMAN_AUTHORITY',
+      session_id: 'hermes-arte-sem-capacete',
+      claim: 'A escolha inicial valorizou o capacete e ignorou o cabelo prateado da arte sem capacete.',
+      learning_delta: 'Antes do ranking, examinar a expressividade e a intencao artistica, nao apenas o simbolo de autoridade.',
+      evidence: [{ type: 'note', value: 'Imagem e correcao do CHEFE apresentadas em conversa.' }],
+    }),
+    event({
+      kind: 'MEMORY',
+      target,
+      source: 'chat:chefe-sol-contraprova',
+      source_class: 'HUMAN_AUTHORITY',
+      session_id: 'hermes-arte-com-capacete',
+      claim: 'A segunda arte mostrou qualidade semelhante com capacete depois da revisao inicial.',
+      learning_delta: 'Nao inverter a preferencia para agradar: preservar ambas as aparencias e comparar pelo objetivo de uso.',
+      evidence: [{ type: 'note', value: 'Contraprova artistica mostrada pelo CHEFE na mesma conversa.' }],
+    }),
+  ];
+  const proposal = buildDreamProposal(observacoes, { headSha: HEAD });
+  assert.equal(proposal.candidate_count, 2);
+  assert.equal(proposal.accepted_event_count, 2);
+  assert.equal(proposal.rejected_event_count, 0);
+  assert.equal(proposal.apply_allowed, false);
+  assert.equal(proposal.direct_canonical_mutation, false);
+  assert.equal(proposal.auto_absorb_eligible_count, 0);
+  assert.deepEqual([...new Set(proposal.candidates.flatMap(c => c.session_ids))].sort(), [
+    'hermes-arte-com-capacete',
+    'hermes-arte-sem-capacete',
+  ]);
+  assert.ok(proposal.candidates.every(c => c.promotion.status === 'CANDIDATE'));
+  assert.equal(validateDreamProposal(proposal).ok, true);
+});
+
+test('provocacoes repetidas em lote nao fabricam novas licoes sem delta', () => {
+  const target = 'docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md';
+  const a = event({ target, kind: 'MEMORY', claim: 'Aparencia nao prova rigor.',
+    learning_delta: 'Avaliar arte por criterio declarado.' });
+  const b = event({ target, kind: 'MEMORY', claim: 'A contraprova desafia o ranking.',
+    learning_delta: 'Revisar sem bajular nem inverter preferencia por impulso.' });
+  const events = Array.from({ length: 64 }, (_, index) =>
+    (index % 2 === 0 ? a : b));
+  const result = buildDreamProposal(events, { headSha: HEAD });
+  assert.equal(result.accepted_event_count, 64);
+  assert.equal(result.candidate_count, 2);
+  assert.deepEqual(result.candidates.map(c => c.observations).sort((x, y) => x - y), [32, 32]);
+  assert.equal(result.direct_canonical_mutation, false);
+  assert.equal(result.auto_absorb_eligible_count, 0);
+});

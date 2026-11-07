@@ -174,7 +174,11 @@ const HARNESS_DESTINOS = [
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
+<<<<<<< HEAD
+  { id: "dream-reviewer", titulo: "Biblioteca de Aprendizados", icone: "📚", privado: false },
+=======
   { id: "codex-halo", titulo: "Codex Halo", icone: "🌈", privado: false },
+>>>>>>> origin/main
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -849,7 +853,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
           {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
-          <AutoSyncButton />
+          <AutoSyncButton onNavigate={abrirDestino} autenticado={autenticado} />
           <div className="mt-4 space-y-4">
             <StatusPanel />
             <DailyReviewPanel />
@@ -904,6 +908,75 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
+<<<<<<< HEAD
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-14" id="centraldark-harness-abas">
+            <div className="sticky top-0 z-30 -mx-4 overflow-x-auto border-y border-border bg-background/90 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
+              <TabsList className="h-auto min-w-max justify-start">
+                <TabsTrigger value="visao">Visão geral</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram">✉️ CentralDark Gram</TabsTrigger> : null}
+                <TabsTrigger value="sync">🛠️ Minha Oficina</TabsTrigger>
+                <TabsTrigger value="design">Design Center</TabsTrigger>
+                <TabsTrigger value="goals">🎯 Goals</TabsTrigger>
+                <TabsTrigger value="claude-notifications">🔔 Claude</TabsTrigger>
+                <TabsTrigger value="dream-reviewer">🌙 Dream Reviewer · Biblioteca</TabsTrigger>
+                <TabsTrigger value="arquitetura">📐 Estrutura</TabsTrigger>
+                <TabsTrigger value="raioxvivo">🪬 Raio-X</TabsTrigger>
+                <TabsTrigger value="recibos">📊 Recibos</TabsTrigger>
+                <TabsTrigger value="forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
+                {autenticado ? <TabsTrigger value="admin">Admin CentralDark</TabsTrigger> : null}
+          <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className="mt-8 min-w-0" id="centraldark-harness-abas">
+            <div className="sticky top-0 z-30 -mx-4 min-w-0 border-y border-border bg-background/95 px-3 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border" aria-label="Navegação do cockpit">
+              <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+                <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                  <span className="max-w-36 truncate font-mono text-xs text-muted-foreground sm:max-w-60" title={tituloAbaAtiva}>{tituloAbaAtiva}</span>
+                  <Button type="button" size="sm" variant={abaAtiva === "visao" ? "default" : "ghost"} onClick={() => abrirDestino("visao")}>Visão</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "jornada" ? "default" : "ghost"} onClick={() => abrirDestino("jornada")}>🎮 Jornada</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "sync" ? "default" : "ghost"} onClick={() => abrirDestino("sync")}>Oficina</Button>
+                  <Button type="button" size="sm" variant={abaAtiva === "hermes" ? "default" : "ghost"} onClick={() => abrirDestino("hermes")}>Hermes</Button>
+                </div>
+                <details className="w-full min-w-0 rounded-md border border-border/70 bg-muted/20 p-1 sm:w-auto sm:flex-1" id="centraldark-todas-as-abas">
+                  <summary className="cursor-pointer select-none rounded px-3 py-2 text-center text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Todas as áreas ▾</summary>
+                  <div className="mt-2 max-h-[min(60dvh,34rem)] overflow-y-auto p-1">
+                    <TabsList className="grid h-auto w-full min-w-0 grid-cols-2 items-stretch justify-start gap-1.5 bg-transparent p-0 sm:grid-cols-3 lg:grid-cols-5 [&_[role=tab]]:h-auto [&_[role=tab]]:min-h-10 [&_[role=tab]]:min-w-0 [&_[role=tab]]:whitespace-normal [&_[role=tab]]:break-words [&_[role=tab]]:justify-start [&_[role=tab]]:text-left">
+                <TabsTrigger value="visao" data-cd-flow="instinto.CockpitShell.aba.visao">Visão geral</TabsTrigger>
+                <TabsTrigger value="jornada" data-cd-flow="instinto.CockpitShell.aba.jornada">🎮 Jornada</TabsTrigger>
+                <TabsTrigger value="portal" data-cd-flow="instinto.CockpitShell.aba.portal">🌐 Portal</TabsTrigger>
+                <TabsTrigger value="builder-bolt" data-cd-flow="instinto.CockpitShell.aba.builder-bolt">⚡ Builder Bolt</TabsTrigger>
+                <TabsTrigger value="pr1873" data-cd-flow="instinto.CockpitShell.aba.pr1873">📜 Mapa PR #1873</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram" data-cd-flow="instinto.CockpitShell.aba.gram">✉️ CentralDark Gram</TabsTrigger> : null}
+                <TabsTrigger value="sync" data-cd-flow="instinto.CockpitShell.aba.sync">🛠️ Minha Oficina</TabsTrigger>
+                <TabsTrigger value="design" data-cd-flow="instinto.CockpitShell.aba.design">Design Center</TabsTrigger>
+                <TabsTrigger value="goals" data-cd-flow="instinto.CockpitShell.aba.goals">🎯 Goals</TabsTrigger>
+                {autenticado ? <TabsTrigger value="genesis" data-cd-flow="instinto.CockpitShell.aba.genesis">🧬 Gênesis · Michelin</TabsTrigger> : null}
+                <TabsTrigger value="dream-reviewer" data-cd-flow="instinto.CockpitShell.aba.dream-reviewer">😴 Dream</TabsTrigger>
+                <TabsTrigger value="arquitetura" data-cd-flow="instinto.CockpitShell.aba.arquitetura">📐 Estrutura</TabsTrigger>
+                <TabsTrigger value="raioxvivo" data-cd-flow="instinto.CockpitShell.aba.raioxvivo">🪬 Raio-X</TabsTrigger>
+                <TabsTrigger value="recibos" data-cd-flow="instinto.CockpitShell.aba.recibos">📊 Recibos</TabsTrigger>
+                <TabsTrigger value="forja" data-cd-flow="instinto.CockpitShell.aba.forja">🔧 Forja</TabsTrigger>
+                {autenticado ? <TabsTrigger value="gram-permissions" data-cd-flow="instinto.CockpitShell.aba.gram-permissions">📋 Permissões Forja</TabsTrigger> : null}
+                {autenticado ? <TabsTrigger value="admin" data-cd-flow="instinto.CockpitShell.aba.admin">Admin CentralDark</TabsTrigger> : null}
+                {autenticado ? (
+                  <TabsTrigger value="sistema" data-cd-flow="instinto.CockpitShell.aba.sistema">Sistema CentralDark</TabsTrigger>
+                ) : null}
+                <TabsTrigger value="hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="obsidian">💎 Obsidian</TabsTrigger>
+                <TabsTrigger value="aionui">🧩 Estúdio</TabsTrigger>
+                <TabsTrigger value="unigram">Unigram</TabsTrigger>
+                <TabsTrigger value="forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation">HTML Consolidation</TabsTrigger>
+                <TabsTrigger value="downloads">Downloads</TabsTrigger>
+                <TabsTrigger value="hermes" data-cd-flow="instinto.CockpitShell.aba.hermes">Hermes</TabsTrigger>
+                <TabsTrigger value="unigram" data-cd-flow="instinto.CockpitShell.aba.unigram">Unigram</TabsTrigger>
+                <TabsTrigger value="forja-regras" data-cd-flow="instinto.CockpitShell.aba.forja-regras">Regras Forja</TabsTrigger>
+                <TabsTrigger value="forja-inventario" data-cd-flow="instinto.CockpitShell.aba.forja-inventario">Inventário</TabsTrigger>
+                <TabsTrigger value="agent-mode" data-cd-flow="instinto.CockpitShell.aba.agent-mode">Agent Mode</TabsTrigger>
+                <TabsTrigger value="html-consolidation" data-cd-flow="instinto.CockpitShell.aba.html-consolidation">HTML Consolidation</TabsTrigger>
+                <TabsTrigger value="downloads" data-cd-flow="instinto.CockpitShell.aba.downloads">Downloads</TabsTrigger>
+              </TabsList>
+=======
           <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full">
             <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
               <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
@@ -951,6 +1024,7 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                     <SidebarTrigger aria-label="Abrir ou recolher menu" className="size-10 shrink-0" />
                     <SidebarTrigger aria-label="Abrir menu lateral" className="fixed bottom-20 left-3 z-[70] size-12 rounded-full border border-border bg-background shadow-xl md:hidden" />
                     <span className="truncate text-sm font-semibold">{pastaAtiva?.pasta ?? "Sala de Controle"} › {tituloAbaAtiva}</span>
+>>>>>>> origin/main
                   </div>
                   {(() => {
                     const codigo = estado.isError ? "FAIL" : estado.isPending ? "UNKNOWN" : estado.isFetching ? "RUNNING" : (dado?.heartbeat ?? "UNKNOWN");
@@ -1073,12 +1147,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">
                   Aprendizado Offline
                 </p>
-                <h2 className="mt-3 text-3xl font-semibold">😴 Dream Reviewer</h2>
+                <h2 className="mt-3 text-3xl font-semibold">🌙 Dream Reviewer · Biblioteca</h2>
                 <p className="mt-3 text-sm text-muted-foreground">
-                  Hermes aprendendo enquanto você dorme • Padrões detectados • Recomendações • Somente leitura
+                  Biblioteca canônica, peças do Dream Review e caminhos para conferir se Hermes realmente utilizou o aprendizado. Somente leitura.
                 </p>
               </div>
-              <DreamReviewer />
+              <DreamReviewer onNavigate={abrirDestino} />
             </TabsContent>
             <TabsContent value="arquitetura" className="mt-10">
               <div className="mb-8">
