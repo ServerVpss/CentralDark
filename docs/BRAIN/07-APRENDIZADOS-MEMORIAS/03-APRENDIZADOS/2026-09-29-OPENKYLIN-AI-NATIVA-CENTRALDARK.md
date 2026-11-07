@@ -18,6 +18,13 @@ centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resili
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "b90a9bcd0fea61f91f456b0eb4b58fb02527336b"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-OPENKYLIN-AI-NATIVA-CENTRALDARK.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Diagnosis"
+centraldark_self_related: ["Self-Healing","Self-Recovery"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-diagnosis/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-healing/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-recovery/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # openKylin AI nativa ↔ CentralDark

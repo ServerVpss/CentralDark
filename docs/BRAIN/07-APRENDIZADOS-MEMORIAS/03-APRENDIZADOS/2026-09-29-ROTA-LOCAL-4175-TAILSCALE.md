@@ -18,6 +18,13 @@ centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resili
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "0848d8ae675515dcccff4d1fa72203326414c746"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-29-ROTA-LOCAL-4175-TAILSCALE.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Recovery"
+centraldark_self_related: ["Self-Monitoring","Self-Orientation"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-recovery/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-monitoring/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-orientation/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # Rota local 4175 → Casa via Tailscale

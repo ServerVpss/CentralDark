@@ -15,6 +15,13 @@ centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resili
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md#aprendizado-recuperado"
 centraldark_previous_blob_sha: "7300f94f55a8b2d420bef631239150034084281e"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Improvement"
+centraldark_self_related: ["Self-Auditing","Self-Documentation"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-improvement/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-auditing/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-documentation/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # 📜 Aprendizado histórico do índice BRAIN 07

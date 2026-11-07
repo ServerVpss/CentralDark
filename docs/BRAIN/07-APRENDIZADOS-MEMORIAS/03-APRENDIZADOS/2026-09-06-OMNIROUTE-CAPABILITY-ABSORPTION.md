@@ -24,6 +24,13 @@ centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegeta-resili
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "1636cec32dccaae65ae855a9028d70fe0b02338b"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-06-OMNIROUTE-CAPABILITY-ABSORPTION.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Integration"
+centraldark_self_related: ["Self-Adaptation","Self-Modeling"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-integration/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-adaptation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-modeling/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # Aprendizado cristalizado
