@@ -900,12 +900,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 <SidebarHeader className="border-b border-border px-3 py-4">
                   <div className="flex min-h-9 items-center justify-between gap-1">
                     <div className="flex min-w-0 items-center gap-2 overflow-hidden group-data-[collapsible=icon]:justify-center">
-                      <span className="relative flex size-7 shrink-0 items-center justify-center rounded-md border border-primary/40 bg-surface" aria-hidden="true">
+                      <span className="relative flex size-8 shrink-0 items-center justify-center rounded-md border border-primary/40 bg-surface" aria-hidden="true">
                         <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
                       </span>
                       <span className="flex min-w-0 flex-col leading-none group-data-[collapsible=icon]:hidden">
-                        <span className="truncate text-gold-gradient text-xs font-semibold tracking-wide">CentralDark</span>
-                        <span className="truncate font-mono text-[8px] tracking-[0.12em] text-muted-foreground uppercase">Instinto Superior</span>
+                        <span className="truncate text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+                        <span className="truncate font-mono text-[9px] tracking-[0.1em] text-muted-foreground uppercase">Instinto Superior</span>
                       </span>
                     </div>
                     <div className="flex shrink-0 items-center gap-0.5 group-data-[collapsible=icon]:flex-col">
