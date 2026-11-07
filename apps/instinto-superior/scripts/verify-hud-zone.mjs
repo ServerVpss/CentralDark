@@ -622,7 +622,12 @@ test("casca preserva sidebar com busca e toggle sem controles centrais duplicado
   assert.match(cockpit, /type="search" value=\{buscaNavegacao\}/);
   assert.match(cockpit, /focarBuscaAoAbrir/);
   assert.match(cockpit, /data-cd-harness="left-rail"/);
-  assert.match(cockpit, /data-cd-harness="right-rail"/);
+  assert.match(cockpit, /aria-label="Harness auxiliar à direita"/);
+  assert.match(cockpit, /data-cd-harness="left-rail" className="fixed right-14 top-1\/2/);
+  assert.match(cockpit, /data-cd-harness="right-rail" className="fixed right-1 top-1\/2/);
+  assert.equal((cockpit.match(/data-cd-harness="left-rail"/g) || []).length, 1);
+  assert.equal((cockpit.match(/data-cd-harness="right-rail"/g) || []).length, 1);
+  assert.doesNotMatch(cockpit, /data-cd-harness="left-rail" className="fixed left-1/);
   assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
   assert.ok(cockpit.includes('data-cd-header-bell="right-of-account"'));
   assert.match(cockpit, /data-cd-sidebar-resize/);
