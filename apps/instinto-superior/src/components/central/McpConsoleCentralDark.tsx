@@ -187,10 +187,53 @@ function McpOperacionalLegado({dados}:{dados:Resultado|null}) {
   const pattern=dados?.["patternAlignment"] as Record<string,unknown>|undefined;
   const campos=[["Veredito",dados?.["verdict"]],["MCP PID",runtime?.["pid"]],["Forensic",forensic?.["status"]],["Alinhamento",pattern?.["marker"]],["Unknowns",pattern?.["unknownCount"]]];
   const semHandler=["Fechar recibo duplicado","Medir Evidence Ledger","Montar pacote do desktop","Atualizar topologia","Revalidar Fixed Point","Rodar contraprova"];
+  const fixed=dados?.["verdict"]==="FIXED_POINT";
+  const warning=["RED","ORANGE","YELLOW"].includes(String(pattern?.["marker"]??""))||dados?.["verdict"]==="UNKNOWN_NOT_PASS";
+  const observed=forensic?.["status"]==="OBSERVED";
+  const state=fixed?"FIXED POINT":warning?"ALERTA":observed?"ATIVO":dados?"MEDINDO":"PROJECTION";
+  const motion=fixed?"animate-bounce":warning?"animate-pulse":observed?"animate-bounce":"animate-pulse";
   return <section className="space-y-3">
+    <div role="status" className="flex items-center gap-3 rounded border border-border p-3" title="MOVIMENTO != DECORAÇÃO; derivado do snapshot">
+      <span aria-hidden="true" className={"inline-flex size-10 items-center justify-center rounded border border-primary/30 bg-primary/10 text-2xl "+motion}>🤖</span>
+      <div><strong className="block text-sm">Hermes · {state}</strong><p className="text-xs text-muted-foreground">Sinal visual vinculado ao snapshot MCP. Movimento não prova execução.</p></div>
+    </div>
     <p className="text-xs text-muted-foreground">HUD original absorvido como projeção de dados do mesmo backend. Linha do tempo antiga era estática; seis botões não tinham handler. Eles não são executores.</p>
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{campos.map(([titulo,valor])=><div key={String(titulo)} className="rounded border border-border p-3"><span className="block text-xs text-muted-foreground">{String(titulo)}</span><strong className="break-all text-sm">{valor==null?"UNKNOWN":String(valor)}</strong></div>)}</div>
     <p className="text-xs font-semibold">Ações históricas sem execução comprovada:</p><div className="flex flex-wrap gap-2">{semHandler.map(t=><button key={t} type="button" disabled title="Sem handler real no frontend antigo" className="rounded border border-border p-2 text-xs opacity-50">{t} · não implementado</button>)}</div>
+  </section>;
+}
+
+
+/** Seis indicadores históricos, sem inventar ferramentas ativas ou bloqueadas. */
+function McpResumoVivo() {
+  const [health,setHealth]=useState<Resultado|null>(null);
+  const [deep,setDeep]=useState<Resultado|null>(null);
+  const [tools,setTools]=useState<Resultado|null>(null);
+  const [medido,setMedido]=useState("");
+  async function atualizar() {
+    const resultados=await Promise.allSettled([solicitar("/health"),solicitar("/health/deep"),solicitar("/admin/api/tools")]);
+    setHealth(resultados[0].status==="fulfilled"?resultados[0].value:null);
+    setDeep(resultados[1].status==="fulfilled"?resultados[1].value:null);
+    setTools(resultados[2].status==="fulfilled"?resultados[2].value:null);
+    setMedido(new Date().toLocaleTimeString("pt-BR"));
+  }
+  useEffect(()=>{void atualizar();const timer=setInterval(()=>void atualizar(),30000);return()=>clearInterval(timer);},[]);
+  const total=tools?.["total"]??health?.["toolCount"]??"UNKNOWN";
+  const uptime=deep?.["uptimeLegivel"]??(typeof deep?.["uptimeSec"]==="number"?Math.round(deep["uptimeSec"]/60)+" min":"UNKNOWN");
+  const campos=[
+    ["Status MCP",health?.["ok"]===true?"RESPONDENDO":"UNKNOWN"],
+    ["Tools totais",total],
+    ["Tools ativas","NÃO MEDIDO"],
+    ["Bloqueadas","NÃO MEDIDO"],
+    ["Uptime",uptime],
+    ["Versão",health?.["version"]??"UNKNOWN"],
+  ];
+  return <section className="space-y-3" aria-label="Métricas da Ponte MCP">
+    <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-xs text-muted-foreground">Métricas reais · saúde, catálogo e health/deep · leitura a cada 30s · {medido||"SEM LEITURA"}</p><Button type="button" size="sm" variant="outline" onClick={()=>void atualizar()}>Atualizar métricas</Button></div>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">{campos.map(([titulo,valor])=><div key={String(titulo)} className="rounded border border-border p-3">
+      <p className="text-[11px] text-muted-foreground">{String(titulo)}</p><strong className="break-all text-sm">{String(valor)}</strong>
+    </div>)}</div>
+    <p className="text-xs text-muted-foreground">A UI antiga mostrava tools ativas = total e bloqueadas = 0 sem prova. Aqui esses valores continuam NÃO MEDIDOS.</p>
   </section>;
 }
 
@@ -344,6 +387,7 @@ export function McpConsoleCentralDark() {
             Executar diagnóstico MCP E2E
           </Button>
         ) : null}
+        {(aba.id === "status" || aba.id === "saude") ? <McpResumoVivo /> : null}
         {aba.id === "auditoria" && autenticado ? <McpAuditoriaFiltrada /> : aba.id === "tools" && autenticado ? <McpFerramentasPorCategoria data={conteudo} /> : aba.id === "conector" ? <McpConector /> : aba.id === "chaves" && autenticado ? <McpEmissaoChave /> : aba.id === "snapshot" && autenticado ? <McpOperacionalLegado dados={conteudo} /> : aba.id === "oauth" ? <section className="space-y-2 text-sm"><p>Clientes OAuth registrados: não há endpoint administrativo de listagem. O MCP oferece DCR via POST /register; metadata abaixo é descoberta, não cadastro de clientes.</p>{conteudo ? <JanelaJson dados={conteudo} /> : null}</section> : conteudo ? <JanelaJson dados={conteudo} /> : (
           <p className="rounded-xl border border-border px-4 py-6 text-sm text-muted-foreground">
             {ocupado ? "Consultando API…" : "Sem dados desta leitura."}
