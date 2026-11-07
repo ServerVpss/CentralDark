@@ -2,6 +2,70 @@
 ## HUD operacional conversacional — ponto fixo de apresentacao
 
 Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark-operational-method`. Chamar `!HUD` ou `#HUD`; usar exatamente um quadro monoespacado NO TOPO da resposta e a resposta operacional ABAIXO. Preservar quesitos numerados, textos completos, status e provas. Cada nova missao substitui apenas o conteudo ATIVO do quadro; preservar historico das missoes neste mesmo owner. So alterar estado de quesito apos conclusao e contraprova. `FORMATO_APROVADO` nao significa missao concluida. Fora do repo/contexto, `HUD_SOURCE=UNKNOWN`; nao afirmar memoria ou sincronizacao entre conversas sem readback. Reconciliador unico: `scripts/centraldark-inventory-reconcile.sh`. O bloco Hermes que segue e o checkpoint vigente, nao um HUD paralelo.
+### CENTRALDARK_MISSION_HUD_33_20261107 — quadro ativo único (01–33)
+
+**INTENÇÃO:** conservar o mesmo HUD quadrado, agora com 33 quesitos numerados e o Corpo Único integrado ao fio operacional. Este bloco é o quadro ATIVO no owner existente; não é outro HUD, programa, rota, executor ou checkpoint. Estados 🟢 de fonte/histórico não significam runtime atual; estados 🟡 não viram PASS sem medição. A numeração 01–13 foi preservada e 14–33 é delta da missão Corpo Único / Electron / MCP Casa. Não substituir outros registros do README.
+
+```text
+╔═════════════════════════════════════════════════════════════════╗
+║ 🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐                                  ║
+║ 👑 CHEFE → SOL → HERMES → REALIDADE → KAIZEN                    ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🎯 MISSÃO: HUD CANÔNICO + CORPO ÚNICO + ELECTRON                ║
+║ 🧠 FASE: DOCUMENTAÇÃO, CONTINUIDADE E CONTRAPROVA               ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 📋 01–13 · PROTOCOLO E CONTINUIDADE                             ║
+║ 01 🟢 Localizar o proprietário do HUD                           ║
+║ 02 🟢 Ler a receita de apresentação                             ║
+║ 03 🟢 Confirmar a fonte na main                                 ║
+║ 04 🟢 Preservar um único quadro operacional                     ║
+║ 05 🟢 Exibir intenção, fase e estados                           ║
+║ 06 🟢 Exibir provas e pendências                                ║
+║ 07 🟡 Sincronizar checkout da Casa                              ║
+║ 08 🟡 Validar boot operacional completo                         ║
+║ 09 🟡 Comprovar consumo pela Skill Mãe                          ║
+║ 10 🟡 Validar runtime Hermes                                    ║
+║ 11 🟡 Confirmar continuidade entre sessões                      ║
+║ 12 🟡 Executar contraprova do ciclo                             ║
+║ 13 🟡 Confirmar FIXED_POINT                                     ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🏠 14–22 · CORPO ÚNICO / CASA                                   ║
+║ 14 🟢 Aplicativo Tray existente (fonte histórica)               ║
+║ 15 🟢 Owner Remote Bridge identificado                          ║
+║ 16 🟡 Cloudflare integrado ao Corpo Único                       ║
+║ 17 🟡 Túnel automático ao iniciar Windows                       ║
+║ 18 🟡 Indicador Cloudflare no HUD superior                      ║
+║ 19 🟡 Logs e TRACE dentro do Corpo Único                        ║
+║ 20 🟡 Integração das capacidades existentes                     ║
+║ 21 🟡 Pareamento MCP Casa ↔ ChatGPT                             ║
+║ 22 🟡 Substituição do Desktop Commander                         ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🖥️ 23–28 · CENTRALDARK DESKTOP / ELECTRON                      ║
+║ 23 🟡 Cockpit como página inicial do Electron                   ║
+║ 24 🟡 Chromium integrado ao Electron                            ║
+║ 25 🟡 Hermes One dentro da mesma janela                         ║
+║ 26 🟡 Codex / Claude / DeepSeek / VS Code                       ║
+║ 27 🟡 Terminal e navegador internos                             ║
+║ 28 🟡 Chat principal orquestrando capacidades                   ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🔗 29–33 · CONECTIVIDADE / MCP                                  ║
+║ 29 🟢 Rota MCP /mcp no agente (fonte local)                     ║
+║ 30 🟢 Bloqueio HTTP 401 (teste histórico)                       ║
+║ 31 🟡 Autenticação real pelo ChatGPT                            ║
+║ 32 🟡 Tailscale + Cloudflare reconciliados                      ║
+║ 33 🟡 Acesso independente de máquina                            ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🟢 = PROVA DE FONTE OU TESTE HISTÓRICO                          ║
+║ 🟡 = PENDENTE DE CONSUMO/CONTRAPROVA VIVA                       ║
+╠═════════════════════════════════════════════════════════════════╣
+║ 🎯 VEREDITO: FONTE REGISTRADA; RUNTIME NÃO SELADO               ║
+║ 🟡 FIXED_POINT=PENDING · NÍVEL=UNKNOWN · XP=UNKNOWN             ║
+║ ➡️ NEXT_CURSOR: RECONCILIAR CASA ↔ MAIN SEM PERDA               ║
+╚═════════════════════════════════════════════════════════════════╝
+```
+
+**OWNER DO HUD:** `docs/HUD/README.md`; **MÉTODO:** `.agents/skills/centraldark-operational-method/SKILL.md`; **EXECUÇÃO CASA:** owners existentes em `scripts/remote-bridge/` e `scripts/casa/`; **EXECUÇÃO DESKTOP:** owner Hermes/Electron existente. **EVIDÊNCIA:** fotografia dos 33 estados apresentada na conversa em 07/11/2026; green = fonte já conferida ou observação histórica, não uma sondagem global atual. **CURRENT CASA:** checkout local `main` 51 commits atrás de `origin/main`, com mudanças de outros owners ainda sujas; `.git/index.lock` antigo impede commit local sem intervenção cautelosa. **REGRA:** não forçar `git pull`, apagar lock, alterar arquivos alheios, promover estado sem contraprova ou criar branch/PR paralelo. **NEXT_CURSOR:** reconciliar checkout de forma preservadora; medir 16–22 no Corpo Único, depois 23–33, e registrar os efeitos no quadro existente.
+
 ### CENTRALDARK_HUD_VSCODE_CHROMIUM_CONTINUITY_20261107 — superficie habitual do CHEFE
 
 Intencao informada pelo CHEFE (07/11/2026): ChatGPT usado dentro do Chromium/Electron integrado ao VS Code para programar, mantendo a conversa na mesma bancada. Essa interface de conversa NAO e automaticamente o renderer Hermes Desktop, nem o owner do HUD. Preferir reconhecer e reutilizar a janela/aba atual; nao abrir segunda instancia nem trocar a interface. A continuidade depende do workspace/sessao restauravel, NAO de PID estavel (PIDs mudam entre inicializacoes).
