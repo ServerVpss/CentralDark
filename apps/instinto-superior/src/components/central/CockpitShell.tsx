@@ -610,21 +610,12 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
       data-pele-cockpit={pele}
       className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
     >
-      {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
+      {/* Cabeçalho superior: ações existentes; identidade única no menu lateral. */}
       <header
         className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
         style={{ transform: navegacaoCompacta ? "translateY(-100%)" : "translateY(0)" }}
       >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
-              <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
-            </span>
-            <span className="flex flex-col leading-none">
-              <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
-              <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
-            </span>
-          </div>
           <div className="ml-auto flex w-full min-w-0 max-w-full flex-wrap items-center justify-start gap-2 sm:w-auto sm:justify-end">
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
@@ -908,7 +899,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
                 <SidebarHeader className="border-b border-border px-3 py-4">
                   <div className="flex min-h-9 items-center justify-between gap-1">
-                    <span className="min-w-0 truncate text-sm font-semibold group-data-[collapsible=icon]:sr-only">🪬 CentralDark</span>
+                    <div className="flex min-w-0 items-center gap-2 overflow-hidden group-data-[collapsible=icon]:justify-center">
+                      <span className="relative flex size-7 shrink-0 items-center justify-center rounded-md border border-primary/40 bg-surface" aria-hidden="true">
+                        <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+                      </span>
+                      <span className="flex min-w-0 flex-col leading-none group-data-[collapsible=icon]:hidden">
+                        <span className="truncate text-gold-gradient text-xs font-semibold tracking-wide">CentralDark</span>
+                        <span className="truncate font-mono text-[8px] tracking-[0.12em] text-muted-foreground uppercase">Instinto Superior</span>
+                      </span>
+                    </div>
                     <div className="flex shrink-0 items-center gap-0.5 group-data-[collapsible=icon]:flex-col">
                       <Button type="button" size="icon" variant="ghost" title="Pesquisar ferramentas" aria-label="Pesquisar ferramentas" onClick={abrirBuscaNavegacao} className="size-8"><Search className="size-4" /></Button>
                       <SidebarTrigger title="Ocultar ou mostrar barra lateral" aria-label="Ocultar ou mostrar barra lateral" className="size-8" />
