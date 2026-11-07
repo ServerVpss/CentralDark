@@ -327,7 +327,9 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(block(src), block(dist));
   assert.ok(src.includes("providerCapabilitiesReturned"));
   assert.ok(src.includes("CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED"));
-  assert.ok(cockpit.includes('autenticado ? <CentralNotificacoes modo="sininho"'));
+  assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
+  assert.ok(cockpit.includes('{autenticado ? <span className="[&_button]:!size-8">'));
+  assert.ok(cockpit.includes('data-cd-sidebar-resize'));
   assert.ok(cockpit.includes('definirAbaAdminInicial("notificacoes")'));
   assert.ok(cockpit.includes('abaInicial={abaAdminInicial}'));
   assert.ok(cockpit.includes('key={versaoAdmin}'), "segundo clique precisa remontar o painel");
