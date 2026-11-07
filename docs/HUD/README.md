@@ -2,6 +2,7 @@
 ## HUD operacional conversacional — ponto fixo de apresentacao
 
 Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark-operational-method`. Chamar `!HUD` ou `#HUD`; usar exatamente um quadro monoespacado NO TOPO da resposta e a resposta operacional ABAIXO. Preservar quesitos numerados, textos completos, status e provas. Cada nova missao substitui apenas o conteudo ATIVO do quadro; preservar historico das missoes neste mesmo owner. So alterar estado de quesito apos conclusao e contraprova. `FORMATO_APROVADO` nao significa missao concluida. Fora do repo/contexto, `HUD_SOURCE=UNKNOWN`; nao afirmar memoria ou sincronizacao entre conversas sem readback. Reconciliador unico: `scripts/centraldark-inventory-reconcile.sh`. O bloco Hermes que segue e o checkpoint vigente, nao um HUD paralelo.
+
 ### CENTRALDARK_MISSION_HUD_33_20261107 — quadro ativo único (01–33)
 
 **INTENÇÃO:** conservar o mesmo HUD quadrado, agora com 33 quesitos numerados e o Corpo Único integrado ao fio operacional. Este bloco é o quadro ATIVO no owner existente; não é outro HUD, programa, rota, executor ou checkpoint. Estados 🟢 de fonte/histórico não significam runtime atual; estados 🟡 não viram PASS sem medição. A numeração 01–13 foi preservada e 14–33 é delta da missão Corpo Único / Electron / MCP Casa. Não substituir outros registros do README.
