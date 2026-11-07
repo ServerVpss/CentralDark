@@ -14,6 +14,10 @@ const PAINEIS = [
   { id: "tools", title: "Ferramentas", publico: false, endpoint: "/admin/api/tools" },
   { id: "logs", title: "Logs", publico: false, endpoint: "/admin/api/logs" },
   { id: "auditoria", title: "Auditoria detalhada", publico: false, endpoint: "/admin/api/logs" },
+  { id: "profunda", title: "Saúde profunda", publico: true, endpoint: "/health/deep" },
+  { id: "conector", title: "Conector", publico: true, endpoint: "/health" },
+  { id: "oauth", title: "Clientes OAuth", publico: true, endpoint: "/.well-known/oauth-authorization-server" },
+  { id: "chaves", title: "Chaves", publico: false, endpoint: "/admin/api/rotas" },
   { id: "metricas", title: "Métricas", publico: false, endpoint: "/admin/api/metricas" },
   { id: "snapshot", title: "Observabilidade", publico: false, endpoint: "/admin/api/operational-snapshot" },
   { id: "grok", title: "Grok", publico: false, endpoint: "/admin/api/grok/control" },
@@ -118,6 +122,78 @@ function McpFerramentasPorCategoria({ data }: { data: Resultado | null }) {
   </section>;
 }
 
+
+/** O frontend antigo tinha exemplos /mcp; desde PR #1946 a API HTTP canônica é /api/mcp. */
+function McpConector() {
+  const [estado, setEstado] = useState("");
+  const url = MCP + "/api/mcp";
+  const exemplos = [
+    { titulo: "Claude Desktop", codigo: JSON.stringify({mcpServers: {centraldark: {type:"http",url}}},null,2) },
+    { titulo: "Cursor", codigo: JSON.stringify({mcpServers:{centraldark:{url,transport:"http"}}},null,2) },
+    { titulo: "Codex CLI", codigo: '[mcp_servers.centraldark]\nurl = "' + url + '"' },
+    { titulo: "Streamable HTTP", codigo: "Endpoint: " + url + "\nAutorização: OAuth 2.1 pelo servidor MCP" },
+  ];
+  return <section className="space-y-3">
+    <p className="text-sm">Destino: <code>{url}</code>. Exemplo de configuração, não prova de pareamento; confirme o formato aceito por cada cliente. Nunca cole tokens nos exemplos.</p>
+    <div className="grid gap-3 sm:grid-cols-2">{exemplos.map(item => <div key={item.titulo} className="rounded border border-border p-3">
+      <div className="flex items-center justify-between gap-2"><strong className="text-sm">{item.titulo}</strong>
+        <Button type="button" variant="outline" size="sm" onClick={() => void navigator.clipboard.writeText(item.codigo).then(() => setEstado("Copiado: "+item.titulo), () => setEstado("COPY_UNAVAILABLE"))}>Copiar</Button></div>
+      <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all rounded bg-background p-2 text-xs">{item.codigo}</pre>
+    </div>)}</div>
+    <p role="status" className="text-xs">{estado}</p>
+  </section>;
+}
+/** Emissão real, explicitamente autorizada, sem armazenar ou renderizar segredo como JSON. */
+function McpEmissaoChave() {
+  const [agente,setAgente]=useState("");
+  const [senha,setSenha]=useState("");
+  const [scope,setScope]=useState("mcp");
+  const [tokens,setTokens]=useState<{access:string;refresh:string;expires:number}|null>(null);
+  const [estado,setEstado]=useState("Emissão protegida por senha do MCP.");
+  const [ocupado,setOcupado]=useState(false);
+  async function emitir(e: React.FormEvent) {
+    e.preventDefault();setOcupado(true);setTokens(null);
+    try {
+      const r=await solicitar("/admin/api/issue-key",{method:"POST",body:JSON.stringify({password:senha,agent_name:agente.trim(),scope})});
+      if(typeof r.access_token!=="string")throw Error("TOKEN_NOT_RETURNED");
+      setTokens({access:r.access_token,refresh:typeof r.refresh_token==="string"?r.refresh_token:"",expires:typeof r.expires_in==="number"?r.expires_in:0});
+      setSenha("");setEstado("Token criado no MCP. Copie apenas para o cliente autorizado e depois descarte da tela.");
+    } catch(err){setEstado(err instanceof Error?err.message:"ISSUE_KEY_UNAVAILABLE");}
+    finally{setOcupado(false);}
+  }
+  function copiar(s:string,tipo:string){void navigator.clipboard.writeText(s).then(()=>setEstado(tipo+" copiado."),()=>setEstado("COPY_UNAVAILABLE"));}
+  return <section className="space-y-3">
+    <p className="text-sm">O backend existente implementa <code>POST /admin/api/issue-key</code>. Emite token de acesso e refresh; não implementa listagem ou revogação neste painel. Nada é gravado no armazenamento do navegador.</p>
+    <form onSubmit={e=>void emitir(e)} className="grid gap-2 rounded border border-border p-3 sm:grid-cols-3">
+      <input aria-label="Agente" required maxLength={80} placeholder="Nome do agente" value={agente} onChange={e=>setAgente(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <input aria-label="Escopo" required maxLength={80} placeholder="Escopo" value={scope} onChange={e=>setScope(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <input aria-label="Senha admin MCP" required type="password" autoComplete="off" placeholder="Senha admin MCP" value={senha} onChange={e=>setSenha(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <div className="sm:col-span-3"><Button type="submit" disabled={ocupado}>{ocupado?"Emitindo…":"Nova chave · emitir"}</Button></div>
+    </form>
+    {tokens?<div className="rounded border border-amber-500/50 p-3 text-sm">
+      <p>Validade do acesso: {tokens.expires||"UNKNOWN"} segundos. Segredo exibido somente por cópia sob sua ação.</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button type="button" size="sm" onClick={()=>copiar(tokens.access,"Token de acesso")}>Copiar acesso</Button>
+        {tokens.refresh?<Button type="button" size="sm" variant="outline" onClick={()=>copiar(tokens.refresh,"Token refresh")}>Copiar refresh</Button>:null}
+        <Button type="button" size="sm" variant="outline" onClick={()=>{setTokens(null);setEstado("Tokens descartados da memória desta tela.");}}>Descartar</Button>
+      </div>
+    </div>:null}
+    <p role="status" className="text-xs">{estado}</p>
+  </section>;
+}
+function McpOperacionalLegado({dados}:{dados:Resultado|null}) {
+  const runtime=dados?.runtime as Record<string,unknown>|undefined;
+  const forensic=dados?.forensic as Record<string,unknown>|undefined;
+  const pattern=dados?.patternAlignment as Record<string,unknown>|undefined;
+  const campos=[["Veredito",dados?.verdict],["MCP PID",runtime?.pid],["Forensic",forensic?.status],["Alinhamento",pattern?.marker],["Unknowns",pattern?.unknownCount]];
+  const semHandler=["Fechar recibo duplicado","Medir Evidence Ledger","Montar pacote do desktop","Atualizar topologia","Revalidar Fixed Point","Rodar contraprova"];
+  return <section className="space-y-3">
+    <p className="text-xs text-muted-foreground">HUD original absorvido como projeção de dados do mesmo backend. Linha do tempo antiga era estática; seis botões não tinham handler. Eles não são executores.</p>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{campos.map(([titulo,valor])=><div key={String(titulo)} className="rounded border border-border p-3"><span className="block text-xs text-muted-foreground">{String(titulo)}</span><strong className="break-all text-sm">{valor==null?"UNKNOWN":String(valor)}</strong></div>)}</div>
+    <p className="text-xs font-semibold">Ações históricas sem execução comprovada:</p><div className="flex flex-wrap gap-2">{semHandler.map(t=><button key={t} type="button" disabled title="Sem handler real no frontend antigo" className="rounded border border-border p-2 text-xs opacity-50">{t} · não implementado</button>)}</div>
+  </section>;
+}
+
 export function McpConsoleCentralDark() {
   const [aba, definirAba] = useState<Endpoint>(PAINEIS[0]);
   const [conteudo, definirConteudo] = useState<Resultado | null>(null);
@@ -160,6 +236,16 @@ export function McpConsoleCentralDark() {
     return () => window.removeEventListener("centraldark:mcp-open-pairing", abrirPareamento);
   }, []);
 
+  async function sair() {
+    definirOcupado(true); definirErro("");
+    try {
+      await fetch(MCP + "/admin/logout", { credentials:"include", redirect:"manual", cache:"no-store" });
+      const prova = await fetch(MCP + "/admin/api/tools", { credentials:"include", cache:"no-store" });
+      if(prova.status !== 401) throw Error("LOGOUT_NOT_CONFIRMED");
+      definirAutenticado(false); definirConteudo(null); definirAtualizadoEm("");
+    } catch(err){definirErro(err instanceof Error?err.message:"LOGOUT_UNAVAILABLE");}
+    finally{definirOcupado(false);}
+  }
   async function entrar(evento: React.FormEvent) {
     evento.preventDefault();
     definirOcupado(true);
@@ -211,6 +297,7 @@ export function McpConsoleCentralDark() {
         <Button type="button" variant="outline" onClick={() => void atualizar(aba)} disabled={ocupado}>
           {ocupado ? "Consultando…" : "↻ Atualizar"}
         </Button>
+        {autenticado ? <Button type="button" variant="outline" onClick={() => void sair()} disabled={ocupado}>Sair do MCP</Button> : null}
       </div>
 
       <nav className="mt-5 flex flex-wrap gap-2" aria-label="Áreas do MCP">
@@ -257,7 +344,7 @@ export function McpConsoleCentralDark() {
             Executar diagnóstico MCP E2E
           </Button>
         ) : null}
-        {aba.id === "auditoria" && autenticado ? <McpAuditoriaFiltrada /> : aba.id === "tools" && autenticado ? <McpFerramentasPorCategoria data={conteudo} /> : conteudo ? <JanelaJson dados={conteudo} /> : (
+        {aba.id === "auditoria" && autenticado ? <McpAuditoriaFiltrada /> : aba.id === "tools" && autenticado ? <McpFerramentasPorCategoria data={conteudo} /> : aba.id === "conector" ? <McpConector /> : aba.id === "chaves" && autenticado ? <McpEmissaoChave /> : aba.id === "snapshot" && autenticado ? <McpOperacionalLegado dados={conteudo} /> : aba.id === "oauth" ? <section className="space-y-2 text-sm"><p>Clientes OAuth registrados: não há endpoint administrativo de listagem. O MCP oferece DCR via POST /register; metadata abaixo é descoberta, não cadastro de clientes.</p>{conteudo ? <JanelaJson dados={conteudo} /> : null}</section> : conteudo ? <JanelaJson dados={conteudo} /> : (
           <p className="rounded-xl border border-border px-4 py-6 text-sm text-muted-foreground">
             {ocupado ? "Consultando API…" : "Sem dados desta leitura."}
           </p>
