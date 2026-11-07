@@ -451,3 +451,19 @@ Legacy hook cleanup remains targeted. README download links now use the local re
 guide and current Hero HTML instead of an unrelated upstream release package.
 SOURCE_ONLY; rebuild, runtime, visual confirmation and Casa-main sync remain PENDING.
 NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.
+
+<!-- CENTRALDARK_MCP_PAIRING_ROUTE_20261107 -->
+### MCP CentralDark + Casa — tunnel STDIO versus OAuth HTTPS (07/11/2026)
+
+**CHEFE_INTENT:** manter Corpo Unico, conservar o tunnel e o token autorizados, usar no Cockpit o pareamento de codigo proprio em vez da tela externa `mcp.desktopcommander.app/verify-device`; concluir ChatGPT -> OAuth MCP -> Casa via owners existentes sem outro tunnel/servico/owner.
+
+**CURRENT MEDIDO (07/11/2026, apenas leitura e testes focados):**
+- **Forja openKylin** `openkylin-vm` no IP atual `192.168.35.130`; checkout `/home/CentralDark-OS/CentralDark` no HEAD `be787cf3df9a422aaa6c695c80d6fb142faa4300`; `centraldark-mcp-tunnel.service` **active/running** com cliente STDIO `tunnel-client` e subprocesso `apps/modulos/mcp/src/mcp-server.js --stdio --compact --admin`. `http://127.0.0.1:8742/readyz` **HTTP 200**. Nao afirmar que status do servico equivale a chamada autorizada do plugin.
+- **Cloudflare**: tunnel ja existente `centraldark-casa-mcp`, estado **healthy**, ingress de `mcp.centralldark.com` -> `http://127.0.0.1:9101` no connector Windows. **Nao alterar/duplicar** esse tunnel sem upstream OAuth provado.
+- **Casa**: `127.0.0.1:9101/health` apresenta `engine_connected=true` e recibo `list_directory` verificado; Tailscale Serve da Casa `:9100 -> 127.0.0.1:9101`; OAuth nao faz parte do Casa Agent. Pela rota publica `/health=200`, `/mcp` anonimo `401` esperado, mas `/tools.json=404` e `/.well-known/oauth-authorization-server=404`: catalogo e OAuth nao chegam ao servidor MCP completo.
+- **MCP HTTP completo**: `apps/modulos/mcp/dist/index.js` existe na VM, com dependencias; porta `127.0.0.1:9100` **sem listener**, e `centraldark-native-mcp-http.service` **nao instalado/ativo como unidade user da VM**. Nao iniciar segunda instancia de writer enquanto o owner canonical VPS nao estiver reconciliado. Origem VPS `89.117.78.124:22` e `100.90.199.124:22`: TIMEOUT neste probe, `admin.centralldark.com` HTTP 523; isso nao prova o estado interno da VPS.
+- **Pareamento proprio ja implementado** em `apps/modulos/mcp/src/device-pairing.js` e `apps/modulos/mcp/src/oauth.js`, com tela `apps/instinto-superior/src/routes/mcp-autorizar.tsx`. Testes na VM: `LOG_DIR=/home/CentralDark-OS/CentralDark/logs node --test tests/device-pairing.test.mjs tests/pairing-consent-flow.test.mjs` -> **12 PASS / 0 FAIL**; sem `LOG_DIR`, teste falha por diretório padrao legado `/root/CentralDark/logs/mcp` inacessivel ao usuario da VM. Teste de fonte nao equivale a OAuth publicado.
+- **Distincao de autenticacao**: o codigo do fornecedor Desktop Commander nao autoriza CentralDark. O proprio OAuth 2.1+PKCE/DCR do MCP deve emitir/validar autorizacao; o tunel STDIO OpenAI em `:8742` e o Cloudflare `:9101` sao transportes separados. Nao mostrar, copiar ou reutilizar tokens nem inserir um segundo login paralelo.
+
+**FIXED_POINT = PENDING**; **NEXT_CURSOR**: recuperar a rota de acesso ao **MCP HTTP completo ja existente** (sem duplicar instancia nem derrubar o Casa Agent); provar `/.well-known/oauth-authorization-server` + `/tools.json` no mesmo hostname HTTPS; confirmar consentimento admin via `/mcp-autorizar` e `/token`; executar `initialize`, `tools/list` e `casa_commander_read` no MCP autenticado atraves da ponte Casa; salvar receipt e readback. O clique humano de consentimento nao e substituido por automacao.
+<!-- /CENTRALDARK_MCP_PAIRING_ROUTE_20261107 -->
