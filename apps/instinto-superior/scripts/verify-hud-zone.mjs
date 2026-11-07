@@ -588,7 +588,7 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   const chaves = [...icones.matchAll(/^  (?:"([^"]+)"|([a-z][a-z0-9]*)):/gm)].map((m) => m[1] || m[2]);
   assert.equal(chaves.length, 27, "cada menu original deve ter ícone próprio");
   assert.equal(new Set(chaves).size, 27, "não duplicar entradas do mapeamento");
-  const rotas = [...navegacao.matchAll(/\\{ valor: "([^"]+)"/g)].map((m) => m[1]);
+  const rotas = [...navegacao.matchAll(/\{ valor: "([^"]+)"/g)].map((m) => m[1]);
   assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 27 rotas atuais");
   assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
   assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
