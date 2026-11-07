@@ -54,6 +54,8 @@
         "title": "CentralDark: Catálogo de abas e capacidades Browser/ZENDRIVE"
       },
       {
+        "command": "centraldark.pairDevice",
+        "title": "CentralDark: Parear este VS Code com o MCP por código"
         "command": "centraldark.pairVsCode",
         "title": "CentralDark: Parear este VS Code (SSH + MCP)"
       },
@@ -92,6 +94,10 @@
           "default": true,
           "description": "Registra somente inicio/fim/resultado de shell integrado no LOGS-VS-CODE.log da Casa; nunca grava comandos ou saidas."
         },
+        "centraldark.restore.mcpBaseUrl": {
+          "type": "string",
+          "default": "https://mcp.centralldark.com",
+          "description": "Origem HTTPS do MCP CentralDark para pareamento por código. Não incluir tokens."
         "centraldark.restore.remoteTerminalEnabled": {
           "type": "boolean",
           "default": false,

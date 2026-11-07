@@ -24,6 +24,7 @@ import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook
 import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, adminSentinelEvent, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
+import { createDevicePairingRouter } from "./device-pairing.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
 import { isAdmin as isCockpitAdmin } from "./admin.js";
 // ─────────────────────── Handlers globais de crash (v2.3) ───────────────────────
@@ -343,6 +344,10 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
+
+// Pareamento do VS Code: reutiliza a implementação existente com a mesma sessão admin.
+// A montagem é isolada; não cria segundo MCP ou processo.
+app.use("/device", createDevicePairingRouter({ isAdmin }));
 
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.use("/admin/grafo", adminGraphProxy);
