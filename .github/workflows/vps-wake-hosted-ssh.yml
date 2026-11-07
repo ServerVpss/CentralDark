@@ -2,12 +2,19 @@ name: ⚙️ VPS wake via hosted SSH
 
 # Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
 # (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo; unidade VPS-1 somente.
+# PR recovery usa pull_request_target: este YAML vem da branch-base e nunca faz
+# checkout/execução do conteúdo da PR, protegendo os segredos SSH.
 # Autorizado: PERMITO SEGREDO — ativar apenas actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service após identificar unit real.
 # NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta
 # no provedor, este job também timeout — aí só Contabo API resolve.
 
 on:
   workflow_dispatch:
+  pull_request_target:
+    branches: [main, program/centraldark-convergencia-omniroute-722]
+    types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -15,10 +22,12 @@ permissions:
 jobs:
   wake:
     # O recovery não pode depender da mesma VPS cujos runners estão offline.
+    # PRs de fork não podem usar esta rota privilegiada.
+    if: ${{ github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - name: 🔹 SSH na VPS e restart runner
+      - name: 🔹 SSH na VPS e ativar runner parado
         env:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
@@ -29,7 +38,9 @@ jobs:
             echo "SECRETS_MISSING: precisa VPS_SSH_KEY_LOVABLE + VPS_HOST_LOVABLE + VPS_USER_LOVABLE"
             exit 1
           fi
-          KEY=/tmp/vps_wake_key
+          KEY="$(mktemp "${RUNNER_TEMP:-/tmp}/vps_wake_key.XXXXXX")"
+          KNOWN_HOSTS="$(mktemp "${RUNNER_TEMP:-/tmp}/vps_wake_known_hosts.XXXXXX")"
+          trap 'rm -f "$KEY" "$KNOWN_HOSTS"' EXIT
           python3 - "$KEY" <<'PY'
           import os, re, sys
           raw = os.environ["VPS_SSH_KEY_LOVABLE"].strip()
@@ -64,8 +75,21 @@ jobs:
             exit 68
           fi
           echo "VPS_TARGET_RESOLUTION=PASS route=$TARGET_ROUTE"
+          EXPECTED_HOSTKEY_SHA256='SHA256:KkbBd5sOR1boP8ldlWh45eWN2DY8RPjOHtXX+4FQhIE'
+          if ! ssh-keyscan -T 10 -t ed25519 "$TARGET_HOST" > "$KNOWN_HOSTS" 2>/dev/null; then
+            echo "VPS_HOSTKEY_SCAN_FAILED"
+            exit 69
+          fi
+          OBSERVED_HOSTKEY_SHA256="$(ssh-keygen -lf "$KNOWN_HOSTS" -E sha256 2>/dev/null | awk '{print $2}' | sort -u)"
+          if [ "$OBSERVED_HOSTKEY_SHA256" != "$EXPECTED_HOSTKEY_SHA256" ]; then
+            echo "VPS_HOSTKEY_PIN_MISMATCH"
+            exit 69
+          fi
+          echo "VPS_HOSTKEY_PIN=PASS"
           set +e
-          ssh -o StrictHostKeyChecking=accept-new \
+          ssh -o UserKnownHostsFile="$KNOWN_HOSTS" \
+              -o GlobalKnownHostsFile=/dev/null \
+              -o StrictHostKeyChecking=yes \
               -o BatchMode=yes \
               -o ConnectTimeout=15 \
               -i "$KEY" \

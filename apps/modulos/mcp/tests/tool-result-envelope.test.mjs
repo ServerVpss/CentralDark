@@ -57,6 +57,10 @@ test("delegation carries capability and a grounded diagnostic cursor without cla
   assert.equal(trace.next_cursor, "exigir_confirmacao_literal_do_usuario");
   assert.equal(trace.proof_verification, "NOT_VERIFIED_AT_ENVELOPE");
   assert.equal(trace.receipt_ref, "UNKNOWN");
+  assert.equal(result.structuredContent.centraldark.state, "BLOCKED");
+  assert.equal(result.structuredContent.centraldark.ok, false);
+  assert.equal(result.structuredContent.centraldark.error_state, "BLOCKED");
+  assert.equal(result.structuredContent.centraldark.error_code, "OPERATION_BLOCKED");
 });
 
 test("explicit SHA/owner/receipt references are only reported, never certified", () => {

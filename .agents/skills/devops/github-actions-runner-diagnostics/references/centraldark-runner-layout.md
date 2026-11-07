@@ -47,3 +47,9 @@ Recarregar antes de decidir — estado muda.
 
 Em qualquer repositório fora do `ServerVpss/CentralDark`, consultar o
 layout de runners dele via o mesmo `gh api .../actions/runners`.
+
+## Rota automática atual — 2026-10-24
+
+O wake owner existente `.github/workflows/vps-wake-hosted-ssh.yml` é acionado em `pull_request_target` e push em `main`, além de permitir dispatch manual; pode acordar somente a unit VPS canônica via SSH com fingerprint ED25519 pinado. O workflow de PR é carregado da branch-base e não faz checkout do head. A porta `porta-de-entrada.yml` continua self-hosted. A exceção hosted serve apenas para recovery, não para executar testes, handlers da PR ou deploy.
+
+A causa documentada de billing continua relevante: se o runner hosted não iniciar, não há transporte SSH executado e o gate fica `queued`. Esse estado não é PASS.

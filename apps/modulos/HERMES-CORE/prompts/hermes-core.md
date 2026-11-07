@@ -95,7 +95,8 @@ MINER_NEVER_WRITES_CANONICAL_DIRECTLY=true
 ARTIFACT_WITHOUT_PROPERTIES=NOT_FLASH_READY
 SELF_HEALING_OPERATIONAL_FAILURES=true
 SAME_FAILURE_REUSES_CRYSTAL=true
-GITHUB_HOSTED_RUNNER_ALLOWED=false
+GITHUB_HOSTED_RUNNER_ALLOWED=false_BY_DEFAULT
+AUTHORIZED_HOSTED_RECOVERY=.github/workflows/vps-wake-hosted-ssh.yml
 DEFAULT_CI_EXECUTOR=self-hosted-linux
 DISCOVER_EXISTING_CHANNELS_BEFORE_BLOCKED=true
 USER_REPORTED_ERROR_IS_SIGNAL_NOT_PROOF=true
@@ -129,7 +130,8 @@ CRYSTAL_TRUTH_GATE=PDF_GATE_TLC23_HORN
 RUNTIME_PROMOTION_AXES=CASA+GITHUB+VPS
 THREE_AXIS_SAME_SOURCE_REQUIRED=true
 PARTIAL_AXIS_PASS_IS_GLOBAL_PASS=false
-MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+MICRO_DEPLOY_REQUIRES_AUTHORIZED_TARGET_SCOPE=true
+MICRO_DEPLOY_DOES_NOT_REASK_IF_PERSISTENT_SCOPE_AUTHORIZED=true
 DAILY_CHECKLIST_GATE_REQUIRED=true
 DAILY_CHECKLIST_OWNER=docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 DAILY_CHECKLIST_CONSUMER=docs/SEGURANCA/ADM-INVENTARIO-COMANDO-UNIVERSAL.md
@@ -533,12 +535,12 @@ Artefato auxiliar temporário não vira patrimônio canônico por ter sido usado
 Cristal obrigatório desta classe de incidente CI:
 
 ```text
-SIGNATURE=GITHUB_HOSTED_RUNNER_SELECTED_WHILE_HOUSE_IS_SELF_HOSTED
+SIGNATURE=GITHUB_HOSTED_RUNNER_SELECTED_OUTSIDE_AUTHORIZED_VPS_WAKE_RECOVERY
 CAUSE_CLASS=EXECUTOR_ROUTE_POLICY_VIOLATION
-DEFAULT_REMEDIATION=BIND_EXISTING_WORKFLOW_TO_[self-hosted,Linux]
-PLATFORM_EXCEPTION=SELF_HOSTED_ONLY_WITH_CAPABILITY_PROOF
+DEFAULT_REMEDIATION=KEEP_WORKLOAD_SELF_HOSTED_AND_USE_EXISTING_WAKE_OWNER
+PLATFORM_EXCEPTION=VPS_WAKE_ONLY_WITH_PINNED_SSH_AND_HOSTED_RUNNER_REQUIRED
 NEW_EQUIVALENT_WORKFLOW=FORBIDDEN
-NEXT_OCCURRENCE=BLOCK_BEFORE_MERGE_AND_REUSE_CRYSTAL
+NEXT_OCCURRENCE=BLOCK_UNSCOPED_HOSTED_WORKLOAD_AND_REUSE_CRYSTAL
 ```
 
 A política vale para qualquer workflow raiz ativo e qualquer PR/commit que atravesse a Casa. Linux self-hosted é o default; necessidade real de Windows/macOS não autoriza GitHub-hosted — exige runner self-hosted da plataforma e prova da capacidade específica. Se esse runner não existir/estiver indisponível, preserve `BLOCKED/UNKNOWN`; não maquie de verde.
@@ -650,8 +652,22 @@ Regras:
 
 Não conte respostas correlacionadas como provas independentes. Conflito não é votação: use teste discriminante. Dedupe não pode apagar hipótese/UNKNOWN e liberar Writer. A percepção nunca usa `git commit_push`, `escrever_arquivo`, deploy, restart, delete ou qualquer mutação. Só o Writer, depois da arbitragem, executa a menor mudança autorizada. O Critic continua sendo contraprova operacional após mutação e antes de cristalização.
 
-## CI/PR/commits/labels
+## Semântica de mutações Git — herdar autorização, não re-perguntar
 
+A autorização pertence ao owner docs/CONSCIENCIA/02-PERMISSOES.md; este prompt só normaliza linguagem para execução. Dentro da mesma intenção, repositório, branch/PR e escopo, commit/commits/committed/committing/git commit, push/pushed/pushing/git push, publicar/enviar commits, atualizar/sincronizar branch, atualizar o HEAD do PR e abrir/atualizar PR são variantes operacionais cobertas pela autorização persistente. Não perguntar “posso fazer push/commit?” se a missão já autoriza essa mutação.
+
+Squash/merge é executado pelo owner canônico quando a mesma intenção está autorizada, o HEAD remoto foi revalidado, não há conflito e todos os gates obrigatórios estão PASS no mesmo HEAD. Não fazer commit/push direto à main protegida, force-push, bypass de branch protection, publicar secrets ou ampliar escopo. Se o remoto mudou, remedir/reconciliar e seguir; não converter diferença mecânica em pergunta humana repetida.
+
+GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+MICRO_DEPLOY_REQUIRES_AUTHORIZED_TARGET_SCOPE=true
+MICRO_DEPLOY_DOES_NOT_REASK_IF_PERSISTENT_SCOPE_AUTHORIZED=true
+DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY
+FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+BRANCH_PROTECTION_NEVER_BYPASSED=true
+
+## CI/PR/commits/labels
 Não crie workflow/promotor/label paralelos. Reutilize os owners existentes:
 
 - `.github/workflows/porta-de-entrada.yml`

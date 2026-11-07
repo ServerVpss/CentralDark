@@ -13,7 +13,7 @@ import { appendCentralEvent } from "./log-funnel.js";
 // ONDE    > apps/modulos/mcp/src/audit-logger.js linha 5.
 // RESOLVE > aceita MCP_LOG_DIR (preferido) e LOG_DIR (o que o PM2 ja define),
 //           e o default aponta para o diretorio canonico.
-const CENTRAL_LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "/root/CentralDark/logs";
+const CENTRAL_LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "<caminho-vps>";
 const LOG_DIR = process.env.MCP_LOG_DIR || process.env.LOG_DIR || path.join(CENTRAL_LOG_ROOT, "mcp");
 if (!process.env.MCP_LOG_DIR && process.env.LOG_DIR) {
     console.warn("[audit-logger] MCP_LOG_DIR ausente; usando LOG_DIR como fallback:", LOG_DIR);
@@ -27,7 +27,7 @@ const PRIVATE_KEY_RE = /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z 
 const BEARER_RE = /\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/gi;
 const GITHUB_TOKEN_RE = /\b(?:gh[pousr]_[A-Za-z0-9_]{30,}|github_pat_[A-Za-z0-9_]{40,})\b/g;
 const JWT_RE = /\beyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b/g;
-const OPENAI_KEY_RE = /\bsk-[A-Za-z0-9_-]{20,}\b/g;
+const <nome-de-segredo> = /\bsk-[A-Za-z0-9_-]{20,}\b/g;
 const EMAIL_RE = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g;
 const AUDIT_SCHEMA = "centraldark.mcp.tool-call.v1";
 const auditSubscribers = new Set();
@@ -54,7 +54,7 @@ function redactString(value) {
         .replace(BEARER_RE, "Bearer [REDACTED]")
         .replace(GITHUB_TOKEN_RE, "[REDACTED_GITHUB_TOKEN]")
         .replace(JWT_RE, "[REDACTED_JWT]")
-        .replace(OPENAI_KEY_RE, "[REDACTED_API_KEY]")
+        .replace(<nome-de-segredo>, "[REDACTED_API_KEY]")
         .replace(EMAIL_RE, "[REDACTED_EMAIL]");
     if (redacted.length <= MAX_STRING_LENGTH) return redacted;
     return `${redacted.slice(0, MAX_STRING_LENGTH)}...[TRUNCATED:${redacted.length}]`;
@@ -122,6 +122,7 @@ export function runWithAuditContext(context, fn) {
     return auditContext.run(context && typeof context === "object" ? context : {}, fn);
 }
 
+// #OBSERVACOES# @owner=apps/modulos/mcp/src/audit-logger.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:48:08.723Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
 export function buildAuditEnvelope(entry = {}) {
     const endedAtMs = Date.now();
     const durationMs = Number.isFinite(Number(entry.durationMs)) ? Math.max(0, Number(entry.durationMs)) : null;
@@ -154,7 +155,7 @@ export function buildAuditEnvelope(entry = {}) {
         durationMs,
         exitCode: source.exitCode ?? null,
         ok,
-        status: ok ? "PASS" : "FAIL",
+        status: !ok && source.status === "BLOCKED" ? "BLOCKED" : ok ? "PASS" : "FAIL",
         input: source.input ?? null,
         result: source.result ?? null,
         error: source.error ?? null,

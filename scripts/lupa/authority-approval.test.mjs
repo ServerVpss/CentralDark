@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 
 import {
   CANONICAL_AUTHORITY_LABEL,
@@ -175,4 +176,46 @@ test("autorização persistente não atravessa fork nem autor não confiável", 
     user: { login: "intruso" },
   }), { repository: REPO });
   assert.equal(intruso.viaPersistent, false);
+});
+
+// #OBSERVACOES# @owner=scripts/lupa/authority-approval.test.mjs @doc_ref=docs/CONSCIENCIA/02-PERMISSOES.md @last_updated=2026-10-24T12:20:43.652Z @estado=CONTRATO_SEMANTICO_ADICIONADO @pendente=CI_SAME_HEAD @next_cursor=VERIFY_NO_REASK_GIT_ACTIONS
+test("push/commit aliases inherit persistent permission without repetitive confirmation", () => {
+  const readOwner = (path) => readFileSync(new URL(path, new URL("../../", import.meta.url)), "utf8");
+  const permissions = readOwner("docs/CONSCIENCIA/02-PERMISSOES.md");
+  const entrypoint = readOwner("LEIA-ME-IA.md");
+  const boot = readOwner("docs/GOVERNANCA/BOOT-IA.md");
+  const hierarchy = readOwner("docs/GOVERNANCA/HIERARQUIA-INSTRUCOES-IA.md");
+  const flow = readOwner("docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md");
+  const claude = readOwner("CLAUDE.md");
+  const hermes = readOwner("apps/modulos/HERMES-CORE/prompts/hermes-core.md");
+  const vault = readOwner("docs/COFRE/README.md");
+  const communication = readOwner("docs/COFRE/COMO-FALAR-COM-O-PIVETE.md");
+  const operationalMethod = readOwner(".agents/skills/centraldark-operational-method/SKILL.md");
+
+  assert.ok(permissions.includes("GIT_SEMANTIC_ACTION_FAMILY=COMMIT|COMMITS|COMMITTED|COMMITTING|GIT_COMMIT|PUSH|PUSHED|PUSHING|GIT_PUSH"));
+  assert.ok(permissions.includes("NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true"));
+  assert.ok(permissions.includes("NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true"));
+  assert.ok(permissions.includes("DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY"));
+  assert.ok(permissions.includes("FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true"));
+  assert.ok(permissions.includes("BRANCH_PROTECTION_NEVER_BYPASSED=true"));
+  assert.ok(entrypoint.includes("NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true"));
+  assert.ok(boot.includes("AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md"));
+  assert.ok(boot.includes("NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true"));
+  assert.ok(boot.includes("DIRECT_PUSH_TO_PROTECTED_MAIN=BLOCKED_BY_BRANCH_POLICY"));
+  assert.ok(hierarchy.includes("owner canônico de autorização"));
+  assert.ok(flow.includes("NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true"));
+  assert.equal(flow.includes("3. não façam merge para `main`;"), false);
+  assert.equal(flow.includes("- Merge somente com gates verdes e autorização explícita."), false);
+  assert.ok(claude.includes("SUSPENDED_ONLY_FOR_VISUAL_CONVERGENCE_SCOPE"));
+  assert.ok(claude.includes("sem re-pergunta quando a mesma intenção/escopo já está autorizado"));
+  assert.ok(hermes.includes("GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES"));
+  assert.ok(hermes.includes("NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true"));
+  assert.equal(hermes.includes("MICRO_DEPLOY_REQUIRES_EXPLICIT_CHEFE_AUTH=true"), false);
+  assert.ok(vault.includes("AUTO_SQUASH_IF_CLEAN"));
+  assert.ok(communication.includes("não pedir a autorização novamente"));
+  assert.ok(operationalMethod.includes("AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md"));
+  assert.ok(operationalMethod.includes("NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true"));
+  assert.equal(operationalMethod.includes("CHEFE_IS_LIVE_APPROVAL=true"), false);
+  assert.ok(operationalMethod.includes("Se a intenção era somente visual e a integração é um escopo novo, aguardar pedido/autorização."));
+  assert.equal(operationalMethod.includes("aguarda pedido/autorização antes de integrar ou modificar infraestrutura."), false);
 });

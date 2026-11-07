@@ -21,12 +21,15 @@ Este documento elimina ambiguidades entre arquivos antigos e novos. Ele define q
 - `00-COMECE-AQUI-IA.md`: porta universal de descoberta. Encaminha toda IA para a Constituição.
 - `CLAUDE.md`: **Constituição universal** de identidade, conduta, defesa, segurança, delegação, contexto e áreas protegidas. Aplica-se a qualquer modelo, não apenas ao Claude.
 - `AGENTS.md`: adaptador operacional universal. Traduz a Constituição para o fluxo de agentes.
-- `docs/GOVERNANCA/BOOT-IA.md`: BOOT operacional obrigatório para edição, commit, push, deploy, auditoria ou mudança de estado.
-- `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`: fluxo permanente `pivete/dev → pivete/auditoria → main`.
+- `docs/CONSCIENCIA/02-PERMISSOES.md`: owner canônico de autorização persistente, classes de ação permitidas e regra de não re-perguntar no mesmo escopo.
+- `docs/GOVERNANCA/BOOT-IA.md`: pré-voo técnico para branch, edição, commit, push, deploy, auditoria, prova e rollback; não cria uma segunda camada de autorização.
+- `docs/GOVERNANCA/FLUXO-PIVETE-DEV-AUDITORIA.md`: mecânica de branch/ambiente `pivete/dev → pivete/auditoria → main`, subordinada ao owner de permissão.
 - `docs/PROTOCOLO-BOOT.md`: ritual complementar de memória, pendências, estado vivo e continuidade entre sessões.
 - `GROK.md`, `GEMINI.md`, `.claude/`, Copilot e equivalentes: pontes específicas. Encaminham para `CLAUDE.md` e não possuem Constituição independente.
 
 ## Regra de precedência
+
+O owner docs/CONSCIENCIA/02-PERMISSOES.md resolve a autorização e sua persistência. BOOT/FLUXO resolvem a mecânica de branch, validação e promoção; não podem transformar a mesma ação já autorizada em uma nova pergunta. As proteções GitHub e os gates técnicos continuam obrigatórios.
 
 Instruções de sistema/plataforma e autorização explícita do Pivete possuem sua precedência própria. Dentro das instruções do repositório:
 
@@ -44,7 +47,7 @@ BOOT-IA.md
 governa branch, edição, commit, push, deploy, auditoria, prova e rollback.
 
 FLUXO-PIVETE-DEV-AUDITORIA.md
-vence instruções antigas que autorizem trabalho direto na main ou no ambiente de produção.
+define a mecânica de ambientes e branches e mantém bloqueado commit/push direto na main protegida. Não revoga autorização persistente para atualizar uma branch de missão/PR nem para squash-merge pelo promotor canônico quando os gates passam; a autoridade vem de docs/CONSCIENCIA/02-PERMISSOES.md.
 
 PROTOCOLO-BOOT.md
 complementa memória e continuidade, mas nunca substitui a Constituição nem o BOOT operacional.

@@ -67,7 +67,7 @@ Antes de tocar no CentralDark, abra ou inspecione pivete/dev, leia 00-COMECE-AQU
 ## Fluxo em uma linha
 
 ```text
-Pivete define → IA lê CLAUDE.md e apresenta o BOOT → trabalha em pivete/dev → Pivete valida → IAs auditam em pivete/auditoria → PR auditado → autorização → main
+Pivete define → IA lê CLAUDE.md/BOOT → executa no branch autorizado → testa e contraprova → PR auditado/gates no HEAD exato → 02-PERMISSOES.md resolve autorização persistente → AUTO_SQUASH_IF_CLEAN pelo owner canônico → main
 ```
 
 ## Papéis
