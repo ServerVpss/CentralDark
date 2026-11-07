@@ -18,6 +18,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "32d10448a6797979c0c1b5d03e1dade30aae9ea7"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Criticism"
+centraldark_self_related: ["Self-Validation","Self-Verification"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-criticism/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-validation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-verification/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # 🔍 O filtro não testado mente

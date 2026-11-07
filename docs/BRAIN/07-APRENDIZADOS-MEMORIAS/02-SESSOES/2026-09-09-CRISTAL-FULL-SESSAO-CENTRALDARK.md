@@ -48,6 +48,13 @@ centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos"
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "335e6aca63a7550204561575a2264778fb0dba47"
 centraldark_previous_path: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-09-CRISTAL-FULL-SESSAO-CENTRALDARK.md"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Improvement Loop"
+centraldark_self_related: ["Self-Iteration","Self-Memory"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-improvement-loop/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-iteration/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-memory/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # Cristal FULL da sessão — 2026-09-09

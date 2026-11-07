@@ -12,6 +12,13 @@ centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","kaizen-continuo"]
 centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
 centraldark_previous_blob_sha: "9ff1a7df6a98d645b372133d0bd1fde31aea94e3"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Testing"
+centraldark_self_related: ["Self-Monitoring","Self-Recovery"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-testing/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-monitoring/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-recovery/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 # 2026-08-26 — Sessão HERMES_REI_DEPLOY + OURO MINERADO
 
