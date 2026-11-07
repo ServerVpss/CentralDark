@@ -1,5 +1,19 @@
 # CentralDark Remote Bridge — entrada unica, LOCAL-FIRST
 
+
+<!-- CURRENT_CASA_VMWARE_SSH_BOUNDARY_20261103 -->
+## CURRENT — não procurar VPS primeiro quando a intenção for a Forja VMware
+
+**A receita principal está na Skill Mãe:** [centraldark-linux-vmware-rawdisk](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md) e [RECEITA-KINGSTON-20261103](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). Registros com VM guest `192.168.35.128` e SSH via `F:\CentralDark\.ssh\config_openkylin` são **históricos**; nunca definir como binding atual sem medição. As receitas VPS↔Casa e notebook↔Casa abaixo são **setores distintos**, não devem levar o diagnóstico da VM a procurar porta VPS ou bridge antiga em primeiro lugar.
+
+**Resultado vivo (03/11/2026):** Remote Desktop Commander `SEGREDO` online; processo VMware PID 20892 executava `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`. Host VMnet8 `192.168.35.1/24`, VMware NAT/DHCP em execução; `vmrun -T ws getGuestIPAddress <VMX_ATUAL>` → `192.168.35.130`. O alias `openkylin-vm` no `C:\Users\Administrador\.ssh\config_openkylin` continha `HostName 192.168.35.128` e deu timeout. Usando **o mesmo SSH e a mesma identidade de host previamente confiada**, com `HostName` temporariamente definido como `.130`, voltou `VM_OK / CentralDark-OS / Linux / CentralDark-OS`. **Casa→VM SSH PASS.** Não modificar arquivos protegidos ou aceitar host keys cegamente.
+
+**Limite atual:** guest `tailscale0=100.81.207.32`, mas `tailscale status` → `Machine is not yet approved by tailnet admin`; `VM_TO_VPS=BLOCKED/UNKNOWN`. O alias `Segredo-VPS` no Windows `100.90.199.124:22` e TCP da VM ao endpoint público VPS `89.117.78.124:22` não responderam na janela de cinco segundos. Isso **não prova VPS OFFLINE**, nem autoriza instalar ponte nova, reiniciar Tailscale ou expor porta pública. `NEXT_CURSOR=VERIFY_APPROVED_TAILNET_PEER_THEN_VM_VPS_READONLY`.
+
+**Transporte ≠ código ≠ deploy:** SSH Casa→VM foi executado só para leitura; VPS, arquivos SSH, disco e serviços ficaram inalterados. A antiga rota de Bridge do restante deste documento é **histórico/escopo próprio**, não override do owner VMware.
+<!-- /CURRENT_CASA_VMWARE_SSH_BOUNDARY_20261103 -->
+
+
 **Um produto, uma base de código, vários ambientes de execução.** A Forja oficial é o **openKylin Linux CentralDark-OS**; a Casa Windows/Remote Desktop Commander é somente cliente/andaime transitório. O GitHub `ServerVpss/CentralDark@main` é a fonte canônica; a VPS é uma projeção Linux opcional do mesmo core lógico, promovida apenas sob ordem do CHEFE e depois de provas de compatibilidade/SHA. O Bridge da Casa descrito nas seções históricas abaixo não constitui runtime atual nem segundo gateway.
 
 ## Diagnostico da rede local (SEM mutacao)

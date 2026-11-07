@@ -2,10 +2,40 @@
 title: "VISUALIZACAO MERMAID PADRAO"
 date: 2026-08-28
 tags: ["consciencia"]
-updated: 2026-10-06
+updated: 2026-11-03
 ---
 
 # Visualização Mermaid — Padrão Obrigatório da Casa
+
+@code_ref: skills/mermaid_render.py
+@code_ref: skills/pretty-mermaid/scripts/render.mjs
+@last_updated: 2026-11-03T19:58:06.891Z
+
+<!-- PR_MERMAID_TRIPLE_FORMAT_RENDER_20261103 -->
+## 🍒+1 CURRENT — todo PR tem explicação visual derivada + três formatos
+
+**Fonte da verdade:** código, owners e registries permanecem na `main`; diagramas, Mermaid, SVG/PNG/ASCII e Excalidraw são **projeções**, jamais prova de runtime nem autorização para alterar o desenho canônico.
+
+**Protocolo automático:**
+1. Se a explicação do PR contiver um bloco `mermaid`, preservar **exatamente** nós, subgraphs, setas, textos e conexões existentes; este bloco será a fonte da renderização.
+2. Se o PR não contiver Mermaid, o gate `scripts/lupa/diagram-route-gate.mjs --pr-preview` utiliza `scripts/grafo-vivo/mermaid-core.mjs` para construir **apenas um mapa do fluxo de revisão**, com fingerprint e auditoria de arestas — não inventa capacidades, APIs ou estados de produção.
+3. O renderizador `skills/mermaid_render.py` usa **o mesmo source Mermaid** para todos os três formatos: **SVG** (legível e escalável), **PNG** (imagem de prévia), **ASCII** (terminal, agente ou chat). Preferência automática: SVG para textos/diagramas, PNG para UI e ASCII para CLIs; **a preferência não impede produzir os demais**.
+4. O workflow `.github/workflows/porta-de-entrada.yml` publica no próprio check/Actions do PR: `.mmd`, `.svg`, `.png`, `.txt` e `receipt.json`, vinculados ao **SHA do HEAD**, com SHA-256/tamanho das imagens. O resumo mostra Mermaid inline. Falha de renderização é **YELLOW** localizado, não bloqueia uma PR alheia.
+5. O Excalidraw derivado continua sob o **mesmo** `scripts/lupa/diagram-route-excalidraw.mjs` e o Grafo Vivo continua sob seus owners. Não fazer escritores ou diagramas canônicos paralelos.
+
+**Privacidade:** o `skills/mermaid_render.py` usa o render local `pretty-mermaid` por padrão. A API Kroki pública só é usada se o executor receber **`--allow-remote`** explícito, pois os diagramas podem conter topologias privadas. `CENTRALDARK_RENDER_NO_INSTALL=1` impede instalação npm silenciosa; em CI as dependências vêm de `npm ci` no lockfile da skill existente.
+
+**Independente do modelo:** qualquer modelo/assistente pode fornecer Mermaid em Markdown ou imagens de apoio no PR. O gate processa a fonte, **sem acionar APIs externas de modelos, sem credenciais novas e sem afirmar que imagens não fornecidas foram geradas**.
+
+**Comando já suportado pelo mesmo renderizador:**
+```sh
+python3 skills/mermaid_render.py diagrama.mmd --svg diagrama.svg --png diagrama.png --ascii diagrama.txt --theme tokyo-night
+```
+
+**Prova separada:** source/receitas escritas no PR #1977 ≠ render CI executado ≠ screenshots realmente inspecionados. `RENDERED=UNKNOWN` até arquivo, assinatura e SHA-256 serem produzidos pelo runner.
+
+<!-- /PR_MERMAID_TRIPLE_FORMAT_RENDER_20261103 -->
+
 
 **Decisão do SEGREDO/CHEFE (PERMITO SEGREDO):** toda informação estruturada na
 CentralDark deve poder ser expressa em **Mermaid** (.mmd). Isso fortalece os
@@ -27,9 +57,8 @@ Não é opcional. É padrão canônico, como o boot !CENTRALDARK.
 | PDF | `skills/mermaid-skill` (mmdc local) | Kroki não faz PDF |
 | 17+ tipos + multi-agent | `skills/mermaid-skill` | cobertura maior |
 
-**Oscilação:** usar Kroki quando só precisa de validar/exportar SVG/PNG sem
-instalar nada; usar pretty-mermaid quando quer tema (tokyo-night, dracula, nord)
-ou saída ASCII para terminal/chat.
+**Oscilação histórica:** o Kroki existe como fallback opcional para conteúdo **publicável**, mas o padrão CURRENT para código privado é renderização local com pretty-mermaid. Kroki requer autorização explícita `--allow-remote`.
+Usar pretty-mermaid quando desejar tema (tokyo-night, dracula, nord) ou saída ASCII para terminal/chat.
 
 ## Uso
 

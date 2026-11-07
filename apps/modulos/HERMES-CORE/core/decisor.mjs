@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 // 🧠 Decisor v5.1 — cadeia + strategy (OmniRoute delta) + cache + Elite fallback
+// #OBSERVACOES#
+// @owner: apps/modulos/HERMES-CORE/core/decisor.mjs
+// @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+// @last_updated: 2026-11-03T18:28:07.127Z
+// @implementado: bloqueia modelo/cache/fallback quando BANDA_COMPASSO_GLOBAL inválida.
+// @pendente: validação de source e checks CI SAME_HEAD; não houve runtime.
+// @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+// @next_cursor: verificar compatibilidade de consumers e gate GitHub.
+
 // Memória oficial: GraphRAG-Master injeta contexto do knowledge/ no prompt (fail-safe).
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -7,7 +16,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { buscarContexto } from '../agents/GraphRAG-Master/agent.mjs';
+import { buscarContexto, carregarPartitura } from '../agents/GraphRAG-Master/agent.mjs';
 import { applyRoutingStrategy } from './routing-strategy.mjs';
 import { evaluatePerceptionGate } from './perception-policy.mjs';
 import { consultarContexto } from '../agents/Knowledge-Collector/agent.mjs';
@@ -533,6 +542,19 @@ async function chamarDarkaiComResiliencia(modelo, system, prompt, timeout_ms, te
 }
 
 export async function decidir(missao, historico, continuityState = {}) {
+  // Contrato obrigatório ANTES de cache, modelo local ou fallback remoto.
+  const bandScore = carregarPartitura();
+  if (!bandScore.ok) {
+    return {
+      pensamento: 'A partitura obrigatoria falhou na validacao; nenhuma decisao de modelo e autorizada.',
+      etapa_titulo: 'Hermes bloqueado por partitura invalida',
+      estado: 'BLOCKED',
+      ferramenta: 'notificar_progresso',
+      args: { mensagem: `BAND_SCORE_GATE=BLOCKED code=${bandScore.status}` },
+      terminou: false,
+      _band_score_gate: 'BLOCKED',
+    };
+  }
   const canonical = carregarSystemCanonico();
   const system = canonical.system;
   const k = chaveCache(missao, historico, continuityState);

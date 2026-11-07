@@ -1,7 +1,16 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:26:02.893Z
+# @implementado: HTTPServer serializa ingestão SQLite na thread dona da conexão.
+# @pendente: gates estaticos no HEAD vigente; nenhum teste de runtime.
+# @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: gates de source e revisoes ainda abertas no PR #1381.
+
 import json
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from .github_state import GitHubStateLibrary, WebhookRejected
 from .centraldark_gate import validate_webhook_gate
@@ -42,4 +51,5 @@ def serve(library: GitHubStateLibrary, host: str = "127.0.0.1", port: int = 8790
         def log_message(self, *_args):
             return
 
-    ThreadingHTTPServer((host, port), Handler).serve_forever()
+    # O mesmo EventStore/SQLite pertence à thread que inicializou o servidor.
+    HTTPServer((host, port), Handler).serve_forever()

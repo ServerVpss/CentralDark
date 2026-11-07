@@ -1,3 +1,12 @@
+/* #OBSERVACOES#
+ * @owner: scripts/github-autonomia-varredura.test.mjs
+ * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+ * @last_updated: 2026-11-03T19:20:26.390Z
+ * @implementado: prova de classificação de pushes na main como PR vinculado, sem associação ou UNKNOWN.
+ * @pendente: rodar suite source no HEAD; nenhuma condição de branch protection simulada.
+ * @estado: SOURCE_ONLY; TESTS_NOT_EXECUTED
+ * @next_cursor: conferir caso concreto nos eventos push da main e readback do PR.
+ */
 import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -6,6 +15,7 @@ import test from "node:test";
 
 import {
   CANONICAL_AUTHORITY_LABEL,
+  classifyMainPush,
   CANONICAL_AUTOMATION_LABEL,
   CANONICAL_GIT_LABEL,
   CANONICAL_REVIEW_LABEL,
@@ -226,4 +236,34 @@ test("ausência de segredo de notificação é reportada, nunca assumida", () =>
     noticeTargets({ TELEGRAM_BOT_TOKEN: "x", TELEGRAM_CHAT_ID: "y" }),
     { telegram: true, webhook: false },
   );
+});
+
+test("auditoria pós-push associa SHA de merge exato ao PR sem alegar checks", () => {
+  const headSha = "a".repeat(40);
+  assert.deepEqual(classifyMainPush({
+    headSha,
+    associatedPulls: [
+      { number: 1973, merged_at: "2026-11-03T10:00:00Z", merge_commit_sha: headSha, base: { ref: "main" } },
+    ],
+  }), { status: "PR_MERGE_COMMIT_LINKED", pr: 1973 });
+});
+
+test("push na main sem vínculo comprovado só gera alerta observacional", () => {
+  const headSha = "b".repeat(40);
+  assert.deepEqual(classifyMainPush({ headSha, associatedPulls: [] }),
+    { status: "UNLINKED_MAIN_PUSH_REVIEW", pr: null });
+  assert.deepEqual(classifyMainPush({
+    headSha,
+    associatedPulls: [{ number: 1, merged_at: "2026-11-03T10:00:00Z",
+      merge_commit_sha: "c".repeat(40), base: { ref: "main" } }],
+  }), { status: "UNLINKED_MAIN_PUSH_REVIEW", pr: null });
+});
+
+test("limite de paginação e SHA inválido ficam UNKNOWN, não falsa violação", () => {
+  assert.deepEqual(classifyMainPush({ headSha: "d".repeat(40), associatedPulls: [], truncated: true }),
+    { status: "UNKNOWN", pr: null });
+  assert.deepEqual(classifyMainPush({ headSha: "", associatedPulls: [] }),
+    { status: "UNKNOWN", pr: null });
+  assert.deepEqual(classifyMainPush({ headSha: "e".repeat(40), associatedPulls: null }),
+    { status: "UNKNOWN", pr: null });
 });

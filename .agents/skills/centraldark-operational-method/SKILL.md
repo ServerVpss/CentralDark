@@ -41,6 +41,10 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
+<!-- ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+**🍒+1 ROTA PRIORITÁRIA (nova contraprova 03/11/2026):** ao investigar Casa→VMware→VPS, **antes de consultar IP histórico, VMX D:/E: fixo, rede VPS ou novo gateway**, carregar [Skill VMware existente](Skills/centraldark-linux-vmware-rawdisk/SKILL.md#current-verificado--casa--vmware-nat--vm-vps-em-diagnostico) e sua [receita Kingston](Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). Na Casa foi comprovado: `SEGREDO` online → VMX corrente do processo `vmware-vmx.exe` em `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx` → `vmrun getGuestIPAddress` = `192.168.35.130` → SSH com override temporário do IP corrente e host key conferida = `CASA_VM_SSH=PASS`. O alias `openkylin-vm` em `C:\Users\Administrador\.ssh\config_openkylin` ainda apontava para `.128`; **nao alterar .ssh sem backup/gate**. Dentro da VM `tailscale status` = `Machine is not yet approved by tailnet admin`; VM→VPS ainda **não comprovado**. Current ≠ medições históricas; nenhuma mudança de disco/SSH/VPS foi feita. `NEXT_CURSOR=APPROVE_TAILNET_VM_THEN_REMEASURE_VM_VPS`.
+<!-- /ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
 
 **Em toda conversa CentralDark, carregar silenciosamente:** [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md).
@@ -67,6 +71,7 @@ Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergu
 **Receipt mínimo de contexto visual:** `OWNER=centraldark-operational-method | SESSION | ROUTES_OBSERVED[Browser,UIA,Cua,WGC,Commander,Git] | TAB_ORIGIN | MONITOR | WINDOW_PID/HWND_FRESH | ACTION_OWNER | DELTA | BEFORE | AFTER_UI | RUNTIME_PROOF | COUNTERPROOF | STATUS=PASS|PARTIAL|FAIL|UNKNOWN | NEXT_CURSOR`. Guardar somente estado operacional e referência de prova, sem tokens, cookies, imagens privadas ou texto sensível integral. Documento na main não prova que outra instância de agente carregou a nova versão.
 
 **Medição de 05/11/2026 (histórica, não usar IDs como constantes):** Casa Windows com duas janelas Chrome visíveis por UIA e abas disponíveis pela sessão Browser; Tailscale administrativo numa janela distinta. Cua 0.28.2 inicialmente parado, então `cua-driver serve` iniciou o daemon padrão; `autostart enable` registrou entrada nativa; build WGC existente foi reaproveitado no diretório `runtime` da Skill F:; `blink_cursor.py --monitor 2 --mode position` devolveu `execution=completed` em `(960,-702)`, sem prova humana do render. `Casa Commander /health` respondeu 200 com `engine_connected=false`; logo, não atribuir cliques a essa rota. O usuário confirmou antes o método de mouse/overlay, mas nenhum clique de página Tailscale foi executado nesta medição. **NEXT_CURSOR:** confirmar visualmente a prévia e provar um clique autorizado com readback na janela corrente; manter a recuperação de autenticação Tailscale como missão separada.
+
 
 
 ## Rota rápida universal — manuseio de interface por qualquer modelo
