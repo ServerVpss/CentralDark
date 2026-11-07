@@ -1,3 +1,18 @@
+---
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "01-OURO"
+centraldark_kind: "OURO_REUTILIZAVEL_COM_PROVA_CONTEXTUAL"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Precisão do Sistema Dependabot"
+centraldark_agent_recall: "Reutilizar tecnica, autoria, limites e evidencia no owner; nao presumir runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "5618a7efa86da57d9291c4c4fe644253386da5d9"
+---
 # Precisão do Sistema Dependabot
 
 ## O Sistema age com Precisão

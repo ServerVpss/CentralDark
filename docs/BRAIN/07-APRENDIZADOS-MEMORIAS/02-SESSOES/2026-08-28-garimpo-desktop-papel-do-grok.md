@@ -5,6 +5,19 @@ tags: ["aprendizado", "garimpo", "reconciliacao", "papeis-ia", "grok", "fronteir
 status: "MEMORIA_RECUPERAVEL"
 authority: "REFERENCIA; owner canônico permanece fora do BRAIN"
 originator: "SEGREDO/CHEFE"
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "02-SESSOES"
+centraldark_kind: "CRISTAL_DE_SESSAO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Garimpo do Desktop — papel do Grok mudou e a doc canônica não soube"
+centraldark_agent_recall: "Recuperar a intencao, correcoes, limites e NEXT_CURSOR antes de continuar; sessao historica nao equivale ao estado atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "43aa9d597b71014b9e2b015411f6a64cac71602a"
 ---
 
 # ⛏️ Garimpo do Desktop — o papel do Grok mudou e a doc canônica não soube
