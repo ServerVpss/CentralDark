@@ -76,9 +76,9 @@ function McpAuditoriaFiltrada() {
     Object.entries(f).forEach(([key, value]) => { if (value.trim()) params.set(key, value.trim()); });
     try {
       const data = await solicitar("/admin/api/logs?" + params.toString());
-      if (!Array.isArray(data.logs)) throw Error("MCP_LOG_SCHEMA_UNKNOWN");
-      setLogs(data.logs as LinhaAuditoria[]);
-      setEstado("LOGS_RETORNADOS=" + data.logs.length);
+      if (!Array.isArray(data["logs"])) throw Error("MCP_LOG_SCHEMA_UNKNOWN");
+      setLogs(data["logs"] as LinhaAuditoria[]);
+      setEstado("LOGS_RETORNADOS=" + data["logs"].length);
     } catch (error) {
       setLogs([]); setEstado(error instanceof Error ? error.message : "MCP_LOG_UNAVAILABLE");
     } finally { setBusy(false); }
@@ -99,7 +99,7 @@ function McpAuditoriaFiltrada() {
     <p role="status" className="text-xs">{busy ? "CONSULTANDO" : estado}</p>
     <div role="log" className="max-h-96 overflow-y-auto rounded border border-border p-3 font-mono text-xs">
       {logs.map((l,i) => <p key={String(l.t ?? i) + String(i)} className="border-b border-border/50 py-1">
-        {l.t ?? "SEM_DATA"} · {l.level ?? "UNKNOWN"} · {l.rota ?? "-"} · CID {l.cid ?? l.meta?.correlation_id ?? "-"} · {l.meta?.toolName ?? ""} {l.meta?.status ?? ""} {l.meta?.durationMs ?? ""}ms · {l.msg ?? ""}
+        {l.t ?? "SEM_DATA"} · {l.level ?? "UNKNOWN"} · {l.rota ?? "-"} · CID {l.cid ?? l.meta?.correlation_id ?? "-"} · {l.meta?.toolName ?? ""} {l.meta?.["status"] ?? ""} {l.meta?.durationMs ?? ""}ms · {l.msg ?? ""}
       </p>)}
       {!logs.length && !busy ? <p className="text-muted-foreground">Sem resultados nesta leitura.</p> : null}
     </div>
@@ -107,10 +107,10 @@ function McpAuditoriaFiltrada() {
 }
 function McpFerramentasPorCategoria({ data }: { data: Resultado | null }) {
   const [busca, setBusca] = useState("");
-  const raw = data?.categorias;
+  const raw = data?.["categorias"];
   const groups = raw && typeof raw === "object" && !Array.isArray(raw) ? Object.entries(raw as Record<string, unknown>) : [];
   return <section className="space-y-3">
-    <p className="text-xs text-muted-foreground">{typeof data?.total === "number" ? data.total : "UNKNOWN"} ferramentas declaradas. TOOL_LISTED != TOOL_ACTIVE.</p>
+    <p className="text-xs text-muted-foreground">{typeof data?.["total"] === "number" ? data["total"] : "UNKNOWN"} ferramentas declaradas. TOOL_LISTED != TOOL_ACTIVE.</p>
     <input aria-label="Buscar ferramenta MCP" placeholder="Buscar ferramentas por nome ou descrição" value={busca} onChange={e => setBusca(e.target.value)} className="w-full rounded border border-border bg-background p-2 text-sm" />
     {groups.map(([categoria, itens]) => {
       const tools = Array.isArray(itens) ? (itens as {name: string; description?: string}[]).filter(t => String(t.name || "").toLowerCase().includes(busca.toLowerCase()) || String(t.description || "").toLowerCase().includes(busca.toLowerCase())) : [];
@@ -155,8 +155,8 @@ function McpEmissaoChave() {
     e.preventDefault();setOcupado(true);setTokens(null);
     try {
       const r=await solicitar("/admin/api/issue-key",{method:"POST",body:JSON.stringify({password:senha,agent_name:agente.trim(),scope})});
-      if(typeof r.access_token!=="string")throw Error("TOKEN_NOT_RETURNED");
-      setTokens({access:r.access_token,refresh:typeof r.refresh_token==="string"?r.refresh_token:"",expires:typeof r.expires_in==="number"?r.expires_in:0});
+      if(typeof r["access_token"]!=="string")throw Error("TOKEN_NOT_RETURNED");
+      setTokens({access:r["access_token"],refresh:typeof r["refresh_token"]==="string"?r["refresh_token"]:"",expires:typeof r["expires_in"]==="number"?r["expires_in"]:0});
       setSenha("");setEstado("Token criado no MCP. Copie apenas para o cliente autorizado e depois descarte da tela.");
     } catch(err){setEstado(err instanceof Error?err.message:"ISSUE_KEY_UNAVAILABLE");}
     finally{setOcupado(false);}
@@ -182,10 +182,10 @@ function McpEmissaoChave() {
   </section>;
 }
 function McpOperacionalLegado({dados}:{dados:Resultado|null}) {
-  const runtime=dados?.runtime as Record<string,unknown>|undefined;
-  const forensic=dados?.forensic as Record<string,unknown>|undefined;
-  const pattern=dados?.patternAlignment as Record<string,unknown>|undefined;
-  const campos=[["Veredito",dados?.verdict],["MCP PID",runtime?.pid],["Forensic",forensic?.status],["Alinhamento",pattern?.marker],["Unknowns",pattern?.unknownCount]];
+  const runtime=dados?.["runtime"] as Record<string,unknown>|undefined;
+  const forensic=dados?.["forensic"] as Record<string,unknown>|undefined;
+  const pattern=dados?.["patternAlignment"] as Record<string,unknown>|undefined;
+  const campos=[["Veredito",dados?.["verdict"]],["MCP PID",runtime?.["pid"]],["Forensic",forensic?.["status"]],["Alinhamento",pattern?.["marker"]],["Unknowns",pattern?.["unknownCount"]]];
   const semHandler=["Fechar recibo duplicado","Medir Evidence Ledger","Montar pacote do desktop","Atualizar topologia","Revalidar Fixed Point","Rodar contraprova"];
   return <section className="space-y-3">
     <p className="text-xs text-muted-foreground">HUD original absorvido como projeção de dados do mesmo backend. Linha do tempo antiga era estática; seis botões não tinham handler. Eles não são executores.</p>
@@ -241,7 +241,7 @@ export function McpConsoleCentralDark() {
     try {
       await fetch(MCP + "/admin/logout", { credentials:"include", redirect:"manual", cache:"no-store" });
       const prova = await fetch(MCP + "/admin/api/tools", { credentials:"include", cache:"no-store" });
-      if(prova.status !== 401) throw Error("LOGOUT_NOT_CONFIRMED");
+      if(prova["status"] !== 401) throw Error("LOGOUT_NOT_CONFIRMED");
       definirAutenticado(false); definirConteudo(null); definirAtualizadoEm("");
     } catch(err){definirErro(err instanceof Error?err.message:"LOGOUT_UNAVAILABLE");}
     finally{definirOcupado(false);}
