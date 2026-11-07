@@ -582,26 +582,24 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
 });
 
-test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
-  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
-  // volta a capsula flutuante superior (sem criar segundo shell/executor).
-  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
-  assert.match(cockpit, /data-cd-harness="top-floating"/);
-  for (const control of [
-    'aria-label="CentralDark · visão geral"',
-    'aria-label="Lupa · buscar ferramentas"',
-    'aria-label="Mapa dos sistemas"',
-    'aria-label="Notificações"',
-  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+test("casca preserva sidebar com busca e toggle sem controles centrais duplicados", () => {
+  // Delta visual autorizado: lupa e recolher/expandir vivem no header da
+  // sidebar existente. O harness superior duplicado nao deve ressurgir.
   assert.match(cockpit, /className="sticky top-0 z-30/);
-  assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
   assert.match(cockpit, /SidebarProvider open=\{menuAberto\}/);
   assert.match(cockpit, /Sidebar collapsible="icon"/);
-  assert.match(cockpit, /SidebarTrigger aria-label="Abrir ou recolher menu"/);
+  assert.match(cockpit, /aria-label="Pesquisar ferramentas"/);
+  assert.match(cockpit, /onClick=\{abrirBuscaNavegacao\}/);
+  assert.match(cockpit, /aria-label="Ocultar ou mostrar barra lateral"/);
+  assert.equal((cockpit.match(/<SidebarTrigger\b/g) || []).length, 1);
   assert.match(cockpit, /aria-label="Seis pastas da Sala de Controle"/);
   assert.match(cockpit, /type="search" value=\{buscaNavegacao\}/);
-  assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
-  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+  assert.match(cockpit, /focarBuscaAoAbrir/);
+  assert.match(cockpit, /data-cd-harness="left-rail"/);
+  assert.match(cockpit, /data-cd-harness="right-rail"/);
+  assert.match(cockpit, /modo="sininho"/);
+  assert.doesNotMatch(cockpit, /data-cd-harness="top-floating"/);
+  assert.doesNotMatch(cockpit, /aria-label="Lupa · buscar ferramentas"/);
 });
 
 test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {
