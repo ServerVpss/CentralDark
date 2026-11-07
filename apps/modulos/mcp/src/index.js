@@ -16,6 +16,7 @@ import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInsta
 import { correlationMiddleware, withCid } from "./correlation.js";
 import { healthDeep } from "./health-deep.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { getOneHeartSupabaseSignals } from "./one-heart-supabase.js";
 import { startHubMissionConsumer, getHubMissionConsumerStatus } from "./hub-mission-consumer.js";
 import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
@@ -235,7 +236,7 @@ app.get("/figma/status", async (_req, res) => {
 });
 // Um coração: heartbeat que monitora o próprio monitor. Público via api.centralldark.com.
 const HEART_FILE = "<caminho-vps>";
-app.get("/heartbeat", (_req, res) => {
+app.get("/heartbeat", async (_req, res) => {
     const nowIso = new Date().toISOString();
     const nowMs = Date.now();
     let prev = null;
@@ -290,6 +291,7 @@ app.get("/heartbeat", (_req, res) => {
         writeFileSync(HEART_FILE, JSON.stringify({ t: nowIso, lag_ms: lagMs, self }, null, 2) + "\n", { mode: 0o600 });
     }
     catch { /* disk fail não derruba o coração */ }
+    body.supabase = await getOneHeartSupabaseSignals();
     res.json(body);
 });
 // ─────────────── #148: rotas que o dossie apontou como 404 mudo ───────────

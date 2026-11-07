@@ -4,13 +4,19 @@
 // @last_updated: 2026-11-01T19:22:05.143254+00:00 @implementado: sondas nativas Linux e papel CASA explícito; sem inferir VPS por hostname.
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
+import { execFile } from "node:child_process";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GITHUB_API = "https://api.github.com";
+<<<<<<< HEAD
+const DEFAULT_API_BASE = "https://api.centralldark.com";
+const DEFAULT_MCP_BASE = "https://mcp.centralldark.com";
+=======
 // A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
 const DEFAULT_API_BASE = "http://127.0.0.1:8099";
 const DEFAULT_CASA_COMMANDER_HEALTH_BASE = "http://127.0.0.1:9101";
 const DEFAULT_CASA_SITE_URL = "http://127.0.0.1:8080/"; // Vite da Casa; configuravel por CENTRALDARK_CASA_SITE_URL.
+>>>>>>> origin/main
 const REQUEST_TIMEOUT_MS = 8_000;
 
 function carregarEnvForja() {
@@ -103,6 +109,30 @@ export type EstadoCentralDark = {
   apiHealthHttp: number | null;
   heartbeatHttp: number | null;
   heartbeatSelf: string | null;
+  supabaseSignals: Estado;
+  supabaseEdgeOnline: number | null;
+  supabaseEdgeTotal: number | null;
+  supabaseRadarSources: number | null;
+  mcpHealth: Estado;
+  mcpRouteHealth: Estado;
+  mcpStatus: Estado;
+  apiRoot: Estado;
+  casaCommander: Estado;
+  mcpHealthHttp: number | null;
+  mcpRouteHealthHttp: number | null;
+  mcpStatusHttp: number | null;
+  apiRootHttp: number | null;
+  casaCommanderHttp: number | null;
+  mcpCatalogVersion: string | null;
+  mcpRouteHealthDetail: string | null;
+  mcpStatusOk: boolean | null;
+  casaCommanderEngine: boolean | null;
+  casaCommanderDetail: string | null;
+  mcpRouteHealthErro: string | null;
+  mcpStatusErro: string | null;
+  apiRootErro: string | null;
+  casaCommanderErro: string | null;
+  casaCommanderFonte: string;
   omniModelsHttp: number | null;
   receiptsHttp: number | null;
   casaSiteHttp: number | null;
@@ -152,8 +182,13 @@ export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
 
+<<<<<<< HEAD
+function mcpBase() {
+  return (process.env["CENTRALDARK_MCP_BASE_URL"] ?? DEFAULT_MCP_BASE).replace(/\/$/, "");
+=======
 function casaCommanderHealthBase() {
   return (process.env["CENTRALDARK_ROUTER_HEALTH_URL"] ?? DEFAULT_CASA_COMMANDER_HEALTH_BASE).replace(/\/$/, "");
+>>>>>>> origin/main
 }
 
 function objetoJson(valor: unknown): valor is JsonObject {
@@ -169,6 +204,10 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
+<<<<<<< HEAD
+    const resposta = await fetch(`${base}${path}`, {
+      headers: { accept: "application/json" },
+=======
     carregarEnvForja();
     const headers: Record<string, string> = { accept: "application/json" };
     const localOwner = base === apiBase() && ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname);
@@ -176,6 +215,7 @@ async function medirApi(path: string, base = apiBase()): Promise<Probe> {
     if (localOwner && routerToken) headers['authorization'] = `Bearer ${routerToken}`;
     const resposta = await fetch(`${base}${path}`, {
       headers,
+>>>>>>> origin/main
       cache: "no-store",
       signal: controller.signal,
     });
@@ -511,6 +551,7 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
 // O loopback pertence SEMPRE ao processo que executa esta função server-side.
 // Não projetar saúde de um host remoto como saúde da Casa.
 type HostScreenpipe = "CASA" | "VPS" | "UNKNOWN";
+type TailscaleProbe = { estado: Estado; casaOnline: boolean | null; vpsOnline: boolean | null; peers: number | null; erro: string | null };
 function origemLocalScreenpipe(): HostScreenpipe {
   const origemDeclarada = process.env["CENTRALDARK_COCKPIT_HOST_ROLE"]?.toUpperCase();
   if (origemDeclarada === "CASA") return "CASA";
@@ -524,6 +565,58 @@ const SONDA_NAO_EXECUTADA: Probe = {
   estado: "UNKNOWN", httpStatus: null, erro: "SEM_MEDICAO_NESTE_HOST", dados: null,
 };
 
+<<<<<<< HEAD
+function medirCasaCommanderRaw(host: HostScreenpipe): Promise<Probe> {
+  if (host === "CASA") return medirReachable("http://127.0.0.1:9101/health", true);
+  if (host === "VPS") {
+    const ip = process.env["CENTRALDARK_CASA_TAILSCALE_IP"] || "100.123.93.25";
+    return medirReachable(`http://${ip}:9100/health`);
+  }
+  return Promise.resolve(SONDA_NAO_EXECUTADA);
+}
+
+function normalizarCasaCommander(sonda: Probe): Probe {
+  if (sonda.estado === "UNKNOWN" || !sonda.dados) return sonda;
+  if (sonda.httpStatus !== 200 || sonda.dados["name"] !== "CentralDark Casa Commander" || sonda.dados["ok"] !== true) {
+    return { ...sonda, estado: "FAIL", erro: "CASA_COMMANDER_IDENTITY_OR_HEALTH_MISMATCH" };
+  }
+  return sonda.dados["engine_connected"] === true
+    ? { ...sonda, estado: "PASS", erro: null }
+    : { ...sonda, estado: "RUNNING", erro: "ENGINE_NOT_CONNECTED" };
+}
+
+async function medirTailscalePeers(): Promise<TailscaleProbe> {
+  const comando = process.platform === "win32" ? "tailscale.exe" : "tailscale";
+  const resultado = await new Promise<{ stdout: string; exitCode: number | null; errorCode: string | null }>((resolve) => {
+    execFile(comando, ["status", "--json"], { timeout: 4_000, windowsHide: true, maxBuffer: 256 * 1024 }, (error, stdout) => {
+      const code = error && typeof error.code === "number" ? error.code : null;
+      resolve({ stdout: String(stdout ?? ""), exitCode: error ? code : 0, errorCode: !error ? null : typeof error.code === "string" ? error.code : code !== null ? String(code) : "COMMAND_FAILED" });
+    });
+  });
+  if (resultado.exitCode !== 0 || !resultado.stdout.trim()) {
+    return { estado: "UNKNOWN", casaOnline: null, vpsOnline: null, peers: null, erro: `TAILSCALE_STATUS_${resultado.errorCode ?? "NO_OUTPUT"}` };
+  }
+  try {
+    const payload = JSON.parse(resultado.stdout) as unknown;
+    if (!objetoJson(payload)) throw new Error("TAILSCALE_JSON_INVALID");
+    const self = objetoJson(payload["Self"]) ? payload["Self"] : null;
+    const peerMap = objetoJson(payload["Peer"]) ? payload["Peer"] : {};
+    const devices = [...(self ? [self] : []), ...Object.values(peerMap).filter(objetoJson)];
+    const deviceFor = (pattern: RegExp) => devices.find((device) => {
+      const host = texto(device["HostName"])?.toLowerCase() ?? "";
+      const dns = texto(device["DNSName"])?.toLowerCase() ?? "";
+      return pattern.test(host) || pattern.test(dns);
+    });
+    const casa = deviceFor(/segredo|windows-casa/);
+    const vps = deviceFor(/centraldark-os/);
+    const casaOnline = casa && typeof casa["Online"] === "boolean" ? casa["Online"] : null;
+    const vpsOnline = vps && typeof vps["Online"] === "boolean" ? vps["Online"] : null;
+    const estado: Estado = casaOnline === true && vpsOnline === true ? "PASS"
+      : casaOnline === false || vpsOnline === false ? "FAIL" : "UNKNOWN";
+    return { estado, casaOnline, vpsOnline, peers: devices.length, erro: estado === "PASS" ? null : "TAILSCALE_PEER_NOT_PROVEN_ON_BOTH_HOSTS" };
+  } catch {
+    return { estado: "UNKNOWN", casaOnline: null, vpsOnline: null, peers: null, erro: "TAILSCALE_JSON_INVALID" };
+=======
 function portaEstado(bind: string, processo: string): Estado {
   return bind && processo ? "PASS" : "UNKNOWN";
 }
@@ -718,6 +811,7 @@ async function inventarioTotalPortas(): Promise<PortaCentralDark[]> {
     return portas;
   } catch {
     return [];
+>>>>>>> origin/main
   }
 }
 
@@ -736,7 +830,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const [
       github,
       liveFabric,
-      grafoVivo,
+      grafoVivoRaw,
       omniRouter,
       apiHealth,
       heartbeatRaw,
@@ -747,18 +841,34 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       screenpipeRemotoCasa,
       commanderCasa,
       actions,
+<<<<<<< HEAD
+      mcpHealthRaw,
+      mcpRoutesRaw,
+      mcpStatusRaw,
+      apiRootRaw,
+      casaCommanderRaw,
+=======
       portas,
       portasTotais,
+>>>>>>> origin/main
     ] = await Promise.all([
       medirGithub(),
       medirApi("/api/live-fabric/status"),
       medirApi("/api/live-fabric/graph"),
       medirApi("/api/omni/status"),
+<<<<<<< HEAD
+      medirApi("/health"),
+      medirApi("/heartbeat", mcpBase()),
+      medirApi("/api/omni/models"),
+      medirApi("/api/microdeploy/receipts/index.json"),
+      medirReachable("http://127.0.0.1:8080/sala-controle", true),
+=======
       medirApi("/health", origemHealth),
       medirApi("/heartbeat"),
       medirApi("/api/omni/models"),
       medirApi("/api/microdeploy/receipts/index.json"),
       medirReachable(casaSiteUrl, true, true),
+>>>>>>> origin/main
       hostScreenpipe !== "UNKNOWN"
         ? medirReachable("http://127.0.0.1:3030/health")
         : Promise.resolve(SONDA_NAO_EXECUTADA),
@@ -768,9 +878,35 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       // Servidor do Cockpit na Forja: ponte privada da Casa, nunca localhost da VM.
       medirReachable(commanderHealthUrl),
       medirActions(),
+<<<<<<< HEAD
+      medirApi("/health", mcpBase()),
+      medirApi("/health/routes", mcpBase()),
+      medirApi("/status.json", mcpBase()),
+      medirApi("/api"),
+      medirCasaCommanderRaw(hostScreenpipe),
+=======
       inventarioPortasCentralDark(),
       inventarioTotalPortas(),
+>>>>>>> origin/main
     ]);
+    const mcpRouteProbes = Array.isArray(mcpRoutesRaw.dados?.["probes"]) ? mcpRoutesRaw.dados["probes"].filter(objetoJson) : [];
+    const mcpRouteReachable = mcpRouteProbes.filter((probe) => probe["state"] === "HTTP_REACHABLE" && probe["httpStatus"] === 200);
+    const mcpRouteMissing = mcpRouteProbes.filter((probe) => probe["state"] !== "HTTP_REACHABLE" || probe["httpStatus"] !== 200);
+    const mcpRouteHealth: Probe = { ...mcpRoutesRaw, estado: mcpRouteProbes.length === 0 ? "UNKNOWN" : mcpRouteMissing.length === 0 ? "PASS" : "FAIL", erro: mcpRouteMissing.length === 0 ? null : `MCP_ROUTES_NOT_REACHABLE:${mcpRouteMissing.map((probe) => texto(probe["id"]) ?? "unknown").join(",")}` };
+    const mcpStatusOk = typeof mcpStatusRaw.dados?.["ok"] === "boolean" ? mcpStatusRaw.dados["ok"] as boolean : null;
+    const apiRoot = apiRootRaw;
+    const casaCommander = normalizarCasaCommander(casaCommanderRaw);
+    const casaCommanderEngine = typeof casaCommander.dados?.["engine_connected"] === "boolean" ? casaCommander.dados["engine_connected"] as boolean : null;
+    const mcpCatalogVersion = texto(mcpHealthRaw.dados?.["catalogVersion"]) ?? texto(objetoJson(mcpHealthRaw.dados?.["catalog"]) ? mcpHealthRaw.dados["catalog"]["catalogVersion"] : null);
+    const mcpRouteHealthDetail = `${mcpRouteReachable.length}/${mcpRouteProbes.length} rotas HTTP acessíveis${mcpRouteMissing.length ? `; falhas: ${mcpRouteMissing.map((probe) => texto(probe["id"]) ?? "unknown").join(", ")}` : ""}`;
+    const grafoInfo = objetoJson(apiHealth.dados?.["grafo"]) ? apiHealth.dados["grafo"] : null;
+    const grafoUltimo = texto(grafoInfo?.["ultimo"]);
+    const grafoIdadeMs = grafoUltimo ? Date.now() - Date.parse(grafoUltimo) : Number.NaN;
+    const grafoIntervaloMin = typeof grafoInfo?.["intervalo_min"] === "number" ? grafoInfo["intervalo_min"] as number : 30;
+    const grafoInternoFresco = grafoInfo?.["ok"] === true && Number.isFinite(grafoIdadeMs) && grafoIdadeMs >= -5_000 && grafoIdadeMs <= Math.max(30, grafoIntervaloMin * 2) * 60_000;
+    const grafoVivo: Probe = grafoInternoFresco
+      ? { ...grafoVivoRaw, estado: "RUNNING", erro: "API_HEALTH_GRAFO_OK; ROTA_PUBLICA_GRAPH_NAO_EXISTE", dados: grafoInfo }
+      : grafoInfo?.["ok"] === false ? { ...grafoVivoRaw, estado: "FAIL", erro: "API_HEALTH_GRAFO_FAIL", dados: grafoInfo } : grafoVivoRaw;
     const screenpipeMedido = screenpipeIdentificado(screenpipe);
     const screenpipeCasa = hostScreenpipe === "CASA" ? screenpipeMedido : hostScreenpipe === "VPS" ? screenpipeIdentificado(screenpipeRemotoCasa) : SONDA_NAO_EXECUTADA;
     const screenpipeVps = hostScreenpipe === "VPS" ? screenpipeMedido : SONDA_NAO_EXECUTADA;
@@ -791,7 +927,9 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const heartbeat: Probe =
       heartbeatSelf === "stale"
         ? { ...heartbeatRaw, estado: "FAIL", erro: "self=stale" }
-        : heartbeatRaw;
+        : heartbeatSelf !== "ok"
+          ? { ...heartbeatRaw, estado: "UNKNOWN", erro: `HEARTBEAT_SELF_${heartbeatSelf ?? "MISSING"}` }
+          : heartbeatRaw;
 
     const atual = github.commits[0] ?? null;
     const gitLive = objetoJson(liveFabric.dados?.["git"]) ? liveFabric.dados["git"] : null;
@@ -803,6 +941,15 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     // SHA sincronizado só comprova código; sem receipt SAME_SHA+health+efeito não existe deploy PASS.
     const deploy: Estado = "UNKNOWN";
 
+<<<<<<< HEAD
+    // Um fio de leitura: Cockpit consome exclusivamente MCP /heartbeat, sem consultar Supabase de novo.
+    const supabaseRaw = objetoJson(heartbeatRaw.dados?.["supabase"]) ? heartbeatRaw.dados["supabase"] : null;
+    const edgeRaw = objetoJson(supabaseRaw?.["edge_functions"]) ? supabaseRaw["edge_functions"] : null;
+    const radarRaw = objetoJson(supabaseRaw?.["radar"]) ? supabaseRaw["radar"] : null;
+    const sinalBruto = texto(supabaseRaw?.["state"]);
+    const supabaseSignals: Estado = heartbeat.estado === "PASS" && (sinalBruto === "PASS" || sinalBruto === "FAIL")
+      ? sinalBruto : "UNKNOWN";
+=======
     const lastToolCandidate = commanderCasa.dados?.["last_authorized_tool"];
     const lastTool = objetoJson(lastToolCandidate) ? lastToolCandidate : null;
     const lastToolAt = texto(lastTool?.["at"]);
@@ -814,6 +961,7 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
     const commanderIdentity = commanderCasa.dados?.["name"] === "CentralDark Casa Commander"
       && commanderCasa.dados?.["ok"] === true && commanderCasa.dados?.["remote_vendor"] === false;
     const commanderConnected = commanderIdentity && commanderCasa.dados?.["engine_connected"] === true;
+>>>>>>> origin/main
     const resultado: EstadoCentralDark = {
       gmail: "AUTH_REQUIRED",
       githubLovable: github.estado,
@@ -875,6 +1023,30 @@ export const lerEstadoCentralDark = createServerFn({ method: "GET" }).handler(
       apiHealthHttp: apiHealth.httpStatus,
       heartbeatHttp: heartbeat.httpStatus,
       heartbeatSelf,
+      supabaseSignals,
+      supabaseEdgeOnline: typeof edgeRaw?.["online"] === "number" ? edgeRaw["online"] : null,
+      supabaseEdgeTotal: typeof edgeRaw?.["total"] === "number" ? edgeRaw["total"] : null,
+      supabaseRadarSources: typeof radarRaw?.["sources_fresh"] === "number" ? radarRaw["sources_fresh"] : null,
+      mcpHealth: mcpHealthRaw.estado,
+      mcpRouteHealth: mcpRouteHealth.estado,
+      mcpStatus: mcpStatusRaw.estado,
+      apiRoot: apiRoot.estado,
+      casaCommander: casaCommander.estado,
+      mcpHealthHttp: mcpHealthRaw.httpStatus,
+      mcpRouteHealthHttp: mcpRouteHealth.httpStatus,
+      mcpStatusHttp: mcpStatusRaw.httpStatus,
+      apiRootHttp: apiRoot.httpStatus,
+      casaCommanderHttp: casaCommander.httpStatus,
+      mcpCatalogVersion,
+      mcpRouteHealthDetail,
+      mcpStatusOk,
+      casaCommanderEngine,
+      casaCommanderDetail: `engine_connected=${casaCommanderEngine === null ? "?" : casaCommanderEngine}; remote_vendor=${String(casaCommander.dados?.["remote_vendor"] ?? "?")}`,
+      mcpRouteHealthErro: mcpRouteHealth.erro,
+      mcpStatusErro: mcpStatusRaw.erro,
+      apiRootErro: apiRoot.erro,
+      casaCommanderErro: casaCommander.erro,
+      casaCommanderFonte: hostScreenpipe === "CASA" ? "Casa loopback 127.0.0.1:9101/health" : hostScreenpipe === "VPS" ? "VPS -> Casa Tailscale Serve :9100/health" : "Bridge Casa sem host executor identificado",
       omniModelsHttp: omniModels.httpStatus,
       receiptsHttp: receipts.httpStatus,
       casaSiteHttp: casaSite.httpStatus,
@@ -1011,3 +1183,60 @@ export const lerMcpRuntimeAoVivo = createServerFn({ method: "GET" })
       erro: recente ? null : leitura.erro ?? (assinaturaValida ? "AMOSTRA_FORA_DA_JANELA_30S" : "SCHEMA_OU_ORIGEM_NAO_COMPROVADA"),
     };
   });
+<<<<<<< HEAD
+
+export type CircuitoPrivado = {
+  hostRole: "CASA" | "VPS" | "UNKNOWN";
+  medidoEm: string;
+  tailscale: Estado;
+  tailscaleCasaOnline: boolean | null;
+  tailscaleVpsOnline: boolean | null;
+  tailscalePeers: number | null;
+  tailscaleErro: string | null;
+  casaCommander: Estado;
+  casaCommanderHttp: number | null;
+  casaCommanderEngine: boolean | null;
+  casaCommanderErro: string | null;
+  vpsToCasaBridge: Estado;
+  vpsToCasaBridgeHttp: number | null;
+  vpsToCasaBridgeEngine: boolean | null;
+  vpsToCasaBridgeErro: string | null;
+  casaToVpsSsh: Estado;
+  casaToVpsSshErro: string | null;
+  vpsToCasaSsh: Estado;
+  vpsToCasaSshErro: string | null;
+};
+
+// Leitura privada: somente administrador autenticado; sem comandos de escrita e sem expor IPs/segredos.
+export const lerCircuitoPrivado = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<CircuitoPrivado> => {
+    const { data: papel, error: erroPapel } = await context.supabase
+      .from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+    if (erroPapel || !papel) throw new Response("Proibido", { status: 403 });
+    const hostRole = origemLocalScreenpipe();
+    const [tailscale, bridgeRaw] = await Promise.all([
+      medirTailscalePeers(),
+      medirCasaCommanderRaw(hostRole),
+    ]);
+    const bridge = normalizarCasaCommander(bridgeRaw);
+    const bridgeReverse: Probe = hostRole === "VPS" ? bridge : {
+      estado: "UNKNOWN", httpStatus: null, erro: "REVERSE_BRIDGE_MUST_BE_MEASURED_FROM_VPS", dados: null,
+    };
+    return {
+      hostRole, medidoEm: new Date().toISOString(),
+      tailscale: tailscale.estado, tailscaleCasaOnline: tailscale.casaOnline,
+      tailscaleVpsOnline: tailscale.vpsOnline, tailscalePeers: tailscale.peers,
+      tailscaleErro: tailscale.erro,
+      casaCommander: bridge.estado, casaCommanderHttp: bridge.httpStatus,
+      casaCommanderEngine: typeof bridge.dados?.["engine_connected"] === "boolean" ? bridge.dados["engine_connected"] as boolean : null,
+      casaCommanderErro: bridge.erro,
+      vpsToCasaBridge: bridgeReverse.estado, vpsToCasaBridgeHttp: bridgeReverse.httpStatus,
+      vpsToCasaBridgeEngine: typeof bridgeReverse.dados?.["engine_connected"] === "boolean" ? bridgeReverse.dados["engine_connected"] as boolean : null,
+      vpsToCasaBridgeErro: bridgeReverse.erro,
+      casaToVpsSsh: "UNKNOWN", casaToVpsSshErro: "SSH_DIRECTION_NOT_MEASURED_BY_COCKPIT",
+      vpsToCasaSsh: "UNKNOWN", vpsToCasaSshErro: "DIRECT_REVERSE_SSH_NOT_PROVEN; native bridge measured separately",
+    };
+  });
+=======
+>>>>>>> origin/main
