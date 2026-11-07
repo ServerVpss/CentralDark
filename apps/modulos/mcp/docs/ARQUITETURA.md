@@ -215,7 +215,32 @@ SOURCE_COMMITTED nos PRs #1842 e #1838 não é prova de runtime instalado.
 | `OperationalHud` (timeline de amostra e botões sem handlers) | Instinto Superior: observabilidade real; **não** copiar timeline estática ou simular botões funcionais |
 | `ToolsTab`, `MetricCard`, `OverviewTab` | `McpAdminIntegrado.tsx` + `McpConsoleCentralDark.tsx`; apenas métricas observadas, nunca `tools ativas = total` presumido |
 | `ConnectorTab` | `McpConsoleCentralDark.tsx` documenta `https://mcp.centralldark.com/api/mcp`; snippets legados `/mcp` não são reintroduzidos |
-| `OAuthClientsTab`, `KeysTab` | placeholders sem backend de listagem de clientes/chaves dedicadas; OAuth `/authorize`, `/token`, `/register` permanece no MCP; não declarar emissão de chaves pronta |
+| OAuthClientsTab e KeysTab | DCR /register é real, mas não há listagem de clientes; emissão por POST /admin/api/issue-key já existe no src/oauth.js:handleIssueKey com senha do admin; formulário/cópia temporária migrados ao McpConsoleCentralDark.tsx; listagem e revogação continuam não implementadas |
 | `App`, páginas Login/Admin, componentes visuais e configuração Vite | Casca/entrada Admin únicas do Instinto Superior; sem servidor ou login duplicado |
 
 **Condição de prova:** retirada do source em branch/commit não comprova deploy; E2E OAuth 404 e captura de Commander externo permanecem independentes. Preservar os recibos/lembranças históricas e validar consumidores antes de remover o diretório físico de checkouts divergentes. `UNKNOWN != PASS`.
+
+
+### Migração fiel de capacidades antigas — 2026-11-07
+
+Os componentes do aplicativo mcp-admin-ui existem desde julho de 2026. Os commits de setembro ampliaram o HUD, e o PR #1946 de outubro consolidou a superfície no Instinto Superior. Um botão/aba antigo não prova efeito real. Cada componente foi confrontado com o backend de apps/modulos/mcp/ e com o owner visual apps/instinto-superior/.
+
+| UI, botão ou capacidade legada | Owner visual ou técnico existente | Estado de equivalência |
+| --- | --- | --- |
+| LoginPage, Entrar | McpConsoleCentralDark.tsx → POST /admin/login; cookie HTTP-only do MCP | Código integrado; autenticação pública E2E pendente |
+| AdminPage Atualizar / atualização a cada 30 segundos | McpConsoleCentralDark.tsx e McpResumoVivo → /health, /health/deep e /admin/api/tools | Código integrado; runtime pendente |
+| AdminPage Sair | McpConsoleCentralDark.tsx → /admin/logout e leitura protegida para contraprova de 401 | Código integrado; runtime pendente |
+| Status, total de tools, ativas, bloqueadas, uptime e versão | McpResumoVivo no Instinto Superior | Seis cartões; ativas/bloqueadas NÃO MEDIDO, sem replicar números fictícios |
+| ToolsTab: categorias, contagem, nome, descrição e filtro | McpFerramentasPorCategoria → /admin/api/tools | Código integrado; tool listada não prova execução |
+| AuditTab: rota, CID, nível, texto, Buscar e Limpar | McpAuditoriaFiltrada e adminBuscarLogs; filtro usa cid ou correlation_id | Código integrado; audit buffer limitada |
+| Tool Call Lens: calls, duração, correlação, PASS/FAIL, pausa, revisão | ObservabilidadeCentralDark.tsx, audit-logger.js, admin.js e SSE/Admin existentes | MCP nativo instrumentado; chamadas diretas ao Commander externo ainda não entram automaticamente |
+| ConnectorTab: Claude Desktop, Cursor, Codex, outros, Copiar | McpConector, endereço canônico HTTPS com /api/mcp | Código integrado; exemplos não substituem teste de cliente |
+| OAuthClientsTab | Descoberta OAuth no servidor + aviso de DCR sem API de listagem | Não simular clientes; listagem ainda ausente |
+| KeysTab: Nova chave, token acesso, refresh, descartar | McpEmissaoChave → POST /admin/api/issue-key com senha explícita | Emissão existente exposta; listagem e revogação ausentes |
+| OverviewTab: ligação OAuth e conectores | McpConsoleCentralDark.tsx, OAuth no src/oauth.js e Cockpit /mcp-autorizar | Entrada GitHub antiga não reativada: handleOAuthStart retorna 410; OpenAI legado era desabilitado |
+| OperationalHud: snapshot, semáforo e sinal Hermes por estado | McpOperacionalLegado e ObservabilidadeCentralDark.tsx | Projeção com dados; movimento do Hermes não é prova de execução |
+| OperationalHud: linha do tempo demonstrativa | Tool Call Lens e logs nativos substituem demonstração | Timeline fixa não é histórico real e não foi reproduzida como telemetria |
+| Seis botões sem handler do OperationalHud | Expostos desabilitados, com ausência de execução declarada | Não criar executor falso nem declarar funcionalidade inexistente |
+| Casca, tabs, componentes de estilo e roteamento React separados | Instinto Superior = único owner visual; apps/modulos/mcp = owner técnico | Remoção versionada no PR #1996 após testes, sem apagar receitas/histórico |
+
+Critério para HAKAI: testes de sintaxe, tipagem, suíte do cone, comparação com os owners e readback de runtime; nenhuma aplicação antiga pode ser declarada dispensável apenas porque uma tela parece equivalente. PR/MERGED != DEPLOYED; F DIRTY não autoriza reset/clean; OAuth público 404 e tool calls externos são pendências independentes.
