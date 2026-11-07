@@ -40,6 +40,15 @@ Extensao nativa do VS Code: mapeia a interface sob comando e preserva a capacida
 
 - `CentralDark: Restaurar bancada`, pela paleta de comandos (`Ctrl+Shift+P`).
 
+## Pastas do projeto no mesmo Vibe Coding (07/11/2026)
+
+- Owner unico: `skills/vs-code-restore/` (mesmo ID de extensao `centraldark.centraldark-vscode-restore`).
+- View `centraldarkWorkspaceFolders` no Explorer nativo, abaixo de `centraldarkVibeCoding`, sem substituir workspace nem reabrir editor/ChatGPT.
+- A arvore mostra diretorios e arquivos; em workspace de subpasta Bolt, tambem identifica a raiz CentralDark por `AGENTS.md` e `scripts/centraldark-inventory-reconcile.sh` existentes. Nao cria checkout.
+- Botao `Mostrar pastas do projeto` no `media/vibe.html` chama `centraldark.showProjectFolders`, com foco na view nativa; o provider usa API oficial `vscode.workspace.fs`.
+- Prova de consumo local: CHEFE confirmou visualmente as pastas `CentralDark` e `Bolt` na janela de VS Code existente; UIA identificou a view `Pastas Do Projeto` e sua arvore. `INSTALLED != PUBLISHED`.
+- Distribuicao: sem sobrescrever o release historico v0.2.1, proxima tag `centraldark-vscode-v0.2.2` com asset `centraldark-vscode-restore-0.2.2.vsix`; o auto-updater existente consome esse padrao de tags/assets. Publicacao depende do readback remoto e do gate de promocao.
+
 ## Como compilar
 
 1. `cd K:\skills\vs-code-restore`
