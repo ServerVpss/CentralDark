@@ -22,6 +22,26 @@ Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark
 - **VEREDITO:** `CASA_MAIN_SYNC=BLOCKED_PENDING_RECONCILIATION`; `HEAD_CURRENT=NO`; `ZERO_DATA_LOSS=NO_DESTRUCTIVE_ACTION_OBSERVED`; `NEXT_CURSOR=RECONCILIAR_17_TRACKED_E_7_UNTRACKED_POR_OWNER_DEPOIS_REMEDIR_CONFLITOS_E_FAZER_FF_READBACK`. Sem `reset --hard`, `git clean`, stash destrutivo, commit em massa ou ramo paralelo; atualizar esse mesmo recibo após a convergência verdadeira.
 <!-- /CASA_MAIN_RECONCILIATION_RECEIPT_20261107 -->
 
+### Acompanhamento GitHub do Corpo Único na Sala de Controle
+
+@code_ref: apps/instinto-superior/src/components/central/CockpitShell.tsx; apps/instinto-superior/src/components/central/ReconciliacaoCorpoUnico.tsx; apps/instinto-superior/src/lib/github.functions.ts; apps/instinto-superior/src/lib/admin.functions.ts; apps/instinto-superior/src/lib/cockpit.functions.ts; apps/instinto-superior/src/lib/sync.functions.ts; apps/instinto-superior/src/components/central/SshBridgeProof.ts; apps/instinto-superior/src/hooks/useTelegramBotsResumo.ts; supabase/migrations/20261107181500_cockpit_reconciliation_permissions.sql
+@last_updated: 2026-11-07T18:15:00Z
+
+A área administrativa `/sala-controle?aba=reconciliacao` apresenta o Funil Único #1977 como missão ativa e o PR-Mãe #1562 como referência anterior. A leitura GitHub usa o mesmo acesso de servidor de Main e Minha Oficina. A rota tenta as variáveis existentes e usa a sessão local do GitHub CLI para leitura do repositório quando a credencial de ambiente é recusada. A comparação usa os dois SHAs e mantém o último retrato identificado como histórico quando a conexão falta. A fila mostra o próximo passo, P1 documentais e pendências informadas na sessão. Os sucessores apontam aos PRs, commits e linhas do recibo original.
+
+Os registros de sessão são anexados ao `agent_events` existente com a sessão administrativa do Supabase e política de linha específica. A migração `supabase/migrations/20261107181500_cockpit_reconciliation_permissions.sql` também libera somente as colunas de resumo dos bots para administradores. A leitura de provas SSH usa o cliente Supabase do Cockpit. A migração está preparada localmente e depende de aplicação autorizada. O tipo de registro é uma classificação informada. Uma nota marcada como fato exige referência por SHA, arquivo e linha e aguarda conferência de mérito. O painel consulta os 100 registros mais recentes. A trilha do GitHub é somente leitura e liga ao inventário completo preservado no #1977.
+
+**Prova desta etapa:** GitHub confirmou #1977 em rascunho, com conflito, HEAD `253ab540c5f60488ed3f514eb106a1def08a5efa`. Na comparação com `ba4fe358b6ac5f4ad659a6340cfbad91827ad2a9`, a branch estava 125 commits à frente e 59 atrás. Este recibo documenta o delta local. A leitura autenticada da aba publicada e o readback do ledger na Sala de Controle estão pendentes.
+
+### Absorção do Status legado pelo Cockpit
+
+@code_ref: apps/instinto-superior/src/components/central/SistemaCentralDark.tsx; apps/instinto-superior/status/
+@last_updated: 2026-11-07T18:29:27Z
+
+`Saúde do sistema` é a entrada visual única. O Mega Painel mantém eventos e notificações. Status exibe a leitura dos serviços. Runtime / Capabilities apresenta capacidades e papéis. Infraestrutura concentra o host e seus processos. Radar concentra sinais e alertas. Os HTMLs `capsula.html`, `ai-review.html`, `conselho.html` e `protocolos.html` têm cards nativos no Mega Painel com a fonte original. Cápsula, revisão e conselho mostram apenas a fotografia histórica. `index.html` e `infra.html` ficam como fonte histórica, com as respectivas funções visuais nos painéis existentes.
+
+Os arquivos de `apps/modulos/status` passam a pertencer a `apps/instinto-superior/status`. HTML, estilos, snapshots, receitas, contratos, coletores e testes permanecem juntos, fora dos arquivos públicos do Instinto Superior. Os workflows e leitores do mesmo repositório usam o novo caminho. As páginas antigas são referência de origem e sua publicação/infraestrutura precisa de readback separado. A migração de código não certifica as sondas, a execução dos coletores nem a troca do endereço publicado.
+
 ### CENTRALDARK_MISSION_HUD_33_20261107 — quadro ativo único (01–33)
 
 **INTENÇÃO:** conservar o mesmo HUD quadrado, agora com 33 quesitos numerados e o Corpo Único integrado ao fio operacional. Este bloco é o quadro ATIVO no owner existente; não é outro HUD, programa, rota, executor ou checkpoint. Estados 🟢 de fonte/histórico não significam runtime atual; estados 🟡 não viram PASS sem medição. A numeração 01–13 foi preservada e 14–33 é delta da missão Corpo Único / Electron / MCP Casa. Não substituir outros registros do README.
@@ -31,8 +51,8 @@ Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark
 ║ 🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐                                  ║
 ║ 👑 CHEFE → SOL → HERMES → REALIDADE → KAIZEN                    ║
 ╠═════════════════════════════════════════════════════════════════╣
-║ 🎯 MISSÃO: HUD CANÔNICO + CORPO ÚNICO + ELECTRON                ║
-║ 🧠 FASE: DOCUMENTAÇÃO, CONTINUIDADE E CONTRAPROVA               ║
+║ 🎯 MISSÃO: CENTRALDARK DESKTOP / BUILDER                        ║
+║ 🧠 FASE: BUILD OK · GUI, COCKPIT E EXE FINAL PENDENTES          ║
 ╠═════════════════════════════════════════════════════════════════╣
 ║ 📋 01–13 · PROTOCOLO E CONTINUIDADE                             ║
 ║ 01 🟢 Localizar o proprietário do HUD                           ║
@@ -80,7 +100,7 @@ Contrato universal no topo de `AGENTS.md`, consumido pela Skill Mae `centraldark
 ╠═════════════════════════════════════════════════════════════════╣
 ║ 🎯 VEREDITO: FONTE REGISTRADA; RUNTIME NÃO SELADO               ║
 ║ 🟡 FIXED_POINT=PENDING · NÍVEL=UNKNOWN · XP=UNKNOWN             ║
-║ ➡️ NEXT_CURSOR: RECONCILIAR CASA ↔ MAIN SEM PERDA               ║
+║ ➡️ NEXT_CURSOR: VALIDAR GUI VIA scripts/code.bat                ║
 ╚═════════════════════════════════════════════════════════════════╝
 ```
 
@@ -483,3 +503,52 @@ NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.
 
 **NEXT_CURSOR:** restaurar roteamento HTTPS do MCP HTTP canônico sem sobrescrever tunnel saudável; autenticar com consentimento real no painel existente, validar `/register`, `/authorize`, `/token`, `tools/list`, e `casa_commander_read` autenticado; publicar/registrar o BAT no owner com gates, sem duplicar script e sem descartar o historico. FIXED_POINT_GLOBAL=PENDING.
 <!-- /CENTRALDARK_MCP_PAIRING_COCKPIT_DELTA_20261107 -->
+<!-- CENTRALDARK_DESKTOP_BUILDER_RUNTIME_HUD_20261108 -->
+### CENTRALDARK DESKTOP / BUILDER — checkpoint medido na Casa em 08/11/2026
+
+**INTENCAO:** buildar o unico CentralDark Desktop a partir da SOURCE Code-OSS; manter Explorer, abas, extensoes, terminal e navegador, incluir Cockpit como landing com login e posteriormente Hermes como motor interno. Este bloco e recibo no HUD canonico e **NAO altera nem renumera o quadro ativo 01-33**.
+
+**OWNER:** Skill Mae .agents/skills/centraldark-operational-method/SKILL.md; receita .agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md; prova Hermes scripts/hermes/verified-checkpoint.py. Raiz oficial C:\CENTRALDAR DESKTOP. projeto = junction F:\CentralDark; builder = junction para centraldark desktop-1.145.2\build (NAO DESCARTAVEL); instalador = destino do futuro EXE final; _toolchain = Node v24.22.1; source extraida e ZIP originais preservados.
+
+| Quesito | Estado | Evidencia e limite |
+|---|---|---|
+| Visual Studio Community 2026 e SDK 26100 | PROVADO | MSI exatos recuperados da ISO Microsoft; SDK log i399 Apply complete result 0x0; vswhere isComplete=true, reboot=false. |
+| MSVC 14.51 e Spectre x64 | PROVADO | biblioteca em VC/Tools/MSVC/14.51.36231/lib/spectre/x64, linker liberado para tree-sitter. |
+| npm, tree-sitter e Copilot esbuild | PROVADO NOS TESTES | Erros nativos LNK1104 e pacote esbuild ausente superados no ciclo de compilacao posterior, sem deletar SOURCE. |
+| npm run compile | PROVADO PARA COMANDO | exit 0 reportado no checkpoint existente; nao demonstra GUI correta. |
+| npm run electron / consulta CLI | PROVADO PARA COMANDO | exit 0, Electron 43.8.3; nao demonstra GUI correta. |
+| Binario Electron | PROVADO | .build/electron/Code - OSS.exe, 239554048 bytes, SHA256 cffb420f19c8fbf4270c2f10ee4a453f7b0a07488b0915b30cc7a13c877f2c56. NAO e instalador final. |
+| Janela visual em 08/11 | CONTRAPROVA — NAO PASS | Print mostra tela padrao Electron com instrucoes para executar EXE path-to-app. Processo renderer PID 47036 roda com --app-path para resources/default_app.asar e user-data-dir Roaming/Electron; nao se comprovou GUI do Code-OSS. |
+| Cockpit landing + autenticacao | PENDENTE | Nao demonstrado na janela atual. |
+| Hermes integrado e configurado | PENDENTE | Implementar sobre SOURCE original, sem motor paralelo e sem migracao prematura. |
+| EXE final e instalador CentralDark Desktop | PENDENTE | Binario de desenvolvimento nao e instalador de distribuicao; pasta instalador sem EXE final comprovado. |
+| Overlay/mouse Cua e contraprova visual | PARCIAL | Recibos do cursor/clique existem, GUI real final ainda sem PASS. |
+| GitHub main e HUD Cockpit consumindo este estado | PENDENTE | Este registro e LOCAL, checkout da Casa contem outras alteracoes; sem commit/push/readback da main nesta operacao. |
+
+**CHECKPOINT EXISTENTE:** missao centraldark-hermes-envelope-20261107, script scripts/hermes/verified-checkpoint.py status: verified=9, events=10; last_step=codeoss-11452-compile-electron-runtime-cli-pass-20261108; current_sha256=8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715. Os 10 eventos nao implicam sucesso da GUI. Nao fabricar PASS.
+
+**NEXT_CURSOR / PENDENCIAS:** (1) diagnosticar o entrypoint/empacotamento em .build/electron/resources: atualmente default_app.asar e nao o app Code-OSS; provar janela real com logs, processo e readback sem modificar SOURCE a esmo; (2) integrar Cockpit Vite como landing/login no owner da shell, preservando a interface e capacidades originais; (3) integrar Hermes original como modulo/atalho com interface existente quando autorizado, sem reparenting prematuro; (4) compilar CentralDark Desktop final, gerar instalador em instalador e testar o EXE instalado; (5) reconciliar dirty checkout F:\CentralDark, commit minimo/push main respeitando gates e conferir SHA/readback remoto e consumo no Cockpit. Preservar ZIP, source, junctions, worktrees, .env e todas as receitas. DOCUMENTED != EXECUTED; CLI_PASS != GUI_PASS; UNKNOWN != PASS; FIXED_POINT_DESKTOP=PENDING.
+
+
+#### Atualizacao P0: modulos nativos de inicializacao (08/11/2026, Casa)
+
+<!-- CENTRALDARK_DESKTOP_NATIVE_MODULES_20261108 -->
+
+**Causa confirmada em scripts/code.bat:** @vscode/policy-watcher ausente inicialmente; apos rebuild direcionado, novo teste revelou @vscode/spdlog e @vscode/windows-registry ausentes. O EXE aberto isoladamente mostrou default_app.asar; o metodo correto para testar a GUI de desenvolvimento e o launcher existente scripts/code.bat na SOURCE original.
+
+| Modulo | Estado de artefato | Contraprova local |
+|---|---|---|
+| @vscode/policy-watcher | ARQUIVO GERADO E REQUIRE PASS | build/Release/vscode-policy-watcher.node, 188416 bytes; require retornou createWatcher=function, exit 0; SHA256 b3bdfbdddda74e5afd621e4bf381d37504e2a3ca8efe66c24c0d190cfb187c25. |
+| @vscode/spdlog | ARQUIVO GERADO | build/Release/spdlog.node, 570368 bytes; processo 27064 nao presente na ultima verificacao; sem exit code final recuperado. |
+| @vscode/windows-registry | ARQUIVO GERADO | build/Release/winregistry.node, 119808 bytes; processo 27064 nao presente na ultima verificacao; sem exit code final recuperado. |
+
+**Status rigoroso:** NATIVE_FILES_PRESENT=PASS para os tres modulos; POLICY_WATCHER_LOAD=PASS; SPDLOG_LOAD=UNKNOWN; WINREGISTRY_LOAD=UNKNOWN; CODEOSS_GUI_PASS=PENDING. Rebuild gerou arquivos sem apagar ZIP, SOURCE, junctions ou scripts. Nao marcar item 10 verde antes de novo boot e readback da janela real.
+
+**NEXT_CURSOR P0 ATUALIZADO:** executar scripts/code.bat com Node portable 24.22.1 e variaveis de desenvolvimento da SOURCE; registrar erro seguinte ou janela Code-OSS; confirmar GUI via processo e evidencia visual. Depois integrar Cockpit, Hermes e instalador sem duplicar owners. DOCUMENTED != EXECUTED; FILE_EXISTS != GUI_PASS.
+
+
+**CENTRALDARK_HUD_BUILDER_READBACK_20261108_1609 — remedição no mesmo owner:** Casa SEGREDO, 08/11/2026 16:09 BRT. Binário de desenvolvimento C:\CENTRALDAR DESKTOP\centraldark desktop-1.145.2\.build\electron\Code - OSS.exe existe (239554048 bytes, última gravação 04:37 BRT); não é instalador. Na SOURCE existem policy-watcher (188416 bytes), spdlog (570368 bytes) e winregistry (119808 bytes). POLICY_WATCHER_LOAD=PASS somente por teste anterior; SPDLOG_LOAD=UNKNOWN, WINREGISTRY_LOAD=UNKNOWN, CODEOSS_GUI_PASS=PENDING; na sonda de processo atual não foi observado Code - OSS.exe vinculado à SOURCE. O launcher nativo scripts/code.bat continua o próximo teste; não assumir GUI funcional pela presença de arquivos.
+
+**GIT / CONSUMO DO HUD (remedição 16:09 BRT):** checkout F:\CentralDark em main@4d2af54c746c827e01c47778a4ce9f4165c39eee; referência local origin/main@b4b3effce8112e4c0023f3742e6d5cc33304ce49; ahead=0 / behind=48. docs/HUD/README.md modificado localmente; skill builder existente ainda sem rastreamento. CASA_MAIN_SYNC=BLOCKED/PENDING; HUD_COCKPIT_CONSUMPTION=UNKNOWN; COMMIT/PUSH_MAIN=NAO_EXECUTADO_NESTE_DELTA. Sem reset, clean, rebase, branch nova, alteração das junctions, ZIP, SOURCE ou processos. O quadro ativo 01–33 mantém todos os textos e semáforos; não converter status documental em PASS de runtime.
+<!-- /CENTRALDARK_DESKTOP_NATIVE_MODULES_20261108 -->
+<!-- /CENTRALDARK_DESKTOP_BUILDER_RUNTIME_HUD_20261108 -->
