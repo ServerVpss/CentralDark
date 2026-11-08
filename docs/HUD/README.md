@@ -576,3 +576,40 @@ Owner existente .agents/skills/centraldark-operational-method. A receita central
 
 **NEXT_CURSOR:** publicar apenas a orientacao documental segura; preservar SOUL/AGENTS/AI_BOOT como pendencias acopladas ao contrato de hash antes de publicar; reconciliar paths da migracao status/telemetria, pendencias de Casa e lock existente. DOCUMENTED != EXECUTED; FILE_EXISTS != CONSUMED.
 <!-- /CENTRALDARK_VOICE_SEMANTIC_AND_MCP_MIGRATION_20261108 -->
+
+<!-- CENTRALDARK_PORTA_UNICA_CLASSIFICACAO_20261108 -->
+### PORTA UNICA / TRIAGEM FORENSE - Backlog da Casa (08/11/2026)
+
+**INTENCAO:** classificar sem perder nenhum delta; entrada canonica scripts/centraldark-inventory-reconcile.sh e governanca pela Skill Mae / HUD existente. Esta e uma classificacao por Git/status/caminho/owner, nao aprova exclusao, deploy, commit em massa nem confirma consumo automatico. Metodo: Git status/diff/ls-files com core.quotepath=false, comparacao de conteudo com origin/main, pares de caminho e hashes Git para a mudanca status. Nenhum script, writer ou arquivo paralelo criado. Timestamp da amostra: 2026-11-08 16:53:30 -03:00 BRT.
+
+**CURRENT VERIFICADO:** F:\CentralDark (main local 4d2af54c74; referencia origin/main 3b77585d43), behind=58; index.lock zero bytes, aproximadamente 18 horas, sem processo Git ativo encontrado na sonda (ainda nao removido). Worktree publicador F:\CentralDark.worktrees\main-1 separado e limpo no inicio. O owner scripts/centraldark-inventory-reconcile.sh --scan NAO foi executado na Casa: Git Bash Windows nao oferece flock; nao alegar JSON do inventario atualizado. Git forneceu a amostra de classificacao sem modificar indice.
+
+**CONTABILIDADE RASTREADA (113 caminhos diferentes = 28 staged, 90 unstaged com sobreposicao):**
+- REMOTE_MATCH_NO_DELTA=23: conteudo do arquivo igual ao da main remota; necessario reconciliar HEAD/index local, nao repetir commit cego.
+- OWNER_TEST_CANDIDATE=42: delta local sem choque de conteudo remoto no mesmo path; depende de validacao e owner antes do commit, NAO automaticamente publicavel.
+- DELETE_MIGRATION_HOLD=28: todas as exclusoes locais de apps/modulos/status; nenhuma autorizada como limpeza.
+- PROTECTED_OWNER_REVIEW=12: alteracoes de governanca, workflows e ponte protegida; validar contrato, gate e efeito.
+- SECURITY_HOLD=4: caminhos rastreados em .ssh/; nunca incluir em commit em massa nem exibir credenciais.
+- THREE_WAY_CONFLICT_REVIEW=4: apps/instinto-superior/src/components/central/CockpitShell.tsx, apps/instinto-superior/src/components/central/SistemaCentralDark.tsx, docs/HUD/README.md, scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md. Exigem comparar base/local/main.
+- TOTAL DE SOBREPOSICOES HISTORICAS REMOTAS=29: 23 iguais ao remoto + 4 conflitos reais de conteudo + 2 exclusoes (apps/modulos/status/index.html, styles.css).
+
+**DISTRIBUICAO DE OWNER NOS 113 CAMINHOS:** STATUS_LEGACY=28; SCRIPTS_RUNTIME=16; VS_CODE_EXTENSION=9; COCKPIT=8; CASA_BRIDGE=7; MODULE_OTHER=7; SKILL_MAE_LIBRARY=7; GITHUB_WORKFLOWS=6; GOVERNANCE_SOUL=5; MCP=5; CASA_SSH_LOCAL=4; OTHER_ROOT=4; ELITE_GATEWAY=3; DOCS_OTHER=2; APPS_OTHER=1; HUD=1. A distribuicao e por pasta/fonte existente; owners funcionais mais especificos devem ser lidos antes do write.
+
+**NAO RASTREADOS (17.704; classificacao exaustiva por area, nao por segredo):**
+- K/ = 16.925 (95,60%) NESTED_TREE_K_PRESERVE: diretorio fisico comum, NAO junction. Mesmo caminho relativo existente no root = 16.713; sem equivalente = 212; 16.463 candidatos com mesmo tamanho (tamanho nao comprova igualdade). Amostra de 30 SHA-256: 28 iguais e 2 diferentes. Proibido apagar toda a arvore ou supor duplicacao total.
+- CENTRALDARK-MINIMAL-OPENKYLIN/ = 509 OPENKYLIN_CAPSULE_PRESERVE: capsula/export com MCP, docs e scripts; reconciliar por manifest/owner, sem copiar em massa.
+- _RECONCILIADO/ = 211 HISTORICAL_RECONCILIATION_PRESERVE: materiais de reconciliacao; nao descartar/recopiar sem comparacao.
+- apps/ = 41 ACTIVE_APP_OWNER_REVIEW: 27 sob apps/instinto-superior/status, 1 componente Cockpit e 13 sob apps/modulos (8 Halo empacotado; 5 elite-gateway).
+- backups/ mais openKylin-backup.tar = 9 BACKUP_PRESERVE.
+- skills/ = 4 SKILL_BUILD_ARTIFACT_REVIEW, incluindo tres VSIX e icone, sem descarte automatico.
+- scripts/ = 2 SCRIPT_OWNER_REVIEW.
+- supabase/ = 1 DB_MIGRATION_GATE; DDL exige propria contraprova.
+- .agents/ = 1 CANONICAL_SKILL_OWNER_REVIEW.
+- GENesis-AGI-i18n-ptbr = 1 OTHER_REVIEW.
+- SENSITIVE_NAME_MATCHES em nao rastreados = 7, todos sob K/; nao exibir conteudo nem colocar no Git. Nenhum token foi lido.
+
+**SUBGATE OBRIGATORIO DE MIGRACAO STATUS (NAO PROMOVER):** 28 arquivos legados marcados D em apps/modulos/status; 27 destinos nao rastreados em apps/instinto-superior/status; equivalencia de blob Git: 23 iguais e 4 alterados (README.md, README-INTELIGENCIA.md, atualizar-painel-vivo.mjs, index.html). painel-data.json NAO EXISTE na pasta nova. O original permanece no historico Git; preservacao de conteudo e obrigatoria. Cinco alteracoes MCP apontam para o destino novo; teste apps/modulos/mcp/tests/operational-telemetry.test.mjs retornou EXIT 1 na ultima sonda. Publicar apenas os cinco caminhos seria desvio. LOCK=BLOCKED ate restaurar destino, confrontar 4 deltas, testes e gate de rotas.
+
+**ROTEAMENTO / NEXT_CURSOR:** (1) preservar os 17.704 nao rastreados, sobretudo K e backups; (2) reconciliar 4 conflitos reais entre Casa/MAIN por owner; (3) corrigir Status 28->27 com painel-data.json e reexecutar testes MCP; (4) submeter 42 candidatos por owner/teste, isolando os cinco do MCP enquanto a migracao estiver incompleta; (5) executar contratos governanca/workflows/bridge; (6) reconciliar index.lock e 58 commits atras sem reset/clean/forcar sync; (7) atualizar o mesmo HUD e inventory canonicos apos provas. Resultado desta secao: CLASSIFICADO_EM_GRUPOS=PROVADO; ARQUIVOS_INDIVIDUAIS_APROVADOS=NAO; CASA_MAIN_SYNC=PENDING; FIXED_POINT_GLOBAL=PENDING.
+
+<!-- /CENTRALDARK_PORTA_UNICA_CLASSIFICACAO_20261108 -->
