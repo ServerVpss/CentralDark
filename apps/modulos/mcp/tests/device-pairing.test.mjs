@@ -146,3 +146,39 @@ test("pairing expira sem falso verde", () => {
     assert.equal(f.store.approve({ pairId: pair.pairId, code: pair.code }).ok, false);
   } finally { f.cleanup(); }
 });
+
+
+test("aprovacao so pode ser consumida uma vez, sem segundo token", () => {
+  const f = fixture();
+  try {
+    const pair = f.store.start({deviceName: "Casa"});
+    assert.equal(f.store.approve({pairId: pair.pairId, code: pair.code}).ok, true);
+    assert.deepEqual(f.store.approve({pairId: pair.pairId, code: pair.code}),
+      {ok: false, error: "pair_already_approved"});
+    assert.equal(f.store.listDevices().length, 1);
+  } finally { f.cleanup(); }
+});
+
+test("revogacao invalida token e heartbeat do dispositivo", () => {
+  const f = fixture();
+  try {
+    const pair = f.store.start({deviceName: "Casa"});
+    const approved = f.store.approve({pairId: pair.pairId, code: pair.code});
+    const token = f.store.status({pairId: pair.pairId, pairSecret: pair.pairSecret}).token;
+    assert.equal(f.store.heartbeat({token}).ok, true);
+    assert.deepEqual(f.store.revoke({deviceId: approved.deviceId}), {ok: true, revoked: true});
+    assert.equal(f.store.heartbeat({token}).ok, false);
+    assert.equal(f.store.listDevices().length, 0);
+  } finally { f.cleanup(); }
+});
+
+test("codigo errado ou expirado nao autoriza dispositivo", () => {
+  const f = fixture();
+  try {
+    const pair = f.store.start({});
+    assert.equal(f.store.approve({pairId: pair.pairId, code: "0000-0000"}).ok, false);
+    assert.equal(f.store.listDevices().length, 0);
+    f.advance(120_001);
+    assert.equal(f.store.approve({pairId: pair.pairId, code: pair.code}).ok, false);
+  } finally { f.cleanup(); }
+});
