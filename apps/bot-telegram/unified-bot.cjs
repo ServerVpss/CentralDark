@@ -946,6 +946,14 @@ function buildCentralDarkMenu() {
         { text: '🔗 Conexões', callback_data: 'hub:centraldark:connections' },
       ],
       [
+        { text: '🫁 Kimetsu', callback_data: 'hub:centraldark:kimetsu' },
+        { text: '⭐ Michelin', callback_data: 'hub:centraldark:michelin' },
+      ],
+      [
+        { text: '🦜 Papagaio', callback_data: 'hub:centraldark:papagaio' },
+        { text: '🔄 Restart controlado', callback_data: 'hub:centraldark:restart' },
+      ],
+      [
         { text: '🔙 Painel', callback_data: 'hub:main' },
       ],
     ],
@@ -1584,6 +1592,71 @@ async function handleCallback(cq) {
         '<b>🔗 Conexões</b>\n\n' +
           'O menu não altera tokens, polling, A2A ou webhook.\n' +
           'Readback desta superfície: <b>UNKNOWN</b>.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:kimetsu') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🫁 Kimetsu</b>\n\nSeleção de técnica: sob demanda.\nMétodo declarado ≠ método executado.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:michelin') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>⭐ Michelin 3 Estrelas</b>\n\nConstruir → integrar → provar.\nAs estrelas dependem de evidência.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:papagaio') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🦜 Papagaio</b>\n\nFiel: preservar sequência.\nON: replay completo.\nOFF: execução objetiva.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:restart') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🔄 Restart controlado</b>\n\n' +
+          'Esta ação interrompe e inicia o owner do gateway.\n' +
+          'Ainda está bloqueada até o adapter Hermes e o readback do mesmo chat serem provados.\n\n' +
+          'Confirmação registrada sem execução.',
+        [
+          [
+            { text: '✅ SIM, preparar gate', callback_data: 'hub:confirm:restart' },
+            { text: '❌ NÃO, cancelar', callback_data: 'hub:confirm:no' },
+          ],
+          [{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }],
+        ],
+      );
+    }
+
+    if (data === 'hub:confirm:no') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>❌ Ação cancelada.</b>\n\nNenhum processo foi alterado.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:confirm:restart') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>⚠️ Restart não executado.</b>\n\n' +
+          'Gate bloqueado: adapter Hermes e entrega no mesmo chat ainda não estão provados.\n' +
+          'Nenhum processo foi interrompido.',
         [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
       );
     }
