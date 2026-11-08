@@ -139,6 +139,11 @@ async function engine() {
     });
     upstream.on("error",err=>{emitOperationalEvent("ENGINE_SPAWN_FAILED", "NOT_PROVEN");invalidate("MCP_UPSTREAM_SPAWN:"+err.message);});
     upstream.on("exit",code=>{upstream=null;emitOperationalEvent("ENGINE_EXIT", Number.isInteger(code) ? String(code) : "UNKNOWN");invalidate("MCP_UPSTREAM_EXIT:"+code);});
+    // Cold-start race reproduced on Windows: stdio requests sent before the
+    // MIT engine finishes attaching its transport can be lost. A 6s warmup
+    // is verified by a direct pipe initialize test (no vendor remote).
+    await new Promise(resolve => setTimeout(resolve, 6000));
+    if (!upstream?.stdin?.writable) throw Error("MCP_ENGINE_EXITED_DURING_WARMUP");
     await rpc("initialize",{
       protocolVersion:"2025-06-18",capabilities:{},
       clientInfo:{name:"CentralDark Casa Commander",version:"1.0.0"}
