@@ -567,3 +567,12 @@ Owner existente .agents/skills/centraldark-operational-method. A receita central
 
 **Limite:** entrada em catalogo e prova documental nao significam consumo por Hermes ou Code-OSS GUI carregado. O checkout F:\CentralDark continua dirty, atras da main e com index.lock, preservado sem reset/clean. NEXT_CURSOR: commit minimo, hook real, push main, readback remoto, reconciliar os demais owners e bloqueios separadamente.
 <!-- /CENTRALDARK_BUILDER_SKILL_REGISTRY_20261108 -->
+
+<!-- CENTRALDARK_VOICE_SEMANTIC_AND_MCP_MIGRATION_20261108 -->
+### Governanca de linguagem e bloqueio de status MCP (08/11/2026)
+**Fonte de orientacao:** skill ja existente .claude/skills/synced/voice-semantic-classifier/SKILL.md e docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml. Delta documental: distinguir relato/pergunta/ordem por verbo, contexto, pontuacao e prosodia disponivel; nunca inferir autorizacao nem estado de runtime pela pontuacao. Contrato YAML parseado com Python 3.13 + PyYAML (exit 0); staged diff --check exit 0. Consumo real por Hermes, ASR ou TTS = NAO PROVADO.
+
+**BLOQUEIO PRESERVADO: MIGRACAO DO MODULO STATUS/MCP.** Cinco arquivos alterados de apps/modulos/mcp (src/dist/test) apontam para apps/instinto-superior/status, mas origin/main ainda rastreia os snapshots em apps/modulos/status e nao contem os destinos pretendidos. Teste local apps/modulos/mcp/tests/operational-telemetry.test.mjs exit 1; NAO PUBLICAR esses cinco arquivos isoladamente nem excluir os 28 arquivos locais de apps/modulos/status. Pendente reconciliar owner/status e executar o cone de testes com prova, sem mover/apagar snapshots enquanto faltar readback.
+
+**NEXT_CURSOR:** publicar apenas a orientacao documental segura; preservar SOUL/AGENTS/AI_BOOT como pendencias acopladas ao contrato de hash antes de publicar; reconciliar paths da migracao status/telemetria, pendencias de Casa e lock existente. DOCUMENTED != EXECUTED; FILE_EXISTS != CONSUMED.
+<!-- /CENTRALDARK_VOICE_SEMANTIC_AND_MCP_MIGRATION_20261108 -->
