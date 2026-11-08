@@ -107,6 +107,14 @@ def _keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
             InlineKeyboardButton("📊 HUD", callback_data="cd:hud"),
         ],
         [
+            InlineKeyboardButton("🧠 Personalidades", callback_data="cd:personalidades"),
+            InlineKeyboardButton("🤖 Motores", callback_data="cd:motores"),
+        ],
+        [
+            InlineKeyboardButton("🛠️ Ferramentas", callback_data="cd:ferramentas"),
+            InlineKeyboardButton("🔥 Skills", callback_data="cd:skills"),
+        ],
+        [
             InlineKeyboardButton("🧾 Receipts", callback_data="cd:receipts"),
             InlineKeyboardButton("🔗 Conexões", callback_data="cd:connections"),
         ],
@@ -145,6 +153,131 @@ def _restart_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
         ],
         [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
     ])
+
+
+def _personalidades_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🛡️ Guardião", callback_data="cd:persona:guardiao"),
+            InlineKeyboardButton("🧠 Orquestrador", callback_data="cd:persona:orquestrador"),
+        ],
+        [
+            InlineKeyboardButton("🔍 Analista", callback_data="cd:persona:analista"),
+            InlineKeyboardButton("👹 Autoaperfeiçoamento", callback_data="cd:persona:auto"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _motores_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🧠 Sistema 2", callback_data="cd:motor:sistema2"),
+            InlineKeyboardButton("⚛️ ReAct", callback_data="cd:motor:react"),
+        ],
+        [
+            InlineKeyboardButton("🪞 Auto-Crítica", callback_data="cd:motor:autocritica"),
+            InlineKeyboardButton("🔗 Decomposição", callback_data="cd:motor:cot"),
+        ],
+        [
+            InlineKeyboardButton("💬 Claude Chat", callback_data="cd:motor:claude"),
+            InlineKeyboardButton("🖥️ Claude Code", callback_data="cd:motor:claudecode"),
+        ],
+        [
+            InlineKeyboardButton("🟣 Grok terminal", callback_data="cd:motor:grok"),
+            InlineKeyboardButton("📝 Plano", callback_data="cd:motor:plano"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _ferramentas_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🖥️ Claude Code", callback_data="cd:tool:claudecode"),
+            InlineKeyboardButton("🧬 Codex", callback_data="cd:tool:codex"),
+        ],
+        [
+            InlineKeyboardButton("⚡ PM2", callback_data="cd:tool:pm2"),
+            InlineKeyboardButton("🩺 Diagnóstico", callback_data="cd:tool:diag"),
+        ],
+        [
+            InlineKeyboardButton("📋 Issues", callback_data="cd:tool:issues"),
+            InlineKeyboardButton("📜 Logs", callback_data="cd:tool:logs"),
+        ],
+        [
+            InlineKeyboardButton("🔗 Webhook", callback_data="cd:tool:webhook"),
+            InlineKeyboardButton("🔐 Contas/Auth", callback_data="cd:tool:accounts"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _skills_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🧬 META-RSI", callback_data="cd:meta"),
+            InlineKeyboardButton("🧪 Autoteste", callback_data="cd:skill:autoteste"),
+        ],
+        [
+            InlineKeyboardButton("🩺 Autodiagnóstico", callback_data="cd:skill:autodiagnostico"),
+            InlineKeyboardButton("🛡️ Autoverificação", callback_data="cd:skill:autoverificacao"),
+        ],
+        [
+            InlineKeyboardButton("📚 Automemória", callback_data="cd:skill:automemoria"),
+            InlineKeyboardButton("🔁 Autoiteração", callback_data="cd:skill:autoiteracao"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _personalidade_page(key: str) -> str:
+    pages = {
+        "guardiao": "<b>🛡️ Guardião</b>\n\nSegurança, saúde da infraestrutura, conexões e proteção.",
+        "orquestrador": "<b>🧠 Orquestrador</b>\n\nCoordena missão, owner, capacidades e próximo cursor.",
+        "analista": "<b>🔍 Analista</b>\n\nInvestiga causas, dependências, falhas e evidências.",
+        "auto": "<b>👹 Revisão de Autoaperfeiçoamento</b>\n\nUsa o motor nativo do Hermes. Só atribui evolução com prova.",
+    }
+    return pages.get(key, "<b>Personalidade UNKNOWN</b>")
+
+
+def _motor_page(key: str) -> str:
+    pages = {
+        "sistema2": "<b>🧠 Sistema 2</b>\n\nRaciocínio cuidadoso interno. Saída com fatos e evidências.",
+        "react": "<b>⚛️ ReAct</b>\n\nAção → observação → decisão → próxima ação.",
+        "autocritica": "<b>🪞 Auto-Crítica</b>\n\nGera → verifica → refina, sem expor pensamento privado.",
+        "cot": "<b>🔗 Decomposição técnica</b>\n\nQuebra a missão internamente e mostra somente resultados verificáveis.",
+        "claude": "<b>💬 Claude Chat</b>\n\nCanal de conversa. A disponibilidade real depende do provider ativo.",
+        "claudecode": "<b>🖥️ Claude Code</b>\n\nCLI de código. Execução exige rota e autorização comprovadas.",
+        "grok": "<b>🟣 Grok terminal</b>\n\nCanal externo. Disponibilidade nesta conversa: UNKNOWN.",
+        "plano": "<b>📝 Plano</b>\n\nPlanejamento separado da execução.",
+    }
+    return pages.get(key, "<b>Motor UNKNOWN</b>")
+
+
+def _tool_page(key: str) -> str:
+    pages = {
+        "claudecode": "<b>🖥️ Claude Code</b>\n\nFerramenta de desenvolvimento. Nenhum comando foi executado por este botão.",
+        "codex": "<b>🧬 Codex</b>\n\nRota de desenvolvimento. Nenhuma tarefa foi iniciada por este botão.",
+        "pm2": "<b>⚡ PM2</b>\n\nLeitura e controle de processos. Readback desta superfície: UNKNOWN.",
+        "diag": "<b>🩺 Diagnóstico</b>\n\nLeitura de saúde e dependências. Readback: UNKNOWN.",
+        "issues": "<b>📋 Issues</b>\n\nLeitura de pendências do repositório. Readback: UNKNOWN.",
+        "logs": "<b>📜 Logs</b>\n\nLeitura de logs. Segredos devem permanecer ocultos.",
+        "webhook": "<b>🔗 Webhook</b>\n\nLeitura do estado do webhook. Readback: UNKNOWN.",
+        "accounts": "<b>🔐 Contas e Auth</b>\n\nAcesso por cofre e fluxo autorizado. Nenhum segredo é exibido.",
+    }
+    return pages.get(key, "<b>Ferramenta UNKNOWN</b>")
+
+
+def _skill_page(key: str) -> str:
+    labels = {
+        "autoteste": "🧪 Autoteste",
+        "autodiagnostico": "🩺 Autodiagnóstico",
+        "autoverificacao": "🛡️ Autoverificação",
+        "automemoria": "📚 Automemória",
+        "autoiteracao": "🔁 Autoiteração",
+    }
+    return f"<b>{labels.get(key, 'Skill UNKNOWN')}</b>\\n\\nCapacidade sob demanda.\\nEstado runtime: <b>UNKNOWN</b>.\\nAção, evidência e contraprova ainda não foram executadas por este botão."
 
 
 def _safe_page(data: str, InlineKeyboardButton, InlineKeyboardMarkup) -> tuple[str, Any]:
@@ -202,6 +335,66 @@ async def _handle_callback(update, context) -> None:
             MENU_TEXT,
             parse_mode="HTML",
             reply_markup=_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:personalidades":
+        await query.edit_message_text(
+            "<b>🧠 Personalidades CentralDark</b>\n\nEscolha quem conduz a missão.",
+            parse_mode="HTML",
+            reply_markup=_personalidades_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:persona:"):
+        key = data.split(":", 2)[2]
+        await query.edit_message_text(
+            _personalidade_page(key),
+            parse_mode="HTML",
+            reply_markup=_personalidades_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:motores":
+        await query.edit_message_text(
+            "<b>🤖 Motores e canais</b>\n\nEscolha o modo ou o canal de desenvolvimento.",
+            parse_mode="HTML",
+            reply_markup=_motores_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:motor:"):
+        key = data.split(":", 2)[2]
+        await query.edit_message_text(
+            _motor_page(key),
+            parse_mode="HTML",
+            reply_markup=_motores_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:ferramentas":
+        await query.edit_message_text(
+            "<b>🛠️ Ferramentas CentralDark</b>\n\nSelecione uma área. O botão mostra a rota e o estado; execução exige owner e gate.",
+            parse_mode="HTML",
+            reply_markup=_ferramentas_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:tool:"):
+        key = data.split(":", 2)[2]
+        await query.edit_message_text(
+            _tool_page(key),
+            parse_mode="HTML",
+            reply_markup=_ferramentas_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:skills":
+        await query.edit_message_text(
+            "<b>🔥 Skills CentralDark</b>\n\nCapacidades catalogadas são acionadas sob demanda.",
+            parse_mode="HTML",
+            reply_markup=_skills_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:skill:"):
+        key = data.split(":", 2)[2]
+        await query.edit_message_text(
+            _skill_page(key),
+            parse_mode="HTML",
+            reply_markup=_skills_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
         )
         return
     if data == "cd:meta":
