@@ -90,6 +90,10 @@ com VER PENDENCIA / ACEITAR MISSAO; consultar o método existente em
 
 Always read `references/hermes-desktop-communication-style.md` when working with CHEFE in Hermes Desktop — it covers communication density preference and browser automation behavior in the preview rail.
 
+## Organização documental — método preservado
+
+Para organizar pastas e arquivos digitais, reutilizar o plano `docs/CENTRALDARK/specs/2026-11-08-organizacao-pastas-arquivos-digitais.md`. Ele aplica classificação, owners, nomes legíveis, datas, candidatos reversíveis, contraprovas e receipts sem criar uma biblioteca paralela. Não excluir, mover ou renomear em massa sem medir consumidores e preservar rollback.
+
 ## Paired operational skill
 
 This skill is paired with the CentralDark operational family: `centraldark-hermes-operations`, `reconciliacao-diaria-centraldark`, `github-actions-runner-diagnostics`, and `skill-synchronization`. When the trigger is Hermes-specific (update, cron, Desktop/backend boot, SSH/no-mux, VPS Hermes version, port/firewall proof for Hermes routes), load `centraldark-hermes-operations` too. When the trigger is daily state, checklist, abandoned deltas, or skill drift, load the matching sibling too. `centraldark-ops` carries the broader CASA/GitHub/VPS operating contract; siblings carry concrete procedures. They are one operational family, not competing owners.
