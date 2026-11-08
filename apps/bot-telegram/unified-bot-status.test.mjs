@@ -20,3 +20,15 @@ test("status mantém UNKNOWN quando health deep não prova topologia", () => {
   assert.match(source, /\/health\/deep indisponível/);
   assert.match(source, /BOT multiplicity=/);
 });
+
+test("painel preserva menus e expõe CentralDark e META-RSI sem duplicar a matriz", () => {
+  assert.match(source, /callback_data: 'hub:centraldark'/);
+  assert.match(source, /callback_data: 'hub:meta-rsi'/);
+  assert.match(source, /40 capacidades catalogadas no owner canônico/);
+  assert.match(source, /Avaliação runtime 40\/40: <b>UNKNOWN<\/b>/);
+});
+
+test("callbacks informativos não promovem runtime desconhecido", () => {
+  assert.match(source, /Entrega de receipt nesta conversa: <b>UNKNOWN<\/b>/);
+  assert.match(source, /Readback desta superfície: <b>UNKNOWN<\/b>/);
+});
