@@ -6,19 +6,23 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar o modo HUD. QUADRO FIXO COMPLETO no topo da resposta; explicacao abaixo. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
+<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
-## Biblioteca operacional centralizada (22 Skills)
+## Biblioteca operacional centralizada (23 Skills)
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
 - [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-builder-destop](Skills/centraldark-builder-destop/SKILL.md)
 - [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
 - [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md)
 - [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)

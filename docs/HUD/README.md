@@ -560,3 +560,10 @@ NEXT_CURSOR: POWERSHELL_SYNTAX -> COMMIT_MAIN_READBACK -> CASA_RECONCILE.
 
 **LIMITES:** publicacao no GitHub nao significa VSIX instalada, Code-OSS GUI carregada nem Cockpit/Hermes integrados. Nao realizar deploy ou alterar configuracao de SSH. NEXT_CURSOR: commit/push do mesmo owner, readback remoto e reconciliacao segura do checkout principal e das pendencias restantes.
 <!-- /CENTRALDARK_VSCODE_NATIVE_EXPLORER_RECEIPT_20261108 -->
+
+<!-- CENTRALDARK_BUILDER_SKILL_REGISTRY_20261108 -->
+### Skill Mae / catalogo: builder Code-OSS registrado (Casa, 08/11/2026)
+Owner existente .agents/skills/centraldark-operational-method. A receita centraldark-builder-destop ja foi publicada anteriormente e agora esta conectada a .agents/library-index.json (ID unico e path existente), ao SKILL.md da Skill Mae e ao catalogo/CATALOGO.md, sem segunda biblioteca. A lista contabilizada contem 23 entradas; o cabecalho anterior dizia 22 e foi corrigido pelo indice observado. JSON da biblioteca versao 1.2.0 foi interpretado sem erro; link ao SKILL.md verificado; staged diff --check exit 0. Contrato Git pre-commit e pre-push existentes permanecem ativos.
+
+**Limite:** entrada em catalogo e prova documental nao significam consumo por Hermes ou Code-OSS GUI carregado. O checkout F:\CentralDark continua dirty, atras da main e com index.lock, preservado sem reset/clean. NEXT_CURSOR: commit minimo, hook real, push main, readback remoto, reconciliar os demais owners e bloqueios separadamente.
+<!-- /CENTRALDARK_BUILDER_SKILL_REGISTRY_20261108 -->
