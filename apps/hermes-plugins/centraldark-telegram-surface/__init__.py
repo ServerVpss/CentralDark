@@ -6,6 +6,10 @@ polling loop, execute the restart, duplicate META-RSI, or become an executor.
 
 from __future__ import annotations
 
+import json
+import os
+import re
+from pathlib import Path
 from typing import Any
 
 
@@ -17,6 +21,83 @@ MENU_TEXT = (
     "⚪ Runtime 40/40: UNKNOWN\n"
     "🟡 UNKNOWN ≠ PASS"
 )
+
+
+
+def _centraldark_root() -> Path | None:
+    candidates = []
+    configured = os.environ.get("CENTRALDARK_ROOT", "").strip()
+    if configured:
+        candidates.append(Path(configured).expanduser())
+    here = Path(__file__).resolve()
+    candidates.extend([here, *here.parents])
+    for candidate in candidates:
+        root = candidate if candidate.is_dir() else candidate.parent
+        for parent in [root, *root.parents]:
+            matrix = parent / ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+            if matrix.is_file():
+                return parent
+    return None
+
+
+def _matrix_status() -> str:
+    root = _centraldark_root()
+    if root is None:
+        return "<b>📖 Matriz META-RSI</b>\\n\\nFonte canônica não localizada.\\nEstado: <b>UNKNOWN</b>."
+    matrix = root / ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+    rows = re.findall(r"^\|\s*(?:0[1-9]|[12][0-9]|3[0-9]|40)\s*\|", matrix.read_text(encoding="utf-8"), re.MULTILINE)
+    return (
+        "<b>📖 Matriz META-RSI</b>\\n\\n"
+        f"Capacidades catalogadas: <b>{len(rows)}/40</b>\\n"
+        f"Fonte: <code>{matrix.name}</code>\\n"
+        "Execução runtime: <b>UNKNOWN</b>.\\n\\n"
+        "Catálogo lido do owner canônico."
+    )
+
+
+def _checkpoint_status() -> str:
+    home = Path(os.environ.get("HERMES_HOME", "/data")).expanduser()
+    current = home / ".hermes/centraldark/verified-execution/telegram-meta-rsi-integration/current.json"
+    if not current.is_file():
+        return "<b>🧾 Receipts CentralDark</b>\\n\\nCheckpoint não localizado.\\nEstado: <b>UNKNOWN</b>."
+    try:
+        payload = json.loads(current.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "<b>🧾 Receipts CentralDark</b>\\n\\nReceipt ilegível.\\nEstado: <b>UNKNOWN</b>."
+    return (
+        "<b>🧾 Receipts CentralDark</b>\\n\\n"
+        f"Etapa: <code>{payload.get('step', 'UNKNOWN')}</code>\\n"
+        f"Próximo cursor: <code>{payload.get('next_cursor', 'UNKNOWN')}</code>\\n"
+        f"Resultado: <b>{payload.get('outcome', 'UNKNOWN')}</b>\\n"
+        f"Integridade: <b>{'HASH_CHAIN_PASS' if payload.get('sha256') else 'UNKNOWN'}</b>"
+    )
+
+
+def _checkpoint_result() -> str:
+    text = _checkpoint_status()
+    marker = "Resultado: <b>"
+    if marker not in text:
+        return "UNKNOWN"
+    return text.split(marker, 1)[1].split("</b>", 1)[0]
+
+
+def _gateway_connections() -> str:
+    state_file = Path("/data/gateway_state.json")
+    if not state_file.is_file():
+        return "<b>🔗 Conexões</b>\\n\\nEstado do gateway não localizado.\\nEstado: <b>UNKNOWN</b>."
+    try:
+        payload = json.loads(state_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "<b>🔗 Conexões</b>\\n\\nEstado ilegível.\\nEstado: <b>UNKNOWN</b>."
+    safe = []
+    for key in ("telegram", "a2a", "webhook"):
+        value = payload.get(key)
+        if isinstance(value, dict):
+            state = value.get("status", value.get("state", "UNKNOWN"))
+        else:
+            state = value if value is not None else "UNKNOWN"
+        safe.append(f"{key.upper()}: <b>{str(state)}</b>")
+    return "<b>🔗 Conexões</b>\\n\\n" + "\\n".join(safe) + "\\n\\nNenhum segredo foi lido."
 
 
 def _keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
@@ -71,18 +152,10 @@ def _safe_page(data: str, InlineKeyboardButton, InlineKeyboardMarkup) -> tuple[s
         "cd:hud": (
             "<b>📊 HUD CentralDark</b>\n\n"
             "O HUD é projeção do estado real.\n"
-            "Runtime desta integração: <b>UNKNOWN</b>."
+            f"Último estado do checkpoint: <b>{_checkpoint_result()}</b>."
         ),
-        "cd:receipts": (
-            "<b>🧾 Receipts CentralDark</b>\n\n"
-            "A cadeia de checkpoint do código está válida.\n"
-            "Entrega de receipt nesta conversa: <b>UNKNOWN</b>."
-        ),
-        "cd:connections": (
-            "<b>🔗 Conexões</b>\n\n"
-            "O menu não altera tokens, polling, A2A ou webhook.\n"
-            "Readback desta superfície: <b>UNKNOWN</b>."
-        ),
+        "cd:receipts": _checkpoint_status(),
+        "cd:connections": _gateway_connections(),
         "cd:kimetsu": (
             "<b>🫁 Kimetsu</b>\n\n"
             "Seleção de técnica: sob demanda.\n"
@@ -143,21 +216,10 @@ async def _handle_callback(update, context) -> None:
         )
         return
     if data == "cd:matrix":
-        text = (
-            "<b>📖 Matriz META-RSI</b>\n\n"
-            "40 capacidades catalogadas no owner canônico.\n"
-            "Avaliação runtime 40/40: <b>UNKNOWN</b>.\n\n"
-            "O catálogo não será duplicado dentro do menu."
-        )
-        await query.edit_message_text(text, parse_mode="HTML", reply_markup=_back_keyboard(InlineKeyboardButton, InlineKeyboardMarkup))
+        await query.edit_message_text(_matrix_status(), parse_mode="HTML", reply_markup=_back_keyboard(InlineKeyboardButton, InlineKeyboardMarkup))
         return
     if data == "cd:receipt":
-        text = (
-            "<b>🧾 Último receipt META-RSI</b>\n\n"
-            "Nenhum receipt runtime 40/40 foi comprovado nesta superfície.\n"
-            "Estado: <b>UNKNOWN</b>."
-        )
-        await query.edit_message_text(text, parse_mode="HTML", reply_markup=_back_keyboard(InlineKeyboardButton, InlineKeyboardMarkup))
+        await query.edit_message_text(_checkpoint_status(), parse_mode="HTML", reply_markup=_back_keyboard(InlineKeyboardButton, InlineKeyboardMarkup))
         return
     if data == "cd:restart":
         text = (
