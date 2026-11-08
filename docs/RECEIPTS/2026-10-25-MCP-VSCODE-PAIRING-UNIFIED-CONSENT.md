@@ -28,3 +28,10 @@ O mesmo codigo mostrado pela extensao VS Code deve aparecer na pagina do Cockpit
 
 ## Estado e NEXT_CURSOR
 Prova local de codigo e integracao. COMMIT != CI_PASS != DEPLOYED != PAREADO. A autorizacao final exige o clique humano. Publicar pelo owner existente, verificar CI/deploy do mesmo SHA e comprovar tentativa nova VS Code -> navegador -> clique -> status/heartbeat.
+
+## Apresentação da confirmação
+
+@code_ref: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@last_updated: 2026-11-08T22:47:36Z
+
+Quando o servidor já entrega o código, a confirmação reutiliza o painel dourado do acesso do Cockpit. A página destaca o código e o botão de confirmação. O formulário continua enviando o identificador, o nonce e o código ao mesmo endpoint. Os estados de digitação, login, erro e sucesso continuam disponíveis.
