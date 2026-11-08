@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -115,6 +116,14 @@ def _keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
             InlineKeyboardButton("🔥 Skills", callback_data="cd:skills"),
         ],
         [
+            InlineKeyboardButton("🛡️ Guardião / Segurança", callback_data="cd:guardiao"),
+            InlineKeyboardButton("📡 PM2 / Serviços", callback_data="cd:pm2"),
+        ],
+        [
+            InlineKeyboardButton("🎯 Arsenal Council", callback_data="cd:arsenal"),
+            InlineKeyboardButton("🧩 Integrações", callback_data="cd:integracoes"),
+        ],
+        [
             InlineKeyboardButton("🧾 Receipts", callback_data="cd:receipts"),
             InlineKeyboardButton("🔗 Conexões", callback_data="cd:connections"),
         ],
@@ -153,6 +162,112 @@ def _restart_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
         ],
         [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
     ])
+
+
+def _run_readonly(argv: list[str], timeout: float = 4.0) -> tuple[int, str]:
+    try:
+        result = subprocess.run(argv, capture_output=True, text=True, timeout=timeout, check=False)
+        return result.returncode, (result.stdout or result.stderr or "").strip()
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return 127, str(exc)
+
+
+def _pm2_status() -> str:
+    code, raw = _run_readonly(["pm2", "jlist"])
+    if code != 0:
+        return "<b>📡 PM2 / Serviços</b>\\n\\nPM2 não está disponível neste runtime.\\nEstado: <b>UNKNOWN</b>.\\n\\nA Casa/VPS remota não é presumida."
+    try:
+        items = json.loads(raw)
+    except ValueError:
+        return "<b>📡 PM2 / Serviços</b>\\n\\nPM2 respondeu em formato inválido.\\nEstado: <b>UNKNOWN</b>."
+    online = sum(1 for item in items if item.get("pm2_env", {}).get("status") == "online")
+    stopped = sum(1 for item in items if item.get("pm2_env", {}).get("status") != "online")
+    names = [str(item.get("name", "?")) for item in items[:12]]
+    return (
+        "<b>📡 PM2 / Serviços</b>\\n\\n"
+        f"Runtime consultado: <code>Hermes atual</code>\\n"
+        f"Online: <b>{online}</b>\\nParados/erro: <b>{stopped}</b>\\n"
+        f"Amostra: <code>{', '.join(names) or 'nenhum'}</code>\\n\\n"
+        "Esta leitura não prova o PM2 da Casa."
+    )
+
+
+def _guardiao_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🛡️ Central Segurança", callback_data="cd:security"),
+            InlineKeyboardButton("🧰 Skills", callback_data="cd:skills"),
+        ],
+        [
+            InlineKeyboardButton("🔐 X / Grok", callback_data="cd:xgrok"),
+            InlineKeyboardButton("🤖 Claude Code", callback_data="cd:motor:claudecode"),
+        ],
+        [
+            InlineKeyboardButton("🚨 Fail2ban", callback_data="cd:fail2ban"),
+            InlineKeyboardButton("📋 Bans", callback_data="cd:bans"),
+        ],
+        [
+            InlineKeyboardButton("📜 Liberados", callback_data="cd:liberados"),
+            InlineKeyboardButton("🔒 Cristal", callback_data="cd:cristal"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _arsenal_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🎯 Router", callback_data="cd:arsenal:router"),
+            InlineKeyboardButton("⚡ Parallel", callback_data="cd:arsenal:parallel"),
+        ],
+        [
+            InlineKeyboardButton("🔥 Debate", callback_data="cd:arsenal:debate"),
+            InlineKeyboardButton("🤖 Hermes", callback_data="cd:arsenal:hermes"),
+        ],
+        [InlineKeyboardButton("🔄 Status do Arsenal", callback_data="cd:arsenal:status")],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _integracoes_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("📨 Telegram", callback_data="cd:int:telegram"),
+            InlineKeyboardButton("📱 WhatsApp", callback_data="cd:int:whatsapp"),
+        ],
+        [
+            InlineKeyboardButton("🤖 IA Central", callback_data="cd:int:ia"),
+            InlineKeyboardButton("🚀 GitHub", callback_data="cd:int:github"),
+        ],
+        [
+            InlineKeyboardButton("📊 Monitor", callback_data="cd:int:monitor"),
+            InlineKeyboardButton("🧠 Memória", callback_data="cd:int:memoria"),
+        ],
+        [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+    ])
+
+
+def _operational_page(key: str) -> str:
+    pages = {
+        "security": "<b>🛡️ Central Segurança</b>\\n\\nAções destrutivas ficam bloqueadas até confirmação.\\nLeitura do host da Casa: <b>UNKNOWN</b>.",
+        "xgrok": "<b>🔐 Plataforma X / Grok</b>\\n\\nLogin, pool e terminal são owners do Guardião original.\\nBinding nesta conversa: <b>UNKNOWN</b>. Nenhum login foi iniciado.",
+        "fail2ban": "<b>🚨 Fail2ban</b>\\n\\nA rota original existe no Guardião.\\nLeitura real do alvo Casa: <b>UNKNOWN</b>. Não executar alteração por este botão.",
+        "bans": "<b>📋 Bans</b>\\n\\nA rota original existe no Guardião.\\nLista real do alvo Casa: <b>UNKNOWN</b>.",
+        "liberados": "<b>📜 Liberados</b>\\n\\nAllowlist do Guardião original.\\nReadback nesta superfície: <b>UNKNOWN</b>.",
+        "cristal": "<b>🔒 Cristal</b>\\n\\nRegistro de ações e falhas do Guardião.\\nReadback nesta superfície: <b>UNKNOWN</b>.",
+        "arsenal:router": "<b>🎯 Arsenal Router</b>\\n\\nOwner: <code>apps/modulos/arsenal-openai-adapter/server.mjs</code>\\nRota inteligente. Execução: <b>UNKNOWN</b>.",
+        "arsenal:parallel": "<b>⚡ Arsenal Parallel</b>\\n\\nOwner: Arsenal OpenAI Adapter.\\nTrês IAs + juiz. Execução: <b>UNKNOWN</b>.",
+        "arsenal:debate": "<b>🔥 Arsenal Debate</b>\\n\\nOwner: Arsenal OpenAI Adapter.\\nDuas rodadas + veredito. Execução: <b>UNKNOWN</b>.",
+        "arsenal:hermes": "<b>🤖 Arsenal Hermes</b>\\n\\nProposta autônoma do Arsenal. Execução: <b>UNKNOWN</b>.",
+        "arsenal:status": "<b>🎯 Arsenal Council</b>\\n\\nModelos e rotas existem no repositório.\\nStatus do endpoint nesta superfície: <b>UNKNOWN</b>.",
+        "int:telegram": "<b>📨 Telegram</b>\\n\\nEsta conversa está ativa. Binding do plugin: <b>PASS</b>.",
+        "int:whatsapp": "<b>📱 WhatsApp</b>\\n\\nOwner WuzAPI/MultiZap preservado. Binding neste runtime: <b>UNKNOWN</b>.",
+        "int:ia": "<b>🤖 IA Central</b>\\n\\nHermes é o executor atual. Providers alternativos dependem de rota medida.",
+        "int:github": "<b>🚀 GitHub</b>\\n\\nCentralDark main é a fonte da verdade. Nenhuma publicação foi acionada.",
+        "int:monitor": "<b>📊 Monitor</b>\\n\\nMonitoramento e health dependem do endpoint owner. Readback: <b>UNKNOWN</b>.",
+        "int:memoria": "<b>🧠 Memória</b>\\n\\nMemória do Hermes preservada. Exclusões unattended continuam bloqueadas.",
+    }
+    return pages.get(key, "<b>Rota UNKNOWN</b>\\n\\nNenhuma ação foi executada.")
 
 
 def _personalidades_keyboard(InlineKeyboardButton, InlineKeyboardMarkup):
@@ -335,6 +450,58 @@ async def _handle_callback(update, context) -> None:
             MENU_TEXT,
             parse_mode="HTML",
             reply_markup=_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:guardiao":
+        await query.edit_message_text(
+            "<b>🛡️ Guardião da Casa</b>\n\nMenu preservado do bot de segurança. Leitura e ações ficam subordinadas ao owner original.",
+            parse_mode="HTML",
+            reply_markup=_guardiao_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:pm2":
+        await query.edit_message_text(
+            _pm2_status(),
+            parse_mode="HTML",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("🔄 Atualizar", callback_data="cd:pm2")],
+                [InlineKeyboardButton("🔙 CentralDark", callback_data="cd:main")],
+            ]),
+        )
+        return
+    if data == "cd:arsenal":
+        await query.edit_message_text(
+            "<b>🎯 Arsenal Council</b>\n\nRotas existentes: Router, Parallel, Debate e Hermes.",
+            parse_mode="HTML",
+            reply_markup=_arsenal_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data == "cd:integracoes":
+        await query.edit_message_text(
+            "<b>🧩 Integrações</b>\n\nEscolha uma integração para consultar o owner e o estado.",
+            parse_mode="HTML",
+            reply_markup=_integracoes_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:int:"):
+        await query.edit_message_text(
+            _operational_page(data[3:]),
+            parse_mode="HTML",
+            reply_markup=_integracoes_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data in {"cd:security", "cd:xgrok", "cd:fail2ban", "cd:bans", "cd:liberados", "cd:cristal"}:
+        await query.edit_message_text(
+            _operational_page(data[3:]),
+            parse_mode="HTML",
+            reply_markup=_guardiao_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
+        )
+        return
+    if data.startswith("cd:arsenal:"):
+        await query.edit_message_text(
+            _operational_page(data[3:]),
+            parse_mode="HTML",
+            reply_markup=_arsenal_keyboard(InlineKeyboardButton, InlineKeyboardMarkup),
         )
         return
     if data == "cd:personalidades":
