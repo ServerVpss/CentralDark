@@ -34,7 +34,7 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 
 function createSupabaseAdminClient() {
   if (typeof process.loadEnvFile === "function") {
-    try { process.loadEnvFile("K:\\.env"); } catch { /* ambiente externo usa variáveis já injetadas */ }
+    try { process.loadEnvFile(process.env["CENTRALDARK_ENV_FILE"] || ".env"); } catch { /* ambiente externo usa variáveis já injetadas */ }
   }
   const SUPABASE_URL = process.env["SUPABASE_URL"];
   const SUPABASE_SERVICE_ROLE_KEY = process.env["SUPABASE_SERVICE_ROLE_KEY"];

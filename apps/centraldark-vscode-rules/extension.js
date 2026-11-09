@@ -110,7 +110,7 @@ function loadRules() {
     rulesPath,
     path.join(__dirname, 'centraldark-rules.md'),
     path.join(vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '', 'centraldark-rules.md'),
-    'K:\\apps\\centraldark-vscode-rules\\centraldark-rules.md'
+    process.env.CENTRALDARK_ROOT ? process.env.CENTRALDARK_ROOT + '/apps/centraldark-vscode-rules/centraldark-rules.md' : 'centraldark-rules.md'
   ];
 
   let rulesContent = null;
@@ -140,7 +140,7 @@ function loadRules() {
     rulesLoaded = false;
     updateStatusBar(false, '🔴 Rules not found');
     vscode.window.showErrorMessage(
-      '❌ centraldark-rules.md não encontrado. Procure em K:\\apps\\centraldark-vscode-rules\\'
+      '❌ centraldark-rules.md não encontrado. Procure em ' + (process.env.CENTRALDARK_ROOT || '.') + '/apps/centraldark-vscode-rules/'
     );
   }
 

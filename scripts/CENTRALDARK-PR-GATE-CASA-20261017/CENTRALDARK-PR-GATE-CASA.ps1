@@ -159,7 +159,7 @@ try {
     $md.Add('')
     $md.Add('## Next')
     $md.Add('1. Resolver ACTION_REQUIRED, queued/pending e demais checks no HEAD de cada PR.')
-    $md.Add('2. Revisar colisao do mesmo owner; rebasear/reconciliar sem sobrescrever edits em K:\.')
+    $md.Add('2. Revisar colisao do mesmo owner; rebasear/reconciliar sem sobrescrever edits no repo.')
     $md.Add('3. Aprovar e integrar PRs por owner sob fluxo do GitHub; cada merge muda o HEAD da main.')
     $md.Add('4. Revalidar a main e usar o updater canônico existente em modo -ProbeOnly antes de qualquer microdeploy autorizado.')
     $md.Add('Este script NAO faz deploy, merge, reset, clean, force push, writes ou muda secrets.')
@@ -171,7 +171,7 @@ try {
     }
     Write-Host '[PRONTO_PARA_REVISAO] Todos os PRs abertos elegiveis; ainda falta merge e gate separado de deploy.' -ForegroundColor Green
     if ($Modo -eq 'Preparar') {
-        $probe = 'K:\scripts\remote-bridge\canonical\CENTRALDARK-VPS-UPDATE.ps1'
+        $probe = Join-Path $PSScriptRoot '..\..\remote-bridge\canonical\CENTRALDARK-VPS-UPDATE.ps1'
         if (Test-Path -LiteralPath $probe) {
             Write-Host ('[SONDA_READ_ONLY] Executando ' + $probe + ' -ProbeOnly')
             & $probe -ProbeOnly

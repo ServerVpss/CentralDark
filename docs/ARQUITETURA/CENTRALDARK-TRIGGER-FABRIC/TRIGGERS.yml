@@ -22,6 +22,15 @@ human_triggers:
     owner: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml"
     explicit_marker_required: true
     plain_word_does_not_trigger: true
+    document_organization_route:
+      condition: FOLDER_OR_FILE_ORGANIZATION_INTENT
+      boot_owner: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+      router_owner: "scripts/memory-linker/library-router.mjs"
+      catalog: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json"
+      source_id: "tcu-boas-praticas-pastas-arquivos-2019"
+      behavior: [SELECT_PERTINENT_PAGES, READ_BEFORE_DELTA, KEEP_VISUAL_PAGES_ON_ORIGINAL_PDF, UNKNOWN_NEVER_PASS]
+      mutation_authority: false
+      creates_second_router: false
     browser_intent_route:
       owner: ".agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md"
       condition: BROWSER_INTENT_AND_AUTHORIZED_CONNECTED_SURFACES

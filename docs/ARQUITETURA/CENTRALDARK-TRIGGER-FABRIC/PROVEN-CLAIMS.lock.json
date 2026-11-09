@@ -11,7 +11,7 @@
       "evidence_ref": "PR_MOTHER_1562_COMMENT_5829464147 + CURRENT_REMEASURE_2026-09-25T09:35Z",
       "observed_at": "2026-09-25T09:35:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "f9f598483810e5d5681e5c61790e6f5aa524072585d481a85e24a40b8eb685d4",
@@ -54,7 +54,7 @@
       "evidence_ref": "PR_MOTHER_1562_COMMENT_5829524277 + CURRENT_REMEASURE_2026-09-25T09:42Z",
       "observed_at": "2026-09-25T09:42:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "69a0e14a67e8ab98e9aacf696bda98601d1af903bf3c57c6bf60090a97413a03",
@@ -95,7 +95,7 @@
       "evidence_ref": "PR_MOTHER_1562_COMMENT_5829640719",
       "observed_at": "2026-09-25T08:43:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "7600d6e0ef127c14bd0b55fbeae8736c53da9e616d0c9769c162c62984d39881",
@@ -140,7 +140,7 @@
       "evidence_ref": "PR_MOTHER_1562_COMMENT_5828750835 + CURRENT_RUN_36119747877",
       "observed_at": "2026-09-25T09:43:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "5f0121cbbe1c79e7218ae53fe194358cf4988084e817a257a27e68fc42828d0b",
@@ -185,7 +185,7 @@
       "evidence_ref": "PR_MOTHER_1562_COMMENTS_5829403379_5829464147",
       "observed_at": "2026-09-25T08:36:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "12ad2de57043c205e9b1298f05f3c39ccc52d06371e88b65f11cc2a316334cde",
@@ -227,7 +227,7 @@
       "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
       "observed_at": "2026-09-25T09:41:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "be70e6a443e9204a4ce03cc27bebc9d1f0d2b8d9beb8af330fdd618580c9e8ca",
@@ -266,7 +266,7 @@
       "evidence_ref": "CURRENT_REMEASURE_2026-09-25T09:41Z",
       "observed_at": "2026-09-25T09:41:00Z",
       "counterproof": "PASS",
-      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
+      "receipt_ref": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/02-SESSOES/2026-09-25-CRISTAL-SESSAO-CAMINHOS-PROVADOS.md",
       "proven_path_replay": {
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "dependency_fingerprint": "5a6ec574d21224c9c389027098b04e97d042788ecd1a69cfe076bed6d2ad13be",

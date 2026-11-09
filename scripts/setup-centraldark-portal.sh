@@ -26,6 +26,7 @@ echo "[centraldark-portal] CANONICAL_DEPLOY_GATE=PASS target=$SOURCE_HEAD"
 PORTAL_DIR="$CENTRALDARK_ROOT/apps/portal"
 TELEPANEL_DIR="$CENTRALDARK_ROOT/apps/Telepanel"
 CADDY_SNIPPET="$CENTRALDARK_ROOT/infra/caddy/portal.Caddyfile"
+MCP_CADDY_SOURCE="${DEPLOY_GATE_REPO_DIR}/infra/caddy/mcp.Caddyfile"
 
 log() { echo "[centraldark-portal] $*"; }
 
@@ -63,6 +64,7 @@ done
 
 TMP_SNIPPET="$(mktemp)"
 trap 'rm -f "$TMP_SNIPPET"' EXIT
+[ -f "$MCP_CADDY_SOURCE" ] || { log "MCP_CADDY_SOURCE_MISSING=$MCP_CADDY_SOURCE"; exit 25; }
 cat > "$TMP_SNIPPET" <<'CADDY'
 centralldark.com, www.centralldark.com {
     root * <caminho-vps>
@@ -83,6 +85,11 @@ telepainel.centralldark.com {
     encode gzip
 }
 CADDY
+# O vhost MCP canonico viaja no mesmo snippet/owner já publicado pelo
+# workflow Caddy existente; não cria import, serviço ou workflow paralelo.
+printf '\n' >> "$TMP_SNIPPET"
+cat "$MCP_CADDY_SOURCE" >> "$TMP_SNIPPET"
+log "MCP_CADDY_SNIPPET_EMBEDDED source=$MCP_CADDY_SOURCE"
 
 if [ ! -f "$CADDY_SNIPPET" ] || ! cmp -s "$TMP_SNIPPET" "$CADDY_SNIPPET"; then
   log "Atualizando snippet Caddy canônico"
