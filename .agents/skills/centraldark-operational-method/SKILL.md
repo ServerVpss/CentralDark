@@ -55,6 +55,27 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 **Regra:** manter os paths/comandos existentes ate mapear `pasta -> frontmatter name -> alias/comando -> loader -> consumidor -> hash/conteudo -> teste de invocacao`. Se o nome humano precisar de padronizacao, exibir CentralDark + titulo PT-BR na interface e no catalogo sem renomear paths ou alterar IDs tecnicos por inferencia. Um unico owner da Skill Mae; adaptadores nos locais exigidos por cada runtime nao viram segunda biblioteca. So depois de contraprova de compatibilidade, decidir menor delta de alias/renomeacao por owner com migracao de consumidores e readback. `CATALOGADA != CARREGADA != EXECUTADA`; `NOME_SEMELHANTE != IDENTIDADE_PROVADA`; `UNKNOWN != PASS`.
 <!-- /CENTRALDARK_SKILL_NAMING_20261109 -->
 
+<!-- CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+### UNKNOWN rastreável — META-START-LINK + DELTA_UTIL
+
+`UNKNOWN` não encerra a investigação quando existe uma rota legítima de leitura. Aplicar o elo canônico `META-START-LINK` em `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md` para preservar `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`, sem copiar memória nem criar segundo router.
+
+Sequência obrigatória para toda pendência rastreável:
+
+```text
+UNKNOWN_CLASSIFICADO
+→ DEFINIR_FATO_AUSENTE_E_CRITÉRIO_DISCRIMINANTE
+→ RECUPERAR_OWNER/CATALOGO/LEMBRANCA/RECEIPT_EXISTENTE
+→ MEDIR_ROTA_READ_ONLY_E_RUNTIME_ATUAL
+→ CONTRAPROVA_INDEPENDENTE
+→ DELTA_UTIL_NO_OWNER_EXISTENTE
+→ RECEIPT + NEXT_CURSOR
+→ FIXED_POINT OU PENDÊNCIA EXPLÍCITA
+```
+
+GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
+<!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
