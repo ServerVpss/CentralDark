@@ -327,7 +327,11 @@ test("catálogo único de provedores e sininho mantêm limites de prova", () => 
   assert.equal(block(src), block(dist));
   assert.ok(src.includes("providerCapabilitiesReturned"));
   assert.ok(src.includes("CATALOGUED != AUTHORIZED != EXECUTABLE != PROVED"));
-  assert.ok(cockpit.includes('autenticado ? <CentralNotificacoes modo="sininho"'));
+  assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
+  assert.ok(cockpit.includes('data-cd-header-bell="right-of-account"'));
+  assert.ok(cockpit.indexOf('data-cd-header-bell="right-of-account"') > cockpit.indexOf('onSair={sair}'));
+  assert.ok(!cockpit.includes('{autenticado ? <span className="[&_button]:!size-8">'));
+  assert.ok(cockpit.includes('data-cd-sidebar-resize'));
   assert.ok(cockpit.includes('definirAbaAdminInicial("notificacoes")'));
   assert.ok(cockpit.includes('abaInicial={abaAdminInicial}'));
   assert.ok(cockpit.includes('key={versaoAdmin}'), "segundo clique precisa remontar o painel");
@@ -690,7 +694,7 @@ test("host health não transfere estado de Screenpipe entre Casa e VPS", () => {
   // Contrato vigente (migracao controlada 2026-10-20): raiz K:\, guarda de checkout Git, porta fixa 8080 no autostart,
   // sem npm install nem kill.
   const autostart = read("scripts/casa/instinto-cockpit-autostart.ps1");
-  for (const field of ['set "ROOT=K:\\"', "rev-parse --is-inside-work-tree", "instinto-cockpit-autostart.ps1"]) {
+  for (const field of ['%~dp0', "rev-parse --is-inside-work-tree", "instinto-cockpit-autostart.ps1"]) {
     assert.ok(launcher.includes(field), field);
   }
   for (const field of ["$port = 8080", "--strictPort"]) assert.ok(autostart.includes(field), field);
@@ -804,28 +808,66 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
   assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
   assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
+  const icones = shell.split("const ICONES_NAVEGACAO = {")[1]?.split("} satisfies Record<")[0] ?? "";
+  const chaves = [...icones.matchAll(/^  (?:"([^"]+)"|([a-z][a-z0-9]*)):/gm)].map((m) => m[1] || m[2]);
+  assert.equal(chaves.length, 27, "cada menu original deve ter ícone próprio");
+  assert.equal(new Set(chaves).size, 27, "não duplicar entradas do mapeamento");
+  const rotas = [...navegacao.matchAll(/\{ valor: "([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 27 rotas atuais");
+  assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
+  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
+  assert.ok(shell.includes("group-data-[state=active]/menuitem:text-primary"));
+  assert.ok(shell.includes("group-hover/menuitem:-translate-y-0.5"));
+  assert.ok(shell.includes("group-hover/menuitem:scale-105"));
+  assert.ok(shell.includes("group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)]"));
+  assert.ok(shell.includes("group-hover/menuitem:text-neon-green"));
+  assert.ok(shell.includes("group-focus-within/menuitem:text-primary"));
+  assert.ok(shell.includes("motion-reduce:transform-none"));
+  assert.ok(!shell.includes('className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0"'));
+  const landing = read("apps/instinto-superior/src/routes/index.tsx");
+  assert.ok(landing.includes('rounded-lg border border-border bg-surface-2'));
+  assert.ok(landing.includes('text-gold transition-colors group-hover:text-neon-green'));
+  const peles = read("apps/instinto-superior/src/styles.css");
+  for (const cor of ['data-pele-cockpit="ouro"', 'data-pele-cockpit="ops"', 'data-pele-cockpit="esmeralda"'])
+    assert.ok(peles.includes(cor), "pele existente precisa permanecer: " + cor);
 });
 
-test("casca preserva barra fixa, rodinha e quatro flutuantes", () => {
-  // Regressao do Corpo Unico: o PR #1895 conserva o header fixo e recebe de
-  // volta a capsula flutuante superior (sem criar segundo shell/executor).
-  assert.match(cockpit, /aria-label="Harness flutuante superior"/);
-  assert.match(cockpit, /data-cd-harness="top-floating"/);
-  for (const control of [
-    'aria-label="CentralDark · visão geral"',
-    'aria-label="Lupa · buscar ferramentas"',
-    'aria-label="Mapa dos sistemas"',
-    'aria-label="Notificações"',
-  ]) assert.ok(cockpit.includes(control), "controle flutuante ausente: " + control);
+test("casca preserva sidebar com busca e toggle sem controles centrais duplicados", () => {
+  // Delta visual autorizado: lupa e recolher/expandir vivem no header da
+  // sidebar existente. O harness superior duplicado nao deve ressurgir.
   assert.match(cockpit, /className="sticky top-0 z-30/);
-  assert.match(cockpit, /className="fixed left-1\/2 top-1 z-\[60\]/);
   assert.match(cockpit, /SidebarProvider open=\{menuAberto\}/);
   assert.match(cockpit, /Sidebar collapsible="icon"/);
-  assert.match(cockpit, /SidebarTrigger aria-label="Abrir ou recolher menu"/);
+  assert.match(cockpit, /aria-label="Pesquisar ferramentas"/);
+  assert.match(cockpit, /onClick=\{abrirBuscaNavegacao\}/);
+  assert.match(cockpit, /aria-label="Ocultar ou mostrar barra lateral"/);
+  assert.equal((cockpit.match(/<SidebarTrigger\b/g) || []).length, 1);
   assert.match(cockpit, /aria-label="Seis pastas da Sala de Controle"/);
   assert.match(cockpit, /type="search" value=\{buscaNavegacao\}/);
-  assert.match(cockpit, /onClick=\{\(\) => \{ definirAbaAdminInicial\("notificacoes"\); abrirDestino\("admin"\); \}\}/);
-  assert.match(cockpit, /harnessVisivel && gaveta === null/);
+  assert.match(cockpit, /focarBuscaAoAbrir/);
+  assert.match(cockpit, /data-cd-harness="left-rail"/);
+  assert.match(cockpit, /aria-label="Harness auxiliar à direita"/);
+  assert.match(cockpit, /data-cd-harness="left-rail" className="fixed right-14 top-1\/2/);
+  assert.match(cockpit, /data-cd-harness="right-rail" className="fixed right-1 top-1\/2/);
+  assert.equal((cockpit.match(/data-cd-harness="left-rail"/g) || []).length, 1);
+  assert.equal((cockpit.match(/data-cd-harness="right-rail"/g) || []).length, 1);
+  assert.doesNotMatch(cockpit, /data-cd-harness="left-rail" className="fixed left-1/);
+  assert.equal((cockpit.match(/<CentralNotificacoes modo="sininho"/g) || []).length, 1);
+  assert.ok(cockpit.includes('data-cd-header-bell="right-of-account"'));
+  assert.match(cockpit, /data-cd-sidebar-resize/);
+  assert.match(cockpit, /role="separator"/);
+  assert.match(cockpit, /aria-label="Arrastar para ajustar largura da barra lateral"/);
+  const scrollbarStyles = read("apps/instinto-superior/src/styles.css");
+  assert.ok(scrollbarStyles.includes("CENTRALDARK.SCROLLBAR.UNICA"));
+  assert.ok(scrollbarStyles.includes('html:has(main[data-pele-cockpit]) body *'));
+  assert.ok(scrollbarStyles.includes('scrollbar-color:'));
+  assert.ok(scrollbarStyles.includes('scrollbar-gutter: stable'));
+  assert.doesNotMatch(cockpit, /cd-sidebar-scrollbar/);
+  assert.match(cockpit, /--cd-sidebar-width/);
+  assert.match(cockpit, /centraldark\.cockpit\.sidebar-width/);
+  assert.doesNotMatch(cockpit, /data-cd-harness="top-rail"/);
+  assert.doesNotMatch(cockpit, /data-cd-harness="top-floating"/);
+  assert.doesNotMatch(cockpit, /aria-label="Lupa · buscar ferramentas"/);
 });
 
 test("jornada evolutiva didatica usa o mesmo cockpit sem XP ficticio", () => {

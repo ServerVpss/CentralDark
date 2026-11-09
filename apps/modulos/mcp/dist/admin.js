@@ -20,10 +20,9 @@ import { getHarnessWeeklySummary, queryCentralLogs } from "./agent-observability
 import { runIntentCycle, readIntentState, publicIntentStatus } from "./intent-cycle-adapter.js";
 import { getLinearAdminSnapshot } from "./tools/integrations.js";
 import { subscribeAuditEvents } from "./audit-logger.js";
-
+import { appendCentralEvent } from "./log-funnel.js";
 const COOKIE = "cd_admin";
 const TTL_MS = 2 * 60 * 60 * 1000;
-
 function secret() {
     return process.env.MCP_ADMIN_COOKIE_SECRET
         || process.env.MCP_SESSION_SECRET
@@ -35,24 +34,35 @@ function sign(payload) {
     return `${body}.${sig}`;
 }
 function verify(cookie) {
-    if (!cookie || typeof cookie !== "string" || !cookie.includes(".")) return null;
+    if (!cookie || typeof cookie !== "string" || !cookie.includes("."))
+        return null;
     const [body, sig] = cookie.split(".");
     const expected = crypto.createHmac("sha256", secret()).update(body).digest("base64url");
     try {
-        if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
-    } catch { return null; }
+        if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)))
+            return null;
+    }
+    catch {
+        return null;
+    }
     try {
         const payload = JSON.parse(Buffer.from(body, "base64url").toString("utf8"));
-        if (payload.exp < Date.now()) return null;
+        if (payload.exp < Date.now())
+            return null;
         return payload;
-    } catch { return null; }
+    }
+    catch {
+        return null;
+    }
 }
 function parseCookies(header) {
     const out = {};
-    if (!header) return out;
+    if (!header)
+        return out;
     for (const part of String(header).split(/;\s*/)) {
         const idx = part.indexOf("=");
-        if (idx === -1) continue;
+        if (idx === -1)
+            continue;
         out[part.slice(0, idx)] = decodeURIComponent(part.slice(idx + 1));
     }
     return out;
@@ -62,7 +72,6 @@ export function isAdmin(req) {
     const p = verify(cookies[COOKIE]);
     return Boolean(p && p.role === "admin");
 }
-
 // ─── Buffer circular de logs em memória ────────────────────────────────
 const LOG_BUFFER = [];
 const LOG_BUFFER_MAX = 2000;
@@ -74,11 +83,9 @@ const sseStats = {
     ultimasMensagens: [],
     ultimoEventoEm: null,
 };
-
 export function activeSseSubscribers() {
     return subscribers.size;
 }
-
 export function getSseDiagnostics() {
     const now = Date.now();
     const recentes = sseStats.eventosRecentes.filter((t) => now - t <= 60_000);
@@ -93,29 +100,33 @@ export function getSseDiagnostics() {
         ultimasMensagens: sseStats.ultimasMensagens.slice(-20),
     };
 }
-
 export function pushAdminLog(level, msg, meta) {
     const line = { t: new Date().toISOString(), level, msg, meta };
     LOG_BUFFER.push(line);
-    if (LOG_BUFFER.length > LOG_BUFFER_MAX) LOG_BUFFER.shift();
+    if (LOG_BUFFER.length > LOG_BUFFER_MAX)
+        LOG_BUFFER.shift();
     sseStats.totalEventos++;
     sseStats.ultimoEventoEm = line.t;
     sseStats.eventosRecentes.push(Date.now());
-    if (sseStats.eventosRecentes.length > 2000) sseStats.eventosRecentes.splice(0, sseStats.eventosRecentes.length - 2000);
+    if (sseStats.eventosRecentes.length > 2000)
+        sseStats.eventosRecentes.splice(0, sseStats.eventosRecentes.length - 2000);
     sseStats.ultimasMensagens.push({ t: line.t, level, msg, cid: meta?.cid, rota: meta?.path });
-    if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
+    if (sseStats.ultimasMensagens.length > 50)
+        sseStats.ultimasMensagens.shift();
     for (const send of subscribers) {
-        try { send(line); } catch { /* silencioso */ }
+        try {
+            send(line);
+        }
+        catch { /* silencioso */ }
     }
 }
-
 // Projecao somente dos metadados do proprio MCP CentralDark.
 // Eventos do Desktop Commander remoto (fora deste MCP) nao surgem aqui
 // automaticamente; precisam de adaptador do cliente/recibo com autorizacao.
 subscribeAuditEvents((evento) => {
-    if (evento?.schema !== "centraldark.mcp.tool-call.v1") return;
-    const safe = (value, length = 120) =>
-        typeof value === "string" ? value.slice(0, length) : null;
+    if (evento?.schema !== "centraldark.mcp.tool-call.v1")
+        return;
+    const safe = (value, length = 120) => typeof value === "string" ? value.slice(0, length) : null;
     pushAdminLog(evento.ok === true ? "info" : "error", "mcp_tool_call", {
         source: "MCP_AUDIT",
         toolName: safe(evento.toolName),
@@ -131,46 +142,56 @@ subscribeAuditEvents((evento) => {
         // Nunca transportar args, stdout, stderr, paths ou credenciais ao painel.
     });
 });
-
 function extrairRota(linha) {
     const p = linha.meta?.path;
-    if (typeof p === "string") return p;
+    if (typeof p === "string")
+        return p;
     // fallback: procura /algo no msg
     const m = /\s(\/[a-zA-Z0-9/_\-.]+)/.exec(String(linha.msg || ""));
     return m ? m[1] : "-";
 }
-
 // ─── HTML NOC (tema Esmeralda) — v2.1 ──────────────────────────────────
 export function adminIntentGet(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false, error: 'AUTH_REQUIRED' }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: 'AUTH_REQUIRED' });
+        return;
+    }
     res.setHeader('Cache-Control', 'no-store');
-    res.json(readIntentState() || {schema:'centraldark.intent.fixed-point.v1',state:'UNKNOWN',fixedPoint:false,nextCursor:'NO_RECEIPT',criteria:[]});
+    res.json(readIntentState() || { schema: 'centraldark.intent.fixed-point.v1', state: 'UNKNOWN', fixedPoint: false, nextCursor: 'NO_RECEIPT', criteria: [] });
 }
 export function adminIntentRun(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ok:false,error:'AUTH_REQUIRED'}); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: 'AUTH_REQUIRED' });
+        return;
+    }
     // Cookie admin nunca autoriza escrita cross-site.
     try {
         const origin = new URL(String(req.headers.origin || ''));
         const host = String(req.headers.host || '').toLowerCase();
         if (origin.protocol !== 'https:' || origin.host.toLowerCase() !== host) {
-            res.status(403).json({ok:false,error:'SAME_ORIGIN_REQUIRED'}); return;
+            res.status(403).json({ ok: false, error: 'SAME_ORIGIN_REQUIRED' });
+            return;
         }
-    } catch { res.status(403).json({ok:false,error:'ORIGIN_REQUIRED'}); return; }
+    }
+    catch {
+        res.status(403).json({ ok: false, error: 'ORIGIN_REQUIRED' });
+        return;
+    }
     try {
         const result = runIntentCycle(req.body, { dispatch: req.body?.dispatch === true });
-        pushAdminLog('info','intent_cycle_receipt',{ cid:req.cid, fingerprint: result.fingerprint, state:result.state, nextCursor:result.nextCursor, queued:result.queued === true });
-        res.setHeader('Cache-Control','no-store');
+        pushAdminLog('info', 'intent_cycle_receipt', { cid: req.cid, fingerprint: result.fingerprint, state: result.state, nextCursor: result.nextCursor, queued: result.queued === true });
+        res.setHeader('Cache-Control', 'no-store');
         res.json(result);
-    } catch (error) {
+    }
+    catch (error) {
         const code = /^(INTENT_|MODE_|OWNER_|CRITERIA_|GOAL_|ITERATION_)/.test(String(error?.message)) ? 400 : 409;
-        res.status(code).json({ok:false,state:'BLOCKED',error:String(error?.message||error).slice(0,160)});
+        res.status(code).json({ ok: false, state: 'BLOCKED', error: String(error?.message || error).slice(0, 160) });
     }
 }
-export function intentPublicStatus(_req,res) {
-    res.setHeader('Cache-Control','no-store');
+export function intentPublicStatus(_req, res) {
+    res.setHeader('Cache-Control', 'no-store');
     res.json(publicIntentStatus());
 }
-
 // ─── Rotas ────────────────────────────────────────────────────────────
 export function adminGet(_req, res) {
     res.setHeader("Cache-Control", "no-store");
@@ -195,7 +216,8 @@ export async function adminGraphProxy(req, res) {
         res.status(upstream.status);
         for (const header of ["content-type", "cache-control", "etag", "last-modified", "location"]) {
             const value = upstream.headers.get(header);
-            if (value) res.setHeader(header, value);
+            if (value)
+                res.setHeader(header, value);
         }
         res.setHeader("X-Content-Type-Options", "nosniff");
         if (req.method === "HEAD") {
@@ -204,7 +226,8 @@ export async function adminGraphProxy(req, res) {
         }
         const body = Buffer.from(await upstream.arrayBuffer());
         res.end(body);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(502).json({
             ok: false,
             error: "graph_panel_unavailable",
@@ -213,14 +236,13 @@ export async function adminGraphProxy(req, res) {
         });
     }
 }
-
 export function adminLogin(req, res) {
     const l = withCid(req.cid);
     const senha = String(req.body?.password || "");
     const esperada = process.env.MCP_ADMIN_PASSWORD || "";
     if (!esperada) {
         l.warn("admin_login_sem_senha_configurada", {});
-        res.status(500).json({ok:false,error:"MCP_ADMIN_PASSWORD_NOT_CONFIGURED"});
+        res.status(500).json({ ok: false, error: "MCP_ADMIN_PASSWORD_NOT_CONFIGURED" });
         return;
     }
     let ok = false;
@@ -228,26 +250,32 @@ export function adminLogin(req, res) {
         const a = Buffer.from(senha.padEnd(64, "\0").slice(0, 64));
         const b = Buffer.from(esperada.padEnd(64, "\0").slice(0, 64));
         ok = crypto.timingSafeEqual(a, b) && senha.length === esperada.length;
-    } catch { ok = false; }
+    }
+    catch {
+        ok = false;
+    }
     if (!ok) {
         l.warn("admin_login_falha", { ip: req.ip });
-        res.status(401).json({ok:false,error:"MCP_ADMIN_PASSWORD_INVALID"});
+        res.status(401).json({ ok: false, error: "MCP_ADMIN_PASSWORD_INVALID" });
         return;
     }
     const cookie = sign({ role: "admin", exp: Date.now() + TTL_MS });
     res.setHeader("Set-Cookie", `${COOKIE}=${encodeURIComponent(cookie)}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${TTL_MS / 1000}`);
     l.info("admin_login_ok", { ip: req.ip });
-    if (req.accepts("json")) res.json({ok:true,authenticated:true});
-    else res.redirect(302, "https://admin.centralldark.com/sala-controle");
+    if (req.accepts("json"))
+        res.json({ ok: true, authenticated: true });
+    else
+        res.redirect(302, "https://admin.centralldark.com/sala-controle");
 }
-
 export function adminLogout(_req, res) {
     res.setHeader("Set-Cookie", `${COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`);
     res.redirect(302, "https://admin.centralldark.com/sala-controle");
 }
-
 export function adminRotas(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.json({
         rotas: [
             { metodo: "GET", path: "/health", protegido: false },
@@ -266,6 +294,7 @@ export function adminRotas(req, res) {
             { metodo: "GET", path: "/admin/logs/stream", protegido: true },
             { metodo: "POST", path: "/admin/api/e2e", protegido: true },
             { metodo: "GET", path: "/admin/api/logs", protegido: true },
+            { metodo: "POST", path: "/admin/api/sentinel/events", protegido: true },
             { metodo: "GET", path: "/admin/api/metricas", protegido: true },
             { metodo: "GET", path: "/admin/api/operational-snapshot", protegido: true },
             { metodo: "GET", path: "/admin/api/linear", protegido: true },
@@ -274,22 +303,137 @@ export function adminRotas(req, res) {
         ],
     });
 }
-
+function sentinelSupabaseConfig() {
+    const url = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const key = String(process.env.HUB_SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "").trim();
+    return { url, key };
+}
+function sentinelText(value, max = 500) {
+    if (typeof value !== "string")
+        return null;
+    return value
+        .replace(/Bearer\s+[^\s,;&]+/gi, "Bearer [REDACTED]")
+        .replace(/((?:["']?(?:password|token|secret|api[_-]?key|authorization)["']?)\s*[:=]\s*["']?)[^\s,;&"'}]+/gi, "$1[REDACTED]")
+        .replace(/https?:\/\/[^\s"'<>)]+/gi, (url) => url.split(/[?#]/, 1)[0])
+        .slice(0, max);
+}
+function sentinelEvent(input = {}) {
+    const metadata = input.metadata && typeof input.metadata === "object" && !Array.isArray(input.metadata) ? input.metadata : {};
+    const kinds = ["code", "promise", "console", "resource", "network", "xhr", "manual"];
+    const allowed = {
+        schema: "centraldark.sentinel.event.v2",
+        event_id: null,
+        status: input.status === "UNKNOWN" ? "UNKNOWN" : "FAIL",
+        correlation_id: sentinelText(input.correlation_id, 160),
+        fingerprint: sentinelText(input.fingerprint, 80),
+        severity: ["CRITICAL", "HIGH", "MEDIUM", "LOW"].includes(input.severity) ? input.severity : "UNKNOWN",
+        kind: kinds.includes(input.kind) ? input.kind : null,
+        page: sentinelText(input.page, 200),
+        route: sentinelText(input.route, 200),
+        control: sentinelText(input.control, 160),
+        source: "cockpit-sentinel",
+        message: sentinelText(input.message, 500),
+        simplified_message: sentinelText(input.simplified_message, 300),
+        http_status: Number.isInteger(input.http_status) ? input.http_status : null,
+        method: sentinelText(input.method, 12),
+        duration_ms: Number.isFinite(Number(input.duration_ms)) ? Math.max(0, Math.min(120000, Number(input.duration_ms))) : null,
+        first_seen: sentinelText(input.first_seen, 40),
+        last_seen: sentinelText(input.last_seen, 40),
+        occurrences: Number.isInteger(input.occurrences) ? Math.max(1, Math.min(100000, input.occurrences)) : 1,
+        sentinel_version: sentinelText(input.sentinel_version, 32),
+    };
+    const safeMetadata = Object.fromEntries(Object.entries(metadata).slice(0, 30).map(([key, value]) => [String(key).slice(0, 60), sentinelText(typeof value === "string" ? value : JSON.stringify(value), 500)]));
+    return { ...allowed, metadata: safeMetadata };
+}
+function sameOriginSentinel(req) {
+    try {
+        const origin = new URL(String(req.headers.origin || ""));
+        const host = String(req.headers.host || "").toLowerCase();
+        if (origin.host.toLowerCase() !== host)
+            return false;
+        if (origin.protocol === "https:")
+            return true;
+        return origin.protocol === "http:" && ["localhost", "127.0.0.1", "[::1]"].includes(origin.hostname);
+    }
+    catch {
+        return false;
+    }
+}
+export async function adminSentinelEvent(req, res) {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: "AUTH_REQUIRED" });
+        return;
+    }
+    if (req.method !== "POST") {
+        res.setHeader("Allow", "POST");
+        res.status(405).json({ ok: false, error: "METHOD_NOT_ALLOWED" });
+        return;
+    }
+    if (!sameOriginSentinel(req)) {
+        res.status(403).json({ ok: false, error: "SAME_ORIGIN_REQUIRED" });
+        return;
+    }
+    if (Buffer.byteLength(JSON.stringify(req.body || {}), "utf8") > 32768) {
+        res.status(413).json({ ok: false, error: "SENTINEL_EVENT_TOO_LARGE" });
+        return;
+    }
+    const event = sentinelEvent(req.body || {});
+    if (!event.correlation_id || !event.fingerprint || !event.kind || !event.page) {
+        res.status(400).json({ ok: false, error: "SENTINEL_EVENT_REQUIRED_FIELDS" });
+        return;
+    }
+    const eventId = crypto.randomUUID();
+    event.event_id = eventId;
+    const local = appendCentralEvent({
+        event_id: eventId, sector: "control", service: "cockpit-sentinel", source: event.source,
+        actor: "cockpit-sentinel", kind: "sentinel_error", level: event.severity === "CRITICAL" || event.severity === "HIGH" ? "error" : "warn",
+        key: `sentinel:${event.fingerprint}`, tags: ["sentinel", event.kind, event.severity.toLowerCase()], correlation_id: event.correlation_id,
+        message: event.simplified_message || event.message, data: event,
+    });
+    const { url, key } = sentinelSupabaseConfig();
+    if (!url || !key) {
+        res.status(503).json({ ok: false, error: "SUPABASE_SERVER_CREDENTIALS_MISSING", event_id: eventId, local });
+        return;
+    }
+    const response = await fetch(`${url}/rest/v1/agent_events`, {
+        method: "POST",
+        headers: { apikey: key, Authorization: `Bearer ${key}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+        body: JSON.stringify({ agent: "cockpit-sentinel", area: event.page, acao: event.kind, alvo: event.route || event.control || "cockpit", status: event.status, metadata: event }),
+        signal: AbortSignal.timeout(8000),
+    });
+    if (!response.ok) {
+        pushAdminLog("error", "sentinel_supabase_ingest_fail", { cid: req.cid, status: response.status, correlation_id: event.correlation_id });
+        res.status(502).json({ ok: false, error: "SUPABASE_INGEST_FAILED", event_id: eventId });
+        return;
+    }
+    pushAdminLog("warn", "sentinel_event_ingested", { cid: req.cid, event_id: eventId, correlation_id: event.correlation_id, fingerprint: event.fingerprint, severity: event.severity });
+    res.status(201).json({ ok: true, event_id: eventId, correlation_id: event.correlation_id, received_at: new Date().toISOString() });
+}
 function inferirCategoria(t) {
     const n = (t.name || "").toLowerCase();
-    if (n.startsWith("tailscale_")) return "Tailscale";
-    if (n.includes("github") || n.includes("repo") || n.includes("pr_")) return "GitHub";
-    if (n.includes("telegram") || n.includes("bot_")) return "Telegram";
-    if (n.includes("supabase") || n.includes("sql") || n.includes("db_")) return "Supabase";
-    if (n.includes("pm2") || n.includes("vps_") || n.includes("deploy")) return "Deploy/VPS";
-    if (n.includes("log") || n.includes("status") || n.includes("health") || n.includes("monitor")) return "Monitoramento";
-    if (n.includes("ai_") || n.includes("llm") || n.includes("chat") || n.includes("gemini") || n.includes("openai")) return "IA";
-    if (n.includes("admin") || n.includes("skill")) return "Admin";
+    if (n.startsWith("tailscale_"))
+        return "Tailscale";
+    if (n.includes("github") || n.includes("repo") || n.includes("pr_"))
+        return "GitHub";
+    if (n.includes("telegram") || n.includes("bot_"))
+        return "Telegram";
+    if (n.includes("supabase") || n.includes("sql") || n.includes("db_"))
+        return "Supabase";
+    if (n.includes("pm2") || n.includes("vps_") || n.includes("deploy"))
+        return "Deploy/VPS";
+    if (n.includes("log") || n.includes("status") || n.includes("health") || n.includes("monitor"))
+        return "Monitoramento";
+    if (n.includes("ai_") || n.includes("llm") || n.includes("chat") || n.includes("gemini") || n.includes("openai"))
+        return "IA";
+    if (n.includes("admin") || n.includes("skill"))
+        return "Admin";
     return "Utilidades";
 }
-
 export function adminTools(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const summary = getCatalogSummary();
     const categorias = {};
     for (const t of summary.tools || []) {
@@ -298,21 +442,24 @@ export function adminTools(req, res) {
     }
     res.json({ total: summary.toolCount, categorias });
 }
-
 export function adminOperationalSnapshot(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.setHeader("Cache-Control", "no-store");
     res.json(getOperationalSnapshot());
 }
-
 export async function adminLinear(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.setHeader("Cache-Control", "no-store");
     const limit = Math.max(1, Math.min(Number(req.query.limit) || 25, 100));
     const snapshot = await getLinearAdminSnapshot(limit);
     res.status(snapshot.ok ? 200 : 503).json(snapshot);
 }
-
 // CentralDark Commander: reutiliza o owner administrativo e a tailnet privada.
 // A sondagem NAO executa comando no Windows nem utiliza o relay pago externo.
 function probeCommanderTcp(host, port) {
@@ -320,7 +467,8 @@ function probeCommanderTcp(host, port) {
         const socket = new Socket();
         let done = false;
         const finish = (value) => {
-            if (done) return;
+            if (done)
+                return;
             done = true;
             socket.destroy();
             resolve(value);
@@ -332,31 +480,32 @@ function probeCommanderTcp(host, port) {
         socket.connect(port, host);
     });
 }
+const COMMANDER_HEALTH_PORT = 9101;
 async function probeCommanderHttp(host) {
     try {
-        const response = await fetch("http://" + host + ":3000/", {
+        const response = await fetch("http://" + host + ":" + COMMANDER_HEALTH_PORT + "/health", {
             cache: "no-store", redirect: "manual", signal: AbortSignal.timeout(2300),
         });
-        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
-    } catch {
-        return { httpStatus: null, state: "NOT_REACHABLE" };
+        return { httpStatus: response.status, state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX", route: "9101/health" };
+    }
+    catch {
+        return { httpStatus: null, state: "NOT_REACHABLE", route: "9101/health" };
     }
 }
 export async function measureNativeCommander() {
     let snapshot;
     try {
         const raw = await new Promise((resolve, reject) => {
-            execFile("tailscale", ["status", "--json"], { timeout: 4000, maxBuffer: 1048576 },
-                (error, stdout) => error ? reject(error) : resolve(stdout));
+            execFile("tailscale", ["status", "--json"], { timeout: 4000, maxBuffer: 1048576 }, (error, stdout) => error ? reject(error) : resolve(stdout));
         });
         snapshot = JSON.parse(raw);
-    } catch {
+    }
+    catch {
         return { ok: false, backend_state: "UNKNOWN", route_base: "TAILSCALE_NATIVE",
             commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
                 transport: "TAILSCALE_PRIVATE", commandExecution: "UNPROVEN" } };
     }
-    const home = Object.values(snapshot.Peer || {}).find(
-        (peer) => ["SEGREDO", "WINDOWS-CASA"].includes(String(peer.HostName || "").trim().toUpperCase()));
+    const home = Object.values(snapshot.Peer || {}).find((peer) => ["SEGREDO", "WINDOWS-CASA"].includes(String(peer.HostName || "").trim().toUpperCase()));
     const ip = home?.TailscaleIPs?.[0] || null;
     const [ssh, winrm, screenpipe, rdp] = ip && home?.Online
         ? await Promise.all([22, 5985, 3030, 3389].map((port) => probeCommanderTcp(ip, port)))
@@ -370,7 +519,7 @@ export async function measureNativeCommander() {
             ips: snapshot.Self?.TailscaleIPs || [] },
         home: { host: home?.HostName || "SEGREDO", ip, online: home?.Online === true,
             ssh_22: ssh, winrm_5985: winrm, screenpipe_3030: screenpipe,
-            cockpit_3000: cockpit, rdp_3389: rdp },
+            commander_9101: cockpit, rdp_3389: rdp },
         commander: { engine: "@wonderwhy-er/desktop-commander@0.2.48", license: "MIT",
             controlPlane: "MCP_CENTRALDARK", transport: "TAILSCALE_PRIVATE",
             commandExecution: "UNPROVEN", authenticatedWindowsSession: false,
@@ -378,47 +527,60 @@ export async function measureNativeCommander() {
     };
 }
 export async function adminTailscale(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.setHeader("Cache-Control", "no-store");
     const native = await measureNativeCommander();
-    if (native.ok) { res.json(native); return; }
+    if (native.ok) {
+        res.json(native);
+        return;
+    }
     try {
         const upstream = await fetch("http://127.0.0.1:8098/api/tailscale/status", {
             headers: { accept: "application/json" }, signal: AbortSignal.timeout(2500),
         });
-        if (!upstream.ok) throw new Error("broker_unavailable");
+        if (!upstream.ok)
+            throw new Error("broker_unavailable");
         res.status(upstream.status).type("application/json").send(await upstream.text());
-    } catch {
+    }
+    catch {
         res.status(503).json(native);
     }
 }
-
 // ─── Busca de logs (filtro por rota / cid / level / texto) ────────────
 export function adminBuscarLogs(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     // Consulta do funil setorizado dentro da mesma API Admin. O modo sem setor fica intacto.
     if (req.query?.sector != null) {
         const sector = String(req.query.sector || "").trim().toLowerCase();
         const allowed = new Set(["all", "mcp", "agents", "hermes", "vscode", "system", "control", "consciencia"]);
-        if (!allowed.has(sector)) { res.status(400).json({ error: "sector_not_allowed" }); return; }
+        if (!allowed.has(sector)) {
+            res.status(400).json({ error: "sector_not_allowed" });
+            return;
+        }
         const since = Math.max(1, Math.min(10080, Number(req.query.since_minutes) || 60));
         const limit = Math.max(1, Math.min(200, Number(req.query.limit) || 100));
         const rows = queryCentralLogs({ sector: sector === "all" ? undefined : sector, since_minutes: since, limit });
-        const q = String(req.query.q || "").toLowerCase().slice(0,80);
+        const q = String(req.query.q || "").toLowerCase().slice(0, 80);
         const logs = rows.filter(row => !q ||
             [row.kind, row.source, row.actor, row.key].some(v => String(v || "").toLowerCase().includes(q)))
             .map(row => ({
-                event_id: String(row.event_id || "").slice(0,120),
-                timestamp: String(row.timestamp || "").slice(0,64),
-                sector: String(row.sector || "").slice(0,80),
-                source: String(row.source || "").slice(0,160),
-                actor: String(row.actor || "").slice(0,160),
-                kind: String(row.kind || "").slice(0,120),
-                level: String(row.level || "").slice(0,32),
-                badge: String(row.badge || "").slice(0,8),
-                key: String(row.key || "").slice(0,160),
-                // Sem args, dados brutos, stdout, paths, cookies ou tokens.
-            }));
+            event_id: String(row.event_id || "").slice(0, 120),
+            timestamp: String(row.timestamp || "").slice(0, 64),
+            sector: String(row.sector || "").slice(0, 80),
+            source: String(row.source || "").slice(0, 160),
+            actor: String(row.actor || "").slice(0, 160),
+            kind: String(row.kind || "").slice(0, 120),
+            level: String(row.level || "").slice(0, 32),
+            badge: String(row.badge || "").slice(0, 8),
+            key: String(row.key || "").slice(0, 160),
+            // Sem args, dados brutos, stdout, paths, cookies ou tokens.
+        }));
         res.setHeader("Cache-Control", "no-store");
         res.json({ schema: "centraldark.central-logs.sanitized.v1", sector, count: logs.length, logs });
         return;
@@ -434,39 +596,53 @@ export function adminBuscarLogs(req, res) {
         const linha = LOG_BUFFER[i];
         const r = extrairRota(linha).toLowerCase();
         const c = String(linha.meta?.cid || "").toLowerCase();
-        if (rota && !r.includes(rota)) continue;
-        if (cid && !c.includes(cid)) continue;
-        if (level && linha.level !== level) continue;
-        if (q && !JSON.stringify(linha).toLowerCase().includes(q)) continue;
+        if (rota && !r.includes(rota))
+            continue;
+        if (cid && !c.includes(cid))
+            continue;
+        if (level && linha.level !== level)
+            continue;
+        if (q && !JSON.stringify(linha).toLowerCase().includes(q))
+            continue;
         out.push({ ...linha, rota: r, cid: c || undefined });
     }
     res.json({ total: out.length, logs: out });
 }
-
 // ─── Métricas: contagem de erros/warns/requests em 5 min ──────────────
 export function adminMetricas(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const corte = Date.now() - 5 * 60 * 1000;
     let erros = 0, warns = 0, requests = 0;
     for (let i = LOG_BUFFER.length - 1; i >= 0; i--) {
         const l = LOG_BUFFER[i];
-        if (new Date(l.t).getTime() < corte) break;
-        if (l.level === "error") erros++;
-        else if (l.level === "warn") warns++;
-        if (l.msg === "http_request_start") requests++;
+        if (new Date(l.t).getTime() < corte)
+            break;
+        if (l.level === "error")
+            erros++;
+        else if (l.level === "warn")
+            warns++;
+        if (l.msg === "http_request_start")
+            requests++;
     }
     res.setHeader("Cache-Control", "no-store");
     res.json({ janelaMin: 5, erros, warns, requests, sseAtivas: subscribers.size, harnessWeek: getHarnessWeeklySummary() });
 }
-
 export function adminGrokControlGet(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     res.setHeader("Cache-Control", "no-store");
     res.json(getGrokControlDashboard());
 }
-
 export function adminGrokControlPost(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const l = withCid(req.cid);
     try {
         const result = setGrokControlSelection(req.body || {}, "admin");
@@ -478,18 +654,20 @@ export function adminGrokControlPost(req, res) {
         });
         res.setHeader("Cache-Control", "no-store");
         res.json(result);
-    } catch (error) {
+    }
+    catch (error) {
         l.warn("admin_grok_mode_rejected", { error: String(error?.message || error).slice(0, 180) });
         res.status(400).json({ ok: false, error: String(error?.message || error) });
     }
 }
-
 export function adminBuildkiteStatus(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const since = Math.min(Math.max(Number(req.query.since_minutes) || 1440, 1), 10080);
     res.json(getBuildkiteStatus({ since_minutes: since, limit: 1200 }));
 }
-
 // ─── Teste E2E: DCR → authorize → token → tools/list ──────────────────
 async function fazerRequest(url, opts = {}) {
     const t0 = performance.now();
@@ -499,20 +677,29 @@ async function fazerRequest(url, opts = {}) {
         const texto = await r.text();
         const json = parseMcpJson(texto);
         return { ok: r.ok, status: r.status, ms: Math.round(performance.now() - t0), json, texto: texto.slice(0, 400), location, contentType: r.headers.get("content-type") || "" };
-    } catch (err) {
+    }
+    catch (err) {
         return { ok: false, status: 0, ms: Math.round(performance.now() - t0), erro: String(err?.message || err) };
     }
 }
-
 function parseMcpJson(texto) {
     const trimmed = String(texto || "").trim();
-    if (!trimmed) return null;
-    try { return JSON.parse(trimmed); } catch { /* tenta SSE */ }
+    if (!trimmed)
+        return null;
+    try {
+        return JSON.parse(trimmed);
+    }
+    catch { /* tenta SSE */ }
     const dataLine = trimmed.split(/\r?\n/).find((line) => line.startsWith("data:"));
-    if (!dataLine) return null;
-    try { return JSON.parse(dataLine.slice(5).trim()); } catch { return null; }
+    if (!dataLine)
+        return null;
+    try {
+        return JSON.parse(dataLine.slice(5).trim());
+    }
+    catch {
+        return null;
+    }
 }
-
 function extrairToolsCount(payload) {
     if (Array.isArray(payload)) {
         const item = payload.find((p) => p?.result?.tools || p?.error);
@@ -520,13 +707,11 @@ function extrairToolsCount(payload) {
     }
     return { toolCount: payload?.result?.tools?.length, error: payload?.error?.message };
 }
-
 async function rodarE2EInterno({ comAdmin, cid }) {
     const base = `http://127.0.0.1:${config.port}`;
     const etapas = [];
     let falhouEm = null;
     const baseHeaders = { "X-Correlation-Id": cid || crypto.randomUUID() };
-
     // 1) DCR
     const dcr = await fazerRequest(`${base}/register`, {
         method: "POST",
@@ -541,15 +726,19 @@ async function rodarE2EInterno({ comAdmin, cid }) {
     });
     const clientId = dcr.json?.client_id;
     etapas.push({ nome: "DCR /register", ok: dcr.ok && !!clientId, status: dcr.status, ms: dcr.ms, detalhe: clientId ? "client_id emitido" : (dcr.erro || dcr.texto) });
-    if (!clientId) { falhouEm = "DCR /register"; return { ok: false, falhouEm, etapas }; }
-
+    if (!clientId) {
+        falhouEm = "DCR /register";
+        return { ok: false, falhouEm, etapas };
+    }
     // 2) Discovery
     const disc = await fazerRequest(`${base}/.well-known/oauth-authorization-server`, { headers: baseHeaders });
     etapas.push({ nome: "Discovery /.well-known", ok: disc.ok, status: disc.status, ms: disc.ms, detalhe: disc.json?.issuer || disc.erro });
-    if (!disc.ok) { falhouEm = "Discovery"; return { ok: false, falhouEm, etapas }; }
-
-    if (!comAdmin) return { ok: true, publico: true, etapas };
-
+    if (!disc.ok) {
+        falhouEm = "Discovery";
+        return { ok: false, falhouEm, etapas };
+    }
+    if (!comAdmin)
+        return { ok: true, publico: true, etapas };
     // 3) /authorize (PKCE+senha admin)
     const codeVerifier = crypto.randomBytes(32).toString("base64url");
     const codeChallenge = crypto.createHash("sha256").update(codeVerifier).digest("base64url");
@@ -569,12 +758,13 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         body: authParams.toString() + `&password=${encodeURIComponent(senha)}`,
         redirect: "manual",
     });
-    
     let code = null;
     if (authz.status === 302 && authz.location) {
-        try { code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code"); } catch {}
+        try {
+            code = new URL(authz.location, "http://127.0.0.1").searchParams.get("code");
+        }
+        catch { }
     }
-    
     etapas.push({
         nome: "/authorize (PKCE+senha admin)",
         ok: !!code,
@@ -582,8 +772,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: authz.ms,
         detalhe: code ? "code capturado automaticamente" : (authz.texto || authz.erro || "Falhou em emitir code; verifique MCP_ADMIN_PASSWORD/GH_TOKEN"),
     });
-    if (!code) { falhouEm = "authorize"; return { ok: false, falhouEm, etapas }; }
-
+    if (!code) {
+        falhouEm = "authorize";
+        return { ok: false, falhouEm, etapas };
+    }
     // 4) /token
     const tok = await fazerRequest(`${base}/token`, {
         method: "POST",
@@ -604,8 +796,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tok.ms,
         detalhe: accessToken ? "token emitido" : (tok.json?.error_description || tok.erro || tok.texto),
     });
-    if (!accessToken) { falhouEm = "token"; return { ok: false, falhouEm, etapas }; }
-
+    if (!accessToken) {
+        falhouEm = "token";
+        return { ok: false, falhouEm, etapas };
+    }
     // 5) initialize via /admin/mcp
     const init = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
@@ -620,8 +814,10 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: init.ms,
         detalhe: initJson?.error?.message || initJson?.result?.serverInfo?.name || init.contentType || init.texto,
     });
-    if (!init.ok || initJson?.error) { falhouEm = "initialize"; return { ok: false, falhouEm, etapas }; }
-
+    if (!init.ok || initJson?.error) {
+        falhouEm = "initialize";
+        return { ok: false, falhouEm, etapas };
+    }
     // 6) tools/list via /admin/mcp
     let tools = await fazerRequest(`${base}/admin/mcp`, {
         method: "POST",
@@ -656,7 +852,6 @@ async function rodarE2EInterno({ comAdmin, cid }) {
         ms: tools.ms,
         detalhe: typeof toolCount === "number" ? `${toolCount} tools listadas` : (toolsError || tools.erro || tools.texto),
     });
-
     if (comAdmin) {
         const grokStarted = performance.now();
         const grok = getGrokControlDashboard();
@@ -677,7 +872,6 @@ async function rodarE2EInterno({ comAdmin, cid }) {
             ].join(" · "),
         });
     }
-
     const bkStarted = performance.now();
     const bk = getBuildkiteStatus({ since_minutes: 60, limit: 100 });
     etapas.push({
@@ -692,38 +886,42 @@ async function rodarE2EInterno({ comAdmin, cid }) {
             "external=" + bk.proof_boundary.external_buildkite_delivery,
         ].join(" · "),
     });
-
     const allOk = etapas.every(e => e.ok !== false);
     const firstFailed = etapas.find((e) => e.ok === false);
     return { ok: allOk, falhouEm: allOk ? null : (firstFailed?.nome || "UNKNOWN"), etapas };
 }
-
 export async function adminE2E(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const l = withCid(req.cid);
     l.info("admin_e2e_start", {});
     try {
         const r = await rodarE2EInterno({ comAdmin: true, cid: req.cid });
         l.info("admin_e2e_end", { ok: r.ok, falhouEm: r.falhouEm });
         res.json(r);
-    } catch (err) {
+    }
+    catch (err) {
         l.error("admin_e2e_error", { error: String(err) });
         res.status(500).json({ ok: false, error: String(err) });
     }
 }
-
 export async function adminE2EPublico(req, res) {
     // Versão sem senha, usada pelo postdeploy-healthcheck.sh — só liveness DCR+Discovery
     try {
         const r = await rodarE2EInterno({ comAdmin: false, cid: req.cid });
         res.json(r);
-    } catch (err) {
+    }
+    catch (err) {
         res.status(500).json({ ok: false, error: String(err) });
     }
 }
-
 export function adminLogsStream(req, res) {
-    if (!isAdmin(req)) { res.status(401).end(); return; }
+    if (!isAdmin(req)) {
+        res.status(401).end();
+        return;
+    }
     sseStats.totalConexoes++;
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
@@ -746,7 +944,8 @@ export function adminLogsStream(req, res) {
         sseStats.ultimoEventoEm = line.t;
         sseStats.eventosRecentes.push(Date.now());
         sseStats.ultimasMensagens.push({ t: line.t, level: line.level, msg: line.msg, cid: req.cid, rota: req.path });
-        if (sseStats.ultimasMensagens.length > 50) sseStats.ultimasMensagens.shift();
+        if (sseStats.ultimasMensagens.length > 50)
+            sseStats.ultimasMensagens.shift();
         res.write(`:ping cid=${req.cid}\n\n`);
     }, 15000);
     req.on("close", () => {
@@ -755,21 +954,26 @@ export function adminLogsStream(req, res) {
         pushAdminLog("info", "admin_sse_desconectado", { cid: req.cid, path: req.path, conexoesAtivas: subscribers.size });
     });
 }
-
 export function adminTestarSse(req, res) {
-    if (!isAdmin(req)) { res.status(401).json({ ok: false }); return; }
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false });
+        return;
+    }
     const l = withCid(req.cid);
     l.info("admin_sse_test", { origem: "botão painel" });
     pushAdminLog("info", "admin_sse_test", { origem: "botão painel", cid: req.cid });
     res.json({ ok: true, cid: req.cid, ts: new Date().toISOString() });
 }
-
 export function bootstrapAdminLogCapture() {
     for (const level of ["debug", "info", "warn", "error"]) {
         const orig = log[level].bind(log);
         log[level] = (msg, meta) => {
-            try { pushAdminLog(level, msg, meta); } catch { /* nunca quebrar log */ }
+            try {
+                pushAdminLog(level, msg, meta);
+            }
+            catch { /* nunca quebrar log */ }
             orig(msg, meta);
         };
     }
 }
+//# sourceMappingURL=admin.js.map

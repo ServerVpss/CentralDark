@@ -5,6 +5,26 @@ tags: ["aprendizado", "garimpo", "reconciliacao", "agentes", "enxame", "overcloc
 status: "MEMORIA_RECUPERAVEL"
 authority: "REFERENCIA; owner canônico permanece fora do BRAIN"
 originator: "SEGREDO/CHEFE"
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "02-SESSOES"
+centraldark_kind: "CRISTAL_DE_SESSAO"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Garimpo do perfil — a taxonomia do enxame estava fora da Casa"
+centraldark_agent_recall: "Recuperar a intencao, correcoes, limites e NEXT_CURSOR antes de continuar; sessao historica nao equivale ao estado atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["yuji-identidade-e-continuidade","gojo-seis-olhos","goku-instinto-superior","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "347cfbcc174e549c3e81dababefcf2dd621c3f28"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Analysis"
+centraldark_self_related: ["Self-Optimization","Self-Modeling"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-analysis/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-optimization/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-modeling/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
 ---
 
 # ⛏️ Garimpo do perfil — a taxonomia do enxame estava fora da Casa

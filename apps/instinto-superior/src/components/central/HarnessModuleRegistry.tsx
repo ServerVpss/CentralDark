@@ -22,7 +22,7 @@ type HarnessModule = {
 };
 
 const MODULES: HarnessModule[] = [
-  { id: "codex-halo", label: "Codex Halo", owner: "apps/modulos/codex-halo-main", transport: "import nativo no CockpitShell · Hermes/Cua preservados", status: "UNKNOWN", evidence: "apps/instinto-superior/src/components/central/CodexHaloHarness.tsx" },
+  { id: "centraldark-halo", label: "CentralDark Halo", owner: "apps/modulos/centraldark-halo-main", transport: "import nativo no CockpitShell · Hermes/Cua preservados", status: "UNKNOWN", evidence: "apps/instinto-superior/src/components/central/CentralDarkHaloHarness.tsx" },
   { id: "hermes", label: "Hermes", owner: "apps/modulos/HERMES-CORE", transport: "MCP/RDC", status: "PROVEN" },
   { id: "claude-code", label: "Claude Code", owner: "owner externo / VS Code", transport: "VS Code/SSH", status: "UNKNOWN" },
   { id: "chatgpt-cowork", label: "ChatGPT / Cowork", owner: "owner externo / Work", transport: "Work/browser", status: "UNKNOWN" },

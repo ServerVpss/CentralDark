@@ -101,7 +101,7 @@ export default function SolWidget() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontSize: 13 }}><span style={{ width: 9, height: 9, borderRadius: 999, background: statusColor, boxShadow: `0 0 18px ${statusColor}` }} />{statusText}</div>
             <div style={{ marginTop: 7, color: '#6ee7b7', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis' }}>{centralEndpoint}{health.latency_ms ? ` · ${health.latency_ms}ms` : ''}</div>
             <div style={{ marginTop: 4, color: '#a7f3d0', fontSize: 10, opacity: .78 }}>SOL → CentralDark → Omni Router → braços/providers</div>
-            <div style={{ marginTop: 3, color: '#a7f3d0', fontSize: 10, opacity: .72 }}>Casa: {runtime?.house_root ?? 'K:\\'}</div>
+            <div style={{ marginTop: 3, color: '#a7f3d0', fontSize: 10, opacity: .72 }}>Casa: {runtime?.house_root ?? (process.env.CENTRALDARK_ROOT || '.')}</div>
           </div>
 
           <form onSubmit={submit} style={{ marginTop: 16 }}>
