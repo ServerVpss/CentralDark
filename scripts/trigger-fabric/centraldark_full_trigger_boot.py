@@ -812,6 +812,109 @@ def hermes_continuity_preflight(repo: Path) -> dict:
     return result
 
 
+DOCUMENT_ORGANIZATION_OBJECT_TOKENS = {
+    "pasta", "pastas", "arquivo", "arquivos", "diretorio", "diretorios",
+    "folder", "folders", "file", "files",
+}
+DOCUMENT_ORGANIZATION_ACTION_ALIASES = {
+    "cria": "criar", "criar": "criar", "crie": "criar",
+    "move": "mover", "mover": "mover", "mova": "mover",
+    "renomear": "renomear", "renomeie": "renomear", "renomeia": "renomear",
+    "nomear": "nomear", "nomeie": "nomear",
+    "organiza": "organizar", "organizar": "organizar", "organize": "organizar",
+    "versionar": "versionar", "versione": "versionar",
+    "armazenar": "armazenar", "armazene": "armazenar",
+    "salvar": "salvar", "salve": "salvar",
+    "excluir": "excluir", "exclua": "excluir",
+    "apagar": "apagar", "apague": "apagar",
+}
+DOCUMENT_ORGANIZATION_OBJECT_ALIASES = {
+    "pastas": "pasta", "pasta": "pasta",
+    "arquivos": "arquivo", "arquivo": "arquivo",
+    "diretorios": "pasta", "diretorio": "pasta",
+    "folders": "pasta", "folder": "pasta",
+    "files": "arquivo", "file": "arquivo",
+}
+
+
+def document_organization_route(repo: Path, text: str) -> dict:
+    """Detect only the scope; ranking stays owned by library-router.mjs."""
+    normalized = strip_accents(str(text or "")).lower()
+    words = re.findall(r"[a-z0-9]+", normalized)
+    objects = sorted({DOCUMENT_ORGANIZATION_OBJECT_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_OBJECT_ALIASES})
+    actions = sorted({DOCUMENT_ORGANIZATION_ACTION_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_ACTION_ALIASES})
+    result = {
+        "status": "NOT_APPLICABLE",
+        "scope": "FOLDER_OR_FILE_ORGANIZATION",
+        "router_owner": "scripts/memory-linker/library-router.mjs",
+        "catalog": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json",
+        "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+        "must_consult_before_delta": False,
+        "query_tokens": [*actions, *objects],
+        "selected_pages": [],
+    }
+    if not objects or not actions:
+        return result
+
+    router = repo / result["router_owner"]
+    catalog = repo / result["catalog"]
+    if not router.is_file() or not catalog.is_file():
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_OR_CATALOG_MISSING")
+        return result
+
+    js = """
+import fs from 'node:fs';
+const { routeEntries } = await import(process.argv[1]);
+const catalog = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const query = JSON.parse(process.argv[3]);
+const sourceId = process.argv[4];
+const candidates = routeEntries({ catalog, query, limit: 10 })
+  .filter(item => item.entry.source_id === sourceId);
+const maxScore = candidates.length ? Math.max(...candidates.map(item => item.score)) : 0;
+const routed = candidates
+  .filter(item => item.score === maxScore)
+  .map(item => ({
+    entry_id: item.entry.id,
+    reference: item.entry.reference,
+    summary: item.entry.summary,
+    score: item.score,
+    matched: item.matched,
+  }));
+process.stdout.write(JSON.stringify(routed));
+""".strip()
+    try:
+        proc = subprocess.run(
+            ["node", "--input-type=module", "-e", js,
+             router.resolve().as_uri(), str(catalog), json.dumps(result["query_tokens"]),
+             result["source_id"]],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=12, env={**os.environ, "NODE_NO_WARNINGS": "1"},
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_EXECUTION_FAILED:" + type(exc).__name__)
+        return result
+    if proc.returncode != 0:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_NONZERO", router_stderr=proc.stderr.strip()[:500])
+        return result
+    try:
+        selected = json.loads(proc.stdout or "[]")
+    except json.JSONDecodeError:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_INVALID_JSON")
+        return result
+    if not selected:
+        result.update(status="BLOCKED", reason="ORGANIZATION_SCOPE_WITHOUT_LIBRARY_REFERENCE")
+        return result
+    result.update(
+        status="ROUTED",
+        must_consult_before_delta=True,
+        selected_pages=selected[:4],
+        reason="EXISTING_LIBRARY_ROUTER_SELECTED_TCU_REFERENCES",
+    )
+    return result
+
+
 def document_organization_readback(repo: Path) -> dict:
     """Read verified PDF-derived page text; visual review remains unproven."""
     base = Path("docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA")
@@ -906,6 +1009,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     # Read the canonical contract first. Runtime and mission gates may limit
     # continuation, but must not erase this read-only result.
     canonical = canonical_boot_snapshot(repo)
+    canonical["document_organization_route"] = document_organization_route(repo, args.input)
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
         print(json.dumps({
@@ -1279,9 +1383,22 @@ def cmd_self_test(args: argparse.Namespace) -> int:
         assert replay["expected_effect_match"] is True
         assert replay["binding_names"] == ["WORKSPACE"]
 
+    repo = discover_boot_repo(getattr(args, "repo", None))
+    rename_route = document_organization_route(repo, "!CENTRALDARK renomear arquivo de relatório")
+    move_route = document_organization_route(repo, "!CENTRALDARK mover pasta de documentação")
+    version_route = document_organization_route(repo, "!CENTRALDARK versionar arquivo")
+    neutral_route = document_organization_route(repo, "!CENTRALDARK verificar túnel MCP")
+    assert rename_route["status"] == "ROUTED"
+    assert rename_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-04"
+    assert move_route["status"] == "ROUTED"
+    assert move_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-03"
+    assert version_route["status"] == "ROUTED"
+    assert version_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-05"
+    assert neutral_route["status"] == "NOT_APPLICABLE"
+
     print(json.dumps({
         "status": "PASS",
-        "tests": 16,
+        "tests": 20,
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "same_fingerprint": same["action"],
         "changed_fingerprint": changed["action"],

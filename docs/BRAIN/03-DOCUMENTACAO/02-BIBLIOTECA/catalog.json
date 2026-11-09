@@ -436,7 +436,10 @@
         "tema/organizacao-documental",
         "pagina/02",
         "tema/introducao",
-        "tema/recuperacao"
+        "tema/recuperacao",
+        "acao/organizar",
+        "objeto/pasta",
+        "objeto/arquivo"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -459,7 +462,12 @@
         "tema/organizacao-documental",
         "pagina/03",
         "tema/hierarquia",
-        "tema/assunto"
+        "tema/assunto",
+        "acao/organizar",
+        "acao/criar",
+        "acao/mover",
+        "objeto/pasta",
+        "objeto/arquivo"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -482,7 +490,11 @@
         "tema/organizacao-documental",
         "pagina/04",
         "tema/nomeacao",
-        "tema/padronizacao"
+        "tema/padronizacao",
+        "acao/renomear",
+        "acao/nomear",
+        "objeto/pasta",
+        "objeto/arquivo"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -506,7 +518,13 @@
         "pagina/05",
         "tema/versoes",
         "tema/preservacao",
-        "tema/exclusao"
+        "tema/exclusao",
+        "acao/versionar",
+        "acao/armazenar",
+        "acao/salvar",
+        "acao/excluir",
+        "acao/apagar",
+        "objeto/arquivo"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -529,7 +547,11 @@
         "tema/organizacao-documental",
         "pagina/06",
         "tema/setores",
-        "tema/administrativo"
+        "tema/administrativo",
+        "acao/organizar",
+        "acao/criar",
+        "objeto/pasta",
+        "tema/estrutura"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -552,7 +574,10 @@
         "tema/organizacao-documental",
         "pagina/07",
         "tema/subpastas",
-        "tema/estrutura"
+        "tema/estrutura",
+        "acao/organizar",
+        "acao/criar",
+        "objeto/pasta"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -575,7 +600,9 @@
         "tema/organizacao-documental",
         "pagina/08",
         "tema/arvore",
-        "tema/estrutura-completa"
+        "tema/estrutura-completa",
+        "acao/organizar",
+        "objeto/pasta"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"
@@ -598,7 +625,9 @@
         "tema/organizacao-documental",
         "pagina/09",
         "tema/arvore",
-        "tema/estrutura-completa"
+        "tema/estrutura-completa",
+        "acao/organizar",
+        "objeto/pasta"
       ],
       "links": [
         "[[Biblioteca Cognitiva - CentralDark]]"

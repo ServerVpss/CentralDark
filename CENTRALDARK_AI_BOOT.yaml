@@ -603,6 +603,8 @@ CENTRALDARK_AI_BOOT:
       last_content_read: "UNKNOWN_UNTIL_RUNTIME_EVIDENCE"
       visual_pages_must_use_original_pdf: true
       external_study_is_executable_authority: false
+      router_owner: "scripts/memory-linker/library-router.mjs"
+      route_before_delta_when_scope_matches: true
       no_parallel_library: true
     behavior:
       reflex_owner: "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX"
