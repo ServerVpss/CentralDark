@@ -17,7 +17,53 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
-=== HANDOFF CHATGPT ===
+## 🧭 CURRENT CONTINUITY — 2026-11-09
+
+> **Este é o estado vigente deste handoff.** O snapshot iniciado em 2026-08-28 permanece abaixo, preservado como proveniência histórica; não deve ser usado como CURRENT.
+
+**FIO DA MISSÃO:** preservar a Casa, inventariar os 17.721 arquivos não rastreados e os 116 caminhos rastreados alterados, identificar a divergência Casa ↔ `origin/main` e preparar uma reconciliação sem perda.
+
+**PRÓXIMO PASSO:** produzir inventário NUL-safe com caminhos e hashes; classificar os 35 caminhos rastreados alterados que também mudaram no remoto e os 16 arquivos não rastreados que colidem com o tree remoto; reconciliar por owner, começando pelo commit local exclusivo e seus três caminhos.
+
+**PONTO DE CONTINUIDADE (NEXT_CURSOR):** preservar e inventariar os 17.721 arquivos, identificar a origem da divergência e preparar uma reconciliação sem perda.
+
+### CURRENT medido na Casa — 2026-11-09T01:59:37-03:00
+
+| Campo | Valor |
+|---|---|
+| Checkout | `F:\CentralDark` |
+| Branch local | `main` |
+| HEAD local | `b71963ffaacbca2847364517487bb232f611acdb` |
+| origin/main / git ls-remote | `4d97ddadda74aaed3ebd17056170718a86a5ec7e` |
+| Base comum | `4d2af54c746c827e01c47778a4ce9f4165c39eee` |
+| Commits exclusivos | `1 local / 67 remoto` |
+| Worktree | `17.721 não rastreados + 116 rastreados alterados = 17.837 caminhos` |
+| Sobreposição | `35/116` caminhos rastreados alterados também mudaram no remoto |
+| Colisões | `16` arquivos não rastreados já existem como caminhos rastreados em origin/main |
+| Sincronização | `CHECKOUT_SYNCED=false` |
+
+**Origem da divergência:** o único commit local exclusivo é `b71963f` (`fix(remote-bridge): restore canonical Windows build`). Ele altera:
+- `scripts/remote-bridge/Build-Remote-Bridge.ps1`
+- `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md`
+- `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1`
+
+Os três caminhos também aparecem no conjunto remoto modificado desde a base comum. A simulação de três vias marcou `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md` como `changed in both`; exige reconciliação manual por owner.
+
+**Preservação aplicada:** `git fetch origin main` já havia concluído no passo anterior; nesta leitura `origin/main` coincide com `git ls-remote`. Nenhum merge, rebase, reset, stash, clean, force-push ou edição do checkout foi executado. O inventário completo e o manifesto de hashes ainda não foram produzidos.
+
+**Checkpoint anterior preservado como proveniência, não como prova de sync:** missão `centraldark-hermes-envelope-20261107`; etapa `codeoss-11452-compile-electron-runtime-cli-pass-20261108`; `HASH_CHAIN_PASS`; receipt `8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715`; 9 etapas verificadas. O cursor deste delta documental é o inventário/reconciliação acima.
+
+### Padrão SOL vigente nesta continuidade
+
+Resultado primeiro; PT-BR direto; até quatro linhas por padrão; distinguir conversa, pergunta, correção, ensino e ordem. Recuperar protocolo, intenção, CURRENT, owner, checkpoint, receipt e `NEXT_CURSOR` quando disponíveis. Reutilizar owners; uma caneta por escopo; preservar o checkout; não executar fases cegamente. Manter separados **FIO DA MISSÃO**, **PRÓXIMO PASSO** e **PONTO DE CONTINUIDADE**. `UNKNOWN != PASS`, ação não é prova, documento não é execução, merge não é deploy; a realidade julga.
+
+
+
+### Snapshot histórico preservado — medição de 2026-08-28
+
+Este bloco é histórico. Os valores e a seção antiga CURRENT_FACTS descrevem a medição de 2026-08-28, não o estado atual. O conteúdo é mantido para proveniência.
+
+=== HANDOFF CHATGPT · HISTORICAL SNAPSHOT (2026-08-28) ===
 
 MEASURED_AT=2026-08-28T15:07Z
 CENTRALDARK_BRANCH=fix/git-conflict-padrao-unico
@@ -48,7 +94,7 @@ FORMATO DO NOTEPAD:
 │   └── LocalState.zip (exportação histórica: ~50 sessões em "TabState - Copia/")
 
 ==================================================
-CURRENT_FACTS (RECONCILIADOS CONTRA ESTADO ATUAL)
+FACTS_MEDIDOS_NO_SNAPSHOT_2026-08-28 (HISTORICAL_REFERENCE_NOT_CURRENT)
 ==================================================
 
 1. GATILHOS CENTRALDARK OPERAM conforme descrito na aba 0f9a4a3a:
