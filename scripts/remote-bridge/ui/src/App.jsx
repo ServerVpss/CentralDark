@@ -78,7 +78,7 @@ export default function App() {
       const result = await operation();
       setAction({
         name,
-        state: result.state?.includes("PENDING") ? "running" : "pass",
+        state: result.state === "PAIRED_VERIFIED" ? "pass" : "running",
         text: result.code
           ? `Código ${result.code} · confira no Cockpit e confirme o pareamento.`
           : (result.state || "Ação iniciada"),
@@ -180,6 +180,23 @@ export default function App() {
             {status.pairing.error ? ` · ${status.pairing.error}` : ""}
           </span>
         </div>
+      )}
+
+      {status.pairing?.code && ["WAITING_OWNER_CONSENT", "PAIRING_PENDING"].includes(status.pairing.state) && (
+        <section className="pairing-options" aria-label="Confirmar pareamento do Bridge">
+          <div>
+            <strong>Seu código: <code>{status.pairing.code}</code></strong>
+            <p>Compare o código no Cockpit. A confirmação exige sua sessão administrativa ou senha do MCP.</p>
+          </div>
+          <div className="pairing-option-buttons">
+            <button onClick={() => runAction("confirmar-codigo", () => window.centralDark.openPairConsent("code"))}>
+              <ShieldCheck size={17} /> Confirmar código
+            </button>
+            <button onClick={() => runAction("confirmar-senha", () => window.centralDark.openPairConsent("password"))}>
+              <KeyRound size={17} /> Usar senha
+            </button>
+          </div>
+        </section>
       )}
 
       {action && (
