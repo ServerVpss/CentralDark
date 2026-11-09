@@ -1,10 +1,10 @@
 name: ⚙️ VPS wake via hosted SSH
 
-# Self-hosted NÃO acorda a si mesmo. Este job roda no GitHub hosted
-# (ubuntu-latest) com as chaves VPS_*_LOVABLE já no repo; unidade VPS-1 somente.
+# Self-hosted Windows é o executor de recuperação disponível nesta conta.
+# Ele acessa a VPS por SSH sem depender do runner Linux que está offline.
 # Autorizado: PERMITO SEGREDO — ativar apenas actions.runner.ServerVpss-CentralDark.centraldark-vps-1.service após identificar unit real.
-# NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta
-# no provedor, este job também timeout — aí só Contabo API resolve.
+# NÃO usa CONTABO_* (ausentes neste repo). Se a porta 22 estiver morta,
+# este job também falha — aí só a API do provedor resolve.
 
 on:
   workflow_dispatch:
@@ -14,8 +14,8 @@ permissions:
 
 jobs:
   wake:
-    # O recovery não pode depender da mesma VPS cujos runners estão offline.
-    runs-on: ubuntu-latest
+    # Reutiliza o único runner online; não depende do Linux offline.
+    runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 8
     steps:
       - name: 🔹 SSH na VPS e restart runner
@@ -23,6 +23,7 @@ jobs:
           VPS_SSH_KEY_LOVABLE: ${{ secrets.VPS_SSH_KEY_LOVABLE }}
           VPS_HOST_LOVABLE: ${{ secrets.VPS_HOST_LOVABLE }}
           VPS_USER_LOVABLE: ${{ secrets.VPS_USER_LOVABLE }}
+        shell: bash
         run: |
           set -euo pipefail
           if [ -z "${VPS_SSH_KEY_LOVABLE:-}" ] || [ -z "${VPS_HOST_LOVABLE:-}" ] || [ -z "${VPS_USER_LOVABLE:-}" ]; then

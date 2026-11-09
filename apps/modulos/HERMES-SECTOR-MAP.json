@@ -160,12 +160,6 @@
       "status": "ACTIVE"
     },
     {
-      "name": "mcp-admin-ui",
-      "type": "admin_interface",
-      "purpose": "MCP server management and status dashboard",
-      "status": "ACTIVE"
-    },
-    {
       "name": "lovable-proxy",
       "type": "integration_service",
       "purpose": "Lovable.dev API proxy and build coordination",
