@@ -43,6 +43,49 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
 
+<!-- CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+**🔐 Hermes pertence à CentralDark — distinção entre método e motor (09/11/2026).** O método e os aprendizados produzidos para a CentralDark pertencem aos owners da própria CentralDark, não a um catálogo paralelo do Hermes: aprendizado geral → `docs/CONSCIENCIA/APRENDIZADOS.md`; procedimento especializado → [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md), já indexado nesta Skill Mãe. Exemplo concreto: recuperar a janela interativa "Sudo Password Required" — ler a receita nessa Skill filha antes de responder genericamente. O código nativo do Hermes (`/opt/hermes/tools/terminal_tool_sudo.py`, quando presente) é **implementação/dependência de runtime**, não owner documental da CentralDark; pode continuar instalado no local que o pacote exige. Qualquer plugin ou cópia necessária para carregamento é **adaptador**, nunca segunda autoridade. Para absorver outras capacidades do Hermes: inventariar as existentes, verificar licença/versão/contratos/consumidores, classificar REUSE/EXTEND, registrar o menor delta na Skill Mãe/Skills/owner e provar recarga real. Não copiar tudo às cegas, não duplicar motor, não solicitar/gravar senha em chat. `DOCUMENTADO != CONSUMIDO`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+
+<!-- CENTRALDARK_SKILL_NAMING_20261109 -->
+### Nomes de Skills: identificador tecnico, owner e apresentacao (09/11/2026)
+
+**Conceito cristalizado:** nome da pasta, campo `name:` do `SKILL.md`, comando exibido pelo Hermes (`/...`) e titulo humano sao **camadas diferentes**. Prefixo `centraldark-` indica identidade no identificador em que realmente aparece; ausencia do prefixo na pasta **nao prova** Skill externa, duplicada, desconectada ou nao carregada. Compatibilidade do loader vem antes da estetica. Na lista desta Skill Mae, 21 das 23 pastas operacionais com link usam prefixo `centraldark-`; as outras sao `michelin-3-estrelas` e `reconciliacao-diaria-centraldark`. A matriz `catalogo/META-RSI-40.md` referencia 40 nomes de pastas SELF sem o prefixo, enquanto os manifestos podem declarar `name: centraldark-...`. Exemplo: comando Hermes `/centraldark-self-cognitive-amplification` **nao esta comprovado como a mesma implementacao** de `Skills/recursive-cognitive-amplification/SKILL.md` (capacidade 40/40) so por semelhanca semantica.
+
+**Regra:** manter os paths/comandos existentes ate mapear `pasta -> frontmatter name -> alias/comando -> loader -> consumidor -> hash/conteudo -> teste de invocacao`. Se o nome humano precisar de padronizacao, exibir CentralDark + titulo PT-BR na interface e no catalogo sem renomear paths ou alterar IDs tecnicos por inferencia. Um unico owner da Skill Mae; adaptadores nos locais exigidos por cada runtime nao viram segunda biblioteca. So depois de contraprova de compatibilidade, decidir menor delta de alias/renomeacao por owner com migracao de consumidores e readback. `CATALOGADA != CARREGADA != EXECUTADA`; `NOME_SEMELHANTE != IDENTIDADE_PROVADA`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_SKILL_NAMING_20261109 -->
+
+<!-- CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+### UNKNOWN rastreável — META-START-LINK + DELTA_UTIL
+
+`UNKNOWN` não encerra a investigação quando existe uma rota legítima de leitura. Aplicar o elo canônico `META-START-LINK` em `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md` para preservar `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`, sem copiar memória nem criar segundo router.
+
+Sequência obrigatória para toda pendência rastreável:
+
+```text
+UNKNOWN_CLASSIFICADO
+→ DEFINIR_FATO_AUSENTE_E_CRITÉRIO_DISCRIMINANTE
+→ RECUPERAR_OWNER/CATALOGO/LEMBRANCA/RECEIPT_EXISTENTE
+→ MEDIR_ROTA_READ_ONLY_E_RUNTIME_ATUAL
+→ CONTRAPROVA_INDEPENDENTE
+→ DELTA_UTIL_NO_OWNER_EXISTENTE
+→ RECEIPT + NEXT_CURSOR
+→ FIXED_POINT OU PENDÊNCIA EXPLÍCITA
+```
+
+GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
+<!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+
+## Runtime preflight obrigatório
+
+O `RUNTIME_PREFLIGHT_LINT` é o gate comum antes de consumir uma rota material.
+Ele valida comando, shell, host, caminhos necessários e evidência de ownership
+da bridge. `PREFLIGHT_PASS != RUNTIME_PASS`: o preflight autoriza a medição, mas
+somente execução, efeito esperado e readback podem provar o runtime.
+
+Falha de parsing do wrapper não vira falha do alvo. Evidência ausente ou inválida
+permanece `UNKNOWN`/`BLOCKED`; não criar uma rota alternativa para forçar verde.
+
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
@@ -173,6 +216,15 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 **Gatilho por intenção:** quando o CHEFE pedir para delegar um Goal ao Hermes **na conversa Cloudroom já aberta**, reutilizar a sessão e o owner. Executar a [receita Cloudroom comprovada](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#cloudroom-windows-delegacao-real-2026-11-01); não criar outro agente, chat, ponte, serviço ou script. Preferir controle nativo/acessível; se UIAutomation retornar zero editores, usar fallback de janela real + geometria atual + captura visual + entrada Win32 autorizada, nunca coordenada/PID fixos. Confirmar janela, conversa, campo vazio e texto antes de enviar **uma vez**. Preservar rascunhos, clipboard e foco na medida possível; se incerto, parar sem reenviar.
 
 **Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
+
+### 🍒+1 Hermes TUI — Goal em texto natural + Cua + Kaizen após prova (09/11/2026)
+
+**Receita comprovada nesta bancada:** quando o alvo for `ChatGPT (Beta) → Hermes CLI → Terminal input`, tratar o campo como a TUI do Hermes, não como o gatilho de boot do ChatGPT. **Não prefixar o Goal com `!CENTRALDARK` dentro dessa TUI quando o runtime interpretar `!` como shell escape**: a contraprova real executou o texto no `/bin/sh` e retornou `CENTRALDARK: not found`. O gatilho `!CENTRALDARK` continua válido onde seu owner o define; no transporte para a TUI, enviar a intenção em texto natural (`CENTRALDARK GOAL DELTA ...`) sem o `!`.
+
+**Fast-path visual/input:** reutilizar janela, sessão, monitor, owner e controle enquanto não mudarem. Localizar o `Terminal input` por UIA/estado atual e usar o owner [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md): Cua virtual para foco/clique; `type_text` tenta `background` primeiro e só usa `foreground` quando o próprio driver devolver `background_unavailable`; conferir visualmente o rascunho antes de `Return`; após envio, exigir readback da resposta. Se uma cópia duplicada ficar no editor, limpar o **Edit** exato por snapshot/UIA (`set_value`) antes de qualquer novo envio, nunca reenviar sob incerteza. PIDs, HWNDs, coordenadas e índices observados são efêmeros e não entram como constantes.
+
+**Kaizen depois da receita:** a melhoria do método só acontece **após** efeito real comprovado e contraprova aplicável. Comparar antes/depois de latência, tokens, erros, passos e atrito; incorporar somente um ganho causal no mesmo owner/Skill; repetir o teste e registrar receipt/SHA/readback. Sem ganho material: `NOOP_JUSTIFIED`. Prova desta rodada: Hermes respondeu `DELTA_METODO_RECEBIDO=PASS`, nomeou CURRENT/OWNER/RECEIPT/NEXT_CURSOR e manteve `KAIZEN=NOOP_JUSTIFIED` enquanto o runtime seguia bloqueado. `INPUT_DISPATCHED != EFFECT_PROVEN`; `DRAFT_STAGED != MESSAGE_SENT`; `UNKNOWN != PASS`.
+
 
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->

@@ -141,6 +141,7 @@ NUL
 .artifacts/system-sentinel/reconciliation.json
 # Mesma classe (3º caso, 08/10): state.json é reescrito pelo Hermes Core a cada ciclo e travava o auto-sync.
 .artifacts/system-sentinel/state.json
+.artifacts/system-sentinel/events.jsonl
 
 # Biblioteca offline local — conteúdo inteiro para estudo/RAG/treino fica só na Casa
 _BIBLIOTECA_OFFLINE/
