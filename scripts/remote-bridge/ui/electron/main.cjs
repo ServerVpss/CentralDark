@@ -309,9 +309,20 @@ async function pollPairing() {
   }
 }
 
+async function openPairConsent(method = "code") {
+  if (!pendingPair || Date.now() >= pendingPair.expiresAt)
+    throw new Error("PAIRING_NOT_PENDING");
+  const url = new URL(MCP_BASE + "/authorize");
+  url.searchParams.set("client_id", DEVICE_CLIENT_ID);
+  url.searchParams.set("pair_id", pendingPair.id);
+  url.searchParams.set("auth_method", method === "password" ? "password" : "code");
+  await shell.openExternal(url.toString());
+  return { state: "AUTH_RESULT_PENDING", code: pairing.code };
+}
+
 async function pairCasa() {
   if (pendingPair && Date.now() < pendingPair.expiresAt) {
-    return { state: "AUTH_RESULT_PENDING", code: pairing.code };
+    return openPairConsent("code");
   }
   const existing = loadDeviceAuth();
   if (existing?.token) {
@@ -338,11 +349,8 @@ async function pairCasa() {
   pendingPair = { id: request.pair_id, secret: request.pair_secret, expiresAt };
   pairing = { state: "WAITING_OWNER_CONSENT", code: request.code,
     expiresAt: request.expires_at, deviceId: null, error: null };
-  const url = new URL(MCP_BASE + "/authorize");
-  url.searchParams.set("client_id", DEVICE_CLIENT_ID);
-  url.searchParams.set("pair_id", request.pair_id);
   try {
-    await shell.openExternal(url.toString());
+    await openPairConsent("code");
   } catch (error) {
     stopPairingPoll();
     pairing = { ...pairing, state: "BROWSER_OPEN_FAILED", error: "BROWSER_OPEN_FAILED" };
@@ -361,6 +369,7 @@ ipcMain.handle("bridge:status", async () => ({
 }));
 
 ipcMain.handle("bridge:pair", async () => pairCasa());
+ipcMain.handle("bridge:open-consent", async (_event, method) => openPairConsent(method));
 
 ipcMain.handle("bridge:start", async () => {
   const script = bridgeResourcePath("CentralDark-Remote-Bridge.ps1");
