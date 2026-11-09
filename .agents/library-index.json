@@ -261,6 +261,20 @@
       "version": "1.0.0"
     },
     {
+      "id": "centraldark-builder-destop",
+      "path": ".agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md",
+      "type": "operational_recipe",
+      "category": "desktop_build",
+      "owner": "centraldark-operational-method",
+      "frequency_required": "media",
+      "dependencies": [
+        "centraldark-operational-method",
+        "centraldark-hermes-visual-computer-use"
+      ],
+      "critical": false,
+      "version": "0.1.0"
+    },
+    {
       "id": "centraldark-operational-method",
       "path": ".agents/skills/centraldark-operational-method/SKILL.md",
       "open_intents": [

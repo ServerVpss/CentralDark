@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# CENTRALDARK_CLI_LAUNCHER
+# Owner: .agents/skills/centraldark-operational-method/SKILL.md
+# CentralDark is the method/identity layer; Hermes remains the execution engine.
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+export CENTRALDARK_ROOT="${CENTRALDARK_ROOT:-$repo_root}"
+export HERMES_HOME="${HERMES_HOME:-/data}"
+
+if command -v hermes >/dev/null 2>&1; then
+  hermes_bin="$(command -v hermes)"
+elif [[ -x /opt/hermes/bin/hermes ]]; then
+  hermes_bin="/opt/hermes/bin/hermes"
+else
+  printf '%s\n' "BLOCKED: Hermes executable not found" >&2
+  exit 127
+fi
+
+exec "$hermes_bin" "$@"
