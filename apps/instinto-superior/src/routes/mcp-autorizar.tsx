@@ -20,8 +20,13 @@ function AutorizarMcpNoCockpit() {
   const [params, alterar] = useState<URLSearchParams | null>(null);
   const [pairCode, alterarPairCode] = useState("");
   const [senha, alterarSenha] = useState("");
+  const [metodo, alterarMetodo] = useState<"code" | "password">("code");
 
-  useEffect(() => { alterar(new URLSearchParams(window.location.search)); }, []);
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    alterar(query);
+    alterarMetodo(query.get("auth_method") === "password" ? "password" : "code");
+  }, []);
   const falha = params?.get("error");
   const sucesso = params?.get("success") === "1";
   const deviceClient = params?.get("client_id");
@@ -56,11 +61,19 @@ function AutorizarMcpNoCockpit() {
               </p>
             ) : null}
             <form method="post" action="https://mcp.centralldark.com/authorize" className="mt-6 space-y-4">
+              {dispositivo ? <input type="hidden" name="auth_method" value={metodo} /> : null}
               {CAMPOS.map((campo) => (
                 <input key={campo} type="hidden" name={campo} value={params.get(campo) || ""} />
               ))}
               {dispositivo ? (
-                params.get("pair_code") ? (
+                <>
+                  <div className="flex flex-wrap gap-2" role="group" aria-label="Modo de autorização">
+                    <Button type="button" variant={metodo === "code" ? "default" : "outline"}
+                      onClick={() => alterarMetodo("code")}>Confirmar com código</Button>
+                    <Button type="button" variant={metodo === "password" ? "default" : "outline"}
+                      onClick={() => alterarMetodo("password")}>Usar senha do MCP</Button>
+                  </div>
+                  {params.get("pair_code") ? (
                   <div className="rounded-lg border border-border bg-background p-4" role="group" aria-label="Confirmação de pareamento">
                     <p className="text-sm">Compare com o código mostrado no {deviceLabel}:</p>
                     <output className="mt-2 block font-mono text-2xl font-bold tracking-wider" aria-label="Código de pareamento">{params.get("pair_code")}</output>
@@ -74,7 +87,19 @@ function AutorizarMcpNoCockpit() {
                     onChange={(e) => alterarPairCode(e.target.value.toUpperCase())}
                     className="mt-2 w-full rounded-lg border border-border bg-background p-3 font-mono" />
                 </label>
-                )
+                  )}
+                  {metodo === "code" ? (
+                    <p className="text-xs text-muted-foreground">Confirme usando a sessão administrativa já autenticada. Sem sessão, escolha Usar senha do MCP.</p>
+                  ) : (
+                    <label className="block text-sm">
+                      Senha administrativa do MCP
+                      <input type="password" required autoComplete="current-password" name="password"
+                        value={senha} onChange={(e) => alterarSenha(e.target.value)}
+                        className="mt-2 w-full rounded-lg border border-border bg-background p-3" />
+                      <span className="mt-2 block text-xs text-muted-foreground">A senha é enviada somente por POST ao MCP; o código e o nonce continuam obrigatórios.</span>
+                    </label>
+                  )}
+                </>
               ) : (
                 <label className="block text-sm">
                   Autenticação do proprietário
