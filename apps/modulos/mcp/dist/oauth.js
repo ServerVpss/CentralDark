@@ -6,6 +6,7 @@ import { isAdmin } from "./admin.js";
 // Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
 // Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
+export const REMOTE_BRIDGE_DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 let devicePairingStore = null;
 export function configureDevicePairingForOAuth(store) {
     if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
@@ -257,17 +258,19 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
-        // Cliente VS Code usa o MESMO /authorize, sem callback paralelo.
-        if (param(req, "client_id") === VSCODE_DEVICE_CLIENT_ID) {
+        // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
+        const deviceClientId = param(req, "client_id");
+        if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
             if (!devicePairingStore)
                 return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
             const pairId = param(req, "pair_id");
             const pair = devicePairingStore.pendingConsent(pairId);
-            if (!pair || pair.executor !== "vscode" || pair.approved)
+            const expectedExecutor = deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "vscode" : "remote-bridge";
+            if (!pair || pair.executor !== expectedExecutor || pair.approved)
                 return oauthError(res, 404, "invalid_request", "Pareamento expirado ou já concluído.");
             const details = {
-                client_id: VSCODE_DEVICE_CLIENT_ID,
-                client_name: "CentralDark · Vibe Coding",
+                client_id: deviceClientId,
+                client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
                 isAdmin: isAdmin(req),
                 device: { pairId: pair.pairId, code: pair.code, nonce: pair.nonce }
