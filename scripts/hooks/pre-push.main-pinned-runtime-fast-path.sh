@@ -36,6 +36,15 @@ for f in "$MD" "$JSON" "$YML" "$SKILL" "$LIVE_MD" "$LIVE_JSON" "$LIVE_YML" "$LIV
   [ -f "$f" ] || { echo "BLOCKED: superfície canônica ausente: $f" >&2; exit 1; }
 done
 
+if ! python3 -m json.tool "$JSON" >/dev/null 2>&1; then
+  if python -m json.tool "$JSON" >/dev/null 2>&1; then
+    python3() { python "$@"; }
+    export -f python3
+  else
+    echo "BLOCKED: Python JSON validation unavailable for pinned runtime contract." >&2
+    exit 1
+  fi
+fi
 python3 -m json.tool "$JSON" >/dev/null
 python3 -m json.tool "$LIVE_JSON" >/dev/null
 

@@ -15,7 +15,7 @@ import {
 
 const catalog = {
   schema_version: 1,
-  owner: 'docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md',
+  owner: 'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md',
   sources: [
     {
       source_id: 'fonte-teste-salmos',

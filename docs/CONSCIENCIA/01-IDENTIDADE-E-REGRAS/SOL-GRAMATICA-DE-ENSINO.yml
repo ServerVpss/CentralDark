@@ -63,6 +63,34 @@ laws:
   BEST_POTENTIAL_SHOULD_BE_SURFACED: true
   BLOCKER_TO_POTENTIAL_MUST_BE_VISIBLE: true
 
+interpretacao_semantica_de_texto_e_fala:
+  status: CANONICAL_DOCUMENTED
+  date: "2026-11-05"
+  classifier_owner: .claude/skills/synced/voice-semantic-classifier/SKILL.md
+  applies_to: [TEXT, VOICE, ASR, TTS, CHAT, CLI, MCP, TELEGRAM, IDE]
+  principle: "Primeiro a intenção comunicativa; pontuação e caixa alta são pistas, nunca autorização isolada."
+  signals:
+    question_mark: "Pergunta usual, mas pergunta também pode existir sem '?'."
+    exclamation_mark: "Ênfase ou emoção; não converte afirmação em dúvida ou ordem."
+    period: "Ponto final neutro; contexto e conteúdo prevalecem."
+    missing_punctuation: "Verbo, tempo verbal e contexto; entonação somente se capturada."
+  rules:
+    PAST_TENSE_REPORT_IS_NOT_IMPERATIVE: true
+    EXCLAMATION_IS_NOT_COMMAND: true
+    ALL_CAPS_IS_NOT_QUESTION: true
+    USER_REPORTED_NE_RUNTIME_VERIFIED: true
+    ASR_PUNCTUATION_MAY_BE_UNRELIABLE: true
+    TTS_PROSODY_DEPENDS_ON_ENGINE_SUPPORT: true
+    TEXT_INTERPRETATION_BEFORE_TOOL_SELECTION: true
+  examples:
+    - {input: "SALVEI AQUI.", intent: REPORT, action: ACKNOWLEDGE}
+    - {input: "SALVEI AQUI!", intent: EMPHATIC_REPORT, action: ACKNOWLEDGE}
+    - {input: "SALVEI AQUI", intent: REPORT, action: ACKNOWLEDGE}
+    - {input: "SALVOU AQUI?", intent: QUESTION, action: ANSWER_WITH_EVIDENCE}
+    - {input: "SALVE AQUI!", intent: INSTRUCTION, action: CHECK_AUTHORIZATION}
+    - {input: "PROSIGA", intent: INSTRUCTION, action: CONTINUE_AUTHORIZED_SCOPE}
+  evidence_limit: "Documentação não prova integração ativa no Hermes, ASR ou TTS."
+
 papagaio_deterministico:
   status: CANONICAL
   existing_law_owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/LEI-PAPAGAIO-INVESTIGADOR.md

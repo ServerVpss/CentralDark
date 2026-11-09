@@ -97,7 +97,7 @@ const rtssInput = z.object({
 });
 
 let rtssHostTemporarioPid: number | null = null;
-const rtssScript = process.env["CENTRALDARK_RTSS_OVERLAY_SCRIPT"] ?? "K:\\scripts\\casa\\CentralDark-RtssOverlay.ps1";
+const rtssScript = process.env["CENTRALDARK_RTSS_OVERLAY_SCRIPT"] ?? (process.env["CENTRALDARK_ROOT"] ? process.env["CENTRALDARK_ROOT"] + "/scripts/casa/CentralDark-RtssOverlay.ps1" : "scripts/casa/CentralDark-RtssOverlay.ps1");
 
 function rtssIndisponivel(state: string): RtssOverlayCasa {
   return { ok: false, state, measuredAt: new Date().toISOString(), running: false, pid: null, visible: false, rect: null, displays: [], aliases: {} };

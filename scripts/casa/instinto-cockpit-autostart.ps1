@@ -1,10 +1,11 @@
 # CentralDark Instinto Superior: idempotent Windows boot launcher.
 # Owner: apps/instinto-superior; fixed TCP 8080. No process termination.
 $ErrorActionPreference = 'Stop'
-$root = 'K:\apps\instinto-superior'
-$node = 'C:\Program Files\nodejs\node.exe'
+$scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$root = if ($env:CENTRALDARK_ROOT) { $env:CENTRALDARK_ROOT } else { (Resolve-Path (Join-Path $scriptRoot '..\..')).Path }
+$node = if (Test-Path 'C:\Program Files\nodejs\node.exe') { 'C:\Program Files\nodejs\node.exe' } else { (Get-Command node -ErrorAction SilentlyContinue).Source }
 $vite = Join-Path $root 'node_modules\vite\bin\vite.js'
-$logDir = 'F:\temp'
+$logDir = if ($env:TEMP) { $env:TEMP } else { Join-Path $root 'logs' }
 $port = 8080
 if (-not (Test-Path -LiteralPath $root -PathType Container) -or
     -not (Test-Path -LiteralPath $vite -PathType Leaf) -or

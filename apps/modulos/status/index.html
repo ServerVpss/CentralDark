@@ -14,33 +14,6 @@
         <div>
           <p class="eyebrow">CentralDark Intelligence</p>
           <h1>
-            <span class="foguete-wrap" aria-hidden="true">
-              <span class="foguete">
-                <svg viewBox="0 0 64 64" width="72" height="72" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Chamas (camadas: brilho externo, laranja, amarelo, núcleo branco) -->
-                  <g class="foguete-chamas">
-                    <path class="chama-glow" d="M22 50 Q32 78 42 50 Q37 64 32 64 Q27 64 22 50Z" fill="#ff4500" opacity=".55"/>
-                    <path class="chama-out"  d="M25 50 Q32 72 39 50 Q35 60 32 60 Q29 60 25 50Z" fill="#ff7a18"/>
-                    <path class="chama-mid"  d="M27 50 Q32 66 37 50 Q34 56 32 56 Q30 56 27 50Z" fill="#ffd23f"/>
-                    <path class="chama-core" d="M29 50 Q32 60 35 50 Q33 54 32 54 Q31 54 29 50Z" fill="#ffffff"/>
-                  </g>
-                  <!-- Aletas azuis -->
-                  <path d="M18 38 Q12 44 14 52 L24 46 Z" fill="#1f7ad1"/>
-                  <path d="M46 38 Q52 44 50 52 L40 46 Z" fill="#1f7ad1"/>
-                  <!-- Corpo -->
-                  <path d="M32 4 Q44 16 44 36 L44 48 Q38 52 32 52 Q26 52 20 48 L20 36 Q20 16 32 4 Z" fill="#e6e9ef"/>
-                  <!-- Ponta vermelha -->
-                  <path d="M32 4 Q40 14 43 26 Q38 22 32 22 Q26 22 21 26 Q24 14 32 4 Z" fill="#e63946"/>
-                  <!-- Faixa cinza -->
-                  <rect x="20" y="44" width="24" height="4" fill="#2b2d33"/>
-                  <!-- Janela -->
-                  <circle cx="32" cy="32" r="6.5" fill="#e63946"/>
-                  <circle cx="32" cy="32" r="5" fill="#3ab7e0"/>
-                  <circle cx="30" cy="30" r="1.6" fill="#ffffff" opacity=".85"/>
-                </svg>
-              </span>
-              <span class="foguete-sombra"></span>
-            </span>
             Mega Painel do Projeto
           </h1>
           <p class="subtitle" id="projectSummary">Carregando visão geral...</p>
@@ -267,7 +240,85 @@
         <div class="section-title">
           <div><p class="eyebrow">Time de bots</p><h2>🤖 Bots especialistas</h2></div>
         </div>
-        <div class="card-grid" id="botCardsList"></div>
+        <!-- Prévia somente visual: registros reais do histórico de agosto/2026.
+             Não representa saúde atual, não executa bots, não substitui o feed vivo. -->
+        <div style="margin:10px 0 16px;padding:12px 14px;border:1px solid #c9973b;border-radius:12px;background:rgba(201,151,59,.08)">
+          <strong style="display:block;margin-bottom:4px">📜 Como este setor aparecia · agosto/2026</strong>
+          <small>5 cartões do commit 9fce580e8b0d · status e progresso históricos, inclusive erros.
+          Nenhum estado abaixo comprova funcionamento atual.</small>
+        </div>
+        <div class="card-grid" id="botCardsHistoricalPreview" aria-label="Prévia histórica dos cinco bots">
+          <article class="av-card" data-historico-bot="bot-telegram">
+            <div class="av-head"><h3>CentralDark TelegramBot</h3><span class="av-badge p3">p3</span></div>
+            <p>@srver1bot online · polling · script restaurado do git + bootstrap Multizap removido (28/06)</p>
+            <div class="bar"><i style="width:98%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Telegram</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">98%</span>
+              <span class="av-badge">PM2: CentralDark-TelegramBot</span>
+            </div>
+            <p class="av-next">▶ Monitorar uptime via PM2</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-botserver">
+            <div class="av-head"><h3>CentralDark BotServer</h3><span class="av-badge p3">p3</span></div>
+            <p>Servidor de bot online. Lote 11 pendente (Issue #128).</p>
+            <div class="bar"><i style="width:90%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">API</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">90%</span>
+              <span class="av-badge">PM2: CentralDark-BotServer</span>
+            </div>
+            <p class="av-next">▶ Aplicar Lote 11 na VPS (Issue #128)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-multizap">
+            <div class="av-head"><h3>MultiZap-BOT</h3><span class="av-badge p1">p1</span></div>
+            <p>PM2 status: errored. Causa raiz não investigada (baixa prioridade — P4).</p>
+            <div class="bar"><i style="width:0%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-erro">erro</span>
+              <span class="av-badge">WhatsApp</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">0%</span>
+              <span class="av-badge">PM2: MultiZap-BOT</span>
+            </div>
+            <p class="av-next">▶ Investigar causa raiz — aguardar pedido do Pivete (P4)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-deploy">
+            <div class="av-head"><h3>DEPLOY Webhook</h3><span class="av-badge p3">p3</span></div>
+            <p>Recebe push do GitHub via webhook e puxa código novo automaticamente.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">CI/CD</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: CentralDark-DEPLOY</span>
+            </div>
+            <p class="av-next">▶ Monitorar deploys</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-vigia">
+            <div class="av-head"><h3>Vigia (monitor_tarefas)</h3><span class="av-badge p3">p3</span></div>
+            <p>Monitora serviços e notifica canal Telegram em caso de alerta.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Monitoramento</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: monitor_tarefas</span>
+            </div>
+            <p class="av-next">▶ Monitorar alertas</p>
+          </article>
+        </div>
+        <details style="margin-top:16px">
+          <summary style="cursor:pointer;font-weight:600">🔎 Dados vivos deste setor (se disponíveis)</summary>
+          <p style="font-size:12px;opacity:.75;margin:8px 0">Esta lista continua recebendo painel-data.json; quando não houver botCards, a ausência permanece visível.</p>
+          <div class="card-grid" id="botCardsList"></div>
+        </details>
       </section>
 
       <section class="panel wide" id="healthcheckPanel">

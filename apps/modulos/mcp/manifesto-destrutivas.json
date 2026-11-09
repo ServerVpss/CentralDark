@@ -45,9 +45,9 @@
   "revisadoPor": "Chefe/SEGREDO via missao ADMIN_PROVIDER_CONTROL_PLANE_20260815",
   "geradoPor": "scripts/gerar-manifesto-destrutivas.mjs",
   "resumo": {
-    "descobertasNoCodigo": 20,
+    "descobertasNoCodigo": 21,
     "aprovadas": 12,
-    "emEngenhariaDeCompensacao": 8,
+    "emEngenhariaDeCompensacao": 9,
     "aprovadasNestaRodada": 0
   },
   "destrutivasAprovadas": [
@@ -408,6 +408,34 @@
       "responsavel": "SOL/ChatGPT — implementação; Chefe/SEGREDO — aprovação final",
       "ultimoTeste": "2026-09-25: MAIN-PINNED manual provado em MCP com same SHA, fileset causal, restart isolado e health 200; handler novo ainda não replayado.",
       "proximoExperimento": "Após deploy MCP, dry-run do fileset; execução real em owner MCP; depois teste de rollback controlado e repetição da compensação."
+    },
+    {
+      "nome": "centraldark_casa_tool_call",
+      "grupo": "casa-private",
+      "arquivo": "src/tools/casa/casa-private.js",
+      "anunciadaEmToolsJson": true,
+      "provider": "CentralDark Casa / Tailscale",
+      "estado": "EM_ENGENHARIA_DE_COMPENSACAO",
+      "efeitoAtual": "QUARENTENA — não autorizar execução mutante até os 9 gates e receipt remoto da Casa.",
+      "porQueNaoPassa": "Sem replay da Casa e compensação de todas as ferramentas mutantes (write/process/kill), aprovação geral seria falso-verde.",
+      "compensacaoAConstruir": "Compensação tipada por nome de ferramenta, com state-before, rollback no host Casa, receipt e readback por fingerprint.",
+      "comoDescobrir": "Selecionar uma única ação reversível na Casa e testar negativo, execução, readback e rollback via OAuth/Tailscale.",
+      "faltaNoHandler": "read-before-write por capacidade, receipt tipado persistente com estado anterior e compensação verificada.",
+      "gateFinal": {
+        "AUTHORIZATION_PROVED": false,
+        "STATE_BEFORE_CAPTURED": false,
+        "ACTION_PROVED": false,
+        "RECEIPT_PERSISTED": false,
+        "COMPENSATION_EXECUTED": false,
+        "ORIGINAL_STATE_RESTORED": false,
+        "DOUBLE_COMPENSATION_SAFE": false,
+        "NEGATIVE_TESTS_PASS": false,
+        "NO_SECRET_LEAK": false
+      },
+      "avaliadaEm": "2026-10-24",
+      "responsavel": "CentralDark Casa; CHEFE — julgamento final",
+      "ultimoTeste": "2026-10-24: implementação de fonte e testes negativos adicionados à PR #1945; runtime Windows ainda não medido.",
+      "proximoExperimento": "Instalar na Casa autorizada, validar status e list_directory primeiro; depois prova de mutação reversível com compensação."
     }
   ],
   "politicaCatalogo": {

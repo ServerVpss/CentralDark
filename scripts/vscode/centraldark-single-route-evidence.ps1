@@ -2,7 +2,7 @@
 # Casa Windows -> VS Code -> Hermes -> Desktop Commander -> GitHub.
 # Does not start, stop, alter, merge or deploy anything.
 [CmdletBinding()]
-param([string]$Repo = 'K:\_worktrees\bolt-desktop')
+param([string]$Repo = (if ($env:CENTRALDARK_REPO) { $env:CENTRALDARK_REPO } else { (Get-Location).Path }))
 $ErrorActionPreference = 'Stop'
 function Emit([string]$Name, [string]$State, [string]$Evidence) {
   [pscustomobject]@{ check=$Name; state=$State; evidence=$Evidence }

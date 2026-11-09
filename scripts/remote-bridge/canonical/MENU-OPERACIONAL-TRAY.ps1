@@ -1,183 +1,98 @@
-﻿param(
-    [string]$RuntimeRoot = "$env:LOCALAPPDATA\CentralDark\Remote-Tray"
-)
+# Menu de manutencao do mesmo Corpo Unico. Nenhum segundo Tray ou executor.
+param([string]$RuntimeRoot = "$env:LOCALAPPDATA\CentralDark\Remote-Tray")
 
-$ErrorActionPreference = "Stop"
-$LoginUrl = "https://mcp.desktopcommander.app/device/verify"
-$Receipt = Join-Path $RuntimeRoot "receipts\latest.json"
-$Canonical = Join-Path $PSScriptRoot "REMOTE-TRAY-STATUS-CANONICO.md"
-$CentralDarkOAuth = Join-Path $PSScriptRoot "CENTRALDARK-OAUTH-TRAY.ps1"
+$ErrorActionPreference = 'Continue'
+$Root = Split-Path -Parent $PSScriptRoot
+$Bridge = Join-Path $Root 'CentralDark-Remote-Bridge.ps1'
+$OAuth = Join-Path $PSScriptRoot 'CENTRALDARK-OAUTH-TRAY.ps1'
+$Harness = Join-Path $PSScriptRoot 'harness\RUN-TESTS.ps1'
+$Contract = Join-Path $PSScriptRoot 'REMOTE-TRAY-STATUS-CANONICO.md'
 
-function Header {
-    Clear-Host
-    Write-Host "╔══════════════════════════════════════════════╗"
-    Write-Host "║ CENTRALDARK REMOTE TRAY · MENU OPERACIONAL  ║"
-    Write-Host "╚══════════════════════════════════════════════╝"
-    Write-Host ""
-    Write-Host "Runtime: $RuntimeRoot"
-    Write-Host ""
-}
-
-function Confirm-Critical([string]$Message) {
-    Write-Host ""
-    $c = Read-Host "[!] $Message - digite ! para confirmar"
-    return ($c -eq "!")
-}
-
-function Latest-Log {
-    $dirs = @(
-        (Join-Path $RuntimeRoot "logs"),
-        (Join-Path $RuntimeRoot "receipts"),
-        $RuntimeRoot
-    ) | Where-Object { Test-Path $_ }
-
-    $logs = foreach ($d in $dirs) {
-        Get-ChildItem -LiteralPath $d -File -ErrorAction SilentlyContinue |
-            Where-Object { $_.Extension -in ".log",".txt" }
-    }
-
-    return $logs | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-}
-
-function Show-State {
-    Header
-    Write-Host "STATUS"
-    Write-Host "------"
-    Write-Host ("Runtime existe : " + (Test-Path $RuntimeRoot))
-    Write-Host ("Receipt existe : " + (Test-Path $Receipt))
-
-    $log = Latest-Log
-    if ($log) {
-        Write-Host ("Log mais novo  : " + $log.FullName)
-        Write-Host ("Atualizado     : " + $log.LastWriteTime)
-    } else {
-        Write-Host "Log mais novo  : UNKNOWN"
-    }
-
-    if (Test-Path $Receipt) {
-        try {
-            $r = Get-Content -Raw -LiteralPath $Receipt | ConvertFrom-Json
-            Write-Host ("Veredito       : " + $r.summary.verdict)
-            Write-Host ("Wrapper        : " + $r.runtime.wrapper_state)
-            Write-Host ("Sensor         : " + $r.runtime.sensor_state)
-            Write-Host ("Online provado : " + $r.runtime.online_proved)
-        } catch {
-            Write-Host "Receipt inválido: QUEBRADO"
-        }
-    }
-
-    Write-Host ""
-    Write-Host "PROCESSO_ATIVO != DEVICE_ONLINE"
-    Write-Host "UNKNOWN != PASS"
-    Read-Host "Enter para voltar" | Out-Null
-}
-
-function Copy-DeviceCode {
-    $log = Latest-Log
-    if (-not $log) {
-        Write-Host "Nenhum log encontrado."
-        return
-    }
-
-    $text = Get-Content -Raw -LiteralPath $log.FullName
-    $m = [regex]::Match($text, '\b[A-Z0-9]{4}-[A-Z0-9]{4}\b')
-    if ($m.Success) {
-        Set-Clipboard $m.Value
-        Write-Host "Código copiado: $($m.Value)"
-    } else {
-        Write-Host "Código não encontrado. Estado: EVIDENCIA_FALTANTE"
-    }
-}
-
-function Invoke-CentralDarkOAuth {
-    if (-not (Test-Path $CentralDarkOAuth)) { Write-Host "OAuth do Tray ausente. QUEBRADO."; return $false }
+function Show-CasaState {
     try {
-        & $CentralDarkOAuth | ForEach-Object { Write-Host $_ }
-        return $true
+        $health = Invoke-RestMethod 'http://127.0.0.1:9101/health' -TimeoutSec 4 -ErrorAction Stop
+        Write-Host ("CASA_COMMANDER_OK=" + [string]$health.ok)
+        Write-Host ("ENGINE_CONNECTED=" + [string]$health.engine_connected)
+        Write-Host ("REMOTE_VENDOR=" + [string]$health.remote_vendor)
+        if ($health.last_authorized_tool) {
+            Write-Host ("LAST_TOOL=" + [string]$health.last_authorized_tool.tool)
+            Write-Host ("LAST_TOOL_VERIFIED=" + [string]$health.last_authorized_tool.verified)
+        }
     } catch {
-        Write-Host ("OAuth CentralDark falhou: " + $_.Exception.Message)
-        return $false
+        Write-Host ("CASA_AGENT_UNAVAILABLE: " + $_.Exception.Message)
     }
 }
-function Reconnect-Remote {
-    if (-not (Confirm-Critical "Reconectar Remote")) { return }
-    $existing = Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
-        Where-Object {
-            $_.CommandLine -match 'desktop-commander' -and
-            $_.CommandLine -match '\bremote\b'
+function Show-LocalReceipts {
+    $statusPath = Join-Path $RuntimeRoot 'context\bridge-human-status.json'
+    if (Test-Path -LiteralPath $statusPath) {
+        Get-Content -Raw -LiteralPath $statusPath
+    } else {
+        Write-Host 'STATUS_FILE_MISSING'
+    }
+    $logDir = Join-Path $RuntimeRoot 'logs'
+    if (Test-Path -LiteralPath $logDir) {
+        $latest = Get-ChildItem -LiteralPath $logDir -File -ErrorAction SilentlyContinue |
+            Where-Object { $_.Extension -in '.log','.txt' } |
+            Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        if ($latest) {
+            Write-Host ("LATEST_LOG=" + $latest.FullName)
         }
-
-    if ($existing) {
-        Write-Host "Remote já possui processo ativo. Sessão preservada; OAuth não foi reaberto."
-        Write-Host "REMOTE_AUTH=PRESERVED"
-        Write-Host "ONE_REMOTE_PROCESS_PER_PROFILE=true"
-        return
     }
-
-    if (-not (Invoke-CentralDarkOAuth)) { return }
-
-    $npx = (Get-Command npx.cmd -ErrorAction SilentlyContinue).Source
-    if (-not $npx) { $npx = (Get-Command npx -ErrorAction SilentlyContinue).Source }
-    if (-not $npx) {
-        Write-Host "npx não encontrado. QUEBRADO."
-        return
-    }
-
-    New-Item -ItemType Directory -Force -Path (Join-Path $RuntimeRoot "logs") | Out-Null
-    $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
-    $logPath = Join-Path $RuntimeRoot "logs\desktop-commander-$stamp.log"
-
-    $cmd = "`"$npx`" --yes @wonderwhy-er/desktop-commander@0.2.48 remote *> `"$logPath`""
-    Start-Process powershell.exe -ArgumentList "-NoProfile","-WindowStyle","Hidden","-Command",$cmd
-    Write-Host "Remote iniciado sob supervisão local."
-    Write-Host "LOG=$logPath"
 }
-
 while ($true) {
-    Header
-    Write-Host "[1] Estado geral"
-    Write-Host "[2] Abrir login Remote"
-    Write-Host "[3] Copiar código Remote"
-    Write-Host "[4] Abrir log atual"
-    Write-Host "[5] Abrir receipt JSON"
-    Write-Host "[6] Reconectar Remote"
-    Write-Host "[7] Rodar testes do pacote"
-    Write-Host "[8] Abrir runtime local"
-    Write-Host "[9] Ver contrato canônico"
-    Write-Host "[A] Autenticar CentralDark OAuth (1x + refresh)"
-    Write-Host "[0] Sair"
-    Write-Host ""
-    $op = Read-Host "Escolha"
-
+    Clear-Host
+    Write-Host 'CENTRALDARK | CORPO UNICO | MENU OPERACIONAL'
+    Write-Host 'Este menu usa os owners existentes; nao inicia Tray paralelo.'
+    Write-Host '[1] Estado do Casa Commander'
+    Write-Host '[2] Autenticar MCP CentralDark (OAuth + refresh)'
+    Write-Host '[3] Estado Tailscale'
+    Write-Host '[4] Iniciar Casa Commander / registrar autostart'
+    Write-Host '[5] Estado e logs locais'
+    Write-Host '[6] Testes historicos do pacote Tray'
+    Write-Host '[7] Diagnostico local-first da bridge'
+    Write-Host '[8] Abrir pasta runtime existente'
+    Write-Host '[9] Abrir contrato do Tray'
+    Write-Host '[0] Sair'
+    $op = Read-Host 'Escolha'
     switch ($op) {
-        "1" { Show-State }
-        "2" { Start-Process $LoginUrl }
-        "3" { Copy-DeviceCode; Read-Host "Enter para voltar" | Out-Null }
-        "4" {
-            $log = Latest-Log
-            if ($log) { Start-Process notepad.exe $log.FullName }
-            else { Write-Host "Nenhum log encontrado."; Start-Sleep 2 }
+        '1' { Show-CasaState }
+        '2' {
+            if (Test-Path -LiteralPath $OAuth) {
+                try { & $OAuth } catch { Write-Host ("OAUTH_FAILED: " + $_.Exception.Message) }
+            } else { Write-Host 'CENTRALDARK_OAUTH_SCRIPT_MISSING' }
         }
-        "5" {
-            if (Test-Path $Receipt) { Start-Process notepad.exe $Receipt }
-            else { Write-Host "Receipt ainda não existe."; Start-Sleep 2 }
+        '3' {
+            $tailscale = Get-Command tailscale -ErrorAction SilentlyContinue
+            if ($tailscale) { & $tailscale.Source status }
+            else { Write-Host 'TAILSCALE_NOT_FOUND' }
         }
-        "6" { Reconnect-Remote; Read-Host "Enter para voltar" | Out-Null }
-        "7" {
-            $test = Join-Path $PSScriptRoot "harness\RUN-TESTS.ps1"
-            if (Test-Path $test) { & $test }
-            else { Write-Host "Harness não veio neste pacote de contrato." }
-            Read-Host "Enter para voltar" | Out-Null
+        '4' {
+            if (Test-Path -LiteralPath $Bridge) {
+                try { & $Bridge -InstallAutoStart } catch { Write-Host ("BRIDGE_START_FAILED: " + $_.Exception.Message) }
+            } else { Write-Host 'CENTRALDARK_BRIDGE_MISSING' }
         }
-        "8" {
-            New-Item -ItemType Directory -Force -Path $RuntimeRoot | Out-Null
-            Start-Process explorer.exe $RuntimeRoot
+        '5' { Show-LocalReceipts }
+        '6' {
+            if (Test-Path -LiteralPath $Harness) {
+                Write-Host 'HISTORICAL_TESTS_ONLY_NOT_CASA_E2E'
+                try { & $Harness } catch { Write-Host ("HARNESS_FAILED: " + $_.Exception.Message) }
+            } else { Write-Host 'HARNESS_MISSING' }
         }
-        "9" {
-            if (Test-Path $Canonical) { Start-Process notepad.exe $Canonical }
+        '7' {
+            if (Test-Path -LiteralPath $Bridge) {
+                try { & $Bridge -LocalStatus -Json } catch { Write-Host ("LOCAL_STATUS_FAILED: " + $_.Exception.Message) }
+            } else { Write-Host 'CENTRALDARK_BRIDGE_MISSING' }
         }
-        { $_ -in "A","a" } { Invoke-CentralDarkOAuth; Read-Host "Enter para voltar" | Out-Null }
-        "0" { break }
-        default { Write-Host "Opção inválida."; Start-Sleep 1 }
+        '8' {
+            if (Test-Path -LiteralPath $RuntimeRoot) { Start-Process explorer.exe $RuntimeRoot }
+            else { Write-Host 'RUNTIME_NOT_INSTALLED' }
+        }
+        '9' {
+            if (Test-Path -LiteralPath $Contract) { Start-Process notepad.exe $Contract }
+            else { Write-Host 'CANONICAL_CONTRACT_MISSING' }
+        }
+        '0' { return }
+        default { Write-Host 'OPCAO_INVALIDA' }
     }
+    Read-Host 'Enter para continuar' | Out-Null
 }

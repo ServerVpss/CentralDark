@@ -80,7 +80,7 @@ Para cada nova descoberta, **acrescentar D00N** com `SOURCE_SHA`, owner, delta, 
 
 - **SOURCE_MAIN_SHA na medição:** `3e800e7dd9440ba4ee2dc9455aeaa1e57295dcdc`.
 - **Intenção:** mapear a “outra porta” e a bancada VS Code sem disputar o writer que trabalha no Auto Sync.
-- **Instinto Superior vivo na Casa:** processo `node.exe` foi observado executando `apps/instinto-superior/.../vite.js dev --host 127.0.0.1 --port 3000 --strictPort`; `tailscaled.exe` apresentou listeners no mesmo `:3000` na interface tailnet. Isto reconfirma a rota já cristalizada em `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md`; não nasce nova receita.
+- **Instinto Superior vivo na Casa:** processo `node.exe` foi observado executando `apps/instinto-superior/.../vite.js dev --host 127.0.0.1 --port 3000 --strictPort`; `tailscaled.exe` apresentou listeners no mesmo `:3000` na interface tailnet. Isto reconfirma a rota já cristalizada em `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/03-APRENDIZADOS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md`; não nasce nova receita.
 - **VS Code vivo:** janela `Code.exe` observada com título apontando para `code-server (...preview.emergentagent.com)`. A árvore do mesmo processo contém terminais integrados e ferramentas multiagente.
 - **Hermes:** terminal integrado observado com `hermes.cmd acp` e outro com `hermes.cmd chat`. Processo observado ≠ GOAL entregue; ACK tipado continua necessário.
 - **Claude Code:** processo CLI observado como filho de terminal PowerShell do VS Code; a árvore contém MCPs e uma sessão SSH para a VPS. Isso prova presença/sessão ativa, não prova que o MCP CentralDark consegue anexar-se à sessão arbitrária.
