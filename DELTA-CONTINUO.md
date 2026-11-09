@@ -18,6 +18,97 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
+<!-- CENTRALDARK_SYNC_RECONCILIATION_CURRENT_20261109 -->
+## 🧭 DELTA CONTÍNUO — inventário concluído; reconciliação preservativa pendente (2026-11-09)
+
+**Status:** `INVENTORY_COMPLETE_FOR_GIT_STATUS_SCOPE / CHECKOUT_UNSYNCED / PRESERVATION_REQUIRED`
+
+**FIO DA MISSÃO:** preservar a Casa e reconciliar sem perda o checkout local com origin/main. O cursor anterior foi concluído: os 17.721 caminhos não rastreados foram inventariados, a origem da divergência foi identificada e as colisões foram medidas.
+
+**PRÓXIMO PASSO:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
+
+**PONTO DE CONTINUIDADE:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
+`NEXT_CURSOR=REVIEW_31_DIFFERENT_CONTENT_PATHS_AND_28_STATUS_DELETIONS_NO_LOSS`
+
+### CURRENT medido na Casa — 2026-11-09T02:21:25-03:00
+
+| Campo | Valor |
+|---|---|
+| Repositório | `F:\CentralDark` |
+| Branch / HEAD local | `main` / `b71963ffaacbca2847364517487bb232f611acdb` |
+| origin/main / live ls-remote | `4d97ddadda74aaed3ebd17056170718a86a5ec7e` / MATCH |
+| Base comum | `4d2af54c746c827e01c47778a4ce9f4165c39eee` |
+| Commits exclusivos | `1 local / 67 remoto` |
+| Status total | `17.837 entradas` |
+| Não rastreados | `17.721: 17.687 arquivos + 34 diretórios` |
+| Rastreados alterados | `116: 88 presentes + 28 deletados` |
+| Hashing | `17.775 arquivos; 5.542.586.713 bytes; 0 erros; 0 instáveis; 0 reparse points` |
+| Estabilidade | `HEAD, origin/main e contagem git status iguais antes/depois` |
+
+### Origem da divergência
+
+O único commit local exclusivo é `b71963ffaacbca2847364517487bb232f611acdb` (`fix(remote-bridge): restore canonical Windows build`). Seus três caminhos:
+1. `scripts/remote-bridge/Build-Remote-Bridge.ps1` — bytes iguais ao main remoto.
+2. `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1` — bytes iguais ao main remoto.
+3. `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md` — versão local diferente da versão remota; também há uma terceira versão modificada no worktree. A simulação de três vias marcou este caminho como changed in both.
+
+### Resultado das comparações
+
+- 16 colisões de caminhos não rastreados com arquivos do main: 14 SAME_BYTES e 2 DIFFERENT_BYTES.
+- 35 caminhos rastreados modificados também no remoto: 4 SAME_BYTES, 29 DIFFERENT_BYTES e 2 NOT_BYTE_COMPARABLE (ausentes no worktree).
+- Total: 49 comparações byte a byte, 18 iguais e 31 diferentes; mais 2 exclusões locais não comparáveis.
+- 28 exclusões locais em `apps/modulos/status/`: 26 blobs iguais entre HEAD e origin/main; 2 versões remotas atualizadas (`index.html` e `styles.css`).
+
+**Duas colisões não rastreadas diferentes:**
+- `.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md`
+- `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md`
+
+**Distribuição NUL-safe:** a lista separada por status está no recibo JSON. Não usar agrupamentos antigos feitos sobre saída PowerShell escapada.
+
+### Recibo de inventário
+
+**Escopo:** `GIT_STATUS_CHANGED_PATHS_ONLY`. Isto inventaria os caminhos alterados que o Git informa; não é declarado como varredura integral de todos os arquivos do filesystem, arquivos ignorados ou árvores geradas.
+
+- Run: `centraldark-sync-20261109T022125`
+- Manifesto JSONL (17.837 linhas): `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.jsonl`
+- Manifesto SHA-256: `b81a44499f0bcdd9072b37c36e2701de12e4d211dfebd9dc20b26ec2e7d75566`
+- Banco SQLite: `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.sqlite3`
+- Recibo JSON corrigido: `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.receipt.json`
+- Integridade SQLite: `ok`
+- Hashes instáveis: `0`
+- Erros de leitura/hash: `0`
+- Readback de CURRENT: `PASS`
+
+### Padrão oficial SOL aplicado ao mesmo fio
+
+- Resultado primeiro, PT-BR direto, sem repetição desnecessária; até quatro linhas por padrão.
+- Diferenciar conversa, pergunta, correção, ensino e ordem.
+- Em gatilhos explícitos, recuperar protocolo, intenção vigente, CURRENT, owner, checkpoint, receipt e `NEXT_CURSOR`; reconhecer o gatilho não prova que o executor esteja disponível.
+- Ciclo: intenção → contexto → CURRENT → owner/writer/escopo → reutilizar → menor delta → executar → observar/testar → contraprova → readback → receipt → `FIXED_POINT` ou continuidade.
+- Manter separados FIO DA MISSÃO, PRÓXIMO PASSO e PONTO DE CONTINUIDADE. A nova mensagem é delta da mesma missão, não reinício.
+- `ONE_SYSTEM_ONLY=true`, `ONE_WRITER_PER_SCOPE=true`, `REUSE_BEFORE_CREATE=true`, `CURRENT_OVER_HISTORY=true`, `UNKNOWN != PASS`, `ACTION != PROOF`, `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `REALITY = JUDGE`.
+- Fechamento documental usa: Feito, Evidência, Pendência, Próximo passo, Qual BOOT usar, Fio da missão e Ponto de continuidade.
+
+### Preservação e gates
+
+`NO_MERGE=true`
+`NO_REBASE=true`
+`NO_RESET=true`
+`NO_STASH=true`
+`NO_CLEAN=true`
+`NO_FORCE_PUSH=true`
+`LOCAL_CHECKOUT_MUTATED_BY_THIS_DELTA=false`
+`INVENTORY_COMPLETE_FOR_GIT_STATUS_SCOPE=true`
+`FIXED_POINT=false`
+`PR_DRAFT=#1998`
+`PR_BRANCH=docs/continuous-handoff-sync-20261109`
+
+Nenhuma cópia foi removida, restaurada ou sobrescrita. A reconciliação exige resolução por owner dos 31 conteúdos diferentes, decisão explícita para as 28 exclusões e readback no mesmo SHA.
+
+<!-- /CENTRALDARK_SYNC_RECONCILIATION_CURRENT_20261109 -->
+
+
+
 
 > **Owner canônico:** SEGREDO/CHEFE
 > **Status:** ATIVO

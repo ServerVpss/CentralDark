@@ -88,3 +88,18 @@ Usar o mesmo owner e o mesmo `blink_cursor.py`; nao criar input, overlay, plugin
 O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo `GetWindowRect`, monitor e device WGC antes de invocar **somente Cua virtual** (`scope=window`, `delivery_mode=background`) e o overlay existente. `--monitor N` opcional no modo dinamico precisa coincidir com o monitor medido; o modo explicito anterior continua disponivel. Janela/controle ausente, ambiguo, desabilitado, fora da tela ou mudanca de monitor: bloquear sem clique, redescobrir somente sob nova intencao. CLI nao faz `SetCursorPos`, `mouse_event` nem `scope=desktop`. Depois do input: prova de efeito UI independente; chamada Cua bem-sucedida nao significa navegacao concluida.
 
 **Prova local 06/11:** o resolvedor UIA somente leitura identificou o botao `Novo bate-papo` da janela Hermes no monitor humano 4, retornando PID/HWND e coordenadas atuais, `input_dispatched=false`; PowerShell AST=PASS e Python `py_compile`=PASS. Clique real dessa rota dinamica nao foi realizado, portanto permanece **UNKNOWN**. Hardware diferente das quatro telas mapeadas na Casa exige novo binding, nao inferencia.
+
+
+## Foco visual continuo no mesmo contrato operacional (08/11/2026)
+
+**Intencao:** durante uma operacao visual ativa no VS Code, manter no mesmo monitor o cursor virtual Cua e a moldura do owner Hermes Visual. Nao desenhar outro overlay, nao abrir driver, nao alterar o mouse fisico, nao capturar imagens sem autorizacao.
+
+**Implementacao unica:** `scripts/blink_cursor.py --mode working --monitor 1 --duration 60` (1 a 120 segundos). O helper continua dono da propria sessao; abre `show_overlay` uma vez, chama `renew_overlay` do `native/Program.cs` **na mesma instancia**, com `visualState=working`, e renova a lease periodicamente enquanto o comando estiver ativo. Os modos anteriores `blink`, `position` e `click` permanecem. Somente um monitor por sessao `working`.
+
+**Identidade visual:** usar o `Overlay.cs` original: `working` / TRABALHANDO (ciano), `attention` / PRECISA DE VOCE (amarelo), `completed` / CONCLUIDO (verde). Esse delta estava preparado na Casa e foi compilado com o SDK 8.0.427 de `native/global.json`; nao acionar simultaneamente o renderer independente de CentralDark Halo sobre a mesma tela. `Codigo Compilado != Visual Validado`.
+
+**Lease e seguranca:** nenhum modo infinito ou processo autonomo: duracao maxima por chamada 120s; a renovacao exige atividade real do chamador no mesmo processo. `finally` encerra overlay e a propria sessao Cua. Expiracao, troca de geometria, falta de writer, falha de host ou EOF encerram o recurso sem tocar sessoes de terceiros. Isso nao garante moldura visivel durante toda inferencia futura fora de uma chamada ativa; o orquestrador deve invocar o modo novamente por operacao autorizada.
+
+**Fonte cruzada:** os logs de extensao Claude Code e Codex no VS Code registram sessoes, mas nao provaram chamadas diretas de `cua-driver` ou `blink_cursor.py`. O metodo visual com estados e watcher foi identificado no source `apps/modulos/centraldark-halo-main/src-tauri/src/lib.rs`, e a rota de input Cua e o overlay WPF pertencem a esta Skill Mae. Nao declarar equivalencia tecnica nao provada entre agentes.
+
+**Prova exigida:** `AST_PASS`, `git diff --check`, build do mesmo `native/HermesVisual.csproj` no SDK pinado, run com `execution=started` e `completed`, encerramento de `HermesVisual` e conferencia visual humana independente. `INPUT_DISPATCHED != EFFECT_PROVEN`; `OVERLAY_EXECUTED != OVERLAY_VISIBLE_CONFIRMED`. Publicacao GitHub e sincronizacao entre Casa e main exigem recibos separados.
