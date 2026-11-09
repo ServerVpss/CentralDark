@@ -43,6 +43,10 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
 
+<!-- CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+**🔐 Hermes pertence à CentralDark — distinção entre método e motor (09/11/2026).** O método e os aprendizados produzidos para a CentralDark pertencem aos owners da própria CentralDark, não a um catálogo paralelo do Hermes: aprendizado geral → `docs/CONSCIENCIA/APRENDIZADOS.md`; procedimento especializado → [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md), já indexado nesta Skill Mãe. Exemplo concreto: recuperar a janela interativa "Sudo Password Required" — ler a receita nessa Skill filha antes de responder genericamente. O código nativo do Hermes (`/opt/hermes/tools/terminal_tool_sudo.py`, quando presente) é **implementação/dependência de runtime**, não owner documental da CentralDark; pode continuar instalado no local que o pacote exige. Qualquer plugin ou cópia necessária para carregamento é **adaptador**, nunca segunda autoridade. Para absorver outras capacidades do Hermes: inventariar as existentes, verificar licença/versão/contratos/consumidores, classificar REUSE/EXTEND, registrar o menor delta na Skill Mãe/Skills/owner e provar recarga real. Não copiar tudo às cegas, não duplicar motor, não solicitar/gravar senha em chat. `DOCUMENTADO != CONSUMIDO`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
