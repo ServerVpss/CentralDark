@@ -68,3 +68,37 @@
 - **Casa:** blob aplicado com readback tanto na fonte de `F:\CentralDark` quanto na instalação `%LOCALAPPDATA%\CentralDark\Casa-Commander\CentralDark-Casa-Agent.mjs`; `node --check` e teste local de segurança `1/1 PASS`. Reinicialização pelo launcher existente com apenas um Casa Agent (PID observado `32520`), `/health` PASS e `remote_vendor=false`.
 - **Separação de provas:** a sequência `initialize → tools/list → tools/call` está **PROVADA no motor isolado**, não ainda pelo endpoint `/mcp` **autenticado do agente instalado**. O conector CentralDark remoto não respondeu nesta medição. `LIVE_AGENT_AUTHORIZED_TOOL_RECEIPT=PENDING`, `HUD_VISUAL_RECEIPT=PENDING`, `FIXED_POINT_GLOBAL=PENDING`.
 - **NEXT_CURSOR:** chamada autorizada de leitura pelo caminho próprio do Casa Agent (sem revelar token), receipt de ferramenta no `/health`, log `[MCP_CASA]` ao vivo e HUD, depois sincronização de todo o checkout com as alterações dos outros owners preservadas.
+
+## Build do executável existente — 08/11/2026
+
+- **@code_ref:** `scripts/remote-bridge/Build-Remote-Bridge.ps1` e `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1`.
+- **@last_updated:** `2026-11-08T23:58:29Z`.
+- O ponto de entrada deixou de apontar para `K:\scripts\remote-bridge`, caminho ausente na Casa, e passou a resolver o builder canônico de forma relativa ao mesmo owner.
+- O builder canônico usa o motor já existente `CentralDark-Remote-One.go` e gera `canonical/dist/CentralDark-Remote-Bridge.exe`. Não cria segundo bridge nem altera OAuth, Tailscale ou a porta 9101.
+- **Prova local Casa:** parser PowerShell `PASS`; Go `1.27.3 windows/amd64`; build `PASS`; `--self-test` `PASS`; processo terminou com código `0`.
+- O binário Go prova o motor e o empacotamento. A camada visual moderna e o instalador Windows foram promovidos no delta de 09/11/2026 abaixo; pareamento OAuth ponta a ponta e autostart instalado continuam pendentes.
+- **Estado Git:** checkout geral da Casa continua atrás da `origin/main` e contém deltas de outros owners. Publicação e sincronização permanecem bloqueadas até reconciliação sem perda.
+
+## HUD moderno e instalador Windows — 09/11/2026
+
+- **@code_ref:** `scripts/remote-bridge/ui`; Electron + React + Vite dentro do mesmo owner, sem segundo executor.
+- O app cria uma única janela e bandeja, consulta `127.0.0.1:9101/health` e o Tailscale, chama os helpers existentes para **Parear Casa** e **Iniciar Bridge**, e abre o Cockpit.
+- A rota OAuth resolve `canonical/CENTRALDARK-OAUTH-TRAY.ps1` no desenvolvimento e `resources/bridge/CENTRALDARK-OAUTH-TRAY.ps1` no pacote instalado.
+- **Prova de código:** `node --check` PASS; Vite transformou 1.682 módulos; NSIS terminou com código `0`.
+- **Prova de runtime:** executável desempacotado iniciado e permaneceu ativo com processos Electron; `/health` respondeu `ok=true`, `engine_connected=true`, `remote_vendor=false`. O HUD aceita recibo em `last_tool_receipt` e no formato real `last_authorized_tool`.
+- **Artefato:** `scripts/remote-bridge/ui/release/CentralDark-Remote-Bridge-Setup.exe`; 123.683.566 bytes; SHA-256 `24e520f0198b1f3c0147fab1fa51bdb311c882f24124a51918368efc45639537`.
+- **Limites observados:** sem certificado de assinatura digital e usando ícone padrão do Electron. A aparência visual ainda precisa de inspeção humana; o fluxo OAuth não foi disparado para não criar autorização externa sem gesto explícito.
+- **Estado Git:** checkout geral permanece atrás da `origin/main` e com deltas de outros owners; publicar/sincronizar continua bloqueado sem reconciliação segura.
+
+**NEXT_CURSOR:** inspecionar o HUD aberto na Casa, aprovar o visual e acionar **Parear Casa**; depois reconciliar a branch sem sobrescrever os demais owners e publicar o delta.
+
+## GOAL: source acessível em F:\CentralDark Remote Bridge — 09/11/2026
+
+- **Intenção:** editar e compilar o mesmo CentralDark Remote Bridge pela pasta `F:\CentralDark Remote Bridge`, sem segunda fonte, sem segundo motor e sem alterar o runtime instalado.
+- **Owner Git canônico:** `ServerVpss/CentralDark@main:scripts/remote-bridge/`. **Projeção local:** junction NTFS `F:\CentralDark Remote Bridge` → `F:\CentralDark\scripts\remote-bridge`. Esta é uma entrada para os **mesmos arquivos**, não uma cópia nem um repositório novo; ainda **não** é uma migração física independente.
+- **Critérios:** source completa acessível; hash idêntico nos dois caminhos; scripts e builds relativos; parser/Node/Go/Vite testados; dependências externas mapeadas; nenhum serviço/tarefa/DPAPI modificado; publicar apenas o delta com SHA/readback; faxina somente após recibo e sem excluir arquivos desconhecidos.
+- **Prova Casa:** `fsutil reparsepoint query` = `0xa0000003` (junction), destino físico canônico; SHA-256 `ui/package.json` nos dois caminhos = `d1ff9dfb54033693203a1e09f23166374e0121430759d407b16aee3802fbfdb8`. Conflito literal do bloco `param` de `CentralDark-Remote-Bridge.ps1` resolvido na Casa preservando as quatro flags; parser PowerShell 0 erros.
+- **Build pelo novo caminho:** `Build-Remote-Bridge.ps1` = Go build e `--self-test` PASS, saída `canonical/dist/CentralDark-Remote-Bridge.exe`; `canonical/CentralDark-Casa-Agent.test.mjs` = 1/1 PASS; `ui/npm run check` PASS; `ui/npm run build` PASS (1.682 módulos). O Vite precisou resolver a raiz física com `realpathSync` no owner `ui/vite.config.mjs` para funcionar via junction.
+- **Separação:** `ui/node_modules`, `ui/dist`, `ui/release` e `canonical/dist` são dependências/artefatos locais, não source Git; não apagar sem confirmar consumidores e receipt. `%LOCALAPPDATA%\CentralDark\Casa-Commander` é runtime instalado, preservado. `scripts/casa`, MCP e Cockpit continuam owners externos consumidos pelo Bridge, não duplicados.
+- **Pendente:** Git Casa `ahead 1 / behind 62` com deltas de outros owners; não executar `reset --hard`, `clean` nem pull destrutivo. O alias não prova pareamento OAuth, visual aprovado, fechamento X com diálogo nem controle remoto E2E. `FIXED_POINT_GLOBAL=PENDING`.
+- **NEXT_CURSOR:** publicar via worktree Git temporário do mesmo repositório, preservar a história de `main`, readback do SHA, limpar somente temporários próprios após recibo, reconciliar Casa sem perda e testar pareamento/UX com autorização.
