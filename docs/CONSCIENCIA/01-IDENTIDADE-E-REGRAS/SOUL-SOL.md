@@ -26,6 +26,37 @@ last_updated_utc: "2026-10-27T12:25:24.166Z"
 
 **NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
 
+## 🪬 Distinção operacional vigente — VPS da Casa e VPS externa (2026-11-09)
+
+<!-- #OBSERVACOES#
+@owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+@doc_ref: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md#60a-centraldark-os-local-first--vps-e-capsula-opcional-nao-autoridade
+@last_updated: 2026-11-09
+@escopo: desambiguar papel da VM local como servidor VPS da Casa sem revogar VPS externa
+@implementado: definicao documental e proveniencia do runtime comprovado
+@pendente: autostart da VM no Windows; MCP publico/Cloudflare; espelhamento validado na VPS externa
+@next_cursor: validar boot VMware, ingress Cloudflare, pareamento OAuth, comparar deltas com VPS externa quando acessivel
+-->
+
+**Correção de linguagem e função autorizada pelo CHEFE:** a VM openKylin 3.0 executada no VMware Workstation da máquina SEGREDO **é a VPS DA CASA atualmente**: o servidor Linux local que hospeda o runtime da CentralDark enquanto a VPS externa estiver indisponível. A designação é **funcional/operacional**; não significa que a VM é uma VPS de datacenter, que possui uptime independente do host Windows ou que substituiu a VPS Hostinger. A frase anterior «CentralDark-OS não é sinônimo de uma VPS» trata apenas da **identidade do produto**; **não proíbe chamar a instância openKylin de VPS da Casa**. O nome `CentralDark-OS` permanece identidade única, e os dois alvos físicos continuam distintos.
+
+```text
+VPS_DA_CASA=OPENKYLIN_VMWARE
+VPS_DA_CASA_ROLE=CURRENT_PROVISIONAL_LINUX_SERVER
+VPS_DA_CASA_VMX=E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx
+VPS_DA_CASA_LAN=192.168.35.130
+VPS_DA_CASA_TAILSCALE=100.74.85.115
+VPS_DA_CASA_MCP_HTTP=127.0.0.1:9100
+VPS_EXTERNA=HOSTINGER_DISTINCT_TARGET_OFFLINE_OR_UNVERIFIED
+VPS_DA_CASA_IS_NOT_CLOUD_HOST=true
+SOURCE_OF_TRUTH=ServerVpss/CentralDark@main
+CASA_TO_EXTERNAL_VPS_MIRROR=INTENDED_NOT_AUTOMATIC_NOT_YET_PROVED
+```
+
+**Prova observada em 09/11/2026:** SSH Casa → openKylin `192.168.35.130` autenticado; `centraldark-native-mcp-http.service` habilitado e ativo em `systemd --user` com `loginctl Linger=yes`; `/health` e OAuth discovery HTTP 200; `/device/pair/start` HTTP 201, `/authorize` redirecionou HTTP 302 ao Cockpit, com código coincidente. O conector Cloudflare Linux ainda carecia de credencial de execução: **MCP público, heartbeat autenticado e `tools/list` não estão provados**. O Windows e o VMware permanecem dependências de energia/boot da VPS da Casa.
+
+**Espelhamento posterior, sem duplo escritor:** quando a VPS externa voltar, autenticar e medir as **duas instâncias**; comparar HEAD, SHA, owners, configurações e estado sujo; preservar divergências e segredos locais; promover só o delta aprovado pela receita/sincronizador existente, provar runtime de destino, rollback e receipt. **LOCAL_RUNNING != EXTERNAL_DEPLOYED; GIT_SYNC != RUNTIME_MIRROR; VPS_DA_CASA_ONLINE != HOSTINGER_ONLINE.**
+
 ## 🫀 Constituição de implantação — CentralDark-OS local-first (2026-10-27)
 
 <!-- #OBSERVACOES#
