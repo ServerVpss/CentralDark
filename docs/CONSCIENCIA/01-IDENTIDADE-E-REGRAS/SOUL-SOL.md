@@ -34,7 +34,7 @@ last_updated_utc: "2026-10-27T12:25:24.166Z"
 @last_updated: 2026-11-09
 @escopo: desambiguar papel da VM local como servidor VPS da Casa sem revogar VPS externa
 @implementado: definicao documental e proveniencia do runtime comprovado
-@pendente: autostart da VM no Windows; MCP publico/Cloudflare; espelhamento validado na VPS externa
+@pendente: teste de reboot Windows/VM para confirmar autostart; MCP publico/Cloudflare; espelhamento validado na VPS externa
 @next_cursor: validar boot VMware, ingress Cloudflare, pareamento OAuth, comparar deltas com VPS externa quando acessivel
 -->
 
@@ -54,6 +54,8 @@ CASA_TO_EXTERNAL_VPS_MIRROR=INTENDED_NOT_AUTOMATIC_NOT_YET_PROVED
 ```
 
 **Prova observada em 09/11/2026:** SSH Casa → openKylin `192.168.35.130` autenticado; `centraldark-native-mcp-http.service` habilitado e ativo em `systemd --user` com `loginctl Linger=yes`; `/health` e OAuth discovery HTTP 200; `/device/pair/start` HTTP 201, `/authorize` redirecionou HTTP 302 ao Cockpit, com código coincidente. O conector Cloudflare Linux ainda carecia de credencial de execução: **MCP público, heartbeat autenticado e `tools/list` não estão provados**. O Windows e o VMware permanecem dependências de energia/boot da VPS da Casa.
+
+**Autostart medido em 09/11/2026:** Windows SEGREDO, VMware Workstation 26.0.1; configuração nativa existente `C:\\ProgramData\\VMware\\VMware Workstation\\vmAutoStart.xml` já tinha a VM `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx`, ordem `1`. O serviço preexistente `VmwareAutostartService` foi alterado de `Manual` para `Auto` via `sc.exe config` e relido. A VM continuou ligada (`vmrun list`: 1 VM) e, por SSH, o MCP HTTP da openKylin respondeu HTTP 200, `systemd --user` `enabled` e `active`. **O serviço VMware não foi iniciado manualmente, o Windows não foi reiniciado e `BOOT_AFTER_REBOOT=NOT_TESTED`.**
 
 **Espelhamento posterior, sem duplo escritor:** quando a VPS externa voltar, autenticar e medir as **duas instâncias**; comparar HEAD, SHA, owners, configurações e estado sujo; preservar divergências e segredos locais; promover só o delta aprovado pela receita/sincronizador existente, provar runtime de destino, rollback e receipt. **LOCAL_RUNNING != EXTERNAL_DEPLOYED; GIT_SYNC != RUNTIME_MIRROR; VPS_DA_CASA_ONLINE != HOSTINGER_ONLINE.**
 
