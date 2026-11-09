@@ -164,6 +164,39 @@ test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código 
   assert.equal(beat.device_id,auth.device_id);
 });
 
+test('Remote Bridge: mesmo /authorize e consentimento, sem token na URL',async()=>{
+  const created=await request('/device/pair/start',json({
+    device_name:'CLIENTE-REMOTE-TEST',executor:'remote-bridge',surface:'windows-tray'
+  }));
+  assert.equal(created.status,201);
+  const pair=await created.json();
+  const consent=await request('/authorize?'+new URLSearchParams({
+    client_id:'centraldark.remote-bridge',pair_id:pair.pair_id
+  }));
+  assert.equal(consent.status,302);
+  const page=new URL(consent.headers.get('location'));
+  assert.equal(page.pathname,'/mcp-autorizar');
+  assert.equal(page.searchParams.get('client_name'),'CentralDark Remote Bridge');
+  assert.equal(page.searchParams.get('pair_code'),pair.code);
+  assert.ok(page.searchParams.get('pair_nonce'));
+  assert.ok(!page.searchParams.has('pair_secret'));
+  const cookie=await adminCookie();
+  const approved=await request('/authorize',urlEncoded({
+    client_id:'centraldark.remote-bridge',pair_id:pair.pair_id,
+    pair_code:pair.code,pair_nonce:page.searchParams.get('pair_nonce')
+  },cookie));
+  assert.equal(approved.status,302);
+  const result=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  const auth=await result.json();
+  assert.equal(auth.status,'approved');
+  assert.ok(auth.token?.length>=32);
+  const heartbeat=await request('/device/heartbeat',{
+    method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+auth.token},
+    body:JSON.stringify({capabilities:{remote_bridge:true}})
+  });
+  assert.equal((await heartbeat.json()).ok,true);
+});
+
 test('Expired pair cannot be confirmed; code alone never issues token',()=>{
   let now=0;
   const isolated=createDevicePairingStore({registryPath:join(tmp,'expired.json'),now:()=>now,ttlMs:500});

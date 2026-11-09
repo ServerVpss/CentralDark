@@ -40,6 +40,15 @@ Extensao nativa do VS Code: mapeia a interface sob comando e preserva a capacida
 
 - `CentralDark: Restaurar bancada`, pela paleta de comandos (`Ctrl+Shift+P`).
 
+## Pastas do projeto no mesmo Vibe Coding (07/11/2026)
+
+- Owner unico: `skills/vs-code-restore/` (mesmo ID de extensao `centraldark.centraldark-vscode-restore`).
+- View `centraldarkWorkspaceFolders` no Explorer nativo, abaixo de `centraldarkVibeCoding`, sem substituir workspace nem reabrir editor/ChatGPT.
+- A arvore mostra diretorios e arquivos; em workspace de subpasta Bolt, tambem identifica a raiz CentralDark por `AGENTS.md` e `scripts/centraldark-inventory-reconcile.sh` existentes. Nao cria checkout.
+- Botao `Mostrar pastas do projeto` no `media/vibe.html` chama `centraldark.showProjectFolders`, com foco na view nativa; o provider usa API oficial `vscode.workspace.fs`.
+- Prova de consumo local: CHEFE confirmou visualmente as pastas `CentralDark` e `Bolt` na janela de VS Code existente; UIA identificou a view `Pastas Do Projeto` e sua arvore. `INSTALLED != PUBLISHED`.
+- Distribuicao: sem sobrescrever o release historico v0.2.1, proxima tag `centraldark-vscode-v0.2.2` com asset `centraldark-vscode-restore-0.2.2.vsix`; o auto-updater existente consome esse padrao de tags/assets. Publicacao depende do readback remoto e do gate de promocao.
+
 ## Como compilar
 
 1. `cd K:\skills\vs-code-restore`
@@ -473,3 +482,25 @@ No Windows: hermes.cmd --tui; depois /model zendrive; depois oi. A seleção env
 5. Separar SOURCE, HERMES_ALIAS_CONFIGURED, WORKER_LIVE, INFERENCE_PASS, HERMES_TOOL_CALLS_PASS e DEPLOY_PASS.
 
 **NEXT_CURSOR:** medir o worker Zendrive autorizado, configurar o alias no Hermes atual, testar a primeira inferência real e só depois promover STATUS=PASS. SOURCE_COMMITTED != RUNTIME_INSTALLED != INFERENCE_PROVEN. Nenhuma instalação, segredo, alteração de perfil ou deploy é realizada por esta skill.
+
+
+<!-- CENTRALDARK_NATIVE_EXPLORER_SEPARATE_ACTIVITYBAR_20261107 -->
+## Explorador nativo e Vibe Coding separados (07/11/2026)
+INTEN??O: preservar o Explorador original do VS Code com suas views nativas (Arquivos, Editores Abertos, Estrutura de T?picos e Linha do Tempo) e oferecer a mesma extens?o CentralDark com icone independente na Activity Bar. Sem segunda extens?o e sem resetar toda a interface.
+DELTA: mover apenas as contribuicoes centraldarkVibeCoding (webview) e centraldarkWorkspaceFolders (arvore) de contributes.views.explorer para contributes.views.centraldarkVibe, declarado no mesmo manifesto em contributes.viewsContainers.activitybar. IDs das views, comandos, storage, renderer, logs e motor permanecem os mesmos. ?cone ?nico em media/centraldark-activity.svg. Vers?o 0.2.3 para atualiza??o do mesmo ID centraldark.centraldark-vscode-restore.
+ACHADO VIVO: em %APPDATA%/Code/User/globalStorage/state.vscdb (somente leitura), views.customizations.viewLocations.workbench.explorer.fileView == workbench.panel.chat: a view nativa Arquivos foi movida historicamente para o Chat; workbench.explorer.views.state.hidden declara isHidden=false. A extens?o n?o apagou a view. A altera??o de manifesto separa as contribui??es, MAS a visualiza??o nativa continua exigindo uma migra??o de layout individual via comando VS Code Exibir: Mover Exibi??o => Arquivos => Explorador, ou mecanismo existente equivalente. Nunca alterar banco SQLite do VS Code enquanto aberto, nem usar Reset View Locations global.
+PROVA/ESTADO: MANIFEST_SPLIT + TSC + TEST + VSIX + INSTALLED_ID + UIA_ICON + NATIVE_FILES_IN_EXPLORER s?o comprova??es independentes. S? marcar como PASS os itens efetivamente medidos. Sem mexer nas sess?es e na source original do VS Code.
+NEXT_CURSOR: compilar extens?o, empacotar VSIX do mesmo owner, instalar no VS Code da Casa sem reiniciar a bancada, observar ?cone pr?prio e restaurar somente a view nativa Arquivos por interface autorizada.
+<!-- /CENTRALDARK_NATIVE_EXPLORER_SEPARATE_ACTIVITYBAR_20261107 -->
+
+
+<!-- CENTRALDARK_NATIVE_EXPLORER_RESTORED_UIA_20261107 -->
+## Restitui??o do Explorador oficial via comando nativo (07/11/2026)
+
+- INTEN??O: restaurar a visualiza??o Arquivos ? localiza??o original SEM modificar Vibe Coding, abas, navegador, perfis, sess?es nem outras visualiza??es reposicionadas pelo CHEFE.
+- OWNER EXISTENTE: skills/vs-code-restore (mesmo ID da extens?o centraldark.centraldark-vscode-restore). A vers?o 0.2.5 acrescenta ao comando j? registrado centraldark.restoreNativeExplorer a a??o individual workbench.explorer.fileView.resetViewLocation, seguida de foco em workbench.view.explorer. N?O executar workbench.action.resetViewLocations global.
+- EXECU??O REAL (Casa SEGREDO): TypeScript PASS; teste de cone 8/8 PASS; empacotado centraldark-vscode-restore-0.2.5.vsix (80.902 bytes, SHA256 51e702660301687e2d216c3f3ffb0ebd6a3214b0ed09032d41ce87a85c7192f9); instala??o code.cmd --install-extension --force EXIT 0; lista de extens?es confirmou @0.2.5; recarregamento da janela existente; comando localizado/invocado por UIAutomation autorizado.
+- CONTRAPROVA: globalStorage/state.vscdb lido SOMENTE em read-only mostrou workbench.explorer.fileView fora do mapa de customiza??es, portanto DEFAULT_NATIVE_EXPLORER; nenhuma mudan?a via SQL. O mesmo UIAutomation identificou simultaneamente as abas de atividade Explorador (Ctrl+Shift+E) e CentralDark Vibe Coding, o bot?o Atualizar Explorador e a ?rvore Explorador de Arquivos. As demais posi??es personalizadas permaneceram com dez entradas no mapa de viewLocations. READBACK_UI_NATIVE_EXPLORER=PASS; READBACK_UI_CENTRALDARK_ICON=PASS; CHECKPOINT/HUD remoto separado.
+- O registro do estado GUI ? diferente da publica??o no GitHub: ainda exigir SHA/readback do commit desta vers?o e diferenciar branch PR #1993, main, release e instala??o.
+- NEXT_CURSOR: preservar o menor delta na branch da PR #1993, conferir SHA/arquivos no GitHub; manter release hist?rico 0.2.2 intacto e n?o publicar automaticamente 0.2.5 sem prova/gates.
+<!-- /CENTRALDARK_NATIVE_EXPLORER_RESTORED_UIA_20261107 -->

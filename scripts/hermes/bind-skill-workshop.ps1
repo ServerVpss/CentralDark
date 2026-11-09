@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string]$RepoRoot = 'K:\',
+  [string]$RepoRoot = if ($env:CENTRALDARK_ROOT) { $env:CENTRALDARK_ROOT } else { Split-Path -Parent (Split-Path -Parent $PSScriptRoot) },
   [string]$HermesHome = "$env:LOCALAPPDATA\hermes"
 )
 $ErrorActionPreference = 'Stop'

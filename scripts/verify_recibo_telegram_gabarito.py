@@ -7,6 +7,9 @@ Usage:
 
 The verifier is intentionally small and deterministic: it checks for the required
 semantic anchors that make a receipt auditable instead of merely repeated text.
+
+Address rule (GABARITO-RECIBO-TELEGRAM.md §10): a claim of ABSENCE must state
+where it was measured, and a claim of PRESENCE must state where it was seen.
 """
 from __future__ import annotations
 
@@ -24,6 +27,17 @@ PROOF_WORDS = re.compile(r"\b(commit|blob|arquivo|file|message_id|endpoint|rota|
 PERCENT_RE = re.compile(r"(?<![A-Za-z0-9])\d{1,3}\s*%")
 FORBIDDEN_FALSE_GREEN = re.compile(r"UNKNOWN\s*=\s*PASS|ACTION\s*=\s*PROOF|DOCUMENTED\s*=\s*EXECUTED", re.I)
 
+# §10 — endereço de ausência e de presença
+ABSENCE_RE = re.compile(
+    r"(n[ãa]o achei|nao achei|zero resultados?|zero ocorr[êe]ncias?|n[ãa]o existe|nao existe|ausente|sem resultados)",
+    re.I,
+)
+PRESENCE_RE = re.compile(r"\b(existe|encontrei|achei|est[áa] (na|no|em)|consta)\b", re.I)
+ADDRESS_RE = re.compile(
+    r"(repo(sit[óo]rio)?\s+[\w./-]+|branch\s+[\w./-]+|\bmain\b|arbolha|arquivo\s+[\w./-]+|"
+    r"linha\s*\d+|\bL\d+\b|sha\s*[0-9a-f]{7,40}|[0-9a-f]{40})",
+    re.I,
+)
 ABSENCE_CLAIM = re.compile(r"\b(?:não\s+(?:achei|encontrei|localizei|consta|há\s+evidência)|nenhum\s+resultado|zero\s+resultados|não\s+localizado|not\s+found|no\s+results|não\s+existe\b)", re.I)
 PRESENCE_CLAIM = re.compile(r"\b(?:achei|encontrei|localizei|foi\s+encontrado|foi\s+localizado|está\s+presente|(?<!não )existe\b|implementado\s+em|confirmed\s+in|found\s+in)\b", re.I)
 REPOSITORY = re.compile(r"(?:\b[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\b|\brepositório\s*:\s*\S+)", re.I)
@@ -41,6 +55,11 @@ def load_text(arg: str) -> str:
     return Path(arg).read_text(encoding="utf-8")
 
 
+def main(argv: list[str]) -> int:
+    if len(argv) != 2:
+        print("usage: verify_recibo_telegram_gabarito.py <receipt.md|->", file=sys.stderr)
+        return 2
+
 def validate(text: str) -> list[str]:
     failures: list[str] = []
     for emoji, meaning in REQUIRED_ALWAYS.items():
@@ -54,6 +73,13 @@ def validate(text: str) -> list[str]:
         failures.append("proof anchor detected but missing 📌")
     if FORBIDDEN_FALSE_GREEN.search(text):
         failures.append("false-green invariant violated")
+
+    # §10 — endereço obrigatório nas afirmações de ausência e de presença
+    has_address = bool(ADDRESS_RE.search(text))
+    if ABSENCE_RE.search(text) and not has_address:
+        failures.append("ausência declarada sem endereço onde se mediu (§10)")
+    if PRESENCE_RE.search(text) and not has_address:
+        failures.append("presença declarada sem endereço onde se viu (§10)")
 
     if ABSENCE_CLAIM.search(text):
         if not REPOSITORY.search(text):

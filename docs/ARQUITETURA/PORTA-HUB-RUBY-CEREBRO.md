@@ -123,7 +123,7 @@ Subfunções existentes ficam ocultas atrás desta caixa visual:
 
 ### 📚 Biblioteca física + grafo semântico
 
-Owner material da biblioteca: `docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md`.
+Owner material da biblioteca: `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md`.
 
 ```text
 PDF | EPUB | JWPUB

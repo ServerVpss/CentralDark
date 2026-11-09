@@ -21,11 +21,11 @@
     "Botão de runtime só pode ser habilitado quando a rota viva for medida.",
     "A integração completa exige readback por arquivo/página e prova de CI; catálogo sozinho não é prova."
     {
-      "id": "codex-halo",
-      "owner": "apps/modulos/codex-halo-main",
+      "id": "centraldark-halo",
+      "owner": "apps/modulos/centraldark-halo-main",
       "transport": "native-cockpit-import",
       "runtime_status": "UNKNOWN",
-      "integration_owner": "apps/instinto-superior/src/components/central/CodexHaloHarness.tsx",
+      "integration_owner": "apps/instinto-superior/src/components/central/CentralDarkHaloHarness.tsx",
       "state_mapping": { "RUNNING": "working", "PASS": "completed", "BLOCKED": "attention", "AUTH_REQUIRED": "attention", "FAIL": "attention", "UNKNOWN": "idle" },
       "interaction_policy": "pointer-events-none; Hermes/Cua remains the executor"
     },
@@ -105,7 +105,7 @@
       "owner": "apps/instinto-superior",
       "transport": "Vite localhost → Tailscale private serve",
       "runtime_status": "PORT_PROCESS_PROVEN",
-      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md",
+      "evidence_owner": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/03-APRENDIZADOS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md",
       "last_evidence_status": "DEGRADED_NO_LISTENER_127_0_0_1_3000_MEDIDO_22_10_2026",
       "last_evidence_ref": "apps/instinto-superior/config/harness-module-registry.json#casa-jea-winrm.measured_routes"
     },
@@ -226,9 +226,9 @@
         "cockpit_8080_religar": {
           "official": true,
           "command": "Start-ScheduledTask -TaskName 'CentralDark-Cockpit-8080'",
-          "task_action": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"K:\\scripts\\casa\\instinto-cockpit-autostart.ps1\"",
-          "process": "\"C:\\Program Files\\nodejs\\node.exe\" \"K:\\apps\\instinto-superior\\node_modules\\vite\\bin\\vite.js\" --host 0.0.0.0 --port 8080 --strictPort",
-          "working_directory": "K:\\apps\\instinto-superior",
+          "task_action": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -WindowStyle Hidden -File \"instinto-cockpit-autostart.ps1\"",
+          "process": "\"node\" \"node_modules\\vite\\bin\\vite.js\" --host 0.0.0.0 --port 8080 --strictPort",
+          "working_directory": ".",
           "user": "NT AUTHORITY\\SYSTEM (sessão 0, RunLevel Highest)",
           "watchdog": "mesma tarefa: gatilhos boot + logon + tempo a cada 1 min, MultipleInstances=IgnoreNew",
           "readback": "Get-NetTCPConnection -State Listen -LocalPort 8080 e HTTP 200 em http://127.0.0.1:8080/sala-controle",

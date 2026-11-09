@@ -910,6 +910,10 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
         { text: '🧬 Cognição',     callback_data: 'hub:cog' },
       ],
       [
+        { text: '🏛️ CentralDark',   callback_data: 'hub:centraldark' },
+        { text: '🧬 META-RSI 40/40', callback_data: 'hub:meta-rsi' },
+      ],
+      [
         { text: '📊 Relatório',    callback_data: 'hub:relatorio' },
         { text: '⚙️ Config',       callback_data: 'hub:config' },
       ],
@@ -919,6 +923,58 @@ ${cogLine}${termLine}  HIST.    ${String(sess.history.length).padStart(2)} msgs 
       ],
       [
         { text: '🧹 Limpar Hist.', callback_data: 'hub:clear' },
+      ],
+    ],
+  };
+}
+
+function buildCentralDarkMenu() {
+  return {
+    text: '<b>🏛️ CentralDark</b>\n\n' +
+      'Camada operacional do Hermes.\n' +
+      'O menu projeta o estado; o owner executa.\n\n' +
+      '🧬 META-RSI: catálogo 40/40 presente\n' +
+      '⚪ Runtime 40/40: UNKNOWN\n' +
+      '🟡 UNKNOWN ≠ PASS',
+    buttons: [
+      [
+        { text: '🧬 META-RSI 40/40', callback_data: 'hub:meta-rsi' },
+        { text: '📊 HUD', callback_data: 'hub:centraldark:hud' },
+      ],
+      [
+        { text: '🧾 Receipts', callback_data: 'hub:centraldark:receipts' },
+        { text: '🔗 Conexões', callback_data: 'hub:centraldark:connections' },
+      ],
+      [
+        { text: '🫁 Kimetsu', callback_data: 'hub:centraldark:kimetsu' },
+        { text: '⭐ Michelin', callback_data: 'hub:centraldark:michelin' },
+      ],
+      [
+        { text: '🦜 Papagaio', callback_data: 'hub:centraldark:papagaio' },
+        { text: '🔄 Restart controlado', callback_data: 'hub:centraldark:restart' },
+      ],
+      [
+        { text: '🔙 Painel', callback_data: 'hub:main' },
+      ],
+    ],
+  };
+}
+
+function buildMetaRsiMenu() {
+  return {
+    text: '<b>🧬 META-RSI 40/40</b>\n\n' +
+      'Catálogo canônico: <b>40 capacidades</b>\n' +
+      'Owner: <code>centraldark-meta-rsi</code>\n' +
+      'Execução persistente: <b>UNKNOWN</b>\n\n' +
+      'Nenhuma capacidade será marcada como evoluída sem ação, evidência e contraprova.',
+    buttons: [
+      [
+        { text: '📖 Ver matriz 40/40', callback_data: 'hub:meta-rsi:matrix' },
+        { text: '🧾 Último receipt', callback_data: 'hub:meta-rsi:receipt' },
+      ],
+      [
+        { text: '🔙 CentralDark', callback_data: 'hub:centraldark' },
+        { text: '🏠 Painel', callback_data: 'hub:main' },
       ],
     ],
   };
@@ -1472,6 +1528,137 @@ async function handleCallback(cq) {
     if (data === 'hub:main') {
       const p = buildPanel(chatId);
       return edit(chatId, msgId, p.text, p.buttons);
+    }
+
+    if (data === 'hub:centraldark') {
+      const p = buildCentralDarkMenu();
+      return edit(chatId, msgId, p.text, p.buttons);
+    }
+
+    if (data === 'hub:meta-rsi') {
+      const p = buildMetaRsiMenu();
+      return edit(chatId, msgId, p.text, p.buttons);
+    }
+
+    if (data === 'hub:meta-rsi:matrix') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>📖 Matriz META-RSI</b>\n\n' +
+          '40 capacidades catalogadas no owner canônico.\n' +
+          'Avaliação runtime 40/40: <b>UNKNOWN</b>.\n\n' +
+          'O catálogo não será duplicado dentro do bot.',
+        [[{ text: '🔙 META-RSI', callback_data: 'hub:meta-rsi' }]],
+      );
+    }
+
+    if (data === 'hub:meta-rsi:receipt') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🧾 Último receipt META-RSI</b>\n\n' +
+          'Nenhum receipt runtime 40/40 foi comprovado nesta superfície.\n' +
+          'Estado: <b>UNKNOWN</b>.',
+        [[{ text: '🔙 META-RSI', callback_data: 'hub:meta-rsi' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:hud') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>📊 HUD CentralDark</b>\n\n' +
+          'O HUD é projeção do estado real.\n' +
+          'Runtime desta integração: <b>UNKNOWN</b>.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:receipts') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🧾 Receipts CentralDark</b>\n\n' +
+          'A cadeia de checkpoint do código está válida.\n' +
+          'Entrega de receipt nesta conversa: <b>UNKNOWN</b>.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:connections') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🔗 Conexões</b>\n\n' +
+          'O menu não altera tokens, polling, A2A ou webhook.\n' +
+          'Readback desta superfície: <b>UNKNOWN</b>.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:kimetsu') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🫁 Kimetsu</b>\n\nSeleção de técnica: sob demanda.\nMétodo declarado ≠ método executado.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:michelin') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>⭐ Michelin 3 Estrelas</b>\n\nConstruir → integrar → provar.\nAs estrelas dependem de evidência.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:papagaio') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🦜 Papagaio</b>\n\nFiel: preservar sequência.\nON: replay completo.\nOFF: execução objetiva.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:centraldark:restart') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>🔄 Restart controlado</b>\n\n' +
+          'Esta ação interrompe e inicia o owner do gateway.\n' +
+          'Ainda está bloqueada até o adapter Hermes e o readback do mesmo chat serem provados.\n\n' +
+          'Confirmação registrada sem execução.',
+        [
+          [
+            { text: '✅ SIM, preparar gate', callback_data: 'hub:confirm:restart' },
+            { text: '❌ NÃO, cancelar', callback_data: 'hub:confirm:no' },
+          ],
+          [{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }],
+        ],
+      );
+    }
+
+    if (data === 'hub:confirm:no') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>❌ Ação cancelada.</b>\n\nNenhum processo foi alterado.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
+    }
+
+    if (data === 'hub:confirm:restart') {
+      return edit(
+        chatId,
+        msgId,
+        '<b>⚠️ Restart não executado.</b>\n\n' +
+          'Gate bloqueado: adapter Hermes e entrega no mesmo chat ainda não estão provados.\n' +
+          'Nenhum processo foi interrompido.',
+        [[{ text: '🔙 CentralDark', callback_data: 'hub:centraldark' }]],
+      );
     }
 
     // ── Seleção de agente

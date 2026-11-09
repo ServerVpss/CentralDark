@@ -26,7 +26,27 @@ import { CartaoDiscosForja } from "@/components/central/CartaoDiscosForja";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Activity,
-  Bell,
+  type LucideIcon,
+  Eye,
+  Sparkles,
+  BookOpen,
+  Globe,
+  GitBranch,
+  FileCheck2,
+  ScanSearch,
+  Hammer,
+  PanelsTopLeft,
+  Palette,
+  Network,
+  History,
+  BookCheck,
+  Boxes,
+  KeyRound,
+  Target,
+  Moon,
+  Dna,
+  Gem,
+  GitPullRequest,
   Download,
   ExternalLink,
   Github,
@@ -80,7 +100,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { lerEstadoCentralDark } from "@/lib/cockpit.functions";
 import { PlayerLocalJarvis } from "@/components/central/PlayerLocalJarvis";
-import { CodexHaloHarness } from "@/components/central/CodexHaloHarness";
+import { CentralDarkHaloHarness } from "@/components/central/CentralDarkHaloHarness";
 /** Pacote real servido pelo próprio site (public/downloads), sem armazenamento externo. */
 const pacoteHermes = {
   url: "/downloads/Hermes-CentralDark-Pacotao.zip",
@@ -150,6 +170,47 @@ const NAVEGACAO_PASTAS = [
   ] },
 ] as const;
 
+// Mesmo padrão de ícones Lucide da landing /: quadrado, borda e cor por token da pele.
+// As 27 rotas e seus owners continuam exclusivamente em NAVEGACAO_PASTAS.
+const ICONES_NAVEGACAO = {
+  visao: Eye,
+  jornada: BookOpen,
+  portal: Globe,
+  sistema: Activity,
+  admin: ShieldCheck,
+  sync: GitBranch,
+  recibos: FileCheck2,
+  raioxvivo: ScanSearch,
+  "builder-bolt": Hammer,
+  aionui: PanelsTopLeft,
+  design: Palette,
+  arquitetura: Network,
+  "agent-mode": Sparkles,
+  "html-consolidation": History,
+  forja: Wrench,
+  "forja-regras": BookCheck,
+  "forja-inventario": Boxes,
+  "gram-permissions": KeyRound,
+  hermes: Bot,
+  goals: Target,
+  "dream-reviewer": Moon,
+  genesis: Dna,
+  obsidian: Gem,
+  pr1873: GitPullRequest,
+  gram: MessagesSquare,
+  unigram: Send,
+  downloads: Download,
+} satisfies Record<(typeof NAVEGACAO_PASTAS)[number]["itens"][number]["valor"], LucideIcon>;
+
+function IconeItemNavegacao({ valor }: { valor: keyof typeof ICONES_NAVEGACAO }) {
+  const Icone = ICONES_NAVEGACAO[valor];
+  return (
+    <span aria-hidden="true" className="mr-2 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 shadow-sm transition-[transform,background-color,border-color,box-shadow] duration-200 ease-out group-hover/menuitem:-translate-y-0.5 group-hover/menuitem:scale-105 group-hover/menuitem:border-primary/50 group-hover/menuitem:bg-primary/10 group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)] group-focus-within/menuitem:border-primary/50 group-data-[collapsible=icon]:mr-0 motion-reduce:transform-none motion-reduce:transition-none">
+      <Icone className="size-4 text-gold transition-[color,transform] duration-200 ease-out group-hover/menuitem:scale-110 group-hover/menuitem:text-neon-green group-focus-within/menuitem:text-primary group-data-[state=active]/menuitem:text-primary motion-reduce:transform-none motion-reduce:transition-none" />
+    </span>
+  );
+}
+
 const ROTULOS_ESTADO = {
   PASS: { rotulo: "Tudo certo", ajuda: "A fonte consultada confirmou o resultado." },
   RUNNING: { rotulo: "Trabalhando", ajuda: "O processo está em andamento." },
@@ -174,7 +235,7 @@ const HARNESS_DESTINOS = [
   { id: "genesis", titulo: "Gênesis · Michelin", icone: "🧬", privado: true },
   { id: "sync", titulo: "Minha Oficina", icone: "🔄", privado: false },
   { id: "hermes", titulo: "Hermes", icone: "⚙️", privado: false },
-  { id: "codex-halo", titulo: "Codex Halo", icone: "🌈", privado: false },
+  { id: "centraldark-halo", titulo: "CentralDark Halo", icone: "🌈", privado: false },
   { id: "obsidian", titulo: "Obsidian", icone: "💎", privado: false },
   { id: "aionui", titulo: "CentralDark Estúdio", icone: "🧩", privado: false },
   { id: "design", titulo: "Design Center", icone: "🎨", privado: false },
@@ -430,6 +491,38 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   const [abaAtiva, definirAbaAtiva] = useState("visao");
   const [buscaNavegacao, definirBuscaNavegacao] = useState("");
   const [menuAberto, definirMenuAberto] = useState(true);
+  const [larguraSidebar, definirLarguraSidebar] = useState(256);
+  const larguraSidebarAtual = useRef(256);
+  const [arrastandoSidebar, definirArrastandoSidebar] = useState(false);
+  const limitarLarguraSidebar = (valor: number) => Math.max(240, Math.min(440, Math.round(valor)));
+  const ajustarLarguraSidebar = (valor: number, persistir = false) => {
+    const proxima = limitarLarguraSidebar(valor);
+    larguraSidebarAtual.current = proxima;
+    definirLarguraSidebar(proxima);
+    if (persistir && typeof window !== "undefined") {
+      try { window.localStorage.setItem("centraldark.cockpit.sidebar-width", String(proxima)); } catch { /* storage indisponível */ }
+    }
+  };
+  useEffect(() => {
+    try {
+      const salva = Number(window.localStorage.getItem("centraldark.cockpit.sidebar-width"));
+      if (Number.isFinite(salva) && salva >= 240 && salva <= 440) ajustarLarguraSidebar(salva);
+    } catch { /* mantém a largura padrão */ }
+  }, []);
+  const focarBuscaAoAbrir = useRef(false);
+  useEffect(() => {
+    if (!menuAberto || !focarBuscaAoAbrir.current) return;
+    focarBuscaAoAbrir.current = false;
+    document.getElementById("busca-navegacao")?.focus();
+  }, [menuAberto]);
+  const abrirBuscaNavegacao = () => {
+    if (menuAberto) {
+      document.getElementById("busca-navegacao")?.focus();
+      return;
+    }
+    focarBuscaAoAbrir.current = true;
+    definirMenuAberto(true);
+  };
   const [abaRestaurada, definirAbaRestaurada] = useState(false);
   useEffect(() => {
     const restaurar = () => {
@@ -595,35 +688,15 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
   return (
     <main
       data-pele-cockpit={pele}
-      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-64" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
+      className={`min-h-dvh w-full min-w-0 overflow-x-clip pb-28 ${menuAberto ? "md:pl-[var(--cd-sidebar-width)]" : "md:pl-12"} ${pele === "default" ? "" : "cockpit-pele"}`}
+      style={{ "--cd-sidebar-width": `${larguraSidebar}px` } as React.CSSProperties}
     >
-      {harnessVisivel && gaveta === null ? (
-        <nav
-          aria-label="Harness flutuante superior"
-          data-cd-harness="top-floating"
-          className="fixed left-1/2 top-1 z-[60] hidden -translate-x-1/2 items-center gap-1 rounded-2xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur sm:flex"
-        >
-          <Button size="sm" variant="ghost" title="CentralDark" aria-label="CentralDark · visão geral" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-          <Button size="icon" variant="ghost" title="Lupa · buscar ferramentas" aria-label="Lupa · buscar ferramentas" onClick={() => definirGaveta("top")}><Search className="size-4" /></Button>
-          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("right")}><Layers3 className="size-4" /></Button>
-          <Button size="icon" variant="ghost" title="Notificações" aria-label="Notificações" onClick={() => { definirAbaAdminInicial("notificacoes"); abrirDestino("admin"); }}><Bell className="size-4" /></Button>
-        </nav>
-      ) : null}
-      {/* Cabecalho unico: identidade a esquerda e catraca no topo direito. */}
+      {/* Cabeçalho superior: ações existentes; identidade única no menu lateral. */}
       <header
         className="relative z-50 border-b border-border bg-background/95 px-4 py-3 transition-transform duration-300 ease-out sm:px-6"
         style={{ transform: navegacaoCompacta ? "translateY(-100%)" : "translateY(0)" }}
       >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5">
-            <span className="relative flex size-8 items-center justify-center rounded-md border border-primary/40 bg-surface">
-              <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
-            </span>
-            <span className="flex flex-col leading-none">
-              <span className="text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
-              <span className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">Instinto Superior</span>
-            </span>
-          </div>
           <div className="ml-auto flex w-full min-w-0 max-w-full flex-wrap items-center justify-start gap-2 sm:w-auto sm:justify-end">
             <Button
               data-cd-flow="instinto.CockpitShell.botao-01"
@@ -679,12 +752,21 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 onSair={sair}
               />
             )}
+            {autenticado ? (
+              <span data-cd-header-bell="right-of-account" className="shrink-0 [&_button]:!size-9 [&_button]:rounded-md [&_button]:border [&_button]:border-border">
+                <CentralNotificacoes modo="sininho" abrirCentral={() => {
+                  definirAbaAdminInicial("notificacoes");
+                  definirVersaoAdmin((n) => n + 1);
+                  abrirDestino("admin");
+                }} />
+              </span>
+            ) : null}
           </div>
         </div>
       </header>
       <div aria-hidden="true" className="h-12" />
       {harnessVisivel ? (
-        <nav aria-label="Harness lateral esquerdo" data-cd-harness="left-rail" className="fixed left-1 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
+        <nav aria-label="Harness auxiliar à direita" data-cd-harness="left-rail" className="fixed right-14 top-1/2 z-40 hidden -translate-y-1/2 flex-col gap-2 sm:flex rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
           <Button size="icon" variant="ghost" title="Abrir ferramentas" aria-label="Abrir ferramentas" onClick={() => definirGaveta("left")}><Menu className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="CentralDark Gram" aria-label="CentralDark Gram" onClick={() => autenticado ? abrirDestino("gram") : abrirDestino("visao")}><MessagesSquare className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Goals" aria-label="Goals" onClick={() => abrirDestino("goals")}><Zap className="size-4" /></Button>
@@ -696,17 +778,6 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
           <Button size="icon" variant="ghost" title="Sistemas" aria-label="Sistemas" onClick={() => definirGaveta("right")}><PanelRight className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Hermes" aria-label="Hermes" onClick={() => abrirDestino("hermes")}><Terminal className="size-4" /></Button>
           <Button size="icon" variant="ghost" title="Configurar Harness" aria-label="Configurar Harness" onClick={() => definirGaveta("bottom")}><Settings2 className="size-4" /></Button>
-        </nav>
-      ) : null}
-      {harnessVisivel ? (
-        <nav aria-label="Harness superior" data-cd-harness="top-rail" className="fixed left-1/2 top-1 z-40 flex -translate-x-1/2 items-center gap-1 rounded-xl border border-border bg-background/95 p-1 shadow-xl backdrop-blur">
-          <Button size="sm" variant="ghost" onClick={() => abrirDestino("visao")}>🧿 CentralDark</Button>
-          {autenticado ? <CentralNotificacoes modo="sininho" abrirCentral={() => {
-            definirAbaAdminInicial("notificacoes");
-            definirVersaoAdmin((n) => n + 1);
-            abrirDestino("admin");
-          }} /> : null}
-          <Button size="icon" variant="ghost" title="Mapa dos sistemas" aria-label="Mapa dos sistemas" onClick={() => definirGaveta("top")}><Layers3 className="size-4" /></Button>
         </nav>
       ) : null}
       {harnessVisivel ? (
@@ -904,11 +975,26 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
             </div>
           ) : null}
 
-          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full">
-            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-64" : "md:-ml-12"}`} id="centraldark-harness-abas">
+          <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full"
+            style={{ "--sidebar-width": `${larguraSidebar}px` } as React.CSSProperties}>
+            <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-[var(--cd-sidebar-width)]" : "md:-ml-12"}`} id="centraldark-harness-abas">
               <Sidebar collapsible="icon" className="z-40" aria-label="Navegação da Sala de Controle">
-                <SidebarHeader className="border-b border-border px-3 py-4">
-                  <span className="truncate text-sm font-semibold group-data-[collapsible=icon]:hidden">🪬 CentralDark</span>
+                <SidebarHeader className="border-b border-border px-2 py-4">
+                  <div className="flex min-h-9 items-center justify-between gap-1">
+                    <div className="flex min-w-0 items-center gap-1 overflow-hidden group-data-[collapsible=icon]:justify-center">
+                      <span className="relative flex size-8 shrink-0 items-center justify-center rounded-md border border-primary/40 bg-surface" aria-hidden="true">
+                        <span className="animate-soft-pulse size-2.5 rounded-full bg-primary" />
+                      </span>
+                      <span className="flex min-w-0 flex-col leading-none group-data-[collapsible=icon]:hidden">
+                        <span className="truncate text-gold-gradient text-sm font-semibold tracking-wide">CentralDark</span>
+                        <span className="truncate font-mono text-[9px] tracking-[0.1em] text-muted-foreground uppercase">Instinto Superior</span>
+                      </span>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-0 group-data-[collapsible=icon]:flex-col">
+                      <Button type="button" size="icon" variant="ghost" title="Pesquisar ferramentas" aria-label="Pesquisar ferramentas" onClick={abrirBuscaNavegacao} className="size-8"><Search className="size-4" /></Button>
+                      <SidebarTrigger title="Ocultar ou mostrar barra lateral" aria-label="Ocultar ou mostrar barra lateral" className="size-8" />
+                    </div>
+                  </div>
                   <label htmlFor="busca-navegacao" className="text-xs text-muted-foreground group-data-[collapsible=icon]:sr-only">Procurar ferramenta</label>
                   <input id="busca-navegacao" type="search" value={buscaNavegacao} onChange={(e) => definirBuscaNavegacao(e.target.value)}
                     placeholder="Procurar: senha, cor, Hermes..."
@@ -928,8 +1014,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                           <FecharMenuNoCelular key={item.valor}>
                             <TabsTrigger value={item.valor} title={item.ajuda}
                               data-cd-flow={"instinto.CockpitShell.aba." + item.valor}
-                              className="flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
-                              <span aria-hidden="true" className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0">{pasta.icone}</span>
+                              className="group/menuitem flex min-h-12 w-full items-center justify-start rounded-md px-3 py-2 text-left text-sm whitespace-normal transition-colors duration-200 hover:bg-primary/10 focus-visible:bg-primary/10 data-[state=active]:bg-primary/15 data-[state=active]:text-primary group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 motion-reduce:transition-none">
+                              <IconeItemNavegacao valor={item.valor} />
                               <span className="min-w-0 group-data-[collapsible=icon]:sr-only">
                                 <span className="block font-medium">{item.nome}</span>
                                 <span className="block text-[11px] font-normal leading-snug text-muted-foreground">{item.ajuda}</span>
@@ -943,13 +1029,48 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                   {buscaNavegacao && !NAVEGACAO_PASTAS.some((pasta) => pasta.itens.some((item) => (!item.soAdmin || autenticado) && (pasta.pasta + " " + item.nome + " " + item.ajuda).toLocaleLowerCase("pt-BR").includes(buscaNavegacao.toLocaleLowerCase("pt-BR")))) ?
                     <p className="p-3 text-xs text-muted-foreground">Nenhuma ferramenta encontrada.</p> : null}
                 </SidebarContent>
+                <div
+                  role="separator"
+                  aria-label="Arrastar para ajustar largura da barra lateral"
+                  aria-orientation="vertical"
+                  aria-valuemin={240}
+                  aria-valuemax={440}
+                  aria-valuenow={larguraSidebar}
+                  tabIndex={menuAberto ? 0 : -1}
+                  title="Arraste para redimensionar · setas do teclado para ajustar"
+                  data-cd-sidebar-resize
+                  data-dragging={arrastandoSidebar ? "true" : "false"}
+                  className="group-data-[collapsible=icon]:hidden absolute inset-y-0 right-0 z-50 hidden w-2 cursor-col-resize touch-none outline-none md:block after:absolute after:inset-y-0 after:right-0 after:w-[2px] after:rounded-full after:bg-transparent hover:after:bg-primary/60 focus-visible:after:bg-primary/70 data-[dragging=true]:after:bg-primary"
+                  onPointerDown={(event) => {
+                    if (event.button !== 0 || !menuAberto) return;
+                    event.preventDefault();
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                    definirArrastandoSidebar(true);
+                  }}
+                  onPointerMove={(event) => {
+                    if (arrastandoSidebar) ajustarLarguraSidebar(event.clientX);
+                  }}
+                  onPointerUp={(event) => {
+                    if (!arrastandoSidebar) return;
+                    definirArrastandoSidebar(false);
+                    ajustarLarguraSidebar(larguraSidebarAtual.current, true);
+                    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+                  }}
+                  onPointerCancel={() => definirArrastandoSidebar(false)}
+                  onLostPointerCapture={() => definirArrastandoSidebar(false)}
+                  onDoubleClick={() => ajustarLarguraSidebar(256, true)}
+                  onKeyDown={(event) => {
+                    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+                      event.preventDefault();
+                      ajustarLarguraSidebar(larguraSidebarAtual.current + (event.key === "ArrowRight" ? 16 : -16), true);
+                    }
+                  }}
+                />
               </Sidebar>
               <div className="min-w-0 flex-1">
                 <div className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-3 border-b border-border bg-background/95 px-3 py-2 backdrop-blur sm:px-4"
                      aria-label="Localização e estado da Sala de Controle">
                   <div className="flex min-w-0 items-center gap-3">
-                    <SidebarTrigger aria-label="Abrir ou recolher menu" className="size-10 shrink-0" />
-                    <SidebarTrigger aria-label="Abrir menu lateral" className="fixed bottom-20 left-3 z-[70] size-12 rounded-full border border-border bg-background shadow-xl md:hidden" />
                     <span className="truncate text-sm font-semibold">{pastaAtiva?.pasta ?? "Sala de Controle"} › {tituloAbaAtiva}</span>
                   </div>
                   {(() => {
@@ -1231,13 +1352,13 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
                 </>
               )}
             </TabsContent>
-            <TabsContent value="codex-halo" className="mt-10">
+            <TabsContent value="centraldark-halo" className="mt-10">
               <div className="mb-6">
                 <p className="font-mono text-[10px] tracking-[0.2em] text-neon-blue uppercase">Harness · capacidade nativa</p>
-                <h2 className="mt-3 text-3xl font-semibold">Codex Halo</h2>
+                <h2 className="mt-3 text-3xl font-semibold">CentralDark Halo</h2>
                 <p className="mt-3 text-sm text-muted-foreground">Overlay original reutilizado no próprio owner, com estados do Harness e passagem de cliques preservada.</p>
               </div>
-              <CodexHaloHarness estado={(dado?.status ?? "UNKNOWN") as EstadoOperacional} />
+              <CentralDarkHaloHarness estado={(dado?.status ?? "UNKNOWN") as EstadoOperacional} />
               <div className="mt-6 rounded-lg border border-border p-4 text-xs text-muted-foreground">
                 Azul = trabalhando · amarelo = atenção · verde = concluído. O Halo é visual e não substitui Hermes, Cua ou qualquer executor.
               </div>

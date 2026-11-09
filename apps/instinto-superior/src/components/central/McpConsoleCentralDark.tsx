@@ -88,6 +88,16 @@ export function McpConsoleCentralDark() {
 
   useEffect(() => { void atualizar(aba); }, [aba, atualizar]);
 
+  useEffect(() => {
+    const abrirPareamento = () => {
+      const item = PAINEIS.find((painel) => painel.id === "pareamento");
+      if (item) definirAba(item);
+    };
+    window.addEventListener("centraldark:mcp-open-pairing", abrirPareamento);
+    if (new URLSearchParams(window.location.search).get("mcp-pareamento") === "1") abrirPareamento();
+    return () => window.removeEventListener("centraldark:mcp-open-pairing", abrirPareamento);
+  }, []);
+
   async function entrar(evento: React.FormEvent) {
     evento.preventDefault();
     definirOcupado(true);
@@ -127,7 +137,7 @@ export function McpConsoleCentralDark() {
   }
 
   return (
-    <section className="mt-8 rounded-2xl border border-border bg-card/40 p-5" aria-label="CentralDark MCP — Sala de Controle">
+    <section id="mcp-console" className="mt-8 rounded-2xl border border-border bg-card/40 p-5" aria-label="CentralDark MCP — Sala de Controle">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">MCP · API única</p>

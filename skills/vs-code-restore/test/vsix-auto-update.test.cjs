@@ -19,3 +19,31 @@ test('old K drive workspace guard persists after reload', () => {
   assert.match(source, /remoteWorkspace && windowsMapped/);
   assert.match(source, /vscode\.window\.terminals\.some/);
 });
+
+
+test('same CentralDark extension owns a separate Activity Bar icon, not native Explorer', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
+  const c = pkg.contributes;
+  assert.equal(pkg.name, 'centraldark-vscode-restore');
+  assert.equal(pkg.publisher, 'centraldark');
+  assert.equal(lock.version, pkg.version);
+  assert.equal(lock.packages[''].version, pkg.version);
+  assert.equal(c.views.explorer, undefined, 'native Explorer must not be occupied by CentralDark');
+  assert.equal(c.viewsContainers.activitybar.length, 1);
+  const container = c.viewsContainers.activitybar[0];
+  assert.equal(container.id, 'centraldarkVibe');
+  assert.ok(fs.existsSync(path.join(root, container.icon)), 'activity icon must ship with the same VSIX');
+  assert.deepEqual(c.views[container.id].map(v => v.id), ['centraldarkVibeCoding', 'centraldarkWorkspaceFolders']);
+  assert.equal(c.views[container.id][0].type, 'webview');
+});
+
+
+test('native Files view is restored only via its own VS Code reset command', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  const src = fs.readFileSync(path.join(root, 'src', 'extension.ts'), 'utf8');
+  const cmd = pkg.contributes.commands.find(c => c.command === 'centraldark.restoreNativeExplorer');
+  assert.ok(cmd, 'existing extension must expose targeted restore command');
+  assert.match(src, /executeCommand\('workbench\.explorer\.fileView\.resetViewLocation'\)/);
+  assert.doesNotMatch(src, /resetViewLocations|state\.vscdb|globalStorage\state/);
+});
