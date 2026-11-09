@@ -369,7 +369,7 @@ def cognitive_bios_state(repo: Path) -> dict:
 def canonical_consumption_gate_state(repo: Path) -> dict:
     """Índice canônico pertinente; nunca vira portão de permissão."""
     gate = repo / CANONICAL_CONSUMPTION_GATE
-    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT"]
+    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT", "--compact"]
     try:
         proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, encoding="utf-8",
                                errors="replace", timeout=15, check=False)
