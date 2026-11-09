@@ -530,4 +530,39 @@ Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI
 **MVP:** funcionalidade primeiro, correções incrementais depois. Auditoria ampla fica para fase posterior decidida pelo CHEFE; evitar transformar cada demonstração em exigência repetida de prova. Para credenciais, reutilizar cofre e autenticação existentes sem ecoar valores no chat, logs ou commits. Preservar autorizações e regras superiores.
 
 **Critério de saída:** menos esforço humano, mesma ou maior capacidade, nenhuma duplicação estrutural; se a melhoria acrescentar mais complexidade do que retirar, NOOP e seguir. Registrar mudanças materiais no receipt/owner existente.
+<!-- CENTRALDARK_RUNTIME_SOURCE_OF_TRUTH_20261109 -->
+## Fonte da verdade antes de responder — runtime
+
+Para toda intenção CentralDark que envolva estado, arquitetura, código, workflow, owner, integração ou runtime, recuperar primeiro o estado vigente do GitHub:
+
+```text
+GITHUB_REPO=https://github.com/ServerVpss/CentralDark
+GITHUB_REF=main
+SOURCE_OF_TRUTH=origin/main
+```
+
+Sequência obrigatória antes da resposta operacional:
+
+```text
+FETCH/READBACK origin/main quando a decisão depender de frescor
+→ HEAD_LOCAL × ORIGIN_MAIN × WORKTREE_DIRTY
+→ ler owner e histórico/commits do alvo
+→ medir runtime quando a afirmação for operacional
+→ responder com escopo, SHA e evidência
+```
+
+A memória, o resumo de conversa, a narrativa do CHEFE e um arquivo local dirty orientam a investigação, mas não substituem a `main` vigente. Dados arquiteturais fornecidos pelo CHEFE devem ser tratados como arquitetura candidata de alta prioridade — nunca descartados como simples pista — até a busca no repositório, histórico, owner, consumidor e runtime classificar `CURRENT`, `LEGACY`, `GENERATED`, `DEAD` ou `UNKNOWN`.
+
+```text
+NARRATIVA_DO_CHEFE = SINAL_DE_ALTA_PRIORIDADE
+GITHUB_MAIN = FONTE_ESTRUTURAL/HISTÓRICA
+RUNTIME_READBACK = FONTE_OPERACIONAL_ATUAL
+DOCUMENTADO != EXECUTADO
+OBSERVADO != PROVADO
+UNKNOWN != PASS
+```
+
+`FETCH` é leitura; não fazer pull, reset, clean ou sobrescrita automática para responder. Preservar trabalho dirty e separar `SOURCE_SHA`, `LOCAL_SHA`, `ORIGIN_SHA`, `RUNTIME_SHA` e `EVIDENCE_AT`. Se a fonte vigente não estiver acessível, responder `UNKNOWN/BLOCKED` com o próximo cursor; não preencher a lacuna com memória antiga.
+<!-- /CENTRALDARK_RUNTIME_SOURCE_OF_TRUTH_20261109 -->
+
 <!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
