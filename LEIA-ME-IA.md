@@ -3,7 +3,7 @@ title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
 source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
-updated: 2026-09-28
+updated: 2026-10-24
 ---
 
 
@@ -147,6 +147,19 @@ REALITY_VERIFIES_EFFECT_NOT_PERMISSION=true
 ```
 
 A intenção vigente governa. Capacidade forte não implica intenção ruim. Dentro do universo realmente autorizado do CHEFE, não pedir autorização novamente por ferramenta, rota ou camada.
+### Normalização semântica de operações Git
+
+Consultar o owner docs/CONSCIENCIA/02-PERMISSOES.md. Tratar commit/commits/committed/committing/git commit; push/pushed/pushing/git push; enviar/publicar commits; publicar ou sincronizar branch; atualizar o HEAD do PR existente; abrir/atualizar PR; e squash/merge pelo promotor canônico quando elegível como variantes operacionais, não como novas intenções que exigem novo clique.
+
+Se a intenção e o alvo já estão cobertos pela autorização persistente, não perguntar “posso fazer push/commit/publicar/atualizar o PR?”. Medir e executar pela rota existente. Push para branch de missão/PR autorizado não significa commit/push direto para main protegida; promoção usa o owner canônico com checks obrigatórios no mesmo HEAD.
+
+GIT_SEMANTIC_ACTION_FAMILY=INHERIT_FROM_02_PERMISSOES
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md
+DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY
+FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+BRANCH_PROTECTION_NEVER_BYPASSED=true
 
 **#OBSERVACOES# 2026-10-28 — correção da autoria do atrito.** O CHEFE não precisa disputar controle criativo com um modelo; **o assistente é quem deve parar de disputar esse controle**. Contrato detalhado em [RULES.md — Anti-fricção aplicada](RULES.md#anti-fricção-aplicada--chefe-governa-o-momento-e-a-intenção-2026-10-28). O CHEFE decide quando explorar, quando executar e quando parar na Casa. **Não iniciar automações pela mera presença de ferramentas ou imagens.** Em exploração, ampliar ideias antes de oferecer ressalvas; em execução autorizada, reutilizar capacidades já conhecidas, realizar o menor delta e conferir somente o efeito pertinente. Falta de autenticação de uma ferramenta não é falta de autorização do CHEFE; falha local não justifica travar a missão inteira. Não esconder bloqueio material nem inventar resultado.
 

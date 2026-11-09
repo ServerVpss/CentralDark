@@ -10,6 +10,7 @@ import { CallToolRequestSchema, ListResourcesRequestSchema, ListToolsRequestSche
 import { z } from "zod";
 import { log } from "./log.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
+import { isSafeReadOnlyExecuteCommand } from "./tools/vps/vps-lazy.js";
 import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
 import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
 import { auditToolExecution } from "./audit-logger.js";
@@ -308,14 +309,21 @@ export function buildServer(options) {
                 callerUser: options.callerUser ?? null,
                 oauthScope: String(options.oauthScope || ""),
                 correlationId: options.cid ?? null,
-                // Only the authenticated HTTP admin endpoint can provide this provenance.
+                // #OBSERVACOES# @owner=apps/modulos/mcp/src/mcp-server.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:49:48.830Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
+                // Only server-authenticated routes can supply a provenance; unknown values fail closed.
                 authProvenance: options.authProvenance === "verified_oauth_admin"
-                    ? "verified_oauth_admin" : null,
+                    || options.authProvenance === "verified_hub_admin" ? options.authProvenance : null,
             });
-            // Mesma preflight do dispatcher; evita clientes diretos furarem a prioridade.
+            // The dispatcher must classify its inner target, not reuse its own outer annotation.
             const targetTool = tool.name === "mcp_admin_call" ? parsed.data.tool : tool.name;
-            const recipeFirst = await canonicalRecipeFirstPreflight(targetTool, tool.name === "mcp_admin_call"
-                ? (parsed.data.input ?? {}) : parsed.data, tool.annotations?.readOnlyHint === true);
+            const targetInput = tool.name === "mcp_admin_call" ? (parsed.data.input ?? {}) : parsed.data;
+            const targetDefinition = tool.name === "mcp_admin_call"
+                ? ALL_TOOLS.find((candidate) => candidate.name === targetTool) : tool;
+            const targetReadOnly = (targetDefinition?.annotations?.readOnlyHint === true
+                    && targetDefinition?.annotations?.destructiveHint !== true)
+                || new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_status"]).has(targetTool)
+                || (targetTool === "execute_command" && isSafeReadOnlyExecuteCommand(targetInput?.command));
+            const recipeFirst = await canonicalRecipeFirstPreflight(targetTool, targetInput, targetReadOnly);
             if (!recipeFirst.ok) throw new Error(recipeFirst.status);
             const raw = await tool.handler(parsed.data, toolContext);
             const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
@@ -333,6 +341,8 @@ export function buildServer(options) {
                 exitCode: typeof result === "object" && result !== null && "exitCode" in result
                     ? Number(result.exitCode)
                     : null,
+                ok: result?.structuredContent?.centraldark?.ok === true && result?.isError !== true,
+                status: result?.structuredContent?.centraldark?.state === "BLOCKED" ? "BLOCKED" : null,
                 ok: !(typeof result === "object" &&
                     result !== null &&
                     "isError" in result &&

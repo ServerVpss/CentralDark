@@ -1,7 +1,7 @@
 ---
 title: "CLAUDE.md"
 date: 2026-08-24
-updated: 2026-10-15T15:30:00-03:00
+updated: 2026-10-24T12:10:17.921Z
 status: LIVE_OPERATING
 permission_mode: TOTAL_BYPASS_AUTO_APPROVAL
 tags: [boot, contrato, claude, ponte, intencao, live-editing]
@@ -77,6 +77,8 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 
 ## ⚡ PERMISSÃO PERMANENTE — VIGENTE A PARTIR DE 2026-10-15
 
+> A suspensão de sincronização de 15/10 pertence somente à convergência visual da Casa daquela missão. Ela não suspende push/commit de missões autorizadas, atualização de branches/PRs existentes ou promoção canônica quando os gates do escopo atual passam. O owner global de permissão é docs/CONSCIENCIA/02-PERMISSOES.md.
+
 **AUTO-APPROVAL TOTAL PARA K:\\ WORKSPACE**
 
 ```yaml
@@ -91,7 +93,7 @@ OPTIONAL_CONDITIONS_ALERT_ONLY:
   - force_push: ALERT (não bloqueia)
 PROMPT_MODE: DISABLED
 BYPASS_MECHANISM: claude-direct-exec (sem pedir)
-SYNC_MODE: SUSPENDED_UNTIL_CHEFE_APPROVAL (2026-10-15 — Convergência Visual CASA)
+SYNC_MODE: SUSPENDED_ONLY_FOR_VISUAL_CONVERGENCE_SCOPE (2026-10-15); OTHER_AUTHORIZED_GIT_OPERATIONS_CONTINUE=true
 ```
 
 **Significado:**
@@ -642,7 +644,7 @@ Seleção automática por complexidade/risco/ambiguidade/custo/latência. Pode m
 
 **Antes de mergear para main:**
 1. Testes passam (local + CI verde)
-2. Uma ou mais aprovações (SEGREDO/CHEFE, Writer, ou codeowner)
+2. Autoridade resolvida por docs/CONSCIENCIA/02-PERMISSOES.md sem re-pergunta quando a mesma intenção/escopo já está autorizado; manter reviews humanos/codeowner somente quando forem exigidos pela branch protection ou pelos gates canônicos.
 3. Sem force-push; rebase em main se divergiu
 4. Commit message inclui scope + `Co-Authored-By`
 5. Docs (`CONSCIENCIA/`, `ARQUITETURA/`) atualizadas se comportamento mudou

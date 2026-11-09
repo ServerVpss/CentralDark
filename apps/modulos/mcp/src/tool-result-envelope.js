@@ -33,6 +33,18 @@ function legacyJsonResult(payload) {
   try { return asObject(JSON.parse(text)); } catch { return {}; }
 }
 
+// #OBSERVACOES# @owner=apps/modulos/mcp/src/tool-result-envelope.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:48:08.723Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
+// Parse the application's structured JSON result without conflating it with MCP transport errors.
+function applicationResult(payload) {
+  const legacy = legacyJsonResult(payload);
+  if (Object.keys(legacy).length > 0) return legacy;
+  const structured = asObject(payload.structuredContent);
+  return asObject(structured.result);
+}
+
+function isBlockedApplicationResult(result) {
+  if (result.executionStatus === "blocked" || result.executionStatus === "BLOCKED" || result.decision === "blocked") return true;
+  return result.ok === false && /^(?:CONFIRMACAO_ADMIN_NECESSARIA|ESCOPO_ADMIN_NECESSARIO|CONTEXTO_ADMIN_INCOMPLETO|INDEPENDENT_APPROVAL_REQUIRED|DESTRUTIVA_EM_QUARENTENA|AUDITORIA_STARTUP_INDISPONIVEL|CANONICAL_RECIPE_READ_FAILED_LOCKED)$/i.test(String(result.status || ""));
 // Resultado semantico: o dispatcher devolve bloqueios como texto JSON
 // ({ ok:false, executionStatus:"blocked" }) sem isError. A auditoria usa isto
 // para nao registrar PASS quando a operacao interna foi bloqueada ou falhou.
@@ -99,17 +111,22 @@ export function decorateToolResult(raw, {
     : { content: [{ type: "text", text: stringifyFallback(raw) }] };
 
   const isError = payload.isError === true || errorCode !== "NONE";
+  const appResult = applicationResult(payload);
+  const blocked = isBlockedApplicationResult(appResult);
+  const appFailure = appResult.ok === false || appResult.executionStatus === "blocked" || appResult.executionStatus === "BLOCKED";
+  const failed = isError || appFailure;
   const durationMs = Math.max(0, Date.now() - Number(startedAt || Date.now()));
 
   const centraldark = {
     schema: "centraldark.tool-call.v1",
-    state: isError ? "ERROR" : "SUCCESS",
-    ok: !isError,
+    state: blocked ? "BLOCKED" : failed ? "ERROR" : "SUCCESS",
+    ok: !failed,
     tool_name: String(toolName || "UNKNOWN"),
     correlation_id: String(correlationId || "UNKNOWN"),
     duration_ms: durationMs,
-    error_state: isError ? "PRESENT" : "NONE",
-    error_code: isError ? String(errorCode || "UNCLASSIFIED") : "NONE",
+    error_state: blocked ? "BLOCKED" : failed ? "PRESENT" : "NONE",
+    error_code: errorCode !== "NONE" ? String(errorCode || "UNCLASSIFIED")
+      : blocked ? "OPERATION_BLOCKED" : appFailure ? "APPLICATION_FAILURE" : "NONE",
     action_is_proof: false,
     evidence_boundary: "MCP_TOOL_CALL_COMPLETED",
     continuity: continuityFromPayload(payload, toolName),

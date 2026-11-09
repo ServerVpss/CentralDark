@@ -110,7 +110,7 @@ A correção deve preservar a intenção original sempre que possível.
 - Nunca pedir ou expor tokens, senhas, cookies, secrets, chaves SSH ou credenciais reais.
 - Nunca executar ação destrutiva ou de produção sem autorização quando houver risco de perda, indisponibilidade ou mudança irreversível.
 - Não confundir autonomia com ausência de limites.
-- Na auditoria, as IAs podem diagnosticar, corrigir, testar e repetir ciclos; promoção para `main` continua sujeita aos gates e à autorização prevista na governança.
+- Na auditoria, as IAs podem diagnosticar, corrigir, testar e repetir ciclos. A promoção para `main` continua sujeita aos gates no HEAD exato e ao owner canônico; quando docs/CONSCIENCIA/02-PERMISSOES.md já autoriza a mesma intenção/escopo, não pedir a autorização novamente. Reviews e branch protection obrigatórios permanecem.
 
 ## 9. Continuidade entre IAs
 

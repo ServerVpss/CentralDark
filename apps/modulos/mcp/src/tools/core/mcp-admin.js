@@ -30,7 +30,7 @@ import { pendenciasTools } from "../pendencias/pendencias.js";
 import { skillTools } from "../skills/skill.js";
 import { supabaseTools } from "../supabase/supabase.js";
 import { vpsFileTools } from "../vps/vps-files.js";
-import { vpsLazyTools } from "../vps/vps-lazy.js";
+import { isSafeReadOnlyExecuteCommand, vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
@@ -508,8 +508,9 @@ export const mcpAdminTools = [
     },
     {
         name: "mcp_admin_call",
-        description: "Dispatcher fixo do MCP. Reutiliza OAuth/Hub admin autenticado para destrutivas aprovadas sem frase repetitiva; chamadas legadas exigem confirmAdmin e missões automáticas não ganham aprovação.",
-        annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
+        // #OBSERVACOES# @owner=apps/modulos/mcp/src/tools/core/mcp-admin.js @doc_ref=apps/modulos/mcp/docs/ARQUITETURA.md @last_updated=2026-10-24T07:48:08.723Z @estado=BRANCH_IMPLEMENTADO @pendente=TESTE_CI_E_READBACK @next_cursor=PR_CI_READBACK
+        description: "Dispatcher admin. A destrutividade é avaliada pela ferramenta interna, não presumida para toda chamada; o guard continua protegendo cada ferramenta destrutiva.",
+        annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false, title: "Chamada admin MCP" },
         inputSchema: z.object({
             tool: z.string().min(1),
             input: z.record(z.string(), z.unknown()).optional(),
@@ -552,6 +553,11 @@ export const mcpAdminTools = [
             const declaredDestructive = tool.annotations?.destructiveHint === true;
             const parsed = parseToolInput(tool, input.input);
             if (!parsed.success) return invalidInputResponse(input, parsed, declaredDestructive);
+
+            // Classificação por alvo: uma chamada de leitura não deve herdar a hint destrutiva do dispatcher.
+            const readOnlyOperation = (tool.annotations?.readOnlyHint === true && !declaredDestructive)
+                || (input.tool === "execute_command" && isSafeReadOnlyExecuteCommand(parsed.data?.command));
+            const destructive = declaredDestructive && !readOnlyOperation;
             // Tool destrutiva pode declarar classifyInvocation(input): somente uma invocacao
             // PROVADA somente-leitura deixa de ser tratada como destrutiva. Erro => destrutiva.
             let readOnlyInvocation = false;
@@ -563,8 +569,7 @@ export const mcpAdminTools = [
 
             // Mesmo dispatcher atende ChatGPT, Hermes, Hub e bridge OAuth:
             // consulta a receita no owner ANTES de qualquer handler.
-            const recipeFirst = await canonicalRecipeFirstPreflight(input.tool, parsed.data,
-                tool.annotations?.readOnlyHint === true);
+            const recipeFirst = await canonicalRecipeFirstPreflight(input.tool, parsed.data, readOnlyOperation);
             if (!recipeFirst.ok) return ok({
                 ok: false, status: recipeFirst.status,
                 tool: input.tool, recipeFirst,

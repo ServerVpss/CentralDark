@@ -2,12 +2,35 @@
 title: "02 PERMISSOES"
 date: 2026-06-29
 tags: ["consciencia"]
-updated: 2026-09-07
+updated: 2026-10-24
 ---
 
 # 02 — Permissões
 
 SEGREDO/CHEFE é a autoridade humana final. Autorização já concedida e ainda dentro do mesmo escopo não deve ser perguntada novamente.
+## Família semântica de commit/push — autorização já concedida
+
+A autorização persistente acompanha a intenção, o repositório, o escopo e o destino; não depende da palavra exata usada na conversa. Na mesma missão e no mesmo alvo autorizado, executar sem re-perguntar os equivalentes abaixo:
+
+- **Commit:** commit, commits, committed, committing, git commit, criar/registrar/salvar um commit, registrar o delta.
+- **Push:** push, pushed, pushing, git push, enviar/publicar commits, publicar branch, atualizar/sincronizar branch remota, git push origin nome-da-branch-autorizada.
+- **Continuidade do PR:** anexar commits à branch do PR existente, atualizar o HEAD do PR, sincronizar a branch, abrir/atualizar PR quando esse for o caminho canônico.
+- **Promoção:** squash/merge pelo owner canônico quando a intenção já estiver autorizada e os gates do HEAD exato estiverem verdes.
+
+Não perguntar de novo frases equivalentes como “posso fazer push?”, “posso commitar?”, “posso publicar os commits?”, “atualizo a branch do PR?”, “envio para origin?” ou “posso dar squash?” quando a mesma ação e o mesmo alvo já estiverem autorizados. Medir o estado vivo e executar; se o alvo mudou, recalibrar a operação sem transferir ao CHEFE uma medição que a máquina consegue fazer.
+
+GIT_SEMANTIC_ACTION_FAMILY=COMMIT|COMMITS|COMMITTED|COMMITTING|GIT_COMMIT|PUSH|PUSHED|PUSHING|GIT_PUSH|PUBLISH_COMMITS|PUBLISH_BRANCH|UPDATE_REMOTE_BRANCH|SYNC_BRANCH|UPDATE_EXISTING_PR|OPEN_OR_UPDATE_PR|SQUASH_MERGE_IF_CLEAN
+NO_HUMAN_REASK_FOR_ALREADY_GRANTED_SCOPE=true
+NO_HUMAN_REASK_FOR_SEMANTIC_ALIAS=true
+AUTHORIZATION_OWNER=docs/CONSCIENCIA/02-PERMISSOES.md
+DIRECT_MAIN_COMMIT=BLOCKED_BY_BRANCH_POLICY
+DIRECT_PUSH_TO_PROTECTED_MAIN=BLOCKED_BY_BRANCH_POLICY
+FORCE_PUSH_REQUIRES_EXPLICIT_CHEFE_AUTH=true
+BRANCH_PROTECTION_NEVER_BYPASSED=true
+REQUIRED_CHECKS_NEVER_BYPASSED=true
+SECRET_OR_CREDENTIAL_VALUE_NEVER_COMMITTED=true
+
+Essa normalização não amplia escopo, não autoriza force-push/reescrita de histórico, bypass de branch protection, publicação de segredos ou mutação fora do owner. Se o remoto mudar concorrentemente, parar a escrita, buscar/reconciliar e continuar quando a operação segura estiver determinada — sem pedir a mesma autorização de novo.
 
 ## Fronteira canônica — identidade humana ≠ corpo executor
 
