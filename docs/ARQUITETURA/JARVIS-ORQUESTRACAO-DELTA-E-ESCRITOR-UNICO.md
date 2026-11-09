@@ -242,13 +242,15 @@ CASA OFFLINE: VPS EXECUTA APENAS CAPACIDADES AUTONOMAS JA COMPROVADAS;
 @doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 @last_updated: 2026-11-09
 @escopo: corrigir ambiguidades entre produto CentralDark-OS, VM VMware e VPS externa
-@pendente: autostart VMware; ingress MCP externo; espelhamento readback VPS Hostinger
+@pendente: validar autostart apos reboot; ingress MCP externo; espelhamento readback VPS Hostinger
 @next_cursor: VM_AUTOSTART_READBACK -> MCP_PUBLIC_OAUTH -> HOSTINGER_COMPARE_PROMOTE_WHEN_AVAILABLE
 -->
 
 **CURRENT:** a VM openKylin executada pelo VMware Workstation em `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx`, acessível da Casa via SSH `192.168.35.130`, é denominada operacionalmente **VPS da Casa**. Está assumindo o alvo Linux de serviço enquanto a VPS Hostinger não estiver pronta. Isto não reclassifica o produto CentralDark-OS como infraestrutura física nem elimina a **VPS externa**; ambos são destinos distintos do mesmo core. A VM depende do Windows/VMware para boot e energia; autostart e uptime devem ser comprovados separadamente.
 
 **Evidência T1 (09/11):** MCP HTTP `systemd --user` `centraldark-native-mcp-http.service` ativo/habilitado, porta `127.0.0.1:9100`, health/discovery 200; início de pareamento 201, redirecionamento consentimento 302. Cloudflare `mcp.centralldark.com` ainda não promovido ao backend Linux no último readback, login humano/heartbeat/`tools/list` pendentes. Essa prova pertence à **VPS da Casa**, não à VPS externa.
+
+**Configuração de boot Windows medida (09/11):** `vmAutoStart.xml` já continha a VM da Casa em prioridade 1; `VmwareAutostartService` atualizado para inicialização `Auto` e confirmado por readback. A VM permaneceu ligada, e o MCP HTTP do guest permaneceu `enabled/active` e com `/health=200`. O serviço VMware não foi iniciado enquanto a VM já rodava. **Ainda não há prova de boot após reiniciar Windows/host.**
 
 **Promoção futura:** quando Hostinger retornar, usar owners existentes para autenticar, comparar SHA/código, estados/configurações, preservar mudanças locais e externas e promover só delta aprovado. Verificar efeitos e rollback em cada destino; não criar sincronizador concorrente e não presumir espelho automático. `CASA_VPS_RUNTIME != HOSTINGER_RUNTIME`; `MIRROR_DESIRED != MIRROR_PROVED`.
 
