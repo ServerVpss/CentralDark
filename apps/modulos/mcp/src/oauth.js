@@ -9,6 +9,8 @@ import { isAdmin } from "./admin.js";
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
 export const REMOTE_BRIDGE_DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 let devicePairingStore = null;
+// Limite de tentativas de senha por pareamento. Nunca registrar ou guardar a senha.
+const devicePasswordFailures = new Map();
 export function configureDevicePairingForOAuth(store) {
     if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
         throw new Error("DEVICE_PAIRING_STORE_INVALID");
@@ -213,6 +215,7 @@ function sendOwnerConsentPage(res, input) {
         pair_id: input.device?.pairId,
         pair_code: input.device?.code,
         pair_nonce: input.device?.nonce,
+        auth_method: input.authMethod,
         error: input.error,
         success: input.success === true ? "1" : undefined,
     };
@@ -273,6 +276,7 @@ export async function handleAuthorize(req, res) {
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
                 isAdmin: isAdmin(req),
+                authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
             };
             if (req.method !== "POST") {
@@ -281,11 +285,31 @@ export async function handleAuthorize(req, res) {
             }
             // Token de dispositivo só é entregue via /device/pair/status
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
-            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            // Confirmação por código exige login admin válido. Senha é fallback
+            // explícito, nunca dispensa código + nonce de uma solicitação viva.
+            let ownerAuthenticated = isAdmin(req);
+            if (!ownerAuthenticated && details.authMethod === "password") {
+                const failures = devicePasswordFailures.get(pairId) || 0;
+                if (failures >= 5)
+                    return oauthError(res, 429, "access_denied", "Muitas tentativas. Inicie novo pareamento.");
+                const expected = getAdminPassword();
+                const submitted = param(req, "password");
+                ownerAuthenticated = Boolean(expected && submitted && timingSafeEqualText(submitted, expected));
+                if (!ownerAuthenticated) {
+                    devicePasswordFailures.set(pairId, failures + 1);
+                    sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Senha administrativa inválida ou não configurada." });
+                    return;
+                }
+            }
+            if (!ownerAuthenticated) {
+                sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Sessão administrativa ausente. Confirme o código e use a senha do MCP." });
+                return;
+            }
             const result = devicePairingStore.approveWeb({
                 pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
             });
             if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            devicePasswordFailures.delete(pairId);
             sendOwnerConsentPage(res, {...details, success: true});
             return;
         }
