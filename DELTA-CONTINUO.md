@@ -18,6 +18,98 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
+<!-- CENTRALDARK_SYNC_RECONCILIATION_CURRENT_20261109 -->
+## 🧭 DELTA CONTÍNUO — preservação e reconciliação Casa ↔ main (2026-11-09)
+
+**Status:** `ACTIVE_DELTA / CHECKOUT_UNSYNCED / PRESERVATION_REQUIRED`.
+**FIO DA MISSÃO:** preservar a Casa, inventariar os 17.721 arquivos não rastreados e os 116 caminhos rastreados alterados, identificar a origem da divergência e preparar reconciliação sem perda.
+
+**PRÓXIMO PASSO:** gerar inventário NUL-safe com caminhos e SHA-256; classificar sobreposições; reconciliar cada escopo com seu owner, sem alterar o checkout até haver plano e prova de preservação.
+
+**PONTO DE CONTINUIDADE:**
+`NEXT_CURSOR=preservar e inventariar os 17.721 arquivos, identificar a origem da divergência e preparar uma reconciliação sem perda.`
+
+### CURRENT medido — Casa Windows `F:\CentralDark`
+
+`MEASURED_AT=2026-11-09T01:59:37-03:00`
+`LOCAL_BRANCH=main`
+`LOCAL_HEAD=b71963ffaacbca2847364517487bb232f611acdb`
+`REMOTE_MAIN=4d97ddadda74aaed3ebd17056170718a86a5ec7e`
+`MERGE_BASE=4d2af54c746c827e01c47778a4ce9f4165c39eee`
+`LOCAL_ONLY_COMMITS=1`
+`REMOTE_ONLY_COMMITS=67`
+`PORCELAIN_TOTAL=17837`
+`UNTRACKED=17721`
+`TRACKED_DIRTY=116`
+`TRACKED_DIRTY_REMOTE_OVERLAP=35`
+`UNTRACKED_MAIN_TREE_COLLISIONS=16`
+`CHECKOUT_SYNCED=false`
+
+**Readback remoto:** a leitura atual de `git ls-remote origin refs/heads/main` coincide com `origin/main`. O `fetch origin main` havia concluído no passo anterior. Isso atualizou referências Git, não o conteúdo do checkout.
+
+### Origem comprovada da divergência
+
+O único commit exclusivo local é:
+
+`b71963ffaacbca2847364517487bb232f611acdb` — `fix(remote-bridge): restore canonical Windows build`.
+
+Arquivos do commit:
+1. `scripts/remote-bridge/Build-Remote-Bridge.ps1`
+2. `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md`
+3. `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1`
+
+Os três caminhos também foram modificados no remoto depois da base comum. A simulação de três vias marcou `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md` como `changed in both`. Portanto, o commit local não deve ser reaplicado automaticamente.
+
+### Colisões de arquivos não rastreados com o tree remoto
+
+Os 16 caminhos abaixo estão não rastreados no checkout local e já existem como caminhos rastreados em `origin/main`:
+
+- `.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md`
+- `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md`
+- `scripts/remote-bridge/ui/.gitignore`
+- `scripts/remote-bridge/ui/assets/client-config.json`
+- `scripts/remote-bridge/ui/assets/tray.ico`
+- `scripts/remote-bridge/ui/assets/tray.png`
+- `scripts/remote-bridge/ui/electron/main.cjs`
+- `scripts/remote-bridge/ui/electron/preload.cjs`
+- `scripts/remote-bridge/ui/index.html`
+- `scripts/remote-bridge/ui/package-lock.json`
+- `scripts/remote-bridge/ui/package.json`
+- `scripts/remote-bridge/ui/src/App.jsx`
+- `scripts/remote-bridge/ui/src/main.jsx`
+- `scripts/remote-bridge/ui/src/styles.css`
+- `scripts/remote-bridge/ui/vite.config.mjs`
+- `skills/vs-code-restore/media/centraldark-activity.svg`
+
+**Observação de inventário:** a distribuição por pasta ainda não é declarada; a leitura PowerShell com caminhos escapados não é suficiente para essa classificação. Usar saída NUL-safe (`git status --porcelain -z`) antes de produzir contagens por raiz. O manifesto completo de caminhos e hashes permanece pendente.
+
+### Padrão oficial SOL aplicado ao mesmo fio
+
+- Resultado primeiro, PT-BR direto, sem repetição desnecessária; até quatro linhas por padrão.
+- Diferenciar conversa, pergunta, correção, ensino e ordem.
+- Em gatilhos explícitos, recuperar protocolo, intenção vigente, CURRENT, owner, checkpoint, receipt e `NEXT_CURSOR`; reconhecer o gatilho não prova que o executor esteja disponível.
+- Ciclo: intenção → contexto → CURRENT → owner/writer/escopo → reutilizar → menor delta → executar → observar/testar → contraprova → readback → receipt → `FIXED_POINT` ou continuidade.
+- Manter separados **FIO DA MISSÃO**, **PRÓXIMO PASSO** e **PONTO DE CONTINUIDADE**. A nova mensagem é delta da mesma missão, não reinício.
+- `ONE_SYSTEM_ONLY=true`, `ONE_WRITER_PER_SCOPE=true`, `REUSE_BEFORE_CREATE=true`, `CURRENT_OVER_HISTORY=true`, `UNKNOWN != PASS`, `ACTION != PROOF`, `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`, `REALITY = JUDGE`.
+- Fechamento documental usa: Feito, Evidência, Pendência, Próximo passo, Qual BOOT usar, Fio da missão e Ponto de continuidade.
+
+### Preservação e gates
+
+`NO_MERGE=true`
+`NO_REBASE=true`
+`NO_RESET=true`
+`NO_STASH=true`
+`NO_CLEAN=true`
+`NO_FORCE_PUSH=true`
+`LOCAL_CHECKOUT_MUTATED_BY_THIS_DELTA=false`
+`INVENTORY_MANIFEST=NOT_CREATED`
+`FIXED_POINT=false`
+
+Não concluir sync por fetch, merge ou atualização de handoff. A reconciliação exige inventário completo, owner por escopo, resolução explícita das colisões, preservação dos dados e readback no mesmo SHA.
+
+<!-- /CENTRALDARK_SYNC_RECONCILIATION_CURRENT_20261109 -->
+
+
 
 > **Owner canônico:** SEGREDO/CHEFE
 > **Status:** ATIVO
