@@ -5,7 +5,7 @@ scope: "Regras operacionais portáteis para agentes, skills, superfícies e runt
 owner: "RULES.md"
 inherits: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
 consumed_by: "AGENTS.md"
-rules_last_updated: "2026-10-16"
+rules_last_updated: "2026-10-28"
 soul_last_updated: "2026-10-05"
 agents_last_updated: "2026-10-16"
 source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
@@ -68,7 +68,7 @@ RULES_POINTS_TO_AGENTS=true
 AGENTS_POINTS_TO_RULES=true
 AGENTS_INHERIT_RULES=true
 NO_SKILL_ABOVE_CENTRALDARK=true
-RULES_LAST_UPDATED=2026-10-16
+RULES_LAST_UPDATED=2026-10-28
 SOUL_LAST_UPDATED=2026-10-05
 AGENTS_LAST_UPDATED=2026-10-16
 ```
@@ -102,6 +102,18 @@ CHEFE_INTENT
 ```
 
 ---
+
+<!-- CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
+## Ciclo de vida de worktree temporario
+
+TEMP_MATERIAL_EXIT_GATE_V1=REQUIRED. Uma raiz por host:
+CENTRALDARK_WORKTREE_ROOT (padrao /tmp/centraldark-worktrees em Linux).
+Subpastas isoladas por owner. Um unico owner de metodo:
+.agents/skills/centraldark-operational-method/SKILL.md (WORKTREE TEARDOWN).
+Um unico executor: scripts/lupa/worktree-teardown-gate.mjs.
+Delta unico e worktree sujo permanecem KEEP_ACTIVE; fonte publicada
+mais scratch limpo permitem REMOVED_VERIFIED, nunca force/prune cego.
+<!-- /CENTRALDARK_TEMP_MATERIAL_EXIT_GATE_V1 -->
 
 <!-- CENTRALDARK_INLINE_DOC_SYNC_20261016 -->
 ## 🧬 Rastro semântico obrigatório — código e documentação juntos

@@ -1,3 +1,7 @@
+// #OBSERVACOES# | CENTRALDARK.CODE.DOC.SYNC
+// @owner: scripts/memory-linker/dream-review-run.mjs
+// @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
+// @last_updated: 2026-10-28T00:29:42.831Z
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
@@ -30,6 +34,42 @@ const CHILD_CONTRACT = {
   root_authority: 'SEGREDO/CHEFE',
   tlc23_horn_gate: TLC23_HORN_PASS,
 };
+
+const FIXED_POINT_TEN_CRITERIA = [
+  'OWNER_UNIQUE', 'LOCKS_PRESERVED', 'MCP_PUBLIC_HEALTH', 'ONE_HEART_FRESH',
+  'SCREENPIPE_CURRENT', 'AIONUI_STDIO_CURRENT', 'LOG_PRIVACY_CURRENT',
+  'CHECKOUT_MAIN_SYNC', 'FORENSIC_FRESHNESS', 'RECEIPT_PRESENT',
+];
+
+// Unit fixture records real execution of *this fixture*, but does not assert
+// environmental PASS. UNKNOWN remains UNKNOWN until a runtime sensor confirms.
+function makeExecutionHeader() {
+  const measuredAt = new Date().toISOString();
+  return {
+    schema: 'centraldark.fixed-point.execution-header.v1',
+    evaluator: 'scripts/lupa/horn-reuse-fixed-point.mjs',
+    agent_id: 'SOL',
+    mission_id: 'memory-pattern-autonomy',
+    intent_id: 'test:memory-pattern',
+    goal_fingerprint: 'test:memory-pattern-fingerprint',
+    observed_head: HEAD,
+    measured_at: measuredAt,
+    evaluation_ref: 'test:fixed-point-header',
+    execution_ref: 'test:dream-review-run',
+    criteria: FIXED_POINT_TEN_CRITERIA.map(id => ({
+      id, evaluated: true, status: 'UNKNOWN',
+      source: 'test:fixture:' + id,
+      attempt_ref: 'test:attempt:' + id,
+      evaluated_at: measuredAt,
+      measured_at: measuredAt,
+      reason: 'unit fixture is not a live environment sensor',
+      next_cursor: 'VERIFY_' + id,
+    })),
+    verdict: 'NEXT_DELTA',
+    next_cursor: 'VERIFY_OWNER_UNIQUE',
+    goal_receipt: null,
+  };
+}
 
 function verified(type, ref) {
   return { type, ref, status: 'PASS', verified: true };
@@ -83,6 +123,7 @@ function jarvisState(overrides = {}) {
       rollback: { status: 'PREPARED', evidence_ref: 'git:dream-rollback' },
       next_cursor: 'DREAM_WRITE_THEN_T1',
       fixed_point: false,
+      fixed_point_execution_header: makeExecutionHeader(),
     },
     ...overrides,
   };
@@ -150,4 +191,13 @@ test('roteamento bloqueia escopo vazio mesmo que agent-call isolado aceitasse li
   assert.equal(routing.blocked_call_count, 1);
   assert.equal(routing.routed[0].receipt.accepted, false);
   assert.equal(routing.routed[0].receipt.status, 'BLOCKED_AUTHORIZED_SCOPE_UNPROVEN');
+});
+
+test('handoff nao fabrica header de execucao quando estado nao mediu o gate', () => {
+  const proposal = buildDreamReviewWithPatterns([event(1), event(2)], { headSha: HEAD });
+  const state = jarvisState();
+  delete state.global_contract_entry.fixed_point_execution_header;
+  const routing = routePatternAutonomy(proposal, state);
+  assert.equal(routing.accepted_call_count, 0);
+  assert.equal(routing.routed[0].receipt.status, 'BLOCKED_FIXED_POINT_EXECUTION_HEADER_MISSING');
 });
