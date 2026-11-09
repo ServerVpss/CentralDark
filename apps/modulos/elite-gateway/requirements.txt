@@ -42,4 +42,4 @@ xlsxwriter==3.2.9
 # Omni Router FastAPI runtime: required in Casa and VPS (missing from prior manifest).
 fastapi>=0.115,<1
 uvicorn>=0.30,<1
-pydantic>=2,<3
+pydantic>=2.14.3,<3
