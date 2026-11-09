@@ -10,15 +10,15 @@
 
   Uso rápido:
     pwsh -ExecutionPolicy Bypass -File scripts/library/CentralDark-LocalOffline-Library-Ingest.ps1 `
-      -SourceRoot "K:\_BIBLIOTECA_OFFLINE\entrada" `
-      -OutputRoot "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" `
+      -SourceRoot (if ($env:CENTRALDARK_LIBRARY_SRC) { $env:CENTRALDARK_LIBRARY_SRC } else { Join-Path $PSScriptRoot "..\..\_BIBLIOTECA_OFFLINE\entrada" }) `
+      -OutputRoot (if ($env:CENTRALDARK_LIBRARY_OUT) { $env:CENTRALDARK_LIBRARY_OUT } else { Join-Path $PSScriptRoot "..\..\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" }) `
       -Recreate
 #>
 
 [CmdletBinding()]
 param(
-  [string]$SourceRoot = "K:\_BIBLIOTECA_OFFLINE\entrada",
-  [string]$OutputRoot = "K:\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS",
+  [string]$SourceRoot = if ($env:CENTRALDARK_LIBRARY_SRC) { $env:CENTRALDARK_LIBRARY_SRC } else { Join-Path $PSScriptRoot "..\..\_BIBLIOTECA_OFFLINE\entrada" },
+  [string]$OutputRoot = if ($env:CENTRALDARK_LIBRARY_OUT) { $env:CENTRALDARK_LIBRARY_OUT } else { Join-Path $PSScriptRoot "..\..\_BIBLIOTECA_OFFLINE\ML-CIENCIA-DE-DADOS" },
   [int]$ChunkChars = 3500,
   [int]$MaxTextFileMB = 80,
   [switch]$CloneMlJourney,

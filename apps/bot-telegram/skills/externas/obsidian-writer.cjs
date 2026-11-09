@@ -58,14 +58,109 @@ function injectLinks(content) {
   return result;
 }
 
-function buildFrontmatter(title, folderName, tags = []) {
+
+const META_RSI_CATALOG_REL = '.agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md';
+function parseMetaRsiCatalog(markdown) {
+  const out = [];
+  for (const row of String(markdown).split('\n')) {
+    const cells = row.split('|').map(x => x.trim());
+    if (!/^\d{2}$/.test(cells[1] || '')) continue;
+    const link = (cells[4] || '').match(/\[skill\]\(([^)]+)\)/);
+    if (!link) continue;
+    out.push({ method: cells[2], group: cells[3],
+      skillPath: path.posix.normalize(path.posix.join(path.posix.dirname(META_RSI_CATALOG_REL), link[1])) });
+  }
+  return out.length === 40 && new Set(out.map(x => x.method)).size === 40 ? out : [];
+}
+function readMetaRsiCatalog() {
+  try { return parseMetaRsiCatalog(fs.readFileSync(path.resolve(BRAIN_DIR, '../..', META_RSI_CATALOG_REL), 'utf8')); }
+  catch (_) { return []; }
+}
+function chooseRelevantSelf(title, content, folderName) {
+  const all = readMetaRsiCatalog(), text = (title + ' ' + content.slice(0, 4000)).toLowerCase();
+  const terms = {
+    'Self-Memory': /mem[oó]ria|lembran|hist[oó]ria|sess[aã]o/,
+    'Self-Testing': /test|smoke|ci\b/,
+    'Self-Documentation': /document|nota|readme|cat[aá]logo/,
+    'Self-Discovery': /descob|garimpo|investig/,
+    'Self-Auditing': /audit|rastro|receipt|recibo/,
+    'Self-Learning': /aprend|kaizen/,
+    'Self-Correction': /corrig|erro|bug/,
+    'Self-Monitoring': /monitor|log|telemetria/,
+    'Self-Verification': /verific|prova|sha|fixed.point/,
+    'Self-Integration': /integr|conex|mcp|ponte/,
+    'Self-Optimization': /otimiz|performance|overclock/,
+    'Self-Healing': /cura|recuper|restaur/,
+    'Self-Planning': /plano|planej/,
+    'Self-Improvement Loop': /loop|ciclo|kaizen/,
+    'Recursive Self-Improvement': /rsi|recurs/,
+  };
+  const groups = { '01-OURO': 'aprendizado-evolucao', '02-SESSOES': 'raciocinio-reflexao',
+    '03-APRENDIZADOS': 'experimentacao-validacao', '04-MEMORIAS': 'aprendizado-evolucao' };
+  return all.map((x, i) => ({ x, i, score: (x.group === groups[folderName] ? 2 : 0)
+    + (terms[x.method]?.test(title.toLowerCase()) ? 10 : 0)
+    + (terms[x.method]?.test(text) ? 3 : 0) }))
+    .sort((a, b) => b.score - a.score || a.i - b.i).slice(0, 3).map(v => v.x);
+}
+function readSelfNoteMetadata(s) {
+  const end = s.startsWith('---\n') ? s.indexOf('\n---\n', 4) : -1;
+  const fm = end < 0 ? '' : s.slice(4, end);
+  const field = name => {
+    const line = fm.split('\n').find(x => x.startsWith(name + ': '));
+    if (!line) return null;
+    try { return JSON.parse(line.slice(name.length + 2)); } catch (_) { return null; }
+  };
+  return { self_primary: field('centraldark_self_primary'),
+    self_related: field('centraldark_self_related') || [],
+    self_skill_refs: field('centraldark_self_skill_refs') || [],
+    self_review: 'CANDIDATE_ONLY_APPLIED_OR_NOOP_JUSTIFIED' };
+}
+
+function buildFrontmatter(title, folderName, tags = [], noteContent = '') {
   const date = new Date().toISOString().split('T')[0];
   const autoTags = [folderName.replace(/^\d+ - /, '').toLowerCase().replace(/ /g, '-'), ...tags];
-  return `---\ntitle: "${title}"\ndate: ${date}\ntags: [${autoTags.map(t => `"${t}"`).join(', ')}]\n---\n\n`;
+  const brain07 = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(folderName);
+  const roleMap = {
+    '01-OURO': ['gojo-seis-olhos','whis-orientacao','vegetto-gogeta-convergencia','kaizen-continuo'],
+    '02-SESSOES': ['yuji-identidade-e-continuidade','gojo-seis-olhos','goku-instinto-superior','kaizen-continuo'],
+    '03-APRENDIZADOS': ['gojo-seis-olhos','whis-orientacao','vegeta-resiliencia','beerus-autolimpeza','kaizen-continuo'],
+    '04-MEMORIAS': ['yuji-identidade-e-continuidade','whis-orientacao','kaizen-continuo'],
+  };
+  const self = brain07 ? chooseRelevantSelf(title, noteContent, folderName) : [];
+  // Propriedades ligam a nota ao Kaizen; nao provam consumo automatico fora do writer.
+  const extra = brain07 ? [
+    'centraldark_note_schema: "brain07.v1"',
+    'centraldark_category: ' + JSON.stringify(folderName),
+    'centraldark_context_owner: "SEGREDO/CHEFE"',
+    'centraldark_intent_anchor: ' + JSON.stringify(title),
+    'centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"',
+    'centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"',
+    'centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"',
+    'centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"',
+    'centraldark_metabolic_roles: ' + JSON.stringify(roleMap[folderName]),
+    'centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"',
+    'centraldark_agent_recall: "Recuperar intencao, memoria, causa e NEXT_CURSOR sem reprocessar o que esta provado."',
+    'centraldark_self_catalog: ' + JSON.stringify(META_RSI_CATALOG_REL),
+    'centraldark_self_catalog_status: ' + JSON.stringify(self.length ? 'CANONICAL_40_FOUND' : 'CATALOG_UNAVAILABLE_OR_INVALID'),
+    'centraldark_self_primary: ' + JSON.stringify(self[0]?.method || null),
+    'centraldark_self_related: ' + JSON.stringify(self.slice(1).map(x => x.method)),
+    'centraldark_self_skill_refs: ' + JSON.stringify(self.map(x => x.skillPath)),
+    'centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"',
+  ].join('\n') + '\n' : '';
+  return '---\ntitle: ' + JSON.stringify(title) + '\ndate: ' + date +
+    '\ntags: [' + autoTags.map(t => JSON.stringify(t)).join(', ') + ']\n' + extra + '---\n\n';
 }
 
 function resolveFolder(folder) {
   if (!folder) return BRAIN_DIR;
+  const requested = String(folder).trim();
+  const cat = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(requested) ? requested : null;
+  const selected = /^(?:07|07-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
+  if (selected) {
+    const target = path.join(BRAIN_DIR, '07-APRENDIZADOS-MEMORIAS', selected);
+    fs.mkdirSync(target, { recursive: true });
+    return target;
+  }
   const entries = fs.readdirSync(BRAIN_DIR, { withFileTypes: true })
     .filter(e => e.isDirectory());
   const match = entries.find(e =>
@@ -248,6 +343,7 @@ function searchBrain(query, options = {}) {
       via: null,
       matches: matches.slice(0, 5),
       excerpt: (matches[0]?.text || note.lines.find(line => line.trim()) || '').slice(0, 240),
+      ...readSelfNoteMetadata(note.text),
     });
     frontier.push({ file, distance: 0 });
   }
@@ -277,6 +373,7 @@ function searchBrain(query, options = {}) {
           via: `docs/BRAIN/${current.file}`,
           matches: [],
           excerpt: (note.lines.find(line => line.trim()) || '').trim().slice(0, 240),
+          ...readSelfNoteMetadata(note.text),
         });
       }
     }
@@ -319,7 +416,7 @@ module.exports = {
       const dir = resolveFolder(folder || '07 - Reuniões & Notas');
       const folderName = path.basename(dir);
       const enriched = injectLinks(content);
-      const frontmatter = buildFrontmatter(title, folderName);
+      const frontmatter = buildFrontmatter(title, folderName, [], content);
       const fullContent = frontmatter + enriched;
       const filename = title.replace(/[^\w\s\-]/g, '').replace(/\s+/g, '-') + '.md';
       const filepath = path.join(dir, filename);
@@ -387,6 +484,10 @@ module.exports = {
   },
 
   _test: {
+    parseMetaRsiCatalog,
+    chooseRelevantSelf,
+    readSelfNoteMetadata,
+    buildFrontmatter,
     extractWikiLinks,
     buildBrainGraph,
     searchBrain,

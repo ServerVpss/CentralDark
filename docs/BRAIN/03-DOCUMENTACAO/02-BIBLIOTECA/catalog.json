@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "owner": "docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md",
+  "owner": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md",
   "status": "DRIVE_REFERENCE_SYNCED_CANDIDATES_INDEXED",
   "supported_formats": [
     "pdf",
@@ -85,6 +85,24 @@
     ]
   },
   "sources": [
+    {
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "title": "Manual de Boas Práticas para Gestão de Pastas e Arquivos Digitais (TCU, 2019)",
+      "formats": [
+        "pdf"
+      ],
+      "status": "INGESTED",
+      "classification": "PUBLIC_STUDY_CANDIDATE",
+      "sha256": "0caf39a4f78388a8d4221f4b53d90c81b6c1f81d1f1e0207bcfa70aa0abebba8",
+      "provenance": {
+        "provider": "repository",
+        "canonical_path": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.pdf",
+        "page_count": 10,
+        "text_index": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md",
+        "text_sha256": "2c06df290832c4738702aac155cfd827a4a8a2cd6ef7f8e23f8f0bf7eaeb3276",
+        "text_index_kind": "PDF_TEXT_EXTRACTION_WITH_VISUAL_ORIGINAL_REFERENCE"
+      }
+    },
     {
       "source_id": "drive-centraldark-root",
       "title": "Google Drive — CentralDark (raiz operacional)",
@@ -383,6 +401,266 @@
     }
   ],
   "entries": [
+    {
+      "id": "tcu-boas-praticas-pagina-01",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=1",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Capa, autoria e instituição",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/01",
+        "tema/identidade",
+        "tema/tcu"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-02",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=2",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Introdução e objetivos",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/02",
+        "tema/introducao",
+        "tema/recuperacao",
+        "acao/organizar",
+        "objeto/pasta",
+        "objeto/arquivo"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-03",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=3",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Organização por setor e assunto",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/03",
+        "tema/hierarquia",
+        "tema/assunto",
+        "acao/organizar",
+        "acao/criar",
+        "acao/mover",
+        "objeto/pasta",
+        "objeto/arquivo"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-04",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=4",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Padrão de nomenclatura e classificação",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/04",
+        "tema/nomeacao",
+        "tema/padronizacao",
+        "acao/renomear",
+        "acao/nomear",
+        "objeto/pasta",
+        "objeto/arquivo"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-05",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=5",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Versões, armazenamento e preservação",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/05",
+        "tema/versoes",
+        "tema/preservacao",
+        "tema/exclusao",
+        "acao/versionar",
+        "acao/armazenar",
+        "acao/salvar",
+        "acao/excluir",
+        "acao/apagar",
+        "objeto/arquivo"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-06",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=6",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Anexo I: setores e áreas",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/06",
+        "tema/setores",
+        "tema/administrativo",
+        "acao/organizar",
+        "acao/criar",
+        "objeto/pasta",
+        "tema/estrutura"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-07",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=7",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Anexo I: subpastas e exemplos",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/07",
+        "tema/subpastas",
+        "tema/estrutura",
+        "acao/organizar",
+        "acao/criar",
+        "objeto/pasta"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-08",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=8",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Anexo I: árvore completa, primeira parte",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/08",
+        "tema/arvore",
+        "tema/estrutura-completa",
+        "acao/organizar",
+        "objeto/pasta"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-09",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=9",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Anexo I: árvore completa, continuação",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/09",
+        "tema/arvore",
+        "tema/estrutura-completa",
+        "acao/organizar",
+        "objeto/pasta"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
+    {
+      "id": "tcu-boas-praticas-pagina-10",
+      "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+      "reference": "Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=10",
+      "kind": "page-reference",
+      "category": "gestao-documental",
+      "state": "INDEXED_REFERENCE",
+      "summary": "Referências bibliográficas",
+      "tags": [
+        "tema/organizacao-documental",
+        "pagina/10",
+        "tema/referencias",
+        "tema/bibliografia"
+      ],
+      "links": [
+        "[[Biblioteca Cognitiva - CentralDark]]"
+      ],
+      "emojis": [],
+      "use": [
+        "cognition",
+        "conversation"
+      ]
+    },
     {
       "id": "a01-transferencia-por-estrutura",
       "source_id": "estudo-eneas-carneiro",

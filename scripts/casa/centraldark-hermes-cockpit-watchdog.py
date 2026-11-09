@@ -9,7 +9,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-LAUNCHER = Path(r"K:\scripts\casa\instinto-cockpit-autostart.ps1")
+LAUNCHER = Path(__file__).resolve().parents[2] / "scripts" / "casa" / "instinto-cockpit-autostart.ps1"
 HEALTH = "http://127.0.0.1:8080/sala-controle"
 
 def check_http():

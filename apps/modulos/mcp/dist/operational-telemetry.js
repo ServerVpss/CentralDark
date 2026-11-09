@@ -1,6 +1,8 @@
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { evaluateFixedPointTen } from "../../../../scripts/lupa/horn-reuse-fixed-point.mjs";
 const DEFAULT_ROOT = process.env.CENTRALDARK_ROOT || "/root/CentralDark";
 const FLOW = [
     "HEARTBEAT",
@@ -46,11 +48,12 @@ function latestForensic(root) {
         ? observedAt.replace(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/, "$1-$2-$3T$4:$5:$6Z")
         : observedAt;
     const ageMs = iso ? Date.now() - Date.parse(iso) : null;
-    const stale = Number.isFinite(ageMs) ? ageMs > 15 * 60 * 1000 : true;
+    const stale = !Number.isFinite(ageMs) || ageMs < -5000 || ageMs > 15 * 60 * 1000;
     return {
         status: stale ? "STALE" : "OBSERVED",
         latestReceiptPresent: true,
         observedAt: observedAt || null,
+        observedAtIso: Number.isFinite(Date.parse(iso || "")) ? new Date(Date.parse(iso)).toISOString() : null,
         ageMs: Number.isFinite(ageMs) ? Math.max(0, ageMs) : null,
         sha256: latest.sha256 || null,
         reportPresent: typeof latest.report === "string" && exists(latest.report),
@@ -476,6 +479,184 @@ export function gitSyncFront(root, nowMs = Date.now()) {
         return `BLOCKED:${String(status.reason || "unknown").slice(0, 80)}`;
     return "UNKNOWN";
 }
+function sha256(value) {
+    const content = typeof value === "string" ? value : JSON.stringify(value);
+    return createHash("sha256").update(content || "").digest("hex");
+}
+function countMatches(text, expression) {
+    return [...String(text || "").matchAll(expression)].length;
+}
+function fixedPointTenEvidence({ root, heartbeat, diagnostics, nowMs }) {
+    const measuredAt = new Date(nowMs).toISOString();
+    const hudPath = path.join(root, "docs/HUD/HUD.html");
+    const hudText = readTextSafe(hudPath);
+    const hudSha = hudText ? sha256(hudText) : null;
+    const expectedUiIds = [
+        "owner", "locks", "mcp", "heart", "screenpipe",
+        "aion", "privacy", "sync", "forensic", "receipt",
+    ];
+    const actualUiIds = [...hudText.matchAll(/data-fp="([^"]+)"/g)].map((match) => match[1]);
+    const uiIdsUnique = expectedUiIds.every((id) => actualUiIds.filter((found) => found === id).length === 1)
+        && countMatches(hudText, /id="cd-fixed-point-ten"/g) === 1;
+    const ownerStatus = !hudText ? "UNKNOWN" : uiIdsUnique ? "PASS" : "FAIL";
+    const ownerEvidence = {
+        id: "OWNER_UNIQUE",
+        status: ownerStatus,
+        evaluated: true,
+        source: "docs/HUD/HUD.html",
+        source_sha: hudSha,
+        proof_ref: "docs/HUD/HUD.html#cd-fixed-point-ten",
+        counterproof_ref: "scan:canonical-owner-and-ten-unique-data-fp-ids",
+        counterproof_verdict: uiIdsUnique ? "NOT_REFUTED" : "REFUTED",
+        attempt_ref: "readback:docs/HUD/HUD.html@" + measuredAt,
+        evaluated_at: measuredAt,
+        measured_at: measuredAt,
+        reason: ownerStatus === "PASS" ? null : "HUD file or ten unique IDs not proven by this readback",
+    };
+    const supplied = heartbeat?.fixedPointTenEvidence && typeof heartbeat.fixedPointTenEvidence === "object"
+        ? heartbeat.fixedPointTenEvidence : {};
+    const suppliedRow = (id, fallbackSource) => {
+        const row = supplied[id];
+        if (!row || typeof row !== "object") {
+            return {
+                id, status: "UNKNOWN", evaluated: false, source: fallbackSource,
+                attempt_ref: null, evaluated_at: null, measured_at: measuredAt,
+                reason: "CURRENT_SENSOR_ATTEMPT_RECEIPT_NOT_SUPPLIED",
+            };
+        }
+        return { ...row, id };
+    };
+    const heartbeatPath = path.join(root, "logs/heartbeat-api.json");
+    const beat = readJsonSafe(heartbeatPath);
+    const beatTime = Date.parse(String(beat?.t || ""));
+    const beatAge = Number.isFinite(beatTime) ? nowMs - beatTime : null;
+    const beatFresh = beatAge !== null && beatAge >= -5000 && beatAge <= 30000;
+    const beatStatus = beatFresh && String(beat?.self || "").toLowerCase() === "alive"
+        ? "PASS"
+        : (beatAge === null ? "UNKNOWN" : (beatAge < -5000 || beatAge > 30000 ? "STALE" : "FAIL"));
+    const heartEvidence = beat ? {
+        id: "ONE_HEART_FRESH",
+        status: beatStatus,
+        evaluated: true,
+        source: "logs/heartbeat-api.json",
+        source_sha: sha256(beat),
+        proof_ref: "logs/heartbeat-api.json#t=" + String(beat.t || "UNKNOWN"),
+        counterproof_ref: "heartbeat-self-alive-and-age-within-30s",
+        counterproof_verdict: beatStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+        attempt_ref: "readback:logs/heartbeat-api.json@" + measuredAt,
+        evaluated_at: measuredAt,
+        measured_at: Number.isFinite(beatTime) ? new Date(beatTime).toISOString() : measuredAt,
+        max_age_ms: 30000,
+        reason: beatStatus === "PASS" ? null : "Heartbeat is absent, unknown, stale, or not alive",
+    } : {
+        id: "ONE_HEART_FRESH", status: "UNKNOWN", evaluated: true,
+        source: "logs/heartbeat-api.json", attempt_ref: "readback:logs/heartbeat-api.json@" + measuredAt,
+        evaluated_at: measuredAt, measured_at: measuredAt,
+        reason: "No current heartbeat file was readable",
+    };
+    const syncPath = path.join(root, "logs/auto-sync-status.json");
+    const sync = readJsonSafe(syncPath);
+    const syncTime = Date.parse(String(sync?.t || ""));
+    const syncAge = Number.isFinite(syncTime) ? nowMs - syncTime : null;
+    const syncFresh = syncAge !== null && syncAge >= -5000 && syncAge <= AUTO_SYNC_STATUS_MAX_AGE_MS;
+    const validSha = (v) => /^(?:[a-f0-9]{40}|[a-f0-9]{64})$/i.test(String(v || ""));
+    const sameHead = validSha(sync?.head) && validSha(sync?.origin_main) && sync.head === sync.origin_main;
+    const syncStatus = !sync ? "UNKNOWN"
+        : !syncFresh ? "STALE"
+            : sync.result === "BLOCKED" ? "BLOCKED"
+                : sync.result === "FAIL" ? "FAIL"
+                    : sync.result === "PASS" && sameHead ? "PASS"
+                        : sync.result === "PASS" ? "FAIL" : "UNKNOWN";
+    const syncEvidence = sync ? {
+        id: "CHECKOUT_MAIN_SYNC",
+        status: syncStatus,
+        evaluated: true,
+        source: "logs/auto-sync-status.json",
+        source_sha: validSha(sync.head) ? sync.head : (validSha(sync.origin_main) ? sync.origin_main : sha256(sync)),
+        proof_ref: "logs/auto-sync-status.json#head=" + String(sync.head || "UNKNOWN"),
+        counterproof_ref: "head-equals-origin_main-and-fresh-auto-sync-receipt",
+        counterproof_verdict: syncStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+        attempt_ref: "readback:logs/auto-sync-status.json@" + measuredAt,
+        evaluated_at: measuredAt,
+        measured_at: Number.isFinite(syncTime) ? new Date(syncTime).toISOString() : measuredAt,
+        max_age_ms: AUTO_SYNC_STATUS_MAX_AGE_MS,
+        reason: syncStatus === "PASS" ? null : "Sync receipt missing, stale, blocked, or HEADs differ",
+    } : {
+        id: "CHECKOUT_MAIN_SYNC", status: "UNKNOWN", evaluated: true, source: syncPath,
+        attempt_ref: "readback:" + syncPath + "@" + measuredAt,
+        evaluated_at: measuredAt, measured_at: measuredAt,
+        reason: "No current auto-sync receipt was readable",
+    };
+    const forensicHashValid = /^[a-f0-9]{64}$/i.test(String(diagnostics?.sha256 || ""));
+    const forensicShapeValid = diagnostics?.latestReceiptPresent === true &&
+        forensicHashValid && diagnostics.reportPresent === true &&
+        diagnostics.archivePresent === true && diagnostics.secretsContentCollected === false;
+    const forensicStatus = !diagnostics?.latestReceiptPresent ? "UNKNOWN"
+        : diagnostics.status === "STALE" ? "STALE"
+            : diagnostics.status === "OBSERVED" && forensicShapeValid ? "PASS"
+                : "FAIL";
+    const forensicEvidence = diagnostics?.latestReceiptPresent ? {
+        id: "FORENSIC_FRESHNESS",
+        status: forensicStatus,
+        evaluated: true,
+        source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+        source_sha: forensicHashValid ? diagnostics.sha256 : sha256(diagnostics),
+        proof_ref: "_DIAGNOSTICS/FORENSIC-LATEST.json#sha256=" + String(diagnostics.sha256 || "UNKNOWN"),
+        counterproof_ref: "timestamp-within-15m+report+archive+secret-boundary",
+        counterproof_verdict: forensicStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+        attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+        evaluated_at: measuredAt,
+        measured_at: Number.isFinite(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt || "")))
+            ? new Date(Date.parse(String(diagnostics.observedAtIso || diagnostics.observedAt))).toISOString() : measuredAt,
+        max_age_ms: 15 * 60 * 1000,
+        reason: forensicStatus === "PASS" ? null : "Receipt exists but freshness/shape/integrity is not proven",
+    } : {
+        id: "FORENSIC_FRESHNESS", status: "UNKNOWN", evaluated: true,
+        source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+        attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+        evaluated_at: measuredAt, measured_at: measuredAt,
+        reason: "No current forensic receipt was found at the canonical pointer",
+    };
+    const receiptStatus = !diagnostics?.latestReceiptPresent ? "UNKNOWN"
+        : forensicShapeValid ? "PASS" : "FAIL";
+    const receiptEvidence = diagnostics?.latestReceiptPresent ? {
+        id: "RECEIPT_PRESENT",
+        status: receiptStatus,
+        evaluated: true,
+        source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+        source_sha: forensicHashValid ? diagnostics.sha256 : sha256(diagnostics),
+        proof_ref: "_DIAGNOSTICS/FORENSIC-LATEST.json#receipt",
+        counterproof_ref: "receipt-hash+report+archive+secret-boundary-readback",
+        counterproof_verdict: receiptStatus === "PASS" ? "NOT_REFUTED" : "REFUTED",
+        attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+        evaluated_at: measuredAt,
+        measured_at: measuredAt,
+        reason: receiptStatus === "PASS" ? null : "Receipt is present but integrity/required artifacts are not proven",
+    } : {
+        id: "RECEIPT_PRESENT", status: "UNKNOWN", evaluated: true,
+        source: "_DIAGNOSTICS/FORENSIC-LATEST.json",
+        attempt_ref: "readback:_DIAGNOSTICS/FORENSIC-LATEST.json@" + measuredAt,
+        evaluated_at: measuredAt, measured_at: measuredAt,
+        reason: "No current receipt was found at the canonical pointer",
+    };
+    const criteria = [
+        ownerEvidence,
+        suppliedRow("LOCKS_PRESERVED", "HUD lock inventory/current receipt"),
+        suppliedRow("MCP_PUBLIC_HEALTH", "authenticated public /health probe receipt"),
+        heartEvidence,
+        suppliedRow("SCREENPIPE_CURRENT", "Screenpipe current health/readback receipt"),
+        suppliedRow("AIONUI_STDIO_CURRENT", "AionUi MCP stdio tools/list receipt"),
+        suppliedRow("LOG_PRIVACY_CURRENT", "authenticated sanitized log readback receipt"),
+        syncEvidence,
+        forensicEvidence,
+        receiptEvidence,
+    ];
+    const goalReceipt = heartbeat?.goalClauseProjection ||
+        heartbeat?.operational?.goalClauseProjection || null;
+    const currentHead = validSha(sync?.origin_main) ? sync.origin_main :
+        (validSha(sync?.head) ? sync.head : null);
+    return evaluateFixedPointTen({ criteria, goalReceipt, currentHead }, { nowMs });
+}
 export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, procRoot = "/proc", nowMs = Date.now() } = {}) {
     const diagnostics = latestForensic(root);
     const cpus = os.cpus()?.length || 0;
@@ -510,6 +691,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
     };
     const boundary = secretBoundary(root);
     const patternAlignment = patternAlignmentSnapshot({ root, diagnostics, boundary, rules });
+    const fixedPointTen = fixedPointTenEvidence({ root, heartbeat, diagnostics, fronts, nowMs });
     const executionTopology = executionTopologySnapshot({ root, procRoot, nowMs });
     const modelBinding = modelBindingSnapshot({ root, procRoot, nowMs });
     return {
@@ -541,6 +723,7 @@ export function getOperationalSnapshot({ root = DEFAULT_ROOT, heartbeat = null, 
         forensic: diagnostics,
         secretBoundary: boundary,
         patternAlignment,
+        fixedPointTen,
         executionTopology,
         modelBinding,
         statusFiles: statusFileSnapshot(root),
