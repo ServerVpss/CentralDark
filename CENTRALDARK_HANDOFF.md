@@ -19,39 +19,55 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 
 ## 🧭 CURRENT CONTINUITY — 2026-11-09
 
-> **Este é o estado vigente deste handoff.** O snapshot iniciado em 2026-08-28 permanece abaixo, preservado como proveniência histórica; não deve ser usado como CURRENT.
+> O snapshot de 2026-08-28 está classificado como histórico e preservado abaixo. Esta seção registra a medição atual da mesma missão.
 
-**FIO DA MISSÃO:** preservar a Casa, inventariar os 17.721 arquivos não rastreados e os 116 caminhos rastreados alterados, identificar a divergência Casa ↔ `origin/main` e preparar uma reconciliação sem perda.
+**FIO DA MISSÃO:** preservar a Casa e preparar a reconciliação sem perda entre o checkout local e origin/main. O cursor anterior de inventariar os 17.721 caminhos não rastreados e identificar a divergência foi concluído para o escopo do Git status.
 
-**PRÓXIMO PASSO:** produzir inventário NUL-safe com caminhos e hashes; classificar os 35 caminhos rastreados alterados que também mudaram no remoto e os 16 arquivos não rastreados que colidem com o tree remoto; reconciliar por owner, começando pelo commit local exclusivo e seus três caminhos.
+**PRÓXIMO PASSO:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
 
-**PONTO DE CONTINUIDADE (NEXT_CURSOR):** preservar e inventariar os 17.721 arquivos, identificar a origem da divergência e preparar uma reconciliação sem perda.
+**PONTO DE CONTINUIDADE:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
+**NEXT_CURSOR:** REVIEW_31_DIFFERENT_CONTENT_PATHS_AND_28_STATUS_DELETIONS_NO_LOSS
 
-### CURRENT medido na Casa — 2026-11-09T01:59:37-03:00
+### CURRENT medido na Casa — 2026-11-09T02:21:25-03:00
 
 | Campo | Valor |
 |---|---|
 | Checkout | `F:\CentralDark` |
-| Branch local | `main` |
-| HEAD local | `b71963ffaacbca2847364517487bb232f611acdb` |
-| origin/main / git ls-remote | `4d97ddadda74aaed3ebd17056170718a86a5ec7e` |
+| Branch local / HEAD | `main` / `b71963ffaacbca2847364517487bb232f611acdb` |
+| origin/main / live ls-remote | `4d97ddadda74aaed3ebd17056170718a86a5ec7e` / MATCH |
 | Base comum | `4d2af54c746c827e01c47778a4ce9f4165c39eee` |
 | Commits exclusivos | `1 local / 67 remoto` |
-| Worktree | `17.721 não rastreados + 116 rastreados alterados = 17.837 caminhos` |
-| Sobreposição | `35/116` caminhos rastreados alterados também mudaram no remoto |
-| Colisões | `16` arquivos não rastreados já existem como caminhos rastreados em origin/main |
+| Git status | `17.837 entradas: 17.721 não rastreadas + 116 rastreadas alteradas` |
+| Não rastreados | `17.687 arquivos + 34 diretórios` |
+| Rastreados alterados | `88 presentes + 28 deletados` |
+| Inventário | `17.775 arquivos SHA-256; 5.542.586.713 bytes; 0 erros; 0 instáveis; 0 reparse points` |
 | Sincronização | `CHECKOUT_SYNCED=false` |
 
-**Origem da divergência:** o único commit local exclusivo é `b71963f` (`fix(remote-bridge): restore canonical Windows build`). Ele altera:
-- `scripts/remote-bridge/Build-Remote-Bridge.ps1`
-- `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md`
-- `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1`
+**Origem da divergência:** um commit local exclusivo, `b71963f`, altera três caminhos do Remote Bridge. Dois arquivos de build são byte a byte iguais ao main remoto. A divergência material do commit está concentrada em `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md`; o worktree também contém uma terceira versão desse documento. A simulação de três vias marcou esse documento como `changed in both`.
 
-Os três caminhos também aparecem no conjunto remoto modificado desde a base comum. A simulação de três vias marcou `scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md` como `changed in both`; exige reconciliação manual por owner.
+**Conflitos medidos:** 16 caminhos não rastreados já existem no tree remoto: 14 são byte a byte idênticos e 2 são diferentes. Nos 35 caminhos rastreados também alterados no remoto: 4 são idênticos, 29 são diferentes e 2 estão ausentes no worktree. No total, 49 comparações de bytes produziram 18 iguais e 31 diferentes; 2 não puderam ser comparadas porque são exclusões locais.
 
-**Preservação aplicada:** `git fetch origin main` já havia concluído no passo anterior; nesta leitura `origin/main` coincide com `git ls-remote`. Nenhum merge, rebase, reset, stash, clean, force-push ou edição do checkout foi executado. O inventário completo e o manifesto de hashes ainda não foram produzidos.
+As duas colisões não rastreadas com conteúdo diferente são:
+- `.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md`
+- `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md`
 
-**Checkpoint anterior preservado como proveniência, não como prova de sync:** missão `centraldark-hermes-envelope-20261107`; etapa `codeoss-11452-compile-electron-runtime-cli-pass-20261108`; `HASH_CHAIN_PASS`; receipt `8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715`; 9 etapas verificadas. O cursor deste delta documental é o inventário/reconciliação acima.
+As 28 exclusões locais estão em `apps/modulos/status/`: 26 têm blobs idênticos em HEAD e origin/main; `index.html` e `styles.css` têm versões remotas diferentes. Nenhum arquivo foi restaurado, removido ou sobrescrito.
+
+**Recibo do inventário (escopo exato: caminhos declarados pelo git status, não varredura integral do filesystem):**
+- Run: `centraldark-sync-20261109T022125`
+- Manifesto JSONL: `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.jsonl`
+- SHA-256 do manifesto: `b81a44499f0bcdd9072b37c36e2701de12e4d211dfebd9dc20b26ec2e7d75566`
+- Banco SQLite: `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.sqlite3`
+- Recibo JSON: `C:\Users\Administrador\.hermes\scratch\centraldark-sync-inventory-20261109T022125.receipt.json`
+- Linhas do manifesto: `17.837`
+- Readback após varredura: HEAD, origin/main e contagem do status estáveis; integridade SQLite OK.
+
+**Preservação:** inventário completo para o escopo do Git status; reconciliação ainda pendente. Nenhum merge, rebase, reset, stash, clean, force-push ou edição do checkout foi executado. Os artefatos de inventário estão no scratch do Hermes, fora do repositório.
+
+**PR documental:** `#1998` em rascunho, branch `docs/continuous-handoff-sync-20261109`. Atualiza este handoff e DELTA-CONTINUO; main ainda não foi alterado.
+
+**Checkpoint anterior preservado como proveniência, não como prova de sync:** missão `centraldark-hermes-envelope-20261107`; etapa `codeoss-11452-compile-electron-runtime-cli-pass-20261108`; `HASH_CHAIN_PASS`; receipt `8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715`; 9 etapas verificadas.
+
 
 ### Padrão SOL vigente nesta continuidade
 
