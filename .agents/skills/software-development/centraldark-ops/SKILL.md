@@ -13,8 +13,8 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 
 ## Always-on
 
-- Workspace operational = `K:\\`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
-- `K:\\` is the canonical repo root; `E:/CentralDark` exists but is **not** a git repo (`TARGET_MATCH=false`). Preserve it — never move, delete, or overwrite. `C:/` is not a repo destination in this execution. `TARGET_MATCH=false` does not authorize deletion; an unclassified duplicate is UNKNOWN. Do not call `E:/CentralDark` canonical even if missions/goals cite it as such — measured reality (git repo present) wins over mission text.
+- Workspace operacional da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Neste runtime Linux, o checkout correspondente é `/data/cache/scratch/CentralDark`.
+- `F:\CentralDark` é a referência canônica do workspace Windows. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; não usar como destino operacional nem fazer substituição global por inferência. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
 - `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
@@ -46,7 +46,7 @@ A autorização vigente do CHEFE permite que Hermes conclua **sequências operac
   6. If a path has `.git` but is not in `.gitmodules`, not in `git worktree list`, and `git -C <path> rev-parse --show-toplevel` differs from the root, **then** investigate whether it is a distinct repo, legacy artifact, or symlink/junction.
 - Caddy: if live import already equals main, do not reload for ritual.
 - **Hermes Desktop browser automation**: `browser_exec` with `local=true` renders to the **right-hand preview rail**, not a separate window. The rail has hide/restore (preserves state) and detach (opens standalone window) controls. Timeout on `browser_exec local=true` means the preview engine is unavailable (can happen in headless/VPS environments or when Hermes Desktop is not running locally); fallback is manual browser open or text-based web extraction (`web_extract`).
-- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `K:\\workspace\\temp` or the existing owner. Do not make C: the workspace. Do not ask the human to move pastes by hand.
+- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `F:\CentralDark\\workspace\\temp` or the existing owner. Do not make C: or K: the workspace. Do not ask the human to move pastes by hand.
 - "Configura na VPS" is not a VPS mutation until measurement names a VPS owner. GitHub `action_required` with empty jobs is the autonomia owner, not PM2/Caddy/runner.
 - Code change while Casa git is dirty/behind: do not patch that tree. `git worktree add` from `origin/main` (or live main SHA) and write only the named owner files. See `references/autonomia-actions.md`.
 
