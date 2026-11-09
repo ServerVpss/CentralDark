@@ -24,6 +24,31 @@ RECEIPT (LOG + PROVA)
 
 ---
 
+## 0. Interpretação de fala, texto e pontuação (SOL ↔ Hermes)
+
+**Regra:** interpretar primeiro a **intenção comunicativa** (afirmação, pergunta, ordem ou expressão), depois selecionar uma ação. Pontuação é uma pista, não autorização nem prova de execução.
+
+- **`?`**: sinal típico de pergunta/dúvida quando presente; não exige ferramenta ou confirmação automaticamente.
+- **`!`**: marca ênfase, emoção, urgência ou exclamação. **Não** transforma uma afirmação em pergunta nem em ordem.
+- **`.`**: encerra uma frase declarativa com tom neutro, mas o conteúdo e o contexto continuam determinantes.
+- **Sem pontuação / transcrição ASR**: classificar pelo verbo, tempo verbal, contexto da conversa e, quando existir, entonação realmente capturada. **Não inventar entonação** a partir de texto.
+- **Verbos e contexto prevalecem sobre sinais**: pretérito na primeira pessoa pode relatar ação concluída; imperativo pode solicitar ação. Ausência de `?` não garante que não seja pergunta.
+- **TTS / síntese de fala**: usar `?` para prosódia interrogativa e `!` para ênfase **somente quando compatível com o sentido e com a capacidade real do motor**. Não declarar suporte de TTS/ASR sem teste.
+- **Relato do CHEFE**: quando ele afirma que fez algo, reconhecer o relato como **informação fornecida**, sem pedir que faça de novo. Se for necessária prova operacional, distinguir `USER_REPORTED` de `RUNTIME_VERIFIED`, sem desautorizar o relato.
+
+| Entrada | Tipo semântico esperado | Resposta apropriada |
+|---|---|---|
+| `SALVEI AQUI.` | AFIRMAÇÃO neutra | Reconhecer que o usuário informou ter salvado. |
+| `SALVEI AQUI!` | AFIRMAÇÃO enfática | Reconhecer a conclusão; não mandar salvar outra vez. |
+| `SALVEI AQUI` | AFIRMAÇÃO sem pontuação | Mesmo sentido, se o contexto não contradiz. |
+| `SALVOU AQUI?` | PERGUNTA | Responder à dúvida com a evidência disponível. |
+| `SALVE AQUI!` | ORDEM/INSTRUÇÃO | Executar somente por ferramenta e autorização aplicáveis. |
+| `PROSIGA` | ORDEM/INSTRUÇÃO sem pontuação | Prosseguir no escopo autorizado. |
+
+**Contraprovas obrigatórias:** `SALVEI AQUI!` **não** pode virar `SALVE AQUI!`; `?` **não** deve ser inferido apenas por caixa alta; `!` **não** significa automaticamente erro, urgência ou autorização. Classificação ≠ execução; execução ≠ prova.
+
+---
+
 ## 1. Classificação de Ações (Voice → Semantic → Tool)
 
 | Voice Phrase | Semantic Action | Tool | Blocker | Auto-Resolve |

@@ -369,7 +369,7 @@ def cognitive_bios_state(repo: Path) -> dict:
 def canonical_consumption_gate_state(repo: Path) -> dict:
     """Índice canônico pertinente; nunca vira portão de permissão."""
     gate = repo / CANONICAL_CONSUMPTION_GATE
-    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT"]
+    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT", "--compact"]
     try:
         proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, encoding="utf-8",
                                errors="replace", timeout=15, check=False)
@@ -812,10 +812,186 @@ def hermes_continuity_preflight(repo: Path) -> dict:
     return result
 
 
+DOCUMENT_ORGANIZATION_OBJECT_TOKENS = {
+    "pasta", "pastas", "arquivo", "arquivos", "diretorio", "diretorios",
+    "folder", "folders", "file", "files",
+}
+DOCUMENT_ORGANIZATION_ACTION_ALIASES = {
+    "cria": "criar", "criar": "criar", "crie": "criar",
+    "move": "mover", "mover": "mover", "mova": "mover",
+    "renomear": "renomear", "renomeie": "renomear", "renomeia": "renomear",
+    "nomear": "nomear", "nomeie": "nomear",
+    "organiza": "organizar", "organizar": "organizar", "organize": "organizar",
+    "versionar": "versionar", "versione": "versionar",
+    "armazenar": "armazenar", "armazene": "armazenar",
+    "salvar": "salvar", "salve": "salvar",
+    "excluir": "excluir", "exclua": "excluir",
+    "apagar": "apagar", "apague": "apagar",
+}
+DOCUMENT_ORGANIZATION_OBJECT_ALIASES = {
+    "pastas": "pasta", "pasta": "pasta",
+    "arquivos": "arquivo", "arquivo": "arquivo",
+    "diretorios": "pasta", "diretorio": "pasta",
+    "folders": "pasta", "folder": "pasta",
+    "files": "arquivo", "file": "arquivo",
+}
+
+
+def document_organization_route(repo: Path, text: str) -> dict:
+    """Detect only the scope; ranking stays owned by library-router.mjs."""
+    normalized = strip_accents(str(text or "")).lower()
+    words = re.findall(r"[a-z0-9]+", normalized)
+    objects = sorted({DOCUMENT_ORGANIZATION_OBJECT_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_OBJECT_ALIASES})
+    actions = sorted({DOCUMENT_ORGANIZATION_ACTION_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_ACTION_ALIASES})
+    result = {
+        "status": "NOT_APPLICABLE",
+        "scope": "FOLDER_OR_FILE_ORGANIZATION",
+        "router_owner": "scripts/memory-linker/library-router.mjs",
+        "catalog": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json",
+        "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+        "must_consult_before_delta": False,
+        "query_tokens": [*actions, *objects],
+        "selected_pages": [],
+    }
+    if not objects or not actions:
+        return result
+
+    router = repo / result["router_owner"]
+    catalog = repo / result["catalog"]
+    if not router.is_file() or not catalog.is_file():
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_OR_CATALOG_MISSING")
+        return result
+
+    js = """
+import fs from 'node:fs';
+const { routeEntries } = await import(process.argv[1]);
+const catalog = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const query = JSON.parse(process.argv[3]);
+const sourceId = process.argv[4];
+const candidates = routeEntries({ catalog, query, limit: 10 })
+  .filter(item => item.entry.source_id === sourceId);
+const maxScore = candidates.length ? Math.max(...candidates.map(item => item.score)) : 0;
+const routed = candidates
+  .filter(item => item.score === maxScore)
+  .map(item => ({
+    entry_id: item.entry.id,
+    reference: item.entry.reference,
+    summary: item.entry.summary,
+    score: item.score,
+    matched: item.matched,
+  }));
+process.stdout.write(JSON.stringify(routed));
+""".strip()
+    try:
+        proc = subprocess.run(
+            ["node", "--input-type=module", "-e", js,
+             router.resolve().as_uri(), str(catalog), json.dumps(result["query_tokens"]),
+             result["source_id"]],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=12, env={**os.environ, "NODE_NO_WARNINGS": "1"},
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_EXECUTION_FAILED:" + type(exc).__name__)
+        return result
+    if proc.returncode != 0:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_NONZERO", router_stderr=proc.stderr.strip()[:500])
+        return result
+    try:
+        selected = json.loads(proc.stdout or "[]")
+    except json.JSONDecodeError:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_INVALID_JSON")
+        return result
+    if not selected:
+        result.update(status="BLOCKED", reason="ORGANIZATION_SCOPE_WITHOUT_LIBRARY_REFERENCE")
+        return result
+    result.update(
+        status="ROUTED",
+        must_consult_before_delta=True,
+        selected_pages=selected[:4],
+        reason="EXISTING_LIBRARY_ROUTER_SELECTED_TCU_REFERENCES",
+    )
+    return result
+
+
+def document_organization_readback(repo: Path) -> dict:
+    """Read verified PDF-derived page text; visual review remains unproven."""
+    base = Path("docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA")
+    original = base / "Boas-praticas-para-pastas-e-arquivos-digitais.pdf"
+    transcript = base / "Boas-praticas-para-pastas-e-arquivos-digitais.md"
+    catalog = base / "catalog.json"
+    expected_sha = "0caf39a4f78388a8d4221f4b53d90c81b6c1f81d1f1e0207bcfa70aa0abebba8"
+    expected_text_sha = "2c06df290832c4738702aac155cfd827a4a8a2cd6ef7f8e23f8f0bf7eaeb3276"
+    evidence = {
+        "owner": (base / "README.md").as_posix(),
+        "original_pdf": original.as_posix(),
+        "catalog": catalog.as_posix(),
+        "text_index": transcript.as_posix(),
+        "expected_sha256": expected_sha,
+        "expected_text_sha256": expected_text_sha,
+        "indexed_pages_expected": 10,
+        "last_content_read_at_utc": "UNKNOWN_NOT_OBSERVED",
+        "content_read_checkpoint": "NOT_PERFORMED",
+        "runtime_consumer_proven": False,
+        "status": "EVIDENCE_MISSING",
+    }
+    source = repo / original
+    extracted = repo / transcript
+    indexed = repo / catalog
+    if not source.is_file() or not indexed.is_file() or not extracted.is_file():
+        evidence["reason"] = "ORIGINAL_OR_INDEX_MISSING"
+        return evidence
+    try:
+        observed = hashlib.sha256(source.read_bytes()).hexdigest()
+        evidence["observed_sha256"] = observed
+        if observed != expected_sha:
+            evidence["reason"] = "ORIGINAL_HASH_MISMATCH"
+            return evidence
+        data = json.loads(indexed.read_text(encoding="utf-8"))
+        key = "tcu-boas-praticas-pastas-arquivos-2019"
+        sources = [item for item in data.get("sources", []) if item.get("source_id") == key]
+        pages = [item for item in data.get("entries", []) if item.get("source_id") == key]
+        ids = {item.get("id") for item in pages}
+        expected = {f"tcu-boas-praticas-pagina-{n:02d}" for n in range(1, 11)}
+        evidence["indexed_pages_found"] = len(ids & expected)
+        if len(sources) != 1 or sources[0].get("sha256") != observed or ids != expected:
+            evidence["reason"] = "CATALOG_PROVENANCE_OR_PAGE_INDEX_MISMATCH"
+            return evidence
+        provenance = sources[0].get("provenance", {})
+        indexed_bytes = extracted.read_bytes()
+        indexed_sha = hashlib.sha256(indexed_bytes).hexdigest()
+        evidence["observed_text_sha256"] = indexed_sha
+        if (indexed_sha != expected_text_sha
+                or provenance.get("text_sha256") != indexed_sha
+                or provenance.get("text_index") != transcript.as_posix()):
+            evidence["reason"] = "TEXT_INDEX_PROVENANCE_OR_SHA_MISMATCH"
+            return evidence
+        markers = [int(n) for n in re.findall(
+            r"<!-- Page: ([0-9]+) -->", indexed_bytes.decode("utf-8"))]
+        evidence["extracted_page_markers_found"] = len(markers)
+        if markers != list(range(1, 11)):
+            evidence["reason"] = "TEXT_INDEX_PAGE_MARKERS_INCOMPLETE"
+            return evidence
+        from datetime import datetime, timezone
+        evidence["last_content_read_at_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        evidence["content_read_checkpoint"] = "BOOT_LOADER_READ_INDEX_TEXT"
+        evidence["checkpoint_sha256"] = hashlib.sha256((observed + indexed_sha).encode("ascii")).hexdigest()
+        evidence["reader"] = "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+        evidence["pdf_visual_reviewed_by_agent"] = "UNKNOWN_NOT_PROVEN"
+    except (OSError, ValueError, TypeError, AttributeError, UnicodeError) as exc:
+        evidence["reason"] = "DOCUMENT_READBACK_FAILED:" + type(exc).__name__
+        return evidence
+    evidence["status"] = "ORIGINAL_AND_PAGE_TEXT_INDEX_VERIFIED"
+    evidence["reason"] = "BOOT_LOADER_READ_EXTRACTED_TEXT_AGENT_VISUAL_REVIEW_NOT_PROVEN"
+    return evidence
+
+
 def canonical_boot_snapshot(repo: Path) -> dict:
     """Read canonical contracts before optional mission-resume and runtime gates."""
     return {
         "source_sha256": require_files(repo),
+        "document_organization_readback": document_organization_readback(repo),
         "fixed_point_pack": fixed_point_pack_state(repo),
         "discovered": discover_registry(repo),
         "cognitive_bios": cognitive_bios_state(repo),
@@ -833,6 +1009,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     # Read the canonical contract first. Runtime and mission gates may limit
     # continuation, but must not erase this read-only result.
     canonical = canonical_boot_snapshot(repo)
+    canonical["document_organization_route"] = document_organization_route(repo, args.input)
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
         print(json.dumps({
@@ -1206,9 +1383,22 @@ def cmd_self_test(args: argparse.Namespace) -> int:
         assert replay["expected_effect_match"] is True
         assert replay["binding_names"] == ["WORKSPACE"]
 
+    repo = discover_boot_repo(getattr(args, "repo", None))
+    rename_route = document_organization_route(repo, "!CENTRALDARK renomear arquivo de relatório")
+    move_route = document_organization_route(repo, "!CENTRALDARK mover pasta de documentação")
+    version_route = document_organization_route(repo, "!CENTRALDARK versionar arquivo")
+    neutral_route = document_organization_route(repo, "!CENTRALDARK verificar túnel MCP")
+    assert rename_route["status"] == "ROUTED"
+    assert rename_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-04"
+    assert move_route["status"] == "ROUTED"
+    assert move_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-03"
+    assert version_route["status"] == "ROUTED"
+    assert version_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-05"
+    assert neutral_route["status"] == "NOT_APPLICABLE"
+
     print(json.dumps({
         "status": "PASS",
-        "tests": 16,
+        "tests": 20,
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "same_fingerprint": same["action"],
         "changed_fingerprint": changed["action"],

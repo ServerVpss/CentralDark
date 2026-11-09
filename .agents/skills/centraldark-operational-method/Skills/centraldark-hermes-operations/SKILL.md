@@ -29,6 +29,24 @@ For a CHEFE-authorized cross-surface Goal, the **original Hermes** must keep doi
 
 This is a *handoff instruction using a callable script*, not a claim that a native Hermes completion hook is installed. HERMES_ORACLE_AUTOHOOK=NOT_PROVEN until an actual terminal Hermes event calls the bridge and the same conversation shows its receipt by independent readback. Never mark an entire parent Goal DONE from a completed micro-step.
 
+<!-- CENTRALDARK_HERMES_SUDO_INTERACTIVE_PROMPT_20261109 -->
+### 🔐 Janela administrativa do Hermes — reutilizar o prompt interativo
+
+**Intenção:** quando o CHEFE pedir para **reabrir a mesma janela "Sudo Password Required"**, recuperar a rota original, sem responder com uma explicação genérica nem criar ferramenta de autenticação paralela.
+
+**Proveniência (2026-11-09):** na sessão do Hermes foi exibida uma solicitação interativa de senha durante a checagem de viabilidade de instalação. O próprio Hermes relatou inspecionar `/opt/hermes/tools/terminal_tool_sudo.py`, com a função `_prompt_for_sudo_password()`, apresentação de `SUDO PASSWORD REQUIRED` e invocação pela ferramenta de terminal interativo. Os nomes de arquivo/função e os números de linha relatados são **evidência de sessão, não readback independente desta revisão nem garantia para versões futuras**.
+
+**Rota de reutilização:**
+1. Usar o **terminal interativo original do Hermes**, na superfície onde o prompt surgiu. `delegate_task`, APIs headless e terminais de outro ambiente não reproduzem obrigatoriamente o mesmo pedido.
+2. Identificar a função/gancho `_prompt_for_sudo_password()` no owner instalado, verificar gatilhos de interatividade, comando `sudo` real, cache e condições `NOPASSWD` antes de prometer a janela. O comando `sudo -k -v` foi o gatilho relatado na sessão; **não afirmar que abrirá o prompt sem confirmar o contexto atual**.
+3. Apresentar a solicitação somente pelo **campo seguro da ferramenta**. Senha não deve ser pedida, copiada, gravada ou exibida pelo chat, log, memória, receipt ou Git.
+4. Separar os fatos: `PROMPT_EXIBIDO` não é `SENHA_ACEITA`; `SENHA_ACEITA` não é `ROOT_ATIVO`. `sudo: command not found` / saída 127 significa comando ausente **naquele executor**; não prova ausência universal de rota administrativa.
+5. Se a rota interativa estiver indisponível, registrar `PROMPT=UNAVAILABLE_OR_UNKNOWN` e o motivo material, sem simular janela, contornar política de privilégios ou instalar serviços por inferência.
+
+**Critério de prova:** caminho/versão da ferramenta, superfície interativa, evento real de exibição do prompt e efeito autorizado quando aplicável. `DOCUMENTADO != CONSUMIDO_PELO_RUNTIME`; `UNKNOWN != PASS`.
+
+<!-- /CENTRALDARK_HERMES_SUDO_INTERACTIVE_PROMPT_20261109 -->
+
 ## Always-on rules
 
 - When CHEFE asks whether running Hermes inside an IDE or terminal "improved" the agent, answer in operational terms first: `sim/nao`, what capability improved, and what evidence proves the hosting chain. Do not detour into model-identity explanations unless asked; CHEFE already distinguishes model intelligence from execution capability.

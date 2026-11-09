@@ -128,8 +128,12 @@ function CredencialTunelLocal() {
     const value = key; setKey('');
     try {
       const result = await salvar({data: {key: value}});
-      setMessage(result.state === 'SAVED_RESTART_PENDING' ? 'Chave salva; ativação do serviço ainda pendente.' : 'Chave salva no Linux. Conexão com a OpenAI ainda em verificação.');
-      await estado.refetch();
+      const verificacao = await estado.refetch();
+      setMessage(verificacao.data?.state === 'READY_CHECK_PASSED'
+        ? 'Túnel STDIO ativo (readyz 200). Chave salva; OAuth do MCP é uma etapa separada.'
+        : result.state === 'SAVED_RESTART_PENDING'
+          ? 'Chave salva; ativação do serviço ainda não comprovada.'
+          : 'Chave salva no Linux; a autorização pelo plugin ainda precisa de prova.');
     } catch { setMessage('Não foi possível salvar. Verifique sua sessão admin e a chave informada.'); }
     finally { setBusy(false); }
   }
@@ -144,7 +148,12 @@ function CredencialTunelLocal() {
       className="rounded bg-primary px-4 py-2 text-sm text-primary-foreground disabled:opacity-50">
       {busy ? 'Salvando…' : 'Salvar e conectar no Linux'}</button>
     <button type="button" className="ml-3 text-sm underline" onClick={() => void estado.refetch()}>Verificar conexão</button>
-    <p role="status" className="text-xs text-muted-foreground">{message || (estado.data?.state === 'READY_CHECK_PASSED' ? 'Cliente pronto; chamada pelo plugin ainda precisa de prova.' : estado.data?.enabled ? 'Túnel ainda não conectado. Informe a chave para iniciar.' : 'Acesso local pendente ou sessão admin não confirmada.')}</p>
-    <p className="text-xs text-muted-foreground">Valor guardado somente no serviço Linux e nunca devolvido ao navegador. Chave salva não comprova conexão.</p>
+    <button type="button" className="ml-3 rounded border border-border px-3 py-2 text-sm underline"
+      onClick={() => {
+        window.dispatchEvent(new Event('centraldark:mcp-open-pairing'));
+        document.getElementById('mcp-console')?.scrollIntoView({behavior:'smooth',block:'start'});
+      }}>Abrir pareamento no MCP</button>
+    <p role="status" className="text-xs text-muted-foreground">{message || (estado.data?.state === 'READY_CHECK_PASSED' ? 'Túnel STDIO ativo. Autorização OAuth e chamada do plugin ainda precisam de prova.' : estado.data?.enabled ? 'Túnel ainda não conectado. Informe a chave para iniciar.' : 'Acesso local pendente ou sessão admin não confirmada.')}</p>
+    <p className="text-xs text-muted-foreground">A chave do túnel STDIO não é código de pareamento. A aprovação de dispositivos usa a autenticação MCP no painel abaixo; não exponha segredos.</p>
   </form>;
 }

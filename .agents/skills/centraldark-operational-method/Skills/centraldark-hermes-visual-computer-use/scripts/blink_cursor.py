@@ -75,8 +75,10 @@ def main():
     choice = parser.add_mutually_exclusive_group()
     choice.add_argument("--monitor", type=int)
     choice.add_argument("--all", action="store_true", help="Ordem humana crescente")
-    parser.add_argument("--mode", choices=("blink", "position", "click"), default="blink",
-                        help="position = previa 5 segundos; blink = 3 ciclos; click = Cua virtual + overlay")
+    parser.add_argument("--mode", choices=("blink", "position", "click", "working"), default="blink",
+                        help="position = previa 5 segundos; blink = 3 ciclos; click = Cua virtual + overlay; working = foco continuo com expiracao")
+    parser.add_argument("--duration", type=int, default=60, metavar="SEGUNDOS",
+                        help="working: sessao visual ativa 1..120s, sem processo permanente")
     parser.add_argument("--pid", type=int, help="PID atual da janela para --mode click")
     parser.add_argument("--hwnd", type=int, help="HWND atual da janela para --mode click")
     parser.add_argument("--x", type=int, help="X absoluto do alvo na tela para --mode click")
@@ -101,6 +103,11 @@ def main():
         parser.error("alvos de clique somente permitidos no modo click")
     elif args.monitor is None and not args.all:
         parser.error("informe --monitor N ou --all")
+    if args.mode == "working":
+        if args.all or args.monitor is None:
+            parser.error("working exige um unico --monitor N")
+        if not 1 <= args.duration <= 120:
+            parser.error("working exige --duration entre 1 e 120 segundos")
     root = args.hermes_root.resolve()
     sys.path.insert(0, str(root))
     os.chdir(root)
@@ -136,6 +143,47 @@ def main():
         call(driver, sid, "start_session")
         session_started = True
         for monitor in monitors:
+            if args.mode == "working":
+                # A mesma sessao Cua + visual permanece viva durante a operacao.
+                # O host renova a lease do MESMO overlay, sem segunda janela.
+                x = monitor["X"] + monitor["Width"] * .5
+                y = monitor["Y"] + monitor["Height"] * .35
+                call(driver, sid, "set_agent_cursor_enabled", {"enabled": True})
+                call(driver, sid, "move_cursor", {"scope": "window", "x": x, "y": y})
+                shown = visual.request("show_overlay", {
+                    "monitor": monitor["Number"], "leaseSeconds": min(120, args.duration + 5)
+                }, session=sid)
+                if not shown.get("ok") or not shown.get("result", {}).get("overlayVisible"):
+                    raise RuntimeError("VISUAL_WORKING_START_FAILED")
+                try:
+                    started = visual.request("renew_overlay", {
+                        "leaseSeconds": min(120, args.duration + 5), "visualState": "working"
+                    }, session=sid)
+                    if not started.get("ok") or not started.get("result", {}).get("overlayVisible"):
+                        raise RuntimeError("VISUAL_WORKING_RENEW_UNAVAILABLE " + str(started)[:300])
+                    print(json.dumps({"mode": "working", "monitor": monitor["Number"],
+                                      "execution": "started", "duration_seconds": args.duration,
+                                      "human_visual_confirmation": "not_inferred"}), flush=True)
+                    ends_at = time.monotonic() + args.duration
+                    while (remaining := ends_at - time.monotonic()) > 0:
+                        time.sleep(min(15, remaining))
+                        if ends_at - time.monotonic() > 0:
+                            renewed = visual.request("renew_overlay", {
+                                "leaseSeconds": min(120, args.duration + 5), "visualState": "working"
+                            }, session=sid)
+                            if not renewed.get("ok") or not renewed.get("result", {}).get("overlayVisible"):
+                                raise RuntimeError("VISUAL_WORKING_RENEW_FAILED " + str(renewed)[:300])
+                finally:
+                    hidden = visual.request("hide_overlay", session=sid)
+                    if not hidden.get("ok") or hidden.get("result", {}).get("overlayVisible"):
+                        raise RuntimeError("VISUAL_WORKING_CLEANUP_FAILED")
+                item = {"number": monitor["Number"], "mode": "working",
+                        "cursor_origin": [x, y], "duration_seconds": args.duration,
+                        "execution": "completed", "renewal": "same_visual_session",
+                        "human_visual_confirmation": "not_inferred"}
+                receipt["monitors"].append(item)
+                print(json.dumps(item), flush=True)
+                continue
             if args.mode == "click":
                 pid = target["pid"] if target else args.pid
                 hwnd = target["hwnd"] if target else args.hwnd

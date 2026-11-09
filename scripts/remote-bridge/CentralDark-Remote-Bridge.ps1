@@ -1,13 +1,10 @@
 param(
   [string]$Workdir = "$env:LOCALAPPDATA\CentralDark\Remote-Tray",
   [int]$RetrySec = 5,
-<<<<<<< HEAD
-  [switch]$InstallAutoStart
-=======
+  [switch]$InstallAutoStart,
   [switch]$EnableLegacyRemote,
   [switch]$LocalStatus,
   [switch]$Json
->>>>>>> origin/main
 )
 
 $ErrorActionPreference = 'Continue'

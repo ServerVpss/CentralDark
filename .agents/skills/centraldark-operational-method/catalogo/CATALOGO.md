@@ -2,6 +2,10 @@
 
 **Owner único:** `centraldark-operational-method`. Cópias importadas com SHA-256; originais preservados para manter compatibilidade.
 
+## CentralDark Desktop - self builder (Code-OSS)
+
+Receita operacional unica: [centraldark-builder-destop](../Skills/centraldark-builder-destop/SKILL.md). SOURCE e ZIP intactos em C:\CENTRALDAR DESKTOP; projeto aponta para F:\CentralDark e builder aponta para build/ nativo. Falha MSB4019 em node-gyp foi identificada; cada install, compile e EXE precisa de exit e readback separado. Nao confundir builder nativo com saida nem publicar etapas ainda pendentes.
+
 ## Diálogo Reflexivo da Intenção
 
 [Reflective Intent Dialogue](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): escuta reflexiva, reparo conversacional, metacomunicação e continuidade da intenção. Seleção: qualquer conversa CentralDark, correção, nova ideia lateral, ou observação que não deve interromper missão ativa. Sempre conectado à Skill Mãe; operacionalmente junto de Kimetsu Remix + Michelin 3 Estrelas. Skill catalogada não comprova consumo do Hermes.

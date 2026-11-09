@@ -3,9 +3,18 @@ param(
   [switch]$OpenAfterBuild
 )
 
+# #OBSERVACOES#
+# @owner scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1
+# @doc_ref scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md
+# @last_updated 2026-11-08T23:58:29Z
+# @implementado compila o motor Go existente pelo caminho relativo do owner
+# @estado SOURCE_READY_RUNTIME_PENDING
+# @next_cursor gerar e provar CentralDark-Remote-Bridge.exe
+
 $ErrorActionPreference = 'Stop'
-$src = Join-Path $PSScriptRoot 'CentralDark-Remote-One.go'
-$exe = Join-Path $OutDir 'CentralDark-Remote-One.exe'
+$remoteBridgeRoot = Split-Path -Parent $PSScriptRoot
+$src = Join-Path $remoteBridgeRoot 'CentralDark-Remote-One.go'
+$exe = Join-Path $OutDir 'CentralDark-Remote-Bridge.exe'
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 
