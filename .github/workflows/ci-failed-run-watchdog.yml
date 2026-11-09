@@ -53,6 +53,14 @@ jobs:
               github.rest.actions.listWorkflowRunsForRepo,
               { owner, repo, per_page: 100 }
             );
+            const runners = await github.paginate(
+              github.rest.actions.listSelfHostedRunnersForRepo,
+              { owner, repo, per_page: 100 }
+            );
+            const linuxRunnerOnline = runners.some((runner) =>
+              runner.status === "online" &&
+              runner.labels?.some((label) => label.name === "Linux")
+            );
 
             const candidates = runs
               .filter((run) => run.name !== workflowName)
@@ -64,7 +72,44 @@ jobs:
 
             let requested = 0;
             let blocked = 0;
+            let deferredForRunner = 0;
+            const startupFailures = candidates.filter((run) =>
+              String(run.conclusion || "").toLowerCase() === "startup_failure"
+            );
+
+            const recentWake = runs.some((run) =>
+              run.name === "⚙️ VPS wake via hosted SSH" &&
+              Date.parse(run.created_at || 0) >= cutoff
+            );
+            if (!linuxRunnerOnline && startupFailures.length > 0 && !recentWake) {
+              try {
+                await github.rest.actions.createWorkflowDispatch({
+                  owner,
+                  repo,
+                  workflow_id: "vps-wake-hosted-ssh.yml",
+                  ref: "main",
+                });
+                core.notice(
+                  `RUNNER_RECOVERY_REQUESTED=PASS workflow=vps-wake-hosted-ssh.yml startup_failures=${startupFailures.length}`
+                );
+              } catch (error) {
+                core.warning(
+                  `RUNNER_RECOVERY_REQUESTED=BLOCKED status=${error.status || "UNKNOWN"}`
+                );
+              }
+            }
+
             for (const run of candidates) {
+              if (
+                String(run.conclusion || "").toLowerCase() === "startup_failure" &&
+                !linuxRunnerOnline
+              ) {
+                deferredForRunner += 1;
+                core.warning(
+                  `RERUN_DEFERRED_RUNNER_MISSING run=${run.id} workflow=${run.name}`
+                );
+                continue;
+              }
               try {
                 await github.request(
                   "POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun",
@@ -83,19 +128,22 @@ jobs:
             }
 
             core.notice(
-              `CI_FAILED_RUN_REVIEW lookback_minutes=${lookbackMinutes} candidates=${candidates.length} requested=${requested} blocked=${blocked}`
+              `CI_FAILED_RUN_REVIEW lookback_minutes=${lookbackMinutes} candidates=${candidates.length} requested=${requested} blocked=${blocked} deferred_for_runner=${deferredForRunner} linux_runner_online=${linuxRunnerOnline}`
             );
             core.setOutput("candidates", String(candidates.length));
             core.setOutput("requested", String(requested));
             core.setOutput("blocked", String(blocked));
+            core.setOutput("deferred_for_runner", String(deferredForRunner));
 
       - name: "🧾 Receipt"
         if: always()
         run: |
           echo "OWNER=CI_FAILED_RUN_WATCHDOG"
           echo "SCHEDULE=*/5 * * * *"
-          echo "ACTION=RERUN_ONLY_RECENT_COMPLETED_RED_RUNS"
+          echo "ACTION=RERUN_RED_RUNS_OR_DISPATCH_EXISTING_RUNNER_RECOVERY"
           echo "RUN_ATTEMPT=1_ONLY"
+          echo "RUNNER_RECOVERY_OWNER=.github/workflows/vps-wake-hosted-ssh.yml"
+          echo "RUNNER_RECOVERY_DEDUP_WINDOW_MINUTES=${{ inputs.lookback_minutes || '15' }}"
           echo "LOOKBACK_MINUTES=${{ inputs.lookback_minutes || '15' }}"
           echo "NO_CODE_MUTATION=1"
           echo "NO_MERGE=1"
