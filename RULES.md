@@ -58,10 +58,12 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 @last_updated: 2026-11-09
 @escopo: distinguir servidor openKylin provisório em VMware de VPS externa
 @estado: DOCUMENTADO_COM_PROVAS_PONTUAIS
-@next_cursor: validar autostart VMware e espelhamento seguro para Hostinger
+@next_cursor: testar autostart VMware apos reboot e espelhamento seguro para Hostinger
 -->
 
 **VPS da Casa = openKylin/CentralDark-OS rodando na VM VMware da Casa SEGREDO**, hoje o alvo operacional Linux de serviços, MCP e Cockpit. **VPS externa = host remoto independente (Hostinger/VPS anteriormente usado)**, mantido como alvo futuro de promoção/mirror, não excluído nem confundido com a VM local. A identidade do produto CentralDark-OS não é a identidade de nenhuma máquina: dizer que o **produto** não é uma VPS não nega o papel **servidor/VPS da Casa** exercido pela VM.
+
+**Prova de configuração (09/11/2026):** `VmwareAutostartService` passou de `Manual` a `Auto`; `vmAutoStart.xml` existente aponta somente para `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx` em ordem `1`. `vmrun list` manteve a VM ligada e o MCP guest ativo (`enabled`, `active`, `/health` 200). **Boot pós-reinício = PENDENTE, não prometer continuidade ininterrupta.**
 
 **Regras:** não declarar 24/7 quando o PC/VM depende de boot/energia; registrar a localização real antes de executar; não promover configuração/estado para VPS externa automaticamente; preservar dirty state, owners e segredos e exigir comparação SHA + testes + readback no destino. `VM_LOCAL_RUNNING != VPS_EXTERNA_DEPLOYED`. Sem nova arquitetura/segundo writer.
 
