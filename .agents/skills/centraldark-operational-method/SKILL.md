@@ -76,6 +76,16 @@ UNKNOWN_CLASSIFICADO
 GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
 <!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
 
+## Runtime preflight obrigatório
+
+O `RUNTIME_PREFLIGHT_LINT` é o gate comum antes de consumir uma rota material.
+Ele valida comando, shell, host, caminhos necessários e evidência de ownership
+da bridge. `PREFLIGHT_PASS != RUNTIME_PASS`: o preflight autoriza a medição, mas
+somente execução, efeito esperado e readback podem provar o runtime.
+
+Falha de parsing do wrapper não vira falha do alvo. Evidência ausente ou inválida
+permanece `UNKNOWN`/`BLOCKED`; não criar uma rota alternativa para forçar verde.
+
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
