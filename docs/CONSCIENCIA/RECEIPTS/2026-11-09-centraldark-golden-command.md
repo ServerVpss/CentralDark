@@ -45,14 +45,14 @@ SHA antes do delta desta rodada:
 SHA final:
 
 ```text
-6cdb4da84ee6ab291091c7b46a77cde7150253e995e932a5683c117ecd82849d
+617137d351d3619d8f99bb2d7d5ca7ac6321c8417b3a90543e3b2f9145faec43
 ```
 
 ## Delta aplicado
 
 Somente `central-dark.yaml` recebeu alteração visual nesta rodada:
 
-- `banner_logo`: logo grande de seis linhas.
+- `banner_logo`: logo grande de oito linhas, com título espaçado `C E N T R A L   D A R K`.
 - `banner_hero`: monograma compacto `CENTRAL DARK`.
 - Dourado primário/secundário e ciano funcional.
 - Paleta funcional herdada de `default` preservada.
@@ -82,8 +82,9 @@ YAML_SCHEMA=PASS
 RICH_MARKUP=PASS
 COLORS_HEX=PASS
 DEFAULT_FUNCTIONAL_PALETTE=PASS
-LOGO_LINES=6
-LOGO_MAX_CHARS=73
+LOGO_LINES=8
+LOGO_MAX_CHARS=83
+SPACED_TITLE=PASS
 WIDTH_60=PASS LOGO=no
 WIDTH_80=PASS LOGO=no
 WIDTH_94=PASS LOGO=no
