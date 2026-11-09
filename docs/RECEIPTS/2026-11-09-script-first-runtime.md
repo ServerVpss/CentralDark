@@ -73,6 +73,18 @@ RAW_ERROR_LEAKED=false
 O hook não chama modelo diretamente. Ele entrega o contexto ao Hermes, que deve
 executar a recuperação determinística existente antes de qualquer especialista.
 
+O System Sentinel existente também recebeu uma falha controlada e fez readback:
+
+```text
+SENTINEL_EVENT=PASS
+SIGNATURE=UNKNOWN_ERROR
+STATE=FAILURE
+ROUTE=TOOL_ERROR → META_LUPA → RECONCILIAR
+AUTO_MUTATION_AUTHORITY=false
+STATE_READBACK=.artifacts/system-sentinel/state.json
+LAST_CURSOR=sha256:092ed47b39241a5552e64635bb466cd3206622e562dab20e608208223de382c6
+```
+
 ## Provas executadas
 
 ```text
