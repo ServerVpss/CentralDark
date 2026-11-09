@@ -23,4 +23,14 @@
 - Há tarefa `CentralDark-Casa-Cockpit-Hermes-One` apontando para `K:\scripts\casa`, mas `K:\` está ausente na medição. **Não alterar a tarefa silenciosamente.**
 - Não há confirmação de compilação do Tray em EXE, pareamento OAuth/admin ponta a ponta, instalação da versão nova do agente nem reboot/autostart. A bridge instalada permanece em `%LOCALAPPDATA%\CentralDark\Casa-Commander`; token DPAPI não foi lido, copiado ou exportado.
 
-**NEXT_CURSOR:** executar o launcher em sessão Windows interativa para confirmar a mesma janela e Tray; fechar/abrir pelo ícone, mantendo mutex; parear admin MCP com token já protegido; testar `/tool` leitura e recibo; publicar runtime MCP/GUI pelo owner existente; reconciliar autostart somente após confirmar caminhos vivos. Nunca mover pastas `apps`, `docs`, `Casa-Commander` ou `.git` para `remote-bridge`, pois isso quebraria os serviços existentes.
+## Build do executável existente — 08/11/2026
+
+- **@code_ref:** `scripts/remote-bridge/Build-Remote-Bridge.ps1` e `scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1`.
+- **@last_updated:** `2026-11-08T23:58:29Z`.
+- O ponto de entrada deixou de apontar para `K:\scripts\remote-bridge`, caminho ausente na Casa, e passou a resolver o builder canônico de forma relativa ao mesmo owner.
+- O builder canônico usa o motor já existente `CentralDark-Remote-One.go` e gera `canonical/dist/CentralDark-Remote-Bridge.exe`. Não cria segundo bridge nem altera OAuth, Tailscale ou a porta 9101.
+- **Prova local Casa:** parser PowerShell `PASS`; Go `1.27.3 windows/amd64`; build `PASS`; `--self-test` `PASS`; processo terminou com código `0`.
+- O binário atual prova o motor e o empacotamento. O HUD moderno, Tray visual, pareamento OAuth e instalação/autostart ainda permanecem pendentes.
+- **Estado Git:** checkout geral da Casa continua atrás da `origin/main` e contém deltas de outros owners. Publicação e sincronização permanecem bloqueadas até reconciliação sem perda.
+
+**NEXT_CURSOR:** adicionar a camada visual moderna ao mesmo executável, consumindo o estado real da porta 9101 e chamando o helper OAuth existente; executar prova visual; depois reconciliar e publicar sem sobrescrever os demais owners.
