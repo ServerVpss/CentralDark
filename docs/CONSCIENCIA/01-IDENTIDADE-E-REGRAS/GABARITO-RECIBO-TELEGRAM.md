@@ -105,6 +105,8 @@ estado. Fora deles, o emoji é do bloco.
 6. Algum emoji fora da paleta?             → remover
 7. Apago os emojis: o texto continua claro? → se não, reescrever texto
 8. Fecha com o rodapé canônico do §7?      → se não, corrigir
+9. Toda ausência diz ONDE se mediu?        → se não, corrigir (ver §10)
+10. Toda presença diz ONDE se viu?         → se não, corrigir (ver §10)
 ```
 
 ## 6. Anti-papagaio: diferença entre repetir e executar
@@ -177,6 +179,58 @@ endpoint, PR ou `UNKNOWN` explícito.
 🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
 ```
 
+## 10. Endereço obrigatório — ausência e presença
+
+O §2 já exige a âncora 📌 quando existe prova. A âncora diz **o que** foi visto.
+Faltava dizer **onde**: a ausência sem endereço é opinião, e a presença sem
+endereço não pode ser conferida por quem lê.
+
+```text
+Toda AFIRMAÇÃO DE AUSÊNCIA carrega o endereço onde se mediu:
+  repositório + branch + o que foi varrido.
+  Se abriu arquivo, informa a linha exata.
+
+Toda AFIRMAÇÃO DE PRESENÇA carrega o endereço onde se viu:
+  arquivo + SHA (ou linha, quando for o caso).
+
+SEM_ENDERECO_DE_AUSENCIA=RECIBO_INVALIDO
+SEM_ENDERECO_DE_PRESENCA=RECIBO_INVALIDO
+NOME_DE_ARQUIVO_NAO_E_ENDERECO=true
+MEMORIA_NAO_E_ENDERECO=true
+SESSAO_NAO_E_ENDERECO=true
+```
+
+Forma correta de escrever cada caso:
+
+```text
+AUSÊNCIA  → "Procurei <termo> em todo o conteúdo de <repo>, branch <branch>."
+            → "Abri <arquivo> na <branch> e a linha <n> traz <valor>."
+PRESENÇA  → "O arquivo <caminho> existe na <branch>, SHA <sha>."
+            → "A linha <n> de <arquivo> contém <valor>."
+```
+
+Contraprovas que devem reprovar (ver §5, itens 9 e 10):
+
+```text
+❌ "Procurei e não achei"           → ausência sem endereço
+❌ "O teste existe"                → presença sem endereço
+❌ "Está no repo"                  → repo sem branch e sem termo
+❌ "Lembro que era assim"          → memória não é endereço
+```
+
+Contraprovas que devem passar:
+
+```text
+✅ "Procurei <termo> em todo o conteúdo da main de <repo>; zero resultados."
+✅ "Abri <arquivo> na main; a linha <n> ainda traz <valor>."
+✅ "O teste existe em <caminho>, SHA <sha>."
+```
+
+O verificador determinístico aplica esta cláusula; ver
+`scripts/verify_recibo_telegram_gabarito.py`.
+
+```text
+🟡 UNKNOWN ≠ 🟢 PASS · ⚖️ REALIDADE = 👑 JUIZ · 🦜🚫 PAPAGAIO_OFF
 
 ## 10. Evidência com endereço — presença e ausência
 

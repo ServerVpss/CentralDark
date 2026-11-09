@@ -2,7 +2,7 @@
 
 Status: `HANDOFF_READY_FOR_HERMES`
 Autoridade: `SEGREDO/CHEFE`
-Owner existente: `docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/README.md`
+Owner existente: `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md`
 Ontologia aplicável: `docs/GOVERNANCA/ONTOLOGIA-DE-EVIDENCIA-E-CAUSALIDADE.md`
 Writer desta rodada: `SOL`
 Writer-scope: `HANDOFF_DOC_ONLY`

@@ -40,6 +40,7 @@ SESSION: dict[str, Any] = {
     "last_anchor_hash": None,
     "events": 0,
     "receipt_start_size": 0,
+    "pending_script_failure": None,
 }
 
 
@@ -48,8 +49,14 @@ def now() -> str:
 
 
 def repo_root() -> Path:
-    candidate = Path(os.environ.get("CENTRALDARK_REPO_ROOT", str(DEFAULT_REPO))).expanduser().resolve()
-    return candidate
+    configured = os.environ.get("CENTRALDARK_REPO_ROOT", "").strip()
+    if configured:
+        return Path(configured).expanduser().resolve()
+    source = Path(__file__).resolve()
+    for candidate in (source, *source.parents):
+        if (candidate / ".git").exists():
+            return candidate
+    return DEFAULT_REPO.expanduser().resolve()
 
 
 def stable_hash(value: Any) -> str:
@@ -243,9 +250,8 @@ def load_memoria_ingest_token() -> str:
     token = str(os.environ.get("MEMORIA_INGEST_TOKEN", "")).strip()
     if token:
         return token
-    token_file = Path(
-        os.environ.get("MEMORIA_INGEST_TOKEN_FILE", str(DEFAULT_MEMORIA_INGEST_TOKEN_FILE))
-    ).expanduser()
+    configured_token = os.environ.get("MEMORIA_INGEST_TOKEN_FILE", "").strip()
+    token_file = Path(configured_token).expanduser() if configured_token else repo_root() / "secrets" / DEFAULT_MEMORIA_INGEST_TOKEN_FILE.name
     try:
         return token_file.read_text(encoding="utf-8").strip()
     except OSError:
@@ -321,6 +327,24 @@ def _tool_parts(*args: Any, **kwargs: Any) -> tuple[str, dict[str, Any]]:
     return str(name), data if isinstance(data, dict) else {}
 
 
+def classify_tool_failure(status: Any = "", error_type: Any = "", error_message: Any = "") -> dict[str, Any] | None:
+    status_norm = str(status or "").strip().lower()
+    if status_norm not in {"error", "failed", "failure", "timeout", "blocked"}:
+        return None
+    return {
+        "status": status_norm,
+        "error_type": str(error_type or "UNKNOWN")[:80],
+        "failure_fingerprint": stable_hash({
+            "status": status_norm,
+            "error_type": str(error_type or "UNKNOWN")[:80],
+            "error_message": str(error_message or "")[:240],
+        }),
+        "recovery_route": "TRIGGER_FABRIC_SYSTEM_SENTINEL_THEN_HERMES",
+        "script_first": True,
+        "model_invocation": "ONLY_AFTER_DETERMINISTIC_RECOVERY_FAILS",
+    }
+
+
 def on_session_start(*_args: Any, **_kwargs: Any) -> None:
     try:
         start_size = receipt_path().stat().st_size
@@ -331,6 +355,7 @@ def on_session_start(*_args: Any, **_kwargs: Any) -> None:
         "last_anchor_hash": None,
         "events": 0,
         "receipt_start_size": start_size,
+        "pending_script_failure": None,
     })
 
 
@@ -340,10 +365,16 @@ def pre_llm_call(*_args: Any, **_kwargs: Any) -> dict[str, str] | None:
     gate = pdf_gate(root)
     anchor = {"snapshot": snapshot, "tlc23": gate}
     fingerprint = stable_hash(anchor)
-    if SESSION.get("last_anchor_hash") == fingerprint:
+    if SESSION.get("last_anchor_hash") == fingerprint and not SESSION.get("pending_script_failure"):
         return None
     SESSION["last_anchor_hash"] = fingerprint
-    return {"context": "CENTRALDARK_RUNTIME_ANCHOR=" + json.dumps(anchor, ensure_ascii=False, separators=(",", ":")) + "\nRegra: estado observado não é prova de runtime; mutação de regra lógica exige TLC23=PROVED antes da ferramenta."}
+    context = "CENTRALDARK_RUNTIME_ANCHOR=" + json.dumps(anchor, ensure_ascii=False, separators=(",", ":"))
+    pending = SESSION.get("pending_script_failure")
+    if pending:
+        context += "\nCENTRALDARK_SCRIPT_FIRST_FAILURE=" + json.dumps(pending, ensure_ascii=False, separators=(",", ":"))
+        context += "\nRegra: executar recuperação determinística existente antes de qualquer modelo especialista; somente falha verificada dessa recuperação autoriza diagnóstico Hermes."
+    context += "\nRegra: estado observado não é prova de runtime; mutação de regra lógica exige TLC23=PROVED antes da ferramenta."
+    return {"context": context}
 
 
 def pre_tool_call(tool_name: str = "", args: Any = None, **_kwargs: Any) -> dict[str, Any] | None:
@@ -367,6 +398,17 @@ def post_tool_call(*args: Any, **kwargs: Any) -> None:
     if tool_name:
         append_receipt({"tool": tool_name, "args": tool_args, "phase": "POST_TOOL", "logical_scope": logical_mutation(tool_name, tool_args), "verdict": "OBSERVED"})
         SESSION["events"] = int(SESSION.get("events", 0)) + 1
+    failure = classify_tool_failure(kwargs.get("status"), kwargs.get("error_type"), kwargs.get("error_message"))
+    if tool_name and failure:
+        SESSION["pending_script_failure"] = {"tool": tool_name[:100], **failure}
+        append_receipt({
+            "tool": tool_name,
+            "args": {},
+            "phase": "SCRIPT_FIRST_FAILURE",
+            "logical_scope": False,
+            "verdict": "HERMES_RECOVERY_PENDING",
+            "failure_fingerprint": failure["failure_fingerprint"],
+        })
 
 
 def on_session_end(*_args: Any, **_kwargs: Any) -> None:
@@ -451,6 +493,9 @@ def self_test() -> dict[str, Any]:
     assert payload_a["head_sha"] == "a" * 40
     assert "Authorization" not in json.dumps(payload_a)
     assert DEFAULT_MEMORIA_INGEST_TOKEN_FILE.name == "memoria-ingest.token"
+    failure = classify_tool_failure("error", "RuntimeError", "controlled failure")
+    assert failure and failure["script_first"] is True
+    assert failure["model_invocation"] == "ONLY_AFTER_DETERMINISTIC_RECOVERY_FAILS"
     return {"status": "PASS", "plugin": PLUGIN_NAME, "checks": 14}
 
 

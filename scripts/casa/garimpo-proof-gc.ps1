@@ -1,5 +1,5 @@
 param(
-  [string]$Root = 'K:\\_MAPA_CASA\\GARIMPO-CHEFE',
+  [string]$Root = if ($env:GARIMPO_ROOT) { $env:GARIMPO_ROOT } else { Join-Path (Split-Path -Parent $PSScriptRoot) '_MAPA_CASA\GARIMPO-CHEFE' },
   [switch]$Apply,
   [switch]$SelfTest
 )

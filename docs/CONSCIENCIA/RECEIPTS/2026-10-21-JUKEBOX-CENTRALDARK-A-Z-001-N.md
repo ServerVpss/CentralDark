@@ -1513,7 +1513,7 @@ flowchart LR
 ### <a id="j166"></a>J166 · instinto-casa-port-3000
 
 - **Categoria:** Módulo. **Estado:** `REGISTRO_HISTORICO`.
-- **O que há:** Owner: apps/instinto-superior; status no registro: PORT_PROCESS_PROVEN; evidência registrada: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md
+- **O que há:** Owner: apps/instinto-superior; status no registro: PORT_PROCESS_PROVEN; evidência registrada: docs/BRAIN/07-APRENDIZADOS-MEMORIAS/03-APRENDIZADOS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md
 - **Fonte / owner:** [registry do Harness](../../../apps/instinto-superior/config/harness-module-registry.json).
 - **Limite de prova:** Uma anotação do registry não substitui readback do runtime atual.
 
