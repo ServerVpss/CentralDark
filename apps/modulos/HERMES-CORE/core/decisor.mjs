@@ -527,7 +527,8 @@ async function chamarEliteAnthropic(prompt, system) {
 }
 
 async function chamarRuntimeLocal(system, prompt) {
-  const statePath = process.env.HERMES_LOCAL_RUNTIME_STATE || '/root/.hermes/runtimes/llamacpp/server.json';
+  const hermesHome = process.env.HERMES_HOME || process.env.HOME || process.cwd();
+  const statePath = process.env.HERMES_LOCAL_RUNTIME_STATE || `${hermesHome}/.hermes/runtimes/llamacpp/server.json`;
   const state = JSON.parse(readFileSync(statePath, 'utf8'));
   const baseUrl = String(state?.base_url || '').replace(/\/$/, '');
   const apiKey = String(state?.api_key || '');
