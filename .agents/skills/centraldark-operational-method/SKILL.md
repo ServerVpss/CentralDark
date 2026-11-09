@@ -76,6 +76,12 @@ UNKNOWN_CLASSIFICADO
 GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
 <!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
 
+## Fallback de modelos — Gemini preservado como rota de retorno
+
+A indisponibilidade temporária de Gemini não autoriza removê-lo, substituí-lo permanentemente ou reordenar sua rota. `429`, cooldown, falta temporária de crédito ou falha transitória são estados de fallback, não prova de obsolescência. Manter Gemini configurado como fallback para leitura ampla, extração e pesquisa quando voltar a responder.
+
+Usar Codex, Nous ou outro provedor comprovado somente como rota temporária/alternativa durante a indisponibilidade observada. Registrar `PROVIDER`, `MODEL`, `FALLBACK_REASON`, `STATUS` e `VALIDATION`; não apagar credenciais, aliases ou entradas Gemini por inferência. Só alterar a política de fallback com ordem explícita do CHEFE e prova comparativa por classe de tarefa. `TEMPORARY_UNAVAILABLE != REPLACED`; `FALLBACK_USED != DEFAULT_CHANGED`; `UNKNOWN != PASS`.
+
 ## Runtime preflight obrigatório
 
 O `RUNTIME_PREFLIGHT_LINT` é o gate comum antes de consumir uma rota material.
