@@ -234,6 +234,25 @@ CASA OFFLINE: VPS EXECUTA APENAS CAPACIDADES AUTONOMAS JA COMPROVADAS;
 
 **Status desta seção:** `CONTRACT_UPDATED=YES`; `VPS_OFFLINE_FAILOVER_E2E=UNKNOWN`; `AUTO_CATCHUP_E2E=UNKNOWN`; `KERNEL_NATIVE_BOOT=UNKNOWN_NOT_PROVED`. Nenhuma dessas capacidades passa a existir por texto de prompt.
 
+
+### 6.0.A.1 Papéis físicos — VPS da Casa ≠ VPS externa (decisão 2026-11-09)
+
+<!-- #OBSERVACOES#
+@owner: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+@last_updated: 2026-11-09
+@escopo: corrigir ambiguidades entre produto CentralDark-OS, VM VMware e VPS externa
+@pendente: autostart VMware; ingress MCP externo; espelhamento readback VPS Hostinger
+@next_cursor: VM_AUTOSTART_READBACK -> MCP_PUBLIC_OAUTH -> HOSTINGER_COMPARE_PROMOTE_WHEN_AVAILABLE
+-->
+
+**CURRENT:** a VM openKylin executada pelo VMware Workstation em `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx`, acessível da Casa via SSH `192.168.35.130`, é denominada operacionalmente **VPS da Casa**. Está assumindo o alvo Linux de serviço enquanto a VPS Hostinger não estiver pronta. Isto não reclassifica o produto CentralDark-OS como infraestrutura física nem elimina a **VPS externa**; ambos são destinos distintos do mesmo core. A VM depende do Windows/VMware para boot e energia; autostart e uptime devem ser comprovados separadamente.
+
+**Evidência T1 (09/11):** MCP HTTP `systemd --user` `centraldark-native-mcp-http.service` ativo/habilitado, porta `127.0.0.1:9100`, health/discovery 200; início de pareamento 201, redirecionamento consentimento 302. Cloudflare `mcp.centralldark.com` ainda não promovido ao backend Linux no último readback, login humano/heartbeat/`tools/list` pendentes. Essa prova pertence à **VPS da Casa**, não à VPS externa.
+
+**Promoção futura:** quando Hostinger retornar, usar owners existentes para autenticar, comparar SHA/código, estados/configurações, preservar mudanças locais e externas e promover só delta aprovado. Verificar efeitos e rollback em cada destino; não criar sincronizador concorrente e não presumir espelho automático. `CASA_VPS_RUNTIME != HOSTINGER_RUNTIME`; `MIRROR_DESIRED != MIRROR_PROVED`.
+
+
 ### Delegação do Builder na Forja existente — sem versões paralelas
 
 **Owner de skill:** skills/centraldark-delegacao/SKILL.md. **Contrato tipado:** .agents/skills/autonomous-ai-agents/hermes-agent/references/centraldark-delegacao-tipado.json. **Superfície:** apps/instinto-superior. **Bancada da Casa:** K:\ (repositório raiz, não K:\CentralDark).
