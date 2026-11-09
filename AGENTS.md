@@ -19,6 +19,17 @@ CONTINUIDADE: nova mensagem e DELTA da missao atual. Quando CHEFE mudar/encerrar
 
 FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/hermes/verified-checkpoint.py` via `scripts/hermes/centraldark-entry.py` (`current.json`/`events.jsonl` fora do Git); depois conferir o recibo documental em `docs/HUD/README.md` e respeitar `scripts/centraldark-inventory-reconcile.sh`. O mais recente por tempo nem sempre e a missao ativa do CHEFE; confrontar INTENCAO+MISSION+RECEIPT_SHA+NEXT_CURSOR e estado vivo, nunca escolher so por data. Em novo chat sem acesso a arquivos, reconstruir quadro apenas com contexto disponivel e marcar verificacoes atuais UNKNOWN. Escritas: caminho + readback local; commit SHA + link + readback remoto apenas se realmente publicado. SEM AUTO-PUBLICAR/SEM SOBRESCREVER DELTAS.
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+<!-- CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
+## 🪬 SOL — Contrato v1.2 de resposta visual, intenção e continuidade
+
+**Owner canônico do estilo:** [docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). Reutilizar a seção `CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109` como regra de apresentação; não copiar os 419 versos do contrato na árvore, nem criar HUD ou writer paralelo.
+
+**Ordem sem ritual obrigatório:** 👑 intenção do CHEFE → 🪬 [Sua Intenção Devolvida](docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) → 🧵 fio vigente → 🧠 [BRAIN.md](docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) / [pasta BRAIN](docs/BRAIN/) → 🏛️ owner/CURRENT → 🌳 árvore real → 📍 arquivo:linha → 🔴 causa raiz → 🔧 menor delta → ⚙️ execução autorizada → 🎯 contraprova → 🧾 receipt → 💗 aprendizado → ➡️ NEXT_CURSOR. Exibir só etapas pertinentes; conversa simples não exige ritual nem formulário.
+
+**Apresentação:** resultado primeiro, PT-BR claro, PAPAGAIO OFF; até quatro linhas em pergunta simples; diagnóstico completo quando necessário. Nomes visíveis humanos com identificadores técnicos estáveis. GenUI/cards são opcionais e funcionais, sem segundo estado: **o HUD monoespaçado obrigatório definido acima continua no topo até validação explícita do formato visual**. Clique ≠ execução; Git commit ≠ consumo; UI verde ≠ teste. Link, caminho, SHA e readback somente quando provados.
+<!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
+
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
