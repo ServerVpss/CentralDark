@@ -137,7 +137,10 @@ test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código 
   const before=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
   assert.equal((await before.json()).status,'pending');
   const anonymous=await request('/authorize',urlEncoded(body));
-  assert.equal(anonymous.status,403);
+  assert.equal(anonymous.status,302);
+  const passwordFallback=new URL(anonymous.headers.get('location'));
+  assert.equal(passwordFallback.searchParams.get('auth_method'),'password');
+  assert.match(passwordFallback.searchParams.get('error') || '',/Sessão administrativa ausente/);
   const invalidNonce=await request('/authorize',urlEncoded({...body,pair_nonce:'wrong'},cookie));
   assert.equal(invalidNonce.status,403);
   const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'FFFF-FFFF'},cookie));
@@ -195,6 +198,45 @@ test('Remote Bridge: mesmo /authorize e consentimento, sem token na URL',async()
     body:JSON.stringify({capabilities:{remote_bridge:true}})
   });
   assert.equal((await heartbeat.json()).ok,true);
+});
+
+test('Remote Bridge: senha fallback exige código, nonce e senha válidos; limita tentativas',async()=>{
+  const created=await request('/device/pair/start',json({
+    device_name:'BRIDGE-FALLBACK-TEST',executor:'remote-bridge',surface:'windows-tray'
+  }));
+  assert.equal(created.status,201);
+  const pair=await created.json();
+  const consent=await request('/authorize?'+new URLSearchParams({
+    client_id:'centraldark.remote-bridge',pair_id:pair.pair_id,auth_method:'password'
+  }));
+  assert.equal(consent.status,302);
+  const page=new URL(consent.headers.get('location'));
+  assert.equal(page.searchParams.get('auth_method'),'password');
+  const body={
+    client_id:'centraldark.remote-bridge',
+    pair_id:pair.pair_id,
+    pair_code:pair.code,
+    pair_nonce:page.searchParams.get('pair_nonce'),
+    auth_method:'password'
+  };
+  const invalid=await request('/authorize',urlEncoded({...body,password:'INCORRECT'}));
+  assert.equal(invalid.status,302);
+  assert.match(new URL(invalid.headers.get('location')).searchParams.get('error'),/Senha/);
+  const pending=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  assert.equal((await pending.json()).status,'pending');
+  const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'0000-0000',password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(invalidCode.status,403);
+  const invalidNonce=await request('/authorize',urlEncoded({...body,pair_nonce:'invalid',password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(invalidNonce.status,403);
+  const approved=await request('/authorize',urlEncoded({...body,password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(approved.status,302);
+  assert.equal(new URL(approved.headers.get('location')).searchParams.get('success'),'1');
+  const result=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  const auth=await result.json();
+  assert.equal(auth.status,'approved');
+  assert.ok(auth.token?.length>=32);
+  const replay=await request('/authorize',urlEncoded({...body,password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(replay.status,404);
 });
 
 test('Expired pair cannot be confirmed; code alone never issues token',()=>{
