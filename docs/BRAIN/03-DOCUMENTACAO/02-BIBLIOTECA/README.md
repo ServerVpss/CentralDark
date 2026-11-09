@@ -402,7 +402,7 @@ Não criar pacote paralelo de personalidade.
 ## Implementação determinística
 
 ```text
-CATALOGO=docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/catalog.json
+CATALOGO=docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json
 ROTEADOR=scripts/memory-linker/library-router.mjs
 TESTE=scripts/memory-linker/library-router.test.mjs
 GATE=.github/workflows/porta-de-entrada.yml
@@ -516,3 +516,22 @@ PUBLIC_PDF_CONTENT_UPLOAD=NO
 ### Aprendizado associado
 
 [[../../07-APRENDIZADOS-MEMORIAS/README|Código autoauditável, rastro de modificação e porta de entrada]].
+
+### Índice por página — Manual TCU (2019)
+
+Original integral: [PDF — 10 páginas](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf). Extração: [texto por página em Markdown](./Boas-praticas-para-pastas-e-arquivos-digitais.md). SHA-256 da extração: 2c06df290832c4738702aac155cfd827a4a8a2cd6ef7f8e23f8f0bf7eaeb3276.
+
+A transcrição reproduz a camada textual disponível. As árvores, exemplos visuais e imagens das páginas 3 e 6–9 devem ser consultados no PDF original; o texto extraído não substitui essas figuras.
+
+- [Página 1](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=1): Capa, autoria e instituição.
+- [Página 2](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=2): Introdução e objetivos.
+- [Página 3](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=3): Organização por setor e assunto.
+- [Página 4](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=4): Padrão de nomenclatura e classificação.
+- [Página 5](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=5): Versões, armazenamento e preservação.
+- [Página 6](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=6): Anexo I: setores e áreas.
+- [Página 7](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=7): Anexo I: subpastas e exemplos.
+- [Página 8](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=8): Anexo I: árvore completa, primeira parte.
+- [Página 9](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=9): Anexo I: árvore completa, continuação.
+- [Página 10](./Boas-praticas-para-pastas-e-arquivos-digitais.pdf#page=10): Referências bibliográficas.
+
+Checkpoint: PDF_SHA_VERIFIED; TEXT_SHA_VERIFIED; PAGE_MARKERS=10. O carregador centraldark_full_trigger_boot.py informa a hora UTC de cada leitura efetiva do índice. Leitura visual por agente e consumo por Telegram/WhatsApp permanecem UNKNOWN. Manual externo é fonte de estudo, não substitui contrato executável.

@@ -9,7 +9,7 @@ public sealed class Host : IDisposable {
  public string State{get;private set;}="IDLE";
  Mutex? writer; bool ownsWriter; MonitorInfo? active; Overlay? overlay; Capture? capture; readonly VisualConfig config;
  readonly DispatcherTimer timer=new(){Interval=TimeSpan.FromSeconds(1)};
- DateTime deadline;string? geometry;
+ DateTime deadline;string? geometry;string? displayedState;
  public Host(VisualConfig c){config=c;c.Validate();timer.Tick+=(_,_)=>{
   if(State=="IDLE" || State=="ERROR")return;
   var current=Native.Monitors(config.monitorBindings);
@@ -19,7 +19,7 @@ public sealed class Host : IDisposable {
  public object Status()=>new{state=State,monitor=active,captureActive=capture!=null,overlayVisible=overlay?.IsVisible??false,
   overlayExcluded=overlay?.ExcludedFromCapture??false,backend="Windows.Graphics.Capture"};
  public void Stop(){
-  State="STOPPING";timer.Stop();capture?.Dispose();capture=null;overlay?.Close();overlay=null;active=null;if(ownsWriter){writer!.ReleaseMutex();ownsWriter=false;}writer?.Dispose();writer=null;State="IDLE";
+  State="STOPPING";timer.Stop();capture?.Dispose();capture=null;overlay?.Close();overlay=null;active=null;displayedState=null;if(ownsWriter){writer!.ReleaseMutex();ownsWriter=false;}writer?.Dispose();writer=null;State="IDLE";
  }
  public async Task<object> Dispatch(JsonElement req){
   string op=req.GetProperty("operation").GetString()??"";
@@ -34,6 +34,25 @@ public sealed class Host : IDisposable {
    return new{results};
   }  if(op=="list_monitors")return new{monitors=Native.Monitors(config.monitorBindings)};
   if(op=="get_active_monitor" || op=="get_capture_status")return Status();
+  if(op=="renew_overlay"){
+   // Keep the current monitor, overlay and Cua session; never create a second writer.
+   if(overlay==null || active==null || !overlay.IsVisible || !ownsWriter)
+    throw new InvalidOperationException("NO_ACTIVE_OVERLAY_TO_RENEW");
+   int lease=req.TryGetProperty("leaseSeconds",out var requested)?requested.GetInt32():60;
+   if(lease<1 || lease>120)throw new ArgumentException("LEASE_OUT_OF_RANGE");
+   if(Signature(Native.Monitors(config.monitorBindings))!=geometry){Stop();throw new IOException("DISPLAY_CHANGED");}
+   deadline=DateTime.UtcNow.AddSeconds(lease);
+   if(req.TryGetProperty("visualState",out var visualState)){
+    string next=visualState.GetString()??"";
+    if(next!="working" && next!="attention" && next!="completed")throw new ArgumentException("VISUAL_STATE_INVALID");
+    State=next.ToUpperInvariant();
+    if(displayedState!=next){
+     overlay.Present(next=="working"?"TRABALHANDO":next=="attention"?"PRECISA DE VOCE":"CONCLUIDO");
+     displayedState=next;
+    }
+   }
+   return Status();
+  }
   if(op=="hide_overlay" || op=="stop"){Stop();return Status();}
   if(op=="pause"){capture?.Dispose();capture=null;State="PAUSED";overlay?.Present("PAUSADO");return Status();}
   if(op=="capturing"){if(capture==null)throw new InvalidOperationException("NO_CAPTURE_SESSION");State="CAPTURING";overlay?.Present("CAPTURA ATIVA");return Status();} if(op=="automating"){

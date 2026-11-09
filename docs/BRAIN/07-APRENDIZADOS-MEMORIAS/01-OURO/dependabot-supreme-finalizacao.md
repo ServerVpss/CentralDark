@@ -1,3 +1,25 @@
+---
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "01-OURO"
+centraldark_kind: "OURO_REUTILIZAVEL_COM_PROVA_CONTEXTUAL"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Sistema Dependabot Supremo — Finalização"
+centraldark_agent_recall: "Reutilizar tecnica, autoria, limites e evidencia no owner; nao presumir runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "6df155b0a17808676c6134d99152cbc07f85f482"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Validation"
+centraldark_self_related: ["Self-Verification","Self-Testing"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-validation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-verification/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-testing/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+---
 # Sistema Dependabot Supremo — Finalização
 
 ## Objetivo Alcançado

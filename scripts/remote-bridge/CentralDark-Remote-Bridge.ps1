@@ -1,6 +1,7 @@
 param(
-  [string]$Workdir = 'K:\_MAPA_CASA\GARIMPO-CHEFE',
+  [string]$Workdir = "$env:LOCALAPPDATA\CentralDark\Remote-Tray",
   [int]$RetrySec = 5,
+  [switch]$InstallAutoStart,
   [switch]$EnableLegacyRemote,
   [switch]$LocalStatus,
   [switch]$Json
@@ -184,16 +185,9 @@ try {
     throw "REMOTE_BRIDGE_CONFIG_MISSING:$configPath"
   }
   $config = Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json
-  $legacyRemoteEnabled = ($config.legacy_remote_enabled_by_default -eq $true) -or $EnableLegacyRemote.IsPresent
-  if ($legacyRemoteEnabled) {
-    $desktopPackage = [string]$config.package
-    if ([string]::IsNullOrWhiteSpace($desktopPackage)) {
-      throw 'DESKTOP_COMMANDER_PACKAGE_PIN_MISSING'
-    }
-    if ($desktopPackage -match '@latest$') {
-      throw "DESKTOP_COMMANDER_PACKAGE_MUST_BE_PINNED:$desktopPackage"
-    }
-    Add-Content $log ("[{0}] DESKTOP_COMMANDER_PACKAGE={1}" -f (Get-Date -Format o), $desktopPackage)
+  # Engine MIT local STDIO, sem a nuvem do fornecedor.
+  if ([string]$config.package -ne '@wonderwhy-er/desktop-commander@0.2.48') {
+    throw 'CENTRALDARK_CASA_ENGINE_PIN_MISMATCH'
   }
 } catch {
   Add-Content $log ("[{0}] REMOTE_BRIDGE_CONFIG_ERROR={1}" -f (Get-Date -Format o), $_.Exception.Message)
@@ -244,7 +238,8 @@ function Start-TailscaleServeFromConfig {
           Write-HumanStatus ("TAILSCALE_{0}" -f $route.name) '🟡' 'rota opcional sem porta/alvo configurado; pulando.'
           continue
         }
-        & $tailscale.Source serve --tcp $publicPort tcp://$target *>> $log
+        & $tailscale.Source serve --bg --tcp $publicPort tcp://$target *>> $log
+        if ($LASTEXITCODE -ne 0) { throw "TAILSCALE_SERVE_TCP_EXIT:$LASTEXITCODE" }
         Write-HumanStatus ("TAILSCALE_{0}" -f $route.name) '🟢' ("tunel tcp://tailnet:{0} -> {1}. Serve para: {2}" -f $publicPort, $target, $route.human_purpose)
       } elseif ($route.protocol -eq 'http') {
         $targetPort = [int]$route.target_port
@@ -277,47 +272,48 @@ function Test-GitHubLocalAuth {
   }
 }
 
+function Start-CentralDarkCasaCommander {
+  $agent = Join-Path $root 'CentralDark-Casa-Agent.mjs'
+  $node = Get-Command node.exe -ErrorAction SilentlyContinue
+  if (-not $node) { $node = Get-Command node -ErrorAction SilentlyContinue }
+  $token = [Environment]::GetEnvironmentVariable('CENTRALDARK_CASA_BRIDGE_TOKEN')
+  if (-not $node) { Write-HumanStatus 'CASA_COMMANDER' '🔴' 'NODE_MISSING'; return }
+  if (-not (Test-Path -LiteralPath $agent)) { Write-HumanStatus 'CASA_COMMANDER' '🔴' 'CASA_AGENT_FILE_MISSING'; return }
+  if ([string]::IsNullOrEmpty($token) -or $token.Length -lt 24) {
+    Write-HumanStatus 'CASA_COMMANDER' '🔴' 'CENTRALDARK_CASA_BRIDGE_TOKEN_MISSING_OR_SHORT'; return
+  }
+  try {
+    $existing = Invoke-RestMethod -Uri 'http://127.0.0.1:9101/health' -TimeoutSec 2 -ErrorAction Stop
+    if ($existing.name -eq 'CentralDark Casa Commander') {
+      Write-HumanStatus 'CASA_COMMANDER' '🟢' 'PROCESS_REUSED_PORT_9101'; return
+    }
+    Write-HumanStatus 'CASA_COMMANDER' '🔴' 'PORT_9101_OWNED_BY_OTHER_PROCESS'; return
+  } catch { }
+  $outLog = Join-Path $receiptDir 'casa-commander.stdout.log'
+  $errLog = Join-Path $receiptDir 'casa-commander.stderr.log'
+  $quotedAgent = '"' + $agent + '"'
+  try {
+    $p = Start-Process -FilePath $node.Source -ArgumentList @($quotedAgent) -PassThru -WindowStyle Hidden -RedirectStandardOutput $outLog -RedirectStandardError $errLog -ErrorAction Stop
+    Start-Sleep -Seconds 2
+    $health = Invoke-RestMethod 'http://127.0.0.1:9101/health' -TimeoutSec 3 -ErrorAction Stop
+    if ($health.name -ne 'CentralDark Casa Commander') { throw 'CASA_AGENT_HEALTH_IDENTITY_MISMATCH' }
+    Write-HumanStatus 'CASA_COMMANDER' '🟢' ("CASA_AGENT_HEALTH_OK PID={0}" -f $p.Id)
+  } catch {
+    Write-HumanStatus 'CASA_COMMANDER' '🔴' ('CASA_AGENT_HEALTH_FAILED:' + $_.Exception.Message)
+  }
+}
+if ($InstallAutoStart) {
+  $taskName = 'CentralDark-Casa-Commander'
+  $user = [Security.Principal.WindowsIdentity]::GetCurrent().Name
+  $action = New-ScheduledTaskAction -Execute (Get-Command powershell.exe).Source -Argument ('-NoProfile -ExecutionPolicy Bypass -File "' + $PSCommandPath + '"')
+  $logon = New-ScheduledTaskTrigger -AtLogOn -User $user
+  $repeat = New-ScheduledTaskTrigger -Once -At ((Get-Date).AddMinutes(1)) -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
+  $settings = New-ScheduledTaskSettingsSet -MultipleInstances IgnoreNew -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 2)
+  $principal = New-ScheduledTaskPrincipal -UserId $user -LogonType Interactive -RunLevel Limited
+  Register-ScheduledTask -TaskName $taskName -Action $action -Trigger @($logon,$repeat) -Settings $settings -Principal $principal -Force -ErrorAction Stop | Out-Null
+  Write-HumanStatus 'CASA_AUTOSTART' '🟢' 'TASK_REGISTERED_NOT_REBOOT_PROVEN'
+}
+Start-CentralDarkCasaCommander
 Start-TailscaleServeFromConfig
 Test-GitHubLocalAuth
-
-# CentralDark MCP e Hermes ACP operam sem Desktop Commander.
-# O processo legado so inicia quando explicitamente habilitado.
-if (-not $legacyRemoteEnabled) {
-  Write-HumanStatus 'DESKTOP_COMMANDER_LEGACY' '🟡' 'Fallback opcional desabilitado; MCP, Tailscale e Hermes ACP independentes.'
-  Add-Content $log ("[{0}] LEGACY_REMOTE_SKIPPED=true" -f (Get-Date -Format o))
-  return
-}
-
-$sidecarProc = $null
-if (Test-Path $sidecar) {
-  $sidecarProc = Start-Process powershell.exe -ArgumentList @(
-    '-NoProfile','-ExecutionPolicy','Bypass','-File',"`"$sidecar`"",'-Workdir',"`"$Workdir`""
-  ) -WindowStyle Hidden -PassThru
-  Add-Content $log ("[{0}] SCREENPIPE_SIDECAR_PID={1}" -f (Get-Date -Format o), $sidecarProc.Id)
-}
-
-try {
-  while ($true) {
-    Add-Content $log ("[{0}] REMOTE_MCP_CONNECT=https://mcp.desktopcommander.app/mcp" -f (Get-Date -Format o))
-    Push-Location $Workdir
-    try {
-      & npx -y $desktopPackage remote *>> $log
-      $exit = $LASTEXITCODE
-    } catch {
-      Add-Content $log ("[{0}] REMOTE_MCP_ERROR={1}" -f (Get-Date -Format o), $_.Exception.Message)
-      $exit = 1
-    } finally {
-      Pop-Location
-    }
-    try {
-      $tail = Get-Content -LiteralPath $log -Tail 80 -ErrorAction SilentlyContinue
-      if (($tail -join "`n") -match 'Unexpected end of JSON input|Failed to reload config') {
-        Write-HumanStatus 'DESKTOP_COMMANDER_CONFIG' '🔴' 'Desktop Commander remoto conectou, mas ha JSON local quebrado/vazio no config do proprio Desktop Commander. Ponte online != config saudavel.'
-      }
-    } catch {}
-    Add-Content $log ("[{0}] REMOTE_MCP_EXIT={1}; retry_in={2}s" -f (Get-Date -Format o), $exit, $RetrySec)
-    Start-Sleep -Seconds ([Math]::Max($RetrySec,3))
-  }
-} finally {
-  if ($sidecarProc -and -not $sidecarProc.HasExited) { Stop-Process -Id $sidecarProc.Id -ErrorAction SilentlyContinue }
-}
+Write-HumanStatus 'CASA_PRIVATE' '🟡' 'CENTRALDARK_MCP_TAILSCALE_NATIVE; E2E_READBACK_PENDING'

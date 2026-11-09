@@ -398,3 +398,4 @@ const ICON = {
     info: "🔁",
 };
 // UI transferida para Sala de Controle do Cockpit.
+//# sourceMappingURL=status.js.map

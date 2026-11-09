@@ -50,35 +50,36 @@ def assign_nodes(text: str):
     """Preserve existing UIDs when new headings duplicate old legacy numbers."""
     matches = list(HEADING_RE.finditer(text))
     totals = Counter(int(m.group(1)) for m in matches)
-    prior = {}
+    prior = defaultdict(list)
     if MANIFEST.exists():
         stored = json.loads(MANIFEST.read_text(encoding="utf-8"))
         if stored.get("schema") != "centraldark.learning-neurolink-lineage.v2":
             raise RuntimeError("PRIOR_LINEAGE_SCHEMA_UNSUPPORTED")
         reserved = set()
         for entry in stored.get("nodes", []):
-            key = (
-                entry["legacy_learning_number"],
-                entry["legacy_occurrence"],
-                entry["title"],
-            )
+            # Preserve the historical UID by lesson identity, not by
+            # occurrence position when legacy numbers are repeated.
+            key = (entry["legacy_learning_number"], entry["title"])
             uid = entry["uid"]
-            if key in prior or uid in reserved:
+            if uid in reserved:
                 raise RuntimeError("PRIOR_LINEAGE_UID_DUPLICATE")
-            prior[key] = uid
+            prior[key].append(uid)
             reserved.add(uid)
-    reserved = set(prior.values())
+    reserved = {uid for values in prior.values() for uid in values}
     seen = defaultdict(int)
+    matched = defaultdict(int)
     used = set()
-    found = set()
     nodes = []
     for order, m in enumerate(matches, start=1):
         n = int(m.group(1))
+        title = m.group(2)
         seen[n] += 1
-        key = (n, seen[n], m.group(2))
-        uid = prior.get(key)
+        key = (n, title)
+        old_uids = prior.get(key, [])
+        match_index = matched[key]
+        uid = old_uids[match_index] if match_index < len(old_uids) else None
         if uid is not None:
-            found.add(key)
+            matched[key] += 1
         else:
             suffix = chr(64 + seen[n]) if totals[n] > 1 else ""
             uid = f"L{n:03d}{suffix}"
@@ -96,13 +97,13 @@ def assign_nodes(text: str):
                 "uid": uid,
                 "legacy_learning_number": n,
                 "legacy_occurrence": seen[n],
-                "title": m.group(2),
+                "title": title,
                 "document_order": order,
                 "source_path": SOURCE_REPO_PATH,
                 "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
             }
         )
-    if set(prior) - found:
+    if any(matched[key] != len(uids) for key, uids in prior.items()):
         raise RuntimeError("PRIOR_LINEAGE_UID_MISSING_OR_REORDERED")
     for i, node in enumerate(nodes):
         node["prev_uid"] = "L000" if i == 0 else nodes[i - 1]["uid"]

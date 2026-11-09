@@ -1,7 +1,7 @@
 param(
     [string]$RuntimeRoot = "$env:LOCALAPPDATA\CentralDark\Remote-Tray",
     [string]$BaseUrl = "https://mcp.centralldark.com",
-    [string]$Resource = "https://mcp.centralldark.com/admin/mcp",
+    [string]$Resource = "https://mcp.centralldark.com/api/mcp",
     [switch]$ForceInteractive
 )
 
@@ -135,7 +135,7 @@ $initBody = @{
     jsonrpc='2.0'; id=1; method='initialize'
     params=@{ protocolVersion='2025-06-18'; capabilities=@{}; clientInfo=@{name='CentralDark Remote Tray';version='1.0'} }
 } | ConvertTo-Json -Depth 6
-$probe = Invoke-WebRequest -Method Post -Uri "$BaseUrl/admin/mcp" -Headers $headers -ContentType 'application/json' -Body $initBody -UseBasicParsing -TimeoutSec 15
+$probe = Invoke-WebRequest -Method Post -Uri "$BaseUrl/api/mcp" -Headers $headers -ContentType 'application/json' -Body $initBody -UseBasicParsing -TimeoutSec 15
 if ($probe.StatusCode -ne 200) { throw "Admin MCP probe HTTP $($probe.StatusCode)" }
 Write-Output 'CENTRALDARK_TRAY_AUTH=PASS'
 Write-Output 'CENTRALDARK_ADMIN_MCP=PASS'
