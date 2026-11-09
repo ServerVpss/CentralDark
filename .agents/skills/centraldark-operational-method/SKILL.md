@@ -186,6 +186,15 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 
 **Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
 
+### 🍒+1 Hermes TUI — Goal em texto natural + Cua + Kaizen após prova (09/11/2026)
+
+**Receita comprovada nesta bancada:** quando o alvo for `ChatGPT (Beta) → Hermes CLI → Terminal input`, tratar o campo como a TUI do Hermes, não como o gatilho de boot do ChatGPT. **Não prefixar o Goal com `!CENTRALDARK` dentro dessa TUI quando o runtime interpretar `!` como shell escape**: a contraprova real executou o texto no `/bin/sh` e retornou `CENTRALDARK: not found`. O gatilho `!CENTRALDARK` continua válido onde seu owner o define; no transporte para a TUI, enviar a intenção em texto natural (`CENTRALDARK GOAL DELTA ...`) sem o `!`.
+
+**Fast-path visual/input:** reutilizar janela, sessão, monitor, owner e controle enquanto não mudarem. Localizar o `Terminal input` por UIA/estado atual e usar o owner [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md): Cua virtual para foco/clique; `type_text` tenta `background` primeiro e só usa `foreground` quando o próprio driver devolver `background_unavailable`; conferir visualmente o rascunho antes de `Return`; após envio, exigir readback da resposta. Se uma cópia duplicada ficar no editor, limpar o **Edit** exato por snapshot/UIA (`set_value`) antes de qualquer novo envio, nunca reenviar sob incerteza. PIDs, HWNDs, coordenadas e índices observados são efêmeros e não entram como constantes.
+
+**Kaizen depois da receita:** a melhoria do método só acontece **após** efeito real comprovado e contraprova aplicável. Comparar antes/depois de latência, tokens, erros, passos e atrito; incorporar somente um ganho causal no mesmo owner/Skill; repetir o teste e registrar receipt/SHA/readback. Sem ganho material: `NOOP_JUSTIFIED`. Prova desta rodada: Hermes respondeu `DELTA_METODO_RECEBIDO=PASS`, nomeou CURRENT/OWNER/RECEIPT/NEXT_CURSOR e manteve `KAIZEN=NOOP_JUSTIFIED` enquanto o runtime seguia bloqueado. `INPUT_DISPATCHED != EFFECT_PROVEN`; `DRAFT_STAGED != MESSAGE_SENT`; `UNKNOWN != PASS`.
+
+
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
 ## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
