@@ -586,6 +586,24 @@ CENTRALDARK_AI_BOOT:
       hermes_runtime_learning: "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/HERMES-AUTOCONFIG-RUNTIME.yml"
       cognitive_capabilities: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNITIVAS.md"
       operational_metacognition: "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md"
+    document_organization_reference:
+      source_id: "tcu-boas-praticas-pastas-arquivos-2019"
+      title: "Manual de Boas Práticas para Gestão de Pastas e Arquivos Digitais — TCU (2019)"
+      original_pdf: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.pdf"
+      original_sha256: "0caf39a4f78388a8d4221f4b53d90c81b6c1f81d1f1e0207bcfa70aa0abebba8"
+      text_index: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md"
+      text_index_sha256: "2c06df290832c4738702aac155cfd827a4a8a2cd6ef7f8e23f8f0bf7eaeb3276"
+      catalog: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json"
+      catalog_owner: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md"
+      page_index_prefix: "tcu-boas-praticas-pagina-"
+      page_count: 10
+      scope: "FOLDER_OR_FILE_ORGANIZATION"
+      read_mode: "PDF_ORIGINAL_PLUS_PAGE_TEXT_INDEX"
+      read_receipt_required: true
+      last_content_read: "UNKNOWN_UNTIL_RUNTIME_EVIDENCE"
+      visual_pages_must_use_original_pdf: true
+      external_study_is_executable_authority: false
+      no_parallel_library: true
     behavior:
       reflex_owner: "INSTINTO_SUPERIOR=OPERATIONAL_REFLEX"
       metacognition_owner: "META_METACOGNICAO_OPERACIONAL"
