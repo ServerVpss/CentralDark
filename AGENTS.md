@@ -1,5 +1,34 @@
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+## HUD FIXO NO TOPO DA RESPOSTA — CONTRATO UNIVERSAL
+
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+
+GATILHOS: `!HUD`, `#HUD`, `!CENTRALDARK` (quando o contexto pedir HUD). CHEFE pode chamar o mesmo HUD em qualquer conversa/agente com acesso a este repo; sem acesso, informar `HUD_SOURCE=UNKNOWN` e pedir o checkpoint, nunca afirmar sincronizacao automatica. Este protocolo usa AGENTS.md e a Skill Mae existentes; NAO cria segundo aplicativo, estado, reconciliador ou arquitetura.
+
+RENDERIZACAO: resposta operacional sempre com UM quadro monoespacado `┌─┐│├┤└─┘` NO TOPO, seguido da explicacao/acoes ABAIXO. Quadro contem nome da MISSAO vigente, tabela numerada com TODOS os quesitos, STATUS e EVIDENCIA individual (sem cortar fatos), OWNER e caminhos, REGRAS FIXAS, FOCO, CURRENT, NEXT_CURSOR, KAIZEN e dois fixed points separados: `HUD_FORMAT` e `MISSION`. Usar largura legivel sem apagar linhas. O quadro e UI conversacional do MESMO inventario, nao segundo HUD runtime.
+
+ESTADOS: 🟢 PROVADO no escopo declarado; 🟡 PENDENTE/UNKNOWN sem contraprova; 🔴 FALHOU com erro observado; ⚪ FUTURO. `CODIGO_ENCONTRADO != SERVICO_ATIVO`; `TESTE_EXISTE != TESTE_PASSOU`; `DOCUMENTADO != EXECUTADO`; `LOCAL != PUBLICADO`. Manter semaforo e textos historicos ate prova do quesito; descubrimentos parciais vao em evidencias/recibo sem promover status. Nunca omitir informacao apenas para compactar o quadro.
+
+CONTINUIDADE: nova mensagem e DELTA da missao atual. Quando CHEFE mudar/encerrar a missao, manter registro de missao anterior e suas evidencias no owner ja existente; atualizar o MESMO quadro com nome, quesitos e NEXT_CURSOR da nova missao; nao transportar status verde de uma missao para outra. `HUD_FORMAT=APPROVED` registra aprovacao de apresentacao; `MISSION_FIXED_POINT` exige contraprova e aceite do CHEFE. Registros historicos nao sao estado ao vivo.
+
+FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/hermes/verified-checkpoint.py` via `scripts/hermes/centraldark-entry.py` (`current.json`/`events.jsonl` fora do Git); depois conferir o recibo documental em `docs/HUD/README.md` e respeitar `scripts/centraldark-inventory-reconcile.sh`. O mais recente por tempo nem sempre e a missao ativa do CHEFE; confrontar INTENCAO+MISSION+RECEIPT_SHA+NEXT_CURSOR e estado vivo, nunca escolher so por data. Em novo chat sem acesso a arquivos, reconstruir quadro apenas com contexto disponivel e marcar verificacoes atuais UNKNOWN. Escritas: caminho + readback local; commit SHA + link + readback remoto apenas se realmente publicado. SEM AUTO-PUBLICAR/SEM SOBRESCREVER DELTAS.
+<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+
+<!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
+**REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
+
+**SEQUÊNCIA OBRIGATÓRIA:** `INTENÇÃO → OWNER EXISTENTE → MENOR DELTA → CASA/OWNER (quando acessível) → TESTE/CONTRAPROVA → COMMIT MÍNIMO → PUSH MAIN → RECONCILIAR CASA COM MAIN → READBACK DO MESMO CONTEÚDO/SHA → RECEIPT → NEXT_CURSOR`. Arquivo gravado não equivale a commit; commit não equivale a push; GitHub atualizado não equivale ao checkout local sincronizado.
+
+**TRAVA DE PRESERVAÇÃO:** se o checkout tiver trabalho local de outros owners, conflitos, processo Git ou `.git/index.lock`, não executar `reset --hard`, `clean`, stash destrutivo, remover lock às cegas nem forçar pull. Preservar alterações, medir a causa, reconciliar com segurança e manter `CASA_MAIN_SYNC=PENDING/BLOCKED` até prova real. Nunca marcar 🟢 por intenção, cabeçalho ou histórico. Sem branch, writer, arquivo, HUD ou arquitetura paralelos quando o owner existente atende.
+<!-- /CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -1921,7 +1950,9 @@ PAPEL_SOL=VOZ|TEXTO|COORDENACAO_COGNITIVA_DA_CASA
 PAPEL_HERMES=EXECUTOR_PRESERVACAO_CONTINUIDADE
 PIVETE_ROLE=RETIRED
 
-RAIZ_LOCAL=K:\
+RAIZ_LOCAL=DINAMICA
+# Resolver pelo arquivo de entrada e validar a raiz Git do checkout/worktree ativo.
+# K:\ nos registros abaixo é histórico, não binding de execução atual.
 # ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior K:\ permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
 
 CASA_PRIMEIRO=SIM
@@ -2635,8 +2666,45 @@ Esta regra vale daqui para frente e para arquivos tocados por um delta. Scripts
 legados fora do cone afetado permanecem preservados até existir causa e teste
 para uma migração específica.
 
+### Portabilidade de metadados e provenance
+
+Arquivos de metadados e provenance (ex: `.agents/skills/centraldark-operational-method/catalogo/ARQUIVOS.json`, `HISTORICO-MUDANCAS.jsonl`) podem conter referências históricas a caminhos absolutos (como `K:\...`, `F:\...`). **Essas referências são dados de provenance, NÃO bindings operacionais.**
+
+- **Metadados de provenance**: Caminhos em campos como `original` e `canonico` em ARQUIVOS.json documentam o local histórico de origem e destino durante migrações. Não devem ser interpretados como configuração executável.
+- **Referências em documentação**: Provas históricas (ex: `K:\TEMP\logs\...` em AGENTS.md, Skill Mãe) documentam eventos reais e não devem ser alteradas. São registros imutáveis de campo.
+- **Novos metadados**: Ao criar novos arquivos de metadados, prefira caminhos relativos ao owner canônico ou omitir a letra de unidade quando o contexto for de provenance.
+
+A distinção é clara:
+- **Scripts/bindings ativos**: NUNCA usar caminhos fixos (`/root/...`, `C:\...`, `K:\...`)
+- **Metadados/provenance**: Podem conter caminhos históricos para rastreamento, mas sempre com contexto claro de que são dados, não configuração
+
 <!-- CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
 ## Diálogo Reflexivo da Intenção - SOL, Hermes e agentes CentralDark
 
 Sempre que o CHEFE conversar sobre CentralDark, consultar a [skill canônica](.agents/skills/centraldark-operational-method/Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): distinguir ato da fala, preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; uma nova ideia é DELTA até existir mudança explícita de missão. Reparar mal-entendidos com explicação natural sem abandonar o trabalho. Para ação material, aplicar Skill Mãe + Kimetsu Remix + Michelin 3 Estrelas com evidência e contraprova. Documento salvo != Hermes consumiu no runtime.
 <!-- /CENTRALDARK_REFLECTIVE_INTENT_DIALOGUE_20261104 -->
+
+## CENTRALDARK_ROOT_DISCOVERY_GLOBAL
+
+Regra global: raiz operacional descoberta dinamicamente a partir do arquivo executado + identidade Git, nunca hardcoded.
+
+```text
+CENTRALDARK_ROOT_DISCOVERY_GLOBAL=true
+ROOT_FROM_EXECUTABLE_FILE=true
+VALIDATE_GIT_IDENTITY=true
+CENTRALDARK_ROOT_ONLY_WITH_VALIDATION=true
+NO_HARDCODED_K_OR_F_OR_E_PATHS_IN_OPERATIONAL_CONSUMERS=true
+WINDOWS_LINUX_OPENKYLIN_CASA_DOCKER_VPS_PARITY=true
+REUSE_BEFORE_CREATE=true
+NO_PARALLEL_ARCHITECTURE=true
+NO_V1_V2_V3=true
+```
+
+Consumidores operacionais devem resolver a raiz via `git rev-parse --show-toplevel` ou equivalente, validando identidade do repo (remote + HEAD). Caminhos fixos em docs/receipts/histórico são preservados (não operacionais).
+
+Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-method/SKILL.md) herda esta regra: descobrir raiz dinamicamente, validar, não criar bot paralelo.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## Entrada META-RSI
+
+A porta metodologica canonica e .agents/skills/centraldark-operational-method/SKILL.md, com Skills/meta-rsi e catalogo/META-RSI-40.md; Kimetsu conectado. Preservar entradas de .agents/skills e gatilhos ate testar todos os loaders. Sem motor paralelo nem alegacao de runtime 40/40 sem prova.

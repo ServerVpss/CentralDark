@@ -1,5 +1,19 @@
-﻿param([switch]$SomenteVerificar, [switch]$SincronizarSkillsCentralDark)
+﻿param([switch]$SomenteVerificar, [switch]$SincronizarSkillsCentralDark, [switch]$VerificarCarregadores)
 $ErrorActionPreference = 'Stop'
+
+# Native Hermes readback of the real loader. This is a gate, not a second loader.
+if ($VerificarCarregadores) {
+  if ($SincronizarSkillsCentralDark) { throw 'LOADER_CHECK_READ_ONLY: do not combine with sync' }
+  $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\..\..')).Path
+  $validator = Join-Path $PSScriptRoot 'validate_meta_rsi_catalog.py'
+  $hermesHome = if ($env:HERMES_HOME) { $env:HERMES_HOME } else { Join-Path $env:LOCALAPPDATA 'hermes' }
+  $python = Join-Path $hermesHome 'hermes-agent\.venv\Scripts\python.exe'
+  if (-not (Test-Path -LiteralPath $python -PathType Leaf)) { throw 'HERMES_PYTHON_NOT_FOUND' }
+  & $python $validator --loader-check --project-root $repoRoot
+  if ($LASTEXITCODE -ne 0) { throw "HERMES_LOADER_GATE_BLOCKED: EXIT=$LASTEXITCODE" }
+  Write-Output 'HERMES_NATIVE_LOADER=PASS'
+  return
+}
 
 # CentralDark-only sync. Reuses this catalog owner; originals remain valid compatibility paths.
 # Opt-in mode: never import unrelated global skills or overwrite local changes to imported files.

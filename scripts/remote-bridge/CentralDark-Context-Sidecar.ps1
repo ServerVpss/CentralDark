@@ -1,5 +1,5 @@
 param(
-  [string]$Workdir = 'K:\_MAPA_CASA\GARIMPO-CHEFE',
+  [string]$Workdir = if ($env:CENTRALDARK_WORKDIR) { $env:CENTRALDARK_WORKDIR } else { (Get-Location).Path },
   [int]$IntervalSec = 15,
   [int]$WindowMinutes = 15,
   [switch]$Status

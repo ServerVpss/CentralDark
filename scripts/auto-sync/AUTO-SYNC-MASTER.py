@@ -25,7 +25,9 @@ class SyncStatus(Enum):
     CONFLICT = "conflict"
 
 class AutoSyncMaster:
-    def __init__(self, repo_root: str = "K:\\"):
+    def __init__(self, repo_root: str = None):
+        if repo_root is None:
+            repo_root = str(Path(__file__).resolve().parents[2])
         self.repo_root = Path(repo_root)
         self.status_file = self.repo_root / ".auto-sync" / "status.json"
         self.status_file.parent.mkdir(exist_ok=True, parents=True)

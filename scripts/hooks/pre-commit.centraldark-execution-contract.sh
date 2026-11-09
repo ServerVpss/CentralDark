@@ -15,3 +15,15 @@ if printf '%s\n' "$changed" | grep -Ev '(^docs/|^AGENTS\.md$|^\.github/|^scripts
     exit 1
   fi
 fi
+# Chain the existing root-file registry gate; do not install a second hook.
+root="$(git rev-parse --show-toplevel)"
+if ! python3 -m json.tool "$root/ROOT-FILE-REGISTRY.json" >/dev/null 2>&1; then
+  if python -m json.tool "$root/ROOT-FILE-REGISTRY.json" >/dev/null 2>&1; then
+    python3() { python "$@"; }
+    export -f python3
+  else
+    echo 'BLOCKED: python3/python unavailable; cannot verify root-file contract.' >&2
+    exit 1
+  fi
+fi
+bash "$root/.githooks/pre-commit-root-contract.sh"

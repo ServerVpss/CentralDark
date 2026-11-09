@@ -9,7 +9,7 @@ test('MCP device pairing requires browser approval, not SSH self-approval', () =
   assert.match(source, /vscode\.env\.openExternal\(approvedUri\)/);
   assert.match(source, /mcp\.centralldark\.com\/authorize\?client_id=/);
   assert.doesNotMatch(source, /\/pair\/consent/);
-  assert.match(source, /'Abrir confirmação'/);
+  assert.match(source, /clique em Confirmar pareamento/);
   assert.doesNotMatch(source, /store\.approve\(\{pairId:pair\.pairId,code:pair\.code\}\)/);
 });
 test('device pairing token is saved only after server heartbeat succeeds', () => {

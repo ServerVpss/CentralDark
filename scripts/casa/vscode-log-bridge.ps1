@@ -1,8 +1,8 @@
 # Casa -> VPS: envia somente metadados. Log bruto e contas continuam no disco da Casa.
 [CmdletBinding()]
 param(
-  [string]$Source = "K:\TEMP\logs\LOGS-VS-CODE.log",
-  [string]$StatePath = "K:\TEMP\cache\vscode-log-bridge.cursor.json",
+  [string]$Source = if ($env:CENTRALDARK_VSCODE_LOG) { $env:CENTRALDARK_VSCODE_LOG } else { Join-Path $env:TEMP "LOGS-VS-CODE.log" },
+  [string]$StatePath = if ($env:CENTRALDARK_VSCODE_STATE) { $env:CENTRALDARK_VSCODE_STATE } else { Join-Path $env:TEMP "vscode-log-bridge.cursor.json" },
   [string]$SshAlias = "segredo-vpss",
   [string]$TailscaleIP = "100.90.199.124",
   [ValidateRange(1024,262144)][int]$MaxBytes = 65536,
@@ -11,11 +11,11 @@ param(
   [switch]$Bootstrap
 )
 $ErrorActionPreference = "Stop"
-# A unica origem Casa e a raiz Git K:\; K:\ e C:\CentralDark sao legados.
+# A unica origem Casa e a raiz Git descoberta dinamicamente; paths legados sao historico.
 # O perfil Windows (e seu cache ms-playwright) permanece independente da raiz Git.
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..')).TrimEnd('\')
-if ($env:OS -eq 'Windows_NT' -and $repoRoot -ine 'K:') {
-  Write-Error 'CASA_ROOT=BLOCKED_LEGACY_OR_NONCANONICAL_PATH; EXPECTED=K:\'
+if ($env:OS -eq 'Windows_NT' -and -not (Test-Path (Join-Path $repoRoot '.git'))) {
+  Write-Error 'CASA_ROOT=BLOCKED_LEGACY_OR_NONCANONICAL_PATH; EXPECTED_DYNAMIC_ROOT'
   exit 20
 }
 # On-demand, four-stage bootstrap of the SAME existing scheduled collector.

@@ -18,7 +18,16 @@ function activate(context) {
     traceOutput = vscode.window.createOutputChannel('CentralDark Trace');
     context.subscriptions.push(traceOutput);
     emitTrace('activate', 'PASS');
-    context.subscriptions.push(vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)), vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)), vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal), 
+    context.subscriptions.push(vscode.commands.registerCommand('centraldark.restoreWorkspace', () => restore(context, true)), vscode.commands.registerCommand('centraldark.mapWorkspace', () => mapNativeWorkspace(context)), vscode.commands.registerCommand('centraldark.showProjectFolders', async () => {
+        await vscode.commands.executeCommand('centraldarkWorkspaceFolders.focus');
+    }),
+    // Recupera somente a view nativa Arquivos, sem reset global.
+    vscode.commands.registerCommand('centraldark.restoreNativeExplorer', async () => {
+        // O comando do proprio VS Code restaura SOMENTE a view original.
+        // Respeita as demais personalizacoes e o storage existente.
+        await vscode.commands.executeCommand('workbench.explorer.fileView.resetViewLocation');
+        await vscode.commands.executeCommand('workbench.view.explorer');
+    }), vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
     vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal), vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)), vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)), vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid), vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)), vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)), vscode.commands.registerCommand('centraldark.checkUpdates', () => (0, autoUpdater_1.checkVsCodeUpdates)(context, sshExecutable, VPS_ROUTES, true)), vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => (0, remote_terminal_1.configureRemoteTerminal)(context)), vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => (0, remote_terminal_1.remoteTerminalStatus)(context)), vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog), vscode.commands.registerCommand('centraldark.showTrace', () => {
         emitTrace('show_trace', 'PASS');
@@ -28,6 +37,7 @@ function activate(context) {
     void (0, remote_terminal_1.startRemoteTerminal)(context);
     (0, autoUpdater_1.registerVsCodeAutoUpdate)(context, sshExecutable, VPS_ROUTES);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider('centraldarkVibeCoding', new CentralDarkVibeViewProvider(context)));
+    context.subscriptions.push(vscode.window.createTreeView('centraldarkWorkspaceFolders', { treeDataProvider: new CentralDarkWorkspaceFolders() }));
     const onOpen = vscode.workspace.getConfiguration('centraldark.restore').get('onOpen', false);
     if (onOpen) {
         void restore(context, false);
@@ -551,7 +561,8 @@ class CentralDarkVibeViewProvider {
             'centraldark.connectVpsSsh', 'centraldark.probeVpsSsh',
             'centraldark.pairVsCode', 'centraldark.verifyVsCodePairing', 'centraldark.checkUpdates',
             'centraldark.focusExistingTerminal', 'centraldark.locateVsCodeByPid',
-            'centraldark.mapWorkspace', 'centraldark.restoreWorkspace'
+            'centraldark.mapWorkspace', 'centraldark.restoreWorkspace',
+            'centraldark.showProjectFolders'
         ]);
         view.webview.onDidReceiveMessage((msg) => {
             if (!msg || typeof msg !== 'object')
@@ -560,6 +571,71 @@ class CentralDarkVibeViewProvider {
             if (typeof cmd === 'string' && allowed.has(cmd))
                 void vscode.commands.executeCommand(cmd);
         });
+    }
+}
+/** Project folders in the existing native Explorer area; never opens a new workspace. */
+class CentralDarkWorkspaceFolders {
+    changed = new vscode.EventEmitter();
+    onDidChangeTreeData = this.changed.event;
+    constructor() {
+        vscode.workspace.onDidChangeWorkspaceFolders(() => this.changed.fire(undefined));
+    }
+    async getTreeItem(uri) {
+        let stat;
+        try {
+            stat = await vscode.workspace.fs.stat(uri);
+        }
+        catch {
+            stat = undefined;
+        }
+        const directory = !!stat && (stat.type & vscode.FileType.Directory) !== 0;
+        const workspaceFolder = vscode.workspace.workspaceFolders?.find(f => f.uri.toString() === uri.toString());
+        const item = new vscode.TreeItem(workspaceFolder?.name ?? path.basename(uri.fsPath), directory ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+        item.resourceUri = uri;
+        item.tooltip = uri.fsPath;
+        item.contextValue = directory ? 'centraldarkWorkspaceFolder' : 'centraldarkWorkspaceFile';
+        item.iconPath = new vscode.ThemeIcon(directory ? 'folder' : 'file');
+        if (!directory)
+            item.command = { command: 'vscode.open', title: 'Abrir arquivo existente', arguments: [uri] };
+        return item;
+    }
+    async findCentralDarkRoot(uri) {
+        if (uri.scheme !== 'file')
+            return undefined;
+        let dir = uri.fsPath;
+        for (let count = 0; count < 9; count++) {
+            const candidate = vscode.Uri.file(dir);
+            try {
+                const repoFile = vscode.Uri.joinPath(candidate, 'AGENTS.md');
+                const inventory = vscode.Uri.joinPath(candidate, 'scripts', 'centraldark-inventory-reconcile.sh');
+                await Promise.all([vscode.workspace.fs.stat(repoFile), vscode.workspace.fs.stat(inventory)]);
+                return candidate;
+            }
+            catch { /* Keep walking up the currently opened project, read-only. */ }
+            const parent = path.dirname(dir);
+            if (parent === dir)
+                break;
+            dir = parent;
+        }
+        return undefined;
+    }
+    async getChildren(uri) {
+        if (!uri) {
+            const folders = (vscode.workspace.workspaceFolders ?? []).map(f => f.uri);
+            const canonical = await Promise.all(folders.map(f => this.findCentralDarkRoot(f)));
+            const roots = [...canonical.filter((f) => !!f), ...folders];
+            return [...new Map(roots.map(f => [f.toString().toLowerCase(), f])).values()];
+        }
+        try {
+            const entries = await vscode.workspace.fs.readDirectory(uri);
+            return entries.sort(([nameA, typeA], [nameB, typeB]) => Number((typeB & vscode.FileType.Directory) !== 0) - Number((typeA & vscode.FileType.Directory) !== 0) ||
+                nameA.localeCompare(nameB, 'pt-BR'))
+                .slice(0, 300)
+                .map(([name]) => vscode.Uri.joinPath(uri, name));
+        }
+        catch {
+            return [];
+        }
     }
 }
 //# sourceMappingURL=extension.js.map

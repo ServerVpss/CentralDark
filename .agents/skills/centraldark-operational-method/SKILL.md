@@ -6,19 +6,23 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar o modo HUD. QUADRO FIXO COMPLETO no topo da resposta; explicacao abaixo. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
+<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
-## Biblioteca operacional centralizada (22 Skills)
+## Biblioteca operacional centralizada (23 Skills)
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
 - [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-builder-destop](Skills/centraldark-builder-destop/SKILL.md)
 - [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
 - [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md)
 - [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
@@ -39,6 +43,49 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
 
+<!-- CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+**🔐 Hermes pertence à CentralDark — distinção entre método e motor (09/11/2026).** O método e os aprendizados produzidos para a CentralDark pertencem aos owners da própria CentralDark, não a um catálogo paralelo do Hermes: aprendizado geral → `docs/CONSCIENCIA/APRENDIZADOS.md`; procedimento especializado → [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md), já indexado nesta Skill Mãe. Exemplo concreto: recuperar a janela interativa "Sudo Password Required" — ler a receita nessa Skill filha antes de responder genericamente. O código nativo do Hermes (`/opt/hermes/tools/terminal_tool_sudo.py`, quando presente) é **implementação/dependência de runtime**, não owner documental da CentralDark; pode continuar instalado no local que o pacote exige. Qualquer plugin ou cópia necessária para carregamento é **adaptador**, nunca segunda autoridade. Para absorver outras capacidades do Hermes: inventariar as existentes, verificar licença/versão/contratos/consumidores, classificar REUSE/EXTEND, registrar o menor delta na Skill Mãe/Skills/owner e provar recarga real. Não copiar tudo às cegas, não duplicar motor, não solicitar/gravar senha em chat. `DOCUMENTADO != CONSUMIDO`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+
+<!-- CENTRALDARK_SKILL_NAMING_20261109 -->
+### Nomes de Skills: identificador tecnico, owner e apresentacao (09/11/2026)
+
+**Conceito cristalizado:** nome da pasta, campo `name:` do `SKILL.md`, comando exibido pelo Hermes (`/...`) e titulo humano sao **camadas diferentes**. Prefixo `centraldark-` indica identidade no identificador em que realmente aparece; ausencia do prefixo na pasta **nao prova** Skill externa, duplicada, desconectada ou nao carregada. Compatibilidade do loader vem antes da estetica. Na lista desta Skill Mae, 21 das 23 pastas operacionais com link usam prefixo `centraldark-`; as outras sao `michelin-3-estrelas` e `reconciliacao-diaria-centraldark`. A matriz `catalogo/META-RSI-40.md` referencia 40 nomes de pastas SELF sem o prefixo, enquanto os manifestos podem declarar `name: centraldark-...`. Exemplo: comando Hermes `/centraldark-self-cognitive-amplification` **nao esta comprovado como a mesma implementacao** de `Skills/recursive-cognitive-amplification/SKILL.md` (capacidade 40/40) so por semelhanca semantica.
+
+**Regra:** manter os paths/comandos existentes ate mapear `pasta -> frontmatter name -> alias/comando -> loader -> consumidor -> hash/conteudo -> teste de invocacao`. Se o nome humano precisar de padronizacao, exibir CentralDark + titulo PT-BR na interface e no catalogo sem renomear paths ou alterar IDs tecnicos por inferencia. Um unico owner da Skill Mae; adaptadores nos locais exigidos por cada runtime nao viram segunda biblioteca. So depois de contraprova de compatibilidade, decidir menor delta de alias/renomeacao por owner com migracao de consumidores e readback. `CATALOGADA != CARREGADA != EXECUTADA`; `NOME_SEMELHANTE != IDENTIDADE_PROVADA`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_SKILL_NAMING_20261109 -->
+
+<!-- CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+### UNKNOWN rastreável — META-START-LINK + DELTA_UTIL
+
+`UNKNOWN` não encerra a investigação quando existe uma rota legítima de leitura. Aplicar o elo canônico `META-START-LINK` em `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md` para preservar `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`, sem copiar memória nem criar segundo router.
+
+Sequência obrigatória para toda pendência rastreável:
+
+```text
+UNKNOWN_CLASSIFICADO
+→ DEFINIR_FATO_AUSENTE_E_CRITÉRIO_DISCRIMINANTE
+→ RECUPERAR_OWNER/CATALOGO/LEMBRANCA/RECEIPT_EXISTENTE
+→ MEDIR_ROTA_READ_ONLY_E_RUNTIME_ATUAL
+→ CONTRAPROVA_INDEPENDENTE
+→ DELTA_UTIL_NO_OWNER_EXISTENTE
+→ RECEIPT + NEXT_CURSOR
+→ FIXED_POINT OU PENDÊNCIA EXPLÍCITA
+```
+
+GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
+<!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+
+## Runtime preflight obrigatório
+
+O `RUNTIME_PREFLIGHT_LINT` é o gate comum antes de consumir uma rota material.
+Ele valida comando, shell, host, caminhos necessários e evidência de ownership
+da bridge. `PREFLIGHT_PASS != RUNTIME_PASS`: o preflight autoriza a medição, mas
+somente execução, efeito esperado e readback podem provar o runtime.
+
+Falha de parsing do wrapper não vira falha do alvo. Evidência ausente ou inválida
+permanece `UNKNOWN`/`BLOCKED`; não criar uma rota alternativa para forçar verde.
+
 **Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
 
 ## Diálogo Reflexivo da Intenção - continuidade entre falas
@@ -53,11 +100,17 @@ Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergu
 
 **POLÍTICA DE PARALELISMO:** vários **sensores somente de leitura** podem trabalhar ao mesmo tempo para manter o contexto atualizado: Browser `list_tabs/get_tab_context` nas abas que expõe; UIAutomation com título/PID/HWND/aba/controle acessível da janela Windows atual; mapa de monitores/posição/DPI e estado WGC; `cua-driver status`; saúde do MCP/Commander local (incluindo `engine_connected`, não apenas HTTP 200); estado Git/arquivo, e Screenpipe só quando já autorizado. Não esperar um sensor lento se outra rota já deu evidência suficiente. Reutilizar índices e observações cujo fingerprint da mesma janela/sessão ainda é válido. **Uma caneta por alvo:** ações de clique, digitação, foco, salvamento, commit ou publicação são serializadas por janela/aba/arquivo/escopo. Nunca disputar mouse com usuário nem fazer dois cliques concorrentes; fan-out de leitura não vira fan-out de escrita.
 
+**Rota complementar Cockpit / RX 580 / monitores (08/11/2026, Casa):** reutilizar a seção existente `Sistema CentralDark → Runtime / Capabilities → Radeon RX 580` em `apps/instinto-superior/src/components/central/RuntimeSistema.tsx`, com leitura autenticada de `apps/instinto-superior/src/lib/maquina.functions.ts`. Seus owners são o coletor read-only `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (fonte MSI Afterburner / MAHMSharedMemory) e `scripts/casa/CentralDark-RtssOverlay.ps1` (estado e mapa dos monitores / DesktopOverlayHost RTSS existente). Referência de capacidades e provas: `docs/HUD/README.md`. Não criar outro plugin, agente, coletor, ponte, janela ou motor visual.
+
+**Seleção e fallback sem confundir capacidades:** Browser/UIAutomation inspecionam controles; WGC da Skill Hermes Visual captura pixels autorizados; Cua virtual + overlay Hermes são a única rota de mouse/clique visual já aprovada. Se WGC, Cua ou mapeamento de tela falhar, consultar o `status` RTSS, seus aliases físicos atuais, processos e sensores Radeon como **contraprova de monitor/topologia/telemetria**, e tentar reparar o owner visual original; RTSS/Afterburner NÃO capturam o conteúdo da janela, NÃO rolam Telegram, NÃO injetam clique e NÃO substituem WGC/Cua. Ações RTSS `open/move/close` continuam restritas ao owner e às permissões tipadas; usar `status` somente leitura durante diagnóstico e nunca abrir/mover host automaticamente como fallback de captura. Medir monitor humano pelo script existente `scripts/Identify-CentralDarkMonitors.ps1 -ListWindows`; o número humano não deriva de DISPLAYx.
+
+**Frescor e segurança:** `GPU=LIVE` exige leitura recente e autenticada no host Windows `SEGREDO`; feed em `%LOCALAPPDATA%\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js` ausente/antigo ou servidor fora da Casa = `STALE/UNKNOWN`, nunca valor antigo como telemetria atual. `RTSS running=false` não equivale a monitor desligado. Manter GPU, clocks e ventoinhas intocados. Anotar no mesmo receipt `MONITOR_MAP|WGC_CAPTURE|CUA_CURSOR|RTSS_STATUS|RX580_FRESHNESS|COCKPIT_AUTH|ACTION|AFTER_UI|COUNTERPROOF|NEXT_CURSOR`; distinguir `SOURCE_PRESENT`, `RUNTIME_PRESENT` e `VISUAL_EFFECT_PROVEN`. Preservar hierarquia/nomes dos owners, conforme o manual já vinculado em `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md`.
+
 **Contexto compacto para o executor:** antes de agir, reunir `INTENT|WINDOW_NAME|PID|HWND|MONITOR_NUMBER+RECT|BROWSER_PROFILE+VISIBLE_TABS|SELECTED_TAB+ORIGIN|CONTROL_NAME+BOUNDS|CUA_STATUS|WGC_STATUS|COMMANDER_ROUTE|GIT_DIRTY+SHA|AUTH_STATE|EVIDENCE_AT|NEXT_CURSOR`. Informação inacessível = UNKNOWN. A aba do Chrome de testes não representa automaticamente o Chrome pessoal; Browser lista somente as abas da sessão que alcança, e UIA `ControlType.TabItem` vê outras janelas sob a identidade atual. Enumerar ambos sem fechar, migrar perfis, copiar cookies ou adivinhar aba.
 
 **Seletor de execução, preferência por owner disponível:**
 1. Para entender navegador, ler a aba certa via Browser; cruzar com UIA de janelas e abas. Se Chrome DevTools MCP já enxergar **a mesma página**, reutilizar `snapshot -> uid atual -> click/fill -> snapshot`. Caso contrário usar UIA (`InvokePattern/ValuePattern/SelectionItemPattern`) pelo CentralDark Casa Commander nativo **somente se `engine_connected` e a ferramenta estiverem comprovados**, ou pelo Desktop Commander autorizado que de fato esteja conectado. `GET /health=200` sem engine é PARTIAL, não input pronto.
-2. Quando o CHEFE pedir mouse visual/overlay, preferir **Cua virtual existente** e WGC da Skill Hermes Visual. Consultar `cua-driver status`; se parado, iniciar **uma vez** `cua-driver serve` em modo standard sem `--no-overlay`, sem alterar permissões. Pode reaproveitar `cua-driver autostart` existente para persistência, sem iniciar daemon duplicado. `scripts/blink_cursor.py --monitor N --mode position` mostra prévia breve; `--mode blink` pisca; `--mode click --monitor N --pid PID_ATUAL --hwnd HWND_ATUAL --x X_ATUAL --y Y_ATUAL` executa mouse virtual com moldura na mesma tela. Validar geometria, hit-test e janela antes do clique. Nunca `scope=desktop`/mouse físico por substituição silenciosa.
+2. Quando o CHEFE pedir mouse visual/overlay, preferir **Cua virtual existente** e WGC da Skill Hermes Visual. Consultar `cua-driver status`; se parado, iniciar **uma vez** `cua-driver serve` em modo standard sem `--no-overlay`, sem alterar permissões. Pode reaproveitar `cua-driver autostart` existente para persistência, sem iniciar daemon duplicado. `scripts/blink_cursor.py --monitor N --mode position` mostra prévia breve; `--mode blink` pisca; `--mode click --window-title 'JANELA_ATUAL' --control-name 'CONTROLE_UIA_EXATO'` descobre dinamicamente PID, HWND, monitor e centro do controle via `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl`, usando somente leitura UIAutomation. O mesmo `blink_cursor.py` executa o clique virtual Cua + overlay existente, com validacoes Win32/geometria antes do input; o formato anterior `--monitor N --pid PID_ATUAL --hwnd HWND_ATUAL --x X_ATUAL --y Y_ATUAL` continua disponivel para alvos ja medidos. Janela/controle ausente ou ambiguo = BLOCKED sem clique. Sem `SetCursorPos`, `mouse_event` ou mouse fisico. `CUA_CALL_OK != UI_EFFECT_PROVEN`: exigir readback independente. Nunca `scope=desktop`/mouse físico por substituição silenciosa.
 3. Se `WINDOWS_VISUAL_RUNTIME_NOT_BUILT`, procurar primeiro `native/bin/Release/.../HermesVisual.exe` e dependências da Skill instalada ou usar seu `scripts/Install.ps1` canônico: reparar apenas `runtime` esperado, sem novo overlay ou engine. Separar `WGC_PREVIEW`, `CUA_CURSOR` e `CUA_CLICK`; sucesso de um não prova os outros.
 4. Para editar código/documento **na tela**, encontrar editor e arquivo reais, preservar conteúdo não solicitado, alterações locais e rascunhos; preferir `ValuePattern` para texto, ou o cursor Cua e controle atual quando a interação visual for exigida. Salvar uma vez no mesmo arquivo, confirmar por leitura da interface **e** `git diff`/hash/resultado de build ou teste proporcional. Operações Git mantêm um escritor por escopo e só promovem o delta autorizado; clique/tecla enviados não provam arquivo salvo.
 5. Se navegador pedir autenticação, renovação de máquina, pagamento ou aprovação administrativa, verificar o estado real e não contornar a etapa humana. Não escolher plano pago nem publicar, alterar secrets ou autorizar outros dispositivos automaticamente. Desconexão Tailscale não implica queda do Cockpit Linux: medir porta e serviço independentemente.
@@ -163,6 +216,15 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 **Gatilho por intenção:** quando o CHEFE pedir para delegar um Goal ao Hermes **na conversa Cloudroom já aberta**, reutilizar a sessão e o owner. Executar a [receita Cloudroom comprovada](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#cloudroom-windows-delegacao-real-2026-11-01); não criar outro agente, chat, ponte, serviço ou script. Preferir controle nativo/acessível; se UIAutomation retornar zero editores, usar fallback de janela real + geometria atual + captura visual + entrada Win32 autorizada, nunca coordenada/PID fixos. Confirmar janela, conversa, campo vazio e texto antes de enviar **uma vez**. Preservar rascunhos, clipboard e foco na medida possível; se incerto, parar sem reenviar.
 
 **Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
+
+### 🍒+1 Hermes TUI — Goal em texto natural + Cua + Kaizen após prova (09/11/2026)
+
+**Receita comprovada nesta bancada:** quando o alvo for `ChatGPT (Beta) → Hermes CLI → Terminal input`, tratar o campo como a TUI do Hermes, não como o gatilho de boot do ChatGPT. **Não prefixar o Goal com `!CENTRALDARK` dentro dessa TUI quando o runtime interpretar `!` como shell escape**: a contraprova real executou o texto no `/bin/sh` e retornou `CENTRALDARK: not found`. O gatilho `!CENTRALDARK` continua válido onde seu owner o define; no transporte para a TUI, enviar a intenção em texto natural (`CENTRALDARK GOAL DELTA ...`) sem o `!`.
+
+**Fast-path visual/input:** reutilizar janela, sessão, monitor, owner e controle enquanto não mudarem. Localizar o `Terminal input` por UIA/estado atual e usar o owner [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md): Cua virtual para foco/clique; `type_text` tenta `background` primeiro e só usa `foreground` quando o próprio driver devolver `background_unavailable`; conferir visualmente o rascunho antes de `Return`; após envio, exigir readback da resposta. Se uma cópia duplicada ficar no editor, limpar o **Edit** exato por snapshot/UIA (`set_value`) antes de qualquer novo envio, nunca reenviar sob incerteza. PIDs, HWNDs, coordenadas e índices observados são efêmeros e não entram como constantes.
+
+**Kaizen depois da receita:** a melhoria do método só acontece **após** efeito real comprovado e contraprova aplicável. Comparar antes/depois de latência, tokens, erros, passos e atrito; incorporar somente um ganho causal no mesmo owner/Skill; repetir o teste e registrar receipt/SHA/readback. Sem ganho material: `NOOP_JUSTIFIED`. Prova desta rodada: Hermes respondeu `DELTA_METODO_RECEBIDO=PASS`, nomeou CURRENT/OWNER/RECEIPT/NEXT_CURSOR e manteve `KAIZEN=NOOP_JUSTIFIED` enquanto o runtime seguia bloqueado. `INPUT_DISPATCHED != EFFECT_PROVEN`; `DRAFT_STAGED != MESSAGE_SENT`; `UNKNOWN != PASS`.
+
 
 <!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
 <!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
@@ -443,3 +505,29 @@ Quando a intenção citar WuzAPI, QR WhatsApp, grupos, foto de grupo, webhook, G
 
 ### WuzAPI + whatsmeow: regra de consulta aos donos (05/11/2026)
 Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webhook, mídia, grupos ou WhatsApp/Whatsmeow, ler **antes da operação** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md). Fontes upstream obrigatórias em dúvida ou divergência: [asternic/wuzapi](https://github.com/asternic/wuzapi) (API REST) e [tulir/whatsmeow](https://github.com/tulir/whatsmeow) (biblioteca/protocolo Go). **Método:** intenção → Swagger vivo Casa → dois repositórios oficiais conforme camada → comparar código, versão e configuração CentralDark → menor delta → contraprova → registrar receipt/owner. Reusar o Gateway e WuzAPI existentes; não misturar API REST, implementação Go ou estado de instância, nem criar proxy/chave ou parear telefone por mera inspeção. Capturas de 05/11 mostram formulário de instância com token, webhook/eventos, history, HMAC e opções proxy/S3, além de Add Proxy; são evidência de interface, não de sessões conectadas. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=UPSTREAM_COMPARE_BEFORE_CHANGE.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## META-RSI 40/40 integrado por metodo
+
+Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.
+
+<!-- CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+**Memorial contextual da sessão:** [TOP CLEAN CEREJAS, META-RSI e autonomia (2026-11-06)](references/MEMORIAL-SESSAO-TOP-CLEAN-CEREJAS-20261106.md). Preserva raciocínio, fatos, hipóteses, lições e NEXT_CURSOR; não é prova de runtime.
+
+
+## 🍒 TOP CLEAN CEREJAS — filtro de melhoria da Skill Mãe
+
+**Lei mestra:** Retém o bem. Elimina o atrito. Preserva o segredo. Automatiza o caminho.
+**Regra suprema:** Uma cereja só merece existir quando elimina mais complexidade do que acrescenta, preservando capacidades úteis.
+**Zero cerimônia:** Se o executor autorizado já sabe o próximo passo, não devolver trabalho repetitivo ao CHEFE. Intenção → reutilização → simplificação → execução → resultado → 🍒.
+**Michelin ⭐⭐⭐:** reutilizou, simplificou, preservou e entregou valor observável? Ganhou uma cereja. Não criar HUD, skill, daemon, executor ou biblioteca paralelos.
+**Autolimpeza:** incorporar, deduplicar ou retirar cerimônia obsoleta sem apagar capacidade nem alterar contratos superiores. Self-Pruning é critério transversal, não um 41º processo.
+
+**Interligados:** esta Skill Mãe coordena com o Kimetsu Brainstorm Remix e o método operacional CentralDark já referenciados acima. SOL interpreta intenção e coordena; Hermes é executor existente; CHEFE decide. Aplicar o menor delta útil no owner atual, respeitando escritor único e NEXT_CURSOR.
+
+**SELF 40/40:** reutilizar a matriz canônica [META-RSI 40/40](catalogo/META-RSI-40.md) e [META-RSI](Skills/meta-rsi/SKILL.md), sem gerar outra lista ou 40 agentes. Famílias de aplicação: consciência, aprendizado, recuperação, autonomia, organização, evolução, continuidade e inteligência. Cada variante é uma técnica candidata (APPLIED ou NOOP_JUSTIFIED), não obrigação de rodar. Self-Testing, Self-Healing, Self-Looping, Self-Provisioning e Self-Pruning só se aplicam quando reduzem atrito real.
+
+**MVP:** funcionalidade primeiro, correções incrementais depois. Auditoria ampla fica para fase posterior decidida pelo CHEFE; evitar transformar cada demonstração em exigência repetida de prova. Para credenciais, reutilizar cofre e autenticação existentes sem ecoar valores no chat, logs ou commits. Preservar autorizações e regras superiores.
+
+**Critério de saída:** menos esforço humano, mesma ou maior capacidade, nenhuma duplicação estrutural; se a melhoria acrescentar mais complexidade do que retirar, NOOP e seguir. Registrar mudanças materiais no receipt/owner existente.
+<!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
