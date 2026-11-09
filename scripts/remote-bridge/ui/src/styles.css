@@ -246,6 +246,29 @@ button {
   border-color: rgba(245, 223, 154, 0.52);
 }
 
+.pairing-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid rgba(214, 173, 75, 0.38);
+  border-radius: 14px;
+  background: rgba(214, 173, 75, 0.06);
+}
+.pairing-options strong { color: var(--gold-soft); font-size: 15px; }
+.pairing-options code { font-size: 19px; letter-spacing: 0.07em; }
+.pairing-options p { margin: 6px 0 0; color: var(--muted); font-size: 12px; max-width: 450px; }
+.pairing-option-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.pairing-option-buttons button {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 12px; cursor: pointer; border-radius: 9px;
+  color: var(--gold-soft); border: 1px solid var(--line); background: var(--surface-strong);
+}
+.pairing-option-buttons button:hover { border-color: var(--gold); }
+
 .action-receipt {
   display: flex;
   align-items: center;
