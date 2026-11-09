@@ -1,26 +1,33 @@
 // #OBSERVACOES#
 // @owner scripts/remote-bridge/ui/electron/main.cjs
 // @doc_ref scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md
-// @last_updated 2026-11-09T00:08:00Z
-// @implementado janela Electron, bandeja unica, health 9101 e OAuth existente
-// @estado PACKAGED_RUNTIME_PASS
-// @next_cursor validar visual e executar pareamento OAuth autorizado
+// @last_updated 2026-11-09T02:43:17Z
+// @implementado icone PNG real na bandeja e dialogo X: minimizar/encerrar/cancelar
+// @estado SOURCE_EDITED_BUILD_PENDING
+// @next_cursor compilar pacote com recursos internos, validar tray e OAuth real
 
-const { app, BrowserWindow, Menu, Tray, ipcMain, nativeImage, shell } = require("electron");
+const { app, BrowserWindow, Menu, Tray, dialog, ipcMain, nativeImage, safeStorage, shell } = require("electron");
 const { execFile, spawn } = require("node:child_process");
 const { promisify } = require("node:util");
 const fs = require("node:fs");
 const path = require("node:path");
+const { hostname } = require("node:os");
 
 const execFileAsync = promisify(execFile);
 const HEALTH_URL = "http://127.0.0.1:9101/health";
+const MCP_BASE = "https://mcp.centralldark.com";
+const DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 const COCKPIT_URL =
   process.env.CENTRALDARK_COCKPIT_URL ||
-  "http://127.0.0.1:8080/sala-controle?aba=admin";
+  "https://admin.centralldark.com/sala-controle";
 
 let mainWindow;
 let tray;
 let quitting = false;
+let pendingPair = null;
+let pairingTimer = null;
+let pairingPolling = false;
+let pairing = { state: "UNPAIRED", code: null, expiresAt: null, deviceId: null, error: null };
 
 function bridgeResourcePath(fileName, developmentRelativePath = fileName) {
   if (app.isPackaged) {
@@ -31,17 +38,16 @@ function bridgeResourcePath(fileName, developmentRelativePath = fileName) {
 }
 
 function createTrayImage() {
-  const svg = [
-    '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">',
-    '<rect width="32" height="32" rx="8" fill="#171816"/>',
-    '<circle cx="16" cy="16" r="10" fill="none" stroke="#d6ad4b" stroke-width="2"/>',
-    '<path d="M10 18l4-7 3 5 5-2" fill="none" stroke="#f5df9a" stroke-width="2" stroke-linecap="round"/>',
-    "</svg>",
-  ].join("");
-
-  return nativeImage
-    .createFromDataURL(`data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`)
-    .resize({ width: 16, height: 16 });
+  // Electron/Windows nao garante renderizacao de SVG em Tray: usar PNG real.
+  const iconPath = path.join(__dirname, "..", "assets", "tray.png");
+  let icon = nativeImage.createFromPath(iconPath);
+  if (icon.isEmpty() && fs.existsSync(iconPath)) {
+    icon = nativeImage.createFromBuffer(fs.readFileSync(iconPath));
+  }
+  if (icon.isEmpty()) {
+    throw new Error(`TRAY_ICON_MISSING_OR_EMPTY:${iconPath}`);
+  }
+  return icon.resize({ width: 16, height: 16 });
 }
 
 function showWindow() {
@@ -80,9 +86,22 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "..", "dist", "index.html"));
   mainWindow.once("ready-to-show", () => mainWindow.show());
   mainWindow.on("close", (event) => {
-    if (!quitting) {
-      event.preventDefault();
-      mainWindow.hide();
+    if (quitting) return;
+    event.preventDefault();
+    const choice = dialog.showMessageBoxSync(mainWindow, {
+      type: "question",
+      title: "CentralDark Remote Bridge",
+      message: "O que deseja fazer com o Remote Bridge?",
+      detail: "Minimizar mantém a ponte na bandeja do Windows. Encerrar fecha o aplicativo.",
+      buttons: ["Minimizar para bandeja", "Encerrar completamente", "Cancelar"],
+      defaultId: 0,
+      cancelId: 2,
+      noLink: true,
+    });
+    if (choice === 0) mainWindow.hide();
+    if (choice === 1) {
+      quitting = true;
+      app.quit();
     }
   });
 }
@@ -183,30 +202,176 @@ function launchPowerShell(scriptPath) {
   return child.pid;
 }
 
+// Reutiliza o pareamento de dispositivos do MCP CentralDark, sem OAuth admin
+// no computador do cliente e sem enviar segredo de posse para o navegador.
+function authFile() {
+  return path.join(app.getPath("userData"), "device-auth.json");
+}
+
+function saveDeviceAuth(auth) {
+  if (!safeStorage.isEncryptionAvailable()) throw new Error("WINDOWS_DPAPI_UNAVAILABLE");
+  const target = authFile();
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  const encrypted = safeStorage.encryptString(JSON.stringify(auth)).toString("base64");
+  fs.writeFileSync(target, JSON.stringify({
+    schema: "centraldark.remote-bridge.device-auth.v1",
+    encrypted,
+  }), { mode: 0o600 });
+}
+
+function loadDeviceAuth() {
+  try {
+    if (!safeStorage.isEncryptionAvailable()) return null;
+    const saved = JSON.parse(fs.readFileSync(authFile(), "utf8"));
+    if (saved.schema !== "centraldark.remote-bridge.device-auth.v1") return null;
+    return JSON.parse(safeStorage.decryptString(Buffer.from(saved.encrypted, "base64")));
+  } catch {
+    return null;
+  }
+}
+
+async function postDevice(route, body, token = null) {
+  const response = await fetch(MCP_BASE + "/device" + route, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: "Bearer " + token } : {}),
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(8000),
+  });
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error("CENTRALDARK_MCP_HTTP_" + response.status + ":" +
+      String(result.error || "ROUTE_UNAVAILABLE").slice(0, 80));
+  }
+  return result;
+}
+
+function stopPairingPoll() {
+  if (pairingTimer) clearInterval(pairingTimer);
+  pairingTimer = null;
+  pendingPair = null;
+}
+
+async function verifyDeviceAuth(auth) {
+  const heartbeat = await postDevice("/heartbeat", {
+    capabilities: { remote_bridge: true, source: "centraldark-remote-bridge" },
+  }, auth.token);
+  if (!heartbeat.ok || heartbeat.device_id !== auth.device_id) {
+    throw new Error("PAIRING_HEARTBEAT_UNVERIFIED");
+  }
+  return heartbeat;
+}
+
+async function pollPairing() {
+  if (!pendingPair || pairingPolling) return;
+  if (Date.now() >= pendingPair.expiresAt) {
+    pairing = { ...pairing, state: "PAIRING_EXPIRED", error: "PRAZO_DE_120_SEGUNDOS_ENCERRADO" };
+    stopPairingPoll();
+    return;
+  }
+  pairingPolling = true;
+  try {
+    const result = await postDevice("/pair/status", {
+      id: pendingPair.id,
+      secret: pendingPair.secret,
+    });
+    if (result.status === "pending") return;
+    if (result.status !== "approved") {
+      pairing = { ...pairing, state: "PAIRING_" + String(result.status).toUpperCase() };
+      stopPairingPoll();
+      return;
+    }
+    if (!result.token || !result.refresh_token || !result.device_id) {
+      throw new Error("PAIRING_TOKEN_INCOMPLETE");
+    }
+    const auth = {
+      device_id: result.device_id,
+      token: result.token,
+      refresh_token: result.refresh_token,
+      token_expires_at: result.token_expires_at,
+    };
+    saveDeviceAuth(auth); // DPAPI antes do heartbeat: token de uso unico nao se perde.
+    stopPairingPoll();
+    try {
+      await verifyDeviceAuth(auth);
+      pairing = { state: "PAIRED_VERIFIED", code: null, expiresAt: null,
+        deviceId: auth.device_id, error: null };
+    } catch {
+      pairing = { state: "TOKEN_SAVED_HEARTBEAT_PENDING", code: null,
+        expiresAt: null, deviceId: auth.device_id, error: "MCP_HEARTBEAT_UNVERIFIED" };
+    }
+  } catch (error) {
+    pairing = { ...pairing, error: String(error.message || "PAIRING_POLL_FAILED").slice(0, 100) };
+  } finally {
+    pairingPolling = false;
+  }
+}
+
+async function pairCasa() {
+  if (pendingPair && Date.now() < pendingPair.expiresAt) {
+    return { state: "AUTH_RESULT_PENDING", code: pairing.code };
+  }
+  const existing = loadDeviceAuth();
+  if (existing?.token) {
+    try {
+      await verifyDeviceAuth(existing);
+      pairing = { state: "PAIRED_VERIFIED", code: null, expiresAt: null,
+        deviceId: existing.device_id, error: null };
+      return { state: "PAIRED_VERIFIED" };
+    } catch {
+      // Sessao antiga nao equivale a login confirmado; iniciar tentativa nova.
+    }
+  }
+  const request = await postDevice("/pair/start", {
+    device_name: hostname(),
+    executor: "remote-bridge",
+    surface: "windows-tray",
+  });
+  if (!request.ok || !/^[A-F0-9]{4}-[A-F0-9]{4}$/.test(request.code) ||
+      !request.pair_id || !request.pair_secret) {
+    throw new Error("PAIRING_START_INVALID");
+  }
+  const expiresAt = Date.parse(request.expires_at);
+  if (!Number.isFinite(expiresAt)) throw new Error("PAIRING_EXPIRATION_INVALID");
+  pendingPair = { id: request.pair_id, secret: request.pair_secret, expiresAt };
+  pairing = { state: "WAITING_OWNER_CONSENT", code: request.code,
+    expiresAt: request.expires_at, deviceId: null, error: null };
+  const url = new URL(MCP_BASE + "/authorize");
+  url.searchParams.set("client_id", DEVICE_CLIENT_ID);
+  url.searchParams.set("pair_id", request.pair_id);
+  try {
+    await shell.openExternal(url.toString());
+  } catch (error) {
+    stopPairingPoll();
+    pairing = { ...pairing, state: "BROWSER_OPEN_FAILED", error: "BROWSER_OPEN_FAILED" };
+    throw error;
+  }
+  pairingTimer = setInterval(() => { void pollPairing(); }, 1800);
+  pairingTimer.unref?.();
+  return { state: "AUTH_RESULT_PENDING", code: request.code };
+}
+
 ipcMain.handle("bridge:status", async () => ({
   observedAt: new Date().toISOString(),
   health: await readHealth(),
   tailscale: await readTailscale(),
+  pairing: { ...pairing },
 }));
 
-ipcMain.handle("bridge:pair", async () => ({
-  started: true,
-  pid: launchPowerShell(
-    bridgeResourcePath(
-      "CENTRALDARK-OAUTH-TRAY.ps1",
-      path.join("canonical", "CENTRALDARK-OAUTH-TRAY.ps1"),
-    ),
-  ),
-  state: "AUTH_RESULT_PENDING",
-}));
+ipcMain.handle("bridge:pair", async () => pairCasa());
 
-ipcMain.handle("bridge:start", async () => ({
-  started: true,
-  pid: launchPowerShell(
-    bridgeResourcePath("CentralDark-Remote-Bridge.ps1"),
-  ),
-  state: "STARTED_EFFECT_PENDING",
-}));
+ipcMain.handle("bridge:start", async () => {
+  const script = bridgeResourcePath("CentralDark-Remote-Bridge.ps1");
+  const config = bridgeResourcePath(
+    path.join("canonical", "CENTRALDARK-REMOTE-BRIDGE.config.json"));
+  const agent = bridgeResourcePath("CentralDark-Casa-Agent.mjs");
+  for (const resource of [script, config, agent]) {
+    if (!fs.existsSync(resource)) throw new Error("BRIDGE_RESOURCE_MISSING:" + path.basename(resource));
+  }
+  return { started: true, pid: launchPowerShell(script), state: "STARTED_EFFECT_PENDING" };
+});
 
 ipcMain.handle("bridge:open-cockpit", async () => {
   await shell.openExternal(COCKPIT_URL);
@@ -220,11 +385,22 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(() => {
     createWindow();
     createTray();
+    const saved = loadDeviceAuth();
+    if (saved?.token) {
+      pairing = { state: "LOCAL_TOKEN_UNVERIFIED", code: null, expiresAt: null,
+        deviceId: saved.device_id || null, error: null };
+      void verifyDeviceAuth(saved).then(() => {
+        pairing = { ...pairing, state: "PAIRED_VERIFIED" };
+      }).catch(() => {
+        pairing = { ...pairing, state: "LOCAL_TOKEN_UNVERIFIED", error: "HEARTBEAT_UNVERIFIED" };
+      });
+    }
   });
 }
 
 app.on("before-quit", () => {
   quitting = true;
+  stopPairingPoll();
 });
 
 app.on("window-all-closed", () => {

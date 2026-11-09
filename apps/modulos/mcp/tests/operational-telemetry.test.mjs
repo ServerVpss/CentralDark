@@ -54,7 +54,7 @@ test("snapshot lê receipt sanitizado sem ler secrets", () => {
   }));
   const snap = getOperationalSnapshot({ root });
   assert.equal(snap.forensic.status, "OBSERVED");
-  assert.match(snap.forensic.observedAtIso, /^\\d{4}-\\d{2}-\\d{2}T.*Z$/);
+  assert.match(snap.forensic.observedAtIso, /^\d{4}-\d{2}-\d{2}T.*Z$/);
   assert.equal(snap.fixedPointTen.criteria.find((criterion) => criterion.id === "FORENSIC_FRESHNESS")?.status, "PASS");
   assert.equal(snap.fixedPointTen.criteria.find((criterion) => criterion.id === "RECEIPT_PRESENT")?.status, "PASS");
   assert.equal(snap.fixedPointTen.fixedPoint, false);

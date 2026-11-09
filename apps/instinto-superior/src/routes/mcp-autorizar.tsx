@@ -24,7 +24,9 @@ function AutorizarMcpNoCockpit() {
   useEffect(() => { alterar(new URLSearchParams(window.location.search)); }, []);
   const falha = params?.get("error");
   const sucesso = params?.get("success") === "1";
-  const dispositivo = params?.get("client_id") === "centraldark.centraldark-vscode-restore";
+  const deviceClient = params?.get("client_id");
+  const dispositivo = deviceClient === "centraldark.centraldark-vscode-restore" || deviceClient === "centraldark.remote-bridge";
+  const deviceLabel = deviceClient === "centraldark.remote-bridge" ? "CentralDark Remote Bridge" : "VS Code";
   const nome = params?.get("client_name") || params?.get("client_id") || "Cliente MCP";
 
   return (
@@ -60,14 +62,14 @@ function AutorizarMcpNoCockpit() {
               {dispositivo ? (
                 params.get("pair_code") ? (
                   <div className="rounded-lg border border-border bg-background p-4" role="group" aria-label="Confirmação de pareamento">
-                    <p className="text-sm">Compare com o código mostrado no VS Code:</p>
+                    <p className="text-sm">Compare com o código mostrado no {deviceLabel}:</p>
                     <output className="mt-2 block font-mono text-2xl font-bold tracking-wider" aria-label="Código de pareamento">{params.get("pair_code")}</output>
                     <p className="mt-2 text-xs text-muted-foreground">Se os códigos coincidirem, clique em Confirmar pareamento.</p>
                     <input type="hidden" name="pair_code" value={params.get("pair_code") || ""} />
                   </div>
                 ) : (
                 <label className="block text-sm">
-                  Código apresentado pelo VS Code
+                  Código apresentado pelo {deviceLabel}
                   <input type="text" autoComplete="off" required name="pair_code" value={pairCode}
                     onChange={(e) => alterarPairCode(e.target.value.toUpperCase())}
                     className="mt-2 w-full rounded-lg border border-border bg-background p-3 font-mono" />

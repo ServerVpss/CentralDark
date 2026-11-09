@@ -31,6 +31,7 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "assets/tray.png",
       "package.json"
     ],
     "extraResources": [
@@ -41,9 +42,18 @@
       {
         "from": "../canonical/CENTRALDARK-OAUTH-TRAY.ps1",
         "to": "bridge/CENTRALDARK-OAUTH-TRAY.ps1"
+      },
+      {
+        "from": "../canonical/CentralDark-Casa-Agent.mjs",
+        "to": "bridge/CentralDark-Casa-Agent.mjs"
+      },
+      {
+        "from": "assets/client-config.json",
+        "to": "bridge/canonical/CENTRALDARK-REMOTE-BRIDGE.config.json"
       }
     ],
     "win": {
+      "icon": "assets/tray.ico",
       "executableName": "CentralDark-Remote-Bridge",
       "target": [
         {

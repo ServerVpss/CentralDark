@@ -402,7 +402,7 @@ Não criar pacote paralelo de personalidade.
 ## Implementação determinística
 
 ```text
-CATALOGO=docs/BRAIN/03-DOCUMENTACAO/BIBLIOTECA/catalog.json
+CATALOGO=docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json
 ROTEADOR=scripts/memory-linker/library-router.mjs
 TESTE=scripts/memory-linker/library-router.test.mjs
 GATE=.github/workflows/porta-de-entrada.yml

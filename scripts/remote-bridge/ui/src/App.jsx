@@ -1,10 +1,10 @@
 // #OBSERVACOES#
 // @owner scripts/remote-bridge/ui/src/App.jsx
 // @doc_ref scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md
-// @last_updated 2026-11-09T00:20:00Z
-// @implementado HUD CentralDark com status real da 9101, MCP e Tailscale
-// @estado PACKAGED_RUNTIME_PASS
-// @next_cursor validar visual e executar pareamento OAuth autorizado
+// @last_updated 2026-11-09T02:43:17Z
+// @implementado HUD com codigo de pareamento MCP e estados pending/verified sem falso PASS
+// @estado SOURCE_EDITED_BUILD_PENDING
+// @next_cursor testar novo pacote, autorizar somente com clique humano
 
 import { useCallback, useEffect, useState } from "react";
 import {
@@ -25,6 +25,7 @@ const initialState = {
   observedAt: null,
   health: { reachable: false },
   tailscale: { available: false, state: "UNKNOWN" },
+  pairing: { state: "UNPAIRED", code: null, deviceId: null },
 };
 
 function StatusPill({ state, children }) {
@@ -77,8 +78,10 @@ export default function App() {
       const result = await operation();
       setAction({
         name,
-        state: "pass",
-        text: result.state || "Ação iniciada",
+        state: result.state?.includes("PENDING") ? "running" : "pass",
+        text: result.code
+          ? `Código ${result.code} · confira no Cockpit e confirme o pareamento.`
+          : (result.state || "Ação iniciada"),
       });
       setTimeout(refresh, 1500);
     } catch (error) {
@@ -167,6 +170,17 @@ export default function App() {
           </span>
         </button>
       </section>
+
+      {status.pairing?.state && status.pairing.state !== "UNPAIRED" && (
+        <div className="action-receipt">
+          <KeyRound size={18} />
+          <span>
+            Pareamento: {status.pairing.state}
+            {status.pairing.code ? ` · código ${status.pairing.code}` : ""}
+            {status.pairing.error ? ` · ${status.pairing.error}` : ""}
+          </span>
+        </div>
+      )}
 
       {action && (
         <div className={`action-receipt ${action.state}`}>
