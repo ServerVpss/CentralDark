@@ -134,3 +134,19 @@ Microsoft `microsoft/vscode`, `microsoft/vscode-wiki/How-to-Contribute.md`, `mic
 - **RECIBO OWNER HERMES** scripts/hermes/verified-checkpoint.py mission centraldark-hermes-envelope-20261107, step codeoss-11452-compile-electron-runtime-cli-pass-20261108, status VERIFIED_100, HASH_CHAIN_PASS 10 events, receipt SHA256 8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715.
 - **LIMITES**: Foi executado CLI --version, nao janela de GUI do build em smoke test; nenhum instalador .exe distributavel, nenhum gate de CentralDark cockpit ou branded executable realizado; nao equivale a DESKTOP_FIXED_POINT. Mantidos Visual Studio Code existente e seus terminais, sem resets.
 - **NEXT_CURSOR**: testar janela GUI Code-OSS compilada com readback visual independente e sem confundir VSCode ja instalado; validar resources/product, cockpit e owner de instalador nativo ja existente. Reutilizar Skill Mae e CUA via Hermes; capturar logs, contraprova, sem criacao paralela.
+
+<!-- CENTRALDARK_HARNES_CODEOSS_PRODUCT_20261109 -->
+## CentralDark Harnes — branding nativo Code-OSS (Casa, 09/11/2026)
+
+**Decisão do CHEFE:** usar literalmente **CENTRALDARK HARNES** como nome exibido no Code-OSS, mantendo o fonte original, menus, Explorer, extensões e modo DEV. Não substituir identificadores técnicos às cegas.
+
+**Owner físico confirmado:** `C:\CENTRALDAR DESKTOP\centraldark desktop-1.145.2\product.json` (fonte Code-OSS ZIP; não é um checkout Git) e `src/vs/platform/product/common/product.ts` (fallback de produto no modo web). `projeto/` continua junction para F:\CentralDark; não confundir com a fonte do Code-OSS.
+
+**Mapeamento na fonte (rg em src/build/scripts; omitidos node_modules, out, dist e diretórios test):** 89 arquivos citam `product.json`; 55 citam `productService.nameLong` e 36 citam `productService.nameShort`. Pontos importantes: `src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.ts`, `src/vs/workbench/browser/parts/titlebar/windowTitle.ts`, `src/vs/platform/product/common/product.ts`, `build/lib/electron.ts` e `build/gulpfile.vscode.win32.ts`. `build/vite/workbench-vite.html` não traz `nameLong/nameShort`, então a prévia web usava o fallback de `product.ts`.
+
+**Delta aplicado na Casa:** `product.json`: `nameShort`, `nameLong`, `win32DirName` e `win32NameVersion` = `CENTRALDARK HARNES`; `win32ShellNameShort` = `CENTRALDARK &HARNES`; `product.ts` no fallback web: `CENTRALDARK HARNES Dev`. Identificadores internos `applicationName=code-oss`, `dataFolderName=.vscode-oss`, `urlProtocol=code-oss`, mutex `vscodeoss`, IDs/GUIDs, licenças, URLs Microsoft e IDs de extensões preservados para não alterar dados, integração, privilégios nem atualização silenciosamente.
+
+**Conferido localmente:** `product.json` parse Node OK; SHA256 `ca1b5f1bb455530752402fb2f7d7a0eb6915980d4ae0e7bf4d47b704cf91910b`; `product.ts` SHA256 `752b0c1c4a1637735bfdeff9d21092530c453656b60367f0788f222d259d786f`; Vite Code-OSS HTTP 200 em porta 5199 e módulo transformado contendo `CENTRALDARK HARNES Dev`, sem `Code - OSS Dev`; Vite Bridge porta 5173 permanece HTTP 200. Originais guardados na pasta `_archive` já existente com prefixo `code-oss-product-pre-harnes-20261109-214841` e `code-oss-product-web-pre-harnes-20261109-214841`. Alteração visível na UI após refresh ainda depende de inspeção visual; pacote Electron não foi reconstruído.
+
+**Escopo de publicação:** este registro da receita está na main; os dois arquivos da fonte Code-OSS alterados na Casa **não** ficam automaticamente sincronizados no GitHub, pois aquela pasta não possui `.git`. Não declarar instalação ou pacote final atualizado. Próximo passo: observar nome na tela DEV e continuar branding incremental no mesmo `product.json`, sem alterar identificadores do sistema antes de preparar migração.
+<!-- /CENTRALDARK_HARNES_CODEOSS_PRODUCT_20261109 -->
