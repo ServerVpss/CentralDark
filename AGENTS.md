@@ -2731,3 +2731,10 @@ Caminhos portáteis nascem da localização do módulo executado ou do diretóri
 
 **Aprendizado aplicado:** [MCP — registro, logs e pareamento](docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md): 22 testes locais pertinentes passaram na VPS da Casa; publicação não equivale a reinício, pareamento humano nem consumo remoto.
 <!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+
+<!-- CENTRALDARK_DEV_FIRST_LIVE_EDIT_20261109 -->
+## 🛠️ Padrão DEV-FIRST — edição ao vivo antes do pacote
+Decisão do CHEFE (09/11/2026): nos projetos CentralDark com fonte e ferramenta de desenvolvimento disponíveis, iniciar e manter o modo de desenvolvimento com atualização visual em tempo real como padrão durante construção. Empacotar somente quando solicitado ou necessário para testar a entrega; depois retomar DEV se houver trabalho. Reutilizar o owner e a interface existentes, sem duplicar aplicativo, servidor, bandeja, roteador ou arquitetura.
+Critérios: identificar ferramenta já instalada (Vite/HMR, Electron, Code-OSS, watcher); usar comandos do projeto; servidor DEV somente em localhost; não abrir depuração remota nem desativar autenticação; preservar sessões, arquivos e processos de outros writers; diferenciar fonte editável, prévia ao vivo e pacote final. DEV ativo exige processo + endpoint + alteração refletida; HTTP 200 sozinho não comprova Electron em DEV. Build final exige teste do artefato.
+Aplicação: scripts/remote-bridge/ui/ e scripts/remote-bridge/Build-Remote-Bridge.ps1, documentados em scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md. Empacotamento integral dos recursos após estabilizar; não copiar segredos ou sessões do AppData de terceiros.
+<!-- /CENTRALDARK_DEV_FIRST_LIVE_EDIT_20261109 -->
