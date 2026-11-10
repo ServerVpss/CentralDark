@@ -2719,3 +2719,15 @@ Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-me
 ## Entrada META-RSI
 
 A porta metodologica canonica e .agents/skills/centraldark-operational-method/SKILL.md, com Skills/meta-rsi e catalogo/META-RSI-40.md; Kimetsu conectado. Preservar entradas de .agents/skills e gatilhos ate testar todos os loaders. Sem motor paralelo nem alegacao de runtime 40/40 sem prova.
+
+<!-- CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+## 🌳 Costura de causa vizinha — voltar uma linha, reparar e seguir (09/11/2026)
+
+**Decisão do CHEFE:** se a investigação de um erro encontrar falha vizinha com a mesma causa no mesmo owner, corrigir o menor delta autorizado antes de seguir. Voltar uma linha/passo, testar o cone afetado e continuar do NEXT_CURSOR. Isso aperfeiçoa o ROOT_DISCOVERY_GLOBAL existente, sem segundo owner, writer, script ou HUD.
+
+**Receita:** ERRO OBSERVADO → ÁRVORE + ARQUIVO:LINHA → CAUSA RAIZ → VERIFICAR USOS ADJACENTES → PRESERVAR DADOS/HISTÓRICO/SEGREDOS → MENOR CORREÇÃO → TESTE NORMAL + NEGATIVO → VOLTAR UMA CASA → RETESTAR → COMPROVANTE → PRÓXIMO PASSO.
+
+Caminhos portáteis nascem da localização do módulo executado ou do diretório do usuário, com configurações externas explícitas e testadas. Não migrar cofres, bancos, registros de auditoria administrativa nem textos históricos por troca em massa. Falha fora do cone ou pertencente a outro writer vira pendência identificada, não invasão de escopo.
+
+**Aprendizado aplicado:** [MCP — registro, logs e pareamento](docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md): 22 testes locais pertinentes passaram na VPS da Casa; publicação não equivale a reinício, pareamento humano nem consumo remoto.
+<!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
