@@ -168,3 +168,17 @@ Microsoft `microsoft/vscode`, `microsoft/vscode-wiki/How-to-Contribute.md`, `mic
 
 **Próximo passo:** ver visualmente menus e Explorer em português na janela nativa; comparar preferências sem segredos e pacotes das demais extensões com o novo Code-OSS, instalando/reutilizando uma a uma quando compatíveis; conferir os dois workspaces existentes, terminal PowerShell, tarefas e atalhos; integrar a experiência ao mesmo owner. Preservar seleção de perfil e sessões existentes sem reset, sincronização cega ou descarte.
 <!-- /CENTRALDARK_CODEOSS_WORKSPACE_EXTENSION_MAP_20261109 -->
+
+<!-- CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109 -->
+## PT-BR na versão web do Code-OSS Vite — 09/11/2026
+
+**Intenção do CHEFE:** primeiro alinhar o idioma da versão web DEV (5199) com o Code-OSS Electron nativo, sem rebuild nem um segundo tradutor; preservar a capacidade de trabalhar nos dois em paralelo com o Remote Bridge (5173). Extensões e APIs web/nativas serão verificadas por compatibilidade real; igualdade de fonte não equivale a mesma disponibilidade de ambiente.
+
+**Owner editado na Casa:** `C:\CENTRALDAR DESKTOP\centraldark desktop-1.145.2\build\vite\vite.config.ts`. Aproveitado o pacote `ms-ceintl.vscode-language-pack-pt-br-1.131.2026090407` já existente em `%USERPROFILE%\.vscode-oss\extensions` (copiado de VS Code, 103 arquivos previamente conferidos). Sem alterações nos arquivos `src/vs` nem no sistema de extensões do usuário.
+
+**Como funciona:** plugin pequeno `centralDarkPtBrSourceNlsPlugin()` no Vite, com marcador `CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109`, lê `translations/main.i18n.json` do pacote existente, encontra os módulos `vs/...` correspondentes e usa o parser TypeScript já instalado para substituir **somente a mensagem literal** em chamadas `localize`/`localize2` com chave traduzida. Mantém a chamada do Code-OSS e o texto inglês quando não houver entrada correspondente. Não cria dicionário, watcher, daemon ou rota paralela. Backup do Vite config anterior no diretório `_archive` existente: `vite-config-before-ptbr-20261109.ts`. No modo DEV, Vite precisa recarregar configuração para aplicar mudanças.
+
+**Resultado de leitura no servidor local:** `GET http://127.0.0.1:5199/src/vs/workbench/browser/actions/workspaceActions.ts` respondeu HTTP 200 e continha `Fechar Workspace` e `Duplicar Espaço de trabalho`, sem o literal antigo `localize2("closeWorkspace", "Close Workspace")`. Página de trabalho Vite respondeu HTTP 200; Bridge 5173 também HTTP 200. O carregamento inicial dos módulos ficou lento em alguns pedidos (aproximadamente 18–28 s), então ainda é preciso medir desempenho e observar visualmente a UI após refresh; este teste não demonstra todos os menus traduzidos, nem extensão nativa funcionando no navegador.
+
+**Restrições:** sem substituir tradução oficial, sem remover o pacote original, sem habilitar APIs nativas no browser, sem copiar credenciais do AppData ou desabilitar segurança. Fonte ZIP sem `.git`; esta anotação na main não publica automaticamente as alterações do `vite.config.ts` feitas na Casa. Próximo passo: conferir tela web atualizada, localizar possíveis textos sem tradução e assegurar compatibilidade/performance das extensões e ferramentas em cada superfície.
+<!-- /CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109 -->
