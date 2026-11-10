@@ -283,6 +283,14 @@ NO_BLIND_OVERWRITE=true
 GREEN_STATE_MUST_BE_PRESERVED=true
 ```
 
+<!-- CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
+**Regra reforçada do CHEFE — melhorar o que já funciona, sem começar do zero:** antes de criar qualquer solução, procure no owner atual a função, extensão, configuração e receita que já resolvem parte do pedido. Reaproveite o original, aplique só o ajuste necessário, confira a mudança no local em que ela será usada e registre no mesmo owner o que mudou, o que funcionou e o que ainda falta. Se achar erro da mesma origem ao lado, corrija no cone autorizado e reteste; não replique arquitetura, não apague o trabalho de outra frente nem invente tarefa quando o objetivo já estiver atendido.
+
+**Critério para fechar:** `REUSOU_O_EXISTENTE → MELHOROU_O_NECESSÁRIO → FUNCIONOU_NO_ALVO → REGISTROU_NO_OWNER → CONTINUOU_O_FIO`. Código alterado, teste, documento, publicação e uso real são estados diferentes; não chamar um pelo nome do outro. Falha, limite ou dependência não confirmada ficam explícitos. Explicar o resultado ao CHEFE em português natural, sem recitar o ritual.
+
+**Exemplo aprendido:** a tradução PT-BR do `CENTRALDARK HARNES` reutilizou o pacote já instalado do VS Code e o Vite já existente (porta 5199), sem um novo tradutor; o módulo servido passou a entregar `Fechar Workspace` e `Duplicar Espaço de trabalho`. A receita e suas limitações estão na [skill existente de construção do Desktop](.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md). Isso não declara todas as extensões web equivalentes às nativas nem publicação automática da fonte local na `main`.
+<!-- /CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
+
 ### 4. Vínculo CHEFE ↔ agente
 
 Toda ação operacional existe dentro de uma intenção humana.
