@@ -123,3 +123,17 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 
 **Owners:** `scripts/Identify-CentralDarkMonitors.ps1`, `Skills/centraldark-hermes-visual-computer-use/scripts/blink.py`, `scripts/blink_cursor.py`, `references/native-cursor.md`. Esta seção registra o resultado no owner existente; nenhuma arquitetura visual nova.
 <!-- /CENTRALDARK_MONITOR_HERMES_VISUAL_SPEED_20261109 -->
+
+<!-- CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
+## 10/11/2026 — Digitar no Hermes Agent Dashboard da direita com Cua existente
+
+**Intenção confirmada:** operar o campo inferior de `Hermes Agent - Dashboard` (Hostinger) dentro do Hermes Desktop da Casa, sem confundir com `Mensagem` do BOT CHAT ao meio nem com a CLI do Windows. O CHEFE confirmou visualmente que esta rota de digitação funcionou; a mensagem de reconhecimento foi apenas digitada, **Enter não foi enviado**.
+
+**Identificação viva (não fixar coordenadas):** janela `Hermes.exe`, título `Hermes`, controle UIA `Terminal input` (`ControlType.Edit`), painel direito `Hermes Agent - Dashboard`, monitor humano 4. Resolver por `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl -WindowTitle 'Hermes' -ControlName 'Terminal input'`: retorna PID, HWND, monitor, device e centro atual; durante o teste o centro mudou de `(1319,990)` para `(1337,977)` — nunca usar esses números como constante. Conferir `GetWindowRect`, `GetWindowThreadProcessId` e monitor antes do input. `Mensagem` do painel central é um alvo distinto.
+
+**Receita já funcional:** 1) identificar o controle vivo via UIA; 2) chamar o `scripts/blink_cursor.py --mode click --monitor 4 --window-title 'Hermes' --control-name 'Terminal input'` para o **mouse virtual Cua + overlay existente** (sem mover o mouse físico); 3) capturar novo centro vivo após clique, pois o painel pode mudar de geometria; 4) usar o `cua-driver call type_text` na sessão existente, com `pid`, `window_id` e `x/y` **relativos ao retângulo da janela**, inicialmente `delivery_mode=background`; 5) somente se o driver retornar explicitamente `code=background_unavailable`, repetir **a mesma digitação uma vez** com `delivery_mode=foreground` (foco temporário, sem mudar serviço nem invocar outro motor); 6) conferir na tela se o texto apareceu **no campo certo** antes de qualquer `press_key return`. Não reenviar texto se o primeiro input já tiver efeito visível; não enviar Enter sem ordem explícita.
+
+**Registro da execução:** `blink_cursor.py` despachou clique via `cua-driver` em modo `background`, `cleanup=completed`; o campo `Terminal input` permanecia sem foco UIA confirmado. `type_text` `background` retornou `background_unavailable` (`Chrome_WidgetWin_1`); `type_text` `foreground` retornou exit 0, `delivery.mode=foreground`, `effect=unverifiable`. **CHEFE confirmou visualmente que funcionou** em 10/11/2026. Portanto `DIGITACAO_VISIVEL=CONFIRMADA_PELO_CHEFE`, `TEXTO_ENVIADO=NAO`, `REPOSTA_HERMES_DIREITA=NAO_TESTADA`, `ACESSO_REMOTO_CASA=NAO_PROVADO`.
+
+**Kaizen:** é o mesmo resolvedor UIA + Cua + overlay da Skill existente, não outro watcher, bridge, script, teclado, agente ou arquitetura. Identificar alvo pelo nome/árvore viva e só usar foreground depois de falha expressa no background. A digitação não concede automaticamente permissão ao dashboard, VPS ou Casa.
+<!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
