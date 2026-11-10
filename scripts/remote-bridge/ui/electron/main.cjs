@@ -51,7 +51,26 @@ async function supabaseAuthCall(pathname, { token, data, method = "GET" } = {}) 
     signal: AbortSignal.timeout(12000),
   });
   const result = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error("SUPABASE_AUTH_HTTP_" + response.status);
+  if (!response.ok) {
+    // Exibir apenas códigos conhecidos do Supabase: nunca vazar resposta bruta,
+    // senhas, e-mails, refresh tokens, JWTs nem detalhes internos no renderer.
+    const known = {
+      invalid_credentials: "E-mail ou senha incorretos. Confira os dados usados no Cockpit.",
+      email_not_confirmed: "Confirme o e-mail cadastrado no Supabase antes de entrar.",
+      validation_failed: "Dados de login inválidos. Confira e-mail e senha.",
+      over_request_rate_limit: "Muitas tentativas. Aguarde o limite do Supabase.",
+      over_email_send_rate_limit: "Limite de envios de e-mail do Supabase atingido.",
+      user_banned: "Conta desabilitada no Supabase.",
+      signup_disabled: "Cadastro desabilitado. Use uma conta existente.",
+    };
+    const code = typeof result?.code === "string" ? result.code : "";
+    if (known[code]) throw new Error(known[code] + " [" + code + "]");
+    // Alguns projetos retornam 400 sem 'code', com 'error' genérico.
+    const legacy = result?.error === "invalid_grant" ? "invalid_credentials" : null;
+    if (legacy) throw new Error(known[legacy] + " [" + legacy + "]");
+    throw new Error("Falha no login Supabase (HTTP " + response.status +
+      "). Código de diagnóstico: " + (/^[a-z_]{3,60}$/.test(code) ? code : "UNKNOWN") + ".");
+  }
   return result;
 }
 
