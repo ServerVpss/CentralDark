@@ -194,3 +194,19 @@ Microsoft `microsoft/vscode`, `microsoft/vscode-wiki/How-to-Contribute.md`, `mic
 
 **Próximo cursor:** recarregar o Harnes para indexar as 95 extensões, provar a lista e detectar falhas de ativação; inspecionar o pipeline NLS do Code-OSS para um ajuste incremental compatível com DEV, executar e medir os menus PT-BR na janela nativa. Nenhuma modificação de código de idioma nativo foi realizada nesta etapa; não declarar pronto.
 <!-- /CENTRALDARK_HARNES_EXTENSIONS_NLS_DEV_20261109 -->
+
+<!-- CENTRALDARK_HARNES_WORKSPACE_PROFILE_TRANSFER_20261109 -->
+## 09/11/2026 — Transporte do workspace aberto para Harnes DEV
+
+**Intenção:** preservar o ambiente atual do VS Code original e migrar para o Harnes sem perda de estado; não declarar autenticação de contas sem prova.
+
+**Mapa observado na Casa:** quatro displays (DISPLAY1 direita 1080×1920; DISPLAY2 esquerda 1080×1920; DISPLAY3 principal inferior 1920×1080; DISPLAY4 superior 1920×1080). VS Code original PID 34276, título `Hermes (...) - Sem título (Workspace) - Visual Studio Code [Administrador]`; Harnes PID 15036. Workspace atual salvo pelo VS Code original em `%APPDATA%\Code\Workspaces\1794032971259\workspace.json`, com **duas pastas**: `F:/CentralDark/apps/modulos/Bolt` e `C:/CENTRALDAR DESKTOP/centraldark desktop-1.145.2`.
+
+**Delta na Casa:** fonte salva copiada com conteúdo e SHA-256 idênticos para `F:\CentralDark\CentralDark-Harnes.code-workspace` (extensão reconhecida pelo Code-OSS), sem sobrescrever `F:\CentralDark\CentralDark.code-workspace`. Harnes aberto com o arquivo novo, `--locale=pt-br` e `--extensions-dir=%USERPROFILE%\.vscode-oss\extensions`. Prova de readback: janela `Welcome - CentralDark-Harnes (Workspace) - CENTRALDARK HARNES Dev` e `%APPDATA%\code-oss-dev\User\workspaceStorage\...\workspace.json` aponta para `file:///f%3A/CentralDark/CentralDark-Harnes.code-workspace`.
+
+**Configurações:** `%APPDATA%\Code\User\settings.json`, `keybindings.json`, `agent-sessions.code-workspace`, `snippets` e `prompts` copiados para `%APPDATA%\code-oss-dev\User`, preservando a origem; arquivos de texto verificados por SHA-256 (settings `D52AB2FCF869352C1328009477FA0971B5DB42ED8FE039E600B28340E52B664D`, keybindings `4B26E65E0FC443574C392E1E73E6BB69D61A5436C5FBC32D2F761A07ED8AB904`). `snippets` tinha zero arquivos; `prompts` tinha um e foi copiado. As 95 extensões já estavam copiadas e conferidas na etapa anterior.
+
+**Travas/pendências reais:** não copiar automaticamente `%APPDATA%\Code\User\globalStorage`, `workspaceStorage/state.vscdb`, tokens, segredos ou cofres de autenticação. Logins do VS Code, Hermes e extensões requerem fluxo de login suportado pelo aplicativo, e não foram provados no Harnes. Abas/painéis e sessões não foram restaurados/contraprovados. O PT-BR nativo DEV continua pendente. VS Code original **não foi fechado** porque ainda é referência funcional para comparar layout e autenticação; autorização para fechar não equivale a comprovação de migração concluída.
+
+**NEXT_CURSOR:** comparar abas e painéis do original com Harnes; testar extensões e autenticações pelo mecanismo oficial; concluir NLS nativo; somente após contraprova e nenhuma pendência de dados não salvos, encerrar o original com segurança. Reutilizar o mesmo owner e scripts operacionais.
+<!-- /CENTRALDARK_HARNES_WORKSPACE_PROFILE_TRANSFER_20261109 -->
