@@ -182,3 +182,15 @@ Microsoft `microsoft/vscode`, `microsoft/vscode-wiki/How-to-Contribute.md`, `mic
 
 **Restrições:** sem substituir tradução oficial, sem remover o pacote original, sem habilitar APIs nativas no browser, sem copiar credenciais do AppData ou desabilitar segurança. Fonte ZIP sem `.git`; esta anotação na main não publica automaticamente as alterações do `vite.config.ts` feitas na Casa. Próximo passo: conferir tela web atualizada, localizar possíveis textos sem tradução e assegurar compatibilidade/performance das extensões e ferramentas em cada superfície.
 <!-- /CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109 -->
+
+<!-- CENTRALDARK_HARNES_EXTENSIONS_NLS_DEV_20261109 -->
+## Harnes Electron DEV — extensões e diagnóstico PT-BR (09/11/2026)
+
+**Pedido:** levar todas as extensões do VS Code Windows original para o CENTRALDARK HARNES, preservar a origem e concluir a tradução do aplicativo nativo, sem reconstruir a distribuição inteira ou inventar tradutor paralelo.
+
+**Execução Casa SEGREDO (readback):** `C:\Users\Administrador\.vscode\extensions` contém 95 diretórios; copiados por `robocopy /E /COPY:DAT /DCOPY:DAT /R:1 /W:1 /MT:8` individualmente para `C:\Users\Administrador\.vscode-oss\extensions`, sem excluir ou modificar a origem. Resultado `EXTENSION_COPY_DONE=95/95 FAIL=` em 63.244 ms. Nova leitura: `SOURCE=95 DEST=95 MISSING=0 MANIFEST_MISSING=0`; nomes incluem PT-BR, GitLens, Claude, Python, PowerShell, Codex. A cópia não demonstra ativação, login, compatibilidade nem funcionamento de todas as extensões. É necessário recarregar o Harnes e verificar a lista e os hosts de extensões.
+
+**Diagnóstico de idioma:** processo nativo `Code - OSS.exe` PID 15036 executado com `--locale=pt-br` e `--extensions-dir=C:\Users\Administrador\.vscode-oss\extensions`. Filhos Electron recebem `--lang=pt-BR`. `%APPDATA%\code-oss-dev\languagepacks.json` contém o pacote `ms-ceintl.vscode-language-pack-pt-br-1.131.2026090407` e traduções do core e extensões. Entretanto, `src/vs/base/node/nls.ts` retorna `defaultNLSConfiguration` se `process.env['VSCODE_DEV']` está ativo; `src/vs/nls.ts` também retorna mensagens originais quando as chamadas não foram convertidas em índices de build. Arquivos `nls.keys.json` e `nls.messages.json` não estão presentes em `out/vs` ou `resources/app/out/vs`. Portanto, **idioma PT-BR nativo continua PENDENTE**: não basta retirar uma condição do resolver, nem alterar `argv.json`. Precisa reutilizar o pipeline NLS existente, gerar/aplicar as tabelas de mensagens compatíveis e testar na janela nativa sem perder o modo DEV. A versão Vite 5199 tem tradução parcial comprovada por módulo servido, mas não é prova do Electron.
+
+**Próximo cursor:** recarregar o Harnes para indexar as 95 extensões, provar a lista e detectar falhas de ativação; inspecionar o pipeline NLS do Code-OSS para um ajuste incremental compatível com DEV, executar e medir os menus PT-BR na janela nativa. Nenhuma modificação de código de idioma nativo foi realizada nesta etapa; não declarar pronto.
+<!-- /CENTRALDARK_HARNES_EXTENSIONS_NLS_DEV_20261109 -->
