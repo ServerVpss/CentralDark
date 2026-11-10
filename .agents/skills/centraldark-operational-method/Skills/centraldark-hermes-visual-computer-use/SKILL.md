@@ -54,6 +54,8 @@ Executar scripts/blink.py --monitor 1 pelo Python do Hermes. O helper usa o mesm
 Via ferramentas do Hermes: repetir computer_show_overlay/espera/computer_hide_overlay com os mesmos tempos e alvo. Nao criar outro executor para piscar.
 Para qualquer numero/posicao: consultar computer_list_monitors somente se alvo, geometria, conexao ou binding mudou. Nunca derivar numero humano do sufixo DISPLAY.
 Resposta: "Monitor N: tres piscadas executadas. Moldura apagada." Confirmacao visual so quando o humano disser ou houver prova independente; nao inferir pelo retorno do processo.
+**Combinado antes de executar (sem pedir autorizacao de novo):** avisar em linguagem natural o que vai aparecer, em quais telas e em que ordem; dizer desde o inicio que ao terminar vai perguntar uma unica vez se o CHEFE viu. Exemplo: "Vou piscar as telas 1 a 4, uma por vez, tres vezes cada. No final, me diga se viu todas." Apos terminar, perguntar somente se ainda faltar confirmacao. Se o CHEFE ja confirmou espontaneamente, aceitar e seguir, sem perguntar outra vez. Se nao viu, investigar o efeito na tela indicada, sem repetir cegamente. Essa comunicacao e parte da receita existente, nao um gatilho, script ou servico novo.
+**Confirmacao recebida em 09/11/2026:** o CHEFE acompanhou e viu as quatro telas piscarem na ordem 1→2→3→4 no teste anterior. Nao solicitar novamente confirmacao desse mesmo teste.
 Onde modificar: SKILL.md=metodo; default.json=aparencia/binding; native/=WGC/overlay/estados; scripts/=ponte/plugin/instalacao/testes; references/=documentacao e provas.
 
 ## Cursor nativo integrado: receita Michelin comprovada
