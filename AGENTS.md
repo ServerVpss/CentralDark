@@ -2749,3 +2749,8 @@ Resiliência: classificar falhas por grupos e índices, registrar dependências,
 
 Remote Bridge: build da UI não comprova Electron atualizado nem OAuth aprovado. Aceite: versão em execução, consentimento, pareamento, heartbeat, chamada MCP real, inspeção visual do CHEFE, receipt e NEXT_CURSOR.
 <!-- /CENTRALDARK_MICHELIN_CHEFE_CONTRAPROVA_20261110 -->
+
+<!-- CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
+### Localização portátil — descoberta, não letra de unidade
+Regra do CHEFE (10/11/2026): nenhum owner, instalador, launcher, bridge ou integração deve depender de destino fixo C:, D:, F: ou caminho absoluto de uma máquina. Descobrir o local de execução a partir do próprio script/aplicativo/repositório e da configuração canônica existente; resolver caminhos relativos a essa raiz, com validação de existência e mensagem explícita quando não localizado. No PowerShell, preferir $PSScriptRoot; em Node/Electron, resolver a partir do diretório real do módulo/app e recursos empacotados; distinguir modo DEV e pacote instalado. Reutilizar mecanismo de descoberta já existente, sem criar segundo localizador. Não substituir caminhos indiscriminadamente sem testar instalação, DEV, Windows/Linux e preservação do runtime. Registrar o caminho detectado como diagnóstico sem expor credenciais. Exemplo F:\CentralDark é observação local, nunca contrato de implantação.
+<!-- /CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
