@@ -171,3 +171,11 @@ ativo — decisão de consolidar num perfil só está registrada como pendência
 
 **Estado documental desta adição:** `METHOD_DOCUMENTED`; `HERMES_INTERVAL_5M=PENDING_RUNTIME_READBACK`. A confirmação de execução exige observar o mesmo ID programado em intervalo 5m e pelo menos um ciclo com status/readback válidos.
 <!-- /CENTRALDARK_RECONCILIACAO_INCREMENTAL_5MIN_20261110 -->
+
+<!-- CENTRALDARK_HERMES_JOB_5M_RUNTIME_READBACK_20261110 -->
+## Recibo de aplicação Hermes (Casa SEGREDO, 10/11/2026 23h50 BRT)
+
+**Owner real:** `C:\Users\Administrador\AppData\Local\hermes\cron\jobs.json`, job ID `f052f0dc37ed`. Alteração efetuada pela CLI original `hermes cron edit f052f0dc37ed --schedule "every 5m"`, exit 0, retorno `Updated job: f052f0dc37ed`. Readback do mesmo registro: `schedule.kind=interval`, `schedule.minutes=5`, `enabled=true`, `state=scheduled`, `next_run_at=2026-11-11T00:52:15.151641-02:00`, `repeat.completed=50`.
+
+**Veredito:** `HERMES_INTERVAL_5M_CONFIGURATION=PASS`. `HERMES_FIRST_FIVE_MINUTE_EXECUTION=PENDING` até observar conclusão de novo disparo com `repeat.completed>50`, `last_run_at` atualizado e efeito/NO_CHANGE verificado. `RUNTIME_SKILL_CONTENT` também requer confronto do arquivo efetivamente lido pelo Hermes com este owner versionado. Não afirmar FIXED_POINT por ter mudado só a agenda; não criar outro job, nem reiniciar o scheduler.
+<!-- /CENTRALDARK_HERMES_JOB_5M_RUNTIME_READBACK_20261110 -->
