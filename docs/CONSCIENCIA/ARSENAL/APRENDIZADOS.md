@@ -24,3 +24,7 @@
 - 2026-07-03 | TIPO: correcao | CONTEXTO: aula-tutor-2 executor.mjs | CAUSA: ferramenta git interna usava add -A contra a licao da aula 1 | ACAO_CORRETIVA: commit_push com paths explicitos; fallback add -u excluindo painel/ambiente/.bak; rebase autostash com abort seguro | CONFIRMADO_POR: fable-tutor
 - 2026-07-03 | TIPO: correcao | CONTEXTO: aula-tutor-2 integracao | CAUSA: cerebro.mjs nunca importado (gap aula 1) | ACAO_CORRETIVA: executor importa cerebro; aprender grava json vivo + ledger ARSENAL | CONFIRMADO_POR: fable-tutor
 - 2026-09-20 | TIPO: licao | CONTEXTO: hermes-runtime cat=runtime | CAUSA: - | ACAO_CORRETIVA: FIXED_POINT verifica estado; delta material comprovado capacita Hermes imediatamente via Knowledge-Collector. | CONFIRMADO_POR: hermes
+
+<!-- CENTRALDARK_DHCP_VMWARE_RESERVATION_20261111 -->
+- 2026-11-11 | TIPO: tecnica | CONTEXTO: VM CentralDark (VPS da Casa), VMware VMnet8 | CAUSA: DHCP foi confundido com IP necessariamente variavel | ACAO_CORRETIVA: distinguir cliente DHCP de reserva por MAC; no VMware vmnetdhcp.conf foi verificado MAC 00:0c:29:94:7b:51 com fixed-address 192.168.35.130, gateway 192.168.35.2; conferir reserva, MAC, rota e lease antes de concluir estabilidade; nao confundir VPS da Casa com VPS externa | CONFIRMADO_POR: leitura Windows SEGREDO + SSH openkylin-vm + arquivo VMware; estado historico, nao monitoramento continuo
+<!-- /CENTRALDARK_DHCP_VMWARE_RESERVATION_20261111 -->
