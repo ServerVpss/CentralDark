@@ -1,0 +1,2 @@
+CENTRALDARK-MCP TEST ephemeral write
+No secrets
