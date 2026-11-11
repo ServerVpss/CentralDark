@@ -645,6 +645,31 @@ níveis 1-9 `OPACA`, 10-29 `MONOCULO`, 30-49 `PRISMATICA`, 50+
 `OMNIVISOR`. A AutoLupa deve validar cálculo, deduplicação, BEGIN/FINAL e
 proveniência antes de selar o recibo.
 
+### Integração determinística com a Skill-Mãe e Kimetsu
+
+Esta é a forma operacional da metáfora: **Meta-Lupa em uma mão e o Método
+Operacional CentralDark na outra**. O owner do ciclo permanece
+`centraldark-operational-method`; o catálogo
+`centraldark-operational-method/catalogo/CATALOGO.md` roteia a intenção e o
+owner Kimetsu (`kimetsu-brainstorm`) escolhe a técnica conforme a condição
+observada. Meta-Lupa mede, falsifica, registra e sela o efeito no ledger
+existente `references/uso-ledger.jsonl`.
+
+Sequência única:
+
+`CATÁLOGO → KIMETSU_SELECIONA → MÉTODO_EXECUTA → METALUPA_CONTRAPROVA →
+SELO_XP → RECIBO/NEXT_CURSOR`.
+
+Catálogo, seleção ou documentação não significam execução. O `finish-use`
+novo exige `--seal-claimed sim` e ao menos um `--delivered-trace-refs`; sem
+esses elementos a gravação do `FINAL` é bloqueada. O registro também pode
+transportar `--kimetsu-round-id` e `--kimetsu-techniques` para preservar a
+proveniência da escolha sem criar histórico paralelo. Registros históricos sem
+`seal-xp/v1` permanecem intactos e são auditados como legado.
+
+O ponto fixo local só pode ser declarado quando a AutoLupa, o guardrail Selo-XP,
+o recibo e a contraprova estiverem no mesmo ciclo. `UNKNOWN != PASS`.
+
 ---
 
 ## Camada XP Consolidada (evolução no mesmo artefato)
