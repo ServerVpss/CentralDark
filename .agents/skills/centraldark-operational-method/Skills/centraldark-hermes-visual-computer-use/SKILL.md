@@ -140,3 +140,13 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 
 **Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sessão dele. Indicou Casa Agent/rota/autenticação e teste remoto real como pendências. Essas são declarações do próprio painel e não substituem medições independentes em cada ambiente.
 <!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
+
+<!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+## Clique unico CentralDark: cursor virtual primeiro, rota mais rapida comprovada
+
+**Entrada unica:** `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click`. Ha duas formas de resolver o mesmo alvo, nao dois motores de clique: (A) `--pid/--hwnd/--x/--y` com identidade e geometria verificadas nesta operacao (menor latencia quando ja se conhece o alvo); (B) `--window-title/--control-name` com UIA e resolvedor `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl` (mais segura quando o alvo precisa ser descoberto). Escolher A apenas com PID/HWND/ponto vivos; caso contrario escolher B. `--monitor N` valida o monitor atual.
+
+**Atuador unico e obrigatorio:** Cua `click(scope=window, delivery_mode=background)` mais cursor virtual e overlay existentes. UIA, Win32 e Browser sao sensores/hit-test e contraprova; **nunca** usar `SetCursorPos`, `mouse_event`, `SendInput`, `scope=desktop` ou mover o ponteiro fisico do usuario como fallback. Se Cua estiver indisponivel, retornar BLOCKED/UNKNOWN em vez de substituir silenciosamente o atuador.
+
+**Criterio de escolha:** menor custo de descoberta com alvo atual inequ?voco, mantendo isolacao do mouse fisico e mesmas garantias de PID/HWND/monitor/controle; nao otimizar velocidade sacrificando identidade. `CUA_CALL_OK != EFEITO_COMPROVADO`; confirmar a mudanca por UIA/snapshot/readback antes do proximo clique. Nao criar fun??o, plugin, runner ou cursor paralelo.
+<!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
