@@ -281,3 +281,49 @@ Comentários de #1562/#1757 não são superfície operacional nem store primári
 - K:/TEMP/cd-wt-015 resolve para F:/TEMP/CentralDark/cd-wt-015; n?o ? reposit?rio adicional. K:/w-skills cont?m gitdir antigo apontando para E:/...; n?o remover sem medir destino.
 - Git worktree prune --dry-run --verbose: nenhuma worktree ?rf?. Nenhum git reset --hard, git clean -fdx ou force push.
 - Evid?ncia e estado: remo??o de 12 c?pias PASS, integridade hist?rica das 8 restantes PROTECTED_WIP, equival?ncia GitHub/main requer o SHA do pr?ximo push em readback. Grupos 03 Provas; 04 Pend?ncias reais; 05 Kaizen.
+
+## ♻️ !RASTRO — replay determinístico da sessão GitHub (11/11/2026)
+
+**Owner existente:** `scripts/trigger-fabric/rastro_fiscal.py`; contraprova: `scripts/trigger-fabric/test_rastro_fiscal.py`. O comando de replay somente lê commits e arquivos históricos no GitHub. Não executa nova escrita, deleção ou deploy. Não cria outro fiscal, motor, memória ou reconciliador.
+
+**Comandos reproduzíveis, na raiz real do checkout:**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/test_rastro_fiscal.py -q
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --pretty
+python3 scripts/trigger-fabric/rebuild_learning_lineage.py --check
+```
+
+**Critérios verificados pelo replay:** schema e caminho permitido; quatro SHAs existentes; cadeia de pais `main → create → update → delete`; arquivo ausente na base; conteúdo exato após criação e atualização; ausência depois da exclusão; árvore final igual à base. A saída é ordenada e sem timestamp variável. Erro de rede ou GitHub indisponível retorna `UNKNOWN`, não `PASS`.
+
+**Reconhecimento de diretórios:** o fiscal descobre a raiz por sua própria localização e exige `AGENTS.md` e `scripts/centraldark-inventory-reconcile.sh`. O inventário de pastas continua no reconciliador único. A exibição de pastas no VS Code continua na view `centraldarkWorkspaceFolders` do owner `skills/vs-code-restore/`; não criar outra árvore.
+
+**Clareza nos locais visíveis:** usar MODO CLAREZA — ASD-STE100 | 80%, conforme `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`. Mostrar nome humano e caminho estável no detalhe: “Pasta de recibos” + `docs/receipts/`; “Arquivo excluído” + SHA; “Não comprovado” + causa técnica. Não trocar IDs, paths, dados ou vereditos por frases vagas.
+
+**Fronteira da prova:** `HISTORICAL_REPLAY != CURRENT_STATE`; `AUTH_OK != WRITE_PASS`; `GITHUB_CONNECTOR_DELETE != CENTRALDARK_MCP_DELETE`; `REGISTERED != CONSUMED`; `DOCUMENTED != EXECUTED`; `SOURCE != RUNNING`. A sessão provou os commits e a exclusão via conector GitHub. O replay não retesta OAuth atual, permissão de escrita atual, a deleção pelo MCP CentralDark nem a sincronização da Casa.
+
+**NEXT_CURSOR:** classificar erros genéricos do GitHub no mesmo owner; testar deleção pelo MCP quando houver ferramenta autorizada; registrar aprendizagem #228 no ledger existente e reconciliar NeuroLink sem renumerar a linhagem.
+
+## ♻️ !RASTRO — saída canônica e metadados separados (11/11/2026)
+
+A revisão do replay distingue o modo `--replay-receipt` do modo `--note-file`. O primeiro **não inclui timestamp** no resultado histórico; o segundo conserva `checked_at` para auditoria de metadados de notas. A existência de `checked_at` em outra rota não invalida o replay.
+
+O mesmo fiscal publica quatro campos explícitos sem quebrar as chaves históricas existentes: `REPLAY_RESULT` (veredito, total de checks e SHA-256 canônico); `EXECUTION_METADATA` (nulo por padrão, ou horário/duração/sistema somente com opt-in); `PROOF_SCOPE` (sempre `HISTORICAL_GITHUB_REPLAY_ONLY`); `UNTESTED_FRONTIERS` (operações presentes ou atuais que não foram medidas pelo replay). O hash cobre apenas a projeção canônica dos fatos e checks, com JSON ordenado, sem hora, SO ou duração.
+
+**Receita reproduzível no mesmo owner e no checkout reconhecido:**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/test_rastro_fiscal.py -q
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --replay-digest
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --pretty
+```
+
+Para comparar Linux e Windows, executar os comandos dentro das respectivas raízes `/home/CentralDark-OS/CentralDark/` e `F:\CentralDark\` (no Windows usar `python` se `python3` não estiver disponível). Comparar `REPLAY_SHA256` e `REPLAY_VERDICT`; só considerar ambientes equivalentes quando ambos coincidirem. A prova exige `gh` autenticado, mesmo recibo e acesso aos mesmos SHAs. Sem acesso, o resultado deve ser `UNKNOWN`, nunca `PASS`.
+
+**Metadados opcionais, fora do hash canônico:**
+
+```bash
+python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --replay-execution-metadata --pretty
+```
+
+O replay não verifica escrita atual, OAuth atual nem exclusão pela ferramenta MCP CentralDark. Também não promove `LOCAL_RUNTIME_SYNC` a `PASS`. Os testes unitários simulados protegem a lógica; o replay com `gh api` e os quatro commits publicados é a contraprova histórica real. Nenhum segundo fiscal, serviço ou sistema de inventário foi criado.

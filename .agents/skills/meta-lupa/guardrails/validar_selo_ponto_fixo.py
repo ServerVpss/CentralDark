@@ -44,6 +44,7 @@ ENGINE = SKILL / "scripts" / "meta_lupa.py"
 LEDGER_PADRAO = SKILL / "references" / "uso-ledger.jsonl"
 
 ACHIEVEMENT = "ponto_fixo_atingido"
+SELO_CONTRACT_VERSION = "selo-xp/v1"
 
 
 class LedgerInputError(ValueError):
@@ -110,6 +111,17 @@ def viola_rastro(rec: dict) -> bool:
     )
 
 
+def viola_selo_obrigatorio(rec: dict) -> bool:
+    """Novos FINAIS devem declarar o contrato e entregar seu rastro.
+
+    Registros históricos sem o campo de contrato permanecem somente leitura;
+    não são reescritos nem promovidos retroativamente ao contrato novo.
+    """
+    if rec.get("event") != "FINAL" or rec.get("seal_contract") != SELO_CONTRACT_VERSION:
+        return False
+    return not rec.get("seal_claimed") or viola_rastro(rec)
+
+
 def auditar(registros: list[dict]) -> dict:
     novas, legado = [], []
     for rec in registros:
@@ -129,6 +141,10 @@ def auditar(registros: list[dict]) -> dict:
         {"mission_id": rec.get("mission_id"), "record_hash": rec.get("record_hash")}
         for rec in registros if viola_rastro(rec)
     ]
+    sem_selo = [
+        {"mission_id": rec.get("mission_id"), "record_hash": rec.get("record_hash")}
+        for rec in registros if viola_selo_obrigatorio(rec)
+    ]
     xp = _xp_do_ponto_fixo()
     return {
         "guardrail": "validar_selo_ponto_fixo",
@@ -138,7 +154,8 @@ def auditar(registros: list[dict]) -> dict:
         "legado": legado,
         "xp_indevido_legado": xp * len(legado),
         "sem_rastro": sem_rastro,
-        "selo_ok": not novas and not sem_rastro,
+        "sem_selo": sem_selo,
+        "selo_ok": not novas and not sem_rastro and not sem_selo,
     }
 
 
@@ -170,6 +187,8 @@ def main() -> int:
                   % (item["mission_id"], str(item["record_hash"])[:16], item["point_fixed_evidential"]))
         for item in rel["sem_rastro"]:
             print("SELO_SEM_RASTRO mission=%s hash=%s" % (item["mission_id"], item["record_hash"]))
+        for item in rel["sem_selo"]:
+            print("SELO_CONTRATO_INVALIDO mission=%s hash=%s" % (item["mission_id"], item["record_hash"]))
         for item in rel["novas"]:
             print("SELO_SEM_AUTOLUPA mission=%s hash=%s xp_gained=%s"
                   % (item["mission_id"], str(item["record_hash"])[:16], item["xp_gained"]))
