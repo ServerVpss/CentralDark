@@ -404,3 +404,14 @@ footer {
     height: auto;
   }
 }
+
+/* CENTRALDARK_REMOTE_SUPABASE_LOGIN_20261109 */.login-shell { min-height:100vh; display:grid; place-items:center; padding:32px; background:#171816; }
+.login-card { width:min(100%,440px); display:flex; flex-direction:column; gap:16px; padding:32px; background:#20221f; border:1px solid #a99539; border-radius:20px; color:#f5f2e5; }
+.login-card h1 { margin:0; font-size:26px; }
+.login-card p { margin:0; line-height:1.55; opacity:.84; }
+.login-card label { display:flex; flex-direction:column; gap:7px; font-size:14px; }
+.login-card input { color:#f5f2e5; background:#111310; border:1px solid #77745d; border-radius:8px; padding:13px; font:inherit; }
+.login-card input:focus-visible { outline:2px solid #f9d12a; }
+.login-card button { display:flex; justify-content:center; padding:15px; cursor:pointer; }
+.login-card button:disabled { opacity:.6; cursor:wait; }
+.login-card .login-error { color:#ff9b9b; font-weight:600; }

@@ -54,6 +54,11 @@ function StatusCard({ icon: Icon, title, state, headline, detail }) {
 
 export default function App() {
   const [status, setStatus] = useState(initialState);
+  const [auth, setAuth] = useState({ authenticated: false, checking: true });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [loginBusy, setLoginBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [action, setAction] = useState(null);
 
@@ -67,10 +72,40 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    refresh();
-    const timer = setInterval(refresh, 10000);
+    let live = true;
+    window.centralDark.getAuthStatus().then((data) => {
+      if (live) setAuth({ ...data, checking: false });
+    }).catch(() => { if (live) setAuth({ authenticated: false, checking: false }); });
+    return () => { live = false; };
+  }, []);
+
+  useEffect(() => {
+    if (!auth.authenticated) return;
+    refresh().catch(() => setAuth({ authenticated: false, checking: false }));
+    const timer = setInterval(() => {
+      refresh().catch(() => setAuth({ authenticated: false, checking: false }));
+    }, 10000);
     return () => clearInterval(timer);
-  }, [refresh]);
+  }, [refresh, auth.authenticated]);
+
+  async function login(event) {
+    event.preventDefault();
+    setLoginBusy(true);
+    setLoginError("");
+    try {
+      const result = await window.centralDark.login(email.trim(), password);
+      setPassword("");
+      setAuth({ ...result, checking: false });
+    } catch (error) {
+      setLoginError(error.message || "Não foi possível autenticar pelo Supabase.");
+    } finally { setLoginBusy(false); }
+  }
+
+  async function logout() {
+    await window.centralDark.logout();
+    setStatus(initialState);
+    setAuth({ authenticated: false, checking: false });
+  }
 
   async function runAction(name, operation) {
     setAction({ name, state: "running", text: "Executando…" });
@@ -93,6 +128,26 @@ export default function App() {
     }
   }
 
+  if (auth.checking) {
+    return <main className="login-shell"><section className="login-card"><h1>CentralDark Remote Bridge</h1><p>Verificando sua sessão Supabase…</p></section></main>;
+  }
+
+  if (!auth.authenticated) {
+    return (
+      <main className="login-shell">
+        <form className="login-card" onSubmit={login}>
+          <ShieldCheck size={38} />
+          <h1>CentralDark Remote Bridge</h1>
+          <p>Entre com a sua conta Supabase para liberar os controles. A ponte não será iniciada automaticamente.</p>
+          <label>E-mail<input type="email" autoComplete="username" required value={email} onChange={(e) => setEmail(e.target.value)} /></label>
+          <label>Senha<input type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} /></label>
+          {loginError ? <p className="login-error" role="alert">{loginError}</p> : null}
+          <button type="submit" className="primary-action" disabled={loginBusy}>{loginBusy ? "Autenticando…" : "Entrar"}</button>
+        </form>
+      </main>
+    );
+  }
+
   const health = status.health || initialState.health;
   const tailscale = status.tailscale || initialState.tailscale;
   const bridgeState = health.reachable ? "pass" : "fail";
@@ -110,6 +165,7 @@ export default function App() {
             <strong>Remote Bridge</strong>
           </div>
         </div>
+        <button className="icon-button" onClick={logout} title={auth.user?.email || ""}>Sair da conta</button>
         <button className="icon-button" onClick={refresh} disabled={loading}>
           <RefreshCw size={18} className={loading ? "spin" : ""} />
           Atualizar
@@ -186,16 +242,9 @@ export default function App() {
         <section className="pairing-options" aria-label="Confirmar pareamento do Bridge">
           <div>
             <strong>Seu código: <code>{status.pairing.code}</code></strong>
-            <p>Compare o código no Cockpit. A confirmação exige sua sessão administrativa ou senha do MCP.</p>
+            <p>Confirme este código aqui mesmo. O MCP valida sua conta Supabase, o código e o nonce antes de autorizar.</p>
           </div>
-          <div className="pairing-option-buttons">
-            <button onClick={() => runAction("confirmar-codigo", () => window.centralDark.openPairConsent("code"))}>
-              <ShieldCheck size={17} /> Confirmar código
-            </button>
-            <button onClick={() => runAction("confirmar-senha", () => window.centralDark.openPairConsent("password"))}>
-              <KeyRound size={17} /> Usar senha
-            </button>
-          </div>
+          <div className="pairing-option-buttons"><button onClick={() => runAction("confirmar-codigo", () => window.centralDark.confirmPair())}><ShieldCheck size={17} /> Confirmar pareamento</button></div>
         </section>
       )}
 

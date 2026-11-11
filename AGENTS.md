@@ -2738,3 +2738,19 @@ Decisão do CHEFE (09/11/2026): nos projetos CentralDark com fonte e ferramenta 
 Critérios: identificar ferramenta já instalada (Vite/HMR, Electron, Code-OSS, watcher); usar comandos do projeto; servidor DEV somente em localhost; não abrir depuração remota nem desativar autenticação; preservar sessões, arquivos e processos de outros writers; diferenciar fonte editável, prévia ao vivo e pacote final. DEV ativo exige processo + endpoint + alteração refletida; HTTP 200 sozinho não comprova Electron em DEV. Build final exige teste do artefato.
 Aplicação: scripts/remote-bridge/ui/ e scripts/remote-bridge/Build-Remote-Bridge.ps1, documentados em scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md. Empacotamento integral dos recursos após estabilizar; não copiar segredos ou sessões do AppData de terceiros.
 <!-- /CENTRALDARK_DEV_FIRST_LIVE_EDIT_20261109 -->
+
+<!-- CENTRALDARK_MICHELIN_CHEFE_CONTRAPROVA_20261110 -->
+## Operação Michelin três estrelas — aceite do CHEFE (10/11/2026)
+Em integrações de serviços, sites, programas e interfaces: SOL coordena, Hermes executa no owner existente. Preservar organismo único; menor delta; testar; observar superfície real; comprova e contraprova em tempo real. SHA, build verde, HTTP 200 e logs são evidências técnicas, mas não substituem confirmação funcional do CHEFE. UNKNOWN != PASS; DOCUMENTED != EXECUTED; MERGED != DEPLOYED.
+
+Comunicação: durante execução, informar ação concreta e próximo marco. Ao concluir etapa, dizer o que mudou, onde, qual prova passou, o que permanece UNKNOWN e qual botão o CHEFE pode clicar, somente quando a versão em execução estiver comprovada. Nunca pedir clique prematuro. Apresentar resultado e perguntar: "Chefe, ficou do jeito que o senhor queria?". Se NÃO, identificar divergência, voltar uma casa, corrigir cone afetado e retestar. FIXED_POINT depende de aceite do CHEFE.
+
+Resiliência: classificar falhas por grupos e índices, registrar dependências, CURRENT e frescor. Falha de um setor não apaga contexto nem torna outro setor aprovado. Preservar controles essenciais e serviços operantes. Reutilizar DEV-FIRST e owners; sem novos executores, HUDs ou scripts paralelos.
+
+Remote Bridge: build da UI não comprova Electron atualizado nem OAuth aprovado. Aceite: versão em execução, consentimento, pareamento, heartbeat, chamada MCP real, inspeção visual do CHEFE, receipt e NEXT_CURSOR.
+<!-- /CENTRALDARK_MICHELIN_CHEFE_CONTRAPROVA_20261110 -->
+
+<!-- CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
+### Localização portátil — descoberta, não letra de unidade
+Regra do CHEFE (10/11/2026): nenhum owner, instalador, launcher, bridge ou integração deve depender de destino fixo C:, D:, F: ou caminho absoluto de uma máquina. Descobrir o local de execução a partir do próprio script/aplicativo/repositório e da configuração canônica existente; resolver caminhos relativos a essa raiz, com validação de existência e mensagem explícita quando não localizado. No PowerShell, preferir $PSScriptRoot; em Node/Electron, resolver a partir do diretório real do módulo/app e recursos empacotados; distinguir modo DEV e pacote instalado. Reutilizar mecanismo de descoberta já existente, sem criar segundo localizador. Não substituir caminhos indiscriminadamente sem testar instalação, DEV, Windows/Linux e preservação do runtime. Registrar o caminho detectado como diagnóstico sem expor credenciais. Exemplo F:\CentralDark é observação local, nunca contrato de implantação.
+<!-- /CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
