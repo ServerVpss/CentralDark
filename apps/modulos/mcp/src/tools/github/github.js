@@ -1,6 +1,33 @@
 // Cliente mínimo da API do GitHub. Usa fetch nativo do Node 20+.
+import { execFileSync } from "node:child_process";
 import { log } from "../../log.js";
 const GITHUB_API = "https://api.github.com";
+export const GH_CLI_OWNER_MARKER = "centraldark-owner-cli-session";
+export function ghCliCall(path, init = {}) {
+    const endpoint = String(path || "");
+    const method = String(init.method || "GET").toUpperCase();
+    if (!endpoint.startsWith("/") || endpoint.startsWith("//") || (endpoint.includes(String.fromCharCode(10)) || endpoint.includes(String.fromCharCode(13))) || !["GET", "POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+        throw new Error("GITHUB_CLI_INVALID_REQUEST");
+    }
+    // gh api usa exclusivamente o login guardado pelo proprio gh; nenhum segredo e lido ou emitido.
+    const { GH_TOKEN, GITHUB_TOKEN, GH_ENTERPRISE_TOKEN, GITHUB_ENTERPRISE_TOKEN, ...safeEnv } = process.env;
+    const args = ["api", endpoint, "--method", method, "--header", "Accept: application/vnd.github+json"];
+    if (init.body !== undefined) args.push("--input", "-");
+    try {
+        const result = execFileSync("gh", args, {
+            env: safeEnv, encoding: "utf8", timeout: 12000, maxBuffer: 4000000,
+            input: init.body, stdio: ["pipe", "pipe", "pipe"],
+        }).trim();
+        return result ? JSON.parse(result) : null;
+    } catch {
+        throw new GitHubError(502, "GitHub CLI: chamada autorizada nao concluiu", null);
+    }
+}
+export function ghCliAvailable() {
+    try { return Boolean(ghCliCall("/user")?.login); }
+    catch { return false; }
+}
+
 
 const LABEL_ALIASES = new Map([
     ["assign:chatgpt", ["🧠 AGENTE-CHATGPT"]],
@@ -101,6 +128,7 @@ export class GitHubError extends Error {
     }
 }
 async function ghFetch(token, path, init) {
+    if (token === GH_CLI_OWNER_MARKER) return ghCliCall(path, init);
     const res = await fetch(`${GITHUB_API}${path}`, {
         ...init,
         headers: {
@@ -132,6 +160,24 @@ export async function getViewer(token) {
 }
 // Checa o token: tipo, scopes (classic), permissões no repo, rate limit e se dá pra Actions write.
 export async function checkToken(token, owner, repo) {
+    if (token === GH_CLI_OWNER_MARKER) {
+        const user = ghCliCall("/user");
+        let permissions;
+        if (owner && repo) {
+            try { permissions = ghCliCall(repoBase(owner, repo))?.permissions; }
+            catch { /* permissao nao provada */ }
+        }
+        return {
+            ok: Boolean(user?.login), status: user?.login ? 200 : 503,
+            user: user?.login || null, tokenType: "gh-cli", tokenPrefix: "cli",
+            expiresAt: null, scopes: [], acceptedScopesForUserEndpoint: [],
+            rateLimit: { limit: null, remaining: null, reset: null },
+            repoCheck: owner && repo ? { owner, repo, permissions } : undefined,
+            actionsWriteHint: "unknown",
+            advice: "Sessao gh CLI autenticada; permissao de escrita requer prova por operacao.",
+        };
+    }
+
     const res = await fetch(`${GITHUB_API}/user`, {
         headers: {
             Accept: "application/vnd.github+json",
