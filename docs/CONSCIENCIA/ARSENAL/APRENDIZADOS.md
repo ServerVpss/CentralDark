@@ -28,3 +28,12 @@
 <!-- CENTRALDARK_DHCP_VMWARE_RESERVATION_20261111 -->
 - 2026-11-11 | TIPO: tecnica | CONTEXTO: VM CentralDark (VPS da Casa), VMware VMnet8 | CAUSA: DHCP foi confundido com IP necessariamente variavel | ACAO_CORRETIVA: distinguir cliente DHCP de reserva por MAC; no VMware vmnetdhcp.conf foi verificado MAC 00:0c:29:94:7b:51 com fixed-address 192.168.35.130, gateway 192.168.35.2; conferir reserva, MAC, rota e lease antes de concluir estabilidade; nao confundir VPS da Casa com VPS externa | CONFIRMADO_POR: leitura Windows SEGREDO + SSH openkylin-vm + arquivo VMware; estado historico, nao monitoramento continuo
 <!-- /CENTRALDARK_DHCP_VMWARE_RESERVATION_20261111 -->
+
+
+### CENTRALDARK_IA_INTELIGENCIA_PROVA_SEM_DIVIDA_20261111 — Aprendizado operacional (2026-11-11)
+
+**Princípio do CHEFE:** Uma IA não demonstra inteligência só porque encontra uma solução. Ela precisa reconhecer o que já existe, distinguir hipótese de prova, corrigir seus próprios desvios e continuar sem criar dívida.
+
+**Receita reutilizável:** recuperar intenção e owner existente → observar estado atual → separar hipótese, evidência e prova → aplicar menor delta autorizado → corrigir desvios encontrados → contraprova e readback → registrar aprendizado e NEXT_CURSOR. Não declarar dívida resolvida, sincronização ou runtime validado sem evidência específica. Reutilizar o contrato operacional SOL e os owners existentes; não criar executor, cérebro ou documento paralelo.
+
+**Escopo da evidência:** este registro comprova a incorporação documental do princípio; não comprova, por si só, reconciliação dos HEADs locais nem solução de MCP/OAuth em execução.
