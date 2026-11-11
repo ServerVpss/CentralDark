@@ -278,5 +278,35 @@ class RastroFiscalTests(unittest.TestCase):
         self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
 
 
+    def test_historical_replay_digest_is_canonical_and_metadata_outside(self):
+        fixture, backend = self.replay_fixture()
+        first = M.verify_session_replay(fixture, REPO, backend)
+        second = M.verify_session_replay(fixture, REPO, backend)
+        digest = first["REPLAY_RESULT"]["sha256"]
+        self.assertRegex(digest, r"^[0-9a-f]{64}$")
+        self.assertEqual(digest, second["REPLAY_RESULT"]["sha256"])
+        self.assertEqual(first["REPLAY_RESULT"]["verdict"], first["verdict"])
+        self.assertIsNone(first["EXECUTION_METADATA"])
+        self.assertEqual("HISTORICAL_GITHUB_REPLAY_ONLY", first["PROOF_SCOPE"])
+        self.assertIn("CURRENT_DELETE_BY_CENTRALDARK_MCP", first["UNTESTED_FRONTIERS"])
+
+    def test_historical_replay_digest_tracks_evidence_not_environment(self):
+        fixture, backend = self.replay_fixture()
+        first = M.verify_session_replay(fixture, REPO, backend)
+        backend.commits[fixture["delete_sha"]][fixture["path"]] = "residual"
+        second = M.verify_session_replay(fixture, REPO, backend)
+        self.assertEqual("FAIL", second["verdict"])
+        self.assertNotEqual(first["REPLAY_RESULT"]["sha256"], second["REPLAY_RESULT"]["sha256"])
+
+    def test_note_metadata_has_timestamp_but_is_not_replay(self):
+        a = M.verify_note_metadata(self.valid_note(), "notes/test.md")
+        b = M.verify_note_metadata(self.valid_note(), "notes/test.md")
+        self.assertEqual("PASS", a["verdict"])
+        self.assertEqual("PASS", b["verdict"])
+        self.assertIn("checked_at", a)
+        self.assertNotIn("REPLAY_RESULT", a)
+
+
+
 if __name__ == "__main__":
     unittest.main()
