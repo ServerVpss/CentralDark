@@ -1,9 +1,64 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
+import { isAbsolute, join } from "node:path";
 import test from "node:test";
 import { createDevicePairingStore } from "../src/device-pairing.js";
+
+test("registro padrao descobre pasta do usuario sem depender de VPS ou cwd", () => {
+  const store = createDevicePairingStore();
+  assert.equal(store.registryPath, join(homedir(), ".centraldark", "mcp-device-registry.json"));
+  assert.equal(isAbsolute(store.registryPath), true);
+});
+
+test("registro dinamico confirma e recebe heartbeat na pasta do usuario, sem EISDIR", () => {
+  const home = mkdtempSync(join(tmpdir(), "centraldark-pair-home-"));
+  try {
+    const moduleUrl = new URL("../src/device-pairing.js", import.meta.url).href;
+    const script = `
+      import { createDevicePairingStore } from ${JSON.stringify(moduleUrl)};
+      const store = createDevicePairingStore();
+      const pair = store.start({ deviceName: "test-device" });
+      if (!store.approve({ pairId: pair.pairId, code: pair.code }).ok) throw Error("approve_failed");
+      const auth = store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
+      if (auth.status !== "approved" || !store.heartbeat({ token: auth.token }).ok) throw Error("heartbeat_failed");
+    `;
+    const run = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+      cwd: home,
+      env: { ...process.env, HOME: home, USERPROFILE: home, CENTRALDARK_DEVICE_REGISTRY_PATH: "" },
+      encoding: "utf8",
+      timeout: 45000,
+    });
+    assert.equal(run.status, 0, run.stderr);
+    const dataDir = join(home, ".centraldark");
+    const dataFile = join(dataDir, "mcp-device-registry.json");
+    assert.equal(existsSync(dataFile), true);
+    if (process.platform !== "win32") {
+      assert.equal(statSync(dataDir).mode & 0o777, 0o700);
+      assert.equal(statSync(dataFile).mode & 0o777, 0o600);
+    }
+  } finally { rmSync(home, { recursive: true, force: true }); }
+});
+
+test("registro rejeita caminho relativo sem depender da pasta de execucao", () => {
+  assert.throws(() => createDevicePairingStore({ registryPath: "registry.json" }), /DEVICE_REGISTRY_PATH_NOT_ABSOLUTE/);
+});
+
+test("registro rejeita pasta como arquivo e preserva conteudo existente", () => {
+  const dir = mkdtempSync(join(tmpdir(), "centraldark-pair-invalid-"));
+  try {
+    const store = createDevicePairingStore({ registryPath: dir });
+    const pair = store.start({ deviceName: "test" });
+    assert.throws(() => store.approve({ pairId: pair.pairId, code: pair.code }), /DEVICE_REGISTRY_PATH_NOT_FILE/);
+    const invalid = join(dir, "registry.json");
+    writeFileSync(invalid, "{invalido", { mode: 0o600 });
+    const broken = createDevicePairingStore({ registryPath: invalid });
+    const item = broken.start({ deviceName: "test" });
+    assert.throws(() => broken.approve({ pairId: item.pairId, code: item.code }), /DEVICE_REGISTRY_INVALID_JSON/);
+    assert.equal(readFileSync(invalid, "utf8"), "{invalido");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
 
 function fixture() {
   const dir = mkdtempSync(join(tmpdir(), "centraldark-pair-"));

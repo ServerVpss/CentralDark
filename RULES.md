@@ -50,6 +50,26 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
 
 
+## 🪬 Nomenclatura obrigatória — VPS DA CASA (decisão 2026-11-09)
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+@last_updated: 2026-11-09
+@escopo: distinguir servidor openKylin provisório em VMware de VPS externa
+@estado: DOCUMENTADO_COM_PROVAS_PONTUAIS
+@next_cursor: testar autostart VMware apos reboot e espelhamento seguro para Hostinger
+-->
+
+**VPS da Casa = openKylin/CentralDark-OS rodando na VM VMware da Casa SEGREDO**, hoje o alvo operacional Linux de serviços, MCP e Cockpit. **VPS externa = host remoto independente (Hostinger/VPS anteriormente usado)**, mantido como alvo futuro de promoção/mirror, não excluído nem confundido com a VM local. A identidade do produto CentralDark-OS não é a identidade de nenhuma máquina: dizer que o **produto** não é uma VPS não nega o papel **servidor/VPS da Casa** exercido pela VM.
+
+**Prova de configuração (09/11/2026):** `VmwareAutostartService` passou de `Manual` a `Auto`; `vmAutoStart.xml` existente aponta somente para `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx` em ordem `1`. `vmrun list` manteve a VM ligada e o MCP guest ativo (`enabled`, `active`, `/health` 200). **Boot pós-reinício = PENDENTE, não prometer continuidade ininterrupta.**
+
+**Regras:** não declarar 24/7 quando o PC/VM depende de boot/energia; registrar a localização real antes de executar; não promover configuração/estado para VPS externa automaticamente; preservar dirty state, owners e segredos e exigir comparação SHA + testes + readback no destino. `VM_LOCAL_RUNNING != VPS_EXTERNA_DEPLOYED`. Sem nova arquitetura/segundo writer.
+
+
+
+
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
 
 Estas regras existem para manter a CentralDark viva, útil, verificável e fiel à intenção do SEGREDO/CHEFE.
@@ -262,6 +282,14 @@ NO_V1_V2_V3=true
 NO_BLIND_OVERWRITE=true
 GREEN_STATE_MUST_BE_PRESERVED=true
 ```
+
+<!-- CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
+**Regra reforçada do CHEFE — melhorar o que já funciona, sem começar do zero:** antes de criar qualquer solução, procure no owner atual a função, extensão, configuração e receita que já resolvem parte do pedido. Reaproveite o original, aplique só o ajuste necessário, confira a mudança no local em que ela será usada e registre no mesmo owner o que mudou, o que funcionou e o que ainda falta. Se achar erro da mesma origem ao lado, corrija no cone autorizado e reteste; não replique arquitetura, não apague o trabalho de outra frente nem invente tarefa quando o objetivo já estiver atendido.
+
+**Critério para fechar:** `REUSOU_O_EXISTENTE → MELHOROU_O_NECESSÁRIO → FUNCIONOU_NO_ALVO → REGISTROU_NO_OWNER → CONTINUOU_O_FIO`. Código alterado, teste, documento, publicação e uso real são estados diferentes; não chamar um pelo nome do outro. Falha, limite ou dependência não confirmada ficam explícitos. Explicar o resultado ao CHEFE em português natural, sem recitar o ritual.
+
+**Exemplo aprendido:** a tradução PT-BR do `CENTRALDARK HARNES` reutilizou o pacote já instalado do VS Code e o Vite já existente (porta 5199), sem um novo tradutor; o módulo servido passou a entregar `Fechar Workspace` e `Duplicar Espaço de trabalho`. A receita e suas limitações estão na [skill existente de construção do Desktop](.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md). Isso não declara todas as extensões web equivalentes às nativas nem publicação automática da fonte local na `main`.
+<!-- /CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
 
 ### 4. Vínculo CHEFE ↔ agente
 

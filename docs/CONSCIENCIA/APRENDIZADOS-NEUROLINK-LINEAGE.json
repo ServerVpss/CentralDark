@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "cdcca2d65b501b50ea3b7055d280e33b89169ac3",
+  "source_blob_sha": "3383216ae4bf331a665ade30e15f6cf086aefbcf",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 235,
-    "highest_legacy_learning_number": 223,
+    "learning_sections": 239,
+    "highest_legacy_learning_number": 227,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -173,7 +173,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 223
+      "end": 227
     }
   },
   "nodes": [
@@ -2760,6 +2760,50 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L222",
+      "next_uid": "L224"
+    },
+    {
+      "uid": "L224",
+      "legacy_learning_number": 224,
+      "legacy_occurrence": 1,
+      "title": "Hermes: prompt interativo de sudo não é sudo do shell nem rota de subagente",
+      "document_order": 236,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L223",
+      "next_uid": "L225"
+    },
+    {
+      "uid": "L225",
+      "legacy_learning_number": 225,
+      "legacy_occurrence": 1,
+      "title": "PENDING/UNKNOWN exige pesquisa, menor melhoria e prova persistente",
+      "document_order": 237,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L224",
+      "next_uid": "L226"
+    },
+    {
+      "uid": "L226",
+      "legacy_learning_number": 226,
+      "legacy_occurrence": 1,
+      "title": "Fonte da verdade recuperada antes da resposta operacional",
+      "document_order": 238,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L225",
+      "next_uid": "L227"
+    },
+    {
+      "uid": "L227",
+      "legacy_learning_number": 227,
+      "legacy_occurrence": 1,
+      "title": "MCP CentralDark: OAuth e descoberta de ferramentas comprovados",
+      "document_order": 239,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L226",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

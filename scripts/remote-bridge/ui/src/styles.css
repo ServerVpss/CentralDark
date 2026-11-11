@@ -246,6 +246,29 @@ button {
   border-color: rgba(245, 223, 154, 0.52);
 }
 
+.pairing-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid rgba(214, 173, 75, 0.38);
+  border-radius: 14px;
+  background: rgba(214, 173, 75, 0.06);
+}
+.pairing-options strong { color: var(--gold-soft); font-size: 15px; }
+.pairing-options code { font-size: 19px; letter-spacing: 0.07em; }
+.pairing-options p { margin: 6px 0 0; color: var(--muted); font-size: 12px; max-width: 450px; }
+.pairing-option-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.pairing-option-buttons button {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 12px; cursor: pointer; border-radius: 9px;
+  color: var(--gold-soft); border: 1px solid var(--line); background: var(--surface-strong);
+}
+.pairing-option-buttons button:hover { border-color: var(--gold); }
+
 .action-receipt {
   display: flex;
   align-items: center;
@@ -381,3 +404,14 @@ footer {
     height: auto;
   }
 }
+
+/* CENTRALDARK_REMOTE_SUPABASE_LOGIN_20261109 */.login-shell { min-height:100vh; display:grid; place-items:center; padding:32px; background:#171816; }
+.login-card { width:min(100%,440px); display:flex; flex-direction:column; gap:16px; padding:32px; background:#20221f; border:1px solid #a99539; border-radius:20px; color:#f5f2e5; }
+.login-card h1 { margin:0; font-size:26px; }
+.login-card p { margin:0; line-height:1.55; opacity:.84; }
+.login-card label { display:flex; flex-direction:column; gap:7px; font-size:14px; }
+.login-card input { color:#f5f2e5; background:#111310; border:1px solid #77745d; border-radius:8px; padding:13px; font:inherit; }
+.login-card input:focus-visible { outline:2px solid #f9d12a; }
+.login-card button { display:flex; justify-content:center; padding:15px; cursor:pointer; }
+.login-card button:disabled { opacity:.6; cursor:wait; }
+.login-card .login-error { color:#ff9b9b; font-weight:600; }

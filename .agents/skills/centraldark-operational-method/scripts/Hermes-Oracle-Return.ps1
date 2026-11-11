@@ -12,7 +12,8 @@ param(
   [string]$PayloadPath,
   [string]$TabTitle,
   [switch]$ActivateExistingTab,
-  [ValidateSet('Auto', 'HermesEmbedded', 'ExternalBrowser')][string]$TargetSurface = 'Auto'
+  [ValidateSet('Auto', 'HermesEmbedded', 'ExternalBrowser')][string]$TargetSurface = 'Auto',
+  [ValidateRange(0,30)][int]$ReacquireSeconds = 10
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -187,57 +188,66 @@ try {
     if ($draft.Length -gt 3600) { throw 'ENVELOPE_TOO_LONG' }
   }
 
-  $matchedRoot = $null
-  $matchingPid = 0
   $switchedTab = $false
-  if ($TargetSurface -in @('Auto','HermesEmbedded')) {
-    $embedded = Find-HermesEmbeddedTarget $expectedPath
-    if ($embedded) {
-      $matchedRoot = $embedded.Root
-      $matchingPid = $embedded.ProcessId
-      $script:resolvedSurface = 'HermesEmbedded'
-    }
-    if (-not $matchedRoot -and $TargetSurface -eq 'HermesEmbedded') {
-      throw 'EXACT_CHATGPT_CONVERSATION_NOT_FOUND_INSIDE_HERMES'
-    }
-  }
-  if (-not $matchedRoot -and $TargetSurface -in @('Auto','ExternalBrowser')) {
-    $browsers = @(Get-Process msedge, chrome -ErrorAction SilentlyContinue |
-      Where-Object { $_.MainWindowHandle -ne 0 })
-    foreach ($process in $browsers) {
-      $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
-      $address = Get-BrowserAddress $root
-      if (Match-Conversation $address $expectedPath) {
-        if ($matchedRoot) { throw 'MULTIPLE_MATCHING_BROWSER_WINDOWS' }
-        $matchedRoot = $root
-        $matchingPid = $process.Id
-        $script:resolvedSurface = 'ExternalBrowser'
+  $deadline = [DateTime]::UtcNow.AddSeconds($ReacquireSeconds)
+  do {
+    $matchedRoot = $null
+    $matchingPid = 0
+    $script:resolvedSurface = 'UNKNOWN'
+    if ($TargetSurface -in @('Auto','HermesEmbedded')) {
+      $embedded = Find-HermesEmbeddedTarget $expectedPath
+      if ($embedded) {
+        $matchedRoot = $embedded.Root
+        $matchingPid = $embedded.ProcessId
+        $script:resolvedSurface = 'HermesEmbedded'
       }
     }
-    if (-not $matchedRoot -and $ActivateExistingTab -and $TabTitle) {
-      $candidates = @()
+    if (-not $matchedRoot -and $TargetSurface -in @('Auto','ExternalBrowser')) {
+      $browsers = @(Get-Process msedge, chrome -ErrorAction SilentlyContinue |
+        Where-Object { $_.MainWindowHandle -ne 0 })
       foreach ($process in $browsers) {
         $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
-        $tabs = @(Find-Type $root ([System.Windows.Automation.ControlType]::TabItem) |
-          Where-Object { $_.Current.Name.StartsWith($TabTitle, [StringComparison]::OrdinalIgnoreCase) })
-        foreach ($tab in $tabs) {
-          $candidates += [pscustomobject]@{ Root=$root; ProcessId=$process.Id; Tab=$tab }
+        $address = Get-BrowserAddress $root
+        if (Match-Conversation $address $expectedPath) {
+          if ($matchedRoot) { throw 'MULTIPLE_MATCHING_BROWSER_WINDOWS' }
+          $matchedRoot = $root
+          $matchingPid = $process.Id
+          $script:resolvedSurface = 'ExternalBrowser'
         }
       }
-      if ($candidates.Count -ne 1) { throw ('EXISTING_TAB_NOT_UNIQUE_OR_NOT_FOUND_' + $candidates.Count) }
-      $candidate = $candidates[0]
-      $selection = Get-Pattern $candidate.Tab ([System.Windows.Automation.SelectionItemPattern]::Pattern)
-      if (-not $selection) { throw 'EXISTING_TAB_CANNOT_SELECT' }
-      $selection.Select()
-      Start-Sleep -Milliseconds 300
-      if (-not (Match-Conversation (Get-BrowserAddress $candidate.Root) $expectedPath)) {
-        throw 'EXISTING_TAB_SELECTED_BUT_URL_MISMATCH'
+      if (-not $matchedRoot -and $ActivateExistingTab -and $TabTitle) {
+        $candidates = @()
+        foreach ($process in $browsers) {
+          $root = [System.Windows.Automation.AutomationElement]::FromHandle([IntPtr]$process.MainWindowHandle)
+          $tabs = @(Find-Type $root ([System.Windows.Automation.ControlType]::TabItem) |
+            Where-Object { $_.Current.Name.StartsWith($TabTitle, [StringComparison]::OrdinalIgnoreCase) })
+          foreach ($tab in $tabs) {
+            $candidates += [pscustomobject]@{ Root=$root; ProcessId=$process.Id; Tab=$tab }
+          }
+        }
+        if ($candidates.Count -gt 1) { throw ('EXISTING_TAB_NOT_UNIQUE_OR_NOT_FOUND_' + $candidates.Count) }
+        if ($candidates.Count -eq 1) {
+          $candidate = $candidates[0]
+          $selection = Get-Pattern $candidate.Tab ([System.Windows.Automation.SelectionItemPattern]::Pattern)
+          if (-not $selection) { throw 'EXISTING_TAB_CANNOT_SELECT' }
+          $selection.Select()
+          Start-Sleep -Milliseconds 300
+          if (-not (Match-Conversation (Get-BrowserAddress $candidate.Root) $expectedPath)) {
+            throw 'EXISTING_TAB_SELECTED_BUT_URL_MISMATCH'
+          }
+          $matchedRoot = $candidate.Root
+          $matchingPid = $candidate.ProcessId
+          $switchedTab = $true
+          $script:resolvedSurface = 'ExternalBrowser'
+        }
       }
-      $matchedRoot = $candidate.Root
-      $matchingPid = $candidate.ProcessId
-      $switchedTab = $true
-      $script:resolvedSurface = 'ExternalBrowser'
     }
+    if ($matchedRoot) { break }
+    if ([DateTime]::UtcNow -ge $deadline) { break }
+    Start-Sleep -Milliseconds 450
+  } while ($true)
+  if (-not $matchedRoot -and $TargetSurface -eq 'HermesEmbedded') {
+    throw 'EXACT_CHATGPT_CONVERSATION_NOT_FOUND_INSIDE_HERMES'
   }
   if (-not $matchedRoot) { throw 'EXACT_CHATGPT_CONVERSATION_NOT_ACTIVE' }
   $editors = @(Find-Type $matchedRoot ([System.Windows.Automation.ControlType]::Edit) |
