@@ -223,6 +223,75 @@ Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência s
 
 **Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
 
+
+
+<!-- CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109 -->
+### Delegação rápida para o Hermes existente — receita YAML verificada (09/11/2026)
+
+Reutilizar a conversa Hermes já aberta. Este método descreve **comunicação e prova**, não cria outro executor, bridge, tela, skill ou agente. A confirmação de envio não substitui a prova da tarefa solicitada.
+
+```yaml
+schema: centraldark.hermes.delegacao_visual.v1
+id: CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109
+data_referencia: "2026-11-09"
+estado: "VERIFICADO_NO_CASO_OBSERVADO"
+owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+intencao: "CHEFE -> SOL -> Hermes existente -> resposta -> contraprova"
+reutilizacao:
+  skill_visual: ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md"
+  interface: "Hermes CLI da Hostinger, na janela já autenticada"
+  casa: "SEGREDO"
+  cliente: "Chrome for Testing"
+  editor_nomes_observados:
+    - "Terminal input"
+    - "Entrada do terminal"
+  descoberta: "Identificar título, PID, HWND e editor dinamicamente; não fixar valores históricos"
+  monitor: "1/direita apenas no arranjo observado; verificar se mudou"
+selecao_de_rota:
+  primeira: "MCP CentralDark/Hermes direto somente se autenticação, comando e readback estiverem provados"
+  primeira_estado: "UNKNOWN para envio direto deste chat ao Hermes"
+  comprovada: "UIAutomation ValuePattern.SetValue -> igualdade do texto -> Cua Enter -> WGC/readback"
+  evitar: "Cua type_text em instruções longas: perda de caracteres observada nesta sessão"
+passos:
+  - "Recuperar intenção, última resposta, owner e NEXT_CURSOR; não recomeçar"
+  - "Localizar a janela Hermes já aberta e o editor pelo nome/ControlType"
+  - "Não sobrescrever rascunho alheio; preparar uma única instrução consolidada"
+  - "Preencher pelo ValuePattern e comparar exatamente o texto relido; se diferente, NÃO enviar"
+  - "Acionar Enter uma vez; Cua tenta background e usa foreground somente após background_unavailable"
+  - "Verificar campo limpo e mensagem na conversa; campo limpo isolado não prova recebimento"
+  - "Ler resposta e resultado pelo WGC/UIAutomation autorizado; consultar de novo só se houver fato novo"
+  - "Registrar receipt, contraprova e NEXT_CURSOR do mesmo Goal"
+delegacao:
+  regra: "Pedir ao Hermes uma delegação conjunta somente para tarefas independentes"
+  observacao: "Quatro subagentes apareceram em execução e depois concluídos na CLI"
+  limite_documental: "max_concurrent_children=10 no relatório anterior; não executar dez por padrão"
+  restricao: "Uma caneta por escopo; nenhuma subtarefa modifica o mesmo owner em paralelo"
+  estados_distintos:
+    - "MENSAGEM_ENVIADA != GOAL_EXECUTADO"
+    - "DELEGADO != CONCLUÍDO"
+    - "RELATÓRIO != EFEITO_COMPROVADO"
+    - "UNKNOWN != PASS"
+comprovacoes_observadas:
+  editor_localizado_por_uia: "PASS"
+  valor_exato_releitura: "PASS"
+  entrada_cua_foreground: "PASS depois de background_unavailable"
+  captura_wgc: "PASS com a Skill Visual existente"
+  delegacao_quatro_tarefas: "PASS observado na CLI"
+  chamada_direta_mcp_hermes: "UNKNOWN"
+  ganho_de_latencia: "NÃO_MEDIDO; não declarar aceleração comprovada"
+protecoes:
+  - "Não instalar extensão de navegador para esta rota comprovada"
+  - "Não criar escritor, script, plugin, bot, navegador ou loop paralelo"
+  - "Não expor tokens, cookies, senhas ou texto de áreas privadas em receipts"
+  - "Não reiniciar Hermes nem alterar tarefa ativa sem ordem"
+  - "Se a tela ou a autenticação mudarem, reidentificar apenas o alvo afetado"
+recibo_minimo:
+  campos: "INTENÇÃO | OWNER | DESTINO | ENVIO | RESPOSTA | EFEITO | EVIDÊNCIA | NEXT_CURSOR"
+  fixed_point: "Somente após execução e contraprova pertinente"
+  next_cursor: "REUSAR_HERMES_ABERTO_UIA_VALOR_CUA_ENTER_WGC_READBACK"
+```
+<!-- /CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109 -->
+
 ### 🍒+1 Hermes TUI — Goal em texto natural + Cua + Kaizen após prova (09/11/2026)
 
 **Receita comprovada nesta bancada:** quando o alvo for `ChatGPT (Beta) → Hermes CLI → Terminal input`, tratar o campo como a TUI do Hermes, não como o gatilho de boot do ChatGPT. **Não prefixar o Goal com `!CENTRALDARK` dentro dessa TUI quando o runtime interpretar `!` como shell escape**: a contraprova real executou o texto no `/bin/sh` e retornou `CENTRALDARK: not found`. O gatilho `!CENTRALDARK` continua válido onde seu owner o define; no transporte para a TUI, enviar a intenção em texto natural (`CENTRALDARK GOAL DELTA ...`) sem o `!`.
@@ -253,6 +322,70 @@ Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita 
 Gatilho automatico por contexto: quando CHEFE pedir para entrar no ChatGPT Classic, clicar, preencher, navegar, baixar, editar ou atualizar plugin no aplicativo Windows, carregar [receita de UIAutomation do Classic](references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md). Identificar OpenAI.ChatGPT-Desktop / ChatGPT Classic.exe e janela ChatGPT Classic, nao Codex nem aba Edge. Reutilizar AutomationElement e padroes InvokePattern, ExpandCollapsePattern, SelectionItemPattern, ValuePattern e TogglePattern conforme suporte real. Conferir controles e efeitos. Preservar drafts e arquivos, nao enviar ou excluir sem autorizacao, e nao codificar coordenadas. CLI/UI_CLICK != EFFECT_PROVED; documentacao Git != automacao ativa.
 
 <!-- /CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
+<!-- CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109 -->
+### ChatGPT Desktop e VS Code — delegacao entre chats com prova (09/11/2026)
+
+**Gatilho:** o CHEFE pede para coordenar duas conversas/monitores da mesma CentralDark. Reutilizar cada conversa aberta e o mesmo Goal; esta receita complementa a delegacao Hermes acima e o owner visual existente. Chat distinto nao compartilha estado automaticamente: o handoff so e confirmado apos envio e readback na conversa de destino. PID, HWND, posicao e nomes de janelas sao observacoes historicas, nao seletores permanentes.
+
+```yaml
+schema: centraldark.operational.multichat_handoff.v1
+id: CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109
+data: "2026-11-09"
+estado: "ENVIO_E_INICIO_VERIFICADOS; CONCLUSAO_DELEGADA_PENDENTE"
+owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+owners_reutilizados:
+  visual: ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md"
+  interface_classic: ".agents/skills/centraldark-operational-method/references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md"
+  hud_contrato: "docs/HUD/README.md"
+  checkpoint: "scripts/hermes/verified-checkpoint.py"
+  reconciliador: "scripts/centraldark-inventory-reconcile.sh"
+intencao: "SOL coordena o mesmo Goal e delega cones independentes a outro chat existente"
+descoberta_do_destino:
+  chatgpt_desktop: "ChatGPT (Beta) no Windows: PID 26388, duas janelas, SOMENTE medicao desta rodada"
+  vscode: "VS Code PID 34276: chat #ACORDAR aberto, SOMENTE medicao desta rodada"
+  browser_plugin: "list_tabs negado sem contexto de origem nesta rodada; nao fingir acesso"
+  criterio: "Identificar processo, titulo, janela, conversa, editor e destinatario atuais antes de agir"
+  captura: "WGC da Skill Visual, monitor autorizado; nunca presumir ordem fixa de monitores"
+divisao_de_escopo_observada:
+  chat_destino: "Casa/main, CI startup_failure e prova visual Code-OSS"
+  chat_origem: "VPS, Cloudflare, MCP/OAuth e pareamento"
+  owner_compartilhado: "docs/HUD/README.md somente leitura durante a delegacao"
+  writer: "Exatamente um escritor por arquivo/owner e por janela; sem dois commits concorrentes"
+passos:
+  - "Ler a ultima resposta e NEXT_CURSOR de cada conversa sem substituir a intencao vigente"
+  - "Escolher o chat existente que ja e dono do cone delegado; nao criar conversa nova"
+  - "Conferir editor e rascunho; se houver texto do usuario, preservar e parar o envio"
+  - "Tentar rota nativa autenticada; se inacessivel, UIAutomation/Cua pela Skill Visual"
+  - "Para Chromium, tentar Cua background primeiro; foreground apenas apos background_unavailable"
+  - "Na rodada observada, um prefixo curto pelo Cua deu foco; UIA ValuePattern depois escreveu todo o texto"
+  - "Reabrir ValuePattern e comparar cada caractere; se divergir, NAO acionar Enviar"
+  - "Acionar uma unica vez o botao Enviar; o editor pode demorar a limpar"
+  - "Verificar a mensagem no historico real e a resposta inicial do chat delegado; nao repetir por atraso"
+  - "O chat de origem continua seu cone; respostas do delegado viram entrada apenas apos novo readback"
+  - "No receipt, separar MENSAGEM, ACEITE, EXECUCAO, CONTRAPROVA e FIXED_POINT"
+gates:
+  - "Nao sobrescrever rascunhos nem mudar a conversa ativa sem identificacao"
+  - "Nao duplicar agente, HUD, ponte, arquivo de receita, executor ou script"
+  - "Nao editar o mesmo owner em paralelo, nem expor tokens ou conversas de terceiros"
+  - "Nao usar reset --hard, clean, force ou stash destrutivo na reconciliacao Git"
+  - "Nenhuma tarefa e comprovada apenas porque outro chat escreveu que vai executar"
+provas_20261109:
+  windows_chatgpt_beta: "PASS: PID e duas janelas encontrados"
+  leitura_visual: "PASS: monitores 3 e 4 por WGC autorizado"
+  chat_destino: "PASS: #ACORDAR identificado no VS Code"
+  texto_integral: "PASS: valor UIA comparado, 1377/1377 caracteres"
+  envio: "PASS: CD-HANDOFF-20261109-01 apareceu na conversa"
+  aceite: "PASS: outro chat confirmou tres cones e iniciou leitura de fontes"
+  trabalho_do_destinatario: "PENDING: CI, Casa/main e Code-OSS sem recibos finais"
+  sincronizacao_automatica_entre_chats: "UNKNOWN: nao presumir memoria ou transporte autonomo"
+  ganho_de_velocidade: "NAO_MEDIDO"
+receipts:
+  formato: "INTENCAO | CONVERSA_ORIGEM | CONVERSA_DESTINO | OWNERS | CURRENT | ENVIO | ACEITE | EFEITO | PROVA | NEXT_CURSOR"
+  regra: "DELEGADO != CONCLUIDO; MENSAGEM_ENVIADA != EXECUTADO; UNKNOWN != PASS"
+  next_cursor: "COLETAR_RECEIPT_CHAT_DELEGADO_E_PROSSEGUIR_MCP_OAUTH_VPS"
+```
+<!-- /CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109 -->
+
 <!-- CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
 ## 🪟 Gatilho autônomo de diagnóstico — terminal piscando, janelas [], Hermes/CLI :9119
 
@@ -572,3 +705,25 @@ UNKNOWN != PASS
 <!-- /CENTRALDARK_RUNTIME_SOURCE_OF_TRUTH_20261109 -->
 
 <!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+
+<!-- CENTRALDARK_HERMES_ORACLE_AUTOMACAO_ROV_20261110 -->
+## CHEFE ativa automacao Hermes Desktop + Oraculo — receita unica reutilizavel
+
+**Comandos naturais:** `!CENTRALDARK USE AUTOMAÇÃO HERMES DESKTOP COM A SKILL ORÁCULO`, `USE A SKILL ORÁCULO PARA INICIARMOS A AUTOMAÇÃO` e equivalentes quando o CHEFE pedir automacao da CentralDark ou navegador autorizado. **Autor:** CHEFE; **coordenação/criterios:** SOL; **execucao e Goal:** Hermes original; **Oraculo:** conversa ChatGPT atual (consulta, sem caneta). Reutilizar o mesmo [ROV Michelin de Hermes Visual](references/ROV-MICHELIN-IA-MCP-HERMES-VISUAL.yml), bloco `AUTOMACAO_HERMES_ORACULO_ROV_20`. Nao criar segundo fluxo, skill, executor, pasta ou hook.
+
+**Primeiro uso da superficie:** reidratar Goal/receipt/NEXT_CURSOR; reconhecer monitor humano, PID/HWND, janela Hermes Desktop, documento/URL do ChatGPT ja aberto e composer por UIAutomation/Computer Use nativo. Reusar mapeamento conhecido enquanto atual; remapear se identidade ou geometria mudar. Exibir a PREVIA existente, sem captura continua, e **perguntar uma unica vez ao CHEFE**: "Voce esta vendo os contornos rosa/coloridos nos alvos certos?". Linhas rosa/coloridas pertencem ao mapeamento `drive_preview`; borda Hermes/Cua/WGC tem identidade e cor proprias. Perguntar sobre o efeito realmente mostrado, nao afirmar que uma cor apareceu sem prova. Apos confirmacao visual registrar `VISUAL_CONFIRMED`, declarar PRONTO e executar somente a operacao autorizada; nao pedir confirmacao redundante por rodada enquanto binding se mantiver. Confirmacao do overlay nao e autorizacao geral para outras mutacoes.
+
+**Ciclo de melhoria:** HERMES inicia contato no **mesmo chat**, envia mensagem material, le resposta completa e produz envelope real; SOL/oraculo diz `FICOU_BOM | DEFEITO_RESTANTE | MELHORIA_CANDIDATA | NEXT_CURSOR`. Aplicar teste, menor patch, contraprova e receita reutilizavel no owner existente. Em cada rodada consultar a matriz [META-RSI 40/40](catalogo/META-RSI-40.md): todos os 40 contratos classificados `APPLIED` ou `NOOP_JUSTIFIED` com motivo; executar apenas os pertinentes, nao 40 processos. Usar `delegate_task(background=true, role=leaf)` nativo somente quando houver patch material e writer disponivel; o worker de cristalizacao nao interrompe nem opera o chat do pai e nunca escreve concorrentemente no mesmo owner. Se loader/quarentena bloquear, manter `BLOCKED` no cone atingido e nao contornar.
+
+**Receita ROV verificavel:** envelope da rodada vai na conversa; conhecimento validado vai para as skills, scripts/hooks e YAML **existentes**, junto com SHA, antes/depois, tempos medidos, percentual calculado, testes e receipt. Prova `3` ciclos bidirecionais consecutivos antes de declarar transporte estavel; Goal de `20` turnos internos nao equivale a `20` rodadas correlacionadas. O proximo turno so herda ganhos realmente comprovados. Cada conta/ChatGPT so carrega este contrato se tiver acesso autenticado ao projeto e as ferramentas; um documento salvo nao produz compartilhamento automatico.
+
+**Publicacao:** delta local deve preservar staging/dirty preexistentes, sem commit ou push geral cego. `DOCUMENTED != EXECUTED`; fonte de aprendizado e receita: mesmo ROV e recibos dos owners anteriores.
+
+**Roteamento visual de tres papeis, ordem do CHEFE (10/11/2026):** pedidos como `!CENTRALDARK`, `use automacao Hermes Desktop`, `use skill Oraculo`, `automatize na CentralDark`, `opere o navegador` e continuacoes semanticamente equivalentes acionam o mesmo contrato, quando houver acesso autorizado ao runtime. SOL, com seu **HUD ja existente**, coordena intencao, criterio e prova; Hermes Desktop e o executor do Goal existente; a CLI/delegado existente executa operacoes pertinentes e devolve receipt a Hermes, que retorna para SOL no mesmo chat. Layout esquerda → meio → direita e apenas uma observacao da sessao e PODE MUDAR; descobrir cada papel pelo conteudo, ferramentas, compositor e controles reais, nao por titulo, aba ou coordenada historica. Nao abrir outro navegador/aba/chat/Goal/daemon. Mensagens curtas usam o compositor existente e envio unico quando habilitado; ordens persistentes entram em `Add criterion` do Goal atual. SOL atualiza apenas a projecao do HUD existente com `INTENT | OWNER | CURRENT | GREEN_STATE | RECEIPT | BLOQUEIO | NEXT_CURSOR`; sem receipt, VERDE=UNKNOWN. Reutilizar [mesma ROV](references/ROV-MICHELIN-IA-MCP-HERMES-VISUAL.yml) → `AUTOMACAO_HERMES_ORACULO_ROV_20.superficies.fluxo_tres_papeis`.
+
+**Incidente vivo nao e receita de sucesso:** a ultima verificacao em 10/11 viu queda do renderer Hermes no log `render-process-gone`, timeout recorrente de SSH para alias `Segredo-VPS:22` e aba que tentou `https://chatgpt/` e recebeu `ERR_NAME_NOT_RESOLVED`. Tratar como evidencias limitadas a essa sessao, NAO prova de comando causador. Ao ver falha: preservar rascunhos e Goal, parar repeticoes sem progresso, separar SSH/GUI/URL, reencontrar superficies por conteudo, utilizar somente URL exata verificada da conversa existente, e nunca inventar disponibilidade de rede. Prosseguir pelas rotas locais independentes enquanto a VPS estiver BLOCKED. Recuperacao visual, modificacao de tunel ou reinicio exigem owner e autorizacao. Aprendizado futuro somente apos teste + readback.
+<!-- /CENTRALDARK_HERMES_ORACLE_AUTOMACAO_ROV_20261110 -->
+
+<!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+**Rota unica para clique visual:** usar `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click`; escolher alvo por PID/HWND/ponto atual ja comprovado (rapido) ou UIA por janela/controle (descoberta). Ambos usam exclusivamente Cua virtual + overlay, nunca mouse fisico (`SetCursorPos`, `mouse_event`, `SendInput`, `scope=desktop`). Cua ausente bloqueia input; UIA/snapshot comprova efeito. Owner detalhado: [Hermes Visual](Skills/centraldark-hermes-visual-computer-use/SKILL.md).
+<!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->

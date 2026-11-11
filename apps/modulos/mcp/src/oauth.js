@@ -9,6 +9,8 @@ import { isAdmin } from "./admin.js";
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
 export const REMOTE_BRIDGE_DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 let devicePairingStore = null;
+// Limite de tentativas de senha por pareamento. Nunca registrar ou guardar a senha.
+const devicePasswordFailures = new Map();
 export function configureDevicePairingForOAuth(store) {
     if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
         throw new Error("DEVICE_PAIRING_STORE_INVALID");
@@ -21,6 +23,40 @@ const CLIENT_METADATA_TTL_MS = 1000 * 60 * 10;
 const clientMetadataCache = new Map();
 function getAdminPassword() {
     return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
+}
+// Mesmo Supabase Auth e tabela user_roles do Cockpit: login não equivale a admin.
+// Somente o executor remote-bridge usa essa rota de consentimento por JWT.
+async function verifyRemoteBridgeSupabaseAdmin(req) {
+    const header = String(req.headers?.authorization || "");
+    const match = /^Bearer\s+([A-Za-z0-9._-]{48,8192})$/.exec(header);
+    if (!match) return false;
+    const base = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const apikey = String(
+        process.env.HUB_SUPABASE_PUBLISHABLE_KEY ||
+        process.env.SUPABASE_PUBLISHABLE_KEY ||
+        process.env.VITE_SUPABASE_PUBLISHABLE_KEY || ""
+    );
+    if (!/^https:\/\/[a-z0-9.-]+$/i.test(base) || !apikey || apikey.startsWith("sb_secret_"))
+        return false;
+    const headers = { apikey, Authorization: "Bearer " + match[1], Accept: "application/json" };
+    try {
+        const opts = { headers, signal: AbortSignal.timeout(6000) };
+        const userResponse = await fetch(base + "/auth/v1/user", opts);
+        if (!userResponse.ok) return false;
+        const user = await userResponse.json();
+        if (!user?.id || user.is_anonymous === true) return false;
+        const roles = new URL(base + "/rest/v1/user_roles");
+        roles.searchParams.set("user_id", "eq." + user.id);
+        roles.searchParams.set("role", "eq.admin");
+        roles.searchParams.set("select", "role");
+        roles.searchParams.set("limit", "1");
+        const roleResponse = await fetch(roles, opts);
+        if (!roleResponse.ok) return false;
+        const data = await roleResponse.json();
+        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin";
+    } catch {
+        return false;
+    }
 }
 function getOwnerToolToken() {
     return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
@@ -213,6 +249,7 @@ function sendOwnerConsentPage(res, input) {
         pair_id: input.device?.pairId,
         pair_code: input.device?.code,
         pair_nonce: input.device?.nonce,
+        auth_method: input.authMethod,
         error: input.error,
         success: input.success === true ? "1" : undefined,
     };
@@ -273,6 +310,7 @@ export async function handleAuthorize(req, res) {
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
                 isAdmin: isAdmin(req),
+                authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
             };
             if (req.method !== "POST") {
@@ -281,11 +319,34 @@ export async function handleAuthorize(req, res) {
             }
             // Token de dispositivo só é entregue via /device/pair/status
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
-            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            // Confirmação por código exige login admin válido. Senha é fallback
+            // explícito, nunca dispensa código + nonce de uma solicitação viva.
+            let ownerAuthenticated = isAdmin(req);
+            if (!ownerAuthenticated && deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID && details.authMethod !== "password") {
+                ownerAuthenticated = await verifyRemoteBridgeSupabaseAdmin(req);
+            }
+            if (!ownerAuthenticated && details.authMethod === "password") {
+                const failures = devicePasswordFailures.get(pairId) || 0;
+                if (failures >= 5)
+                    return oauthError(res, 429, "access_denied", "Muitas tentativas. Inicie novo pareamento.");
+                const expected = getAdminPassword();
+                const submitted = param(req, "password");
+                ownerAuthenticated = Boolean(expected && submitted && timingSafeEqualText(submitted, expected));
+                if (!ownerAuthenticated) {
+                    devicePasswordFailures.set(pairId, failures + 1);
+                    sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Senha administrativa inválida ou não configurada." });
+                    return;
+                }
+            }
+            if (!ownerAuthenticated) {
+                sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Sessão administrativa ausente. Confirme o código e use a senha do MCP." });
+                return;
+            }
             const result = devicePairingStore.approveWeb({
                 pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
             });
             if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            devicePasswordFailures.delete(pairId);
             sendOwnerConsentPage(res, {...details, success: true});
             return;
         }

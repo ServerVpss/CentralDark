@@ -19,6 +19,17 @@ CONTINUIDADE: nova mensagem e DELTA da missao atual. Quando CHEFE mudar/encerrar
 
 FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/hermes/verified-checkpoint.py` via `scripts/hermes/centraldark-entry.py` (`current.json`/`events.jsonl` fora do Git); depois conferir o recibo documental em `docs/HUD/README.md` e respeitar `scripts/centraldark-inventory-reconcile.sh`. O mais recente por tempo nem sempre e a missao ativa do CHEFE; confrontar INTENCAO+MISSION+RECEIPT_SHA+NEXT_CURSOR e estado vivo, nunca escolher so por data. Em novo chat sem acesso a arquivos, reconstruir quadro apenas com contexto disponivel e marcar verificacoes atuais UNKNOWN. Escritas: caminho + readback local; commit SHA + link + readback remoto apenas se realmente publicado. SEM AUTO-PUBLICAR/SEM SOBRESCREVER DELTAS.
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+<!-- CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
+## 🪬 SOL — Contrato v1.2 de resposta visual, intenção e continuidade
+
+**Owner canônico do estilo:** [docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). Reutilizar a seção `CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109` como regra de apresentação; não copiar os 419 versos do contrato na árvore, nem criar HUD ou writer paralelo.
+
+**Ordem sem ritual obrigatório:** 👑 intenção do CHEFE → 🪬 [Sua Intenção Devolvida](docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) → 🧵 fio vigente → 🧠 [BRAIN.md](docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) / [pasta BRAIN](docs/BRAIN/) → 🏛️ owner/CURRENT → 🌳 árvore real → 📍 arquivo:linha → 🔴 causa raiz → 🔧 menor delta → ⚙️ execução autorizada → 🎯 contraprova → 🧾 receipt → 💗 aprendizado → ➡️ NEXT_CURSOR. Exibir só etapas pertinentes; conversa simples não exige ritual nem formulário.
+
+**Apresentação:** resultado primeiro, PT-BR claro, PAPAGAIO OFF; até quatro linhas em pergunta simples; diagnóstico completo quando necessário. Nomes visíveis humanos com identificadores técnicos estáveis. GenUI/cards são opcionais e funcionais, sem segundo estado: **o HUD monoespaçado obrigatório definido acima continua no topo até validação explícita do formato visual**. Clique ≠ execução; Git commit ≠ consumo; UI verde ≠ teste. Link, caminho, SHA e readback somente quando provados.
+<!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
+
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
 
@@ -2708,3 +2719,38 @@ Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-me
 ## Entrada META-RSI
 
 A porta metodologica canonica e .agents/skills/centraldark-operational-method/SKILL.md, com Skills/meta-rsi e catalogo/META-RSI-40.md; Kimetsu conectado. Preservar entradas de .agents/skills e gatilhos ate testar todos os loaders. Sem motor paralelo nem alegacao de runtime 40/40 sem prova.
+
+<!-- CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+## 🌳 Costura de causa vizinha — voltar uma linha, reparar e seguir (09/11/2026)
+
+**Decisão do CHEFE:** se a investigação de um erro encontrar falha vizinha com a mesma causa no mesmo owner, corrigir o menor delta autorizado antes de seguir. Voltar uma linha/passo, testar o cone afetado e continuar do NEXT_CURSOR. Isso aperfeiçoa o ROOT_DISCOVERY_GLOBAL existente, sem segundo owner, writer, script ou HUD.
+
+**Receita:** ERRO OBSERVADO → ÁRVORE + ARQUIVO:LINHA → CAUSA RAIZ → VERIFICAR USOS ADJACENTES → PRESERVAR DADOS/HISTÓRICO/SEGREDOS → MENOR CORREÇÃO → TESTE NORMAL + NEGATIVO → VOLTAR UMA CASA → RETESTAR → COMPROVANTE → PRÓXIMO PASSO.
+
+Caminhos portáteis nascem da localização do módulo executado ou do diretório do usuário, com configurações externas explícitas e testadas. Não migrar cofres, bancos, registros de auditoria administrativa nem textos históricos por troca em massa. Falha fora do cone ou pertencente a outro writer vira pendência identificada, não invasão de escopo.
+
+**Aprendizado aplicado:** [MCP — registro, logs e pareamento](docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md): 22 testes locais pertinentes passaram na VPS da Casa; publicação não equivale a reinício, pareamento humano nem consumo remoto.
+<!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+
+<!-- CENTRALDARK_DEV_FIRST_LIVE_EDIT_20261109 -->
+## 🛠️ Padrão DEV-FIRST — edição ao vivo antes do pacote
+Decisão do CHEFE (09/11/2026): nos projetos CentralDark com fonte e ferramenta de desenvolvimento disponíveis, iniciar e manter o modo de desenvolvimento com atualização visual em tempo real como padrão durante construção. Empacotar somente quando solicitado ou necessário para testar a entrega; depois retomar DEV se houver trabalho. Reutilizar o owner e a interface existentes, sem duplicar aplicativo, servidor, bandeja, roteador ou arquitetura.
+Critérios: identificar ferramenta já instalada (Vite/HMR, Electron, Code-OSS, watcher); usar comandos do projeto; servidor DEV somente em localhost; não abrir depuração remota nem desativar autenticação; preservar sessões, arquivos e processos de outros writers; diferenciar fonte editável, prévia ao vivo e pacote final. DEV ativo exige processo + endpoint + alteração refletida; HTTP 200 sozinho não comprova Electron em DEV. Build final exige teste do artefato.
+Aplicação: scripts/remote-bridge/ui/ e scripts/remote-bridge/Build-Remote-Bridge.ps1, documentados em scripts/remote-bridge/CORPO-UNICO-CAPACIDADES.md. Empacotamento integral dos recursos após estabilizar; não copiar segredos ou sessões do AppData de terceiros.
+<!-- /CENTRALDARK_DEV_FIRST_LIVE_EDIT_20261109 -->
+
+<!-- CENTRALDARK_MICHELIN_CHEFE_CONTRAPROVA_20261110 -->
+## Operação Michelin três estrelas — aceite do CHEFE (10/11/2026)
+Em integrações de serviços, sites, programas e interfaces: SOL coordena, Hermes executa no owner existente. Preservar organismo único; menor delta; testar; observar superfície real; comprova e contraprova em tempo real. SHA, build verde, HTTP 200 e logs são evidências técnicas, mas não substituem confirmação funcional do CHEFE. UNKNOWN != PASS; DOCUMENTED != EXECUTED; MERGED != DEPLOYED.
+
+Comunicação: durante execução, informar ação concreta e próximo marco. Ao concluir etapa, dizer o que mudou, onde, qual prova passou, o que permanece UNKNOWN e qual botão o CHEFE pode clicar, somente quando a versão em execução estiver comprovada. Nunca pedir clique prematuro. Apresentar resultado e perguntar: "Chefe, ficou do jeito que o senhor queria?". Se NÃO, identificar divergência, voltar uma casa, corrigir cone afetado e retestar. FIXED_POINT depende de aceite do CHEFE.
+
+Resiliência: classificar falhas por grupos e índices, registrar dependências, CURRENT e frescor. Falha de um setor não apaga contexto nem torna outro setor aprovado. Preservar controles essenciais e serviços operantes. Reutilizar DEV-FIRST e owners; sem novos executores, HUDs ou scripts paralelos.
+
+Remote Bridge: build da UI não comprova Electron atualizado nem OAuth aprovado. Aceite: versão em execução, consentimento, pareamento, heartbeat, chamada MCP real, inspeção visual do CHEFE, receipt e NEXT_CURSOR.
+<!-- /CENTRALDARK_MICHELIN_CHEFE_CONTRAPROVA_20261110 -->
+
+<!-- CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
+### Localização portátil — descoberta, não letra de unidade
+Regra do CHEFE (10/11/2026): nenhum owner, instalador, launcher, bridge ou integração deve depender de destino fixo C:, D:, F: ou caminho absoluto de uma máquina. Descobrir o local de execução a partir do próprio script/aplicativo/repositório e da configuração canônica existente; resolver caminhos relativos a essa raiz, com validação de existência e mensagem explícita quando não localizado. No PowerShell, preferir $PSScriptRoot; em Node/Electron, resolver a partir do diretório real do módulo/app e recursos empacotados; distinguir modo DEV e pacote instalado. Reutilizar mecanismo de descoberta já existente, sem criar segundo localizador. Não substituir caminhos indiscriminadamente sem testar instalação, DEV, Windows/Linux e preservação do runtime. Registrar o caminho detectado como diagnóstico sem expor credenciais. Exemplo F:\CentralDark é observação local, nunca contrato de implantação.
+<!-- /CENTRALDARK_PORTABLE_PATH_DISCOVERY_20261110 -->
