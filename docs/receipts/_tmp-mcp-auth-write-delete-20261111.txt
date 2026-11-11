@@ -1,3 +1,0 @@
-CENTRALDARK-MCP TEST ephemeral write
-phase=update
-No secrets
