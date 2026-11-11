@@ -701,7 +701,7 @@ function resolveGhToken(req) {
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
-app.post("/api/mcp", (req, res) => {
+app.post(["/api/mcp", "/mcp"], (req, res) => {
     const l = withCid(req.cid);
     const r = resolveGhToken(req);
     if ("error" in r) {
@@ -730,7 +730,7 @@ app.post("/api/mcp", (req, res) => {
     });
 });
 // GET /mcp — alguns clientes pingam pra checar OAuth via 401
-app.get("/api/mcp", (req, res) => {
+app.get(["/api/mcp", "/mcp"], (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
 // getAdminCatalog() nunca foi implementado/importado neste arquivo; esta rota
