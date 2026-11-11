@@ -1,12 +1,13 @@
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
-import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, isAbsolute, join } from "node:path";
 import express from "express";
 
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
 const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
-const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "<caminho-vps>";
+const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || join(homedir(), ".centraldark", "mcp-device-registry.json");
 
 const sha256 = (value) => createHash("sha256").update(String(value)).digest("hex");
 const safeEqual = (a, b) => {
@@ -19,6 +20,7 @@ const cleanText = (value, fallback = "") => String(value ?? fallback).trim().sli
 
 export function createDevicePairingStore(options = {}) {
   const registryPath = options.registryPath || DEFAULT_REGISTRY_PATH;
+  if (!isAbsolute(registryPath)) throw new Error("DEVICE_REGISTRY_PATH_NOT_ABSOLUTE");
   const ttlMs = Number(options.ttlMs || DEFAULT_TTL_MS);
   const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);
   const deviceTokenTtlMs = Number(options.deviceTokenTtlMs || DEFAULT_DEVICE_TOKEN_TTL_MS);
@@ -27,7 +29,13 @@ export function createDevicePairingStore(options = {}) {
 
   function readRegistry() {
     if (!existsSync(registryPath)) return { version: 1, devices: [] };
-    const parsed = JSON.parse(readFileSync(registryPath, "utf8"));
+    if (!statSync(registryPath).isFile()) throw new Error("DEVICE_REGISTRY_PATH_NOT_FILE");
+    let parsed;
+    try { parsed = JSON.parse(readFileSync(registryPath, "utf8")); }
+    catch (error) {
+      if (error instanceof SyntaxError) throw new Error("DEVICE_REGISTRY_INVALID_JSON");
+      throw error;
+    }
     if (!parsed || !Array.isArray(parsed.devices)) throw new Error("DEVICE_REGISTRY_INVALID");
     return parsed;
   }

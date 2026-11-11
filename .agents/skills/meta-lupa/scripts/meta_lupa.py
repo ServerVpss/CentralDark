@@ -24,6 +24,7 @@ LUPA_REGISTRATION_MODE=1 desliga a abertura de recibo aninhado (anti-recursão).
 """
 import argparse
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -38,6 +39,8 @@ from pathlib import Path, PurePosixPath
 LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
 REGISTRATION_ENV = "LUPA_REGISTRATION_MODE"
+SELO_CONTRACT_VERSION = "selo-xp/v1"
+SELO_GUARDRAIL = Path(__file__).resolve().parents[1] / "guardrails" / "validar_selo_ponto_fixo.py"
 # commit sancionado para migracao de alvo versionado nao reproduzivel (linha 4 / CANDIDATE_REF)
 MIGRATION_COMMIT = "e6718f69d"
 
@@ -997,6 +1000,20 @@ def _append_atomic(rec: dict) -> None:
     append_record_atomic(_ledger_path(), rec)
 
 
+def _audit_selo_xp(records: list[dict]) -> dict:
+    """Executa o guardrail existente antes de gravar um novo FINAL.
+
+    O guardrail continua sendo o owner da regra; o motor apenas faz a
+    contraprova no mesmo conjunto de registros antes do append atomico.
+    """
+    spec = importlib.util.spec_from_file_location("meta_lupa_selo_guardrail", SELO_GUARDRAIL)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("SELO_GUARDRAIL_UNAVAILABLE")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.auditar(records)
+
+
 def _registration_active() -> bool:
     return os.environ.get(REGISTRATION_ENV) == "1"
 
@@ -1122,12 +1139,28 @@ def cmd_finish_use(args) -> int:
         "evidence_hash": hashlib.sha256("|".join(args.evidence or []).encode("utf-8")).hexdigest(),
         "achievements": sorted(set(args.achievement or [])),
         "penalties": sorted(set(args.penalty or [])),
+        "seal_contract": SELO_CONTRACT_VERSION,
+        "seal_claimed": args.seal_claimed == "sim",
+        "delivered_trace_refs": args.delivered_trace_refs,
+        "kimetsu_round_id": args.kimetsu_round_id,
+        "kimetsu_techniques": args.kimetsu_techniques,
     }
     rec.update(evolution)
     rec = _sanitize_value(rec)
+    try:
+        seal_report = _audit_selo_xp(ledger_records + [rec])
+    except Exception as exc:
+        print(f"SELO_XP_BLOCKED reason={type(exc).__name__}", file=sys.stderr)
+        return 2
+    if not seal_report.get("selo_ok"):
+        print("SELO_XP_BLOCKED", file=sys.stderr)
+        return 2
+    rec["seal_guardrail"] = "PASS"
+    rec["seal_guardrail_contract"] = SELO_CONTRACT_VERSION
     rec["record_hash"] = _record_hash({k: v for k, v in rec.items() if k != "record_hash"})
     _append_atomic(rec)
     print(f"FINAL_RECORDED usage_id={uid}")
+    print("SELO_XP=PASS")
     print(_final_receipt_line(rec))
     return 0
 
@@ -2071,6 +2104,10 @@ def main() -> None:
     f.add_argument("--improvements", nargs="*", default=[])
     f.add_argument("--achievement", action="append", choices=sorted(XP_AWARDS), default=[])
     f.add_argument("--penalty", action="append", choices=sorted(XP_PENALTIES), default=[])
+    f.add_argument("--seal-claimed", required=True, choices=["sim"])
+    f.add_argument("--delivered-trace-refs", nargs="+", required=True)
+    f.add_argument("--kimetsu-round-id", default="")
+    f.add_argument("--kimetsu-techniques", nargs="*", default=[])
     f.set_defaults(func=cmd_finish_use)
 
     v = sub.add_parser("verify-ledger")
