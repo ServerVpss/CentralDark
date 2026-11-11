@@ -1591,7 +1591,7 @@ check('scripts/trigger-fabric/main_first_change_guard.py',[
 ], classification='MAIN_FIRST_CHANGE_GUARD_OWNER')
 check_command(
  'scripts/trigger-fabric/main_first_change_guard.py --compile',
- ['python3', '-m', 'py_compile', str(ROOT/'scripts/trigger-fabric/main_first_change_guard.py')],
+ [sys.executable, '-m', 'py_compile', str(ROOT/'scripts/trigger-fabric/main_first_change_guard.py')],
  classification='MAIN_FIRST_CHANGE_GUARD_SYNTAX',
 )
 
@@ -1669,12 +1669,12 @@ if tracked:
 # Reprova desordem A-Z, lacunas J001..JNNN, links, titulo/identidade e duplicatas.
 check_command(
     'scripts/trigger-fabric/verify_jukebox.py --self-test',
-    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--self-test'],
+    [sys.executable, str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--self-test'],
     classification='JUKEBOX_VALIDATOR_NEGATIVE_TESTS',
 )
 check_command(
     'scripts/trigger-fabric/verify_jukebox.py --check',
-    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--check', str(ROOT)],
+    [sys.executable, str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--check', str(ROOT)],
     classification='JUKEBOX_ORDER_AZ_NUMERIC_EXECUTABLE_GATE',
 )
 
