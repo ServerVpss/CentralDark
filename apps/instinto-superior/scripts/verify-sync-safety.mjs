@@ -51,6 +51,9 @@ test('Cockpit separa leitura Git, Casa Windows, VMware e Triton sem falso verde'
  assert.match(ui,/Todos os commits iguais/);
  assert.match(ui,/Triton: executa modelos de IA/);
  assert.match(ui,/NÃO VERIFICADO/);
+ assert.match(ui,/Última execução concluída; código agora:/);
+ assert.match(ui,/todosMesmoCommit === true \? 'bg-emerald-500\/10/);
+ assert.match(ui,/sem leitura própria/);
 });
 
 test('Falha histórica VPS conserva erro e escopo sem inventar estado atual',async t=>run(t,async(f,m)=>{
