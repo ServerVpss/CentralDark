@@ -243,7 +243,9 @@ PR abre/atualiza  ->  workflow dispara
 Na mão, quando o runner estiver fora:
 
 ```bash
-ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh <PR>"
+ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh --dry-run <PR>"
+# Somente apos autorizacao e contraprova:
+ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh --apply <PR>"
 ```
 
 ## Regras de ferro
@@ -344,6 +346,47 @@ ISOLATED_INDEX != CASA_INDEX
 SCOPED_DIFF_CHECK + REMOTE_READBACK -> REVIEWABLE_CANDIDATE
 AUDIT_PASS != PUBLISHED
 ```
+## COSTURA: preflight read-only, escritor unico e substituicao atomica
+
+Essas garantias pertencem ao **metodo de conflito** e aos seus auxiliares
+canônicos, nao ao reconciliador de notas. O motor continua unico:
+`scripts/dependabot/resolve-conflicts.sh`.
+
+```bash
+# Preflight read-only: consulta SHA da main, branch do PR e ref de pull.
+# Nao busca refs, cria worktree, altera indice, resolve conflitos ou publica.
+PR_HEAD_REF=dependabot/exemplo REPO_DIR=/root/CentralDark \
+  bash scripts/dependabot/resolve-conflicts.sh --dry-run 123
+
+# Somente com autorizacao explicita; o workflow existente usa --apply.
+PR_HEAD_REF=dependabot/exemplo REPO_DIR=/root/CentralDark \
+  bash scripts/dependabot/resolve-conflicts.sh --apply 123
+```
+
+- `--dry-run` comprova somente preflight e SHAs atuais. A classificacao de
+  conflitos permanece `UNPROVEN_NO_MERGE`; nao declarar resolucao PASS.
+- `--apply` exige numero de PR valido e branch que nao seja `main`.
+- O bloqueio exclusivo por `mkdir` atomico protege a raiz dos worktrees.
+  Segundo escritor recebe `BLOCKED_COSTURA_WRITER_LOCK_BUSY` antes do fetch.
+  Se houver encerramento abrupto, lock residual **bloqueia** ate auditoria;
+  nao remover automaticamente nem roubar lock.
+- Os auxiliares existentes `semantic-all-resolver.mjs` e
+  `structured-conflict-resolver.mjs` fazem escrita temporaria no mesmo
+  diretorio, `fsync`, `rename` atomico e readback do conteudo.
+- `--audit-index` permanece read-only e independente de `--apply`.
+- Nenhuma dessas etapas publica diretamente na `main`.
+
+```text
+DRY_RUN != RESOLVED
+PREFLIGHT_PASS != SAME_HEAD_CI_PASS
+LOCK_BUSY -> BLOCKED_BEFORE_FETCH
+ATOMIC_REPLACE + READBACK != REMOTE_PUBLISHED
+NO_EXPLICIT_APPLY -> BLOCKED
+```
+
+Regressoes comprovadas nos fixtures do
+`scripts/dependabot/resolve-conflicts-policy.test.sh` existente.
+
 ## Python da COSTURA: selecao validada, sem confundir com Hermes (11/11/2026)
 
 Contraprova da Casa: no Git Bash, `python3` foi resolvido em

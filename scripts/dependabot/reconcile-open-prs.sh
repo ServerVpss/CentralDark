@@ -80,7 +80,7 @@ for row in "${PRS[@]}"; do
   if [ "$mergeable" = "false" ] || [ "$mergeable_state" = "dirty" ]; then
     echo "🪡 CONFLICT_DETECTED=1 — acionando motor único da Casa"
     set +e
-    PR_HEAD_REF="$head_ref" REPO_DIR="$REPO_DIR" bash "$RESOLVER_PATH" "$pr"
+    PR_HEAD_REF="$head_ref" REPO_DIR="$REPO_DIR" bash "$RESOLVER_PATH" --apply "$pr"
     resolve_rc=$?
     set -e
     if [ "$resolve_rc" -eq 0 ]; then

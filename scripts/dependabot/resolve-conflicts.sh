@@ -111,7 +111,16 @@ if [[ "${1:-}" == "--audit-index" ]]; then
   exit 0
 fi
 
-PR_NUM="${1:?Uso: $0 <PR_NUMBER>}"
+# Mutation is opt-in. --dry-run is a read-only preflight; --audit-index remains separate.
+case "${1:-}" in
+  --dry-run|--apply) COSTURA_MODE="$1"; shift ;;
+  *) echo "BLOCKED_EXPLICIT_MODE_REQUIRED: --dry-run|--apply <PR_NUMBER>"; exit 2 ;;
+esac
+if (( $# != 1 )); then
+  echo "BLOCKED_PR_ARGUMENTS: expected exactly one PR number"
+  exit 2
+fi
+PR_NUM="$1"
 PR_HEAD_REF="${PR_HEAD_REF:-}"
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
@@ -151,14 +160,14 @@ git check-ref-format "refs/heads/$PR_HEAD_REF" >/dev/null || {
   exit 2
 }
 
-mkdir -p "$WORKTREE_ROOT"
-
 cleanup() {
   set +e
   git -C "$REPO_DIR" worktree remove --force "$WORKTREE" >/dev/null 2>&1 || true
-  git -C "$REPO_DIR" worktree prune >/dev/null 2>&1 || true
+  # Do not prune unrelated worktrees: only remove the exact isolated COSTURA worktree.
+  if [[ "${COSTURA_LOCK_ACQUIRED:-0}" == 1 ]]; then
+    rmdir -- "$COSTURA_LOCK_DIR" 2>/dev/null || echo "BLOCKED_LOCK_CLEANUP=$COSTURA_LOCK_DIR" >&2
+  fi
 }
-trap cleanup EXIT
 
 echo "🧭 RESOLVER_PR=$PR_NUM"
 echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
@@ -175,6 +184,40 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
 else
   GIT_AUTH=()
 fi
+
+echo "COSTURA_MODE=$COSTURA_MODE"
+if [[ "$COSTURA_MODE" == "--dry-run" ]]; then
+  # No fetch, worktree, lock, merge, index, file write, commit or push.
+  DRY_MAIN_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin refs/heads/main | awk '{print $1}')"
+  DRY_PR_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin "refs/heads/$PR_HEAD_REF" | awk '{print $1}')"
+  DRY_PULL_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin "refs/pull/$PR_NUM/head" | awk '{print $1}')"
+  if [[ -z "$DRY_MAIN_SHA" || -z "$DRY_PR_SHA" || -z "$DRY_PULL_SHA" || "$DRY_PR_SHA" != "$DRY_PULL_SHA" ]]; then
+    echo "BLOCKED_DRY_RUN_SOURCE_UNPROVEN main=${DRY_MAIN_SHA:-UNKNOWN} pr=${DRY_PR_SHA:-UNKNOWN} pull=${DRY_PULL_SHA:-UNKNOWN}"
+    exit 21
+  fi
+  echo "COSTURA_DRY_RUN=PASS"
+  echo "DRY_RUN_MAIN_SHA=$DRY_MAIN_SHA"
+  echo "DRY_RUN_PR_SHA=$DRY_PR_SHA"
+  echo "DRY_RUN_CONFLICT_DECISIONS=UNPROVEN_NO_MERGE"
+  echo "DRY_RUN_LOCAL_WRITES=0"
+  echo "DRY_RUN_REMOTE_WRITES=0"
+  echo "DRY_RUN_PUSH=0"
+  exit 0
+fi
+
+# Atomic directory creation enforces one COSTURA writer per repository/worktree root.
+# A crashed writer leaves a blocking lock: never steal or silently bypass it.
+mkdir -p "$WORKTREE_ROOT"
+COSTURA_LOCK_DIR="$WORKTREE_ROOT/.costura-repo-writer.lock"
+if ! mkdir -- "$COSTURA_LOCK_DIR" 2>/dev/null; then
+  echo "BLOCKED_COSTURA_WRITER_LOCK_BUSY=$COSTURA_LOCK_DIR"
+  exit 23
+fi
+COSTURA_LOCK_ACQUIRED=1
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+echo "COSTURA_WRITER_LOCK=ACQUIRED"
 
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"

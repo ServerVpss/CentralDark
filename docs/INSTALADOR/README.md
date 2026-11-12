@@ -76,3 +76,19 @@ O aplicativo de instalação de openKylin e preservação do disco físico tem *
 - [ ] Modo `--restore` para migração entre VPS
 
 A doc é preenchida incrementalmente conforme cada peça do sistema é tocada.
+
+<!-- CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+## Fase incremental: runner Linux isolado (VMware agora, VPS futura)
+
+Owner unico: `install.sh`. Fases explicitas e opcionais:
+
+- `bash install.sh --runner-linux-check`: inventario local, somente leitura.
+- `bash install.sh --runner-linux-install --dry-run`: plano sem gravacao.
+- `bash install.sh --runner-linux-install`: pacote oficial Linux x64, SHA-256 e promocao atomica.
+- `bash install.sh --runner-linux-activate --dry-run`: preflight sem token.
+- `bash install.sh --runner-linux-activate`: registro e servico systemd, somente com nome e token efemero autorizados.
+
+Cada host tem identidade, servico e `_work` exclusivos. GitHub distribui um job por runner e recebe resultado/checks; Hermes supervisiona sem segundo scheduler; HUD acompanha o PR equivalente. `REGISTERED != ONLINE` e `RUNNER_ONLINE != ACTIONS_STARTUP_OK`. O limite de billing da organizacao continua independente.
+
+Detalhes: `02-dependencias.md`, `04-estrutura-pastas.md` e aprendizado tematico do runner em `docs/CONSCIENCIA/APRENDIZADOS/2026-10-18-VPS-RUNNER-EPHEMERAL-POSTJOB.md`.
+<!-- /CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
