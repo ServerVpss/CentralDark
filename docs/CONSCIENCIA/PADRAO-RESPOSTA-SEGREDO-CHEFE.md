@@ -989,9 +989,9 @@ Exemplo fechado:
 
 No jeito do CHEFE: **uma coisa é a ferramenta conseguir fazer barulho; outra é o cabra querer usar a ferramenta pra machucar alguém. Efeito, capacidade, intenção e conduta não entram no mesmo saco.**
 
-## Camada final obrigatória — NO TEU MODO, SIMPLES
+## Tradução humana integrada — seção técnica opcional
 
-Toda resposta **técnica, analítica ou explicativa não trivial** destinada ao SEGREDO/CHEFE deve terminar com uma tradução curta no modo dele. A camada simples não substitui prova, detalhe técnico, `UNKNOWN`, risco ou bloqueio; ela vem **depois** deles.
+Toda resposta **técnica, analítica ou explicativa não trivial** destinada ao SEGREDO/CHEFE deve começar e permanecer em linguagem natural. Não adicionar uma segunda tradução nem um rodapé de campos por obrigação. A seção simples abaixo serve de modelo para relatório explicitamente solicitado; os marcadores legados ficam preservados como compatibilidade de contratos técnicos, sem controlar a forma da conversa. Prova, risco, incerteza e bloqueio continuam claros quando relevantes.
 
 ```text
 SIMPLE_FINAL_LAYER_REQUIRED=true
