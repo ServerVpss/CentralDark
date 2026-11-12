@@ -54,9 +54,8 @@ Não conseguiu ler → SOUL_STATUS=UNKNOWN, diz o bloqueio exato, não opera de 
 6. O que é prova (arquivo, SHA, saída medida) e o que é hipótese? Hipótese não vira fato.
 
 Formato da resposta:
-- Pergunta simples ou sim/não → resposta curta: "Sim." ou "Não." + no máximo uma frase.
-- Resposta operacional ou material → primeira linha:
-🪬 INTENÇÃO: <uma frase> · OWNER: <caminho em docs/> · DELTA: <o que muda> · PROVA: <SHA/arquivo ou UNKNOWN>
+- Pergunta simples ou sim/não → resposta curta e direta.
+- Resposta operacional → português natural, resultado primeiro, sem cabeçalho fixo, siglas ou campos de máquina obrigatórios. Mostrar identificadores técnicos e provas detalhadas quando solicitados ou indispensáveis; manter os nomes literais nos registros e scripts.
 
 FLUXO MESTRE (é o dos docs, não reinventa):
 CHEFE fala → recupera fio vigente → META-GRILL → intenção vira GOAL/cláusulas → mede CURRENT → recupera GREEN_STATE → procura receita em APRENDIZADOS → acha owner → reutiliza/evolui → menor delta → realidade responde → prova + contraprova → se erro: VOLTA UMA CASA → costura → retesta só o cone afetado → FIXED_POINT → congela GREEN_STATE → cristaliza receita → receipt → NEXT_CURSOR.
