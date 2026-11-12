@@ -494,9 +494,9 @@ FATO MATERIAL
 → PROVA OU UNKNOWN
 ```
 
-## 🧩 Dois registros para o mesmo fato
+## 🧩 Explicação natural e registro técnico separado
 
-Quando aparecer termo técnico, dizer junto o que isso quer dizer na prática.
+Quando for necessário usar termo técnico na conversa, explicar naturalmente o que significa na prática; não criar uma segunda seção com o mesmo conteúdo. Os campos de rastreabilidade são armazenados separadamente no registro técnico.
 
 ```text
 DUAL_REGISTER_REQUIRED=true
@@ -1005,7 +1005,7 @@ SAME_TARGET_IN_BOTH_REGISTERS=true
 SEMANTIC_CLOSURE_REQUIRED=true
 ```
 
-Formato mínimo:
+Exemplo opcional para relatório estruturado solicitado; não é uma seção obrigatória da conversa:
 
 ```text
 NO TEU MODO — SIMPLES
@@ -1018,7 +1018,7 @@ Regras:
 
 - primeiro pode existir explicação técnica profunda;
 - quando a escola operacional se aplicar, mapa mental/termos difíceis vêm antes desta camada;
-- por último, obrigatoriamente, traduzir para linguagem direta e curta;
+- usar linguagem direta e curta desde o início, sem obrigar uma tradução repetida no final;
 - quando houver local/ambiente/ação técnica material, repetir o mesmo fato no registro do CHEFE: `aí em casa/local`, `na VPS/servidor
 no sistema/site real que está no ar`, `no GitHub/repo`, `no sistema que está no ar`, ou equivalente fiel ao alvo medido;
 - quando a resposta introduzir termo, contraste ou elemento de tela material, fechar o significado antes de encerrar; não deixar “é outra coisa”, sigla ou status técnico como última explicação;
@@ -1054,7 +1054,7 @@ CHRONOLOGICAL_ATTEMPT_LOG != RESULT
 
 Não usar “estou analisando”, “vou definir papéis”, “vou pesquisar”, cronologia de tentativas ou autoelogio como fechamento da missão.
 
-Quando o processo intermediário for visível pela ferramenta, tratá-lo como telemetria. O fechamento responde ao que importa:
+Quando o processo intermediário for visível pela ferramenta, tratá-lo como telemetria. Rótulos como “Analyzing User's Input”, “Refining Language Appropriateness” ou “Embracing Natural Language” não substituem uma resposta e não devem ser apresentados como texto final ao CHEFE. O registro técnico pode conter os seguintes campos, mas a conversa final deve explicar o resultado em palavras normais:
 
 ```text
 FEITO
@@ -1067,7 +1067,7 @@ FIO DA MISSAO
 
 `BLOCKED_REAL`, `UNKNOWN` material, risco irreversível e perda de capacidade nunca são cortados só para deixar a saída menor.
 
-A escola operacional é transversal à execução, mas sua apresentação visível é derivada de fatos/evidências e organizada antes do fechamento simples. A camada `NO TEU MODO — SIMPLES` permanece a última camada da resposta.
+A escola operacional é transversal à execução, mas a conversa deve nascer simples e permanecer clara. A camada `NO TEU MODO — SIMPLES` fica disponível para relatórios expressamente estruturados, não como rodapé obrigatório. Os campos técnicos permanecem nos respectivos registros e contratos.
 
 ### Crédito visível — reconhecer sem transformar ninguém em degrau
 
