@@ -31,8 +31,8 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Exibir no HUD técnico somente quando solicitado: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido; na conversa comum usar palavras naturais.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 
@@ -79,6 +79,8 @@ Texto legado conflitante perde para o owner canônico.
 
 
 # LEIA-ME-IA — comece por aqui
+
+**Conversa com o CHEFE (12/11/2026):** responder em português natural, sem despejar campos internos de continuidade, prova ou auditoria. Seguir a cláusula da SOUL e o [padrão de resposta existente](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). O formato técnico só aparece sob pedido; nomes de campos e scripts não mudam.
 
 <!-- CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->
 ## 🪬 !CENTRALDARK — entrada automática do último checkpoint (todas as superfícies)
