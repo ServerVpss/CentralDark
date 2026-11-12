@@ -214,3 +214,84 @@
 | `NEXT_CURSOR` | DOC_SHA → CI_PASS → REVIEW → AUTHORIZED_MERGE → MAIN_SHA_READBACK |
 
 **Correções no mesmo owner:** distinção entre capacidade oficial, instalação relatada, processos, endpoints, teste funcional e desconhecidos; rotas/portas históricas sem falso verde; falha 404 de embedding; documentação das fontes consultadas. O SHA exato do commit que incorpora estas correções deve ser lido no GitHub.
+
+---
+
+<!-- KYLINBOT_NATIVE_MCP_VM_CONTRAPROOF_20261112 -->
+## 10. T2 — Casa VMware openKylin: CLI, Gateway e MCP (2026-11-12)
+
+**Proveniencia:** medicao SSH na Casa (SEGREDO -> openkylin-vm, hostname CentralDark-OS), NAO na VPS historica das secoes T0/T1. Nao projetar dados de um host no outro.
+
+- SO: openKylin 3.0. Pacotes instalados: kylin-bot 0.7.5-ok1.9, kylin-ai-runtime 1.1.0.1-ok0.21, kylin-aiassistant 5.0.0.0-0k1.33.
+- CLI nativa confirmada pelo --help: agent, gateway, acp, daemon, service, doctor, status, cron, models, providers, channel, integrations, skills, sop, memory, config e self-test.
+- Gateway nativo: HTTP/WebSocket, pareamento, host local por padrao. ACP: JSON-RPC 2.0 via stdio; nao equiparar ACP a A2A. Daemon: gateway, canais, cron e heartbeat.
+- MCP nativo: cliente de MCP externo, com transporte stdio, http ou sse, headers por servidor e schema proprio. Nao existe subcomando kylin-bot mcp na versao aferida.
+- Config real (somente metadados sem segredos): ~/.kylinbot/config.toml em modo 0600; mcp.enabled=false, mcp.servers=[] e deferred_loading=true; gateway.host=127.0.0.1, gateway.port=42617, require_pairing=true e allow_public_bind=false; node_transport requer HTTPS por padrao.
+- Porta 9100: PID transitorio 660929, node, owner apps/modulos/mcp/dist/index.js, systemd user centraldark-native-mcp-http.service; listener 0.0.0.0:9100. GET /health=HTTP 200, service=mcp-centraldark, catalogVersion=160-45340263b107; GET /mcp sem autenticacao=401; GET /sse=410.
+- Rota canonica neste processo e POST /api/mcp (Streamable HTTP), conforme apps/modulos/mcp/src/index.js. Nao confundir com o servidor alternativo em src/mcp-server.js. A porta 8099 Omni Router e 8080 Cockpit tambem estavam em 0.0.0.0.
+- Teste efemero do Gateway nativo na interface 127.0.0.1:42617: processo criado, nenhuma porta pronta na janela de ~7 s, processo encerrado; nao foi instalado servico persistente.
+- Prova de MCP autenticado foi bloqueada por controle de seguranca antes da execucao. Nao foi contornada. Nenhum token foi exibido, copiado ou persistido; initialize/tools/list/tools/call autenticados NAO foram provados.
+- Hermes Windows e instalacao isolada; CLI CentralDark na Hostinger NAO foi aferida nesta rodada. Evidencia atual da VMware nao e evidencia da VPS.
+
+**Menor delta / NEXT_CURSOR:** (1) diagnosticar inicio do Gateway local sem expor pareamento; (2) obter autorizacao de cliente MCP com escopo restrito, sem reutilizar token administrativo de processo; (3) usar mecanismo atomico nativo de config para mcp.enabled e um servidor HTTP no endpoint /api/mcp; (4) testar initialize, tools/list e chamada permitida com receipt; (5) conferir caminhos CentralDark CLI Hostinger e Hermes Windows separadamente. Reutilizar os owners existentes e o inventario unico; sem novo dispatcher.
+
+CASA_KYLIN_CLI=PASS | CASA_MCP_HTTP_HEALTH=PASS | KYLIN_MCP_CLIENT_CONFIGURED=NO | KYLIN_GATEWAY_READY=NOT_PROVEN | MCP_AUTH_E2E=NOT_PROVEN | FIXED_POINT=PENDING
+
+<!-- /KYLINBOT_NATIVE_MCP_VM_CONTRAPROOF_20261112 -->
+
+---
+
+<!-- KYLINBOT_NATIVE_GATEWAY_UNIX_PROOF_20261112 -->
+## 11. T3 — Contraprova corrigida do Gateway KylinBot na Casa (2026-11-12)
+
+- **Causa exata da falsa suspeita de falha TCP:** o proprio KylinBot informou Gateway TCP disabled — Unix socket only. O contrato atual usa ~/.kylinbot/gateway.sock, nao a porta 42617, apesar de o comando aceitar --port.
+- **Prova funcional real:** iniciar o gateway nativo temporariamente em loopback e enviar GET /health sobre AF_UNIX retornou HTTP/1.1 200 OK. Socket existe e tem permissao 0600.
+- **Preservacao:** o processo temporario foi encerrado e recolhido; antes do teste nenhum gateway respondia naquele socket. Nenhum daemon KylinBot permanente foi instalado; nenhum codigo de pareamento foi lido ou exposto.
+- **Contraprova:** o teste anterior que esperava listener TCP era inadequado para esta configuracao; manter seu registro como historico, mas nao interpretar falta de porta como falha de Gateway.
+- **Seguranca:** manter bind isolado no socket Unix; nao habilitar allow_public_bind, nao abrir 42617 e nao duplicar Gateway ou MCP para satisfazer sondas TCP.
+- **NEXT_CURSOR:** localizar consumer ja existente da CentralDark capaz de usar HTTP sobre socket Unix (ou adaptador existente, se houver); testar autorizacao com escopo adequado e consentido para o MCP em /api/mcp sem extrair token administrativo de processo; medir fluxo bidirecional real antes de habilitar mcp.enabled e antes de instalar servico persistente.
+
+GATEWAY_NATIVE_UNIX_HEALTH=PASS | GATEWAY_UNIX_SOCKET_MODE=0600 | GATEWAY_TCP=DISABLED_BY_CONFIG | GATEWAY_PROCESS_AFTER_TEST=STOPPED | MCP_CLIENT_CONFIGURED=NO | FIXED_POINT=PENDING
+
+<!-- /KYLINBOT_NATIVE_GATEWAY_UNIX_PROOF_20261112 -->
+
+---
+
+<!-- CENTRALDARK_VPS_VMWARE_IDENTITY_RASTRO_PR1900_20261112 -->
+## 12. T4 — VPS operacional VMware, identidade e !RASTRO / PR #1900 (2026-11-12)
+
+**Intencao expressa do CHEFE:** a VMware openKylin e a VPS operacional da CentralDark. Usar `ROLE=VPS` para esta maquina, preservando `HOST_ID`, `KERNEL`, `RUNNER_NAME`, origem e timestamp para evitar mistura com instalacoes distintas, inclusive Hostinger. `SAME_ROLE != SAME_HOST` e `SOURCE != RUNTIME`.
+
+### Contraprova comparativa: parecer fornecido vs leitura SSH da VPS/VMware
+
+| Indicador | Parecer consultivo fornecido pelo CHEFE | VPS/VMware medida via SSH |
+|---|---|---|
+| Host | `CENTRALDARK-OS` | `CentralDark-OS` |
+| OS | openKylin 3.0 | openKylin 3.0 |
+| Kernel | `7.0.0-2-generic` | `7.0.0-3-generic` |
+| Load 1/5/15 | `10.06 / 10.49 / 10.56` | `0.02 / 0.03 / 0.03` |
+| Runner | `centraldark-vps-1` | `centraldark-vm-1`, servico systemd ativo |
+| Triton readiness/live | `200 / 200` | `200 / 200` |
+| MCP health | `200` | `200` |
+| Kylin Bridge health | `200` | `200` |
+| `darkai` | ABSENT | ABSENT |
+| `kylinbot` sem hifen | ABSENT | ABSENT |
+| `kylin-bot` com hifen | Nao medido no parecer | `/usr/bin/kylin-bot`, pacote `0.7.5-ok1.9` |
+| Hermes | active no parecer | `hermes` nao encontrado no PATH; processos pesquisados nao confirmaram Hermes na VM |
+| Modelo `Llama-3.2-3B-Instruct-Q4_K_M` | Declarado no parecer | inferencia nao testada; catalogo Triton consultado mostrou modelos ASR e embeddings; disponibilidade deste modelo permanece UNKNOWN |
+
+**Causa raiz a investigar no resolvedor existente:** o sensor usa `kylinbot` sem hifen, mas o binario instalado e `kylin-bot`; o papel VPS e o hostname sao confundidos com a identidade de host; o runner e kernel divergem; `TRITON_READY=200` nao prova modelo especifico carregado; `HERMES_ACTIVE` precisa de PID, unidade ou resposta autenticada no mesmo host. O parecer `NEEDS_HUMAN`/`Fonte:none` nao supera os gates deterministicos.
+
+### !RASTRO / delegacao PR #1900
+
+- PR #1900 aberto, branch `feat/casa-hermes-pid-catalog-20261021`: owners `scripts/casa/discover-operational-channels.ps1`, `apps/modulos/mcp/src/tools/core/mcp-admin.js`, `mcp-diagnostics.js`, `tests/mcp-catalog-scope.test.mjs`, `skills/centraldark-delegacao/SKILL.md`.
+- Contrato da receita no PR: `HOST + PID + SESSION + AUTH + TASK_ID + ACK`; `PID != transport != auth`, `PORT_OPEN != SSH_AUTH`, `ENQUEUED != ACKED`, `SOURCE != RUNTIME`.
+- O diff do PR nao contem o literal `!RASTRO`; **nao declarar implementacao do comando**, apenas o contrato de rastreabilidade encontrado. Descobrir o owner real do comando antes de vincular.
+- O diff do PR contem marcadores literais de conflito `<<<<<<< HEAD`, `=======`, `>>>>>>> origin/main` em `mcp-admin.js`; **nao promover** antes de reconciliar ambos os deltas, reexecutar gates e obter readback.
+- A descoberta do Gateway nativo via socket Unix e o inventario MCP (secoes T2/T3) foram sincronizados da main para esta branch no mesmo owner documental; nao criar CLI, gateway, script ou writer paralelo.
+
+**NEXT_CURSOR:** localizar o owner do resolvedor de identidade VPS e do literal `!RASTRO`; corrigir apenas esses owners com dry-run, escritor unico e teste; reconciliar conflito do PR #1900; comparar `HOST_ID/KERNEL/RUNNER/PID` em runtime; confirmar modelo local por inferencia; validar gates no HEAD exato; somente entao considerar merge/deploy.
+
+`VPS_VMWARE_ROLE=CHEFE_CONFIRMED` · `SERVICE_HEALTH=MEASURED` · `HOST_IDENTITY_MATCH=NOT_PROVEN` · `RASTRO_LITERAL_IN_PR=NOT_FOUND` · `PR1900_CONFLICT=FOUND` · `FIXED_POINT=PENDING`
+
+<!-- /CENTRALDARK_VPS_VMWARE_IDENTITY_RASTRO_PR1900_20261112 -->
