@@ -214,3 +214,27 @@
 | `NEXT_CURSOR` | DOC_SHA → CI_PASS → REVIEW → AUTHORIZED_MERGE → MAIN_SHA_READBACK |
 
 **Correções no mesmo owner:** distinção entre capacidade oficial, instalação relatada, processos, endpoints, teste funcional e desconhecidos; rotas/portas históricas sem falso verde; falha 404 de embedding; documentação das fontes consultadas. O SHA exato do commit que incorpora estas correções deve ser lido no GitHub.
+
+---
+
+<!-- KYLINBOT_NATIVE_MCP_VM_CONTRAPROOF_20261112 -->
+## 10. T2 — Casa VMware openKylin: CLI, Gateway e MCP (2026-11-12)
+
+**Proveniencia:** medicao SSH na Casa (SEGREDO -> openkylin-vm, hostname CentralDark-OS), NAO na VPS historica das secoes T0/T1. Nao projetar dados de um host no outro.
+
+- SO: openKylin 3.0. Pacotes instalados: kylin-bot 0.7.5-ok1.9, kylin-ai-runtime 1.1.0.1-ok0.21, kylin-aiassistant 5.0.0.0-0k1.33.
+- CLI nativa confirmada pelo --help: agent, gateway, acp, daemon, service, doctor, status, cron, models, providers, channel, integrations, skills, sop, memory, config e self-test.
+- Gateway nativo: HTTP/WebSocket, pareamento, host local por padrao. ACP: JSON-RPC 2.0 via stdio; nao equiparar ACP a A2A. Daemon: gateway, canais, cron e heartbeat.
+- MCP nativo: cliente de MCP externo, com transporte stdio, http ou sse, headers por servidor e schema proprio. Nao existe subcomando kylin-bot mcp na versao aferida.
+- Config real (somente metadados sem segredos): ~/.kylinbot/config.toml em modo 0600; mcp.enabled=false, mcp.servers=[] e deferred_loading=true; gateway.host=127.0.0.1, gateway.port=42617, require_pairing=true e allow_public_bind=false; node_transport requer HTTPS por padrao.
+- Porta 9100: PID transitorio 660929, node, owner apps/modulos/mcp/dist/index.js, systemd user centraldark-native-mcp-http.service; listener 0.0.0.0:9100. GET /health=HTTP 200, service=mcp-centraldark, catalogVersion=160-45340263b107; GET /mcp sem autenticacao=401; GET /sse=410.
+- Rota canonica neste processo e POST /api/mcp (Streamable HTTP), conforme apps/modulos/mcp/src/index.js. Nao confundir com o servidor alternativo em src/mcp-server.js. A porta 8099 Omni Router e 8080 Cockpit tambem estavam em 0.0.0.0.
+- Teste efemero do Gateway nativo na interface 127.0.0.1:42617: processo criado, nenhuma porta pronta na janela de ~7 s, processo encerrado; nao foi instalado servico persistente.
+- Prova de MCP autenticado foi bloqueada por controle de seguranca antes da execucao. Nao foi contornada. Nenhum token foi exibido, copiado ou persistido; initialize/tools/list/tools/call autenticados NAO foram provados.
+- Hermes Windows e instalacao isolada; CLI CentralDark na Hostinger NAO foi aferida nesta rodada. Evidencia atual da VMware nao e evidencia da VPS.
+
+**Menor delta / NEXT_CURSOR:** (1) diagnosticar inicio do Gateway local sem expor pareamento; (2) obter autorizacao de cliente MCP com escopo restrito, sem reutilizar token administrativo de processo; (3) usar mecanismo atomico nativo de config para mcp.enabled e um servidor HTTP no endpoint /api/mcp; (4) testar initialize, tools/list e chamada permitida com receipt; (5) conferir caminhos CentralDark CLI Hostinger e Hermes Windows separadamente. Reutilizar os owners existentes e o inventario unico; sem novo dispatcher.
+
+CASA_KYLIN_CLI=PASS | CASA_MCP_HTTP_HEALTH=PASS | KYLIN_MCP_CLIENT_CONFIGURED=NO | KYLIN_GATEWAY_READY=NOT_PROVEN | MCP_AUTH_E2E=NOT_PROVEN | FIXED_POINT=PENDING
+
+<!-- /KYLINBOT_NATIVE_MCP_VM_CONTRAPROOF_20261112 -->
