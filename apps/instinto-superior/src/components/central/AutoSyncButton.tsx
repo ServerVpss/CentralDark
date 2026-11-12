@@ -195,11 +195,12 @@ export const AutoSyncButton: React.FC = () => {
   const mainSha = atual?.mainSha ?? null
   const vpsSha = atual?.vpsSha ?? null
   const vpsMesmoCommit: boolean | null = mainSha && vpsSha ? mainSha === vpsSha : null
-  const trackerEmDia = !trackerError && !!trackerStatus?.at
-    && Number.isFinite(Date.parse(trackerStatus.at))
-    && Date.now() - Date.parse(trackerStatus.at) >= 0
-    && Date.now() - Date.parse(trackerStatus.at) < 120_000
-  const casaMesmoCommit: boolean | null = trackerEmDia && trackerStatus?.head && trackerStatus.githubMain === mainSha
+  const dataTracker = trackerStatus?.at ? Date.parse(trackerStatus.at) : Number.NaN
+  const trackerEmDia = !trackerError && Number.isFinite(dataTracker)
+    && Date.now() - dataTracker >= 0 && Date.now() - dataTracker < 120_000
+  // Doctor mede o checkout do servidor do Cockpit; Linux não é a Casa Windows.
+  const casaMesmoCommit: boolean | null = trackerStatus?.hostOS === 'windows' && trackerEmDia
+    && !!mainSha && !!trackerStatus.head && trackerStatus.githubMain === mainSha
     && trackerStatus.dirtyTracked !== null
     ? trackerStatus.head === mainSha && trackerStatus.dirtyTracked === false : null
   const todosMesmoCommit: boolean | null = casaMesmoCommit === false || vpsMesmoCommit === false
@@ -247,9 +248,9 @@ export const AutoSyncButton: React.FC = () => {
         </div>
         <div className="mt-3 grid gap-2 sm:grid-cols-3" role="status" aria-live="polite" aria-label="Comparação atual de commits">
           <div className="rounded-md border border-border/60 p-2 text-xs">
-            <span className="text-muted-foreground">Casa/Forja ↔ Main</span>
+            <span className="text-muted-foreground">Casa Windows ↔ Main</span>
             <p className="font-semibold">Mesmo commit? {rotulo(casaMesmoCommit)}</p>
-            <p className="break-all font-mono text-[10px] text-muted-foreground">{trackerEmDia ? trackerStatus?.head?.slice(0, 8) ?? 'sem SHA' : 'Use Diagnosticar'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{trackerStatus?.hostOS === 'windows' && trackerEmDia ? trackerStatus.head?.slice(0, 8) ?? 'sem SHA' : 'Casa sem leitura própria'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
           </div>
           <div className="rounded-md border border-border/60 p-2 text-xs">
             <span className="text-muted-foreground">VMware (VPS) ↔ Main</span>
@@ -262,7 +263,7 @@ export const AutoSyncButton: React.FC = () => {
             <p className="text-[10px] text-muted-foreground">Não comprova deploy nem arquivos locais não enviados.</p>
           </div>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">Triton executa modelos de IA. O Git e a rota autorizada por SSH fazem a sincronização; Triton não atualiza o código.</p>
+        <p className="mt-2 text-xs text-muted-foreground">Triton: executa modelos de IA; não baixa nem sincroniza código do GitHub. Git e SSH são os responsáveis. Leituras da Forja Linux não substituem uma leitura da Casa Windows.</p>
         {isSyncing && (
           <div className="mt-3 rounded-md border border-white/10 bg-background/30 px-3 py-2" aria-live="polite">
             <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
