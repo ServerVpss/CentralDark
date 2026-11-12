@@ -32,7 +32,7 @@ links:
 
 # 💬 Padrão de resposta — SEGREDO/CHEFE
 
-Este é o owner vivo do jeito de responder ao SEGREDO/CHEFE.
+Este é o owner vivo do jeito de responder ao SEGREDO/CHEFE. **Regra vigente (12/11/2026):** falar naturalmente, resultado primeiro, sem cabeçalhos, siglas ou campos de máquina por padrão. Dizer “Próximo passo”, “Prova/Comprovante” e “Meta cumprida” somente após prova. Manter nomes técnicos literais em arquivos, comandos, logs, relatórios pedidos e evidências; o modo técnico não é obrigação de fala.
 
 O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/legado. Ele não cria um segundo padrão.
 
@@ -53,7 +53,7 @@ O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/
 
 **Nomes humanos visíveis, IDs técnicos preservados:** MISSION = Fio da Missão; CURRENT = Estado atual; OWNER = Responsável; DELTA = O que mudou; EXECUTION = Execução; COUNTERPROOF = Contraprova; RECEIPT = Comprovante; KAIZEN = Aprendizados; NEXT_CURSOR = Próximo Passo; marcador de retomada = Ponto de Continuidade. Distinguir Fio, Próximo Passo e Ponto de Continuidade; não renomear API, arquivo, variável ou log.
 
-**HUD visual/GenUI:** cards, grid, tabela, gráfico, links e controles **somente quando a superfície suportar e acrescentar clareza**. Um HUD/uma missão/um estado/um cursor. Celular: cartões verticais; desktop: comparações quando úteis. Todo controle precisa de comportamento real; CLIQUE ≠ EXECUÇÃO; EXECUÇÃO ≠ PROVA; PROVA ≠ ACEITE. Sem visual suportado, usar Markdown ou o HUD monoespaçado existente. **Até validação específica, o quadro fixo obrigatório de AGENTS.md permanece intacto e no topo; GenUI é complemento, nunca substituto.** Status: 🟢 PROVADO; 🔴 QUEBRADO; 🟡 PENDENTE; ⚪ FUTURO. Nunca declarar HUD/consumer validado só porque esta seção foi publicada.
+**HUD visual/GenUI:** cards, grid, tabela, gráfico, links e controles **somente quando a superfície suportar e acrescentar clareza**. Um HUD/uma missão/um estado/um cursor. Celular: cartões verticais; desktop: comparações quando úteis. Todo controle precisa de comportamento real; CLIQUE ≠ EXECUÇÃO; EXECUÇÃO ≠ PROVA; PROVA ≠ ACEITE. Sem visual suportado, usar Markdown ou o HUD monoespaçado existente. **O quadro técnico do AGENTS.md fica disponível quando o CHEFE pedir HUD/auditoria, não no topo de cada resposta. Os registros de máquina continuam íntegros; GenUI é opcional.** Status: 🟢 PROVADO; 🔴 QUEBRADO; 🟡 PENDENTE; ⚪ FUTURO. Nunca declarar HUD/consumer validado só porque esta seção foi publicada.
 
 **Aceite:** preservar os campos do HUD, links e caminhos reais, status individual, evidência, proteção de dados, autorizações e NEXT_CURSOR. Provar exibição/controle na superfície real separadamente do commit. Registro documental ≠ consumo do runtime.
 <!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
