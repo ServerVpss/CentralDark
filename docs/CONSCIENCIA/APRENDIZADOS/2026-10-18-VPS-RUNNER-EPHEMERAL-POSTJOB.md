@@ -49,3 +49,16 @@ A VPS não deve armazenar permanentemente cópias de GitHub Actions como se foss
 `CONSULTAR #1807 + SCRIPT + RECEIPT` → `MAPEAR df + runner process + checkout + mounts` → `SE job terminou, usar hook` → `CONTAR entries e ler journal` → `CONTRAPROVA df + serviços + PID` → `DOCUMENTAR NEXT_CURSOR`.
 
 **NEXT_CURSOR:** conferir pós-job em execução futura e se há corrida com `runner-work` do owner geral antes de habilitar novos serviços; manter distinção entre código de execução e arquivo permanente. Este aprendizado temático **não reivindica novo número L197 nem altera o manifesto NeuroLink**, para preservar a linhagem numerada existente; sua proveniência é PR #1807 + receipt + commit do hook.
+
+<!-- CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+## Atualizacao da sessao 2026-11-12: runner VMware e instalador por fases
+
+- **Intencao:** fechar circuito despacho/execucao/resultado com runners separados por sistema operacional e instalador portavel para VPS futura.
+- **Prova Windows:** `centraldark-casa-1` online/livre no GitHub; watchdog nativo Hermes em modo `no-agent`. Nao iniciar uma segunda instancia do mesmo runner.
+- **Prova Linux:** VM `CentralDark-OS` autenticada via SSH, Linux x86_64, aproximadamente 339 GiB livres em `/home`; pacote oficial `v2.338.2` baixado, hash oficial SHA-256 verificado, `config.sh` e `run.sh` executaveis. Na leitura inicial, `.runner` nao existia: `PACKAGE_READY != REGISTERED != ONLINE`.
+- **Isolamento:** Windows em `F:\_WORKER\CentralDark-Runners\CASA-1`; VM em `$HOME/actions-runner`; checkout de codigo em `$HOME/CentralDark`; CI em `actions-runner/_work`. VPS futura reexecuta receita com nova identidade e token, sem transportar credenciais.
+- **Bloqueio distinto:** `startup_failure` com zero jobs e orcamento Actions da organizacao em US$0 com `prevent_further_usage=true`. Runner online nao elimina gate administrativo. Nenhuma alteracao financeira autorizada.
+- **HUD:** `docs/HUD/README.md` exige PR equivalente e reconciliacao do #1977. Estava modificado por outro escritor; foi preservado. Workflow `pr-hud-live-remeasure.yml` exige Linux; regra documentada nao comprova PR atualizado.
+- **Kaizen:** ampliar `install.sh`, sem criar instalador ou scheduler paralelo; fases `--runner-linux-check`, `--runner-linux-install` e `--runner-linux-activate`, com dry-run, lock, hash e readback. Preservar o manifesto NeuroLink, sem criar numero cognitivo por inferencia.
+- **NEXT_CURSOR:** validar registro/service/online Linux, executar job real no SHA e verificar PR HUD; so entao avaliar FIXED_POINT. `DOCUMENTED != EXECUTED`.
+<!-- /CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
