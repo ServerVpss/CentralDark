@@ -26,11 +26,11 @@ const MISSOES = [
 // #OBSERVACOES#: mesmo HUD, mesma ordem; a resposta da API geral não sela missões MCP.
 export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null }) {
   return (
-    <section aria-label="PAPAGAIO ON — HUD fixo Missão MCP" data-hud-identity="CENTRALDARK-MISSAO-MCP-10"
+    <section aria-label="Acompanhamento da missão MCP" data-hud-identity="CENTRALDARK-MISSAO-MCP-10"
       className="panel mt-6 overflow-hidden border border-border bg-background/80 p-3 shadow-deep sm:p-6">
       <details open className="group">
         <summary className="cursor-pointer list-none rounded-lg border-b border-border p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-green">
-          <span className="block font-mono text-xs uppercase tracking-widest text-neon-green">🦜 PAPAGAIO ON · HUD FIXO / FIEL</span>
+          <span className="block font-mono text-xs uppercase tracking-widest text-neon-green">Acompanhamento do MCP</span>
           <span className="mt-1 block text-lg font-semibold sm:text-2xl">CENTRALDARK / MISSÃO MCP</span>
           <span className="mt-2 block text-xs text-muted-foreground">
             {medicao ? "Sensores do Cockpit: " + new Date(medicao.atualizadoEm).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }) : "Sensores sem medição recente · UNKNOWN"}
@@ -61,7 +61,7 @@ export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null 
                 </li>
               ))}
             </ol>
-            <p className="mt-3 text-xs text-amber-400">Estados individuais não reclassificados sem receipts do owner MCP.</p>
+            <p className="mt-3 text-xs text-amber-400">Os estados de cada etapa só mudam com a confirmação do próprio MCP.</p>
           </section>
 
           <section aria-labelledby="mcp-raiox" className="rounded-xl border border-border/70 bg-background/65 p-4">
@@ -97,13 +97,13 @@ export function PapagaioHudMcp({ medicao }: { medicao: EstadoCentralDark | null 
           <section aria-labelledby="mcp-cursor" className="rounded-xl border border-border/70 bg-background/65 p-4">
             <h4 id="mcp-cursor" className="font-semibold">06 · PRÓXIMA JOGADA</h4>
             <p className="mt-2 text-sm">Diagnosticar CI no mesmo SHA, reconciliar 12 arquivos, validar MCP/VPS e preservar o legado.</p>
-            <p className="mt-2 text-xs text-amber-400">Promover só depois de prova, contraprova, receipt e ganho demonstrado.</p>
+            <p className="mt-2 text-xs text-amber-400">Marcar como concluído somente após testes, confirmação independente e benefício demonstrado.</p>
           </section>
 
           <section aria-labelledby="mcp-vitoria" className="rounded-xl border border-border/70 bg-background/65 p-4">
             <h4 id="mcp-vitoria" className="font-semibold">07 · VITÓRIA</h4>
-            <p className="mt-2 text-sm text-amber-400">FIXED_POINT parcial (histórico). Selo global/deploy: NÃO COMPROVADO.</p>
-            <p className="mt-2 font-mono text-[10px] text-muted-foreground">MESMO HUD · MESMAS 10 MISSÕES · SÓ EVOLUÇÃO COMPROVADA.</p>
+            <p className="mt-2 text-sm text-amber-400">Verificação parcial registrada no histórico. Funcionamento geral e implantação ainda não comprovados.</p>
+            <p className="mt-2 font-mono text-[10px] text-muted-foreground">Painel único: dez etapas acompanhadas com evidências.</p>
           </section>
         </div>
       </details>
