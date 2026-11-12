@@ -66,6 +66,8 @@ grep -F -x 'main-change' CENTRALDARK_AI_BOOT.yaml >/dev/null
 grep -F -x 'gateway-main-change' docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md >/dev/null
 grep -F 'CONFLICT_DECISION path=CENTRALDARK_AI_BOOT.yaml action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=BOOT_CENTRALDARK_AI' "$TMP_ROOT/resolver.log" >/dev/null
 grep -F 'CONFLICT_DECISION path=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=REMOTE_MCP_GATEWAY_ARCHITECTURE' "$TMP_ROOT/resolver.log" >/dev/null
+grep -F 'COSTURA_PYTHON_SELECTED=' "$TMP_ROOT/resolver.log" >/dev/null
+echo 'COSTURA_PYTHON_RUNTIME_PROBED=PASS'
 
 UNKNOWN_REMOTE="$TMP_ROOT/unknown-remote.git"
 UNKNOWN_SOURCE="$TMP_ROOT/unknown-source"
@@ -153,5 +155,62 @@ console.log('REGRESSION_MAIN_PRECEDENCE=PASS');
 console.log('REGRESSION_COUNTER_AND_EXCLUSIVES=PASS');
 NODE
 )
+
+# COSTURA also audits explicit-baseline isolated indexes (not only merge conflicts).
+# A dirty/diverged local HEAD must never contaminate a remote-baseline check.
+AUDIT_FIXTURE="$TMP_ROOT/costura-index-audit"
+git init -q "$AUDIT_FIXTURE"
+git -C "$AUDIT_FIXTURE" config user.name "CentralDark Audit Fixture"
+git -C "$AUDIT_FIXTURE" config user.email "audit-fixture@example.invalid"
+printf 'original note\n' > "$AUDIT_FIXTURE/note.md"
+printf 'clean\n' > "$AUDIT_FIXTURE/unrelated.md"
+git -C "$AUDIT_FIXTURE" add -- note.md unrelated.md
+git -C "$AUDIT_FIXTURE" commit -qm 'audit baseline'
+AUDIT_BASE="$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)"
+printf 'unrelated trailing   \n' > "$AUDIT_FIXTURE/unrelated.md"
+git -C "$AUDIT_FIXTURE" commit -qam 'diverged local head unrelated whitespace'
+AUDIT_LOCAL_HEAD="$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)"
+AUDIT_INDEX="$AUDIT_FIXTURE/.git/isolated-audit.index"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" read-tree "$AUDIT_BASE"
+AUDIT_BLOB="$(printf 'new note\n' | git -C "$AUDIT_FIXTURE" hash-object -w --stdin)"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" update-index --add --cacheinfo "100644,$AUDIT_BLOB,note.md"
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-pass.log"
+grep -F 'COSTURA_AUDIT_INDEX=PASS' "$TMP_ROOT/index-audit-pass.log" >/dev/null
+grep -F "COSTURA_AUDIT_LOCAL_HEAD=$AUDIT_LOCAL_HEAD" "$TMP_ROOT/index-audit-pass.log" >/dev/null
+set +e
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- unrelated.md > "$TMP_ROOT/index-audit-scope.log" 2>&1
+AUDIT_SCOPE_RC=$?
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_FIXTURE/.git/index" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-default-index.log" 2>&1
+AUDIT_DEFAULT_RC=$?
+git -C "$AUDIT_FIXTURE" remote add origin "$REMOTE"
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" refs/heads/main -- note.md > "$TMP_ROOT/index-audit-remote-drift.log" 2>&1
+AUDIT_DRIFT_RC=$?
+set -e
+test "$AUDIT_SCOPE_RC" -eq 3
+test "$AUDIT_DEFAULT_RC" -eq 2
+test "$AUDIT_DRIFT_RC" -eq 21
+grep -F 'BLOCKED_AUDIT_UNEXPECTED_PATH=note.md' "$TMP_ROOT/index-audit-scope.log" >/dev/null
+grep -F 'BLOCKED_AUDIT_DEFAULT_INDEX_FORBIDDEN' "$TMP_ROOT/index-audit-default-index.log" >/dev/null
+grep -F 'BLOCKED_AUDIT_REMOTE_DRIFT' "$TMP_ROOT/index-audit-remote-drift.log" >/dev/null
+# Remote drift must never rewrite or rebase the current local HEAD.
+test "$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)" = "$AUDIT_LOCAL_HEAD"
+AUDIT_BAD_BLOB="$(printf 'bad whitespace   \n' | git -C "$AUDIT_FIXTURE" hash-object -w --stdin)"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" update-index --add --cacheinfo "100644,$AUDIT_BAD_BLOB,note.md"
+set +e
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-whitespace.log" 2>&1
+AUDIT_WHITESPACE_RC=$?
+set -e
+test "$AUDIT_WHITESPACE_RC" -eq 4
+grep -F 'BLOCKED_AUDIT_SCOPED_DIFF_CHECK' "$TMP_ROOT/index-audit-whitespace.log" >/dev/null
+echo "COSTURA_INDEX_AUDIT_DIVERGED_HEAD=PASS"
+echo "COSTURA_INDEX_AUDIT_SCOPE_GUARD=PASS"
+echo "COSTURA_INDEX_AUDIT_DEFAULT_INDEX_GUARD=PASS"
+echo "COSTURA_INDEX_AUDIT_REMOTE_FAIL_CLOSED=PASS"
+echo "COSTURA_INDEX_AUDIT_WHITESPACE_GUARD=PASS"
 
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"

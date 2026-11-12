@@ -727,3 +727,16 @@ UNKNOWN != PASS
 <!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
 **Rota unica para clique visual:** usar `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click`; escolher alvo por PID/HWND/ponto atual ja comprovado (rapido) ou UIA por janela/controle (descoberta). Ambos usam exclusivamente Cua virtual + overlay, nunca mouse fisico (`SetCursorPos`, `mouse_event`, `SendInput`, `scope=desktop`). Cua ausente bloqueia input; UIA/snapshot comprova efeito. Owner detalhado: [Hermes Visual](Skills/centraldark-hermes-visual-computer-use/SKILL.md).
 <!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+
+<!-- CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+### 2026-11-11 — Rota SSH VMware comprovada; distinta do WSL2
+
+- Intencao: reutilizar o owner SSH existente e evitar confundir rotas da VM VMware e do WSL2.
+- Ambiente: alias openkylin = WSL2 via ProxyCommand; alias openkylin-vm ou CentralDark-OS-VM = VMware guest CentralDark-OS, porta 22. SSH Windows e SSH guest sao servicos diferentes.
+- Fonte operacional: C:\Users\Administrador\.ssh\config_openkylin (ativo do usuario); espelho F:\CentralDark\.ssh\config_openkylin. Preservar config principal e credenciais.
+- Teste read-only provado: ssh -F 'C:\Users\Administrador\.ssh\config_openkylin' -o BatchMode=yes -o ConnectTimeout=8 -o ConnectionAttempts=1 openkylin-vm 'hostname; id -un; systemctl is-active ssh'
+- Contraprova 11/11/2026: CentralDark-OS / CentralDark-OS / active / SSH_EXIT=0. O IP 192.168.35.130 foi observado; preferir alias a IP codificado.
+- Timeout no banner foi intermitente. TCP 22 aberto nao prova SSH autenticado. IPQoS=none funcionou em um teste, mas a causalidade nao foi demonstrada. Nao alterar sshd, firewall ou IPQoS por hipotese.
+- Receita canônica existente: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md e references/RECEITA-KINGSTON-20261103.md. Preservar a historia do WSL2 de 30/10; nao converter prova WSL2 em prova VMware.
+- Limite de verdade: SSH_VMWARE=PASS; COCKPIT_HTTP_524=PENDING; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
+<!-- /CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
