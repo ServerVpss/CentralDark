@@ -184,9 +184,9 @@ Se o MCP correspondente estiver indisponível:
 - continuar apenas dentro do escopo que puder ser comprovado;
 - não usar a falha como justificativa para pular a Constituição ou este BOOT.
 
-## 10. Encerramento obrigatório
+## 10. Registro obrigatório de encerramento técnico
 
-Toda missão termina com:
+Ao concluir missão material, guardar os campos abaixo no artefato técnico de encerramento, quando aplicáveis. A resposta ao CHEFE deve ser natural e direta, sem imprimir este formulário no chat salvo pedido explícito:
 
 ```text
 Status: CONCLUÍDO | PARCIAL | BLOQUEADO
