@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { lerEstadoCentralDark } from '@/lib/cockpit.functions'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { lerRastreadorCasa, type EstadoRastreadorCasa } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
@@ -60,12 +61,23 @@ export const AutoSyncButton: React.FC = () => {
   const [trackerError, setTrackerError] = useState(false)
   const [syncProgress, setSyncProgress] = useState({ value: 0, label: 'Preparando sincronização...' })
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
+  const [hidratado, setHidratado] = useState(false)
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
   const readTracker = useServerFn(lerRastreadorCasa)
+  const readEstadoVivo = useServerFn(lerEstadoCentralDark)
   const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
   const queryClient = useQueryClient()
+  // Reutiliza a MESMA consulta do Estado atual do sistema; não cria outro sensor ou executor.
+  const estadoVivo = useQuery({
+    queryKey: ['centraldark', 'estado-vivo'],
+    queryFn: () => readEstadoVivo(),
+    refetchInterval: 15_000,
+    refetchOnWindowFocus: true,
+    retry: false,
+  })
+  useEffect(() => { setHidratado(true) }, [])
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -176,6 +188,24 @@ export const AutoSyncButton: React.FC = () => {
     }
   }
 
+  // Os SHAs são leituras do Git atual. Sucesso anterior do botão NÃO prova sincronização atual.
+  // Sem readback fresco da Casa e da VMware, o estado é desconhecido, nunca SIM.
+  const atual = hidratado && !estadoVivo.isError && estadoVivo.data
+    && Date.now() - estadoVivo.dataUpdatedAt < 45_000 ? estadoVivo.data : null
+  const mainSha = atual?.mainSha ?? null
+  const vpsSha = atual?.vpsSha ?? null
+  const vpsMesmoCommit: boolean | null = mainSha && vpsSha ? mainSha === vpsSha : null
+  const trackerEmDia = !trackerError && !!trackerStatus?.at
+    && Number.isFinite(Date.parse(trackerStatus.at))
+    && Date.now() - Date.parse(trackerStatus.at) >= 0
+    && Date.now() - Date.parse(trackerStatus.at) < 120_000
+  const casaMesmoCommit: boolean | null = trackerEmDia && trackerStatus?.head && trackerStatus.githubMain === mainSha
+    && trackerStatus.dirtyTracked !== null
+    ? trackerStatus.head === mainSha && trackerStatus.dirtyTracked === false : null
+  const todosMesmoCommit: boolean | null = casaMesmoCommit === false || vpsMesmoCommit === false
+    ? false : casaMesmoCommit === true && vpsMesmoCommit === true ? true : null
+  const rotulo = (igual: boolean | null) => igual === true ? 'SIM' : igual === false ? 'NÃO' : 'NÃO VERIFICADO'
+
   return (
     <div className="space-y-3">
       <Card className={`p-4 border ${getStatusColor()}`}>
@@ -183,8 +213,8 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-               <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main · VPS manual</p>
-              <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
+               <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VMware</p>
+              <p className="text-xs text-muted-foreground">Última tentativa: {syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
                 <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
                   {syncStatus.details}
@@ -204,7 +234,7 @@ export const AutoSyncButton: React.FC = () => {
               VPS
             </CockpitActionButton>
             <SyncActionButton
-              label="Sincronizar Tudo"
+              label="Sincronizar Casa/Main"
                onClick={() => handleSync('local')}
               isFetching={isSyncing}
               autoSyncEnabled
@@ -215,6 +245,24 @@ export const AutoSyncButton: React.FC = () => {
             />
           </div>
         </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3" role="status" aria-live="polite" aria-label="Comparação atual de commits">
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">Casa/Forja ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(casaMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{trackerEmDia ? trackerStatus?.head?.slice(0, 8) ?? 'sem SHA' : 'Use Diagnosticar'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+          </div>
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">VMware (VPS) ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+          </div>
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">Todos os commits iguais</span>
+            <p className="font-semibold">{rotulo(todosMesmoCommit)}</p>
+            <p className="text-[10px] text-muted-foreground">Não comprova deploy nem arquivos locais não enviados.</p>
+          </div>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">Triton executa modelos de IA. O Git e a rota autorizada por SSH fazem a sincronização; Triton não atualiza o código.</p>
         {isSyncing && (
           <div className="mt-3 rounded-md border border-white/10 bg-background/30 px-3 py-2" aria-live="polite">
             <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
