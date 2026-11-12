@@ -9,18 +9,39 @@
 | --- | --- |
 | [`AGENTS.md`](../../AGENTS.md) e [método operacional](../../.agents/skills/centraldark-operational-method/SKILL.md) na `main` | Contrato, formato do HUD e regras de continuidade. |
 | [Checkpoint verificado](../../scripts/hermes/verified-checkpoint.py) e [leitor Hermes](../../scripts/hermes/centraldark-entry.py) | Estado observado, evidências e `NEXT_CURSOR`. Compare missão, escopo e prova antes de adotar um checkpoint. |
-| PR vigente da mesma missão | Mantenha um único quadro no corpo do PR existente. Atualize o bloco da missão e preserve os demais blocos, caixas e evidências. Escolha pelo escopo e pelo owner. O [#1977](https://github.com/ServerVpss/CentralDark/pull/1977) acompanha o funil de 891 branches. |
+| PR vigente da mesma missão e PR vigente do funil | Descubra ambos pelo escopo, owner e marcadores no GitHub CURRENT; não fixe o número de nenhum PR. Mantenha o quadro no corpo do PR da missão e o resumo/link no funil vigente. O #1977 é apenas exemplo histórico do funil das 891 branches, não ponteiro permanente. |
 | [Histórico integral deste README](https://github.com/ServerVpss/CentralDark/blob/1377ffcc62ae693ae48568afa07d46d1e0e82506/docs/HUD/README.md) | Consulte os recibos e quadros anteriores pelo commit fixado. |
 
 Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo HUD conversacional conforme `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
 
 ## Atualização obrigatória da missão e do funil
 
-A cada mudança material de escopo, estado, evidência, bloqueio ou próximo passo, atualize o quadro existente no **PR vigente da mesma missão** e o item correspondente em **[Funil e prioridades do HUD #1977](https://github.com/ServerVpss/CentralDark/pull/1977)**. Identifique o PR pelo escopo e pelo responsável técnico.
+<!-- CENTRALDARK_HUD_FUNNEL_CONTINUITY -->
+**Identificador operacional estável:** `CENTRALDARK_HUD_FUNNEL_CONTINUITY`. Esse marcador identifica a **função do funil HUD vigente**, não o número de um PR. O `#1977` foi observado nessa função para a missão de 891 branches, mas **não é endereço canônico imutável nem destino obrigatório de toda missão**. O PR que ocupar a função no futuro herda o identificador, com relação explícita predecessor/sucessor. Não criar outro HUD, ledger primário ou roteador.
 
-Registre no PR da missão o estado observado, o que mudou, a contraprova ou a lacuna de evidência e o `NEXT_CURSOR`. No funil, atualize o resumo do item e o link para o PR da missão. Se o #1977 for o próprio PR vigente, atualize o quadro e a entrada do funil na mesma edição. Preserve missões, caixas, evidências, métricas e diagramas fora do delta.
+**Ao receber `!HUD`, `#HUD` ou `!CENTRALDARK` com missão operacional, qualquer agente deve:**
 
-Se faltar PR equivalente ou acesso de escrita, registre a pendência no checkpoint existente e informe a lacuna. Confirme por releitura cada atualização antes de declarar a sincronização. O checkpoint verificado e o responsável técnico fornecem a evidência usada pelo quadro e pelo funil.
+1. Ler este `docs/HUD/README.md@main`, o cabeçalho de `AGENTS.md`, a Skill Mãe e o checkpoint verificado via `scripts/hermes/centraldark-entry.py`. Recuperar `INTENÇÃO + MISSION + OWNER + RECEIPT_SHA + NEXT_CURSOR`; `README` é contrato/índice, não snapshot de status vivo.
+2. **Descobrir dinamicamente** pela API do GitHub (`GET /repos/ServerVpss/CentralDark/pulls?state=open&per_page=100`, paginando; `GET /repos/ServerVpss/CentralDark/pulls/{number}` para confirmar) os PRs abertos. Inspecionar o corpo do candidato ao funil para `CENTRALDARK_HUD_FUNNEL_CONTINUITY`; confrontar escopo/owner, estado aberto, eventual predecessor/sucessor e último checkpoint. Localizar **separadamente** o PR vigente da missão pelo Goal/owner. Não selecionar pelo número fixo, maior número ou data apenas.
+3. Antes de qualquer escrita, exigir **um único funil ativo não contradito** e o PR correto da missão. Se não houver candidato inequívoco, marcar `ACTIVE_FUNNEL_PR=UNKNOWN` e registrar `NEXT_CURSOR` no checkpoint existente; não escrever no #1977 por reflexo. Se o PR da missão também for o funil, atualizar ambos os blocos no **mesmo corpo**, sem duplicar eventos.
+4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
+5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
+
+**Rotas autorizadas para consulta e atualização, sem segunda arquitetura (falhas verificadas, não fallback presumido):**
+
+- **Preferencial:** GitHub API autenticada na superfície atual; ler PRs abertos e atualizar o corpo somente com permissão e owner/writer autorizado. Preservar a versão completa do body, aplicar delta cirúrgico e reler; não sobrescrever atualizações concorrentes.
+- **Fallback Casa:** GitHub CLI `gh` já existente, quando a Casa estiver acessível e `gh auth status`/`gh api` funcionarem. Usar `gh pr list/view` ou `gh api` para localizar o marcador e `gh pr edit`/`gh api` para editar o **mesmo PR**, quando autorizado. Não transferir token nem considerar a presença do binário prova de autenticação.
+- **Fallback MCP:** conector GitHub/MCP autorizado existente, com capacidade real de consultar/editar PR e readback. Reutilizar o MCP único e os owners conhecidos; sem acesso, sem método de escrita ou com múltiplos candidatos, registrar `UNKNOWN/BLOCKED` e preservar o checkpoint. Fallback nunca cria PR paralelo por conveniência.
+
+**Sucessão por esgotamento real (rollover):** aplicar a receita já existente `docs/CONSCIENCIA/RECEIPTS/2026-10-06-pr-mae-ledger-rollover.md` quando o PR ativo fechar ou atingir **limite operacional confirmado** para registrar/atualizar corpo ou comentários, e **restarem pendências materiais**. Tentativa de comentário falha não implica que commit do repositório esteja bloqueado: `COMMIT`, `PR_BODY` e `COMMENTS` são capacidades distintas. Antes de trocar a casca:
+
+1. Cristalizar nos **owners e receipts existentes** somente o bem que sobreviveu à contraprova, com fingerprints, SHA, referências e receitas válidas; separar `PASS`, `FAIL`, `UNKNOWN` e material não concluído. Não transportar narrativas repetidas, status sintético ou registros brutos como ledger.
+2. Abrir **um único sucessor autorizado** da mesma função, com o marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`, link do predecessor, `GOAL_ID`/escopo aplicável, pendências não seladas, receitas sobreviventes, recibos e `NEXT_CURSOR`. Confirmar abertura, conteúdo e permissão de escrita por API/gh/MCP e readback antes do cutover.
+3. Só após sucessor confirmado, marcar no anterior sua condição de histórico/ponte e **fechar o anterior sem apagá-lo nem fazer merge por cerimônia**, quando as regras do PR permitirem. Atualizar os ponteiros no mesmo HUD/checkpoint, e consultar novamente o marcador ativo. Se o predecessor não puder ser editado por limite, preservar a ligação ao menos no sucessor/receipt canônico e registrar o bloqueio.
+4. Se não houver pendências materiais, encerrar com receipt/FIXED_POINT e **não abrir sucessor**. Se não houver escrita/autorização/contraprova de cutover, `ROLLOVER=PENDING/BLOCKED`, sem dois PRs ativos assumidos como autoridade.
+
+**Identidade estável:** `HUD_ROLE=CENTRALDARK_HUD_FUNNEL_CONTINUITY`; **binding variável:** `ACTIVE_FUNNEL_PR=<resolvido e comprovado no CURRENT>`. `MISSION_PR` pode ser distinto. O número atual nunca vira variável fixa em README, Skill Mãe, código ou comando. O checkpoint verificado, o owner técnico e os receipts versionados sustentam o HUD, não o contrário.
+<!-- /CENTRALDARK_HUD_FUNNEL_CONTINUITY -->
 
 ## Contrato operacional
 
