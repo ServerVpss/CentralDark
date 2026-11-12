@@ -31,7 +31,7 @@ FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/her
 
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências de verificação — sem cabeçalho obrigatório no chat
 
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
@@ -2538,7 +2538,7 @@ PAPAGAIO_DOCUMENTED_NOT_RUNTIME_PROVEN=true
 
 - **ON:** quando pedido explícito de árvore, replay, ensino ou histórico: mostrar as rotas interligadas e os owners reais, extensões dos arquivos e proveniência, em ordem pedida; não inventar arestas entre serviços apenas por coexistirem.
 - **OFF:** durante execução rotineira: só a rota relevante, o resultado, sua prova e o próximo delta útil. Não repetir novela.
-- **FIEL:** se a missão já estabeleceu um HUD fixo, toda **atualização ou medição da missão** começa pelo HUD **inteiro** na mesma estrutura, com a mesma identidade, dez missões originais e ordem original. Só atualizar cores, percentuais, estados, evidências e horário quando comprovados; nenhuma medição = não inventar novos números. ON/OFF não desliga esta obrigação.
+- **FIEL:** quando o CHEFE solicitar **exibição do HUD da missão**, preservar o painel inteiro na mesma estrutura, identidade, dez missões originais e ordem. A conversa comum continua natural e não precisa repetir o quadro. Atualizar cores, percentuais, estados, evidências e horário somente quando comprovados; não inventar novos números.
 - **ÁRVORE VIVA:** preservar caminhos, donos, scripts, configurações e serviços efetivamente presentes, com marcação de link observado versus relação pretendida/UNKNOWN. Antes de referenciar caminho técnico como ativo, ler o owner e a ligação real com processo/serviço. Casa participa da forja quando acessível; não é pré-requisito para execução VPS.
 - **CONTRAPROVA:** Casa ↔ GitHub ↔ VPS representa comparação bidirecional; promoção mutante mantém owner/writer único. Comprovar o efeito no consumidor, não apenas a existência da regra. A imagem/selo de 100% é material de proposta, nunca receipt de runtime.
 
@@ -2633,7 +2633,9 @@ A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo
  Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
  <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
 
-## 🔒 Cabeçalho de execução obrigatório — FIX POINT
+## 🔒 Registro técnico de execução — FIX POINT
+
+Os campos abaixo pertencem ao avaliador técnico e às chamadas delegadas, não são um cabeçalho que o CHEFE precise ler em toda resposta. A verificação de dez critérios continua exigida quando aplicável; conversa humana permanece natural.
 
 FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
 FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader
