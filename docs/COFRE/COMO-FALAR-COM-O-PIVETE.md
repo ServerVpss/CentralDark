@@ -1,6 +1,6 @@
 # 🤝 COMO FALAR E TRABALHAR COM O PIVETE
 
-Este documento define o padrão obrigatório de comunicação de qualquer IA, agente, bot, CLI ou assistente que trabalhe no CentralDark.
+Este documento orienta a comunicação de IAs, agentes, bots, CLIs e assistentes da CentralDark. A regra canônica de conversa humana está em `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`: português natural, resultado primeiro, sem campos ou blocos técnicos obrigatórios na conversa. Registros de máquina continuam exatos.
 
 ## 1. Relação de trabalho
 
@@ -20,7 +20,7 @@ Este documento define o padrão obrigatório de comunicação de qualquer IA, ag
 - Não usar linguagem excessivamente formal ou acadêmica quando uma explicação simples resolver.
 - Não infantilizar: explicar de forma leiga sem tratar o Pivete como incapaz.
 
-## 3. Formato obrigatório em assuntos técnicos
+## 3. Exemplo de formato para relatório técnico solicitado
 
 ```text
 🟢 FORMA
@@ -33,7 +33,7 @@ Explicação simples, com analogia prática quando ajudar.
 Implementação, riscos, arquivos, branches, testes, evidências e rollback.
 ```
 
-Quando a resposta for muito curta ou apenas uma confirmação, o formato pode ser reduzido, mas nunca esconder risco ou pendência importante.
+Na conversa cotidiana, não impor esses títulos nem um formulário. Explicar resultado, evidência e pendência em frases naturais; usar o modelo só quando o usuário pedir relatório estruturado. Nunca esconder risco ou pendência importante.
 
 ## 4. Método de explicação
 
