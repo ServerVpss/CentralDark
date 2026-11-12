@@ -195,6 +195,40 @@ REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
 `SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
 
 
+## PR #1900 — marcador previamente commitado não é conflito novo de índice
+
+**Evidência 12/11/2026:** `mcp-admin.js` em `17e744c0` já contém um bloco literal
+`<<<<<<< HEAD / ======= / >>>>>>> origin/main`. Além disso, a simulação
+`git merge-tree --write-tree` contra `5442e1c6` identificou conflitos em
+`mcp-admin.js` e `mcp-diagnostics.js`. São **duas classes diferentes**.
+
+O classificador `scripts/dependabot/classify-conflict.mjs` lê o blob imutável
+`HEAD:path` e registra `committed_marker_state`, `committed_marker_blocks`
+e linhas dos marcadores. Em código/config alterado pelo PR, o resolvedor faz
+preflight antes de executar merge: qualquer marcador já commitado bloqueia
+`--apply` com `NO_PUSH_ON_COMMITTED_MARKERS=1` e saída 20. Mesmo um padrão
+anteriormente conhecido não pode selecionar cegamente um lado nesse caso.
+
+**Padrões conhecidos relevantes:** catálogo MCP (`mcp-admin.js`), diagnóstico
+(`mcp-diagnostics.js`) e índice central (`.agents/library-index.json`).
+`SAFE_RESOLUTION=REVIEW` significa **YELLOW** e exige discriminação pelo
+owner, não é permissão para substituir o código pela main nem unir texto às cegas.
+No #1900, preservar a rota nativa Tailscale/fallback sob autorização e a rota
+nova `CASA_NATIVE_PID_INVENTORY`, com cardinalidade e testes de catálogo;
+nunca repetir `RDC_DESKTOP_COMMANDER`.
+
+Receita: medir `HEAD` e `main` atuais -> comparar intenções dos dois lados ->
+compor em worktree temporário -> remover marcadores -> `git diff --check` e
+`node --check` -> validar unicidade/escopo do catálogo -> same-HEAD CI ->
+receipt/decisão de publicação separada. Nada disso autoriza push de PR nem main
+sem gates. `--dry-run` atual prova somente refs e nenhuma escrita; **não**
+afirma ter conciliado conteúdo. `UNKNOWN != PASS`.
+
+Referências Git: https://git-scm.com/docs/git-merge-tree (não altera índice/
+worktree; status 1 indica conflitos) e
+https://www.kernel.org/pub/software/scm/git/docs/gitmergeconflicts.html
+(marcadores são produto de conflito textual, não prova de composição semântica).
+
 ## Primary-source-first — contrato executável da COSTURA
 
 ```text

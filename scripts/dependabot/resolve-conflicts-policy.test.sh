@@ -277,4 +277,38 @@ echo "COSTURA_INDEX_AUDIT_DEFAULT_INDEX_GUARD=PASS"
 echo "COSTURA_INDEX_AUDIT_REMOTE_FAIL_CLOSED=PASS"
 echo "COSTURA_INDEX_AUDIT_WHITESPACE_GUARD=PASS"
 
+# Regression: source HEAD can ALREADY contain committed conflict markers.
+# That is not the same as a merge-index conflict and must block before push.
+cd "$UNKNOWN_SOURCE"
+mkdir -p apps/modulos/mcp/src/tools/core
+printf '%s\n' 'const route = [' '<<<<<<< HEAD' '  "legacy",' '=======' '  "native",' '>>>>>>> origin/main' '];' > apps/modulos/mcp/src/tools/core/mcp-admin.js
+printf '%s\n' '<<<<<<< HEAD' 'const broken = 1;' > scripts/dependabot/incomplete-committed-marker.js
+git add -- apps/modulos/mcp/src/tools/core/mcp-admin.js scripts/dependabot/incomplete-committed-marker.js
+git -c user.name='CentralDark Test' -c user.email='centraldark-test@example.invalid' commit -qm 'fixture for committed conflict markers'
+git push -f origin HEAD:refs/pull/2/head >/dev/null 2>&1
+git push -f origin HEAD:refs/heads/dependabot/unknown-conflict >/dev/null 2>&1
+MARKER_PR_SHA_BEFORE="$(git ls-remote "$UNKNOWN_REMOTE" refs/heads/dependabot/unknown-conflict | awk '{print $1}')"
+CONFLICT_REGISTRY="$REPO_ROOT/scripts/dependabot/known-conflict-patterns.json" \
+  node "$REPO_ROOT/scripts/dependabot/classify-conflict.mjs" apps/modulos/mcp/src/tools/core/mcp-admin.js > "$TMP_ROOT/committed-marker-classifier.json"
+grep -F '"committed_marker_state":"COMMITTED_BLOCKS"' "$TMP_ROOT/committed-marker-classifier.json" >/dev/null
+grep -F '"committed_marker_blocks":1' "$TMP_ROOT/committed-marker-classifier.json" >/dev/null
+grep -F '"action":"YELLOW"' "$TMP_ROOT/committed-marker-classifier.json" >/dev/null
+grep -F '"conflict_id":"PR_HEAD_EMBEDDED_MERGE_MARKERS"' "$TMP_ROOT/committed-marker-classifier.json" >/dev/null
+CONFLICT_REGISTRY="$REPO_ROOT/scripts/dependabot/known-conflict-patterns.json" \
+  node "$REPO_ROOT/scripts/dependabot/classify-conflict.mjs" scripts/dependabot/incomplete-committed-marker.js > "$TMP_ROOT/malformed-marker-classifier.json"
+grep -F '"committed_marker_state":"COMMITTED_MALFORMED"' "$TMP_ROOT/malformed-marker-classifier.json" >/dev/null
+grep -F '"reason":"PR_HEAD_MALFORMED_CONFLICT_MARKERS"' "$TMP_ROOT/malformed-marker-classifier.json" >/dev/null
+set +e
+PR_HEAD_REF='dependabot/unknown-conflict' REPO_DIR="$UNKNOWN_SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$UNKNOWN_WORKTREES" \
+  bash "$RESOLVER" --apply 2 > "$TMP_ROOT/committed-marker-block.log" 2>&1
+MARKER_BLOCK_RC=$?
+set -e
+test "$MARKER_BLOCK_RC" -eq 20
+grep -F 'BLOCKED_PR_COMMITTED_CONFLICT_MARKERS path=apps/modulos/mcp/src/tools/core/mcp-admin.js' "$TMP_ROOT/committed-marker-block.log" >/dev/null
+grep -F 'NO_PUSH_ON_COMMITTED_MARKERS=1' "$TMP_ROOT/committed-marker-block.log" >/dev/null
+test "$(git ls-remote "$UNKNOWN_REMOTE" refs/heads/dependabot/unknown-conflict | awk '{print $1}')" = "$MARKER_PR_SHA_BEFORE"
+test ! -e "$UNKNOWN_WORKTREES/.costura-repo-writer.lock"
+echo "PR_HEAD_COMMITTED_MARKERS_CLASSIFIER_AND_FAIL_CLOSED=PASS"
+
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"
