@@ -62,12 +62,12 @@ async function runtimeSnapshot() {
     const routeNames = [...new Set(catalog.routes.map((route) => route.id))].sort();
     return {
         names, exposedNames, routeNames, runtimeTools: tools,
-        expectedRouteCount: routeNames.length,
+        expectedRouteCount: 18,
         catalogScope: catalog.catalogScope,
         catalogFingerprint: catalog.catalogFingerprint,
         advertisedToolCount: catalog.totalRuntimeTools,
         routeCount: catalog.routeCount,
-        routeParity: catalog.routeCount === routeNames.length,
+        routeParity: catalog.routeCount === routeNames.length && catalog.routeCount === 18,
         missingCanaryRoutes: EXPECTED_CANARY_ROUTES.filter((id) => !routeNames.includes(id)),
         legacySafetyReview: LEGACY_REQUIRES_SAFETY_REVIEW.map((name) => ({
             name, present: names.includes(name), reviewRequired: true,
