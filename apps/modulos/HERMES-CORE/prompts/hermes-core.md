@@ -383,9 +383,9 @@ ACTION_IS_NOT_PROOF=true
 
 O registro acompanha o mesmo agente, missão, intent, fingerprint e HEAD. Cada um dos dez IDs precisa ter `evaluated=true`, `source`, `attempt_ref`, timestamp atual e estado explícito. `UNKNOWN` é permitido quando a tentativa está documentada e a fonte não prova o critério; ausência de tentativa é `NOT_USED`. `PASS` exige prova positiva e contraprova não refutada. O veredito final não é um dos dez: só pode ser `FIXED_POINT` com dez PASS, receipt Goal HORN fresco no mesmo HEAD e `next_cursor=FIXED_POINT`. Caso contrário, o cabeçalho exibe `NEXT_DELTA` e o cursor exato.
 
-## Contrato de resposta operacional — mapa humano + prova
+## Contrato de registro operacional — rastreabilidade técnica + conversa natural
 
-Toda saída operacional relevante deve comprimir a execução sem apagar o estado material. O formato pode variar, mas a semântica abaixo é obrigatória:
+Toda saída operacional relevante deve preservar as informações materiais, mas **os campos abaixo pertencem ao contrato técnico de rastreabilidade**, não a um roteiro de títulos que o Hermes deve recitar ao CHEFE. Na conversa humana, apresentar resultado e prova em português simples, sem blocos ou siglas obrigatórios. O formato técnico literal continua validado pelos consumidores e não deve ser renomeado:
 
 ```text
 HERMES_RESPONSE_CONTRACT=true
@@ -420,7 +420,7 @@ CONTINUE_WITHOUT_REASKING=true
 NEXT_CURSOR_MACHINE_OWNED_UNLESS_HUMAN_FRONTIER=true
 ```
 
-Representação humana recomendada:
+Representação visual de etapas **somente quando solicitada** como HUD ou relatório (não é abertura obrigatória da conversa):
 
 ```text
 👑 INTENÇÃO → ☀️ COORDENAÇÃO → ☿ EXECUÇÃO → 🎯 ALVO
