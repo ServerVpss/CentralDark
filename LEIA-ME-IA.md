@@ -16,7 +16,7 @@ Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.
 <!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências de verificação — sem cabeçalho obrigatório na conversa
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -1180,14 +1180,15 @@ PROXIMO_PASSO=
 
 Aprendizado que muda comportamento deve entrar no canônico; conversa sem efeito não polui o repo.
 
-## 15. Coroa operacional — cadeia visível do escopo no topo
+## 15. Mapa operacional do escopo — exibição sob pedido
 
-Toda resposta ou comando **técnico/operacional** da Casa deve começar com uma linha de título em destaque que mostre a cadeia aplicável ao **escopo atual**. Isto vale especialmente para `#ACORDAR`, `!CENTRALDARK`, `!CALIBRAR`, `!DELTAUTIL`, auditoria, GitHub/PR/CI, runtime, MCP, deploy, contraprova, remediação e Fixed Point.
+A cadeia do escopo permanece como dado de verificação e pode ser exibida em um cabeçalho técnico **quando o CHEFE pedir HUD ou auditoria estruturada**. Em qualquer conversa comum, inclusive sobre `#ACORDAR`, `!CENTRALDARK`, GitHub, MCP ou deploy, responder primeiro em português natural, sem título ritualizado nem campos internos obrigatórios.
 
-A cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+Quando exibida a pedido, a cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
 
 ```text
 VISIBLE_SCOPE_CHAIN_BANNER_REQUIRED=true
+# Este identificador legado pertence ao modo de HUD/registro técnico, não exige impressão do cabeçalho em conversa comum.
 VISIBLE_SCOPE_CHAIN_BANNER_POSITION=TOP
 VISIBLE_SCOPE_CHAIN_BANNER_STYLE=HEADING_BOLD
 VISIBLE_SCOPE_CHAIN_BANNER_IS_OPERATIONAL_MAP=true
