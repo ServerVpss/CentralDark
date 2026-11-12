@@ -66,6 +66,8 @@ grep -F -x 'main-change' CENTRALDARK_AI_BOOT.yaml >/dev/null
 grep -F -x 'gateway-main-change' docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md >/dev/null
 grep -F 'CONFLICT_DECISION path=CENTRALDARK_AI_BOOT.yaml action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=BOOT_CENTRALDARK_AI' "$TMP_ROOT/resolver.log" >/dev/null
 grep -F 'CONFLICT_DECISION path=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=REMOTE_MCP_GATEWAY_ARCHITECTURE' "$TMP_ROOT/resolver.log" >/dev/null
+grep -F 'COSTURA_PYTHON_SELECTED=' "$TMP_ROOT/resolver.log" >/dev/null
+echo 'COSTURA_PYTHON_RUNTIME_PROBED=PASS'
 
 UNKNOWN_REMOTE="$TMP_ROOT/unknown-remote.git"
 UNKNOWN_SOURCE="$TMP_ROOT/unknown-source"

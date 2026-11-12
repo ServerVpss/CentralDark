@@ -344,3 +344,30 @@ ISOLATED_INDEX != CASA_INDEX
 SCOPED_DIFF_CHECK + REMOTE_READBACK -> REVIEWABLE_CANDIDATE
 AUDIT_PASS != PUBLISHED
 ```
+## Python da COSTURA: selecao validada, sem confundir com Hermes (11/11/2026)
+
+Contraprova da Casa: no Git Bash, `python3` foi resolvido em
+`WindowsApps/python3`, iniciando um Python 3.14.7 incompleto
+(sem `Lib/enum.py`). Esse interpretador **nao** era o runtime de Hermes.
+
+O Hermes possui ambientes Python proprios e validos (3.14.9, venv 3.14.7 e
+venv 3.11.16), mas o resolvedor de PR **nao depende** desses ambientes.
+
+No mesmo motor `scripts/dependabot/resolve-conflicts.sh`, a funcao
+`costura_python` verifica versao Python 3.8+ e imports
+`ast`, `enum` e `pathlib`, tentando `python3` antes de `python`.
+Somente um interpretador aprovado executa as validacoes YAML/Python.
+A variavel opcional `CENTRALDARK_COSTURA_PYTHON` permite selecionar
+explicitamente um interpretador, inclusive um ambiente Hermes, mas uma
+selecao invalida **bloqueia** o processo; nao faz fallback silencioso.
+
+```text
+PYTHON3_COMMAND_FOUND != PYTHON_STDLIB_COMPLETE
+HERMES_PYTHON_AVAILABLE != COSTURA_USES_HERMES
+COSTURA_PYTHON_SELECTED=verified_runtime
+INVALID_PYTHON -> BLOCKED_COSTURA_NO_VALID_PYTHON
+NO_GLOBAL_PYTHON_PATH_CHANGE=true
+```
+
+A prova de regressao reside no `resolve-conflicts-policy.test.sh` existente,
+que exige `COSTURA_PYTHON_SELECTED` no receipt do resolver.

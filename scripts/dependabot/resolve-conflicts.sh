@@ -345,6 +345,32 @@ if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- "${CONFLICTS[@]}"; then
   exit 4
 fi
 
+# The WindowsApps python3 alias may launch an incomplete Python distribution.
+# Do not bind COSTURA to Hermes venv; probe a healthy Python before syntax checks.
+# An explicit CENTRALDARK_COSTURA_PYTHON override is validated, never trusted blindly.
+costura_python() {
+  if [[ -z "${COSTURA_VALIDATED_PYTHON:-}" ]]; then
+    local candidate
+    local candidates=(python3 python)
+    if [[ -n "${CENTRALDARK_COSTURA_PYTHON:-}" ]]; then
+      candidates=("$CENTRALDARK_COSTURA_PYTHON")
+    fi
+    for candidate in "${candidates[@]}"; do
+      if command -v "$candidate" >/dev/null 2>&1 &&
+        "$candidate" -c 'import ast,enum,pathlib,sys; assert sys.version_info >= (3, 8)' >/dev/null 2>&1; then
+        COSTURA_VALIDATED_PYTHON="$candidate"
+        break
+      fi
+    done
+    if [[ -z "${COSTURA_VALIDATED_PYTHON:-}" ]]; then
+      echo "BLOCKED_COSTURA_NO_VALID_PYTHON" >&2
+      return 13
+    fi
+    echo "COSTURA_PYTHON_SELECTED=$(command -v "$COSTURA_VALIDATED_PYTHON")"
+  fi
+  "$COSTURA_VALIDATED_PYTHON" "$@"
+}
+
 for f in "${CONFLICTS[@]}"; do
   case "$f" in
     *.json)
@@ -357,10 +383,10 @@ for f in "${CONFLICTS[@]}"; do
       bash -n "$f"
       ;;
     *.py)
-      python3 -m py_compile "$f"
+      costura_python -m py_compile "$f"
       ;;
     *.yml|*.yaml)
-      python3 - <<'PY' "$f"
+      costura_python - <<'PY' "$f"
 import sys
 from pathlib import Path
 text = Path(sys.argv[1]).read_text()
