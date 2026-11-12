@@ -56,7 +56,7 @@ SHA da ref inspecionada: git rev-parse origin/pivete/dev
 
 Nunca declarar que a branch atual é `pivete/dev` se o checkout local estiver na `main` ou em outra branch.
 
-## 3. Resposta obrigatória antes de agir
+## 3. Registro técnico do boot antes de agir
 
 ```text
 BOOT CENTRALDARK
@@ -144,7 +144,7 @@ código alterado
 
 Deploy de código não commitado é proibido.
 
-## 7. Formato de comunicação com o Pivete
+## 7. Exemplo de relatório de comunicação técnica solicitado
 
 ```text
 🟢 FORMA
@@ -157,7 +157,7 @@ Explicação simples, sem presumir conhecimento técnico.
 Branch, SHA, diff, testes, riscos, evidência e rollback.
 ```
 
-A regra completa de comunicação está em `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md`.
+O registro técnico acima preserva os campos exigidos pelo procedimento; não deve ser recitado na conversa normal. Relatar ao CHEFE resultado, risco e comprovação em português natural. A regra de fala humana está na SOUL canônica; `docs/COFRE/COMO-FALAR-COM-O-PIVETE.md` apresenta exemplos opcionais.
 
 ## 8. Ações que exigem parada e autorização
 
