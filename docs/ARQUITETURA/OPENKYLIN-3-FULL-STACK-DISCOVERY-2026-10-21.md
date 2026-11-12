@@ -287,7 +287,7 @@ GATEWAY_NATIVE_UNIX_HEALTH=PASS | GATEWAY_UNIX_SOCKET_MODE=0600 | GATEWAY_TCP=DI
 - PR #1900 aberto, branch `feat/casa-hermes-pid-catalog-20261021`: owners `scripts/casa/discover-operational-channels.ps1`, `apps/modulos/mcp/src/tools/core/mcp-admin.js`, `mcp-diagnostics.js`, `tests/mcp-catalog-scope.test.mjs`, `skills/centraldark-delegacao/SKILL.md`.
 - Contrato da receita no PR: `HOST + PID + SESSION + AUTH + TASK_ID + ACK`; `PID != transport != auth`, `PORT_OPEN != SSH_AUTH`, `ENQUEUED != ACKED`, `SOURCE != RUNTIME`.
 - O diff do PR nao contem o literal `!RASTRO`; **nao declarar implementacao do comando**, apenas o contrato de rastreabilidade encontrado. Descobrir o owner real do comando antes de vincular.
-- O diff do PR contem marcadores literais de conflito `<<<<<<< HEAD`, `=======`, `>>>>>>> origin/main` em `mcp-admin.js`; **nao promover** antes de reconciliar ambos os deltas, reexecutar gates e obter readback.
+- O diff original do PR continha marcadores literais de conflito `<<<<<<< HEAD`, `=======`, `>>>>>>> origin/main` em `mcp-admin.js`; **marcadores removidos no commit dbb4dc6847**; gates de integracao e readback ainda obrigatorios.
 - A descoberta do Gateway nativo via socket Unix e o inventario MCP (secoes T2/T3) foram sincronizados da main para esta branch no mesmo owner documental; nao criar CLI, gateway, script ou writer paralelo.
 
 **NEXT_CURSOR:** localizar o owner do resolvedor de identidade VPS e do literal `!RASTRO`; corrigir apenas esses owners com dry-run, escritor unico e teste; reconciliar conflito do PR #1900; comparar `HOST_ID/KERNEL/RUNNER/PID` em runtime; confirmar modelo local por inferencia; validar gates no HEAD exato; somente entao considerar merge/deploy.

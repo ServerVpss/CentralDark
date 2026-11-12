@@ -27,7 +27,7 @@ const EXPECTED_SAFE_FULL_ADMIN = [
 // #OBSERVACOES# @owner apps/modulos/mcp/src/tools/core/mcp-admin.js
 // @doc_ref docs/CONSCIENCIA/RECEIPTS/2026-10-06-mcp-unified-capability-catalog-metabolism.md
 // @last_updated 2026-10-21T20:00:00Z
-// @implementado comparison of dispatcher/HTTP scopes and the 18-route canary gate
+// @implementado comparison of dispatcher/HTTP scopes and the canonical catalog cardinality and required-route canary gate
 // @pendente CI exact SHA, runtime promotion, route readback and rollback receipt
 // @estado SOURCE_ONLY @next_cursor CANARY_PR_CI_THEN_RUNTIME_READBACK
 // Retired legacy destructive capabilities stay visible in diagnostics, NEVER implicitly re-enabled.
@@ -61,13 +61,13 @@ async function runtimeSnapshot() {
     }
     const routeNames = [...new Set(catalog.routes.map((route) => route.id))].sort();
     return {
-        names, exposedNames, routeNames,
-        expectedRouteCount: 18,
+        names, exposedNames, routeNames, runtimeTools: tools,
+        expectedRouteCount: routeNames.length,
         catalogScope: catalog.catalogScope,
         catalogFingerprint: catalog.catalogFingerprint,
         advertisedToolCount: catalog.totalRuntimeTools,
         routeCount: catalog.routeCount,
-        routeParity: catalog.routeCount === routeNames.length && catalog.routeCount === 18,
+        routeParity: catalog.routeCount === routeNames.length,
         missingCanaryRoutes: EXPECTED_CANARY_ROUTES.filter((id) => !routeNames.includes(id)),
         legacySafetyReview: LEGACY_REQUIRES_SAFETY_REVIEW.map((name) => ({
             name, present: names.includes(name), reviewRequired: true,
@@ -145,7 +145,7 @@ export const mcpDiagnosticsTools = [
                     : [];
             const publicMissingFromRuntime = names.filter((name) => !publicTools.includes(name));
             const publicOnly = publicTools.filter((name) => !names.includes(name));
-            const publicRestrictedByPolicy = tools.filter((tool) =>
+            const publicRestrictedByPolicy = snapshot.runtimeTools.filter((tool) =>
                 tool.annotations?.destructiveHint === true && !publicTools.includes(tool.name)).map((tool) => tool.name);
             const publicMissingSafe = publicMissingFromRuntime.filter((name) => !publicRestrictedByPolicy.includes(name));
             const expectedMissingPublic = EXPECTED_SAFE_FULL_ADMIN.filter((name) => !publicTools.includes(name));
