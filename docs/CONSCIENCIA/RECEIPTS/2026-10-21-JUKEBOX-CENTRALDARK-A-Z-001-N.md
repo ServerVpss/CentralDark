@@ -6,6 +6,18 @@ tags: [centraldark, jukebox, capacidades, inventario, A-Z, numerico, leitura, ow
 source_class: INTERNAL
 authority: "INDEX_NOT_RUNTIME_AUTHORITY"
 owner: "docs/CONSCIENCIA/RECEIPTS"
+updated: 2026-11-12
+trace_provenance:
+  source: "ServerVpss/CentralDark@main"
+  observation_date: 2026-11-12
+  observed_commits:
+    - "1b72c62caa464bce09fe9931a77db1746702e08a"
+    - "f788dedd095989679b08cb311bacd7116552653b"
+  runtime_receipt: "UNKNOWN"
+  trace_id: "UNKNOWN"
+  mission_id: "UNKNOWN"
+  scope: "jukebox-route-recovery-index"
+  validation: "SOURCE_READBACK_ONLY"
 ---
 
 # 🎛️🍒 JUKEBOX CENTRALDARK — Catálogo da sessão e das capacidades conhecidas
