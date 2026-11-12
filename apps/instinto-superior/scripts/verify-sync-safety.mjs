@@ -56,6 +56,19 @@ test('Cockpit separa leitura Git, Casa Windows, VMware e Triton sem falso verde'
  assert.match(ui,/sem leitura própria/);
 });
 
+test('Código oficial reutiliza gh CLI autenticado sem extrair token para o navegador',()=>{
+ const source=fs.readFileSync(new URL('../src/lib/cockpit.functions.ts',import.meta.url),'utf8');
+ const ui=fs.readFileSync(new URL('../src/components/central/StatusPanel.tsx',import.meta.url),'utf8');
+ assert.match(source,/async function consultarGitHubLeitura\(/);
+ assert.match(source,/promisify\(execFile\)\("gh"/);
+ assert.match(source,/GitHub CLI autenticado no servidor/);
+ assert.match(source,/consultarGitHubLeitura\("commits\?sha=main&per_page=4"\)/);
+ assert.match(source,/consultarGitHubLeitura\(\s*`compare\//);
+ assert.doesNotMatch(source,/gh auth token/);
+ assert.match(ui,/d\?\.github === "PASS" && d\.mainSha/);
+ assert.match(ui,/d\?\.fonte \?\? "GitHub main/);
+});
+
 test('Falha histórica VPS conserva erro e escopo sem inventar estado atual',async t=>run(t,async(f,m)=>{
  const dir=path.join(f.repo,'.auto-sync');fs.mkdirSync(dir);
  const status=path.join(dir,'status.json');
