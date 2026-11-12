@@ -2524,3 +2524,27 @@ flowchart LR
 
 **NEXT_CURSOR:** `CI_EXACT_HEAD → JUKEBOX_ORDER_PASS → AUTO_FAIL_ON_DRIFT → OWNER_READBACK → CHECKPOINT`.
 <!-- /CENTRALDARK_JUKEBOX_ORDER_ENFORCEMENT_20261021 -->
+
+<!-- CENTRALDARK_JUKEBOX_ROUTE_RECOVERY_20261112 -->
+## 7. Delta de preservação — site original, Sala de Controle e Omni (12/11/2026)
+
+**Este é um adendo de leitura ao catálogo, não uma ficha J302 nem mudança de identidade.** J001–J301, seus títulos, a ordem A–Z e o fingerprint `83f1dfa563d66705` permanecem intactos. A Jukebox aponta para os owners e para a [fronteira causal de prova](../../ARQUITETURA/EVIDENCE-ENVELOPE-CAUSAL.md#recuperação-de-rotas-legadas--leitura-causal-de-12112026), sem virar outro router ou executor.
+
+| Peça reaproveitada | Owner / fonte | Estado observado e interpretação |
+| --- | --- | --- |
+| Site original da Casa | [`src/main.tsx`](../../../src/main.tsx), [`src/App.tsx`](../../../src/App.tsx) | `SOURCE_EXISTS`: entrypoint usa `src/App.tsx`; a rota legada não está nesse roteador |
+| Sala antiga / Overclock | [`src/paginas/admin-cockpit/SalaControle.tsx`](../../../src/paginas/admin-cockpit/SalaControle.tsx) | `SOURCE_EXISTS`: preservar interface e comparar funcionalidades; parte dos dados ainda é mock |
+| Registro legado de rotas | [`src/app/rotas/rotas-admin.tsx`](../../../src/app/rotas/rotas-admin.tsx) | `REGISTERED_NOT_MOUNTED_IN_ACTIVE_ENTRY`: `/admin/cockpit` e `/preview/cockpit` declarados em outra composição |
+| Cockpit atual | [`sala-controle.tsx`](../../../apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx) e [`CockpitShell.tsx`](../../../apps/instinto-superior/src/components/central/CockpitShell.tsx) | `SOURCE_EXISTS`: Sala atual com verificação administrativa; serviço da VMware ativo em `:8080` |
+| Omni Router | [`centraldark_omni_router.py`](../../../apps/modulos/elite-gateway/scripts/centraldark_omni_router.py) | `RUNTIME_HEALTH_200` em `:8099/health`; é API, não página React |
+
+**Contraprova read-only (12/11/2026):** na VMware, `:8080/admin/cockpit` = 404; `:8099/admin/cockpit` = 404; `:8099/health` = 200; `:8099/docs` = 200. A existência do código antigo não implica rota publicada; o 404 não autoriza descartar arquivos. A auditoria anterior de `api.centralldark.com` com HTTP 525 é histórica e precisa de nova medição TLS antes de inferir falha de endpoint.
+
+**Reuso antes de criar:** usar a Sala de Controle autenticada já existente como destino de compatibilidade para os endereços antigos, no owner real de roteamento do Cockpit; recuperar capacidades da interface legada somente após comparar dependências, autorizações e dados. Não abrir painel, iframe, porta, subdomínio, event bus ou motor paralelo. Não substituir um 404 por página genérica 200.
+
+**Limite de prova:** `ROUTE_COMPAT=PENDING`; `AUTH_PROOF=UNKNOWN`; `UI_VISUAL_PROOF=UNKNOWN`; `LIVE_DATA=UNKNOWN`; `DEPLOY=NOT_EXECUTED`. A Casa tinha `main` local 4 commits à frente e 182 atrás do `origin/main` conhecido, e este arquivo tinha modificação local de frontmatter. Preservar esse delta local e reconciliar sem `reset --hard`, `clean` ou sobrescrita; essa medição é snapshot, não status permanente.
+
+**Reuso do índice:** [J258](#j258) (Cockpit 8080), [J274](#j274) (Jukebox), [J289](#j289) (CockpitShell), [J299](#j299) (índice arquitetural). A documentação causal fica no owner `docs/ARQUITETURA/EVIDENCE-ENVELOPE-CAUSAL.md`; a normalização de eventos continua em `supabase/functions/_shared/evidence-envelope.mjs`.
+
+**NEXT_CURSOR:** `PRESERVAR_DELTAS_CASA → RESOLVER_OWNER_DO_ALIAS → CORRIGIR_MENOR_DELTA → TESTAR_HTTP_AUTH_UI_DADOS → REGRESSAO → COMMIT_CONFORME_PROTECOES → READBACK_SHA → RECONCILIAR_CASA → FIXED_POINT`. `UNKNOWN != PASS`; `DOCUMENTED != EXECUTED`; `MERGED != DEPLOYED`.
+<!-- /CENTRALDARK_JUKEBOX_ROUTE_RECOVERY_20261112 -->
