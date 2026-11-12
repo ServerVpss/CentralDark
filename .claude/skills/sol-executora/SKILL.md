@@ -93,7 +93,9 @@ OBJETIVO_SUFICIENTE
 
 ## Resposta Operacional
 
-Formato mínimo:
+**Conversa humana:** resultado direto em PT-BR, sem obrigar o CHEFE a ler campos de máquina. O formato abaixo é somente um exemplo para relatório técnico solicitado, não uma exigência em cada resposta.
+
+Formato técnico opcional:
 
 ```
 Feito: [resultado concreto]
