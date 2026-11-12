@@ -238,3 +238,19 @@
 CASA_KYLIN_CLI=PASS | CASA_MCP_HTTP_HEALTH=PASS | KYLIN_MCP_CLIENT_CONFIGURED=NO | KYLIN_GATEWAY_READY=NOT_PROVEN | MCP_AUTH_E2E=NOT_PROVEN | FIXED_POINT=PENDING
 
 <!-- /KYLINBOT_NATIVE_MCP_VM_CONTRAPROOF_20261112 -->
+
+---
+
+<!-- KYLINBOT_NATIVE_GATEWAY_UNIX_PROOF_20261112 -->
+## 11. T3 — Contraprova corrigida do Gateway KylinBot na Casa (2026-11-12)
+
+- **Causa exata da falsa suspeita de falha TCP:** o proprio KylinBot informou Gateway TCP disabled — Unix socket only. O contrato atual usa ~/.kylinbot/gateway.sock, nao a porta 42617, apesar de o comando aceitar --port.
+- **Prova funcional real:** iniciar o gateway nativo temporariamente em loopback e enviar GET /health sobre AF_UNIX retornou HTTP/1.1 200 OK. Socket existe e tem permissao 0600.
+- **Preservacao:** o processo temporario foi encerrado e recolhido; antes do teste nenhum gateway respondia naquele socket. Nenhum daemon KylinBot permanente foi instalado; nenhum codigo de pareamento foi lido ou exposto.
+- **Contraprova:** o teste anterior que esperava listener TCP era inadequado para esta configuracao; manter seu registro como historico, mas nao interpretar falta de porta como falha de Gateway.
+- **Seguranca:** manter bind isolado no socket Unix; nao habilitar allow_public_bind, nao abrir 42617 e nao duplicar Gateway ou MCP para satisfazer sondas TCP.
+- **NEXT_CURSOR:** localizar consumer ja existente da CentralDark capaz de usar HTTP sobre socket Unix (ou adaptador existente, se houver); testar autorizacao com escopo adequado e consentido para o MCP em /api/mcp sem extrair token administrativo de processo; medir fluxo bidirecional real antes de habilitar mcp.enabled e antes de instalar servico persistente.
+
+GATEWAY_NATIVE_UNIX_HEALTH=PASS | GATEWAY_UNIX_SOCKET_MODE=0600 | GATEWAY_TCP=DISABLED_BY_CONFIG | GATEWAY_PROCESS_AFTER_TEST=STOPPED | MCP_CLIENT_CONFIGURED=NO | FIXED_POINT=PENDING
+
+<!-- /KYLINBOT_NATIVE_GATEWAY_UNIX_PROOF_20261112 -->
