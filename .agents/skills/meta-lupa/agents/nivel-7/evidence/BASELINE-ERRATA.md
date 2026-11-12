@@ -1,3 +1,25 @@
+---
+title: "BASELINE-ERRATA — Turno D (Reparo de Integridade)"
+status: "DOCUMENTAL_SEM_PROVA_RUNTIME_ATUAL"
+owner: ".agents/skills/meta-lupa/agents/nivel-7/evidence/BASELINE-ERRATA.md"
+source_class: "INTERNAL"
+tipo: "evidencia_documental"
+data_criacao: "UNKNOWN"
+ultima_atualizacao: "UNKNOWN"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "2aefd628c876737f9d2dff168c35860d0b212998a7fce486c00c21c8cf8c7d77"
+rastro: 
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "1bfdf71ad4935dea833c637d10d901de4578d30c"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a: []
+estado_evidencia: "UNKNOWN"
+---
 # BASELINE-ERRATA — Turno D (Reparo de Integridade)
 
 Data: 2026-07-24

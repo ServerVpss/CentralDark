@@ -1,3 +1,25 @@
+---
+title: "RECEIPT · MCP tools/list falso vermelho corrigido · 2026-09-11"
+status: "DOCUMENTAL_SEM_PROVA_RUNTIME_ATUAL"
+owner: "evidence/MCP-TOOLS-LIST-FALSE-RED-RECEIPT-20260911.md"
+source_class: "INTERNAL"
+tipo: "evidencia_documental"
+data_criacao: "UNKNOWN"
+ultima_atualizacao: "UNKNOWN"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "3b48e2b21bcc37ed843ff092672748956e0d480cebddc459a9cb58508e7a7c12"
+rastro: 
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "3d184fc3445982eb0f81ccb8d998fd826b837e31"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a: []
+estado_evidencia: "UNKNOWN"
+---
 # RECEIPT · MCP tools/list falso vermelho corrigido · 2026-09-11
 
 VEREDITO=FALSE_RED_UI_CORRIGIDO_NO_OWNER
