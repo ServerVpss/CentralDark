@@ -494,7 +494,7 @@ async function medirGithub() {
     .slice(0, 4)
     .map((commit) => ({
       sha: commit.sha as string,
-      mensagem: commit.commit?.message?.split("\\n")[0] ?? "Sem mensagem",
+      mensagem: commit.commit?.message?.split("\n")[0] ?? "Sem mensagem",
       data: commit.commit?.author?.date ?? "",
     }));
   return {
