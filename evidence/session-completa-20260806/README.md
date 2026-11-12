@@ -10,7 +10,7 @@ ultima_modificacao: "2026-11-12T18:33:38-03:00"
 ultima_verificacao: "2026-11-12T18:33:38-03:00"
 fuso_horario: "America/Sao_Paulo"
 hash_conteudo: "85ddf84d03adbb20fde2452814e21b711ed56be86508f772c8baadd04377740c"
-rastro: 
+rastro:
   - tipo: "CONCILIACAO_PROPRIEDADES"
     momento: "2026-11-12T18:33:38-03:00"
     origem_commit: "ec55039d0cc73531c9d28b26a4272a4d70404e8f"
