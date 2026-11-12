@@ -170,7 +170,9 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {
-      case 'success': return <AnimatedDoneIcon className="w-5 h-5 text-green-500" label="Sincronização confirmada" />
+      case 'success': return todosMesmoCommit === true
+        ? <AnimatedDoneIcon className="w-5 h-5 text-green-500" label="Mesmo commit atual confirmado nos três ambientes" />
+        : <Clock className="w-5 h-5 text-amber-500" aria-label="Ação anterior concluída; sincronização atual ainda não comprovada" />
       case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
@@ -180,7 +182,7 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusColor = () => {
     switch (syncStatus.status) {
-      case 'success': return 'bg-emerald-500/10 border-emerald-500/40'
+      case 'success': return todosMesmoCommit === true ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-amber-500/10 border-amber-500/40'
       case 'syncing': return 'bg-sky-500/10 border-sky-500/40'
       case 'failed': return 'bg-red-500/10 border-red-500/40'
       case 'conflict': return 'bg-amber-500/10 border-amber-500/40'
@@ -279,10 +281,10 @@ export const AutoSyncButton: React.FC = () => {
           </div>
         )}
         {!isSyncing && syncStatus.status === 'success' && (
-          <div className="mt-3 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[10px] text-emerald-200" aria-live="polite">
+          <div className="mt-3 rounded-md border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[10px] text-amber-200" aria-live="polite">
             <div className="flex items-center gap-2">
-              <AnimatedDoneIcon size={14} className="h-3.5 w-3.5 text-emerald-300" />
-              <span className="font-semibold">{syncStatus.target === "main" || syncStatus.details?.includes("Casa já está em dia") ? "Main em dia · mesmo SHA confirmado" : "Sincronizado · mesmo SHA confirmado"}</span>
+              <Clock size={14} className="h-3.5 w-3.5 text-amber-300" />
+              <span className="font-semibold">Última execução concluída; código agora: {rotulo(todosMesmoCommit)}. A tentativa antiga não prova o estado atual.</span>
             </div>
             {syncStatus.files && syncStatus.files.length > 0 && (
               <div className="mt-1 truncate font-mono text-muted-foreground" title={syncStatus.files.join(' · ')}>
