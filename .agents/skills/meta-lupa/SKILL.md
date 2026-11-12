@@ -531,7 +531,9 @@ MESMO_ERRO + MESMA_DISCUSSÃO + ZERO_INFORMACAO_NOVA + ZERO_MUDANCA
 - IA indisponível não encerra o fluxo: usar checks e scripts determinísticos. Falha determinística impede a tentativa defeituosa e retorna para correção; não vira falso verde.
 - Não prometer `100%` de certeza. Buscar evidência suficiente para o custo do erro e declarar o risco residual que não pode ser eliminado.
 
-## Saída obrigatória
+## Saída de verificação técnica
+
+**Escopo:** o formato de veredito abaixo é saída interna/estruturada da MetaLupa, não molde obrigatório de resposta humana. Ao CHEFE, comunicar a conclusão em português natural com evidência, sem recitar campos internos por padrão. Preservar os identificadores de verificação no sistema e nos recibos.
 
 ```text
 VEREDITO: APROVAR | CONDICIONAR | CORRIGIR | BLOQUEAR
