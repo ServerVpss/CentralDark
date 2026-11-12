@@ -2778,7 +2778,7 @@ TEN_PASS_PLUS_CURRENT_GOAL_RECEIPT_SAME_HEAD=USED_AND_FIXED_POINT
 
 O cabeçalho acompanha `agent_id`, `mission_id`, `intent_id`, `goal_fingerprint`, HEAD, instante de medição, avaliador, referência do receipt, os dez estados e `NEXT_CURSOR`. Cada ID exige `evaluated=true`, `source`, `attempt_ref` e `evaluated_at` atual. `UNKNOWN` com tentativa rastreável significa que o agente aplicou a régua e não obteve prova suficiente; `UNKNOWN` sem tentativa significa que a régua não foi usada. `PASS` exige origem com SHA, prova positiva, contraprova não refutada e medição recente.
 
-O cabeçalho é obrigatório antes da primeira ação material, após cada delta material e antes da saída do agente. O gate `scripts/agent-call.mjs` rejeita chamada delegada sem as dez tentativas e devolve `fixed_point_header_usage` com `USED_WITH_GAPS` ou `USED_AND_FIXED_POINT`. O próprio receipt do gate preserva a missão, o HEAD, a cobertura e o cursor para auditoria.
+O registro técnico do cabeçalho de execução é obrigatório no fluxo de avaliação antes da primeira ação material, após cada mudança material e antes da saída do agente, **não na resposta conversacional ao CHEFE**. O gate `scripts/agent-call.mjs` rejeita chamada delegada sem as dez tentativas e devolve `fixed_point_header_usage` com `USED_WITH_GAPS` ou `USED_AND_FIXED_POINT`. O próprio recibo técnico preserva a missão, o HEAD, a cobertura e o cursor para auditoria.
 
 O veredito final pertence ao avaliador HORN. Nenhum agente pode se declarar `FIXED_POINT` apenas porque preencheu a tabela: exige dez PASS, Goal receipt HORN recente no mesmo HEAD e `next_cursor=FIXED_POINT`. O contrato valida estrutura e referências rastreáveis; a verdade dos fatos continua sujeita à prova e à contraprova independente.
 
