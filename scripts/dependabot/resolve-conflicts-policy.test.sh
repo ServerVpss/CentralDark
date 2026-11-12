@@ -52,11 +52,69 @@ printf 'gateway-main-change\n' > docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY
 git commit -am "main advances" >/dev/null
 git push origin main >/dev/null 2>&1
 
+# --dry-run must not fetch, create a worktree, lock, commit, or push.
+PR_SHA_BEFORE="$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')"
+MAIN_SHA_BEFORE="$(git ls-remote "$REMOTE" refs/heads/main | awk '{print $1}')"
+LOCAL_HEAD_BEFORE="$(git -C "$SOURCE" rev-parse HEAD)"
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
+  bash "$RESOLVER" --dry-run 1 > "$TMP_ROOT/dry-run.log"
+grep -F "COSTURA_DRY_RUN=PASS" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_CONFLICT_DECISIONS=UNPROVEN_NO_MERGE" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_LOCAL_WRITES=0" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_REMOTE_WRITES=0" "$TMP_ROOT/dry-run.log" >/dev/null
+test ! -e "$WORKTREES"
+test "$(git -C "$SOURCE" rev-parse HEAD)" = "$LOCAL_HEAD_BEFORE"
+test "$(git ls-remote "$REMOTE" refs/heads/main | awk '{print $1}')" = "$MAIN_SHA_BEFORE"
+test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')" = "$PR_SHA_BEFORE"
+echo "COSTURA_DRY_RUN_ZERO_WRITES=PASS"
+# PIECE_FIRST must classify exactly the fixture conflicts with no checkout or push.
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
+  bash "$RESOLVER" --piece-first 1 > "$TMP_ROOT/piece-first.log"
+grep -F 'PIECE_FIRST=CLASSIFIED_NO_CHECKOUT' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'PIECE_FIRST_CONFLICT_COUNT=3' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'CENTRALDARK_AI_BOOT.yaml' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'package.json' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'PIECE_FIRST_WORKTREE_CREATED=0' "$TMP_ROOT/piece-first.log" >/dev/null
+grep -F 'PIECE_FIRST_RESOLUTION=UNPROVEN_NO_PUSH' "$TMP_ROOT/piece-first.log" >/dev/null
+test ! -e "$WORKTREES"
+test "$(git -C "$SOURCE" rev-parse HEAD)" = "$LOCAL_HEAD_BEFORE"
+test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')" = "$PR_SHA_BEFORE"
+echo 'COSTURA_PIECE_FIRST_NO_CHECKOUT=PASS'
+
+# No implicit mutation: apply requires explicit authorization.
+set +e
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" bash "$RESOLVER" 1 > "$TMP_ROOT/no-mode.log" 2>&1
+NO_MODE_RC=$?
+set -e
+test "$NO_MODE_RC" -eq 2
+grep -F "BLOCKED_EXPLICIT_MODE_REQUIRED" "$TMP_ROOT/no-mode.log" >/dev/null
+echo "COSTURA_EXPLICIT_APPLY_REQUIRED=PASS"
+
+# Single writer per worktree root; a held lock must block before any fetch.
+mkdir -p "$WORKTREES/.costura-repo-writer.lock"
+set +e
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
+  bash "$RESOLVER" --apply 1 > "$TMP_ROOT/lock-busy.log" 2>&1
+LOCK_BUSY_RC=$?
+set -e
+test "$LOCK_BUSY_RC" -eq 23
+grep -F "BLOCKED_COSTURA_WRITER_LOCK_BUSY" "$TMP_ROOT/lock-busy.log" >/dev/null
+test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')" = "$PR_SHA_BEFORE"
+rmdir "$WORKTREES/.costura-repo-writer.lock"
+echo "COSTURA_SINGLE_WRITER_LOCK=PASS"
+
 PR_HEAD_REF='dependabot/test-bump' \
 REPO_DIR="$SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
-bash "$RESOLVER" 1 > "$TMP_ROOT/resolver.log"
+bash "$RESOLVER" --apply 1 > "$TMP_ROOT/resolver.log"
+grep -F "COSTURA_WRITER_LOCK=ACQUIRED" "$TMP_ROOT/resolver.log" >/dev/null
+test ! -e "$WORKTREES/.costura-repo-writer.lock"
+echo "COSTURA_LOCK_RELEASED=PASS"
 
 git fetch origin dependabot/test-bump >/dev/null 2>&1
 git checkout -q FETCH_HEAD
@@ -66,6 +124,8 @@ grep -F -x 'main-change' CENTRALDARK_AI_BOOT.yaml >/dev/null
 grep -F -x 'gateway-main-change' docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md >/dev/null
 grep -F 'CONFLICT_DECISION path=CENTRALDARK_AI_BOOT.yaml action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=BOOT_CENTRALDARK_AI' "$TMP_ROOT/resolver.log" >/dev/null
 grep -F 'CONFLICT_DECISION path=docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md action=INCOMING reason=KNOWN_POLICY_USE_MAIN_SIDE conflict_id=REMOTE_MCP_GATEWAY_ARCHITECTURE' "$TMP_ROOT/resolver.log" >/dev/null
+grep -F 'COSTURA_PYTHON_SELECTED=' "$TMP_ROOT/resolver.log" >/dev/null
+echo 'COSTURA_PYTHON_RUNTIME_PROBED=PASS'
 
 UNKNOWN_REMOTE="$TMP_ROOT/unknown-remote.git"
 UNKNOWN_SOURCE="$TMP_ROOT/unknown-source"
@@ -102,7 +162,7 @@ PR_HEAD_REF='dependabot/unknown-conflict' \
 REPO_DIR="$UNKNOWN_SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$UNKNOWN_WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
-bash "$RESOLVER" 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
+bash "$RESOLVER" --apply 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
 UNKNOWN_EXIT=$?
 set -e
 test "$UNKNOWN_EXIT" -eq 20
@@ -117,6 +177,27 @@ if grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null; then
   exit 1
 fi
 echo "UNREGISTERED_CONFLICT_FAIL_CLOSED=PASS"
+
+# Both existing file writers must replace atomically, with verified readback.
+SEMANTIC_ATOMIC="$TMP_ROOT/semantic-atomic.md"
+printf '%s\n' 'prefix' '<<<<<<< HEAD' 'ours' '=======' 'theirs' '>>>>>>> main' > "$SEMANTIC_ATOMIC"
+node "$REPO_ROOT/scripts/dependabot/semantic-all-resolver.mjs" "$SEMANTIC_ATOMIC" > "$TMP_ROOT/semantic-atomic.log"
+grep -F -x 'ours' "$SEMANTIC_ATOMIC" >/dev/null
+grep -F -x 'theirs' "$SEMANTIC_ATOMIC" >/dev/null
+if grep -Eq '^(<<<<<<< |=======|>>>>>>> )' "$SEMANTIC_ATOMIC"; then
+  echo "BLOCKED_SEMANTIC_ATOMIC_MARKERS_LEFT" >&2
+  exit 1
+fi
+for helper in "$REPO_ROOT/scripts/dependabot/semantic-all-resolver.mjs" "$REPO_ROOT/scripts/dependabot/structured-conflict-resolver.mjs"; do
+  grep -F 'fs.fsyncSync(fd)' "$helper" >/dev/null
+  grep -F 'fs.renameSync(temp, target)' "$helper" >/dev/null
+  grep -F 'COSTURA_ATOMIC_READBACK_MISMATCH' "$helper" >/dev/null
+done
+if find "$TMP_ROOT" -name '*.costura-*.tmp' -print -quit | grep -q .; then
+  echo "BLOCKED_COSTURA_TEMPORARY_FILE_LEFT" >&2
+  exit 1
+fi
+echo "COSTURA_ATOMIC_FILE_REPLACEMENT=PASS"
 
 # Contraprova estruturada: CONFLICT_ID (catálogo canônico) e id (legado) são aliases.
 echo ""
@@ -153,5 +234,62 @@ console.log('REGRESSION_MAIN_PRECEDENCE=PASS');
 console.log('REGRESSION_COUNTER_AND_EXCLUSIVES=PASS');
 NODE
 )
+
+# COSTURA also audits explicit-baseline isolated indexes (not only merge conflicts).
+# A dirty/diverged local HEAD must never contaminate a remote-baseline check.
+AUDIT_FIXTURE="$TMP_ROOT/costura-index-audit"
+git init -q "$AUDIT_FIXTURE"
+git -C "$AUDIT_FIXTURE" config user.name "CentralDark Audit Fixture"
+git -C "$AUDIT_FIXTURE" config user.email "audit-fixture@example.invalid"
+printf 'original note\n' > "$AUDIT_FIXTURE/note.md"
+printf 'clean\n' > "$AUDIT_FIXTURE/unrelated.md"
+git -C "$AUDIT_FIXTURE" add -- note.md unrelated.md
+git -C "$AUDIT_FIXTURE" commit -qm 'audit baseline'
+AUDIT_BASE="$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)"
+printf 'unrelated trailing   \n' > "$AUDIT_FIXTURE/unrelated.md"
+git -C "$AUDIT_FIXTURE" commit -qam 'diverged local head unrelated whitespace'
+AUDIT_LOCAL_HEAD="$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)"
+AUDIT_INDEX="$AUDIT_FIXTURE/.git/isolated-audit.index"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" read-tree "$AUDIT_BASE"
+AUDIT_BLOB="$(printf 'new note\n' | git -C "$AUDIT_FIXTURE" hash-object -w --stdin)"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" update-index --add --cacheinfo "100644,$AUDIT_BLOB,note.md"
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-pass.log"
+grep -F 'COSTURA_AUDIT_INDEX=PASS' "$TMP_ROOT/index-audit-pass.log" >/dev/null
+grep -F "COSTURA_AUDIT_LOCAL_HEAD=$AUDIT_LOCAL_HEAD" "$TMP_ROOT/index-audit-pass.log" >/dev/null
+set +e
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- unrelated.md > "$TMP_ROOT/index-audit-scope.log" 2>&1
+AUDIT_SCOPE_RC=$?
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_FIXTURE/.git/index" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-default-index.log" 2>&1
+AUDIT_DEFAULT_RC=$?
+git -C "$AUDIT_FIXTURE" remote add origin "$REMOTE"
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" refs/heads/main -- note.md > "$TMP_ROOT/index-audit-remote-drift.log" 2>&1
+AUDIT_DRIFT_RC=$?
+set -e
+test "$AUDIT_SCOPE_RC" -eq 3
+test "$AUDIT_DEFAULT_RC" -eq 2
+test "$AUDIT_DRIFT_RC" -eq 21
+grep -F 'BLOCKED_AUDIT_UNEXPECTED_PATH=note.md' "$TMP_ROOT/index-audit-scope.log" >/dev/null
+grep -F 'BLOCKED_AUDIT_DEFAULT_INDEX_FORBIDDEN' "$TMP_ROOT/index-audit-default-index.log" >/dev/null
+grep -F 'BLOCKED_AUDIT_REMOTE_DRIFT' "$TMP_ROOT/index-audit-remote-drift.log" >/dev/null
+# Remote drift must never rewrite or rebase the current local HEAD.
+test "$(git -C "$AUDIT_FIXTURE" rev-parse HEAD)" = "$AUDIT_LOCAL_HEAD"
+AUDIT_BAD_BLOB="$(printf 'bad whitespace   \n' | git -C "$AUDIT_FIXTURE" hash-object -w --stdin)"
+GIT_INDEX_FILE="$AUDIT_INDEX" git -C "$AUDIT_FIXTURE" update-index --add --cacheinfo "100644,$AUDIT_BAD_BLOB,note.md"
+set +e
+REPO_DIR="$AUDIT_FIXTURE" GIT_INDEX_FILE="$AUDIT_INDEX" \
+  bash "$RESOLVER" --audit-index "$AUDIT_BASE" - -- note.md > "$TMP_ROOT/index-audit-whitespace.log" 2>&1
+AUDIT_WHITESPACE_RC=$?
+set -e
+test "$AUDIT_WHITESPACE_RC" -eq 4
+grep -F 'BLOCKED_AUDIT_SCOPED_DIFF_CHECK' "$TMP_ROOT/index-audit-whitespace.log" >/dev/null
+echo "COSTURA_INDEX_AUDIT_DIVERGED_HEAD=PASS"
+echo "COSTURA_INDEX_AUDIT_SCOPE_GUARD=PASS"
+echo "COSTURA_INDEX_AUDIT_DEFAULT_INDEX_GUARD=PASS"
+echo "COSTURA_INDEX_AUDIT_REMOTE_FAIL_CLOSED=PASS"
+echo "COSTURA_INDEX_AUDIT_WHITESPACE_GUARD=PASS"
 
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"
