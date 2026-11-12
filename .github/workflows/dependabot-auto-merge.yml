@@ -482,7 +482,7 @@ jobs:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
-          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
+          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" --apply "${{ github.event.pull_request.number }}"
 
       - name: 🧭 Entregar promoção ao gate hosted de compatibilidade
         if: env.RESOLVE_REQUESTED != '1'

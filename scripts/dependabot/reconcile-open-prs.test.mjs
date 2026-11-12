@@ -3,8 +3,12 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { DEFAULT_REQUIRED_WORKFLOWS, greenDecision, runBelongsToPullHead, selectLatestRun } from '../github-autonomia-green-guard.mjs';
 
-const source = (await readFile(new URL('./reconcile-open-prs.mjs', import.meta.url), 'utf8')).replace(/^#!.*\n/, '').replace(/^import .*;\n/gm, '');
+const source = (await readFile(new URL('./reconcile-open-prs.mjs', import.meta.url), 'utf8')).replace(/^#![^\r\n]*\r?\n/, '').replace(/^import [^\r\n]*;\r?\n/gm, '');
 const execute = new (Object.getPrototypeOf(async function(){}).constructor)('process', 'console', 'fetch', 'spawnSync', 'DEFAULT_REQUIRED_WORKFLOWS', 'greenDecision', 'runBelongsToPullHead', 'selectLatestRun', source);
+test('conflict caller requires explicit COSTURA apply', () => {
+  assert.match(source, /spawnSync\('bash', \[resolver, '--apply', String\(number\)\]/);
+});
+
 const head = 'a'.repeat(40);
 const pr = { number: 10, state: 'open', draft: false, user: { login: 'segredounlock' }, mergeable: true, mergeable_state: 'clean', head: { sha: head, ref: 'fix', repo: { full_name: 'ServerVpss/CentralDark' } }, base: { ref: 'main' } };
 const run = (name, conclusion = 'success', number = 2) => ({ id: number, name, run_number: number, run_attempt: 1, head_sha: head, event: 'pull_request', pull_requests: [{number: 10}], status: conclusion === null ? 'queued' : 'completed', conclusion });

@@ -52,11 +52,54 @@ printf 'gateway-main-change\n' > docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY
 git commit -am "main advances" >/dev/null
 git push origin main >/dev/null 2>&1
 
+# --dry-run must not fetch, create a worktree, lock, commit, or push.
+PR_SHA_BEFORE="$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')"
+MAIN_SHA_BEFORE="$(git ls-remote "$REMOTE" refs/heads/main | awk '{print $1}')"
+LOCAL_HEAD_BEFORE="$(git -C "$SOURCE" rev-parse HEAD)"
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
+  bash "$RESOLVER" --dry-run 1 > "$TMP_ROOT/dry-run.log"
+grep -F "COSTURA_DRY_RUN=PASS" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_CONFLICT_DECISIONS=UNPROVEN_NO_MERGE" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_LOCAL_WRITES=0" "$TMP_ROOT/dry-run.log" >/dev/null
+grep -F "DRY_RUN_REMOTE_WRITES=0" "$TMP_ROOT/dry-run.log" >/dev/null
+test ! -e "$WORKTREES"
+test "$(git -C "$SOURCE" rev-parse HEAD)" = "$LOCAL_HEAD_BEFORE"
+test "$(git ls-remote "$REMOTE" refs/heads/main | awk '{print $1}')" = "$MAIN_SHA_BEFORE"
+test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')" = "$PR_SHA_BEFORE"
+echo "COSTURA_DRY_RUN_ZERO_WRITES=PASS"
+
+# No implicit mutation: apply requires explicit authorization.
+set +e
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" bash "$RESOLVER" 1 > "$TMP_ROOT/no-mode.log" 2>&1
+NO_MODE_RC=$?
+set -e
+test "$NO_MODE_RC" -eq 2
+grep -F "BLOCKED_EXPLICIT_MODE_REQUIRED" "$TMP_ROOT/no-mode.log" >/dev/null
+echo "COSTURA_EXPLICIT_APPLY_REQUIRED=PASS"
+
+# Single writer per worktree root; a held lock must block before any fetch.
+mkdir -p "$WORKTREES/.costura-repo-writer.lock"
+set +e
+PR_HEAD_REF='dependabot/test-bump' REPO_DIR="$SOURCE" \
+  CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
+  bash "$RESOLVER" --apply 1 > "$TMP_ROOT/lock-busy.log" 2>&1
+LOCK_BUSY_RC=$?
+set -e
+test "$LOCK_BUSY_RC" -eq 23
+grep -F "BLOCKED_COSTURA_WRITER_LOCK_BUSY" "$TMP_ROOT/lock-busy.log" >/dev/null
+test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1}')" = "$PR_SHA_BEFORE"
+rmdir "$WORKTREES/.costura-repo-writer.lock"
+echo "COSTURA_SINGLE_WRITER_LOCK=PASS"
+
 PR_HEAD_REF='dependabot/test-bump' \
 REPO_DIR="$SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
-bash "$RESOLVER" 1 > "$TMP_ROOT/resolver.log"
+bash "$RESOLVER" --apply 1 > "$TMP_ROOT/resolver.log"
+grep -F "COSTURA_WRITER_LOCK=ACQUIRED" "$TMP_ROOT/resolver.log" >/dev/null
+test ! -e "$WORKTREES/.costura-repo-writer.lock"
+echo "COSTURA_LOCK_RELEASED=PASS"
 
 git fetch origin dependabot/test-bump >/dev/null 2>&1
 git checkout -q FETCH_HEAD
@@ -104,7 +147,7 @@ PR_HEAD_REF='dependabot/unknown-conflict' \
 REPO_DIR="$UNKNOWN_SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$UNKNOWN_WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
-bash "$RESOLVER" 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
+bash "$RESOLVER" --apply 2 > "$TMP_ROOT/unknown-resolver.log" 2>&1
 UNKNOWN_EXIT=$?
 set -e
 test "$UNKNOWN_EXIT" -eq 20
@@ -119,6 +162,27 @@ if grep -F -x 'unknown-main' docs/unknown-conflict.md >/dev/null; then
   exit 1
 fi
 echo "UNREGISTERED_CONFLICT_FAIL_CLOSED=PASS"
+
+# Both existing file writers must replace atomically, with verified readback.
+SEMANTIC_ATOMIC="$TMP_ROOT/semantic-atomic.md"
+printf '%s\n' 'prefix' '<<<<<<< HEAD' 'ours' '=======' 'theirs' '>>>>>>> main' > "$SEMANTIC_ATOMIC"
+node "$REPO_ROOT/scripts/dependabot/semantic-all-resolver.mjs" "$SEMANTIC_ATOMIC" > "$TMP_ROOT/semantic-atomic.log"
+grep -F -x 'ours' "$SEMANTIC_ATOMIC" >/dev/null
+grep -F -x 'theirs' "$SEMANTIC_ATOMIC" >/dev/null
+if grep -Eq '^(<<<<<<< |=======|>>>>>>> )' "$SEMANTIC_ATOMIC"; then
+  echo "BLOCKED_SEMANTIC_ATOMIC_MARKERS_LEFT" >&2
+  exit 1
+fi
+for helper in "$REPO_ROOT/scripts/dependabot/semantic-all-resolver.mjs" "$REPO_ROOT/scripts/dependabot/structured-conflict-resolver.mjs"; do
+  grep -F 'fs.fsyncSync(fd)' "$helper" >/dev/null
+  grep -F 'fs.renameSync(temp, target)' "$helper" >/dev/null
+  grep -F 'COSTURA_ATOMIC_READBACK_MISMATCH' "$helper" >/dev/null
+done
+if find "$TMP_ROOT" -name '*.costura-*.tmp' -print -quit | grep -q .; then
+  echo "BLOCKED_COSTURA_TEMPORARY_FILE_LEFT" >&2
+  exit 1
+fi
+echo "COSTURA_ATOMIC_FILE_REPLACEMENT=PASS"
 
 # Contraprova estruturada: CONFLICT_ID (catálogo canônico) e id (legado) são aliases.
 echo ""
