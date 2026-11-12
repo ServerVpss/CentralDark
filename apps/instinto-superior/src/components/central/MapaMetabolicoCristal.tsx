@@ -200,7 +200,7 @@ export function MapaMetabolicoCristal({ compacto = false }: { compacto?: boolean
             </div>
             <div className="rounded-lg border border-neon-purple/30 p-4">
               <h4 className="text-sm font-semibold text-neon-purple">⚙️ Metabolismo funcional</h4>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Goal → GREEN_STATE/receita → owner/capability → Hermes → ação → teste → readback → Reality Judge/contraprova → receipt → HUD/Obsidian → NEXT_CURSOR.</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Objetivo → último estado confirmado → responsável → Hermes → execução → teste → verificação independente → comprovante → HUD/Obsidian → NEXT_CURSOR.</p>
             </div>
           </div>
           <p className="text-center text-xs text-muted-foreground">👑 CHEFE → SOL coordena → Hermes executa → 🧿 realidade verifica o efeito → 🫀 Kaizen aprende. Nenhum segundo cérebro, PET executor ou writer.</p>
