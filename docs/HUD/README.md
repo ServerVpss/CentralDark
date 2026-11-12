@@ -357,7 +357,7 @@ Nenhum cartão fica verde apenas por ter sido apresentado.
 
 **Interface incompatível:** usar Markdown ou o HUD monoespaçado existente.
 
-Até a integração e validação no `AGENTS.md`, manter o formato obrigatório do HUD canônico e utilizar os cartões como apresentação complementar.
+Os campos e a estrutura do HUD canônico permanecem obrigatórios **dentro do painel técnico quando solicitado**; os cartões são apresentação complementar, sem impor quadros à conversa normal. A integração e validação do comportamento real em cada superfície continuam sujeitas a teste e leitura de confirmação.
 
 #### 10.7. Preservação e sincronização
 
