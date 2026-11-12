@@ -39,7 +39,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
     try {
       const resposta = await continuar({ headers: await authHeaders() });
       setRetorno(resposta.state === "DISPATCHED_AWAITING_RECEIPT"
-        ? "Continuação enviada ao executor. Aguardando recibo; o checkpoint verde só muda após contraprova."
+        ? "Continuação enviada ao executor. Aguardando confirmação; o estado só muda após verificação independente."
         : resposta.state);
       await ultimo.refetch();
       if (resposta.state === "DISPATCHED_AWAITING_RECEIPT") {
@@ -82,7 +82,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
             <div><dt className="text-xs text-muted-foreground">Próxima execução</dt><dd className="mt-1 break-words font-medium">{checkpoint?.next_cursor ?? "Ainda não definida"}</dd></div>
             <div><dt className="text-xs text-muted-foreground">Confirmações válidas</dt><dd className="mt-1 font-medium">{disponivel ? `${checkpoint?.verified_steps ?? 0} / ${checkpoint?.events ?? 0} eventos` : "Ainda não verificadas"}</dd></div>
           </dl>
-          <p className="mt-3 break-words text-sm">{disponivel ? checkpoint?.intent : "Aguardar uma leitura comprovada do owner da VPS."}</p>
+          <p className="mt-3 break-words text-sm">{disponivel ? checkpoint?.intent : "Aguardando confirmação do servidor responsável."}</p>
           {checkpoint?.receipt_sha256 ? (
             <p className="mt-2 break-all font-mono text-[10px] text-muted-foreground" title="SHA-256 do recibo">
               SHA-256 · {checkpoint.receipt_sha256}
@@ -118,7 +118,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               <p><strong>Identidade:</strong> SOUL + RULES + AGENTS existentes. O modelo pode ser substituído.</p>
               <p><strong>Memória:</strong> checkpoint em disco, journal encadeado e histórico do Hermes; não depende da janela de contexto.</p>
               <p><strong>Executor:</strong> Hermes/CLI usa a mesma missão; a aprovação por etapa exige saída correta e contraprova.</p>
-              <p><strong>Continuidade:</strong> uma execução que falha não apaga o último PASS; a próxima tentativa retoma no NEXT_CURSOR.</p>
+              <p><strong>Continuidade:</strong> uma execução que falha não apaga o último sucesso confirmado; a próxima tentativa retoma de onde parou.</p>
               <p><strong>Fontes:</strong> VPS → checkpoint owner → servidor autenticado → este cockpit. Código e contratos permanecem na main.</p>
               <p className="text-xs text-muted-foreground">Com plano comprovado, continua sem repetir verdes. Sem plano, delega o próximo cursor ao Kanban Hermes existente; o Reality Judge valida cada resultado.</p>
             </div>
