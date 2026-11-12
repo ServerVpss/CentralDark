@@ -1,3 +1,30 @@
+---
+title: "Envelope causal único — CentralDark"
+date: 2026-11-12
+updated: 2026-11-12
+tags: [centraldark, arquitetura, evidencia, rastreabilidade, causalidade, cockpit, omni-router]
+status: DOCUMENTED_RUNTIME_PENDING
+source_class: INTERNAL
+authority: "EVIDENCE_CONTRACT_NOT_RUNTIME_AUTHORITY"
+owner: "supabase/functions/_shared/evidence-envelope.mjs"
+entrypoint: "supabase/functions/agent-log/index.ts"
+persistence: "public.agent_events"
+related:
+  - "docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md"
+  - "apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx"
+trace_provenance:
+  source: "ServerVpss/CentralDark@main"
+  observation_date: 2026-11-12
+  observed_commits:
+    - "1b72c62caa464bce09fe9931a77db1746702e08a"
+    - "f788dedd095989679b08cb311bacd7116552653b"
+  runtime_receipt: "UNKNOWN"
+  trace_id: "UNKNOWN"
+  mission_id: "UNKNOWN"
+  scope: "docs-and-route-audit"
+  validation: "SOURCE_READBACK_ONLY"
+---
+
 # Envelope causal único — CentralDark
 
 **Owner:** `supabase/functions/_shared/evidence-envelope.mjs`  
