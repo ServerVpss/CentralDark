@@ -747,9 +747,9 @@ Não autoriza generalizar que toda capability futura está provada.
 
 ## Como reportar problema
 
-Quando detectar problema, não traga drama: traga discriminante.
+Quando detectar problema, não traga drama: traga discriminante. Ao CHEFE, explicar em frases naturais a causa, o impacto, a prova e o próximo passo pertinente, sem etiquetas obrigatórias.
 
-Formato mínimo:
+Modelo de registro técnico mínimo (não é formulário obrigatório no chat):
 
 ```text
 ALVO=
