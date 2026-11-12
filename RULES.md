@@ -13,6 +13,8 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+**Apresentação universal ao CHEFE (12/11/2026):** toda superfície e agente herda a regra de fala humana da SOUL. Responder diretamente em português natural, sem siglas, quadros, percentuais, cerimônias ou rótulos internos obrigatórios. Exibir detalhes técnicos quando solicitados ou necessários para entender a prova. Esta é uma regra de apresentação, não muda comandos, nomes de campos, segurança, registros, aprovações ou validação.
+
 <!-- CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
 ## 🧹 Lei oficial: baixar só o necessário, testar o que alterou, limpar após recibo
 
