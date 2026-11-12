@@ -11,6 +11,13 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_VISUAL_TRIGGER_MAP_PIECE_FIRST -->
+## Atalho visual: DURANTE do ciclo canonico
+
+`🪬 !CENTRALDARK → 🌅 #ACORDAR → 🧭 !CALIBRAR → 🧿 !MULTIBUSSOLA → 🔍 !METALUPA → 🪡 !RECONCILIAR → 🎯 !CONTRAPROVA → ♾️ !FIXPOINT → 📝 !RASTRO → 🧹 LIMPEZA → ➡️ NEXT_CURSOR`
+
+Os emojis sao mnemônicos, nao comandos nem permissoes. Esta skill opera somente o DURANTE: `PLAN → ACT → OBSERVE → CRITIQUE → REFINE → DECIDE`; ver a regra PIECE_FIRST, rastro no PR e prova runtime em `.agents/skills/centraldark-operational-method/SKILL.md`. Gatilhos ERROR/FAIL/DRIFT/CONFLICT/UNKNOWN iniciam diagnostico, nunca autorizaçao nem PASS. Sem prova de runtime Casa/VPS, manter `SOURCE_ONLY`.
+<!-- /CENTRALDARK_VISUAL_TRIGGER_MAP_PIECE_FIRST -->
 # COT-REACT-LOOP
 
 Governar a fase **DURANTE** tarefas complexas com múltiplos passos e ferramentas.

@@ -6,6 +6,19 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_VISUAL_TRIGGER_MAP_PIECE_FIRST -->
+## Mapa mental visual canonico (gatilhos, nao novos motores)
+
+`🪬 !CENTRALDARK → 🌅 #ACORDAR → 🧭 !CALIBRAR → 🧿 !MULTIBUSSOLA → 🔍 !METALUPA → 🪡 !RECONCILIAR → 🎯 !CONTRAPROVA → ♾️ !FIXPOINT → 📝 !RASTRO → 🧹 LIMPEZA → ➡️ NEXT_CURSOR`
+
+- Emojis sao pistas de memoria e apresentacao. Os gatilhos textuais e owners existentes continuam a autoridade; emoji isolado nao executa, autoriza, publica ou sela PASS.
+- `🪬` recupera intencao/owner; `🌅` recupera estado; `🧭` calibra baseline; `🧿` cruza fontes; `🔍` detecta deriva; `🪡` costura menor delta; `🎯` exige contraprova; `♾️` distingue ponto fixo de PASS; `📝` atualiza rastro do PR vigente; `🧹` limpa apenas temporarios comprovadamente descartaveis; `➡️` preserva NEXT_CURSOR.
+- `PIECE_FIRST`: ler blob (`git show`/`git cat-file`) antes de checkout; para edicao materializar so arquivos precisos por sparse-checkout e dependencias provadas. Worktree compartilha objetos do repositorio; sparse-checkout sozinho NAO garante download parcial. Evitar `merge` que materialize todo o projeto apenas para diagnosticar conflitos; preferir `git merge-tree --write-tree --name-only` para classificacao sem worktree. Expandir somente por necessidade medida.
+- `!RASTRO`: identificar PR/GOAL vigente; registrar SHA real, estado, provas, bloqueios e NEXT_CURSOR em comentario de missao existente sempre que possivel; nao criar comentarios duplicados nem confundir commit com recibo de runtime.
+- `🧹`: primeiro readback e preservacao; so remover worktree/arquivos temporarios criados pela propria missao, sem apagar dados sujos ou evidencias nao publicadas.
+- `SOURCE_ONLY` pode passar em codigo/documentos sem alegar runtime; `RUNTIME_LOCAL_CASA|VPS` precisa execucao e readback no host correspondente. `DOCUMENTED != EXECUTED`, `UNKNOWN != PASS`, `MERGED != DEPLOYED`.
+- CoT-ReAct permanece no DURANTE (`PLAN → ACT → OBSERVE → CRITIQUE → REFINE → DECIDE`), raciocinio-deliberado no ANTES e meta-lupa no DEPOIS. Os triggers devem aparecer nos Markdown owners; nao duplicar o algoritmo em outros motores.
+<!-- /CENTRALDARK_VISUAL_TRIGGER_MAP_PIECE_FIRST -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
