@@ -64,7 +64,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
         <div>
           <h3 className="text-base font-semibold">🪬 !CENTRALDARK · Memória operacional</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Último fato comprovado → próximo cursor → execução. Independente da conversa ou do modelo.
+            Retomar do último resultado confirmado e continuar a execução, sem depender da conversa ou do modelo.
           </p>
         </div>
         <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">{label}</span>
@@ -104,7 +104,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
           </div>
           {disponivel && !checkpoint?.plan_ready && checkpoint?.dispatch_ready ? (
             <p className="mt-2 text-xs text-muted-foreground">
-              Sem plano local: continuar envia o próximo cursor ao Kanban original do Hermes, com idempotência. Enviar não significa concluir.
+              Sem plano local: o botão continua a missão no Hermes existente, evitando envios duplicados. Enviar não significa concluir.
             </p>
           ) : null}
           {disponivel && !checkpoint?.plan_ready && !checkpoint?.dispatch_ready ? (
@@ -120,7 +120,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               <p><strong>Executor:</strong> Hermes/CLI usa a mesma missão; a aprovação por etapa exige saída correta e contraprova.</p>
               <p><strong>Continuidade:</strong> uma execução que falha não apaga o último sucesso confirmado; a próxima tentativa retoma de onde parou.</p>
               <p><strong>Fontes:</strong> VPS → checkpoint owner → servidor autenticado → este cockpit. Código e contratos permanecem na main.</p>
-              <p className="text-xs text-muted-foreground">Com plano comprovado, continua sem repetir verdes. Sem plano, delega o próximo cursor ao Kanban Hermes existente; o Reality Judge valida cada resultado.</p>
+              <p className="text-xs text-muted-foreground">Com plano confirmado, continua sem repetir etapas concluídas. Sem plano, envia o próximo passo ao Hermes existente; uma verificação independente valida cada resultado.</p>
             </div>
           ) : null}
         </>
