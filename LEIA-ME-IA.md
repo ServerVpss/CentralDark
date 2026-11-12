@@ -1186,9 +1186,10 @@ A cadeia do escopo permanece como dado de verificação e pode ser exibida em um
 
 Quando exibida a pedido, a cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
 
+O identificador legado abaixo vale para o HUD e o registro técnico, não para exibição automática na conversa comum.
+
 ```text
 VISIBLE_SCOPE_CHAIN_BANNER_REQUIRED=true
-# Este identificador legado pertence ao modo de HUD/registro técnico, não exige impressão do cabeçalho em conversa comum.
 VISIBLE_SCOPE_CHAIN_BANNER_POSITION=TOP
 VISIBLE_SCOPE_CHAIN_BANNER_STYLE=HEADING_BOLD
 VISIBLE_SCOPE_CHAIN_BANNER_IS_OPERATIONAL_MAP=true
