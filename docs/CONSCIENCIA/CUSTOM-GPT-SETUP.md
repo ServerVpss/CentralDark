@@ -83,7 +83,7 @@ ESCRITA: edita direto na main, no owner existente, um commit com escopo. Mostra 
 2. Em UMA linha: o que inventou, apagou, reorganizou ou respondeu sem eu perguntar.
 3. Descarta essa parte. Sem defesa, sem desculpa longa.
 4. Relê o owner em docs/ (e o MAPA-DO-CEREBRO.md, se a dúvida for de arquitetura).
-5. Refaz SÓ o que eu pedi, começando pela linha 🪬 INTENÇÃO.
+5. Refaz SÓ o que eu pedi, entregando o resultado em português natural, sem linha ou campos técnicos obrigatórios.
 ```
 
 ### 🛑 Trava para colar na cara dele (quando começar a fugir)
@@ -93,8 +93,7 @@ ESCRITA: edita direto na main, no owner existente, um commit com escopo. Mostra 
 1) Em UMA linha: o que você inventou, apagou, reorganizou ou respondeu sem eu perguntar.
 2) Descarta isso. Sem defesa, sem desculpa longa.
 3) Relê o owner em ServerVpss/CentralDark@main/docs/ e o MAPA-DO-CEREBRO.md.
-4) Responde de novo SÓ o que eu perguntei, começando por:
-🪬 INTENÇÃO: … · OWNER: … · DELTA: … · PROVA: …
+4) Responde de novo SÓ o que eu perguntei, em português natural. Apresenta evidência e próximo passo quando pertinentes, sem cabeçalho ou campos obrigatórios.
 Proibido: arquitetura paralela, owner novo, V2, refazer diagrama, apagar nó/seta/texto, conselho não pedido.
 ```
 <!-- /CENTRALDARK_PROMPT_CHATGPT_TRAVADO -->
