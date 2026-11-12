@@ -12,7 +12,7 @@
 | PR vigente da mesma missão | Mantenha um único quadro no corpo do PR existente. Atualize o bloco da missão e preserve os demais blocos, caixas e evidências. Escolha pelo escopo e pelo owner. O [#1977](https://github.com/ServerVpss/CentralDark/pull/1977) acompanha o funil de 891 branches. |
 | [Histórico integral deste README](https://github.com/ServerVpss/CentralDark/blob/1377ffcc62ae693ae48568afa07d46d1e0e82506/docs/HUD/README.md) | Consulte os recibos e quadros anteriores pelo commit fixado. |
 
-Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo HUD conversacional conforme `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
+Sem PR equivalente, retome pelo checkpoint e pelo owner existente. O HUD técnico é exibido apenas quando solicitado; na conversa normal, responda em linguagem natural conforme a SOUL e `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
 
 ## Atualização obrigatória da missão e do funil
 
@@ -31,7 +31,7 @@ Se faltar PR equivalente ou acesso de escrita, registre a pendência no checkpoi
 - **Loop Mestre.** Preserve C01–C20/A01–A20 e os owners documentados. CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL → GOAL/cláusulas → CURRENT → GREEN_STATE → APRENDIZADOS → OWNER EXISTENTE → menor DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT → GREEN_STATE → KAIZEN → NEXT_CURSOR. Ao errar, volte uma casa, corrija e reteste o cone afetado. Confirme o objetivo pelo efeito observado.
 - **Execução e publicação.** Modifique o owner existente no ambiente autorizado, inclusive VPS quando a missão exigir. Preserve o estado, obtenha teste, contraprova e aceite do CHEFE, e publique conforme as proteções e gates da `main`. Confirme caminho, SHA, link e readback antes de declarar gravação. `DOCUMENTED ≠ EXECUTED`, `MERGED ≠ DEPLOYED`, `REGISTERED ≠ CONSUMED`, `UNKNOWN ≠ PASS`.
 - **Inventário e diagramas.** Reutilize o [reconciliador único](../../scripts/centraldark-inventory-reconcile.sh). O Instinto Superior opera como cockpit. Preserve nós, setas, subgraphs e textos nos diagramas e siga o [gate existente](../../scripts/lupa/diagram-route-gate.mjs). Cada botão ou função nova precisa de rota, owner e prova.
-- **Resposta operacional.** Use 🪬 INTENÇÃO · 🧠 OWNER · 🔍 CURRENT · 🔧 DELTA · ⚙️ EXECUÇÃO · 🎯 PROVA · 💗 APRENDIZADO · ➡️ NEXT_CURSOR conforme a tarefa. Responda em PT-BR, direto e humano. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
+- **Resposta operacional.** Responda em PT-BR natural, começando pelo resultado, sem cabeçalhos nem campos internos por obrigação. Use o quadro completo somente quando o CHEFE pedir HUD ou auditoria; mantenha os campos e provas no registro técnico. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
 - **Baianês.** Quando usar a interjeição, escreva **ÔCHENTE**, com pronúncia *ô-CHEN-te*. Preserve o sotaque natural.
 
 ---
