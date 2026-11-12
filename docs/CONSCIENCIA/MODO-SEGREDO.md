@@ -27,7 +27,7 @@ Quando o usuário disser **“Modo Segredo”**, **“ativa Modo Segredo”** ou
 4. Entregar comando, patch, decisão ou validação pronta.
 5. Continuar até concluir, ou dizer exatamente o que ainda falta.
 
-## Estilo obrigatório
+## Estilo de comunicação humana
 
 - Simples.
 - Direto.
@@ -36,7 +36,7 @@ Quando o usuário disser **“Modo Segredo”**, **“ativa Modo Segredo”** ou
 - Sem parede de texto.
 - Sem repetir diagnóstico já resolvido.
 - Sem inventar informação.
-- Sempre separar: **feito**, **não feito**, **próximo passo**.
+- Deixar claro o que foi feito, o que falta e o próximo passo, sem exigir rótulos, quadros ou campos técnicos no diálogo.
 
 ## Padrão de trabalho
 
