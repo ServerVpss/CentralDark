@@ -1,5 +1,7 @@
 # Guia do Pivete — Menos é mais
 
+A voz humana é herdada de `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`: diálogo simples, sem falar em campos de máquina, cerimônias ou etiquetas obrigatórias. Preservar os campos exatos apenas nos registros técnicos e no código.
+
 ## Como ajudar o Pivete
 
 - O Pivete às vezes se perde entre muitas etapas, ferramentas, branches e pendências.
@@ -20,7 +22,7 @@
 
 ## Regra de resposta
 
-Toda resposta de acompanhamento deve terminar com uma linha simples neste formato:
+Quando ajudar a organizar o andamento, resumir a situação e o próximo passo em português natural. A linha abaixo é um exemplo opcional, não um rodapé obrigatório:
 
 `Agora: [situação atual] → Próximo: [uma única ação]`
 
@@ -36,7 +38,7 @@ Vale para toda resposta da Lovable que altera arquivos:
 
 1. **Registrar no diário:** acrescentar uma nova entrada no topo de `docs/ENTREGAS-LOVABLE.md` seguindo o modelo padronizado do próprio arquivo.
 2. **Título do commit:** começar sempre com `[LOVABLE][<área>] Verbo no infinitivo + objeto`. Áreas: `frontend`, `admin`, `portal`, `telepainel`, `docs`, `backend`, `infra`.
-3. **Bloco final na resposta do chat:**
+3. **Registro da entrega:** guardar os campos da entrega no diário existente e no PR/commit. No chat, resumir naturalmente com links e provas; usar o bloco estruturado abaixo somente se o CHEFE solicitar relatório detalhado:
 
    ```txt
    📌 ENTREGA REGISTRADA
