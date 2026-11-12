@@ -306,3 +306,68 @@ AUTONOMOUS_KNOWN_CONFLICTS=true
 UNKNOWN_CONFLICT_STOPS_YELLOW=true
 PROVEN_YELLOW_RESOLUTION_ENTERS_EXISTING_REGISTRY=true
 ```
+
+## COSTURA sem merge: auditoria de base e indice isolado
+
+A falha observada em 11/11/2026 mostrou um caso diferente de conflito de PR:
+o checkout da Casa tinha HEAD local divergente da main remota. O comando
+`git diff --cached --check` comparou o indice isolado contra o HEAD local,
+misturando erros preexistentes de outras missoes. Nao era conflito de merge.
+
+O **mesmo motor** `scripts/dependabot/resolve-conflicts.sh` possui agora
+o modo somente leitura `--audit-index`, sem novo resolvedor ou writer:
+
+```bash
+# GIT_INDEX_FILE aponta para indice temporario construido pelo caller
+# com git read-tree <SHA_BASE> e update-index apenas dos arquivos permitidos.
+REPO_DIR="$REPO" GIT_INDEX_FILE="$INDEX_ISOLADO" \
+  bash scripts/dependabot/resolve-conflicts.sh \
+  --audit-index "$SHA_BASE" refs/heads/main -- "caminho/arquivo.md"
+```
+
+- A base e obrigatoriamente um SHA completo, nao HEAD implicito.
+- O motor compara `git diff --cached --check "$SHA_BASE"` e valida
+  todos os paths alterados, rejeitando arquivos fora do escopo.
+- `refs/heads/main` e lido do remoto antes do PASS; drift bloqueia.
+- `-` no lugar da referencia remota exige modo local-only explicito.
+- Exige GIT_INDEX_FILE isolado; nunca troca o indice normal da Casa.
+- Nao executa merge, commit, reset, checkout, stash, push ou escrita.
+- O HEAD local divergente e metadado de diagnostico, nao base da prova.
+- Os testes do modo novo vivem no `resolve-conflicts-policy.test.sh`
+  existente. Reutilizar a COSTURA para auditorias similares de branches,
+  checkouts, staging, cherry-pick candidato e publicacoes por indice isolado.
+
+```text
+WRONG_IMPLICIT_HEAD_BASE != CONFLICT
+REMOTE_PIN != LOCAL_HEAD
+ISOLATED_INDEX != CASA_INDEX
+SCOPED_DIFF_CHECK + REMOTE_READBACK -> REVIEWABLE_CANDIDATE
+AUDIT_PASS != PUBLISHED
+```
+## Python da COSTURA: selecao validada, sem confundir com Hermes (11/11/2026)
+
+Contraprova da Casa: no Git Bash, `python3` foi resolvido em
+`WindowsApps/python3`, iniciando um Python 3.14.7 incompleto
+(sem `Lib/enum.py`). Esse interpretador **nao** era o runtime de Hermes.
+
+O Hermes possui ambientes Python proprios e validos (3.14.9, venv 3.14.7 e
+venv 3.11.16), mas o resolvedor de PR **nao depende** desses ambientes.
+
+No mesmo motor `scripts/dependabot/resolve-conflicts.sh`, a funcao
+`costura_python` verifica versao Python 3.8+ e imports
+`ast`, `enum` e `pathlib`, tentando `python3` antes de `python`.
+Somente um interpretador aprovado executa as validacoes YAML/Python.
+A variavel opcional `CENTRALDARK_COSTURA_PYTHON` permite selecionar
+explicitamente um interpretador, inclusive um ambiente Hermes, mas uma
+selecao invalida **bloqueia** o processo; nao faz fallback silencioso.
+
+```text
+PYTHON3_COMMAND_FOUND != PYTHON_STDLIB_COMPLETE
+HERMES_PYTHON_AVAILABLE != COSTURA_USES_HERMES
+COSTURA_PYTHON_SELECTED=verified_runtime
+INVALID_PYTHON -> BLOCKED_COSTURA_NO_VALID_PYTHON
+NO_GLOBAL_PYTHON_PATH_CHANGE=true
+```
+
+A prova de regressao reside no `resolve-conflicts-policy.test.sh` existente,
+que exige `COSTURA_PYTHON_SELECTED` no receipt do resolver.

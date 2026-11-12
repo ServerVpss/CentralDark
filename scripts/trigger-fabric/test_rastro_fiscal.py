@@ -209,5 +209,104 @@ class RastroFiscalTests(unittest.TestCase):
         )
 
 
+    @staticmethod
+    def replay_fixture():
+        base, created, updated, deleted = ("b" * 40, "c" * 40, "d" * 40, "e" * 40)
+        target = "docs/receipts/temporary-rastro-proof.txt"
+        payload = {
+            "schema": M.REPLAY_SCHEMA, "repo": REPO, "path": target,
+            "main_sha": base, "create_sha": created,
+            "update_sha": updated, "delete_sha": deleted,
+            "created_content": "created\n", "updated_content": "updated\n",
+        }
+
+        class ReplayBackend(M.FakeBackend):
+            def __init__(self):
+                super().__init__(commits={
+                    base: {}, created: {target: "created\n"},
+                    updated: {target: "updated\n"}, deleted: {}
+                }, main=base)
+                self.parents = {created: base, updated: created, deleted: updated}
+
+            def commit(self, sha):
+                obj = super().commit(sha)
+                if obj:
+                    full = obj["sha"]
+                    obj["parents"] = ([{"sha": self.parents[full]}]
+                                      if full in self.parents else [])
+                    obj["commit"] = {"tree": {"sha": "same-tree" if
+                                               full in (base, deleted) else full}}
+                return obj
+
+        return payload, ReplayBackend()
+
+    def test_historical_replay_pass_and_repeated_identical_output(self):
+        fixture, backend = self.replay_fixture()
+        first = M.verify_session_replay(fixture, REPO, backend)
+        second = M.verify_session_replay(fixture, REPO, backend)
+        self.assertEqual("PASS", first["verdict"])
+        self.assertEqual(first, second)
+        self.assertEqual("NOT_TESTED", first["current_write"])
+        self.assertFalse(first["modified_repository"])
+
+    def test_historical_replay_wrong_update_must_fail(self):
+        fixture, backend = self.replay_fixture()
+        fixture["updated_content"] = "fabricated"
+        self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+
+    def test_historical_replay_file_not_deleted_must_fail(self):
+        fixture, backend = self.replay_fixture()
+        backend.commits[fixture["delete_sha"]][fixture["path"]] = "leftover"
+        self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+
+    def test_historical_replay_wrong_parent_must_fail(self):
+        fixture, backend = self.replay_fixture()
+        backend.parents[fixture["update_sha"]] = fixture["main_sha"]
+        self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+
+    def test_historical_replay_unavailable_is_unknown(self):
+        fixture, backend = self.replay_fixture()
+        backend.unavailable = True
+        self.assertEqual("UNKNOWN", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+
+    def test_historical_replay_rejects_path_traversal_and_wrong_repo(self):
+        fixture, backend = self.replay_fixture()
+        fixture["path"] = "../secrets"
+        self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+        fixture["path"] = "docs/receipts/temporary-rastro-proof.txt"
+        fixture["repo"] = "other/repo"
+        self.assertEqual("FAIL", M.verify_session_replay(fixture, REPO, backend)["verdict"])
+
+
+    def test_historical_replay_digest_is_canonical_and_metadata_outside(self):
+        fixture, backend = self.replay_fixture()
+        first = M.verify_session_replay(fixture, REPO, backend)
+        second = M.verify_session_replay(fixture, REPO, backend)
+        digest = first["REPLAY_RESULT"]["sha256"]
+        self.assertRegex(digest, r"^[0-9a-f]{64}$")
+        self.assertEqual(digest, second["REPLAY_RESULT"]["sha256"])
+        self.assertEqual(first["REPLAY_RESULT"]["verdict"], first["verdict"])
+        self.assertIsNone(first["EXECUTION_METADATA"])
+        self.assertEqual("HISTORICAL_GITHUB_REPLAY_ONLY", first["PROOF_SCOPE"])
+        self.assertIn("CURRENT_DELETE_BY_CENTRALDARK_MCP", first["UNTESTED_FRONTIERS"])
+
+    def test_historical_replay_digest_tracks_evidence_not_environment(self):
+        fixture, backend = self.replay_fixture()
+        first = M.verify_session_replay(fixture, REPO, backend)
+        backend.commits[fixture["delete_sha"]][fixture["path"]] = "residual"
+        second = M.verify_session_replay(fixture, REPO, backend)
+        self.assertEqual("FAIL", second["verdict"])
+        self.assertNotEqual(first["REPLAY_RESULT"]["sha256"], second["REPLAY_RESULT"]["sha256"])
+
+    def test_note_metadata_has_timestamp_but_is_not_replay(self):
+        a = M.verify_note_metadata(self.valid_note(), "notes/test.md")
+        b = M.verify_note_metadata(self.valid_note(), "notes/test.md")
+        self.assertEqual("PASS", a["verdict"])
+        self.assertEqual("PASS", b["verdict"])
+        self.assertIn("checked_at", a)
+        self.assertNotIn("REPLAY_RESULT", a)
+
+
+
 if __name__ == "__main__":
     unittest.main()
