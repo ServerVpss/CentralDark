@@ -49,3 +49,12 @@ Prova local de codigo e integracao. COMMIT != CI_PASS != DEPLOYED != PAREADO. A 
 
 **Próximo passo:** reconciliar o checkout local com main sem apagar trabalho alheio; em janela autorizada, recarregar somente centraldark-native-mcp-http.service e fazer pareamento novo, com confirmação humana, status, heartbeat e tools/list autenticado. DOC != SERVIÇO RECARREGADO != DISPOSITIVO PAREADO.
 <!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+
+<!-- HISTORICO_CONFIRMAR_CODIGO_20261108 -->
+## Apresentação da confirmação
+
+@code_ref: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@last_updated: 2026-11-08T22:47:36Z
+
+Quando o servidor já entrega o código, a confirmação reutiliza o painel dourado do acesso do Cockpit. A página destaca o código e o botão de confirmação. O formulário continua enviando o identificador, o nonce e o código ao mesmo endpoint. Os estados de digitação, login, erro e sucesso continuam disponíveis.
+<!-- /HISTORICO_CONFIRMAR_CODIGO_20261108 -->
