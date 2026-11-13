@@ -163,6 +163,15 @@ if ($LocalStatus) {
     remote_command_execution = 'NOT_TESTED'
     vps_role = 'RUNTIME_24_7_SAME_PRODUCT'
     linux_k_role = 'FORJA_NATIVE_OR_VMWARE_WHEN_AUTHORIZED'
+    forja_binding = [ordered]@{
+      target = [string]$localConfig.local_first.linux_forja.execution_target
+      ssh_alias = [string]$localConfig.local_first.linux_forja.ssh_alias
+      root = [string]$localConfig.local_first.linux_forja.canonical_root
+      transport = [string]$localConfig.local_first.linux_forja.transport
+      windows_role = [string]$localConfig.local_first.linux_forja.windows_role
+      tunnel_readiness = [string]$localConfig.local_first.linux_forja.mcp_tunnel_readiness
+      verified_in_this_local_status = $false
+    }
     ssh_reverse = 'REUSE_EXISTING_CASA_VPS_RECIPE_ONLY'
     mutations = 'NONE'
   }
