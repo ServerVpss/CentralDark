@@ -143,6 +143,36 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 **Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sessão dele. Indicou Casa Agent/rota/autenticação e teste remoto real como pendências. Essas são declarações do próprio painel e não substituem medições independentes em cada ambiente.
 <!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
 
+<!-- CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
+## Terminal SSH existente na Casa → Linux CentralDark-OS
+
+Consumir o `RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX` da Skill Mãe. Esta skill cuida da **aquisição visual do alvo**; ela não cria uma segunda sessão SSH por padrão.
+
+```text
+ENUMERAR_WINDOWS
+→ MATCH TITLE + PID + WINDOW_RECT
+→ MONITOR_MATCH
+→ FOCUS
+→ PROBE_MINIMO_READ_ONLY
+→ CAPTURE/READBACK DA MESMA ABA
+→ SSH_TARGET_MATCH
+→ TYPE/PASTE ONE COMMAND
+→ CAPTURE/READBACK DA MESMA ABA
+→ EFFECT_PROOF
+```
+
+Regras:
+- janela correta não implica aba correta;
+- `AppActivate=PASS` ou mecanismo equivalente prova foco da janela, não entrega no shell remoto;
+- antes do comando material, exigir um probe inofensivo visível na própria aba SSH;
+- se uma ferramenta abrir aba auxiliar ou `send-input`, tratar como `WRONG_SURFACE`, congelar retry e fechar somente a superfície criada pela operação quando isso for seguro;
+- após qualquer mudança de aba/foco/render, reacquirir PID/título/retângulo/monitor antes de nova entrada;
+- comando que usa segredo deve referenciá-lo no processo remoto sem imprimir o valor; screenshot/readback não pode conter token;
+- `INPUT_DELIVERY_OK != TERMINAL_TEXT_VISIBLE != REMOTE_EFFECT_PROVEN`.
+
+Este caminho complementa Cua/UIA/overlay; usar o mecanismo de input já disponível e autorizado para aquela bancada. Não mover mouse físico, não abrir novo terminal só para contornar target lock e não transformar coordenada histórica em receita.
+<!-- /CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
+
 <!-- CENTRALDARK_VISUAL_RECOVERY_LADDER_10X1_20261112 -->
 ## Recovery Ladder visual 10×1 — falhou o clique, a missão continua
 
