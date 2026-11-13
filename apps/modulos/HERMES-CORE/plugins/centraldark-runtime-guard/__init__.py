@@ -19,7 +19,9 @@ from pathlib import Path
 from typing import Any
 
 PLUGIN_NAME = "centraldark-runtime-guard"
-DEFAULT_REPO = Path("/root/CentralDark")
+REPO_IDENTITY_FILE = "LEIA-ME-IA.md"
+VPS_COMPAT_REPO_CANDIDATE = Path("/root/CentralDark")
+WINDOWS_COMPAT_REPO_CANDIDATE = Path("F:/CentralDark")
 LOGICAL_PREFIXES = (
     "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/",
     "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/",
@@ -34,7 +36,7 @@ LOGICAL_EXACT = {
 MUTATING_TOOLS = {"write_file", "patch", "skill_manage", "terminal", "browser_exec"}
 HARVEST_OWNER = ".agents/skills/session-intelligence-harvester/SKILL.md"
 DEFAULT_MEMORIA_INGEST_URL = "http://127.0.0.1:3101/memoria/ingest"
-DEFAULT_MEMORIA_INGEST_TOKEN_FILE = Path("/root/CentralDark/secrets/memoria-ingest.token")
+DEFAULT_MEMORIA_INGEST_TOKEN_NAME = "memoria-ingest.token"
 SESSION: dict[str, Any] = {
     "started_at": None,
     "last_anchor_hash": None,
@@ -48,15 +50,46 @@ def now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _is_centraldark_repo(candidate: Path) -> bool:
+    return (
+        (candidate / REPO_IDENTITY_FILE).is_file()
+        and (candidate / ".agents").is_dir()
+    )
+
+
+def _repo_candidates() -> list[Path]:
+    source = Path(__file__).resolve()
+    cwd = Path.cwd().resolve()
+    ordered = [
+        *source.parents,
+        cwd,
+        *cwd.parents,
+        VPS_COMPAT_REPO_CANDIDATE,
+        WINDOWS_COMPAT_REPO_CANDIDATE,
+    ]
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for candidate in ordered:
+        key = str(candidate)
+        if key not in seen:
+            seen.add(key)
+            unique.append(candidate)
+    return unique
+
+
 def repo_root() -> Path:
     configured = os.environ.get("CENTRALDARK_REPO_ROOT", "").strip()
     if configured:
         return Path(configured).expanduser().resolve()
-    source = Path(__file__).resolve()
-    for candidate in (source, *source.parents):
-        if (candidate / ".git").exists():
-            return candidate
-    return DEFAULT_REPO.expanduser().resolve()
+
+    for candidate in _repo_candidates():
+        if _is_centraldark_repo(candidate):
+            return candidate.expanduser().resolve()
+
+    # Fail soft into the current environment so downstream checks report
+    # REPO_NOT_FOUND/MATERIALIZATION_GAP instead of pretending /root/CentralDark
+    # is canonical on every host.
+    return Path.cwd().resolve()
 
 
 def stable_hash(value: Any) -> str:
@@ -251,7 +284,7 @@ def load_memoria_ingest_token() -> str:
     if token:
         return token
     configured_token = os.environ.get("MEMORIA_INGEST_TOKEN_FILE", "").strip()
-    token_file = Path(configured_token).expanduser() if configured_token else repo_root() / "secrets" / DEFAULT_MEMORIA_INGEST_TOKEN_FILE.name
+    token_file = Path(configured_token).expanduser() if configured_token else repo_root() / "secrets" / DEFAULT_MEMORIA_INGEST_TOKEN_NAME
     try:
         return token_file.read_text(encoding="utf-8").strip()
     except OSError:
