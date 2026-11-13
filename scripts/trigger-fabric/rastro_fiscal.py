@@ -441,6 +441,20 @@ class FakeBackend:
         return any(full.lower().startswith(x) or x.startswith(full.lower()) for x in self.ledger)
 
 
+def _ledger_issue_number(ref: Optional[str]) -> Optional[int]:
+    if not ref:
+        return None
+    raw = ref.strip().strip(chr(96)).strip("'\"")
+    for pattern in (
+        r"github\.com/[^/\s]+/[^/\s]+/(?:pull|issues)/(\d+)",
+        r"\bPR\s*#?(\d+)\b",
+        r"^#(\d+)$",
+    ):
+        match = re.search(pattern, raw, re.I)
+        if match:
+            return int(match.group(1))
+    return None
+
 def _ledger_comment_id(ref: Optional[str]) -> Optional[int]:
     if not ref:
         return None
