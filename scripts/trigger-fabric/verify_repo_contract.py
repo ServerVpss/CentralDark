@@ -727,6 +727,7 @@ check('.agents/skills/meta-lupa/SKILL.md',[
  'FALSO_VERDE_BLOQUEADO=SIM',
  'Variantes dentro das três temperaturas',
  'MEDIA_RECOVERY_VISUAL',
+ 'MEDIA_MATERIALIZATION_GAP',
  'QUENTE_RECURRENCIA_ADVERSARIAL',
 ], classification='META_LUPA_TEMPERATURE_VARIANT_CONTRACT')
 check('.agents/skills/meta-lupa/scripts/meta_lupa.py',[
@@ -734,8 +735,36 @@ check('.agents/skills/meta-lupa/scripts/meta_lupa.py',[
  'def select_variant(data: dict',
  '"variant_used": select_variant',
  '"VISUAL_ACTION_NO_EFFECT"',
+ '"MATERIALIZATION_GAP"',
+ '"MEDIA_MATERIALIZATION_GAP"',
  '"RECOVERY_RECURRENT"',
 ], classification='META_LUPA_EXECUTABLE_VARIANT_CLASSIFIER')
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_materialization_scope(observation: dict)',
+ '"NO_MATERIALIZATION_NEEDED"',
+ '"MINIMAL_DEPENDENCY_CONE"',
+ '"REQUIRED_CHECKOUT_SCOPE"',
+ '"UNKNOWN_MATERIALIZATION_SCOPE"',
+ '"MEDIA_MATERIALIZATION_GAP"',
+], classification='MATERIALIZATION_SCOPE_EXECUTABLE_CLASSIFIER')
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'Materialization Scope: trazer o owner ao ambiente sem falsificar raiz',
+ 'MINIMAL_DEPENDENCY_CONE',
+ 'REQUIRED_CHECKOUT_SCOPE',
+ 'MATERIALIZED_PATH != CANONICAL_OWNER',
+ 'PATH_RESOLVED != PATH_EXISTS',
+], classification='TARGET_LOCK_MATERIALIZATION_SCOPE_CONTRACT')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'def _is_centraldark_repo(candidate: Path)',
+ 'def _repo_candidates() -> list[Path]',
+ 'VPS_COMPAT_REPO_CANDIDATE',
+ 'WINDOWS_COMPAT_REPO_CANDIDATE',
+ 'return Path.cwd().resolve()',
+], classification='HERMES_RUNTIME_DYNAMIC_REPO_ROOT')
+check_absent('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ r'DEFAULT_REPO\s*=\s*Path\(["\']\/root\/CentralDark["\']\)',
+], classification='NO_HARDCODED_CANONICAL_REPO_ROOT')
+
 check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
  'def classify_visual_recovery(observation: dict)',
  '"H01_STALE_RUNTIME_TARGET"',
