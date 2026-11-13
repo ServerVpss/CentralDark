@@ -74,6 +74,10 @@ Antes das três estrelas, resolver o alvo pelo contrato da Skill Mãe:
 4. Se falhar, investigar causa, corrigir menor componente e retestar o **mesmo escopo**; não criar mecanismo paralelo.
 5. Para software, adicionar testes e integração apropriados; para arquivos simples, prova do efeito no disco é a integração proporcional.
 
+## ♻️ Recovery Michelin — ação sem efeito não perde a missão
+
+Se a ação visual não produzir efeito comprovado, não remover estrelas por impulso nem repetir o clique. Preservar o último verde e aplicar o Recovery Ladder 10×1 do Hermes Visual: ⭐ localizar hipótese/prova discriminante; ⭐⭐ integrar a menor recuperação segura; ⭐⭐⭐ somente depois do readback/contraprova. `10_HYPOTHESES != 10_RETRIES`; retry idempotente da mesma ação é no máximo um por fingerprint invariável e apenas após evidência nova de actionability. Sem causa suficiente: `BLOCKED_WITH_CURSOR`, não abandono nem falso PASS.
+
 ## ⭐⭐⭐ Terceira estrela: PROVAR
 
 1. Conferir no host certo o efeito exato: criar = existe+conteúdo; excluir = alvo ausente; editar = delta correto; formato novo = arquivo válido; deploy = runtime correto e provas exigidas.
