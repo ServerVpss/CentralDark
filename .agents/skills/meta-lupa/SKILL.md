@@ -86,6 +86,7 @@ VARIANTE    = classe causal / método discriminante
 ### MÉDIA — variantes de diagnóstico
 
 - `MEDIA_CAUSA_DISCRIMINANTE`: hipótese distinguível + uma variável/teste por vez.
+- `MEDIA_MATERIALIZATION_GAP`: owner/caminho relativo conhecido, mas `ENVIRONMENT_ROOT` não resolvido ou `RESOLVED_ABSOLUTE_PATH` inexistente no executor; distinguir `MINIMAL_DEPENDENCY_CONE` de `REQUIRED_CHECKOUT_SCOPE` antes de importar/executar.
 - `MEDIA_RECOVERY_VISUAL`: ação visual sem efeito, target/monitor/actionability divergente; classificar H01..H10 e testar uma hipótese read-only por vez.
 - `MEDIA_FALSO_VERDE`: sucesso aparente com evidência insuficiente.
 - `MEDIA_DRIFT_DISTRIBUIDO`: runtime/host/SHA/superfície divergem.
