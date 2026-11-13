@@ -747,6 +747,41 @@ check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
  '"UNKNOWN_MATERIALIZATION_SCOPE"',
  '"MEDIA_MATERIALIZATION_GAP"',
 ], classification='MATERIALIZATION_SCOPE_EXECUTABLE_CLASSIFIER')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'EXISTING_SSH_TERMINAL_AVAILABLE',
+ 'SSH_VISUAL_PROBE_PASS',
+ 'SSH_WRONG_SURFACE',
+ 'SSH_REMOTE_EFFECT_READBACK',
+ 'MISSION_STATE_READY_FOR_HUD',
+ 'CANONICAL_SKILL_RECIPE_CHANGED',
+], classification='SSH_TRIGGER_FEEDBACK_HUD_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'existing_ssh_terminal_feedback_sync_contract:',
+ 'FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL',
+ 'PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR',
+ 'MAIN_RUNTIME_LOCK_IS_NOT_ACTIVE_SESSION_LOAD',
+], classification='SSH_FEEDBACK_SYNC_MASTER_CONTRACT')
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_existing_ssh_terminal_event(observation: dict)',
+ 'def classify_mission_hud_publication(observation: dict)',
+ 'ssh-terminal-event',
+ 'hud-mission-state',
+], classification='SSH_FEEDBACK_HUD_EXECUTABLE_CLASSIFIER')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md',[
+ 'centraldark_autosync: true',
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+], classification='SSH_VISUAL_SKILL_AUTOSYNC')
+check('.agents/skills/skill-synchronization/SKILL.md',[
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'SYNCED_BYTES != SESSION_LOADED != RECIPE_EXECUTED != EFFECT_PROVED',
+], classification='SSH_RECIPE_SKILL_SYNC_OWNER')
+check('docs/HUD/README.md',[
+ 'MISSION_STATE_READY_FOR_HUD',
+ 'FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL',
+ 'PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR',
+ 'NO_HUD_WRITE_NO_MATERIAL_DELTA',
+], classification='HUD_CURRENT_OR_FINALIZE_MISSION_CONTRACT')
+
 check('.agents/skills/centraldark-operational-method/SKILL.md',[
  'RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
  'WINDOW_FOCUSED != CORRECT_TAB',
