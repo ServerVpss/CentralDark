@@ -58,6 +58,55 @@ def test_prose_does_not_activate():
     assert mod.explicit_command_context("falei de centraldark ontem") is False
 
 
+def test_existing_ssh_terminal_event_state_machine():
+    available = mod.classify_existing_ssh_terminal_event({"existing_session_visible": True})
+    assert available["event"] == "EXISTING_SSH_TERMINAL_AVAILABLE"
+    assert available["material_command_allowed"] is False
+
+    probe = mod.classify_existing_ssh_terminal_event({
+        "existing_session_visible": True,
+        "probe_visible_same_tab": True,
+        "ssh_target_match": True,
+    })
+    assert probe["event"] == "SSH_VISUAL_PROBE_PASS"
+    assert probe["material_command_allowed"] is True
+
+    wrong = mod.classify_existing_ssh_terminal_event({"wrong_surface": True})
+    assert wrong["event"] == "SSH_WRONG_SURFACE"
+    assert wrong["retry_frozen"] is True
+
+    effect = mod.classify_existing_ssh_terminal_event({"remote_effect_proven": True})
+    assert effect["event"] == "SSH_REMOTE_EFFECT_READBACK"
+    assert effect["feedback_route"] == "PERSISTENT_GAP_SWEEP"
+
+
+def test_hud_publication_finalizes_or_posts_current():
+    current = mod.classify_mission_hud_publication({
+        "material_state_changed": True,
+        "fixed_point": False,
+        "next_cursor": "SYNC_RUNTIME",
+    })
+    assert current["publish"] is True
+    assert current["action"] == "PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR"
+    assert current["next_cursor_required"] is True
+    assert current["next_cursor_present"] is True
+
+    done = mod.classify_mission_hud_publication({
+        "material_state_changed": True,
+        "fixed_point": True,
+    })
+    assert done["publish"] is True
+    assert done["action"] == "FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL"
+    assert done["next_cursor_required"] is False
+
+    no_delta = mod.classify_mission_hud_publication({
+        "material_state_changed": False,
+        "fixed_point": False,
+    })
+    assert no_delta["publish"] is False
+    assert no_delta["action"] == "NO_HUD_WRITE_NO_MATERIAL_DELTA"
+
+
 def test_realtime_feedback_routes_without_mutation_permission():
     feedback = mod.classify_realtime_feedback("print/log novo da missão")
     assert feedback["active"] is True
@@ -762,6 +811,8 @@ if __name__ == "__main__":
     tests = [
         test_normalization_variants,
         test_prose_does_not_activate,
+        test_existing_ssh_terminal_event_state_machine,
+        test_hud_publication_finalizes_or_posts_current,
         test_realtime_feedback_routes_without_mutation_permission,
         test_materialization_scope_classification,
         test_visual_recovery_h01_h10_classification,
