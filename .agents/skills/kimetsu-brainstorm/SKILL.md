@@ -87,6 +87,32 @@ Pergunta ≠ pedir autorização. Intent descoberto ≠ intenção aprovada para
 
 ---
 
+## 2.1 TARGET LOCK — distância real até o alvo
+
+Antes de escolher uma Respiração de execução, resolver as coordenadas do alvo:
+
+```
+TARGET_ID=
+OWNER_RELATIVE_PATH=
+ENVIRONMENT_ROOT=
+RESOLVED_ABSOLUTE_PATH=
+RUNTIME_TARGET_ID=
+RELATIVE_TRAJECTORY=
+ABSOLUTE_TRAJECTORY=
+TARGET_MATCH=PASS|FAIL|UNKNOWN
+```
+
+**Semântica:**
+- `TARGET_ID` é a identidade estável.
+- `OWNER_RELATIVE_PATH` é portátil entre hosts.
+- `RESOLVED_ABSOLUTE_PATH` é físico e pertence ao ambiente atual.
+- `RUNTIME_TARGET_ID` (PID/HWND/RuntimeId/tab id etc.) é efêmero.
+- `RELATIVE_TRAJECTORY` descreve a rota semântica reutilizável.
+- `ABSOLUTE_TRAJECTORY` registra a rota observada nesta execução.
+- `TARGET_MATCH` exige convergência suficiente para provar que todas as coordenadas levam ao alvo pretendido.
+
+**Selector Kimetsu:** se `TARGET_MATCH != PASS`, permanecer em 🫁 Concentração Total, 🌫️ Névoa ou 🌊 Água para resolver ambiguidade. ⚡ Trovão e 🦋 Inseto só executam após lock. 🔥 Chamas preserva o mesmo `TARGET_ID` e revalida absoluto/runtime ID a cada mudança de host, sessão ou processo. Nunca transformar PID, drive letter, coordenada de tela ou path histórico em identidade permanente.
+
 ## 3. ENCADEAMENTO — RESPIRAÇÃO SELEciona BASEADO NO ESTADO
 
 ```
