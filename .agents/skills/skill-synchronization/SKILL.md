@@ -34,6 +34,26 @@ RUNTIME_SEAL_BINDS_TO_MAIN_SHA=true
 
 Only skills with centraldark_autosync: true are in automatic scope. This avoids bulk-enabling unrelated third-party/security skills.
 
+## Receita SSH visual — consumo e sync
+
+A receita `CASA_EXISTING_SSH_TERMINAL_TO_LINUX` permanece dona da Skill Mãe/Visual/Ops; este owner **somente sincroniza bytes canônicos** das skills opt-in.
+
+A skill `centraldark-hermes-visual-computer-use` participa de `centraldark_autosync: true`. Quando a receita canônica mudar:
+
+```text
+CANONICAL_SKILL_RECIPE_CHANGED
+→ fetch exact origin/main
+→ skill-sync-check.sh --check
+→ classify runtime drift
+→ --apply only when safe
+→ hash readback
+→ MAIN_RUNTIME_LOCK
+→ ACTIVE_SESSION_LOAD remains UNKNOWN until observed
+→ MISSION_STATE_READY_FOR_HUD
+```
+
+`SYNCED_BYTES != SESSION_LOADED != RECIPE_EXECUTED != EFFECT_PROVED`. O sync não cria sessão SSH, não executa comando Linux e não atualiza HUD por si; ele fornece o estado de sincronização que entra no mesmo feedback/readback da missão.
+
 ## Procedure
 
 At every CentralDark Eternal Self-Heal wake and after a canonical autonomous-skill mutation:
