@@ -499,7 +499,9 @@ Toda ação material deve resolver o **mesmo alvo** em camadas, sem confundir id
 - `ABSOLUTE_TRAJECTORY`: rota observada no runtime atual: `HOST → superfície/processo → PID/handle atual → controle/path resolvido → ação`.
 - `TARGET_MATCH`: prova de que as coordenadas lógica, relativa e absoluta apontam para o mesmo alvo pretendido. Sem convergência, `TARGET_MATCH=UNKNOWN|FAIL` e a mutação para.
 
-**Ordem padrão de resolução:** `INTENT → TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → TARGET_MATCH → ACTION → READBACK`.
+**Ordem padrão de resolução:** `INTENT → TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → MONITOR_MAP → TARGET_MATCH → MONITOR_MATCH → OVERLAY → CUA_CURSOR → ACTION → READBACK`.
+
+Para alvo visual, o Target Lock inclui também: `MONITOR_ID_HUMANO`, `MONITOR_RECT`, `WINDOW_RECT`, `CONTROL_BOUNDS`, `OVERLAY_STATE`, `CUA_SESSION`. O mesmo alvo só está pronto para ação quando identidade + janela/processo + controle + monitor convergem. O overlay deve marcar **o monitor resolvido** antes/durante a ação visual, e o cursor virtual Cua deve operar na mesma tela; `OVERLAY_VISIBLE_ON_OTHER_MONITOR` ou `CURSOR_TARGET_MISMATCH` bloqueiam a ação.
 
 **Regras:** preferir ID lógico + path relativo para persistência; resolver absoluto/PID/handle somente no runtime; redescobrir tudo após troca de host, sessão, janela, checkout ou processo; nunca transformar PID, drive letter, URL privada, índice visual ou coordenada de tela em owner canônico. Um recibo pode registrar o absoluto/PID observado como evidência histórica, mas a receita reutilizável permanece parametrizada.
 
