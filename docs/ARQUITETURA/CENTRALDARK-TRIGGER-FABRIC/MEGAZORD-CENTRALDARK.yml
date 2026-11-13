@@ -186,7 +186,7 @@ persistent_gap_sweep:
   persistent_per_mission: true
   user_repetition_required: false
   inherit_current_configuration: true
-  scan_surfaces: [REALTIME_FEEDBACK, PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL]
+  scan_surfaces: [REALTIME_FEEDBACK, PR, COMMIT, CI, DEPENDABOT, WORKFLOW, JOB, RUNNER, TOOL_ERROR, TEST_FAILURE, RUNTIME_DRIFT, CAPABILITY_GAP, OPEN_RESIDUAL, VISUAL_ACTION_NO_EFFECT]
   process:
     - MEASURE_CURRENT_STATE
     - CLASSIFY_FAILURE_SIGNATURE
@@ -203,6 +203,33 @@ persistent_gap_sweep:
     - CRYSTALLIZE_LEARNING
     - WRITE_RECEIPT
     - CONTINUE_NEXT_CURSOR
+  visual_recovery_classification:
+    owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py#classify_visual_recovery
+    meta_lupa_owner: .agents/skills/meta-lupa/scripts/meta_lupa.py
+    temperature_default: MEDIA
+    variant_default: MEDIA_RECOVERY_VISUAL
+    classes:
+      - H01_STALE_RUNTIME_TARGET
+      - H02_GEOMETRY_OR_MONITOR_DRIFT
+      - H03_CONTROL_RECREATED
+      - H04_EVENT_INTERCEPTED
+      - H05_NOT_ACTIONABLE
+      - H06_PREREQUISITE_FOCUS_SCROLL
+      - H07_CUA_DELIVERY_UNAVAILABLE
+      - H08_ASYNC_EFFECT_PENDING
+      - H09_TARGET_AMBIGUOUS
+      - H10_SURFACE_SESSION_CHANGED
+      - UNKNOWN_VISUAL_CAUSE
+    policy:
+      ten_hypotheses_are_not_ten_retries: true
+      retry_frozen_until_new_evidence: true
+      same_action_retry_budget: 1
+      preserve: [LAST_GOOD_STATE, TARGET_ID, TARGET_FINGERPRINT, NEXT_CURSOR]
+      fable: READ_ONLY_CALIBRATION
+      executor_after_new_evidence: COT_REACT_OR_EXISTING_HERMES
+      recurrent_material_failure_trigger: RECOVERY_RECURRENT
+      recurrent_temperature: QUENTE
+      recurrent_variant: QUENTE_RECURRENCIA_ADVERSARIAL
   loop_until: FIXED_POINT_OR_PROVEN_HUMAN_FRONTIER
   same_failure_no_new_information: REUSE_CRYSTAL_NOT_RETHINK
   already_proven_without_reopen_cause: REUSE_PROOF
