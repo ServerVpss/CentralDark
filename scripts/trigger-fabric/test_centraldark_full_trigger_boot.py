@@ -69,6 +69,29 @@ def test_realtime_feedback_routes_without_mutation_permission():
     assert feedback["reopen_scope"] == "AFFECTED_CONE_ONLY"
 
 
+def test_materialization_scope_classification():
+    assert mod.classify_materialization_scope({"path_exists": True})["scope"] == "NO_MATERIALIZATION_NEEDED"
+
+    unit = mod.classify_materialization_scope({
+        "path_exists": False,
+        "test_kind": "unit",
+        "dependency_cone_known": True,
+    })
+    assert unit["scope"] == "MINIMAL_DEPENDENCY_CONE"
+    assert unit["meta_lupa_variant"] == "MEDIA_MATERIALIZATION_GAP"
+
+    integration = mod.classify_materialization_scope({
+        "path_exists": False,
+        "integration_test": True,
+        "requires_git_identity": True,
+    })
+    assert integration["scope"] == "REQUIRED_CHECKOUT_SCOPE"
+
+    unknown = mod.classify_materialization_scope({"path_exists": False})
+    assert unknown["scope"] == "UNKNOWN_MATERIALIZATION_SCOPE"
+    assert unknown["execute_allowed"] is False
+
+
 def test_visual_recovery_h01_h10_classification():
     cases = [
         ({"pid_match": False}, "H01_STALE_RUNTIME_TARGET"),
@@ -740,6 +763,7 @@ if __name__ == "__main__":
         test_normalization_variants,
         test_prose_does_not_activate,
         test_realtime_feedback_routes_without_mutation_permission,
+        test_materialization_scope_classification,
         test_visual_recovery_h01_h10_classification,
         test_visual_recovery_unknown_preserves_cursor_without_retry,
         test_visual_recovery_precedence_prefers_session_change_over_stale_pid,
