@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-# @last_updated: 2026-11-13T04:33:00Z
-# @implementado: planner 3-way fail-closed, lock de writer único e status atômico; removido ours/rebase/commit automático.
+# @last_updated: 2026-11-13T04:39:00Z
+# @implementado: planner 3-way fail-closed, lock de writer único, status atômico e reutilização do FETCH_HEAD sem fetch duplicado.
 # @pendente: promoção de conflitos semânticos continua exigindo owner/teste/contraprova; dry-run nunca vira PASS.
 # @next_cursor: Cockpit consome --dry-run --json; resolver frentes semânticas e só então convergir checkout.
 """AUTO-SYNC MASTER — Casa / Main / VPS, preservação antes de mutação.
@@ -164,20 +164,21 @@ class AutoSyncMaster:
             return ("CONTENT_CONFLICT", result.returncode)
         return ("MERGE_PROBE_ERROR", 1)
 
-    def plan_main(self, fetch: bool = True) -> dict:
+    def plan_main(self, fetch: bool = True, remote_ref: str = "FETCH_HEAD") -> dict:
         if fetch:
             self._git("fetch", "--no-tags", "origin", "refs/heads/main")
+            remote_ref = "FETCH_HEAD"
         head = self._git("rev-parse", "HEAD").stdout.strip()
-        remote = self._git("rev-parse", "FETCH_HEAD").stdout.strip()
-        base = self._git("merge-base", "HEAD", "FETCH_HEAD").stdout.strip()
-        left, right = self._git("rev-list", "--left-right", "--count", "HEAD...FETCH_HEAD").stdout.split()
+        remote = self._git("rev-parse", remote_ref).stdout.strip()
+        base = self._git("merge-base", "HEAD", remote_ref).stdout.strip()
+        left, right = self._git("rev-list", "--left-right", "--count", f"HEAD...{remote_ref}").stdout.split()
         ahead, behind = int(left), int(right)
         entries = self._dirty_entries()
         dirty_paths = {p for _, p in entries}
         tracked_dirty = sum(1 for st, _ in entries if st != "??")
         untracked = sum(1 for st, _ in entries if st == "??")
         remote_changed = set(
-            x for x in self._git("diff", "--name-only", "HEAD..FETCH_HEAD").stdout.splitlines() if x
+            x for x in self._git("diff", "--name-only", f"HEAD..{remote_ref}").stdout.splitlines() if x
         )
         overlap = sorted(dirty_paths & remote_changed)
         conflicts: list[dict] = []
@@ -189,7 +190,7 @@ class AutoSyncMaster:
                 conflicts.append({"path": self._safe_path(path), "reason": "UNTRACKED_REMOTE_COLLISION"})
                 conflict_hunks += 1
                 continue
-            verdict, hunks = self._three_way_probe(path, head, remote)
+            verdict, hunks = self._three_way_probe(path, head, remote_ref)
             if verdict == "AUTO_MERGEABLE":
                 auto_mergeable.append(self._safe_path(path))
             else:
@@ -333,6 +334,8 @@ if __name__ == "__main__":
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--dry-run", action="store_true", help="calcula BASE/LOCAL/MAIN sem mutar worktree/index/HEAD")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--no-fetch", action="store_true", help="reutiliza um ref já medido; não faz segunda ida à rede")
+    parser.add_argument("--remote-ref", default="FETCH_HEAD", help="ref remoto já medido quando --no-fetch é usado")
     parser.add_argument("--repo", default=None, help="checkout explícito; padrão é a raiz deste script")
     args = parser.parse_args()
     sync = AutoSyncMaster(args.repo)
@@ -340,7 +343,7 @@ if __name__ == "__main__":
         print(json.dumps(sync.get_status_for_ui(), ensure_ascii=False, indent=2))
     elif args.dry_run:
         with sync._one_writer():
-            plan = sync.plan_main(fetch=True)
+            plan = sync.plan_main(fetch=not args.no_fetch, remote_ref=args.remote_ref)
         print(json.dumps(plan, ensure_ascii=False, sort_keys=True) if args.json else json.dumps(plan, ensure_ascii=False, indent=2))
     else:
         target = SyncTarget[args.target.upper()]

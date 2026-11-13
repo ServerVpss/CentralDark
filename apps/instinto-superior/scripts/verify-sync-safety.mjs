@@ -1,5 +1,5 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-// @last_updated: 2026-11-13T04:33:00Z @implementado: regressão trava resolvedor 3-way fail-closed e proíbe ours/rebase/add automático.
+// @last_updated: 2026-11-13T04:39:00Z @implementado: regressão trava resolvedor 3-way fail-closed e proíbe ours/rebase/add automático.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -60,5 +60,7 @@ test('Resolvedor canônico é 3-way fail-closed e nunca escolhe ours nem cria co
  assert.doesNotMatch(py,/Auto Conflict-Resolve \[ours strategy\]/);
  assert.match(source,/AUTO-SYNC-MASTER\.py/);
  assert.match(source,/--dry-run/);
+ assert.match(source,/--no-fetch/);
+ assert.match(source,/FETCH_HEAD/);
  assert.match(source,/Conflitos semânticos localizados/);
 });

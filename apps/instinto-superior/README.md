@@ -89,11 +89,11 @@ Botão Main mede sem publicar e retorna conflito se SHAs diferem; consulta bem-s
 ## Reconciliação Casa/Main 3-way — 13/11/2026
 
 @code_ref: `scripts/auto-sync/AUTO-SYNC-MASTER.py`; `src/lib/sync.functions.ts`; `scripts/verify-sync-safety.mjs`  
-@last_updated: 2026-11-13T04:33:00Z
+@last_updated: 2026-11-13T04:39:00Z
 
 O botão Casa/Main continua no mesmo owner `cockpit-sync`, mas checkout sujo não passa mais por `pull --rebase`, `checkout --ours`, `git add .` ou commit automático. O `AUTO-SYNC-MASTER.py --dry-run --json` mede `HEAD / merge-base / origin/main`, arquivos locais, mudanças remotas e interseção de caminhos; para cada sobreposição textual usa o merge-base real com `git merge-file -p` somente como **sonda**, sem modificar worktree, index ou HEAD.
 
-O Cockpit consome esse plano server-side e mostra quantos caminhos são auto-mescláveis e quantos têm conflito semântico real. Conflito continua vermelho/pendente até writer do owner, teste e contraprova; plano não vira commit nem deploy. O arquivo de status usa replace atômico e o planner usa lock de writer único.
+O Cockpit faz um único `fetch`, passa o `FETCH_HEAD` já medido ao planner com `--no-fetch` e mostra quantos caminhos são auto-mescláveis e quantos têm conflito semântico real. Conflito continua vermelho/pendente até writer do owner, teste e contraprova; plano não vira commit nem deploy. O arquivo de status usa replace atômico e o planner usa lock de writer único.
 
 Prova que motivou o delta: VM openKylin em `main@4207576f4c86`, `origin/main@b98dd1ae471a`, `ahead=0`, `behind=276`, 68 pendências locais, 49 caminhos sobrepostos; sonda 3-way encontrou 35 auto-mescláveis, 13 conflitos de conteúdo e 1 caminho sem par textual normal. Esses números são snapshot da medição de 13/11/2026, não estado eterno.
 

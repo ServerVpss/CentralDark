@@ -1,5 +1,5 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-// @last_updated: 2026-11-13T04:33:00Z @implementado: Cockpit delega checkout sujo ao planner 3-way fail-closed do AUTO-SYNC-MASTER; nenhuma escolha ours/theirs.
+// @last_updated: 2026-11-13T04:39:00Z @implementado: Cockpit faz um fetch e delega checkout sujo ao planner 3-way fail-closed reutilizando FETCH_HEAD; nenhuma escolha ours/theirs.
 import { createServerFn } from "@tanstack/react-start";
 import { execSync, execFileSync } from "child_process";
 import path from "path";
@@ -66,6 +66,8 @@ function safeResolverPlan(): SafeResolverPlan | null {
       "--target", "main",
       "--dry-run",
       "--json",
+      "--no-fetch",
+      "--remote-ref", "FETCH_HEAD",
       "--repo", CENTRALDARK_ROOT,
     ], { encoding: "utf8", timeout: 60_000, maxBuffer: 2 * 1024 * 1024 });
     const plan = JSON.parse(raw) as SafeResolverPlan;
