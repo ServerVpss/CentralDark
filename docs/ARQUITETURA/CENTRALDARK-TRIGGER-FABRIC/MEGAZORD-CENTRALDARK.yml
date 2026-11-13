@@ -275,6 +275,25 @@ adapter_contract:
     - REMEASURE
   missing_required_capability: BLOCKED_CAPABILITY_GAP
 
+materialization_contract:
+  owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py#classify_materialization_scope
+  target_lock_owner: .agents/skills/centraldark-operational-method/SKILL.md
+  meta_lupa_variant: MEDIA_MATERIALIZATION_GAP
+  scopes:
+    - NO_MATERIALIZATION_NEEDED
+    - MINIMAL_DEPENDENCY_CONE
+    - REQUIRED_CHECKOUT_SCOPE
+    - UNKNOWN_MATERIALIZATION_SCOPE
+  laws:
+    materialized_path_is_not_canonical_owner: true
+    environment_root_is_not_owner: true
+    path_resolved_is_not_path_exists: true
+    minimal_dependency_cone_is_not_operational_integration_proof: true
+    full_checkout_is_not_default: true
+  fail_closed:
+    unknown_scope: BLOCKED_MATERIALIZATION
+    missing_authorized_source: BLOCKED_MATERIALIZATION
+
 context_contract:
   catalogue_all_relevant_metadata: true
   full_body_preload: false
