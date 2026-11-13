@@ -290,67 +290,6 @@ HORA_DA_RESENHA
 
 Conteúdo: Quando o alvo for local, subir/editar/testar no CENTRALDARK-OS e consumir da Casa sem precisar abrir a VM. Preservar a rota VPS→Tailscale→CENTRALDARK-OS como fallback. O teste da porta 4175 funcionou no guest, via VPS/Tailscale e foi confirmado visualmente na Casa.
 
-### [2026-09-30T04:48] Kit futuro — agentes cloud + event bus CentralDark
-- **Data:** 2026-09-30
-- **Tags:** futuro, integracao, agentes-cloud, github-event-bus, handoff, pr-mae-1562, kastra-edge, centraldark-os
-- **Relevância:** alta
-- **Eixo:** futuro
-- **Expira:** 2026-10-30
-- **Promovida:** nao
-
-Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
-
-### [2026-09-30T04:49] Kit futuro — agentes cloud + event bus CentralDark
-- **Data:** 2026-09-30
-- **Tags:** futuro, integracao, agentes-cloud, github-event-bus, handoff, pr-mae-1562, kastra-edge, centraldark-os
-- **Relevância:** alta
-- **Eixo:** futuro
-- **Expira:** 2026-10-30
-- **Promovida:** nao
-
-Conteúdo: Futuro: trazer para a CentralDark o padrão observado entre ChatGPT/SOL, GitHub e Claude Cloud: agentes remotos persistentes, assinando o mesmo owner, recebendo deltas em tempo real, compartilhando estado/receipts via GitHub/ledger e continuando a missão sem depender da Casa. Reusar PR-MÃE #1562, MCP Admin/API CentralDark, VPS always-on e Casa como edge opcional. Kastra Edge fica como candidato futuro de política/auditoria local. Implementar somente delta faltante, sem segundo cérebro/orquestrador.
-
-
-## 2026-09-30 — Autoridade do CHEFE e Reality Judge pós-efeito
-
-Origem: correção explícita do SEGREDO/CHEFE durante a operação CentralDark-OS, cristalizada na main.
-
-```text
-CHEFE_AUTHORITY_IS_SINGLETON=true
-DETERMINISTIC_ROUTE_FIRST=true
-REALITY_JUDGE_AFTER_EFFECT=true
-REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
-REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
-REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
-CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
-OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
-TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
-UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
-MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
-```
-
-Lembrança operacional: realidade observada é evidência técnica, não soberania humana. Sensor/log/modelo/cache/workflow podem estar errados ou parciais. Contradição abre teste discriminante, prova/contraprova e remediação do cone afetado; não rebaixa intenção, autonomia ou governança do CHEFE.
-
-
-## 2026-09-30 — META-GRILL protege o executor de resolver a coisa errada
-
-Origem: cristalização do SEGREDO/CHEFE durante a operação CentralDark-OS. Absorvida por antecipação — o delta foi gravado no owner (SOUL §3.1.1) antes de o CHEFE terminar de digitá-lo, e o CHEFE confirmou. Aprendizado por delta sobre intenção contínua.
-
-```text
-OBJECTIVE_BEFORE_SYMPTOM=true
-META_GRILL_PREVENTS_SOLVING_WRONG_TARGET=true
-SELF_GRILL_BEFORE_SYSTEM_GRILL=true
-SYMPTOM_IS_NOT_OBJECTIVE=true
-ERROR_DISAPPEARED_IS_NOT_OBJECTIVE_RESOLVED=true
-CLAUSE_GRAMMAR_IS_THE_METHOD=true
-MACHINE_RESOLVABLE_CLAUSE_AUTO_CONTINUE=true
-CLAUSE_WRITTEN_BUT_NOT_RESOLVED=UNKNOWN_NOT_PASS
-ANTICIPATED_COMPATIBLE_DELTA_IS_VALID_WHEN_CHEFE_CONFIRMS=true
-NO_MAQUIAGEM=true
-```
-
-Lembrança operacional: o primeiro alvo do META-GRILL é o próprio executor — Q0 vem antes de Q1-Q5: "estou resolvendo o objetivo do CHEFE ou só o sintoma que apareceu?". O erro não é o centro; o objetivo é. Intenção → objetivo → cláusulas → função que resolve a cláusula UNKNOWN → mundo devolve valor → gate avalia corpo completo → contraprova → Reality Judge pós-efeito → fixed point → receita+fingerprint → próximo executor dá replay. TLC23/Horn é motor de falsificação dentro do fluxo, não portão burocrático. Nunca maquiar verde.
-
 ### [2026-09-30T15:53] Não chamar CentralDark de Claude
 - **Data:** 2026-09-30
 - **Tags:** centraldark-os, identidade, meta-grill, sol-executora, receipts
@@ -1440,7 +1379,6 @@ Conteúdo: Ciclo 2026-10-12/13: CHEFE trouxe execução REAL do ZIP original no 
 - **Mesmo fio e NEXT_CURSOR:** `LC07_LOG_CRON -> BOT_ADMIN_E2E -> RECOVER_EXISTING_OAUTH_VAULT_KEY -> OAUTHBROKER_HEALTH`. Owners `scripts/limpeza-autonoma.sh`, `apps/instinto-superior/`, `apps/modulos/oauth-broker/` e PR #1804. O outro fio `INSTALADOR_TOTAL` citado no #189 não é acionado por este registro.
 - **NeuroLink:** `L190`, `PREV=L189`, `NEXT=PENDING_NEXT_CURSOR`.
 
-
 ### [2026-10-13] Aprendizado #191 — Integração A–Z e discernimento Whis, sem duplicação
 
 - **Cena e aceite:** o CHEFE pediu síntese integral de 26 temas da sessão e registro funcional do aprendizado. Associou Whis/GPT ao rigor gentil, Vados/Claude à colaboração especializada e Goku/Zen'Oh ao respeito sem medo. Metáfora não é papel técnico, poder de IA nem ranking.
@@ -1561,6 +1499,7 @@ Conteúdo: Resumo das evidências coletidas durante a missão:
    - Testar /admin/api/tools com sessão admin válida
 
 <!-- CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+
 ### [2026-10-21] CHEFE externaliza como um Harness brasileiro deve falar
 - **Data:** 2026-10-21; **Tags:** chefe, inteligencia, linguagem-produto, ux-writing, pt-br, mermaid, harness, cockpit, voz.
 - **Fonte do contexto:** CHEFE observou no Cockpit termos de diagnóstico `áudio não comprovado` / `UNKNOWN` e questionou com humor se um aplicativo Windows moderno pediria ao usuário para comprovar o áudio antes de ativar o microfone.
@@ -1571,6 +1510,7 @@ Conteúdo: Resumo das evidências coletidas durante a missão:
 - **PR equivalente:** https://github.com/ServerVpss/CentralDark/pull/1895.
 - **NEXT_CURSOR:** PR1895_DOCS_READBACK → CI_MESMO_SHA → RESPONSAVEL_UI → MUDANCA_DE_ROTULOS → VISUAL_READBACK → FIXED_POINT.
 <!-- /CENTRALDARK_MEMORIA_LINGUAGEM_PRODUTO_20261021 -->
+
 ### [2026-10-22T21:44] 🍒 ZENDRIVE para todos — recuperar owner, não inventar memória
 - **Data:** 2026-10-22
 - **Tags:** centraldark, zendrive, todos-agentes, memoria, circuito, owner, pr1842, no-falso-verde
@@ -1590,3 +1530,13 @@ Conteúdo: REGRA DO CHEFE 22/10/2026: em missão pertinente sobre Casa↔VPS/VS 
 - **Promovida:** sim
 
 Conteúdo: Preferência operacional explícita do CHEFE: em máquina local/Casa e em sessões de agentes autorizadas pelo MCP CentralDark, não bloquear genericamente a visualização de valores reais das próprias credenciais quando necessários ao trabalho e acessíveis ao processo. A fronteira é o destino: não persistir/publicar segredos em GitHub (commits, PRs, issues, comentários, CI logs, artefatos). Não alterar/rotacionar credenciais sem autorização. Implementar no enforcement canônico do MCP para Cline, Hermes e clientes conectados, com testes sintéticos de exibição local e bloqueio de persistência. Autenticação MCP prova identidade/canal, não autorização irrestrita de toda operação; manter confirmações existentes para escrita/destruição. Regra não está implementada globalmente até diff, testes, contraprova e propagação serem comprovados. Issue de implementação: https://github.com/ServerVpss/CentralDark/issues/1934
+
+### [2026-11-13T05:32] Operação fecha com feedback + readback
+- **Data:** 2026-11-13
+- **Tags:** feedback, readback, rastro, hud, reuse-before-create, kaizen, github, hermes-fork
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-12-13
+- **Promovida:** sim
+
+Conteúdo: Padrão operacional confirmado: depois de qualquer ação material, registrar o feedback imediato do executor e fazer readback do estado real antes de declarar PASS. Se uma rota autorizada não tem a capability necessária, continuar pela próxima rota já existente em vez de criar ferramenta nova. Caso provado: GitHub auto-merge do fork Hermes foi ativado por gh CLI após limitação dos conectores; readback confirmou allow_auto_merge=true e PR #1 MERGED.
