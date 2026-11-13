@@ -600,24 +600,23 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
   // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
   const navegacao = shell.split("const NAVEGACAO_PASTAS = [")[1]?.split("] as const;")[0] ?? "";
-  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
+  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,28);
   assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
   assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
   const icones = shell.split("const ICONES_NAVEGACAO = {")[1]?.split("} satisfies Record<")[0] ?? "";
   const chaves = [...icones.matchAll(/^  (?:"([^"]+)"|([a-z][a-z0-9]*)):/gm)].map((m) => m[1] || m[2]);
-  assert.equal(chaves.length, 27, "cada menu original deve ter ícone próprio");
-  assert.equal(new Set(chaves).size, 27, "não duplicar entradas do mapeamento");
+  assert.equal(chaves.length, 28, "cada menu original deve ter ícone próprio");
+  assert.equal(new Set(chaves).size, 28, "não duplicar entradas do mapeamento");
   const rotas = [...navegacao.matchAll(/\{ valor: "([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 27 rotas atuais");
+  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 28 rotas atuais");
   assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
-  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-data-[state=active]/menuitem:text-primary"));
-  assert.ok(shell.includes("group-hover/menuitem:-translate-y-0.5"));
-  assert.ok(shell.includes("group-hover/menuitem:scale-105"));
-  assert.ok(shell.includes("group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)]"));
-  assert.ok(shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-focus-within/menuitem:text-primary"));
-  assert.ok(shell.includes("motion-reduce:transform-none"));
+  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold"));
+  assert.ok(shell.includes("hover:bg-primary/10"));
+  assert.ok(shell.includes("focus-visible:bg-primary/10"));
+  assert.ok(shell.includes("data-[state=active]:bg-primary/15"));
+  assert.ok(shell.includes("data-[state=active]:text-primary"));
+  assert.ok(shell.includes("group-data-[collapsible=icon]:justify-center"));
+  assert.ok(shell.includes("motion-reduce:transition-none"));
   assert.ok(!shell.includes('className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0"'));
   const landing = read("apps/instinto-superior/src/routes/index.tsx");
   assert.ok(landing.includes('rounded-lg border border-border bg-surface-2'));
