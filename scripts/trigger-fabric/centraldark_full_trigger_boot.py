@@ -103,6 +103,83 @@ def explicit_command_context(value: str) -> bool:
     return bool(receipt.get("master_cycle_active"))
 
 
+def classify_existing_ssh_terminal_event(observation: dict) -> dict:
+    """Classifica o estado da receita SSH visual sem confundir input com efeito remoto."""
+    if not isinstance(observation, dict):
+        raise TypeError("SSH_TERMINAL_OBSERVATION_MUST_BE_OBJECT")
+
+    wrong_surface = observation.get("wrong_surface") is True
+    remote_effect = observation.get("remote_effect_proven") is True
+    probe_visible = observation.get("probe_visible_same_tab") is True
+    target_match = observation.get("ssh_target_match") is True
+    existing_session = observation.get("existing_session_visible") is True
+
+    if wrong_surface:
+        event = "SSH_WRONG_SURFACE"
+        action = "FREEZE_RETRY_REACQUIRE_AND_REPEAT_PROBE_ONLY"
+    elif remote_effect:
+        event = "SSH_REMOTE_EFFECT_READBACK"
+        action = "INGEST_FEEDBACK_COUNTERPROOF_AND_PUBLISH_HUD_STATE"
+    elif probe_visible and target_match:
+        event = "SSH_VISUAL_PROBE_PASS"
+        action = "ALLOW_ONE_AUTHORIZED_LINUX_COMMAND"
+    elif existing_session:
+        event = "EXISTING_SSH_TERMINAL_AVAILABLE"
+        action = "TARGET_LOCK_AND_REQUIRE_READONLY_PROBE"
+    else:
+        event = "SSH_TERMINAL_STATE_UNKNOWN"
+        action = "REACQUIRE_WITHOUT_MATERIAL_COMMAND"
+
+    return {
+        "schema": "centraldark.existing-ssh-terminal-event.v1",
+        "recipe_id": "CASA_EXISTING_SSH_TERMINAL_TO_LINUX",
+        "event": event,
+        "action": action,
+        "readback_required": True,
+        "same_tab_required": True,
+        "feedback_route": "PERSISTENT_GAP_SWEEP" if event == "SSH_REMOTE_EFFECT_READBACK" else "NONE",
+        "material_command_allowed": event == "SSH_VISUAL_PROBE_PASS",
+        "retry_frozen": event in {"SSH_WRONG_SURFACE", "SSH_TERMINAL_STATE_UNKNOWN"},
+        "window_focused_is_correct_tab": False,
+        "send_accepted_is_command_visible": False,
+        "command_visible_is_linux_effect_proven": False,
+    }
+
+
+def classify_mission_hud_publication(observation: dict) -> dict:
+    """Decide fechamento vs CURRENT no HUD/funil sem promover estado parcial a fixed point."""
+    if not isinstance(observation, dict):
+        raise TypeError("MISSION_HUD_OBSERVATION_MUST_BE_OBJECT")
+
+    material_state_changed = observation.get("material_state_changed") is True
+    fixed_point = observation.get("fixed_point") is True
+    next_cursor = str(observation.get("next_cursor", "")).strip()
+
+    if not material_state_changed:
+        action = "NO_HUD_WRITE_NO_MATERIAL_DELTA"
+        publish = False
+    elif fixed_point:
+        action = "FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL"
+        publish = True
+    else:
+        action = "PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR"
+        publish = True
+
+    return {
+        "schema": "centraldark.mission-hud-publication.v1",
+        "publish": publish,
+        "action": action,
+        "active_funnel_resolution": "DYNAMIC_CENTRALDARK_HUD_FUNNEL_CONTINUITY",
+        "mission_pr_resolution": "DYNAMIC_GOAL_OWNER_SCOPE",
+        "hardcoded_pr_number_forbidden": True,
+        "readback_required": publish,
+        "fixed_point": fixed_point if material_state_changed else False,
+        "next_cursor_required": publish and not fixed_point,
+        "next_cursor_present": bool(next_cursor),
+        "hud_updated_is_runtime_proven": False,
+    }
+
+
 def classify_realtime_feedback(value: str) -> dict:
     """Classifica entrada humana/live como sinal da missao, sem conceder escrita."""
     active = bool(value.strip())
@@ -1331,6 +1408,37 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     return 0 if result["feedback"]["active"] else 4
 
 
+def cmd_ssh_terminal_event(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_existing_ssh_terminal_event(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.existing-ssh-terminal-event.v1",
+            "event": "SSH_TERMINAL_STATE_UNKNOWN",
+            "reason": type(exc).__name__,
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["event"] != "SSH_TERMINAL_STATE_UNKNOWN" else 4
+
+
+def cmd_hud_mission_state(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_mission_hud_publication(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.mission-hud-publication.v1",
+            "publish": False,
+            "reason": type(exc).__name__,
+        }, indent=2, ensure_ascii=False))
+        return 4
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0
+
+
 def cmd_materialization_plan(args: argparse.Namespace) -> int:
     try:
         observation = json.loads(args.observation_json)
@@ -1797,6 +1905,14 @@ def build_parser() -> argparse.ArgumentParser:
     f.add_argument("--repo", default=".")
     f.add_argument("--input", required=True)
     f.set_defaults(func=cmd_feedback)
+
+    ste = sub.add_parser("ssh-terminal-event")
+    ste.add_argument("--observation-json", required=True)
+    ste.set_defaults(func=cmd_ssh_terminal_event)
+
+    hms = sub.add_parser("hud-mission-state")
+    hms.add_argument("--observation-json", required=True)
+    hms.set_defaults(func=cmd_hud_mission_state)
 
     mp = sub.add_parser("materialization-plan")
     mp.add_argument("--observation-json", required=True)
