@@ -24,6 +24,7 @@ LUPA_REGISTRATION_MODE=1 desliga a abertura de recibo aninhado (anti-recursão).
 """
 import argparse
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -38,6 +39,8 @@ from pathlib import Path, PurePosixPath
 LEDGER_NAME = "references/uso-ledger.jsonl"
 SCHEMA_VERSION = 1
 REGISTRATION_ENV = "LUPA_REGISTRATION_MODE"
+SELO_CONTRACT_VERSION = "selo-xp/v1"
+SELO_GUARDRAIL = Path(__file__).resolve().parents[1] / "guardrails" / "validar_selo_ponto_fixo.py"
 # commit sancionado para migracao de alvo versionado nao reproduzivel (linha 4 / CANDIDATE_REF)
 MIGRATION_COMMIT = "e6718f69d"
 
@@ -78,12 +81,14 @@ HOT_TRIGGERS = {
     "R3", "R4", "PRODUCAO", "VPS", "MERGE", "MAIN", "IDENTIDADE",
     "MEMORIA", "AUTENTICACAO", "DADOS", "ROTEAMENTO", "FALLBACK",
     "FALSO_VERDE_RECORRENTE", "AGENTES_DISCORDANDO", "CACA_AO_ERRO",
-    "ALTERAR_LUPA",
+    "RECOVERY_RECURRENT", "ALTERAR_LUPA",
 }
 WARM_TRIGGERS = {
     "R2", "404", "401", "429", "TIMEOUT", "CONTRADICAO",
     "EVIDENCIA_FRACA", "MECANISMO_DESCONHECIDO", "FALSO_VERDE",
-    "RUNTIME_DIVERGENTE", "DRIFT",
+    "RUNTIME_DIVERGENTE", "DRIFT", "VISUAL_ACTION_NO_EFFECT",
+    "TARGET_MISMATCH", "MONITOR_MISMATCH", "ACTIONABILITY_GAP",
+    "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED", "PATH_RESOLVED_NOT_PRESENT",
 }
 
 UNKNOWN = "UNKNOWN"
@@ -322,6 +327,49 @@ def select_mode(data: dict) -> str:
     return "FRIA"
 
 
+def select_variant(data: dict, mode: str | None = None) -> str:
+    """Seleciona a ferida operacional dentro da temperatura sem criar outro motor."""
+    selected_mode = mode or select_mode(data)
+    triggers = {str(item).upper() for item in data.get("triggers", [])}
+    visual_recovery = str(data.get("visual_recovery_class", "")).upper()
+
+    if selected_mode == "FRIA":
+        if triggers & {"READBACK", "CURRENT", "STATUS", "OBSERVE", "REMEASURE"}:
+            return "FRIA_READBACK"
+        if triggers & {"FINGERPRINT_UNCHANGED", "SAME_FAILURE_WITHOUT_NEW_INFORMATION", "REUSE_PROOF"}:
+            return "FRIA_REUSE_FINGERPRINT"
+        return "FRIA_FATO_BINARIO"
+
+    if selected_mode == "MEDIA":
+        if triggers & {
+            "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED",
+            "PATH_RESOLVED_NOT_PRESENT",
+        }:
+            return "MEDIA_MATERIALIZATION_GAP"
+        if visual_recovery or triggers & {
+            "VISUAL_ACTION_NO_EFFECT", "TARGET_MISMATCH", "MONITOR_MISMATCH",
+            "ACTIONABILITY_GAP",
+        }:
+            return "MEDIA_RECOVERY_VISUAL"
+        if triggers & {"FALSO_VERDE", "EVIDENCIA_FRACA"}:
+            return "MEDIA_FALSO_VERDE"
+        if triggers & {"RUNTIME_DIVERGENTE", "DRIFT"}:
+            return "MEDIA_DRIFT_DISTRIBUIDO"
+        if triggers & {"SENSOR_FAILURE", "INSTRUMENT_FAILURE", "TOOL_RESULT_INVALID"}:
+            return "MEDIA_INSTRUMENTO_INCERTO"
+        return "MEDIA_CAUSA_DISCRIMINANTE"
+
+    if triggers & {"ALTERAR_LUPA"}:
+        return "QUENTE_META_EVOLUCAO"
+    if triggers & {"MAIN", "MERGE", "PROMOVER", "PROMOTION"}:
+        return "QUENTE_PROMOCAO_CANONICA"
+    if triggers & {"PRODUCAO", "VPS", "AUTENTICACAO", "DADOS"}:
+        return "QUENTE_PRODUCAO_AUTH"
+    if triggers & {"FALSO_VERDE_RECORRENTE", "AGENTES_DISCORDANDO", "CACA_AO_ERRO", "RECOVERY_RECURRENT"}:
+        return "QUENTE_RECURRENCIA_ADVERSARIAL"
+    return "QUENTE_CONSOLIDACAO"
+
+
 def validate(data: dict) -> list[str]:
     errors = []
     risk = str(data.get("risk", "R0")).upper()
@@ -383,8 +431,10 @@ def evaluate(data: dict) -> dict:
         verdict = "CONDICIONAR"
     else:
         verdict = "APROVAR"
+    mode_used = select_mode(data)
     return {
-        "mode_used": select_mode(data),
+        "mode_used": mode_used,
+        "variant_used": select_variant(data, mode_used),
         "trigger": data.get("triggers", []),
         "risk": data.get("risk", "R0"),
         "contract_digest": contract_digest(data),
@@ -997,6 +1047,20 @@ def _append_atomic(rec: dict) -> None:
     append_record_atomic(_ledger_path(), rec)
 
 
+def _audit_selo_xp(records: list[dict]) -> dict:
+    """Executa o guardrail existente antes de gravar um novo FINAL.
+
+    O guardrail continua sendo o owner da regra; o motor apenas faz a
+    contraprova no mesmo conjunto de registros antes do append atomico.
+    """
+    spec = importlib.util.spec_from_file_location("meta_lupa_selo_guardrail", SELO_GUARDRAIL)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("SELO_GUARDRAIL_UNAVAILABLE")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.auditar(records)
+
+
 def _registration_active() -> bool:
     return os.environ.get(REGISTRATION_ENV) == "1"
 
@@ -1122,12 +1186,28 @@ def cmd_finish_use(args) -> int:
         "evidence_hash": hashlib.sha256("|".join(args.evidence or []).encode("utf-8")).hexdigest(),
         "achievements": sorted(set(args.achievement or [])),
         "penalties": sorted(set(args.penalty or [])),
+        "seal_contract": SELO_CONTRACT_VERSION,
+        "seal_claimed": args.seal_claimed == "sim",
+        "delivered_trace_refs": args.delivered_trace_refs,
+        "kimetsu_round_id": args.kimetsu_round_id,
+        "kimetsu_techniques": args.kimetsu_techniques,
     }
     rec.update(evolution)
     rec = _sanitize_value(rec)
+    try:
+        seal_report = _audit_selo_xp(ledger_records + [rec])
+    except Exception as exc:
+        print(f"SELO_XP_BLOCKED reason={type(exc).__name__}", file=sys.stderr)
+        return 2
+    if not seal_report.get("selo_ok"):
+        print("SELO_XP_BLOCKED", file=sys.stderr)
+        return 2
+    rec["seal_guardrail"] = "PASS"
+    rec["seal_guardrail_contract"] = SELO_CONTRACT_VERSION
     rec["record_hash"] = _record_hash({k: v for k, v in rec.items() if k != "record_hash"})
     _append_atomic(rec)
     print(f"FINAL_RECORDED usage_id={uid}")
+    print("SELO_XP=PASS")
     print(_final_receipt_line(rec))
     return 0
 
@@ -2071,6 +2151,10 @@ def main() -> None:
     f.add_argument("--improvements", nargs="*", default=[])
     f.add_argument("--achievement", action="append", choices=sorted(XP_AWARDS), default=[])
     f.add_argument("--penalty", action="append", choices=sorted(XP_PENALTIES), default=[])
+    f.add_argument("--seal-claimed", required=True, choices=["sim"])
+    f.add_argument("--delivered-trace-refs", nargs="+", required=True)
+    f.add_argument("--kimetsu-round-id", default="")
+    f.add_argument("--kimetsu-techniques", nargs="*", default=[])
     f.set_defaults(func=cmd_finish_use)
 
     v = sub.add_parser("verify-ledger")

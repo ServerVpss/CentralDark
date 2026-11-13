@@ -1050,6 +1050,82 @@ run_online_check_only() {
   oc_check_all "$zone"
 }
 
+# CENTRALDARK_RUNNER_LINUX_PHASE_20261112
+runner_linux_phase() {
+  local phase="$1" option="${2:-}" target="${CENTRALDARK_RUNNER_HOME:-$HOME/actions-runner}"
+  if [ "$(uname -s)" != Linux ]; then echo "RUNNER_LINUX=BLOCKED_NOT_LINUX"; return 2; fi
+  case "$target" in /*) ;; *) err "BLOCKED_RUNNER_PATH"; return 2 ;; esac
+  if [ -L "$target" ]; then err "BLOCKED_RUNNER_SYMLINK"; return 2; fi
+  case "$target" in /|"$SCRIPT_DIR"|"$SCRIPT_DIR"/*) err "BLOCKED_RUNNER_INSIDE_SOURCE"; return 2 ;; esac
+  if [ "$phase" = check ]; then
+    printf 'RUNNER_HOME=%s\n' "$target"
+    if [ -x "$target/config.sh" ] && [ -x "$target/run.sh" ]; then echo "RUNNER_PACKAGE=PASS"; else echo "RUNNER_PACKAGE=PENDING"; fi
+    if [ -f "$target/.runner" ]; then echo "RUNNER_REGISTERED_LOCAL=YES"; else echo "RUNNER_REGISTERED_LOCAL=NO"; fi
+    if [ -f "$target/.service" ]; then
+      local unit; IFS= read -r unit < "$target/.service" || true
+      echo "RUNNER_SERVICE=$(systemctl is-active "$unit" 2>/dev/null || echo inactive)"
+    else echo "RUNNER_SERVICE=NOT_INSTALLED"; fi
+    echo "RUNNER_GITHUB_ONLINE=UNKNOWN_REQUIRES_API"
+    return 0
+  fi
+  if [ "$phase" = install ] && [ "$(uname -m)" != x86_64 ]; then
+    err "BLOCKED_RUNNER_ARCH_NOT_X64"; return 2
+  fi
+  if [ "$option" = --dry-run ]; then
+    printf 'RUNNER_%s_DRY_RUN=PASS\nRUNNER_HOME=%s\nMUTATIONS=0\n' "$phase" "$target"
+    return 0
+  fi
+  if [ "$phase" = install ]; then
+    local bin parent stage fd
+    for bin in curl tar sha256sum flock mktemp mv; do command -v "$bin" >/dev/null 2>&1 || { err "BLOCKED_DEPENDENCY:$bin"; return 2; }; done
+    parent="$(dirname "$target")"; mkdir -p "$parent" || return 2
+    exec {fd}> "$parent/.centraldark-runner-install.lock" || return 2
+    flock -n "$fd" || { err "BLOCKED_EXCLUSIVE_WRITER"; return 2; }
+    if [ -x "$target/config.sh" ] && [ -x "$target/run.sh" ]; then ok "RUNNER_PACKAGE=ALREADY_INSTALLED"; return 0; fi
+    if [ -e "$target" ]; then err "BLOCKED_EXISTING_INCOMPLETE_DIR"; return 2; fi
+    stage="$(mktemp -d "$parent/.centraldark-runner-stage.XXXXXXXX")" || return 2
+    mkdir -p "$stage/payload"
+    if ! curl -fsSL --retry 2 --connect-timeout 15 --max-time 600 -o "$stage/runner.tgz" \
+      'https://github.com/actions/runner/releases/download/v2.338.2/actions-runner-linux-x64-2.338.2.tar.gz'; then
+      rm -rf -- "$stage"; err "RUNNER_DOWNLOAD=FAILED"; return 2
+    fi
+    if ! printf '%s  %s\n' 'baebf204307bac6193480852732f0aba2ae97b6c5597c244f4d5558390147c40' "$stage/runner.tgz" | sha256sum -c - >/dev/null; then
+      rm -rf -- "$stage"; err "RUNNER_SHA256=FAILED"; return 2
+    fi
+    if ! tar -xzf "$stage/runner.tgz" -C "$stage/payload" ||
+       [ ! -x "$stage/payload/config.sh" ] || [ ! -x "$stage/payload/run.sh" ]; then
+      rm -rf -- "$stage"; err "RUNNER_EXTRACT=FAILED"; return 2
+    fi
+    rm -f "$stage/runner.tgz"
+    if [ -e "$target" ]; then rm -rf -- "$stage"; err "BLOCKED_TARGET_RACE"; return 2; fi
+    mv -T -n -- "$stage/payload" "$target" || { rm -rf -- "$stage"; return 2; }
+    if [ -d "$stage/payload" ]; then rm -rf -- "$stage"; err "BLOCKED_PROMOTION_RACE"; return 2; fi
+    rmdir "$stage" 2>/dev/null || true
+    ok "RUNNER_PACKAGE=PASS SHA256=PASS HOME=$target"
+    return 0
+  fi
+  if [ "$phase" = activate ]; then
+    [ -x "$target/config.sh" ] || { err "BLOCKED_RUNNER_NOT_INSTALLED"; return 2; }
+    command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null || { err "BLOCKED_SUDO_REQUIRED"; return 2; }
+    local name="${CENTRALDARK_RUNNER_NAME:-}" labels="${CENTRALDARK_RUNNER_LABELS:-centraldark}" token="${CENTRALDARK_RUNNER_REGISTRATION_TOKEN:-}"
+    if [ -f "$target/.runner" ]; then
+      local current; current="$(sed -n 's/.*"agentName"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$target/.runner" | head -n 1)"
+      if [ -n "$name" ] && [ "$name" != "$current" ]; then err "BLOCKED_RUNNER_IDENTITY_MISMATCH"; return 2; fi
+      ok "RUNNER_REGISTRATION=ALREADY_PRESENT"
+    else
+      [[ "$name" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] && [[ "$labels" =~ ^[A-Za-z0-9._,-]+$ ]] && [ -n "$token" ] || { err "BLOCKED_RUNNER_NAME_LABELS_OR_TOKEN"; return 2; }
+      (cd "$target" && ./config.sh --unattended --url 'https://github.com/ServerVpss/CentralDark' --token "$token" --name "$name" --labels "$labels" --work _work) || return 2
+      unset token
+    fi
+    [ -x "$target/svc.sh" ] || { err "BLOCKED_SVC_SH_MISSING"; return 2; }
+    if [ ! -f "$target/.service" ]; then (cd "$target" && sudo -n ./svc.sh install "$USER") || return 2; fi
+    (cd "$target" && sudo -n ./svc.sh start) || return 2
+    runner_linux_phase check
+    return 0
+  fi
+  err "BLOCKED_UNKNOWN_RUNNER_PHASE"; return 2
+}
+
 run_reconciler() {
   # Somente encaminha ao owner existente: inventário/scan/diff/menu/pulse plan.
   local owner="$SCRIPT_DIR/scripts/centraldark-inventory-reconcile.sh"
@@ -1083,6 +1159,9 @@ Modos:
   --deps                Instala só as dependências do instalador (curl, jq, qrencode, dig, ...)
   --menu                Instala menu colorido da VPS (cdmenu / cdstatus / menu)
   --gh-auth             Instala gh se faltar; OAuth sem DISPLAY e prova do repo privado
+  --runner-linux-check  Consulta o runner Linux (read-only)
+  --runner-linux-install [--dry-run]  Instala pacote oficial isolado
+  --runner-linux-activate [--dry-run]  Registra e inicia systemd com token efemero
   --inventory           Inventário canônico via owner existente
   --scan                Varredura de scripts e duplicatas via owner existente
   --diff                Reconciliar diferenças via owner existente
@@ -1323,6 +1402,9 @@ main() {
   # Modos de inventário são leitura/recibo e NÃO acionam auto-update nem symlinks.
   case "${1:-}" in
     --gh-auth) github_auth_preflight; return $? ;;
+    --runner-linux-check) runner_linux_phase check; return $? ;;
+    --runner-linux-install) runner_linux_phase install "${2:-}"; return $? ;;
+    --runner-linux-activate) runner_linux_phase activate "${2:-}"; return $? ;;
     --inventory|--scan|--diff) run_reconciler "$1"; return $? ;;
     --inventory-menu) run_reconciler --menu; return $? ;;
     --pulse-plan) run_reconciler --pulse --plan; return $? ;;

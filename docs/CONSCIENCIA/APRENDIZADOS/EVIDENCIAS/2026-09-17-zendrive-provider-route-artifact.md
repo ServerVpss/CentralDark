@@ -10,6 +10,22 @@ sensitivity: "INTERNAL"
 source: "PR #1549 commit c43e83f6459068c51b421922c23dac170d12e96e"
 source_class: "INTERNAL"
 owner: "apps/modulos/elite-gateway/scripts/centraldark_omni_router.py"
+tipo: "evidencia_documental"
+data_criacao: "2026-09-17"
+ultima_atualizacao: "2026-09-17T23:31:00-03:00"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "a2a350ab232a110549f5c16ab888d912a12a9844a056a5cdbb68c383622ad165"
+rastro:
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "ff0b62a3f92e7e3f5de26320400421865e852de9"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a: []
+estado_evidencia: "UNKNOWN"
 ---
 
 # 🧠 Artefato automático de aprendizado — Zendrive Provider Route

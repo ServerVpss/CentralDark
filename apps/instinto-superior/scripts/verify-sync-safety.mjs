@@ -1,5 +1,5 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-// @last_updated: 2026-11-01T20:00:00Z @implementado: regressão Git isolada do handler real, sem tocar remoto de produção.
+// @last_updated: 2026-11-13T04:39:00Z @implementado: regressão trava resolvedor 3-way fail-closed e proíbe ours/rebase/add automático.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -26,7 +26,7 @@ test('Main igual é sucesso; consulta divergente não vira mesmo SHA',async t=>r
 }));
 test('Casa e Tudo preservam arquivo alheio e não criam commit nem stage',async t=>run(t,async(f,m)=>{
  fs.writeFileSync(path.join(f.repo,'alheio.txt'),'do not publish');const head=f.g('rev-parse','HEAD');
- for(const target of ['windows','local','all']) {const result=await m.executarSync({data:{target}});assert.notEqual(result.status,'success');assert.equal(f.g('rev-parse','HEAD'),head);assert.equal(f.g('diff','--cached','--name-only'),'');assert.equal(fs.readFileSync(path.join(f.repo,'alheio.txt'),'utf8'),'do not publish');}
+ for(const target of ['windows','local','all']) {const result=await m.executarSync({data:{target}});assert.equal(result.status,'conflict');assert.match(result.human_readable,/Alterações locais preservadas|Reconciliação 3-way/);assert.doesNotMatch(result.human_readable,/Sync parcial: local: conflict/);assert.equal(f.g('rev-parse','HEAD'),head);assert.equal(f.g('diff','--cached','--name-only'),'');assert.equal(fs.readFileSync(path.join(f.repo,'alheio.txt'),'utf8'),'do not publish');}
 }));
 test('Casa limpa publica commit existente e confirma SHA remoto real',async t=>run(t,async(f,m)=>{
  fs.writeFileSync(path.join(f.repo,'tracked.txt'),'approved commit');f.g('add','tracked.txt');f.g('commit','-m','approved');
@@ -46,3 +46,21 @@ test('Falha histórica VPS conserva erro e escopo sem inventar estado atual',asy
  assert.equal(main.status,'success');assert.equal(main.target,undefined);
  assert.doesNotMatch(main.human_readable,/VPS/);
 }));
+
+
+test('Resolvedor canônico é 3-way fail-closed e nunca escolhe ours nem cria commit automático',()=> {
+ const py=fs.readFileSync(new URL('../../../scripts/auto-sync/AUTO-SYNC-MASTER.py',import.meta.url),'utf8');
+ assert.match(py,/centraldark\.auto-sync-plan\.v2/);
+ assert.match(py,/merge-file/);
+ assert.match(py,/--dry-run/);
+ assert.match(py,/ONE_WRITER_LOCK\s*=\s*True/);
+ assert.doesNotMatch(py,/checkout["',\s]+--ours/);
+ assert.doesNotMatch(py,/pull["',\s]+--rebase/);
+ assert.doesNotMatch(py,/["']add["']\s*,\s*["']\.["']/);
+ assert.doesNotMatch(py,/Auto Conflict-Resolve \[ours strategy\]/);
+ assert.match(source,/AUTO-SYNC-MASTER\.py/);
+ assert.match(source,/--dry-run/);
+ assert.match(source,/--no-fetch/);
+ assert.match(source,/FETCH_HEAD/);
+ assert.match(source,/Conflitos semânticos localizados/);
+});

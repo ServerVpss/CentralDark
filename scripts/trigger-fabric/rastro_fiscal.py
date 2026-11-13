@@ -282,10 +282,67 @@ class GitHubBackend:
         except Exception as exc:
             raise BackendUnavailable(f"cannot decode content {path}@{ref}: {exc}") from exc
 
+    def resolve_active_funnel_issue(self) -> Optional[int]:
+        matches: list[int] = []
+        page = 1
+        while True:
+            obj = self._gh(
+                f"repos/{self.repo}/pulls?state=open&per_page=100&page={page}"
+            )
+            if obj is None:
+                return None
+            if not isinstance(obj, list):
+                raise BackendUnavailable("invalid open PR payload from GitHub")
+            if not obj:
+                break
+            for item in obj:
+                if ACTIVE_FUNNEL_MARKER in str(item.get("body") or ""):
+                    try:
+                        matches.append(int(item["number"]))
+                    except (KeyError, TypeError, ValueError) as exc:
+                        raise BackendUnavailable("invalid active funnel PR number") from exc
+            if len(obj) < 100:
+                break
+            page += 1
+
+        unique = sorted(set(matches))
+        if len(unique) == 1:
+            return unique[0]
+        if len(unique) == 0:
+            return None
+        raise BackendUnavailable(
+            "multiple open PRs carry CENTRALDARK_HUD_FUNNEL_CONTINUITY"
+        )
+
+    def _issue_has_sha(self, issue: int, needle: str) -> Optional[bool]:
+        issue_obj = self._gh(f"repos/{self.repo}/issues/{issue}")
+        if issue_obj is None:
+            return None
+        if needle in str(issue_obj.get("body") or "").lower():
+            return True
+        try:
+            total = int(issue_obj.get("comments") or 0)
+        except (TypeError, ValueError):
+            raise BackendUnavailable("invalid ledger comment count from GitHub")
+        if total == 0:
+            return False
+
+        page = max(1, (total + 99) // 100)
+        while page >= 1:
+            obj = self._gh(
+                f"repos/{self.repo}/issues/{issue}/comments?per_page=100&page={page}"
+            )
+            if obj is None:
+                return None
+            if any(needle in str(item.get("body") or "").lower() for item in obj):
+                return True
+            page -= 1
+        return False
+
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1757,
+        issue: Optional[int] = None,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         needle = sha.lower()
@@ -315,32 +372,16 @@ class GitHubBackend:
                 return False
             return needle in str(obj.get("body") or "").lower()
 
-        # Legacy fallback only: scan the historical issue thread when no exact
-        # repository receipt was supplied.
-        # Read the issue comment count, start at the newest page, then walk
-        # backwards until the cited SHA is found. This prevents false FAILs
-        # once #1562 grows beyond 100 comments.
-        issue_obj = self._gh(f"repos/{self.repo}/issues/{issue}")
-        if issue_obj is None:
-            return None
-        try:
-            total = int(issue_obj.get("comments") or 0)
-        except (TypeError, ValueError):
-            raise BackendUnavailable("invalid ledger comment count from GitHub")
-        if total == 0:
-            return False
+        explicit_issue = _ledger_issue_number(ledger_ref)
+        if explicit_issue is not None:
+            return self._issue_has_sha(explicit_issue, needle)
 
-        page = max(1, (total + 99) // 100)
-        while page >= 1:
-            obj = self._gh(
-                f"repos/{self.repo}/issues/{issue}/comments?per_page=100&page={page}"
-            )
-            if obj is None:
-                return None
-            if any(needle in str(item.get("body") or "").lower() for item in obj):
-                return True
-            page -= 1
-        return False
+        # CURRENT fallback: resolve the active funnel dynamically by marker.
+        # Historical PR numbers are not canonical identity.
+        target_issue = issue if issue is not None else self.resolve_active_funnel_issue()
+        if target_issue is None:
+            return None
+        return self._issue_has_sha(target_issue, needle)
 
 
 class FakeBackend:
@@ -392,13 +433,27 @@ class FakeBackend:
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1757,
+        issue: Optional[int] = None,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         self._guard()
         full = self._resolve(sha) or sha
         return any(full.lower().startswith(x) or x.startswith(full.lower()) for x in self.ledger)
 
+
+def _ledger_issue_number(ref: Optional[str]) -> Optional[int]:
+    if not ref:
+        return None
+    raw = ref.strip().strip(chr(96)).strip("'\"")
+    for pattern in (
+        r"github\.com/[^/\s]+/[^/\s]+/(?:pull|issues)/(\d+)",
+        r"\bPR\s*#?(\d+)\b",
+        r"^#(\d+)$",
+    ):
+        match = re.search(pattern, raw, re.I)
+        if match:
+            return int(match.group(1))
+    return None
 
 def _ledger_comment_id(ref: Optional[str]) -> Optional[int]:
     if not ref:
@@ -651,7 +706,7 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
             checks.append(Check("ledger_active", "FAIL", "direct-main write claim without COMMIT_SHA"))
         else:
             try:
-                found = backend.ledger_has_sha(sha, 1757, data.get("ledger_ref"))
+                found = backend.ledger_has_sha(sha, None, data.get("ledger_ref"))
             except BackendUnavailable as exc:
                 checks.append(Check("ledger_active", "UNKNOWN", str(exc)))
             else:
@@ -685,6 +740,122 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
     )
 
 
+
+# Reproduz fatos históricos de escrita e exclusão sem executar novas mutações.
+ACTIVE_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"
+
+REPLAY_SCHEMA = "centraldark.rastro-session-replay.v1"
+
+
+def verify_session_replay(receipt: dict[str, Any], repo: str, backend: Any) -> dict[str, Any]:
+    checks: list[Check] = []
+
+    def check(name: str, state: str, detail: str) -> None:
+        checks.append(Check(name, state, detail))
+
+    required = ("repo", "path", "main_sha", "create_sha", "update_sha",
+                "delete_sha", "created_content", "updated_content")
+    missing = [key for key in required if not isinstance(receipt.get(key), str) or not receipt[key]]
+    check("schema", "PASS" if receipt.get("schema") == REPLAY_SCHEMA and not missing else "FAIL",
+          "schema e campos exigidos" if not missing else "campos ausentes: " + ",".join(missing))
+    path = receipt.get("path")
+    safe = (isinstance(path, str) and path.startswith("docs/receipts/")
+            and "\\" not in path and ".." not in path.split("/"))
+    check("recognized_path", "PASS" if safe else "FAIL", "caminho relativo permitido" if safe else "caminho fora da pasta de recibos")
+    check("repo", "PASS" if receipt.get("repo") == repo else "FAIL", "escopo do repositório")
+    names = ("main", "create", "update", "delete")
+    shas = [receipt.get(name + "_sha", "") for name in names]
+    valid_sha = all(isinstance(x, str) and re.fullmatch(r"[a-f0-9]{40}", x, re.I) for x in shas)
+    distinct = len(set(shas)) == len(names) if valid_sha else False
+    check("commit_ids", "PASS" if valid_sha and distinct else "FAIL", "quatro SHA completos e distintos")
+
+    commits: dict[str, dict[str, Any]] = {}
+    if not any(c.verdict == "FAIL" for c in checks):
+        for name, sha in zip(names, shas):
+            try:
+                obj = backend.commit(sha)
+            except BackendUnavailable:
+                check(name + "_commit", "UNKNOWN", "GitHub indisponível")
+                continue
+            if obj is not None and str(obj.get("sha", "")).lower() == sha.lower():
+                commits[name] = obj
+                check(name + "_commit", "PASS", "commit encontrado")
+            else:
+                check(name + "_commit", "FAIL", "commit não encontrado")
+
+        for name, prev in (("create", "main"), ("update", "create"), ("delete", "update")):
+            obj = commits.get(name)
+            if not obj:
+                continue
+            parents = obj.get("parents", [])
+            if not parents:
+                check(name + "_parent", "UNKNOWN", "pais do commit não disponíveis")
+            else:
+                same = str(parents[0].get("sha", "")).lower() == receipt[prev + "_sha"].lower()
+                check(name + "_parent", "PASS" if same else "FAIL", "cadeia de commits")
+
+        for name, expected in (("main", None), ("create", receipt["created_content"]),
+                               ("update", receipt["updated_content"]), ("delete", None)):
+            if name not in commits:
+                continue
+            try:
+                actual = backend.file_at(path, receipt[name + "_sha"])
+            except BackendUnavailable:
+                check(name + "_readback", "UNKNOWN", "GitHub indisponível")
+                continue
+            same = actual == expected
+            check(name + "_readback", "PASS" if same else "FAIL",
+                  "conteúdo exato" if expected is not None else "ausência comprovada")
+
+        first = commits.get("main", {}).get("commit", {}).get("tree", {}).get("sha")
+        last = commits.get("delete", {}).get("commit", {}).get("tree", {}).get("sha")
+        if first and last:
+            check("tree_restored", "PASS" if first == last else "FAIL", "árvore original recuperada")
+        elif "main" in commits and "delete" in commits:
+            check("tree_restored", "UNKNOWN", "árvores indisponíveis")
+
+    verdict = _aggregate(checks)
+    proof_scope = "HISTORICAL_GITHUB_REPLAY_ONLY"
+    untested_frontiers = [
+        "CURRENT_WRITE_PERMISSION", "CURRENT_DELETE_BY_CENTRALDARK_MCP",
+        "CURRENT_OAUTH_DISCOVERY", "LOCAL_RUNTIME_SYNC",
+    ]
+    stable_checks = [asdict(c) for c in checks]
+    # Hash only deterministic, evidence-derived data. Never hash clock or host.
+    canonical = {
+        "schema": REPLAY_SCHEMA,
+        "repo": repo,
+        "path": path,
+        "verdict": verdict,
+        "checks": stable_checks,
+        "proof_scope": proof_scope,
+        "untested_frontiers": untested_frontiers,
+    }
+    canonical_bytes = json.dumps(
+        canonical, sort_keys=True, ensure_ascii=True, separators=(",", ":")
+    ).encode("utf-8")
+    proof_digest = hashlib.sha256(canonical_bytes).hexdigest()
+    return {
+        "schema": REPLAY_SCHEMA,
+        "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+        "repo": repo,
+        "path": path,
+        "scope": proof_scope,
+        "verdict": verdict,
+        "checks": stable_checks,
+        "current_write": "NOT_TESTED",
+        "current_delete_by_centraldark_mcp": "NOT_TESTED",
+        "oauth_discovery_current": "NOT_TESTED",
+        "local_runtime_sync": "NOT_TESTED",
+        "modified_repository": False,
+        "mensagem": "Rastro histórico reconstruído." if verdict == "PASS" else "Rastro ainda não comprovado.",
+        "REPLAY_RESULT": {"verdict": verdict, "sha256": proof_digest, "checks_total": len(checks)},
+        "EXECUTION_METADATA": None,
+        "PROOF_SCOPE": proof_scope,
+        "UNTESTED_FRONTIERS": untested_frontiers,
+    }
+
+
 def _load_text(args: argparse.Namespace) -> str:
     if args.text is not None:
         return args.text
@@ -701,7 +872,43 @@ def main(argv: Optional[list[str]] = None) -> int:
     src.add_argument("--file")
     parser.add_argument("--note-file", help="Read-only metadata verification for touched Markdown notes")
     parser.add_argument("--pretty", action="store_true")
+    parser.add_argument("--replay-receipt", help="Reexecuta recibo histórico sem modificar arquivos")
+    parser.add_argument("--replay-digest", action="store_true", help="Exibe veredito e hash canônico para comparar ambientes")
+    parser.add_argument("--replay-execution-metadata", action="store_true", help="Inclui horário e sistema fora de REPLAY_RESULT")
     args = parser.parse_args(argv)
+
+
+    if args.replay_receipt:
+        if args.file or args.text or args.note_file:
+            parser.error("--replay-receipt não combina com --file, --text ou --note-file")
+        root = Path(__file__).resolve().parents[2]
+        target = (root / args.replay_receipt).resolve()
+        if (not target.is_relative_to(root) or not (root / "AGENTS.md").is_file()
+                or not (root / "scripts/centraldark-inventory-reconcile.sh").is_file()):
+            print(json.dumps({"verdict": "UNKNOWN", "reason": "ROOT_NOT_RECOGNIZED"}))
+            return 2
+        try:
+            payload = json.loads(target.read_text(encoding="utf-8"))
+            if not isinstance(payload, dict):
+                raise ValueError("recibo não é objeto JSON")
+        except (OSError, ValueError) as exc:
+            print(json.dumps({"verdict": "UNKNOWN", "reason": "RECEIPT_NOT_READABLE"}))
+            return 2
+        import platform
+        import time
+        started = time.monotonic()
+        result = verify_session_replay(payload, args.repo, GitHubBackend(args.repo))
+        if args.replay_execution_metadata:
+            result["EXECUTION_METADATA"] = {
+                "checked_at_utc": datetime.now(timezone.utc).isoformat(),
+                "elapsed_ms": round((time.monotonic() - started) * 1000, 2),
+                "platform": platform.system(),
+            }
+        if args.replay_digest:
+            print(f"REPLAY_VERDICT={result['verdict']} REPLAY_SHA256={result['REPLAY_RESULT']['sha256']}")
+        else:
+            print(json.dumps(result, ensure_ascii=False, indent=2 if args.pretty else None))
+        return {"PASS": 0, "FAIL": 1, "UNKNOWN": 2}[result["verdict"]]
 
     if args.note_file:
         if args.file or args.text:

@@ -1,5 +1,7 @@
 ---
 name: kimetsu-brainstorm
+display_name: "CentralDark - Kimetsu Brainstorm"
+legacy_alias: kimetsu-brainstorm
 description: "KIMETSU REMIX: classifica intenção, seleciona contextual e deliberadamente 17 respirações históricas e técnicas ToT/CoT/ReAct/GoT/AoT/SoT/PoT/CoT-SC; avalia delegação Hermes, fable-loop e cot-react-loop por rodada com evidência, sem arquitetura paralela. Use quando o CHEFE invocar Kimetsu, REMIX ou brainstorming operacional."
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock

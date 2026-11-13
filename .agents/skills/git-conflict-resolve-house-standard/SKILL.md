@@ -195,6 +195,40 @@ REUSE_THIS_OWNER_FOR_ALL_EQUIVALENT_PRS=true
 `SEMANTIC_ALL` preserva ambos somente quando os deltas coexistem sem contradição material. Código/config nunca vira PASS só porque a composição foi possível: sintaxe, teste aplicável, contraprova e SAME_HEAD continuam obrigatórios.
 
 
+## PR #1900 — marcador previamente commitado não é conflito novo de índice
+
+**Evidência 12/11/2026:** `mcp-admin.js` em `17e744c0` já contém um bloco literal
+`<<<<<<< HEAD / ======= / >>>>>>> origin/main`. Além disso, a simulação
+`git merge-tree --write-tree` contra `5442e1c6` identificou conflitos em
+`mcp-admin.js` e `mcp-diagnostics.js`. São **duas classes diferentes**.
+
+O classificador `scripts/dependabot/classify-conflict.mjs` lê o blob imutável
+`HEAD:path` e registra `committed_marker_state`, `committed_marker_blocks`
+e linhas dos marcadores. Em código/config alterado pelo PR, o resolvedor faz
+preflight antes de executar merge: qualquer marcador já commitado bloqueia
+`--apply` com `NO_PUSH_ON_COMMITTED_MARKERS=1` e saída 20. Mesmo um padrão
+anteriormente conhecido não pode selecionar cegamente um lado nesse caso.
+
+**Padrões conhecidos relevantes:** catálogo MCP (`mcp-admin.js`), diagnóstico
+(`mcp-diagnostics.js`) e índice central (`.agents/library-index.json`).
+`SAFE_RESOLUTION=REVIEW` significa **YELLOW** e exige discriminação pelo
+owner, não é permissão para substituir o código pela main nem unir texto às cegas.
+No #1900, preservar a rota nativa Tailscale/fallback sob autorização e a rota
+nova `CASA_NATIVE_PID_INVENTORY`, com cardinalidade e testes de catálogo;
+nunca repetir `RDC_DESKTOP_COMMANDER`.
+
+Receita: medir `HEAD` e `main` atuais -> comparar intenções dos dois lados ->
+compor em worktree temporário -> remover marcadores -> `git diff --check` e
+`node --check` -> validar unicidade/escopo do catálogo -> same-HEAD CI ->
+receipt/decisão de publicação separada. Nada disso autoriza push de PR nem main
+sem gates. `--dry-run` atual prova somente refs e nenhuma escrita; **não**
+afirma ter conciliado conteúdo. `UNKNOWN != PASS`.
+
+Referências Git: https://git-scm.com/docs/git-merge-tree (não altera índice/
+worktree; status 1 indica conflitos) e
+https://www.kernel.org/pub/software/scm/git/docs/gitmergeconflicts.html
+(marcadores são produto de conflito textual, não prova de composição semântica).
+
 ## Primary-source-first — contrato executável da COSTURA
 
 ```text
@@ -243,7 +277,9 @@ PR abre/atualiza  ->  workflow dispara
 Na mão, quando o runner estiver fora:
 
 ```bash
-ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh <PR>"
+ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh --dry-run <PR>"
+# Somente apos autorizacao e contraprova:
+ssh Segredo-VPS "cd /root/CentralDark && bash scripts/dependabot/resolve-conflicts.sh --apply <PR>"
 ```
 
 ## Regras de ferro
@@ -306,3 +342,109 @@ AUTONOMOUS_KNOWN_CONFLICTS=true
 UNKNOWN_CONFLICT_STOPS_YELLOW=true
 PROVEN_YELLOW_RESOLUTION_ENTERS_EXISTING_REGISTRY=true
 ```
+
+## COSTURA sem merge: auditoria de base e indice isolado
+
+A falha observada em 11/11/2026 mostrou um caso diferente de conflito de PR:
+o checkout da Casa tinha HEAD local divergente da main remota. O comando
+`git diff --cached --check` comparou o indice isolado contra o HEAD local,
+misturando erros preexistentes de outras missoes. Nao era conflito de merge.
+
+O **mesmo motor** `scripts/dependabot/resolve-conflicts.sh` possui agora
+o modo somente leitura `--audit-index`, sem novo resolvedor ou writer:
+
+```bash
+# GIT_INDEX_FILE aponta para indice temporario construido pelo caller
+# com git read-tree <SHA_BASE> e update-index apenas dos arquivos permitidos.
+REPO_DIR="$REPO" GIT_INDEX_FILE="$INDEX_ISOLADO" \
+  bash scripts/dependabot/resolve-conflicts.sh \
+  --audit-index "$SHA_BASE" refs/heads/main -- "caminho/arquivo.md"
+```
+
+- A base e obrigatoriamente um SHA completo, nao HEAD implicito.
+- O motor compara `git diff --cached --check "$SHA_BASE"` e valida
+  todos os paths alterados, rejeitando arquivos fora do escopo.
+- `refs/heads/main` e lido do remoto antes do PASS; drift bloqueia.
+- `-` no lugar da referencia remota exige modo local-only explicito.
+- Exige GIT_INDEX_FILE isolado; nunca troca o indice normal da Casa.
+- Nao executa merge, commit, reset, checkout, stash, push ou escrita.
+- O HEAD local divergente e metadado de diagnostico, nao base da prova.
+- Os testes do modo novo vivem no `resolve-conflicts-policy.test.sh`
+  existente. Reutilizar a COSTURA para auditorias similares de branches,
+  checkouts, staging, cherry-pick candidato e publicacoes por indice isolado.
+
+```text
+WRONG_IMPLICIT_HEAD_BASE != CONFLICT
+REMOTE_PIN != LOCAL_HEAD
+ISOLATED_INDEX != CASA_INDEX
+SCOPED_DIFF_CHECK + REMOTE_READBACK -> REVIEWABLE_CANDIDATE
+AUDIT_PASS != PUBLISHED
+```
+## COSTURA: preflight read-only, escritor unico e substituicao atomica
+
+Essas garantias pertencem ao **metodo de conflito** e aos seus auxiliares
+canônicos, nao ao reconciliador de notas. O motor continua unico:
+`scripts/dependabot/resolve-conflicts.sh`.
+
+```bash
+# Preflight read-only: consulta SHA da main, branch do PR e ref de pull.
+# Nao busca refs, cria worktree, altera indice, resolve conflitos ou publica.
+PR_HEAD_REF=dependabot/exemplo REPO_DIR=/root/CentralDark \
+  bash scripts/dependabot/resolve-conflicts.sh --dry-run 123
+
+# Somente com autorizacao explicita; o workflow existente usa --apply.
+PR_HEAD_REF=dependabot/exemplo REPO_DIR=/root/CentralDark \
+  bash scripts/dependabot/resolve-conflicts.sh --apply 123
+```
+
+- `--dry-run` comprova somente preflight e SHAs atuais. A classificacao de
+  conflitos permanece `UNPROVEN_NO_MERGE`; nao declarar resolucao PASS.
+- `--apply` exige numero de PR valido e branch que nao seja `main`.
+- O bloqueio exclusivo por `mkdir` atomico protege a raiz dos worktrees.
+  Segundo escritor recebe `BLOCKED_COSTURA_WRITER_LOCK_BUSY` antes do fetch.
+  Se houver encerramento abrupto, lock residual **bloqueia** ate auditoria;
+  nao remover automaticamente nem roubar lock.
+- Os auxiliares existentes `semantic-all-resolver.mjs` e
+  `structured-conflict-resolver.mjs` fazem escrita temporaria no mesmo
+  diretorio, `fsync`, `rename` atomico e readback do conteudo.
+- `--audit-index` permanece read-only e independente de `--apply`.
+- Nenhuma dessas etapas publica diretamente na `main`.
+
+```text
+DRY_RUN != RESOLVED
+PREFLIGHT_PASS != SAME_HEAD_CI_PASS
+LOCK_BUSY -> BLOCKED_BEFORE_FETCH
+ATOMIC_REPLACE + READBACK != REMOTE_PUBLISHED
+NO_EXPLICIT_APPLY -> BLOCKED
+```
+
+Regressoes comprovadas nos fixtures do
+`scripts/dependabot/resolve-conflicts-policy.test.sh` existente.
+
+## Python da COSTURA: selecao validada, sem confundir com Hermes (11/11/2026)
+
+Contraprova da Casa: no Git Bash, `python3` foi resolvido em
+`WindowsApps/python3`, iniciando um Python 3.14.7 incompleto
+(sem `Lib/enum.py`). Esse interpretador **nao** era o runtime de Hermes.
+
+O Hermes possui ambientes Python proprios e validos (3.14.9, venv 3.14.7 e
+venv 3.11.16), mas o resolvedor de PR **nao depende** desses ambientes.
+
+No mesmo motor `scripts/dependabot/resolve-conflicts.sh`, a funcao
+`costura_python` verifica versao Python 3.8+ e imports
+`ast`, `enum` e `pathlib`, tentando `python3` antes de `python`.
+Somente um interpretador aprovado executa as validacoes YAML/Python.
+A variavel opcional `CENTRALDARK_COSTURA_PYTHON` permite selecionar
+explicitamente um interpretador, inclusive um ambiente Hermes, mas uma
+selecao invalida **bloqueia** o processo; nao faz fallback silencioso.
+
+```text
+PYTHON3_COMMAND_FOUND != PYTHON_STDLIB_COMPLETE
+HERMES_PYTHON_AVAILABLE != COSTURA_USES_HERMES
+COSTURA_PYTHON_SELECTED=verified_runtime
+INVALID_PYTHON -> BLOCKED_COSTURA_NO_VALID_PYTHON
+NO_GLOBAL_PYTHON_PATH_CHANGE=true
+```
+
+A prova de regressao reside no `resolve-conflicts-policy.test.sh` existente,
+que exige `COSTURA_PYTHON_SELECTED` no receipt do resolver.
