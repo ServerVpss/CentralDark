@@ -41,3 +41,11 @@
 | Telegram | Bot operacional | Token bot |
 
 > Quem instala o quê e em que ordem está documentado em `11-fluxo-do-installer.md`. A Forja Total/Drive está em `31-forja-total-drive-vps.md`.
+
+<!-- CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+## Dependencias da fase opcional GitHub Actions runner Linux
+
+`--runner-linux-install` requer Linux x86_64, `bash`, `curl`, `tar`, `sha256sum` (coreutils), `flock` (util-linux), `mktemp` e `mv`; acesso HTTPS ao release oficial. Versao fixada: `actions/runner v2.338.2`; SHA-256 `baebf204307bac6193480852732f0aba2ae97b6c5597c244f4d5558390147c40`. Docker, WSL e modelo de IA nao sao prerequisitos do runner Linux nativo.
+
+`--runner-linux-activate` requer `sudo -n`, systemd, `CENTRALDARK_RUNNER_NAME` exclusivo e `CENTRALDARK_RUNNER_REGISTRATION_TOKEN` efemero obtido por fonte autorizada. Nao salvar token em Git, recibo, arquivo de receita ou log. Status `online` so pode ser confirmado pela API do GitHub.
+<!-- /CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->

@@ -1,25 +1,31 @@
 {
-  "schema": "centraldark.remote-bridge.config.v2",
-  "device_label": "LOCAL_WINDOWS",
-  "package": "@wonderwhy-er/desktop-commander@0.2.48",
-  "primary_control_plane": "centraldark_mcp",
-  "centraldark_mcp": "https://mcp.centralldark.com/api/mcp",
-  "legacy_remote_enabled_by_default": false,
-  "local_first": {
-    "enabled": true,
-    "read_only_diagnostics": true,
-    "remote_execution_enabled": false,
-    "notebook": {
-      "device_label": "NOT_CONFIGURED",
-      "lan_ipv4_env": "CENTRALDARK_NOTEBOOK_LAN_IP",
-      "lan_ipv4_observed": "",
-      "radmin_ipv4_observed": "",
-      "tailscale_ipv4_observed": ""
-    }
-  },
-  "tailscale": {
-    "serve_enabled": false,
-    "routes": []
-  },
-  "secrets_in_repo": false
+    "schema":  "centraldark.remote-bridge.config.v2",
+    "device_label":  "LOCAL_WINDOWS",
+    "package":  "@wonderwhy-er/desktop-commander@0.2.48",
+    "primary_control_plane":  "centraldark_mcp",
+    "centraldark_mcp":  "https://mcp.centralldark.com/api/mcp",
+    "legacy_remote_enabled_by_default":  false,
+    "local_first":  {
+                        "enabled":  true,
+                        "read_only_diagnostics":  true,
+                        "remote_execution_enabled":  false,
+                        "notebook":  {
+                                         "device_label":  "NOT_CONFIGURED",
+                                         "lan_ipv4_env":  "CENTRALDARK_NOTEBOOK_LAN_IP",
+                                         "lan_ipv4_observed":  "",
+                                         "radmin_ipv4_observed":  "",
+                                         "tailscale_ipv4_observed":  ""
+                                     }
+                    },
+    "tailscale":  {
+                      "serve_enabled":  false,
+                      "routes":  [
+
+                                 ]
+                  },
+    "secrets_in_repo":  false,
+    "supabase_auth":  {
+                          "publishable_key":  "sb_publishable_7V83I0wkIYoT7tpvBOh0Sg_jNk-GrX5",
+                          "url":  "https://lyoigsqluyktoclwdaft.supabase.co"
+                      }
 }

@@ -282,10 +282,67 @@ class GitHubBackend:
         except Exception as exc:
             raise BackendUnavailable(f"cannot decode content {path}@{ref}: {exc}") from exc
 
+    def resolve_active_funnel_issue(self) -> Optional[int]:
+        matches: list[int] = []
+        page = 1
+        while True:
+            obj = self._gh(
+                f"repos/{self.repo}/pulls?state=open&per_page=100&page={page}"
+            )
+            if obj is None:
+                return None
+            if not isinstance(obj, list):
+                raise BackendUnavailable("invalid open PR payload from GitHub")
+            if not obj:
+                break
+            for item in obj:
+                if ACTIVE_FUNNEL_MARKER in str(item.get("body") or ""):
+                    try:
+                        matches.append(int(item["number"]))
+                    except (KeyError, TypeError, ValueError) as exc:
+                        raise BackendUnavailable("invalid active funnel PR number") from exc
+            if len(obj) < 100:
+                break
+            page += 1
+
+        unique = sorted(set(matches))
+        if len(unique) == 1:
+            return unique[0]
+        if len(unique) == 0:
+            return None
+        raise BackendUnavailable(
+            "multiple open PRs carry CENTRALDARK_HUD_FUNNEL_CONTINUITY"
+        )
+
+    def _issue_has_sha(self, issue: int, needle: str) -> Optional[bool]:
+        issue_obj = self._gh(f"repos/{self.repo}/issues/{issue}")
+        if issue_obj is None:
+            return None
+        if needle in str(issue_obj.get("body") or "").lower():
+            return True
+        try:
+            total = int(issue_obj.get("comments") or 0)
+        except (TypeError, ValueError):
+            raise BackendUnavailable("invalid ledger comment count from GitHub")
+        if total == 0:
+            return False
+
+        page = max(1, (total + 99) // 100)
+        while page >= 1:
+            obj = self._gh(
+                f"repos/{self.repo}/issues/{issue}/comments?per_page=100&page={page}"
+            )
+            if obj is None:
+                return None
+            if any(needle in str(item.get("body") or "").lower() for item in obj):
+                return True
+            page -= 1
+        return False
+
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1757,
+        issue: Optional[int] = None,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         needle = sha.lower()
@@ -315,32 +372,16 @@ class GitHubBackend:
                 return False
             return needle in str(obj.get("body") or "").lower()
 
-        # Legacy fallback only: scan the historical issue thread when no exact
-        # repository receipt was supplied.
-        # Read the issue comment count, start at the newest page, then walk
-        # backwards until the cited SHA is found. This prevents false FAILs
-        # once #1562 grows beyond 100 comments.
-        issue_obj = self._gh(f"repos/{self.repo}/issues/{issue}")
-        if issue_obj is None:
-            return None
-        try:
-            total = int(issue_obj.get("comments") or 0)
-        except (TypeError, ValueError):
-            raise BackendUnavailable("invalid ledger comment count from GitHub")
-        if total == 0:
-            return False
+        explicit_issue = _ledger_issue_number(ledger_ref)
+        if explicit_issue is not None:
+            return self._issue_has_sha(explicit_issue, needle)
 
-        page = max(1, (total + 99) // 100)
-        while page >= 1:
-            obj = self._gh(
-                f"repos/{self.repo}/issues/{issue}/comments?per_page=100&page={page}"
-            )
-            if obj is None:
-                return None
-            if any(needle in str(item.get("body") or "").lower() for item in obj):
-                return True
-            page -= 1
-        return False
+        # CURRENT fallback: resolve the active funnel dynamically by marker.
+        # Historical PR numbers are not canonical identity.
+        target_issue = issue if issue is not None else self.resolve_active_funnel_issue()
+        if target_issue is None:
+            return None
+        return self._issue_has_sha(target_issue, needle)
 
 
 class FakeBackend:
@@ -392,13 +433,27 @@ class FakeBackend:
     def ledger_has_sha(
         self,
         sha: str,
-        issue: int = 1757,
+        issue: Optional[int] = None,
         ledger_ref: Optional[str] = None,
     ) -> Optional[bool]:
         self._guard()
         full = self._resolve(sha) or sha
         return any(full.lower().startswith(x) or x.startswith(full.lower()) for x in self.ledger)
 
+
+def _ledger_issue_number(ref: Optional[str]) -> Optional[int]:
+    if not ref:
+        return None
+    raw = ref.strip().strip(chr(96)).strip("'\"")
+    for pattern in (
+        r"github\.com/[^/\s]+/[^/\s]+/(?:pull|issues)/(\d+)",
+        r"\bPR\s*#?(\d+)\b",
+        r"^#(\d+)$",
+    ):
+        match = re.search(pattern, raw, re.I)
+        if match:
+            return int(match.group(1))
+    return None
 
 def _ledger_comment_id(ref: Optional[str]) -> Optional[int]:
     if not ref:
@@ -651,7 +706,7 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
             checks.append(Check("ledger_active", "FAIL", "direct-main write claim without COMMIT_SHA"))
         else:
             try:
-                found = backend.ledger_has_sha(sha, 1757, data.get("ledger_ref"))
+                found = backend.ledger_has_sha(sha, None, data.get("ledger_ref"))
             except BackendUnavailable as exc:
                 checks.append(Check("ledger_active", "UNKNOWN", str(exc)))
             else:
@@ -687,6 +742,8 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
 
 
 # Reproduz fatos históricos de escrita e exclusão sem executar novas mutações.
+ACTIVE_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"
+
 REPLAY_SCHEMA = "centraldark.rastro-session-replay.v1"
 
 

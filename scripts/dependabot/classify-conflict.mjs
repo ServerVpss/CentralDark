@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const file = process.argv[2];
 if (!file) {
@@ -55,6 +56,52 @@ const normalized = file.replaceAll('\\', '/');
 const base = path.posix.basename(normalized);
 const ext = path.posix.extname(normalized).toLowerCase();
 
+// The unmerged index and conflict markers *already committed in the PR HEAD*
+// are different failure modes. Detect the latter from the immutable Git blob,
+// not from the merge worktree (which normally contains temporary markers).
+function inspectCommittedMarkers(repoPath) {
+  if (!new Set(['.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx', '.json', '.yaml', '.yml', '.sh', '.ps1', '.py']).has(ext)) {
+    return { state: 'NOT_APPLICABLE', blocks: 0, lines: [] };
+  }
+  let data;
+  try {
+    data = execFileSync('git', ['show', 'HEAD:' + repoPath], {
+      encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'],
+    });
+  } catch {
+    return { state: 'UNAVAILABLE', blocks: 0, lines: [] };
+  }
+  let state = 0;
+  let blocks = 0;
+  let malformed = false;
+  const lines = [];
+  for (const [i, line] of data.replace(/\r\n/g, '\n').split('\n').entries()) {
+    if (/^<<<<<<<(?: |$)/.test(line)) {
+      lines.push(i + 1);
+      if (state !== 0) malformed = true;
+      state = 1;
+    } else if (/^\|\|\|\|\|\|\|(?: |$)/.test(line)) {
+      if (state !== 1) malformed = true;
+    } else if (/^=======$/.test(line)) {
+      lines.push(i + 1);
+      if (state !== 1) malformed = true;
+      state = 2;
+    } else if (/^>>>>>>>(?: |$)/.test(line)) {
+      lines.push(i + 1);
+      if (state !== 2) malformed = true;
+      state = 0;
+      blocks += 1;
+    }
+  }
+  if (state !== 0) malformed = true;
+  return {
+    state: lines.length === 0 ? 'NONE' : malformed ? 'COMMITTED_MALFORMED' : 'COMMITTED_BLOCKS',
+    blocks, lines,
+  };
+}
+
+const committedMarkers = inspectCommittedMarkers(normalized);
+
 let action = 'YELLOW';
 let reason = 'UNKNOWN_CODE_OR_CONFIG_REQUIRES_DISCRIMINANT';
 let conflictId = 'UNREGISTERED';
@@ -85,6 +132,9 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
     } else if (policy === 'PRESERVE_BOTH' || policy === 'USE_BOTH') {
       action = 'BOTH';
       reason = 'KNOWN_POLICY_PRESERVE_BOTH';
+    } else if (policy === 'REVIEW' || policy === 'BLOCK_REVIEW') {
+      action = 'YELLOW';
+      reason = 'KNOWN_OWNER_REVIEW_AND_COUNTERPROOF_REQUIRED';
     } else if (policy === 'STRUCTURED') {
       action = 'STRUCTURED';
       structuredStrategy = String(known.STRUCTURED_STRATEGY || '');
@@ -105,8 +155,23 @@ if (action === 'YELLOW' && reason === 'UNKNOWN_CODE_OR_CONFIG_REQUIRES_DISCRIMIN
   reason = 'UNREGISTERED_CONFLICT_REQUIRES_PROVEN_PATTERN';
 }
 
+// A committed marker cannot be resolved by selecting --ours/--theirs
+// during a later merge. Never silently discard either policy branch.
+if (committedMarkers.state.startsWith('COMMITTED_')) {
+  action = 'YELLOW';
+  reason = committedMarkers.state === 'COMMITTED_MALFORMED'
+    ? 'PR_HEAD_MALFORMED_CONFLICT_MARKERS'
+    : 'PR_HEAD_COMMITTED_CONFLICT_MARKERS_REQUIRE_RECONCILIATION';
+  conflictId = 'PR_HEAD_EMBEDDED_MERGE_MARKERS';
+  source = 'git HEAD:path';
+  structuredStrategy = '';
+}
+
 console.log(JSON.stringify({
   path: normalized,
+  committed_marker_state: committedMarkers.state,
+  committed_marker_blocks: committedMarkers.blocks,
+  committed_marker_lines: committedMarkers.lines,
   action,
   reason,
   conflict_id: conflictId,
