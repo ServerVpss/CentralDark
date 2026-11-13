@@ -35,6 +35,12 @@ def test_variantes_das_tres_temperaturas():
     assert quente["variant_used"] == "QUENTE_META_EVOLUCAO"
 
 
+def test_recovery_recorrente_escala_para_quente():
+    result = m.evaluate({"risk": "R0", "triggers": ["RECOVERY_RECURRENT"]})
+    assert result["mode_used"] == "QUENTE"
+    assert result["variant_used"] == "QUENTE_RECURRENCIA_ADVERSARIAL"
+
+
 def test_media_variantes_discriminam_ferida():
     assert m.select_variant({"risk": "R2", "triggers": ["FALSO_VERDE"]}) == "MEDIA_FALSO_VERDE"
     assert m.select_variant({"risk": "R2", "triggers": ["DRIFT"]}) == "MEDIA_DRIFT_DISTRIBUIDO"
