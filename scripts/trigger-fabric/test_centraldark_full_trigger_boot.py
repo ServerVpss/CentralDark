@@ -58,6 +58,55 @@ def test_prose_does_not_activate():
     assert mod.explicit_command_context("falei de centraldark ontem") is False
 
 
+def test_existing_ssh_terminal_event_state_machine():
+    available = mod.classify_existing_ssh_terminal_event({"existing_session_visible": True})
+    assert available["event"] == "EXISTING_SSH_TERMINAL_AVAILABLE"
+    assert available["material_command_allowed"] is False
+
+    probe = mod.classify_existing_ssh_terminal_event({
+        "existing_session_visible": True,
+        "probe_visible_same_tab": True,
+        "ssh_target_match": True,
+    })
+    assert probe["event"] == "SSH_VISUAL_PROBE_PASS"
+    assert probe["material_command_allowed"] is True
+
+    wrong = mod.classify_existing_ssh_terminal_event({"wrong_surface": True})
+    assert wrong["event"] == "SSH_WRONG_SURFACE"
+    assert wrong["retry_frozen"] is True
+
+    effect = mod.classify_existing_ssh_terminal_event({"remote_effect_proven": True})
+    assert effect["event"] == "SSH_REMOTE_EFFECT_READBACK"
+    assert effect["feedback_route"] == "PERSISTENT_GAP_SWEEP"
+
+
+def test_hud_publication_finalizes_or_posts_current():
+    current = mod.classify_mission_hud_publication({
+        "material_state_changed": True,
+        "fixed_point": False,
+        "next_cursor": "SYNC_RUNTIME",
+    })
+    assert current["publish"] is True
+    assert current["action"] == "PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR"
+    assert current["next_cursor_required"] is True
+    assert current["next_cursor_present"] is True
+
+    done = mod.classify_mission_hud_publication({
+        "material_state_changed": True,
+        "fixed_point": True,
+    })
+    assert done["publish"] is True
+    assert done["action"] == "FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL"
+    assert done["next_cursor_required"] is False
+
+    no_delta = mod.classify_mission_hud_publication({
+        "material_state_changed": False,
+        "fixed_point": False,
+    })
+    assert no_delta["publish"] is False
+    assert no_delta["action"] == "NO_HUD_WRITE_NO_MATERIAL_DELTA"
+
+
 def test_realtime_feedback_routes_without_mutation_permission():
     feedback = mod.classify_realtime_feedback("print/log novo da missão")
     assert feedback["active"] is True
@@ -67,6 +116,66 @@ def test_realtime_feedback_routes_without_mutation_permission():
     assert feedback["feedback_is_authority"] is False
     assert feedback["feedback_is_mutation_permission"] is False
     assert feedback["reopen_scope"] == "AFFECTED_CONE_ONLY"
+
+
+def test_materialization_scope_classification():
+    assert mod.classify_materialization_scope({"path_exists": True})["scope"] == "NO_MATERIALIZATION_NEEDED"
+
+    unit = mod.classify_materialization_scope({
+        "path_exists": False,
+        "test_kind": "unit",
+        "dependency_cone_known": True,
+    })
+    assert unit["scope"] == "MINIMAL_DEPENDENCY_CONE"
+    assert unit["meta_lupa_variant"] == "MEDIA_MATERIALIZATION_GAP"
+
+    integration = mod.classify_materialization_scope({
+        "path_exists": False,
+        "integration_test": True,
+        "requires_git_identity": True,
+    })
+    assert integration["scope"] == "REQUIRED_CHECKOUT_SCOPE"
+
+    unknown = mod.classify_materialization_scope({"path_exists": False})
+    assert unknown["scope"] == "UNKNOWN_MATERIALIZATION_SCOPE"
+    assert unknown["execute_allowed"] is False
+
+
+def test_visual_recovery_h01_h10_classification():
+    cases = [
+        ({"pid_match": False}, "H01_STALE_RUNTIME_TARGET"),
+        ({"monitor_match": False}, "H02_GEOMETRY_OR_MONITOR_DRIFT"),
+        ({"control_recreated": True}, "H03_CONTROL_RECREATED"),
+        ({"event_intercepted": True}, "H04_EVENT_INTERCEPTED"),
+        ({"visible": False}, "H05_NOT_ACTIONABLE"),
+        ({"needs_focus": True}, "H06_PREREQUISITE_FOCUS_SCROLL"),
+        ({"delivery_code": "background_unavailable"}, "H07_CUA_DELIVERY_UNAVAILABLE"),
+        ({"async_pending": True}, "H08_ASYNC_EFFECT_PENDING"),
+        ({"candidate_count": 2}, "H09_TARGET_AMBIGUOUS"),
+        ({"session_changed": True}, "H10_SURFACE_SESSION_CHANGED"),
+    ]
+    for observation, expected in cases:
+        result = mod.classify_visual_recovery(observation)
+        assert result["class"] == expected
+        assert result["meta_lupa_mode"] == "MEDIA"
+        assert result["meta_lupa_variant"] == "MEDIA_RECOVERY_VISUAL"
+        assert result["retry_frozen"] is True
+        assert result["same_action_retry_budget"] == 1
+        assert result["retry_requires_new_evidence"] is True
+        assert result["recipe"] != "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE"
+
+
+def test_visual_recovery_unknown_preserves_cursor_without_retry():
+    result = mod.classify_visual_recovery({})
+    assert result["class"] == "UNKNOWN_VISUAL_CAUSE"
+    assert result["recipe"] == "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE"
+    assert "NEXT_CURSOR" in result["preserve"]
+    assert result["retry_frozen"] is True
+
+
+def test_visual_recovery_precedence_prefers_session_change_over_stale_pid():
+    result = mod.classify_visual_recovery({"session_changed": True, "pid_match": False})
+    assert result["class"] == "H10_SURFACE_SESSION_CHANGED"
 
 
 def test_empty_feedback_is_not_active():
@@ -702,7 +811,13 @@ if __name__ == "__main__":
     tests = [
         test_normalization_variants,
         test_prose_does_not_activate,
+        test_existing_ssh_terminal_event_state_machine,
+        test_hud_publication_finalizes_or_posts_current,
         test_realtime_feedback_routes_without_mutation_permission,
+        test_materialization_scope_classification,
+        test_visual_recovery_h01_h10_classification,
+        test_visual_recovery_unknown_preserves_cursor_without_retry,
+        test_visual_recovery_precedence_prefers_session_change_over_stale_pid,
         test_empty_feedback_is_not_active,
         test_megazord_persists_realtime_feedback_binding,
         test_runtime_preflight_contract_is_bound,

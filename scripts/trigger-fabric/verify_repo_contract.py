@@ -722,7 +722,165 @@ check_absent('CENTRALDARK_AI_BOOT.yaml',[
 check('AGENTS.md',['#ACORDAR','!CALIBRAR','REALITY=JUDGE'])
 check('docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md',['#ACORDAR + !CALIBRAR + !MULTIBUSSOLA','MESMO_CONTRATO=SIM'])
 check('docs/CONSCIENCIA/MULTIBUSSOLA.md',['!MULTIBUSSOLA','REALITY_IS_JUDGE=true','BOTTOM-UP','ROUND-TRIP'])
-check('.agents/skills/meta-lupa/SKILL.md',['# META LUPA','FALSO_VERDE_BLOQUEADO=SIM'])
+check('.agents/skills/meta-lupa/SKILL.md',[
+ '# META LUPA',
+ 'FALSO_VERDE_BLOQUEADO=SIM',
+ 'Variantes dentro das três temperaturas',
+ 'MEDIA_RECOVERY_VISUAL',
+ 'MEDIA_MATERIALIZATION_GAP',
+ 'QUENTE_RECURRENCIA_ADVERSARIAL',
+], classification='META_LUPA_TEMPERATURE_VARIANT_CONTRACT')
+check('.agents/skills/meta-lupa/scripts/meta_lupa.py',[
+ 'def select_mode(data: dict)',
+ 'def select_variant(data: dict',
+ '"variant_used": select_variant',
+ '"VISUAL_ACTION_NO_EFFECT"',
+ '"MATERIALIZATION_GAP"',
+ '"MEDIA_MATERIALIZATION_GAP"',
+ '"RECOVERY_RECURRENT"',
+], classification='META_LUPA_EXECUTABLE_VARIANT_CLASSIFIER')
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_materialization_scope(observation: dict)',
+ '"NO_MATERIALIZATION_NEEDED"',
+ '"MINIMAL_DEPENDENCY_CONE"',
+ '"REQUIRED_CHECKOUT_SCOPE"',
+ '"UNKNOWN_MATERIALIZATION_SCOPE"',
+ '"MEDIA_MATERIALIZATION_GAP"',
+], classification='MATERIALIZATION_SCOPE_EXECUTABLE_CLASSIFIER')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'EXISTING_SSH_TERMINAL_AVAILABLE',
+ 'SSH_VISUAL_PROBE_PASS',
+ 'SSH_WRONG_SURFACE',
+ 'SSH_REMOTE_EFFECT_READBACK',
+ 'MISSION_STATE_READY_FOR_HUD',
+ 'CANONICAL_SKILL_RECIPE_CHANGED',
+], classification='SSH_TRIGGER_FEEDBACK_HUD_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'existing_ssh_terminal_feedback_sync_contract:',
+ 'FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL',
+ 'PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR',
+ 'MAIN_RUNTIME_LOCK_IS_NOT_ACTIVE_SESSION_LOAD',
+], classification='SSH_FEEDBACK_SYNC_MASTER_CONTRACT')
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_existing_ssh_terminal_event(observation: dict)',
+ 'def classify_mission_hud_publication(observation: dict)',
+ 'ssh-terminal-event',
+ 'hud-mission-state',
+], classification='SSH_FEEDBACK_HUD_EXECUTABLE_CLASSIFIER')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md',[
+ 'centraldark_autosync: true',
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+], classification='SSH_VISUAL_SKILL_AUTOSYNC')
+check('.agents/skills/skill-synchronization/SKILL.md',[
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'SYNCED_BYTES != SESSION_LOADED != RECIPE_EXECUTED != EFFECT_PROVED',
+], classification='SSH_RECIPE_SKILL_SYNC_OWNER')
+check('docs/HUD/README.md',[
+ 'MISSION_STATE_READY_FOR_HUD',
+ 'FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL',
+ 'PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR',
+ 'NO_HUD_WRITE_NO_MATERIAL_DELTA',
+], classification='HUD_CURRENT_OR_FINALIZE_MISSION_CONTRACT')
+
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'WINDOW_FOCUSED != CORRECT_TAB',
+ 'SEND_ACCEPTED != COMMAND_VISIBLE',
+ 'COMMAND_VISIBLE != LINUX_EFFECT_PROVEN',
+ 'SSH_CONNECTED != TARGET_MATCH',
+], classification='EXISTING_SSH_TERMINAL_OPERATIONAL_RECIPE')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md',[
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'WRONG_SURFACE',
+ 'INPUT_DELIVERY_OK != TERMINAL_TEXT_VISIBLE != REMOTE_EFFECT_PROVEN',
+], classification='EXISTING_SSH_TERMINAL_VISUAL_BINDING')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-ops/SKILL.md',[
+ 'RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'pwd; hostname',
+ 'ENV_FILE_LOADED != REMOTE_AUTH_PROVEN',
+], classification='EXISTING_SSH_TERMINAL_LINUX_OPS_BINDING')
+check('.agents/library-index.json',[
+ '"id": "centraldark-hermes-visual-computer-use"',
+ '"recipe_ids": [',
+ '"CASA_EXISTING_SSH_TERMINAL_TO_LINUX"',
+ '"delta_uses_existing_windows_terminal_ssh_to_linux"',
+], classification='LIBRARY_INDEX_EXISTING_SSH_TERMINAL_ROUTE')
+check('docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',[
+ 'Terminal SSH já aberto Casa→Linux',
+ 'EXISTING_SSH_TERMINAL_REUSE_BEFORE_NEW_SESSION=true',
+ 'SSH_TARGET_REQUIRES_VISIBLE_READONLY_PROBE=true',
+], classification='BRAIN_MAP_EXISTING_SSH_TERMINAL_ROUTE')
+
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'Materialization Scope: trazer o owner ao ambiente sem falsificar raiz',
+ 'MINIMAL_DEPENDENCY_CONE',
+ 'REQUIRED_CHECKOUT_SCOPE',
+ 'MATERIALIZED_PATH != CANONICAL_OWNER',
+ 'PATH_RESOLVED != PATH_EXISTS',
+], classification='TARGET_LOCK_MATERIALIZATION_SCOPE_CONTRACT')
+check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ 'def _is_centraldark_repo(candidate: Path)',
+ 'def _repo_candidates() -> list[Path]',
+ 'VPS_COMPAT_REPO_CANDIDATE',
+ 'WINDOWS_COMPAT_REPO_CANDIDATE',
+ 'return Path.cwd().resolve()',
+], classification='HERMES_RUNTIME_DYNAMIC_REPO_ROOT')
+check_absent('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
+ r'DEFAULT_REPO\s*=\s*Path\(["\']\/root\/CentralDark["\']\)',
+], classification='NO_HARDCODED_CANONICAL_REPO_ROOT')
+check('docs/agente/elite-mapper/config.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('docs/CONSCIENCIA/agente/elite-mapper/config.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('infra/guardiao/guardiao.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('apps/modulos/elite-gateway/scripts/pivete_routes.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh',[
+ 'CENTRALDARK_RUNTIME_ROOT',
+ 'ROOT%%/_worktrees/*',
+ 'CENTRALDARK_SCRATCH_WORKTREE',
+], classification='PORTABLE_RUNTIME_ROOT_HOOK')
+check_absent('docs/agente/elite-mapper/config.py',[r'ROOT_DIR\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_MAPPER_ROOT')
+check_absent('docs/CONSCIENCIA/agente/elite-mapper/config.py',[r'ROOT_DIR\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_MAPPER_ROOT')
+check_absent('infra/guardiao/guardiao.py',[r'RAIZ\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_GUARDIAO_ROOT')
+check_absent('apps/modulos/elite-gateway/scripts/pivete_routes.py',[r'REPO_ROOT\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_GATEWAY_ROOT')
+check_absent('scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh',[
+ r'RUNTIME_ROOT=["\']\/root\/CentralDark["\']',
+ r'CANONICAL_SCRATCH_WORKTREE=["\']\/root\/CentralDark\/',
+],classification='NO_HARDCODED_RUNTIME_HOOK_ROOT')
+
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_visual_recovery(observation: dict)',
+ '"H01_STALE_RUNTIME_TARGET"',
+ '"H10_SURFACE_SESSION_CHANGED"',
+ '"MEDIA_RECOVERY_VISUAL"',
+ '"retry_frozen": True',
+ '"same_action_retry_budget": 1',
+], classification='VISUAL_RECOVERY_H01_H10_EXECUTABLE_CLASSIFIER')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml',[
+ 'visual_recovery_classification:',
+ 'H01_STALE_RUNTIME_TARGET',
+ 'H10_SURFACE_SESSION_CHANGED',
+ 'ten_hypotheses_are_not_ten_retries: true',
+ 'recurrent_variant: QUENTE_RECURRENCIA_ADVERSARIAL',
+], classification='MEGAZORD_VISUAL_RECOVERY_META_LUPA_BINDING')
 check('docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',[
  'PAPAGAIO_MODE=OFF',
  'POMBO_MODE=CHECKSUM_ON',
@@ -938,6 +1096,54 @@ check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
  '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
  '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
 ], classification='TIK_TAK_HARD_GATES_REGISTERED')
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'RETURN_BEFORE_TRACE_READBACK = METHOD_FAILURE',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_COMPLETION_METHOD')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md',[
+ 'Gate de conclusão Direct Main — ledger CURRENT no mesmo ciclo',
+ 'CENTRALDARK_HUD_FUNNEL_CONTINUITY',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'METHOD_FAILURE',
+], classification='DIRECT_MAIN_CURRENT_LEDGER_RASTRO')
+check('scripts/trigger-fabric/rastro_fiscal.py',[
+ 'def resolve_active_funnel_issue(self)',
+ 'ACTIVE_FUNNEL_MARKER',
+ 'pulls?state=open&per_page=100&page={page}',
+ 'backend.ledger_has_sha(sha, None, data.get("ledger_ref"))',
+], classification='RASTRO_DYNAMIC_ACTIVE_FUNNEL')
+check_absent('scripts/trigger-fabric/rastro_fiscal.py',[
+ r'backend\.ledger_has_sha\(sha,\s*1757',
+ r'issue:\s*int\s*=\s*1757',
+], classification='NO_HARDCODED_RASTRO_LEDGER_PR')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: DIRECT_MAIN_MATERIAL_WRITE',
+ 'event: DIRECT_MAIN_LEDGER_READBACK_PASS',
+ 'event: DIRECT_MAIN_TRACE_INCOMPLETE',
+ 'LEDGER_READBACK_BEFORE_RETURN',
+], classification='DIRECT_MAIN_TRACE_TRIGGER_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'direct_main_trace_completion_gate:',
+ 'RECEIPT_OR_HUD_LEDGER_WRITE_SAME_CYCLE',
+ 'RETURN_BEFORE_LEDGER_READBACK_IS_METHOD_FAILURE',
+], classification='DIRECT_MAIN_TRACE_MASTER_CONTRACT')
+check('docs/HUD/README.md',[
+ 'Direct Main — rastro é parte do write',
+ 'RECORD_EACH_COMMIT_AS_COMMIT_DELTA_PROOF',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_HUD_CONTRACT')
+check('.agents/library-index.json',[
+ '"material_direct_main_write_requires_trace_completion"',
+ '"direct_main_write_complete_only_after_ledger_readback": true',
+], classification='DIRECT_MAIN_TRACE_LIBRARY_ROUTE')
+check('docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',[
+ 'Direct Main Trace Completion Gate',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_MAP_BINDING')
+
 check('scripts/trigger-fabric/rastro_fiscal.py',[
  'TRACE_PRESENT != TRACE_VALID',
  'class GitHubBackend',
@@ -945,6 +1151,9 @@ check('scripts/trigger-fabric/rastro_fiscal.py',[
  'def verify_text(',
  'RESPONSE_WITHOUT_TRACE',
  'def _ledger_comment_id(',
+ 'def _ledger_issue_number(',
+ 'def resolve_active_funnel_issue(self)',
+ 'ACTIVE_FUNNEL_MARKER',
  'issues/comments/{comment_id}',
  'comments?per_page=100&page={page}',
 ], classification='RASTRO_FISCAL_EXECUTABLE')
@@ -958,6 +1167,9 @@ check('scripts/trigger-fabric/test_rastro_fiscal.py',[
  'test_memory_without_location_fails',
  'test_github_unavailable_is_unknown',
  'test_direct_main_without_ledger_fails',
+ 'test_direct_main_uses_dynamic_current_ledger',
+ 'test_active_funnel_is_resolved_by_marker_not_historical_number',
+ 'test_multiple_active_funnels_are_unknown_not_arbitrary',
  'test_ledger_exact_comment_ref_is_checked_directly',
  'test_ledger_over_100_comments_starts_from_newest_page',
 ], classification='RASTRO_FISCAL_COUNTERPROOF')
@@ -1591,7 +1803,7 @@ check('scripts/trigger-fabric/main_first_change_guard.py',[
 ], classification='MAIN_FIRST_CHANGE_GUARD_OWNER')
 check_command(
  'scripts/trigger-fabric/main_first_change_guard.py --compile',
- ['python3', '-m', 'py_compile', str(ROOT/'scripts/trigger-fabric/main_first_change_guard.py')],
+ [sys.executable, '-m', 'py_compile', str(ROOT/'scripts/trigger-fabric/main_first_change_guard.py')],
  classification='MAIN_FIRST_CHANGE_GUARD_SYNTAX',
 )
 
@@ -1669,12 +1881,12 @@ if tracked:
 # Reprova desordem A-Z, lacunas J001..JNNN, links, titulo/identidade e duplicatas.
 check_command(
     'scripts/trigger-fabric/verify_jukebox.py --self-test',
-    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--self-test'],
+    [sys.executable, str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--self-test'],
     classification='JUKEBOX_VALIDATOR_NEGATIVE_TESTS',
 )
 check_command(
     'scripts/trigger-fabric/verify_jukebox.py --check',
-    ['python3', str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--check', str(ROOT)],
+    [sys.executable, str(ROOT/'scripts/trigger-fabric/verify_jukebox.py'), '--check', str(ROOT)],
     classification='JUKEBOX_ORDER_AZ_NUMERIC_EXECUTABLE_GATE',
 )
 

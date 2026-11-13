@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import express from "express";
 import { config } from "./config.js";
 import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
-import { assertNoRetiredCentralDarkHostedDeploy } from "./tools/github/github.js";
+import { assertNoRetiredCentralDarkHostedDeploy, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
@@ -21,7 +21,7 @@ import { providerAdminBridge } from "./provider-admin-bridge.js";
 import { getAgentObservabilityStatus, scheduleAgentLogIngest } from "./agent-observability.js";
 import { handleBuildkiteWebhook } from "./buildkite-integration.js";
 import { githubDeployWebhook, githubDeployHealth } from "./github-deploy-webhook.js";
-import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
+import { isAdmin, adminGet, adminGraphProxy, adminLogin, adminLogout, adminRotas, adminTools, adminLogsStream, adminTestarSse, adminBuscarLogs, adminMetricas, adminOperationalSnapshot, adminLinear, adminTailscale, adminGrokControlGet, adminGrokControlPost, adminBuildkiteStatus, adminE2E, adminE2EPublico, adminIntentGet, adminIntentRun, adminSentinelEvent, intentPublicStatus, bootstrapAdminLogCapture, getSseDiagnostics, pushAdminLog, } from "./admin.js";
 import { getLinearPublicStatus } from "./tools/integrations.js";
 import { adminVsCodeLog } from "./vscode-log-route.js";
 import { readTailscaleNetworkLogs } from "./modes/admin/tools/admin-provider-control.js";
@@ -75,8 +75,8 @@ const app = express();
 app.disable("x-powered-by");
 app.get("/", (_req, res) => {
     res.setHeader("Cache-Control", "no-store");
-    res.json({ ok:true, service:"CentralDark MCP", api:"/api/mcp",
-        ui:"https://admin.centralldark.com/sala-controle" });
+    res.json({ ok: true, service: "CentralDark MCP", api: "/api/mcp",
+        ui: "https://admin.centralldark.com/sala-controle" });
 });
 function setCorsHeaders(res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -122,7 +122,6 @@ app.use(express.urlencoded({ extended: false, limit: "1mb" }));
 app.use(correlationMiddleware);
 // Owner existente: pareamento de dispositivos com aprovacao admin e token one-shot.
 // Um unico store para /device e /authorize.
-
 app.get("/admin/pairing", (_req, res) => {
     res.redirect(302, "https://admin.centralldark.com/sala-controle");
 });
@@ -153,16 +152,16 @@ app.get("/intent/manifesto", (_req, res) => {
 app.get("/health", async (_req, res) => {
     let preflight = null;
     try {
-        preflight = await canonicalRecipeFirstPreflight(
-            "centraldark_deploy_micro_fallback", { owner: "mcp", dryRun: true },
-        );
-    } catch {
+        preflight = await canonicalRecipeFirstPreflight("centraldark_deploy_micro_fallback", { owner: "mcp", dryRun: true });
+    }
+    catch {
         // /health continua disponível como sensor mesmo se a receita estiver ausente.
     }
     let hostedDispatchLocked = false;
     try {
         assertNoRetiredCentralDarkHostedDeploy("ServerVpss", "CentralDark", "vps-ssh-exec.yml");
-    } catch (error) {
+    }
+    catch (error) {
         hostedDispatchLocked = String(error?.message || error)
             .includes("CENTRALDARK_HOSTED_DEPLOY_ROUTE_LOCKED");
     }
@@ -210,7 +209,8 @@ app.get("/health/routes", async (_req, res) => {
             });
             return { id, httpStatus: response.status, reachable: true,
                 state: response.ok ? "HTTP_REACHABLE" : "HTTP_NON_2XX" };
-        } catch {
+        }
+        catch {
             return { id, httpStatus: null, reachable: false, state: "NOT_REACHABLE" };
         }
     }));
@@ -299,7 +299,6 @@ app.get("/heartbeat", (_req, res) => {
 // ONDE    > issue #148, itens 2, 4 e 7 da secao "Falhas / atritos".
 // RESOLVE > cada uma passa a responder o codigo que descreve o fato:
 //           favicon 200, transporte aposentado 410, metodo errado 405.
-
 // Favicon 32x32 (PNG embutido em base64 — sem arquivo binario no repo).
 // Existe porque a UI /admin e mantida; sem ele o conector fica com icone
 // generico na lista do cliente.
@@ -311,7 +310,6 @@ const serveFavicon = (_req, res) => {
 };
 app.get("/favicon.ico", serveFavicon);
 app.get("/favicon.png", serveFavicon);
-
 // Transporte SSE foi aposentado: este servidor fala Streamable HTTP em /api/mcp.
 // MOTIVO  > conector antigo tenta /sse e recebia 404, que ele interpreta como
 //           "servidor errado" em vez de "transporte trocado".
@@ -326,7 +324,6 @@ app.all("/sse", (_req, res) => {
         documentation: "/.well-known/oauth-protected-resource",
     });
 });
-
 // Metodo errado responde 405 com Allow, nao 404.
 // MOTIVO  > GET /token e GET /register caiam no 404 generico, escondendo que
 //           a rota existe e so aceita POST. Confunde diagnostico de OAuth.
@@ -343,7 +340,6 @@ const somentePost = (rota) => (_req, res) => {
 };
 app.get("/token", somentePost("/token"));
 app.get("/register", somentePost("/register"));
-
 // ───────────────────────────── Painel /admin (NOC do Dono) ─────────────
 app.use("/admin/grafo", adminGraphProxy);
 app.get("/admin", adminGet);
@@ -352,6 +348,7 @@ app.get("/admin/logout", adminLogout);
 app.get("/admin/api/rotas", adminRotas);
 app.get("/admin/api/tools", adminTools);
 app.get("/admin/api/logs", adminBuscarLogs);
+app.post("/admin/api/sentinel/events", adminSentinelEvent);
 app.get("/admin/api/logs/LOGS-VS-CODE.log", adminVsCodeLog);
 app.get("/admin/api/metricas", adminMetricas);
 app.get("/admin/api/grok/control", adminGrokControlGet);
@@ -637,8 +634,12 @@ function resolveGhToken(req) {
     const authScheme = schemeMatch ? schemeMatch[1] : (rawAuth ? "raw" : "none");
     const bearer = extractBearer(req);
     const tokenPrefix = bearer ? bearer.slice(0, 8) : null;
-    const stats = (() => { try { return getStateStats(); } catch { return { accessTokens: -1 }; } })();
-
+    const stats = (() => { try {
+        return getStateStats();
+    }
+    catch {
+        return { accessTokens: -1 };
+    } })();
     // Diagnóstico obrigatório em toda request /mcp (níveis 1..5 de causa-raiz)
     const logAuth = (lookupResult, extra = {}) => {
         l.info("mcp_auth_diagnostic", {
@@ -650,7 +651,6 @@ function resolveGhToken(req) {
             ...extra,
         });
     };
-
     if (bearer) {
         const directToken = process.env.MCP_CENTRALDARK_TOKEN ||
             process.env.CENTRALDARK_MCP_TOKEN ||
@@ -677,7 +677,8 @@ function resolveGhToken(req) {
         }
         logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
         return {
-            token: at.gh_token,
+            token: at.gh_scope === "owner-admin" && at.gh_login === "centraldark-admin"
+                ? GH_CLI_OWNER_MARKER : at.gh_token,
             callerUser: at.gh_login || "github-oauth",
             oauthScope: String(at.oauth_scope || ""),
         };
@@ -700,7 +701,7 @@ function resolveGhToken(req) {
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
-app.post("/api/mcp", (req, res) => {
+app.post(["/api/mcp", "/mcp"], (req, res) => {
     const l = withCid(req.cid);
     const r = resolveGhToken(req);
     if ("error" in r) {
@@ -729,17 +730,20 @@ app.post("/api/mcp", (req, res) => {
     });
 });
 // GET /mcp — alguns clientes pingam pra checar OAuth via 401
-app.get("/api/mcp", (req, res) => {
+app.get(["/api/mcp", "/mcp"], (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
-app.get("/admin/catalog", authAdmin, async (req, res) => {
-    try {
-        const result = await getAdminCatalog(req);
-        res.json(result);
-    } catch (err) {
-        log.error("admin_catalog_error", { error: String(err) });
-        res.status(500).json({ ok: false, error: "erro ao obter catálogo administrativo", cid: req.cid });
+// getAdminCatalog() nunca foi implementado/importado neste arquivo; esta rota
+// ficou com referencias indefinidas (authAdmin + getAdminCatalog) que
+// derrubavam o carregamento do modulo inteiro. Guard alinhado ao padrao
+// isAdmin() usado pelas demais rotas /admin/*; a rota fica 501 ate alguem
+// implementar e importar getAdminCatalog de verdade.
+app.get("/admin/catalog", (req, res) => {
+    if (!isAdmin(req)) {
+        res.status(401).json({ ok: false, error: "AUTH_REQUIRED" });
+        return;
     }
+    res.status(501).json({ ok: false, error: "admin_catalog_nao_implementado", cid: req.cid });
 });
 // /mcp-public removido em 30/06/2026 — expunha vps_write_file_safe sem Bearer
 // (pendência #8). Toda chamada ao MCP agora exige OAuth via /mcp.
@@ -783,3 +787,4 @@ app.listen(config.port, "127.0.0.1", () => {
     });
 });
 export { codeReviewerToolDefinition } from "./tools/code-reviewer.js";
+//# sourceMappingURL=index.js.map

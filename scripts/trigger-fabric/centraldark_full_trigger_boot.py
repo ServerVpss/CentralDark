@@ -103,6 +103,83 @@ def explicit_command_context(value: str) -> bool:
     return bool(receipt.get("master_cycle_active"))
 
 
+def classify_existing_ssh_terminal_event(observation: dict) -> dict:
+    """Classifica o estado da receita SSH visual sem confundir input com efeito remoto."""
+    if not isinstance(observation, dict):
+        raise TypeError("SSH_TERMINAL_OBSERVATION_MUST_BE_OBJECT")
+
+    wrong_surface = observation.get("wrong_surface") is True
+    remote_effect = observation.get("remote_effect_proven") is True
+    probe_visible = observation.get("probe_visible_same_tab") is True
+    target_match = observation.get("ssh_target_match") is True
+    existing_session = observation.get("existing_session_visible") is True
+
+    if wrong_surface:
+        event = "SSH_WRONG_SURFACE"
+        action = "FREEZE_RETRY_REACQUIRE_AND_REPEAT_PROBE_ONLY"
+    elif remote_effect:
+        event = "SSH_REMOTE_EFFECT_READBACK"
+        action = "INGEST_FEEDBACK_COUNTERPROOF_AND_PUBLISH_HUD_STATE"
+    elif probe_visible and target_match:
+        event = "SSH_VISUAL_PROBE_PASS"
+        action = "ALLOW_ONE_AUTHORIZED_LINUX_COMMAND"
+    elif existing_session:
+        event = "EXISTING_SSH_TERMINAL_AVAILABLE"
+        action = "TARGET_LOCK_AND_REQUIRE_READONLY_PROBE"
+    else:
+        event = "SSH_TERMINAL_STATE_UNKNOWN"
+        action = "REACQUIRE_WITHOUT_MATERIAL_COMMAND"
+
+    return {
+        "schema": "centraldark.existing-ssh-terminal-event.v1",
+        "recipe_id": "CASA_EXISTING_SSH_TERMINAL_TO_LINUX",
+        "event": event,
+        "action": action,
+        "readback_required": True,
+        "same_tab_required": True,
+        "feedback_route": "PERSISTENT_GAP_SWEEP" if event == "SSH_REMOTE_EFFECT_READBACK" else "NONE",
+        "material_command_allowed": event == "SSH_VISUAL_PROBE_PASS",
+        "retry_frozen": event in {"SSH_WRONG_SURFACE", "SSH_TERMINAL_STATE_UNKNOWN"},
+        "window_focused_is_correct_tab": False,
+        "send_accepted_is_command_visible": False,
+        "command_visible_is_linux_effect_proven": False,
+    }
+
+
+def classify_mission_hud_publication(observation: dict) -> dict:
+    """Decide fechamento vs CURRENT no HUD/funil sem promover estado parcial a fixed point."""
+    if not isinstance(observation, dict):
+        raise TypeError("MISSION_HUD_OBSERVATION_MUST_BE_OBJECT")
+
+    material_state_changed = observation.get("material_state_changed") is True
+    fixed_point = observation.get("fixed_point") is True
+    next_cursor = str(observation.get("next_cursor", "")).strip()
+
+    if not material_state_changed:
+        action = "NO_HUD_WRITE_NO_MATERIAL_DELTA"
+        publish = False
+    elif fixed_point:
+        action = "FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL"
+        publish = True
+    else:
+        action = "PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR"
+        publish = True
+
+    return {
+        "schema": "centraldark.mission-hud-publication.v1",
+        "publish": publish,
+        "action": action,
+        "active_funnel_resolution": "DYNAMIC_CENTRALDARK_HUD_FUNNEL_CONTINUITY",
+        "mission_pr_resolution": "DYNAMIC_GOAL_OWNER_SCOPE",
+        "hardcoded_pr_number_forbidden": True,
+        "readback_required": publish,
+        "fixed_point": fixed_point if material_state_changed else False,
+        "next_cursor_required": publish and not fixed_point,
+        "next_cursor_present": bool(next_cursor),
+        "hud_updated_is_runtime_proven": False,
+    }
+
+
 def classify_realtime_feedback(value: str) -> dict:
     """Classifica entrada humana/live como sinal da missao, sem conceder escrita."""
     active = bool(value.strip())
@@ -119,6 +196,166 @@ def classify_realtime_feedback(value: str) -> dict:
         "repeated_failure_same_signature": "REUSE_CRYSTAL_NOT_RETHINK",
         "learning_outputs": ["REFUTED_MINERAL", "UNRESOLVED_MINERAL", "CRYSTAL_GOLD"],
         "next_cursor_required": True,
+    }
+
+
+MATERIALIZATION_SCOPES = {
+    "NO_MATERIALIZATION_NEEDED",
+    "MINIMAL_DEPENDENCY_CONE",
+    "REQUIRED_CHECKOUT_SCOPE",
+    "UNKNOWN_MATERIALIZATION_SCOPE",
+}
+
+
+def classify_materialization_scope(observation: dict) -> dict:
+    """Choose the smallest physical repo scope that can prove the requested effect."""
+    if not isinstance(observation, dict):
+        raise TypeError("MATERIALIZATION_OBSERVATION_MUST_BE_OBJECT")
+
+    path_exists = observation.get("path_exists")
+    test_kind = str(observation.get("test_kind", "")).strip().lower()
+    dependency_cone_known = observation.get("dependency_cone_known") is True
+    repo_semantics_required = any(
+        observation.get(key) is True
+        for key in (
+            "requires_git_identity",
+            "requires_repo_guards",
+            "requires_relative_imports",
+            "requires_repo_traversal",
+            "integration_test",
+            "operational_test",
+        )
+    )
+
+    if path_exists is True:
+        scope = "NO_MATERIALIZATION_NEEDED"
+        reason = "TARGET_ALREADY_PRESENT"
+    elif repo_semantics_required:
+        scope = "REQUIRED_CHECKOUT_SCOPE"
+        reason = "REPOSITORY_SEMANTICS_PARTICIPATE_IN_PROOF"
+    elif test_kind in {"unit", "function", "module"} and dependency_cone_known:
+        scope = "MINIMAL_DEPENDENCY_CONE"
+        reason = "UNIT_SCOPE_WITH_KNOWN_DEPENDENCY_CONE"
+    elif path_exists is False:
+        scope = "UNKNOWN_MATERIALIZATION_SCOPE"
+        reason = "PATH_MISSING_SCOPE_NOT_PROVEN"
+    else:
+        scope = "UNKNOWN_MATERIALIZATION_SCOPE"
+        reason = "INSUFFICIENT_MATERIALIZATION_EVIDENCE"
+
+    return {
+        "schema": "centraldark.materialization-scope.v1",
+        "scope": scope,
+        "reason": reason,
+        "meta_lupa_mode": "MEDIA" if scope != "NO_MATERIALIZATION_NEEDED" else "FRIA",
+        "meta_lupa_variant": (
+            "MEDIA_MATERIALIZATION_GAP"
+            if scope != "NO_MATERIALIZATION_NEEDED"
+            else "FRIA_READBACK"
+        ),
+        "materialized_path_is_canonical_owner": False,
+        "environment_root_is_owner": False,
+        "path_resolved_is_path_exists": False,
+        "execute_allowed": scope in {
+            "NO_MATERIALIZATION_NEEDED",
+            "MINIMAL_DEPENDENCY_CONE",
+            "REQUIRED_CHECKOUT_SCOPE",
+        },
+    }
+
+
+VISUAL_RECOVERY_RECIPES = {
+    "H01_STALE_RUNTIME_TARGET": "REACQUIRE_RUNTIME_TARGET",
+    "H02_GEOMETRY_OR_MONITOR_DRIFT": "REMAP_GEOMETRY_AND_MONITOR",
+    "H03_CONTROL_RECREATED": "REACQUIRE_CONTROL_TREE",
+    "H04_EVENT_INTERCEPTED": "IDENTIFY_INTERCEPTOR_THEN_REVALIDATE",
+    "H05_NOT_ACTIONABLE": "REMEASURE_ACTIONABILITY_WITH_BOUNDED_WAIT",
+    "H06_PREREQUISITE_FOCUS_SCROLL": "APPLY_ONE_PREREQUISITE_THEN_REVALIDATE",
+    "H07_CUA_DELIVERY_UNAVAILABLE": "FOREGROUND_FALLBACK_IF_AUTHORIZED",
+    "H08_ASYNC_EFFECT_PENDING": "WAIT_POSTCONDITION_WITHOUT_RECLICK",
+    "H09_TARGET_AMBIGUOUS": "DISAMBIGUATE_TARGET_BY_ID_ROLE_PARENT_BOUNDS",
+    "H10_SURFACE_SESSION_CHANGED": "RECOVER_SAME_SURFACE_SESSION_THEN_REACQUIRE",
+    "UNKNOWN_VISUAL_CAUSE": "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE",
+}
+
+
+def classify_visual_recovery(observation: dict) -> dict:
+    """Classifica ausência de efeito visual sem autorizar retry cego."""
+    if not isinstance(observation, dict):
+        raise TypeError("VISUAL_RECOVERY_OBSERVATION_MUST_BE_OBJECT")
+
+    cls = "UNKNOWN_VISUAL_CAUSE"
+    evidence = []
+
+    if (
+        observation.get("session_changed") is True
+        or observation.get("surface_changed") is True
+        or observation.get("process_alive") is False
+    ):
+        cls = "H10_SURFACE_SESSION_CHANGED"
+        evidence.append("SURFACE_OR_SESSION_CHANGED")
+    elif (
+        observation.get("target_current") is False
+        or observation.get("pid_match") is False
+        or observation.get("hwnd_match") is False
+    ):
+        cls = "H01_STALE_RUNTIME_TARGET"
+        evidence.append("RUNTIME_TARGET_ID_STALE")
+    elif (
+        observation.get("monitor_match") is False
+        or observation.get("geometry_changed") is True
+        or observation.get("dpi_changed") is True
+    ):
+        cls = "H02_GEOMETRY_OR_MONITOR_DRIFT"
+        evidence.append("GEOMETRY_OR_MONITOR_DRIFT")
+    elif (
+        observation.get("control_recreated") is True
+        or observation.get("control_ref_valid") is False
+    ):
+        cls = "H03_CONTROL_RECREATED"
+        evidence.append("CONTROL_REFERENCE_INVALIDATED")
+    elif (
+        observation.get("ambiguous") is True
+        or (
+            isinstance(observation.get("candidate_count"), int)
+            and observation["candidate_count"] != 1
+        )
+    ):
+        cls = "H09_TARGET_AMBIGUOUS"
+        evidence.append("TARGET_CARDINALITY_NOT_ONE")
+    elif (
+        str(observation.get("delivery_code", "")).lower() == "background_unavailable"
+        or observation.get("background_available") is False
+    ):
+        cls = "H07_CUA_DELIVERY_UNAVAILABLE"
+        evidence.append("CUA_BACKGROUND_UNAVAILABLE")
+    elif observation.get("async_pending") is True:
+        cls = "H08_ASYNC_EFFECT_PENDING"
+        evidence.append("POSTCONDITION_PENDING")
+    elif observation.get("event_intercepted") is True:
+        cls = "H04_EVENT_INTERCEPTED"
+        evidence.append("EVENT_INTERCEPTOR_OBSERVED")
+    elif any(observation.get(key) is False for key in ("visible", "stable", "enabled", "receives_events")):
+        cls = "H05_NOT_ACTIONABLE"
+        evidence.append("ACTIONABILITY_PRECONDITION_FALSE")
+    elif any(observation.get(key) is True for key in ("needs_scroll", "needs_hover", "needs_focus")):
+        cls = "H06_PREREQUISITE_FOCUS_SCROLL"
+        evidence.append("INTERACTION_PREREQUISITE_REQUIRED")
+
+    return {
+        "schema": "centraldark.visual-recovery-classification.v1",
+        "class": cls,
+        "recipe": VISUAL_RECOVERY_RECIPES[cls],
+        "meta_lupa_mode": "MEDIA",
+        "meta_lupa_variant": "MEDIA_RECOVERY_VISUAL",
+        "meta_lupa_trigger": "VISUAL_ACTION_NO_EFFECT",
+        "evidence": evidence,
+        "retry_frozen": True,
+        "same_action_retry_budget": 1,
+        "retry_requires_new_evidence": True,
+        "preserve": ["LAST_GOOD_STATE", "TARGET_ID", "TARGET_FINGERPRINT", "NEXT_CURSOR"],
+        "fable_mode": "READ_ONLY_CALIBRATION",
+        "next_executor": "COT_REACT_OR_EXISTING_HERMES_AFTER_NEW_EVIDENCE",
     }
 
 
@@ -369,7 +606,7 @@ def cognitive_bios_state(repo: Path) -> dict:
 def canonical_consumption_gate_state(repo: Path) -> dict:
     """Índice canônico pertinente; nunca vira portão de permissão."""
     gate = repo / CANONICAL_CONSUMPTION_GATE
-    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT"]
+    command = ["node", str(gate), "--file", CANONICAL_LEARNINGS.as_posix(), "--learning", "PERTINENT", "--compact"]
     try:
         proc = subprocess.run(command, cwd=repo, capture_output=True, text=True, encoding="utf-8",
                                errors="replace", timeout=15, check=False)
@@ -812,10 +1049,186 @@ def hermes_continuity_preflight(repo: Path) -> dict:
     return result
 
 
+DOCUMENT_ORGANIZATION_OBJECT_TOKENS = {
+    "pasta", "pastas", "arquivo", "arquivos", "diretorio", "diretorios",
+    "folder", "folders", "file", "files",
+}
+DOCUMENT_ORGANIZATION_ACTION_ALIASES = {
+    "cria": "criar", "criar": "criar", "crie": "criar",
+    "move": "mover", "mover": "mover", "mova": "mover",
+    "renomear": "renomear", "renomeie": "renomear", "renomeia": "renomear",
+    "nomear": "nomear", "nomeie": "nomear",
+    "organiza": "organizar", "organizar": "organizar", "organize": "organizar",
+    "versionar": "versionar", "versione": "versionar",
+    "armazenar": "armazenar", "armazene": "armazenar",
+    "salvar": "salvar", "salve": "salvar",
+    "excluir": "excluir", "exclua": "excluir",
+    "apagar": "apagar", "apague": "apagar",
+}
+DOCUMENT_ORGANIZATION_OBJECT_ALIASES = {
+    "pastas": "pasta", "pasta": "pasta",
+    "arquivos": "arquivo", "arquivo": "arquivo",
+    "diretorios": "pasta", "diretorio": "pasta",
+    "folders": "pasta", "folder": "pasta",
+    "files": "arquivo", "file": "arquivo",
+}
+
+
+def document_organization_route(repo: Path, text: str) -> dict:
+    """Detect only the scope; ranking stays owned by library-router.mjs."""
+    normalized = strip_accents(str(text or "")).lower()
+    words = re.findall(r"[a-z0-9]+", normalized)
+    objects = sorted({DOCUMENT_ORGANIZATION_OBJECT_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_OBJECT_ALIASES})
+    actions = sorted({DOCUMENT_ORGANIZATION_ACTION_ALIASES[w] for w in words
+                      if w in DOCUMENT_ORGANIZATION_ACTION_ALIASES})
+    result = {
+        "status": "NOT_APPLICABLE",
+        "scope": "FOLDER_OR_FILE_ORGANIZATION",
+        "router_owner": "scripts/memory-linker/library-router.mjs",
+        "catalog": "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json",
+        "source_id": "tcu-boas-praticas-pastas-arquivos-2019",
+        "must_consult_before_delta": False,
+        "query_tokens": [*actions, *objects],
+        "selected_pages": [],
+    }
+    if not objects or not actions:
+        return result
+
+    router = repo / result["router_owner"]
+    catalog = repo / result["catalog"]
+    if not router.is_file() or not catalog.is_file():
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_OR_CATALOG_MISSING")
+        return result
+
+    js = """
+import fs from 'node:fs';
+const { routeEntries } = await import(process.argv[1]);
+const catalog = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+const query = JSON.parse(process.argv[3]);
+const sourceId = process.argv[4];
+const candidates = routeEntries({ catalog, query, limit: 10 })
+  .filter(item => item.entry.source_id === sourceId);
+const maxScore = candidates.length ? Math.max(...candidates.map(item => item.score)) : 0;
+const routed = candidates
+  .filter(item => item.score === maxScore)
+  .map(item => ({
+    entry_id: item.entry.id,
+    reference: item.entry.reference,
+    summary: item.entry.summary,
+    score: item.score,
+    matched: item.matched,
+  }));
+process.stdout.write(JSON.stringify(routed));
+""".strip()
+    try:
+        proc = subprocess.run(
+            ["node", "--input-type=module", "-e", js,
+             router.resolve().as_uri(), str(catalog), json.dumps(result["query_tokens"]),
+             result["source_id"]],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=12, env={**os.environ, "NODE_NO_WARNINGS": "1"},
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_EXECUTION_FAILED:" + type(exc).__name__)
+        return result
+    if proc.returncode != 0:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_NONZERO", router_stderr=proc.stderr.strip()[:500])
+        return result
+    try:
+        selected = json.loads(proc.stdout or "[]")
+    except json.JSONDecodeError:
+        result.update(status="BLOCKED", reason="LIBRARY_ROUTER_INVALID_JSON")
+        return result
+    if not selected:
+        result.update(status="BLOCKED", reason="ORGANIZATION_SCOPE_WITHOUT_LIBRARY_REFERENCE")
+        return result
+    result.update(
+        status="ROUTED",
+        must_consult_before_delta=True,
+        selected_pages=selected[:4],
+        reason="EXISTING_LIBRARY_ROUTER_SELECTED_TCU_REFERENCES",
+    )
+    return result
+
+
+def document_organization_readback(repo: Path) -> dict:
+    """Read verified PDF-derived page text; visual review remains unproven."""
+    base = Path("docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA")
+    original = base / "Boas-praticas-para-pastas-e-arquivos-digitais.pdf"
+    transcript = base / "Boas-praticas-para-pastas-e-arquivos-digitais.md"
+    catalog = base / "catalog.json"
+    expected_sha = "0caf39a4f78388a8d4221f4b53d90c81b6c1f81d1f1e0207bcfa70aa0abebba8"
+    expected_text_sha = "2c06df290832c4738702aac155cfd827a4a8a2cd6ef7f8e23f8f0bf7eaeb3276"
+    evidence = {
+        "owner": (base / "README.md").as_posix(),
+        "original_pdf": original.as_posix(),
+        "catalog": catalog.as_posix(),
+        "text_index": transcript.as_posix(),
+        "expected_sha256": expected_sha,
+        "expected_text_sha256": expected_text_sha,
+        "indexed_pages_expected": 10,
+        "last_content_read_at_utc": "UNKNOWN_NOT_OBSERVED",
+        "content_read_checkpoint": "NOT_PERFORMED",
+        "runtime_consumer_proven": False,
+        "status": "EVIDENCE_MISSING",
+    }
+    source = repo / original
+    extracted = repo / transcript
+    indexed = repo / catalog
+    if not source.is_file() or not indexed.is_file() or not extracted.is_file():
+        evidence["reason"] = "ORIGINAL_OR_INDEX_MISSING"
+        return evidence
+    try:
+        observed = hashlib.sha256(source.read_bytes()).hexdigest()
+        evidence["observed_sha256"] = observed
+        if observed != expected_sha:
+            evidence["reason"] = "ORIGINAL_HASH_MISMATCH"
+            return evidence
+        data = json.loads(indexed.read_text(encoding="utf-8"))
+        key = "tcu-boas-praticas-pastas-arquivos-2019"
+        sources = [item for item in data.get("sources", []) if item.get("source_id") == key]
+        pages = [item for item in data.get("entries", []) if item.get("source_id") == key]
+        ids = {item.get("id") for item in pages}
+        expected = {f"tcu-boas-praticas-pagina-{n:02d}" for n in range(1, 11)}
+        evidence["indexed_pages_found"] = len(ids & expected)
+        if len(sources) != 1 or sources[0].get("sha256") != observed or ids != expected:
+            evidence["reason"] = "CATALOG_PROVENANCE_OR_PAGE_INDEX_MISMATCH"
+            return evidence
+        provenance = sources[0].get("provenance", {})
+        indexed_bytes = extracted.read_bytes()
+        indexed_sha = hashlib.sha256(indexed_bytes).hexdigest()
+        evidence["observed_text_sha256"] = indexed_sha
+        if (indexed_sha != expected_text_sha
+                or provenance.get("text_sha256") != indexed_sha
+                or provenance.get("text_index") != transcript.as_posix()):
+            evidence["reason"] = "TEXT_INDEX_PROVENANCE_OR_SHA_MISMATCH"
+            return evidence
+        markers = [int(n) for n in re.findall(
+            r"<!-- Page: ([0-9]+) -->", indexed_bytes.decode("utf-8"))]
+        evidence["extracted_page_markers_found"] = len(markers)
+        if markers != list(range(1, 11)):
+            evidence["reason"] = "TEXT_INDEX_PAGE_MARKERS_INCOMPLETE"
+            return evidence
+        from datetime import datetime, timezone
+        evidence["last_content_read_at_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        evidence["content_read_checkpoint"] = "BOOT_LOADER_READ_INDEX_TEXT"
+        evidence["checkpoint_sha256"] = hashlib.sha256((observed + indexed_sha).encode("ascii")).hexdigest()
+        evidence["reader"] = "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+        evidence["pdf_visual_reviewed_by_agent"] = "UNKNOWN_NOT_PROVEN"
+    except (OSError, ValueError, TypeError, AttributeError, UnicodeError) as exc:
+        evidence["reason"] = "DOCUMENT_READBACK_FAILED:" + type(exc).__name__
+        return evidence
+    evidence["status"] = "ORIGINAL_AND_PAGE_TEXT_INDEX_VERIFIED"
+    evidence["reason"] = "BOOT_LOADER_READ_EXTRACTED_TEXT_AGENT_VISUAL_REVIEW_NOT_PROVEN"
+    return evidence
+
+
 def canonical_boot_snapshot(repo: Path) -> dict:
     """Read canonical contracts before optional mission-resume and runtime gates."""
     return {
         "source_sha256": require_files(repo),
+        "document_organization_readback": document_organization_readback(repo),
         "fixed_point_pack": fixed_point_pack_state(repo),
         "discovered": discover_registry(repo),
         "cognitive_bios": cognitive_bios_state(repo),
@@ -833,6 +1246,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     # Read the canonical contract first. Runtime and mission gates may limit
     # continuation, but must not erase this read-only result.
     canonical = canonical_boot_snapshot(repo)
+    canonical["document_organization_route"] = document_organization_route(repo, args.input)
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
         print(json.dumps({
@@ -992,6 +1406,81 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     }
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0 if result["feedback"]["active"] else 4
+
+
+def cmd_ssh_terminal_event(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_existing_ssh_terminal_event(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.existing-ssh-terminal-event.v1",
+            "event": "SSH_TERMINAL_STATE_UNKNOWN",
+            "reason": type(exc).__name__,
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["event"] != "SSH_TERMINAL_STATE_UNKNOWN" else 4
+
+
+def cmd_hud_mission_state(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_mission_hud_publication(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.mission-hud-publication.v1",
+            "publish": False,
+            "reason": type(exc).__name__,
+        }, indent=2, ensure_ascii=False))
+        return 4
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0
+
+
+def cmd_materialization_plan(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_materialization_scope(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.materialization-scope.v1",
+            "scope": "UNKNOWN_MATERIALIZATION_SCOPE",
+            "reason": type(exc).__name__,
+            "execute_allowed": False,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["execute_allowed"] else 4
+
+
+def cmd_visual_recovery(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+    except json.JSONDecodeError:
+        print(json.dumps({
+            "schema": "centraldark.visual-recovery-classification.v1",
+            "class": "UNKNOWN_VISUAL_CAUSE",
+            "reason": "INVALID_OBSERVATION_JSON",
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    try:
+        result = classify_visual_recovery(observation)
+    except TypeError as exc:
+        print(json.dumps({
+            "schema": "centraldark.visual-recovery-classification.v1",
+            "class": "UNKNOWN_VISUAL_CAUSE",
+            "reason": str(exc),
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["class"] != "UNKNOWN_VISUAL_CAUSE" else 4
 
 
 def proven_path_replay_decision(entry: dict, current_fingerprint: str | None) -> dict:
@@ -1206,9 +1695,22 @@ def cmd_self_test(args: argparse.Namespace) -> int:
         assert replay["expected_effect_match"] is True
         assert replay["binding_names"] == ["WORKSPACE"]
 
+    repo = discover_boot_repo(getattr(args, "repo", None))
+    rename_route = document_organization_route(repo, "!CENTRALDARK renomear arquivo de relatório")
+    move_route = document_organization_route(repo, "!CENTRALDARK mover pasta de documentação")
+    version_route = document_organization_route(repo, "!CENTRALDARK versionar arquivo")
+    neutral_route = document_organization_route(repo, "!CENTRALDARK verificar túnel MCP")
+    assert rename_route["status"] == "ROUTED"
+    assert rename_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-04"
+    assert move_route["status"] == "ROUTED"
+    assert move_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-03"
+    assert version_route["status"] == "ROUTED"
+    assert version_route["selected_pages"][0]["entry_id"] == "tcu-boas-praticas-pagina-05"
+    assert neutral_route["status"] == "NOT_APPLICABLE"
+
     print(json.dumps({
         "status": "PASS",
-        "tests": 16,
+        "tests": 20,
         "marker": "PROVEN_PATH_REPLAY_LOCK",
         "same_fingerprint": same["action"],
         "changed_fingerprint": changed["action"],
@@ -1403,6 +1905,22 @@ def build_parser() -> argparse.ArgumentParser:
     f.add_argument("--repo", default=".")
     f.add_argument("--input", required=True)
     f.set_defaults(func=cmd_feedback)
+
+    ste = sub.add_parser("ssh-terminal-event")
+    ste.add_argument("--observation-json", required=True)
+    ste.set_defaults(func=cmd_ssh_terminal_event)
+
+    hms = sub.add_parser("hud-mission-state")
+    hms.add_argument("--observation-json", required=True)
+    hms.set_defaults(func=cmd_hud_mission_state)
+
+    mp = sub.add_parser("materialization-plan")
+    mp.add_argument("--observation-json", required=True)
+    mp.set_defaults(func=cmd_materialization_plan)
+
+    vr = sub.add_parser("visual-recovery")
+    vr.add_argument("--observation-json", required=True)
+    vr.set_defaults(func=cmd_visual_recovery)
 
     s = sub.add_parser("seal")
     s.add_argument("--repo", default=".")

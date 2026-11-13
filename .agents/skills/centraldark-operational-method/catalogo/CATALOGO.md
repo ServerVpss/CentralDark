@@ -2,6 +2,10 @@
 
 **Owner único:** `centraldark-operational-method`. Cópias importadas com SHA-256; originais preservados para manter compatibilidade.
 
+## CentralDark Desktop - self builder (Code-OSS)
+
+Receita operacional unica: [centraldark-builder-destop](../Skills/centraldark-builder-destop/SKILL.md). SOURCE e ZIP intactos em C:\CENTRALDAR DESKTOP; projeto aponta para F:\CentralDark e builder aponta para build/ nativo. Falha MSB4019 em node-gyp foi identificada; cada install, compile e EXE precisa de exit e readback separado. Nao confundir builder nativo com saida nem publicar etapas ainda pendentes.
+
 ## Diálogo Reflexivo da Intenção
 
 [Reflective Intent Dialogue](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): escuta reflexiva, reparo conversacional, metacomunicação e continuidade da intenção. Seleção: qualquer conversa CentralDark, correção, nova ideia lateral, ou observação que não deve interromper missão ativa. Sempre conectado à Skill Mãe; operacionalmente junto de Kimetsu Remix + Michelin 3 Estrelas. Skill catalogada não comprova consumo do Hermes.
@@ -16,6 +20,22 @@
 6. Escolher modelo, provedor **e reasoning effort** por evidência da tarefa; distinguir default do perfil, override por cartão e preset de sessão/Desktop.
 7. Despachar com **`hermes kanban create`**. A descrição da missão determina se a ação é criar, remover, editar ou verificar.
 8. Conferir `kanban show`, `kanban runs`, `reasoning_effort` quando disponível e o **efeito real no ambiente-alvo**.
+
+### Meta-Lupa + Kimetsu: duas mãos do mesmo método
+
+Para auditoria de qualquer execução, usar as duas camadas do mesmo circuito:
+
+- [Meta-Lupa](../../meta-lupa/SKILL.md) é a mão da falsificação, da contraprova,
+  do XP comprovado e do selo `selo-xp/v1` no ledger existente.
+- [Kimetsu](../Skills/kimetsu-brainstorm/SKILL.md) é a mão do diagnóstico e da
+  escolha da técnica, sempre orientada pelo catálogo e pela condição observada.
+- Este [Método Operacional CentralDark](../SKILL.md) é o owner do ciclo:
+  intenção → owner → menor delta → execução → efeito → contraprova → recibo.
+
+O catálogo somente roteia; não prova carregamento, execução ou runtime. A
+seleção Kimetsu deve apontar para a técnica escolhida e a execução deve deixar
+recibo no ledger Meta-Lupa. Sem evidência aceita, não há XP nem ponto fixo.
+Não criar segundo roteador, ledger, agente ou skill para essa integração.
 
 **Ordem de autoridade para Hermes Desktop/CLI/Kanban:** consultar primeiro o GitHub/documentação oficial `NousResearch/hermes-agent`; depois medir a versão instalada (`hermes --version`), o help local e o estado/config/schema da Casa. Nunca promover comportamento do upstream a capacidade local sem confronto de versão.
 
@@ -125,3 +145,8 @@ Este bloco é mantido pelo script canônico. Datas vêm do sistema de arquivos; 
 - [Histórico das alterações](HISTORICO-MUDANCAS.jsonl)
 - [Método de autorreparo e evidência](../references/AUTO-MELHORIA-COM-PROVA.md)
 <!-- AUTOCATALOGO:FIM -->
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## META-RSI 40/40 integrado por metodo
+
+Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.

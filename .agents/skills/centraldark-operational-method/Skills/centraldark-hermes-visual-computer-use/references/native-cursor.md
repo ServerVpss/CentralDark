@@ -19,6 +19,28 @@ Contraprova: o wrapper CuaDriverBackend.start() travou no handshake por 30 segun
 move_cursor em Windows usa coordenadas fisicas ABSOLUTAS do desktop virtual, inclusive negativas. scope=window controla apenas o cursor emulado. scope=desktop move o ponteiro fisico e nao pertence a esta receita. Nao combinar target com scope; o driver rejeita essa mistura.
 Cores pertencem a identidade da sessao, nao sao numeros de monitor. Nao fixar cor rosa/verde nem reusar HWND/PID antigo. Para automacao de janela, capturar e conferir PID/HWND atuais antes de enviar input com computer_use existente.
 
+## Receita unificada — localizar + marcar + apontar + agir
+
+O cursor Cua e o overlay Hermes formam **uma única trajetória visual**, não duas automações:
+
+```text
+TARGET_ID
+→ UIA_WINDOW/CONTROL
+→ PID + HWND CURRENT
+→ MONITOR_ID_HUMANO + MONITOR_RECT
+→ TARGET_MATCH
+→ MONITOR_MATCH
+→ show_overlay(mesmo monitor)
+→ CUA_SESSION
+→ set_agent_cursor_enabled(true)
+→ move_cursor(scope=window)
+→ ACTION_SINGLE
+→ READBACK independente
+→ hide_overlay + end_session
+```
+
+Regras: o overlay precisa marcar a tela que contém a janela/controle resolvido; o cursor virtual deve permanecer no mesmo monitor e `scope=window`; qualquer divergência de monitor, PID/HWND ou geometria exige redescoberta antes da ação. `OVERLAY_SHOWN != TARGET_PROVEN`, `CURSOR_MOVED != ACTION_PROVEN`, `CUA_CALL_OK != UI_EFFECT_PROVEN`.
+
 ## Prova e limites
 CHEFE confirmou cursor verde e rosa em 02/11/2026. Foto mostra hermes-443ff947f17d, identidade exata do teste persistente. Esta prova confirma render nativo, nao certifica topologia distinta ou ausencia de input por cor.
 Cua 0.28.2 retorna position:null fixo no get_agent_cursor_state Windows, que tambem causa tool_output_invalid no MCP. Resultado move_cursor=effect:unverifiable nao constitui prova visual. Confirmacao humana com identidade exata e suficiente para a prova especifica; nao repetir investigacao sem delta.
@@ -34,3 +56,10 @@ Reutilizar **o mesmo** `scripts/blink_cursor.py` com `--mode click`. Descobrir P
 O modo valida `GetWindowThreadProcessId`, `GetWindowRect` e ponto dentro da janela e do monitor; `SetForegroundWindow` atua somente no foco da janela. A sessao nativa do Cua mantem `set_agent_cursor_enabled(true)`, `move_cursor(scope=window, x/y absolutos)` e `click(scope=window, pid, x/y relativos ao retangulo da janela, delivery_mode=background)`. O overlay existente `visual.request("show_overlay")` permanece ativo durante movimento e clique; `finally` sempre solicita `hide_overlay` e encerra somente aquela sessao Cua. Nenhum mouse fisico, `SendInput`, `SetCursorPos`, `mouse_event`, `scope=desktop`, segundo cursor ou segundo overlay.
 
 Teste observado: Chrome Trinity, monitor 4, botao "Todos os Agentes", resultado do Cua `delivery.mode=background`, execucao exit 0, UIAutomation `HasKeyboardFocus=True` no botao apos o clique. `effect=unverifiable` no driver exige readback do efeito desejado; clique enviado nao significa que toda navegacao foi concluida. Aprovacao visual do CHEFE para este **modo de clique** ainda nao recebida; nao extrapolar a confirmacao anterior da piscada para esta funcao. Exigir nova contraprova somente se a intencao for validar visualmente o novo modo; nao transformar prova de codigo em necessidade de teste Hermes ao vivo para outros deltas.
+
+
+## Selecionar controle atual sem PID nem coordenadas gravadas (06/11/2026)
+
+A mesma receita `scripts/blink_cursor.py --mode click` aceita `--window-title "Agente Hermes" --control-name "Novo bate-papo"` em vez de `--pid/--hwnd/--x/--y`. Consulta read-only a `centraldark-operational-method/scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl`, que exige exatamente uma janela e um controle UIAutomation visivel/habilitado e associa o centro do controle ao monitor humano realmente conectado. `--monitor N` opcional funciona como contraprova: mismatch bloqueia. A versao explicita original continua funcional para alvos ja medidos, sem substituir Cua nem WGC.
+
+O resultado e verificado pelo mesmo `resolve_window` Win32 e pelas coordenadas dentro da janela/monitor antes de chamar o daemon Cua existente; nunca transformar selecao de UI em `SetCursorPos` ou `mouse_event`. Retornar `WINDOW_CONTROL_DISCOVERY_FAILED`, `CONTROL_MONITOR_MISMATCH` ou `CUA_CLICK_TARGET_DEVICE_MISMATCH` quando houver divergencia. `UIA_TARGET_RESOLVED` prova somente descoberta; `CUA_CALL_OK` nao prova efeito. Exigir leitura do resultado visual antes de repetir input. Observacao read-only na janela Hermes em 06/11: controle nomeado localizado no monitor 4; clique dinamico nao testado.

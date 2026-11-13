@@ -4,8 +4,15 @@ set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
-CANONICAL_SCRATCH_WORKTREE="/root/CentralDark/_worktrees/main-pinned-runtime-fastpath"
-RUNTIME_ROOT="/root/CentralDark"
+if [ -n "${CENTRALDARK_RUNTIME_ROOT:-}" ]; then
+  RUNTIME_ROOT="$(readlink -f "$CENTRALDARK_RUNTIME_ROOT")"
+elif [[ "$ROOT" == */_worktrees/* ]]; then
+  RUNTIME_ROOT="${ROOT%%/_worktrees/*}"
+else
+  RUNTIME_ROOT="$ROOT"
+fi
+
+CANONICAL_SCRATCH_WORKTREE="${CENTRALDARK_SCRATCH_WORKTREE:-$RUNTIME_ROOT/_worktrees/main-pinned-runtime-fastpath}"
 
 assert_disposable_scratch() {
   local candidate="${1:-$CANONICAL_SCRATCH_WORKTREE}"
@@ -36,6 +43,15 @@ for f in "$MD" "$JSON" "$YML" "$SKILL" "$LIVE_MD" "$LIVE_JSON" "$LIVE_YML" "$LIV
   [ -f "$f" ] || { echo "BLOCKED: superfície canônica ausente: $f" >&2; exit 1; }
 done
 
+if ! python3 -m json.tool "$JSON" >/dev/null 2>&1; then
+  if python -m json.tool "$JSON" >/dev/null 2>&1; then
+    python3() { python "$@"; }
+    export -f python3
+  else
+    echo "BLOCKED: Python JSON validation unavailable for pinned runtime contract." >&2
+    exit 1
+  fi
+fi
 python3 -m json.tool "$JSON" >/dev/null
 python3 -m json.tool "$LIVE_JSON" >/dev/null
 

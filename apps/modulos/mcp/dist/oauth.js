@@ -1,11 +1,13 @@
 // OAuth 2.1 do MCP CentralDark.
 import crypto from "node:crypto";
+import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
-
+import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 // Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
 // Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
+export const REMOTE_BRIDGE_DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 let devicePairingStore = null;
 export function configureDevicePairingForOAuth(store) {
     if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
@@ -21,6 +23,8 @@ function getAdminPassword() {
     return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
 }
 function getOwnerToolToken() {
+    // Reutiliza sessao gh somente apos OAuth admin autorizado; nao expor credencial.
+    if (ghCliAvailable()) return GH_CLI_OWNER_MARKER;
     return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
 }
 function timingSafeEqualText(a, b) {
@@ -154,7 +158,7 @@ async function resolveClientRegistration(client_id, redirect_uri) {
     if (!metadata) {
         return undefined;
     }
-    if (!metadata.redirect_uris.includes(redirect_uri)) {
+    if (!redirectUriRegistered(metadata, redirect_uri)) {
         log.warn("oauth_client_metadata_redirect_rejected", { client_id, redirect_uri });
         return undefined;
     }
@@ -215,7 +219,8 @@ function sendOwnerConsentPage(res, input) {
         success: input.success === true ? "1" : undefined,
     };
     for (const [key, value] of Object.entries(values)) {
-        if (value !== undefined && value !== null) url.searchParams.set(key, String(value));
+        if (value !== undefined && value !== null)
+            url.searchParams.set(key, String(value));
     }
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("Referrer-Policy", "no-referrer");
@@ -256,20 +261,22 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
-        // Cliente VS Code usa o MESMO /authorize, sem callback paralelo.
-        if (param(req, "client_id") === VSCODE_DEVICE_CLIENT_ID) {
+        // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
+        const deviceClientId = param(req, "client_id");
+        if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
             if (!devicePairingStore)
                 return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
             const pairId = param(req, "pair_id");
             const pair = devicePairingStore.pendingConsent(pairId);
-            if (!pair || pair.executor !== "vscode" || pair.approved)
+            const expectedExecutor = deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "vscode" : "remote-bridge";
+            if (!pair || pair.executor !== expectedExecutor || pair.approved)
                 return oauthError(res, 404, "invalid_request", "Pareamento expirado ou já concluído.");
             const details = {
-                client_id: VSCODE_DEVICE_CLIENT_ID,
-                client_name: "CentralDark · Vibe Coding",
+                client_id: deviceClientId,
+                client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
                 isAdmin: isAdmin(req),
-                device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
+                device: { pairId: pair.pairId, code: pair.code, nonce: pair.nonce }
             };
             if (req.method !== "POST") {
                 sendOwnerConsentPage(res, details);
@@ -277,12 +284,14 @@ export async function handleAuthorize(req, res) {
             }
             // Token de dispositivo só é entregue via /device/pair/status
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
-            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            if (!isAdmin(req))
+                return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
             const result = devicePairingStore.approveWeb({
                 pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
             });
-            if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
-            sendOwnerConsentPage(res, {...details, success: true});
+            if (!result.ok)
+                return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            sendOwnerConsentPage(res, { ...details, success: true });
             return;
         }
         const client_id = param(req, "client_id");
@@ -303,7 +312,7 @@ export async function handleAuthorize(req, res) {
             oauthError(res, 400, "invalid_client", "client_id desconhecido. Faça /register antes ou use Client ID Metadata Document compatível.");
             return;
         }
-        if (!client.redirect_uris.includes(redirect_uri)) {
+        if (!redirectUriRegistered(client, redirect_uri)) {
             oauthError(res, 400, "invalid_request", "redirect_uri não registrado pra esse client.");
             return;
         }
@@ -410,7 +419,6 @@ export function postToken(req, res) {
             oauth_scope: ac.oauth_scope || "mcp admin",
         });
         log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login, oauth_scope: ac.oauth_scope });
-
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
@@ -443,7 +451,6 @@ export function postToken(req, res) {
             oauth_scope: rt.oauth_scope || "mcp",
         });
         log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login, oauth_scope: rt.oauth_scope });
-
         res.json({
             access_token: pair.access.token,
             token_type: "Bearer",
@@ -494,4 +501,5 @@ export function handleIssueKey(req, res) {
         agent_name: agentName,
     });
 }
+//# sourceMappingURL=oauth.js.map
 //# sourceMappingURL=oauth.js.map

@@ -12,7 +12,115 @@
 
 set -euo pipefail
 
-PR_NUM="${1:?Uso: $0 <PR_NUMBER>}"
+# COSTURA audit mode: validate an isolated index against an explicit base commit.
+# Usage: resolve-conflicts.sh --audit-index BASE_SHA REMOTE_REF_OR_DASH -- PATH...
+# Remote ref "-" is explicit offline/local-only mode; never pushes or writes.
+if [[ "${1:-}" == "--audit-index" ]]; then
+  shift
+  if (( $# < 4 )); then
+    echo "BLOCKED_AUDIT_USAGE: --audit-index <base-sha> <remote-ref|-> -- <paths...>"
+    exit 2
+  fi
+  AUDIT_BASE="$1"
+  AUDIT_REMOTE_REF="$2"
+  shift 2
+  if [[ "${1:-}" != "--" ]]; then
+    echo "BLOCKED_AUDIT_SCOPE_SEPARATOR_REQUIRED"
+    exit 2
+  fi
+  shift
+  AUDIT_SCOPE=("$@")
+  if (( ${#AUDIT_SCOPE[@]} == 0 )); then
+    echo "BLOCKED_AUDIT_EMPTY_SCOPE"
+    exit 2
+  fi
+  if ! [[ "$AUDIT_BASE" =~ ^[0-9a-fA-F]{40}$|^[0-9a-fA-F]{64}$ ]]; then
+    echo "BLOCKED_AUDIT_BASE_NOT_PINNED_SHA"
+    exit 2
+  fi
+  AUDIT_REPO="${REPO_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || true)}"
+  if [[ -z "$AUDIT_REPO" ]] || ! git -C "$AUDIT_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "BLOCKED_AUDIT_REPO_UNAVAILABLE"
+    exit 2
+  fi
+  if [[ -z "${GIT_INDEX_FILE:-}" ]]; then
+    echo "BLOCKED_AUDIT_ISOLATED_INDEX_REQUIRED"
+    exit 2
+  fi
+  AUDIT_DEFAULT_INDEX="$(env -u GIT_INDEX_FILE git -C "$AUDIT_REPO" rev-parse --path-format=absolute --git-path index)"
+  if command -v cygpath >/dev/null 2>&1; then
+    AUDIT_INDEX_NORMALIZED="$(cygpath -ml "$GIT_INDEX_FILE" 2>/dev/null || true)"
+    AUDIT_DEFAULT_NORMALIZED="$(cygpath -ml "$AUDIT_DEFAULT_INDEX" 2>/dev/null || true)"
+  else
+    AUDIT_INDEX_NORMALIZED="$(realpath -m -- "$GIT_INDEX_FILE" 2>/dev/null || true)"
+    AUDIT_DEFAULT_NORMALIZED="$(realpath -m -- "$AUDIT_DEFAULT_INDEX" 2>/dev/null || true)"
+  fi
+  if [[ -z "$AUDIT_INDEX_NORMALIZED" || -z "$AUDIT_DEFAULT_NORMALIZED" ]]; then
+    echo "BLOCKED_AUDIT_INDEX_PATH_INVALID"
+    exit 2
+  fi
+  if [[ "${AUDIT_INDEX_NORMALIZED,,}" == "${AUDIT_DEFAULT_NORMALIZED,,}" ]]; then
+    echo "BLOCKED_AUDIT_DEFAULT_INDEX_FORBIDDEN"
+    exit 2
+  fi
+  if ! git -C "$AUDIT_REPO" cat-file -e "${AUDIT_BASE}^{commit}" 2>/dev/null; then
+    echo "BLOCKED_AUDIT_BASE_COMMIT_MISSING"
+    exit 2
+  fi
+  if [[ "$AUDIT_REMOTE_REF" != "-" ]]; then
+    if ! [[ "$AUDIT_REMOTE_REF" =~ ^refs/heads/[a-zA-Z0-9._/-]+$ ]]; then
+      echo "BLOCKED_AUDIT_REMOTE_REF_INVALID"
+      exit 2
+    fi
+    AUDIT_REMOTE_SHA="$(git -C "$AUDIT_REPO" ls-remote origin "$AUDIT_REMOTE_REF" | awk '{print $1}')"
+    if [[ -z "$AUDIT_REMOTE_SHA" || "$AUDIT_REMOTE_SHA" != "$AUDIT_BASE" ]]; then
+      echo "BLOCKED_AUDIT_REMOTE_DRIFT expected=$AUDIT_BASE actual=${AUDIT_REMOTE_SHA:-UNKNOWN}"
+      exit 21
+    fi
+  fi
+  if [[ -n "$(git -C "$AUDIT_REPO" ls-files -u)" ]]; then
+    echo "BLOCKED_AUDIT_UNMERGED_INDEX"
+    exit 3
+  fi
+  mapfile -d '' -t AUDIT_CHANGED < <(git -C "$AUDIT_REPO" diff --cached --name-only -z "$AUDIT_BASE")
+  if (( ${#AUDIT_CHANGED[@]} == 0 )); then
+    echo "BLOCKED_AUDIT_NO_DELTA"
+    exit 3
+  fi
+  for AUDIT_PATH in "${AUDIT_CHANGED[@]}"; do
+    FOUND=0
+    for AUDIT_ALLOWED in "${AUDIT_SCOPE[@]}"; do
+      if [[ "$AUDIT_PATH" == "$AUDIT_ALLOWED" ]]; then FOUND=1; break; fi
+    done
+    if (( ! FOUND )); then
+      echo "BLOCKED_AUDIT_UNEXPECTED_PATH=$AUDIT_PATH"
+      exit 3
+    fi
+  done
+  if ! git -C "$AUDIT_REPO" diff --cached --check "$AUDIT_BASE" -- "${AUDIT_SCOPE[@]}"; then
+    echo "BLOCKED_AUDIT_SCOPED_DIFF_CHECK"
+    exit 4
+  fi
+  echo "COSTURA_AUDIT_INDEX=PASS"
+  echo "COSTURA_AUDIT_BASE=$AUDIT_BASE"
+  echo "COSTURA_AUDIT_LOCAL_HEAD=$(git -C "$AUDIT_REPO" rev-parse HEAD)"
+  echo "COSTURA_AUDIT_REMOTE_REF=$AUDIT_REMOTE_REF"
+  echo "COSTURA_AUDIT_CHANGED_COUNT=${#AUDIT_CHANGED[@]}"
+  echo "COSTURA_AUDIT_WRITE=0"
+  echo "COSTURA_AUDIT_PUSH=0"
+  exit 0
+fi
+
+# Mutation is opt-in. --dry-run is a read-only preflight; --audit-index remains separate.
+case "${1:-}" in
+  --dry-run|--apply) COSTURA_MODE="$1"; shift ;;
+  *) echo "BLOCKED_EXPLICIT_MODE_REQUIRED: --dry-run|--apply <PR_NUMBER>"; exit 2 ;;
+esac
+if (( $# != 1 )); then
+  echo "BLOCKED_PR_ARGUMENTS: expected exactly one PR number"
+  exit 2
+fi
+PR_NUM="$1"
 PR_HEAD_REF="${PR_HEAD_REF:-}"
 REPO_DIR="${REPO_DIR:-/root/CentralDark}"
 FETCH_REF="refs/centraldark/pr/${PR_NUM}"
@@ -52,14 +160,14 @@ git check-ref-format "refs/heads/$PR_HEAD_REF" >/dev/null || {
   exit 2
 }
 
-mkdir -p "$WORKTREE_ROOT"
-
 cleanup() {
   set +e
   git -C "$REPO_DIR" worktree remove --force "$WORKTREE" >/dev/null 2>&1 || true
-  git -C "$REPO_DIR" worktree prune >/dev/null 2>&1 || true
+  # Do not prune unrelated worktrees: only remove the exact isolated COSTURA worktree.
+  if [[ "${COSTURA_LOCK_ACQUIRED:-0}" == 1 ]]; then
+    rmdir -- "$COSTURA_LOCK_DIR" 2>/dev/null || echo "BLOCKED_LOCK_CLEANUP=$COSTURA_LOCK_DIR" >&2
+  fi
 }
-trap cleanup EXIT
 
 echo "🧭 RESOLVER_PR=$PR_NUM"
 echo "🔄 PR_HEAD_REF=$PR_HEAD_REF"
@@ -77,11 +185,65 @@ else
   GIT_AUTH=()
 fi
 
+echo "COSTURA_MODE=$COSTURA_MODE"
+if [[ "$COSTURA_MODE" == "--dry-run" ]]; then
+  # No fetch, worktree, lock, merge, index, file write, commit or push.
+  DRY_MAIN_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin refs/heads/main | awk '{print $1}')"
+  DRY_PR_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin "refs/heads/$PR_HEAD_REF" | awk '{print $1}')"
+  DRY_PULL_SHA="$(git "${GIT_AUTH[@]}" -C "$REPO_DIR" ls-remote origin "refs/pull/$PR_NUM/head" | awk '{print $1}')"
+  if [[ -z "$DRY_MAIN_SHA" || -z "$DRY_PR_SHA" || -z "$DRY_PULL_SHA" || "$DRY_PR_SHA" != "$DRY_PULL_SHA" ]]; then
+    echo "BLOCKED_DRY_RUN_SOURCE_UNPROVEN main=${DRY_MAIN_SHA:-UNKNOWN} pr=${DRY_PR_SHA:-UNKNOWN} pull=${DRY_PULL_SHA:-UNKNOWN}"
+    exit 21
+  fi
+  echo "COSTURA_DRY_RUN=PASS"
+  echo "DRY_RUN_MAIN_SHA=$DRY_MAIN_SHA"
+  echo "DRY_RUN_PR_SHA=$DRY_PR_SHA"
+  echo "DRY_RUN_CONFLICT_DECISIONS=UNPROVEN_NO_MERGE"
+  echo "DRY_RUN_LOCAL_WRITES=0"
+  echo "DRY_RUN_REMOTE_WRITES=0"
+  echo "DRY_RUN_PUSH=0"
+  exit 0
+fi
+
+# Atomic directory creation enforces one COSTURA writer per repository/worktree root.
+# A crashed writer leaves a blocking lock: never steal or silently bypass it.
+mkdir -p "$WORKTREE_ROOT"
+COSTURA_LOCK_DIR="$WORKTREE_ROOT/.costura-repo-writer.lock"
+if ! mkdir -- "$COSTURA_LOCK_DIR" 2>/dev/null; then
+  echo "BLOCKED_COSTURA_WRITER_LOCK_BUSY=$COSTURA_LOCK_DIR"
+  exit 23
+fi
+COSTURA_LOCK_ACQUIRED=1
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+echo "COSTURA_WRITER_LOCK=ACQUIRED"
+
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
+
+# A PR may already contain literal conflict markers committed in its HEAD.
+# An ordinary merge only reports *new* index conflicts and can miss them.
+# Check changed executable/config files BEFORE running any merge. The classifier
+# inspects HEAD:path, not the transient worktree; never promote malformed source.
+SOURCE_BASE_SHA="$(git merge-base HEAD origin/main || true)"
+if [[ -z "$SOURCE_BASE_SHA" ]]; then
+  echo "BLOCKED_PR_SOURCE_MERGE_BASE_UNKNOWN"
+  exit 20
+fi
+while IFS= read -r -d '' SOURCE_PATH; do
+  if git cat-file -e "HEAD:$SOURCE_PATH" 2>/dev/null &&
+     git grep -Eq '^(<{7}( |$)|={7}$|>{7}( |$))' HEAD -- "$SOURCE_PATH"; then
+    echo "BLOCKED_PR_COMMITTED_CONFLICT_MARKERS path=$SOURCE_PATH"
+    node "$CLASSIFIER" "$SOURCE_PATH"
+    echo "NO_PUSH_ON_COMMITTED_MARKERS=1"
+    exit 20
+  fi
+done < <(git diff --name-only --diff-filter=ACMRT -z "$SOURCE_BASE_SHA" HEAD -- '*.js' '*.mjs' '*.cjs' '*.jsx' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' '*.sh' '*.ps1' '*.py')
+echo "PR_HEAD_COMMITTED_MARKER_PREFLIGHT=PASS"
 
 set +e
 MERGE_OUTPUT="$(git merge --no-commit --no-ff origin/main 2>&1)"
@@ -246,6 +408,32 @@ if git grep -n -E '^(<<<<<<< |=======|>>>>>>> )' -- "${CONFLICTS[@]}"; then
   exit 4
 fi
 
+# The WindowsApps python3 alias may launch an incomplete Python distribution.
+# Do not bind COSTURA to Hermes venv; probe a healthy Python before syntax checks.
+# An explicit CENTRALDARK_COSTURA_PYTHON override is validated, never trusted blindly.
+costura_python() {
+  if [[ -z "${COSTURA_VALIDATED_PYTHON:-}" ]]; then
+    local candidate
+    local candidates=(python3 python)
+    if [[ -n "${CENTRALDARK_COSTURA_PYTHON:-}" ]]; then
+      candidates=("$CENTRALDARK_COSTURA_PYTHON")
+    fi
+    for candidate in "${candidates[@]}"; do
+      if command -v "$candidate" >/dev/null 2>&1 &&
+        "$candidate" -c 'import ast,enum,pathlib,sys; assert sys.version_info >= (3, 8)' >/dev/null 2>&1; then
+        COSTURA_VALIDATED_PYTHON="$candidate"
+        break
+      fi
+    done
+    if [[ -z "${COSTURA_VALIDATED_PYTHON:-}" ]]; then
+      echo "BLOCKED_COSTURA_NO_VALID_PYTHON" >&2
+      return 13
+    fi
+    echo "COSTURA_PYTHON_SELECTED=$(command -v "$COSTURA_VALIDATED_PYTHON")"
+  fi
+  "$COSTURA_VALIDATED_PYTHON" "$@"
+}
+
 for f in "${CONFLICTS[@]}"; do
   case "$f" in
     *.json)
@@ -258,10 +446,10 @@ for f in "${CONFLICTS[@]}"; do
       bash -n "$f"
       ;;
     *.py)
-      python3 -m py_compile "$f"
+      costura_python -m py_compile "$f"
       ;;
     *.yml|*.yaml)
-      python3 - <<'PY' "$f"
+      costura_python - <<'PY' "$f"
 import sys
 from pathlib import Path
 text = Path(sys.argv[1]).read_text()

@@ -1,11 +1,12 @@
 # #OBSERVACOES# @owner=.agents/skills/centraldark-operational-method/SKILL.md
 # @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
-# @last_updated=2026-11-02T17:06:13.5559151Z
-# @implementado=mapa semantico Casa, aliases, janelas por tela e borda temporaria sem foco.
+# @last_updated=2026-11-10T01:40:16.491Z
+# @implementado=mapa semantico Casa, janelas por tela e resolucao read-only de controle UIA para clique Cua virtual.
 # @pendente=numeros nativos devem ser reconfirmados se o arranjo mudar; overlay nao prova automacao.
 [CmdletBinding()]
 param([switch]$Identify, [string]$Target, [switch]$ListWindows,
-      [switch]$Overlay, [string]$CaptureDirectory, [ValidateRange(1,30)][int]$Seconds=5)
+      [switch]$Overlay, [string]$CaptureDirectory, [ValidateRange(1,30)][int]$Seconds=5,
+      [switch]$ResolveControl, [string]$WindowTitle, [string]$ControlName)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Windows.Forms
@@ -51,6 +52,84 @@ public class CentralDarkMonitorBorder : Form {
  protected override CreateParams CreateParams {get{var p=base.CreateParams;p.ExStyle|=0x08000020;return p;}}
 }
 '@
+}
+# Read-only UIA resolver for the existing Cua click route; no mouse, keys or overlay.
+if($ResolveControl){
+  if([string]::IsNullOrWhiteSpace($WindowTitle) -or [string]::IsNullOrWhiteSpace($ControlName)){
+    throw 'WINDOW_AND_CONTROL_REQUIRED'
+  }
+  Add-Type -AssemblyName UIAutomationClient
+  Add-Type -AssemblyName UIAutomationTypes
+  $candidateWindows=@(Get-Process | Where-Object {
+    $_.MainWindowHandle -ne 0 -and
+    $_.MainWindowTitle.IndexOf($WindowTitle,[StringComparison]::OrdinalIgnoreCase) -ge 0 -and
+    [CentralDarkMonitorNative]::IsWindowVisible($_.MainWindowHandle)
+  })
+  if($candidateWindows.Count -ne 1){throw "WINDOW_NOT_UNIQUE_OR_MISSING count=$($candidateWindows.Count)"}
+  $windowProcess=$candidateWindows[0]
+  $windowHandle=$windowProcess.MainWindowHandle
+  $windowRect=New-Object CentralDarkMonitorNative+RECT
+  if(-not [CentralDarkMonitorNative]::GetWindowRect($windowHandle,[ref]$windowRect) -or
+     $windowRect.Left -le -30000 -or $windowRect.Right -le $windowRect.Left){
+    throw 'WINDOW_MINIMIZED_OR_INVALID'
+  }
+  $windowElement=[System.Windows.Automation.AutomationElement]::FromHandle($windowHandle)
+  if($null -eq $windowElement){throw 'WINDOW_UIA_UNAVAILABLE'}
+  $allControls=$windowElement.FindAll([System.Windows.Automation.TreeScope]::Descendants,
+                                       [System.Windows.Automation.Condition]::TrueCondition)
+  $matchingControls=@(foreach($element in $allControls){
+    try{
+      $state=$element.Current
+      if($state.Name -ieq $ControlName -and $state.IsEnabled -and -not $state.IsOffscreen){
+        $element
+      }
+    }catch{continue}
+  })
+  # UIA can expose one button as a TabItem and a Group at identical coordinates.
+  # Prefer the only actionable entry if every matching rectangle is identical.
+  # Distinct controls remain ambiguous and fail closed.
+  if($matchingControls.Count -gt 1){
+    $actionable=@($matchingControls | Where-Object {
+      $_.Current.ControlType.ProgrammaticName -in @('ControlType.TabItem','ControlType.Button','ControlType.MenuItem')
+    })
+    if($actionable.Count -eq 1){
+      $reference=$actionable[0].Current.BoundingRectangle
+      $coincident=@($matchingControls | Where-Object {
+        $rect=$_.Current.BoundingRectangle
+        $rect.X -eq $reference.X -and $rect.Y -eq $reference.Y -and
+        $rect.Width -eq $reference.Width -and $rect.Height -eq $reference.Height
+      })
+      if($coincident.Count -eq $matchingControls.Count){
+        $matchingControls=@($actionable[0])
+      }
+    }
+  }
+  if($matchingControls.Count -ne 1){throw "CONTROL_NOT_UNIQUE_OR_MISSING count=$($matchingControls.Count)"}
+  $controlState=$matchingControls[0].Current
+  $controlRect=$controlState.BoundingRectangle
+  if($controlRect.IsEmpty -or $controlRect.Width -le 0 -or $controlRect.Height -le 0){
+    throw 'CONTROL_BOUNDS_UNAVAILABLE'
+  }
+  $pointX=[int][Math]::Floor($controlRect.X + $controlRect.Width/2)
+  $pointY=[int][Math]::Floor($controlRect.Y + $controlRect.Height/2)
+  if($pointX -lt $windowRect.Left -or $pointX -ge $windowRect.Right -or
+     $pointY -lt $windowRect.Top -or $pointY -ge $windowRect.Bottom){
+    throw 'CONTROL_OUTSIDE_WINDOW'
+  }
+  $controlScreen=[System.Windows.Forms.Screen]::FromPoint([System.Drawing.Point]::new($pointX,$pointY))
+  if(-not $controlScreen.Bounds.Contains([System.Drawing.Point]::new($pointX,$pointY))){
+    throw 'CONTROL_OUTSIDE_MONITORS'
+  }
+  $mappedMonitor=@($map.Keys | Where-Object { $map[$_].screen.DeviceName -eq $controlScreen.DeviceName })
+  if($mappedMonitor.Count -ne 1){throw 'CONTROL_MONITOR_BINDING_UNKNOWN'}
+  [pscustomobject]@{
+    pid=[int]$windowProcess.Id;hwnd=[long]$windowHandle.ToInt64()
+    monitor=[int]$mappedMonitor[0];device=$controlScreen.DeviceName
+    x=$pointX;y=$pointY;window_title=$windowProcess.MainWindowTitle
+    control_name=$controlState.Name;control_type=$controlState.ControlType.ProgrammaticName
+    evidence='LIVE_UIA_WINDOW_CONTROL_BOUNDS';input_dispatched=$false
+  } | ConvertTo-Json -Compress -Depth 5
+  exit 0
 }
 $stamp=[DateTime]::UtcNow.ToString('o')
 $geometry=($screens | Sort-Object DeviceName | ForEach-Object {"$($_.DeviceName):$($_.Bounds)"}) -join '|'

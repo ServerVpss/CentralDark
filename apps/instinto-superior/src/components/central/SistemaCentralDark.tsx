@@ -58,12 +58,110 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
 
   return (
     <section aria-labelledby="mega-painel-titulo">
+      <style>{`/* ─────────────────────────────────────────────────────────────
+   Foguete animado transferido do HTML original
+   ───────────────────────────────────────────────────────────── */
+.foguete-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  vertical-align: -0.4em;
+  margin-right: 0.35em;
+  width: 78px;
+  height: 78px;
+  position: relative;
+  animation: foguete-flutuar 5.5s ease-in-out infinite;
+}
+.foguete {
+  display: inline-block;
+  position: relative;
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.2));
+  line-height: 0;
+}
+.foguete::before {
+  content: "";
+  position: absolute;
+  inset: -15px;
+  border-radius: 30%;
+  background:
+    conic-gradient(from 0deg,
+      rgba(255, 140, 30, 0) 0deg,
+      rgba(255, 180, 60, 0.45) 60deg,
+      rgba(255, 90, 0, 0) 130deg,
+      rgba(255, 200, 80, 0.35) 220deg,
+      rgba(255, 80, 0, 0) 300deg,
+      rgba(255, 140, 30, 0) 360deg);
+  -webkit-mask: radial-gradient(circle, transparent 25%, #000 38%, #000 50%, transparent 70%);
+  mask: radial-gradient(circle, transparent 32%, #000 38%, #000 62%, transparent 70%);
+  filter: blur(0px);
+  opacity: 0.75;
+  z-index: -1;
+  pointer-events: none;
+}
+.foguete svg { display: block; }
+.foguete-chamas {
+  transform-origin: 32px 50px;
+  animation: foguete-chama 0.35s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(255, 140, 30, 0.65)) drop-shadow(0 0 14px rgba(255, 80, 0, 0.4));
+}
+.foguete-chamas .chama-glow { animation: foguete-chama-glow 0.9s ease-in-out infinite alternate; transform-origin: 32px 50px; }
+.foguete-chamas .chama-core { animation: foguete-chama-core 0.25s ease-in-out infinite alternate; transform-origin: 32px 50px; }
+.foguete-sombra {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 48px;
+  height: 9px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+  border-radius: 50%;
+  animation: foguete-sombra 5.5s ease-in-out infinite;
+}
+
+@keyframes foguete-flutuar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes foguete-chama { from { transform: scaleY(.85) scaleX(1); opacity: .92; } to { transform: scaleY(1.25) scaleX(.9); opacity: 1; } }
+@keyframes foguete-chama-glow { from { opacity: .35; transform: scaleY(.9) scaleX(1.05); } to { opacity: .7; transform: scaleY(1.3) scaleX(.95); } }
+@keyframes foguete-chama-core { from { opacity: .7; transform: scaleY(.7); } to { opacity: 1; transform: scaleY(1.1); } }
+@keyframes foguete-sombra { 0%, 100% { transform: translateX(-50%) scale(1); opacity: .55; } 50% { transform: translateX(-50%) scale(.78); opacity: .35; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .foguete-wrap, .foguete, .foguete-chamas, .foguete-sombra { animation: none !important; }
+}`}</style>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="font-mono text-[10px] tracking-[0.2em] text-neon-green uppercase">
             Feed unificado
           </p>
-          <h3 id="mega-painel-titulo" className="mt-3 text-3xl font-semibold">
+          <h3 id="mega-painel-titulo" className="mt-3 flex items-center text-3xl font-semibold">
+            <span className="foguete-wrap" aria-hidden="true">
+              <span className="foguete">
+                <svg viewBox="0 0 64 64" width="72" height="72" xmlns="http://www.w3.org/2000/svg">
+                  
+                  <g className="foguete-chamas">
+                    <path className="chama-glow" d="M22 50 Q32 78 42 50 Q37 64 32 64 Q27 64 22 50Z" fill="#ff4500" opacity=".55"/>
+                    <path className="chama-out"  d="M25 50 Q32 72 39 50 Q35 60 32 60 Q29 60 25 50Z" fill="#ff7a18"/>
+                    <path className="chama-mid"  d="M27 50 Q32 66 37 50 Q34 56 32 56 Q30 56 27 50Z" fill="#ffd23f"/>
+                    <path className="chama-core" d="M29 50 Q32 60 35 50 Q33 54 32 54 Q31 54 29 50Z" fill="#ffffff"/>
+                  </g>
+                  
+                  <path d="M18 38 Q12 44 14 52 L24 46 Z" fill="#1f7ad1"/>
+                  <path d="M46 38 Q52 44 50 52 L40 46 Z" fill="#1f7ad1"/>
+                  
+                  <path d="M32 4 Q44 16 44 36 L44 48 Q38 52 32 52 Q26 52 20 48 L20 36 Q20 16 32 4 Z" fill="#e6e9ef"/>
+                  
+                  <path d="M32 4 Q40 14 43 26 Q38 22 32 22 Q26 22 21 26 Q24 14 32 4 Z" fill="#e63946"/>
+                  
+                  <rect x="20" y="44" width="24" height="4" fill="#2b2d33"/>
+                  
+                  <circle cx="32" cy="32" r="6.5" fill="#e63946"/>
+                  <circle cx="32" cy="32" r="5" fill="#3ab7e0"/>
+                  <circle cx="30" cy="30" r="1.6" fill="#ffffff" opacity=".85"/>
+                </svg>
+              </span>
+              <span className="foguete-sombra"></span>
+            </span>
             Mega Painel
           </h3>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
