@@ -69,6 +69,43 @@ def test_realtime_feedback_routes_without_mutation_permission():
     assert feedback["reopen_scope"] == "AFFECTED_CONE_ONLY"
 
 
+def test_visual_recovery_h01_h10_classification():
+    cases = [
+        ({"pid_match": False}, "H01_STALE_RUNTIME_TARGET"),
+        ({"monitor_match": False}, "H02_GEOMETRY_OR_MONITOR_DRIFT"),
+        ({"control_recreated": True}, "H03_CONTROL_RECREATED"),
+        ({"event_intercepted": True}, "H04_EVENT_INTERCEPTED"),
+        ({"visible": False}, "H05_NOT_ACTIONABLE"),
+        ({"needs_focus": True}, "H06_PREREQUISITE_FOCUS_SCROLL"),
+        ({"delivery_code": "background_unavailable"}, "H07_CUA_DELIVERY_UNAVAILABLE"),
+        ({"async_pending": True}, "H08_ASYNC_EFFECT_PENDING"),
+        ({"candidate_count": 2}, "H09_TARGET_AMBIGUOUS"),
+        ({"session_changed": True}, "H10_SURFACE_SESSION_CHANGED"),
+    ]
+    for observation, expected in cases:
+        result = mod.classify_visual_recovery(observation)
+        assert result["class"] == expected
+        assert result["meta_lupa_mode"] == "MEDIA"
+        assert result["meta_lupa_variant"] == "MEDIA_RECOVERY_VISUAL"
+        assert result["retry_frozen"] is True
+        assert result["same_action_retry_budget"] == 1
+        assert result["retry_requires_new_evidence"] is True
+        assert result["recipe"] != "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE"
+
+
+def test_visual_recovery_unknown_preserves_cursor_without_retry():
+    result = mod.classify_visual_recovery({})
+    assert result["class"] == "UNKNOWN_VISUAL_CAUSE"
+    assert result["recipe"] == "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE"
+    assert "NEXT_CURSOR" in result["preserve"]
+    assert result["retry_frozen"] is True
+
+
+def test_visual_recovery_precedence_prefers_session_change_over_stale_pid():
+    result = mod.classify_visual_recovery({"session_changed": True, "pid_match": False})
+    assert result["class"] == "H10_SURFACE_SESSION_CHANGED"
+
+
 def test_empty_feedback_is_not_active():
     feedback = mod.classify_realtime_feedback("   ")
     assert feedback["active"] is False
@@ -703,6 +740,9 @@ if __name__ == "__main__":
         test_normalization_variants,
         test_prose_does_not_activate,
         test_realtime_feedback_routes_without_mutation_permission,
+        test_visual_recovery_h01_h10_classification,
+        test_visual_recovery_unknown_preserves_cursor_without_retry,
+        test_visual_recovery_precedence_prefers_session_change_over_stale_pid,
         test_empty_feedback_is_not_active,
         test_megazord_persists_realtime_feedback_binding,
         test_runtime_preflight_contract_is_bound,
