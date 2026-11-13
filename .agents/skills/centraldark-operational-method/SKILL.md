@@ -398,6 +398,50 @@ receipts:
 **Escopo de autonomia:** o agente que carregou a Skill-Mãe escolhe quando aplicar a receita **na própria execução**. Texto persistido em Git não cria observação remota contínua nem garante adoção por agente que não lê a skill.
 <!-- /CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
 
+<!-- CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113 -->
+## 🔏 CRISTAL — Direct Main só termina com rastro no mesmo ciclo
+
+**Ferida generalizada:** um commit material pode existir e ter readback correto na `main`, mas a missão continuar com rastro incompleto se o agente deixar o ledger/HUD para depois. `COMMIT_PROVEN != WRITE_CYCLE_COMPLETE`.
+
+**Gate obrigatório para qualquer escrita material direta na `main`:**
+
+```text
+DIRECT_MAIN_INTENT
+→ OWNER/WRITER_LOCK
+→ MUTATION
+→ COMMIT
+→ REMOTE_MAIN_READBACK
+→ RESOLVE_ACTIVE_TRACE_DESTINATION
+→ WRITE_COMMIT_TO_LEDGER/HUD_IN_SAME_CYCLE
+→ LEDGER_READBACK
+→ CURRENT_OR_FIXED_POINT
+→ RETURN_TO_CHEFE
+```
+
+A escrita só pode ser anunciada como concluída quando o mesmo ciclo contém:
+
+1. **commit remoto comprovado** — SHA + owner/path + link + readback;
+2. **destino de rastro CURRENT resolvido dinamicamente** — receipt versionado e/ou PR da missão + funil ativo por marcador, nunca número histórico hardcoded;
+3. **mapa causal** — cada commit material deve aparecer como `COMMIT → DELTA → PROVA/STATUS`; se vários commits formaram uma única missão, enumerar a cadeia completa e identificar o HEAD final;
+4. **readback do ledger/HUD** — provar que os SHAs citados realmente aparecem no destino;
+5. **estado da missão** — `FIXED_POINT` ou `CURRENT + NEXT_CURSOR`.
+
+**Invariantes:**
+
+```text
+DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT
+COMMIT_READBACK != LEDGER_READBACK
+COMMIT_PROVEN != TRACE_COMPLETE
+PR_BODY_UPDATED != RUNTIME_PROVEN
+HISTORICAL_PR_NUMBER != ACTIVE_LEDGER_IDENTITY
+RETURN_BEFORE_TRACE_READBACK = METHOD_FAILURE
+```
+
+Se o commit já foi publicado mas o rastro falhou, **não repetir a mutação**. Entrar em `TRACE_RECOVERY`: preservar o SHA já provado, resolver o ledger vigente, registrar `COMMIT → DELTA → PROVA`, reler e somente então continuar. Falha de ledger não transforma o commit em inexistente; transforma o **fechamento da missão** em `PARTIAL/BLOCKED`.
+
+**Aplicação ao próprio método:** qualquer alteração desta Skill Mãe por direct-main também obedece a esse gate. A regra não é “documentar depois”; é parte da definição de conclusão da escrita.
+<!-- /CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113 -->
+
 <!-- CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
 ## 🔎 RASTRO PRIMEIRO — TRACE-FIRST / Delta Útil (CHEFE, 2026-10-29)
 
