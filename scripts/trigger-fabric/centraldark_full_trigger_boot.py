@@ -122,6 +122,71 @@ def classify_realtime_feedback(value: str) -> dict:
     }
 
 
+MATERIALIZATION_SCOPES = {
+    "NO_MATERIALIZATION_NEEDED",
+    "MINIMAL_DEPENDENCY_CONE",
+    "REQUIRED_CHECKOUT_SCOPE",
+    "UNKNOWN_MATERIALIZATION_SCOPE",
+}
+
+
+def classify_materialization_scope(observation: dict) -> dict:
+    """Choose the smallest physical repo scope that can prove the requested effect."""
+    if not isinstance(observation, dict):
+        raise TypeError("MATERIALIZATION_OBSERVATION_MUST_BE_OBJECT")
+
+    path_exists = observation.get("path_exists")
+    test_kind = str(observation.get("test_kind", "")).strip().lower()
+    dependency_cone_known = observation.get("dependency_cone_known") is True
+    repo_semantics_required = any(
+        observation.get(key) is True
+        for key in (
+            "requires_git_identity",
+            "requires_repo_guards",
+            "requires_relative_imports",
+            "requires_repo_traversal",
+            "integration_test",
+            "operational_test",
+        )
+    )
+
+    if path_exists is True:
+        scope = "NO_MATERIALIZATION_NEEDED"
+        reason = "TARGET_ALREADY_PRESENT"
+    elif repo_semantics_required:
+        scope = "REQUIRED_CHECKOUT_SCOPE"
+        reason = "REPOSITORY_SEMANTICS_PARTICIPATE_IN_PROOF"
+    elif test_kind in {"unit", "function", "module"} and dependency_cone_known:
+        scope = "MINIMAL_DEPENDENCY_CONE"
+        reason = "UNIT_SCOPE_WITH_KNOWN_DEPENDENCY_CONE"
+    elif path_exists is False:
+        scope = "UNKNOWN_MATERIALIZATION_SCOPE"
+        reason = "PATH_MISSING_SCOPE_NOT_PROVEN"
+    else:
+        scope = "UNKNOWN_MATERIALIZATION_SCOPE"
+        reason = "INSUFFICIENT_MATERIALIZATION_EVIDENCE"
+
+    return {
+        "schema": "centraldark.materialization-scope.v1",
+        "scope": scope,
+        "reason": reason,
+        "meta_lupa_mode": "MEDIA" if scope != "NO_MATERIALIZATION_NEEDED" else "FRIA",
+        "meta_lupa_variant": (
+            "MEDIA_MATERIALIZATION_GAP"
+            if scope != "NO_MATERIALIZATION_NEEDED"
+            else "FRIA_READBACK"
+        ),
+        "materialized_path_is_canonical_owner": False,
+        "environment_root_is_owner": False,
+        "path_resolved_is_path_exists": False,
+        "execute_allowed": scope in {
+            "NO_MATERIALIZATION_NEEDED",
+            "MINIMAL_DEPENDENCY_CONE",
+            "REQUIRED_CHECKOUT_SCOPE",
+        },
+    }
+
+
 VISUAL_RECOVERY_RECIPES = {
     "H01_STALE_RUNTIME_TARGET": "REACQUIRE_RUNTIME_TARGET",
     "H02_GEOMETRY_OR_MONITOR_DRIFT": "REMAP_GEOMETRY_AND_MONITOR",
@@ -1266,6 +1331,23 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     return 0 if result["feedback"]["active"] else 4
 
 
+def cmd_materialization_plan(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+        result = classify_materialization_scope(observation)
+    except (json.JSONDecodeError, TypeError) as exc:
+        print(json.dumps({
+            "schema": "centraldark.materialization-scope.v1",
+            "scope": "UNKNOWN_MATERIALIZATION_SCOPE",
+            "reason": type(exc).__name__,
+            "execute_allowed": False,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["execute_allowed"] else 4
+
+
 def cmd_visual_recovery(args: argparse.Namespace) -> int:
     try:
         observation = json.loads(args.observation_json)
@@ -1715,6 +1797,10 @@ def build_parser() -> argparse.ArgumentParser:
     f.add_argument("--repo", default=".")
     f.add_argument("--input", required=True)
     f.set_defaults(func=cmd_feedback)
+
+    mp = sub.add_parser("materialization-plan")
+    mp.add_argument("--observation-json", required=True)
+    mp.set_defaults(func=cmd_materialization_plan)
 
     vr = sub.add_parser("visual-recovery")
     vr.add_argument("--observation-json", required=True)
