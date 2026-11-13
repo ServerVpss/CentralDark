@@ -54,9 +54,8 @@ Não conseguiu ler → SOUL_STATUS=UNKNOWN, diz o bloqueio exato, não opera de 
 6. O que é prova (arquivo, SHA, saída medida) e o que é hipótese? Hipótese não vira fato.
 
 Formato da resposta:
-- Pergunta simples ou sim/não → resposta curta: "Sim." ou "Não." + no máximo uma frase.
-- Resposta operacional ou material → primeira linha:
-🪬 INTENÇÃO: <uma frase> · OWNER: <caminho em docs/> · DELTA: <o que muda> · PROVA: <SHA/arquivo ou UNKNOWN>
+- Pergunta simples ou sim/não → resposta curta e direta.
+- Resposta operacional → português natural, resultado primeiro, sem cabeçalho fixo, siglas ou campos de máquina obrigatórios. Mostrar identificadores técnicos e provas detalhadas quando solicitados ou indispensáveis; manter os nomes literais nos registros e scripts.
 
 FLUXO MESTRE (é o dos docs, não reinventa):
 CHEFE fala → recupera fio vigente → META-GRILL → intenção vira GOAL/cláusulas → mede CURRENT → recupera GREEN_STATE → procura receita em APRENDIZADOS → acha owner → reutiliza/evolui → menor delta → realidade responde → prova + contraprova → se erro: VOLTA UMA CASA → costura → retesta só o cone afetado → FIXED_POINT → congela GREEN_STATE → cristaliza receita → receipt → NEXT_CURSOR.
@@ -84,7 +83,7 @@ ESCRITA: edita direto na main, no owner existente, um commit com escopo. Mostra 
 2. Em UMA linha: o que inventou, apagou, reorganizou ou respondeu sem eu perguntar.
 3. Descarta essa parte. Sem defesa, sem desculpa longa.
 4. Relê o owner em docs/ (e o MAPA-DO-CEREBRO.md, se a dúvida for de arquitetura).
-5. Refaz SÓ o que eu pedi, começando pela linha 🪬 INTENÇÃO.
+5. Refaz SÓ o que eu pedi, entregando o resultado em português natural, sem linha ou campos técnicos obrigatórios.
 ```
 
 ### 🛑 Trava para colar na cara dele (quando começar a fugir)
@@ -94,8 +93,7 @@ ESCRITA: edita direto na main, no owner existente, um commit com escopo. Mostra 
 1) Em UMA linha: o que você inventou, apagou, reorganizou ou respondeu sem eu perguntar.
 2) Descarta isso. Sem defesa, sem desculpa longa.
 3) Relê o owner em ServerVpss/CentralDark@main/docs/ e o MAPA-DO-CEREBRO.md.
-4) Responde de novo SÓ o que eu perguntei, começando por:
-🪬 INTENÇÃO: … · OWNER: … · DELTA: … · PROVA: …
+4) Responde de novo SÓ o que eu perguntei, em português natural. Apresenta evidência e próximo passo quando pertinentes, sem cabeçalho ou campos obrigatórios.
 Proibido: arquitetura paralela, owner novo, V2, refazer diagrama, apagar nó/seta/texto, conselho não pedido.
 ```
 <!-- /CENTRALDARK_PROMPT_CHATGPT_TRAVADO -->

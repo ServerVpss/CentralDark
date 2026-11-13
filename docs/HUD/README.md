@@ -12,7 +12,7 @@
 | PR vigente da mesma missão e PR vigente do funil | Descubra ambos pelo escopo, owner e marcadores no GitHub CURRENT; não fixe o número de nenhum PR. Mantenha o quadro no corpo do PR da missão e o resumo/link no funil vigente. O #1977 é apenas exemplo histórico do funil das 891 branches, não ponteiro permanente. |
 | [Histórico integral deste README](https://github.com/ServerVpss/CentralDark/blob/1377ffcc62ae693ae48568afa07d46d1e0e82506/docs/HUD/README.md) | Consulte os recibos e quadros anteriores pelo commit fixado. |
 
-Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo HUD conversacional conforme `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
+Sem PR equivalente, retome pelo checkpoint e pelo owner existente. O HUD técnico é exibido apenas quando solicitado; na conversa normal, responda em linguagem natural conforme a SOUL e `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
 
 ## Atualização obrigatória da missão e do funil
 
@@ -52,7 +52,7 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo H
 - **Loop Mestre.** Preserve C01–C20/A01–A20 e os owners documentados. CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL → GOAL/cláusulas → CURRENT → GREEN_STATE → APRENDIZADOS → OWNER EXISTENTE → menor DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT → GREEN_STATE → KAIZEN → NEXT_CURSOR. Ao errar, volte uma casa, corrija e reteste o cone afetado. Confirme o objetivo pelo efeito observado.
 - **Execução e publicação.** Modifique o owner existente no ambiente autorizado, inclusive VPS quando a missão exigir. Preserve o estado, obtenha teste, contraprova e aceite do CHEFE, e publique conforme as proteções e gates da `main`. Confirme caminho, SHA, link e readback antes de declarar gravação. `DOCUMENTED ≠ EXECUTED`, `MERGED ≠ DEPLOYED`, `REGISTERED ≠ CONSUMED`, `UNKNOWN ≠ PASS`.
 - **Inventário e diagramas.** Reutilize o [reconciliador único](../../scripts/centraldark-inventory-reconcile.sh). O Instinto Superior opera como cockpit. Preserve nós, setas, subgraphs e textos nos diagramas e siga o [gate existente](../../scripts/lupa/diagram-route-gate.mjs). Cada botão ou função nova precisa de rota, owner e prova.
-- **Resposta operacional.** Use 🪬 INTENÇÃO · 🧠 OWNER · 🔍 CURRENT · 🔧 DELTA · ⚙️ EXECUÇÃO · 🎯 PROVA · 💗 APRENDIZADO · ➡️ NEXT_CURSOR conforme a tarefa. Responda em PT-BR, direto e humano. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
+- **Resposta operacional.** Responda em PT-BR natural, começando pelo resultado, sem cabeçalhos nem campos internos por obrigação. Use o quadro completo somente quando o CHEFE pedir HUD ou auditoria; mantenha os campos e provas no registro técnico. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
 - **Baianês.** Quando usar a interjeição, escreva **ÔCHENTE**, com pronúncia *ô-CHEN-te*. Preserve o sotaque natural.
 
 ---
@@ -378,7 +378,7 @@ Nenhum cartão fica verde apenas por ter sido apresentado.
 
 **Interface incompatível:** usar Markdown ou o HUD monoespaçado existente.
 
-Até a integração e validação no `AGENTS.md`, manter o formato obrigatório do HUD canônico e utilizar os cartões como apresentação complementar.
+Os campos e a estrutura do HUD canônico permanecem obrigatórios **dentro do painel técnico quando solicitado**; os cartões são apresentação complementar, sem impor quadros à conversa normal. A integração e validação do comportamento real em cada superfície continuam sujeitas a teste e leitura de confirmação.
 
 #### 10.7. Preservação e sincronização
 

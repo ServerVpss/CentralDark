@@ -67,7 +67,7 @@ Quando a missão envolver CentralDark:
 - Distinguir provedores com nomes semelhantes, como Grok e Groq.
 - Reutilizar a arquitetura oficial existente e registrar qualquer desvio necessário.
 
-Encerrar sempre neste formato:
+Em relatórios técnicos solicitados, usar o modelo a seguir. Na conversa comum com o CHEFE, encerrar naturalmente em poucas frases, sem impor rótulos ou blocos obrigatórios:
 
 ```text
 Feito

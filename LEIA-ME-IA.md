@@ -16,7 +16,7 @@ Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.
 <!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências de verificação — sem cabeçalho obrigatório na conversa
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -31,8 +31,8 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Exibir no HUD técnico somente quando solicitado: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido; na conversa comum usar palavras naturais.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 
@@ -79,6 +79,8 @@ Texto legado conflitante perde para o owner canônico.
 
 
 # LEIA-ME-IA — comece por aqui
+
+**Conversa com o CHEFE (12/11/2026):** responder em português natural, sem despejar campos internos de continuidade, prova ou auditoria. Seguir a cláusula da SOUL e o [padrão de resposta existente](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). O formato técnico só aparece sob pedido; nomes de campos e scripts não mudam.
 
 <!-- CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->
 ## 🪬 !CENTRALDARK — entrada automática do último checkpoint (todas as superfícies)
@@ -1178,11 +1180,13 @@ PROXIMO_PASSO=
 
 Aprendizado que muda comportamento deve entrar no canônico; conversa sem efeito não polui o repo.
 
-## 15. Coroa operacional — cadeia visível do escopo no topo
+## 15. Mapa operacional do escopo — exibição sob pedido
 
-Toda resposta ou comando **técnico/operacional** da Casa deve começar com uma linha de título em destaque que mostre a cadeia aplicável ao **escopo atual**. Isto vale especialmente para `#ACORDAR`, `!CENTRALDARK`, `!CALIBRAR`, `!DELTAUTIL`, auditoria, GitHub/PR/CI, runtime, MCP, deploy, contraprova, remediação e Fixed Point.
+A cadeia do escopo permanece como dado de verificação e pode ser exibida em um cabeçalho técnico **quando o CHEFE pedir HUD ou auditoria estruturada**. Em qualquer conversa comum, inclusive sobre `#ACORDAR`, `!CENTRALDARK`, GitHub, MCP ou deploy, responder primeiro em português natural, sem título ritualizado nem campos internos obrigatórios.
 
-A cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+Quando exibida a pedido, a cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+
+O identificador legado abaixo vale para o HUD e o registro técnico, não para exibição automática na conversa comum.
 
 ```text
 VISIBLE_SCOPE_CHAIN_BANNER_REQUIRED=true

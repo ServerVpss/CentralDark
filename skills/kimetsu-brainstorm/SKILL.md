@@ -63,7 +63,7 @@ Antes de classificar, entender:
 3. **Qual sucesso?** (o que significa "ta pronto"?)
 4. **Quais constraints?** (tempo, recursos, compatibilidade, risco)
 
-### Formato de output
+### Formato de registro interno (não é modelo obrigatório de resposta ao CHEFE)
 
 INTENT=
 PROBLEM=

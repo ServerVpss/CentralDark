@@ -7,7 +7,7 @@ oracle_review_on_change: true
 ---
 
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
-HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar o modo HUD. QUADRO FIXO COMPLETO no topo da resposta; explicacao abaixo. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
+HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar explicitamente o modo HUD. QUADRO FIXO COMPLETO apenas no modo HUD solicitado; conversa normal em PT-BR natural, sem recitar siglas e campos internos. Explicacao abaixo do quadro quando solicitado. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 

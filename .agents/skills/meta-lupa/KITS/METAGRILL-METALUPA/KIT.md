@@ -85,17 +85,17 @@ INTENÇÃO
 → PRÓXIMO CURSOR
 ```
 
-## ✍️ Gramática obrigatória
+## ✍️ Gramática para notas e registros técnicos
 
 `EMOJI + GANCHO HUMANO + (TERMO TÉCNICO) → ensinamento curto.`
 
-- Emoji permanece visível.
+- Emoji é uma pista visual opcional na conversa; nos modelos e registros técnicos que exigirem sua presença, preservar o formato.
 - Frase curta funciona como âncora semântica.
 - Palavra técnica nunca vem seca quando um gancho humano reduzir carga cognitiva.
 - Explicação deve permanecer curta, clara e operacional.
 - `UNKNOWN != PASS` e aparência não substitui prova.
 
-## 🔒 Formato de resposta bloqueado
+## 🔒 Formato de registro técnico bloqueado
 
 Fonte byte-a-byte:
 
@@ -109,7 +109,7 @@ Gate reutilizado:
 
 `python scripts/lupa/validar_autolupa_hash.py`
 
-O formato exige emoji, âncora semântica, resposta curta e, quando houver mutação/cristalização/prova, os blocos `📝 ANOTAÇÃO` e `🧾 PROVAS / RASTRO` com `ID`, `HEAD`, `HASH`, `COMMIT`, `LINK` e `RASTRO` quando disponíveis.
+O formato bloqueado continua exigido para a saída técnica auditável, com emoji e os blocos `📝 ANOTAÇÃO` e `🧾 PROVAS / RASTRO` e seus campos `ID`, `HEAD`, `HASH`, `COMMIT`, `LINK`, `RASTRO` quando disponíveis. Na conversa com o CHEFE, entregar o resultado de forma natural, sem impor blocos, emojis ou cabeçalhos obrigatórios. O cadeado e os validadores permanecem intactos.
 
 ## 🔒 Invariantes
 

@@ -624,9 +624,9 @@ VALIDATION_COST_SHOULD_SCALE_WITH_BLAST_RADIUS=true
 - runtime/src/deploy/workflow: teste do owner + contraprova viva + receipt.
 - pacote cristal com manifest/fingerprint: replay primeiro + provar só encaixe novo.
 
-## 9. Resposta esperada
+## 9. Resultado técnico e resposta humana
 
-Toda execução deve responder em `PASS | UNKNOWN | BLOCKED`:
+Toda execução deve **registrar** `PASS | UNKNOWN | BLOCKED` conforme a prova. Ao CHEFE, explicar esse resultado em português simples, sem exigir que a resposta comece por rótulos de máquina:
 
 ```text
 PASS: efeito medido e receipt registrado

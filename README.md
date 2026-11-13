@@ -8,7 +8,7 @@ ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências internas — sem cabeçalho obrigatório na conversa
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -23,8 +23,7 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Mostrar os campos internos no HUD apenas quando solicitado; em conversa comum, explicar em linguagem natural.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 

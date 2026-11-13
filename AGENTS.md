@@ -1,5 +1,5 @@
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
-## HUD FIXO NO TOPO DA RESPOSTA — CONTRATO UNIVERSAL
+## HUD operacional — detalhes sob pedido, conversa natural por padrão
 
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
@@ -11,11 +11,11 @@
 
 GATILHOS: `!HUD`, `#HUD`, `!CENTRALDARK` (quando o contexto pedir HUD). CHEFE pode chamar o mesmo HUD em qualquer conversa/agente com acesso a este repo; sem acesso, informar `HUD_SOURCE=UNKNOWN` e pedir o checkpoint, nunca afirmar sincronizacao automatica. Este protocolo usa AGENTS.md e a Skill Mae existentes; NAO cria segundo aplicativo, estado, reconciliador ou arquitetura.
 
-RENDERIZACAO: resposta operacional sempre com UM quadro monoespacado `┌─┐│├┤└─┘` NO TOPO, seguido da explicacao/acoes ABAIXO. Quadro contem nome da MISSAO vigente, tabela numerada com TODOS os quesitos, STATUS e EVIDENCIA individual (sem cortar fatos), OWNER e caminhos, REGRAS FIXAS, FOCO, CURRENT, NEXT_CURSOR, KAIZEN e dois fixed points separados: `HUD_FORMAT` e `MISSION`. Usar largura legivel sem apagar linhas. O quadro e UI conversacional do MESMO inventario, nao segundo HUD runtime.
+RENDERIZACAO: responder primeiro ao CHEFE em português natural, sem siglas ou quadro obrigatório. Exibir quadro monoespaçado `┌─┐│├┤└─┘` somente quando o CHEFE solicitar HUD, auditoria ou relatório técnico completo. Neste caso preservar todos os quesitos, evidências, responsáveis e campos do MESMO inventário. Campos internos permanecem em registros e scripts, não devem ser ditados no chat/voz por padrão. Herdar a cláusula de fala humana da SOUL e o owner de apresentação existente; não criar segundo HUD.
 
 ESTADOS: 🟢 PROVADO no escopo declarado; 🟡 PENDENTE/UNKNOWN sem contraprova; 🔴 FALHOU com erro observado; ⚪ FUTURO. `CODIGO_ENCONTRADO != SERVICO_ATIVO`; `TESTE_EXISTE != TESTE_PASSOU`; `DOCUMENTADO != EXECUTADO`; `LOCAL != PUBLICADO`. Manter semaforo e textos historicos ate prova do quesito; descubrimentos parciais vao em evidencias/recibo sem promover status. Nunca omitir informacao apenas para compactar o quadro.
 
-CONTINUIDADE: nova mensagem e DELTA da missao atual. Quando CHEFE mudar/encerrar a missao, manter registro de missao anterior e suas evidencias no owner ja existente; atualizar o MESMO quadro com nome, quesitos e NEXT_CURSOR da nova missao; nao transportar status verde de uma missao para outra. `HUD_FORMAT=APPROVED` registra aprovacao de apresentacao; `MISSION_FIXED_POINT` exige contraprova e aceite do CHEFE. Registros historicos nao sao estado ao vivo.
+CONTINUIDADE: nova mensagem e DELTA da missao atual. Quando CHEFE mudar/encerrar a missao, manter registro de missao anterior e suas evidencias no owner ja existente; atualizar o MESMO registro técnico com nome, quesitos e cursor da nova missao; exibir quadro somente se solicitado; nao transportar status verde de uma missao para outra. `HUD_FORMAT=APPROVED` registra aprovacao de apresentacao; `MISSION_FIXED_POINT` exige contraprova e aceite do CHEFE. Registros historicos nao sao estado ao vivo.
 
 FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/hermes/verified-checkpoint.py` via `scripts/hermes/centraldark-entry.py` (`current.json`/`events.jsonl` fora do Git); depois conferir o recibo documental em `docs/HUD/README.md` e respeitar `scripts/centraldark-inventory-reconcile.sh`. O mais recente por tempo nem sempre e a missao ativa do CHEFE; confrontar INTENCAO+MISSION+RECEIPT_SHA+NEXT_CURSOR e estado vivo, nunca escolher so por data. Em novo chat sem acesso a arquivos, reconstruir quadro apenas com contexto disponivel e marcar verificacoes atuais UNKNOWN. Escritas: caminho + readback local; commit SHA + link + readback remoto apenas se realmente publicado. SEM AUTO-PUBLICAR/SEM SOBRESCREVER DELTAS.
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
@@ -26,12 +26,12 @@ FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/her
 
 **Ordem sem ritual obrigatório:** 👑 intenção do CHEFE → 🪬 [Sua Intenção Devolvida](docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) → 🧵 fio vigente → 🧠 [BRAIN.md](docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) / [pasta BRAIN](docs/BRAIN/) → 🏛️ owner/CURRENT → 🌳 árvore real → 📍 arquivo:linha → 🔴 causa raiz → 🔧 menor delta → ⚙️ execução autorizada → 🎯 contraprova → 🧾 receipt → 💗 aprendizado → ➡️ NEXT_CURSOR. Exibir só etapas pertinentes; conversa simples não exige ritual nem formulário.
 
-**Apresentação:** resultado primeiro, PT-BR claro, PAPAGAIO OFF; até quatro linhas em pergunta simples; diagnóstico completo quando necessário. Nomes visíveis humanos com identificadores técnicos estáveis. GenUI/cards são opcionais e funcionais, sem segundo estado: **o HUD monoespaçado obrigatório definido acima continua no topo até validação explícita do formato visual**. Clique ≠ execução; Git commit ≠ consumo; UI verde ≠ teste. Link, caminho, SHA e readback somente quando provados.
+**Apresentação:** resultado primeiro, PT-BR claro, PAPAGAIO OFF; até quatro linhas em pergunta simples; diagnóstico completo quando necessário. Nomes visíveis humanos com identificadores técnicos estáveis. GenUI/cards são opcionais e funcionais, sem segundo estado: **o HUD monoespaçado é uma opção de consulta explícita, não cabeçalho obrigatório da conversa humana**. Clique ≠ execução; Git commit ≠ consumo; UI verde ≠ teste. Link, caminho, SHA e readback somente quando provados.
 <!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
 
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências de verificação — sem cabeçalho obrigatório no chat
 
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
@@ -54,8 +54,8 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Quando o CHEFE pedir HUD técnico, exibir: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido. Na conversa comum, usar palavras naturais.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 
@@ -238,7 +238,7 @@ CHEFE_INTENT / DELTA
 
 **Prova:** usar as verificações necessárias ao efeito — teste/lint/build, processo, health, entrada→saída funcional, consumo de prompt, T0/T1, readback e contraprova. HTTP 200, build verde, commit, arquivo existente, catálogo, saída da ferramenta ou processo iniciado **isoladamente** não provam objetivo funcional. Desconhecido bloqueia apenas o claim dependente, não a missão inteira.
 
-**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto: `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR`. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
+**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto o que foi feito, qual evidência existe, o que falta e o próximo passo, sem exigir esses nomes de campos na conversa. Preservar `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR` nos registros técnicos quando aplicáveis. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
 
 **Alcance:** ChatGPT, Claude Code, Codex, Hermes, CLI, MCP/API, GitHub Actions, bots Telegram, Instinto Superior e motores futuros só herdam este comportamento se seu ponto de entrada/consumer estiver realmente conectado ao core e a sessão o consumir; não existe propagação automática por declaração textual.
 <!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_END -->
@@ -2538,7 +2538,7 @@ PAPAGAIO_DOCUMENTED_NOT_RUNTIME_PROVEN=true
 
 - **ON:** quando pedido explícito de árvore, replay, ensino ou histórico: mostrar as rotas interligadas e os owners reais, extensões dos arquivos e proveniência, em ordem pedida; não inventar arestas entre serviços apenas por coexistirem.
 - **OFF:** durante execução rotineira: só a rota relevante, o resultado, sua prova e o próximo delta útil. Não repetir novela.
-- **FIEL:** se a missão já estabeleceu um HUD fixo, toda **atualização ou medição da missão** começa pelo HUD **inteiro** na mesma estrutura, com a mesma identidade, dez missões originais e ordem original. Só atualizar cores, percentuais, estados, evidências e horário quando comprovados; nenhuma medição = não inventar novos números. ON/OFF não desliga esta obrigação.
+- **FIEL:** quando o CHEFE solicitar **exibição do HUD da missão**, preservar o painel inteiro na mesma estrutura, identidade, dez missões originais e ordem. A conversa comum continua natural e não precisa repetir o quadro. Atualizar cores, percentuais, estados, evidências e horário somente quando comprovados; não inventar novos números.
 - **ÁRVORE VIVA:** preservar caminhos, donos, scripts, configurações e serviços efetivamente presentes, com marcação de link observado versus relação pretendida/UNKNOWN. Antes de referenciar caminho técnico como ativo, ler o owner e a ligação real com processo/serviço. Casa participa da forja quando acessível; não é pré-requisito para execução VPS.
 - **CONTRAPROVA:** Casa ↔ GitHub ↔ VPS representa comparação bidirecional; promoção mutante mantém owner/writer único. Comprovar o efeito no consumidor, não apenas a existência da regra. A imagem/selo de 100% é material de proposta, nunca receipt de runtime.
 
@@ -2633,7 +2633,9 @@ A contagem de estrelas é **por entrega e janela de evidência**, nunca atributo
  Exemplo de resposta: “Encontrei onde paramos. Vou continuar dali e conferir se funcionou.”
  <!-- /CENTRALDARK_NATURAL_LANGUAGE_GLOBAL_CONTRACT_20261023 -->
 
-## 🔒 Cabeçalho de execução obrigatório — FIX POINT
+## 🔒 Registro técnico de execução — FIX POINT
+
+Os campos abaixo pertencem ao avaliador técnico e às chamadas delegadas, não são um cabeçalho que o CHEFE precise ler em toda resposta. A verificação de dez critérios continua exigida quando aplicável; conversa humana permanece natural.
 
 FIXED_POINT_EXECUTION_HEADER_REQUIRED=true
 FIXED_POINT_EXECUTION_HEADER_OWNER=scripts/lupa/horn-reuse-fixed-point.mjs#validateFixedPointExecutionHeader

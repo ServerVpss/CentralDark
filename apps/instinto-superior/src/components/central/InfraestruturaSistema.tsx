@@ -181,7 +181,7 @@ function Biblioteca() {
             serviço instalado, modelo treinado, motor ligado ou PASS.
           </p>
           <label className="mt-3 block text-xs font-semibold" htmlFor="busca-cognitiva-centraldark">
-            Buscar conceito, tipo, função ou owner
+            Buscar conceito, tipo, função ou responsável
           </label>
           <input id="busca-cognitiva-centraldark" type="search" value={buscaCognitiva}
             onChange={(evento) => setBuscaCognitiva(evento.target.value)}
@@ -195,7 +195,7 @@ function Biblioteca() {
               <div key={item.name} className="rounded-md border border-border/70 p-3">
                 <dt className="text-sm font-semibold">{item.name} <span className="font-normal text-muted-foreground">· {item.kind}</span></dt>
                 <dd className="mt-1 text-xs text-muted-foreground">{item.description}</dd>
-                <dd className="mt-1 break-all font-mono text-[10px] text-muted-foreground">OWNER · {item.owner}</dd>
+                <dd className="mt-1 break-all font-mono text-[10px] text-muted-foreground">RESPONSÁVEL · {item.owner}</dd>
               </div>
             ))}
           </dl>
