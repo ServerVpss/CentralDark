@@ -450,7 +450,8 @@ async function medirGithub() {
     const { stdout: rootRaw } = await execFile("git", ["rev-parse", "--show-toplevel"], opcoes);
     const root = rootRaw.trim();
     const { stdout: originRaw } = await execFile("git", ["-C", root, "config", "--get", "remote.origin.url"], opcoes);
-    if (/(?:^|[:/])ServerVpss\/CentralDark(?:\.git)?$/i.test(originRaw.trim())) {
+    const normalizedOrigin = originRaw.trim().replace(/\.git$/i, "").replaceAll("\\", "/");
+    if (normalizedOrigin === "ServerVpss/CentralDark" || normalizedOrigin.endsWith(":ServerVpss/CentralDark") || normalizedOrigin.endsWith("/ServerVpss/CentralDark")) {
       const { stdout: logRaw } = await execFile("git", [
         "-C", root,
         "log", "-4",
