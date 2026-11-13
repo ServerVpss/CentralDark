@@ -487,6 +487,26 @@ receipts:
 - **Ferramentas/owners usados:** Browser conectado somente para tentativa de leitura da aba; Remote Desktop Commander para alcançar a Casa; PowerShell/`Get-Process` para inventariar janelas; COM `WScript.Shell` para `AppActivate` e `SendKeys`. Nenhum script novo, nenhuma automação persistente e nenhuma captura contínua.
 - **Cadeados:** PID é efêmero; título sozinho pode falhar; `SEND_ACCEPTED != UI_EFFECT_PROVEN`; nunca repetir cegamente F5/clique quando a ação puder ser destrutiva; recapturar janela/PID após troca de sessão, reload do app ou múltiplas janelas homônimas.
 
+### 🎯 CRISTAL — Target Lock por coordenadas lógica, relativa e absoluta (CHEFE, 12/11/2026)
+
+Toda ação material deve resolver o **mesmo alvo** em camadas, sem confundir identidade com localização corrente:
+
+- `TARGET_ID`: identificador lógico estável quando existir — por exemplo `GOAL_ID`, UID, marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`, AutomationId/control ID ou owner lógico. É a identidade preferida para continuidade.
+- `OWNER_RELATIVE_PATH`: caminho **relativo à raiz canônica do owner/repositório**. Ex.: `apps/instinto-superior/src/components/central/HudDeterministico.tsx`. É o formato preferido em docs, receipts e regras portáveis.
+- `RESOLVED_ABSOLUTE_PATH`: caminho físico absoluto **resolvido no ambiente corrente** quando o alvo for arquivo/diretório. Ex.: `F:\CentralDark\...` na Casa ou `/root/CentralDark/...` na VPS. Nunca herdar automaticamente de outro host.
+- `RUNTIME_TARGET_ID`: identidade efêmera da sessão — PID, HWND, RuntimeId UIA, tab id, job id transitório. Serve para agir **agora**, nunca como ponteiro permanente.
+- `RELATIVE_TRAJECTORY`: rota semântica portátil até o alvo: `OWNER → componente → controle/arquivo → ação`.
+- `ABSOLUTE_TRAJECTORY`: rota observada no runtime atual: `HOST → superfície/processo → PID/handle atual → controle/path resolvido → ação`.
+- `TARGET_MATCH`: prova de que as coordenadas lógica, relativa e absoluta apontam para o mesmo alvo pretendido. Sem convergência, `TARGET_MATCH=UNKNOWN|FAIL` e a mutação para.
+
+**Ordem padrão de resolução:** `INTENT → TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → TARGET_MATCH → ACTION → READBACK`.
+
+**Regras:** preferir ID lógico + path relativo para persistência; resolver absoluto/PID/handle somente no runtime; redescobrir tudo após troca de host, sessão, janela, checkout ou processo; nunca transformar PID, drive letter, URL privada, índice visual ou coordenada de tela em owner canônico. Um recibo pode registrar o absoluto/PID observado como evidência histórica, mas a receita reutilizável permanece parametrizada.
+
+**Caso Cockpit 12/11/2026:** `TARGET_ID=Cockpit CentralDark/Sala de Controle`; `RUNTIME_TARGET_ID=PID 29728` apenas naquela sessão; título identificou o candidato, `AppActivate(title)=FAIL`, revalidação por PID corrente produziu `TARGET_MATCH=PASS`, então uma única ação `F5` foi enviada. `SEND_ACCEPTED != UI_EFFECT_PROVEN`.
+
+**Michelin/Kimetsu:** ⭐ Construir exige `TARGET_LOCK`; ⭐⭐ Integrar executa no alvo resolvido sem trocar trajetória silenciosamente; ⭐⭐⭐ Provar remede o mesmo alvo e contraprova vizinhos. Kimetsu usa Concentração/Névoa/Água enquanto `TARGET_MATCH` não converge; Trovão/Inseto só depois do lock; Chamas preserva o mesmo `TARGET_ID` ao longo das etapas.
+
 **Matriz de conformidade obrigatória:** `PASS` = identidade, autorização, efeito e readback confirmados no escopo; `PARTIAL` = subconjunto confirmado, com pendência declarada; `UNKNOWN` = falta de evidência/atribuição; `BLOCKED` = autorização, acesso ou segurança impedem avançar; `FAIL` = efeito esperado não ocorreu com contraprova. `TARGET_COMPLIANCE=100% DE AÇÕES AUDITADAS` é **objetivo**, não percentual medido; sem universo de testes, `NUMERIC_COMPLIANCE=UNMEASURED`. Homologar cada variante por replay controlado, sem sobreposição de writers, inclusive caso negativo de duas janelas semelhantes. `DOC_COMMITTED != MAIN_MERGED != HERMES_SKILL_LOADED != CONTEXT_ROUTING_DEPLOYED`.
 
 **NEXT_CURSOR:** incluir a receita documental na gaveta existente sem alterar runtime; mapear capacidade real do `computer_use` na sessão executora; testar por pedido humano "mostre a janela aberta do WSL", depois um clique de baixo impacto autorizado, readback e teste ambíguo; nenhum observador permanente por padrão.
