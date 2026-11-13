@@ -429,6 +429,22 @@ Essa camada é apresentação. Não é autoridade religiosa, não altera prova e
 - `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md` — entrada humana do vault.
 - `docs/CONSCIENCIA/APRENDIZADOS.md` — aprendizados duráveis.
 
+## Direct Main Trace Completion Gate
+
+Quando uma mudança material entra direto na `main`, o método só considera o ciclo de escrita completo depois do rastro CURRENT:
+
+```text
+OWNER WRITE
+→ COMMIT
+→ MAIN READBACK
+→ RESOLVE ACTIVE LEDGER
+→ COMMIT→DELTA→PROOF
+→ LEDGER READBACK
+→ CURRENT/FIXED_POINT
+```
+
+`COMMIT_PROVEN != TRACE_COMPLETE`. Se o commit já existe mas o ledger ficou faltando, usar `TRACE_RECOVERY`: preservar o SHA e reparar apenas o rastro. O funil vigente é resolvido por marcador; PR histórico não é identidade canônica.
+
 ## Regra final
 
 ```text
