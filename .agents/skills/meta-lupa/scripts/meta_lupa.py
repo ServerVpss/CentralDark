@@ -88,6 +88,7 @@ WARM_TRIGGERS = {
     "EVIDENCIA_FRACA", "MECANISMO_DESCONHECIDO", "FALSO_VERDE",
     "RUNTIME_DIVERGENTE", "DRIFT", "VISUAL_ACTION_NO_EFFECT",
     "TARGET_MISMATCH", "MONITOR_MISMATCH", "ACTIONABILITY_GAP",
+    "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED", "PATH_RESOLVED_NOT_PRESENT",
 }
 
 UNKNOWN = "UNKNOWN"
@@ -340,6 +341,11 @@ def select_variant(data: dict, mode: str | None = None) -> str:
         return "FRIA_FATO_BINARIO"
 
     if selected_mode == "MEDIA":
+        if triggers & {
+            "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED",
+            "PATH_RESOLVED_NOT_PRESENT",
+        }:
+            return "MEDIA_MATERIALIZATION_GAP"
         if visual_recovery or triggers & {
             "VISUAL_ACTION_NO_EFFECT", "TARGET_MISMATCH", "MONITOR_MISMATCH",
             "ACTIONABILITY_GAP",
