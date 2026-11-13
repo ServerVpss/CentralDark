@@ -13,8 +13,8 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 
 ## Always-on
 
-- Workspace operacional da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Neste runtime Linux, o checkout correspondente é `/data/cache/scratch/CentralDark`.
-- `F:\CentralDark` é a referência canônica do workspace Windows. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; não usar como destino operacional nem fazer substituição global por inferência. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
+- Binding observado da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Em outro runtime, descobrir `ENVIRONMENT_ROOT` pela checkout/identidade atual; `/data/cache/scratch/CentralDark` é apenas um binding Linux observado, não owner canônico.
+- `F:\CentralDark` é um `ENVIRONMENT_ROOT` observado da Casa Windows, não a identidade canônica do owner. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; resolver `OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH` antes de agir. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
 - `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
@@ -46,7 +46,7 @@ A autorização vigente do CHEFE permite que Hermes conclua **sequências operac
   6. If a path has `.git` but is not in `.gitmodules`, not in `git worktree list`, and `git -C <path> rev-parse --show-toplevel` differs from the root, **then** investigate whether it is a distinct repo, legacy artifact, or symlink/junction.
 - Caddy: if live import already equals main, do not reload for ritual.
 - **Hermes Desktop browser automation**: `browser_exec` with `local=true` renders to the **right-hand preview rail**, not a separate window. The rail has hide/restore (preserves state) and detach (opens standalone window) controls. Timeout on `browser_exec local=true` means the preview engine is unavailable (can happen in headless/VPS environments or when Hermes Desktop is not running locally); fallback is manual browser open or text-based web extraction (`web_extract`).
-- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `F:\CentralDark\workspace\temp` or the existing owner. Do not make C: or K: the workspace. Do not ask the human to move pastes by hand.
+- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, resolve the current `ENVIRONMENT_ROOT`, then copy only the useful delta into `<ENVIRONMENT_ROOT>/workspace/temp` or the existing owner. Do not promote a drive letter to canonical identity. Do not ask the human to move pastes by hand.
 - "Configura na VPS" is not a VPS mutation until measurement names a VPS owner. GitHub `action_required` with empty jobs is the autonomia owner, not PM2/Caddy/runner.
 - Code change while Casa git is dirty/behind: do not patch that tree. `git worktree add` from `origin/main` (or live main SHA) and write only the named owner files. See `references/autonomia-actions.md`.
 
@@ -85,6 +85,17 @@ cópia oculta ou deploy extra. Escopo de outra unidade precisa de owner/prova;
 não usar `restart all`. Reaproveitar o MESMO HUD `docs/HUD/HUD.html`
 com VER PENDENCIA / ACEITAR MISSAO; consultar o método existente em
 `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-VPS-AUTONOMOUS-GIT-SYNC-METHOD.md`.
+
+## Environment root / materialization binding
+
+Reusable recipes persist `TARGET_ID + OWNER_RELATIVE_PATH`; the physical checkout is resolved at runtime.
+
+```text
+OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH
+→ PATH_EXISTS → MATERIALIZATION_SCOPE → TARGET_MATCH
+```
+
+Use `MINIMAL_DEPENDENCY_CONE` for isolated unit/function proof with a known dependency cone. Use `REQUIRED_CHECKOUT_SCOPE` when Git identity, guards, relative imports, repository traversal or integration semantics participate. `MATERIALIZED_PATH != CANONICAL_OWNER`; `ENVIRONMENT_ROOT != OWNER`; `PATH_RESOLVED != PATH_EXISTS`.
 
 ## Communication and environment clarity
 
@@ -210,7 +221,7 @@ LOCAL_CONFIG_SEALED → VPS_IS_CONSEQUENCE → REPLAY_WHEN_ROUTE_RETURNS
 7. **Prove compile/validate**: `python3 -m py_compile` for Python; `caddy validate --config /etc/caddy/Caddyfile` for Caddy.
 8. **Restart only if content changed** and only the owning process.
 9. **Counterproof** both stripped upstream and public prefixed URL. Capture PM2 restart deltas so you can assert no other process moved.
-10. **Receipt** under `F:\CentralDark\LOGS\CASA\\...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Stop. Do not crystallize a dirty checkout as main.
+10. **Receipt** under `<ENVIRONMENT_ROOT>/LOGS/CASA/...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Persist the owner as a repo-relative path and record the resolved absolute path only as execution evidence. Stop. Do not crystallize a dirty checkout as main.
 
 ## Hermes Desktop boot/update failure trigger
 
