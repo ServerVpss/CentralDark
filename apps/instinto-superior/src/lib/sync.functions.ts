@@ -1,5 +1,5 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-// @last_updated: 2026-11-01T19:58:27.552347+00:00 @implementado: divergencia e drift bloqueiam falso verde/publicacao cega; restante preservado.
+// @last_updated: 2026-11-13T04:33:00Z @implementado: Cockpit delega checkout sujo ao planner 3-way fail-closed do AUTO-SYNC-MASTER; nenhuma escolha ours/theirs.
 import { createServerFn } from "@tanstack/react-start";
 import { execSync, execFileSync } from "child_process";
 import path from "path";
@@ -32,6 +32,51 @@ const STATUS_FILE = path.join(CENTRALDARK_ROOT, ".auto-sync", "status.json");
 
 const VPS_SSH_HOST = "segredo-vpss";
 const VPS_REPO_PATH = "/root/CentralDark";
+const AUTO_SYNC_MASTER = path.join(CENTRALDARK_ROOT, "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
+
+type SafeResolverPlan = {
+  schema: string;
+  resolver: string;
+  state: string;
+  head: string;
+  origin_main: string;
+  merge_base: string;
+  ahead: number;
+  behind: number;
+  dirty_total: number;
+  dirty_tracked: number;
+  untracked: number;
+  remote_changed: number;
+  overlap: number;
+  auto_mergeable: number;
+  conflicts: number;
+  conflict_hunks: number;
+  conflict_paths: Array<{ path: string; reason: string; hunks?: number }>;
+  non_overlap_dirty: number;
+  fingerprint: string;
+  mutated_worktree: boolean;
+  dry_run: boolean;
+};
+
+function safeResolverPlan(): SafeResolverPlan | null {
+  if (!fs.existsSync(AUTO_SYNC_MASTER)) return null;
+  try {
+    const raw = execFileSync("python3", [
+      AUTO_SYNC_MASTER,
+      "--target", "main",
+      "--dry-run",
+      "--json",
+      "--repo", CENTRALDARK_ROOT,
+    ], { encoding: "utf8", timeout: 60_000, maxBuffer: 2 * 1024 * 1024 });
+    const plan = JSON.parse(raw) as SafeResolverPlan;
+    if (plan.schema !== "centraldark.auto-sync-plan.v2" || plan.mutated_worktree !== false || plan.dry_run !== true) {
+      return null;
+    }
+    return plan;
+  } catch {
+    return null;
+  }
+}
 
 function ensureStatusDir() {
   const dir = path.dirname(STATUS_FILE);
@@ -134,7 +179,32 @@ function syncCasaMain(): SyncStatus {
   }
 
   if (git("status", "--porcelain")) {
-    const details = "Alterações locais sem escopo revisado; preservadas antes de merge/publicação";
+    const plan = safeResolverPlan();
+    if (plan) {
+      const details = [
+        `Resolver seguro ${plan.resolver}`,
+        `↓${plan.behind} ↑${plan.ahead}`,
+        `dirty=${plan.dirty_total}`,
+        `overlap=${plan.overlap}`,
+        `auto=${plan.auto_mergeable}`,
+        `conflitos=${plan.conflicts}`,
+      ].join(" · ");
+      const conflictFiles = plan.conflict_paths.map((entry) => entry.path).filter(Boolean).slice(0, 50);
+      writeStatus("conflict", details);
+      return {
+        timestamp: new Date().toISOString(),
+        status: "conflict",
+        target: "local",
+        human_readable: plan.conflicts > 0
+          ? `Reconciliação 3-way: ${plan.auto_mergeable} auto-mescláveis · ${plan.conflicts} conflitos reais`
+          : `Reconciliação 3-way pronta: ${plan.auto_mergeable} sobreposições sem conflito; aplicação ainda exige writer`,
+        details,
+        phase: plan.conflicts > 0 ? "Conflitos semânticos localizados" : "Plano seguro pronto",
+        progress: plan.conflicts > 0 ? 65 : 80,
+        files: conflictFiles.length ? conflictFiles : files,
+      };
+    }
+    const details = "Alterações locais preservadas; resolvedor seguro indisponível. Nenhum merge/publicação executado";
     writeStatus("conflict", details);
     return { timestamp: new Date().toISOString(), status: "conflict", target: "local", human_readable: details, details, files };
   }

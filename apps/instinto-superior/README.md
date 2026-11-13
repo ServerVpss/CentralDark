@@ -84,3 +84,19 @@ Screenpipe Linux: binário npm oficial da mesma versão0.4.51 já fixada no proj
 @code_ref: src/lib/sync.functions.ts; src/components/central/AutoSyncButton.tsx
 @last_updated: 2026-11-01T19:58:27.552347+00:00
 Botão Main mede sem publicar e retorna conflito se SHAs diferem; consulta bem-sucedida não significa convergência. Casa/Forja reutiliza syncCasaMain, bloqueia drift antes de merge/push e não adiciona arquivos automaticamente. Seleção/publicação de arquivos permanece com writer-safe-push-main existente. Sincronizar Tudo cobre Casa/Main; VPS é explícita e bloqueia checkout remoto sujo. Sequência all interrompe no primeiro conflito, sem alcançar VPS. Regressão exige clique, readback do host e contraprova; navegação não é execução do motor.
+
+
+## Reconciliação Casa/Main 3-way — 13/11/2026
+
+@code_ref: `scripts/auto-sync/AUTO-SYNC-MASTER.py`; `src/lib/sync.functions.ts`; `scripts/verify-sync-safety.mjs`  
+@last_updated: 2026-11-13T04:33:00Z
+
+O botão Casa/Main continua no mesmo owner `cockpit-sync`, mas checkout sujo não passa mais por `pull --rebase`, `checkout --ours`, `git add .` ou commit automático. O `AUTO-SYNC-MASTER.py --dry-run --json` mede `HEAD / merge-base / origin/main`, arquivos locais, mudanças remotas e interseção de caminhos; para cada sobreposição textual usa o merge-base real com `git merge-file -p` somente como **sonda**, sem modificar worktree, index ou HEAD.
+
+O Cockpit consome esse plano server-side e mostra quantos caminhos são auto-mescláveis e quantos têm conflito semântico real. Conflito continua vermelho/pendente até writer do owner, teste e contraprova; plano não vira commit nem deploy. O arquivo de status usa replace atômico e o planner usa lock de writer único.
+
+Prova que motivou o delta: VM openKylin em `main@4207576f4c86`, `origin/main@b98dd1ae471a`, `ahead=0`, `behind=276`, 68 pendências locais, 49 caminhos sobrepostos; sonda 3-way encontrou 35 auto-mescláveis, 13 conflitos de conteúdo e 1 caminho sem par textual normal. Esses números são snapshot da medição de 13/11/2026, não estado eterno.
+
+`DRY_RUN != APPLY` · `PLAN != COMMIT` · `COMMIT != DEPLOYED` · `UNKNOWN != PASS`.
+
+NEXT_CURSOR: atualizar o runtime do mesmo Cockpit com esse owner, repetir o clique Casa/Main, obter o manifesto dos conflitos, reconciliar as frentes por owner e só então promover o checkout ao mesmo SHA da main.
