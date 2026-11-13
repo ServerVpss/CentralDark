@@ -106,6 +106,28 @@ Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergu
 
 **POLÍTICA DE PARALELISMO:** vários **sensores somente de leitura** podem trabalhar ao mesmo tempo para manter o contexto atualizado: Browser `list_tabs/get_tab_context` nas abas que expõe; UIAutomation com título/PID/HWND/aba/controle acessível da janela Windows atual; mapa de monitores/posição/DPI e estado WGC; `cua-driver status`; saúde do MCP/Commander local (incluindo `engine_connected`, não apenas HTTP 200); estado Git/arquivo, e Screenpipe só quando já autorizado. Não esperar um sensor lento se outra rota já deu evidência suficiente. Reutilizar índices e observações cujo fingerprint da mesma janela/sessão ainda é válido. **Uma caneta por alvo:** ações de clique, digitação, foco, salvamento, commit ou publicação são serializadas por janela/aba/arquivo/escopo. Nunca disputar mouse com usuário nem fazer dois cliques concorrentes; fan-out de leitura não vira fan-out de escrita.
 
+<!-- CENTRALDARK_BROWSER_COMMANDER_PARALLEL_VISUAL_20261113 -->
+**Receita canônica — Browser + Desktop Commander em paralelo (13/11/2026):** quando a missão envolver uma interface já aberta e o estado real do host/filesystem, iniciar as duas leituras independentes no mesmo ciclo: **Browser** reutiliza a aba existente com `list_tabs → get_tab_context` para inspecionar texto/DOM/estado visível sem clicar; **Desktop Commander** reutiliza o dispositivo autorizado para ler filesystem, Git, processo, serviço, terminal ou executar uma sonda somente de leitura no host real. Não abrir aba, navegador, terminal, sessão SSH, daemon ou cópia de repo se a superfície já existir. As duas rotas são sensores complementares: Browser prova o que a página expõe; Commander prova o estado operacional do host. Nenhuma substitui a outra.
+
+```text
+INTENÇÃO
+→ [PARALELO READ-ONLY]
+   ├─ BROWSER: TAB_ID → PAGE_CONTEXT → UI_STATE
+   └─ DESKTOP_COMMANDER: DEVICE → FILE/GIT/PROCESS/RUNTIME_STATE
+→ FUSÃO POR MESMO TARGET_ID / OWNER
+→ DELTA MÍNIMO
+→ UMA AÇÃO AUTORIZADA
+→ FEEDBACK
+→ [PARALELO READBACK]
+   ├─ BROWSER: reler a mesma aba/estado visual
+   └─ DESKTOP_COMMANDER: reler arquivo/processo/serviço/runtime
+→ COUNTERPROOF
+→ RECEIPT / NEXT_CURSOR
+```
+
+**Regra de prova:** `BROWSER_VISIBLE != RUNTIME_PROVEN`; `COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN`. Para uma mudança de Cockpit, por exemplo, o Browser deve reler o card/estado da mesma aba e o Commander deve reler o arquivo/serviço/porta/PID pertinente. Só declarar PASS quando as duas metades exigidas pela intenção convergirem. Se uma fonte estiver indisponível, marcar somente aquela perna como `UNKNOWN` e continuar pelas demais rotas autorizadas; não criar arquitetura paralela. Para ações materiais, manter `ONE_WRITER_PER_RESOURCE`: leituras podem ser paralelas, escrita/clique/tecla/commit não.
+<!-- /CENTRALDARK_BROWSER_COMMANDER_PARALLEL_VISUAL_20261113 -->
+
 **Rota complementar Cockpit / RX 580 / monitores (08/11/2026, Casa):** reutilizar a seção existente `Sistema CentralDark → Runtime / Capabilities → Radeon RX 580` em `apps/instinto-superior/src/components/central/RuntimeSistema.tsx`, com leitura autenticada de `apps/instinto-superior/src/lib/maquina.functions.ts`. Seus owners são o coletor read-only `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (fonte MSI Afterburner / MAHMSharedMemory) e `scripts/casa/CentralDark-RtssOverlay.ps1` (estado e mapa dos monitores / DesktopOverlayHost RTSS existente). Referência de capacidades e provas: `docs/HUD/README.md`. Não criar outro plugin, agente, coletor, ponte, janela ou motor visual.
 
 **Seleção e fallback sem confundir capacidades:** Browser/UIAutomation inspecionam controles; WGC da Skill Hermes Visual captura pixels autorizados; Cua virtual + overlay Hermes são a única rota de mouse/clique visual já aprovada. Se WGC, Cua ou mapeamento de tela falhar, consultar o `status` RTSS, seus aliases físicos atuais, processos e sensores Radeon como **contraprova de monitor/topologia/telemetria**, e tentar reparar o owner visual original; RTSS/Afterburner NÃO capturam o conteúdo da janela, NÃO rolam Telegram, NÃO injetam clique e NÃO substituem WGC/Cua. Ações RTSS `open/move/close` continuam restritas ao owner e às permissões tipadas; usar `status` somente leitura durante diagnóstico e nunca abrir/mover host automaticamente como fallback de captura. Medir monitor humano pelo script existente `scripts/Identify-CentralDarkMonitors.ps1 -ListWindows`; o número humano não deriva de DISPLAYx.
