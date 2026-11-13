@@ -1096,6 +1096,54 @@ check('docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json',[
  '"GREG_VERDICT_REQUIRED_BEFORE_GREEN"',
  '"DEX_APPROVAL_REQUIRED_FOR_CRITICAL_DELTA"',
 ], classification='TIK_TAK_HARD_GATES_REGISTERED')
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'RETURN_BEFORE_TRACE_READBACK = METHOD_FAILURE',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_COMPLETION_METHOD')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md',[
+ 'Gate de conclusão Direct Main — ledger CURRENT no mesmo ciclo',
+ 'CENTRALDARK_HUD_FUNNEL_CONTINUITY',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'METHOD_FAILURE',
+], classification='DIRECT_MAIN_CURRENT_LEDGER_RASTRO')
+check('scripts/trigger-fabric/rastro_fiscal.py',[
+ 'def resolve_active_funnel_issue(self)',
+ 'ACTIVE_FUNNEL_MARKER',
+ 'pulls?state=open&per_page=100&page={page}',
+ 'backend.ledger_has_sha(sha, None, data.get("ledger_ref"))',
+], classification='RASTRO_DYNAMIC_ACTIVE_FUNNEL')
+check_absent('scripts/trigger-fabric/rastro_fiscal.py',[
+ r'backend\.ledger_has_sha\(sha,\s*1757',
+ r'issue:\s*int\s*=\s*1757',
+], classification='NO_HARDCODED_RASTRO_LEDGER_PR')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml',[
+ 'event: DIRECT_MAIN_MATERIAL_WRITE',
+ 'event: DIRECT_MAIN_LEDGER_READBACK_PASS',
+ 'event: DIRECT_MAIN_TRACE_INCOMPLETE',
+ 'LEDGER_READBACK_BEFORE_RETURN',
+], classification='DIRECT_MAIN_TRACE_TRIGGER_CONTRACT')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml',[
+ 'direct_main_trace_completion_gate:',
+ 'RECEIPT_OR_HUD_LEDGER_WRITE_SAME_CYCLE',
+ 'RETURN_BEFORE_LEDGER_READBACK_IS_METHOD_FAILURE',
+], classification='DIRECT_MAIN_TRACE_MASTER_CONTRACT')
+check('docs/HUD/README.md',[
+ 'Direct Main — rastro é parte do write',
+ 'RECORD_EACH_COMMIT_AS_COMMIT_DELTA_PROOF',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_HUD_CONTRACT')
+check('.agents/library-index.json',[
+ '"material_direct_main_write_requires_trace_completion"',
+ '"direct_main_write_complete_only_after_ledger_readback": true',
+], classification='DIRECT_MAIN_TRACE_LIBRARY_ROUTE')
+check('docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',[
+ 'Direct Main Trace Completion Gate',
+ 'COMMIT_PROVEN != TRACE_COMPLETE',
+ 'TRACE_RECOVERY',
+], classification='DIRECT_MAIN_TRACE_MAP_BINDING')
+
 check('scripts/trigger-fabric/rastro_fiscal.py',[
  'TRACE_PRESENT != TRACE_VALID',
  'class GitHubBackend',
@@ -1103,6 +1151,9 @@ check('scripts/trigger-fabric/rastro_fiscal.py',[
  'def verify_text(',
  'RESPONSE_WITHOUT_TRACE',
  'def _ledger_comment_id(',
+ 'def _ledger_issue_number(',
+ 'def resolve_active_funnel_issue(self)',
+ 'ACTIVE_FUNNEL_MARKER',
  'issues/comments/{comment_id}',
  'comments?per_page=100&page={page}',
 ], classification='RASTRO_FISCAL_EXECUTABLE')
@@ -1116,6 +1167,9 @@ check('scripts/trigger-fabric/test_rastro_fiscal.py',[
  'test_memory_without_location_fails',
  'test_github_unavailable_is_unknown',
  'test_direct_main_without_ledger_fails',
+ 'test_direct_main_uses_dynamic_current_ledger',
+ 'test_active_funnel_is_resolved_by_marker_not_historical_number',
+ 'test_multiple_active_funnels_are_unknown_not_arbitrary',
  'test_ledger_exact_comment_ref_is_checked_directly',
  'test_ledger_over_100_comments_starts_from_newest_page',
 ], classification='RASTRO_FISCAL_COUNTERPROOF')
