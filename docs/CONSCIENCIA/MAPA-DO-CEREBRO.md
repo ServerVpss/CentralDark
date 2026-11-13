@@ -592,6 +592,7 @@ INTENÇÃO DO CHEFE
 | 🧪 Hermes WebUI antiga | `apps/modulos/WebUI/` | DONOR de capacidades/UX | DONOR_IS_NOT_SOURCE_OF_TRUTH |
 | 🌐 Rede privada | Tailscale + `scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md` | PRIVATE_SPINE | transporte != GUI |
 | ⌨️ Controle remoto textual | SSH + `docs/CONSCIENCIA/05-SSH-VPS.md` | CONTROL_PLANE | usar para reparar serviços/GUI quando shell estiver vivo |
+| 🪟→🐧 Terminal SSH já aberto Casa→Linux | Skill Mãe + `centraldark-hermes-visual-computer-use` + `centraldark-ops` | reutilizar a sessão SSH visível como superfície de comando do Linux | `CASA_EXISTING_SSH_TERMINAL_TO_LINUX`: probe visível primeiro; janela focada ≠ aba correta; comando enviado ≠ efeito remoto provado |
 | 🖱️ Desktop remoto interativo | AnyDesk no runtime alvo | INTERACTIVE_GUI | GUI != network spine |
 | 🆘 Resgate fora de banda | Contabo VNC/Rescue | OUT_OF_BAND_RESCUE | usar quando SO/rede interna não sustentarem as rotas normais |
 | 🐧 Corpo/SO | `centraldark-os` / openKylin runtime | substrate operacional | OS != identidade CentralDark |
@@ -623,7 +624,14 @@ FAILOVER_BEFORE_BLOCKED=true
 GUI_FAILURE_CAN_BE_REPAIRED_OVER_SSH=true
 SSH_FAILURE_CAN_BE_REPAIRED_OVER_GUI_WHEN_GUI_IS_LIVE=true
 OS_OR_NETWORK_FAILURE_CAN_ESCALATE_TO_VNC_RESCUE=true
+EXISTING_SSH_TERMINAL_REUSE_BEFORE_NEW_SESSION=true
+WINDOW_FOCUSED_IS_NOT_CORRECT_TAB=true
+SEND_ACCEPTED_IS_NOT_COMMAND_VISIBLE=true
+COMMAND_VISIBLE_IS_NOT_LINUX_EFFECT_PROVEN=true
+SSH_TARGET_REQUIRES_VISIBLE_READONLY_PROBE=true
 ```
+
+**Rota indexada:** `CASA_EXISTING_SSH_TERMINAL_TO_LINUX` → Skill Mãe → Hermes Visual Computer Use → centraldark-ops. Reutilizar a janela/aba SSH existente somente depois de reacquirir o alvo vivo; executar `pwd; hostname` ou probe equivalente read-only e confirmar o resultado na mesma aba antes do comando material. Se uma ferramenta criar/selecionar superfície errada, congelar retry e voltar ao probe; não duplicar sessão SSH por reflexo.
 
 ### Receipt vivo — acesso remoto observado em 2026-10-01
 
