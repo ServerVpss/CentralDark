@@ -101,7 +101,10 @@
     "tool_available_must_be_attempted_before_unknown": true,
     "measurable_unknown_is_method_failure": true,
     "existing_ssh_terminal_reuse_before_new_session": true,
-    "existing_ssh_terminal_requires_visual_probe_and_readback": true
+    "existing_ssh_terminal_requires_visual_probe_and_readback": true,
+    "direct_main_write_complete_only_after_ledger_readback": true,
+    "direct_main_material_commit_chain_must_be_enumerated": true,
+    "direct_main_trace_failure_recovers_trace_not_mutation": true
   },
   "mandatory_triggers": [
     "!CENTRALDARK",
@@ -420,6 +423,25 @@
     }
   ],
   "route_selection": [
+    {
+      "when": "material_direct_main_write_requires_trace_completion",
+      "then": [
+        "centraldark-operational-method",
+        "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md",
+        "docs/HUD/README.md"
+      ],
+      "trigger_events": [
+        "DIRECT_MAIN_MATERIAL_WRITE",
+        "DIRECT_MAIN_LEDGER_READBACK_PASS",
+        "DIRECT_MAIN_TRACE_INCOMPLETE"
+      ],
+      "invariants": [
+        "COMMIT_PROVEN != TRACE_COMPLETE",
+        "DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT",
+        "HISTORICAL_PR_NUMBER != ACTIVE_LEDGER_IDENTITY",
+        "RETURN_BEFORE_LEDGER_READBACK = METHOD_FAILURE"
+      ]
+    },
     {
       "when": "intent_clear_and_scope_authorized",
       "then": "EXECUTE_MINIMUM_COMPLETE_PATH"
