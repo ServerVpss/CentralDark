@@ -3451,3 +3451,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-11-13
 - **Contexto:** Na ativação de auto-merge do fork ServerVpss/hermes-agent, o conector GitHub direto falhou porque allow_auto_merge estava desativado e o MCP CentralDark não expunha mutação de repo settings. A missão continuou por rota autorizada existente: CLI gh em terminal. O comando PATCH ativou allow_auto_merge=true e o PR #1 foi integrado; depois houve readback do estado e do merge commit.
 - **Aprendizado:** Toda mutação material deve fechar um microloop FEEDBACK + READBACK: executar uma vez, capturar retorno imediato/exit/result como feedback, e reler o estado por fonte independente ou consulta posterior como readback. Falha de uma rota é local: NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE. PASS só após efeito observado + readback. Para GitHub: repo setting mutation -> repo readback -> PR mutation -> PR/base SHA readback. REUSE_BEFORE_CREATE + KAIZEN: preferir CLI/tool existente antes de criar capability paralela.
+
+### 230. Browser + Desktop Commander em paralelo para contexto visual e runtime
+- **Categoria:** regra
+- **Data:** 2026-11-13
+- **Contexto:** Em operações do Cockpit e interfaces já abertas, Browser e Desktop Commander têm capacidades complementares. Browser lê a aba e o estado visual/DOM disponível; Desktop Commander mede filesystem, Git, processo, serviço e terminal no host real.
+- **Aprendizado:** Usar fan-out somente de leitura: Browser list_tabs/get_tab_context em paralelo com Desktop Commander read_file/git/process/runtime. Fundir por TARGET_ID/owner, executar uma única ação autorizada, e fechar com readback paralelo da mesma aba + estado operacional. BROWSER_VISIBLE != RUNTIME_PROVEN; COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN; ONE_WRITER_PER_RESOURCE continua obrigatório.
