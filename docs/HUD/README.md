@@ -558,3 +558,13 @@ A GenUI apresenta tudo em linguagem humana, sem alterar a arquitetura técnica.
 
 <!-- /RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
 
+
+<!-- CENTRALDARK_GITHUB_FUNNEL_RUNTIME_COUNTERPROOF_20261113 -->
+#### Contraprova runtime — resolvedor do funil · 13/11/2026
+
+- cinco workflows de push do receipt `ac629385...` encerraram como `startup_failure`, todos com `jobs=[]`; a falha ocorreu antes de qualquer job e não prova regressão do resolvedor.
+- check do commit material `f15539999e45a4eb877a5d899dc41281c5064d2c`: `Supabase Preview=in_progress` no momento da medição.
+- MCP runtime: `ok=true`, `runtimeTools=155`, `auditStartupReady=false`.
+- Casa: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; ponte: `TAILSCALE_OAUTH_BROKER_UNREACHABLE`.
+- conclusão: `SOURCE_READBACK=PASS`; `COCKPIT_RUNTIME_CONSUMPTION=UNKNOWN`; `WORKFLOW_STARTUP=QUEBRADO`; não atribuir o startup failure ao delta sem evidência causal.
+- `NEXT_CURSOR=RESTORE_WORKFLOW_STARTUP_OWNER → VALIDATE_COCKPIT_RUNTIME_CONSUMPTION → RECONCILE_CASA_BRIDGE`.
