@@ -17,6 +17,42 @@ def test_temperaturas():
     assert m.select_mode({"risk": "R3"}) == "QUENTE"
 
 
+def test_variantes_das_tres_temperaturas():
+    fria = m.evaluate({"risk": "R0", "triggers": ["READBACK"]})
+    assert fria["mode_used"] == "FRIA"
+    assert fria["variant_used"] == "FRIA_READBACK"
+
+    media = m.evaluate({
+        "risk": "R1",
+        "triggers": ["VISUAL_ACTION_NO_EFFECT"],
+        "visual_recovery_class": "H01_STALE_RUNTIME_TARGET",
+    })
+    assert media["mode_used"] == "MEDIA"
+    assert media["variant_used"] == "MEDIA_RECOVERY_VISUAL"
+
+    quente = m.evaluate({"risk": "R0", "triggers": ["ALTERAR_LUPA"]})
+    assert quente["mode_used"] == "QUENTE"
+    assert quente["variant_used"] == "QUENTE_META_EVOLUCAO"
+
+
+def test_materialization_gap_usa_media():
+    result = m.evaluate({"risk": "R1", "triggers": ["MATERIALIZATION_GAP"]})
+    assert result["mode_used"] == "MEDIA"
+    assert result["variant_used"] == "MEDIA_MATERIALIZATION_GAP"
+
+
+def test_recovery_recorrente_escala_para_quente():
+    result = m.evaluate({"risk": "R0", "triggers": ["RECOVERY_RECURRENT"]})
+    assert result["mode_used"] == "QUENTE"
+    assert result["variant_used"] == "QUENTE_RECURRENCIA_ADVERSARIAL"
+
+
+def test_media_variantes_discriminam_ferida():
+    assert m.select_variant({"risk": "R2", "triggers": ["FALSO_VERDE"]}) == "MEDIA_FALSO_VERDE"
+    assert m.select_variant({"risk": "R2", "triggers": ["DRIFT"]}) == "MEDIA_DRIFT_DISTRIBUIDO"
+    assert m.select_variant({"risk": "R2", "triggers": ["INSTRUMENT_FAILURE"]}) == "MEDIA_INSTRUMENTO_INCERTO"
+
+
 def test_falso_verde_bloqueado():
     result = m.evaluate({
         "risk": "R0",

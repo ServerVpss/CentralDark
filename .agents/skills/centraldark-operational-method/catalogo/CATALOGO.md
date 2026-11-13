@@ -21,6 +21,22 @@ Receita operacional unica: [centraldark-builder-destop](../Skills/centraldark-bu
 7. Despachar com **`hermes kanban create`**. A descrição da missão determina se a ação é criar, remover, editar ou verificar.
 8. Conferir `kanban show`, `kanban runs`, `reasoning_effort` quando disponível e o **efeito real no ambiente-alvo**.
 
+### Meta-Lupa + Kimetsu: duas mãos do mesmo método
+
+Para auditoria de qualquer execução, usar as duas camadas do mesmo circuito:
+
+- [Meta-Lupa](../../meta-lupa/SKILL.md) é a mão da falsificação, da contraprova,
+  do XP comprovado e do selo `selo-xp/v1` no ledger existente.
+- [Kimetsu](../Skills/kimetsu-brainstorm/SKILL.md) é a mão do diagnóstico e da
+  escolha da técnica, sempre orientada pelo catálogo e pela condição observada.
+- Este [Método Operacional CentralDark](../SKILL.md) é o owner do ciclo:
+  intenção → owner → menor delta → execução → efeito → contraprova → recibo.
+
+O catálogo somente roteia; não prova carregamento, execução ou runtime. A
+seleção Kimetsu deve apontar para a técnica escolhida e a execução deve deixar
+recibo no ledger Meta-Lupa. Sem evidência aceita, não há XP nem ponto fixo.
+Não criar segundo roteador, ledger, agente ou skill para essa integração.
+
 **Ordem de autoridade para Hermes Desktop/CLI/Kanban:** consultar primeiro o GitHub/documentação oficial `NousResearch/hermes-agent`; depois medir a versão instalada (`hermes --version`), o help local e o estado/config/schema da Casa. Nunca promover comportamento do upstream a capacidade local sem confronto de versão.
 
 **Receita parametrizada e detalhada:** [Hermes Kanban universal](../references/HERMES-KANBAN-RECEITA-UNIVERSAL.md).

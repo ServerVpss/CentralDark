@@ -1,5 +1,7 @@
 ---
 name: kimetsu-brainstorm
+display_name: "CentralDark - Kimetsu Brainstorm"
+legacy_alias: kimetsu-brainstorm
 description: "KIMETSU REMIX: classifica intenção, seleciona contextual e deliberadamente 17 respirações históricas e técnicas ToT/CoT/ReAct/GoT/AoT/SoT/PoT/CoT-SC; avalia delegação Hermes, fable-loop e cot-react-loop por rodada com evidência, sem arquitetura paralela. Use quando o CHEFE invocar Kimetsu, REMIX ou brainstorming operacional."
 centraldark_autosync: true
 centraldark_autosync_policy: main-runtime-lock
@@ -84,6 +86,36 @@ Se a intenção for desconhecida ou ambígua, **uma pergunta focada** sobre purp
 Pergunta ≠ pedir autorização. Intent descoberto ≠ intenção aprovada para implementação.
 
 ---
+
+## 2.1 TARGET LOCK — distância real até o alvo
+
+Antes de escolher uma Respiração de execução, resolver as coordenadas do alvo:
+
+```
+TARGET_ID=
+OWNER_RELATIVE_PATH=
+ENVIRONMENT_ROOT=
+RESOLVED_ABSOLUTE_PATH=
+RUNTIME_TARGET_ID=
+RELATIVE_TRAJECTORY=
+ABSOLUTE_TRAJECTORY=
+TARGET_MATCH=PASS|FAIL|UNKNOWN
+```
+
+**Semântica:**
+- `TARGET_ID` é a identidade estável.
+- `OWNER_RELATIVE_PATH` é portátil entre hosts.
+- `RESOLVED_ABSOLUTE_PATH` é físico e pertence ao ambiente atual.
+- `RUNTIME_TARGET_ID` (PID/HWND/RuntimeId/tab id etc.) é efêmero.
+- `RELATIVE_TRAJECTORY` descreve a rota semântica reutilizável.
+- `ABSOLUTE_TRAJECTORY` registra a rota observada nesta execução.
+- `TARGET_MATCH` exige convergência suficiente para provar que todas as coordenadas levam ao alvo pretendido.
+
+**Selector Kimetsu:** se `TARGET_MATCH != PASS`, permanecer em 🫁 Concentração Total, 🌫️ Névoa ou 🌊 Água para resolver ambiguidade. Em tarefa visual, resolver também `MONITOR_MATCH`; somente então marcar a tela com o overlay e habilitar o cursor virtual Cua. ⚡ Trovão e 🦋 Inseto só executam após `TARGET_MATCH=PASS` + `MONITOR_MATCH=PASS`; 🔥 Chamas preserva o mesmo `TARGET_ID` e revalida absoluto/runtime ID/monitor a cada mudança de host, sessão ou processo. A trajetória visual é `LOCALIZAR → MARCAR_OVERLAY → APONTAR_CUA → AÇÃO ÚNICA → EVIDÊNCIA`; nunca transformar PID, drive letter, coordenada de tela ou path histórico em identidade permanente.
+
+## 2.2 RECOVERY VISUAL — manter o fio quando a ação falha
+
+Quando `ACTION_SENT` não gera `EFFECT_PROVEN`, Kimetsu não escolhe retry por ansiedade. Preserva `TARGET_ID + LAST_GOOD_STATE + NEXT_CURSOR` e seleciona a recuperação conforme evidência: 🫁 Concentração para reobservar; 🌫️ Névoa/🌊 Água para ambiguidade/obstrução; 🐗 Fera para causa ainda desconhecida; 🦋 Inseto para correção local provada; ⚡ Trovão somente para **um retry idempotente** após target/actionability reconfirmados; 🔥 Chamas para recuperação multietapa com o mesmo Target ID. O catálogo H01..H10 vive no owner Hermes Visual e FABLE LOOP calibra read-only; CoT-ReAct executa apenas depois de nova evidência. Sem ganho informacional, avançar hipótese ou terminar `BLOCKED_WITH_CURSOR`, nunca repetir o mesmo clique.
 
 ## 3. ENCADEAMENTO — RESPIRAÇÃO SELEciona BASEADO NO ESTADO
 

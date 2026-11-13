@@ -468,8 +468,8 @@ Rota histórica anterior (substituída pela rota canônica do Hermes Desktop):
               http://127.0.0.1:8080/sala-controle
               e drive_preview(action='elements') para obter refs.
               Browser Use/browser isolado NÃO é a sessão do CHEFE: pode cair em /auth. Não usar para este readback.
-2. MUDAR    → código em K:\apps\instinto-superior (owner real dos cards)
-              Vite dev server (`vite --port 8080`, servido do K:) recarrega o card sozinho (HMR).
+2. MUDAR    → código em F:\CentralDark\apps\instinto-superior (owner real dos cards)
+              Vite dev server (`vite --port 8080`, servido do F:\CentralDark) recarrega o card sozinho (HMR).
 3. EMITIR   → evento no ledger existente public.notifications_log (projeto Supabase do Cockpit),
               origem=claude_code, event_key único para dedupe; o hub 🔔 Claude escuta por Realtime.
               metadata.owner e metadata.proof_state são os campos que o hub exibe
@@ -523,7 +523,7 @@ Usado quando o executor de main é outro agente (ex.: ChatGPT no PR) e a Casa s�
 DELEGAR   → pedido com intenção já decidida, arquivos exatos, critério de aceite e formato de resposta (SHA)
 VIGIAR    → Monitor de fundo que consulta o PR a cada ~45 s e avisa só quando o head muda
 CONFERIR  → fetch do head novo, git show do que mudou, diff contra a última versão validada na Casa
-VALIDAR   → worktree isolado no F:, vite build, carregar 8080, conferir no navegador
+VALIDAR   → worktree isolado em F:\CentralDark, vite build, carregar 8080, conferir no navegador
 SUBIR     → commit por cima do head atual, push fast-forward (sem force); aborta se o PR andou
 REGISTRAR → evento no notifications_log com proof_state e SHA
 ```
@@ -537,7 +537,7 @@ MONITOR_STOPS_ON_EXPIRY=30min          # re-armar após cada disparo; sem re-arm
 CHECK_PR_HEAD_BEFORE_PUSH=true         # push só se origin/pr == HEAD local; senão PR_MOVED e nada sobe
 DO_NOT_FORCE_PUSH=true
 PORT_8080_HANDOVER=explicit            # derrubar o 8080 antigo só com autorização do CHEFE; confirmar porta livre antes de subir
-ENV_FILES_COPY_IGNORED=true            # .env.local não vai no Git: copiar do K: sem mostrar valor e confirmar git check-ignore
+ENV_FILES_COPY_IGNORED=true            # .env.local não vai no Git: copiar do F:\CentralDark sem mostrar valor e confirmar git check-ignore
 MOCK_UI_DETECTION=true                 # hub com texto fixo ("abc123", "0 erros") é demonstração, não ledger: procurar useNotificationsLog
 BYTE_COMPARE_BEFORE_ACCEPT=true        # arquivo de outro agente aceito só depois de diff contra a versão validada
 REFERENCE_ELEMENT_WHEN_ASKING_CHATGPT=true   # ao falar com o ChatGPT sobre a tela, citar o elemento exato (ex.: div.h-full da barra) e não só descrever

@@ -1256,3 +1256,30 @@ Uma instância lógica de **Gateway central no openKylin da Casa** é compartilh
 **NEXT_CURSOR:** pelo executor/owner que já existe, identificar somente as duplicações reais de Gateway/CLI/serviços; fazer as interfaces atuais compartilhar o serviço Linux; desligar duplicações substituídas preservando outros processos; reproduzir na VPS os scripts validados e configurar os endpoints públicos; registrar receipts e diferenças observadas. Nenhuma nova arquitetura.
 
 <!-- /CENTRALDARK_FORJA_UNICA_GATEWAY_UNICO_CASA_GITHUB_VPS_20261031 -->
+
+<!-- CENTRALDARK_SOL_HUMAN_NAMING_ROV_20261111 -->
+## Regra de nomenclatura humana e contrato ROV (decisao CHEFE 2026-11-09)
+
+A interface fala com pessoas; identificadores internos falam com a maquina. Nao renomear variaveis, APIs, arquivos, rotas, comandos ou contratos tecnicos apenas para mudar a aparencia.
+
+| Identificador existente | Nome visivel |
+|---|---|
+| MISSION | Fio da Missao |
+| CURRENT | Estado atual |
+| OWNER | Responsavel |
+| DELTA | O que mudou |
+| EXECUTION | Execucao |
+| COUNTERPROOF | Contraprova |
+| RECEIPT | Comprovante |
+| KAIZEN | Aprendizados |
+| NEXT_CURSOR | Proximo Passo |
+| Marcador de retomada | Ponto de Continuidade |
+
+**Distincao:** Fio da Missao = contexto/intencao vigente; Proximo Passo = acao seguinte; Ponto de Continuidade = estado/referencias para retomar. NEXT_CURSOR pode alimentar os dois ultimos, sem torna-los sinonimos. UNKNOWN = Nao confirmado; PENDENTE = acao/teste/aprovacao nao concluida; PROVADO somente no escopo medido.
+
+**Ambientes:** Casa = Windows SEGREDO (host); VM CentralDark = openKylin no VMware, tambem chamada **VPS da Casa** por funcao operacional; VPS externa = servidor remoto distinto; Work = modo de trabalho do ChatGPT, nao um host. O nome funcional VPS da Casa nao implica independencia do Windows ou substituicao da VPS externa. **DHCP nao implica IP variavel:** a VM tem reserva por MAC 00:0c:29:94:7b:51 para 192.168.35.130 no VMware VMnet8; a estabilidade depende da reserva e configuracao da rede. Aprendizado detalhado no owner `docs/CONSCIENCIA/ARSENAL/APRENDIZADOS.md`.
+
+**YAML nao e execucao:** contrato estruturado -> receita operacional verificavel (ROV) -> execucao autorizada -> contraprova -> comprovante -> aprendizados -> NEXT_CURSOR. A camada GenUI/HUD apenas apresenta o mesmo estado real; nao e executor ou segunda fonte da verdade. `DOCUMENTED != EXECUTED`; `MERGED != DEPLOYED`; `UNKNOWN != PASS`. Preservar o HUD fixo do AGENTS.md e a Skill Mae existentes.
+
+**REGRA FINAL:** IDENTIFICADOR TECNICO ESTAVEL -> APRESENTACAO HUMANA CLARA -> MESMO ESTADO REAL.
+<!-- /CENTRALDARK_SOL_HUMAN_NAMING_ROV_20261111 -->

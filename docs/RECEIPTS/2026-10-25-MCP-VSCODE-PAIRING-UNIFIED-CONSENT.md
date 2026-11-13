@@ -28,3 +28,46 @@ O mesmo codigo mostrado pela extensao VS Code deve aparecer na pagina do Cockpit
 
 ## Estado e NEXT_CURSOR
 Prova local de codigo e integracao. COMMIT != CI_PASS != DEPLOYED != PAREADO. A autorizacao final exige o clique humano. Publicar pelo owner existente, verificar CI/deploy do mesmo SHA e comprovar tentativa nova VS Code -> navegador -> clique -> status/heartbeat.
+
+<!-- CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+## 09/11/2026 — Pareamento portátil + costura de registros no MCP
+
+**Intenção do CHEFE:** fechar o pareamento do CentralDark Remote Bridge com MCP sem caminho preso a Windows, raiz antiga ou VPS, corrigindo falhas vizinhas da mesma causa no owner existente e preservando o que funciona.
+
+**Causa observada:** apps/modulos/mcp/src/device-pairing.js tinha registro padrão apontando para diretório. A aprovação em /authorize chamava readRegistry(), que tentava ler a pasta como JSON e devolvia EISDIR/HTTP 500. audit-logger.js, log-funnel.js e lib/audit.js continham defaults presos a /root/CentralDark/logs. Um teste mostrou que a identidade clientLabel não era projetada em actor no registro do agente.
+
+**Menor delta:**
+- src/device-pairing.js + dist/device-pairing.js: homedir()/.centraldark/mcp-device-registry.json, independentemente do diretório atual. Rejeitar caminho relativo, diretório em vez de arquivo e JSON danificado sem apagar dados; manter escrita atômica e permissões originais.
+- src/audit-logger.js + dist/audit-logger.js: fallback dinâmico para a pasta de logs do repositório quando não configurada; preservar clientLabel como nome do agente.
+- src/log-funnel.js + dist/log-funnel.js: preferir CENTRALDARK_LOG_ROOT/LOG_DIR e, na ausência, resolver logs pela localização do módulo.
+- src/lib/audit.js + dist/lib/audit.js: preferir MCP_AUDIT_DIR/LOG_DIR/CENTRALDARK_LOG_ROOT e, na ausência, resolver pela localização do módulo.
+- Tests ampliados nos owners já existentes tests/device-pairing.test.mjs e tests/agent-observability.test.mjs.
+
+**Resultado observado na VPS da Casa openKylin (checkout local):** 18/18 testes de pareamento/OAuth e 4/4 de observabilidade; total 22/22. Sintaxe node --check e git diff --check dos arquivos afetados passaram. Testes com dados fictícios e isolamento de HOME, verificando caminhos, permissões, códigos, expiração, registros e heartbeat. O teste agent-observability que falhava por ignorar clientLabel passou depois da correção.
+
+**Limite:** uma bateria mais ampla mostrou falhas em quatro testes de interface/contratos fora do cone afetado, que não estão sendo declarados verdes. src/oauth.js, dist/oauth.js e Cockpit têm trabalho local de outro writer, preservado sem sobrescrita. Não houve aprovação humana de novo dispositivo nem execução de tools/list autenticado nestes testes. Arquivos e registros administrativos anteriores não foram removidos.
+
+**Próximo passo:** reconciliar o checkout local com main sem apagar trabalho alheio; em janela autorizada, recarregar somente centraldark-native-mcp-http.service e fazer pareamento novo, com confirmação humana, status, heartbeat e tools/list autenticado. DOC != SERVIÇO RECARREGADO != DISPOSITIVO PAREADO.
+<!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+
+<!-- HISTORICO_CONFIRMAR_CODIGO_20261108 -->
+## Apresentação da confirmação
+
+@code_ref: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@last_updated: 2026-11-08T22:47:36Z
+
+Quando o servidor já entrega o código, a confirmação reutiliza o painel dourado do acesso do Cockpit. A página destaca o código e o botão de confirmação. O formulário continua enviando o identificador, o nonce e o código ao mesmo endpoint. Os estados de digitação, login, erro e sucesso continuam disponíveis.
+<!-- /HISTORICO_CONFIRMAR_CODIGO_20261108 -->
+
+<!-- COSTURA_VM_DEVICE_PAIRING_20261112 -->
+## 12/11/2026 ? COSTURA: identidade de dono e revogacao do proprio dispositivo
+
+@code_ref: apps/modulos/mcp/src/device-pairing.js
+@code_ref: apps/modulos/mcp/dist/device-pairing.js
+@code_ref: apps/modulos/mcp/tests/device-pairing.test.mjs
+@last_updated: 2026-11-12T22:14:42Z
+
+O checkout VMware continha alteracoes locais uteis nao publicadas: ownerUserId opcional na aprovacao do dispositivo, persistencia de owner_user_id e revokeSelf autenticado pelo token do proprio dispositivo na rota /device/devices/self/revoke. Preservados no owner existente, incluindo o espelho dist e a contraprova de token incorreto, rotacao, revogacao e heartbeat.
+
+Prova local VMware: node --check nos tres arquivos e node --test tests/device-pairing.test.mjs com 11/11 PASS. A publicacao de fonte nao comprova consumo do servico, login Supabase nem tools/list autenticado. SOURCE_ONLY; RUNTIME=UNKNOWN; NEXT_CURSOR=validar integracao no consumer e pareamento autorizado sem reiniciar servicos por este commit.
+<!-- /COSTURA_VM_DEVICE_PAIRING_20261112 -->
