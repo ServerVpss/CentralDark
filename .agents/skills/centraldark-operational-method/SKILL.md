@@ -489,6 +489,36 @@ receipts:
 - **Ferramentas/owners usados:** Browser conectado somente para tentativa de leitura da aba; Remote Desktop Commander para alcançar a Casa; PowerShell/`Get-Process` para inventariar janelas; COM `WScript.Shell` para `AppActivate` e `SendKeys`. Nenhum script novo, nenhuma automação persistente e nenhuma captura contínua.
 - **Cadeados:** PID é efêmero; título sozinho pode falhar; `SEND_ACCEPTED != UI_EFFECT_PROVEN`; nunca repetir cegamente F5/clique quando a ação puder ser destrutiva; recapturar janela/PID após troca de sessão, reload do app ou múltiplas janelas homônimas.
 
+### ⌨️ CRISTAL — Casa → terminal SSH já aberto → Linux CentralDark-OS
+
+`RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX`
+
+Quando o CHEFE já abriu uma sessão SSH válida no Windows Terminal/terminal equivalente para o openKylin/CentralDark-OS, **reutilizar essa sessão visível** antes de abrir outro SSH, console ou executor. O Windows é superfície de entrada; o comando Linux só é considerado executado quando o efeito aparece na sessão remota correta.
+
+```text
+INTENT
+→ ENUMERAR_JANELAS/TABS_REAIS
+→ TARGET_ID=EXISTING_SSH_TERMINAL
+→ PID + WINDOW_TITLE + WINDOW_RECT CURRENT
+→ MONITOR_MATCH
+→ FOCUS_EXISTING_WINDOW
+→ PROBE_MINIMO_READ_ONLY (pwd; hostname)
+→ VISUAL_READBACK_DA_MESMA_ABA
+→ SSH_TARGET_MATCH
+→ COMANDO_LINUX_UNICO
+→ VISUAL_READBACK_DA_MESMA_ABA
+→ CONTRAPROVA_INDEPENDENTE_QUANDO_MATERIAL
+→ RECEIPT
+```
+
+**Leis:** `WINDOW_FOCUSED != CORRECT_TAB`; `SEND_ACCEPTED != COMMAND_VISIBLE`; `COMMAND_VISIBLE != LINUX_EFFECT_PROVEN`; `SSH_CONNECTED != TARGET_MATCH`; `WINDOW_PID/TITLE/GEOMETRY` são bindings efêmeros. Se uma tentativa cair em aba errada, nova aba, painel auxiliar ou superfície criada pela própria ferramenta: `FREEZE_RETRY → fechar somente a superfície criada pela operação quando seguro → REACQUIRE → PROBE_MINIMO → continuar no mesmo Goal`.
+
+**Target Match mínimo:** o probe deve retornar o host/raiz esperados na **mesma aba** antes de qualquer comando material. Exemplo de classe, não constante: `pwd; hostname`. Não persistir hostname, PID, coordenada ou drive letter como identidade eterna.
+
+**Segredos:** para comandos que consumam `.env`/EnvironmentFile, ler o valor somente dentro do processo remoto autorizado e não ecoá-lo. Preferir prova por nome de variável, status/HTTP/efeito e remover temporários. `ENV_FILE_PRESENT != AUTH_REQUEST_PROVEN`.
+
+**Caso observado em 12/11/2026:** uma tentativa desviou para uma aba `send-input`; o readback visual reprovou `COMMAND_SENT` como efeito. Após remover apenas a aba criada pela operação, o alvo foi reacquirido por PID/título, `pwd; hostname` apareceu na aba SSH correta e o comando seguinte retornou `ROOT=/home/CentralDark-OS/CentralDark` e `SUPABASE_LINUX_AUTH_HTTP=200`. Os valores de PID/host/path dessa medição são evidência histórica, não bindings permanentes.
+
 ### 🎯 CRISTAL — Target Lock por coordenadas lógica, relativa e absoluta (CHEFE, 12/11/2026)
 
 Toda ação material deve resolver o **mesmo alvo** em camadas, sem confundir identidade com localização corrente:
