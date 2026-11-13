@@ -47,6 +47,23 @@ COMMIT_REMOTE_PROVEN
 - resposta ao CHEFE antes do readback do ledger = `METHOD_FAILURE`;
 - sem ledger disponível, a escrita pode estar publicada, mas o estado da missão é `PARTIAL/BLOCKED`, nunca “fechado”.
 
+
+<!-- CENTRALDARK_VPS_RUNTIME_SYNC_RASTRO_20261113 -->
+#### Receipt — VPS Runtime Sync Semantic Diagnostics · 13/11/2026
+
+- `MISSION=VPS_RUNTIME_SYNC_SEMANTICALLY_SAFE` · `OWNER=cockpit-sync`.
+- cadeia material na `main`: `abf4483d13b304ee3e137e21c529ec5791895d4a` (bloqueio semântico) → `90acced7ad0209d89dc20dade3b0e30f6f5952af` (`hostOS`/origem da Casa) → `0ec29ea131a17671fe5e8748887f2982fc0d4d10` (HUD Casa/Main/VPS Runtime).
+- blobs canônicos antes deste receipt: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9`; `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`.
+- contraprova do candidato: `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0`; após o teste temporário a VM restaurou exatamente `sync=834c8e65...` e `UI=8e2bb8a0...` antes do consumo da main.
+- consumo VM comprovado: `origin/main=0ec29ea131a17671fe5e8748887f2982fc0d4d10`, `sync=3b47236d...`, `UI=8669d560...`, serviço `centraldark-instinto-superior.service=active`, PID `1693207`, HTTP `8080=200`.
+- HUD visual comprovado: bloqueio `VPS_DIRTY_SCOPE_BLOCKED` aparece como preventivo/âmbar, `exit_code=4`, `runtime_mode=local`, trabalho local preservado e histórico separado de CURRENT.
+- Casa: `AutoSyncButton.tsx=8669d560...` (igual à main); `sync.functions.ts=86468564...` = main + residual explícito de `consultarGitHubCentralDark` em `lerEstadoOficina`. `git diff --check=0`; sintaxe TS do candidato = `0 erros`. Teste Node local = `UNAVAILABLE` porque o pacote `typescript` não está instalado na Casa; isso não é `FAIL` do código.
+- `.env` permaneceu fora do Git e não foi copiado entre ambientes. Casa=46 chaves; VM=48 chaves; valores não foram lidos/expostos.
+- status combinados do GitHub no HEAD material retornaram lista vazia: `CI=UNKNOWN`, não verde.
+- `FIXED_POINT=false`: main e VM fecharam o owner canônico; a Casa preserva um residual GitHub conhecido que exige reconciliação própria antes de declarar os três conteúdos idênticos.
+- `NEXT_CURSOR=RECONCILE_CASA_GITHUB_HELPER_RESIDUAL_WITH_CANONICAL_OWNER`.
+
+
 ### Fechamento ou publicação de CURRENT
 
 Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
