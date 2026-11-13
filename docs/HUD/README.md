@@ -530,3 +530,19 @@ A GenUI apresenta tudo em linguagem humana, sem alterar a arquitetura técnica.
 **Não basta dizer que resolveu. Mostrar onde estava, o que mudou e a prova do resultado.**
 
 **RESULTADO PRIMEIRO · PROVA REAL · MENOR DELTA · PAPAGAIO OFF.**
+
+<!-- RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+## !RASTRO — GitHub read-only owner reconciliado — 2026-11-13
+
+- Owner: `apps/instinto-superior/src/lib/github.functions.ts`.
+- Consumidor causal: hunks GitHub de `apps/instinto-superior/src/lib/cockpit.functions.ts`.
+- Prova de candidato na Casa: ambos os arquivos passaram `node --experimental-strip-types --check` com exit 0.
+- Segurança: rota GitHub limitada por allowlist GET; credenciais não são expostas ao browser; fallback público permanece somente leitura.
+- Escopo excluído: `.env`, Casa Commander e demais hunks locais do Cockpit.
+- HUD global observado antes da promoção: 28 PASS, 5 FAIL, 1 TODO; falhas pertencem a outros owners, portanto GREEN global não foi declarado.
+- VM/VPS para este owner: UNKNOWN nesta rodada; publicação em main não equivale a deploy.
+- Base main antes desta promoção: `c036ff748333cf8640ea1cbfd3fe68762e72cec7`.
+- NEXT_CURSOR: readback da main no mesmo commit, conferir CI/status e só depois reconciliar o runtime que realmente materializa `apps/instinto-superior`.
+
+<!-- /RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+
