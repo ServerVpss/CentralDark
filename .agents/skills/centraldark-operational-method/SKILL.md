@@ -503,6 +503,24 @@ Toda ação material deve resolver o **mesmo alvo** em camadas, sem confundir id
 
 **Ordem padrão de resolução:** `INTENT → TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → MONITOR_MAP → TARGET_MATCH → MONITOR_MATCH → OVERLAY → CUA_CURSOR → ACTION → READBACK`.
 
+### 📦 CRISTAL — Materialization Scope: trazer o owner ao ambiente sem falsificar raiz
+
+Quando o executor está em sandbox, container, runner, worktree ou host que **não possui fisicamente** o owner resolvido, `RESOLVED_ABSOLUTE_PATH` pode ser válido como trajetória e ainda assim `PATH_EXISTS=false`. Isso é `MATERIALIZATION_GAP`, não erro do owner.
+
+**Classificação obrigatória:**
+- `MINIMAL_DEPENDENCY_CONE`: usar para teste unitário/local de uma função, módulo ou receita quando o conjunto mínimo de arquivos/dependências é conhecido e suficiente para reproduzir o comportamento.
+- `REQUIRED_CHECKOUT_SCOPE`: usar para teste operacional/integração quando identidade Git, guards, imports relativos, arquivos irmãos, owners, schemas, config ou traversal do repositório participam da prova.
+- `FULL_CHECKOUT`: somente quando o escopo requerido não pode ser delimitado com segurança; não é default.
+- `NO_MATERIALIZATION_NEEDED`: alvo já existe e `TARGET_MATCH=PASS` no ambiente atual.
+
+**Sequência:**
+`TARGET_ID → OWNER_RELATIVE_PATH → DISCOVER_ENVIRONMENT_ROOT → RESOLVE_ABSOLUTE → PATH_EXISTS? → MATERIALIZATION_SCOPE → MATERIALIZE_FROM_AUTHORIZED_SOURCE → VERIFY_SOURCE_REF/BLOB → TARGET_MATCH → EXECUTE → READBACK`.
+
+**Leis:** `MATERIALIZED_PATH != CANONICAL_OWNER`; `ENVIRONMENT_ROOT != OWNER`; `PATH_RESOLVED != PATH_EXISTS`; `FILE_EXISTS != TARGET_MATCH`; `MINIMAL_DEPENDENCY_CONE != OPERATIONAL_INTEGRATION_PROOF`. Caminho físico materializado é binding efêmero daquele executor e nunca substitui o owner relativo. Se a fonte autorizada não puder ser materializada, manter `BLOCKED_MATERIALIZATION`/ `UNKNOWN`, sem inventar arquivo, pacote ou checkout.
+
+**Exemplo de sandbox:** owner `.agents/skills/meta-lupa/scripts/meta_lupa.py` pode resolver para `/mnt/data/CentralDark/.agents/...`; se o arquivo não existir, classificar `MATERIALIZATION_GAP`. Para testar apenas `evaluate()`, materializar o cone mínimo necessário; para validar a Meta-Lupa como organismo com `LEIA-ME-IA.md`, guards, Trigger Fabric e paths relativos, materializar `REQUIRED_CHECKOUT_SCOPE`.
+
+
 Para alvo visual, o Target Lock inclui também: `MONITOR_ID_HUMANO`, `MONITOR_RECT`, `WINDOW_RECT`, `CONTROL_BOUNDS`, `OVERLAY_STATE`, `CUA_SESSION`. O mesmo alvo só está pronto para ação quando identidade + janela/processo + controle + monitor convergem. O overlay deve marcar **o monitor resolvido** antes/durante a ação visual, e o cursor virtual Cua deve operar na mesma tela; `OVERLAY_VISIBLE_ON_OTHER_MONITOR` ou `CURSOR_TARGET_MISMATCH` bloqueiam a ação.
 
 **Regras:** preferir ID lógico + path relativo para persistência; resolver absoluto/PID/handle somente no runtime; redescobrir tudo após troca de host, sessão, janela, checkout ou processo; nunca transformar PID, drive letter, URL privada, índice visual ou coordenada de tela em owner canônico. Um recibo pode registrar o absoluto/PID observado como evidência histórica, mas a receita reutilizável permanece parametrizada.
