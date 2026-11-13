@@ -225,6 +225,26 @@ git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
 
+# A PR may already contain literal conflict markers committed in its HEAD.
+# An ordinary merge only reports *new* index conflicts and can miss them.
+# Check changed executable/config files BEFORE running any merge. The classifier
+# inspects HEAD:path, not the transient worktree; never promote malformed source.
+SOURCE_BASE_SHA="$(git merge-base HEAD origin/main || true)"
+if [[ -z "$SOURCE_BASE_SHA" ]]; then
+  echo "BLOCKED_PR_SOURCE_MERGE_BASE_UNKNOWN"
+  exit 20
+fi
+while IFS= read -r -d '' SOURCE_PATH; do
+  if git cat-file -e "HEAD:$SOURCE_PATH" 2>/dev/null &&
+     git grep -Eq '^(<{7}( |$)|={7}$|>{7}( |$))' HEAD -- "$SOURCE_PATH"; then
+    echo "BLOCKED_PR_COMMITTED_CONFLICT_MARKERS path=$SOURCE_PATH"
+    node "$CLASSIFIER" "$SOURCE_PATH"
+    echo "NO_PUSH_ON_COMMITTED_MARKERS=1"
+    exit 20
+  fi
+done < <(git diff --name-only --diff-filter=ACMRT -z "$SOURCE_BASE_SHA" HEAD -- '*.js' '*.mjs' '*.cjs' '*.jsx' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' '*.sh' '*.ps1' '*.py')
+echo "PR_HEAD_COMMITTED_MARKER_PREFLIGHT=PASS"
+
 set +e
 MERGE_OUTPUT="$(git merge --no-commit --no-ff origin/main 2>&1)"
 MERGE_STATUS=$?
