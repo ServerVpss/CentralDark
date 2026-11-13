@@ -27,6 +27,21 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo H
 4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
 5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
 
+### Fechamento ou publicação de CURRENT
+
+Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
+
+Após qualquer **mudança material comprovada** de missão, inclusive `SSH_REMOTE_EFFECT_READBACK`, o método não abandona o fio antes de atualizar o HUD/funil:
+
+- `FIXED_POINT=true` → `FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL`: marcar a missão como terminal no PR correto da missão e refletir a conclusão no funil vigente, com receipt/SHA/contraprova. Isso finaliza **o estado da missão**, não autoriza fechar PR, deletar branch ou declarar runtime global verde sem os gates correspondentes.
+- `FIXED_POINT=false` → `PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR`: publicar CURRENT, evidência, bloqueios/UNKNOWNs e `NEXT_CURSOR` no PR da missão + item do funil vigente.
+- sem delta material → `NO_HUD_WRITE_NO_MATERIAL_DELTA`; não gerar churn.
+- o funil é sempre resolvido dinamicamente por `CENTRALDARK_HUD_FUNNEL_CONTINUITY`; número de PR hardcoded é proibido.
+- após escrita: reler PR da missão + funil + refs/HEAD. Só então `HUD_SYNC=PROVADO`.
+
+Classificador executável: `scripts/trigger-fabric/centraldark_full_trigger_boot.py#classify_mission_hud_publication` e CLI `hud-mission-state --observation-json ...`.
+
+
 **Rotas autorizadas para consulta e atualização, sem segunda arquitetura (falhas verificadas, não fallback presumido):**
 
 - **Preferencial:** GitHub API autenticada na superfície atual; ler PRs abertos e atualizar o corpo somente com permissão e owner/writer autorizado. Preservar a versão completa do body, aplicar delta cirúrgico e reler; não sobrescrever atualizações concorrentes.
