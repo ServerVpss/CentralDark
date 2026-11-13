@@ -748,6 +748,35 @@ check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
  '"MEDIA_MATERIALIZATION_GAP"',
 ], classification='MATERIALIZATION_SCOPE_EXECUTABLE_CLASSIFIER')
 check('.agents/skills/centraldark-operational-method/SKILL.md',[
+ 'RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'WINDOW_FOCUSED != CORRECT_TAB',
+ 'SEND_ACCEPTED != COMMAND_VISIBLE',
+ 'COMMAND_VISIBLE != LINUX_EFFECT_PROVEN',
+ 'SSH_CONNECTED != TARGET_MATCH',
+], classification='EXISTING_SSH_TERMINAL_OPERATIONAL_RECIPE')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md',[
+ 'CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'WRONG_SURFACE',
+ 'INPUT_DELIVERY_OK != TERMINAL_TEXT_VISIBLE != REMOTE_EFFECT_PROVEN',
+], classification='EXISTING_SSH_TERMINAL_VISUAL_BINDING')
+check('.agents/skills/centraldark-operational-method/Skills/centraldark-ops/SKILL.md',[
+ 'RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX',
+ 'pwd; hostname',
+ 'ENV_FILE_LOADED != REMOTE_AUTH_PROVEN',
+], classification='EXISTING_SSH_TERMINAL_LINUX_OPS_BINDING')
+check('.agents/library-index.json',[
+ '"id": "centraldark-hermes-visual-computer-use"',
+ '"recipe_ids": [',
+ '"CASA_EXISTING_SSH_TERMINAL_TO_LINUX"',
+ '"delta_uses_existing_windows_terminal_ssh_to_linux"',
+], classification='LIBRARY_INDEX_EXISTING_SSH_TERMINAL_ROUTE')
+check('docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',[
+ 'Terminal SSH já aberto Casa→Linux',
+ 'EXISTING_SSH_TERMINAL_REUSE_BEFORE_NEW_SESSION=true',
+ 'SSH_TARGET_REQUIRES_VISIBLE_READONLY_PROBE=true',
+], classification='BRAIN_MAP_EXISTING_SSH_TERMINAL_ROUTE')
+
+check('.agents/skills/centraldark-operational-method/SKILL.md',[
  'Materialization Scope: trazer o owner ao ambiente sem falsificar raiz',
  'MINIMAL_DEPENDENCY_CONE',
  'REQUIRED_CHECKOUT_SCOPE',
