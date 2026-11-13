@@ -68,6 +68,43 @@ Saída mínima: `MODO=QUENTE`, contratos, observadores, testes, rollback, regist
 
 Escalonamento: comece FRIA; contradição escala para MÉDIA; criticidade, recorrência ou promoção escala para QUENTE; ponto fixo resfria e encerra.
 
+## Variantes dentro das três temperaturas — intensidade ≠ ferida
+
+A temperatura define **quanto rigor e risco** a Meta-Lupa aplica. A variante define **qual ferida operacional está sendo examinada**. Não criar novas temperaturas para cada incidente; selecionar uma variante dentro de FRIA, MÉDIA ou QUENTE e preservar o mesmo owner.
+
+```text
+TEMPERATURA = intensidade / custo do erro
+VARIANTE    = classe causal / método discriminante
+```
+
+### FRIA — variantes de observação
+
+- `FRIA_FATO_BINARIO`: fato local simples, SIM/NÃO, antes/depois.
+- `FRIA_READBACK`: reler CURRENT/STATUS/OBSERVE/REMEASURE sem explicar mecanismo invisível.
+- `FRIA_REUSE_FINGERPRINT`: fingerprint invariável ou mesma falha sem informação nova; reutilizar prova/cristal e não reabrir investigação.
+
+### MÉDIA — variantes de diagnóstico
+
+- `MEDIA_CAUSA_DISCRIMINANTE`: hipótese distinguível + uma variável/teste por vez.
+- `MEDIA_RECOVERY_VISUAL`: ação visual sem efeito, target/monitor/actionability divergente; classificar H01..H10 e testar uma hipótese read-only por vez.
+- `MEDIA_FALSO_VERDE`: sucesso aparente com evidência insuficiente.
+- `MEDIA_DRIFT_DISTRIBUIDO`: runtime/host/SHA/superfície divergem.
+- `MEDIA_INSTRUMENTO_INCERTO`: sensor, ferramenta ou observador falhou; não projetar a falha do instrumento no alvo.
+
+### QUENTE — variantes de consolidação/adversarial
+
+- `QUENTE_META_EVOLUCAO`: alteração da própria Meta-Lupa; exigir regressão, contraprova e mesmo HEAD.
+- `QUENTE_PROMOCAO_CANONICA`: main/merge/promoção/selagem.
+- `QUENTE_PRODUCAO_AUTH`: produção, VPS, autenticação ou dados.
+- `QUENTE_RECURRENCIA_ADVERSARIAL`: falha recorrente, recovery recorrente, agentes discordando ou caça ao erro.
+- `QUENTE_CONSOLIDACAO`: demais escopos quentes que exigem teste positivo, negativo, limite e rollback.
+
+**Escalonamento por variante:** FRIA pode subir para MÉDIA quando nasce contradição/causa desconhecida; `MEDIA_RECOVERY_VISUAL` sobe para `QUENTE_RECURRENCIA_ADVERSARIAL` somente quando a falha se repete com material novo ou o risco/ambiente exigir. Trocar variante sem evidência nova é ruído, não progresso.
+
+**Contrato visual H01..H10:** o classificador executável vive em `scripts/trigger-fabric/centraldark_full_trigger_boot.py#classify_visual_recovery`. As classes são variantes causais do mesmo invariante de recuperação, não dez novos invariantes e não dez retries. A Meta-Lupa recebe `VISUAL_ACTION_NO_EFFECT` + `visual_recovery_class` e usa `MEDIA_RECOVERY_VISUAL`; recurrence material usa `RECOVERY_RECURRENT` e escala para QUENTE.
+
+**Saída auditável do motor:** `evaluate()` deve expor `mode_used` + `variant_used`. Temperatura sem variante continua válida para compatibilidade, mas consumidores novos devem preferir o par para classificar com mais precisão.
+
 ## ♻️ Self-Evolution e XP comprovado — integração no mesmo organismo (2026-10-14)
 
 As técnicas externas de otimização **GEPA/DSPy** (feedback textual de falhas e rastros), **Reflexion** (memória episódica de correções) e **EvoAgentX** (avaliação repetível de workflows) são absorvidas como **método de observação e contraprova**, não como dependências obrigatórias, novos agentes ou novo orquestrador. Referências técnicas: `https://dspy.ai/3.1.0/api/optimizers/GEPA/overview/`, `https://arxiv.org/abs/2303.11366`, `https://github.com/ANative-Lab/EvoAgentX`.
