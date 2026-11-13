@@ -229,3 +229,26 @@ ACTION_WITHOUT_PROVEN_EFFECT
 
 **Criterio de escolha:** menor custo de descoberta com alvo atual inequ?voco, mantendo isolacao do mouse fisico e mesmas garantias de PID/HWND/monitor/controle; nao otimizar velocidade sacrificando identidade. `CUA_CALL_OK != EFEITO_COMPROVADO`; confirmar a mudanca por UIA/snapshot/readback antes do proximo clique. Nao criar fun??o, plugin, runner ou cursor paralelo.
 <!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+
+<!-- CENTRALDARK_CUA_COCKPIT_TERMINAL_20261113 -->
+## 13/11/2026 — Cockpit embaixo + terminal em cima: rota CUA afinada
+
+**Intenção comprovada:** operar a VM openKylin pelo Windows Terminal visível e validar o mesmo efeito no Cockpit aberto no Chrome, mantendo cursor virtual/overlay Cua visível e readback de tela. Reusar `cua-driver` e este owner; não criar mouse, browser, daemon ou overlay paralelo.
+
+**Descobertas desta execução na Casa SEGREDO (PIDs/HWNDs são efêmeros):**
+- redescobrir janela por `list_windows` a cada mudança material; nesta sessão o terminal openKylin e o Chrome/Cockpit foram distinguidos por título + PID + HWND + bounds, nunca por coordenada fixa;
+- `get_window_state` com screenshot é o readback preferido quando UIA do Chrome retorna árvore incompleta; `effect=unverifiable` do clique exige captura posterior;
+- Windows Terminal rejeitou entrega `background` para teclado: usar `foreground` somente após confirmar PID/HWND vivos. Para JSON no PowerShell 5.1, preferir objeto → `ConvertTo-Json -Compress` → stdin do `cua-driver call`; não depender de aspas em argv;
+- nesta sessão, alguns `type_text + Return` deixaram o comando apenas **digitado**. Nunca mandar Enter duplo por hábito: recapturar a janela; somente se a linha estiver visivelmente staged e o prompt não tiver executado, enviar um segundo `Return`;
+- sessão Cua pode expirar durante espera/teste longo. Se `session ... has ended`, reviver o **mesmo session_id** com `start_session`, reposicionar o cursor e continuar somente após novo readback;
+- manter overlay/cursor em lease bounded e mover o cursor antes de cada ação material. A captura após o clique é a contraprova; clique enviado != efeito;
+- ao alternar terminal ↔ Cockpit, evitar novo `git fetch` quando `FETCH_HEAD` acabou de ser medido e continua válido para o mesmo cálculo. Revalidar a ref quando houver evento externo ou intervalo material;
+- fluxo rápido comprovado: `list_windows → get_window_state(before) → start/revive session → move_cursor → one click/type → get_window_state(after)`. Browser/DOM conectado, quando disponível para a mesma aba, pode substituir apenas a **leitura**; input continua no owner autorizado e o readback deve confirmar o efeito.
+
+**Prova do caso:** o botão `Sincronizar Casa/Main` do Cockpit foi localizado por captura atual e clicado uma vez pelo Cua em `foreground`; readback posterior mostrou a tentativa mudando para `local: conflict` e barra `Confirmando o mesmo SHA...`. Esse resultado provou despacho do botão e revelou perda de detalhe no wrapper; o owner `apps/instinto-superior/src/lib/sync.functions.ts` foi corrigido para preservar o `conflict` causal do planner 3-way.
+
+**Kaizen:** medir tempo de descoberta/ação/readback somente quando relógio real estiver disponível; não inventar ganho percentual. Toda melhoria futura entra neste mesmo owner e em seus scripts existentes, com `FILE → LOADER → CONSUMER → TRIGGER → EXECUTION → EVIDENCE → COUNTERPROOF`.
+
+`CUA_CALL_OK != EFFECT_PROVEN` · `TYPE_TEXT != EXECUTED_COMMAND` · `CLICK_SENT != SYNC_COMPLETE` · `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_CUA_COCKPIT_TERMINAL_20261113 -->
+

@@ -481,17 +481,28 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       }
 
       const failed = results.filter((r) => r.status === "failed" || r.status === "conflict");
-      const allOk = failed.length === 0;
       const summary = results.map((r) => `${r.target}: ${r.status}`).join(" · ");
 
-      writeStatus(allOk ? "success" : "failed", summary);
+      if (failed.length > 0) {
+        const blocker = failed[0];
+        const details = blocker.details ?? blocker.human_readable ?? summary;
+        // Preserva o diagnóstico causal do passo que bloqueou. O wrapper não
+        // rebaixa "conflict" para "failed" nem apaga o plano 3-way do Cockpit.
+        writeStatus(blocker.status, details);
+        return {
+          ...blocker,
+          timestamp: new Date().toISOString(),
+          target: blocker.target ?? target,
+          details,
+        };
+      }
+
+      writeStatus("success", summary);
       return {
         timestamp: new Date().toISOString(),
-        status: allOk ? "success" : "failed",
-         human_readable: allOk
-           ? (target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓")
-           : `Sync parcial: ${summary}`,
-        target: "all",
+        status: "success",
+        human_readable: target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓",
+        target,
         details: summary,
       };
     } catch (error) {

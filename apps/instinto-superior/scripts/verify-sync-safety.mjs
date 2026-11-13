@@ -26,7 +26,7 @@ test('Main igual é sucesso; consulta divergente não vira mesmo SHA',async t=>r
 }));
 test('Casa e Tudo preservam arquivo alheio e não criam commit nem stage',async t=>run(t,async(f,m)=>{
  fs.writeFileSync(path.join(f.repo,'alheio.txt'),'do not publish');const head=f.g('rev-parse','HEAD');
- for(const target of ['windows','local','all']) {const result=await m.executarSync({data:{target}});assert.notEqual(result.status,'success');assert.equal(f.g('rev-parse','HEAD'),head);assert.equal(f.g('diff','--cached','--name-only'),'');assert.equal(fs.readFileSync(path.join(f.repo,'alheio.txt'),'utf8'),'do not publish');}
+ for(const target of ['windows','local','all']) {const result=await m.executarSync({data:{target}});assert.equal(result.status,'conflict');assert.match(result.human_readable,/Alterações locais preservadas|Reconciliação 3-way/);assert.doesNotMatch(result.human_readable,/Sync parcial: local: conflict/);assert.equal(f.g('rev-parse','HEAD'),head);assert.equal(f.g('diff','--cached','--name-only'),'');assert.equal(fs.readFileSync(path.join(f.repo,'alheio.txt'),'utf8'),'do not publish');}
 }));
 test('Casa limpa publica commit existente e confirma SHA remoto real',async t=>run(t,async(f,m)=>{
  fs.writeFileSync(path.join(f.repo,'tracked.txt'),'approved commit');f.g('add','tracked.txt');f.g('commit','-m','approved');
