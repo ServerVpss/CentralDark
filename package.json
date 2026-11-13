@@ -72,7 +72,7 @@
     "react-router-dom": "^7.18.3",
     "recharts": "^2.15.4",
     "screenpipe": "0.4.51",
-    "screenpipe-mcp": "0.20.0",
+    "screenpipe-mcp": "0.20.4",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.1",
     "tailwindcss-animate": "^1.0.7",
