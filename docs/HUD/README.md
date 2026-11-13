@@ -48,6 +48,18 @@ COMMIT_REMOTE_PROVEN
 - sem ledger disponível, a escrita pode estar publicada, mas o estado da missão é `PARTIAL/BLOCKED`, nunca “fechado”.
 
 
+<!-- CENTRALDARK_GITHUB_FUNNEL_DYNAMIC_RESOLUTION_20261113 -->
+#### Receipt — resolução dinâmica do funil HUD · 13/11/2026
+
+- `OWNER=apps/instinto-superior/src/lib/github.functions.ts` · escopo separado do fixed point `cockpit-sync`.
+- causa observada: a `main` ainda continha `PR_FUNIL=1977` e `PR_ANTERIOR=1562`, em conflito com `CENTRALDARK_HUD_FUNNEL_CONTINUITY`.
+- delta publicado: `f15539999e45a4eb877a5d899dc41281c5064d2c`; blob `github.functions.ts=7e1a45e6a06e7ad989677a9564a27a53a83aca02`.
+- comportamento: pagina PRs abertos, seleciona pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY` e exige exatamente um candidato; ambiguidade vira `ACTIVE_FUNNEL_PR=UNKNOWN`.
+- contraprova remota: readback confirmou hardcode `1977` ausente e resolução dinâmica presente. A busca CURRENT encontrou um único candidato aberto, PR #1977; o número é resultado da descoberta, não identidade canônica.
+- `CI=UNKNOWN`: combined statuses do commit material retornaram lista vazia.
+- Casa nesta superfície: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; VPS git probe: sem estado Git utilizável. Portanto `CASA_MAIN_SYNC=UNKNOWN` e `VPS_CONSUMPTION=UNKNOWN`.
+- `NEXT_CURSOR=VALIDATE_GITHUB_FUNNEL_RESOLVER_IN_RUNTIME → RECONCILE_CASA_WHEN_BRIDGE_AVAILABLE`.
+
 <!-- CENTRALDARK_VPS_RUNTIME_SYNC_RASTRO_20261113 -->
 #### Receipt — VPS Runtime Sync Semantic Diagnostics · 13/11/2026
 
