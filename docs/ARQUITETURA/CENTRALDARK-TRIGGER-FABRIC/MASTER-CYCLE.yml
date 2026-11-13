@@ -914,6 +914,41 @@ semantic_memory_links:
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
 
+existing_ssh_terminal_feedback_sync_contract:
+  recipe_id: CASA_EXISTING_SSH_TERMINAL_TO_LINUX
+  owner: .agents/skills/centraldark-operational-method/SKILL.md
+  trigger_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  feedback_owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  skill_sync_owner: .agents/skills/skill-synchronization/SKILL.md
+  skill_sync_executor: scripts/skill-sync-check.sh
+  hud_owner: docs/HUD/README.md
+  flow:
+    - EXISTING_SSH_TERMINAL_AVAILABLE
+    - TARGET_LOCK
+    - SSH_VISUAL_PROBE_PASS
+    - ONE_AUTHORIZED_LINUX_COMMAND
+    - SSH_REMOTE_EFFECT_READBACK
+    - REALTIME_FEEDBACK
+    - COUNTERPROOF
+    - SKILL_SYNC_IF_CANONICAL_SKILL_CHANGED
+    - MISSION_STATE_READY_FOR_HUD
+    - FIXED_POINT_OR_NEXT_CURSOR
+  hud_resolution:
+    fixed_point: FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL
+    non_terminal_material_state: PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR
+    active_funnel_resolution: DYNAMIC_BY_CENTRALDARK_HUD_FUNNEL_CONTINUITY
+    mission_pr_resolution: DYNAMIC_BY_GOAL_OWNER_SCOPE
+    hardcoded_pr_number_forbidden: true
+    readback_required: true
+  invariants:
+    WINDOW_FOCUSED_IS_NOT_CORRECT_TAB: true
+    SEND_ACCEPTED_IS_NOT_COMMAND_VISIBLE: true
+    COMMAND_VISIBLE_IS_NOT_LINUX_EFFECT_PROVEN: true
+    FEEDBACK_IS_NOT_MUTATION_PERMISSION: true
+    MAIN_RUNTIME_LOCK_IS_NOT_ACTIVE_SESSION_LOAD: true
+    HUD_UPDATED_IS_NOT_RUNTIME_PROVEN: true
+    CURRENT_STATE_MUST_NOT_BE_REPORTED_AS_FIXED_POINT: true
+
 adaptive_backcheck_contract:
   owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
   creates_new_method: false

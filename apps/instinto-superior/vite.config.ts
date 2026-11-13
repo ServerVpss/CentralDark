@@ -21,7 +21,8 @@ export default defineConfig({
     server: {
       port: 8080,
       strictPort: true,
-      allowedHosts: ["windows-casa.tail6d7aa4.ts.net"],
+      allowedHosts: ["windows-casa.tail6d7aa4.ts.net", "admin.centralldark.com"],
+      hmr: { protocol: "wss", host: "admin.centralldark.com", clientPort: 443 },
     },
   },
   tanstackStart: {

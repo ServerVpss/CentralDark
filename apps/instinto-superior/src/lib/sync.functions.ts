@@ -435,6 +435,159 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
   }
 );
 
+// #OBSERVACOES# @owner: cockpit-sync @doc_ref: docs/HUD/README.md
+// @last_updated: 2026-11-12T23:59:04.000Z
+// @implementado: HUD vigente resolvido em tempo real por marcador via GitHub API server-side, com fallback gh autenticado no host; token nunca sai para o navegador.
+// @pendente: build/readback visual do Cockpit publicado; MCP permanece fallback operacional do agente, não biblioteca embutida no browser.
+
+export type EstadoHudVigente = {
+  role: "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
+  status: "PASS" | "UNKNOWN" | "BLOCKED";
+  activePr: number | null;
+  title: string | null;
+  url: string | null;
+  headSha: string | null;
+  mainSha: string | null;
+  nextCursor: string | null;
+  source: "GITHUB_API" | "GH_CLI" | "UNAVAILABLE";
+  measuredAt: string;
+  candidates: number[];
+  detail: string;
+};
+
+const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
+const GITHUB_REPO = "ServerVpss/CentralDark";
+
+function parseHudNextCursor(body: string): string | null {
+  const matches = [...body.matchAll(/NEXT_CURSOR\s*[:=]\s*([^\n\r<]+)/gi)];
+  const value = matches.at(-1)?.[1]?.trim();
+  return value || null;
+}
+
+async function githubRequest(pathname: string, token?: string): Promise<unknown | null> {
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "CentralDark-Cockpit-HUD",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6500);
+  try {
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/${pathname}`, {
+      headers, cache: "no-store", signal: controller.signal,
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function resolveHudFromPulls(
+  pulls: Array<Record<string, unknown>>,
+  mainSha: string | null,
+  source: EstadoHudVigente["source"],
+): EstadoHudVigente {
+  const candidates = pulls.filter(pr =>
+    typeof pr["body"] === "string" &&
+    (pr["body"] as string).includes(HUD_FUNNEL_MARKER) &&
+    pr["state"] === "open"
+  );
+  if (candidates.length !== 1) {
+    return {
+      role: HUD_FUNNEL_MARKER, status: candidates.length ? "BLOCKED" : "UNKNOWN",
+      activePr: null, title: null, url: null, headSha: null, mainSha,
+      nextCursor: null, source, measuredAt: new Date().toISOString(),
+      candidates: candidates.map(pr => Number(pr["number"])).filter(Number.isFinite),
+      detail: candidates.length
+        ? `Mais de um PR aberto carrega ${HUD_FUNNEL_MARKER}; cutover precisa ser reconciliado.`
+        : `Nenhum PR aberto com ${HUD_FUNNEL_MARKER} foi encontrado.`,
+    };
+  }
+  const pr = candidates[0]!;
+  const head = pr["head"];
+  const headSha = head && typeof head === "object" && typeof (head as { sha?: unknown }).sha === "string"
+    ? (head as { sha: string }).sha : null;
+  const body = typeof pr["body"] === "string" ? pr["body"] as string : "";
+  const number = typeof pr["number"] === "number" ? pr["number"] : Number(pr["number"]);
+  return {
+    role: HUD_FUNNEL_MARKER,
+    status: Number.isFinite(number) ? "PASS" : "UNKNOWN",
+    activePr: Number.isFinite(number) ? number : null,
+    title: typeof pr["title"] === "string" ? pr["title"] as string : null,
+    url: typeof pr["html_url"] === "string" ? pr["html_url"] as string : null,
+    headSha,
+    mainSha,
+    nextCursor: parseHudNextCursor(body),
+    source,
+    measuredAt: new Date().toISOString(),
+    candidates: Number.isFinite(number) ? [number] : [],
+    detail: "PR vigente resolvido pelo identificador lógico; número não é fixado no código.",
+  };
+}
+
+async function readHudViaGithubApi(): Promise<EstadoHudVigente | null> {
+  const token = process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"];
+  const main = await githubRequest("branches/main", token);
+  const mainSha = main && typeof main === "object"
+    && (main as Record<string, unknown>)["commit"]
+    && typeof (main as Record<string, unknown>)["commit"] === "object"
+    && typeof ((main as Record<string, unknown>)["commit"] as { sha?: unknown }).sha === "string"
+      ? ((main as Record<string, unknown>)["commit"] as { sha: string }).sha : null;
+
+  const pulls: Array<Record<string, unknown>> = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const raw = await githubRequest(`pulls?state=open&per_page=100&page=${page}`, token);
+    if (!Array.isArray(raw)) return null;
+    const batch = raw.filter(item => item && typeof item === "object") as Array<Record<string, unknown>>;
+    pulls.push(...batch);
+    if (batch.length < 100) break;
+  }
+  return resolveHudFromPulls(pulls, mainSha, "GITHUB_API");
+}
+
+function readHudViaGhCli(): EstadoHudVigente | null {
+  try {
+    execFileSync("gh", ["auth", "status"], { encoding: "utf8", timeout: 8000, stdio: ["ignore", "pipe", "pipe"] });
+    const mainRaw = execFileSync("gh", ["api", `repos/${GITHUB_REPO}/branches/main`], {
+      encoding: "utf8", timeout: 12000,
+    });
+    const main = JSON.parse(mainRaw) as { commit?: { sha?: string } };
+    const pullsRaw = execFileSync("gh", [
+      "api", "--paginate", `repos/${GITHUB_REPO}/pulls?state=open&per_page=100`,
+    ], { encoding: "utf8", timeout: 25000 });
+    // gh --paginate pode concatenar arrays JSON; --slurp produz uma lista de páginas de forma determinística.
+    const pagesRaw = execFileSync("gh", [
+      "api", "--paginate", "--slurp", `repos/${GITHUB_REPO}/pulls?state=open&per_page=100`,
+    ], { encoding: "utf8", timeout: 25000 });
+    void pullsRaw; // mantém a chamada simples compatível como contraprova do endpoint.
+    const pages = JSON.parse(pagesRaw) as unknown[];
+    const pulls = pages.flatMap(page => Array.isArray(page) ? page : [])
+      .filter(item => item && typeof item === "object") as Array<Record<string, unknown>>;
+    return resolveHudFromPulls(pulls, main.commit?.sha ?? null, "GH_CLI");
+  } catch {
+    return null;
+  }
+}
+
+export const lerHudVigente = createServerFn({ method: "GET" }).handler(
+  async (): Promise<EstadoHudVigente> => {
+    const api = await readHudViaGithubApi();
+    if (api) return api;
+    const gh = readHudViaGhCli();
+    if (gh) return gh;
+    return {
+      role: HUD_FUNNEL_MARKER, status: "UNKNOWN", activePr: null, title: null, url: null,
+      headSha: null, mainSha: null, nextCursor: null, source: "UNAVAILABLE",
+      measuredAt: new Date().toISOString(), candidates: [],
+      detail: "GitHub API e gh autenticado indisponíveis no servidor do Cockpit; MCP pode ser usado pelo agente como fallback operacional.",
+    };
+  }
+);
+
 /** Minha Oficina: consultas reais, sem executar operações GitHub. */
 export type EstadoOficina = {
   casaSha: string | null;

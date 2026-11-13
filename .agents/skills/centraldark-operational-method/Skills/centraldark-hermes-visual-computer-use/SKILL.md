@@ -2,6 +2,9 @@
 name: centraldark-hermes-visual-computer-use
 description: Identificar monitores por numero ou posicao, capturar um monitor autorizado com Windows.Graphics.Capture e mostrar moldura verde de atividade no Hermes Windows 11. Use para captura de tela, monitor um/dois/tres/quatro, bancada operacional e automacao visual com indicador, sem substituir o cursor Cua existente.
 platforms: [windows]
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
 metadata:
   hermes:
     category: productivity
@@ -119,7 +122,110 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 
 **Clique e localização:** busca de 354 controles UIA na janela Code-OSS levou 576 ms e encontrou dois elementos com nome `Explorer (Ctrl+Shift+E)` no mesmo retângulo (-1072,-789,36×36): um `TabItem` e um `Group`. O resolver existente `scripts/Identify-CentralDarkMonitors.ps1` foi ajustado: aceita a única entrada acionável apenas quando **todos os retângulos coincidem exatamente**. Dois `Toggle Chat` acionáveis ou controle inexistente continuam bloqueados. `-ResolveControl` localizou o Explorer na tela humana 3 (x=-1054,y=-771). `scripts/blink_cursor.py --mode click --monitor 3 --window-title 'HARNES Dev' --control-name 'Explorer (Ctrl+Shift+E)'` enviou um clique `cua-driver` em modo background, exit 0, limpeza completa, 11.138 ms; mouse físico não se moveu. A mudança de estado do Explorer NÃO foi confirmada por leitura independente, então o efeito visual do clique permanece PENDENTE.
 
-**Método afinado:** descobrir a topologia **uma vez** → usar mapeamento humano atual → piscar apenas overlay se não houver clique → localizar janela e controle vivos com UIA → checar monitor e retângulo → clicar uma única vez com Cua virtual e moldura → ler o efeito → encerrar somente a própria sessão. Se o controle duplicado ocupar lugares diferentes, **não clicar**. Medir sempre o tempo, mas não otimizar removendo travas ou trocando motor.
+**Método afinado unificado:** descobrir a topologia **uma vez** → resolver `TARGET_ID`/janela/controle vivos → obter PID/HWND atuais → mapear monitor humano + retângulo → exigir `TARGET_MATCH=PASS` e `MONITOR_MATCH=PASS` → acender o **overlay na tela resolvida** → habilitar e mover o **cursor virtual Cua** dentro da mesma janela/tela → executar uma única ação autorizada → reler o efeito por UIA/snapshot/readback independente → encerrar somente overlay e sessão Cua criados para a operação. Se o controle duplicado ocupar lugares diferentes, se a janela mudar de monitor ou se overlay/cursor não coincidirem com o alvo, **não clicar**. Medir sempre o tempo, mas não otimizar removendo travas ou trocando motor.
+
+**Contrato visual forte:** `LOCALIZAR != MARCAR != APONTAR != AGIR != PROVAR`. A receita completa é `LOCALIZAR → TARGET_LOCK → MONITOR_LOCK → OVERLAY_MARK → CUA_CURSOR → ACTION_SINGLE → READBACK → COUNTERPROOF`. O overlay funciona como marcador visual do monitor/alvo atual; o cursor Cua mostra a trajetória da ação sem mover o ponteiro físico do usuário. Os dois devem referenciar o mesmo monitor e a mesma janela antes do input.
 
 **Owners:** `scripts/Identify-CentralDarkMonitors.ps1`, `Skills/centraldark-hermes-visual-computer-use/scripts/blink.py`, `scripts/blink_cursor.py`, `references/native-cursor.md`. Esta seção registra o resultado no owner existente; nenhuma arquitetura visual nova.
 <!-- /CENTRALDARK_MONITOR_HERMES_VISUAL_SPEED_20261109 -->
+
+<!-- CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
+## 10/11/2026 — Digitar no Hermes Agent Dashboard da direita com Cua existente
+
+**Intenção confirmada:** operar o campo inferior de `Hermes Agent - Dashboard` (Hostinger) dentro do Hermes Desktop da Casa, sem confundir com `Mensagem` do BOT CHAT ao meio nem com a CLI do Windows. O CHEFE confirmou visualmente que esta rota de digitação funcionou; a mensagem de reconhecimento foi apenas digitada, **Enter não foi enviado**.
+
+**Identificação viva (não fixar coordenadas):** janela `Hermes.exe`, título `Hermes`, controle UIA `Terminal input` (`ControlType.Edit`), painel direito `Hermes Agent - Dashboard`, monitor humano 4. Resolver por `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl -WindowTitle 'Hermes' -ControlName 'Terminal input'`: retorna PID, HWND, monitor, device e centro atual; durante o teste o centro mudou de `(1319,990)` para `(1337,977)` — nunca usar esses números como constante. Conferir `GetWindowRect`, `GetWindowThreadProcessId` e monitor antes do input. `Mensagem` do painel central é um alvo distinto.
+
+**Receita já funcional:** 1) identificar o controle vivo via UIA; 2) chamar o `scripts/blink_cursor.py --mode click --monitor 4 --window-title 'Hermes' --control-name 'Terminal input'` para o **mouse virtual Cua + overlay existente** (sem mover o mouse físico); 3) capturar novo centro vivo após clique, pois o painel pode mudar de geometria; 4) usar o `cua-driver call type_text` na sessão existente, com `pid`, `window_id` e `x/y` **relativos ao retângulo da janela**, inicialmente `delivery_mode=background`; 5) somente se o driver retornar explicitamente `code=background_unavailable`, repetir **a mesma digitação uma vez** com `delivery_mode=foreground` (foco temporário, sem mudar serviço nem invocar outro motor); 6) conferir na tela se o texto apareceu **no campo certo** antes de qualquer `press_key return`. Não reenviar texto se o primeiro input já tiver efeito visível; não enviar Enter sem ordem explícita.
+
+**Registro da execução:** `blink_cursor.py` despachou clique via `cua-driver` em modo `background`, `cleanup=completed`; o campo `Terminal input` permanecia sem foco UIA confirmado. `type_text` `background` retornou `background_unavailable` (`Chrome_WidgetWin_1`); `type_text` `foreground` retornou exit 0, `delivery.mode=foreground`, `effect=unverifiable`. **CHEFE confirmou visualmente que funcionou** em 10/11/2026. Portanto `DIGITACAO_VISIVEL=CONFIRMADA_PELO_CHEFE`, `TEXTO_ENVIADO=NAO`, `REPOSTA_HERMES_DIREITA=NAO_TESTADA`, `ACESSO_REMOTO_CASA=NAO_PROVADO`.
+
+**Kaizen:** é o mesmo resolvedor UIA + Cua + overlay da Skill existente, não outro watcher, bridge, script, teclado, agente ou arquitetura. Identificar alvo pelo nome/árvore viva e só usar foreground depois de falha expressa no background. A digitação não concede automaticamente permissão ao dashboard, VPS ou Casa.
+**Contraprova de envio sem intervenção do CHEFE (10/11/2026):** após a digitação inicial, o CHEFE apertou Enter manualmente e o Dashboard respondeu. Repetimos com **uma nova pergunta**, sem intervenção humana: `Identify-CentralDarkMonitors.ps1 -ResolveControl -WindowTitle 'Hermes' -ControlName 'Terminal input'` encontrou a janela viva no monitor 4; `cua-driver type_text` retornou `background_unavailable`, depois `foreground` exit 0. UIA confirmou a pergunta integral no próprio terminal da direita, e não no BOT CHAT central. Em seguida `cua-driver press_key` com `key=return` também retornou `background_unavailable` em modo background; a repetição em `foreground` retornou exit 0. **Readback independente da UIA** confirmou a nova resposta do agente, seguida de `pronto` e campo livre. As duas sessões Cua criadas para esses testes foram encerradas com `active=false`. O motor reportou `effect=unverifiable`, porém **a resposta real visível na UI** encerra a dúvida de entrega neste teste. Não afirmar que o acesso do Remote Bridge à Casa foi comprovado.
+
+**Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sessão dele. Indicou Casa Agent/rota/autenticação e teste remoto real como pendências. Essas são declarações do próprio painel e não substituem medições independentes em cada ambiente.
+<!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
+
+<!-- CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
+## Terminal SSH existente na Casa → Linux CentralDark-OS
+
+Consumir o `RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX` da Skill Mãe. Esta skill cuida da **aquisição visual do alvo**; ela não cria uma segunda sessão SSH por padrão.
+
+```text
+ENUMERAR_WINDOWS
+→ MATCH TITLE + PID + WINDOW_RECT
+→ MONITOR_MATCH
+→ FOCUS
+→ PROBE_MINIMO_READ_ONLY
+→ CAPTURE/READBACK DA MESMA ABA
+→ SSH_TARGET_MATCH
+→ TYPE/PASTE ONE COMMAND
+→ CAPTURE/READBACK DA MESMA ABA
+→ EFFECT_PROOF
+```
+
+Regras:
+- janela correta não implica aba correta;
+- `AppActivate=PASS` ou mecanismo equivalente prova foco da janela, não entrega no shell remoto;
+- antes do comando material, exigir um probe inofensivo visível na própria aba SSH;
+- se uma ferramenta abrir aba auxiliar ou `send-input`, tratar como `WRONG_SURFACE`, congelar retry e fechar somente a superfície criada pela operação quando isso for seguro;
+- após qualquer mudança de aba/foco/render, reacquirir PID/título/retângulo/monitor antes de nova entrada;
+- comando que usa segredo deve referenciá-lo no processo remoto sem imprimir o valor; screenshot/readback não pode conter token;
+- `INPUT_DELIVERY_OK != TERMINAL_TEXT_VISIBLE != REMOTE_EFFECT_PROVEN`.
+
+Este caminho complementa Cua/UIA/overlay; usar o mecanismo de input já disponível e autorizado para aquela bancada. Não mover mouse físico, não abrir novo terminal só para contornar target lock e não transformar coordenada histórica em receita.
+<!-- /CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
+
+<!-- CENTRALDARK_VISUAL_RECOVERY_LADDER_10X1_20261112 -->
+## Recovery Ladder visual 10×1 — falhou o clique, a missão continua
+
+**Princípio:** `ACTION_SENT != EFFECT_PROVEN`. Falha ou ausência de efeito não encerra a missão e também não autoriza retry cego. Preservar `LAST_GOOD_STATE + TARGET_ID + TARGET_FINGERPRINT + NEXT_CURSOR`; acionar FABLE LOOP em leitura para classificar a falha, escolher **uma hipótese discriminante**, medir, e somente então permitir ao CoT-ReAct/Hermes executar o menor próximo passo autorizado.
+
+**Contrato:** `10 hipóteses disponíveis != 10 retries`. Para fingerprint invariável, no máximo **um retry idempotente** da mesma ação após nova evidência de que o alvo voltou a estar acionável. Sem informação nova, não repetir.
+
+| ID | Hipótese observável | Prova discriminante | Retorno seguro |
+|---|---|---|---|
+| H01 | PID/HWND/RuntimeId ficou velho | reenumerar janela/processo/controle | reacquirir IDs atuais; preservar TARGET_ID |
+| H02 | janela mudou de monitor, posição, DPI ou retângulo | UIA + GetWindowRect + mapa atual de monitores | recalcular MONITOR_MATCH/CONTROL_BOUNDS e reposicionar overlay/Cua |
+| H03 | controle foi recriado/detached por rerender | nova árvore UIA/DOM e identidade do controle | reacquirir elemento; não usar ref antiga |
+| H04 | modal/overlay/tooltip está interceptando eventos | hit-test/ReceivesEvents + leitura visual | resolver/bloquear modal conforme autorização; depois reavaliar alvo |
+| H05 | controle ainda não está visível/estável/habilitado | Visible/Stable/Enabled/viewport | aguardar condição observável limitada e reread; sem force click |
+| H06 | controle exige scroll, hover ou foco prévio | bounds/viewport/focus state | trazer para viewport/focar de forma nativa e revalidar antes do clique |
+| H07 | Cua background não é suportado naquela superfície | retorno explícito `background_unavailable`/delivery | uma única tentativa foreground somente quando owner já autoriza e o alvo foi revalidado |
+| H08 | ação funcionou, mas o readback foi cedo demais | evento/estado assíncrono, loading, mudança tardia | esperar condição de pós-ação com timeout curto; **não clicar de novo** |
+| H09 | há controles duplicados/ambíguos | contagem + retângulos + role/control type | estreitar por parent/role/AutomationId/texto; se não convergir, BLOCKED |
+| H10 | sessão/aba/processo/conexão mudou ou morreu | fingerprint de superfície, processo, heartbeat/readback | recuperar **a mesma sessão** quando possível; reread → reacquire → refresh controlado; só depois failover |
+
+**Ladder operacional:**
+
+```text
+ACTION_WITHOUT_PROVEN_EFFECT
+→ FREEZE_RETRY
+→ SAVE LAST_GOOD_STATE / TARGET_ID / TARGET_FINGERPRINT / NEXT_CURSOR
+→ REREAD
+→ REACQUIRE_ELEMENTS + PID/HWND + MONITOR_MAP
+→ FABLE: CLASSIFY H01..H10
+→ RUN ONE DISCRIMINATING READ-ONLY PROBE
+→ evidence_new?
+   ├─ NO  → NEXT_HYPOTHESIS (sem repetir ação)
+   └─ YES → TARGET_MATCH + MONITOR_MATCH + ACTIONABILITY
+             ├─ PASS → ONE_IDEMPOTENT_RETRY_OR_RECOVERY_ACTION
+             └─ FAIL → NEXT_HYPOTHESIS
+→ READBACK + COUNTERPROOF
+→ PASS | BLOCKED_WITH_CURSOR | UNKNOWN_WITH_CURSOR
+```
+
+**Budget:** parar antes de 10 se uma hipótese for provada; 10 é catálogo máximo, não obrigação. Se o orçamento acabar sem causa suficiente, `BLOCKED_WITH_CURSOR` mantém o Goal ativo e retomável, sem abrir nova missão, janela, tab, driver ou executor. O próximo ciclo começa no último `NEXT_CURSOR`, não do zero.
+
+**Referências de método:** Playwright-style actionability (unicidade, visibilidade, estabilidade, recebe eventos, enabled) inspira os gates; o recovery ladder já existente no `centraldark-oracle-surface` fornece `REREAD → REACQUIRE_ELEMENTS → ONE_IDEMPOTENT_RETRY → REFRESH`; FABLE LOOP faz calibração read-only e CoT-ReAct executa somente quando há nova evidência/rota segura. Isso é integração de owners existentes, não um quarto loop.
+<!-- /CENTRALDARK_VISUAL_RECOVERY_LADDER_10X1_20261112 -->
+
+<!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+## Clique unico CentralDark: cursor virtual primeiro, rota mais rapida comprovada
+
+**Entrada unica:** `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click`. Ha duas formas de resolver o mesmo alvo, nao dois motores de clique: (A) `--pid/--hwnd/--x/--y` com identidade e geometria verificadas nesta operacao (menor latencia quando ja se conhece o alvo); (B) `--window-title/--control-name` com UIA e resolvedor `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl` (mais segura quando o alvo precisa ser descoberto). Escolher A apenas com PID/HWND/ponto vivos; caso contrario escolher B. `--monitor N` valida o monitor atual.
+
+**Atuador unico e obrigatorio:** Cua `click(scope=window, delivery_mode=background)` mais cursor virtual e overlay existentes. UIA, Win32 e Browser sao sensores/hit-test e contraprova; **nunca** usar `SetCursorPos`, `mouse_event`, `SendInput`, `scope=desktop` ou mover o ponteiro fisico do usuario como fallback. Se Cua estiver indisponivel, retornar BLOCKED/UNKNOWN em vez de substituir silenciosamente o atuador.
+
+**Criterio de escolha:** menor custo de descoberta com alvo atual inequ?voco, mantendo isolacao do mouse fisico e mesmas garantias de PID/HWND/monitor/controle; nao otimizar velocidade sacrificando identidade. `CUA_CALL_OK != EFEITO_COMPROVADO`; confirmar a mudanca por UIA/snapshot/readback antes do proximo clique. Nao criar fun??o, plugin, runner ou cursor paralelo.
+<!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->

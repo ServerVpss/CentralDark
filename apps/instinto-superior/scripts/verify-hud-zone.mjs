@@ -12,7 +12,26 @@ const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${
 });
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+const syncFunctions = read("apps/instinto-superior/src/lib/sync.functions.ts");
 
+
+test("HUD vigente vem da main por marcador sem PR fixo nem segredo no browser", () => {
+  assert.ok(syncFunctions.includes('const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"'));
+  assert.ok(syncFunctions.includes('process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"]'));
+  assert.ok(syncFunctions.includes('pulls?state=open&per_page=100&page='));
+  assert.ok(syncFunctions.includes('execFileSync("gh", ["auth", "status"]'));
+  assert.ok(syncFunctions.includes('"GH_CLI"'));
+  assert.ok(syncFunctions.includes('"GITHUB_API"'));
+  assert.ok(syncFunctions.includes("readHudViaGithubApi"));
+  assert.ok(syncFunctions.includes("readHudViaGhCli"));
+  assert.ok(zone.includes('import { lerHudVigente } from "@/lib/sync.functions";'));
+  assert.ok(zone.includes('queryKey: ["centraldark", "hud-funil-current"]'));
+  assert.ok(zone.includes("CENTRALDARK_HUD_FUNNEL_CONTINUITY"));
+  assert.ok(zone.includes("GITHUB_TOKEN/GH_TOKEN do ambiente"));
+  assert.ok(zone.includes("Nenhum segredo é enviado ao navegador"));
+  assert.ok(!zone.includes("process.env"));
+  assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
+});
 test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   const n = [lineage.genesis, ...lineage.nodes];
   assert.equal(n[0].uid, "L000");

@@ -92,13 +92,13 @@ export function createDevicePairingStore(options = {}) {
       approved: Boolean(item.deviceId),
     };
   }
-  function approveWeb({ pairId, code, nonce }) {
+  function approveWeb({ pairId, code, nonce, ownerUserId = null }) {
     const item = pendingConsent(pairId);
     if (!item || item.approved) return { ok: false, error: "pair_expired_or_completed" };
     if (!safeEqual(item.nonce, nonce)) return { ok: false, error: "pair_consent_invalid" };
-    return approve({ pairId, code });
+    return approve({ pairId, code, ownerUserId });
   }
-  function approve({ pairId, code, deviceName, executor, surface }) {
+  function approve({ pairId, code, deviceName, executor, surface, ownerUserId = null }) {
     prune();
     const item = pending.get(String(pairId));
     if (!item || item.expiresAt <= now()) return { ok: false, error: "pair_expired_or_missing" };
@@ -109,6 +109,7 @@ export function createDevicePairingStore(options = {}) {
     const registry = readRegistry();
     registry.devices.push({
       device_id: deviceId,
+      owner_user_id: ownerUserId || null,
       device_name: cleanText(deviceName, item.meta.deviceName),
       executor: cleanText(executor, item.meta.executor),
       surface: cleanText(surface, item.meta.surface),
@@ -163,6 +164,17 @@ export function createDevicePairingStore(options = {}) {
     writeRegistry(registry);
     return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
   }
+  // Logout can revoke only the device that proves possession of its own token.
+  function revokeSelf({ token, deviceId }) {
+    const registry = readRegistry();
+    const tokenHash = sha256(token || "");
+    const idx = registry.devices.findIndex(entry =>
+      entry.device_id === deviceId && safeEqual(entry.token_hash || "", tokenHash));
+    if (idx < 0) return { ok: false, error: "invalid_device_token" };
+    registry.devices.splice(idx, 1);
+    writeRegistry(registry);
+    return { ok: true, device_id: deviceId };
+  }
   function revoke({ deviceId }) {
     if (!deviceId || typeof deviceId !== "string") return { ok: false, error: "device_id_required" };
     const registry = readRegistry();
@@ -180,7 +192,7 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, revokeSelf, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
@@ -232,6 +244,10 @@ export function createDevicePairingRouter(options = {}) {
   });
   router.post("/heartbeat", (req, res) => {
     const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });
+    res.status(result.ok ? 200 : 401).json(result);
+  });
+  router.post("/devices/self/revoke", (req, res) => {
+    const result = store.revokeSelf({ token: bearerFrom(req), deviceId: req.body?.device_id });
     res.status(result.ok ? 200 : 401).json(result);
   });
   router.post("/devices/revoke", (req, res) => {
