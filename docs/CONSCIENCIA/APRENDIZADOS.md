@@ -3439,3 +3439,21 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Ressalva:** O `github_read` interno do MCP ainda respondeu GitHub HTTP 401 e `puxar_aprendizados` bloqueou escrita. O auxiliar `gh` autenticado na Casa conseguiu ler `ServerVpss/CentralDark`; essa prova não corrige a credencial interna do MCP. `auditStartupReady=false` permanece pendente. Nenhum segredo foi exposto.
 - **Owner reaproveitado:** `apps/modulos/mcp/src/index.js`, `apps/modulos/mcp/dist/index.js`, `docs/CONSCIENCIA/APRENDIZADOS.md`, `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` e `scripts/trigger-fabric/rebuild_learning_lineage.py` (reconciliador derivado existente).
 - **NEXT_CURSOR:** Confirmar `initialize` e `tools/list` autenticados em nova conexão; corrigir somente a credencial de GitHub consumida pelo MCP e contraprovar `github_read`; medir o readiness de auditoria, mantendo o catálogo único e os registros preservados.
+
+### 228. Hermes fork: delta mínimo, teste isolado e promoção segura
+- **Categoria:** regra
+- **Data:** 2026-11-13
+- **Contexto:** Na atualização do fork ServerVpss/hermes-agent, uma melhoria isolada de WhatsApp foi reaplicada sobre a main atual por cherry-pick. O clone completo do histórico foi maior que o necessário, mas a integração ficou limitada ao commit autorizado, com patch-id idêntico e testes verdes. Depois o repositório teve allow_auto_merge habilitado via gh CLI e o PR foi integrado.
+- **Aprendizado:** Aplicar REUSE_BEFORE_CREATE + KAIZEN: manter Hermes upstream como motor, o fork como camada controlada, e absorver apenas deltas úteis. Para mudanças isoladas, preferir fetch/partial clone mínimo em vez de baixar histórico completo; aplicar somente o commit/delta autorizado, verificar patch-id/diff, testar o cone afetado e só então promover. AUTO_MERGE deve ser política do repo + PR elegível, com readback do merge SHA. DOWNLOAD_SCOPE não deve exceder o necessário; INTEGRATION_SCOPE deve permanecer mínimo e provado.
+
+### 229. Feedback + readback fecham a ação; capability bloqueada não encerra a missão
+- **Categoria:** regra
+- **Data:** 2026-11-13
+- **Contexto:** Na ativação de auto-merge do fork ServerVpss/hermes-agent, o conector GitHub direto falhou porque allow_auto_merge estava desativado e o MCP CentralDark não expunha mutação de repo settings. A missão continuou por rota autorizada existente: CLI gh em terminal. O comando PATCH ativou allow_auto_merge=true e o PR #1 foi integrado; depois houve readback do estado e do merge commit.
+- **Aprendizado:** Toda mutação material deve fechar um microloop FEEDBACK + READBACK: executar uma vez, capturar retorno imediato/exit/result como feedback, e reler o estado por fonte independente ou consulta posterior como readback. Falha de uma rota é local: NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE. PASS só após efeito observado + readback. Para GitHub: repo setting mutation -> repo readback -> PR mutation -> PR/base SHA readback. REUSE_BEFORE_CREATE + KAIZEN: preferir CLI/tool existente antes de criar capability paralela.
+
+### 230. Browser + Desktop Commander em paralelo para contexto visual e runtime
+- **Categoria:** regra
+- **Data:** 2026-11-13
+- **Contexto:** Em operações do Cockpit e interfaces já abertas, Browser e Desktop Commander têm capacidades complementares. Browser lê a aba e o estado visual/DOM disponível; Desktop Commander mede filesystem, Git, processo, serviço e terminal no host real.
+- **Aprendizado:** Usar fan-out somente de leitura: Browser list_tabs/get_tab_context em paralelo com Desktop Commander read_file/git/process/runtime. Fundir por TARGET_ID/owner, executar uma única ação autorizada, e fechar com readback paralelo da mesma aba + estado operacional. BROWSER_VISIBLE != RUNTIME_PROVEN; COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN; ONE_WRITER_PER_RESOURCE continua obrigatório.

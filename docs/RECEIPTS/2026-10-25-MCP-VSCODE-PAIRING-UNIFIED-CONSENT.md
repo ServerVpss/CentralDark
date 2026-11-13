@@ -49,3 +49,25 @@ Prova local de codigo e integracao. COMMIT != CI_PASS != DEPLOYED != PAREADO. A 
 
 **Próximo passo:** reconciliar o checkout local com main sem apagar trabalho alheio; em janela autorizada, recarregar somente centraldark-native-mcp-http.service e fazer pareamento novo, com confirmação humana, status, heartbeat e tools/list autenticado. DOC != SERVIÇO RECARREGADO != DISPOSITIVO PAREADO.
 <!-- /CENTRALDARK_NEIGHBOR_ROOT_CAUSE_REPAIR_20261109 -->
+
+<!-- HISTORICO_CONFIRMAR_CODIGO_20261108 -->
+## Apresentação da confirmação
+
+@code_ref: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@last_updated: 2026-11-08T22:47:36Z
+
+Quando o servidor já entrega o código, a confirmação reutiliza o painel dourado do acesso do Cockpit. A página destaca o código e o botão de confirmação. O formulário continua enviando o identificador, o nonce e o código ao mesmo endpoint. Os estados de digitação, login, erro e sucesso continuam disponíveis.
+<!-- /HISTORICO_CONFIRMAR_CODIGO_20261108 -->
+
+<!-- COSTURA_VM_DEVICE_PAIRING_20261112 -->
+## 12/11/2026 ? COSTURA: identidade de dono e revogacao do proprio dispositivo
+
+@code_ref: apps/modulos/mcp/src/device-pairing.js
+@code_ref: apps/modulos/mcp/dist/device-pairing.js
+@code_ref: apps/modulos/mcp/tests/device-pairing.test.mjs
+@last_updated: 2026-11-12T22:14:42Z
+
+O checkout VMware continha alteracoes locais uteis nao publicadas: ownerUserId opcional na aprovacao do dispositivo, persistencia de owner_user_id e revokeSelf autenticado pelo token do proprio dispositivo na rota /device/devices/self/revoke. Preservados no owner existente, incluindo o espelho dist e a contraprova de token incorreto, rotacao, revogacao e heartbeat.
+
+Prova local VMware: node --check nos tres arquivos e node --test tests/device-pairing.test.mjs com 11/11 PASS. A publicacao de fonte nao comprova consumo do servico, login Supabase nem tools/list autenticado. SOURCE_ONLY; RUNTIME=UNKNOWN; NEXT_CURSOR=validar integracao no consumer e pareamento autorizado sem reiniciar servicos por este commit.
+<!-- /COSTURA_VM_DEVICE_PAIRING_20261112 -->
