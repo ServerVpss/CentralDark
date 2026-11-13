@@ -153,7 +153,7 @@ export function StatusPanel() {
   const screenpipeSaude: Estado = fresco && d?.screenpipeHttp === 200 ? "PASS" : screen;
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: d?.casaSiteFonte ?? "Casa · site local · fonte não medida", icon: House },
-    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "Main · GitHub principal consultado agora.", icon: Github },
+    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: d?.fonte ?? "Main · fonte não medida", icon: Github },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: d?.apiHealthFonte ?? "Host atual · API /health · fonte não medida", icon: Activity },
     { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: d?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida", icon: GitBranch },
     { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Host atual · Omni Router consultado agora.", icon: Cpu },

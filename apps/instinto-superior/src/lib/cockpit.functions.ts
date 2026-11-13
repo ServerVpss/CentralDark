@@ -438,12 +438,47 @@ async function medirActions() {
 }
 
 async function medirGithub() {
+  // Fonte primária no runtime: o próprio repo materializado. Isso reutiliza o
+  // acesso ao filesystem já concedido ao processo e não exige exportar token.
+  try {
+    const [{ execFile: execFileCallback }, { promisify }] = await Promise.all([
+      import("node:child_process"),
+      import("node:util"),
+    ]);
+    const execFile = promisify(execFileCallback);
+    const opcoes = { timeout: 6_500, windowsHide: true, encoding: "utf8" as const, maxBuffer: 1024 * 1024 };
+    const { stdout: rootRaw } = await execFile("git", ["rev-parse", "--show-toplevel"], opcoes);
+    const root = rootRaw.trim();
+    const { stdout: originRaw } = await execFile("git", ["-C", root, "config", "--get", "remote.origin.url"], opcoes);
+    if (/(?:^|[:/])ServerVpss\/CentralDark(?:\.git)?$/i.test(originRaw.trim())) {
+      const { stdout: logRaw } = await execFile("git", [
+        "-C", root,
+        "log", "-4",
+        "--format=%H%x1f%s%x1f%cI",
+        "origin/main",
+      ], opcoes);
+      const commits = logRaw.trim().split(/\r?\n/).filter(Boolean).map((linha) => {
+        const [sha = "", mensagem = "Sem mensagem", data = ""] = linha.split("\x1f");
+        return { sha, mensagem, data };
+      }).filter((commit) => /^[a-f0-9]{40}$/.test(commit.sha));
+      if (commits[0]) {
+        return {
+          estado: "PASS" as Estado,
+          commits,
+          fonte: "Filesystem do runtime · repo canônico · origin/main materializado",
+        };
+      }
+    }
+  } catch {
+    // Sem repo local canônico: seguir para a leitura GitHub já existente.
+  }
+
   const acesso = acessoGitHub();
   if (!acesso) {
     return {
       estado: "AUTH_REQUIRED" as Estado,
       commits: [] as CommitCentralDark[],
-      fonte: "GitHub sem credencial de leitura",
+      fonte: "Repo local canônico indisponível e GitHub sem credencial de leitura",
     };
   }
 
