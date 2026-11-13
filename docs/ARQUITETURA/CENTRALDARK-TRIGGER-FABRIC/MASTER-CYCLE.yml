@@ -61,10 +61,42 @@ current_delivery_policy:
   vps_offline_blocks_repository_edit: false
   ssh_vps_only_when_reachable_and_authorized: true
   vps_unreachable_requires: REPORT_RUNTIME_READBACK_PENDING_WITHOUT_WAITING
-  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RECEIPT]
+  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RESOLVE_ACTIVE_TRACE_DESTINATION, RECEIPT_OR_HUD_LEDGER_WRITE_SAME_CYCLE, LEDGER_READBACK, RECEIPT]
   active_pr_collision: RECONCILE_OWNER_AND_SCOPE_BEFORE_WRITE
   material_failures: DO_NOT_CLAIM_PASS_OR_FIXED_POINT
   no_new_branch_or_workflow_by_default: true
+
+direct_main_trace_completion_gate:
+  owner: .agents/skills/centraldark-operational-method/SKILL.md
+  fiscal_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md
+  fiscal_executor: scripts/trigger-fabric/rastro_fiscal.py
+  trigger_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  hud_owner: docs/HUD/README.md
+  write_cycle:
+    - DIRECT_MAIN_MATERIAL_WRITE
+    - COMMIT_REMOTE_PROVEN
+    - MAIN_READBACK
+    - RESOLVE_ACTIVE_TRACE_DESTINATION
+    - RECORD_COMMIT_DELTA_PROOF
+    - LEDGER_READBACK
+    - MISSION_STATE_READY_FOR_HUD
+    - CURRENT_OR_FIXED_POINT
+  complete_requires:
+    - COMMIT_SHA_PATH_LINK_READBACK
+    - ACTIVE_LEDGER_CURRENT
+    - COMPLETE_MATERIAL_COMMIT_CHAIN
+    - LEDGER_READBACK
+    - NEXT_CURSOR_IF_NOT_FIXED_POINT
+  on_trace_failure:
+    mutation_replay: FORBIDDEN
+    preserve_existing_commit: true
+    mode: TRACE_RECOVERY
+    status_until_repaired: PARTIAL_OR_BLOCKED
+  invariants:
+    COMMIT_PROVEN_IS_NOT_TRACE_COMPLETE: true
+    DIRECT_MAIN_COMMIT_IS_NOT_PR_BRANCH_COMMIT: true
+    HISTORICAL_PR_NUMBER_IS_NOT_ACTIVE_LEDGER_IDENTITY: true
+    RETURN_BEFORE_LEDGER_READBACK_IS_METHOD_FAILURE: true
 
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
