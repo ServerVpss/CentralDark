@@ -27,6 +27,26 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo H
 4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
 5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
 
+### Direct Main — rastro é parte do write
+
+Quando houver escrita material direta na `main`, o HUD/funil não é “documentação posterior”. Ele é o **fechamento rastreável da escrita**.
+
+```text
+COMMIT_REMOTE_PROVEN
+→ MAIN_READBACK
+→ RESOLVE_ACTIVE_FUNNEL_DYNAMICALLY
+→ RECORD_EACH_COMMIT_AS_COMMIT_DELTA_PROOF
+→ LEDGER_READBACK
+→ CURRENT_OR_FIXED_POINT
+```
+
+- se a missão produziu vários commits materiais, registrar todos na ordem causal e marcar o HEAD final;
+- `DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT`: o PR/funil pode ser apenas ledger/HUD e não conter os commits em sua branch;
+- número de PR histórico nunca é identidade do ledger; resolver pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`;
+- se o commit já existe e o ledger está faltando, entrar em `TRACE_RECOVERY`; corrigir somente o rastro, sem repetir a mutação;
+- resposta ao CHEFE antes do readback do ledger = `METHOD_FAILURE`;
+- sem ledger disponível, a escrita pode estar publicada, mas o estado da missão é `PARTIAL/BLOCKED`, nunca “fechado”.
+
 ### Fechamento ou publicação de CURRENT
 
 Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
