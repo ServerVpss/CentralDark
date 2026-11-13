@@ -12,7 +12,26 @@ const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${
 });
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+const syncFunctions = read("apps/instinto-superior/src/lib/sync.functions.ts");
 
+
+test("HUD vigente vem da main por marcador sem PR fixo nem segredo no browser", () => {
+  assert.ok(syncFunctions.includes('const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"'));
+  assert.ok(syncFunctions.includes('process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"]'));
+  assert.ok(syncFunctions.includes('pulls?state=open&per_page=100&page='));
+  assert.ok(syncFunctions.includes('execFileSync("gh", ["auth", "status"]'));
+  assert.ok(syncFunctions.includes('"GH_CLI"'));
+  assert.ok(syncFunctions.includes('"GITHUB_API"'));
+  assert.ok(syncFunctions.includes("readHudViaGithubApi"));
+  assert.ok(syncFunctions.includes("readHudViaGhCli"));
+  assert.ok(zone.includes('import { lerHudVigente } from "@/lib/sync.functions";'));
+  assert.ok(zone.includes('queryKey: ["centraldark", "hud-funil-current"]'));
+  assert.ok(zone.includes("CENTRALDARK_HUD_FUNNEL_CONTINUITY"));
+  assert.ok(zone.includes("GITHUB_TOKEN/GH_TOKEN do ambiente"));
+  assert.ok(zone.includes("Nenhum segredo é enviado ao navegador"));
+  assert.ok(!zone.includes("process.env"));
+  assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
+});
 test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   const n = [lineage.genesis, ...lineage.nodes];
   assert.equal(n[0].uid, "L000");
@@ -805,24 +824,23 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
   // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
   const navegacao = shell.split("const NAVEGACAO_PASTAS = [")[1]?.split("] as const;")[0] ?? "";
-  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
+  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,28);
   assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
   assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
   const icones = shell.split("const ICONES_NAVEGACAO = {")[1]?.split("} satisfies Record<")[0] ?? "";
   const chaves = [...icones.matchAll(/^  (?:"([^"]+)"|([a-z][a-z0-9]*)):/gm)].map((m) => m[1] || m[2]);
-  assert.equal(chaves.length, 27, "cada menu original deve ter ícone próprio");
-  assert.equal(new Set(chaves).size, 27, "não duplicar entradas do mapeamento");
+  assert.equal(chaves.length, 28, "cada menu original deve ter ícone próprio");
+  assert.equal(new Set(chaves).size, 28, "não duplicar entradas do mapeamento");
   const rotas = [...navegacao.matchAll(/\{ valor: "([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 27 rotas atuais");
+  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 28 rotas atuais");
   assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
-  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-data-[state=active]/menuitem:text-primary"));
-  assert.ok(shell.includes("group-hover/menuitem:-translate-y-0.5"));
-  assert.ok(shell.includes("group-hover/menuitem:scale-105"));
-  assert.ok(shell.includes("group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)]"));
-  assert.ok(shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-focus-within/menuitem:text-primary"));
-  assert.ok(shell.includes("motion-reduce:transform-none"));
+  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold"));
+  assert.ok(shell.includes("hover:bg-primary/10"));
+  assert.ok(shell.includes("focus-visible:bg-primary/10"));
+  assert.ok(shell.includes("data-[state=active]:bg-primary/15"));
+  assert.ok(shell.includes("data-[state=active]:text-primary"));
+  assert.ok(shell.includes("group-data-[collapsible=icon]:justify-center"));
+  assert.ok(shell.includes("motion-reduce:transition-none"));
   assert.ok(!shell.includes('className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0"'));
   const landing = read("apps/instinto-superior/src/routes/index.tsx");
   assert.ok(landing.includes('rounded-lg border border-border bg-surface-2'));

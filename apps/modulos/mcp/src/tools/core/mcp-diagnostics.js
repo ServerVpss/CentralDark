@@ -60,7 +60,7 @@ async function runtimeSnapshot() {
     }
     const routeNames = [...new Set(catalog.routes.map((route) => route.id))].sort();
     return {
-        names, exposedNames, routeNames,
+        names, exposedNames, routeNames, runtimeTools: tools,
         expectedRouteCount: 17,
         catalogScope: catalog.catalogScope,
         catalogFingerprint: catalog.catalogFingerprint,
@@ -144,7 +144,7 @@ export const mcpDiagnosticsTools = [
                     : [];
             const publicMissingFromRuntime = names.filter((name) => !publicTools.includes(name));
             const publicOnly = publicTools.filter((name) => !names.includes(name));
-            const publicRestrictedByPolicy = tools.filter((tool) =>
+            const publicRestrictedByPolicy = snapshot.runtimeTools.filter((tool) =>
                 tool.annotations?.destructiveHint === true && !publicTools.includes(tool.name)).map((tool) => tool.name);
             const publicMissingSafe = publicMissingFromRuntime.filter((name) => !publicRestrictedByPolicy.includes(name));
             const expectedMissingPublic = EXPECTED_SAFE_FULL_ADMIN.filter((name) => !publicTools.includes(name));

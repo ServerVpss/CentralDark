@@ -1,5 +1,5 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
-// @last_updated: 2026-11-01T19:58:27.552347+00:00 @implementado: divergencia e drift bloqueiam falso verde/publicacao cega; restante preservado.
+// @last_updated: 2026-11-13T04:39:00Z @implementado: Cockpit faz um fetch e delega checkout sujo ao planner 3-way fail-closed reutilizando FETCH_HEAD; nenhuma escolha ours/theirs.
 import { createServerFn } from "@tanstack/react-start";
 import { execSync, execFileSync } from "child_process";
 import path from "path";
@@ -32,6 +32,53 @@ const STATUS_FILE = path.join(CENTRALDARK_ROOT, ".auto-sync", "status.json");
 
 const VPS_SSH_HOST = "segredo-vpss";
 const VPS_REPO_PATH = "/root/CentralDark";
+const AUTO_SYNC_MASTER = path.join(CENTRALDARK_ROOT, "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
+
+type SafeResolverPlan = {
+  schema: string;
+  resolver: string;
+  state: string;
+  head: string;
+  origin_main: string;
+  merge_base: string;
+  ahead: number;
+  behind: number;
+  dirty_total: number;
+  dirty_tracked: number;
+  untracked: number;
+  remote_changed: number;
+  overlap: number;
+  auto_mergeable: number;
+  conflicts: number;
+  conflict_hunks: number;
+  conflict_paths: Array<{ path: string; reason: string; hunks?: number }>;
+  non_overlap_dirty: number;
+  fingerprint: string;
+  mutated_worktree: boolean;
+  dry_run: boolean;
+};
+
+function safeResolverPlan(): SafeResolverPlan | null {
+  if (!fs.existsSync(AUTO_SYNC_MASTER)) return null;
+  try {
+    const raw = execFileSync("python3", [
+      AUTO_SYNC_MASTER,
+      "--target", "main",
+      "--dry-run",
+      "--json",
+      "--no-fetch",
+      "--remote-ref", "FETCH_HEAD",
+      "--repo", CENTRALDARK_ROOT,
+    ], { encoding: "utf8", timeout: 60_000, maxBuffer: 2 * 1024 * 1024 });
+    const plan = JSON.parse(raw) as SafeResolverPlan;
+    if (plan.schema !== "centraldark.auto-sync-plan.v2" || plan.mutated_worktree !== false || plan.dry_run !== true) {
+      return null;
+    }
+    return plan;
+  } catch {
+    return null;
+  }
+}
 
 function ensureStatusDir() {
   const dir = path.dirname(STATUS_FILE);
@@ -134,7 +181,32 @@ function syncCasaMain(): SyncStatus {
   }
 
   if (git("status", "--porcelain")) {
-    const details = "Alterações locais sem escopo revisado; preservadas antes de merge/publicação";
+    const plan = safeResolverPlan();
+    if (plan) {
+      const details = [
+        `Resolver seguro ${plan.resolver}`,
+        `↓${plan.behind} ↑${plan.ahead}`,
+        `dirty=${plan.dirty_total}`,
+        `overlap=${plan.overlap}`,
+        `auto=${plan.auto_mergeable}`,
+        `conflitos=${plan.conflicts}`,
+      ].join(" · ");
+      const conflictFiles = plan.conflict_paths.map((entry) => entry.path).filter(Boolean).slice(0, 50);
+      writeStatus("conflict", details);
+      return {
+        timestamp: new Date().toISOString(),
+        status: "conflict",
+        target: "local",
+        human_readable: plan.conflicts > 0
+          ? `Reconciliação 3-way: ${plan.auto_mergeable} auto-mescláveis · ${plan.conflicts} conflitos reais`
+          : `Reconciliação 3-way pronta: ${plan.auto_mergeable} sobreposições sem conflito; aplicação ainda exige writer`,
+        details,
+        phase: plan.conflicts > 0 ? "Conflitos semânticos localizados" : "Plano seguro pronto",
+        progress: plan.conflicts > 0 ? 65 : 80,
+        files: conflictFiles.length ? conflictFiles : files,
+      };
+    }
+    const details = "Alterações locais preservadas; resolvedor seguro indisponível. Nenhum merge/publicação executado";
     writeStatus("conflict", details);
     return { timestamp: new Date().toISOString(), status: "conflict", target: "local", human_readable: details, details, files };
   }
@@ -409,17 +481,28 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
       }
 
       const failed = results.filter((r) => r.status === "failed" || r.status === "conflict");
-      const allOk = failed.length === 0;
       const summary = results.map((r) => `${r.target}: ${r.status}`).join(" · ");
 
-      writeStatus(allOk ? "success" : "failed", summary);
+      if (failed.length > 0) {
+        const blocker = failed[0];
+        const details = blocker.details ?? blocker.human_readable ?? summary;
+        // Preserva o diagnóstico causal do passo que bloqueou. O wrapper não
+        // rebaixa "conflict" para "failed" nem apaga o plano 3-way do Cockpit.
+        writeStatus(blocker.status, details);
+        return {
+          ...blocker,
+          timestamp: new Date().toISOString(),
+          target: blocker.target ?? target,
+          details,
+        };
+      }
+
+      writeStatus("success", summary);
       return {
         timestamp: new Date().toISOString(),
-        status: allOk ? "success" : "failed",
-         human_readable: allOk
-           ? (target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓")
-           : `Sync parcial: ${summary}`,
-        target: "all",
+        status: "success",
+        human_readable: target === "local" ? "Sync local: Casa → Main ✓" : "Sync completo: Casa → Main → VPS ✓",
+        target,
         details: summary,
       };
     } catch (error) {
@@ -432,6 +515,159 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
         target,
       };
     }
+  }
+);
+
+// #OBSERVACOES# @owner: cockpit-sync @doc_ref: docs/HUD/README.md
+// @last_updated: 2026-11-12T23:59:04.000Z
+// @implementado: HUD vigente resolvido em tempo real por marcador via GitHub API server-side, com fallback gh autenticado no host; token nunca sai para o navegador.
+// @pendente: build/readback visual do Cockpit publicado; MCP permanece fallback operacional do agente, não biblioteca embutida no browser.
+
+export type EstadoHudVigente = {
+  role: "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
+  status: "PASS" | "UNKNOWN" | "BLOCKED";
+  activePr: number | null;
+  title: string | null;
+  url: string | null;
+  headSha: string | null;
+  mainSha: string | null;
+  nextCursor: string | null;
+  source: "GITHUB_API" | "GH_CLI" | "UNAVAILABLE";
+  measuredAt: string;
+  candidates: number[];
+  detail: string;
+};
+
+const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
+const GITHUB_REPO = "ServerVpss/CentralDark";
+
+function parseHudNextCursor(body: string): string | null {
+  const matches = [...body.matchAll(/NEXT_CURSOR\s*[:=]\s*([^\n\r<]+)/gi)];
+  const value = matches.at(-1)?.[1]?.trim();
+  return value || null;
+}
+
+async function githubRequest(pathname: string, token?: string): Promise<unknown | null> {
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "CentralDark-Cockpit-HUD",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6500);
+  try {
+    const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/${pathname}`, {
+      headers, cache: "no-store", signal: controller.signal,
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function resolveHudFromPulls(
+  pulls: Array<Record<string, unknown>>,
+  mainSha: string | null,
+  source: EstadoHudVigente["source"],
+): EstadoHudVigente {
+  const candidates = pulls.filter(pr =>
+    typeof pr["body"] === "string" &&
+    (pr["body"] as string).includes(HUD_FUNNEL_MARKER) &&
+    pr["state"] === "open"
+  );
+  if (candidates.length !== 1) {
+    return {
+      role: HUD_FUNNEL_MARKER, status: candidates.length ? "BLOCKED" : "UNKNOWN",
+      activePr: null, title: null, url: null, headSha: null, mainSha,
+      nextCursor: null, source, measuredAt: new Date().toISOString(),
+      candidates: candidates.map(pr => Number(pr["number"])).filter(Number.isFinite),
+      detail: candidates.length
+        ? `Mais de um PR aberto carrega ${HUD_FUNNEL_MARKER}; cutover precisa ser reconciliado.`
+        : `Nenhum PR aberto com ${HUD_FUNNEL_MARKER} foi encontrado.`,
+    };
+  }
+  const pr = candidates[0]!;
+  const head = pr["head"];
+  const headSha = head && typeof head === "object" && typeof (head as { sha?: unknown }).sha === "string"
+    ? (head as { sha: string }).sha : null;
+  const body = typeof pr["body"] === "string" ? pr["body"] as string : "";
+  const number = typeof pr["number"] === "number" ? pr["number"] : Number(pr["number"]);
+  return {
+    role: HUD_FUNNEL_MARKER,
+    status: Number.isFinite(number) ? "PASS" : "UNKNOWN",
+    activePr: Number.isFinite(number) ? number : null,
+    title: typeof pr["title"] === "string" ? pr["title"] as string : null,
+    url: typeof pr["html_url"] === "string" ? pr["html_url"] as string : null,
+    headSha,
+    mainSha,
+    nextCursor: parseHudNextCursor(body),
+    source,
+    measuredAt: new Date().toISOString(),
+    candidates: Number.isFinite(number) ? [number] : [],
+    detail: "PR vigente resolvido pelo identificador lógico; número não é fixado no código.",
+  };
+}
+
+async function readHudViaGithubApi(): Promise<EstadoHudVigente | null> {
+  const token = process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"];
+  const main = await githubRequest("branches/main", token);
+  const mainSha = main && typeof main === "object"
+    && (main as Record<string, unknown>)["commit"]
+    && typeof (main as Record<string, unknown>)["commit"] === "object"
+    && typeof ((main as Record<string, unknown>)["commit"] as { sha?: unknown }).sha === "string"
+      ? ((main as Record<string, unknown>)["commit"] as { sha: string }).sha : null;
+
+  const pulls: Array<Record<string, unknown>> = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const raw = await githubRequest(`pulls?state=open&per_page=100&page=${page}`, token);
+    if (!Array.isArray(raw)) return null;
+    const batch = raw.filter(item => item && typeof item === "object") as Array<Record<string, unknown>>;
+    pulls.push(...batch);
+    if (batch.length < 100) break;
+  }
+  return resolveHudFromPulls(pulls, mainSha, "GITHUB_API");
+}
+
+function readHudViaGhCli(): EstadoHudVigente | null {
+  try {
+    execFileSync("gh", ["auth", "status"], { encoding: "utf8", timeout: 8000, stdio: ["ignore", "pipe", "pipe"] });
+    const mainRaw = execFileSync("gh", ["api", `repos/${GITHUB_REPO}/branches/main`], {
+      encoding: "utf8", timeout: 12000,
+    });
+    const main = JSON.parse(mainRaw) as { commit?: { sha?: string } };
+    const pullsRaw = execFileSync("gh", [
+      "api", "--paginate", `repos/${GITHUB_REPO}/pulls?state=open&per_page=100`,
+    ], { encoding: "utf8", timeout: 25000 });
+    // gh --paginate pode concatenar arrays JSON; --slurp produz uma lista de páginas de forma determinística.
+    const pagesRaw = execFileSync("gh", [
+      "api", "--paginate", "--slurp", `repos/${GITHUB_REPO}/pulls?state=open&per_page=100`,
+    ], { encoding: "utf8", timeout: 25000 });
+    void pullsRaw; // mantém a chamada simples compatível como contraprova do endpoint.
+    const pages = JSON.parse(pagesRaw) as unknown[];
+    const pulls = pages.flatMap(page => Array.isArray(page) ? page : [])
+      .filter(item => item && typeof item === "object") as Array<Record<string, unknown>>;
+    return resolveHudFromPulls(pulls, main.commit?.sha ?? null, "GH_CLI");
+  } catch {
+    return null;
+  }
+}
+
+export const lerHudVigente = createServerFn({ method: "GET" }).handler(
+  async (): Promise<EstadoHudVigente> => {
+    const api = await readHudViaGithubApi();
+    if (api) return api;
+    const gh = readHudViaGhCli();
+    if (gh) return gh;
+    return {
+      role: HUD_FUNNEL_MARKER, status: "UNKNOWN", activePr: null, title: null, url: null,
+      headSha: null, mainSha: null, nextCursor: null, source: "UNAVAILABLE",
+      measuredAt: new Date().toISOString(), candidates: [],
+      detail: "GitHub API e gh autenticado indisponíveis no servidor do Cockpit; MCP pode ser usado pelo agente como fallback operacional.",
+    };
   }
 );
 

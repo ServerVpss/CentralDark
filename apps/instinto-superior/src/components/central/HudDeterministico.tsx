@@ -8,6 +8,7 @@ import { consultarRegressaoGenesis, dispararRegressaoGenesis } from "@/lib/admin
 import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
 import type { EstadoCentralDark } from "@/lib/cockpit.functions";
 import { lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
+import { lerHudVigente } from "@/lib/sync.functions";
 import { GavetaForja } from "@/components/central/InfraestruturaSistema";
 import hudMigrationSnapshot from "@/data/hud-migration.snapshot.json";
 
@@ -144,6 +145,13 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
     refetchInterval: 60_000,
     retry: false,
   });
+  const lerHudCurrent = useServerFn(lerHudVigente);
+  const hudCurrent = useQuery({
+    queryKey: ["centraldark", "hud-funil-current"],
+    queryFn: () => lerHudCurrent(),
+    refetchInterval: 30_000,
+    retry: false,
+  });
   const [cursor, setCursor] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -244,6 +252,47 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           e Gênese L000. Migração de todos os sensores do HUD: em andamento.
         </p>
       </header>
+      {/* #OBSERVACOES# @owner: HudDeterministico @doc_ref: docs/HUD/README.md
+          @last_updated: 2026-11-12T23:59:04.000Z
+          CURRENT vem do servidor do Cockpit; credenciais e gh nunca entram no browser. */}
+      <section className="panel p-6" aria-labelledby="cd-hud-current-live">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs text-neon-blue">HUD VIGENTE · MAIN EM TEMPO REAL</p>
+            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 CENTRALDARK_HUD_FUNNEL_CONTINUITY</h3>
+          </div>
+          <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
+            {hudCurrent.data?.status ?? "UNKNOWN"}
+          </span>
+        </div>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            ["PR vigente", hudCurrent.data?.activePr ? `#${hudCurrent.data.activePr}` : "UNKNOWN"],
+            ["Fonte", hudCurrent.data?.source ?? "UNAVAILABLE"],
+            ["main SHA", hudCurrent.data?.mainSha?.slice(0, 12) ?? "UNKNOWN"],
+            ["PR HEAD", hudCurrent.data?.headSha?.slice(0, 12) ?? "UNKNOWN"],
+            ["Medição", hudCurrent.data?.measuredAt ?? "UNKNOWN"],
+            ["NEXT_CURSOR", hudCurrent.data?.nextCursor ?? "UNKNOWN"],
+          ] as const).map(([rotulo, valor]) => (
+            <div key={rotulo} className="rounded-md border border-border p-3">
+              <dt className="text-xs font-semibold">{rotulo}</dt>
+              <dd className="mt-1 break-words font-mono text-xs">{valor}</dd>
+            </div>
+          ))}
+        </dl>
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          {hudCurrent.data?.url ? (
+            <a href={hudCurrent.data.url} target="_blank" rel="noreferrer" className="underline">
+              Abrir PR vigente
+            </a>
+          ) : null}
+          <span>{hudCurrent.data?.detail ?? "GitHub CURRENT ainda não medido."}</span>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Consulta server-side: GitHub API com GITHUB_TOKEN/GH_TOKEN do ambiente; fallback para gh autenticado no host.
+          MCP permanece fallback operacional do agente quando o servidor não consegue consultar. Nenhum segredo é enviado ao navegador.
+        </p>
+      </section>
       {/* Incremento 2026-10-16: ingress observável, sem atribuir sessão por adivinhação.
           Contrato: UNIVERSAL-ENGINE-METHOD.yml#sol_chat_entrypoint_handoff_2026_10_16
           O chat é entrada nesta missão; a interface só exibe fatos do snapshot real. */}

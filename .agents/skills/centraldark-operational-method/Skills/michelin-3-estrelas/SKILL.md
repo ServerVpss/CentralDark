@@ -44,6 +44,21 @@ Se delegar para Hermes, carregar também `../../../references/HERMES-KANBAN-RECE
 **FORJA_DISCOS:** K patrimônio; F temporários; C Windows e exceções reais, mas a intenção define o workspace da missão.
 **AGENTES:** reutilizar Hermes original, não recriar agentes. **REALIDADE_JUIZ:** UNKNOWN não é PASS, e a aparência não prova resultado.
 
+## 🎯 Target Lock transversal — coordenadas lógica, relativa e absoluta
+
+Antes das três estrelas, resolver o alvo pelo contrato da Skill Mãe:
+
+`TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → TARGET_MATCH`.
+
+- Persistência usa `TARGET_ID` e caminho relativo do owner.
+- Caminho absoluto, PID, handle e RuntimeId são resolvidos no host/sessão atual e não viram constantes canônicas.
+- ⭐ Construir só passa o preflight com `TARGET_MATCH=PASS`.
+- ⭐⭐ Integrar deve agir no mesmo `TARGET_ID`; trocar host/path/PID silenciosamente invalida a continuidade.
+- ⭐⭐⭐ Provar remede o alvo e contraprova vizinhos; `ACTION_SENT != EFFECT_PROVED`.
+- Em arquivos: provar que path relativo + raiz atual resolvem o absoluto esperado.
+- Em UI: provar janela/processo/controle atual; PID é efêmero e deve ser redescoberto após mudança de sessão.
+- Quando houver operação visual, o lock Michelin inclui `MONITOR_MATCH + OVERLAY_MARK + CUA_CURSOR`: ⭐ localizar e travar alvo/monitor; ⭐⭐ integrar overlay + cursor virtual na mesma tela e executar uma ação única; ⭐⭐⭐ provar o efeito por readback/contraprova independente. Overlay em monitor errado, cursor em alvo divergente ou `CUA_CALL_OK` sem efeito observado impedem a terceira estrela.
+
 ## ⭐ Primeira estrela: CONSTRUIR
 
 1. Extrair intenção, alvo, workspace variável, ambiente, limitações e critério de aceite.
@@ -58,6 +73,10 @@ Se delegar para Hermes, carregar também `../../../references/HERMES-KANBAN-RECE
 3. Ler ID do cartão, `kanban show`, `kanban runs` e logs. `READY`, `RUNNING` e `DONE` são estados diferentes.
 4. Se falhar, investigar causa, corrigir menor componente e retestar o **mesmo escopo**; não criar mecanismo paralelo.
 5. Para software, adicionar testes e integração apropriados; para arquivos simples, prova do efeito no disco é a integração proporcional.
+
+## ♻️ Recovery Michelin — ação sem efeito não perde a missão
+
+Se a ação visual não produzir efeito comprovado, não remover estrelas por impulso nem repetir o clique. Preservar o último verde e aplicar o Recovery Ladder 10×1 do Hermes Visual: ⭐ localizar hipótese/prova discriminante; ⭐⭐ integrar a menor recuperação segura; ⭐⭐⭐ somente depois do readback/contraprova. `10_HYPOTHESES != 10_RETRIES`; retry idempotente da mesma ação é no máximo um por fingerprint invariável e apenas após evidência nova de actionability. Sem causa suficiente: `BLOCKED_WITH_CURSOR`, não abandono nem falso PASS.
 
 ## ⭐⭐⭐ Terceira estrela: PROVAR
 
