@@ -722,7 +722,35 @@ check_absent('CENTRALDARK_AI_BOOT.yaml',[
 check('AGENTS.md',['#ACORDAR','!CALIBRAR','REALITY=JUDGE'])
 check('docs/CONSCIENCIA/00-PORTA-DE-ENTRADA-IA.md',['#ACORDAR + !CALIBRAR + !MULTIBUSSOLA','MESMO_CONTRATO=SIM'])
 check('docs/CONSCIENCIA/MULTIBUSSOLA.md',['!MULTIBUSSOLA','REALITY_IS_JUDGE=true','BOTTOM-UP','ROUND-TRIP'])
-check('.agents/skills/meta-lupa/SKILL.md',['# META LUPA','FALSO_VERDE_BLOQUEADO=SIM'])
+check('.agents/skills/meta-lupa/SKILL.md',[
+ '# META LUPA',
+ 'FALSO_VERDE_BLOQUEADO=SIM',
+ 'Variantes dentro das três temperaturas',
+ 'MEDIA_RECOVERY_VISUAL',
+ 'QUENTE_RECURRENCIA_ADVERSARIAL',
+], classification='META_LUPA_TEMPERATURE_VARIANT_CONTRACT')
+check('.agents/skills/meta-lupa/scripts/meta_lupa.py',[
+ 'def select_mode(data: dict)',
+ 'def select_variant(data: dict',
+ '"variant_used": select_variant',
+ '"VISUAL_ACTION_NO_EFFECT"',
+ '"RECOVERY_RECURRENT"',
+], classification='META_LUPA_EXECUTABLE_VARIANT_CLASSIFIER')
+check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
+ 'def classify_visual_recovery(observation: dict)',
+ '"H01_STALE_RUNTIME_TARGET"',
+ '"H10_SURFACE_SESSION_CHANGED"',
+ '"MEDIA_RECOVERY_VISUAL"',
+ '"retry_frozen": True',
+ '"same_action_retry_budget": 1',
+], classification='VISUAL_RECOVERY_H01_H10_EXECUTABLE_CLASSIFIER')
+check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MEGAZORD-CENTRALDARK.yml',[
+ 'visual_recovery_classification:',
+ 'H01_STALE_RUNTIME_TARGET',
+ 'H10_SURFACE_SESSION_CHANGED',
+ 'ten_hypotheses_are_not_ten_retries: true',
+ 'recurrent_variant: QUENTE_RECURRENCIA_ADVERSARIAL',
+], classification='MEGAZORD_VISUAL_RECOVERY_META_LUPA_BINDING')
 check('docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md',[
  'PAPAGAIO_MODE=OFF',
  'POMBO_MODE=CHECKSUM_ON',
