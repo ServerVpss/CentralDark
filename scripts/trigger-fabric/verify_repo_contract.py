@@ -764,6 +764,43 @@ check('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
 check_absent('apps/modulos/HERMES-CORE/plugins/centraldark-runtime-guard/__init__.py',[
  r'DEFAULT_REPO\s*=\s*Path\(["\']\/root\/CentralDark["\']\)',
 ], classification='NO_HARDCODED_CANONICAL_REPO_ROOT')
+check('docs/agente/elite-mapper/config.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('docs/CONSCIENCIA/agente/elite-mapper/config.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('infra/guardiao/guardiao.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('apps/modulos/elite-gateway/scripts/pivete_routes.py',[
+ 'def _resolve_repo_root() -> Path:',
+ 'CENTRALDARK_REPO_ROOT',
+ 'LEIA-ME-IA.md',
+ 'CENTRALDARK_REPO_ROOT_NOT_FOUND',
+], classification='PORTABLE_REPO_ROOT_EXECUTABLES')
+check('scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh',[
+ 'CENTRALDARK_RUNTIME_ROOT',
+ 'ROOT%%/_worktrees/*',
+ 'CENTRALDARK_SCRATCH_WORKTREE',
+], classification='PORTABLE_RUNTIME_ROOT_HOOK')
+check_absent('docs/agente/elite-mapper/config.py',[r'ROOT_DIR\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_MAPPER_ROOT')
+check_absent('docs/CONSCIENCIA/agente/elite-mapper/config.py',[r'ROOT_DIR\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_MAPPER_ROOT')
+check_absent('infra/guardiao/guardiao.py',[r'RAIZ\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_GUARDIAO_ROOT')
+check_absent('apps/modulos/elite-gateway/scripts/pivete_routes.py',[r'REPO_ROOT\s*=\s*Path\(["\']\/root\/CentralDark["\']\)'],classification='NO_HARDCODED_ELITE_GATEWAY_ROOT')
+check_absent('scripts/hooks/pre-push.main-pinned-runtime-fast-path.sh',[
+ r'RUNTIME_ROOT=["\']\/root\/CentralDark["\']',
+ r'CANONICAL_SCRATCH_WORKTREE=["\']\/root\/CentralDark\/',
+],classification='NO_HARDCODED_RUNTIME_HOOK_ROOT')
 
 check('scripts/trigger-fabric/centraldark_full_trigger_boot.py',[
  'def classify_visual_recovery(observation: dict)',
