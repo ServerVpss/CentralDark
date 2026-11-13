@@ -742,7 +742,9 @@ def verify_text(text: str, repo: str, backend: Any) -> FiscalResult:
 
 
 # Reproduz fatos históricos de escrita e exclusão sem executar novas mutações.
-ACTIVE_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"\n\nREPLAY_SCHEMA = "centraldark.rastro-session-replay.v1"
+ACTIVE_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"
+
+REPLAY_SCHEMA = "centraldark.rastro-session-replay.v1"
 
 
 def verify_session_replay(receipt: dict[str, Any], repo: str, backend: Any) -> dict[str, Any]:
