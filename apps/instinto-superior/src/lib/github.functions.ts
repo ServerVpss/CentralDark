@@ -154,10 +154,9 @@ export const lerVariosArquivos = createServerFn({ method: "POST" })
  * @implementado Leitura administrativa do funil e comparação por SHA.
  * @pendente Leitura pelo Cockpit publicado.
  */
-const PR_FUNIL = 1977;
-const PR_ANTERIOR = 1562;
+const FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
 const githubRepo = "repos/ServerVpss/CentralDark";
-const rotasGitHub = /^(?:branches\/main|commits(?:\?sha=(?:main|[a-f0-9]{40})&per_page=(?:4|20))|commits\/[a-f0-9]{40}\/check-runs\?per_page=100|pulls\/\d+|compare\/[a-f0-9]{7,40}\.\.\.[a-f0-9]{7,40}(?:\?per_page=1)?)$/;
+const rotasGitHub = /^(?:branches\/main|commits(?:\?sha=(?:main|[a-f0-9]{40})&per_page=(?:4|20))|commits\/[a-f0-9]{40}\/check-runs\?per_page=100|pulls(?:\?state=open&per_page=100&page=\d+|\/\d+)|compare\/[a-f0-9]{7,40}\.\.\.[a-f0-9]{7,40}(?:\?per_page=1)?)$/;
 
 /** Rota fixa e somente leitura. O gh usa a sessão já autorizada no host, sem exportar o token. */
 export async function consultarGitHubCentralDark(caminho: string, signal = AbortSignal.timeout(6500)) {
@@ -237,6 +236,11 @@ const gitPull = z.object({
   user: z.object({ login: z.string() }),
   head: z.object({ sha: gitSha, ref: z.string() }),
 });
+const gitPullListItem = z.object({
+  number: z.number(),
+  body: z.string().nullable(),
+});
+
 const gitCompare = z.object({
   ahead_by: z.number(),
   behind_by: z.number(),
@@ -258,11 +262,21 @@ export const lerReconciliacaoGitHub = createServerFn({ method: "GET" })
       if (resultado.status !== 200) throw new Error(`GitHub respondeu ${resultado.status}.`);
       return resultado.dados;
     };
-    const [atual, anterior, main] = await Promise.all([
-      ler(`pulls/${PR_FUNIL}`).then((data) => gitPull.parse(data)),
-      ler(`pulls/${PR_ANTERIOR}`).then((data) => gitPull.parse(data)).catch(() => null),
-      ler("branches/main").then((data) => z.object({ commit: z.object({ sha: gitSha }) }).parse(data).commit.sha),
-    ]);
+    const candidatos: Array<z.infer<typeof gitPullListItem>> = [];
+    for (let page = 1; page <= 10; page += 1) {
+      const pagina = await ler(`pulls?state=open&per_page=100&page=${page}`);
+      const itens = z.array(gitPullListItem).parse(pagina);
+      candidatos.push(...itens.filter((pr) => pr.body?.includes(FUNNEL_MARKER)));
+      if (itens.length < 100) break;
+    }
+    if (candidatos.length !== 1) {
+      throw new Error(`ACTIVE_FUNNEL_PR=UNKNOWN: esperava 1 PR aberto com ${FUNNEL_MARKER}; encontrei ${candidatos.length}.`);
+    }
+    const atual = await ler(`pulls/${candidatos[0]!.number}`).then((data) => gitPull.parse(data));
+    const main = await ler("branches/main").then((data) =>
+      z.object({ commit: z.object({ sha: gitSha }) }).parse(data).commit.sha,
+    );
+    const anterior = null;
     const [divergencia, commits] = await Promise.all([
       ler(`compare/${main}...${atual.head.sha}?per_page=1`).then((data) => gitCompare.parse(data)).catch(() => null),
       ler(`commits?sha=${atual.head.sha}&per_page=20`).then((data) => gitCommits.parse(data).map(({ sha, commit }) => ({
