@@ -37,7 +37,7 @@ six==1.17.0
 soupsieve==2.9
 sympy==1.14.0
 typing_extensions==4.15.0
-urllib3==2.7.0
+urllib3==2.8.0
 xlsxwriter==3.2.9
 # Omni Router FastAPI runtime: required in Casa and VPS (missing from prior manifest).
 fastapi>=0.115,<1
