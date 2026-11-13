@@ -57,11 +57,11 @@ COMMIT_REMOTE_PROVEN
 - contraprova do candidato: `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0`; após o teste temporário a VM restaurou exatamente `sync=834c8e65...` e `UI=8e2bb8a0...` antes do consumo da main.
 - consumo VM comprovado: `origin/main=0ec29ea131a17671fe5e8748887f2982fc0d4d10`, `sync=3b47236d...`, `UI=8669d560...`, serviço `centraldark-instinto-superior.service=active`, PID `1693207`, HTTP `8080=200`.
 - HUD visual comprovado: bloqueio `VPS_DIRTY_SCOPE_BLOCKED` aparece como preventivo/âmbar, `exit_code=4`, `runtime_mode=local`, trabalho local preservado e histórico separado de CURRENT.
-- Casa: `AutoSyncButton.tsx=8669d560...` (igual à main); `sync.functions.ts=86468564...` = main + residual explícito de `consultarGitHubCentralDark` em `lerEstadoOficina`. `git diff --check=0`; sintaxe TS do candidato = `0 erros`. Teste Node local = `UNAVAILABLE` porque o pacote `typescript` não está instalado na Casa; isso não é `FAIL` do código.
+- Casa reconciliada: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9` e `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`, ambos idênticos à `main` e à VM. O residual intermediário `consultarGitHubCentralDark` foi removido somente deste owner; sua fonte permanece preservada em `github.functions.ts`. Harness Node local segue `UNAVAILABLE` por ausência do pacote `typescript`, mas a mesma fonte canônica passou `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0` na VM.
 - `.env` permaneceu fora do Git e não foi copiado entre ambientes. Casa=46 chaves; VM=48 chaves; valores não foram lidos/expostos.
 - status combinados do GitHub no HEAD material retornaram lista vazia: `CI=UNKNOWN`, não verde.
-- `FIXED_POINT=false`: main e VM fecharam o owner canônico; a Casa preserva um residual GitHub conhecido que exige reconciliação própria antes de declarar os três conteúdos idênticos.
-- `NEXT_CURSOR=RECONCILE_CASA_GITHUB_HELPER_RESIDUAL_WITH_CANONICAL_OWNER`.
+- `FIXED_POINT=true` para o escopo `cockpit-sync`: Casa, VM e `main` possuem os mesmos blobs canônicos de `sync.functions.ts` e `AutoSyncButton.tsx`; serviço VM ativo e HUD visual relido. Isso não declara o repositório inteiro sincronizado.
+- `NEXT_CURSOR=FIXED_POINT_COCKPIT_SYNC → PRESERVE_GITHUB_FUNCTIONS_OWNER_AS_SEPARATE_SCOPE`.
 
 
 ### Fechamento ou publicação de CURRENT
