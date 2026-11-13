@@ -57,6 +57,7 @@ Antes das três estrelas, resolver o alvo pelo contrato da Skill Mãe:
 - ⭐⭐⭐ Provar remede o alvo e contraprova vizinhos; `ACTION_SENT != EFFECT_PROVED`.
 - Em arquivos: provar que path relativo + raiz atual resolvem o absoluto esperado.
 - Em UI: provar janela/processo/controle atual; PID é efêmero e deve ser redescoberto após mudança de sessão.
+- Quando houver operação visual, o lock Michelin inclui `MONITOR_MATCH + OVERLAY_MARK + CUA_CURSOR`: ⭐ localizar e travar alvo/monitor; ⭐⭐ integrar overlay + cursor virtual na mesma tela e executar uma ação única; ⭐⭐⭐ provar o efeito por readback/contraprova independente. Overlay em monitor errado, cursor em alvo divergente ou `CUA_CALL_OK` sem efeito observado impedem a terceira estrela.
 
 ## ⭐ Primeira estrela: CONSTRUIR
 
