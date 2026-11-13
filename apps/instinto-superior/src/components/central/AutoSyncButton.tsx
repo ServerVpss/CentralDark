@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { AlertCircle, Clock, Zap } from 'lucide-react'
 import { useServerFn } from '@tanstack/react-start'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { lerEstadoCentralDark } from '@/lib/cockpit.functions'
 import { lerStatusSync, executarSync } from '@/lib/sync.functions'
 import { lerRastreadorCasa, type EstadoRastreadorCasa } from '@/lib/sync.functions'
 import { solicitarPromocaoSegura } from '@/lib/admin.functions'
@@ -38,14 +39,14 @@ function AnimatedDoneIcon({ size = 20, className = '', label }: { size?: number;
 
 async function prepararAutomacao(modo: 'main-only' | 'full', executarSync: SyncRunner) {
   const target = modo === 'full' ? 'all' : 'local';
-  const escopo = modo === 'full' ? 'Casa/Main/VPS' : 'Casa/Main';
+  const escopo = modo === 'full' ? 'Casa/Main/VPS Runtime' : 'Casa/Main';
   const sync = await executarSync({ data: { target } });
   return { sync, escopo };
 }
 
 /**
  * AutoSyncButton — Cockpit Control for Bidirectional Sync + Micro-Deploy
- * Casa <-> Main <-> VPS (continuous, single-writer Hermes)
+ * Casa <-> Main <-> VPS_RUNTIME (VMware hoje; VPS física futura; mesmo contrato)
  * Rota: sync.functions.ts (createServerFn) -> AUTO-SYNC-MASTER.py -> .auto-sync/status.json
  */
 export const AutoSyncButton: React.FC = () => {
@@ -60,12 +61,23 @@ export const AutoSyncButton: React.FC = () => {
   const [trackerError, setTrackerError] = useState(false)
   const [syncProgress, setSyncProgress] = useState({ value: 0, label: 'Preparando sincronização...' })
   const [microDeployMode, setMicroDeployMode] = useState<'main-only' | 'full'>('main-only')
+  const [hidratado, setHidratado] = useState(false)
 
   const getStatus = useServerFn(lerStatusSync)
   const runSync = useServerFn(executarSync)
   const readTracker = useServerFn(lerRastreadorCasa)
+  const readEstadoVivo = useServerFn(lerEstadoCentralDark)
   const dispatchPromotion = useServerFn(solicitarPromocaoSegura)
   const queryClient = useQueryClient()
+  // Reutiliza a MESMA consulta do Estado atual do sistema; não cria outro sensor ou executor.
+  const estadoVivo = useQuery({
+    queryKey: ['centraldark', 'estado-vivo'],
+    queryFn: () => readEstadoVivo(),
+    refetchInterval: 15_000,
+    refetchOnWindowFocus: true,
+    retry: false,
+  })
+  useEffect(() => { setHidratado(true) }, [])
 
   // Fetch status on mount + poll every 30s
   useEffect(() => {
@@ -158,7 +170,9 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusIcon = () => {
     switch (syncStatus.status) {
-      case 'success': return <AnimatedDoneIcon className="w-5 h-5 text-green-500" label="Sincronização confirmada" />
+      case 'success': return todosMesmoCommit === true
+        ? <AnimatedDoneIcon className="w-5 h-5 text-green-500" label="Mesmo commit atual confirmado nos três ambientes" />
+        : <Clock className="w-5 h-5 text-amber-500" aria-label="Ação anterior concluída; sincronização atual ainda não comprovada" />
       case 'syncing': return <SyncLoopIcon autoSyncEnabled isFetching size={20} />
       case 'failed': return <AlertCircle className="w-5 h-5 text-red-500" />
       case 'conflict': return <AlertCircle className="w-5 h-5 text-yellow-500" />
@@ -168,13 +182,32 @@ export const AutoSyncButton: React.FC = () => {
 
   const getStatusColor = () => {
     switch (syncStatus.status) {
-      case 'success': return 'bg-emerald-500/10 border-emerald-500/40'
+      case 'success': return todosMesmoCommit === true ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-amber-500/10 border-amber-500/40'
       case 'syncing': return 'bg-sky-500/10 border-sky-500/40'
       case 'failed': return 'bg-red-500/10 border-red-500/40'
       case 'conflict': return 'bg-amber-500/10 border-amber-500/40'
       default: return 'bg-muted/30 border-border'
     }
   }
+
+  // Os SHAs são leituras do Git atual. Sucesso anterior do botão NÃO prova sincronização atual.
+  // Sem readback fresco da Casa e da VMware, o estado é desconhecido, nunca SIM.
+  const atual = hidratado && !estadoVivo.isError && estadoVivo.data
+    && Date.now() - estadoVivo.dataUpdatedAt < 45_000 ? estadoVivo.data : null
+  const mainSha = atual?.mainSha ?? null
+  const vpsSha = atual?.vpsSha ?? null
+  const vpsMesmoCommit: boolean | null = mainSha && vpsSha ? mainSha === vpsSha : null
+  const dataTracker = trackerStatus?.at ? Date.parse(trackerStatus.at) : Number.NaN
+  const trackerEmDia = !trackerError && Number.isFinite(dataTracker)
+    && Date.now() - dataTracker >= 0 && Date.now() - dataTracker < 120_000
+  // Doctor mede o checkout do servidor do Cockpit; Linux não é a Casa Windows.
+  const casaMesmoCommit: boolean | null = trackerStatus?.hostOS === 'windows' && trackerEmDia
+    && !!mainSha && !!trackerStatus.head && trackerStatus.githubMain === mainSha
+    && trackerStatus.dirtyTracked !== null
+    ? trackerStatus.head === mainSha && trackerStatus.dirtyTracked === false : null
+  const todosMesmoCommit: boolean | null = casaMesmoCommit === false || vpsMesmoCommit === false
+    ? false : casaMesmoCommit === true && vpsMesmoCommit === true ? true : null
+  const rotulo = (igual: boolean | null) => igual === true ? 'SIM' : igual === false ? 'NÃO' : 'NÃO VERIFICADO'
 
   return (
     <div className="space-y-3">
@@ -183,8 +216,8 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
-               <p className="text-sm font-semibold text-foreground">Auto Sync: Casa / Main · VPS manual</p>
-              <p className="text-xs text-muted-foreground">{syncStatus.human_readable}</p>
+               <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VPS Runtime</p>
+              <p className="text-xs text-muted-foreground">Última tentativa: {syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
                 <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
                   {syncStatus.details}
@@ -200,11 +233,11 @@ export const AutoSyncButton: React.FC = () => {
             <CockpitActionButton hint="Main: consulta o remoto e compara os SHAs local e origin/main" onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
               Main
             </CockpitActionButton>
-            <CockpitActionButton hint="VPS: atualiza o checkout remoto por SSH com fast-forward; conflito bloqueia" onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
+            <CockpitActionButton hint="VPS Runtime: usa o Linux atual quando ele já é o repo canônico; só usa SSH quando o papel estiver remoto" onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
               VPS
             </CockpitActionButton>
             <SyncActionButton
-              label="Sincronizar Tudo"
+              label="Sincronizar Casa/Main"
                onClick={() => handleSync('local')}
               isFetching={isSyncing}
               autoSyncEnabled
@@ -215,6 +248,24 @@ export const AutoSyncButton: React.FC = () => {
             />
           </div>
         </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3" role="status" aria-live="polite" aria-label="Comparação atual de commits">
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">Casa Windows ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(casaMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{trackerStatus?.hostOS === 'windows' && trackerEmDia ? trackerStatus.head?.slice(0, 8) ?? 'sem SHA' : 'Casa sem leitura própria'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+          </div>
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">VPS Runtime (VMware atual) ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS runtime sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+          </div>
+          <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">Todos os commits iguais</span>
+            <p className="font-semibold">{rotulo(todosMesmoCommit)}</p>
+            <p className="text-[10px] text-muted-foreground">Não comprova deploy nem arquivos locais não enviados.</p>
+          </div>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">Triton: executa modelos de IA; não baixa nem sincroniza código do GitHub. Git e SSH são os responsáveis. Leituras da Forja Linux não substituem uma leitura da Casa Windows.</p>
         {isSyncing && (
           <div className="mt-3 rounded-md border border-white/10 bg-background/30 px-3 py-2" aria-live="polite">
             <div className="mb-1 flex items-center justify-between gap-3 text-[10px] text-muted-foreground">
@@ -230,10 +281,10 @@ export const AutoSyncButton: React.FC = () => {
           </div>
         )}
         {!isSyncing && syncStatus.status === 'success' && (
-          <div className="mt-3 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-[10px] text-emerald-200" aria-live="polite">
+          <div className="mt-3 rounded-md border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-[10px] text-amber-200" aria-live="polite">
             <div className="flex items-center gap-2">
-              <AnimatedDoneIcon size={14} className="h-3.5 w-3.5 text-emerald-300" />
-              <span className="font-semibold">{syncStatus.target === "main" || syncStatus.details?.includes("Casa já está em dia") ? "Main em dia · mesmo SHA confirmado" : "Sincronizado · mesmo SHA confirmado"}</span>
+              <Clock size={14} className="h-3.5 w-3.5 text-amber-300" />
+              <span className="font-semibold">Última execução concluída; código agora: {rotulo(todosMesmoCommit)}. A tentativa antiga não prova o estado atual.</span>
             </div>
             {syncStatus.files && syncStatus.files.length > 0 && (
               <div className="mt-1 truncate font-mono text-muted-foreground" title={syncStatus.files.join(' · ')}>
@@ -288,11 +339,11 @@ export const AutoSyncButton: React.FC = () => {
               onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
               disabled={isSyncing}
               aria-label="Escopo da automação"
-              title="Escolha se a pré-sincronização inclui somente Casa/Main ou também a VPS"
+              title="Escolha se a pré-sincronização inclui somente Casa/Main ou também o papel VPS Runtime"
               className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
             >
               <option value="main-only">Main Only · Casa/Main</option>
-              <option value="full">Full · Casa/VPS/Main</option>
+              <option value="full">Full · Casa/VPS Runtime/Main</option>
             </select>
 
             <CockpitActionButton hint="Primeiro sincroniza o escopo escolhido. Depois solicita o workflow canônico, que exige gates verdes e faz squash. Deploy só é confirmado por receipt." onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">

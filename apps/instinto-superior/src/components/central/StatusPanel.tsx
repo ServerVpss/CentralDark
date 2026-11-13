@@ -435,7 +435,7 @@ export function StatusPanel() {
 >>>>>>> origin/main
   const sinais = [
     { nome: "Casa / Site local", estado: d?.casaSite ?? unknown, detalhe: d?.casaSiteFonte ?? "Casa · site local · fonte não medida", icon: House },
-    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: "Main · GitHub principal consultado agora.", icon: Github },
+    { nome: "Código oficial", estado: d?.github ?? unknown, detalhe: d?.github === "PASS" && d.mainSha ? `${d.fonte} · main ${d.mainSha.slice(0, 8)}` : d?.fonte ?? "GitHub ainda não verificado", icon: Github },
     { nome: "API CentralDark", estado: d?.apiHealth ?? unknown, detalhe: d?.apiHealthFonte ?? "Host atual · API /health · fonte não medida", icon: Activity },
     { nome: "Grafo Vivo", estado: d?.grafoVivo ?? unknown, detalhe: d?.liveFabricFonte ?? "Host atual · Live Fabric · fonte não medida", icon: GitBranch },
     { nome: "Roteador", estado: d?.omniRouter ?? unknown, detalhe: "Host atual · Omni Router consultado agora.", icon: Cpu },
@@ -445,7 +445,7 @@ export function StatusPanel() {
 
   const rotas = [
     { id: "casa-site", owner: "Cockpit / host local", estado: d?.casaSite ?? unknown, fonte: d?.casaSiteFonte ?? "Casa/Site local · sem medição (padrão 8080)" },
-    { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: "GitHub API · main SHA" },
+    { id: "github-main", owner: "GitHub main", estado: d?.github ?? unknown, fonte: d?.fonte ?? "GitHub main · sem leitura atual" },
     { id: "vps-sha", owner: "Microdeploy VPS", estado: d?.deploy ?? unknown, fonte: "VPS SHA · comparação com main (não prova serviço)" },
     { id: "api-health", owner: "API CentralDark", estado: d?.apiHealth ?? unknown, fonte: "API /health · não prova todo o sistema" },
     { id: "screenpipe-casa", owner: "Screenpipe Casa", estado: d?.screenpipe ?? unknown, fonte: d?.screenpipeFonte ?? "Casa 3030/health" },
