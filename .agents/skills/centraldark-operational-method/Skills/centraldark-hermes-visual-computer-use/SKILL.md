@@ -143,6 +143,50 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 **Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sessão dele. Indicou Casa Agent/rota/autenticação e teste remoto real como pendências. Essas são declarações do próprio painel e não substituem medições independentes em cada ambiente.
 <!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
 
+<!-- CENTRALDARK_VISUAL_RECOVERY_LADDER_10X1_20261112 -->
+## Recovery Ladder visual 10×1 — falhou o clique, a missão continua
+
+**Princípio:** `ACTION_SENT != EFFECT_PROVEN`. Falha ou ausência de efeito não encerra a missão e também não autoriza retry cego. Preservar `LAST_GOOD_STATE + TARGET_ID + TARGET_FINGERPRINT + NEXT_CURSOR`; acionar FABLE LOOP em leitura para classificar a falha, escolher **uma hipótese discriminante**, medir, e somente então permitir ao CoT-ReAct/Hermes executar o menor próximo passo autorizado.
+
+**Contrato:** `10 hipóteses disponíveis != 10 retries`. Para fingerprint invariável, no máximo **um retry idempotente** da mesma ação após nova evidência de que o alvo voltou a estar acionável. Sem informação nova, não repetir.
+
+| ID | Hipótese observável | Prova discriminante | Retorno seguro |
+|---|---|---|---|
+| H01 | PID/HWND/RuntimeId ficou velho | reenumerar janela/processo/controle | reacquirir IDs atuais; preservar TARGET_ID |
+| H02 | janela mudou de monitor, posição, DPI ou retângulo | UIA + GetWindowRect + mapa atual de monitores | recalcular MONITOR_MATCH/CONTROL_BOUNDS e reposicionar overlay/Cua |
+| H03 | controle foi recriado/detached por rerender | nova árvore UIA/DOM e identidade do controle | reacquirir elemento; não usar ref antiga |
+| H04 | modal/overlay/tooltip está interceptando eventos | hit-test/ReceivesEvents + leitura visual | resolver/bloquear modal conforme autorização; depois reavaliar alvo |
+| H05 | controle ainda não está visível/estável/habilitado | Visible/Stable/Enabled/viewport | aguardar condição observável limitada e reread; sem force click |
+| H06 | controle exige scroll, hover ou foco prévio | bounds/viewport/focus state | trazer para viewport/focar de forma nativa e revalidar antes do clique |
+| H07 | Cua background não é suportado naquela superfície | retorno explícito `background_unavailable`/delivery | uma única tentativa foreground somente quando owner já autoriza e o alvo foi revalidado |
+| H08 | ação funcionou, mas o readback foi cedo demais | evento/estado assíncrono, loading, mudança tardia | esperar condição de pós-ação com timeout curto; **não clicar de novo** |
+| H09 | há controles duplicados/ambíguos | contagem + retângulos + role/control type | estreitar por parent/role/AutomationId/texto; se não convergir, BLOCKED |
+| H10 | sessão/aba/processo/conexão mudou ou morreu | fingerprint de superfície, processo, heartbeat/readback | recuperar **a mesma sessão** quando possível; reread → reacquire → refresh controlado; só depois failover |
+
+**Ladder operacional:**
+
+```text
+ACTION_WITHOUT_PROVEN_EFFECT
+→ FREEZE_RETRY
+→ SAVE LAST_GOOD_STATE / TARGET_ID / TARGET_FINGERPRINT / NEXT_CURSOR
+→ REREAD
+→ REACQUIRE_ELEMENTS + PID/HWND + MONITOR_MAP
+→ FABLE: CLASSIFY H01..H10
+→ RUN ONE DISCRIMINATING READ-ONLY PROBE
+→ evidence_new?
+   ├─ NO  → NEXT_HYPOTHESIS (sem repetir ação)
+   └─ YES → TARGET_MATCH + MONITOR_MATCH + ACTIONABILITY
+             ├─ PASS → ONE_IDEMPOTENT_RETRY_OR_RECOVERY_ACTION
+             └─ FAIL → NEXT_HYPOTHESIS
+→ READBACK + COUNTERPROOF
+→ PASS | BLOCKED_WITH_CURSOR | UNKNOWN_WITH_CURSOR
+```
+
+**Budget:** parar antes de 10 se uma hipótese for provada; 10 é catálogo máximo, não obrigação. Se o orçamento acabar sem causa suficiente, `BLOCKED_WITH_CURSOR` mantém o Goal ativo e retomável, sem abrir nova missão, janela, tab, driver ou executor. O próximo ciclo começa no último `NEXT_CURSOR`, não do zero.
+
+**Referências de método:** Playwright-style actionability (unicidade, visibilidade, estabilidade, recebe eventos, enabled) inspira os gates; o recovery ladder já existente no `centraldark-oracle-surface` fornece `REREAD → REACQUIRE_ELEMENTS → ONE_IDEMPOTENT_RETRY → REFRESH`; FABLE LOOP faz calibração read-only e CoT-ReAct executa somente quando há nova evidência/rota segura. Isso é integração de owners existentes, não um quarto loop.
+<!-- /CENTRALDARK_VISUAL_RECOVERY_LADDER_10X1_20261112 -->
+
 <!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
 ## Clique unico CentralDark: cursor virtual primeiro, rota mais rapida comprovada
 
