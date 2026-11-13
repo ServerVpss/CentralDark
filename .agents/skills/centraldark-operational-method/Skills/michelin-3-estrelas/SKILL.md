@@ -44,6 +44,20 @@ Se delegar para Hermes, carregar também `../../../references/HERMES-KANBAN-RECE
 **FORJA_DISCOS:** K patrimônio; F temporários; C Windows e exceções reais, mas a intenção define o workspace da missão.
 **AGENTES:** reutilizar Hermes original, não recriar agentes. **REALIDADE_JUIZ:** UNKNOWN não é PASS, e a aparência não prova resultado.
 
+## 🎯 Target Lock transversal — coordenadas lógica, relativa e absoluta
+
+Antes das três estrelas, resolver o alvo pelo contrato da Skill Mãe:
+
+`TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → TARGET_MATCH`.
+
+- Persistência usa `TARGET_ID` e caminho relativo do owner.
+- Caminho absoluto, PID, handle e RuntimeId são resolvidos no host/sessão atual e não viram constantes canônicas.
+- ⭐ Construir só passa o preflight com `TARGET_MATCH=PASS`.
+- ⭐⭐ Integrar deve agir no mesmo `TARGET_ID`; trocar host/path/PID silenciosamente invalida a continuidade.
+- ⭐⭐⭐ Provar remede o alvo e contraprova vizinhos; `ACTION_SENT != EFFECT_PROVED`.
+- Em arquivos: provar que path relativo + raiz atual resolvem o absoluto esperado.
+- Em UI: provar janela/processo/controle atual; PID é efêmero e deve ser redescoberto após mudança de sessão.
+
 ## ⭐ Primeira estrela: CONSTRUIR
 
 1. Extrair intenção, alvo, workspace variável, ambiente, limitações e critério de aceite.
