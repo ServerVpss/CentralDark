@@ -47,6 +47,35 @@ COMMIT_REMOTE_PROVEN
 - resposta ao CHEFE antes do readback do ledger = `METHOD_FAILURE`;
 - sem ledger disponível, a escrita pode estar publicada, mas o estado da missão é `PARTIAL/BLOCKED`, nunca “fechado”.
 
+
+<!-- CENTRALDARK_GITHUB_FUNNEL_DYNAMIC_RESOLUTION_20261113 -->
+#### Receipt — resolução dinâmica do funil HUD · 13/11/2026
+
+- `OWNER=apps/instinto-superior/src/lib/github.functions.ts` · escopo separado do fixed point `cockpit-sync`.
+- causa observada: a `main` ainda continha `PR_FUNIL=1977` e `PR_ANTERIOR=1562`, em conflito com `CENTRALDARK_HUD_FUNNEL_CONTINUITY`.
+- delta publicado: `f15539999e45a4eb877a5d899dc41281c5064d2c`; blob `github.functions.ts=7e1a45e6a06e7ad989677a9564a27a53a83aca02`.
+- comportamento: pagina PRs abertos, seleciona pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY` e exige exatamente um candidato; ambiguidade vira `ACTIVE_FUNNEL_PR=UNKNOWN`.
+- contraprova remota: readback confirmou hardcode `1977` ausente e resolução dinâmica presente. A busca CURRENT encontrou um único candidato aberto, PR #1977; o número é resultado da descoberta, não identidade canônica.
+- `CI=UNKNOWN`: combined statuses do commit material retornaram lista vazia.
+- Casa nesta superfície: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; VPS git probe: sem estado Git utilizável. Portanto `CASA_MAIN_SYNC=UNKNOWN` e `VPS_CONSUMPTION=UNKNOWN`.
+- `NEXT_CURSOR=VALIDATE_GITHUB_FUNNEL_RESOLVER_IN_RUNTIME → RECONCILE_CASA_WHEN_BRIDGE_AVAILABLE`.
+
+<!-- CENTRALDARK_VPS_RUNTIME_SYNC_RASTRO_20261113 -->
+#### Receipt — VPS Runtime Sync Semantic Diagnostics · 13/11/2026
+
+- `MISSION=VPS_RUNTIME_SYNC_SEMANTICALLY_SAFE` · `OWNER=cockpit-sync`.
+- cadeia material na `main`: `abf4483d13b304ee3e137e21c529ec5791895d4a` (bloqueio semântico) → `90acced7ad0209d89dc20dade3b0e30f6f5952af` (`hostOS`/origem da Casa) → `0ec29ea131a17671fe5e8748887f2982fc0d4d10` (HUD Casa/Main/VPS Runtime).
+- blobs canônicos antes deste receipt: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9`; `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`.
+- contraprova do candidato: `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0`; após o teste temporário a VM restaurou exatamente `sync=834c8e65...` e `UI=8e2bb8a0...` antes do consumo da main.
+- consumo VM comprovado: `origin/main=0ec29ea131a17671fe5e8748887f2982fc0d4d10`, `sync=3b47236d...`, `UI=8669d560...`, serviço `centraldark-instinto-superior.service=active`, PID `1693207`, HTTP `8080=200`.
+- HUD visual comprovado: bloqueio `VPS_DIRTY_SCOPE_BLOCKED` aparece como preventivo/âmbar, `exit_code=4`, `runtime_mode=local`, trabalho local preservado e histórico separado de CURRENT.
+- Casa reconciliada: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9` e `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`, ambos idênticos à `main` e à VM. O residual intermediário `consultarGitHubCentralDark` foi removido somente deste owner; sua fonte permanece preservada em `github.functions.ts`. Harness Node local segue `UNAVAILABLE` por ausência do pacote `typescript`, mas a mesma fonte canônica passou `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0` na VM.
+- `.env` permaneceu fora do Git e não foi copiado entre ambientes. Casa=46 chaves; VM=48 chaves; valores não foram lidos/expostos.
+- status combinados do GitHub no HEAD material retornaram lista vazia: `CI=UNKNOWN`, não verde.
+- `FIXED_POINT=true` para o escopo `cockpit-sync`: Casa, VM e `main` possuem os mesmos blobs canônicos de `sync.functions.ts` e `AutoSyncButton.tsx`; serviço VM ativo e HUD visual relido. Isso não declara o repositório inteiro sincronizado.
+- `NEXT_CURSOR=FIXED_POINT_COCKPIT_SYNC → PRESERVE_GITHUB_FUNCTIONS_OWNER_AS_SEPARATE_SCOPE`.
+
+
 ### Fechamento ou publicação de CURRENT
 
 Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
@@ -513,3 +542,29 @@ A GenUI apresenta tudo em linguagem humana, sem alterar a arquitetura técnica.
 **Não basta dizer que resolveu. Mostrar onde estava, o que mudou e a prova do resultado.**
 
 **RESULTADO PRIMEIRO · PROVA REAL · MENOR DELTA · PAPAGAIO OFF.**
+
+<!-- RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+## !RASTRO — GitHub read-only owner reconciliado — 2026-11-13
+
+- Owner: `apps/instinto-superior/src/lib/github.functions.ts`.
+- Consumidor causal: hunks GitHub de `apps/instinto-superior/src/lib/cockpit.functions.ts`.
+- Prova de candidato na Casa: ambos os arquivos passaram `node --experimental-strip-types --check` com exit 0.
+- Segurança: rota GitHub limitada por allowlist GET; credenciais não são expostas ao browser; fallback público permanece somente leitura.
+- Escopo excluído: `.env`, Casa Commander e demais hunks locais do Cockpit.
+- HUD global observado antes da promoção: 28 PASS, 5 FAIL, 1 TODO; falhas pertencem a outros owners, portanto GREEN global não foi declarado.
+- VM/VPS para este owner: UNKNOWN nesta rodada; publicação em main não equivale a deploy.
+- Base main antes desta promoção: `c036ff748333cf8640ea1cbfd3fe68762e72cec7`.
+- NEXT_CURSOR: readback da main no mesmo commit, conferir CI/status e só depois reconciliar o runtime que realmente materializa `apps/instinto-superior`.
+
+<!-- /RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+
+
+<!-- CENTRALDARK_GITHUB_FUNNEL_RUNTIME_COUNTERPROOF_20261113 -->
+#### Contraprova runtime — resolvedor do funil · 13/11/2026
+
+- cinco workflows de push do receipt `ac629385...` encerraram como `startup_failure`, todos com `jobs=[]`; a falha ocorreu antes de qualquer job e não prova regressão do resolvedor.
+- check do commit material `f15539999e45a4eb877a5d899dc41281c5064d2c`: `Supabase Preview=in_progress` no momento da medição.
+- MCP runtime: `ok=true`, `runtimeTools=155`, `auditStartupReady=false`.
+- Casa: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; ponte: `TAILSCALE_OAUTH_BROKER_UNREACHABLE`.
+- conclusão: `SOURCE_READBACK=PASS`; `COCKPIT_RUNTIME_CONSUMPTION=UNKNOWN`; `WORKFLOW_STARTUP=QUEBRADO`; não atribuir o startup failure ao delta sem evidência causal.
+- `NEXT_CURSOR=RESTORE_WORKFLOW_STARTUP_OWNER → VALIDATE_COCKPIT_RUNTIME_CONSUMPTION → RECONCILE_CASA_BRIDGE`.
