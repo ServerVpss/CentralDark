@@ -536,6 +536,8 @@ echo "=== VPS RUNTIME SYNC DONE ==="
 
 /* ── diagnóstico read-only do rastreador Casa / openKylin ── */
 export type EstadoRastreadorCasa = {
+  // Identifica a origem da leitura; Linux local não é prova do checkout Windows.
+  hostOS?: 'windows' | 'linux' | 'other';
   at: string | null;
   tracker: 'active' | 'inactive' | 'unknown';
   ssh: boolean | null;
@@ -549,8 +551,9 @@ export type EstadoRastreadorCasa = {
 
 export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
   async (): Promise<EstadoRastreadorCasa> => {
+    const hostOS = process.platform === 'win32' ? 'windows' : process.platform === 'linux' ? 'linux' : 'other';
     const empty: EstadoRastreadorCasa = {
-      at: null, tracker: 'unknown', ssh: null, githubAuthenticated: null,
+      at: null, tracker: 'unknown', ssh: null, githubAuthenticated: null, hostOS,
       head: null, githubMain: null, sameSha: null, dirtyTracked: null, lastEventAt: null,
     };
     const script = path.join(CENTRALDARK_ROOT, 'scripts', 'casa', 'centraldark-change-tracker.py');
@@ -577,6 +580,7 @@ export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
       const validSha = typeof data.github_main === 'string' && data.github_main !== 'UNKNOWN';
       return {
         at: typeof data.at === 'string' ? data.at : null,
+        hostOS,
         tracker,
         ssh: typeof data.ssh_active === 'boolean' ? data.ssh_active : null,
         githubAuthenticated: typeof data.github_authenticated_and_accessible === 'boolean'
