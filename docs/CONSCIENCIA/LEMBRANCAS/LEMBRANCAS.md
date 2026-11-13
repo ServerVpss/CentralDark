@@ -1540,3 +1540,13 @@ Conteúdo: Preferência operacional explícita do CHEFE: em máquina local/Casa 
 - **Promovida:** sim
 
 Conteúdo: Padrão operacional confirmado: depois de qualquer ação material, registrar o feedback imediato do executor e fazer readback do estado real antes de declarar PASS. Se uma rota autorizada não tem a capability necessária, continuar pela próxima rota já existente em vez de criar ferramenta nova. Caso provado: GitHub auto-merge do fork Hermes foi ativado por gh CLI após limitação dos conectores; readback confirmou allow_auto_merge=true e PR #1 MERGED.
+
+### [2026-11-13T06:00] Inspeção dual Browser + Desktop Commander
+- **Data:** 2026-11-13
+- **Tags:** browser, desktop-commander, visual, readback, paralelismo, one-writer, kaizen
+- **Relevância:** alta
+- **Eixo:** presente
+- **Expira:** 2026-12-13
+- **Promovida:** sim
+
+Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e o host/filesystem pelo Desktop Commander em paralelo quando ambas são leituras independentes. Não abrir superfícies duplicadas. Depois de uma ação única, reler a mesma aba e o mesmo alvo operacional em paralelo; PASS somente quando as provas exigidas convergirem.
