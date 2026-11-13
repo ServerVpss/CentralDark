@@ -99,7 +99,9 @@
     "pointer_must_resolve_source_before_response": true,
     "search_miss_requires_direct_canonical_path_fallback": true,
     "tool_available_must_be_attempted_before_unknown": true,
-    "measurable_unknown_is_method_failure": true
+    "measurable_unknown_is_method_failure": true,
+    "existing_ssh_terminal_reuse_before_new_session": true,
+    "existing_ssh_terminal_requires_visual_probe_and_readback": true
   },
   "mandatory_triggers": [
     "!CENTRALDARK",
@@ -295,6 +297,32 @@
       "version": "1.0.0"
     },
     {
+      "id": "centraldark-hermes-visual-computer-use",
+      "path": ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md",
+      "open_intents": [
+        "operar uma janela ou aba já aberta",
+        "usar terminal SSH já conectado ao Linux",
+        "comandar openKylin pela tela existente",
+        "provar input visual com readback",
+        "usar overlay e cursor virtual no alvo atual"
+      ],
+      "type": "operational_visual_recipe",
+      "category": "visual_target_and_existing_ssh_terminal",
+      "owner": "centraldark-operational-method",
+      "frequency_required": "media",
+      "dependencies": [
+        "centraldark-operational-method",
+        "centraldark-ops",
+        "target_lock",
+        "readback",
+        "counterproof"
+      ],
+      "critical": true,
+      "recipe_ids": [
+        "CASA_EXISTING_SSH_TERMINAL_TO_LINUX"
+      ]
+    },
+    {
       "id": "reality-drift-detector",
       "path": ".agents/skills/reality-drift-detector/SKILL.md",
       "type": "automation",
@@ -382,7 +410,11 @@
       "category": "kaizen_decisao_calibrada",
       "owner": "SEGREDO/CHEFE",
       "frequency_required": "media",
-      "dependencies": ["centraldark-live-editing-fabric", "centraldark-operational-method", "centraldark-oracle-surface"],
+      "dependencies": [
+        "centraldark-live-editing-fabric",
+        "centraldark-operational-method",
+        "centraldark-oracle-surface"
+      ],
       "critical": false,
       "version": "1.1.0"
     }
@@ -391,6 +423,21 @@
     {
       "when": "intent_clear_and_scope_authorized",
       "then": "EXECUTE_MINIMUM_COMPLETE_PATH"
+    },
+    {
+      "when": "delta_uses_existing_windows_terminal_ssh_to_linux",
+      "then": [
+        "centraldark-operational-method",
+        "centraldark-hermes-visual-computer-use",
+        "centraldark-ops"
+      ],
+      "recipe_id": "CASA_EXISTING_SSH_TERMINAL_TO_LINUX",
+      "invariants": [
+        "WINDOW_FOCUSED != CORRECT_TAB",
+        "SEND_ACCEPTED != COMMAND_VISIBLE",
+        "COMMAND_VISIBLE != LINUX_EFFECT_PROVEN",
+        "SSH_CONNECTED != TARGET_MATCH"
+      ]
     },
     {
       "when": "delta_involves_runtime_site_panel_feature",
@@ -654,8 +701,19 @@
     "owner": "docs/ARQUITETURA/CENTRALDARK-UNIFIED-SURFACE-PARITY-01.yaml",
     "learning_ref": "docs/CONSCIENCIA/APRENDIZADOS.md#82",
     "invariant": "TOOL_CALL_EXECUTED != TOOL_CALL_VISIBLE_IN_SIDEBAR",
-    "trace_chain": ["SESSION_ID", "TRACE_ID", "TOOL_CALL_ID", "USAGE/TOKENS", "RECEIPT"],
-    "visibility_states": ["PROVED_BY_PLATFORM_RECEIPT", "USER_CONFIRMED_VISIBILITY", "PLATFORM_UNAVAILABLE", "UNKNOWN"],
+    "trace_chain": [
+      "SESSION_ID",
+      "TRACE_ID",
+      "TOOL_CALL_ID",
+      "USAGE/TOKENS",
+      "RECEIPT"
+    ],
+    "visibility_states": [
+      "PROVED_BY_PLATFORM_RECEIPT",
+      "USER_CONFIRMED_VISIBILITY",
+      "PLATFORM_UNAVAILABLE",
+      "UNKNOWN"
+    ],
     "user_visual_confirmation_is_backend_proof": false
   }
 }
