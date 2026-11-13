@@ -111,7 +111,7 @@ TARGET_MATCH=PASS|FAIL|UNKNOWN
 - `ABSOLUTE_TRAJECTORY` registra a rota observada nesta execução.
 - `TARGET_MATCH` exige convergência suficiente para provar que todas as coordenadas levam ao alvo pretendido.
 
-**Selector Kimetsu:** se `TARGET_MATCH != PASS`, permanecer em 🫁 Concentração Total, 🌫️ Névoa ou 🌊 Água para resolver ambiguidade. ⚡ Trovão e 🦋 Inseto só executam após lock. 🔥 Chamas preserva o mesmo `TARGET_ID` e revalida absoluto/runtime ID a cada mudança de host, sessão ou processo. Nunca transformar PID, drive letter, coordenada de tela ou path histórico em identidade permanente.
+**Selector Kimetsu:** se `TARGET_MATCH != PASS`, permanecer em 🫁 Concentração Total, 🌫️ Névoa ou 🌊 Água para resolver ambiguidade. Em tarefa visual, resolver também `MONITOR_MATCH`; somente então marcar a tela com o overlay e habilitar o cursor virtual Cua. ⚡ Trovão e 🦋 Inseto só executam após `TARGET_MATCH=PASS` + `MONITOR_MATCH=PASS`; 🔥 Chamas preserva o mesmo `TARGET_ID` e revalida absoluto/runtime ID/monitor a cada mudança de host, sessão ou processo. A trajetória visual é `LOCALIZAR → MARCAR_OVERLAY → APONTAR_CUA → AÇÃO ÚNICA → EVIDÊNCIA`; nunca transformar PID, drive letter, coordenada de tela ou path histórico em identidade permanente.
 
 ## 3. ENCADEAMENTO — RESPIRAÇÃO SELEciona BASEADO NO ESTADO
 
