@@ -4,6 +4,7 @@ param(
   [switch]$InstallAutoStart,
   [switch]$EnableLegacyRemote,
   [switch]$LocalStatus,
+  [switch]$ForjaStatus,
   [switch]$Json
 )
 
@@ -16,6 +17,43 @@ $sidecar = Join-Path $root 'CentralDark-Context-Sidecar.ps1'
 $configPath = Join-Path $root 'canonical\CENTRALDARK-REMOTE-BRIDGE.config.json'
 if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) {
   $configPath = Join-Path $root 'CENTRALDARK-REMOTE-BRIDGE.config.json'
+}
+
+# Rota explicita de verificacao SSH da Forja; nao modifica o runtime.
+# Mantem -LocalStatus estritamente local e reutiliza o alias autenticado.
+if ($ForjaStatus) {
+  $ErrorActionPreference = 'Stop'
+  $bridgeConfig = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+  $forja = $bridgeConfig.local_first.linux_forja
+  $alias = [string]$forja.ssh_alias
+  $expectedRoot = [string]$forja.canonical_root
+  if ($alias -notmatch '^[a-zA-Z0-9_-]+$' -or
+      $expectedRoot -ne '/home/CentralDark-OS/CentralDark') {
+    throw 'FORJA_BINDING_UNTRUSTED'
+  }
+  $sshTool = Get-Command ssh -ErrorAction Stop
+  $probe = 'realpath /home/CentralDark-OS/CentralDark; curl -s -o /dev/null -w cockpit:%{http_code} --max-time 4 http://127.0.0.1:8080; echo; curl -s -o /dev/null -w mcp:%{http_code} --max-time 4 http://127.0.0.1:9100/health; echo; curl -s -o /dev/null -w tunnel:%{http_code} --max-time 4 http://127.0.0.1:8742/readyz; echo'
+  $lines = @(& $sshTool.Source '-o' 'BatchMode=yes' '-o' 'ConnectTimeout=7' '-o' 'StrictHostKeyChecking=yes' $alias $probe 2>&1)
+  $sshExit = $LASTEXITCODE
+  $rootActual = [string]($lines | Select-Object -First 1)
+  $codes = @($lines | Where-Object { $_ -match '^(cockpit|mcp|tunnel):[0-9]{3}$' })
+  $passed = ($sshExit -eq 0 -and $rootActual -eq $expectedRoot -and
+    $codes.Count -eq 3 -and @($codes | Where-Object { $_ -match ':200$' }).Count -eq 3)
+  $result = [ordered]@{
+    schema = 'centraldark.forja.ssh-readonly.v1'
+    target = [string]$forja.execution_target
+    alias = $alias
+    root_expected = $expectedRoot
+    root_actual = $rootActual
+    services = $codes
+    transport = 'SSH_AUTHENTICATED_EXISTING'
+    status = $(if ($passed) { 'PASS' } else { 'FAIL' })
+    mutations = 'NONE'
+  }
+  if ($Json) { $result | ConvertTo-Json -Depth 4 -Compress }
+  else { Write-Output $result }
+  if (-not $passed) { throw 'FORJA_SSH_READBACK_FAILED' }
+  return
 }
 
 # Entrada UNICA de diagnostico local: nao inicia daemons, nao instala,
@@ -163,6 +201,15 @@ if ($LocalStatus) {
     remote_command_execution = 'NOT_TESTED'
     vps_role = 'RUNTIME_24_7_SAME_PRODUCT'
     linux_k_role = 'FORJA_NATIVE_OR_VMWARE_WHEN_AUTHORIZED'
+    forja_binding = [ordered]@{
+      target = [string]$localConfig.local_first.linux_forja.execution_target
+      ssh_alias = [string]$localConfig.local_first.linux_forja.ssh_alias
+      root = [string]$localConfig.local_first.linux_forja.canonical_root
+      transport = [string]$localConfig.local_first.linux_forja.transport
+      windows_role = [string]$localConfig.local_first.linux_forja.windows_role
+      tunnel_readiness = [string]$localConfig.local_first.linux_forja.mcp_tunnel_readiness
+      verified_in_this_local_status = $false
+    }
     ssh_reverse = 'REUSE_EXISTING_CASA_VPS_RECIPE_ONLY'
     mutations = 'NONE'
   }
