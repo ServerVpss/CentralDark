@@ -109,6 +109,27 @@ Para organizar pastas e arquivos digitais, reutilizar o plano `docs/CENTRALDARK/
 
 This skill is paired with the CentralDark operational family: `centraldark-hermes-operations`, `reconciliacao-diaria-centraldark`, `github-actions-runner-diagnostics`, and `skill-synchronization`. When the trigger is Hermes-specific (update, cron, Desktop/backend boot, SSH/no-mux, VPS Hermes version, port/firewall proof for Hermes routes), load `centraldark-hermes-operations` too. When the trigger is daily state, checklist, abandoned deltas, or skill drift, load the matching sibling too. `centraldark-ops` carries the broader CASA/GitHub/VPS operating contract; siblings carry concrete procedures. They are one operational family, not competing owners.
 
+## Casa → sessão SSH existente → Linux
+
+Quando houver terminal SSH já aberto e visível para o openKylin/CentralDark-OS, reutilizar `RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX` da Skill Mãe e carregar `centraldark-hermes-visual-computer-use` para o Target Lock da superfície.
+
+```text
+WINDOW/TAB CURRENT
+→ PID/TITLE/RECT + MONITOR
+→ FOCUS
+→ pwd; hostname (probe read-only)
+→ READBACK VISUAL DA MESMA ABA
+→ SSH_TARGET_MATCH
+→ cd <ENVIRONMENT_ROOT resolvido>
+→ ONE LINUX COMMAND
+→ READBACK VISUAL
+→ PROVA INDEPENDENTE QUANDO MATERIAL
+```
+
+A sessão já aberta é transporte, não autoridade. Windows Terminal/Remote Desktop Commander controla a entrada; o **efeito pertence ao Linux remoto** somente quando o shell remoto mostra o resultado esperado. Se a entrada cair em outra aba, painel ou terminal, classificar `WRONG_SURFACE`, congelar retry, reacquirir e repetir apenas o probe — nunca o comando material às cegas.
+
+Para `.env`, systemd e secrets: consumir variáveis já carregadas no processo/EnvironmentFile sem imprimir valores; provar por estado, nome da binding e efeito. `ENV_FILE_LOADED != REMOTE_AUTH_PROVEN`; `HTTP_200` deve ser atribuído ao endpoint/escopo exato testado.
+
 ## VPS — resiliência semântica sob drift técnico
 
 Esta é a regra padrão para **qualquer** leitura, diagnóstico, correção, deploy, runner, serviço, rede, SSH, PM2, Caddy, cron ou automação na VPS.
