@@ -3457,3 +3457,9 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-11-13
 - **Contexto:** Em operações do Cockpit e interfaces já abertas, Browser e Desktop Commander têm capacidades complementares. Browser lê a aba e o estado visual/DOM disponível; Desktop Commander mede filesystem, Git, processo, serviço e terminal no host real.
 - **Aprendizado:** Usar fan-out somente de leitura: Browser list_tabs/get_tab_context em paralelo com Desktop Commander read_file/git/process/runtime. Fundir por TARGET_ID/owner, executar uma única ação autorizada, e fechar com readback paralelo da mesma aba + estado operacional. BROWSER_VISIBLE != RUNTIME_PROVEN; COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN; ONE_WRITER_PER_RESOURCE continua obrigatório.
+
+### 231. Não promover owner sem consumidor material na main
+- **Categoria:** regra
+- **Data:** 2026-11-13
+- **Contexto:** Durante reconciliação do acesso GitHub do Cockpit, github.functions.ts continha um delta local válido, mas a main não tinha consumidores desse novo caminho. O teste HUD global também apresentava falhas em owners não relacionados.
+- **Aprendizado:** Antes de promover um owner novo, confirmar pelo menos um consumidor material no mesmo cone causal. Se o consumidor estiver em arquivo com hunks de outros owners, promover apenas os hunks causais. Falhas globais preexistentes fora do cone permanecem registradas, mas não devem ser atribuídas ao delta nem usadas como verde.

@@ -5,6 +5,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { consultarGitHubCentralDark } from "./github.functions";
 
 const GITHUB_API = "https://api.github.com";
 // A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
@@ -129,24 +130,6 @@ export type EstadoCentralDark = {
   portas: PortaCentralDark[];
   portasTotais: PortaCentralDark[];
 };
-
-function acessoGitHub() {
-  carregarEnvForja();
-  const token = process.env["GITHUB_TOKEN"];
-  if (token) {
-    return {
-      base: GITHUB_API,
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-      fonte: "GitHub API",
-    };
-  }
-
-  return null;
-}
 
 export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
@@ -437,72 +420,37 @@ async function medirActions() {
   }
 }
 
+// #OBSERVACOES# @owner instinto.cockpit @doc_ref docs/HUD/README.md
+// @last_updated 2026-11-07T18:13:00Z @implementado Main e divergência consultam o acesso GitHub compartilhado.
 async function medirGithub() {
-  const acesso = acessoGitHub();
-  if (!acesso) {
-    return {
-      estado: "AUTH_REQUIRED" as Estado,
-      commits: [] as CommitCentralDark[],
-      fonte: "GitHub sem credencial de leitura",
-    };
-  }
-
+  carregarEnvForja();
   try {
-    const resposta = await fetch(
-      `${acesso.base}/repos/ServerVpss/CentralDark/commits?sha=main&per_page=4`,
-      { headers: acesso.headers, cache: "no-store" },
-    );
+    const resposta = await consultarGitHubCentralDark("commits?sha=main&per_page=4");
     if (resposta.status === 401 || resposta.status === 403) {
-      return {
-        estado: "AUTH_REQUIRED" as Estado,
-        commits: [] as CommitCentralDark[],
-        fonte: `GitHub respondeu ${resposta.status}`,
-      };
+      return { estado: "AUTH_REQUIRED" as Estado, commits: [] as CommitCentralDark[], fonte: `GitHub respondeu ${resposta.status}` };
     }
-    if (!resposta.ok) {
-      return {
-        estado: "FAIL" as Estado,
-        commits: [] as CommitCentralDark[],
-        fonte: `GitHub respondeu ${resposta.status}`,
-      };
+    if (resposta.status !== 200 || !Array.isArray(resposta.dados)) {
+      return { estado: "FAIL" as Estado, commits: [] as CommitCentralDark[], fonte: `GitHub respondeu ${resposta.status}` };
     }
-
-    const payload = (await resposta.json()) as Array<{
-      sha: string;
-      commit?: { message?: string; author?: { date?: string } };
-    }>;
+    const payload = resposta.dados as Array<{ sha: string; commit?: { message?: string; author?: { date?: string } } }>;
     const commits = payload.map((commit) => ({
       sha: commit.sha,
       mensagem: commit.commit?.message?.split("\n")[0] ?? "Sem mensagem",
       data: commit.commit?.author?.date ?? "",
     }));
-    return {
-      estado: commits[0] ? ("PASS" as Estado) : ("UNKNOWN" as Estado),
-      commits,
-      fonte: `${acesso.fonte} · ServerVpss/CentralDark@main`,
-    };
+    return { estado: commits[0] ? ("PASS" as Estado) : ("UNKNOWN" as Estado), commits, fonte: `${resposta.fonte} · ServerVpss/CentralDark@main` };
   } catch {
-    return {
-      estado: "UNKNOWN" as Estado,
-      commits: [] as CommitCentralDark[],
-      fonte: "GitHub inacessível",
-    };
+    return { estado: "UNKNOWN" as Estado, commits: [] as CommitCentralDark[], fonte: "GitHub inacessível" };
   }
 }
 
 async function medirDelta(vpsSha: string | null, mainSha: string | null) {
-  const acesso = acessoGitHub();
-  if (!acesso || !vpsSha || !mainSha) return null;
+  if (!vpsSha || !mainSha) return null;
   if (vpsSha === mainSha) return 0;
-
   try {
-    const resposta = await fetch(
-      `${acesso.base}/repos/ServerVpss/CentralDark/compare/${encodeURIComponent(vpsSha)}...${encodeURIComponent(mainSha)}`,
-      { headers: acesso.headers, cache: "no-store" },
-    );
-    if (!resposta.ok) return null;
-    const payload = (await resposta.json()) as { ahead_by?: number };
-    return typeof payload.ahead_by === "number" ? payload.ahead_by : null;
+    const { dados } = await consultarGitHubCentralDark(`compare/${vpsSha}...${mainSha}`);
+    const payload = dados as { ahead_by?: number } | null;
+    return typeof payload?.ahead_by === "number" ? payload.ahead_by : null;
   } catch {
     return null;
   }
