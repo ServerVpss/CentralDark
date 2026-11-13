@@ -35,6 +35,12 @@ def test_variantes_das_tres_temperaturas():
     assert quente["variant_used"] == "QUENTE_META_EVOLUCAO"
 
 
+def test_materialization_gap_usa_media():
+    result = m.evaluate({"risk": "R1", "triggers": ["MATERIALIZATION_GAP"]})
+    assert result["mode_used"] == "MEDIA"
+    assert result["variant_used"] == "MEDIA_MATERIALIZATION_GAP"
+
+
 def test_recovery_recorrente_escala_para_quente():
     result = m.evaluate({"risk": "R0", "triggers": ["RECOVERY_RECURRENT"]})
     assert result["mode_used"] == "QUENTE"
