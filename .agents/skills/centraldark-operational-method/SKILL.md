@@ -867,3 +867,29 @@ UNKNOWN != PASS
 - Receita canônica existente: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md e references/RECEITA-KINGSTON-20261103.md. Preservar a historia do WSL2 de 30/10; nao converter prova WSL2 em prova VMware.
 - Limite de verdade: SSH_VMWARE=PASS; COCKPIT_HTTP_524=PENDING; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
 <!-- /CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+
+
+<!-- CENTRALDARK_FEEDBACK_READBACK_LOOP_20261113 -->
+## 🔁 Feedback + Readback — fechamento mínimo de toda ação material
+
+Toda ação material fecha no mesmo ciclo com **feedback imediato do executor + readback do efeito real**.
+
+```text
+ACTION_SINGLE
+→ FEEDBACK_EXECUTOR
+→ READBACK_TARGET
+→ COUNTERPROOF_WHEN_MATERIAL
+→ PASS | FAIL | UNKNOWN
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+- `FEEDBACK` = retorno imediato da ação: exit/result/status/erro observado. É sinal de execução, não prova suficiente do efeito.
+- `READBACK` = releitura posterior do alvo real por API, Git, arquivo, UI, runtime ou outra fonte pertinente.
+- Quando material, adicionar contraprova independente antes de declarar PASS.
+- Falha de uma rota autorizada é local; tentar a próxima rota existente antes de criar capability, bridge ou owner novo.
+- Não repetir ação com efeito incerto. Primeiro fazer readback.
+- GitHub: mutação de configuração → ler configuração; mutação de PR/ref → reler PR/ref/SHA.
+- `FEEDBACK_OK != EFFECT_PROVEN`; `ACTION != PROOF`; `UNKNOWN != PASS`.
+- Filosofia: `REUSE_BEFORE_CREATE + KAIZEN`.
+<!-- /CENTRALDARK_FEEDBACK_READBACK_LOOP_20261113 -->
