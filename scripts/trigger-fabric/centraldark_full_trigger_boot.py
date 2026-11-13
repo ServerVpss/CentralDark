@@ -122,6 +122,101 @@ def classify_realtime_feedback(value: str) -> dict:
     }
 
 
+VISUAL_RECOVERY_RECIPES = {
+    "H01_STALE_RUNTIME_TARGET": "REACQUIRE_RUNTIME_TARGET",
+    "H02_GEOMETRY_OR_MONITOR_DRIFT": "REMAP_GEOMETRY_AND_MONITOR",
+    "H03_CONTROL_RECREATED": "REACQUIRE_CONTROL_TREE",
+    "H04_EVENT_INTERCEPTED": "IDENTIFY_INTERCEPTOR_THEN_REVALIDATE",
+    "H05_NOT_ACTIONABLE": "REMEASURE_ACTIONABILITY_WITH_BOUNDED_WAIT",
+    "H06_PREREQUISITE_FOCUS_SCROLL": "APPLY_ONE_PREREQUISITE_THEN_REVALIDATE",
+    "H07_CUA_DELIVERY_UNAVAILABLE": "FOREGROUND_FALLBACK_IF_AUTHORIZED",
+    "H08_ASYNC_EFFECT_PENDING": "WAIT_POSTCONDITION_WITHOUT_RECLICK",
+    "H09_TARGET_AMBIGUOUS": "DISAMBIGUATE_TARGET_BY_ID_ROLE_PARENT_BOUNDS",
+    "H10_SURFACE_SESSION_CHANGED": "RECOVER_SAME_SURFACE_SESSION_THEN_REACQUIRE",
+    "UNKNOWN_VISUAL_CAUSE": "RUN_NEXT_DISCRIMINATING_READ_ONLY_PROBE",
+}
+
+
+def classify_visual_recovery(observation: dict) -> dict:
+    """Classifica ausência de efeito visual sem autorizar retry cego."""
+    if not isinstance(observation, dict):
+        raise TypeError("VISUAL_RECOVERY_OBSERVATION_MUST_BE_OBJECT")
+
+    cls = "UNKNOWN_VISUAL_CAUSE"
+    evidence = []
+
+    if (
+        observation.get("session_changed") is True
+        or observation.get("surface_changed") is True
+        or observation.get("process_alive") is False
+    ):
+        cls = "H10_SURFACE_SESSION_CHANGED"
+        evidence.append("SURFACE_OR_SESSION_CHANGED")
+    elif (
+        observation.get("target_current") is False
+        or observation.get("pid_match") is False
+        or observation.get("hwnd_match") is False
+    ):
+        cls = "H01_STALE_RUNTIME_TARGET"
+        evidence.append("RUNTIME_TARGET_ID_STALE")
+    elif (
+        observation.get("monitor_match") is False
+        or observation.get("geometry_changed") is True
+        or observation.get("dpi_changed") is True
+    ):
+        cls = "H02_GEOMETRY_OR_MONITOR_DRIFT"
+        evidence.append("GEOMETRY_OR_MONITOR_DRIFT")
+    elif (
+        observation.get("control_recreated") is True
+        or observation.get("control_ref_valid") is False
+    ):
+        cls = "H03_CONTROL_RECREATED"
+        evidence.append("CONTROL_REFERENCE_INVALIDATED")
+    elif (
+        observation.get("ambiguous") is True
+        or (
+            isinstance(observation.get("candidate_count"), int)
+            and observation["candidate_count"] != 1
+        )
+    ):
+        cls = "H09_TARGET_AMBIGUOUS"
+        evidence.append("TARGET_CARDINALITY_NOT_ONE")
+    elif (
+        str(observation.get("delivery_code", "")).lower() == "background_unavailable"
+        or observation.get("background_available") is False
+    ):
+        cls = "H07_CUA_DELIVERY_UNAVAILABLE"
+        evidence.append("CUA_BACKGROUND_UNAVAILABLE")
+    elif observation.get("async_pending") is True:
+        cls = "H08_ASYNC_EFFECT_PENDING"
+        evidence.append("POSTCONDITION_PENDING")
+    elif observation.get("event_intercepted") is True:
+        cls = "H04_EVENT_INTERCEPTED"
+        evidence.append("EVENT_INTERCEPTOR_OBSERVED")
+    elif any(observation.get(key) is False for key in ("visible", "stable", "enabled", "receives_events")):
+        cls = "H05_NOT_ACTIONABLE"
+        evidence.append("ACTIONABILITY_PRECONDITION_FALSE")
+    elif any(observation.get(key) is True for key in ("needs_scroll", "needs_hover", "needs_focus")):
+        cls = "H06_PREREQUISITE_FOCUS_SCROLL"
+        evidence.append("INTERACTION_PREREQUISITE_REQUIRED")
+
+    return {
+        "schema": "centraldark.visual-recovery-classification.v1",
+        "class": cls,
+        "recipe": VISUAL_RECOVERY_RECIPES[cls],
+        "meta_lupa_mode": "MEDIA",
+        "meta_lupa_variant": "MEDIA_RECOVERY_VISUAL",
+        "meta_lupa_trigger": "VISUAL_ACTION_NO_EFFECT",
+        "evidence": evidence,
+        "retry_frozen": True,
+        "same_action_retry_budget": 1,
+        "retry_requires_new_evidence": True,
+        "preserve": ["LAST_GOOD_STATE", "TARGET_ID", "TARGET_FINGERPRINT", "NEXT_CURSOR"],
+        "fable_mode": "READ_ONLY_CALIBRATION",
+        "next_executor": "COT_REACT_OR_EXISTING_HERMES_AFTER_NEW_EVIDENCE",
+    }
+
+
 def runtime_preflight_contract_state(repo: Path) -> dict:
     path = repo / RUNTIME_PREFLIGHT_LINT
     if not path.is_file():
@@ -1171,6 +1266,33 @@ def cmd_feedback(args: argparse.Namespace) -> int:
     return 0 if result["feedback"]["active"] else 4
 
 
+def cmd_visual_recovery(args: argparse.Namespace) -> int:
+    try:
+        observation = json.loads(args.observation_json)
+    except json.JSONDecodeError:
+        print(json.dumps({
+            "schema": "centraldark.visual-recovery-classification.v1",
+            "class": "UNKNOWN_VISUAL_CAUSE",
+            "reason": "INVALID_OBSERVATION_JSON",
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    try:
+        result = classify_visual_recovery(observation)
+    except TypeError as exc:
+        print(json.dumps({
+            "schema": "centraldark.visual-recovery-classification.v1",
+            "class": "UNKNOWN_VISUAL_CAUSE",
+            "reason": str(exc),
+            "retry_frozen": True,
+        }, indent=2, ensure_ascii=False))
+        return 4
+
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["class"] != "UNKNOWN_VISUAL_CAUSE" else 4
+
+
 def proven_path_replay_decision(entry: dict, current_fingerprint: str | None) -> dict:
     recipe = entry.get("proven_path_replay") or {}
     sealed_fingerprint = recipe.get("dependency_fingerprint")
@@ -1593,6 +1715,10 @@ def build_parser() -> argparse.ArgumentParser:
     f.add_argument("--repo", default=".")
     f.add_argument("--input", required=True)
     f.set_defaults(func=cmd_feedback)
+
+    vr = sub.add_parser("visual-recovery")
+    vr.add_argument("--observation-json", required=True)
+    vr.set_defaults(func=cmd_visual_recovery)
 
     s = sub.add_parser("seal")
     s.add_argument("--repo", default=".")
