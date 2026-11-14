@@ -97,6 +97,8 @@ REPO_DIR="$SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
 bash "$RESOLVER" --apply 1 > "$TMP_ROOT/resolver.log"
+# Git stderr changes by locale; conflict evidence comes from the unmerged index.
+grep -F "CONFLICT_DETECTED_INDEX_PROVEN" "$TMP_ROOT/resolver.log" >/dev/null
 grep -F "COSTURA_WRITER_LOCK=ACQUIRED" "$TMP_ROOT/resolver.log" >/dev/null
 test ! -e "$WORKTREES/.costura-repo-writer.lock"
 echo "COSTURA_LOCK_RELEASED=PASS"

@@ -388,6 +388,14 @@ bash scripts/dependabot/resolve-conflicts.sh \
 `DRY_RUN != APPLY` · `TREE_RESOLVED != HEAD_SYNCED` ·
 `SINGLE_WRITER_PER_SCOPE` · `UNKNOWN != PASS`.
 
+**Contraprova Linux/VMware (13/11/2026):** Git com locale `pt_PT`
+escreve `CONFLITO` em vez de `CONFLICT` ao reportar merge.
+O motor PR foi corrigido no mesmo owner: usa `git ls-files -u`
+(estado do índice) para comprovar conflito, sem reconhecer textos
+humanos dependentes de idioma. A regressão está no mesmo teste
+`resolve-conflicts-policy.test.sh`; não usar grep de mensagem Git
+como gate determinístico.
+
 ## COSTURA sem merge: auditoria de base e indice isolado
 
 A falha observada em 11/11/2026 mostrou um caso diferente de conflito de PR:

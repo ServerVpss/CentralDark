@@ -482,13 +482,15 @@ if [ "$MERGE_STATUS" -eq 0 ]; then
   exit 0
 fi
 
-if ! grep -q "CONFLICT" <<<"$MERGE_OUTPUT"; then
-  echo "MERGE_FAILED_WITHOUT_CONFLICT status=$MERGE_STATUS"
+# Git's stderr is localized (e.g. pt_PT prints CONFLITO instead of CONFLICT).
+# Only unmerged index entries are authoritative; never parse human text as a gate.
+if [[ -z "$(git ls-files -u)" ]]; then
+  echo "MERGE_FAILED_WITHOUT_UNMERGED_INDEX status=$MERGE_STATUS"
   git merge --abort 2>/dev/null || true
   exit "$MERGE_STATUS"
 fi
 
-echo "CONFLICT_DETECTED"
+echo "CONFLICT_DETECTED_INDEX_PROVEN"
 mapfile -t CONFLICTS < <(git diff --name-only --diff-filter=U)
 
 if [ "${#CONFLICTS[@]}" -eq 0 ]; then
