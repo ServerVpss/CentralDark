@@ -743,6 +743,7 @@ export type EstadoHudVigente = {
   recibos?: ReciboHudGitHub[];
   missaoAtual?: ReciboHudGitHub | null;
   funilNextCursor?: string | null;
+  activeMissionId?: string | null;
 };
 
 const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
@@ -812,6 +813,7 @@ function resolveHudFromPulls(
     headSha,
     mainSha,
     nextCursor: parseHudNextCursor(body),
+    activeMissionId: body.match(/<!--\s*CENTRALDARK_HUD_ACTIVE_MISSION:\s*([A-Z0-9_-]{3,120})\s*-->/i)?.[1] ?? null,
     source,
     measuredAt: new Date().toISOString(),
     candidates: Number.isFinite(number) ? [number] : [],
@@ -934,8 +936,11 @@ function lerHudComentariosGh(pr: number): ReciboHudGitHub[] | null {
 function vincularHudRecibos(hud: EstadoHudVigente, recibos: ReciboHudGitHub[] | null): EstadoHudVigente {
   if (hud.status !== "PASS" || hud.activePr === null) return hud;
   if (!recibos?.length) return { ...hud, recibosEstado: "UNKNOWN", recibos: [], missaoAtual: null };
-  // Com mais de uma missao, nao escolher pelo timestamp e trocar a intencao do CHEFE.
-  const atual = recibos.length === 1 ? recibos[0]! : null;
+  // Com varias missoes, somente o apontamento no corpo do PR escolhe a vigente.
+  // Sem apontamento, um unico recibo identificado pode ser usado; nunca escolher por timestamp.
+  const atual = hud.activeMissionId
+    ? recibos.find(r => r.missionId === hud.activeMissionId) ?? null
+    : recibos.length === 1 ? recibos[0]! : null;
   return { ...hud, recibosEstado: atual ? "PASS" : "BLOCKED", recibos,
     missaoAtual: atual, funilNextCursor: hud.nextCursor,
     nextCursor: atual?.nextCursor ?? hud.nextCursor };
