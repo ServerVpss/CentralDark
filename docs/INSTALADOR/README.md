@@ -104,3 +104,13 @@ O método do CHEFE define a VMware openKylin como `VPS_RUNTIME`, equivalente à 
 
 **NEXT_CURSOR:** remover efeitos colaterais de `--check/--help`, validar `CENTRALDARK_ROOT` absoluto, alinhar `installer.tar.gz` com checker e dependências, investigar HTTP 525 no owner existente e retestar no mesmo sandbox antes de promover `INSTALLER_FIXED_POINT`.
 <!-- /CENTRALDARK_INSTALLER_SANDBOX_DETERMINISTIC_20261114 -->
+
+<!-- CENTRALDARK_INSTALLER_READONLY_ENTRY_20261114 -->
+## Entrada de leitura sem bootstrap (14/11/2026)
+
+Owner: `install.sh`. O despacho antecipado de `--help`, `--runner-linux-check` e `--runner-linux-install|--runner-linux-activate --dry-run` evita `locate_repo`, `self_update`, atalhos, migracao de shell e escrita do log de inicializacao nesses modos. O fluxo de instalacao real permanece intocado.
+
+Contraprova no openKylin 3.0: copia temporaria do mesmo `install.sh`, Linux isolado com `bubblewrap` (raiz somente leitura, sem rede, HOME temporario), `bash -n` PASS, `--help` PASS, `--runner-linux-install --dry-run` PASS com `MUTATIONS=0`, `--runner-linux-check` PASS (pacote ausente corretamente informado). Temporario removido. `install.sh text eol=lf` em `.gitattributes` impede que o checkout Windows entregue CRLF ao Linux via Samba/SCP.
+
+Limite: `--check` geral ainda pode gerar efeitos, e instalacao completa/bootstrap HTTP 525 seguem PENDENTES. `DRY_RUN_PASS != INSTALLATION_PASS`; `CASA_EDITED != MAIN_PUBLISHED`.
+<!-- /CENTRALDARK_INSTALLER_READONLY_ENTRY_20261114 -->
