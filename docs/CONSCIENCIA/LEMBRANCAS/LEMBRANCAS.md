@@ -1561,3 +1561,12 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Prova desta sessão:** Biblioteca recebeu o mesmo delta em `library-router.mjs` + teste na Casa e VM; ambos passaram 27/27 testes. Backcheck detectou e corrigiu escaping antes da publicação.
 - **Próximo passo:** readback da `main` após publicação do mesmo delta e fechamento da branch/PR transitória.
 <!-- /CENTRALDARK_FAST_LOOP_CASA_SAMBA_VM_MAIN_20261114 -->
+
+
+<!-- CENTRALDARK_PERSIST_BEFORE_REPORT_20261114 -->
+### [2026-11-14] Persistir aprendizado antes de relatá-lo
+- **Tags:** aprendizado, lembranca, persist-first, kaizen, fast-loop, readback
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Aprendizado operacional confirmado não deve aparecer primeiro como conclusão de chat. Persistir nos owners existentes de APRENDIZADOS e LEMBRANCAS, reconciliar índice/linhagem e obter readback; depois responder com o recibo. Se não houver prova de persistência, declarar registro UNKNOWN/BLOQUEADO.
+<!-- /CENTRALDARK_PERSIST_BEFORE_REPORT_20261114 -->
