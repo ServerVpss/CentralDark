@@ -252,3 +252,14 @@ ACTION_WITHOUT_PROVEN_EFFECT
 `CUA_CALL_OK != EFFECT_PROVEN` · `TYPE_TEXT != EXECUTED_COMMAND` · `CLICK_SENT != SYNC_COMPLETE` · `UNKNOWN != PASS`.
 <!-- /CENTRALDARK_CUA_COCKPIT_TERMINAL_20261113 -->
 
+
+<!-- CENTRALDARK_OBSIDIAN_CUA_UI_MAP_20261114 -->
+## Regra reaproveitável — ler interfaces de apps por Cua, sem imagem contínua (14/11/2026)
+
+- **Entrada:** app já aberto e autorizado, janela/controle vivos medidos por PID/HWND/monitor; a leitura usa apenas a sessão Cua existente, nunca cria um motor paralelo.
+- **Sensor textual:** `cua-driver call start_session` → `cua-driver call get_window_state` com `pid`, `window_id`, `include_screenshot:false` → consumir `tree_markdown`, `elements[].label/role/actions/frame`, `elements_complete` → `end_session` no `finally`. Filtrar texto e índice por intenção; revalidar `element_token`/janela após mudanças. Não persistir PID, coordenadas ou tokens de elemento como IDs estáveis.
+- **Ação:** resolver alvo existente e usar exclusivamente `scripts/blink_cursor.py --mode click` (Cua virtual + overlay), seguido de readback textual Cua. `execution=dispatched` e `driver_effect=unverifiable` não autorizam `UI_EFFECT=PASS`; falha de efeito não autoriza mouse físico ou retries cegos.
+- **Prova inicial:** Casa SEGREDO, Obsidian 1.15.1/Vault Orrery 2.3.0, `get_window_state(...include_screenshot:false)` devolveu 165 elementos, inventário parcial `elements_complete=false`. Foram observados busca, nota, propriedades e backlinks. CLI oficial existe, mas estava desabilitada; `CLI_READY=NO`.
+- **Generalização:** cada app lido gera apenas `CAPABILITY_DISCOVERED` enquanto não houver acionamento e readback. Registrar capacidades já comprovadas no seu owner e APRENDIZADOS/LEMBRANCAS existentes; não criar catálogo, skill, bridge ou plugin por app.
+- **NEXT_CURSOR:** habilitar a CLI do Obsidian pelo controle real se aplicável e validar busca em lote, sem inferir leitura semântica completa apenas do grafo.
+<!-- /CENTRALDARK_OBSIDIAN_CUA_UI_MAP_20261114 -->
