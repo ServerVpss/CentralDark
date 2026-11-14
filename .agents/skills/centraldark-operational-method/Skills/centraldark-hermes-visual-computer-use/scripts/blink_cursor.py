@@ -79,6 +79,8 @@ def main():
                         help="position = previa 5 segundos; blink = 3 ciclos; click = Cua virtual + overlay; working = foco continuo com expiracao")
     parser.add_argument("--duration", type=int, default=60, metavar="SEGUNDOS",
                         help="working: sessao visual ativa 1..120s, sem processo permanente")
+    parser.add_argument("--cursor-motion", action="store_true",
+                        help="working: mover cursor virtual com a moldura fixa no monitor selecionado")
     parser.add_argument("--pid", type=int, help="PID atual da janela para --mode click")
     parser.add_argument("--hwnd", type=int, help="HWND atual da janela para --mode click")
     parser.add_argument("--x", type=int, help="X absoluto do alvo na tela para --mode click")
@@ -103,6 +105,8 @@ def main():
         parser.error("alvos de clique somente permitidos no modo click")
     elif args.monitor is None and not args.all:
         parser.error("informe --monitor N ou --all")
+    if args.cursor_motion and args.mode != "working":
+        parser.error("--cursor-motion exige working")
     if args.mode == "working":
         if args.all or args.monitor is None:
             parser.error("working exige um unico --monitor N")
@@ -165,14 +169,24 @@ def main():
                                       "execution": "started", "duration_seconds": args.duration,
                                       "human_visual_confirmation": "not_inferred"}), flush=True)
                     ends_at = time.monotonic() + args.duration
+                    next_renew = time.monotonic() + 15
+                    waypoints = ((.30, .35), (.70, .35), (.70, .65), (.30, .65))
+                    movement_count = 0
                     while (remaining := ends_at - time.monotonic()) > 0:
-                        time.sleep(min(15, remaining))
-                        if ends_at - time.monotonic() > 0:
+                        if args.cursor_motion:
+                            fx, fy = waypoints[movement_count % len(waypoints)]
+                            mx = monitor["X"] + monitor["Width"] * fx
+                            my = monitor["Y"] + monitor["Height"] * fy
+                            call(driver, sid, "move_cursor", {"scope": "window", "x": mx, "y": my})
+                            movement_count += 1
+                        time.sleep(min(2 if args.cursor_motion else 15, remaining))
+                        if time.monotonic() >= next_renew and ends_at - time.monotonic() > 0:
                             renewed = visual.request("renew_overlay", {
                                 "leaseSeconds": min(120, args.duration + 5), "visualState": "working"
                             }, session=sid)
                             if not renewed.get("ok") or not renewed.get("result", {}).get("overlayVisible"):
                                 raise RuntimeError("VISUAL_WORKING_RENEW_FAILED " + str(renewed)[:300])
+                            next_renew = time.monotonic() + 15
                 finally:
                     hidden = visual.request("hide_overlay", session=sid)
                     if not hidden.get("ok") or hidden.get("result", {}).get("overlayVisible"):
@@ -180,6 +194,7 @@ def main():
                 item = {"number": monitor["Number"], "mode": "working",
                         "cursor_origin": [x, y], "duration_seconds": args.duration,
                         "execution": "completed", "renewal": "same_visual_session",
+                        "virtual_cursor_moves": movement_count,
                         "human_visual_confirmation": "not_inferred"}
                 receipt["monitors"].append(item)
                 print(json.dumps(item), flush=True)

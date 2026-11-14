@@ -252,3 +252,18 @@ ACTION_WITHOUT_PROVEN_EFFECT
 `CUA_CALL_OK != EFFECT_PROVEN` · `TYPE_TEXT != EXECUTED_COMMAND` · `CLICK_SENT != SYNC_COMPLETE` · `UNKNOWN != PASS`.
 <!-- /CENTRALDARK_CUA_COCKPIT_TERMINAL_20261113 -->
 
+<!-- CENTRALDARK_WORKING_CURSOR_MOTION_VISUAL_PASS_20261114 -->
+## 14/11/2026 - Mouse virtual em movimento com moldura fixa: VISUAL_PASS e cleanup
+
+**Intencao:** o cursor virtual Cua se move dentro do monitor humano selecionado, com uma unica moldura Hermes Visual fixa enquanto o modo working estiver ativo. Nao deslocar o mouse fisico nem criar segundo cursor, overlay, daemon, janela ou executor.
+
+**Owner/comando:** scripts/blink_cursor.py --monitor N --mode working --cursor-motion --duration SEGUNDOS. O mesmo owner reutiliza cua-driver (start_session, set_agent_cursor_enabled, move_cursor com scope=window, end_session) e visual.py/native/HermesVisual (show_overlay, renew_overlay na mesma sessao, hide_overlay). O movimento percorre quatro pontos internos a cada ~2s. Duracao de 1 a 120s. O modo working sem movimento e os modos blink, position e click permanecem.
+
+**Mapa e prova humana:** Casa SEGREDO, monitor humano 2, superior horizontal, DISPLAY4 (x=0, y=-1080, 1920x1080). Em 14/11/2026, o CHEFE confirmou literalmente: "Confirmo visualmente o mouse virtual em movimento e a moldura fixa no monitor 2." VISUAL_PASS somente para a exibicao simultanea nesta bancada; nao equivale a clique provado ou integracao Halo aprovada. Reenumerar se a geometria mudar.
+
+**Contraprova de limpeza:** execucao do mesmo helper com --monitor 2 --mode working --cursor-motion --duration 8; session=hermes-visual-cursor-19d0749299; execution=started, execution=completed, virtual_cursor_moves=2, renewal=same_visual_session, cleanup=completed, TEST_EXIT_CODE=0. hide_overlay retornou overlayVisible=false antes do recibo; o finally chamou end_session e visual.close_session. Essa prova e do contrato de encerramento, nao de pixels independentes apos o fechamento.
+
+**Integracao futura no Halo:** reutilizar o atuador Cua e os estados working/attention/completed; a moldura, skin e visual devem permanecer sob o owner Halo existente. Nunca renderizar a moldura Hermes e a borda Halo juntas na mesma tela. HALO_INTEGRATION_VISUAL=UNKNOWN ate implementacao e teste visual separados, preservando o executavel aprovado.
+
+**Kaizen/NEXT_CURSOR:** uma sessao por operacao autorizada; avisar monitor/efeito antes; perguntar sobre visibilidade apenas se a confirmacao ainda nao foi recebida; manter recibo tecnico e prova humana distintos; validar cone, commit, push conforme gate e readback sem levar mutacoes de outros owners.
+<!-- /CENTRALDARK_WORKING_CURSOR_MOTION_VISUAL_PASS_20261114 -->
