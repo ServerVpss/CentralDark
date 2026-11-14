@@ -12,6 +12,216 @@
 
 set -euo pipefail
 
+# COSTURA checkout reconciliation: reuse this engine, never mutate HEAD/index here.
+# Usage: --checkout-dry-run|--checkout-apply MAIN_SHA CHECKPOINT_SHA -- PATH
+# One scoped path per apply; unknown/both-sided edits fail closed.
+if [[ "${1:-}" == "--checkout-dry-run" || "${1:-}" == "--checkout-apply" ]]; then
+  CHECKOUT_MODE="$1"
+  shift
+  if (( $# < 4 )) || [[ "${3:-}" != "--" ]]; then
+    echo "BLOCKED_CHECKOUT_USAGE: MODE MAIN_SHA CHECKPOINT_SHA -- PATH"
+    exit 2
+  fi
+  CHECKOUT_MAIN="$1"
+  CHECKOUT_SNAPSHOT="$2"
+  shift 3
+  if (( $# != 1 )); then
+    echo "BLOCKED_CHECKOUT_SINGLE_OWNER_PATH_REQUIRED"
+    exit 2
+  fi
+  CHECKOUT_PATH="$1"
+  CHECKOUT_REPO="${REPO_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || true)}"
+  if [[ -z "$CHECKOUT_REPO" || -n "${GIT_INDEX_FILE:-}" ]]; then
+    echo "BLOCKED_CHECKOUT_REPO_OR_INDEX"
+    exit 2
+  fi
+  if ! [[ "$CHECKOUT_MAIN" =~ ^[0-9a-fA-F]{40}$|^[0-9a-fA-F]{64}$ ]] ||
+     ! [[ "$CHECKOUT_SNAPSHOT" =~ ^[0-9a-fA-F]{40}$|^[0-9a-fA-F]{64}$ ]]; then
+    echo "BLOCKED_CHECKOUT_PINNED_SHAS_REQUIRED"
+    exit 2
+  fi
+  if ! git -C "$CHECKOUT_REPO" cat-file -e "$CHECKOUT_MAIN^{commit}" 2>/dev/null ||
+     ! git -C "$CHECKOUT_REPO" cat-file -e "$CHECKOUT_SNAPSHOT^{commit}" 2>/dev/null; then
+    echo "BLOCKED_CHECKOUT_MISSING_COMMIT"
+    exit 2
+  fi
+  if [[ "$(git -C "$CHECKOUT_REPO" rev-parse refs/remotes/origin/main 2>/dev/null)" != "$CHECKOUT_MAIN" ]] ||
+     [[ "$(git -C "$CHECKOUT_REPO" rev-parse "$CHECKOUT_SNAPSHOT^1" 2>/dev/null)" != "$(git -C "$CHECKOUT_REPO" rev-parse HEAD)" ]]; then
+    echo "BLOCKED_CHECKOUT_BASE_OR_CHECKPOINT_DRIFT"
+    exit 21
+  fi
+  if [[ -n "$(git -C "$CHECKOUT_REPO" ls-files -u)" ]]; then
+    echo "BLOCKED_CHECKOUT_UNMERGED_INDEX"
+    exit 3
+  fi
+  if [[ "$CHECKOUT_MODE" == "--checkout-apply" ]]; then
+    CHECKOUT_LIVE_MAIN="$(git -C "$CHECKOUT_REPO" ls-remote origin refs/heads/main | awk '{print $1}')" || {
+      echo "BLOCKED_CHECKOUT_REMOTE_UNAVAILABLE"
+      exit 21
+    }
+    if [[ -z "$CHECKOUT_LIVE_MAIN" || "$CHECKOUT_LIVE_MAIN" != "$CHECKOUT_MAIN" ]]; then
+      echo "BLOCKED_CHECKOUT_REMOTE_DRIFT"
+      exit 21
+    fi
+    # Shared single writer lock; cannot coexist with a PR COSTURA writer.
+    CHECKOUT_LOCK_ROOT="${CENTRALDARK_DEPENDABOT_WORKTREES:-${TMPDIR:-/tmp}/centraldark-dependabot}"
+    mkdir -p "$CHECKOUT_LOCK_ROOT"
+    CHECKOUT_LOCK="$CHECKOUT_LOCK_ROOT/.costura-repo-writer.lock"
+    if ! mkdir "$CHECKOUT_LOCK" 2>/dev/null; then
+      echo "BLOCKED_CHECKOUT_WRITER_BUSY"
+      exit 23
+    fi
+    trap 'rmdir -- "$CHECKOUT_LOCK" 2>/dev/null || true' EXIT
+  fi
+  set +e
+  CHECKOUT_MERGE_OUTPUT="$(git -C "$CHECKOUT_REPO" merge-tree --write-tree --name-only "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" 2>&1)"
+  CHECKOUT_MERGE_RC=$?
+  set -e
+  if (( CHECKOUT_MERGE_RC > 1 )); then
+    echo "BLOCKED_CHECKOUT_MERGE_TREE_ERROR=$CHECKOUT_MERGE_RC"
+    exit 4
+  fi
+  CHECKOUT_TREE="${CHECKOUT_MERGE_OUTPUT%%$'\n'*}"
+  if ! [[ "$CHECKOUT_TREE" =~ ^[0-9a-fA-F]{40}$|^[0-9a-fA-F]{64}$ ]]; then
+    echo "BLOCKED_CHECKOUT_MERGE_TREE_MISSING"
+    exit 4
+  fi
+  if ! command -v node >/dev/null 2>&1; then
+    echo "BLOCKED_CHECKOUT_NODE_MISSING"
+    exit 4
+  fi
+  CHECKOUT_RESOLUTION_REF="refs/centraldark/checkpoints/costura-${CHECKOUT_MAIN:0:12}-${CHECKOUT_SNAPSHOT:0:12}-tree"
+  node - "$CHECKOUT_MODE" "$CHECKOUT_REPO" "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" "$CHECKOUT_TREE" "$CHECKOUT_RESOLUTION_REF" "$CHECKOUT_PATH" <<'COSTURA_CHECKOUT_NODE'
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
+const cp = require("node:child_process");
+const [mode, repo, main, snapshot, baseTree, resolutionRef, rel] = process.argv.slice(2);
+let temporaryIndexDirectory = null;
+function blocked(reason) {
+  console.log("CHECKOUT_DECISION=YELLOW");
+  console.log("CHECKOUT_BLOCKED=" + reason);
+  if (temporaryIndexDirectory) {
+    try { fs.rmSync(temporaryIndexDirectory, {recursive: true, force: true}); } catch {}
+  }
+  process.exit(20);
+}
+function git(args, opts = {}) {
+  const r = cp.spawnSync("git", args, {cwd: repo, encoding: null, maxBuffer: 12 * 1024 * 1024, ...opts});
+  if (r.error || r.status !== 0) blocked("GIT_COMMAND_FAILED");
+  return r.stdout;
+}
+if (!rel || path.isAbsolute(rel) || rel.includes("\\") ||
+    rel.split("/").some(x => x === "" || x === "." || x === "..") ||
+    rel.includes(":")) blocked("UNSAFE_PATH");
+if (!new Set([".md", ".txt", ".json"]).has(path.extname(rel).toLowerCase()))
+  blocked("UNSUPPORTED_OWNER_FORMAT");
+if (git(["diff", "--cached", "--name-only", "-z", "--", rel]).length)
+  blocked("STAGED_OWNER_PROTECTED");
+if (!git(["ls-files", "--error-unmatch", "--", rel]).length) blocked("UNTRACKED_OWNER");
+const abs = path.join(repo, ...rel.split("/"));
+if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) blocked("MISSING_OR_NONREGULAR_OWNER");
+const expected = git(["rev-parse", snapshot + ":" + rel]).toString("utf8").trim();
+const actual = git(["hash-object", "--", rel]).toString("utf8").trim();
+if (expected !== actual) blocked("WORKTREE_CHANGED_AFTER_CHECKPOINT");
+const original = cp.spawnSync("git", ["merge-tree", "--write-tree", "--name-only", main, snapshot],
+  {cwd: repo, encoding: "utf8", maxBuffer: 12 * 1024 * 1024});
+if (original.error || ![0, 1].includes(original.status)) blocked("MERGE_SOURCE_UNAVAILABLE");
+const sourceLines = original.stdout.split(/\r?\n/);
+if (sourceLines[0] !== baseTree) blocked("MERGE_BASE_TREE_DRIFT");
+const conflictNames = [];
+for (const line of sourceLines.slice(1)) {
+  if (!line.trim()) break;
+  conflictNames.push(line.trim());
+}
+if (!conflictNames.includes(rel)) blocked("PATH_NOT_A_SOURCE_CONFLICT");
+const refTest = cp.spawnSync("git", ["show-ref", "--verify", "--quiet", resolutionRef], {cwd: repo});
+if (![0, 1].includes(refTest.status)) blocked("RESOLUTION_REF_READ_FAILED");
+const hasRef = refTest.status === 0;
+const activeTree = hasRef ? git(["rev-parse", resolutionRef]).toString("utf8").trim() : baseTree;
+if (git(["cat-file", "-t", activeTree]).toString("utf8").trim() !== "tree")
+  blocked("RESOLUTION_REF_NOT_A_TREE");
+const changedPaths = git(["diff", "--name-only", "-z", baseTree, activeTree])
+  .toString("utf8").split("\0").filter(Boolean);
+if (changedPaths.some(p => !conflictNames.includes(p)))
+  blocked("RESOLUTION_REF_OUTSIDE_CONFLICT_SCOPE");
+const currentBlob = git(["show", activeTree + ":" + rel]);
+if (currentBlob.length > 5 * 1024 * 1024 || currentBlob.includes(0))
+  blocked("BINARY_OR_OVERSIZED_MERGE");
+const input = currentBlob.toString("utf8");
+const conflicts = [...input.matchAll(/^<<<<<<< [^\r\n]+\r?\n([\s\S]*?)^=======\r?\n([\s\S]*?)^>>>>>>> [^\r\n]+(?:\r?\n|$)/gm)];
+if (conflicts.length !== 1) blocked("REQUIRES_EXACTLY_ONE_CONFLICT_HUNK");
+const match = conflicts[0];
+const mainPart = match[1], localPart = match[2];
+if ((mainPart.trim().length === 0) === (localPart.trim().length === 0))
+  blocked("BOTH_SIDES_OR_BOTH_EMPTY");
+const retained = mainPart.trim().length ? mainPart : localPart;
+const rawMerged = input.slice(0, match.index) + retained + input.slice(match.index + match[0].length);
+const merged = rawMerged.replace(/(?:\r?\n){2,}$/, "\n");
+if (/^(<<<<<<< |=======\s*$|>>>>>>> )/m.test(merged)) blocked("CONFLICT_MARKERS_REMAIN");
+if (rel.endsWith(".json")) {
+  try { JSON.parse(merged); } catch { blocked("JSON_PARSE_FAILED"); }
+}
+const proposedHash = git(["hash-object", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
+console.log("CHECKOUT_OWNER=" + rel);
+console.log("CHECKOUT_DECISION=SAFE_ONE_SIDED_INSERT");
+console.log("CHECKOUT_SOURCE_SHA=" + actual);
+console.log("CHECKOUT_PROPOSED_SHA=" + proposedHash);
+console.log("CHECKOUT_RESOLUTION_REF=" + resolutionRef);
+if (mode === "--checkout-dry-run") {
+  console.log("CHECKOUT_WORKTREE_WRITE=0");
+  console.log("CHECKOUT_CANDIDATE_WRITE=0");
+  process.exit(0);
+}
+if (mode !== "--checkout-apply") blocked("INVALID_MODE");
+const current = git(["hash-object", "--", rel]).toString("utf8").trim();
+if (current !== expected) blocked("PREWRITE_DRIFT");
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-costura-index-"));
+temporaryIndexDirectory = tmpDir;
+try {
+  const env = {...process.env, GIT_INDEX_FILE: path.join(tmpDir, "index")};
+  git(["read-tree", activeTree], {env});
+  const row = git(["ls-tree", activeTree, "--", rel]).toString("utf8").trim();
+  const fileMode = row.split(/\s+/)[0];
+  if (!["100644", "100755"].includes(fileMode)) blocked("UNSUPPORTED_FILE_MODE");
+  const blob = git(["hash-object", "-w", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
+  git(["update-index", "--add", "--cacheinfo", fileMode + "," + blob + "," + rel], {env});
+  const nextTree = git(["write-tree"], {env}).toString("utf8").trim();
+  const scope = git(["diff", "--name-only", "-z", activeTree, nextTree])
+    .toString("utf8").split("\0").filter(Boolean);
+  if (scope.length !== 1 || scope[0] !== rel) blocked("UNSCOPED_CANDIDATE_CHANGE");
+  const check = cp.spawnSync("git", ["diff", "--check", activeTree, nextTree, "--", rel],
+    {cwd: repo, encoding: "utf8"});
+  if (check.error || check.status !== 0) blocked("CANDIDATE_DIFF_CHECK_FAILED");
+  if (!hasRef) {
+    const zeros = "0".repeat(baseTree.length);
+    git(["update-ref", resolutionRef, baseTree, zeros]);
+  }
+  git(["update-ref", resolutionRef, nextTree, activeTree]);
+  const readbackTree = git(["rev-parse", resolutionRef]).toString("utf8").trim();
+  const readbackBlob = git(["rev-parse", resolutionRef + ":" + rel]).toString("utf8").trim();
+  if (readbackTree !== nextTree || readbackBlob !== proposedHash)
+    blocked("CANDIDATE_REF_READBACK_FAILED");
+  // A conflict path can be delete/modify or mode conflict without textual markers.
+  // Only paths explicitly changed in this isolated resolution tree count as resolved.
+  const resolved = git(["diff", "--name-only", "-z", baseTree, readbackTree])
+    .toString("utf8").split("\0").filter(Boolean);
+  if (resolved.some(p => !conflictNames.includes(p))) blocked("RESOLUTION_SCOPE_DRIFT");
+  console.log("CHECKOUT_READBACK=PASS");
+  console.log("CHECKOUT_RESOLVED_PATHS=" + resolved.length);
+  console.log("CHECKOUT_REMAINING_CONFLICTS=" + (conflictNames.length - resolved.length));
+  console.log("CHECKOUT_CANDIDATE_TREE=" + nextTree);
+  console.log("CHECKOUT_WORKTREE_WRITE=0");
+  console.log("CHECKOUT_HEAD_MUTATED=0");
+  console.log("CHECKOUT_INDEX_MUTATED=0");
+  console.log("CHECKOUT_PUSH=0");
+} finally {
+  fs.rmSync(tmpDir, {recursive: true, force: true});
+}
+COSTURA_CHECKOUT_NODE
+  exit $?
+fi
+
 # COSTURA audit mode: validate an isolated index against an explicit base commit.
 # Usage: resolve-conflicts.sh --audit-index BASE_SHA REMOTE_REF_OR_DASH -- PATH...
 # Remote ref "-" is explicit offline/local-only mode; never pushes or writes.

@@ -311,4 +311,65 @@ test "$(git ls-remote "$UNKNOWN_REMOTE" refs/heads/dependabot/unknown-conflict |
 test ! -e "$UNKNOWN_WORKTREES/.costura-repo-writer.lock"
 echo "PR_HEAD_COMMITTED_MARKERS_CLASSIFIER_AND_FAIL_CLOSED=PASS"
 
+# COSTURA checkout: one-sided insertion is resolved only in an isolated Git tree.
+# Never touch the checkout's index/HEAD or write to main.
+CHECKOUT_REMOTE="$TMP_ROOT/checkout-remote.git"
+CHECKOUT_WORK="$TMP_ROOT/checkout-work"
+CHECKOUT_PEER="$TMP_ROOT/checkout-peer"
+git init -q --bare "$CHECKOUT_REMOTE"
+git -C "$CHECKOUT_REMOTE" symbolic-ref HEAD refs/heads/main
+git init -q -b main "$CHECKOUT_WORK"
+git -C "$CHECKOUT_WORK" config user.name "Costura Checkout Test"
+git -C "$CHECKOUT_WORK" config user.email "costura-checkout@example.invalid"
+printf 'top\nowner:\nbottom\n' > "$CHECKOUT_WORK/note.md"
+git -C "$CHECKOUT_WORK" add note.md
+git -C "$CHECKOUT_WORK" commit -qm "base"
+git -C "$CHECKOUT_WORK" remote add origin "$CHECKOUT_REMOTE"
+git -C "$CHECKOUT_WORK" push -q -u origin main
+printf 'top\nowner:\nlocal_note: yes\nbottom\n' > "$CHECKOUT_WORK/note.md"
+CHECKOUT_SNAPSHOT="$(git -C "$CHECKOUT_WORK" stash create checkout-tracked-snapshot)"
+CHECKOUT_HEAD_BEFORE="$(git -C "$CHECKOUT_WORK" rev-parse HEAD)"
+CHECKOUT_BLOB_BEFORE="$(git -C "$CHECKOUT_WORK" hash-object -- note.md)"
+git clone -q "$CHECKOUT_REMOTE" "$CHECKOUT_PEER"
+git -C "$CHECKOUT_PEER" config user.name "Costura Checkout Test"
+git -C "$CHECKOUT_PEER" config user.email "costura-checkout@example.invalid"
+printf 'top\nowner:\n\nbottom\n' > "$CHECKOUT_PEER/note.md"
+git -C "$CHECKOUT_PEER" add note.md
+git -C "$CHECKOUT_PEER" commit -qm "main one-sided change"
+git -C "$CHECKOUT_PEER" push -q origin main
+git -C "$CHECKOUT_WORK" fetch -q origin main
+CHECKOUT_MAIN="$(git -C "$CHECKOUT_WORK" rev-parse refs/remotes/origin/main)"
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-dry-run "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-dry.log"
+grep -Fq 'CHECKOUT_DECISION=SAFE_ONE_SIDED_INSERT' "$TMP_ROOT/checkout-dry.log"
+grep -Fq 'CHECKOUT_CANDIDATE_WRITE=0' "$TMP_ROOT/checkout-dry.log"
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-apply "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-apply.log"
+grep -Fq 'CHECKOUT_READBACK=PASS' "$TMP_ROOT/checkout-apply.log"
+grep -Fq 'CHECKOUT_RESOLVED_PATHS=1' "$TMP_ROOT/checkout-apply.log"
+grep -Fq 'CHECKOUT_REMAINING_CONFLICTS=0' "$TMP_ROOT/checkout-apply.log"
+test "$(git -C "$CHECKOUT_WORK" rev-parse HEAD)" = "$CHECKOUT_HEAD_BEFORE"
+test "$(git -C "$CHECKOUT_WORK" hash-object -- note.md)" = "$CHECKOUT_BLOB_BEFORE"
+test -z "$(git -C "$CHECKOUT_WORK" diff --cached --name-only)"
+CHECKOUT_REF="refs/centraldark/checkpoints/costura-${CHECKOUT_MAIN:0:12}-${CHECKOUT_SNAPSHOT:0:12}-tree"
+git -C "$CHECKOUT_WORK" cat-file -e "$CHECKOUT_REF:note.md"
+test "$(git -C "$CHECKOUT_WORK" rev-parse "$CHECKOUT_REF:note.md")" = "$CHECKOUT_BLOB_BEFORE"
+set +e
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-apply "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-again.log" 2>&1
+CHECKOUT_AGAIN_RC=$?
+set -e
+test "$CHECKOUT_AGAIN_RC" -eq 20
+grep -Fq 'CHECKOUT_BLOCKED=REQUIRES_EXACTLY_ONE_CONFLICT_HUNK' "$TMP_ROOT/checkout-again.log"
+git -C "$CHECKOUT_WORK" add note.md
+set +e
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-dry-run "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-staged.log" 2>&1
+CHECKOUT_STAGED_RC=$?
+set -e
+test "$CHECKOUT_STAGED_RC" -eq 20
+grep -Fq 'CHECKOUT_BLOCKED=STAGED_OWNER_PROTECTED' "$TMP_ROOT/checkout-staged.log"
+echo "COSTURA_CHECKOUT_ISOLATED_CANDIDATE=PASS"
+echo "COSTURA_CHECKOUT_STAGE_HEAD_GUARDS=PASS"
+
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"
