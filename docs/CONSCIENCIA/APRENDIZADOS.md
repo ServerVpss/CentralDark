@@ -3463,3 +3463,17 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-11-13
 - **Contexto:** Durante reconciliação do acesso GitHub do Cockpit, github.functions.ts continha um delta local válido, mas a main não tinha consumidores desse novo caminho. O teste HUD global também apresentava falhas em owners não relacionados.
 - **Aprendizado:** Antes de promover um owner novo, confirmar pelo menos um consumidor material no mesmo cone causal. Se o consumidor estiver em arquivo com hunks de outros owners, promover apenas os hunks causais. Falhas globais preexistentes fora do cone permanecem registradas, mas não devem ser atribuídas ao delta nem usadas como verde.
+
+
+### 232. Reconciliação de Casa e VMware por vinte frentes, com escritor único
+- **Categoria:** contraprova e regra operacional
+- **Data:** 2026-11-13
+- **Marcador:** RECONCILIACAO_CASA_VM_20_FRENTES_20261113
+- **Owner:** `scripts/centraldark-inventory-reconcile.sh` para inventário e owners existentes de cada escopo para resolução; não criar reconciliador ou writer paralelo.
+- **Método comprovado:** dez frentes de leitura por checkout, Casa `F:\CentralDark` e VMware `/home/CentralDark-OS/CentralDark`, classificadas em governança, skills, documentação, apps, src, scripts, infraestrutura, testes, configuração e demais; escrita sequencial com um writer por escopo.
+- **Casa (snapshot):** HEAD `0213fecf70` contra `origin/main=f548bc23f5`; 266 caminhos rastreados com alterações locais, 237 recebidos da main, 105 sobreposições potenciais. Comparação de conteúdo: 59 iguais à main, 37 divergentes e 9 caminhos excluídos ou sem arquivo regular. Foram observados 3.176 não rastreados, 4 colisões com caminhos recebidos e 26 arquivos já preparados no índice. O `git merge --ff-only origin/main` recusou sobrescrever alterações; HEAD e contagem do stage permaneceram iguais, sem MERGE_HEAD.
+- **VMware (snapshot):** HEAD `4207576f4` contra a mesma main; 61 caminhos com alterações locais, 254 recebidos, 56 sobrepostos; 33 iguais à main, 23 divergentes, 10 não rastreados e 1 colisão não rastreada. O `git merge --ff-only origin/main` também recusou sobrescrever alterações; HEAD permaneceu igual e não deixou MERGE_HEAD.
+- **Convergência provada no cone documental:** `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-COMPRESSAO-INVARIANTE-BINDINGS-VMWARE-VPS.md` foi alinhado ao conteúdo da main nos dois checkouts, após backup verificado em `backups/centraldark-note-maintenance/`. Blob após readback em ambos: `274e531d50d05d0106af3f20634d2ce6eb6cfe52`. Este PASS refere-se somente a esse documento, não ao HEAD global.
+- **Lição causal:** sobreposição de caminho não equivale a conflito de conteúdo; hash igual elimina disputa textual, mas Git ainda pode bloquear fast-forward por stage, exclusões e arquivos não rastreados. Conflitos de owner precisam de decisão e teste por cone antes de avançar o checkout. Não usar `reset --hard`, `clean`, stash destrutivo ou `pull` forçado para fabricar verde.
+- **NEXT_CURSOR:** resolver deltas divergentes e exclusões por owner preservando os 26 staged da Casa; comparar colisões por hash e caixa do caminho; executar testes focados; só então avançar Casa e VMware para o SHA aprovado e fazer readback; VPS pública é etapa distinta. `MISSION_FIXED_POINT=PENDING`.
+
