@@ -363,10 +363,16 @@ bash scripts/dependabot/resolve-conflicts.sh \
   objetos Git da simulação, mas não altera HEAD, índice, arquivos ou refs.
 - `--checkout-apply` exige SHAs completos, checkpoint cujo pai seja o HEAD
   atual, readback remoto da main, arquivo rastreado e não staged, hash local
-  igual ao snapshot e lock de writer único compartilhado com COSTURA PR.
-- Apenas inserções textuais de **um hunk com um lado vazio** são elegíveis.
-  Conflitos de duas alterações materiais, exclusões, arquivos binários,
-  syntax inválida, mais de um hunk e divergência de owner permanecem YELLOW.
+  igual ao snapshot **ou à main atual**, com prova por blob, e lock de writer
+  único compartilhado com COSTURA PR.
+- Caminho seguro adicional: se o **blob atual do worktree é exatamente igual ao
+  blob da main** e o owner não está staged, o motor aceita esse blob na árvore
+  candidata mesmo quando o checkpoint antigo divergia. A igualdade por SHA é
+  obrigatória; nunca aplicar `--theirs` por conveniência.
+- Fora desse caso, apenas inserções textuais de **um hunk com um lado vazio**
+  são elegíveis (`.md`, `.txt`, `.json` com parse). Conflitos de duas
+  alterações materiais, exclusões, arquivo divergente sem prova, sintaxe
+  inválida e mais de um hunk permanecem YELLOW.
 - A aplicação atualiza **somente** uma árvore Git candidata em
   `refs/centraldark/checkpoints/costura-<main>-<snapshot>-tree`, com
   índice temporário, escrita por path, `git diff --check`, CAS e readback.

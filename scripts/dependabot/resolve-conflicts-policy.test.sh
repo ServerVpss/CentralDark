@@ -369,7 +369,22 @@ CHECKOUT_STAGED_RC=$?
 set -e
 test "$CHECKOUT_STAGED_RC" -eq 20
 grep -Fq 'CHECKOUT_BLOCKED=STAGED_OWNER_PROTECTED' "$TMP_ROOT/checkout-staged.log"
+# The worktree may already match main while its pinned checkpoint is older.
+# Such a path can be marked resolved in the candidate tree without --theirs.
+git -C "$CHECKOUT_WORK" reset -q HEAD -- note.md
+git -C "$CHECKOUT_WORK" update-ref -d "$CHECKOUT_REF"
+git -C "$CHECKOUT_WORK" show "$CHECKOUT_MAIN:note.md" > "$CHECKOUT_WORK/note.md"
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-dry-run "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-identical-dry.log"
+grep -Fq 'CHECKOUT_DECISION=SAFE_CURRENT_EQUALS_MAIN' "$TMP_ROOT/checkout-identical-dry.log"
+REPO_DIR="$CHECKOUT_WORK" bash "$RESOLVER" \
+  --checkout-apply "$CHECKOUT_MAIN" "$CHECKOUT_SNAPSHOT" -- note.md > "$TMP_ROOT/checkout-identical-apply.log"
+grep -Fq 'CHECKOUT_READBACK=PASS' "$TMP_ROOT/checkout-identical-apply.log"
+test "$(git -C "$CHECKOUT_WORK" rev-parse "$CHECKOUT_REF:note.md")" = "$(git -C "$CHECKOUT_WORK" rev-parse "$CHECKOUT_MAIN:note.md")"
+test "$(git -C "$CHECKOUT_WORK" rev-parse HEAD)" = "$CHECKOUT_HEAD_BEFORE"
+test -z "$(git -C "$CHECKOUT_WORK" diff --cached --name-only)"
 echo "COSTURA_CHECKOUT_ISOLATED_CANDIDATE=PASS"
 echo "COSTURA_CHECKOUT_STAGE_HEAD_GUARDS=PASS"
+echo "COSTURA_CHECKOUT_MAIN_IDENTICAL=PASS"
 
 echo "RESOLVE_CONFLICTS_POLICY_TEST=PASS"

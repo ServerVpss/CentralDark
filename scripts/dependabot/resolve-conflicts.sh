@@ -114,8 +114,6 @@ function git(args, opts = {}) {
 if (!rel || path.isAbsolute(rel) || rel.includes("\\") ||
     rel.split("/").some(x => x === "" || x === "." || x === "..") ||
     rel.includes(":")) blocked("UNSAFE_PATH");
-if (!new Set([".md", ".txt", ".json"]).has(path.extname(rel).toLowerCase()))
-  blocked("UNSUPPORTED_OWNER_FORMAT");
 if (git(["diff", "--cached", "--name-only", "-z", "--", rel]).length)
   blocked("STAGED_OWNER_PROTECTED");
 if (!git(["ls-files", "--error-unmatch", "--", rel]).length) blocked("UNTRACKED_OWNER");
@@ -123,7 +121,9 @@ const abs = path.join(repo, ...rel.split("/"));
 if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) blocked("MISSING_OR_NONREGULAR_OWNER");
 const expected = git(["rev-parse", snapshot + ":" + rel]).toString("utf8").trim();
 const actual = git(["hash-object", "--", rel]).toString("utf8").trim();
-if (expected !== actual) blocked("WORKTREE_CHANGED_AFTER_CHECKPOINT");
+const mainBlob = git(["rev-parse", main + ":" + rel]).toString("utf8").trim();
+const mainIdentical = actual === mainBlob;
+if (expected !== actual && !mainIdentical) blocked("WORKTREE_CHANGED_AFTER_CHECKPOINT");
 const original = cp.spawnSync("git", ["merge-tree", "--write-tree", "--name-only", main, snapshot],
   {cwd: repo, encoding: "utf8", maxBuffer: 12 * 1024 * 1024});
 if (original.error || ![0, 1].includes(original.status)) blocked("MERGE_SOURCE_UNAVAILABLE");
@@ -145,26 +145,39 @@ const changedPaths = git(["diff", "--name-only", "-z", baseTree, activeTree])
   .toString("utf8").split("\0").filter(Boolean);
 if (changedPaths.some(p => !conflictNames.includes(p)))
   blocked("RESOLUTION_REF_OUTSIDE_CONFLICT_SCOPE");
-const currentBlob = git(["show", activeTree + ":" + rel]);
-if (currentBlob.length > 5 * 1024 * 1024 || currentBlob.includes(0))
-  blocked("BINARY_OR_OVERSIZED_MERGE");
-const input = currentBlob.toString("utf8");
-const conflicts = [...input.matchAll(/^<<<<<<< [^\r\n]+\r?\n([\s\S]*?)^=======\r?\n([\s\S]*?)^>>>>>>> [^\r\n]+(?:\r?\n|$)/gm)];
-if (conflicts.length !== 1) blocked("REQUIRES_EXACTLY_ONE_CONFLICT_HUNK");
-const match = conflicts[0];
-const mainPart = match[1], localPart = match[2];
-if ((mainPart.trim().length === 0) === (localPart.trim().length === 0))
-  blocked("BOTH_SIDES_OR_BOTH_EMPTY");
-const retained = mainPart.trim().length ? mainPart : localPart;
-const rawMerged = input.slice(0, match.index) + retained + input.slice(match.index + match[0].length);
-const merged = rawMerged.replace(/(?:\r?\n){2,}$/, "\n");
-if (/^(<<<<<<< |=======\s*$|>>>>>>> )/m.test(merged)) blocked("CONFLICT_MARKERS_REMAIN");
-if (rel.endsWith(".json")) {
-  try { JSON.parse(merged); } catch { blocked("JSON_PARSE_FAILED"); }
+let merged = null;
+let proposedHash;
+let decision;
+if (mainIdentical) {
+  const activeBlob = git(["rev-parse", activeTree + ":" + rel]).toString("utf8").trim();
+  if (activeBlob === mainBlob) blocked("ALREADY_ALIGNED_IN_CANDIDATE");
+  proposedHash = mainBlob;
+  decision = "SAFE_CURRENT_EQUALS_MAIN";
+} else {
+  if (!new Set([".md", ".txt", ".json"]).has(path.extname(rel).toLowerCase()))
+    blocked("UNSUPPORTED_OWNER_FORMAT");
+  const currentBlob = git(["show", activeTree + ":" + rel]);
+  if (currentBlob.length > 5 * 1024 * 1024 || currentBlob.includes(0))
+    blocked("BINARY_OR_OVERSIZED_MERGE");
+  const input = currentBlob.toString("utf8");
+  const conflicts = [...input.matchAll(/^<<<<<<< [^\r\n]+\r?\n([\s\S]*?)^=======\r?\n([\s\S]*?)^>>>>>>> [^\r\n]+(?:\r?\n|$)/gm)];
+  if (conflicts.length !== 1) blocked("REQUIRES_EXACTLY_ONE_CONFLICT_HUNK");
+  const match = conflicts[0];
+  const mainPart = match[1], localPart = match[2];
+  if ((mainPart.trim().length === 0) === (localPart.trim().length === 0))
+    blocked("BOTH_SIDES_OR_BOTH_EMPTY");
+  const retained = mainPart.trim().length ? mainPart : localPart;
+  const rawMerged = input.slice(0, match.index) + retained + input.slice(match.index + match[0].length);
+  merged = rawMerged.replace(/(?:\r?\n){2,}$/, "\n");
+  if (/^(<<<<<<< |=======\s*$|>>>>>>> )/m.test(merged)) blocked("CONFLICT_MARKERS_REMAIN");
+  if (rel.endsWith(".json")) {
+    try { JSON.parse(merged); } catch { blocked("JSON_PARSE_FAILED"); }
+  }
+  proposedHash = git(["hash-object", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
+  decision = "SAFE_ONE_SIDED_INSERT";
 }
-const proposedHash = git(["hash-object", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
 console.log("CHECKOUT_OWNER=" + rel);
-console.log("CHECKOUT_DECISION=SAFE_ONE_SIDED_INSERT");
+console.log("CHECKOUT_DECISION=" + decision);
 console.log("CHECKOUT_SOURCE_SHA=" + actual);
 console.log("CHECKOUT_PROPOSED_SHA=" + proposedHash);
 console.log("CHECKOUT_RESOLUTION_REF=" + resolutionRef);
@@ -175,16 +188,18 @@ if (mode === "--checkout-dry-run") {
 }
 if (mode !== "--checkout-apply") blocked("INVALID_MODE");
 const current = git(["hash-object", "--", rel]).toString("utf8").trim();
-if (current !== expected) blocked("PREWRITE_DRIFT");
+if (current !== actual || (current !== expected && current !== mainBlob))
+  blocked("PREWRITE_DRIFT");
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-costura-index-"));
 temporaryIndexDirectory = tmpDir;
 try {
   const env = {...process.env, GIT_INDEX_FILE: path.join(tmpDir, "index")};
   git(["read-tree", activeTree], {env});
-  const row = git(["ls-tree", activeTree, "--", rel]).toString("utf8").trim();
+  const row = git(["ls-tree", mainIdentical ? main : activeTree, "--", rel]).toString("utf8").trim();
   const fileMode = row.split(/\s+/)[0];
   if (!["100644", "100755"].includes(fileMode)) blocked("UNSUPPORTED_FILE_MODE");
-  const blob = git(["hash-object", "-w", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
+  const blob = mainIdentical ? mainBlob :
+    git(["hash-object", "-w", "--stdin"], {input: Buffer.from(merged, "utf8")}).toString("utf8").trim();
   git(["update-index", "--add", "--cacheinfo", fileMode + "," + blob + "," + rel], {env});
   const nextTree = git(["write-tree"], {env}).toString("utf8").trim();
   const scope = git(["diff", "--name-only", "-z", activeTree, nextTree])
