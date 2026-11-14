@@ -16,17 +16,31 @@ import { auditToolExecution } from "./audit-logger.js";
 import { decorateToolResult, semanticOutcome } from "./tool-result-envelope.js";
 import { getOperationalSnapshot } from "./operational-telemetry.js";
 import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
-function zodTypeToJsonSchema(schema) {
-    if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
-        return zodTypeToJsonSchema(schema._def.innerType);
+export function zodTypeToJsonSchema(schema) {
+    if (!schema) {
+        return { type: "object", properties: {} };
     }
-    if (schema instanceof z.ZodObject) {
-        const shape = schema.shape;
+    const isZod = (name) => typeof z[name] === "function" && schema instanceof z[name];
+    if (isZod("ZodOptional") || isZod("ZodDefault")) {
+        return zodTypeToJsonSchema(schema._def?.innerType ?? schema.unwrap?.());
+    }
+    // Zod 3 wraps refine/superRefine in ZodEffects. Zod 4 keeps the
+    // object shape but older deployed builds can still expose the wrapper.
+    if (isZod("ZodEffects")) {
+        return zodTypeToJsonSchema(schema._def?.schema);
+    }
+    if (isZod("ZodPipeline")) {
+        return zodTypeToJsonSchema(schema._def?.out ?? schema._def?.in);
+    }
+    // Prefer structural detection so duplicate Zod installations do not
+    // silently fall through to a schema without the required JSON type.
+    const shape = schema.shape ?? (schema._def?.shape && schema._def.shape());
+    if (isZod("ZodObject") || schema._def?.type === "object" || shape) {
         const properties = {};
         const required = [];
-        for (const [key, value] of Object.entries(shape)) {
+        for (const [key, value] of Object.entries(shape ?? {})) {
             properties[key] = zodTypeToJsonSchema(value);
-            if (!(value instanceof z.ZodOptional) && !(value instanceof z.ZodDefault)) {
+            if (!(isZod("ZodOptional") || isZod("ZodDefault"))) {
                 required.push(key);
             }
         }
@@ -36,36 +50,39 @@ function zodTypeToJsonSchema(schema) {
             ...(required.length > 0 ? { required } : {}),
         };
     }
-    if (schema instanceof z.ZodString) {
-        return { type: "string", description: schema.description };
+    if (isZod("ZodString") || schema._def?.type === "string") {
+        return { type: "string", ...(schema.description ? { description: schema.description } : {}) };
     }
-    if (schema instanceof z.ZodNumber) {
-        return { type: "number", description: schema.description };
+    if (isZod("ZodNumber") || schema._def?.type === "number") {
+        return { type: "number", ...(schema.description ? { description: schema.description } : {}) };
     }
-    if (schema instanceof z.ZodBoolean) {
-        return { type: "boolean", description: schema.description };
+    if (isZod("ZodBoolean") || schema._def?.type === "boolean") {
+        return { type: "boolean", ...(schema.description ? { description: schema.description } : {}) };
     }
-    if (schema instanceof z.ZodEnum) {
-        return { type: "string", enum: schema.options, description: schema.description };
+    if (isZod("ZodEnum") || schema._def?.type === "enum") {
+        const values = schema.options ?? (schema._def?.entries ? Object.values(schema._def.entries) : []);
+        return { type: "string", enum: values, ...(schema.description ? { description: schema.description } : {}) };
     }
-    if (schema instanceof z.ZodArray) {
+    if (isZod("ZodArray") || schema._def?.type === "array") {
+        const element = schema.element ?? (typeof schema._def?.type === "string" ? schema._def?.element : schema._def?.type);
         return {
             type: "array",
-            items: zodTypeToJsonSchema(schema._def.type),
-            description: schema.description,
+            items: zodTypeToJsonSchema(element),
+            ...(schema.description ? { description: schema.description } : {}),
         };
     }
-    if (schema instanceof z.ZodUnion) {
+    if (isZod("ZodUnion") || schema._def?.type === "union") {
         return {
-            oneOf: schema._def.options.map((opt) => zodTypeToJsonSchema(opt)),
-            description: schema.description,
+            oneOf: (schema._def?.options ?? []).map((opt) => zodTypeToJsonSchema(opt)),
+            ...(schema.description ? { description: schema.description } : {}),
         };
     }
-    if (schema instanceof z.ZodLiteral) {
-        return { const: schema._def.value, description: schema.description };
+    if (isZod("ZodLiteral") || schema._def?.type === "literal") {
+        return { const: schema._def?.value ?? schema._def?.values?.[0], ...(schema.description ? { description: schema.description } : {}) };
     }
-    // Fallback genérico
-    return { description: schema.description };
+    // Never emit an invalid MCP schema. Unknown tool inputs are objects in
+    // this server and must still carry the required JSON Schema type.
+    return { type: "object", properties: {} };
 }
 // PUBLIC_CALLABLE_TOOL_NAMES removido em 30/06/2026 — /mcp-public deletado
 // (expunha vps_write_file_safe sem Bearer, pendência #8).
