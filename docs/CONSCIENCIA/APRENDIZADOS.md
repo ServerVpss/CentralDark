@@ -3546,3 +3546,13 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Aprendizado:** `BRANCH_STALE != BRANCH_USELESS`; `CASA_HAS_DELTA != MAIN_HAS_DELTA`; `DELETE_BRANCH_AFTER_ABSORPTION_TEST_READBACK=true`. Antes de apagar branch antiga, comparar com a `main`, identificar o ouro exclusivo, preservar a versão mais nova do owner, absorver somente o delta causal, testar nas frentes aplicáveis, publicar na `main`, fazer readback e só então remover a branch. Não sobrescrever owner mais novo com snapshot antigo de branch.
 - **Prova:** `main` recebeu o delta no commit `651ca293fac882583e67fa8c1ad2bfb04cd097c7`; blobs `SKILL.md=087b8d6a5d3bf46a09b06dfce8f1498eee3b39d4` e `blink_cursor.py=0176fbaf96e89fb9611ac5ce3823f447dd907a55`. A VM recebeu o mesmo script, passou `py_compile` + `--help` e produziu o mesmo blob `0176fbaf...`; a Casa já possuía o marcador VISUAL_PASS e `virtual_cursor_moves`.
 - **Owners reaproveitados:** skill Hermes Visual, `blink_cursor.py`, APRENDIZADOS, LEMBRANCAS e NeuroLink existentes. Nenhum runner, PR, skill ou memória paralela.
+
+
+### 235. !AUREULA — sincronização seletiva V ↔ F ↔ MAIN: examinai tudo, retém o bem
+- **Categoria:** reconciliação, sincronização, fast loop, owner, Kaizen
+- **Data:** 2026-11-14
+- **Intenção:** transformar a reconciliação entre `V:\\` (VM/Samba), `F:\\CentralDark` (Casa) e `main` em um fluxo seletivo e determinístico, sem cópia cega nem duplicação.
+- **Aprendizado:** `COMPARE_BEFORE_SYNC=true`; `SURVIVES_PROOF_ONLY=true`; `EXACT_DELTA_ONLY=true`; `NO_DUPLICATION=true`; `PRESERVE_CURRENT_OWNER=true`. Antes de sincronizar, conferir o que cada frente já possui, o que falta e o que divergiu. Aplicar somente a linha/hunk/semântica necessária que sobreviver à contraprova. Não transportar arquivo, pasta, branch ou histórico inteiro quando o delta causal for menor.
+- **Regra operacional:** V ↔ F ↔ MAIN é um circuito de reconciliação, não três fontes concorrentes. O owner mais atual deve ser preservado; diferenças pré-existentes fora do cone não são apagadas. Mesmo conteúdo já existente não é regravado. Só o delta ausente e provado atravessa as frentes aplicáveis.
+- **Mnemônico do CHEFE:** `!AUREULA — examinai tudo, retém o bem`. Examinar = comparar CURRENT; reter = preservar o que já funciona; bem = delta que sobrevive a teste, contraprova e readback.
+- **Fixed point:** circuito só fecha quando as frentes aplicáveis concordam semanticamente no delta, os testes mínimos passam, a `main` recebe a versão canônica e o readback confirma ausência de duplicação.
