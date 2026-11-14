@@ -78,6 +78,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#090b13" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "Instinto Superior" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { title: "CentralDark — Instinto Superior" },
       {
         name: "description",
@@ -104,6 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Rubik:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "manifest", href: "/manifest.webmanifest", type: "application/manifest+json" },
     ],
   }),
   shellComponent: RootShell,
@@ -129,6 +134,14 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const caminho = useRouterState({ select: (state) => state.location.pathname });
+
+  // PWA de continuidade: registra somente o fallback público; nunca guarda dados autenticados.
+  useEffect(() => {
+    if (!("serviceWorker" in navigator) || !window.isSecureContext) return;
+    void navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+      // UNKNOWN, não PASS. A prova de instalação/offline depende do iPhone e do deploy.
+    });
+  }, []);
 
   // 🧿 Erros visíveis: sensor único em public/centraldark-erros-visiveis.js (skill kaizen-sistema-um).
   useEffect(() => {
