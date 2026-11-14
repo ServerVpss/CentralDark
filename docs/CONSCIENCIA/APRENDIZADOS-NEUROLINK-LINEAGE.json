@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "d4e8082734250187e0f848cd3ea24cb32c6fb2f6",
+  "source_blob_sha": "2d01ab5aafa66ca571c44d808759efaf57489e31",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 248,
-    "highest_legacy_learning_number": 234,
+    "learning_sections": 249,
+    "highest_legacy_learning_number": 235,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -189,7 +189,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 234
+      "end": 235
     }
   },
   "nodes": [
@@ -2919,6 +2919,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L229B",
+      "next_uid": "L235"
+    },
+    {
+      "uid": "L235",
+      "legacy_learning_number": 235,
+      "legacy_occurrence": 1,
+      "title": "!AUREULA — sincronização seletiva V ↔ F ↔ MAIN: examinai tudo, retém o bem",
+      "document_order": 249,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L234",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
