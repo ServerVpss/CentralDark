@@ -3528,3 +3528,12 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Prova:** `V:\` foi lido na Casa `SEGREDO`; os owners `scripts/memory-linker/library-router.mjs` e `library-router.test.mjs` existem em F: e V:. Após o delta read-only TREE↔CATALOG e correção de escaping por backcheck, `node --check` + `node --test` passaram **27/27** na Casa e **27/27** na VM via Samba. Nenhuma pasta inteira foi copiada e `catalog.json` não recebeu autoescrita.
 - **Owners reaproveitados:** `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md`; `scripts/memory-linker/library-router.mjs`; `scripts/memory-linker/library-router.test.mjs`; este `APRENDIZADOS.md`; `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`; `scripts/trigger-fabric/rebuild_learning_lineage.py`.
 - **Próximo passo:** publicar somente os deltas intencionais na `main`, fazer readback do SHA e encerrar a branch/PR transitória criada antes da correção do método.
+
+
+### 229. Persist-first: aprendizado confirmado deve ser gravado antes de ser relatado no chat
+- **Categoria:** memória operacional, Kaizen, disciplina de resposta, fast loop
+- **Data:** 2026-11-14
+- **Ferida:** Após cristalizar o Fast Loop, a SOL recebeu um novo aprendizado sobre Dev Mode/HMR e o descreveu na resposta antes de persistir APRENDIZADOS + LEMBRANCAS.
+- **Aprendizado:** `LEARNED_AND_CONFIRMED => PERSIST_BEFORE_REPORT`. Quando uma execução, teste, aprovação do CHEFE ou correção produzir aprendizado operacional reutilizável, a ordem obrigatória é: owner existente → APRENDIZADOS → LEMBRANCAS → índice/linhagem existente → readback → somente então relatar o aprendizado no chat. A resposta não substitui persistência.
+- **Escopo:** vale para código, React/HMR, site, documentação, runtime, reconciliação e métodos operacionais. Não criar documento, memória, writer ou índice paralelo.
+- **Contraprova:** se a persistência não puder ser executada ou provada, relatar `REGISTRO=UNKNOWN/BLOQUEADO`; nunca dizer que o aprendizado foi salvo.
