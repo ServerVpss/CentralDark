@@ -714,6 +714,18 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
 // @implementado: HUD vigente resolvido em tempo real por marcador via GitHub API server-side, com fallback gh autenticado no host; token nunca sai para o navegador.
 // @pendente: build/readback visual do Cockpit publicado; MCP permanece fallback operacional do agente, não biblioteca embutida no browser.
 
+export type ReciboHudGitHub = {
+  missionId: string;
+  titulo: string;
+  estado: "PENDENTE" | "CONCLUSAO_RELATADA" | "UNKNOWN";
+  commentId: number;
+  commentUrl: string;
+  autor: string | null;
+  atualizadoEm: string | null;
+  nextCursor: string | null;
+  checklist: Array<{ texto: string; marcado: boolean }>;
+};
+
 export type EstadoHudVigente = {
   role: "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
   status: "PASS" | "UNKNOWN" | "BLOCKED";
@@ -727,6 +739,10 @@ export type EstadoHudVigente = {
   measuredAt: string;
   candidates: number[];
   detail: string;
+  recibosEstado?: "PASS" | "UNKNOWN" | "BLOCKED";
+  recibos?: ReciboHudGitHub[];
+  missaoAtual?: ReciboHudGitHub | null;
+  funilNextCursor?: string | null;
 };
 
 const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
@@ -847,12 +863,93 @@ function readHudViaGhCli(): EstadoHudVigente | null {
   }
 }
 
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/sync.functions.ts @doc_ref=docs/HUD/README.md
+// @last_updated=2026-11-14T09:34:00Z
+// @implementado: leitura read-only dos recibos de missao na conversa do funil dinamico
+// @pendente: build e prova visual no Cockpit publicado; caixa marcada nao e PASS sem contraprova
+const HUD_MISSION_TAG = /<!--\s*CENTRALDARK_HUD_MISSION_ID:\s*([A-Z0-9_-]{3,120})\s*-->/i;
+const HUD_HALO_RECEIPT = "CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT";
+
+function parseHudRecibos(raw: unknown[], pr: number): ReciboHudGitHub[] {
+  const dados: ReciboHudGitHub[] = [];
+  for (const obj of raw) {
+    if (!obj || typeof obj !== "object") continue;
+    const c = obj as Record<string, unknown>;
+    const body = c["body"];
+    if (typeof body !== "string" || body.length > 64000 || typeof c["id"] !== "number" ||
+        !Number.isSafeInteger(c["id"]) || c["id"] <= 0) continue;
+    const missionId = body.match(HUD_MISSION_TAG)?.[1] ??
+      (body.includes(HUD_HALO_RECEIPT) ? "CENTRALDARK_REMOTE_AGENT_HALO_RADEON" : null);
+    if (!missionId) continue;
+    const cursorText = [...body.matchAll(/^\s*(?:[-*]\s*)?\*{0,2}NEXT_CURSOR\*{0,2}\s*[:=]\s*(.+)$/gim)].at(-1)?.[1];
+    const nextCursor = cursorText?.replace(/^\*{1,2}\s*/, "").replace(/^\x60|\x60$/g, "").trim() || null;
+    const checklist = [...body.matchAll(/^\s*-\s*\[([ xX])\]\s+(.+)$/gm)]
+      .slice(0, 30).map(m => ({ texto: m[2]!.trim().slice(0, 220), marcado: m[1]!.toLowerCase() === "x" }));
+    const completo = /(?:MISSION|STATUS)\s*[:=]\s*(?:COMPLETE|DONE|CONCLUID[AO])/i.test(body) &&
+      /(?:MISSION_)?FIXED_POINT\s*[:=]\s*(?:YES|PASS|TRUE)/i.test(body) &&
+      /READBACK\s*[:=]\s*PASS/i.test(body);
+    const estado = completo ? "CONCLUSAO_RELATADA" :
+      /(?:MISSION|STATUS)\s*[:=]\s*(?:PENDING|PENDENTE)|FIXED_POINT\s*[:=]\s*NO/i.test(body)
+      ? "PENDENTE" : "UNKNOWN";
+    const user = c["user"];
+    const autor = user && typeof user === "object" && typeof (user as {login?: unknown}).login === "string"
+      ? (user as {login:string}).login : null;
+    dados.push({
+      missionId, titulo: (body.match(/^#{1,4}\s+(.+)$/m)?.[1] ?? missionId).slice(0, 160),
+      estado, commentId: c["id"], commentUrl: "https://github.com/" + GITHUB_REPO +
+        "/pull/" + pr + "#issuecomment-" + c["id"],
+      autor, atualizadoEm: typeof c["updated_at"] === "string" ? c["updated_at"] :
+        typeof c["created_at"] === "string" ? c["created_at"] : null,
+      nextCursor, checklist,
+    });
+  }
+  dados.sort((a, b) => (b.atualizadoEm ?? "").localeCompare(a.atualizadoEm ?? "") ||
+    b.commentId - a.commentId);
+  const vistos = new Set<string>();
+  return dados.filter(item => !vistos.has(item.missionId) && !!vistos.add(item.missionId)).slice(0, 12);
+}
+
+async function lerHudComentariosApi(pr: number, token?: string): Promise<ReciboHudGitHub[] | null> {
+  const comentarios: unknown[] = [];
+  for (let pagina = 1; pagina <= 10; pagina += 1) {
+    const paginaApi = await githubRequest("issues/" + pr + "/comments?per_page=100&page=" + pagina, token);
+    if (!Array.isArray(paginaApi)) return null;
+    comentarios.push(...paginaApi);
+    if (paginaApi.length < 100) return parseHudRecibos(comentarios, pr);
+  }
+  return null; // Pagina excedida: nao afirmar snapshot completo.
+}
+
+function lerHudComentariosGh(pr: number): ReciboHudGitHub[] | null {
+  try {
+    const s = execFileSync("gh", [
+      "api", "--paginate", "--slurp", "repos/" + GITHUB_REPO + "/issues/" + pr + "/comments?per_page=100",
+    ], { encoding: "utf8", timeout: 25000, maxBuffer: 4 * 1024 * 1024 });
+    const paginas: unknown = JSON.parse(s);
+    if (!Array.isArray(paginas) || paginas.length > 10) return null;
+    return parseHudRecibos(paginas.flatMap(p => Array.isArray(p) ? p : []), pr);
+  } catch { return null; }
+}
+
+function vincularHudRecibos(hud: EstadoHudVigente, recibos: ReciboHudGitHub[] | null): EstadoHudVigente {
+  if (hud.status !== "PASS" || hud.activePr === null) return hud;
+  if (!recibos?.length) return { ...hud, recibosEstado: "UNKNOWN", recibos: [], missaoAtual: null };
+  // Com mais de uma missao, nao escolher pelo timestamp e trocar a intencao do CHEFE.
+  const atual = recibos.length === 1 ? recibos[0]! : null;
+  return { ...hud, recibosEstado: atual ? "PASS" : "BLOCKED", recibos,
+    missaoAtual: atual, funilNextCursor: hud.nextCursor,
+    nextCursor: atual?.nextCursor ?? hud.nextCursor };
+}
+
 export const lerHudVigente = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoHudVigente> => {
     const api = await readHudViaGithubApi();
-    if (api) return api;
+    if (api) return vincularHudRecibos(api, api.status === "PASS" && api.activePr !== null
+      ? await lerHudComentariosApi(api.activePr, process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"])
+      : null);
     const gh = readHudViaGhCli();
-    if (gh) return gh;
+    if (gh) return vincularHudRecibos(gh, gh.status === "PASS" && gh.activePr !== null
+      ? lerHudComentariosGh(gh.activePr) : null);
     return {
       role: HUD_FUNNEL_MARKER, status: "UNKNOWN", activePr: null, title: null, url: null,
       headSha: null, mainSha: null, nextCursor: null, source: "UNAVAILABLE",
