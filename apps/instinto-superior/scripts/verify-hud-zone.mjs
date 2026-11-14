@@ -43,6 +43,8 @@ test("!HUD le comentarios do funil por MISSION_ID e expoe pendencias sem falso P
   assert.ok(syncFunctions.includes("parseHudRecibos"));
   assert.ok(syncFunctions.includes("lerHudComentariosApi"));
   assert.ok(syncFunctions.includes("lerHudComentariosGh"));
+  assert.ok(syncFunctions.includes("CENTRALDARK_HUD_ACTIVE_MISSION"));
+  assert.ok(syncFunctions.includes("activeMissionId"));
   assert.ok(syncFunctions.includes("issues/" + '" + pr + "' + "/comments?per_page=100&page="));
   assert.ok(syncFunctions.includes('recibosEstado: atual ? "PASS" : "BLOCKED"'));
   assert.ok(syncFunctions.includes("CONCLUSAO_RELATADA"));
