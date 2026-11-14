@@ -221,11 +221,11 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
       <section className="panel p-6" aria-labelledby="cd-hud-current-live">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-xs text-neon-blue">HUD VIGENTE · MAIN EM TEMPO REAL</p>
+            <p className="text-xs text-neon-blue">HUD VIGENTE · PR E RECIBOS DO GITHUB</p>
             <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 CENTRALDARK_HUD_FUNNEL_CONTINUITY</h3>
           </div>
           <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
-            {hudCurrent.data?.status ?? "UNKNOWN"}
+            {hudCurrent.data?.missaoAtual?.estado ?? hudCurrent.data?.recibosEstado ?? hudCurrent.data?.status ?? "UNKNOWN"}
           </span>
         </div>
         <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -279,12 +279,24 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
                className="mt-2 inline-block text-xs underline">Abrir recibo no PR vigente</a>
           </div>
         ) : (
-          <p className="mt-4 text-xs text-amber-400" role="status">
-            Recibos da missão: {hudCurrent.data?.recibosEstado ?? "UNKNOWN"}.
-            {hudCurrent.data?.recibosEstado === "BLOCKED"
-              ? " Há mais de uma missão; verificar a intenção do CHEFE antes de selecionar."
-              : " Comentários não lidos ou missão não identificada; não inferir estado atual."}
-          </p>
+          <div className="mt-4 text-xs text-amber-400" role="status">
+            <p>Recibos da missão: {hudCurrent.data?.recibosEstado ?? "UNKNOWN"}.
+              {hudCurrent.data?.recibosEstado === "BLOCKED"
+                ? " Há mais de uma missão; conferir o marcador ativo no PR e a intenção do CHEFE."
+                : " Comentários não lidos ou missão não identificada; não inferir estado atual."}
+            </p>
+            {hudCurrent.data?.recibosEstado === "BLOCKED" && hudCurrent.data?.recibos?.length ? (
+              <ul className="mt-2 space-y-1" aria-label="Missões disponíveis no funil">
+                {hudCurrent.data.recibos.map(item => (
+                  <li key={item.commentId}>
+                    <a href={item.commentUrl} target="_blank" rel="noreferrer" className="underline">
+                      {item.missionId} · {item.estado}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         )}
         <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           {hudCurrent.data?.url ? (
