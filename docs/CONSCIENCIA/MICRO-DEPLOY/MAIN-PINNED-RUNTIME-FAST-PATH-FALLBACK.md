@@ -339,3 +339,67 @@ Receipt ocorre **antes** do cleanup final. Handoff só ocorre com scratch limpo.
 ## Conciliação CURRENT — PR-mãe aposentada (11/10/2026)
 
 Owner: `docs/CONSCIENCIA/LEDGER-SURFACE-ANCHOR.md` (`PR_MOTHER_ROLE=RETIRED`). #1562/#1757 permanecem somente como proveniência. O script `scripts/vps/main-pinned-microdeploy.sh` já escreve receipt **local** em `logs/receipts/`, mas **não o comita automaticamente**. Para selo global, publicar receipt versionado no repositório com readback de SHA; se pendente, classificar PARTIAL. Nenhum passo mutante, lock, permissão ou comando de reset é alterado por este delta documental.
+ 
+<!-- #OBSERVACOES# | MICRODEPLOY_MCP_SKILL_CATALOG_SCOPE
+@code_ref: scripts/vps/main-pinned-microdeploy.sh
+@code_ref: scripts/vps/tests/main-pinned-microdeploy-skill-catalog.test.sh
+@last_updated: 2026-10-22T04:25:00.000Z
+-->
+## Microdeploy da skill unificada — escopo específico (22/10/2026)
+
+**Intenção:** `CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016`. Reusar o catálogo já integrado em `apps/modulos/mcp/src/tools/skills/skill.js` + `catalog-index.js`. Sem outro catálogo, motor ou fila de Hermes.
+
+**Diagnóstico T0:** `skill_buscar` existe no source da `main`, mas `mcp_admin_call(skill_buscar)` respondeu `TOOL_NAO_ENCONTRADA`, `mcp_catalog_diff` informou uma tool ausente, e `skill_listar` retornou só quatro skills; `deploy_status` registrou erro PM2 e VPS antiga. O serviço `centraldark-native-mcp-http.service` tem pipeline separado do checkout da VPS. Código em `main` não prova módulo carregado na memória.
+
+**Correção restrita da receita existente:** quatro arquivos precisam ser promovidos juntos, no mesmo `SOURCE_SHA`, ao mesmo runtime nativo:
+- `apps/modulos/mcp/src/tools/skills/skill.js`;
+- `apps/modulos/mcp/dist/tools/skills/skill.js`;
+- `apps/modulos/mcp/src/tools/skills/catalog-index.js`;
+- `apps/modulos/mcp/dist/tools/skills/catalog-index.js`.
+
+**Guards adicionais:** recusar arquivo fora da allowlist, recusar quarteto incompleto ou qualquer quinto arquivo, executar `node --check` e os dois testes `skill-catalog-unificado`/`centraldark-hermes-delegacao-contract` no scratch antes de alterar o runtime. Após reinício **isolado** do owner nativo, conferir `skill_buscar` mais quatro operações existentes em `/tools.json` e reprovar se qualquer ferramenta anterior desaparecer. Preservar merge-file, backup, rollback, lock, SHA e receipt anteriores.
+
+**Contraprova de fonte:** `bash scripts/vps/tests/main-pinned-microdeploy-skill-catalog.test.sh`; casos negativos: arquivo não autorizado e quarteto parcial. **Prova final requerida:** `mcp_admin_call(skill_buscar,{busca:"centraldark-delegacao"})` com resultados reais, `skill_listar` incluindo os dois roots, e Hermes Kanban ACK separado. Nenhuma estrela de runtime por mera documentação.
+
+**Bloqueios CURRENT:** o dispatcher `centraldark_deploy_micro_fallback` retornou `DESTRUTIVA_EM_QUARENTENA`, divergência na lista de ferramentas privilegiadas; o deploy canônico da `main` estava `pending` no self-hosted runner. **Não contornar a quarentena nem inventar confirmação administrativa.** Atualizar a implantação somente quando os controles do owner permitirem e a rota canônica/same SHA estiver disponível.
+`NEXT_CURSOR=SOURCE_PR_CI → PRIMARY_DEPLOY_OR_AUTHORIZED_FALLBACK → RUNTIME_SKILL_BUSCAR_READBACK → HERMES_ACK → FIXED_POINT`.
+
+## KIT DE CONTINUIDADE — PR #1904 / Catálogo unificado Hermes
+
+**Contrato de handoff para quem assumir a PR:** `INTENT_ID=CENTRALDARK-UNIFIED-DELEGATION-CATALOG-20261016`. Este kit é uma seção **do owner de microdeploy existente**, não uma fila, skill, arquitetura ou PR paralela. Caminho humano: `!AUREULA → !CENTRALDARK → #ACORDAR → !RECONCILIAR → !CONTRAPROVA → 🌟 !MICHELIN → !FIXED_POINT`. Cada seta indica um gatilho, não execução presumida.
+
+| Envelope | Valor / regra |
+| --- | --- |
+| **GOAL** | Fazer `skill_buscar` e o catálogo `skills/` + `.agents/skills/` funcionarem no **MCP autenticado vivo**, preservando Hermes Kanban atual. |
+| **OWNER de fonte** | `apps/modulos/mcp/src/tools/skills/skill.js` e `catalog-index.js` (já integrados à `main`). |
+| **OWNER da correção** | `scripts/vps/main-pinned-microdeploy.sh`; PR [#1904](https://github.com/ServerVpss/CentralDark/pull/1904). |
+| **OWNER do executor** | `centraldark-native-mcp-http.service` no runtime nativo, **não** presumir PM2; despacho Hermes pelo Kanban existente. |
+| **MAIN_SHA** | **REMEDIR** antes de executar. O SHA `96eb7b5` é base histórica desta PR, não autorização para substituir a `main` atual. |
+| **ACTIVE_WRITER** | `UNKNOWN`: verificar lease/worktree/runner antes de mutar. Um escritor por escopo. |
+| **SOURCE_EVIDENCE T0** | `skill_buscar` existe no source da `main`; `mcp_catalog_diff` ainda informa `missing=[skill_buscar]`, `runtimeToolCount=86`; VPS checkout `4b0ce5a7`, dirty. Revalidar antes de promover. |
+| **BLOCKER** | Dispatcher de microdeploy reportou `DESTRUTIVA_EM_QUARENTENA`, e deploy canônico estava pendente. **Não gerar aprovação, alterar política de segurança ou contornar bloqueio.** |
+| **NEXT_CURSOR** | `CI_SAME_HEAD → AUTHORIZED_OWNER_DEPLOY → /tools.json_READBACK → skill_buscar_RESULT → HERMES_KANBAN_ACK → !FIXED_POINT`. |
+
+### Kit para execução determinística — uma intenção, três frentes
+
+**Frente 1 — !RECONCILIAR fonte e gates (read-only primeiro):**
+- Confirmar PR #1904 aberta, `PR_HEAD`, `MAIN_SHA`, `mergeable` e CI **do mesmo HEAD**. Se a `main` avançou, medir diferenças e conflitos; nunca `reset --hard` ou `git pull` no checkout sujo da VPS.
+- Conferir que os **quatro arquivos causais** estão no mesmo `SOURCE_SHA`: `src/tools/skills/skill.js`, `dist/tools/skills/skill.js`, `src/tools/skills/catalog-index.js`, `dist/tools/skills/catalog-index.js`, todos sob `apps/modulos/mcp/`.
+- Executar e registrar saída/exit code: `bash -n scripts/vps/main-pinned-microdeploy.sh`; `bash scripts/vps/tests/main-pinned-microdeploy-skill-catalog.test.sh`; `node --test apps/modulos/mcp/tests/skill-catalog-unificado.test.mjs apps/modulos/mcp/tests/centraldark-hermes-delegacao-contract.test.mjs`; `git diff --check`.
+- Os testes negativos **devem** rejeitar arquivo fora da allowlist, quarteto incompleto **e quinto arquivo extra**, antes de acessar a VPS/alterar runtime.
+
+**Frente 2 — !EXECUTAR via owner existente, somente quando permitido:**
+- Usar primeiro o pipeline canônico `.github/workflows/vps-exec-selfhosted.yml` e verificar se o runner/lock está realmente executando. `QUEUED`/`PENDING` não equivalem a `PASS`.
+- O microdeploy **fallback** `scripts/vps/main-pinned-microdeploy.sh` é permitido somente com fonte comprovada na `main`, `PRIMARY_DEPLOY_STATE=FAIL|BLOCKED`, writer exclusivo e controles administrativos regulares. Se `DESTRUTIVA_EM_QUARENTENA`, **parar e registrar o bloqueio**, sem chamar ferramenta destrutiva.
+- Preservar `/root/CentralDark` dirty, `/root/CentralDark_MCP_RUNTIME`, backups e rollback; usar somente scratch canônico autorizado. Restart **apenas** `centraldark-native-mcp-http.service` se os gates do owner permitirem.
+- Se a `main` ainda não contiver o script novo, **não usar a PR como fonte de deploy**. Primeiro gates, revisão, integração autorizada e readback do SHA.
+
+**Frente 3 — !CONTRAPROVA do efeito real e !RASTRO:**
+- Antes/depois: conferir processo/PID do **mesmo owner** e `/health`, `/heartbeat`, `/tools.json`. Esperado: ferramentas preexistentes preservadas **e** `skill_buscar` presente.
+- Teste autenticado: `mcp_admin_call({tool:"skill_buscar",input:{busca:"centraldark-delegacao"}})` deve retornar resultado real. `skill_listar` deve buscar também `.agents/skills/`, com paginação, `AMBIGUOUS` sem escolha cega e sem declarar skills executadas.
+- Hermes: recuperar a tarefa por `INTENT_ID` no **Kanban existente**, verificar `TASK_ID`, `ACTIVE_WRITER`, `ACK` e receipt. `RUNNING != COMPLETED != VERIFIED`. Não abrir segundo Kanban.
+- Anexar na própria PR #1904 somente prova atual do mesmo SHA (T0/T1, saída, gates, receipt, `NEXT_CURSOR`). `SOURCE_COMMITTED != MCP_RUNNING`; `MERGED != DEPLOYED`; `UNKNOWN != PASS`.
+
+**Critério para !FIXED_POINT:** CI necessária passou no SHA efetivamente promovido, `skill_buscar` respondeu no MCP vivo, busca das duas raízes funcionou, nenhuma ferramenta antiga desapareceu, Hermes deu ACK comprovado no mesmo contrato e o recibo foi lido de volta. Caso contrário `!FIXED_POINT=PENDING` com causa exata.
+
+**Não absorver escopos alheios:** PR [#1900](https://github.com/ServerVpss/CentralDark/pull/1900) (Casa SSH/PID/Kanban) e [#1880](https://github.com/ServerVpss/CentralDark/pull/1880) (VS Code) continuam owners independentes; só cruzar dependências reais, não modificar suas branches.
