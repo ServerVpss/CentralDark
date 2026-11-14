@@ -27,6 +27,28 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo H
 4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
 5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
 
+### 🪬 Comentarios como recibos duraveis da missao (!HUD / #HUD · 14/11/2026)
+
+A descricao do **PR da missao** continua sendo o quadro editavel com caixinhas; o **PR do funil** mantem o resumo e o link, e os comentarios `Conversation` preservam recibos em ordem causal. A cada mudanca material comprovada, atualizar o estado do owner e do quadro pertinente e adicionar ou editar o recibo relevante, com readback da mesma URL. Se for apenas novo resultado/pendencia, comentario e corpo de PR com readback bastam — nao fabricar commit de codigo. O #1977 e o funil atualmente observado, **nao** numero fixo.
+
+**Contrato minimo de um comentario consumivel pelo leitor `lerHudVigente`:**
+
+```markdown
+<!-- CENTRALDARK_HUD_MISSION_ID:CENTRALDARK_REMOTE_AGENT_HALO_RADEON -->
+## !HUD · Missao vigente e checkpoint de DD/MM/AAAA
+MISSION=PENDING
+MISSION_FIXED_POINT=NO
+- [x] Etapa realmente provada — link para SHA/teste/contraprova
+- [ ] Etapa nao provada — causa/bloqueio
+NEXT_CURSOR: uma acao concreta
+```
+
+- Ler pelo proprio GitHub `GET /issues/{PR}/comments` em paginas, depois filtrar pelos marcadores de missao e ligar o ultimo recibo **da mesma MISSION_ID**. Recibo historico de 14/11 para Halo tem marcador legado `CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT`; ler, sem reescrever nem duplicar.
+- O `[x]` marca apenas a declaracao do autor; requer commit/teste/readback para virar PROVADO. O campo `MISSION=COMPLETE` sem `FIXED_POINT=YES` e `READBACK=PASS` nao declara conclusao.
+- Varias missoes no funil sem escolha inequívoca na intencao do CHEFE = `BLOCKED`; nenhum "ultimo comentario do PR" substitui a missao vigente. Harmonizar com o checkpoint `scripts/hermes/centraldark-entry.py` antes de retomar execucao.
+- O Cockpit utiliza `apps/instinto-superior/src/lib/sync.functions.ts#lerHudVigente` e `apps/instinto-superior/src/components/central/HudDeterministico.tsx` para **projetar** o recibo autenticado/permitido, nunca para escrever GitHub por um navegador nem iniciar Hermes. `MAIN_CODE=COMMITTED` nao prova `UI_DEPLOYED` nem `HUD_CONSUMED`.
+- O metodo operativo consultado em `C:\Users\Administrador\Downloads\PROMPT_METODO_PIVETE.md` orienta ler, validar, minimo delta, contraprova, registro e retomada; a autoridade no GitHub continua neste contrato e em `AGENTS.md`.
+
 ### Direct Main — rastro é parte do write
 
 Quando houver escrita material direta na `main`, o HUD/funil não é “documentação posterior”. Ele é o **fechamento rastreável da escrita**.
