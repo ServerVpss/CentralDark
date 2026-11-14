@@ -92,3 +92,15 @@ Cada host tem identidade, servico e `_work` exclusivos. GitHub distribui um job 
 
 Detalhes: `02-dependencias.md`, `04-estrutura-pastas.md` e aprendizado tematico do runner em `docs/CONSCIENCIA/APRENDIZADOS/2026-10-18-VPS-RUNNER-EPHEMERAL-POSTJOB.md`.
 <!-- /CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+
+<!-- CENTRALDARK_INSTALLER_SANDBOX_DETERMINISTIC_20261114 -->
+## Teste Linux isolado de 14/11/2026 — bootstrap e instalador
+
+O método do CHEFE define a VMware openKylin como `VPS_RUNTIME`, equivalente à VPS futura. Testar o `install.sh` da `main` em Linux mínimo/descartável, com caminhos absolutos, idempotência, fases claras, sem depender de IP/hostname e sem alterar runtime vivo.
+
+**Recibo:** blob `install.sh` Git SHA `fad7d5e2bb8e223cf2a8c4fdf584f93da77f68be` isolado com `bubblewrap` em `/tmp/centraldark-installer-lab.nDHpjoWr`, VM openKylin 3.0, host read-only, sem rede. `bash -n` PASS, `--help` RC 0; `--runner-linux-install --dry-run` RC 0 e caminho relativo do runner rejeitado com RC 2. `--check` RC 0 mesmo com `jq`/Node/npm ausentes; ainda criou seis atalhos dentro do `/usr/local/bin` de teste e aceitou `CENTRALDARK_ROOT=relative/lab`. Portanto não é prova de readiness nem de leitura sem efeitos. `--install` com staging gravável criou estrutura e `secrets/ 700`, porém faltou `scripts/checker/run-all.sh` no cenário de script solto (`RC 2`), inclusive na reexecução. `--mcp` preparou pasta, sem serviço. `https://install.centralldark.com/` respondeu HTTP 525 à VM; bootstrap/bundle vivo não foi testado. Atalhos globais da VM não foram alterados.
+
+**Critérios:** corrigir apenas `install.sh` existente e bootstrap/empacotador proprietário; `CHECK_RC0 != INSTALL_READY`, `STRUCTURE_CREATED != INSTALLED`, `BUNDLE_DOCUMENTED != BUNDLE_VERIFIED`; respeitar FHS/caminhos absolutos e `ONE_WRITER_PER_SCOPE`. Não criar segundo instalador, runner ou script de teste no repositório.
+
+**NEXT_CURSOR:** remover efeitos colaterais de `--check/--help`, validar `CENTRALDARK_ROOT` absoluto, alinhar `installer.tar.gz` com checker e dependências, investigar HTTP 525 no owner existente e retestar no mesmo sandbox antes de promover `INSTALLER_FIXED_POINT`.
+<!-- /CENTRALDARK_INSTALLER_SANDBOX_DETERMINISTIC_20261114 -->
