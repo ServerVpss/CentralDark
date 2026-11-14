@@ -1570,3 +1570,13 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Promovida:** sim
 - **Memória:** Aprendizado operacional confirmado não deve aparecer primeiro como conclusão de chat. Persistir nos owners existentes de APRENDIZADOS e LEMBRANCAS, reconciliar índice/linhagem e obter readback; depois responder com o recibo. Se não houver prova de persistência, declarar registro UNKNOWN/BLOQUEADO.
 <!-- /CENTRALDARK_PERSIST_BEFORE_REPORT_20261114 -->
+
+
+<!-- CENTRALDARK_BRANCH_GOLD_PROMOTE_BEFORE_DELETE_20261114 -->
+### [2026-11-14] Branch antiga pode conter ouro: absorver antes de apagar
+- **Tags:** branch, main, casa, vm, hermes-visual, fast-loop, readback, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Uma branch atrasada não é lixo automaticamente. Comparar contra a main, extrair somente o delta exclusivo, preservar owner mais novo, testar, publicar e fazer readback; apagar a branch somente depois do circuito Casa/VM/main estar comprovado.
+- **Prova:** cursor-motion Hermes Visual promovido na main em `651ca293fac882583e67fa8c1ad2bfb04cd097c7`; VM alinhada e testada com o mesmo blob do script publicado.
+<!-- /CENTRALDARK_BRANCH_GOLD_PROMOTE_BEFORE_DELETE_20261114 -->
