@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "3f9df25c64b8c527617510ce2c81a10bc72ee5bf",
+  "source_blob_sha": "d4e8082734250187e0f848cd3ea24cb32c6fb2f6",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 247,
-    "highest_legacy_learning_number": 233,
+    "learning_sections": 248,
+    "highest_legacy_learning_number": 234,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -189,7 +189,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 233
+      "end": 234
     }
   },
   "nodes": [
@@ -2908,6 +2908,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L228B",
+      "next_uid": "L234"
+    },
+    {
+      "uid": "L234",
+      "legacy_learning_number": 234,
+      "legacy_occurrence": 1,
+      "title": "Ouro de branch só é apagado depois de absorção causal, teste e readback",
+      "document_order": 248,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L229B",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
