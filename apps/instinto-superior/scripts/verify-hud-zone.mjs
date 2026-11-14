@@ -32,6 +32,29 @@ test("HUD vigente vem da main por marcador sem PR fixo nem segredo no browser", 
   assert.ok(!zone.includes("process.env"));
   assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
 });
+// #OBSERVACOES# @owner=apps/instinto-superior/scripts/verify-hud-zone.mjs
+// @doc_ref=docs/HUD/README.md @last_updated=2026-11-14T09:34:00Z
+// O gate testa o vinculo do leitor PR-comentario com HUD; nao declara runtime publicado.
+test("!HUD le comentarios do funil por MISSION_ID e expoe pendencias sem falso PASS", () => {
+  const agentes = read("AGENTS.md");
+  const contrato = read("docs/HUD/README.md");
+  assert.ok(syncFunctions.includes("HUD_MISSION_TAG"));
+  assert.ok(syncFunctions.includes("HUD_HALO_RECEIPT"));
+  assert.ok(syncFunctions.includes("parseHudRecibos"));
+  assert.ok(syncFunctions.includes("lerHudComentariosApi"));
+  assert.ok(syncFunctions.includes("lerHudComentariosGh"));
+  assert.ok(syncFunctions.includes("issues/" + '" + pr + "' + "/comments?per_page=100&page="));
+  assert.ok(syncFunctions.includes('recibosEstado: atual ? "PASS" : "BLOCKED"'));
+  assert.ok(syncFunctions.includes("CONCLUSAO_RELATADA"));
+  assert.ok(zone.includes("MISSÃO PERSISTENTE · RECIBO DO GITHUB"));
+  assert.ok(zone.includes("hudCurrent.data.missaoAtual.checklist.map"));
+  assert.ok(zone.includes("hudCurrent.data.missaoAtual.commentUrl"));
+  assert.ok(zone.includes("Caixas refletem declarações nos comentários"));
+  assert.ok(agentes.includes("LEITURA INTERCHATS DO FUNIL"));
+  assert.ok(contrato.includes("CENTRALDARK_HUD_MISSION_ID"));
+  assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
+});
+
 test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   const n = [lineage.genesis, ...lineage.nodes];
   assert.equal(n[0].uid, "L000");
