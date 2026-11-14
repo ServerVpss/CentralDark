@@ -1,5 +1,36 @@
 # 🪬 HUD histórico → Instinto Superior · documento de migração
 
+<!-- CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114 -->
+## 🪬 !HUD · MISSÃO ATIVA VINCULADA — Agente Remoto + Halo + Radeon (14/11/2026, sábado, Bahia)
+
+> **MISSÃO=PENDENTE · CURRENT=CASA_MEDIDA_PARCIAL · GREEN_STATE=NOT_PROVEN · FIXED_POINT=NO**
+> **Funil:** [PR HUD vigente #1977](https://github.com/ServerVpss/CentralDark/pull/1977), descoberto dinamicamente pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`. Este bloco é checkpoint documental vinculado ao funil, não outra missão de reconciliação das 891 branches.
+
+**INTENÇÃO:** concluir o mesmo **CentralDark Agente Remoto + Halo** no Bridge/terminal Hermes já existentes: seleção semântica das telas, moldura Halo ativa durante o trabalho, cursor virtual Cua e input autorizado, readback de efeito e encerramento limpo. **Somente depois** integrar o Cockpit ao Bridge. Preservar a aparência/customização Halo, sessão/arquivos do CHEFE, writer único e owners existentes; não criar novo coletor, executor, mouse, overlay, HUD ou arquitetura paralela.
+
+**OWNERS CANÔNICOS:** `.agents/skills/centraldark-operational-method/SKILL.md` (método/diagrama), `.agents/skills/centraldark-operational-method/scripts/Identify-CentralDarkMonitors.ps1` (detecção), `.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/` (Cua/Hermes Visual), `apps/modulos/centraldark-halo-main/` e `scripts/remote-bridge/` (Halo/Bridge, reconciliar antes de editar). Telemetria já existente: `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`, `scripts/casa/CentralDark-RtssOverlay.ps1`, `apps/instinto-superior/src/lib/maquina.functions.ts`, `apps/instinto-superior/src/components/central/RuntimeSistema.tsx`. Não mudar o Cockpit nesta missão.
+
+**CURRENT / PROVA SEPARADA (Casa SEGREDO, observações 14/11/2026):**
+- **Vídeo:** Radeon RX 580 Series, driver `31.0.21925.1001`; Windows `Screen.AllScreens=1`, superfície lógica `6000x1920`, `DISPLAY1`, WmiMonitorID com 1 monitor ativo. Fotos do CHEFE mostram **quatro painéis físicos** e Radeon Adrenalin com `Tela 1..4` / Eyefinity / Super-resolução virtual. **Os quatro retângulos físicos dentro da superfície unificada não foram obtidos por API AMD**: `PHYSICAL_BOUNDS=UNKNOWN`.
+- **Linguagem:** direita, esquerda, cima/superior, central/meio/inferior/baixo são **posições físicas**; central/meio/baixo = mesma tela (alias legado 4). `DISPLAYn` e numeração da UI Windows são campos distintos; no modo unificado nenhum alias autoriza clique até provar o binding da região. Ordem `1→2→3→4` ou inversa é percurso, não identidade. O resolvedor local já reconheceu `SINGLE_WIDE_6000X1920` e recusou operar alvo físico não comprovado; alterações da Casa **ainda não publicadas**.
+- **Visual:** prova histórica em 14/11: monitor superior antigo (alias 2) com cursor Cua virtual em movimento + moldura Hermes fixa (`VISUAL_PASS`) e teste finito com `cleanup=completed`; **não prova** Halo integrado, input com efeito, overlay permanente nem quatro telas simultâneas sob Eyefinity. Terminal Hermes/VS Code foi observado no monitor central pelo CHEFE; sessão atual e alvo precisam de novo readback.
+- **Halo/Bridge:** processo `CentralDarkHalo.exe` visto ativo na Casa, mas `HALO_BRIDGE_E2E=UNKNOWN`; porta local `1420` apareceu intermitentemente em LISTEN / sem listener; imagens do diagnóstico relatam Rust `cargo check` falhando em `windows-sys` e pasta de trabalho C: sem `.git`. Nada disso autoriza reset/clean/cópia destrutiva ou declarar build aprovado.
+- **Radeon/Cockpit:** MSI Afterburner, RTSS e Radeon Software observados vivos; **feed CentralDark** `%LOCALAPPDATA%/CentralDark/CENTRALDARK-AFTERBURNER-LIVE.js` existia porém última alteração `08/11/2026 23:05 Bahia` (STALE em 14/11); coletor periódico vivo não observado; porta Cockpit Casa `8080` sem listener na medição. Radeon Adrenalin mostra gravação dentro do **app AMD**, que não equivale a registro do Cockpit.
+- **Prova commitada anterior:** [coletor 51 sensores / HUD](https://github.com/ServerVpss/CentralDark/commit/45dcf83b2ada2fa8447f5d8deff0c4e4307d649a) e [painel Cockpit Radeon](https://github.com/ServerVpss/CentralDark/commit/8b2e3ce01f6d07835515f749dab658d96a50ff62); [recibo T7 12/10](https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md) e `.agents/skills/centraldark-operational-method/references/FOCUS-DELEGACAO-TELEMETRIA.md` (27/10: Hermes reportou navegação 6/6, 58/60 LIVE, mas **não** acionamento de gravar nem exportação CSV). São provas **históricas**, não saúde atual.
+
+**PENDÊNCIAS / GATES:**
+- [ ] Identificar por API Radeon/ADL ou contraprova física independente os quatro limites por painel na superfície `6000x1920` e vinculá-los aos comandos de posição sem adivinhar.
+- [ ] Reconciliar a origem Halo/Bridge/checkout Casa protegendo alterações locais; corrigir erro real Rust/Tauri e comprovar endpoint 1420 com processo/protocolo/readback.
+- [ ] Na janela Hermes **existente**, executar `SELECT_TARGET → PREVIEW_BLINK → ACTIVE_WORKING(Halo/Cua) → INPUT autorizado → READBACK efeito → CLEANUP`, com moldura e cursor ativos durante operação; checar um alvo antes de quatro alvos coordenados.
+- [ ] Restaurar somente o coletor MAHM já existente; exigir feed fresco (<=30 s), servidor Cockpit autenticado e dados ao vivo; confirmar gravação/CSV separadamente, sem alterar parâmetros da GPU.
+- [ ] Rever Mermaid + YAML da Skill Mãe, dono técnico, gate de diagrama, provas e CI no mesmo SHA; validar somente o cone afetado; decisão humana; publicar seletivamente com SHA/readback.
+
+**!HUD / REGRA DE RETOMADA:** localizar o **PR aberto único** por `CENTRALDARK_HUD_FUNNEL_CONTINUITY`; ler esta seção em `docs/HUD/README.md` da **branch HEAD desse PR** e comparar com `main` e com a Casa quando disponível. Não tratar este checkpoint como telemetria viva nem como deploy; atualizar **a mesma seção e o corpo do PR vigente** a cada avanço material, sem trocar missão por conversa nova e sem reabrir trabalho já comprovado. `UNKNOWN != PASS`, `DOCUMENTED != EXECUTED`, `COMMITTED != DEPLOYED`, `LOCAL != MAIN`.
+
+**NEXT_CURSOR:** `AMD_PHYSICAL_BOUNDARIES_READONLY → HERMES_CENTRAL_TARGET_READBACK → HALO_BRIDGE_OWNER_RECONCILE → VISUAL_E2E → RESTORE_EXISTING_MAHM_FEED → GATES → PR_SHA_READBACK`. PR #1977 continua também com seu funil 891 branches pendente, sem exclusões. Este commit é **DOCUMENTATION_ONLY**, não conclusão de runtime.
+<!-- /CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114 -->
+
+
 **Intenção do CHEFE (15/10/2026):** o `docs/HUD/HUD.html` é a **fonte de capacidades legado**. Todas as capacidades devem convergir para o **zone de navegação existente** no Instinto Superior. `docs/HUD` fica como referência, ensinamento, template e prova de paridade até que as funções sejam comprovadamente migradas. Nenhuma exclusão antes do inventário e do teste de paridade.
 
 ## 🪬 Ponte Radeon RX 580 → Cockpit vivo (27/10/2026)
