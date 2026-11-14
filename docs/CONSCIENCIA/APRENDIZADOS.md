@@ -3430,7 +3430,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **NEXT_CURSOR:** em cada missão CentralDark, executar o preflight da fonte vigente; classificar arquitetura viva/legado/gerado/morto/desconhecido; responder com SHA, escopo e evidência; manter `UNKNOWN/BLOCKED` quando a fonte ou runtime não puderem ser lidos.
 
 ### 227. MCP CentralDark: OAuth e descoberta de ferramentas comprovados
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L227`; `PREV_GLOBAL_UID=L226`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=227`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L227`; `PREV_GLOBAL_UID=L226`; `NEXT_GLOBAL_UID=L228A`; `LEGACY_LEARNING_NUMBER=227`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** erro-correção, integração MCP, OAuth, contraprova, continuidade
 - **Data:** 2026-11-11
 - **Contexto:** O aplicativo CentralDark do ChatGPT exibiu `Authentication succeeded, action discovery failed`. Em `logs/mcp-app-2026-11-11.jsonl`, a Forja registrou `POST /authorize` HTTP 302, `POST /token` HTTP 200 e, na sequência, `POST /mcp`/`GET /mcp` HTTP 404. O servidor existente `centraldark-native-mcp-http.service` usava `/api/mcp` na porta 9100. Foi aplicado o menor delta no mesmo handler, aceitando `/api/mcp` e `/mcp` para GET e POST em `apps/modulos/mcp/src/index.js` e `dist/index.js`, sem criar segundo MCP. O serviço reiniciou ativo. A contraprova local e pública mostrou `/mcp` HTTP 401 sem token, em vez do 404 anterior, e preservou o comportamento autenticado de `/api/mcp`. Commits na main: `ae1aa1422f06eeccbcda6470f680dbd475664cb9` e `3c0f46ed9e2e87e454c510eefda5ba3377b13139`; arquivos correspondentes também receberam readback na Casa.
@@ -3441,24 +3441,28 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **NEXT_CURSOR:** Confirmar `initialize` e `tools/list` autenticados em nova conexão; corrigir somente a credencial de GitHub consumida pelo MCP e contraprovar `github_read`; medir o readiness de auditoria, mantendo o catálogo único e os registros preservados.
 
 ### 228. Hermes fork: delta mínimo, teste isolado e promoção segura
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L228A`; `PREV_GLOBAL_UID=L227`; `NEXT_GLOBAL_UID=L229`; `LEGACY_LEARNING_NUMBER=228`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** regra
 - **Data:** 2026-11-13
 - **Contexto:** Na atualização do fork ServerVpss/hermes-agent, uma melhoria isolada de WhatsApp foi reaplicada sobre a main atual por cherry-pick. O clone completo do histórico foi maior que o necessário, mas a integração ficou limitada ao commit autorizado, com patch-id idêntico e testes verdes. Depois o repositório teve allow_auto_merge habilitado via gh CLI e o PR foi integrado.
 - **Aprendizado:** Aplicar REUSE_BEFORE_CREATE + KAIZEN: manter Hermes upstream como motor, o fork como camada controlada, e absorver apenas deltas úteis. Para mudanças isoladas, preferir fetch/partial clone mínimo em vez de baixar histórico completo; aplicar somente o commit/delta autorizado, verificar patch-id/diff, testar o cone afetado e só então promover. AUTO_MERGE deve ser política do repo + PR elegível, com readback do merge SHA. DOWNLOAD_SCOPE não deve exceder o necessário; INTEGRATION_SCOPE deve permanecer mínimo e provado.
 
 ### 229. Feedback + readback fecham a ação; capability bloqueada não encerra a missão
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L229`; `PREV_GLOBAL_UID=L228A`; `NEXT_GLOBAL_UID=L230`; `LEGACY_LEARNING_NUMBER=229`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** regra
 - **Data:** 2026-11-13
 - **Contexto:** Na ativação de auto-merge do fork ServerVpss/hermes-agent, o conector GitHub direto falhou porque allow_auto_merge estava desativado e o MCP CentralDark não expunha mutação de repo settings. A missão continuou por rota autorizada existente: CLI gh em terminal. O comando PATCH ativou allow_auto_merge=true e o PR #1 foi integrado; depois houve readback do estado e do merge commit.
 - **Aprendizado:** Toda mutação material deve fechar um microloop FEEDBACK + READBACK: executar uma vez, capturar retorno imediato/exit/result como feedback, e reler o estado por fonte independente ou consulta posterior como readback. Falha de uma rota é local: NEXT_AUTHORIZED_ROUTE_AUTO_CONTINUE. PASS só após efeito observado + readback. Para GitHub: repo setting mutation -> repo readback -> PR mutation -> PR/base SHA readback. REUSE_BEFORE_CREATE + KAIZEN: preferir CLI/tool existente antes de criar capability paralela.
 
 ### 230. Browser + Desktop Commander em paralelo para contexto visual e runtime
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L230`; `PREV_GLOBAL_UID=L229`; `NEXT_GLOBAL_UID=L231`; `LEGACY_LEARNING_NUMBER=230`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** regra
 - **Data:** 2026-11-13
 - **Contexto:** Em operações do Cockpit e interfaces já abertas, Browser e Desktop Commander têm capacidades complementares. Browser lê a aba e o estado visual/DOM disponível; Desktop Commander mede filesystem, Git, processo, serviço e terminal no host real.
 - **Aprendizado:** Usar fan-out somente de leitura: Browser list_tabs/get_tab_context em paralelo com Desktop Commander read_file/git/process/runtime. Fundir por TARGET_ID/owner, executar uma única ação autorizada, e fechar com readback paralelo da mesma aba + estado operacional. BROWSER_VISIBLE != RUNTIME_PROVEN; COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN; ONE_WRITER_PER_RESOURCE continua obrigatório.
 
 ### 231. Não promover owner sem consumidor material na main
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L231`; `PREV_GLOBAL_UID=L230`; `NEXT_GLOBAL_UID=L232`; `LEGACY_LEARNING_NUMBER=231`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** regra
 - **Data:** 2026-11-13
 - **Contexto:** Durante reconciliação do acesso GitHub do Cockpit, github.functions.ts continha um delta local válido, mas a main não tinha consumidores desse novo caminho. O teste HUD global também apresentava falhas em owners não relacionados.
@@ -3466,6 +3470,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 232. Reconciliação de Casa e VMware por vinte frentes, com escritor único
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L232`; `PREV_GLOBAL_UID=L231`; `NEXT_GLOBAL_UID=L233`; `LEGACY_LEARNING_NUMBER=232`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** contraprova e regra operacional
 - **Data:** 2026-11-13
 - **Marcador:** RECONCILIACAO_CASA_VM_20_FRENTES_20261113
@@ -3479,6 +3484,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 233. Conflitos reais em Casa/VMware: checkpoints imutáveis, leitura paralela e menor delta por owner
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L233`; `PREV_GLOBAL_UID=L232`; `NEXT_GLOBAL_UID=L228B`; `LEGACY_LEARNING_NUMBER=233`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** contraprova operacional; **Data:** 2026-11-13; **Marcador:** CD_RECONCILIACAO_20_FRENTES_CONFLITOS_RED_20261113.
 - **Owner de inventário:** `scripts/centraldark-inventory-reconcile.sh`; cada arquivo continua sob seu próprio owner. Dez frentes leitoras em Casa + dez frentes leitoras na VMware; escrita sequencial por escopo. Nenhum resolvedor, branch, executor ou script paralelo foi criado.
 - **Checkpoint rastreado, somente local:** Casa `refs/centraldark/checkpoints/casa-20261113-20frentes` -> `8ab320f5fbaba0435190928b019e76ec044befa5`; VMware `refs/centraldark/checkpoints/vm-20261113-20frentes` -> `b3bbdd5684c5ab0ca6a2384a0f0afbc199f9e619`. Criados com `git stash create` (sem `push/pop/clear`), fixados via `git update-ref` com SHA anterior esperado. Protegem alterações **rastreadas**; arquivos não rastreados exigem preservação própria. Não publicar snapshots por conterem estado de trabalho local.
@@ -3511,3 +3517,14 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Owners:** `.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md`; `docs/CONSCIENCIA/LEMBRANCAS/2026-10-03-CRISTAL-VMWARE-FORGE-OBSIDIAN-PRESERVE-GOLD-SYNC.md`; este `APRENDIZADOS.md`. Os conteúdos privados das notas não são reproduzidos nesta receita.
 - **NEXT_CURSOR:** ativar CLI oficial pela interface de Configurações quando o controle estiver comprovado, validar busca textual por múltiplos termos e readback por Cua sem screenshots; somente então promover `CLI_READY` ou `SEARCH_BATCH` a PASS.
 <!-- /CENTRALDARK_OBSIDIAN_CUA_UI_MAP_20261114 -->
+
+
+### 228. Fast loop direto: mesmo owner em Casa e VM; CI profundo somente como contraprova
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L228B`; `PREV_GLOBAL_UID=L233`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=228`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** método operacional, execução direta, Samba, Biblioteca, Kaizen
+- **Data:** 2026-11-14
+- **Contexto:** Na reconciliação da Biblioteca, a SOL abriu branch/PR por reflexo para um delta pequeno e independente. O CHEFE corrigiu o método e demonstrou a rota já existente: Casa em `F:\CentralDark`, VM exposta em `V:\` via Samba e GitHub `main` como fonte versionada. O delta de `library-router.mjs` e `library-router.test.mjs` foi então aplicado diretamente aos mesmos owners em Casa e VM, sem sincronizar pastas inteiras.
+- **Aprendizado:** `MVP_FAST_LOOP=PADRAO`; `CI_DEEP_LOOP=CONTRAPROVA_SOB_DEMANDA`. Para delta causal pequeno: recuperar receita e owner → editar o mesmo owner na Casa → aplicar o mesmo delta na VM/VPS pelo transporte existente (Samba quando montado; SSH somente quando necessário ao runtime) → teste mínimo aplicável → readback/hash → registrar APRENDIZADOS+LEMBRANCAS → atualizar índice/linhagem existente → publicar na `main` conforme proteção real. Não criar branch/PR/runner por reflexo quando a operação direta na `main` estiver autorizada e protegida. Branch/PR/CI continuam válidos quando houver isolamento, revisão, segurança, investigação de falha ou gate material.
+- **Prova:** `V:\` foi lido na Casa `SEGREDO`; os owners `scripts/memory-linker/library-router.mjs` e `library-router.test.mjs` existem em F: e V:. Após o delta read-only TREE↔CATALOG e correção de escaping por backcheck, `node --check` + `node --test` passaram **27/27** na Casa e **27/27** na VM via Samba. Nenhuma pasta inteira foi copiada e `catalog.json` não recebeu autoescrita.
+- **Owners reaproveitados:** `docs/CONSCIENCIA/MICRO-DEPLOY/CENTRALDARK-LIVE-EDITING-FABRIC.md`; `scripts/memory-linker/library-router.mjs`; `scripts/memory-linker/library-router.test.mjs`; este `APRENDIZADOS.md`; `docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`; `scripts/trigger-fabric/rebuild_learning_lineage.py`.
+- **Próximo passo:** publicar somente os deltas intencionais na `main`, fazer readback do SHA e encerrar a branch/PR transitória criada antes da correção do método.

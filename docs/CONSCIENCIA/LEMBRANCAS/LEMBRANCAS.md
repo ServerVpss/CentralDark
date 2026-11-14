@@ -1550,3 +1550,14 @@ Conteúdo: Padrão operacional confirmado: depois de qualquer ação material, r
 - **Promovida:** sim
 
 Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e o host/filesystem pelo Desktop Commander em paralelo quando ambas são leituras independentes. Não abrir superfícies duplicadas. Depois de uma ação única, reler a mesma aba e o mesmo alvo operacional em paralelo; PASS somente quando as provas exigidas convergirem.
+
+
+<!-- CENTRALDARK_FAST_LOOP_CASA_SAMBA_VM_MAIN_20261114 -->
+### [2026-11-14] Método das 3 frentes — um delta, mesmo owner, execução direta e readback
+- **Tags:** casa, samba, vm, vps, main, fast-loop, owner, delta-util, biblioteca, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** O caminho operacional padrão para deltas causais pequenos é `Casa F:\CentralDark → VM/VPS pelo transporte existente (V:\ via Samba quando disponível) → GitHub main`, sempre no mesmo owner e sem sincronizar pastas inteiras. CI/CD profundo não é ritual do fast loop: entra como contraprova/revisão quando risco, segurança, falha difícil ou gate material exigirem. Aprendizado confirmado deve ser persistido antes da resposta final em APRENDIZADOS + LEMBRANCAS e reconciliado pelo índice/linhagem existente; chat sozinho não é memória operacional.
+- **Prova desta sessão:** Biblioteca recebeu o mesmo delta em `library-router.mjs` + teste na Casa e VM; ambos passaram 27/27 testes. Backcheck detectou e corrigiu escaping antes da publicação.
+- **Próximo passo:** readback da `main` após publicação do mesmo delta e fechamento da branch/PR transitória.
+<!-- /CENTRALDARK_FAST_LOOP_CASA_SAMBA_VM_MAIN_20261114 -->
