@@ -45,7 +45,7 @@ NEXT_CURSOR: uma acao concreta
 
 - Ler pelo proprio GitHub `GET /issues/{PR}/comments` em paginas, depois filtrar pelos marcadores de missao e ligar o ultimo recibo **da mesma MISSION_ID**. Recibo historico de 14/11 para Halo tem marcador legado `CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT`; ler, sem reescrever nem duplicar.
 - O `[x]` marca apenas a declaracao do autor; requer commit/teste/readback para virar PROVADO. O campo `MISSION=COMPLETE` sem `FIXED_POINT=YES` e `READBACK=PASS` nao declara conclusao.
-- Varias missoes no funil sem escolha inequívoca na intencao do CHEFE = `BLOCKED`; nenhum "ultimo comentario do PR" substitui a missao vigente. Harmonizar com o checkpoint `scripts/hermes/centraldark-entry.py` antes de retomar execucao.
+- Para varias missoes, declarar a ativa no **corpo do PR do funil** com `<!-- CENTRALDARK_HUD_ACTIVE_MISSION:MISSION_ID -->` e publicar recibos novos pelo mesmo ID. O leitor usa esse ponteiro explicito; sem escolha inequívoca pela intencao do CHEFE = `BLOCKED`. Nenhum "ultimo comentario do PR" substitui a missao vigente. Harmonizar com o checkpoint `scripts/hermes/centraldark-entry.py` antes de retomar execucao.
 - O Cockpit utiliza `apps/instinto-superior/src/lib/sync.functions.ts#lerHudVigente` e `apps/instinto-superior/src/components/central/HudDeterministico.tsx` para **projetar** o recibo autenticado/permitido, nunca para escrever GitHub por um navegador nem iniciar Hermes. `MAIN_CODE=COMMITTED` nao prova `UI_DEPLOYED` nem `HUD_CONSUMED`.
 - O metodo operativo consultado em `C:\Users\Administrador\Downloads\PROMPT_METODO_PIVETE.md` orienta ler, validar, minimo delta, contraprova, registro e retomada; a autoridade no GitHub continua neste contrato e em `AGENTS.md`.
 
