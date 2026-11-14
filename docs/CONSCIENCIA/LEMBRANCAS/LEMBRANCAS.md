@@ -1580,3 +1580,13 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Memória:** Uma branch atrasada não é lixo automaticamente. Comparar contra a main, extrair somente o delta exclusivo, preservar owner mais novo, testar, publicar e fazer readback; apagar a branch somente depois do circuito Casa/VM/main estar comprovado.
 - **Prova:** cursor-motion Hermes Visual promovido na main em `651ca293fac882583e67fa8c1ad2bfb04cd097c7`; VM alinhada e testada com o mesmo blob do script publicado.
 <!-- /CENTRALDARK_BRANCH_GOLD_PROMOTE_BEFORE_DELETE_20261114 -->
+
+
+<!-- CENTRALDARK_AUREULA_SELECTIVE_SYNC_V_F_MAIN_20261114 -->
+### [2026-11-14] !AUREULA — sincronizador seletivo V ↔ F ↔ MAIN
+- **Tags:** aureula, sincronizacao, v, f, main, delta-exato, sem-duplicacao, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Sempre comparar V, F e main antes de mover qualquer coisa. Preservar o owner mais atual e tudo que já funciona; aplicar somente a linha/hunk/semântica ausente que sobrevive à prova. Não duplicar conteúdo nem sincronizar pasta inteira por reflexo.
+- **Mnemônico:** `examinai tudo, retém o bem`.
+<!-- /CENTRALDARK_AUREULA_SELECTIVE_SYNC_V_F_MAIN_20261114 -->
