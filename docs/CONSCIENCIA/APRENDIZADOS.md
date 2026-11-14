@@ -3490,3 +3490,11 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Travas restantes:** Casa mantém HEAD `0213fecf70` com 26 arquivos preparados, VMware mantém HEAD `4207576f4`; `origin/main` estava em `f8eca4b183` no momento da sonda. Sem `reset --hard`, `clean`, merge aplicado, `stash push/pop`, nem deploy. `AGENTS.md` possui mudanças staged na Casa; não restaurar cegamente. `docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json` aponta `source_blob_sha` divergente e precisa de regeneração/revalidação no owner existente, não troca de SHA por palpite. O README da Biblioteca diverge também em caminho e hash da transcrição PDF; verificar a fonte real antes de decidir.
 - **NEXT_CURSOR:** reconciliar os 28/15 conflitos da sonda por owner, preservar staged e não rastreados, testar o cone afetado, avançar Casa e VMware ao SHA aprovado com readback, e só depois tratar a VPS pública. `FIXED_POINT=PENDING`.
 
+
+<!-- CENTRALDARK_REPLAY_SAMBA_SSH_MCP_20261114 -->
+### Receita operacional 2026-11-14 — recuperar antes de redescobrir; editar via Samba e provar no consumidor
+- **Regra:** REPLAY_BEFORE_REDISCOVERY=true. Antes de responder ou sondar, recuperar histórico, APRENDIZADOS, owner e receipts da missão; consultar a main; pesquisar na internet somente lacunas. Histórico não substitui prova do runtime atual.
+- **Execução demonstrada pelo Hermes (evidência visual do CHEFE):** Casa editou via Samba em V:\apps\modulos\mcp\src\mcp-server.js:68 e dist\mcp-server.js:68; conferiu SHA-256 entre acesso Windows e VM; reiniciou via SSH somente centraldark-native-mcp-http.service e centraldark-mcp-tunnel.service; validou na Casa com hermes mcp test CentralDark-mcp: OAuth 2.0, Connected, 142 ferramentas descobertas, PASS. Não confundir captura do Hermes com segunda contraprova independente.
+- **Método:** owner existente → delta exato → Samba → SSH/reinício isolado quando necessário → teste do consumidor → hash/readback → registro no owner → GitHub main conforme gates. Sem cópia geral, sem segundo executor e sem sobrescrever divergências entre F:, V: e main.
+- **NEXT_CURSOR:** verificar publicação na main e igualdade do delta por leitura nos três acessos, preservando diferenças anteriores de cada checkout.
+<!-- /CENTRALDARK_REPLAY_SAMBA_SSH_MCP_20261114 -->
