@@ -3520,7 +3520,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 228. Fast loop direto: mesmo owner em Casa e VM; CI profundo somente como contraprova
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L228B`; `PREV_GLOBAL_UID=L233`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=228`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L228B`; `PREV_GLOBAL_UID=L233`; `NEXT_GLOBAL_UID=L229B`; `LEGACY_LEARNING_NUMBER=228`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** método operacional, execução direta, Samba, Biblioteca, Kaizen
 - **Data:** 2026-11-14
 - **Contexto:** Na reconciliação da Biblioteca, a SOL abriu branch/PR por reflexo para um delta pequeno e independente. O CHEFE corrigiu o método e demonstrou a rota já existente: Casa em `F:\CentralDark`, VM exposta em `V:\` via Samba e GitHub `main` como fonte versionada. O delta de `library-router.mjs` e `library-router.test.mjs` foi então aplicado diretamente aos mesmos owners em Casa e VM, sem sincronizar pastas inteiras.
@@ -3531,6 +3531,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 229. Persist-first: aprendizado confirmado deve ser gravado antes de ser relatado no chat
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L229B`; `PREV_GLOBAL_UID=L228B`; `NEXT_GLOBAL_UID=L234`; `LEGACY_LEARNING_NUMBER=229`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** memória operacional, Kaizen, disciplina de resposta, fast loop
 - **Data:** 2026-11-14
 - **Ferida:** Após cristalizar o Fast Loop, a SOL recebeu um novo aprendizado sobre Dev Mode/HMR e o descreveu na resposta antes de persistir APRENDIZADOS + LEMBRANCAS.
@@ -3540,6 +3541,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 234. Ouro de branch só é apagado depois de absorção causal, teste e readback
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L234`; `PREV_GLOBAL_UID=L229B`; `NEXT_GLOBAL_UID=L235`; `LEGACY_LEARNING_NUMBER=234`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** Git, fast loop, owner, Hermes Visual, Kaizen
 - **Data:** 2026-11-14
 - **Contexto:** A branch `centraldark/hermes-visual-pass-20261114` continha um delta real já validado visualmente: `--cursor-motion` no `blink_cursor.py` e o bloco VISUAL_PASS na skill. A Casa já continha esse ouro e evoluções posteriores; a `main` não continha o delta e a VM estava ainda mais atrás no mesmo owner.
@@ -3549,6 +3551,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 235. !AUREULA — sincronização seletiva V ↔ F ↔ MAIN: examinai tudo, retém o bem
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L235`; `PREV_GLOBAL_UID=L234`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=235`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** reconciliação, sincronização, fast loop, owner, Kaizen
 - **Data:** 2026-11-14
 - **Intenção:** transformar a reconciliação entre `V:\\` (VM/Samba), `F:\\CentralDark` (Casa) e `main` em um fluxo seletivo e determinístico, sem cópia cega nem duplicação.
