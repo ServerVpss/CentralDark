@@ -8,7 +8,7 @@ fixed_point_kind: SCOPED_EFFECT_FIXED_POINT
 
 repository: ServerVpss/CentralDark
 canonical_branch: main
-current_origin_main_sha: acd35487446be3a6129f5ce990364b15bf7262d0
+current_origin_main_sha: 59733a8209fded5680d4dfcbb7d8ffa8ee6a1f6b
 local_head_sha: 6fd2a448770243148a1eeb01f828d999a0514117
 worktree_state:
   status: DIRTY_PRESERVED
