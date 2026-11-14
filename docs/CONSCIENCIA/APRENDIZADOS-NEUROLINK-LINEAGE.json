@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "927f50c4d2c5026cda905ef329126ecb853d6133",
+  "source_blob_sha": "3f9df25c64b8c527617510ce2c81a10bc72ee5bf",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,7 +20,7 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 246,
+    "learning_sections": 247,
     "highest_legacy_learning_number": 233,
     "duplicate_legacy_numbers": [
       {
@@ -167,6 +167,14 @@
         "uids": [
           "L228A",
           "L228B"
+        ]
+      },
+      {
+        "legacy_learning_number": 229,
+        "count": 2,
+        "uids": [
+          "L229",
+          "L229B"
         ]
       }
     ],
@@ -2889,6 +2897,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L233",
+      "next_uid": "L229B"
+    },
+    {
+      "uid": "L229B",
+      "legacy_learning_number": 229,
+      "legacy_occurrence": 2,
+      "title": "Persist-first: aprendizado confirmado deve ser gravado antes de ser relatado no chat",
+      "document_order": 247,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L228B",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
