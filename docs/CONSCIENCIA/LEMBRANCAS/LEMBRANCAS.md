@@ -1550,3 +1550,43 @@ Conteúdo: Padrão operacional confirmado: depois de qualquer ação material, r
 - **Promovida:** sim
 
 Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e o host/filesystem pelo Desktop Commander em paralelo quando ambas são leituras independentes. Não abrir superfícies duplicadas. Depois de uma ação única, reler a mesma aba e o mesmo alvo operacional em paralelo; PASS somente quando as provas exigidas convergirem.
+
+
+<!-- CENTRALDARK_FAST_LOOP_CASA_SAMBA_VM_MAIN_20261114 -->
+### [2026-11-14] Método das 3 frentes — um delta, mesmo owner, execução direta e readback
+- **Tags:** casa, samba, vm, vps, main, fast-loop, owner, delta-util, biblioteca, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** O caminho operacional padrão para deltas causais pequenos é `Casa F:\CentralDark → VM/VPS pelo transporte existente (V:\ via Samba quando disponível) → GitHub main`, sempre no mesmo owner e sem sincronizar pastas inteiras. CI/CD profundo não é ritual do fast loop: entra como contraprova/revisão quando risco, segurança, falha difícil ou gate material exigirem. Aprendizado confirmado deve ser persistido antes da resposta final em APRENDIZADOS + LEMBRANCAS e reconciliado pelo índice/linhagem existente; chat sozinho não é memória operacional.
+- **Prova desta sessão:** Biblioteca recebeu o mesmo delta em `library-router.mjs` + teste na Casa e VM; ambos passaram 27/27 testes. Backcheck detectou e corrigiu escaping antes da publicação.
+- **Próximo passo:** readback da `main` após publicação do mesmo delta e fechamento da branch/PR transitória.
+<!-- /CENTRALDARK_FAST_LOOP_CASA_SAMBA_VM_MAIN_20261114 -->
+
+
+<!-- CENTRALDARK_PERSIST_BEFORE_REPORT_20261114 -->
+### [2026-11-14] Persistir aprendizado antes de relatá-lo
+- **Tags:** aprendizado, lembranca, persist-first, kaizen, fast-loop, readback
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Aprendizado operacional confirmado não deve aparecer primeiro como conclusão de chat. Persistir nos owners existentes de APRENDIZADOS e LEMBRANCAS, reconciliar índice/linhagem e obter readback; depois responder com o recibo. Se não houver prova de persistência, declarar registro UNKNOWN/BLOQUEADO.
+<!-- /CENTRALDARK_PERSIST_BEFORE_REPORT_20261114 -->
+
+
+<!-- CENTRALDARK_BRANCH_GOLD_PROMOTE_BEFORE_DELETE_20261114 -->
+### [2026-11-14] Branch antiga pode conter ouro: absorver antes de apagar
+- **Tags:** branch, main, casa, vm, hermes-visual, fast-loop, readback, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Uma branch atrasada não é lixo automaticamente. Comparar contra a main, extrair somente o delta exclusivo, preservar owner mais novo, testar, publicar e fazer readback; apagar a branch somente depois do circuito Casa/VM/main estar comprovado.
+- **Prova:** cursor-motion Hermes Visual promovido na main em `651ca293fac882583e67fa8c1ad2bfb04cd097c7`; VM alinhada e testada com o mesmo blob do script publicado.
+<!-- /CENTRALDARK_BRANCH_GOLD_PROMOTE_BEFORE_DELETE_20261114 -->
+
+
+<!-- CENTRALDARK_AUREULA_SELECTIVE_SYNC_V_F_MAIN_20261114 -->
+### [2026-11-14] !AUREULA — sincronizador seletivo V ↔ F ↔ MAIN
+- **Tags:** aureula, sincronizacao, v, f, main, delta-exato, sem-duplicacao, kaizen
+- **Relevância:** alta
+- **Promovida:** sim
+- **Memória:** Sempre comparar V, F e main antes de mover qualquer coisa. Preservar o owner mais atual e tudo que já funciona; aplicar somente a linha/hunk/semântica ausente que sobrevive à prova. Não duplicar conteúdo nem sincronizar pasta inteira por reflexo.
+- **Mnemônico:** `examinai tudo, retém o bem`.
+<!-- /CENTRALDARK_AUREULA_SELECTIVE_SYNC_V_F_MAIN_20261114 -->
