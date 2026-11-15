@@ -216,6 +216,7 @@ export const AutoSyncButton: React.FC = () => {
           <div className="flex items-center gap-3">
             {getStatusIcon()}
             <div>
+               <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VMware</p>
                <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VPS Runtime</p>
               <p className="text-xs text-muted-foreground">Última tentativa: {syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
@@ -255,6 +256,9 @@ export const AutoSyncButton: React.FC = () => {
             <p className="break-all font-mono text-[10px] text-muted-foreground">{trackerStatus?.hostOS === 'windows' && trackerEmDia ? trackerStatus.head?.slice(0, 8) ?? 'sem SHA' : 'Casa sem leitura própria'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
           </div>
           <div className="rounded-md border border-border/60 p-2 text-xs">
+            <span className="text-muted-foreground">VMware (VPS) ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
             <span className="text-muted-foreground">VPS Runtime (VMware atual) ↔ Main</span>
             <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
             <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS runtime sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>

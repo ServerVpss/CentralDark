@@ -1469,4 +1469,19 @@ main() {
 }
 
 
+# CENTRALDARK_INSTALLER_READONLY_ENTRY_20261114
+# Entrada de leitura e simulacao: nao executar locate_repo, self_update,
+# launchers, migracao de shell ou logging em disco antes dessas opcoes.
+case "${1:-}" in
+  --help|-h) usage; exit 0 ;;
+  --runner-linux-check) runner_linux_phase check; exit $? ;;
+  --runner-linux-install)
+    if [ "${2:-}" = "--dry-run" ]; then runner_linux_phase install --dry-run; exit $?; fi
+    ;;
+  --runner-linux-activate)
+    if [ "${2:-}" = "--dry-run" ]; then runner_linux_phase activate --dry-run; exit $?; fi
+    ;;
+esac
+# /CENTRALDARK_INSTALLER_READONLY_ENTRY_20261114
+
 main "$@" 2> >(sanitize >&2) | tee >(sanitize > "/tmp/centraldark-install-$(date +%s).log")

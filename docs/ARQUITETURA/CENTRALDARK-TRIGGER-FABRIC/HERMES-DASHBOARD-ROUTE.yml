@@ -1,0 +1,49 @@
+schema: centraldark.hermes.dashboard-route.v1
+status: OBSERVED_WITH_PERSISTENT_TUNNEL_RESOURCE
+owner: Hermes Gateway + Cloudflare Tunnel
+source_of_truth:
+  local_config: /data/config.yaml
+  tunnel_config: /data/.cloudflared/dashboard.yml
+  receipt: docs/RECEIPTS/2026-11-14-HERMES-DASHBOARD-CLOUDFLARE-TUNNEL.md
+
+route:
+  public_url: https://gateway.centralldark.com
+  tunnel_name: centraldark-dashboard
+  tunnel_id: fe52c8b1-dcc3-46c3-ab75-ee41fa3c3555
+  dns_target: fe52c8b1-dcc3-46c3-ab75-ee41fa3c3555.cfargotunnel.com
+  ingress:
+    hostname: gateway.centralldark.com
+    service: http://127.0.0.1:18787
+    http_host_header: gateway.centralldark.com
+
+security:
+  dashboard_auth_required: true
+  auth_providers:
+    - nous
+    - session-token
+  credentials_versioned: false
+  tunnel_credentials_versioned: false
+  dashboard_bound_to_loopback: true
+
+readback:
+  status_json: PASS
+  status_http: 200
+  ws_ticket_without_session: 401
+  ws_ticket_content_type: application/json
+  login_page: PASS
+  public_route: PASS
+
+persistence:
+  cloudflare_tunnel_resource: PASS
+  dns_record: PASS
+  connector_process: RUNNING_NOW
+  system_autostart: UNKNOWN
+  systemd_available: false
+  sudo_available: false
+
+invariants:
+  no_dns_owner_duplication: true
+  no_second_dashboard: true
+  no_auth_bypass: true
+  no_secret_in_repo: true
+  unknown_not_pass: true
