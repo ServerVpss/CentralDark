@@ -3,7 +3,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
-ROOT="$(git -C "$SCRIPT_DIR/../.." rev-parse --show-toplevel)"
+ROOT="${CENTRALDARK_SOURCE_ROOT:-$(git -C "$SCRIPT_DIR/../.." rev-parse --show-toplevel)}"
 REMOTE="${CENTRALDARK_REMOTE:-origin}"
 BRANCH="${CENTRALDARK_BRANCH:-main}"
 SYNC_ROOT="${CENTRALDARK_SYNC_ROOT:-${ROOT%/*}/CentralDark-auto-sync}"
@@ -30,8 +30,8 @@ git -C "$ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
 
 if [ -e "$SYNC_ROOT" ]; then
   [ -e "$SYNC_ROOT/.git" ] || fail "SYNC_ROOT_EXISTS_BUT_IS_NOT_GIT_WORKTREE"
-  common_root="$(git -C "$ROOT" rev-parse --git-common-dir)"
-  common_sync="$(git -C "$SYNC_ROOT" rev-parse --git-common-dir)"
+  common_root="$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)"
+  common_sync="$(git -C "$SYNC_ROOT" rev-parse --path-format=absolute --git-common-dir)"
   [ "$common_root" = "$common_sync" ] || fail "SYNC_ROOT_BELONGS_TO_ANOTHER_REPOSITORY"
 else
   git -C "$ROOT" worktree add --detach "$SYNC_ROOT" "$REMOTE/$BRANCH" >/dev/null
