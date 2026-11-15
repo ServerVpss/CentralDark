@@ -125,6 +125,63 @@ class RastroFiscalTests(unittest.TestCase):
         self.assertEqual("FAIL", r.verdict)
         self.assertTrue(any(c.name == "ledger_active" and c.verdict == "FAIL" for c in r.checks))
 
+    def test_direct_main_uses_dynamic_current_ledger(self):
+        class TrackingBackend(M.FakeBackend):
+            def __init__(self):
+                super().__init__(
+                    commits={FULL: {PATH: "OWNER=AGENTS.md\nTRACE_PRESENT != TRACE_VALID\n"}},
+                    main=FULL,
+                    ledger={FULL},
+                )
+                self.issue_seen = "UNSET"
+
+            def ledger_has_sha(self, sha, issue=None, ledger_ref=None):
+                self.issue_seen = issue
+                return super().ledger_has_sha(sha, issue, ledger_ref)
+
+        b = TrackingBackend()
+        r = M.verify_text(traced_text().replace("LEDGER_REF=#1562\n", ""), REPO, b)
+        self.assertEqual("PASS", r.verdict)
+        self.assertIsNone(b.issue_seen)
+
+    def test_active_funnel_is_resolved_by_marker_not_historical_number(self):
+        class FunnelBackend(M.GitHubBackend):
+            def __init__(self):
+                super().__init__(REPO)
+                self.calls = []
+
+            def _gh(self, endpoint):
+                self.calls.append(endpoint)
+                if endpoint == f"repos/{REPO}/pulls?state=open&per_page=100&page=1":
+                    return [
+                        {"number": 1757, "body": "historical"},
+                        {"number": 1977, "body": "<!-- CENTRALDARK_HUD_FUNNEL_CONTINUITY --> current"},
+                    ]
+                if endpoint == f"repos/{REPO}/issues/1977":
+                    return {"body": f"CURRENT receipt {FULL}", "comments": 0}
+                raise AssertionError(f"unexpected endpoint: {endpoint}")
+
+        b = FunnelBackend()
+        self.assertTrue(b.ledger_has_sha(FULL))
+        self.assertIn(f"repos/{REPO}/issues/1977", b.calls)
+        self.assertNotIn(f"repos/{REPO}/issues/1757", b.calls)
+
+    def test_multiple_active_funnels_are_unknown_not_arbitrary(self):
+        class AmbiguousBackend(M.GitHubBackend):
+            def __init__(self):
+                super().__init__(REPO)
+
+            def _gh(self, endpoint):
+                if endpoint == f"repos/{REPO}/pulls?state=open&per_page=100&page=1":
+                    return [
+                        {"number": 1977, "body": "CENTRALDARK_HUD_FUNNEL_CONTINUITY"},
+                        {"number": 2001, "body": "CENTRALDARK_HUD_FUNNEL_CONTINUITY"},
+                    ]
+                raise AssertionError(f"unexpected endpoint: {endpoint}")
+
+        with self.assertRaises(M.BackendUnavailable):
+            AmbiguousBackend().ledger_has_sha(FULL)
+
     def test_link_repo_mismatch_fails(self):
         text = traced_text().replace(
             f"https://github.com/{REPO}/commit/",

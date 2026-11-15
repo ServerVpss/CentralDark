@@ -81,12 +81,14 @@ HOT_TRIGGERS = {
     "R3", "R4", "PRODUCAO", "VPS", "MERGE", "MAIN", "IDENTIDADE",
     "MEMORIA", "AUTENTICACAO", "DADOS", "ROTEAMENTO", "FALLBACK",
     "FALSO_VERDE_RECORRENTE", "AGENTES_DISCORDANDO", "CACA_AO_ERRO",
-    "ALTERAR_LUPA",
+    "RECOVERY_RECURRENT", "ALTERAR_LUPA",
 }
 WARM_TRIGGERS = {
     "R2", "404", "401", "429", "TIMEOUT", "CONTRADICAO",
     "EVIDENCIA_FRACA", "MECANISMO_DESCONHECIDO", "FALSO_VERDE",
-    "RUNTIME_DIVERGENTE", "DRIFT",
+    "RUNTIME_DIVERGENTE", "DRIFT", "VISUAL_ACTION_NO_EFFECT",
+    "TARGET_MISMATCH", "MONITOR_MISMATCH", "ACTIONABILITY_GAP",
+    "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED", "PATH_RESOLVED_NOT_PRESENT",
 }
 
 UNKNOWN = "UNKNOWN"
@@ -325,6 +327,49 @@ def select_mode(data: dict) -> str:
     return "FRIA"
 
 
+def select_variant(data: dict, mode: str | None = None) -> str:
+    """Seleciona a ferida operacional dentro da temperatura sem criar outro motor."""
+    selected_mode = mode or select_mode(data)
+    triggers = {str(item).upper() for item in data.get("triggers", [])}
+    visual_recovery = str(data.get("visual_recovery_class", "")).upper()
+
+    if selected_mode == "FRIA":
+        if triggers & {"READBACK", "CURRENT", "STATUS", "OBSERVE", "REMEASURE"}:
+            return "FRIA_READBACK"
+        if triggers & {"FINGERPRINT_UNCHANGED", "SAME_FAILURE_WITHOUT_NEW_INFORMATION", "REUSE_PROOF"}:
+            return "FRIA_REUSE_FINGERPRINT"
+        return "FRIA_FATO_BINARIO"
+
+    if selected_mode == "MEDIA":
+        if triggers & {
+            "MATERIALIZATION_GAP", "ENVIRONMENT_ROOT_UNRESOLVED",
+            "PATH_RESOLVED_NOT_PRESENT",
+        }:
+            return "MEDIA_MATERIALIZATION_GAP"
+        if visual_recovery or triggers & {
+            "VISUAL_ACTION_NO_EFFECT", "TARGET_MISMATCH", "MONITOR_MISMATCH",
+            "ACTIONABILITY_GAP",
+        }:
+            return "MEDIA_RECOVERY_VISUAL"
+        if triggers & {"FALSO_VERDE", "EVIDENCIA_FRACA"}:
+            return "MEDIA_FALSO_VERDE"
+        if triggers & {"RUNTIME_DIVERGENTE", "DRIFT"}:
+            return "MEDIA_DRIFT_DISTRIBUIDO"
+        if triggers & {"SENSOR_FAILURE", "INSTRUMENT_FAILURE", "TOOL_RESULT_INVALID"}:
+            return "MEDIA_INSTRUMENTO_INCERTO"
+        return "MEDIA_CAUSA_DISCRIMINANTE"
+
+    if triggers & {"ALTERAR_LUPA"}:
+        return "QUENTE_META_EVOLUCAO"
+    if triggers & {"MAIN", "MERGE", "PROMOVER", "PROMOTION"}:
+        return "QUENTE_PROMOCAO_CANONICA"
+    if triggers & {"PRODUCAO", "VPS", "AUTENTICACAO", "DADOS"}:
+        return "QUENTE_PRODUCAO_AUTH"
+    if triggers & {"FALSO_VERDE_RECORRENTE", "AGENTES_DISCORDANDO", "CACA_AO_ERRO", "RECOVERY_RECURRENT"}:
+        return "QUENTE_RECURRENCIA_ADVERSARIAL"
+    return "QUENTE_CONSOLIDACAO"
+
+
 def validate(data: dict) -> list[str]:
     errors = []
     risk = str(data.get("risk", "R0")).upper()
@@ -386,8 +431,10 @@ def evaluate(data: dict) -> dict:
         verdict = "CONDICIONAR"
     else:
         verdict = "APROVAR"
+    mode_used = select_mode(data)
     return {
-        "mode_used": select_mode(data),
+        "mode_used": mode_used,
+        "variant_used": select_variant(data, mode_used),
         "trigger": data.get("triggers", []),
         "risk": data.get("risk", "R0"),
         "contract_digest": contract_digest(data),

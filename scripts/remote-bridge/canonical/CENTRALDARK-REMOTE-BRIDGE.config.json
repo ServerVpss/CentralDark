@@ -31,7 +31,16 @@
       "owner": "KINGSTON_PHYSICAL_DISK",
       "modes": ["BOOT_NATIVO", "VMWARE_RAW_DISK_COM_ACESSO_EXCLUSIVO"],
       "installation_status": "PENDENTE",
-      "hermes_cli_status": "PENDENTE_POS_OPENKYLIN"
+      "hermes_cli_status": "PENDENTE_POS_OPENKYLIN",
+      "execution_target": "OPENKYLIN_VMWARE_LOCAL",
+      "ssh_alias": "openkylin-vm",
+      "resolved_host": "192.168.35.130",
+      "canonical_root": "/home/CentralDark-OS/CentralDark",
+      "transport": "SSH_AUTHENTICATED_EXISTING",
+      "windows_role": "CLIENT_ONLY",
+      "mcp_tunnel_readiness": "http://127.0.0.1:8742/readyz",
+      "source_of_truth": "ServerVpss/CentralDark@main",
+      "runtime_mirror_proven": false
     },
     "vps": {
       "role": "RUNTIME_24_7_MESMO_CODIGO",

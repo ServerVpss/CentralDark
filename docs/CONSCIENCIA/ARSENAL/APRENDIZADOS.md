@@ -37,3 +37,16 @@
 **Receita reutilizável:** recuperar intenção e owner existente → observar estado atual → separar hipótese, evidência e prova → aplicar menor delta autorizado → corrigir desvios encontrados → contraprova e readback → registrar aprendizado e NEXT_CURSOR. Não declarar dívida resolvida, sincronização ou runtime validado sem evidência específica. Reutilizar o contrato operacional SOL e os owners existentes; não criar executor, cérebro ou documento paralelo.
 
 **Escopo da evidência:** este registro comprova a incorporação documental do princípio; não comprova, por si só, reconciliação dos HEADs locais nem solução de MCP/OAuth em execução.
+
+<!-- CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+### 2026-11-11 — Rota SSH VMware comprovada; distinta do WSL2
+
+- Intencao: reutilizar o owner SSH existente e evitar confundir rotas da VM VMware e do WSL2.
+- Ambiente: alias openkylin = WSL2 via ProxyCommand; alias openkylin-vm ou CentralDark-OS-VM = VMware guest CentralDark-OS, porta 22. SSH Windows e SSH guest sao servicos diferentes.
+- Fonte operacional: C:\Users\Administrador\.ssh\config_openkylin (ativo do usuario); espelho F:\CentralDark\.ssh\config_openkylin. Preservar config principal e credenciais.
+- Teste read-only provado: ssh -F 'C:\Users\Administrador\.ssh\config_openkylin' -o BatchMode=yes -o ConnectTimeout=8 -o ConnectionAttempts=1 openkylin-vm 'hostname; id -un; systemctl is-active ssh'
+- Contraprova 11/11/2026: CentralDark-OS / CentralDark-OS / active / SSH_EXIT=0. O IP 192.168.35.130 foi observado; preferir alias a IP codificado.
+- Timeout no banner foi intermitente. TCP 22 aberto nao prova SSH autenticado. IPQoS=none funcionou em um teste, mas a causalidade nao foi demonstrada. Nao alterar sshd, firewall ou IPQoS por hipotese.
+- Receita canônica existente: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md e references/RECEITA-KINGSTON-20261103.md. Preservar a historia do WSL2 de 30/10; nao converter prova WSL2 em prova VMware.
+- Limite de verdade: SSH_VMWARE=PASS; COCKPIT_HTTP_524=PENDING; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
+<!-- /CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->

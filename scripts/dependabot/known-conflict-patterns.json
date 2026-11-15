@@ -11,6 +11,42 @@
   },
   "patterns": [
     {
+      "CONFLICT_ID": "PR1900_MCP_ADMIN_ROUTE_CATALOG",
+      "PATH_PATTERN": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "OWNER": "apps/modulos/mcp/src/tools/core/mcp-admin.js",
+      "CONFLICT_CLASS": "MCP_CANONICAL_ROUTE_CATALOG",
+      "SOURCE_REF": "PR #1900 HEAD 17e744c0 versus main 5442e1c6; source catalog and UI route contract",
+      "KNOWN_CAUSE": "PR HEAD contains committed conflict markers and contradictory RDC route policies; main adds native Tailscale and explicit-opt-in fallback.",
+      "SAFE_RESOLUTION": "REVIEW",
+      "PRESERVE_RULE": "Keep current main Tailscale/native security contract, preserve PR-only CASA_NATIVE_PID_INVENTORY without duplicate route IDs, and require source tests.",
+      "COUNTERPROOF": "No committed markers, unique route IDs, Node syntax, catalog scope tests and same-HEAD CI.",
+      "RUNTIME_APPLICABLE": "SOURCE_ONLY"
+    },
+    {
+      "CONFLICT_ID": "PR1900_MCP_DIAGNOSTICS_CARDINALITY",
+      "PATH_PATTERN": "apps/modulos/mcp/src/tools/core/mcp-diagnostics.js",
+      "OWNER": "apps/modulos/mcp/src/tools/core/mcp-diagnostics.js",
+      "CONFLICT_CLASS": "MCP_CATALOG_DIAGNOSTICS",
+      "SOURCE_REF": "PR #1900 HEAD 17e744c0 versus main 5442e1c6",
+      "KNOWN_CAUSE": "Route cardinality and canary snapshots drift while main route catalog advances.",
+      "SAFE_RESOLUTION": "REVIEW",
+      "PRESERVE_RULE": "Compute route cardinality from the merged canonical catalog; no hard-coded green check or missing canary.",
+      "COUNTERPROOF": "Catalog tests, route parity and same-HEAD CI.",
+      "RUNTIME_APPLICABLE": "SOURCE_ONLY"
+    },
+    {
+      "CONFLICT_ID": "CENTRALDARK_LIBRARY_INDEX_CONCURRENT_EDIT",
+      "PATH_PATTERN": ".agents/library-index.json",
+      "OWNER": ".agents/library-index.json",
+      "CONFLICT_CLASS": "SHARED_CANONICAL_INDEX",
+      "SOURCE_REF": "AGENTS.md one-writer contract; existing index owner",
+      "KNOWN_CAUSE": "Multiple missions may update the same canonical skill index.",
+      "SAFE_RESOLUTION": "REVIEW",
+      "PRESERVE_RULE": "Preserve entries from both sides, reject duplicate identity and compare against explicit remote base.",
+      "COUNTERPROOF": "JSON parse, schema/duplicate checks and same-HEAD CI.",
+      "RUNTIME_APPLICABLE": "SOURCE_ONLY"
+    },
+    {
       "CONFLICT_ID": "DEPENDABOT_MANIFEST_PACKAGE_JSON",
       "PATH_PATTERN": "**/package.json",
       "OWNER": "scripts/dependabot/resolve-conflicts.sh",
