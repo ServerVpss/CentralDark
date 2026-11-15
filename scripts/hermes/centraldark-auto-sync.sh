@@ -4,9 +4,16 @@ set -euo pipefail
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 ROOT="${CENTRALDARK_SOURCE_ROOT:-$(git -C "$SCRIPT_DIR/../.." rev-parse --show-toplevel)}"
+ROOT="$(realpath "$ROOT")"
 REMOTE="${CENTRALDARK_REMOTE:-origin}"
 BRANCH="${CENTRALDARK_BRANCH:-main}"
-SYNC_ROOT="${CENTRALDARK_SYNC_ROOT:-${ROOT%/*}/CentralDark-auto-sync}"
+SYNC_ROOT_INPUT="${CENTRALDARK_SYNC_ROOT:-${ROOT%/*}/CentralDark-auto-sync}"
+if [[ "$SYNC_ROOT_INPUT" = /* ]]; then
+  SYNC_ROOT="$(realpath -m "$SYNC_ROOT_INPUT")"
+else
+  SYNC_ROOT="$(realpath -m "$ROOT/$SYNC_ROOT_INPUT")"
+fi
+SYNC_OWNER_MARKER="${SYNC_ROOT}.centraldark-auto-sync-owner"
 RECEIPT_DIR="${CENTRALDARK_RECEIPT_DIR:-${ROOT%/*}/centraldark-auto-sync}"
 TLC23="${ROOT}/docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf"
 TLC23_SHA="b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
@@ -28,13 +35,22 @@ main_sha="$(git -C "$ROOT" ls-remote "$REMOTE" "refs/heads/$BRANCH" | awk 'NR==1
 [ -n "$main_sha" ] || fail "REMOTE_MAIN_NOT_FOUND"
 git -C "$ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
 
+if [ "$SYNC_ROOT" = "$ROOT" ]; then
+  fail "SYNC_ROOT_MUST_NOT_BE_SOURCE_CHECKOUT"
+fi
+
+created_sync_root=false
 if [ -e "$SYNC_ROOT" ]; then
   [ -e "$SYNC_ROOT/.git" ] || fail "SYNC_ROOT_EXISTS_BUT_IS_NOT_GIT_WORKTREE"
+  [ -f "$SYNC_OWNER_MARKER" ] || fail "SYNC_ROOT_OWNERSHIP_NOT_PROVEN"
   common_root="$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)"
   common_sync="$(git -C "$SYNC_ROOT" rev-parse --path-format=absolute --git-common-dir)"
   [ "$common_root" = "$common_sync" ] || fail "SYNC_ROOT_BELONGS_TO_ANOTHER_REPOSITORY"
 else
   git -C "$ROOT" worktree add --detach "$SYNC_ROOT" "$REMOTE/$BRANCH" >/dev/null
+  printf 'owner=centraldark-auto-sync\nroot=%s\ncommon_git=%s\n' \
+    "$ROOT" "$(git -C "$ROOT" rev-parse --path-format=absolute --git-common-dir)" >"$SYNC_OWNER_MARKER"
+  created_sync_root=true
 fi
 
 # This is the script-owned clean mirror. Never clean the operator's worktree.
