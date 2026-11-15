@@ -547,6 +547,8 @@ export type EstadoRastreadorCasa = {
   sameSha: boolean | null;
   dirtyTracked: boolean | null;
   lastEventAt: string | null;
+  // Identifica a origem da leitura; Linux local não é prova do checkout Windows.
+  hostOS?: 'windows' | 'linux' | 'other';
 };
 
 export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
@@ -582,6 +584,7 @@ export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
         at: typeof data.at === 'string' ? data.at : null,
         hostOS,
         tracker,
+        hostOS,
         ssh: typeof data.ssh_active === 'boolean' ? data.ssh_active : null,
         githubAuthenticated: typeof data.github_authenticated_and_accessible === 'boolean'
           ? data.github_authenticated_and_accessible : null,

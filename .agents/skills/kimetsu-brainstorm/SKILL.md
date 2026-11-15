@@ -38,7 +38,7 @@ Em qualquer execução material dentro da CentralDark, esta Remix deve ser carre
 
 Selector compacto dos 17 slots: `1 Concentração Total` (foco/estado), `2 Sol` (meta-orquestração), `3 Lua` (contraprova), `4 Água` (adaptação), `5 Chamas` (execução sustentada), `6 Trovão` (movimento curto comprovado), `7 Vento` (exploração), `8 Pedra` (estabilidade), `9 Flor` (precisão), `10 Inseto` (mudança mínima), `11 Serpente` (rota indireta), `12 Amor` (integração), `13 Som` (sinais/telemetria), `14 Névoa` (ambiguidade), `15 Fera` (detecção de campo), `16 Regeneração Monotônica` (refinar sem perder verde) e `17 Continuar até Fixed Point` (parar apenas em critério objetivo).
 
-**Gatilho obrigatório de execução:** antes de mutar, delegar implementação, corrigir, integrar ou provar, declarar `CLASSIFICAÇÃO + INTENT + BREATH_ID/NAME + condição observada`. Depois executar o ciclo `VERSO → DECLARAÇÃO → EXECUÇÃO → EVIDÊNCIA → VEREDITO → TRANSIÇÃO`. Leituras puras podem terminar em Concentração/Lua/Som sem mutação. Uma nova evidência pode mudar a respiração; falhar não autoriza retry cego.
+**Gatilho obrigatório de execução:** antes de mutar, delegar implementação, corrigir, integrar ou provar, registrar internamente `CLASSIFICAÇÃO + INTENT + BREATH_ID/NAME + condição observada`, sem impor essa declaração ao CHEFE na conversa natural. Depois executar o ciclo `VERSO → DECLARAÇÃO → EXECUÇÃO → EVIDÊNCIA → VEREDITO → TRANSIÇÃO`. Leituras puras podem terminar em Concentração/Lua/Som sem mutação. Uma nova evidência pode mudar a respiração; falhar não autoriza retry cego.
 
 ---
 
@@ -71,7 +71,7 @@ Antes de classificar, entender:
 3. **Qual sucesso?** (o que significa "ta pronto"?)
 4. **Quais constraints?** (tempo, recursos, compatibilidade, risco)
 
-### Formato de output
+### Formato de registro interno (não é modelo obrigatório de resposta ao CHEFE)
 
 INTENT=
 PROBLEM=
