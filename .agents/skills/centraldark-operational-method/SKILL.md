@@ -43,6 +43,20 @@ Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, r
 - [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
 - [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
 
+<!-- CENTRALDARK_PROMPT_ENGINEER_CATALOG_20261115 -->
+### Capacidade vinculada — centraldark-prompt-engineer
+
+**Nome de catálogo:** `centraldark-prompt-engineer`. **Apresentação:** `CentralDark · Engenharia de Prompts`. **Owner de conteúdo existente:** [PROMPT-ENGINEER.md](../../../docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/PROMPT-ENGINEER.md). **Classificação:** `REUSE / DOCUMENTED / RUNTIME_UNPROVEN`.
+
+**Roteamento por intenção:** pedidos de criar, forjar, melhorar, comparar, testar ou otimizar prompts devem consultar esse mesmo owner, sem exigir comando ritual. **Chamadas manuais em português:** `forja esse prompt`, `melhora esse prompt` e `centraldark-prompt-engineer`. O nome antigo `PROMPT-ENGINEER` é referência documental de compatibilidade; não é o identificador preferido apresentado ao CHEFE.
+
+**Modos:** pedido simples → entregar prompt melhorado, preservando intenção e explicando o delta; pedido de avaliação/produção → baseline A/B, métricas, custos, segurança e contraprova, somente quando o escopo solicitar. Não executar benchmark em toda conversa. Nunca transformar exemplos de métricas em resultados reais.
+
+**Compatibilidade e prova:** esta entrada é um **ponteiro de catálogo**, não a vigésima quarta pasta em `Skills/`, nem uma skill nativa recém-instalada. Não renomear, mover ou duplicar o owner antigo por estética. Conferir o roteador/consumidor real antes de afirmar que Hermes, Telegram ou Cockpit invocam essa capacidade; catálogo `!=` carregamento `!=` execução. Uma implementação legada que direcione frases semelhantes para outra skill requer reconciliação do owner de roteamento e teste funcional específico antes de declarar acionamento automático.
+
+**NEXT_CURSOR:** `PROMPT_ENGINEER_CATALOG_READBACK → ROUTER_OWNER_MAPPING → LIVE_INVOCATION_TEST → A_B_BASELINE_IF_REQUESTED`.
+<!-- /CENTRALDARK_PROMPT_ENGINEER_CATALOG_20261115 -->
+
 <!-- CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
 **🔐 Hermes pertence à CentralDark — distinção entre método e motor (09/11/2026).** O método e os aprendizados produzidos para a CentralDark pertencem aos owners da própria CentralDark, não a um catálogo paralelo do Hermes: aprendizado geral → `docs/CONSCIENCIA/APRENDIZADOS.md`; procedimento especializado → [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md), já indexado nesta Skill Mãe. Exemplo concreto: recuperar a janela interativa "Sudo Password Required" — ler a receita nessa Skill filha antes de responder genericamente. O código nativo do Hermes (`/opt/hermes/tools/terminal_tool_sudo.py`, quando presente) é **implementação/dependência de runtime**, não owner documental da CentralDark; pode continuar instalado no local que o pacote exige. Qualquer plugin ou cópia necessária para carregamento é **adaptador**, nunca segunda autoridade. Para absorver outras capacidades do Hermes: inventariar as existentes, verificar licença/versão/contratos/consumidores, classificar REUSE/EXTEND, registrar o menor delta na Skill Mãe/Skills/owner e provar recarga real. Não copiar tudo às cegas, não duplicar motor, não solicitar/gravar senha em chat. `DOCUMENTADO != CONSUMIDO`; `UNKNOWN != PASS`.
 <!-- /CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
