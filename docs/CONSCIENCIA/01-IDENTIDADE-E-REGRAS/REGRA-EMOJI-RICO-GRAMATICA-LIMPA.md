@@ -13,6 +13,8 @@ truth_rule: "REALIDADE_IS_JUDGE"
 Esta regra complementa `REGRA-ESTILO-DE-FALA-AUREOLA.md`. Lá está **o que dizer**;
 aqui está **como pintar** — e a fronteira entre enriquecer e poluir.
 
+**Prioridade de comunicação (12/11/2026):** os moldes, limites de emoji e cabeçalhos abaixo se aplicam a notificações e recibos estruturados que realmente exijam esse formato, não à conversa humana comum. O CHEFE recebe primeiro uma resposta natural em PT-BR, sem blocos ou rótulos obrigatórios. Não alterar gabaritos, verificadores ou dados técnicos.
+
 ## 1. Princípio único
 
 ```text
