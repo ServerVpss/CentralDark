@@ -1,0 +1,403 @@
+schema: centraldark.rov.pr-reconciliation.v1
+status: FIXED_POINT_TRUE_SCOPED
+active_scope:
+  id: MCP_SCHEMA_RECONCILIATION_PR_2056
+  fixed_point: TRUE
+  includes:
+    - PR_2056_MERGED
+    - MAIN_SOURCE_READBACK
+    - LOCAL_SCHEMA_REGRESSION
+    - MCP_OAUTH
+    - MCP_TOOLS_LIST
+    - MCP_TOOLS_JSON_SHAPE
+    - HERMES_MCP_READBACK
+  excludes:
+    - GLOBAL_OPEN_PR_BACKLOG
+    - EXACT_RUNTIME_PROCESS_SHA
+  exclusion_policy: >-
+    A identidade exata do processo remoto permanece uma dimensão observacional
+    separada. O ponto fixo deste escopo é o efeito MCP schema, comprovado por
+    fonte main, regressão local e readback funcional independente.
+owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml
+authority: SEGREDO/CHEFE
+coordinator: SOL
+executor: HERMES
+judge: REALITY
+
+purpose: >-
+  Auditar PRs abertos, separar mergeabilidade técnica de autorização,
+  priorizar o menor delta causal, reconciliar conflitos sem reescrita cega
+  e fechar somente com readback do código, checks, runtime e efeito.
+
+source_of_truth:
+  repository: ServerVpss/CentralDark
+  canonical_branch: main
+  remote: origin
+  resolve_at_runtime: true
+  observed_snapshot_is_not_authority: true
+  current_head: RESOLVE_AT_RUNTIME
+  current_origin_main: RESOLVE_AT_RUNTIME
+  current_worktree: RESOLVE_AT_RUNTIME
+
+runtime_anchor:
+  required: true
+  tlc23:
+    status: PROVED
+    reason: BYTE_IDENTITY_MATCH
+    sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+    path: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+  mutation_requires_tlc23_proved: true
+  observed_anchor_must_be_revalidated: true
+
+recovery_first:
+  required: true
+  sentinel:
+    command: python3 scripts/trigger-fabric/system_sentinel.py --self-test
+    expected:
+      ok: true
+      failed: []
+  script_first_failure:
+    marker: CENTRALDARK_SCRIPT_FIRST_FAILURE
+    recovery_route:
+      - TRIGGER_FABRIC_SYSTEM_SENTINEL
+      - HERMES
+    model_invocation: ONLY_AFTER_DETERMINISTIC_RECOVERY_FAILS
+  fail_closed_when:
+    - sentinel_not_run
+    - sentinel_failed
+    - recovery_route_unknown
+
+operational_invariants:
+  one_system_only: true
+  one_owner_per_capability: true
+  one_writer_per_scope: true
+  reuse_before_create: true
+  unknown_never_pass: true
+  history_ne_current: true
+  action_ne_proof: true
+  documented_ne_executed: true
+  merge_ne_deployed: true
+  merge_authorized_ne_mergeable: true
+  dirty_worktree_ne_clean: true
+  force_push_forbidden: true
+  reset_hard_forbidden: true
+  broad_clean_forbidden: true
+  secrets_in_logs_forbidden: true
+  parallel_mutation_same_scope_forbidden: true
+
+classification:
+  pr_state:
+    source: github_api
+    states: [OPEN, CLOSED, MERGED]
+    eligible_for_audit: [OPEN]
+  mergeability:
+    source: github_api
+    values: [clean, behind, dirty, blocked, unstable, unknown]
+  readiness:
+    values:
+      - READY_TECHNICAL
+      - READY_WITHOUT_REVIEW_PROOF
+      - NEEDS_BRANCH_UPDATE
+      - NEEDS_RECONCILIATION
+      - BLOCKED_CHECKS
+      - BLOCKED_OWNER
+      - BLOCKED_SCOPE
+      - DRAFT
+      - UNKNOWN
+  rules:
+    ready_technical:
+      all:
+        - pr.state == OPEN
+        - pr.draft == false
+        - pr.mergeable == true
+        - pr.mergeable_state == clean
+        - checks.pending == 0
+        - checks.failed == 0
+        - reviews.changes_requested == 0
+        - scope.unique == true
+        - dependencies.known == true
+    needs_branch_update:
+      any:
+        - pr.mergeable_state == behind
+        - base_sha != current_origin_main_sha
+    needs_reconciliation:
+      any:
+        - pr.mergeable == false
+        - pr.mergeable_state == dirty
+        - conflicts.count > 0
+    blocked:
+      any:
+        - checks.failed > 0
+        - checks.pending > 0
+        - scope.unique == false
+        - owner.unknown == true
+        - rollback.known == false
+    human_review_note:
+      text: >-
+        A aprovação humana pode ser recomendada mesmo quando a branch não
+        possui regra técnica de aprovação obrigatória. O contrato não inventa
+        autorização; ele separa estado GitHub de decisão do CHEFE.
+
+preflight:
+  mode: READ_ONLY
+  steps:
+    - id: recover_sentinel
+      command: python3 scripts/trigger-fabric/system_sentinel.py --self-test
+      gate: sentinel.ok == true
+    - id: resolve_repo
+      command: git remote get-url origin
+      gate: repository == ServerVpss/CentralDark
+    - id: fetch_main
+      command: git fetch --prune origin main
+      mutation: false
+      gate: origin_main_sha != null
+    - id: inspect_worktree
+      command: git status --short --branch
+      gate: preserve_preexisting_dirty_entries
+    - id: inspect_anchor
+      command: git rev-parse HEAD && git rev-parse origin/main
+      gate: record_head_and_origin
+    - id: inspect_tlc23
+      command: test -f docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+      gate: tlc23.status == PROVED
+
+inventory:
+  source: github_api
+  command: python3 scripts/trigger-fabric/pr_rov_audit.py --contract docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+  pagination_required: true
+  fields:
+    - number
+    - title
+    - state
+    - draft
+    - head_ref
+    - head_sha
+    - base_ref
+    - base_sha
+    - mergeable
+    - mergeable_state
+    - checks
+    - reviews
+    - changed_files
+    - labels
+    - html_url
+  wait_for_mergeability_recalculation: true
+  minimum_readback:
+    - open_total
+    - readiness_counts
+    - current_origin_main_sha
+    - audit_timestamp
+  no_claim_without:
+    - api_readback
+    - head_sha
+    - base_sha
+    - mergeable_state
+
+zero_regression_scope:
+  declared: true
+  baseline_t0:
+    git:
+      head: RESOLVE_AT_RUNTIME
+      origin_main: RESOLVE_AT_RUNTIME
+      worktree: RESOLVE_AT_RUNTIME
+    repository:
+      sentinel: PASS_REQUIRED
+      diff_check: PASS_REQUIRED
+    pr:
+      inventory: PASS_REQUIRED
+      checks: READ_BACK_REQUIRED
+    mcp:
+      oauth: SEPARATE_LAYER
+      tools_list_schema: REQUIRED_WHEN_MCP_SCOPE
+      hermes_mcp_test: REQUIRED_AFTER_DEPLOY
+  same_checks_at_t1: true
+  unknown_material_blocks_pass: true
+  rollback_required: true
+
+priority_queue:
+  ordering:
+    - mcp_runtime_blocker
+    - security_and_authentication
+    - dependency_foundation
+    - infrastructure_and_deploy
+    - functional_changes
+    - documentation
+  current_cursor:
+    primary: PR_2056
+    reason: MCP_tools_list_schema_failure
+    next:
+      - validate_pr_2056_against_current_main
+      - merge_only_after_required_gates
+      - deploy_through_existing_owner
+      - read_back_tools_list
+      - run_hermes_mcp_test_centraldark
+  dependency_group_policy:
+    one_merge_at_a_time: true
+    rerun_consumer_tests_after_each: true
+    zod_change_requires_mcp_schema_counterproof: true
+
+merge_gate:
+  authorization: HUMAN_OR_EXISTING_AUTHORIZED_POLICY_REQUIRED
+  default_action: REPORT_ONLY
+  required:
+    - pr.state == OPEN
+    - pr.draft == false
+    - pr.mergeable == true
+    - pr.mergeable_state == clean
+    - checks.pending == 0
+    - checks.failed == 0
+    - reviews.changes_requested == 0
+    - scope.unique == true
+    - dependencies.known == true
+    - security.secrets_exposed == false
+    - rollback.known == true
+    - t0_baseline.status == PASS
+    - t1_same_checks.status == PASS
+  forbidden:
+    - merge_batch_without_classification
+    - force_push
+    - force_merge
+    - merge_dirty_pr
+    - merge_unknown_state
+    - merge_from_dirty_checkout
+    - merge_to_hide_conflict
+    - claim_deployed_before_runtime_readback
+
+reconciliation_gate:
+  applies_when:
+    - pr.mergeable_state == dirty
+    - pr.mergeable_state == behind
+    - pr.base_sha != current_origin_main_sha
+  steps:
+    - read_pr_diff_against_current_main
+    - identify_causal_commit
+    - search_duplicate_or_superseding_pr
+    - classify_owner_and_consumers
+    - choose_one:
+        - KEEP_AND_REBASE
+        - PORT_TO_SUCCESSOR_PR
+        - SUPERSEDED
+        - CLOSE_WITHOUT_MERGE
+        - BLOCKED_OWNER_REVIEW
+    - preserve_original_provenance
+    - rerun_same_t0_checks
+  forbidden:
+    - reset_hard
+    - broad_clean
+    - blind_conflict_resolution
+    - force_push
+    - accepting_ours_or_theirs_in_bulk
+
+mcp_counterproof:
+  applies_when_scope_contains_mcp: true
+  required_sequence:
+    - inspect_current_mcp_owner
+    - verify_source_and_dist_alignment
+    - run_local_schema_regression
+    - authenticated_tools_list
+    - assert_every_tool_inputSchema_type
+    - hermes_mcp_test_centraldark_after_deploy
+    - read_only_mcp_call
+  separate_layers:
+    oauth: MCP_OAUTH
+    schema: TOOLS_LIST_SCHEMA
+    client: HERMES_MCP_CLIENT
+    gateway: HERMES_GATEWAY
+    deploy: RUNTIME_DEPLOY
+  rules:
+    oauth_pass_does_not_imply_tools_list_pass: true
+    tools_list_pass_does_not_imply_deploy_pass: true
+    hermes_client_auth_does_not_imply_gateway_auth: true
+    health_does_not_imply_feature_consumed: true
+
+rollback:
+  required: true
+  merge_rollback:
+    - identify_merge_commit
+    - preserve_receipt
+    - revert_through_normal_pr_flow
+    - rerun_t0_checks
+  reconciliation_rollback:
+    - preserve_original_branch
+    - delete_no_refs_automatically: true
+    - restore_last_known_good_branch_state
+    - emit_blocker_if_recovery_not_proven
+  runtime_rollback:
+    - preserve_last_known_good_deploy
+    - revert_only_through_existing_owner
+    - read_back_process_listener_endpoint
+
+receipts:
+  owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/
+  required_fields:
+    - contract
+    - contract_version
+    - repository
+    - tested_origin_main_sha
+    - receipt_persisted_in_main_sha
+    - local_head_sha
+    - worktree_state
+    - sentinel_result
+    - tlc23_result
+    - open_pr_total
+    - readiness_counts
+    - selected_pr
+    - decision
+    - tests_t0
+    - tests_t1
+    - runtime_readback
+    - rollback_reference
+    - next_cursor
+  secret_policy:
+    values: NEVER_PERSIST
+    allowed: [provider, owner, status, result, sha, url]
+
+verdict:
+  pass_only_when:
+    - all_applicable_gates_pass
+    - no_material_unknown
+    - same_t0_checks_pass_at_t1
+    - rollback_is_known
+    - receipt_persisted
+  mapping:
+    PASS: merge_or_reconciliation_effect_proven
+    PARTIAL: source_and_checks_pass_but_runtime_or_effect_unknown
+    BLOCKED: exact_conflict_or_failed_gate_known
+    UNKNOWN: required_readback_missing
+  output_fields:
+    - verdict
+    - scope
+    - proven
+    - blocked
+    - unknown
+    - evidence
+    - selected_pr
+    - next_cursor
+
+execution_modes:
+  audit:
+    mutates: false
+    default: true
+    allowed: true
+  reconcile_branch:
+    mutates: true
+    requires: [human_authorization, tlc23_proved, clean_isolated_worktree]
+  merge:
+    mutates: true
+    requires: [human_authorization, merge_gate_pass, tlc23_proved]
+  deploy:
+    mutates: true
+    requires: [existing_owner, merge_readback, runtime_rollback_known, human_authorization]
+
+fixed_point:
+  required_state:
+    - inventory_current
+    - selected_delta_proven
+    - merge_or_reconciliation_readback
+    - runtime_effect_readback_when_applicable
+    - receipt_persisted
+    - next_cursor_persisted
+  unknown_is_not_fixed_point: true
+  merged_is_not_deployed: true
+  deployed_is_not_runtime_fixed_point: true
+  final_rule: REALITY_IS_JUDGE
