@@ -1,0 +1,68 @@
+schema: centraldark.hermes.dashboard-route.v2
+status: OBSERVED_WITH_PERSISTENT_PRIMARY_AND_TAILSCALE_FALLBACK
+owner: Hermes Gateway + Cloudflare Tunnel + Tailscale Serve
+source_of_truth:
+  local_config: /data/config.yaml
+  tunnel_config: /data/.cloudflared/dashboard.yml
+  tailscale_fallback_proxy: /data/.cloudflared/tailscale-fallback.Caddyfile
+  receipt: docs/RECEIPTS/2026-11-14-HERMES-DASHBOARD-CLOUDFLARE-TUNNEL.md
+
+route:
+  public_url: https://gateway.centralldark.com
+  tunnel_name: centraldark-dashboard
+  tunnel_id: fe52c8b1-dcc3-46c3-ab75-ee41fa3c3555
+  dns_target: fe52c8b1-dcc3-46c3-ab75-ee41fa3c3555.cfargotunnel.com
+  ingress:
+    hostname: gateway.centralldark.com
+    service: http://127.0.0.1:18787
+    http_host_header: gateway.centralldark.com
+
+fallback:
+  access_url: https://0886c2779b0c.tail89b909.ts.net
+  tailscale_serve: https://0886c2779b0c.tail89b909.ts.net:443
+  local_proxy: http://127.0.0.1:18788
+  proxy_engine: caddy
+  proxy_host_header: gateway.centralldark.com
+  dashboard_origin: http://127.0.0.1:18787
+  automatic_client_failover: false
+  fallback_scope: tailnet_only
+
+security:
+  dashboard_auth_required: true
+  auth_providers:
+    - nous
+    - session-token
+  credentials_versioned: false
+  tunnel_credentials_versioned: false
+  dashboard_bound_to_loopback: true
+  fallback_proxy_bound_to_loopback: true
+
+readback:
+  cloudflare_status_json: PASS
+  cloudflare_status_http: 200
+  fallback_proxy_status_json: PASS
+  fallback_proxy_status_http: 200
+  fallback_proxy_auth_required: true
+  ws_ticket_without_session: 401
+  ws_ticket_content_type: application/json
+  login_page: PASS
+  public_route: PASS
+  tailscale_serve_config: PASS
+
+persistence:
+  cloudflare_tunnel_resource: PASS
+  dns_record: PASS
+  tailscale_serve_resource: PASS
+  connector_process: RUNNING_NOW
+  fallback_proxy_process: RUNNING_NOW
+  system_autostart: UNKNOWN
+  systemd_available: false
+  sudo_available: false
+
+invariants:
+  no_dns_owner_duplication: true
+  no_second_dashboard: true
+  no_auth_bypass: true
+  no_secret_in_repo: true
+  dashboard_bind_not_widened: true
+  unknown_not_pass: true

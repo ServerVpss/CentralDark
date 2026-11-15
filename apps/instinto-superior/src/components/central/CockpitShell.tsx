@@ -130,6 +130,7 @@ function nativeUnigramBridge(): NativeUnigramBridge | undefined {
 
 const NAVEGACAO_PASTAS = [
   { pasta: "Começar aqui", icone: "✦", itens: [
+    { valor: "geral", nome: "Geral", ajuda: "Estado geral do Cockpit e da Forja.", soAdmin: false },
     { valor: "visao", nome: "Resumo", ajuda: "Como está tudo agora, num olhar só.", soAdmin: false },
     { valor: "jornada", nome: "Aprender jogando", ajuda: "Um passo a passo para entender o sistema.", soAdmin: false },
     { valor: "portal", nome: "Portal", ajuda: "A porta de entrada para os seus produtos.", soAdmin: false },
@@ -173,6 +174,7 @@ const NAVEGACAO_PASTAS = [
 // Mesmo padrão de ícones Lucide da landing /: quadrado, borda e cor por token da pele.
 // As 27 rotas e seus owners continuam exclusivamente em NAVEGACAO_PASTAS.
 const ICONES_NAVEGACAO = {
+  geral: Radar,
   visao: Eye,
   jornada: BookOpen,
   portal: Globe,
@@ -206,7 +208,7 @@ function IconeItemNavegacao({ valor }: { valor: keyof typeof ICONES_NAVEGACAO })
   const Icone = ICONES_NAVEGACAO[valor];
   return (
     <span aria-hidden="true" className="mr-2 flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 shadow-sm transition-[transform,background-color,border-color,box-shadow] duration-200 ease-out group-hover/menuitem:-translate-y-0.5 group-hover/menuitem:scale-105 group-hover/menuitem:border-primary/50 group-hover/menuitem:bg-primary/10 group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)] group-focus-within/menuitem:border-primary/50 group-data-[collapsible=icon]:mr-0 motion-reduce:transform-none motion-reduce:transition-none">
-      <Icone className="size-4 text-gold transition-[color,transform] duration-200 ease-out group-hover/menuitem:scale-110 group-hover/menuitem:text-neon-green group-focus-within/menuitem:text-primary group-data-[state=active]/menuitem:text-primary motion-reduce:transform-none motion-reduce:transition-none" />
+      <Icone className="size-4 text-gold transition-[color,transform] duration-200 ease-out group-hover/menuitem:scale-110 group-hover/menuitem:text-primary group-focus-within/menuitem:text-primary group-data-[state=active]/menuitem:text-primary motion-reduce:transform-none motion-reduce:transition-none" />
     </span>
   );
 }
@@ -891,90 +893,8 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
         </section>
       ) : null}
 
-      <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
-        <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
-        <div className="relative mx-auto max-w-6xl">
-          <p className="font-mono text-[10px] tracking-[0.22em] text-neon-blue uppercase">
-            {autenticado ? "SALA DE CONTROLE" : "ACESSO OPERACIONAL"}
-          </p>
-          <h1 className="text-gold-gradient mt-4 max-w-4xl text-5xl font-semibold sm:text-7xl">
-            Cockpit vivo
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
-            Estado atual, conexões e Hermes reunidos numa única superfície, sem transformar
-            histórico em prova.
-          </p>
-          {!autenticado ? (
-            <Button
-              data-cd-flow="instinto.CockpitShell.botao-04"
-              asChild
-              size="lg"
-              className="mt-8"
-            >
-              <Link to="/auth">Abrir cockpit</Link>
-            </Button>
-          ) : null}
-        </div>
-      </section>
-
       <section className="px-4 py-14 sm:px-6">
         <div className="mx-auto max-w-6xl">
-          {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
-          <AutoSyncButton />
-          <div className="mt-4 space-y-4">
-            <StatusPanel />
-            <DailyReviewPanel />
-          </div>
-
-          <div className="mt-8 flex items-center gap-3">
-            <Radar className="size-5 text-neon-blue" />
-            <h2 className="text-2xl font-semibold">HUD de estado</h2>
-            <span className="ml-auto font-mono text-[10px] text-muted-foreground">
-              ATUALIZAÇÃO 60S
-            </span>
-          </div>
-          <PapagaioHudMcp medicao={hudMedido} />
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <BlocoEstado
-              titulo="Main oficial"
-              estado={
-                estado.isPending ? "RUNNING" : ((dado?.github ?? "UNKNOWN") as EstadoOperacional)
-              }
-              codigo={dado?.sha?.slice(0, 12) ?? "Aguardando medição"}
-              detalhe="Medição via CentralDark; OAuth externo não bloqueia."
-              icone={<Github className="size-5" />}
-            />
-            <BlocoEstado
-              titulo="Build local"
-              estado={(dado?.build ?? "UNKNOWN") as EstadoOperacional}
-              codigo="Sem medição viva"
-              detalhe="Sem fonte real de build com horário medido."
-              icone={<Activity className="size-5" />}
-            />
-            <BlocoEstado
-              titulo="Servidor publicado"
-              estado={(dado?.deploy ?? "UNKNOWN") as EstadoOperacional}
-              codigo={dado?.vpsSha?.slice(0, 12) ?? "UNKNOWN"}
-              detalhe={
-                dado?.deltaVps != null
-                  ? `${dado.deltaVps} commit(s) atrás.`
-                  : "Sem fonte viva do servidor."
-              }
-              icone={<Server className="size-5" />}
-            />
-            <BlocoEstado
-              titulo="Gmail"
-              estado={(dado?.gmail ?? "AUTH_REQUIRED") as EstadoOperacional}
-              detalhe="Autorização humana pendente; o restante continua operando."
-              icone={<Mail className="size-5" />}
-            />
-          </div>
-          {autenticado ? (
-            <div className="mt-10">
-              <PainelConsumo />
-            </div>
-          ) : null}
-
           <SidebarProvider open={menuAberto} onOpenChange={definirMenuAberto} className="min-h-0 w-full"
             style={{ "--sidebar-width": `${larguraSidebar}px` } as React.CSSProperties}>
             <Tabs value={abaAtiva} onValueChange={definirAbaAtiva} className={`flex min-w-0 flex-1 ${menuAberto ? "md:-ml-[var(--cd-sidebar-width)]" : "md:-ml-12"}`} id="centraldark-harness-abas">
@@ -1089,7 +1009,94 @@ export function CockpitShell({ autenticado = false }: { autenticado?: boolean })
               <MenuVisualCentralDark titulo="⚡ Builder Bolt" descricao="Fábrica de sites existente. Esta vitrine não inicia outro editor ou processo." itens={["🏗️ Construção de sites", "🖥️ Editor", "👁️ Preview", "🗂️ Projetos existentes", "🧩 Modelos e componentes", "🔄 Git e versões"]} />
             </TabsContent>
             {autenticado ? <TabsContent value="gram" className="mt-8"><CentralDarkGram abrirAdmin={() => abrirDestino("admin")} abrirSync={() => abrirDestino("sync")} /></TabsContent> : null}
+            <TabsContent value="geral" className="mt-8">
+      <section className="relative overflow-hidden border-b border-border px-4 py-20 sm:px-6">
+        <div aria-hidden className="grid-mesh absolute inset-0 opacity-30" />
+        <div className="relative mx-auto max-w-6xl">
+          <p className="font-mono text-[10px] tracking-[0.22em] text-neon-blue uppercase">
+            {autenticado ? "SALA DE CONTROLE" : "ACESSO OPERACIONAL"}
+          </p>
+          <h1 className="text-gold-gradient mt-4 max-w-4xl text-5xl font-semibold sm:text-7xl">
+            Cockpit vivo
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Estado atual, conexões e Hermes reunidos numa única superfície, sem transformar
+            histórico em prova.
+          </p>
+          {!autenticado ? (
+            <Button
+              data-cd-flow="instinto.CockpitShell.botao-04"
+              asChild
+              size="lg"
+              className="mt-8"
+            >
+              <Link to="/auth">Abrir cockpit</Link>
+            </Button>
+          ) : null}
+        </div>
+      </section>
+              <div className="mt-6 space-y-4">
+          {/* Auto Sync + Micro-Deploy + Status Lights + Daily Review */}
+          <AutoSyncButton />
+          <div className="mt-4 space-y-4">
+            <StatusPanel />
+          </div>
+              </div>
+            </TabsContent>
             <TabsContent value="visao" className="mt-8">
+          <div className="mt-4 space-y-4">
+            <DailyReviewPanel />
+          </div>
+
+          <div className="mt-8 flex items-center gap-3">
+            <Radar className="size-5 text-neon-blue" />
+            <h2 className="text-2xl font-semibold">HUD de estado</h2>
+            <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+              ATUALIZAÇÃO 60S
+            </span>
+          </div>
+          <PapagaioHudMcp medicao={hudMedido} />
+          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <BlocoEstado
+              titulo="Main oficial"
+              estado={
+                estado.isPending ? "RUNNING" : ((dado?.github ?? "UNKNOWN") as EstadoOperacional)
+              }
+              codigo={dado?.sha?.slice(0, 12) ?? "Aguardando medição"}
+              detalhe="Medição via CentralDark; OAuth externo não bloqueia."
+              icone={<Github className="size-5" />}
+            />
+            <BlocoEstado
+              titulo="Build local"
+              estado={(dado?.build ?? "UNKNOWN") as EstadoOperacional}
+              codigo="Sem medição viva"
+              detalhe="Sem fonte real de build com horário medido."
+              icone={<Activity className="size-5" />}
+            />
+            <BlocoEstado
+              titulo="Servidor publicado"
+              estado={(dado?.deploy ?? "UNKNOWN") as EstadoOperacional}
+              codigo={dado?.vpsSha?.slice(0, 12) ?? "UNKNOWN"}
+              detalhe={
+                dado?.deltaVps != null
+                  ? `${dado.deltaVps} commit(s) atrás.`
+                  : "Sem fonte viva do servidor."
+              }
+              icone={<Server className="size-5" />}
+            />
+            <BlocoEstado
+              titulo="Gmail"
+              estado={(dado?.gmail ?? "AUTH_REQUIRED") as EstadoOperacional}
+              detalhe="Autorização humana pendente; o restante continua operando."
+              icone={<Mail className="size-5" />}
+            />
+          </div>
+          {autenticado ? (
+            <div className="mt-10">
+              <PainelConsumo />
+            </div>
+          ) : null}
+
               <section aria-label="Resumo da Sala de Controle" className="mb-6 space-y-4">
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {([

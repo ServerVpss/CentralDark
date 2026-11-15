@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
+import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 // Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
 // Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
@@ -22,6 +23,8 @@ function getAdminPassword() {
     return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
 }
 function getOwnerToolToken() {
+    // Reutiliza sessao gh somente apos OAuth admin autorizado; nao expor credencial.
+    if (ghCliAvailable()) return GH_CLI_OWNER_MARKER;
     return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
 }
 function timingSafeEqualText(a, b) {
