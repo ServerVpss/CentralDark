@@ -33,6 +33,42 @@ test('Casa limpa publica commit existente e confirma SHA remoto real',async t=>r
  const result=await m.executarSync({data:{target:'local'}});assert.equal(result.status,'success');assert.equal(f.g('rev-parse','HEAD'),f.g('rev-parse','FETCH_HEAD'));
 }));
 
+test('Diagnóstico identifica a origem do checkout em vez de chamar Linux de Casa Windows',async t=>run(t,async(f,m)=>{
+ const leitura=await m.lerRastreadorCasa();
+ const esperado=process.platform==='win32'?'windows':process.platform==='linux'?'linux':'other';
+ assert.equal(leitura.hostOS,esperado);
+ assert.equal(leitura.sameSha,null);
+}));
+
+test('Cockpit separa leitura Git, Casa Windows, VMware e Triton sem falso verde',()=>{
+ const ui=fs.readFileSync(new URL('../src/components/central/AutoSyncButton.tsx',import.meta.url),'utf8');
+ assert.match(ui,/queryKey: \['centraldark', 'estado-vivo'\]/);
+ assert.match(ui,/label="Sincronizar Casa\/Main"/);
+ assert.match(ui,/onClick=\{\(\) => handleSync\('local'\)\}/);
+ assert.doesNotMatch(ui,/label="Sincronizar Tudo"/);
+ assert.match(ui,/trackerStatus\?\.hostOS === 'windows'/);
+ assert.match(ui,/mainSha && vpsSha \? mainSha === vpsSha : null/);
+ assert.match(ui,/Todos os commits iguais/);
+ assert.match(ui,/Triton: executa modelos de IA/);
+ assert.match(ui,/NÃO VERIFICADO/);
+ assert.match(ui,/Última execução concluída; código agora:/);
+ assert.match(ui,/todosMesmoCommit === true \? 'bg-emerald-500\/10/);
+ assert.match(ui,/sem leitura própria/);
+});
+
+test('Código oficial reutiliza gh CLI autenticado sem extrair token para o navegador',()=>{
+ const source=fs.readFileSync(new URL('../src/lib/cockpit.functions.ts',import.meta.url),'utf8');
+ const ui=fs.readFileSync(new URL('../src/components/central/StatusPanel.tsx',import.meta.url),'utf8');
+ assert.match(source,/async function consultarGitHubLeitura\(/);
+ assert.match(source,/promisify\(execFile\)\("gh"/);
+ assert.match(source,/GitHub CLI autenticado no servidor/);
+ assert.match(source,/consultarGitHubLeitura\("commits\?sha=main&per_page=4"\)/);
+ assert.match(source,/consultarGitHubLeitura\(\s*`compare\//);
+ assert.doesNotMatch(source,/gh auth token/);
+ assert.match(ui,/d\?\.github === "PASS" && d\.mainSha/);
+ assert.match(ui,/d\?\.fonte \?\? "GitHub main/);
+});
+
 test('Falha histórica VPS conserva erro e escopo sem inventar estado atual',async t=>run(t,async(f,m)=>{
  const dir=path.join(f.repo,'.auto-sync');fs.mkdirSync(dir);
  const status=path.join(dir,'status.json');

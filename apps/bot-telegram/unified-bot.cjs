@@ -198,7 +198,7 @@ async function callHermesExecutor(history, systemPrompt, motivo = 'fallback') {
     `Motivo do fallback: ${motivo}.`,
     'Responda SOMENTE em PT-BR.',
     'Entregue apenas a resposta final útil; não exponha raciocínio interno, rascunho, chain-of-thought, tags de ferramenta ou mensagens de controle.',
-    'Se uma prova estiver ausente, diga UNKNOWN em vez de inventar.',
+    'Se faltar prova, explique em português natural que ainda não foi confirmado, sem inventar resultado.',
   ].join('\n');
 
   const hermesBin = fs.existsSync('/usr/local/bin/hermes')
@@ -403,28 +403,19 @@ function getSession(chatId) {
 
 // ── Agentes LLM ───────────────────────────────────────────────────────────
 const FORMATO_HTML = `
-REGRAS DE FORMATAÇÃO — OBRIGATÓRIO:
-• Use HTML do Telegram: <b>negrito</b>, <i>itálico</i>, <code>código</code>, <pre>bloco</pre>
-• NÃO use Markdown (**, __, ##, ---, | tabelas |)
-• Seja conciso — máximo 250 palavras por resposta conversacional
-• Para listas use bullet points com • ou números
-• Para código/comandos sempre use <code>comando</code> ou <pre>bloco</pre>
-• Responda sempre em PT-BR
+FORMATAÇÃO DA CONVERSA — PT-BR NATURAL:
+• Responda com clareza, resultado primeiro, sem rótulos de máquina ou cabeçalhos obrigatórios.
+• Use HTML compatível com o Telegram quando necessário: <b>negrito</b>, <i>itálico</i>, <code>código</code> e <pre>bloco</pre>.
+• NÃO use Markdown (**, __, ##, ---, | tabelas |) quando o canal exigir HTML do Telegram.
+• Seja conciso — em geral, até 250 palavras na resposta conversacional.
+• Use listas somente quando facilitarem a compreensão.
+• Use <code> para comandos curtos e <pre> para códigos, logs ou dados cujo alinhamento seja essencial.
+• Explique status, falhas, ferramentas e próximos passos em português comum; nomes técnicos literais continuam nos registros e quando necessários à precisão.
 
-PADRÃO MONOESPAÇADO (OBRIGATÓRIO para relatórios técnicos):
-• Qualquer resposta sobre: ferramentas disponíveis, modelos, status do servidor, o que foi
-  feito na sessão, pendências, PM2, logs ou qualquer informação técnica estruturada DEVE
-  ser entregue dentro de blocos <pre>...</pre> com caixas ASCII (╔═╗║╚╝) e emojis alinhados
-• Estrutura obrigatória:
-    <pre>
-    ╔══════════════════════════════════╗
-    ║  EMOJI  TÍTULO DA SEÇÃO         ║
-    ╚══════════════════════════════════╝
-    linha 1
-    linha 2
-    </pre>
-• Múltiplas seções = múltiplos blocos <pre> separados
-• Nunca misture texto solto com conteúdo técnico — ou é <pre> ou é conversa`.trim();
+RELATÓRIO TÉCNICO SOLICITADO:
+• Se o CHEFE pedir explicitamente HUD, tabela ou relatório monoespaçado, preserve o formato técnico e as evidências originais.
+• Caixa ASCII (╔═╗║╚╝) e emojis são opcionais na apresentação humana; nunca imponha essa moldura à conversa normal.
+• Não altere identificadores e campos exigidos por APIs, recibos, validadores ou pelo gabarito Telegram.`.trim();
 
 const IDENTIDADE_PIVETE = `
 IDENTIDADE DO USUÁRIO — LEIA COM ATENÇÃO:
@@ -491,7 +482,7 @@ const COG_MODES = {
   react: {
     emoji: '⚛️',  nome: 'ReAct',
     desc: 'Age → observa → raciocina → age de novo.',
-    prompt: 'Você usa ReAct internamente. Na saída ao usuário mostre somente Ação, Observação verificável e Resposta Final. ' +
+    prompt: 'Você usa ReAct internamente. Ao usuário, explique naturalmente o resultado e a evidência pertinente, sem impor títulos Ação/Observação/Resposta Final. ' +
             'Não exponha pensamento privado nem mensagens internas de ferramenta. Responda em PT-BR.',
   },
   reflexao: {

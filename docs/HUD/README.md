@@ -12,7 +12,7 @@
 | PR vigente da mesma missão e PR vigente do funil | Descubra ambos pelo escopo, owner e marcadores no GitHub CURRENT; não fixe o número de nenhum PR. Mantenha o quadro no corpo do PR da missão e o resumo/link no funil vigente. O #1977 é apenas exemplo histórico do funil das 891 branches, não ponteiro permanente. |
 | [Histórico integral deste README](https://github.com/ServerVpss/CentralDark/blob/1377ffcc62ae693ae48568afa07d46d1e0e82506/docs/HUD/README.md) | Consulte os recibos e quadros anteriores pelo commit fixado. |
 
-Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo HUD conversacional conforme `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
+Sem PR equivalente, retome pelo checkpoint e pelo owner existente. O HUD técnico é exibido apenas quando solicitado; na conversa normal, responda em linguagem natural conforme a SOUL e `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
 
 ## Atualização obrigatória da missão e do funil
 
@@ -26,6 +26,28 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Use o mesmo H
 3. Antes de qualquer escrita, exigir **um único funil ativo não contradito** e o PR correto da missão. Se não houver candidato inequívoco, marcar `ACTIVE_FUNNEL_PR=UNKNOWN` e registrar `NEXT_CURSOR` no checkpoint existente; não escrever no #1977 por reflexo. Se o PR da missão também for o funil, atualizar ambos os blocos no **mesmo corpo**, sem duplicar eventos.
 4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
 5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
+
+### 🪬 Comentarios como recibos duraveis da missao (!HUD / #HUD · 14/11/2026)
+
+A descricao do **PR da missao** continua sendo o quadro editavel com caixinhas; o **PR do funil** mantem o resumo e o link, e os comentarios `Conversation` preservam recibos em ordem causal. A cada mudanca material comprovada, atualizar o estado do owner e do quadro pertinente e adicionar ou editar o recibo relevante, com readback da mesma URL. Se for apenas novo resultado/pendencia, comentario e corpo de PR com readback bastam — nao fabricar commit de codigo. O #1977 e o funil atualmente observado, **nao** numero fixo.
+
+**Contrato minimo de um comentario consumivel pelo leitor `lerHudVigente`:**
+
+```markdown
+<!-- CENTRALDARK_HUD_MISSION_ID:CENTRALDARK_REMOTE_AGENT_HALO_RADEON -->
+## !HUD · Missao vigente e checkpoint de DD/MM/AAAA
+MISSION=PENDING
+MISSION_FIXED_POINT=NO
+- [x] Etapa realmente provada — link para SHA/teste/contraprova
+- [ ] Etapa nao provada — causa/bloqueio
+NEXT_CURSOR: uma acao concreta
+```
+
+- Ler pelo proprio GitHub `GET /issues/{PR}/comments` em paginas, depois filtrar pelos marcadores de missao e ligar o ultimo recibo **da mesma MISSION_ID**. Recibo historico de 14/11 para Halo tem marcador legado `CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT`; ler, sem reescrever nem duplicar.
+- O `[x]` marca apenas a declaracao do autor; requer commit/teste/readback para virar PROVADO. O campo `MISSION=COMPLETE` sem `FIXED_POINT=YES` e `READBACK=PASS` nao declara conclusao.
+- Para varias missoes, declarar a ativa no **corpo do PR do funil** com `<!-- CENTRALDARK_HUD_ACTIVE_MISSION:MISSION_ID -->` e publicar recibos novos pelo mesmo ID. O leitor usa esse ponteiro explicito; sem escolha inequívoca pela intencao do CHEFE = `BLOCKED`. Nenhum "ultimo comentario do PR" substitui a missao vigente. Harmonizar com o checkpoint `scripts/hermes/centraldark-entry.py` antes de retomar execucao.
+- O Cockpit utiliza `apps/instinto-superior/src/lib/sync.functions.ts#lerHudVigente` e `apps/instinto-superior/src/components/central/HudDeterministico.tsx` para **projetar** o recibo autenticado/permitido, nunca para escrever GitHub por um navegador nem iniciar Hermes. `MAIN_CODE=COMMITTED` nao prova `UI_DEPLOYED` nem `HUD_CONSUMED`.
+- O metodo operativo consultado em `C:\Users\Administrador\Downloads\PROMPT_METODO_PIVETE.md` orienta ler, validar, minimo delta, contraprova, registro e retomada; a autoridade no GitHub continua neste contrato e em `AGENTS.md`.
 
 ### Direct Main — rastro é parte do write
 
@@ -118,7 +140,7 @@ Classificador executável: `scripts/trigger-fabric/centraldark_full_trigger_boot
 - **Loop Mestre.** Preserve C01–C20/A01–A20 e os owners documentados. CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL → GOAL/cláusulas → CURRENT → GREEN_STATE → APRENDIZADOS → OWNER EXISTENTE → menor DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT → GREEN_STATE → KAIZEN → NEXT_CURSOR. Ao errar, volte uma casa, corrija e reteste o cone afetado. Confirme o objetivo pelo efeito observado.
 - **Execução e publicação.** Modifique o owner existente no ambiente autorizado, inclusive VPS quando a missão exigir. Preserve o estado, obtenha teste, contraprova e aceite do CHEFE, e publique conforme as proteções e gates da `main`. Confirme caminho, SHA, link e readback antes de declarar gravação. `DOCUMENTED ≠ EXECUTED`, `MERGED ≠ DEPLOYED`, `REGISTERED ≠ CONSUMED`, `UNKNOWN ≠ PASS`.
 - **Inventário e diagramas.** Reutilize o [reconciliador único](../../scripts/centraldark-inventory-reconcile.sh). O Instinto Superior opera como cockpit. Preserve nós, setas, subgraphs e textos nos diagramas e siga o [gate existente](../../scripts/lupa/diagram-route-gate.mjs). Cada botão ou função nova precisa de rota, owner e prova.
-- **Resposta operacional.** Use 🪬 INTENÇÃO · 🧠 OWNER · 🔍 CURRENT · 🔧 DELTA · ⚙️ EXECUÇÃO · 🎯 PROVA · 💗 APRENDIZADO · ➡️ NEXT_CURSOR conforme a tarefa. Responda em PT-BR, direto e humano. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
+- **Resposta operacional.** Responda em PT-BR natural, começando pelo resultado, sem cabeçalhos nem campos internos por obrigação. Use o quadro completo somente quando o CHEFE pedir HUD ou auditoria; mantenha os campos e provas no registro técnico. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
 - **Baianês.** Quando usar a interjeição, escreva **ÔCHENTE**, com pronúncia *ô-CHEN-te*. Preserve o sotaque natural.
 
 ---
@@ -444,7 +466,7 @@ Nenhum cartão fica verde apenas por ter sido apresentado.
 
 **Interface incompatível:** usar Markdown ou o HUD monoespaçado existente.
 
-Até a integração e validação no `AGENTS.md`, manter o formato obrigatório do HUD canônico e utilizar os cartões como apresentação complementar.
+Os campos e a estrutura do HUD canônico permanecem obrigatórios **dentro do painel técnico quando solicitado**; os cartões são apresentação complementar, sem impor quadros à conversa normal. A integração e validação do comportamento real em cada superfície continuam sujeitas a teste e leitura de confirmação.
 
 #### 10.7. Preservação e sincronização
 
