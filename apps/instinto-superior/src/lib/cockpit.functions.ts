@@ -136,6 +136,63 @@ export type EstadoCentralDark = {
   portasTotais: PortaCentralDark[];
 };
 
+function acessoGitHub() {
+  carregarEnvForja();
+  const token = process.env["GITHUB_TOKEN"];
+  if (token) {
+    return {
+      base: GITHUB_API,
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `Bearer ${token}`,
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+      fonte: "GitHub API",
+    };
+  }
+
+  return null;
+}
+
+// Reutiliza a autenticação já ativa no servidor (gh CLI) sem ler, copiar ou
+// enviar tokens ao navegador. A API com GITHUB_TOKEN continua sendo prioridade.
+async function consultarGitHubLeitura(caminho: string): Promise<{
+  estado: Estado; dados: unknown; fonte: string;
+}> {
+  const acesso = acessoGitHub();
+  if (acesso) {
+    try {
+      const resposta = await fetch(`${acesso.base}/repos/ServerVpss/CentralDark/${caminho}`, {
+        headers: acesso.headers, cache: "no-store", signal: AbortSignal.timeout(8_000),
+      });
+      if (resposta.ok) return {
+        estado: "PASS", dados: await resposta.json(), fonte: `${acesso.fonte} autenticada`,
+      };
+      if (resposta.status !== 401 && resposta.status !== 403) return {
+        estado: "FAIL", dados: null, fonte: `GitHub HTTP ${resposta.status}`,
+      };
+    } catch { /* Tenta a sessão existente do gh sem copiar credenciais. */ }
+  }
+  try {
+    const { execFile } = await import("node:child_process");
+    const { promisify } = await import("node:util");
+    // Somente endpoints de leitura montados neste servidor; nunca executar shell.
+    const { stdout } = await promisify(execFile)("gh", [
+      "api", `repos/ServerVpss/CentralDark/${caminho}`,
+    ], { timeout: 8_000, maxBuffer: 1024 * 1024, windowsHide: true });
+    return {
+      estado: "PASS", dados: JSON.parse(stdout) as unknown,
+      fonte: "GitHub CLI autenticado no servidor",
+    };
+  } catch {
+    return {
+      estado: acesso ? "UNKNOWN" : "AUTH_REQUIRED",
+      dados: null,
+      fonte: acesso ? "GitHub indisponível" : "Sessão GitHub CLI indisponível no servidor",
+    };
+  }
+}
+
 export function apiBase() {
   return (process.env["CENTRALDARK_API_BASE_URL"] ?? DEFAULT_API_BASE).replace(/\/$/, "");
 }
@@ -485,6 +542,31 @@ async function medirActions() {
 // #OBSERVACOES# @owner instinto.cockpit @doc_ref docs/HUD/README.md
 // @last_updated 2026-11-07T18:13:00Z @implementado Main e divergência consultam o acesso GitHub compartilhado.
 async function medirGithub() {
+  const leitura = await consultarGitHubLeitura("commits?sha=main&per_page=4");
+  if (leitura.estado !== "PASS" || !Array.isArray(leitura.dados)) {
+    return {
+      estado: leitura.estado === "PASS" ? ("UNKNOWN" as Estado) : leitura.estado,
+      commits: [] as CommitCentralDark[],
+      fonte: leitura.fonte,
+    };
+  }
+  const payload = leitura.dados as Array<{
+    sha?: unknown;
+    commit?: { message?: string; author?: { date?: string } };
+  }>;
+  const commits: CommitCentralDark[] = payload
+    .filter((commit) => typeof commit.sha === "string" && /^[0-9a-f]{40}$/i.test(commit.sha))
+    .slice(0, 4)
+    .map((commit) => ({
+      sha: commit.sha as string,
+      mensagem: commit.commit?.message?.split("\n")[0] ?? "Sem mensagem",
+      data: commit.commit?.author?.date ?? "",
+    }));
+  return {
+    estado: commits[0] ? ("PASS" as Estado) : ("UNKNOWN" as Estado),
+    commits,
+    fonte: `${leitura.fonte} · ServerVpss/CentralDark@main`,
+  };
   carregarEnvForja();
   try {
     const resposta = await consultarGitHubCentralDark("commits?sha=main&per_page=4");
@@ -509,6 +591,12 @@ async function medirGithub() {
 async function medirDelta(vpsSha: string | null, mainSha: string | null) {
   if (!vpsSha || !mainSha) return null;
   if (vpsSha === mainSha) return 0;
+  const leitura = await consultarGitHubLeitura(
+    `compare/${encodeURIComponent(vpsSha)}...${encodeURIComponent(mainSha)}`,
+  );
+  if (leitura.estado !== "PASS" || !objetoJson(leitura.dados)) return null;
+  const ahead = leitura.dados["ahead_by"];
+  return typeof ahead === "number" ? ahead : null;
   try {
     const { dados } = await consultarGitHubCentralDark(`compare/${vpsSha}...${mainSha}`);
     const payload = dados as { ahead_by?: number } | null;
