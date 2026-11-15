@@ -47,22 +47,62 @@ O `401` sem cookie é esperado. Ele prova que a rota chegou ao Gateway correto e
 - O DNS do `gateway.centralldark.com` foi apontado para o Tunnel nomeado.
 - O túnel rápido temporário foi encerrado.
 
+## Rota reserva Tailscale
+
+O primeiro teste direto pelo Tailscale retornou `HTTP 400` porque o hostname `*.ts.net` não correspondia ao `webapp.public_url` canônico. A correção mantém o Dashboard em loopback e adiciona um proxy local sem alterar a URL pública do Hermes:
+
+```text
+Tailscale Serve
+→ https://0886c2779b0c.tail89b909.ts.net
+→ Caddy 127.0.0.1:18788
+→ Hermes 127.0.0.1:18787
+```
+
+O Caddy reescreve o `Host` para `gateway.centralldark.com` antes de encaminhar ao Hermes.
+
+```text
+GET http://127.0.0.1:18788/api/status
+→ HTTP 200 application/json
+→ gateway_running=true
+→ auth_required=true
+
+Tailscale Serve readback
+→ HTTPS 443
+→ proxy http://127.0.0.1:18788
+```
+
+Arquivos runtime, fora do Git e sem segredos:
+
+```text
+/data/.cloudflared/tailscale-fallback.Caddyfile
+/data/.cloudflared/dashboard.yml
+```
+
 ## Limite operacional
 
 ```text
 CLOUDFLARE_RESOURCE_PERSISTENT=true
-TUNNEL_PROCESS_CURRENT=true
+TAILSCALE_SERVE_CONFIGURED=true
+TAILSCALE_FALLBACK_HOST_COMPATIBILITY=PROVED_LOCAL_PROXY
+CLOUDFLARE_PROCESS_CURRENT=true
+CADDY_PROCESS_CURRENT=true
 SYSTEM_AUTOSTART=false
 ```
 
-O recurso nomeado e o DNS são persistentes. O processo `cloudflared` ainda é iniciado manualmente neste container; não há `systemd` ou `sudo` disponíveis para instalar auto-start neste host.
+Os recursos Cloudflare e Tailscale são persistentes. Os processos `cloudflared` e Caddy ainda são iniciados manualmente neste container; não há `systemd` ou `sudo` disponíveis para instalar auto-start neste host.
 
 ## Uso
 
-No Hermes Desktop/iPhone, usar somente:
+Principal:
 
 ```text
 https://gateway.centralldark.com
 ```
 
-Não usar `:18787` publicamente.
+Reserva dentro do tailnet:
+
+```text
+https://0886c2779b0c.tail89b909.ts.net
+```
+
+Não usar `:18787` ou `:18788` publicamente.
