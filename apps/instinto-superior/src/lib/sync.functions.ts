@@ -1,7 +1,7 @@
 // #OBSERVACOES# @owner: cockpit-sync @doc_ref: apps/instinto-superior/README.md
 // @last_updated: 2026-11-13T04:39:00Z @implementado: Cockpit faz um fetch e delega checkout sujo ao planner 3-way fail-closed reutilizando FETCH_HEAD; nenhuma escolha ours/theirs.
 import { createServerFn } from "@tanstack/react-start";
-import { execSync, execFileSync } from "child_process";
+import { execFileSync } from "child_process";
 import path from "path";
 import fs from "fs";
 
@@ -15,6 +15,13 @@ export interface SyncStatus {
   phase?: string;
   progress?: number;
   files?: string[];
+  reason?: string;
+  exit_code?: number | null;
+  stdout?: string;
+  stderr?: string;
+  command?: string;
+  repo_path?: string;
+  runtime_mode?: "local" | "remote";
 }
 
 /* ── caminhos ── */
@@ -30,8 +37,116 @@ function centralDarkRoot(): string {
 const CENTRALDARK_ROOT = centralDarkRoot();
 const STATUS_FILE = path.join(CENTRALDARK_ROOT, ".auto-sync", "status.json");
 
-const VPS_SSH_HOST = "segredo-vpss";
-const VPS_REPO_PATH = "/root/CentralDark";
+const VPS_REMOTE_REPO_PATH = process.env["CENTRALDARK_VPS_REPO_PATH"]?.trim() || "/root/CentralDark";
+const VPS_CANONICAL_ORIGIN = /(?:^|[:/])ServerVpss\/CentralDark(?:\.git)?$/i;
+
+type VpsRuntime = {
+  mode: "local" | "remote";
+  repoPath: string;
+  target?: string;
+  label: string;
+};
+
+type TailscalePeer = {
+  HostName?: string;
+  DNSName?: string;
+  OS?: string;
+  Online?: boolean;
+  TailscaleIPs?: string[];
+};
+
+type TailscaleStatus = {
+  Peer?: Record<string, TailscalePeer>;
+};
+
+function canonicalRepoAt(repoPath: string): boolean {
+  try {
+    const origin = execFileSync("git", ["-C", repoPath, "config", "--get", "remote.origin.url"], {
+      encoding: "utf8",
+      timeout: 5_000,
+    }).trim();
+    return VPS_CANONICAL_ORIGIN.test(origin);
+  } catch {
+    return false;
+  }
+}
+
+function vpsRepoIdentityMatches(target: string): boolean {
+  try {
+    const origin = execFileSync("ssh", [
+      "-o", "BatchMode=yes",
+      "-o", "ConnectTimeout=4",
+      "-o", "StrictHostKeyChecking=accept-new",
+      target,
+      `test -d "${VPS_REMOTE_REPO_PATH}/.git" && git -C "${VPS_REMOTE_REPO_PATH}" config --get remote.origin.url`,
+    ], {
+      encoding: "utf8",
+      timeout: 8_000,
+      maxBuffer: 256 * 1024,
+    }).trim();
+    return VPS_CANONICAL_ORIGIN.test(origin);
+  } catch {
+    return false;
+  }
+}
+
+function resolveVpsSshTarget(): string {
+  const explicit = process.env["CENTRALDARK_VPS_SSH_TARGET"]?.trim();
+  if (explicit) {
+    if (!vpsRepoIdentityMatches(explicit)) {
+      throw new Error("VPS_ROUTE_REJECTED: target configurado não confirmou o repo canônico CentralDark");
+    }
+    return explicit;
+  }
+
+  let status: TailscaleStatus;
+  try {
+    const raw = execFileSync("tailscale", ["status", "--json"], {
+      encoding: "utf8",
+      timeout: 8_000,
+      maxBuffer: 2 * 1024 * 1024,
+    });
+    status = JSON.parse(raw) as TailscaleStatus;
+  } catch {
+    throw new Error("VPS_ROUTE_UNKNOWN: Tailscale indisponível e nenhum target externo foi configurado");
+  }
+
+  const matches: string[] = [];
+  for (const peer of Object.values(status.Peer ?? {})) {
+    if (peer.Online !== true || peer.OS !== "linux") continue;
+    const target = peer.DNSName?.replace(/\.$/, "")
+      || peer.TailscaleIPs?.find((ip) => ip.includes("."))
+      || peer.TailscaleIPs?.[0];
+    if (!target) continue;
+    if (vpsRepoIdentityMatches(target)) matches.push(target);
+  }
+
+  const unique = [...new Set(matches)];
+  if (unique.length !== 1) {
+    throw new Error(
+      `VPS_ROUTE_UNKNOWN: esperado 1 peer Tailscale com repo canônico; encontrados ${unique.length}`,
+    );
+  }
+  return unique[0];
+}
+
+function resolveVpsRuntime(): VpsRuntime {
+  if (process.platform === "linux" && canonicalRepoAt(CENTRALDARK_ROOT)) {
+    return {
+      mode: "local",
+      repoPath: CENTRALDARK_ROOT,
+      label: `VPS_RUNTIME local · ${process.env["HOSTNAME"] ?? "linux"}`,
+    };
+  }
+
+  const target = resolveVpsSshTarget();
+  return {
+    mode: "remote",
+    repoPath: VPS_REMOTE_REPO_PATH,
+    target,
+    label: `VPS_RUNTIME remoto · ${target}`,
+  };
+}
 const AUTO_SYNC_MASTER = path.join(CENTRALDARK_ROOT, "scripts", "auto-sync", "AUTO-SYNC-MASTER.py");
 
 type SafeResolverPlan = {
@@ -125,18 +240,29 @@ function changedFiles(): string[] {
   }).filter(Boolean).slice(0, 50);
 }
 
-function sshVps(script: string): string {
-  const tmpScript = path.join(CENTRALDARK_ROOT, ".auto-sync", "_vps-sync-tmp.sh");
-  ensureStatusDir();
-  fs.writeFileSync(tmpScript, script, { encoding: "utf-8" });
-  try {
-    return execSync(
-      `ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new ${VPS_SSH_HOST} "bash -s" < "${tmpScript}"`,
-      { encoding: "utf-8", timeout: 120_000 },
-    ).trim();
-  } finally {
-    try { fs.unlinkSync(tmpScript); } catch {}
+function runVpsRuntime(runtime: VpsRuntime, script: string): string {
+  if (runtime.mode === "local") {
+    return execFileSync("bash", ["-s", "--", runtime.repoPath], {
+      input: script,
+      encoding: "utf8",
+      timeout: 120_000,
+      maxBuffer: 4 * 1024 * 1024,
+    }).trim();
   }
+
+  if (!runtime.target) throw new Error("VPS_ROUTE_UNKNOWN: runtime remoto sem target");
+  return execFileSync("ssh", [
+    "-o", "ConnectTimeout=10",
+    "-o", "BatchMode=yes",
+    "-o", "StrictHostKeyChecking=accept-new",
+    runtime.target,
+    "bash", "-s", "--", runtime.repoPath,
+  ], {
+    input: script,
+    encoding: "utf8",
+    timeout: 120_000,
+    maxBuffer: 4 * 1024 * 1024,
+  }).trim();
 }
 
 /* ── Sync Windows (Casa → GitHub) ── */
@@ -242,23 +368,24 @@ function syncCasaMain(): SyncStatus {
 
 /* ── Sync VPS (GitHub → VPS via SSH com stash seguro) ── */
 function syncVps(): SyncStatus {
+  const runtime = resolveVpsRuntime();
   const script = `
 set -euo pipefail
-cd "${VPS_REPO_PATH}" || exit 1
+VPS_REPO="$1"
+cd "$VPS_REPO" || exit 1
 
-echo "=== VPS SYNC START ==="
+echo "=== VPS RUNTIME SYNC START ==="
+echo "VPS_ROLE_MODE=${runtime.mode}"
+echo "VPS_ROLE_LABEL=${runtime.label}"
 echo "HEAD_BEFORE=$(git rev-parse HEAD)"
 
-# Preflight: verificar se é um repo válido
 git rev-parse --git-dir >/dev/null 2>&1 || { echo "ERRO: não é um repo git"; exit 2; }
 
-# Preservar drift remoto: bloqueia antes de qualquer stash/merge.
 if [ -n "$(git status --porcelain)" ]; then
   echo "VPS_DIRTY_SCOPE_BLOCKED=true"
   exit 4
 fi
 
-# Checkout comprovadamente limpo; nenhum arquivo local deve ser movido.
 STASH_BEFORE=$(git stash list | wc -l)
 git stash push -u -m "auto-sync-$(date +%Y%m%d-%H%M%S)" 2>&1 || true
 STASH_AFTER=$(git stash list | wc -l)
@@ -270,14 +397,11 @@ else
   echo "STASH=clean"
 fi
 
-# Fetch latest from origin
 git fetch --no-tags origin refs/heads/main 2>&1
 
-# Merge fast-forward
 MERGE_OUTPUT=$(git merge --ff-only FETCH_HEAD 2>&1) || {
   MERGE_EXIT=$?
   echo "MERGE_FAILED: $MERGE_OUTPUT"
-  # Restaurar stash se existia
   if [ "$STASHED" -eq 1 ]; then
     git stash pop 2>&1 || echo "STASH_POP_CONFLICT=true"
   fi
@@ -285,7 +409,6 @@ MERGE_OUTPUT=$(git merge --ff-only FETCH_HEAD 2>&1) || {
 }
 echo "MERGE=$MERGE_OUTPUT"
 
-# Restaurar alterações locais
 if [ "$STASHED" -eq 1 ]; then
   POP_OUTPUT=$(git stash pop 2>&1) || {
     echo "STASH_POP_CONFLICT=true"
@@ -296,12 +419,12 @@ fi
 
 HEAD_AFTER=$(git rev-parse HEAD)
 echo "HEAD_AFTER=$HEAD_AFTER"
-echo "=== VPS SYNC DONE ==="
+echo "=== VPS RUNTIME SYNC DONE ==="
 `;
 
   try {
-    const output = sshVps(script);
-    console.log("[VPS-SYNC] Output:", output);
+    const output = runVpsRuntime(runtime, script);
+    console.log("[VPS-RUNTIME-SYNC] Output:", output);
 
     const headAfterMatch = output.match(/HEAD_AFTER=([a-f0-9]+)/);
     const headAfter = headAfterMatch?.[1]?.slice(0, 8) ?? "???";
@@ -313,7 +436,7 @@ echo "=== VPS SYNC DONE ==="
       return {
         timestamp: new Date().toISOString(),
         status: "conflict",
-        human_readable: "VPS: merge falhou — branches divergiram, requer atenção manual",
+        human_readable: "VPS runtime: merge falhou — branches divergiram, requer atenção manual",
         target: "vps",
         details: output.slice(-300),
       };
@@ -324,30 +447,88 @@ echo "=== VPS SYNC DONE ==="
       return {
         timestamp: new Date().toISOString(),
         status: "conflict",
-        human_readable: `VPS → ${headAfter} (stash pop com conflito — verificar)`,
+        human_readable: `VPS runtime (${runtime.mode}) → ${headAfter} (stash pop com conflito — verificar)`,
         target: "vps",
         details: output.slice(-300),
       };
     }
 
-    writeStatus("success", `VPS sincronizada. HEAD=${headAfter}`);
+    writeStatus("success", `VPS runtime sincronizado (${runtime.mode}). HEAD=${headAfter}`);
     return {
       timestamp: new Date().toISOString(),
       status: "success",
-      human_readable: `VPS → ${headAfter} · sync OK`,
+      human_readable: `VPS runtime (${runtime.mode}) → ${headAfter} · sync OK`,
       target: "vps",
     };
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    const stdout = (err as { stdout?: string })?.stdout ?? "";
-    console.error("[VPS-SYNC] Erro:", msg, stdout);
-    writeStatus("failed", `VPS sync erro: ${msg.slice(0, 200)}`);
+    const execErr = err as {
+      stdout?: string;
+      stderr?: string;
+      status?: number | null;
+      code?: number | string | null;
+    };
+    const stdout = typeof execErr.stdout === "string" ? execErr.stdout : "";
+    const stderr = typeof execErr.stderr === "string" ? execErr.stderr : "";
+    const exitCode = typeof execErr.status === "number"
+      ? execErr.status
+      : typeof execErr.code === "number" ? execErr.code : null;
+    const marker = "VPS_DIRTY_SCOPE_BLOCKED=true";
+    const dirtyScopeBlocked = exitCode === 4 && `${stdout}\n${stderr}`.includes(marker);
+    const command = runtime.mode === "local"
+      ? `bash -s -- ${runtime.repoPath}`
+      : `ssh ${runtime.target ?? "UNKNOWN"} bash -s -- ${runtime.repoPath}`;
+
+    if (dirtyScopeBlocked) {
+      const evidence = [
+        "reason=VPS_DIRTY_SCOPE_BLOCKED",
+        `exit_code=${exitCode}`,
+        `runtime_mode=${runtime.mode}`,
+        `repo_path=${runtime.repoPath}`,
+        `command=${command}`,
+        `stdout=${stdout.trim() || "(vazio)"}`,
+        `stderr=${stderr.trim() || "(vazio)"}`,
+      ].join("\n");
+      console.warn("[VPS-RUNTIME-SYNC] Bloqueio preventivo:", evidence);
+      writeStatus("conflict", evidence);
+      return {
+        timestamp: new Date().toISOString(),
+        status: "conflict",
+        reason: "VPS_DIRTY_SCOPE_BLOCKED",
+        human_readable: "VPS Runtime preservado: alterações locais pendentes de reconciliação.",
+        target: "vps",
+        details: evidence,
+        exit_code: exitCode,
+        stdout,
+        stderr,
+        command,
+        repo_path: runtime.repoPath,
+        runtime_mode: runtime.mode,
+      };
+    }
+
+    const diagnostic = [
+      `exit_code=${exitCode ?? "UNKNOWN"}`,
+      `runtime_mode=${runtime.mode}`,
+      `repo_path=${runtime.repoPath}`,
+      `command=${command}`,
+      `stdout=${stdout.trim() || "(vazio)"}`,
+      `stderr=${stderr.trim() || "(vazio)"}`,
+    ].join("\n");
+    console.error("[VPS-RUNTIME-SYNC] Erro:", msg, diagnostic);
+    writeStatus("failed", `VPS sync erro: ${msg.slice(0, 200)}\n${diagnostic}`);
     return {
       timestamp: new Date().toISOString(),
       status: "failed",
       human_readable: `VPS sync falhou: ${msg.slice(0, 100)}`,
       target: "vps",
-      details: stdout.slice(-300),
+      details: diagnostic,
+      exit_code: exitCode,
+      stdout,
+      stderr,
+      command,
+      repo_path: runtime.repoPath,
+      runtime_mode: runtime.mode,
     };
   }
 }
@@ -355,6 +536,8 @@ echo "=== VPS SYNC DONE ==="
 
 /* ── diagnóstico read-only do rastreador Casa / openKylin ── */
 export type EstadoRastreadorCasa = {
+  // Identifica a origem da leitura; Linux local não é prova do checkout Windows.
+  hostOS?: 'windows' | 'linux' | 'other';
   at: string | null;
   tracker: 'active' | 'inactive' | 'unknown';
   ssh: boolean | null;
@@ -364,12 +547,15 @@ export type EstadoRastreadorCasa = {
   sameSha: boolean | null;
   dirtyTracked: boolean | null;
   lastEventAt: string | null;
+  // Identifica a origem da leitura; Linux local não é prova do checkout Windows.
+  hostOS?: 'windows' | 'linux' | 'other';
 };
 
 export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
   async (): Promise<EstadoRastreadorCasa> => {
+    const hostOS = process.platform === 'win32' ? 'windows' : process.platform === 'linux' ? 'linux' : 'other';
     const empty: EstadoRastreadorCasa = {
-      at: null, tracker: 'unknown', ssh: null, githubAuthenticated: null,
+      at: null, tracker: 'unknown', ssh: null, githubAuthenticated: null, hostOS,
       head: null, githubMain: null, sameSha: null, dirtyTracked: null, lastEventAt: null,
     };
     const script = path.join(CENTRALDARK_ROOT, 'scripts', 'casa', 'centraldark-change-tracker.py');
@@ -396,7 +582,9 @@ export const lerRastreadorCasa = createServerFn({ method: 'GET' }).handler(
       const validSha = typeof data.github_main === 'string' && data.github_main !== 'UNKNOWN';
       return {
         at: typeof data.at === 'string' ? data.at : null,
+        hostOS,
         tracker,
+        hostOS,
         ssh: typeof data.ssh_active === 'boolean' ? data.ssh_active : null,
         githubAuthenticated: typeof data.github_authenticated_and_accessible === 'boolean'
           ? data.github_authenticated_and_accessible : null,
@@ -421,18 +609,24 @@ export const lerStatusSync = createServerFn({ method: "GET" }).handler(
         return { timestamp: null, status: "idle", human_readable: "Nunca sincronizado" };
       }
       const raw = JSON.parse(fs.readFileSync(STATUS_FILE, "utf-8"));
-      // Recibo do último comando não é observação atual da VPS.
-      const registroVps = typeof raw.details === "string" && raw.details.startsWith("VPS ");
+      const details = typeof raw.details === "string" ? raw.details : "";
+      const bloqueioPreventivoVps = raw.status === "conflict"
+        && details.includes("reason=VPS_DIRTY_SCOPE_BLOCKED")
+        && details.includes("exit_code=4");
+      const registroVps = details.startsWith("VPS ") || bloqueioPreventivoVps;
       const ultimoResultado = raw.status === "success" ? "concluída"
         : raw.status === "failed" ? "falhou"
         : raw.status === "conflict" ? "bloqueada" : "registrada";
       return {
         timestamp: raw.last_sync ?? null,
         status: raw.status ?? "idle",
-        human_readable: registroVps
-          ? `Última tentativa VPS ${ultimoResultado} em ${formatTimestamp(raw.last_sync)} · histórico, não estado atual`
-          : formatTimestamp(raw.last_sync),
+        human_readable: bloqueioPreventivoVps
+          ? `Última tentativa VPS bloqueada preventivamente em ${formatTimestamp(raw.last_sync)} · trabalho local preservado · histórico, não estado atual`
+          : registroVps
+            ? `Última tentativa VPS ${ultimoResultado} em ${formatTimestamp(raw.last_sync)} · histórico, não estado atual`
+            : formatTimestamp(raw.last_sync),
         ...(registroVps ? { target: "vps" } : {}),
+        ...(bloqueioPreventivoVps ? { reason: "VPS_DIRTY_SCOPE_BLOCKED", exit_code: 4 } : {}),
         details: raw.details ?? undefined,
       };
     } catch {
@@ -523,6 +717,18 @@ export const executarSync = createServerFn({ method: "POST" }).handler(
 // @implementado: HUD vigente resolvido em tempo real por marcador via GitHub API server-side, com fallback gh autenticado no host; token nunca sai para o navegador.
 // @pendente: build/readback visual do Cockpit publicado; MCP permanece fallback operacional do agente, não biblioteca embutida no browser.
 
+export type ReciboHudGitHub = {
+  missionId: string;
+  titulo: string;
+  estado: "PENDENTE" | "CONCLUSAO_RELATADA" | "UNKNOWN";
+  commentId: number;
+  commentUrl: string;
+  autor: string | null;
+  atualizadoEm: string | null;
+  nextCursor: string | null;
+  checklist: Array<{ texto: string; marcado: boolean }>;
+};
+
 export type EstadoHudVigente = {
   role: "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
   status: "PASS" | "UNKNOWN" | "BLOCKED";
@@ -536,6 +742,11 @@ export type EstadoHudVigente = {
   measuredAt: string;
   candidates: number[];
   detail: string;
+  recibosEstado?: "PASS" | "UNKNOWN" | "BLOCKED";
+  recibos?: ReciboHudGitHub[];
+  missaoAtual?: ReciboHudGitHub | null;
+  funilNextCursor?: string | null;
+  activeMissionId?: string | null;
 };
 
 const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY";
@@ -605,6 +816,7 @@ function resolveHudFromPulls(
     headSha,
     mainSha,
     nextCursor: parseHudNextCursor(body),
+    activeMissionId: body.match(/<!--\s*CENTRALDARK_HUD_ACTIVE_MISSION:\s*([A-Z0-9_-]{3,120})\s*-->/i)?.[1] ?? null,
     source,
     measuredAt: new Date().toISOString(),
     candidates: Number.isFinite(number) ? [number] : [],
@@ -656,12 +868,96 @@ function readHudViaGhCli(): EstadoHudVigente | null {
   }
 }
 
+// #OBSERVACOES# @owner=apps/instinto-superior/src/lib/sync.functions.ts @doc_ref=docs/HUD/README.md
+// @last_updated=2026-11-14T09:34:00Z
+// @implementado: leitura read-only dos recibos de missao na conversa do funil dinamico
+// @pendente: build e prova visual no Cockpit publicado; caixa marcada nao e PASS sem contraprova
+const HUD_MISSION_TAG = /<!--\s*CENTRALDARK_HUD_MISSION_ID:\s*([A-Z0-9_-]{3,120})\s*-->/i;
+const HUD_HALO_RECEIPT = "CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT";
+
+function parseHudRecibos(raw: unknown[], pr: number): ReciboHudGitHub[] {
+  const dados: ReciboHudGitHub[] = [];
+  for (const obj of raw) {
+    if (!obj || typeof obj !== "object") continue;
+    const c = obj as Record<string, unknown>;
+    const body = c["body"];
+    if (typeof body !== "string" || body.length > 64000 || typeof c["id"] !== "number" ||
+        !Number.isSafeInteger(c["id"]) || c["id"] <= 0) continue;
+    const missionId = body.match(HUD_MISSION_TAG)?.[1] ??
+      (body.includes(HUD_HALO_RECEIPT) ? "CENTRALDARK_REMOTE_AGENT_HALO_RADEON" : null);
+    if (!missionId) continue;
+    const cursorText = [...body.matchAll(/^\s*(?:[-*]\s*)?\*{0,2}NEXT_CURSOR\*{0,2}\s*[:=]\s*(.+)$/gim)].at(-1)?.[1];
+    const nextCursor = cursorText?.replace(/^\*{1,2}\s*/, "").replace(/^\x60|\x60$/g, "").trim() || null;
+    const checklist = [...body.matchAll(/^\s*-\s*\[([ xX])\]\s+(.+)$/gm)]
+      .slice(0, 30).map(m => ({ texto: m[2]!.trim().slice(0, 220), marcado: m[1]!.toLowerCase() === "x" }));
+    const completo = /(?:MISSION|STATUS)\s*[:=]\s*(?:COMPLETE|DONE|CONCLUID[AO])/i.test(body) &&
+      /(?:MISSION_)?FIXED_POINT\s*[:=]\s*(?:YES|PASS|TRUE)/i.test(body) &&
+      /READBACK\s*[:=]\s*PASS/i.test(body);
+    const estado = completo ? "CONCLUSAO_RELATADA" :
+      /(?:MISSION|STATUS)\s*[:=]\s*(?:PENDING|PENDENTE)|FIXED_POINT\s*[:=]\s*NO/i.test(body)
+      ? "PENDENTE" : "UNKNOWN";
+    const user = c["user"];
+    const autor = user && typeof user === "object" && typeof (user as {login?: unknown}).login === "string"
+      ? (user as {login:string}).login : null;
+    dados.push({
+      missionId, titulo: (body.match(/^#{1,4}\s+(.+)$/m)?.[1] ?? missionId).slice(0, 160),
+      estado, commentId: c["id"], commentUrl: "https://github.com/" + GITHUB_REPO +
+        "/pull/" + pr + "#issuecomment-" + c["id"],
+      autor, atualizadoEm: typeof c["updated_at"] === "string" ? c["updated_at"] :
+        typeof c["created_at"] === "string" ? c["created_at"] : null,
+      nextCursor, checklist,
+    });
+  }
+  dados.sort((a, b) => (b.atualizadoEm ?? "").localeCompare(a.atualizadoEm ?? "") ||
+    b.commentId - a.commentId);
+  const vistos = new Set<string>();
+  return dados.filter(item => !vistos.has(item.missionId) && !!vistos.add(item.missionId)).slice(0, 12);
+}
+
+async function lerHudComentariosApi(pr: number, token?: string): Promise<ReciboHudGitHub[] | null> {
+  const comentarios: unknown[] = [];
+  for (let pagina = 1; pagina <= 10; pagina += 1) {
+    const paginaApi = await githubRequest("issues/" + pr + "/comments?per_page=100&page=" + pagina, token);
+    if (!Array.isArray(paginaApi)) return null;
+    comentarios.push(...paginaApi);
+    if (paginaApi.length < 100) return parseHudRecibos(comentarios, pr);
+  }
+  return null; // Pagina excedida: nao afirmar snapshot completo.
+}
+
+function lerHudComentariosGh(pr: number): ReciboHudGitHub[] | null {
+  try {
+    const s = execFileSync("gh", [
+      "api", "--paginate", "--slurp", "repos/" + GITHUB_REPO + "/issues/" + pr + "/comments?per_page=100",
+    ], { encoding: "utf8", timeout: 25000, maxBuffer: 4 * 1024 * 1024 });
+    const paginas: unknown = JSON.parse(s);
+    if (!Array.isArray(paginas) || paginas.length > 10) return null;
+    return parseHudRecibos(paginas.flatMap(p => Array.isArray(p) ? p : []), pr);
+  } catch { return null; }
+}
+
+function vincularHudRecibos(hud: EstadoHudVigente, recibos: ReciboHudGitHub[] | null): EstadoHudVigente {
+  if (hud.status !== "PASS" || hud.activePr === null) return hud;
+  if (!recibos?.length) return { ...hud, recibosEstado: "UNKNOWN", recibos: [], missaoAtual: null };
+  // Com varias missoes, somente o apontamento no corpo do PR escolhe a vigente.
+  // Sem apontamento, um unico recibo identificado pode ser usado; nunca escolher por timestamp.
+  const atual = hud.activeMissionId
+    ? recibos.find(r => r.missionId === hud.activeMissionId) ?? null
+    : recibos.length === 1 ? recibos[0]! : null;
+  return { ...hud, recibosEstado: atual ? "PASS" : "BLOCKED", recibos,
+    missaoAtual: atual, funilNextCursor: hud.nextCursor,
+    nextCursor: atual?.nextCursor ?? hud.nextCursor };
+}
+
 export const lerHudVigente = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstadoHudVigente> => {
     const api = await readHudViaGithubApi();
-    if (api) return api;
+    if (api) return vincularHudRecibos(api, api.status === "PASS" && api.activePr !== null
+      ? await lerHudComentariosApi(api.activePr, process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"])
+      : null);
     const gh = readHudViaGhCli();
-    if (gh) return gh;
+    if (gh) return vincularHudRecibos(gh, gh.status === "PASS" && gh.activePr !== null
+      ? lerHudComentariosGh(gh.activePr) : null);
     return {
       role: HUD_FUNNEL_MARKER, status: "UNKNOWN", activePr: null, title: null, url: null,
       headSha: null, mainSha: null, nextCursor: null, source: "UNAVAILABLE",

@@ -258,11 +258,11 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
       <section className="panel p-6" aria-labelledby="cd-hud-current-live">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-xs text-neon-blue">HUD VIGENTE · MAIN EM TEMPO REAL</p>
+            <p className="text-xs text-neon-blue">HUD VIGENTE · PR E RECIBOS DO GITHUB</p>
             <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 CENTRALDARK_HUD_FUNNEL_CONTINUITY</h3>
           </div>
           <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
-            {hudCurrent.data?.status ?? "UNKNOWN"}
+            {hudCurrent.data?.missaoAtual?.estado ?? hudCurrent.data?.recibosEstado ?? hudCurrent.data?.status ?? "UNKNOWN"}
           </span>
         </div>
         <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -273,6 +273,9 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["PR HEAD", hudCurrent.data?.headSha?.slice(0, 12) ?? "UNKNOWN"],
             ["Medição", hudCurrent.data?.measuredAt ?? "UNKNOWN"],
             ["NEXT_CURSOR", hudCurrent.data?.nextCursor ?? "UNKNOWN"],
+            ["Recibos do PR", hudCurrent.data?.recibosEstado ?? "UNKNOWN"],
+            ["Missão", hudCurrent.data?.missaoAtual?.missionId ?? "UNKNOWN"],
+            ["Cursor do funil", hudCurrent.data?.funilNextCursor ?? "UNKNOWN"],
           ] as const).map(([rotulo, valor]) => (
             <div key={rotulo} className="rounded-md border border-border p-3">
               <dt className="text-xs font-semibold">{rotulo}</dt>
@@ -280,6 +283,58 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </div>
           ))}
         </dl>
+        {/* #OBSERVACOES# @owner=HudDeterministico @doc_ref=docs/HUD/README.md
+            @last_updated=2026-11-14T09:34:00Z
+            Recibos GitHub sao checkpoint documental, caixas marcadas nao comprovam runtime. */}
+        {hudCurrent.data?.missaoAtual ? (
+          <div className="mt-4 rounded-md border border-amber-500/40 bg-amber-500/5 p-4"
+               aria-label="Ultimo recibo de missao do funil GitHub" role="status">
+            <p className="text-xs font-semibold">MISSÃO PERSISTENTE · RECIBO DO GITHUB</p>
+            <h4 className="mt-2 text-sm font-semibold">{hudCurrent.data.missaoAtual.titulo}</h4>
+            <p className="mt-1 font-mono text-xs">
+              {hudCurrent.data.missaoAtual.missionId} · {hudCurrent.data.missaoAtual.estado}
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Autor: {hudCurrent.data.missaoAtual.autor ?? "UNKNOWN"} ·
+              Atualizado: {hudCurrent.data.missaoAtual.atualizadoEm ?? "UNKNOWN"}
+            </p>
+            <p className="mt-2 break-words text-xs">
+              Próximo passo: {hudCurrent.data.missaoAtual.nextCursor ?? "UNKNOWN"}
+            </p>
+            {hudCurrent.data.missaoAtual.checklist.length ? (
+              <ul className="mt-3 space-y-1 text-xs" aria-label="Pendências registradas no PR">
+                {hudCurrent.data.missaoAtual.checklist.map((item, i) => (
+                  <li key={i}><span aria-hidden="true">{item.marcado ? "☑" : "☐"}</span> {item.texto}</li>
+                ))}
+              </ul>
+            ) : null}
+            <p className="mt-3 text-xs text-muted-foreground">
+              Caixas refletem declarações nos comentários. Conferir SHA e contraprova antes de promover PASS.
+              O checkpoint local Hermes e a missão ativa do CHEFE devem ser confrontados.
+            </p>
+            <a href={hudCurrent.data.missaoAtual.commentUrl} target="_blank" rel="noreferrer"
+               className="mt-2 inline-block text-xs underline">Abrir recibo no PR vigente</a>
+          </div>
+        ) : (
+          <div className="mt-4 text-xs text-amber-400" role="status">
+            <p>Recibos da missão: {hudCurrent.data?.recibosEstado ?? "UNKNOWN"}.
+              {hudCurrent.data?.recibosEstado === "BLOCKED"
+                ? " Há mais de uma missão; conferir o marcador ativo no PR e a intenção do CHEFE."
+                : " Comentários não lidos ou missão não identificada; não inferir estado atual."}
+            </p>
+            {hudCurrent.data?.recibosEstado === "BLOCKED" && hudCurrent.data?.recibos?.length ? (
+              <ul className="mt-2 space-y-1" aria-label="Missões disponíveis no funil">
+                {hudCurrent.data.recibos.map(item => (
+                  <li key={item.commentId}>
+                    <a href={item.commentUrl} target="_blank" rel="noreferrer" className="underline">
+                      {item.missionId} · {item.estado}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        )}
         <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
           {hudCurrent.data?.url ? (
             <a href={hudCurrent.data.url} target="_blank" rel="noreferrer" className="underline">
