@@ -79,3 +79,17 @@ ORIGINAL_VMWARE_E_PRESERVED=PASS
 DATA_FULL_BACKUP=NOT_PROVEN
 STATUS=FIXED_POINT_HISTORICO
 NEXT_CURSOR=REPLAY_WITH_FRESH_DISK_ID_PATHS_ONLY_IF_NEW_INTENT
+
+<!-- CENTRALDARK_VMWARE_SSH_CONFIG_OPENKYLIN_20261111 -->
+### Atualizacao da receita SSH VMware - 11/11/2026
+
+Nao confundir o alias WSL2 "openkylin" (ProxyCommand) com o alias da VM "openkylin-vm" (ou "CentralDark-OS-VM"). O arquivo ativo do Windows e C:\Users\Administrador\.ssh\config_openkylin; o espelho do repositorio e F:\CentralDark\.ssh\config_openkylin. Ambos foram verificados com o alias VMware. Preservar o config principal e as chaves existentes.
+
+Comando SSH comprovado na Casa:
+
+    ssh -F 'C:\Users\Administrador\.ssh\config_openkylin' -o BatchMode=yes -o ConnectTimeout=8 -o ConnectionAttempts=1 openkylin-vm 'hostname; id -un; systemctl is-active ssh'
+
+Resultado real: CentralDark-OS / CentralDark-OS / active / SSH_EXIT=0. Sem sudo, senha ou mudanca no servidor. O IP 192.168.35.130 e observado; novos comandos devem usar alias. Timeout de banner e porta TCP 22 aberta nao provam falha de senha. IPQoS=none foi usado em um teste bem-sucedido, mas nao e causa raiz comprovada. Nao alterar rede/sshd por hipotese.
+
+SSH_VMWARE=PASS. COCKPIT_524=UNRESOLVED. OAUTH=UNTOUCHED. FIXED_POINT=PENDING.
+<!-- /CENTRALDARK_VMWARE_SSH_CONFIG_OPENKYLIN_20261111 -->

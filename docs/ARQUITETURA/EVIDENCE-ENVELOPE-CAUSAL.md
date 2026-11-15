@@ -1,3 +1,30 @@
+---
+title: "Envelope causal único — CentralDark"
+date: 2026-11-12
+updated: 2026-11-12
+tags: [centraldark, arquitetura, evidencia, rastreabilidade, causalidade, cockpit, omni-router]
+status: DOCUMENTED_RUNTIME_PENDING
+source_class: INTERNAL
+authority: "EVIDENCE_CONTRACT_NOT_RUNTIME_AUTHORITY"
+owner: "supabase/functions/_shared/evidence-envelope.mjs"
+entrypoint: "supabase/functions/agent-log/index.ts"
+persistence: "public.agent_events"
+related:
+  - "docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md"
+  - "apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx"
+trace_provenance:
+  source: "ServerVpss/CentralDark@main"
+  observation_date: 2026-11-12
+  observed_commits:
+    - "1b72c62caa464bce09fe9931a77db1746702e08a"
+    - "f788dedd095989679b08cb311bacd7116552653b"
+  runtime_receipt: "UNKNOWN"
+  trace_id: "UNKNOWN"
+  mission_id: "UNKNOWN"
+  scope: "docs-and-route-audit"
+  validation: "SOURCE_READBACK_ONLY"
+---
+
 # Envelope causal único — CentralDark
 
 **Owner:** `supabase/functions/_shared/evidence-envelope.mjs`  
@@ -178,3 +205,63 @@ Proof Ownership ou o fluxo canônico de promoção.
 
 `UNKNOWN` permanece UNKNOWN até o sensor aplicável emitir evidência no mesmo
 alvo/escopo.
+
+<!-- CENTRALDARK_ROUTE_RECOVERY_CAUSAL_20261112 -->
+## Recuperação de rotas legadas — leitura causal de 12/11/2026
+
+**Intenção:** recuperar o site e a Sala de Controle existentes, sem criar outro painel, servidor, gateway ou normalizador. Esta seção é **evidência de auditoria e contrato de contraprova**, não registro de deploy ou de emissão de eventos.
+
+**Owners distintos, um único circuito:**
+
+- **Site legado:** `src/main.tsx` importa `src/App.tsx`. Esse roteador efetivamente montado não registra `/admin/cockpit`; o registro em `src/app/rotas/rotas-admin.tsx` pertence à árvore `src/app/App.tsx` e, por si só, **não prova que a rota foi montada no entrypoint atual**. A interface original continua em `src/paginas/admin-cockpit/SalaControle.tsx`.
+- **Cockpit operacional:** `apps/instinto-superior/src/routes/_authenticated/sala-controle.tsx` é a Sala de Controle existente, com verificação de sessão e papel administrativo; `CockpitShell.tsx` é a casca atual. Não contornar essa verificação para restaurar alias.
+- **Omni Router:** `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`, serviço `centraldark-omni-router.service` na porta 8099. É backend/API, não a página React. Não mover o frontend para 8099 para ocultar um 404.
+- **Projeção/catalogação:** [Jukebox A–Z / J001–J301](../CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md) e Cockpit são leitores/projeções; o único normalizador causal continua sendo `supabase/functions/_shared/evidence-envelope.mjs` via `agent-log`.
+
+### Snapshot observado, somente leitura
+
+| Superfície e alvo | Observação em 12/11/2026 | Limite da conclusão |
+| --- | --- | --- |
+| VMware / Cockpit `:8080` | Serviço `centraldark-instinto-superior.service` ativo; `/admin/cockpit` respondeu HTTP 404 | A URL legada não foi servida nesse teste; não prova exclusão do componente |
+| VMware / Omni `:8099` | Serviço `centraldark-omni-router.service` ativo; `/health`, `/docs` e `/openapi.json` responderam HTTP 200 | Saúde/documentação da API não provam frontend ou rotas de negócio |
+| VMware / Omni `:8099/admin/cockpit` | HTTP 404 | O backend não serve a página React; não é motivo para criar outra UI |
+| Código do Cockpit `/sala-controle` | Rota autenticada presente na fonte `apps/instinto-superior` | Presença no código não comprova navegação autenticada, renderização ou dados live |
+| API pública `api.centralldark.com` | HTTP 525 relatado em auditoria anterior | **Histórico não remensurado neste snapshot**; falha TLS de origem não prova ausência de `/api/graph`, `/api/stats` ou `/api/audit` |
+
+**Causa no site legado, demonstrada em fonte:** a rota existe em `rotas-admin.tsx`, mas o entrypoint `src/main.tsx` usa `src/App.tsx`, que não consome essa composição. **Hipótese de recuperação:** compatibilizar `/admin/cockpit` e `/preview/cockpit` com `/sala-controle` no roteador/host existente, preservando a autenticação. Nenhum redirect, build, deploy ou teste autenticado foi executado por esta documentação.
+
+### Como o envelope deve distinguir cada camada
+
+`ROUTE_SOURCE_EXISTS != ROUTE_MOUNTED != HTTP_REACHABLE != AUTHORIZED != UI_RENDERED != LIVE_DATA_VERIFIED`.
+
+1. **Transporte:** DNS/túnel/TLS e origem identificados; 525 fica na camada TLS, antes de concluir sobre handler HTTP.
+2. **HTTP e rota:** registrar host lógico, path, método, status e timestamp do probe. `404` não significa `SOURCE_DELETED`; `200` de `/health` não significa `UI_PASS`.
+3. **Autenticação:** testar sem sessão e com sessão autorizada, sem registrar cookie, token, URL de callback sensível ou dados pessoais. `401/403` podem comprovar proteção, não sucesso de navegação.
+4. **Interface:** confirmar navegação, renderização e ausência de erro de console, sem mascarar a falha com fallback que devolve 200 para qualquer path.
+5. **Dados e ação:** separar UI renderizada de integração real com Omni, MCP, Hermes e Supabase; mock não vira PASS por estar visível.
+6. **Regressão:** validar rotas públicas existentes, alias legado, autorização e retorno ao Cockpit no mesmo build/commit; registrar recibo, SHA observado e `NEXT_CURSOR`.
+
+**Exemplo ilustrativo de entrada para o produtor existente** (não é evento já entregue):
+
+```json
+{
+  "event": "route_probe",
+  "producer": "cockpit-readonly-probe",
+  "target": "cockpit:8080/admin/cockpit",
+  "writer_scope": "read-only-route-audit",
+  "result": "OBSERVED",
+  "context": {
+    "http_status": 404,
+    "route_kind": "legacy",
+    "interpretation": "ROUTE_NOT_SERVED_IN_PROBE",
+    "action_is_proof": false
+  }
+}
+```
+
+Não preencher `mission_id`, `sha`, `event_id` ou `trace_id` com valores fictícios: só incluir quando observados. A identidade causal implementada também considera `event_id`, `causation_id`, `surface_id` e `attempt_id` **quando fornecidos**, além dos campos-base da seção Dedupe; `trace_id` e latência não geram causa independente. Uma captura/receipt repetido não vira múltiplas provas.
+
+**Gate de aceite:** redirect/alias no **owner existente** + bloqueio administrativo preservado + navegação real + dados reais quando aplicáveis + testes de regressão + readback no mesmo SHA. `DOCUMENTED != EXECUTED`; `HTTP_200 != AUTH_PASS`; `UNKNOWN != PASS`.
+
+**NEXT_CURSOR:** `OWNER_ROUTE_CURRENT → COMPATIBILIDADE_SEM_BYPASS → BUILD → PROBE_HTTP_E_AUTH → PROVA_VISUAL → PROVA_DADOS → REGRESSAO → RECEIPT_SHA → JUKEBOX_READBACK → FIXED_POINT`.
+<!-- /CENTRALDARK_ROUTE_RECOVERY_CAUSAL_20261112 -->

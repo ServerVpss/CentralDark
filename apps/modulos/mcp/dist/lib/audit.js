@@ -3,8 +3,9 @@
 // Formato JSONL por dia em /root/CentralDark/logs/mcp-audit-YYYY-MM-DD.jsonl
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import os from "node:os";
-const AUDIT_DIR = process.env.MCP_AUDIT_DIR || "/root/CentralDark/logs";
+const AUDIT_DIR = process.env.MCP_AUDIT_DIR || process.env.LOG_DIR || process.env.CENTRALDARK_LOG_ROOT || fileURLToPath(new URL("../../../../../logs/", import.meta.url));
 const HOSTNAME = os.hostname();
 const PID = process.pid;
 function callerUser() {

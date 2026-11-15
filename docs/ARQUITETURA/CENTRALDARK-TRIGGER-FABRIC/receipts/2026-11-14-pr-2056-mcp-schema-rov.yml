@@ -1,0 +1,123 @@
+schema: centraldark.rov.pr-reconciliation.receipt.v1
+contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+contract_version: centraldark.rov.pr-reconciliation.v1
+scope: MCP_SCHEMA_RECONCILIATION_PR_2056
+verdict: PASS
+rov_fixed_point: TRUE
+fixed_point_kind: SCOPED_EFFECT_FIXED_POINT
+
+repository: ServerVpss/CentralDark
+canonical_branch: main
+tested_origin_main_sha: 59733a8209fded5680d4dfcbb7d8ffa8ee6a1f6b
+receipt_persisted_in_main_sha: 6f4d77783b1dba589a6e140ba817e2b8b5390c76
+proof_sha_semantics: TESTED_SOURCE_BASE_NOT_CURRENT_HEAD
+local_head_sha: 6fd2a448770243148a1eeb01f828d999a0514117
+worktree_state:
+  status: DIRTY_PRESERVED
+  dirty_entries_observed: 13
+  mutation_of_existing_dirty_work: false
+
+sentinel_result:
+  command: python3 scripts/trigger-fabric/system_sentinel.py --self-test
+  status: PASS
+  failed_checks: []
+
+tlc23_result:
+  status: PROVED
+  reason: BYTE_IDENTITY_MATCH
+  sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+  path: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+
+pr_inventory:
+  open_pr_total: 74
+  readiness_counts:
+    READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 62
+    NEEDS_RECONCILIATION: 12
+  selected_pr: 2056
+
+selected_pr:
+  number: 2056
+  title: "fix(mcp): publish valid JSON schemas for refined tools"
+  state: MERGED
+  merge_commit_sha: acd35487446be3a6129f5ce990364b15bf7262d0
+  url: https://github.com/ServerVpss/CentralDark/pull/2056
+  mergeable_before_merge: true
+  mergeable_state_before_merge: clean
+  checks_pending_before_merge: 0
+  checks_failed_before_merge: 0
+  changes_requested_before_merge: 0
+
+decision:
+  action: MERGE_SCOPED_EFFECT_CLOSED
+  reason: >-
+    A falha de schema MCP foi corrigida na main e o efeito foi comprovado por
+    regressão local, tools.json público e cliente Hermes autenticado.
+  human_authorization: CHEFE_REQUESTED_RESOLUTION
+
+source_readback:
+  origin_main_contains_fix: true
+  owner: apps/modulos/mcp/src/mcp-server.js
+  artifact: apps/modulos/mcp/dist/mcp-server.js
+  regression: apps/modulos/mcp/tests/mcp-schema-json.test.mjs
+
+tests_t0:
+  local_schema_regression:
+    command: node --test tests/mcp-schema-json.test.mjs
+    status: PASS
+    passed: 3
+  build:
+    command: npm run build
+    status: PASS
+  diff_check:
+    command: git diff --check
+    status: PASS
+
+tests_t1:
+  public_health:
+    endpoint: https://mcp.centralldark.com/health
+    status: PASS
+    service: mcp-centraldark
+    version: 0.4.0
+    catalog_version: 160-45340263b107
+    tool_count: 160
+  public_tools_json:
+    endpoint: https://mcp.centralldark.com/tools.json
+    status: PASS
+    tool_count: 160
+    invalid_shape: 0
+    duplicate_names: []
+  hermes_mcp_client:
+    command: HERMES_HOME=/data hermes mcp test centraldark
+    status: PASS
+    oauth: PASS
+    connected: true
+    tools_discovered: 142
+  sentinel:
+    status: PASS
+
+runtime_readback:
+  mcp_oauth: PASS
+  tools_list_schema: PASS
+  tools_json_shape: PASS
+  hermes_client_readback: PASS
+  exact_runtime_process_sha: UNKNOWN
+  exact_runtime_process_sha_policy: NON_BLOCKING_OUTSIDE_THIS_SCOPE
+  runtime_catalog_hash: 45340263b107
+  main_source_catalog_hash: 1f1f52f8a100
+
+rollback_reference:
+  owner: scripts/vps/main-pinned-microdeploy.sh
+  policy: preserve_last_known_good_deploy_and_revert_through_owner
+  rollback_path_known: true
+  rollback_execution_in_this_receipt: NOT_REQUIRED
+
+unknown:
+  - exact_runtime_process_sha
+  - global_open_pr_backlog_fixed_point
+
+next_cursor:
+  MCP_SCHEMA_SCOPE: CLOSED
+  GLOBAL_PR_RECONCILIATION: CONTINUE_SEPARATELY
+  EXACT_RUNTIME_IDENTITY: OBSERVE_IF_REQUIRED
+
+rule: UNKNOWN_IS_NOT_PASS
