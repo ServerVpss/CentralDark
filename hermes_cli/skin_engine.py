@@ -366,6 +366,11 @@ def _skins_dir() -> Path:
     return get_hermes_home() / "skins"
 
 
+def _bundled_skins_dir() -> Path:
+    """Return skins shipped with this source tree, when present."""
+    return Path(__file__).resolve().parent.parent / "skins"
+
+
 def _load_skin_from_yaml(path: Path) -> Optional[dict[str, Any]]:
     """Load a skin definition from a YAML file; None on any failure."""
     try:
@@ -409,22 +414,32 @@ def _build_skin_config(data: dict[str, Any]) -> SkinConfig:
 
 
 def list_skins() -> list[dict[str, str]]:
-    """List all available skins (built-in + user-installed); user skins never shadow built-ins."""
+    """List built-in, bundled, and user-installed skins; user skins win by name."""
     result = [{"name": name, "description": data.get("description", ""), "source": "builtin"}
               for name, data in _BUILTIN_SKINS.items()]
-    skins_path = _skins_dir()
-    for f in sorted(skins_path.glob("*.yaml")) if skins_path.is_dir() else ():
+    bundled_path = _bundled_skins_dir()
+    for f in sorted(bundled_path.glob("*.yaml")) if bundled_path.is_dir() else ():
         data = _load_skin_from_yaml(f)
         if data and not any(s["name"] == data.get("name", f.stem) for s in result):
             result.append({"name": data.get("name", f.stem), "description": data.get("description", ""),
-                           "source": "user"})
+                           "source": "bundled"})
+    skins_path = _skins_dir()
+    for f in sorted(skins_path.glob("*.yaml")) if skins_path.is_dir() else ():
+        data = _load_skin_from_yaml(f)
+        if data:
+            name = data.get("name", f.stem)
+            result = [s for s in result if s["name"] != name]
+            result.append({"name": name, "description": data.get("description", ""), "source": "user"})
     return result
 
 
 def load_skin(name: str) -> SkinConfig:
-    """Load a skin by name: user skins first, then built-in, then default."""
+    """Load a skin by name: user, bundled, built-in, then default."""
     user_file = _skins_dir() / f"{name}.yaml"
     data = _load_skin_from_yaml(user_file) if user_file.is_file() else None
+    if not data:
+        bundled_file = _bundled_skins_dir() / f"{name}.yaml"
+        data = _load_skin_from_yaml(bundled_file) if bundled_file.is_file() else None
     if not data and name not in _BUILTIN_SKINS:
         logger.warning("Skin '%s' not found, using default", name)
     return _build_skin_config(data or _BUILTIN_SKINS.get(name) or _BUILTIN_SKINS["default"])
