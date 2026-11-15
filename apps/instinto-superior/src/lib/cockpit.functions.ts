@@ -5,6 +5,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { hostname } from "node:os";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { consultarGitHubCentralDark } from "./github.functions";
 
 const GITHUB_API = "https://api.github.com";
 // A API e local ao host de execucao (Casa ou VPS); o dominio publico e apenas exposicao.
@@ -476,6 +477,8 @@ async function medirActions() {
   }
 }
 
+// #OBSERVACOES# @owner instinto.cockpit @doc_ref docs/HUD/README.md
+// @last_updated 2026-11-07T18:13:00Z @implementado Main e divergência consultam o acesso GitHub compartilhado.
 async function medirGithub() {
   const leitura = await consultarGitHubLeitura("commits?sha=main&per_page=4");
   if (leitura.estado !== "PASS" || !Array.isArray(leitura.dados)) {
@@ -502,6 +505,25 @@ async function medirGithub() {
     commits,
     fonte: `${leitura.fonte} · ServerVpss/CentralDark@main`,
   };
+  carregarEnvForja();
+  try {
+    const resposta = await consultarGitHubCentralDark("commits?sha=main&per_page=4");
+    if (resposta.status === 401 || resposta.status === 403) {
+      return { estado: "AUTH_REQUIRED" as Estado, commits: [] as CommitCentralDark[], fonte: `GitHub respondeu ${resposta.status}` };
+    }
+    if (resposta.status !== 200 || !Array.isArray(resposta.dados)) {
+      return { estado: "FAIL" as Estado, commits: [] as CommitCentralDark[], fonte: `GitHub respondeu ${resposta.status}` };
+    }
+    const payload = resposta.dados as Array<{ sha: string; commit?: { message?: string; author?: { date?: string } } }>;
+    const commits = payload.map((commit) => ({
+      sha: commit.sha,
+      mensagem: commit.commit?.message?.split("\n")[0] ?? "Sem mensagem",
+      data: commit.commit?.author?.date ?? "",
+    }));
+    return { estado: commits[0] ? ("PASS" as Estado) : ("UNKNOWN" as Estado), commits, fonte: `${resposta.fonte} · ServerVpss/CentralDark@main` };
+  } catch {
+    return { estado: "UNKNOWN" as Estado, commits: [] as CommitCentralDark[], fonte: "GitHub inacessível" };
+  }
 }
 
 async function medirDelta(vpsSha: string | null, mainSha: string | null) {
@@ -513,6 +535,13 @@ async function medirDelta(vpsSha: string | null, mainSha: string | null) {
   if (leitura.estado !== "PASS" || !objetoJson(leitura.dados)) return null;
   const ahead = leitura.dados["ahead_by"];
   return typeof ahead === "number" ? ahead : null;
+  try {
+    const { dados } = await consultarGitHubCentralDark(`compare/${vpsSha}...${mainSha}`);
+    const payload = dados as { ahead_by?: number } | null;
+    return typeof payload?.ahead_by === "number" ? payload.ahead_by : null;
+  } catch {
+    return null;
+  }
 }
 
 // O loopback pertence SEMPRE ao processo que executa esta função server-side.

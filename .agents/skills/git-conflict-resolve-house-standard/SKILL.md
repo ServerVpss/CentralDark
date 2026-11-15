@@ -343,6 +343,59 @@ UNKNOWN_CONFLICT_STOPS_YELLOW=true
 PROVEN_YELLOW_RESOLUTION_ENTERS_EXISTING_REGISTRY=true
 ```
 
+## COSTURA checkout sujo: simulação e resolução em árvore isolada (13/11/2026)
+
+O mesmo owner `scripts/dependabot/resolve-conflicts.sh` atende a conflitos
+de PR **e** a reconciliação de Casa/VMware, sem segundo motor. Primeiro criar
+um checkpoint rastreado por `git stash create`, fixar seu SHA em
+`refs/centraldark/checkpoints/` e atualizar apenas `origin/main` com fetch.
+Não usar `stash push/pop` nem `git reset --hard`.
+
+```bash
+# Dez frentes de leitura por host; writer único dentro do motor.
+bash scripts/dependabot/resolve-conflicts.sh \
+  --checkout-dry-run MAIN_SHA CHECKPOINT_SHA -- docs/arquivo.md
+bash scripts/dependabot/resolve-conflicts.sh \
+  --checkout-apply MAIN_SHA CHECKPOINT_SHA -- docs/arquivo.md
+```
+
+- `--checkout-dry-run` apenas planeja a resolução de um caminho; pode gerar
+  objetos Git da simulação, mas não altera HEAD, índice, arquivos ou refs.
+- `--checkout-apply` exige SHAs completos, checkpoint cujo pai seja o HEAD
+  atual, readback remoto da main, arquivo rastreado e não staged, hash local
+  igual ao snapshot **ou à main atual**, com prova por blob, e lock de writer
+  único compartilhado com COSTURA PR.
+- Caminho seguro adicional: se o **blob atual do worktree é exatamente igual ao
+  blob da main** e o owner não está staged, o motor aceita esse blob na árvore
+  candidata mesmo quando o checkpoint antigo divergia. A igualdade por SHA é
+  obrigatória; nunca aplicar `--theirs` por conveniência.
+- Fora desse caso, apenas inserções textuais de **um hunk com um lado vazio**
+  são elegíveis (`.md`, `.txt`, `.json` com parse). Conflitos de duas
+  alterações materiais, exclusões, arquivo divergente sem prova, sintaxe
+  inválida e mais de um hunk permanecem YELLOW.
+- A aplicação atualiza **somente** uma árvore Git candidata em
+  `refs/centraldark/checkpoints/costura-<main>-<snapshot>-tree`, com
+  índice temporário, escrita por path, `git diff --check`, CAS e readback.
+  Não reescreve os arquivos locais nem faz commit, merge ou push.
+- Conflito resolvido na árvore candidata **não equivale** a checkout
+  sincronizado. Restantes incluem conflitos estruturais sem marcadores;
+  contabilizar apenas arquivos efetivamente modificados no candidato.
+- Antes de publicar, resolver todos os conflitos restantes por owner,
+  executar os testes afetados, conferir a árvore limpa, passar pelos gates
+  de revisão e só então avançar o checkout e medir os SHAs.
+- Os fixtures continuam no `resolve-conflicts-policy.test.sh` existente.
+
+`DRY_RUN != APPLY` · `TREE_RESOLVED != HEAD_SYNCED` ·
+`SINGLE_WRITER_PER_SCOPE` · `UNKNOWN != PASS`.
+
+**Contraprova Linux/VMware (13/11/2026):** Git com locale `pt_PT`
+escreve `CONFLITO` em vez de `CONFLICT` ao reportar merge.
+O motor PR foi corrigido no mesmo owner: usa `git ls-files -u`
+(estado do índice) para comprovar conflito, sem reconhecer textos
+humanos dependentes de idioma. A regressão está no mesmo teste
+`resolve-conflicts-policy.test.sh`; não usar grep de mensagem Git
+como gate determinístico.
+
 ## COSTURA sem merge: auditoria de base e indice isolado
 
 A falha observada em 11/11/2026 mostrou um caso diferente de conflito de PR:

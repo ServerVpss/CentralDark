@@ -39,14 +39,14 @@ function AnimatedDoneIcon({ size = 20, className = '', label }: { size?: number;
 
 async function prepararAutomacao(modo: 'main-only' | 'full', executarSync: SyncRunner) {
   const target = modo === 'full' ? 'all' : 'local';
-  const escopo = modo === 'full' ? 'Casa/Main/VPS' : 'Casa/Main';
+  const escopo = modo === 'full' ? 'Casa/Main/VPS Runtime' : 'Casa/Main';
   const sync = await executarSync({ data: { target } });
   return { sync, escopo };
 }
 
 /**
  * AutoSyncButton — Cockpit Control for Bidirectional Sync + Micro-Deploy
- * Casa <-> Main <-> VPS (continuous, single-writer Hermes)
+ * Casa <-> Main <-> VPS_RUNTIME (VMware hoje; VPS física futura; mesmo contrato)
  * Rota: sync.functions.ts (createServerFn) -> AUTO-SYNC-MASTER.py -> .auto-sync/status.json
  */
 export const AutoSyncButton: React.FC = () => {
@@ -217,6 +217,7 @@ export const AutoSyncButton: React.FC = () => {
             {getStatusIcon()}
             <div>
                <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VMware</p>
+               <p className="text-sm font-semibold text-foreground">Sincronização do código · Casa / Main / VPS Runtime</p>
               <p className="text-xs text-muted-foreground">Última tentativa: {syncStatus.human_readable}</p>
               {syncStatus.details && syncStatus.status !== 'idle' && (
                 <p className="text-[10px] font-mono text-muted-foreground/70 mt-0.5 max-w-xs truncate" title={syncStatus.details}>
@@ -233,7 +234,7 @@ export const AutoSyncButton: React.FC = () => {
             <CockpitActionButton hint="Main: consulta o remoto e compara os SHAs local e origin/main" onClick={() => handleSync('main')} disabled={isSyncing} size="sm" variant="outline">
               Main
             </CockpitActionButton>
-            <CockpitActionButton hint="VPS: atualiza o checkout remoto por SSH com fast-forward; conflito bloqueia" onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
+            <CockpitActionButton hint="VPS Runtime: usa o Linux atual quando ele já é o repo canônico; só usa SSH quando o papel estiver remoto" onClick={() => handleSync('vps')} disabled={isSyncing} size="sm" variant="outline">
               VPS
             </CockpitActionButton>
             <SyncActionButton
@@ -258,6 +259,9 @@ export const AutoSyncButton: React.FC = () => {
             <span className="text-muted-foreground">VMware (VPS) ↔ Main</span>
             <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
             <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
+            <span className="text-muted-foreground">VPS Runtime (VMware atual) ↔ Main</span>
+            <p className="font-semibold">Mesmo commit? {rotulo(vpsMesmoCommit)}</p>
+            <p className="break-all font-mono text-[10px] text-muted-foreground">{vpsSha?.slice(0, 8) ?? 'VPS runtime sem leitura'} / {mainSha?.slice(0, 8) ?? 'main sem leitura'}</p>
           </div>
           <div className="rounded-md border border-border/60 p-2 text-xs">
             <span className="text-muted-foreground">Todos os commits iguais</span>
@@ -339,11 +343,11 @@ export const AutoSyncButton: React.FC = () => {
               onChange={(e) => setMicroDeployMode(e.target.value as 'main-only' | 'full')}
               disabled={isSyncing}
               aria-label="Escopo da automação"
-              title="Escolha se a pré-sincronização inclui somente Casa/Main ou também a VPS"
+              title="Escolha se a pré-sincronização inclui somente Casa/Main ou também o papel VPS Runtime"
               className="px-2 py-1 text-xs border border-amber-500/40 rounded bg-background text-foreground"
             >
               <option value="main-only">Main Only · Casa/Main</option>
-              <option value="full">Full · Casa/VPS/Main</option>
+              <option value="full">Full · Casa/VPS Runtime/Main</option>
             </select>
 
             <CockpitActionButton hint="Primeiro sincroniza o escopo escolhido. Depois solicita o workflow canônico, que exige gates verdes e faz squash. Deploy só é confirmado por receipt." onClick={handleMicroDeploy} disabled={isSyncing} size="sm" className="gap-2 bg-amber-600 hover:bg-amber-700">

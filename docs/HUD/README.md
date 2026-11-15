@@ -27,11 +27,99 @@ Sem PR equivalente, retome pelo checkpoint e pelo owner existente. O HUD técnic
 4. A cada mudança material de estado, escopo, evidência, plano/receita, bloqueio ou próximo passo, atualizar **o quadro no corpo do PR vigente da missão** e **o item correspondente no corpo do PR vigente do funil**, mantendo `GOAL_ID`, owner, status verificável, resumo do plano/receita, link para receita/receipt durável, contraprova, SHA e `NEXT_CURSOR`. Preservar blocos, caixas, métricas, diagramas e missões fora do delta. Planos e receitas detalhados pertencem aos owners/receipts versionados; o PR conserva a síntese rastreável e os links, não milhares de comentários.
 5. Fazer **readback** do corpo atualizado e do SHA/refs aplicáveis, comparar os dois PRs e o checkpoint; somente então declarar `HUD_SYNC=PROVADO`. `DOCUMENTED != EXECUTED`, `PR_UPDATED != RUNTIME_PROVEN`, `UNKNOWN != PASS`.
 
+### 🪬 Comentarios como recibos duraveis da missao (!HUD / #HUD · 14/11/2026)
+
+A descricao do **PR da missao** continua sendo o quadro editavel com caixinhas; o **PR do funil** mantem o resumo e o link, e os comentarios `Conversation` preservam recibos em ordem causal. A cada mudanca material comprovada, atualizar o estado do owner e do quadro pertinente e adicionar ou editar o recibo relevante, com readback da mesma URL. Se for apenas novo resultado/pendencia, comentario e corpo de PR com readback bastam — nao fabricar commit de codigo. O #1977 e o funil atualmente observado, **nao** numero fixo.
+
+**Contrato minimo de um comentario consumivel pelo leitor `lerHudVigente`:**
+
+```markdown
+<!-- CENTRALDARK_HUD_MISSION_ID:CENTRALDARK_REMOTE_AGENT_HALO_RADEON -->
+## !HUD · Missao vigente e checkpoint de DD/MM/AAAA
+MISSION=PENDING
+MISSION_FIXED_POINT=NO
+- [x] Etapa realmente provada — link para SHA/teste/contraprova
+- [ ] Etapa nao provada — causa/bloqueio
+NEXT_CURSOR: uma acao concreta
+```
+
+- Ler pelo proprio GitHub `GET /issues/{PR}/comments` em paginas, depois filtrar pelos marcadores de missao e ligar o ultimo recibo **da mesma MISSION_ID**. Recibo historico de 14/11 para Halo tem marcador legado `CENTRALDARK_HUD_REMOTE_AGENT_HALO_PENDING_20261114_COMMENT`; ler, sem reescrever nem duplicar.
+- O `[x]` marca apenas a declaracao do autor; requer commit/teste/readback para virar PROVADO. O campo `MISSION=COMPLETE` sem `FIXED_POINT=YES` e `READBACK=PASS` nao declara conclusao.
+- Para varias missoes, declarar a ativa no **corpo do PR do funil** com `<!-- CENTRALDARK_HUD_ACTIVE_MISSION:MISSION_ID -->` e publicar recibos novos pelo mesmo ID. O leitor usa esse ponteiro explicito; sem escolha inequívoca pela intencao do CHEFE = `BLOCKED`. Nenhum "ultimo comentario do PR" substitui a missao vigente. Harmonizar com o checkpoint `scripts/hermes/centraldark-entry.py` antes de retomar execucao.
+- O Cockpit utiliza `apps/instinto-superior/src/lib/sync.functions.ts#lerHudVigente` e `apps/instinto-superior/src/components/central/HudDeterministico.tsx` para **projetar** o recibo autenticado/permitido, nunca para escrever GitHub por um navegador nem iniciar Hermes. `MAIN_CODE=COMMITTED` nao prova `UI_DEPLOYED` nem `HUD_CONSUMED`.
+- O metodo operativo consultado em `C:\Users\Administrador\Downloads\PROMPT_METODO_PIVETE.md` orienta ler, validar, minimo delta, contraprova, registro e retomada; a autoridade no GitHub continua neste contrato e em `AGENTS.md`.
+
+### Direct Main — rastro é parte do write
+
+Quando houver escrita material direta na `main`, o HUD/funil não é “documentação posterior”. Ele é o **fechamento rastreável da escrita**.
+
+```text
+COMMIT_REMOTE_PROVEN
+→ MAIN_READBACK
+→ RESOLVE_ACTIVE_FUNNEL_DYNAMICALLY
+→ RECORD_EACH_COMMIT_AS_COMMIT_DELTA_PROOF
+→ LEDGER_READBACK
+→ CURRENT_OR_FIXED_POINT
+```
+
+- se a missão produziu vários commits materiais, registrar todos na ordem causal e marcar o HEAD final;
+- `DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT`: o PR/funil pode ser apenas ledger/HUD e não conter os commits em sua branch;
+- número de PR histórico nunca é identidade do ledger; resolver pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`;
+- se o commit já existe e o ledger está faltando, entrar em `TRACE_RECOVERY`; corrigir somente o rastro, sem repetir a mutação;
+- resposta ao CHEFE antes do readback do ledger = `METHOD_FAILURE`;
+- sem ledger disponível, a escrita pode estar publicada, mas o estado da missão é `PARTIAL/BLOCKED`, nunca “fechado”.
+
+
+<!-- CENTRALDARK_GITHUB_FUNNEL_DYNAMIC_RESOLUTION_20261113 -->
+#### Receipt — resolução dinâmica do funil HUD · 13/11/2026
+
+- `OWNER=apps/instinto-superior/src/lib/github.functions.ts` · escopo separado do fixed point `cockpit-sync`.
+- causa observada: a `main` ainda continha `PR_FUNIL=1977` e `PR_ANTERIOR=1562`, em conflito com `CENTRALDARK_HUD_FUNNEL_CONTINUITY`.
+- delta publicado: `f15539999e45a4eb877a5d899dc41281c5064d2c`; blob `github.functions.ts=7e1a45e6a06e7ad989677a9564a27a53a83aca02`.
+- comportamento: pagina PRs abertos, seleciona pelo marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY` e exige exatamente um candidato; ambiguidade vira `ACTIVE_FUNNEL_PR=UNKNOWN`.
+- contraprova remota: readback confirmou hardcode `1977` ausente e resolução dinâmica presente. A busca CURRENT encontrou um único candidato aberto, PR #1977; o número é resultado da descoberta, não identidade canônica.
+- `CI=UNKNOWN`: combined statuses do commit material retornaram lista vazia.
+- Casa nesta superfície: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; VPS git probe: sem estado Git utilizável. Portanto `CASA_MAIN_SYNC=UNKNOWN` e `VPS_CONSUMPTION=UNKNOWN`.
+- `NEXT_CURSOR=VALIDATE_GITHUB_FUNNEL_RESOLVER_IN_RUNTIME → RECONCILE_CASA_WHEN_BRIDGE_AVAILABLE`.
+
+<!-- CENTRALDARK_VPS_RUNTIME_SYNC_RASTRO_20261113 -->
+#### Receipt — VPS Runtime Sync Semantic Diagnostics · 13/11/2026
+
+- `MISSION=VPS_RUNTIME_SYNC_SEMANTICALLY_SAFE` · `OWNER=cockpit-sync`.
+- cadeia material na `main`: `abf4483d13b304ee3e137e21c529ec5791895d4a` (bloqueio semântico) → `90acced7ad0209d89dc20dade3b0e30f6f5952af` (`hostOS`/origem da Casa) → `0ec29ea131a17671fe5e8748887f2982fc0d4d10` (HUD Casa/Main/VPS Runtime).
+- blobs canônicos antes deste receipt: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9`; `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`.
+- contraprova do candidato: `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0`; após o teste temporário a VM restaurou exatamente `sync=834c8e65...` e `UI=8e2bb8a0...` antes do consumo da main.
+- consumo VM comprovado: `origin/main=0ec29ea131a17671fe5e8748887f2982fc0d4d10`, `sync=3b47236d...`, `UI=8669d560...`, serviço `centraldark-instinto-superior.service=active`, PID `1693207`, HTTP `8080=200`.
+- HUD visual comprovado: bloqueio `VPS_DIRTY_SCOPE_BLOCKED` aparece como preventivo/âmbar, `exit_code=4`, `runtime_mode=local`, trabalho local preservado e histórico separado de CURRENT.
+- Casa reconciliada: `sync.functions.ts=3b47236d37058b8f74d63fec974b25fc0d2f2db9` e `AutoSyncButton.tsx=8669d56059abdab16ef033a8e5c49bf9be81c747`, ambos idênticos à `main` e à VM. O residual intermediário `consultarGitHubCentralDark` foi removido somente deste owner; sua fonte permanece preservada em `github.functions.ts`. Harness Node local segue `UNAVAILABLE` por ausência do pacote `typescript`, mas a mesma fonte canônica passou `DIFF_RC=0`, `TEST_RC=0`, `BUILD_RC=0` na VM.
+- `.env` permaneceu fora do Git e não foi copiado entre ambientes. Casa=46 chaves; VM=48 chaves; valores não foram lidos/expostos.
+- status combinados do GitHub no HEAD material retornaram lista vazia: `CI=UNKNOWN`, não verde.
+- `FIXED_POINT=true` para o escopo `cockpit-sync`: Casa, VM e `main` possuem os mesmos blobs canônicos de `sync.functions.ts` e `AutoSyncButton.tsx`; serviço VM ativo e HUD visual relido. Isso não declara o repositório inteiro sincronizado.
+- `NEXT_CURSOR=FIXED_POINT_COCKPIT_SYNC → PRESERVE_GITHUB_FUNCTIONS_OWNER_AS_SEPARATE_SCOPE`.
+
+
+### Fechamento ou publicação de CURRENT
+
+Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
+
+Após qualquer **mudança material comprovada** de missão, inclusive `SSH_REMOTE_EFFECT_READBACK`, o método não abandona o fio antes de atualizar o HUD/funil:
+
+- `FIXED_POINT=true` → `FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL`: marcar a missão como terminal no PR correto da missão e refletir a conclusão no funil vigente, com receipt/SHA/contraprova. Isso finaliza **o estado da missão**, não autoriza fechar PR, deletar branch ou declarar runtime global verde sem os gates correspondentes.
+- `FIXED_POINT=false` → `PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR`: publicar CURRENT, evidência, bloqueios/UNKNOWNs e `NEXT_CURSOR` no PR da missão + item do funil vigente.
+- sem delta material → `NO_HUD_WRITE_NO_MATERIAL_DELTA`; não gerar churn.
+- o funil é sempre resolvido dinamicamente por `CENTRALDARK_HUD_FUNNEL_CONTINUITY`; número de PR hardcoded é proibido.
+- após escrita: reler PR da missão + funil + refs/HEAD. Só então `HUD_SYNC=PROVADO`.
+
+Classificador executável: `scripts/trigger-fabric/centraldark_full_trigger_boot.py#classify_mission_hud_publication` e CLI `hud-mission-state --observation-json ...`.
+
+
 **Rotas autorizadas para consulta e atualização, sem segunda arquitetura (falhas verificadas, não fallback presumido):**
 
 - **Preferencial:** GitHub API autenticada na superfície atual; ler PRs abertos e atualizar o corpo somente com permissão e owner/writer autorizado. Preservar a versão completa do body, aplicar delta cirúrgico e reler; não sobrescrever atualizações concorrentes.
 - **Fallback Casa:** GitHub CLI `gh` já existente, quando a Casa estiver acessível e `gh auth status`/`gh api` funcionarem. Usar `gh pr list/view` ou `gh api` para localizar o marcador e `gh pr edit`/`gh api` para editar o **mesmo PR**, quando autorizado. Não transferir token nem considerar a presença do binário prova de autenticação.
 - **Fallback MCP:** conector GitHub/MCP autorizado existente, com capacidade real de consultar/editar PR e readback. Reutilizar o MCP único e os owners conhecidos; sem acesso, sem método de escrita ou com múltiplos candidatos, registrar `UNKNOWN/BLOCKED` e preservar o checkpoint. Fallback nunca cria PR paralelo por conveniência.
+
+**Consumo pelo Cockpit CURRENT:** o HUD visual do Cockpit não lê um snapshot local como autoridade. A função server-side existente em `apps/instinto-superior/src/lib/sync.functions.ts#lerHudVigente` deve consultar a `main`/PRs abertos no GitHub e resolver `CENTRALDARK_HUD_FUNNEL_CONTINUITY` em tempo real. Autenticação permanece no servidor: primeiro `GITHUB_TOKEN`/`GH_TOKEN` já carregado pelo ambiente (`.env` quando assim configurado pelo runtime), depois `gh` já autenticado no host/VM openKylin. O navegador recebe apenas estado sanitizado (`ACTIVE_FUNNEL_PR`, SHAs, fonte, horário, `NEXT_CURSOR`), nunca token ou conteúdo de credenciais. MCP GitHub continua fallback operacional do agente quando API/gh do servidor estiverem indisponíveis; não é embutido no React nem vira segundo backend. `apps/instinto-superior/src/components/central/HudDeterministico.tsx` projeta essa leitura e deve manter `UNKNOWN/BLOCKED` quando a resolução não for inequívoca.
 
 **Sucessão por esgotamento real (rollover):** aplicar a receita já existente `docs/CONSCIENCIA/RECEIPTS/2026-10-06-pr-mae-ledger-rollover.md` quando o PR ativo fechar ou atingir **limite operacional confirmado** para registrar/atualizar corpo ou comentários, e **restarem pendências materiais**. Tentativa de comentário falha não implica que commit do repositório esteja bloqueado: `COMMIT`, `PR_BODY` e `COMMENTS` são capacidades distintas. Antes de trocar a casca:
 
@@ -476,3 +564,29 @@ A GenUI apresenta tudo em linguagem humana, sem alterar a arquitetura técnica.
 **Não basta dizer que resolveu. Mostrar onde estava, o que mudou e a prova do resultado.**
 
 **RESULTADO PRIMEIRO · PROVA REAL · MENOR DELTA · PAPAGAIO OFF.**
+
+<!-- RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+## !RASTRO — GitHub read-only owner reconciliado — 2026-11-13
+
+- Owner: `apps/instinto-superior/src/lib/github.functions.ts`.
+- Consumidor causal: hunks GitHub de `apps/instinto-superior/src/lib/cockpit.functions.ts`.
+- Prova de candidato na Casa: ambos os arquivos passaram `node --experimental-strip-types --check` com exit 0.
+- Segurança: rota GitHub limitada por allowlist GET; credenciais não são expostas ao browser; fallback público permanece somente leitura.
+- Escopo excluído: `.env`, Casa Commander e demais hunks locais do Cockpit.
+- HUD global observado antes da promoção: 28 PASS, 5 FAIL, 1 TODO; falhas pertencem a outros owners, portanto GREEN global não foi declarado.
+- VM/VPS para este owner: UNKNOWN nesta rodada; publicação em main não equivale a deploy.
+- Base main antes desta promoção: `c036ff748333cf8640ea1cbfd3fe68762e72cec7`.
+- NEXT_CURSOR: readback da main no mesmo commit, conferir CI/status e só depois reconciliar o runtime que realmente materializa `apps/instinto-superior`.
+
+<!-- /RASTRO_GITHUB_OWNER_RECONCILIATION_20261113 -->
+
+
+<!-- CENTRALDARK_GITHUB_FUNNEL_RUNTIME_COUNTERPROOF_20261113 -->
+#### Contraprova runtime — resolvedor do funil · 13/11/2026
+
+- cinco workflows de push do receipt `ac629385...` encerraram como `startup_failure`, todos com `jobs=[]`; a falha ocorreu antes de qualquer job e não prova regressão do resolvedor.
+- check do commit material `f15539999e45a4eb877a5d899dc41281c5064d2c`: `Supabase Preview=in_progress` no momento da medição.
+- MCP runtime: `ok=true`, `runtimeTools=155`, `auditStartupReady=false`.
+- Casa: `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; ponte: `TAILSCALE_OAUTH_BROKER_UNREACHABLE`.
+- conclusão: `SOURCE_READBACK=PASS`; `COCKPIT_RUNTIME_CONSUMPTION=UNKNOWN`; `WORKFLOW_STARTUP=QUEBRADO`; não atribuir o startup failure ao delta sem evidência causal.
+- `NEXT_CURSOR=RESTORE_WORKFLOW_STARTUP_OWNER → VALIDATE_COCKPIT_RUNTIME_CONSUMPTION → RECONCILE_CASA_BRIDGE`.

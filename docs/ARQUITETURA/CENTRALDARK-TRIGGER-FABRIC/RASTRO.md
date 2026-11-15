@@ -79,6 +79,30 @@ STALE_CURRENT_MAIN=FAIL
 
 O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
 
+### Gate de conclusão Direct Main — ledger CURRENT no mesmo ciclo
+
+`REPOSITORY_RECEIPT_AND_HUD_CURRENT_READBACK_SAME_TURN_AS_DIRECT_MAIN=true` significa **parte do write**, não tarefa opcional posterior.
+
+```text
+COMMIT_REMOTE_PROVEN
+→ RESOLVE_CURRENT_LEDGER
+→ RECORD_COMMIT_DELTA_PROOF
+→ LEDGER_READBACK
+→ TRACE_COMPLETE
+```
+
+Regras determinísticas:
+
+- receipt versionado no repositório é válido quando o SHA está realmente presente no arquivo lido da `main`;
+- PR/funil deve ser resolvido por `CENTRALDARK_HUD_FUNNEL_CONTINUITY` no conjunto **aberto CURRENT**; número histórico não pode ser default do fiscal;
+- referência explícita `LEDGER_REF` continua permitida para receipt/PR/comment exato, mas a resposta deve distinguir **proveniência histórica** de **ledger vigente**;
+- múltiplos commits materiais da mesma missão exigem cadeia `COMMIT → DELTA → PROVA` e HEAD final, sem esconder commits intermediários;
+- `COMMIT_EXISTS=PASS` com `LEDGER_ACTIVE=FAIL|UNKNOWN` resulta em write publicado porém `TRACE_COMPLETE != PASS`; não repetir o commit, recuperar apenas o rastro;
+- retorno ao CHEFE antes de `LEDGER_READBACK` é `METHOD_FAILURE`.
+
+`DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT` e `COMMIT_READBACK != LEDGER_READBACK`.
+
+
 
 ## Metadados obrigatórios de nota (delta 2026-10-25)
 
