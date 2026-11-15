@@ -333,7 +333,8 @@ receipts:
     - contract
     - contract_version
     - repository
-    - current_origin_main_sha
+    - tested_origin_main_sha
+    - receipt_persisted_in_main_sha
     - local_head_sha
     - worktree_state
     - sentinel_result
