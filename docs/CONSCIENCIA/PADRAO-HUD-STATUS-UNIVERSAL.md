@@ -6,9 +6,9 @@
 
 ## Intenção
 
-Todo status técnico deve ser exibido em duas camadas:
+Na conversa humana, apresentar o significado e a consequência em português natural. No HUD técnico solicitado, preservar a rastreabilidade:
 
-> termo humano universal primeiro + termo técnico entre parênteses.
+> termo humano primeiro; identificador técnico entre parênteses somente quando necessário ou pedido.
 
 Isso preserva precisão para engenharia sem deixar o CHEFE, usuário leigo ou operador de sistema perdido.
 
@@ -41,7 +41,7 @@ Isso preserva precisão para engenharia sem deixar o CHEFE, usuário leigo ou op
 | 🌍 Alteração realmente em uso | `deployed` | runtime recebeu o delta |
 | ⚖️ Comprovação no mundo real | `runtime proof / Reality Judge` | prova observada |
 
-## Forma obrigatória no HUD
+## Forma do HUD técnico quando solicitado
 
 Exemplo correto:
 
@@ -53,7 +53,7 @@ Exemplo incorreto:
 
 ## Gate de clareza
 
-Um status operacional só está no padrão quando contém:
+Um status operacional deve manter no registro técnico:
 
 1. estado humano claro;
 2. termo técnico rastreável;
@@ -61,7 +61,7 @@ Um status operacional só está no padrão quando contém:
 4. nenhuma promoção de `unknown` para verde.
 ## Aplicação imediata
 
-A partir deste contrato, respostas e painéis devem preferir:
+Em painéis técnicos, preferir:
 
 `🟢 Pronto para juntar (OPEN / MERGEABLE)`
 

@@ -83,8 +83,8 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
 .foguete::before {
   content: "";
   position: absolute;
-  inset: -18px;
-  border-radius: 50%;
+  inset: -15px;
+  border-radius: 30%;
   background:
     conic-gradient(from 0deg,
       rgba(255, 140, 30, 0) 0deg,
@@ -93,9 +93,9 @@ function MegaPainel({ estado, atualizando, atualizar }: SistemaCentralDarkProps)
       rgba(255, 200, 80, 0.35) 220deg,
       rgba(255, 80, 0, 0) 300deg,
       rgba(255, 140, 30, 0) 360deg);
-  -webkit-mask: radial-gradient(circle, transparent 32%, #000 38%, #000 62%, transparent 70%);
+  -webkit-mask: radial-gradient(circle, transparent 25%, #000 38%, #000 50%, transparent 70%);
   mask: radial-gradient(circle, transparent 32%, #000 38%, #000 62%, transparent 70%);
-  filter: blur(2px);
+  filter: blur(0px);
   opacity: 0.75;
   z-index: -1;
   pointer-events: none;
