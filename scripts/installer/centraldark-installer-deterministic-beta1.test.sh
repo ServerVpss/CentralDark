@@ -46,4 +46,36 @@ out="$(bash "$SCRIPT" --self-test)"
 grep -q 'OWNER_DECISION=BLOCKED_OWNER_GAP' <<<"$out"
 
 export CENTRALDARK_CANONICAL_INSTALLER="$ROOT/install.sh"
+# Fase Linux opcional do owner raiz: leitura/dry-run sem instalar ou registrar.
+CANONICAL_INSTALLER="$(cd "$(dirname "$SCRIPT")/../.." && pwd)/install.sh"
+if [ -f "$CANONICAL_INSTALLER" ]; then
+  RUNNER_TEST_HOME="$ROOT/runner-linux-dry-run"
+  rc=0
+  out="$(CENTRALDARK_RUNNER_HOME="$RUNNER_TEST_HOME" bash "$CANONICAL_INSTALLER" --runner-linux-check 2>&1)" || rc=$?
+  case "$(uname -s)" in
+    Linux)
+      [ "$rc" -eq 0 ]
+      grep -q 'RUNNER_REGISTERED_LOCAL=NO' <<<"$out"
+      ;;
+    *)
+      [ "$rc" -eq 2 ]
+      grep -q 'BLOCKED_NOT_LINUX' <<<"$out"
+      ;;
+  esac
+  rc=0
+  out="$(CENTRALDARK_RUNNER_HOME="$RUNNER_TEST_HOME" bash "$CANONICAL_INSTALLER" --runner-linux-install --dry-run 2>&1)" || rc=$?
+  case "$(uname -s)" in
+    Linux) [ "$rc" -eq 0 ]; grep -q 'RUNNER_install_DRY_RUN=PASS' <<<"$out" ;;
+    *) [ "$rc" -eq 2 ]; grep -q 'BLOCKED_NOT_LINUX' <<<"$out" ;;
+  esac
+  rc=0
+  out="$(CENTRALDARK_RUNNER_HOME="$RUNNER_TEST_HOME" bash "$CANONICAL_INSTALLER" --runner-linux-activate --dry-run 2>&1)" || rc=$?
+  case "$(uname -s)" in
+    Linux) [ "$rc" -eq 0 ]; grep -q 'RUNNER_activate_DRY_RUN=PASS' <<<"$out" ;;
+    *) [ "$rc" -eq 2 ]; grep -q 'BLOCKED_NOT_LINUX' <<<"$out" ;;
+  esac
+  [ ! -e "$RUNNER_TEST_HOME" ]
+  echo 'RUNNER_LINUX_PHASE_DRY_RUN_TEST=PASS'
+fi
+
 echo 'DETERMINISTIC_INSTALLER_TEST=PASS'

@@ -149,3 +149,33 @@ Achado separado, ainda pendente: existe um segundo perfil Windows (`danda`)
 com Hermes mais maduro (849 skills, webui configurada) mas sem gateway
 ativo — decisão de consolidar num perfil só está registrada como pendência
 `chefe` no HUD/Pendências.md, não decidir isso sozinho.
+
+
+<!-- CENTRALDARK_RECONCILIACAO_INCREMENTAL_5MIN_20261110 -->
+## Reconciliação incremental de 5 minutos — mesma Skill e mesmo job
+
+**Intenção do CHEFE (10/11/2026):** evoluir **o job Hermes existente** `f052f0dc37ed` (`Reconciliacao Diaria CentralDark`), não criar outro agendamento, reconciliação, writer, daemon ou rotina concorrente. A frequência desejada é **a cada cinco minutos**, e não apenas às 08h. A mudança de cron só é `EXECUTED` após edição na configuração ativa do Hermes e conferência do `next_run_at`, execução e recibo. Este parágrafo **não** modifica o scheduler.
+
+**Dado medido na Casa antes do delta:** `C:\Users\Administrador\AppData\Local\hermes\cron\jobs.json`, ID `f052f0dc37ed`, `schedule.kind=cron`, `schedule.expr="0 8 * * *"`, `enabled=true`, `last_status=ok` e `repeat.completed=50`. A configuração desejada do **mesmo ID** é `schedule.kind=interval`, `schedule.minutes=5`, preservando prompt, skills, modelo, origem, entregas e histórico. Usar a API/UI/CLI nativa de edição do Hermes e verificar o readback; não editar `jobs.json` sob um scheduler vivo sem o mecanismo oficial de lock/atualização.
+
+### Mesmo método, sem varreduras ou merges cegos
+
+1. **Preflight barato e idempotente:** confirmar writer único, owner, job atual, gatilho anterior ainda concluído e lock de reconciliação; se uma rodada ainda estiver rodando, registrar `SKIPPED_OVERLAP`. Capturar fingerprints/SHAs dos owners e `GitHub/main` e consultar o cursor da rodada anterior. Quando nenhuma fonte material mudou, `NO_CHANGE` e nenhuma mutação, commit, PR ou log duplicado.
+2. **Mudança detectada:** consultar fontes autorizadas e recuperar o owner existente, `NEXT_CURSOR`, alterações locais `staged/unstaged/untracked` e versão remota real. O reconciliador `scripts/centraldark-inventory-reconcile.sh` é o inventário único; reutilizá-lo, não criar um inventário paralelo.
+3. **Merge Git de três vias:** usar `BASE=ancestral comum`, `LOCAL=trabalho preservado`, `REMOTE=main`; comparar `git diff`/conteúdo, resolver apenas deltas inequívocos e incluir contribuições exclusivas dos dois lados. Para preparar publicação seletiva, usar `GIT_INDEX_FILE` isolado + `git read-tree`/`git add`/`git write-tree`, sem misturar outras alterações locais. `git merge-file -p` serve de proposta de conteúdo, não prova automática de equivalência semântica.
+4. **Proteção e decisão:** conflitos semânticos, credenciais, exclusões, alterações de contratos, dono ocupado, locks, gates ou fontes incompletas resultam em `BLOCKED/UNKNOWN` e `NEXT_CURSOR`; jamais apagar, forçar push, executar `reset --hard`, `clean` ou `stash` destrutivo. Não promover automaticamente código não testado. Respeitar `ONE_WRITER_PER_SCOPE`, regras de PR e gates; diferenciar reconciliação documental de teste de runtime.
+5. **Prova antes de promover:** teste direcionado ao cone alterado, `git diff --check`, sintaxe pertinente, invariantes, commit mínimo autorizado, push normal sem força, `git ls-remote`/fetch/readback dos hashes e recibo no owner. `PUSH != RUNTIME_PASS`; `NO_CHANGE` não gera commit.
+6. **Frequência vs. custo:** o tick é de 5 minutos, mas a reconciliação profunda só acontece quando o fingerprint muda. Não iniciar sessões paralelas ou enviar notificações de `NO_CHANGE` a cada tick; relatar apenas mudança útil, falha ou bloqueio.
+
+**Rota visual:** quando o delta exigir operar telas, usar a entrada já existente `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click` com Cua virtual e UIA para descoberta, nunca mover o mouse físico. Não reimplementar o motor visual no reconciliador.
+
+**Estado documental desta adição:** `METHOD_DOCUMENTED`; `HERMES_INTERVAL_5M=PENDING_RUNTIME_READBACK`. A confirmação de execução exige observar o mesmo ID programado em intervalo 5m e pelo menos um ciclo com status/readback válidos.
+<!-- /CENTRALDARK_RECONCILIACAO_INCREMENTAL_5MIN_20261110 -->
+
+<!-- CENTRALDARK_HERMES_JOB_5M_RUNTIME_READBACK_20261110 -->
+## Recibo de aplicação Hermes (Casa SEGREDO, 10/11/2026 23h50 BRT)
+
+**Owner real:** `C:\Users\Administrador\AppData\Local\hermes\cron\jobs.json`, job ID `f052f0dc37ed`. Alteração efetuada pela CLI original `hermes cron edit f052f0dc37ed --schedule "every 5m"`, exit 0, retorno `Updated job: f052f0dc37ed`. Readback do mesmo registro: `schedule.kind=interval`, `schedule.minutes=5`, `enabled=true`, `state=scheduled`, `next_run_at=2026-11-11T00:52:15.151641-02:00`, `repeat.completed=50`.
+
+**Veredito:** `HERMES_INTERVAL_5M_CONFIGURATION=PASS`. `HERMES_FIRST_FIVE_MINUTE_EXECUTION=PENDING` até observar conclusão de novo disparo com `repeat.completed>50`, `last_run_at` atualizado e efeito/NO_CHANGE verificado. `RUNTIME_SKILL_CONTENT` também requer confronto do arquivo efetivamente lido pelo Hermes com este owner versionado. Não afirmar FIXED_POINT por ter mudado só a agenda; não criar outro job, nem reiniciar o scheduler.
+<!-- /CENTRALDARK_HERMES_JOB_5M_RUNTIME_READBACK_20261110 -->

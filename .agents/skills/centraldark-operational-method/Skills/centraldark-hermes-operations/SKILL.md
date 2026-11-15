@@ -17,7 +17,7 @@ oracle_review_on_change: true
 
 # CentralDark Hermes Operations
 
-Use this when CHEFE asks to update Hermes, create Hermes cron jobs, verify Hermes on the VPS, prove SSH/port access for CentralDark infrastructure, or pastes Hermes Desktop/backend logs such as `completing source-update dependencies`, `Timed out waiting for Hermes backend port announcement`, `Desktop boot failed`, `refreshProfiles failed`, `bootstrap reset`, or `ssh connection closed (no-mux tunnels killed)`. Keep responses dense: answer SIM/NAO or the operational state first, then receipts.
+Use this when CHEFE asks to update Hermes, create Hermes cron jobs, verify Hermes on the VPS, prove SSH/port access for CentralDark infrastructure, or pastes Hermes Desktop/backend logs such as `completing source-update dependencies`, `Timed out waiting for Hermes backend port announcement`, `Desktop boot failed`, `refreshProfiles failed`, `bootstrap reset`, or `ssh connection closed (no-mux tunnels killed)`. Keep responses short and natural in PT-BR: answer SIM/NAO or explain the operational result first, followed by a plain-language account of the evidence. Keep exact machine fields and receipts in technical artifacts, not as mandatory conversational labels.
 
 ## Paired operational skill
 
