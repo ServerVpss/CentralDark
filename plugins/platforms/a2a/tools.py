@@ -18,7 +18,9 @@ from . import protocol, security
 
 logger = logging.getLogger(__name__)
 
-_DEFAULT_TIMEOUT = 120
+# The server holds synchronous A2A replies for A2A_REPLY_TIMEOUT (300s by default).
+# Outlive that window so the client receives a task state, not a socket timeout.
+_DEFAULT_TIMEOUT = 330
 _ORCHESTRATE_MAX_WORKERS = 6  # max parallel peers for fan-out
 
 
@@ -38,11 +40,25 @@ def _peer_from_entry(entry: dict, **extra: Any) -> dict:
 
 
 def _resolve_peer(agent: str) -> Optional[dict]:
-    """Peer name -> {url, auth, timeout, capabilities, tenant}, or treat ``agent`` as a URL."""
+    """Resolve a peer by name or URL, keeping its configured auth and timeout.
+
+    A raw URL matching a configured peer inherits that peer's settings.
+    """
+    peers = _configured_peers()
     if agent.startswith(("http://", "https://")):
-        return {"url": agent, "auth": {}, "timeout": _DEFAULT_TIMEOUT, "capabilities": []}
-    entry = _configured_peers().get(agent)
-    return _peer_from_entry(entry, capabilities=entry.get("capabilities", []) or [], tenant=entry.get("tenant", "")) if entry else None
+        entry = next(
+            (item for item in peers.values()
+             if (item.get("url") or "").rstrip("/") == agent.rstrip("/")),
+            None,
+        )
+        if entry is None:
+            return {"url": agent, "auth": {}, "timeout": _DEFAULT_TIMEOUT, "capabilities": []}
+    else:
+        entry = peers.get(agent)
+    return _peer_from_entry(
+        entry, capabilities=entry.get("capabilities", []) or [],
+        tenant=entry.get("tenant", ""),
+    ) if entry else None
 
 
 def _auth_header(auth: dict) -> dict:
@@ -170,7 +186,7 @@ def a2a_discover(args: dict, **_: Any) -> str:
 
 
 def a2a_call(args: dict, **_: Any) -> str:
-    """Send a task to a peer (configured name or direct URL); ``context_id`` continues a prior exchange."""
+    """Send a task to a peer; optional ``timeout`` overrides its wait budget."""
     # Accept common aliases models reach for (observed live: 'agent_name').
     agent = str(args.get("agent") or args.get("agent_name") or args.get("name") or "").strip()
     message = str(args.get("message") or args.get("text") or args.get("task") or "").strip()
@@ -180,6 +196,15 @@ def a2a_call(args: dict, **_: Any) -> str:
     peer = _resolve_peer(agent)
     if not peer or not peer.get("url"):
         return f"Error: unknown agent '{agent}'. Configure it under 'a2a_agents' in config.yaml or pass a full http(s):// URL."
+    raw_timeout = args.get("timeout", args.get("timeout_seconds"))
+    if raw_timeout is not None:
+        try:
+            seconds = int(raw_timeout)
+            if seconds < 1:
+                raise ValueError("timeout must be positive")
+            peer["timeout"] = seconds
+        except (TypeError, ValueError):
+            return f"Error: 'timeout' must be a positive number of seconds, got {raw_timeout!r}."
     try:
         reply, reply_ctx, state = _send_task(agent, peer, message, context_id)
     except urllib.error.HTTPError as e:
@@ -305,7 +330,8 @@ _TOOLS: dict[str, tuple[Any, str, dict, list[str]]] = {
                  "reply to continue a multi-turn exchange.",
                  {"agent": _str("Configured peer name (from a2a_agents) or a full http(s):// URL."),
                   "message": _str("The task / message to send the peer, in natural language."),
-                  "context_id": _str("Optional: context id from a prior reply, to continue the conversation.")},
+                  "context_id": _str("Optional: context id from a prior reply, to continue the conversation."),
+                  "timeout": {"type": "integer", "description": "Optional: seconds to wait for the peer, overriding its configured timeout."}},
                  ["agent", "message"]),
     "a2a_list": (a2a_list, "List configured A2A peer agents, persisted A2A conversations, and metrics.", {}, []),
     "a2a_history": (a2a_history,

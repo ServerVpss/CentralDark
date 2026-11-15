@@ -580,6 +580,56 @@ class TestClientTools:
         assert tools._rpc_url("http://base:3/", None) == "http://base:3"
 
 
+    def test_default_timeout_exceeds_server_reply_window(self):
+        assert tools._DEFAULT_TIMEOUT > 300
+
+    def test_call_timeout_override(self, monkeypatch):
+        monkeypatch.setattr(tools, "_load_config",
+                            lambda: {"a2a_agents": {"r": {"url": "http://localhost:9999", "timeout": 5}}})
+        monkeypatch.setattr(tools, "_http_get_json", lambda url, headers, timeout: None)
+        captured = {}
+
+        def fake_post(url, body, headers, timeout):
+            captured["timeout"] = timeout
+            return protocol.jsonrpc_result(
+                body["id"], protocol.build_task("t", "ctx", protocol.STATE_COMPLETED, "reply"),
+            )
+
+        monkeypatch.setattr(tools, "_http_post_json", fake_post)
+        assert "reply" in tools.a2a_call({"agent": "r", "message": "hi", "timeout": 330})
+        assert captured["timeout"] == 330
+
+    def test_call_timeout_rejects_invalid_value(self, monkeypatch):
+        monkeypatch.setattr(tools, "_load_config",
+                            lambda: {"a2a_agents": {"r": {"url": "http://localhost:9999"}}})
+        for value in ("soon", 0, -1):
+            result = tools.a2a_call({"agent": "r", "message": "hi", "timeout": value})
+            assert "Error:" in result and "timeout" in result
+
+    def test_raw_url_inherits_named_peer_auth_and_timeout(self, monkeypatch):
+        monkeypatch.setattr(tools, "_load_config", lambda: {"a2a_agents": {"r": {
+            "url": "http://localhost:9999", "timeout": 777,
+            "auth": {"type": "bearer", "token": "dummy-test-token"},
+        }}})
+        monkeypatch.setattr(tools, "_http_get_json", lambda url, headers, timeout: None)
+        captured = {}
+
+        def fake_post(url, body, headers, timeout):
+            captured.update(headers=headers, timeout=timeout)
+            return protocol.jsonrpc_result(
+                body["id"], protocol.build_task("t", "ctx", protocol.STATE_COMPLETED, "reply"),
+            )
+
+        monkeypatch.setattr(tools, "_http_post_json", fake_post)
+        assert "reply" in tools.a2a_call({"agent": "http://localhost:9999/", "message": "hi"})
+        assert captured["timeout"] == 777
+        assert captured["headers"].get("Authorization") == "Bearer dummy-test-token"
+
+    def test_unknown_url_uses_default_without_auth(self, monkeypatch):
+        monkeypatch.setattr(tools, "_load_config", lambda: {"a2a_agents": {}})
+        peer = tools._resolve_peer("http://localhost:9998")
+        assert peer["timeout"] == tools._DEFAULT_TIMEOUT
+        assert peer["auth"] == {}
 
 class TestRegistryDispatchConvention:
     """Tools must accept the args-as-dict positional that registry.dispatch
