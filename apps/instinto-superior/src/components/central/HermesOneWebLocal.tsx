@@ -46,7 +46,7 @@ export function HermesOneWebLocal({ autenticado }: { autenticado: boolean }) {
           <div className="min-w-0">
             <h3 className="font-semibold">Hermes ONE · módulo local</h3>
             <p className="text-xs text-muted-foreground">
-              Dashboard web Hermes nativo · independente do AionUI · porta 9119 (Casa)
+              Dashboard web Hermes nativo · independente do CentralDarkBot · porta 9119 (Casa)
             </p>
           </div>
         </div>
