@@ -306,3 +306,6 @@ This fork is the code home for **CentralDark Agent** on the existing Hermes engi
 
 **Migration gate:** inventory and compare → reuse the native owner → adapt the smallest delta → run relevant Hermes contract tests → prove runtime consumer/readback → only then retire the redundant CentralDark implementation. A document or merged commit does not prove deployment. Do not replace Hostinger-managed \`/opt/hermes\`, reset dirty checkouts, or start a second Gateway.
 
+### Automatic CentralDark fork updates
+
+On a connected workstation, use **Hermes' existing Cron scheduler**, not another updater or Windows service. A `--no-agent --script` job in `HERMES_HOME/scripts/` delegates to the versioned `scripts/centraldark-fork-auto-update.sh` inside the installed fork. The versioned script checks the checkout is on a clean `main` and that `origin` matches `ServerVpss/CentralDark-hermes-agent`; it fetches only that fork's `main`, rejects non-fast-forward or dirty worktrees, then hands off updates to the **native `hermes update --yes --channel main`** for dependencies, backup and gateway lifecycle. It never pushes upstream, force-updates, silently stashes, or writes to Hostinger-managed `/opt/hermes`. A disabled or unreachable gateway cannot run cron jobs; a refusal is logged and retried at a later tick, not treated as success.
