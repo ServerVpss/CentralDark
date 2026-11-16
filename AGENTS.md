@@ -1927,6 +1927,7 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 
 ## Code review
 
+- **Idioma da revisão Codex/GitHub:** produzir em português brasileiro os títulos, resumos, explicações, comentários e sugestões **que o revisor gera**. Preservar nomes de APIs, identificadores, comandos, caminhos e trechos de código sem tradução. A regra não controla os cabeçalhos fixos do serviço Codex (`Codex Review Summary`, estados automáticos) nem o template de e-mail do GitHub; não confundir esse limite com idioma da análise técnica.
 - revisar HEAD exato;
 - estado de HEAD anterior não aprova HEAD novo;
 - distinguir instrumento defeituoso de sistema observado;
@@ -1967,8 +1968,8 @@ PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=DINAMICA
 # Resolver pelo arquivo de entrada e validar a raiz Git do checkout/worktree ativo.
-# K:\ nos registros abaixo é histórico, não binding de execução atual.
-# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior K:\ permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
+# Referências a letras de disco usadas nos receipts de outubro/2026 são históricas, não bindings atuais.
+# ROOT_CURRENT: descobrir via arquivo de entrada, git rev-parse --show-toplevel e validação do remote/owner no runtime autorizado. A migração física de dados não comprova qual unidade é o checkout em uso. Obsidian/HUD e perfis privados exigem leitura do consumidor e prova no próprio ambiente; não reescrever paths nem mover dados sem autorização e contraprova.
 
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
@@ -2249,7 +2250,7 @@ CONNECTOR_DOWN_ONCE
 → SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
 ```
 
-Casa local do CHEFE (`K:\`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+Casa local do CHEFE (checkout Git validado no runtime, sem letra de unidade fixa) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
 
 ```text
 LOCAL_ONLY_CHANGE_FORBIDDEN=true

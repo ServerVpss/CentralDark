@@ -72,12 +72,26 @@ set -e
 # result is authoritative for the gates; other non-zero exits are real errors.
 [ "$boot_rc" = 0 ] || [ "$boot_rc" = 4 ] || fail "BOOT_COMMAND_FAILED_RC_$boot_rc"
 
-python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" <<'PY'
+# Reuse the single CentralDark skill-sync owner after the same main SHA is proven.
+# This never overwrites independently changed runtime skills: the checker owns
+# locks, backups, hash seals, and ORACLE_REQUIRED_RUNTIME_DRIFT classification.
+SKILL_SYNC_CHECKER="$SYNC_ROOT/scripts/skill-sync-check.sh"
+SKILL_SYNC_OUTPUT=""
+SKILL_SYNC_RC=0
+if [[ -x "$SKILL_SYNC_CHECKER" ]]; then
+  SKILL_SYNC_OUTPUT="$(CENTRALDARK_ROOT="$SYNC_ROOT" CENTRALDARK_SKILL_SYNC_REF="$main_sha" bash "$SKILL_SYNC_CHECKER" --apply 2>&1)" || SKILL_SYNC_RC=$?
+else
+  SKILL_SYNC_OUTPUT="SKILL_SYNC=BLOCKED_OWNER_MISSING"
+  SKILL_SYNC_RC=69
+fi
+printf '%s\n' "$SKILL_SYNC_OUTPUT"
+
+python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-output, sync_root, main_sha, receipt_dir = sys.argv[1:]
+output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output = sys.argv[1:]
 text = Path(output).read_text(encoding="utf-8", errors="replace")
 start = text.find("{")
 if start < 0:
@@ -87,8 +101,10 @@ status = data.get("status", "UNKNOWN")
 hud = data.get("hud_first", {})
 if status != "CANONICAL_MAIN_LOADED" or hud.get("status") != "PASS":
     raise SystemExit(f"BOOT_GATE_NOT_PASS status={status} hud={hud.get('status', 'UNKNOWN')}")
+skill_status = "PASS" if int(skill_sync_rc) == 0 and "MAIN_RUNTIME_LOCK=PASS" in skill_sync_output else "BLOCKED_OR_UNKNOWN"
+overall_status = "PASS" if skill_status == "PASS" else "PARTIAL"
 receipt = {
-    "status": "PASS",
+    "status": overall_status,
     "sync_root": sync_root,
     "main_sha": main_sha,
     "boot_status": status,
@@ -96,11 +112,13 @@ receipt = {
     "hud_reason": hud.get("reason"),
     "runtime_preflight": data.get("canonical_boot", {}).get("runtime_preflight_contract", {}).get("status"),
     "canonical_consumption": data.get("canonical_boot", {}).get("canonical_consumption", {}).get("status"),
+    "skill_sync_rc": int(skill_sync_rc),
+    "skill_sync_status": skill_status,
 }
 path = Path(receipt_dir)
 path.mkdir(parents=True, exist_ok=True)
 (path / "last.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print("CENTRALDARK_AUTO_SYNC=PASS")
+print(f"CENTRALDARK_AUTO_SYNC={overall_status}")
 for key, value in receipt.items():
     print(f"{key.upper()}={value}")
 PY
