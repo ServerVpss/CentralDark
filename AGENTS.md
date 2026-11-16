@@ -1927,6 +1927,7 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 
 ## Code review
 
+- **Idioma da revisão Codex/GitHub:** produzir em português brasileiro os títulos, resumos, explicações, comentários e sugestões **que o revisor gera**. Preservar nomes de APIs, identificadores, comandos, caminhos e trechos de código sem tradução. A regra não controla os cabeçalhos fixos do serviço Codex (`Codex Review Summary`, estados automáticos) nem o template de e-mail do GitHub; não confundir esse limite com idioma da análise técnica.
 - revisar HEAD exato;
 - estado de HEAD anterior não aprova HEAD novo;
 - distinguir instrumento defeituoso de sistema observado;
