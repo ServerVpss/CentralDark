@@ -1,5 +1,7 @@
 # Mirror body reconciliation (Samba share → VM dev server → main)
 
+**When to use:** whenever a *body* of the CentralDark tree has to be brought in line with `origin/main` and you cannot decide by asking Git alone — either because the body has **no `.git`** (Samba/Windows share) or because the checkout **is** a Git repo but is far behind and dirty. Both cases share the same discriminating question: *is this file stale, or is it real local work?* Section 1 (Samba, no `.git`) and the measured git-checkout case at the end answer that with commands, not opinion.
+
 A CentralDark tree exposed over Samba has no `.git`, so Git cannot tell you whether a file is stale or locally edited. The dev server on the VM is the real consumer. This recipe establishes both facts before any write.
 
 ## 1. Prove the consumer
