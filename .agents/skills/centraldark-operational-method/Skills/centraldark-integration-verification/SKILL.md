@@ -91,17 +91,6 @@ Responda em português direto, sem papagaio. Quando o usuário perguntar se “j
    - Para builds que geram artefatos SSR/Nitro, execute também o pós-processador do owner (`build:vps`, não apenas `vite build`). Se o build principal passar e o pós-processador falhar por mudança de formato, inspecione o artefato real e prove o invariante necessário no entry efetivamente carregado; não relaxe a asserção contando qualquer arquivo parecido.
    - Antes de declarar cadeia Casa → transporte → VPS → MCP, teste DNS/rota e acesso read-only. Separe explicitamente HEAD local, HEAD remoto e HEAD implantado; um serviço MCP saudável não prova que o cockpit está publicado, e uma porta local respondendo não prova autenticação ou consumo da feature. Se o canal não puder ser alcançado, mantenha o efeito, cursor e deploy como `UNKNOWN`, sem transformar documentação histórica em prova.
 
-### Verificação de identidade e autenticação A2A
-
-Quando a integração usa um Agent Card A2A atrás de uma rota privada:
-
-1. Leia o card local e o card pelo endereço privado antes da alteração; compare `name`, `url`, `supportedInterfaces`, `capabilities`, `securitySchemes` e `security`.
-2. Localize o owner efetivo da identidade e edite somente a chave de nome autorizada. Preserve `A2A_BEARER_TOKEN` e `A2A_PEER_TOKENS` byte a byte; valide apenas a presença das chaves, nunca imprima seus valores.
-3. Diferencie configuração persistida de runtime ativo: se o adapter captura ambiente/configuração na construção, um card antigo após a edição prova que o processo ainda não foi recarregado.
-4. Antes de recarregar, prove que existe um processo A2A independente. Se o A2A vive dentro de um Gateway compartilhado e o escopo proíbe reiniciar esse Gateway, não o reinicie; marque a identidade ativa como `BLOCKED` e deixe o próximo cursor no reload isolado.
-5. Faça readback do card local e privado após o reload. Teste proteção com uma requisição JSON-RPC sem credencial e espere `401`; nunca inclua token em comandos, logs, receipts ou respostas.
-6. Não trate HTTP 200 do card como prova de autorização ou comunicação entre máquinas. Se o peer remoto estiver offline, não fabrique chamada, identidade ou resposta; mantenha a prova bidirecional `PENDING`.
-
 8. Emitir a matriz e o veredito
 
    Use uma linha por capacidade:
