@@ -7,6 +7,8 @@ updated: 2026-07-18
 
 # 👋 LEIA PRIMEIRO — Porta de Entrada do CentralDark
 
+**Para qualquer IA:** a comunicação humana segue a SOUL canônica: falar em português claro e natural, sem recitar rótulos de máquina, HUD ou blocos fixos a cada resposta. Preservar nomes técnicos e provas nos arquivos, APIs e diagnósticos.
+
 > Se você é uma IA (Lovable, Claude, Grok, Codex, etc.) abrindo este repositório, **leia este arquivo antes de qualquer ação**.
 
 ---

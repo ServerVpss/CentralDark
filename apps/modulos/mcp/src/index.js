@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import express from "express";
 import { config } from "./config.js";
 import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
-import { assertNoRetiredCentralDarkHostedDeploy } from "./tools/github/github.js";
+import { assertNoRetiredCentralDarkHostedDeploy, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 import { log } from "./log.js";
 import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
@@ -678,7 +678,8 @@ function resolveGhToken(req) {
         }
         logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
         return {
-            token: at.gh_token,
+            token: at.gh_scope === "owner-admin" && at.gh_login === "centraldark-admin"
+                ? GH_CLI_OWNER_MARKER : at.gh_token,
             callerUser: at.gh_login || "github-oauth",
             oauthScope: String(at.oauth_scope || ""),
         };
@@ -701,7 +702,7 @@ function resolveGhToken(req) {
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
-app.post("/api/mcp", (req, res) => {
+app.post(["/api/mcp", "/mcp"], (req, res) => {
     const l = withCid(req.cid);
     const r = resolveGhToken(req);
     if ("error" in r) {
@@ -730,7 +731,7 @@ app.post("/api/mcp", (req, res) => {
     });
 });
 // GET /mcp — alguns clientes pingam pra checar OAuth via 401
-app.get("/api/mcp", (req, res) => {
+app.get(["/api/mcp", "/mcp"], (req, res) => {
     unauthorized(req, res, "Authorization Bearer ausente.");
 });
 // getAdminCatalog() nunca foi implementado/importado neste arquivo; esta rota

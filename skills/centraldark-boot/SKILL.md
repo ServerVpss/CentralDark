@@ -31,7 +31,7 @@ Always-on rules:
 - `UNKNOWN` is not a pass; any missing or unproven field must be reported as a blocker with exact receipt.
 - Reuse before create: if the boot output indicates `active: false` and the input fingerprint matches a previous proven run, the system will reuse the proven path instead of re-executing phases.
 - One writer per scope: the boot procedure is read‑only; it does not mutate the repository or runtime state.
-- User preference: present the HUD summary first, then offer the full JSON on request; avoid verbose dumps unless asked.
+- User preference: present a natural Portuguese summary of the boot result first, translating machine fields into plain language. Show the HUD or full JSON only when explicitly requested or essential to diagnose a failure; preserve exact field names in the underlying artifacts.
 
 Pitfalls:
 - Before step 2, locate the boot file from the live workspace and verify its repository root, canonical HUD source, and live checkout; scratch/cache copies are test artifacts, not proof of the repository boot. Hardcoded paths such as `/c/CentralDark` can point at a different checkout and produce a false setup diagnosis.

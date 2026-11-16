@@ -47,3 +47,13 @@ Segredos permanecem fora do Git. Fingerprint de host é material de verificaçã
 
 ## Next cursor
 Validar identidade atual da VPS; atualizar somente known_hosts afetado; provar VMware→VPS autenticado; depois matricular/provar runner VMware com runner_name real e somente então comprimir/rebindar workflows por famílias.
+
+
+## Atualizacao operacional - 2026-11-13 (Casa e VMware)
+
+- Preferencia da Casa SEGREDO: VMware openKylin via alias existente `openkylin-vm`, destino `192.168.35.130`, usuario `CentralDark-OS`. SSH confirmou hostname, usuario e home `/home/CentralDark-OS`.
+- `centraldark-preferencial` e alias proposto, ainda nao instalado: tentativa de gravar o SSH config da Casa foi negada pelo Windows.
+- `segredo-vpss` na Casa aponta para VPS publica, nao para a VMware. Tentativa SSH Casa -> VPS retornou `Permission denied (publickey)`; VPS ativa ou inativa permanece UNKNOWN.
+- Contraprova na VMware em 13/11: `ssh segredo-vpss` retornou `Could not resolve hostname`. Evidencia historica de alias existente nao representa CURRENT.
+- Preservar receipts de outubro como historicos; nao alterar chaves nem promover SSH/VPS como PASS sem prova.
+- NEXT_CURSOR: reconciliar SSH Casa/VMware/VPS, validar rotas autorizadas e sincronizar checkouts por SHA/readback sem sobrescrever trabalho local.
