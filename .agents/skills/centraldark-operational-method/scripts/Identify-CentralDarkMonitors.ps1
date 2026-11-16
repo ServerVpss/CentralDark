@@ -1,6 +1,6 @@
 # #OBSERVACOES# @owner=.agents/skills/centraldark-operational-method/SKILL.md
 # @doc_ref=.agents/skills/centraldark-operational-method/references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md
-# @last_updated=2026-11-06T18:02:11.1794150Z
+# @last_updated=2026-11-10T01:40:16.491Z
 # @implementado=mapa semantico Casa, janelas por tela e resolucao read-only de controle UIA para clique Cua virtual.
 # @pendente=numeros nativos devem ser reconfirmados se o arranjo mudar; overlay nao prova automacao.
 [CmdletBinding()]
@@ -85,6 +85,25 @@ if($ResolveControl){
       }
     }catch{continue}
   })
+  # UIA can expose one button as a TabItem and a Group at identical coordinates.
+  # Prefer the only actionable entry if every matching rectangle is identical.
+  # Distinct controls remain ambiguous and fail closed.
+  if($matchingControls.Count -gt 1){
+    $actionable=@($matchingControls | Where-Object {
+      $_.Current.ControlType.ProgrammaticName -in @('ControlType.TabItem','ControlType.Button','ControlType.MenuItem')
+    })
+    if($actionable.Count -eq 1){
+      $reference=$actionable[0].Current.BoundingRectangle
+      $coincident=@($matchingControls | Where-Object {
+        $rect=$_.Current.BoundingRectangle
+        $rect.X -eq $reference.X -and $rect.Y -eq $reference.Y -and
+        $rect.Width -eq $reference.Width -and $rect.Height -eq $reference.Height
+      })
+      if($coincident.Count -eq $matchingControls.Count){
+        $matchingControls=@($actionable[0])
+      }
+    }
+  }
   if($matchingControls.Count -ne 1){throw "CONTROL_NOT_UNIQUE_OR_MISSING count=$($matchingControls.Count)"}
   $controlState=$matchingControls[0].Current
   $controlRect=$controlState.BoundingRectangle

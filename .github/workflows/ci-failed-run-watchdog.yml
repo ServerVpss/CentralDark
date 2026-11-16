@@ -23,7 +23,7 @@ concurrency:
 jobs:
   review-failed-runs:
     name: "🔎 Revisar runs falhos recentes"
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Windows, X64]
     timeout-minutes: 8
     steps:
       - name: "🔎 Detectar e reexecutar falhas recentes"
