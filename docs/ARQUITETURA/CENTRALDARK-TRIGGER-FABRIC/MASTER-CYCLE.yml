@@ -722,23 +722,6 @@ communication_interface:
     parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE
     micro_goal: DERIVED_FROM_CURRENT_WOUND
     phase_contract: REHYDRATE_NOT_REINVENT
-    pre_goal_checkpoint:
-      purpose: READ_AND_RECONCILE_BEFORE_NEW_GOAL_OR_ACTIVE_GOAL_REHYDRATION
-      mode: READ_ONLY_CONTEXT_PREFLIGHT_NOT_A_SECOND_EXECUTOR
-      human_sequence: "!CENTRALDARK → !RASTRO → !HUD → #ACORDAR → !AUREULA → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → GOAL"
-      rastro_at_entry: READ_LATEST_VERIFIED_RECEIPT_AND_NEXT_CURSOR_ONLY
-      hud_at_entry: READ_CURRENT_MISSION_STATE_WITHOUT_INVENTING_GREEN
-      acordar: REHYDRATE_CHEFE_INTENT_AND_OWNER_NOT_RESTART_MISSION
-      aureula: REUSE_AUREOLA_CANONICA_ALIAS_AND_CLASSIFY_SURVIVING_EVIDENCE
-      calibrar_multibussola_meta_lupa: APPLY_RELEVANT_CRITERIA_WITHOUT_RITUAL_OR_REPEATED_TESTS
-      reconciliar_at_entry: RECONCILE_CONTEXT_AND_EXISTING_OWNER_BEFORE_GOAL_NOT_FORCE_DIRTY_SYNC
-      goal: DEFINE_OR_RESUME_VERIFIABLE_CLAUSES_WITH_CHEFE_AUTHORITY
-      after_goal_for_authorized_execution: "OWNER_EXISTENTE → MENOR_DELTA → HERMES_EXECUTE → OBSERVE → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !RASTRO → !BOOT"
-      rastro_after_registra: PRESERVE_EXISTING_MANDATORY_FINAL_FISCAL_GATE
-      boot_only_after_valid_effect_and_receipt: true
-      preserve_canonical_machine_chain: true
-      no_new_trigger_router_hud_writer_or_goal: true
-      missing_current_source: UNKNOWN_NOT_PASS
     execute_with_judgment_means: NEXT_STEP_INSIDE_ALREADY_AUTHORIZED_SCOPE
     progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT
     continuation_flow:
