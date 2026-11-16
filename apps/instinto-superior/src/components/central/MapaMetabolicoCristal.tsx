@@ -59,15 +59,15 @@ const CIRCUITO_COGNITIVO = [
 ] as const;
 
 const BATIDAS_DO_CIRCUITO = [
-  "CHEFE define Goal, limites e autorização; recuperar CURRENT, owner e receita existente.",
+  "CHEFE define o objetivo, os limites e a autorização; o sistema recupera o andamento, o responsável e a receita existente.",
   "GPT/Codex examina código e evidências; entrega hipótese técnica consultiva ao Hermes.",
   "Hermes reconcilia o candidato com as precondições e pede análise de Claude/SOL quando houver ganho.",
   "Claude/SOL contesta premissas e sugere teste discriminante; devolve candidato ao MESMO Hermes.",
-  "Hermes escolhe uma caneta autorizada, executa o menor delta, testa, lê efeito e devolve receipt aos revisores.",
-  "Reality Judge contraprova; Kaizen evolui a MESMA receita versionada, preservando a anterior; FIXED_POINT ou NEXT_CURSOR.",
+  "Hermes executa a menor mudança autorizada, testa o resultado e envia o comprovante aos revisores.",
+  "Uma revisão independente confirma o resultado; Kaizen melhora a mesma receita e registra o que foi concluído ou o próximo passo.",
 ] as const;
 
-const PODERES_INTEGRAIS = [{"name":"SIX_EYES","text":"inventário de skills, tools, owners, evidências, falhas e NEXT_CURSOR"},{"name":"INFINITY","text":"não promover prova ausente nem output externo a verdade"},{"name":"BLUE","text":"atrair só evidência causal relevante"},{"name":"RED","text":"rejeitar duplicação, falso verde, stale e arquitetura paralela"},{"name":"PURPLE","text":"reconciliar menor delta no owner existente"},{"name":"RCT","text":"transformar falha comprovada em teste/receita/receipt"},{"name":"DOMAIN","text":"preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR"}] as const;
+const PODERES_INTEGRAIS = [{"name":"SIX_EYES","text":"inventário de habilidades, ferramentas, responsáveis, evidências, falhas e próximos passos"},{"name":"INFINITY","text":"não promover prova ausente nem output externo a verdade"},{"name":"BLUE","text":"atrair só evidência causal relevante"},{"name":"RED","text":"rejeitar duplicação, falso verde, stale e arquitetura paralela"},{"name":"PURPLE","text":"reconciliar menor delta no owner existente"},{"name":"RCT","text":"transformar falha comprovada em teste/receita/receipt"},{"name":"DOMAIN","text":"preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR"}] as const;
 const BATIDAS_OP = [{"n":1,"text":"Vive e experimenta"},{"n":2,"text":"Descobre"},{"n":3,"text":"Melhora"},{"n":4,"text":"Comprova e deixa sua marca"},{"n":5,"text":"Aprende"},{"n":6,"text":"Reutiliza e alimenta a próxima batida"},{"n":7,"text":"Continua evoluindo"}] as const;
 const BATIDAS_POEMA = [{"n":1,"text":"🫀 Receber"},{"n":2,"text":"👀 Perceber"},{"n":3,"text":"🧠 Compreender"},{"n":4,"text":"🔧 Transformar"},{"n":5,"text":"🪬 Conectar"},{"n":6,"text":"♻️ Aprender"},{"n":7,"text":"🚀 Continuar"}] as const;
 const PECAS_INTEGRAIS = ["🌱 Kaizen: melhoria contínua.","🔄 Feedback: aprender com o retorno da realidade.","📈 Aprendizado incremental: evoluir em pequenos avanços.","🧠 Self-Learning: aprender com experiências comprovadas.","🔧 Self-Correction: identificar e corrigir erros.","❤️ Self-Healing: recuperar a operação após falhas.","🧿 Contraprova: verificar além da primeira aparência.","🪬 Continuidade da intenção: preservar o objetivo vigente.","♻️ Reuso: aproveitar o conhecimento já existente.","🎯 Menor delta: corrigir apenas o necessário.","🛡️ Preservação: proteger o que já funciona.","💻 Vibe Coding: desenvolver por conversa e experimentação.","👥 Crowdtesting: utilizar feedback humano como observação.","✅ CI sob demanda: aprofundar verificações quando necessário.","💾 Prompt/Self-Cache: reaproveitar contexto e trabalho adequado.","⚡ KV Cache: otimização do processamento de modelos compatíveis.","⚖️ RLCD: estudar decisões com confiança probabilística calibrada.","📚 Biblioteca indexada.","🧠 Memória NeuroLink.","🧭 Skills sob demanda.","🔮 Consulta ao Oráculo.","✍🏼 Self-Learning Harvest.","🔁 Replay de aprendizado.","💎 Promoção de memória validada.","🌟 Knowledge Compiler.","📋 Saídas estruturadas e verificadas por esquema.","📊 Avaliação paralela de decisões e suas probabilidades.","👀 Seis Olhos — Gojo Domain / Skill Evolution: observar capacidades utilizadas, selecionar evidências, rejeitar contradições, preparar a menor melhoria, aprender com falhas e preservar a continuidade da intenção."] as const;
@@ -200,7 +200,7 @@ export function MapaMetabolicoCristal({ compacto = false }: { compacto?: boolean
             </div>
             <div className="rounded-lg border border-neon-purple/30 p-4">
               <h4 className="text-sm font-semibold text-neon-purple">⚙️ Metabolismo funcional</h4>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Goal → GREEN_STATE/receita → owner/capability → Hermes → ação → teste → readback → Reality Judge/contraprova → receipt → HUD/Obsidian → NEXT_CURSOR.</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Objetivo → último estado confirmado → responsável → Hermes → execução → teste → verificação independente → comprovante → HUD/Obsidian → NEXT_CURSOR.</p>
             </div>
           </div>
           <p className="text-center text-xs text-muted-foreground">👑 CHEFE → SOL coordena → Hermes executa → 🧿 realidade verifica o efeito → 🫀 Kaizen aprende. Nenhum segundo cérebro, PET executor ou writer.</p>
