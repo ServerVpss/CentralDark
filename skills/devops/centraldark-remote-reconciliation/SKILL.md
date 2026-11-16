@@ -81,7 +81,7 @@ Pitfall: Vite dev mode only reads `.env` and `.env.local`, NOT `.env.production.
 
 ## Mirror body (Samba/VM) → main
 
-Use when a CentralDark tree is exposed over Samba (no `.git`) and a dev server on the VM serves it live. Full recipe: `references/mirror-body-reconciliation.md`.
+Use when a *body* must be brought in line with `origin/main` and Git alone cannot decide it: a CentralDark tree exposed over Samba (no `.git`) served live by the VM dev server, **or** a Git checkout that is far behind and dirty. Both ask the same question — stale copy or real local work? Full recipe: `references/mirror-body-reconciliation.md`.
 
 Always-on rules for this body:
 

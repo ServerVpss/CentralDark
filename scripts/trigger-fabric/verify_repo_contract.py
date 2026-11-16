@@ -1234,6 +1234,18 @@ check('.github/workflows/dependabot-auto-merge.yml',[
  "source: 'dependabot'",
  'DEPENDABOT_SENTINEL_ROUTE=DISPATCHED',
 ], classification='DEPENDABOT_TO_SENTINEL_API_ROUTE')
+
+check('.github/workflows/dependabot-auto-merge.yml',[
+ 'NO_EFFECTIVE_GATE_PASS',
+ 'SKIPPED_IS_PASS=0',
+ 'effectiveSuccessConclusions',
+], classification='SKIPPED_CHECK_IS_NOT_PASS')
+check_absent('.github/workflows/dependabot-auto-merge.yml',[
+ r"\['success',\s*'neutral',\s*'skipped'\]",
+], classification='SKIPPED_CHECK_NEVER_COUNTS_AS_SUCCESS')
+check_absent('apps/modulos/hub/package.json',[
+ r'"tailwindcss":\s*"\^?4\.',
+], classification='HUB_TAILWIND4_REQUIRES_MIGRATION_BEFORE_BUMP')
 check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ENGINE_BINDING.yml',[
  'engine_is_owner: false','prompt_consumer: apps/modulos/HERMES-CORE/prompts/hermes-core.md','LOAD_REFERENCE',
  'agent_runtimes:', 'role: EXECUTION_CONTINUITY_RUNTIME', 'model_catalog_member: false', 'selectable_as_engine: false',
