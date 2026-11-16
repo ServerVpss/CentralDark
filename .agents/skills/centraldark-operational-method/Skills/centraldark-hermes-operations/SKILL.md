@@ -32,18 +32,18 @@ This is a *handoff instruction using a callable script*, not a claim that a nati
 <!-- CENTRALDARK_HERMES_SUDO_INTERACTIVE_PROMPT_20261109 -->
 ### 🔐 Janela administrativa do Hermes — reutilizar o prompt interativo
 
-**Intenção:** quando o CHEFE pedir para **reabrir a mesma janela "Sudo Password Required"**, recuperar a rota original, sem responder com uma explicação genérica nem criar ferramenta de autenticação paralela.
+## Registro histórico separado
 
-**Proveniência (2026-11-09):** na sessão do Hermes foi exibida uma solicitação interativa de senha durante a checagem de viabilidade de instalação. O próprio Hermes relatou inspecionar `/opt/hermes/tools/terminal_tool_sudo.py`, com a função `_prompt_for_sudo_password()`, apresentação de `SUDO PASSWORD REQUIRED` e invocação pela ferramenta de terminal interativo. Os nomes de arquivo/função e os números de linha relatados são **evidência de sessão, não readback independente desta revisão nem garantia para versões futuras**.
+O registro do prompt administrativo interativo foi preservado no owner documental:
 
-**Rota de reutilização:**
-1. Usar o **terminal interativo original do Hermes**, na superfície onde o prompt surgiu. `delegate_task`, APIs headless e terminais de outro ambiente não reproduzem obrigatoriamente o mesmo pedido.
-2. Identificar a função/gancho `_prompt_for_sudo_password()` no owner instalado, verificar gatilhos de interatividade, comando `sudo` real, cache e condições `NOPASSWD` antes de prometer a janela. O comando `sudo -k -v` foi o gatilho relatado na sessão; **não afirmar que abrirá o prompt sem confirmar o contexto atual**.
-3. Apresentar a solicitação somente pelo **campo seguro da ferramenta**. Senha não deve ser pedida, copiada, gravada ou exibida pelo chat, log, memória, receipt ou Git.
-4. Separar os fatos: `PROMPT_EXIBIDO` não é `SENHA_ACEITA`; `SENHA_ACEITA` não é `ROOT_ATIVO`. `sudo: command not found` / saída 127 significa comando ausente **naquele executor**; não prova ausência universal de rota administrativa.
-5. Se a rota interativa estiver indisponível, registrar `PROMPT=UNAVAILABLE_OR_UNKNOWN` e o motivo material, sem simular janela, contornar política de privilégios ou instalar serviços por inferência.
+```text
+docs/CONSCIENCIA/RECEIPTS/HERMES-SUDO-INTERACTIVE-PROMPT-20261109.md
+```
 
-**Critério de prova:** caminho/versão da ferramenta, superfície interativa, evento real de exibição do prompt e efeito autorizado quando aplicável. `DOCUMENTADO != CONSUMIDO_PELO_RUNTIME`; `UNKNOWN != PASS`.
+A Skill operacional mantém apenas a referência e as regras de segurança. O conteúdo histórico não é instrução automática do Hermes.
+
+`DOCUMENTED != CONSUMED_BY_RUNTIME`
+`UNKNOWN != PASS`
 
 <!-- /CENTRALDARK_HERMES_SUDO_INTERACTIVE_PROMPT_20261109 -->
 
