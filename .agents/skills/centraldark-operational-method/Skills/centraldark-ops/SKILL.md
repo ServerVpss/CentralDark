@@ -23,6 +23,10 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 - One writer per scope. Restart only the named PM2 process. Never `restart all`.
 - ERR_MODULE_NOT_FOUND on a CentralDark module is not a license to fabricate a stub: do not create an empty module just to make the test green. Search git history for the refactor commit that removed it (`git log --all -- <path>`), locate the legacy owner (often `src/legacy/.../*.original.*.txt` or a moved `dist/`), and restore the real implementation from there. Verify with `node -e "import('./path').then(()=>console.log('IMPORT_OK'))"` before running the test suite. The test's own git/spawn buffer limits (ENOBUFS on huge repos) are environment issues, not import failures — classify them separately.
 
+## Communication operational contract
+
+Write reports in clear Portuguese first: result, evidence, risk, correction, and next step. Every material finding must name its source (`GitHub`, `Casa`, `Hostinger`, log, or real test) and confidence (`CONFIRMADO`, `PROVÁVEL`, `DESCONHECIDO`, or `BLOQUEADO`). Never present illustrative counts, hypotheses, or historical claims as current runtime facts; counts and SHAs require a measured readback. Keep technical paths, lines, and identifiers available as proof without letting them obscure the decision.
+
 ## Autonomia do Hermes na VPS — mesma missão, sem micro-passos
 
 A autorização vigente do CHEFE permite que Hermes conclua **sequências operacionais reversíveis dentro do owner autorizado**, inclusive scripts `.sh` locais e skills da CentralDark, sem voltar ao humano em cada leitura, correção, teste, commit e readback. Executar em lote até PASS da cláusula provada ou uma pendência material nomeada; registrar receipt no **PR ativo compatível** (nesta missão, **#1788**) e aplicar a lei do mesmo HUD **ENTROU, TEM QUE SELAR**.
