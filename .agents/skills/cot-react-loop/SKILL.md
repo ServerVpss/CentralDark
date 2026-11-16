@@ -820,7 +820,9 @@ STOP_SUCCESS=PROIBIDO
 VERIFIED=PROIBIDO
 ```
 
-## 16. Saída obrigatória
+## 16. Saída estruturada obrigatória para o recibo técnico
+
+O esquema abaixo pertence ao registro técnico do ciclo, não é modelo de resposta conversacional. Ao CHEFE, comunicar resultado e evidência em linguagem natural, sem perder riscos ou pendências relevantes.
 
 ```text
 MISSION_ID=

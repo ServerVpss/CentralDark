@@ -134,3 +134,79 @@ Microsoft `microsoft/vscode`, `microsoft/vscode-wiki/How-to-Contribute.md`, `mic
 - **RECIBO OWNER HERMES** scripts/hermes/verified-checkpoint.py mission centraldark-hermes-envelope-20261107, step codeoss-11452-compile-electron-runtime-cli-pass-20261108, status VERIFIED_100, HASH_CHAIN_PASS 10 events, receipt SHA256 8573d5515444fa686bf55b2c72ff3b68c16c8859245fa316fdcc243288e70715.
 - **LIMITES**: Foi executado CLI --version, nao janela de GUI do build em smoke test; nenhum instalador .exe distributavel, nenhum gate de CentralDark cockpit ou branded executable realizado; nao equivale a DESKTOP_FIXED_POINT. Mantidos Visual Studio Code existente e seus terminais, sem resets.
 - **NEXT_CURSOR**: testar janela GUI Code-OSS compilada com readback visual independente e sem confundir VSCode ja instalado; validar resources/product, cockpit e owner de instalador nativo ja existente. Reutilizar Skill Mae e CUA via Hermes; capturar logs, contraprova, sem criacao paralela.
+
+<!-- CENTRALDARK_HARNES_CODEOSS_PRODUCT_20261109 -->
+## CentralDark Harnes — branding nativo Code-OSS (Casa, 09/11/2026)
+
+**Decisão do CHEFE:** usar literalmente **CENTRALDARK HARNES** como nome exibido no Code-OSS, mantendo o fonte original, menus, Explorer, extensões e modo DEV. Não substituir identificadores técnicos às cegas.
+
+**Owner físico confirmado:** `C:\CENTRALDAR DESKTOP\centraldark desktop-1.145.2\product.json` (fonte Code-OSS ZIP; não é um checkout Git) e `src/vs/platform/product/common/product.ts` (fallback de produto no modo web). `projeto/` continua junction para F:\CentralDark; não confundir com a fonte do Code-OSS.
+
+**Mapeamento na fonte (rg em src/build/scripts; omitidos node_modules, out, dist e diretórios test):** 89 arquivos citam `product.json`; 55 citam `productService.nameLong` e 36 citam `productService.nameShort`. Pontos importantes: `src/vs/workbench/contrib/welcomeGettingStarted/browser/gettingStarted.ts`, `src/vs/workbench/browser/parts/titlebar/windowTitle.ts`, `src/vs/platform/product/common/product.ts`, `build/lib/electron.ts` e `build/gulpfile.vscode.win32.ts`. `build/vite/workbench-vite.html` não traz `nameLong/nameShort`, então a prévia web usava o fallback de `product.ts`.
+
+**Delta aplicado na Casa:** `product.json`: `nameShort`, `nameLong`, `win32DirName` e `win32NameVersion` = `CENTRALDARK HARNES`; `win32ShellNameShort` = `CENTRALDARK &HARNES`; `product.ts` no fallback web: `CENTRALDARK HARNES Dev`. Identificadores internos `applicationName=code-oss`, `dataFolderName=.vscode-oss`, `urlProtocol=code-oss`, mutex `vscodeoss`, IDs/GUIDs, licenças, URLs Microsoft e IDs de extensões preservados para não alterar dados, integração, privilégios nem atualização silenciosamente.
+
+**Conferido localmente:** `product.json` parse Node OK; SHA256 `ca1b5f1bb455530752402fb2f7d7a0eb6915980d4ae0e7bf4d47b704cf91910b`; `product.ts` SHA256 `752b0c1c4a1637735bfdeff9d21092530c453656b60367f0788f222d259d786f`; Vite Code-OSS HTTP 200 em porta 5199 e módulo transformado contendo `CENTRALDARK HARNES Dev`, sem `Code - OSS Dev`; Vite Bridge porta 5173 permanece HTTP 200. Originais guardados na pasta `_archive` já existente com prefixo `code-oss-product-pre-harnes-20261109-214841` e `code-oss-product-web-pre-harnes-20261109-214841`. Alteração visível na UI após refresh ainda depende de inspeção visual; pacote Electron não foi reconstruído.
+
+**Escopo de publicação:** este registro da receita está na main; os dois arquivos da fonte Code-OSS alterados na Casa **não** ficam automaticamente sincronizados no GitHub, pois aquela pasta não possui `.git`. Não declarar instalação ou pacote final atualizado. Próximo passo: observar nome na tela DEV e continuar branding incremental no mesmo `product.json`, sem alterar identificadores do sistema antes de preparar migração.
+<!-- /CENTRALDARK_HARNES_CODEOSS_PRODUCT_20261109 -->
+
+<!-- CENTRALDARK_CODEOSS_WORKSPACE_EXTENSION_MAP_20261109 -->
+## Workspace do CHEFE e tradução PT-BR — migração segura para Harnes (09/11/2026)
+
+**Pedido do CHEFE:** não perder o ambiente completo do VS Code original ao transformar a distribuição Code-OSS em CENTRALDARK HARNES. Preservar scripts, workspace, terminal, extensões, perfis e organização; evitar clones cegos do AppData ou novo sistema paralelo.
+
+**Mapeamento lido na Casa (Windows SEGREDO, sem extrair segredos):** fonte do VS Code original em `%USERPROFILE%\.vscode\extensions` com **95 diretórios de extensão**; configuração original em `%APPDATA%\Code\User` (`settings.json`, `keybindings.json`, `mcp.json`, perfis, globalStorage, workspaceStorage, History, snippets, prompts, sync e caches). `profiles/` com dois perfis, um identificado como `381acb8`; `workspaceStorage` com 34 entradas; `globalStorage` com 25; `mcp` com 8. **Não copiar diretamente** banco, credenciais, OAuth, tokens, sessões, mcp.json ou caches vivos; requer conciliação e relogin quando aplicável.
+
+**Workspace original, reutilizado sem cópia:** `F:\CentralDark\CentralDark.code-workspace` com as pastas `.` (raiz), `./scripts`, `./apps`, `./docs`, `./infra`, recomendações de extensões e configurações locais. Workspace SSH distinto em `F:\CentralDark\CentralDark sshSegredo-VPS.code-workspace` (URIs remotos). `F:\CentralDark\.vscode\` tem `settings.json`, `tasks.json`, `launch.json`, `extensions.json` e `argv.json` — aproveitar os mesmos arquivos e não substituir alterações atuais. O perfil original também tem `agent-sessions.code-workspace` com folders vazio; ele não substitui o principal.
+
+**Idioma reaproveitado:** extensão instalada `ms-ceintl.vscode-language-pack-pt-br-1.131.2026090407`, com 103 arquivos/2.664.319 bytes. Copiada para o diretório de extensões isolado `%USERPROFILE%\.vscode-oss\extensions` com mesmo nome e comparação SHA256 arquivo a arquivo, **103/103 iguais**; original VS Code intacto. O arquivo principal `translations/main.i18n.json` existe. Para inicialização nativa, usar `--locale=pt-br` e `--extensions-dir=%USERPROFILE%\.vscode-oss\extensions`; tradução visual de todos os menus e compatibilidade com a versão 1.145.2 ainda merecem teste visual.
+
+**Execução nativa:** a distribuição do Code-OSS 1.145.2 já contém `.build\electron\Code - OSS.exe` e `out/`. Foi iniciada a partir da pasta da própria source, com argumento `.` antes de opções do VS Code (necessário para Electron não confundir `--extensions-dir` com a pasta do aplicativo), `--locale=pt-br`, diretório isolado de extensões e o workspace principal existente. Janela observada no PID 15036, título `Welcome - CentralDark (Workspace) - CENTRALDARK HARNES Dev`; o VS Code original permaneceu aberto. Uma primeira tentativa sem `.` abriu erro do Electron (`Cannot find module <extensions-dir>`), foi fechada apenas aquela tentativa, relançada corretamente e conferida.
+
+**Limite declarado:** abrir workspace com sucesso não equivale a migrar as 95 extensões, layouts, barras, estado de painéis, abas, terminais, login e sessão dos agentes. O workspace aponta para as pastas reais; os arquivos reais não foram clonados. Tradução instalada na pasta nativa, mas não há evidência de que a prévia Vite em localhost 5199 carrega a mesma extensão; Vite web e Electron não são idênticos. Não publicar dados particulares do AppData em GitHub.
+
+**Próximo passo:** ver visualmente menus e Explorer em português na janela nativa; comparar preferências sem segredos e pacotes das demais extensões com o novo Code-OSS, instalando/reutilizando uma a uma quando compatíveis; conferir os dois workspaces existentes, terminal PowerShell, tarefas e atalhos; integrar a experiência ao mesmo owner. Preservar seleção de perfil e sessões existentes sem reset, sincronização cega ou descarte.
+<!-- /CENTRALDARK_CODEOSS_WORKSPACE_EXTENSION_MAP_20261109 -->
+
+<!-- CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109 -->
+## PT-BR na versão web do Code-OSS Vite — 09/11/2026
+
+**Intenção do CHEFE:** primeiro alinhar o idioma da versão web DEV (5199) com o Code-OSS Electron nativo, sem rebuild nem um segundo tradutor; preservar a capacidade de trabalhar nos dois em paralelo com o Remote Bridge (5173). Extensões e APIs web/nativas serão verificadas por compatibilidade real; igualdade de fonte não equivale a mesma disponibilidade de ambiente.
+
+**Owner editado na Casa:** `C:\CENTRALDAR DESKTOP\centraldark desktop-1.145.2\build\vite\vite.config.ts`. Aproveitado o pacote `ms-ceintl.vscode-language-pack-pt-br-1.131.2026090407` já existente em `%USERPROFILE%\.vscode-oss\extensions` (copiado de VS Code, 103 arquivos previamente conferidos). Sem alterações nos arquivos `src/vs` nem no sistema de extensões do usuário.
+
+**Como funciona:** plugin pequeno `centralDarkPtBrSourceNlsPlugin()` no Vite, com marcador `CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109`, lê `translations/main.i18n.json` do pacote existente, encontra os módulos `vs/...` correspondentes e usa o parser TypeScript já instalado para substituir **somente a mensagem literal** em chamadas `localize`/`localize2` com chave traduzida. Mantém a chamada do Code-OSS e o texto inglês quando não houver entrada correspondente. Não cria dicionário, watcher, daemon ou rota paralela. Backup do Vite config anterior no diretório `_archive` existente: `vite-config-before-ptbr-20261109.ts`. No modo DEV, Vite precisa recarregar configuração para aplicar mudanças.
+
+**Resultado de leitura no servidor local:** `GET http://127.0.0.1:5199/src/vs/workbench/browser/actions/workspaceActions.ts` respondeu HTTP 200 e continha `Fechar Workspace` e `Duplicar Espaço de trabalho`, sem o literal antigo `localize2("closeWorkspace", "Close Workspace")`. Página de trabalho Vite respondeu HTTP 200; Bridge 5173 também HTTP 200. O carregamento inicial dos módulos ficou lento em alguns pedidos (aproximadamente 18–28 s), então ainda é preciso medir desempenho e observar visualmente a UI após refresh; este teste não demonstra todos os menus traduzidos, nem extensão nativa funcionando no navegador.
+
+**Restrições:** sem substituir tradução oficial, sem remover o pacote original, sem habilitar APIs nativas no browser, sem copiar credenciais do AppData ou desabilitar segurança. Fonte ZIP sem `.git`; esta anotação na main não publica automaticamente as alterações do `vite.config.ts` feitas na Casa. Próximo passo: conferir tela web atualizada, localizar possíveis textos sem tradução e assegurar compatibilidade/performance das extensões e ferramentas em cada superfície.
+<!-- /CENTRALDARK_VITE_PTBR_NATIVE_NLS_20261109 -->
+
+<!-- CENTRALDARK_HARNES_EXTENSIONS_NLS_DEV_20261109 -->
+## Harnes Electron DEV — extensões e diagnóstico PT-BR (09/11/2026)
+
+**Pedido:** levar todas as extensões do VS Code Windows original para o CENTRALDARK HARNES, preservar a origem e concluir a tradução do aplicativo nativo, sem reconstruir a distribuição inteira ou inventar tradutor paralelo.
+
+**Execução Casa SEGREDO (readback):** `C:\Users\Administrador\.vscode\extensions` contém 95 diretórios; copiados por `robocopy /E /COPY:DAT /DCOPY:DAT /R:1 /W:1 /MT:8` individualmente para `C:\Users\Administrador\.vscode-oss\extensions`, sem excluir ou modificar a origem. Resultado `EXTENSION_COPY_DONE=95/95 FAIL=` em 63.244 ms. Nova leitura: `SOURCE=95 DEST=95 MISSING=0 MANIFEST_MISSING=0`; nomes incluem PT-BR, GitLens, Claude, Python, PowerShell, Codex. A cópia não demonstra ativação, login, compatibilidade nem funcionamento de todas as extensões. É necessário recarregar o Harnes e verificar a lista e os hosts de extensões.
+
+**Diagnóstico de idioma:** processo nativo `Code - OSS.exe` PID 15036 executado com `--locale=pt-br` e `--extensions-dir=C:\Users\Administrador\.vscode-oss\extensions`. Filhos Electron recebem `--lang=pt-BR`. `%APPDATA%\code-oss-dev\languagepacks.json` contém o pacote `ms-ceintl.vscode-language-pack-pt-br-1.131.2026090407` e traduções do core e extensões. Entretanto, `src/vs/base/node/nls.ts` retorna `defaultNLSConfiguration` se `process.env['VSCODE_DEV']` está ativo; `src/vs/nls.ts` também retorna mensagens originais quando as chamadas não foram convertidas em índices de build. Arquivos `nls.keys.json` e `nls.messages.json` não estão presentes em `out/vs` ou `resources/app/out/vs`. Portanto, **idioma PT-BR nativo continua PENDENTE**: não basta retirar uma condição do resolver, nem alterar `argv.json`. Precisa reutilizar o pipeline NLS existente, gerar/aplicar as tabelas de mensagens compatíveis e testar na janela nativa sem perder o modo DEV. A versão Vite 5199 tem tradução parcial comprovada por módulo servido, mas não é prova do Electron.
+
+**Próximo cursor:** recarregar o Harnes para indexar as 95 extensões, provar a lista e detectar falhas de ativação; inspecionar o pipeline NLS do Code-OSS para um ajuste incremental compatível com DEV, executar e medir os menus PT-BR na janela nativa. Nenhuma modificação de código de idioma nativo foi realizada nesta etapa; não declarar pronto.
+<!-- /CENTRALDARK_HARNES_EXTENSIONS_NLS_DEV_20261109 -->
+
+<!-- CENTRALDARK_HARNES_WORKSPACE_PROFILE_TRANSFER_20261109 -->
+## 09/11/2026 — Transporte do workspace aberto para Harnes DEV
+
+**Intenção:** preservar o ambiente atual do VS Code original e migrar para o Harnes sem perda de estado; não declarar autenticação de contas sem prova.
+
+**Mapa observado na Casa:** quatro displays (DISPLAY1 direita 1080×1920; DISPLAY2 esquerda 1080×1920; DISPLAY3 principal inferior 1920×1080; DISPLAY4 superior 1920×1080). VS Code original PID 34276, título `Hermes (...) - Sem título (Workspace) - Visual Studio Code [Administrador]`; Harnes PID 15036. Workspace atual salvo pelo VS Code original em `%APPDATA%\Code\Workspaces\1794032971259\workspace.json`, com **duas pastas**: `F:/CentralDark/apps/modulos/Bolt` e `C:/CENTRALDAR DESKTOP/centraldark desktop-1.145.2`.
+
+**Delta na Casa:** fonte salva copiada com conteúdo e SHA-256 idênticos para `F:\CentralDark\CentralDark-Harnes.code-workspace` (extensão reconhecida pelo Code-OSS), sem sobrescrever `F:\CentralDark\CentralDark.code-workspace`. Harnes aberto com o arquivo novo, `--locale=pt-br` e `--extensions-dir=%USERPROFILE%\.vscode-oss\extensions`. Prova de readback: janela `Welcome - CentralDark-Harnes (Workspace) - CENTRALDARK HARNES Dev` e `%APPDATA%\code-oss-dev\User\workspaceStorage\...\workspace.json` aponta para `file:///f%3A/CentralDark/CentralDark-Harnes.code-workspace`.
+
+**Configurações:** `%APPDATA%\Code\User\settings.json`, `keybindings.json`, `agent-sessions.code-workspace`, `snippets` e `prompts` copiados para `%APPDATA%\code-oss-dev\User`, preservando a origem; arquivos de texto verificados por SHA-256 (settings `D52AB2FCF869352C1328009477FA0971B5DB42ED8FE039E600B28340E52B664D`, keybindings `4B26E65E0FC443574C392E1E73E6BB69D61A5436C5FBC32D2F761A07ED8AB904`). `snippets` tinha zero arquivos; `prompts` tinha um e foi copiado. As 95 extensões já estavam copiadas e conferidas na etapa anterior.
+
+**Travas/pendências reais:** não copiar automaticamente `%APPDATA%\Code\User\globalStorage`, `workspaceStorage/state.vscdb`, tokens, segredos ou cofres de autenticação. Logins do VS Code, Hermes e extensões requerem fluxo de login suportado pelo aplicativo, e não foram provados no Harnes. Abas/painéis e sessões não foram restaurados/contraprovados. O PT-BR nativo DEV continua pendente. VS Code original **não foi fechado** porque ainda é referência funcional para comparar layout e autenticação; autorização para fechar não equivale a comprovação de migração concluída.
+
+**NEXT_CURSOR:** comparar abas e painéis do original com Harnes; testar extensões e autenticações pelo mecanismo oficial; concluir NLS nativo; somente após contraprova e nenhuma pendência de dados não salvos, encerrar o original com segurança. Reutilizar o mesmo owner e scripts operacionais.
+<!-- /CENTRALDARK_HARNES_WORKSPACE_PROFILE_TRANSFER_20261109 -->
