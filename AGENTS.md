@@ -340,6 +340,8 @@ BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true
 AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
 
+**Gatilhos MVP/teste autorizado (16/11/2026):** `estamos em MVP`, `em teste`, `não é nada oficial`, `autonomia executa teste autorizado` e `criar senhas quando pedir` acionam a receita em [REGRA-SECRETS-E-VARIAVEIS.md](docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md#mvp-e-teste-autorizado--autonomia-sem-bloqueio-artificial-16112026). Em sistema autorizado do CHEFE, executar teste reversível e entregar usuário/senha **de demonstração gerados** no chat privado quando solicitado; não exigir escolha de senha humana como etapa vazia. `SENHA_GERADA != CONTA_CRIADA != LOGIN_TESTADO`; preservar fronteiras de produção, terceiros e publicação de segredos.
+
 Texto legado conflitante perde para o owner canônico.
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
