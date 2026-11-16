@@ -47,7 +47,7 @@ HISTORICAL_PROOF != CURRENT_STATE
 
 # FORMATO CANÔNICO DE COMITÊ / RESPOSTA DE PROVA
 
-Toda resposta material de `#ACORDAR`, auditoria, comitê, status ou contraprova deve organizar os fatos assim:
+Todo **registro técnico estruturado** de `#ACORDAR`, auditoria, comitê, status ou contraprova deve organizar os fatos assim. Na **conversa humana**, explicar o que aconteceu, o que foi comprovado e o próximo passo em português natural, sem imprimir campos internos como regra geral. Os identificadores literais permanecem nos artefatos e na rastreabilidade:
 
 ```text
 # CATEGORIA
