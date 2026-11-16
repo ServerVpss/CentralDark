@@ -102,6 +102,47 @@ else
   say "SYNC_MODE=UPDATED_TO_MAIN_SHA"
 fi
 
+# --- housekeeping: prune stale clean worktrees inside the scratch root ---
+# Only checked-out files are removed; branch refs and commits stay in the repo, so
+# nothing is lost. Dirty worktrees, the canonical checkout and the sync mirror are
+# never touched. A failed removal (dirty, locked) is skipped, never forced.
+WORKTREE_TTL_HOURS="${CENTRALDARK_WORKTREE_TTL_HOURS:-24}"
+WORKTREE_PRUNE_MAX="${CENTRALDARK_WORKTREE_PRUNE_MAX:-10}"
+PRUNE_REMOVED=0
+PRUNE_SKIPPED=0
+scratch_root="$(dirname "$ROOT")"
+now_epoch="$(date +%s)"
+while IFS= read -r wt_path; do
+  [ -n "$wt_path" ] || continue
+  [ "$wt_path" = "$ROOT" ] && continue
+  [ "$wt_path" = "$SYNC_ROOT" ] && continue
+  case "$wt_path" in
+    "$scratch_root"/*) ;;
+    *) PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue ;;
+  esac
+  [ -d "$wt_path" ] || continue
+  if [ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  wt_age_s=$(( now_epoch - $(stat -c %Y "$wt_path" 2>/dev/null || echo "$now_epoch") ))
+  if [ "$wt_age_s" -lt $(( WORKTREE_TTL_HOURS * 3600 )) ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  if [ "$PRUNE_REMOVED" -ge "$WORKTREE_PRUNE_MAX" ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  if git -C "$ROOT" worktree remove "$wt_path" >/dev/null 2>&1; then
+    PRUNE_REMOVED=$((PRUNE_REMOVED + 1))
+    say "WORKTREE_PRUNED=$wt_path"
+  else
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1))
+  fi
+done < <(git -C "$ROOT" worktree list --porcelain | awk '/^worktree /{print $2}')
+git -C "$ROOT" worktree prune >/dev/null 2>&1 || true
+say "WORKTREE_PRUNE_REMOVED=$PRUNE_REMOVED"
+say "WORKTREE_PRUNE_SKIPPED=$PRUNE_SKIPPED"
+say "WORKTREE_PRUNE_TTL_HOURS=$WORKTREE_TTL_HOURS"
+
 sync_head="$(git -C "$SYNC_ROOT" rev-parse HEAD)"
 [ "$sync_head" = "$main_sha" ] || fail "SYNC_HEAD_DOES_NOT_MATCH_REMOTE_MAIN"
 [ -z "$(git -C "$SYNC_ROOT" status --porcelain)" ] || fail "SYNC_WORKTREE_DIRTY_AFTER_CLEAN"
@@ -130,12 +171,12 @@ else
 fi
 printf '%s\n' "$SKILL_SYNC_OUTPUT"
 
-python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" <<'PY'
+python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" "$PRUNE_REMOVED" "$PRUNE_SKIPPED" "$WORKTREE_TTL_HOURS" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced = sys.argv[1:]
+output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced, prune_removed, prune_skipped, prune_ttl = sys.argv[1:]
 text = Path(output).read_text(encoding="utf-8", errors="replace")
 start = text.find("{")
 if start < 0:
@@ -154,6 +195,9 @@ receipt = {
     "sync_mode": "NOOP_ALREADY_AT_MAIN_SHA" if already_synced == "true" else "UPDATED_TO_MAIN_SHA",
     "api_verify": api_verify,
     "api_main_sha": api_main_sha or None,
+    "worktrees_pruned": int(prune_removed),
+    "worktrees_skipped": int(prune_skipped),
+    "worktree_ttl_hours": int(prune_ttl),
     "boot_status": status,
     "hud_status": hud.get("status"),
     "hud_reason": hud.get("reason"),
