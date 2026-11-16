@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
-import { extractReleaseHighlights, latestMergedPrTitles, updateNotesSource } from './update-notes'
+import { extractReleaseHighlights, latestMergedPrTitles, updateNotesSource, updateNotesUrl } from './update-notes'
 
 describe('update notes', () => {
+
+  it('links update notes to the CentralDark fork, not the Hermes upstream', () => {
+    const status = { currentSha: '23103a2', targetSha: '6546972' }
+    expect(updateNotesUrl({ kind: 'prs' }, status)).toBe(
+      'https://github.com/ServerVpss/CentralDark-hermes-agent/compare/23103a2...6546972'
+    )
+    expect(updateNotesUrl({ kind: 'release', tag: 'v0.23.1' }, status)).toBe(
+      'https://github.com/ServerVpss/CentralDark-hermes-agent/releases/tag/v0.23.1'
+    )
+  })
   it('summarizes a release as its highlight headlines, and falls back to the first bullet list', () => {
     const major = [
       '# Hermes Agent v0.22.0',
