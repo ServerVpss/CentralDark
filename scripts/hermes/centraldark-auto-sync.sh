@@ -101,8 +101,10 @@ status = data.get("status", "UNKNOWN")
 hud = data.get("hud_first", {})
 if status != "CANONICAL_MAIN_LOADED" or hud.get("status") != "PASS":
     raise SystemExit(f"BOOT_GATE_NOT_PASS status={status} hud={hud.get('status', 'UNKNOWN')}")
+skill_status = "PASS" if int(skill_sync_rc) == 0 and "MAIN_RUNTIME_LOCK=PASS" in skill_sync_output else "BLOCKED_OR_UNKNOWN"
+overall_status = "PASS" if skill_status == "PASS" else "PARTIAL"
 receipt = {
-    "status": "PASS",
+    "status": overall_status,
     "sync_root": sync_root,
     "main_sha": main_sha,
     "boot_status": status,
@@ -111,12 +113,12 @@ receipt = {
     "runtime_preflight": data.get("canonical_boot", {}).get("runtime_preflight_contract", {}).get("status"),
     "canonical_consumption": data.get("canonical_boot", {}).get("canonical_consumption", {}).get("status"),
     "skill_sync_rc": int(skill_sync_rc),
-    "skill_sync_status": "PASS" if int(skill_sync_rc) == 0 and "MAIN_RUNTIME_LOCK=PASS" in skill_sync_output else "BLOCKED_OR_UNKNOWN",
+    "skill_sync_status": skill_status,
 }
 path = Path(receipt_dir)
 path.mkdir(parents=True, exist_ok=True)
 (path / "last.json").write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print("CENTRALDARK_AUTO_SYNC=PASS")
+print(f"CENTRALDARK_AUTO_SYNC={overall_status}")
 for key, value in receipt.items():
     print(f"{key.upper()}={value}")
 PY
