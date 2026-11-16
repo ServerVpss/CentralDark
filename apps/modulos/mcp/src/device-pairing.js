@@ -1,12 +1,13 @@
 import { createHash, randomBytes, randomUUID, timingSafeEqual } from "node:crypto";
-import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, statSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, isAbsolute, join } from "node:path";
 import express from "express";
 
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
 const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
-const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || "<caminho-vps>";
+const DEFAULT_REGISTRY_PATH = process.env.CENTRALDARK_DEVICE_REGISTRY_PATH || join(homedir(), ".centraldark", "mcp-device-registry.json");
 
 const sha256 = (value) => createHash("sha256").update(String(value)).digest("hex");
 const safeEqual = (a, b) => {
@@ -19,6 +20,7 @@ const cleanText = (value, fallback = "") => String(value ?? fallback).trim().sli
 
 export function createDevicePairingStore(options = {}) {
   const registryPath = options.registryPath || DEFAULT_REGISTRY_PATH;
+  if (!isAbsolute(registryPath)) throw new Error("DEVICE_REGISTRY_PATH_NOT_ABSOLUTE");
   const ttlMs = Number(options.ttlMs || DEFAULT_TTL_MS);
   const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);
   const deviceTokenTtlMs = Number(options.deviceTokenTtlMs || DEFAULT_DEVICE_TOKEN_TTL_MS);
@@ -27,7 +29,13 @@ export function createDevicePairingStore(options = {}) {
 
   function readRegistry() {
     if (!existsSync(registryPath)) return { version: 1, devices: [] };
-    const parsed = JSON.parse(readFileSync(registryPath, "utf8"));
+    if (!statSync(registryPath).isFile()) throw new Error("DEVICE_REGISTRY_PATH_NOT_FILE");
+    let parsed;
+    try { parsed = JSON.parse(readFileSync(registryPath, "utf8")); }
+    catch (error) {
+      if (error instanceof SyntaxError) throw new Error("DEVICE_REGISTRY_INVALID_JSON");
+      throw error;
+    }
     if (!parsed || !Array.isArray(parsed.devices)) throw new Error("DEVICE_REGISTRY_INVALID");
     return parsed;
   }
@@ -84,13 +92,13 @@ export function createDevicePairingStore(options = {}) {
       approved: Boolean(item.deviceId),
     };
   }
-  function approveWeb({ pairId, code, nonce }) {
+  function approveWeb({ pairId, code, nonce, ownerUserId = null }) {
     const item = pendingConsent(pairId);
     if (!item || item.approved) return { ok: false, error: "pair_expired_or_completed" };
     if (!safeEqual(item.nonce, nonce)) return { ok: false, error: "pair_consent_invalid" };
-    return approve({ pairId, code });
+    return approve({ pairId, code, ownerUserId });
   }
-  function approve({ pairId, code, deviceName, executor, surface }) {
+  function approve({ pairId, code, deviceName, executor, surface, ownerUserId = null }) {
     prune();
     const item = pending.get(String(pairId));
     if (!item || item.expiresAt <= now()) return { ok: false, error: "pair_expired_or_missing" };
@@ -101,6 +109,7 @@ export function createDevicePairingStore(options = {}) {
     const registry = readRegistry();
     registry.devices.push({
       device_id: deviceId,
+      owner_user_id: ownerUserId || null,
       device_name: cleanText(deviceName, item.meta.deviceName),
       executor: cleanText(executor, item.meta.executor),
       surface: cleanText(surface, item.meta.surface),
@@ -155,6 +164,17 @@ export function createDevicePairingStore(options = {}) {
     writeRegistry(registry);
     return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
   }
+  // Logout can revoke only the device that proves possession of its own token.
+  function revokeSelf({ token, deviceId }) {
+    const registry = readRegistry();
+    const tokenHash = sha256(token || "");
+    const idx = registry.devices.findIndex(entry =>
+      entry.device_id === deviceId && safeEqual(entry.token_hash || "", tokenHash));
+    if (idx < 0) return { ok: false, error: "invalid_device_token" };
+    registry.devices.splice(idx, 1);
+    writeRegistry(registry);
+    return { ok: true, device_id: deviceId };
+  }
   function revoke({ deviceId }) {
     if (!deviceId || typeof deviceId !== "string") return { ok: false, error: "device_id_required" };
     const registry = readRegistry();
@@ -172,7 +192,7 @@ export function createDevicePairingStore(options = {}) {
       status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
     }));
   }
-  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, listDevices, registryPath };
+  return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, revokeSelf, listDevices, registryPath };
 }
 
 export function createDevicePairingRouter(options = {}) {
@@ -224,6 +244,10 @@ export function createDevicePairingRouter(options = {}) {
   });
   router.post("/heartbeat", (req, res) => {
     const result = store.heartbeat({ token: bearerFrom(req), capabilities: req.body?.capabilities });
+    res.status(result.ok ? 200 : 401).json(result);
+  });
+  router.post("/devices/self/revoke", (req, res) => {
+    const result = store.revokeSelf({ token: bearerFrom(req), deviceId: req.body?.device_id });
     res.status(result.ok ? 200 : 401).json(result);
   });
   router.post("/devices/revoke", (req, res) => {

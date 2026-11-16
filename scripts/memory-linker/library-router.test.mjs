@@ -8,6 +8,7 @@ import {
   deriveSourceIdentity,
   destinationsForEntry,
   pickContextualReference,
+  reconcileLibraryCoverage,
   reconcileSourceIdentity,
   routeEntries,
   validateCatalog,
@@ -194,6 +195,62 @@ test('ids duplicados falham fechado', () => {
   const broken = structuredClone(catalog);
   broken.entries.push(structuredClone(broken.entries[0]));
   assert.throws(() => validateCatalog(broken), /DUPLICATE_ENTRY_ID/);
+});
+
+
+test('cobertura ignora metadados operacionais e aceita fonte cognitiva catalogada', () => {
+  const c = structuredClone(catalog);
+  c.sources.push({
+    source_id: 'pdf-local', formats: ['pdf'], status: 'INGESTED',
+    sha256: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+    provenance: { provider: 'github', canonical_path: 'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/fonte.pdf' },
+  });
+  const result = reconcileLibraryCoverage({ catalog: c, physicalFiles: [
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md',
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/catalog.json',
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SETORES/setor/sector-manifest.json',
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/fonte.pdf',
+  ]});
+  assert.equal(result.status, 'PASS');
+  assert.deepEqual(result.unregistered_sources, []);
+  assert.deepEqual(result.missing_declared_paths, []);
+  assert.equal(result.catalog_mutated, false);
+});
+
+test('PDF físico sem source_id falha como fonte cognitiva não registrada', () => {
+  const result = reconcileLibraryCoverage({ catalog, physicalFiles: [
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md',
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/orfao.pdf',
+  ]});
+  assert.equal(result.status, 'FAIL');
+  assert.deepEqual(result.unregistered_sources, ['docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/orfao.pdf']);
+  assert.equal(result.catalog_mutated, false);
+});
+
+test('fonte declarada no catálogo mas ausente da árvore falha fechado', () => {
+  const c = structuredClone(catalog);
+  c.sources.push({
+    source_id: 'pdf-ausente', formats: ['pdf'], status: 'INGESTED',
+    sha256: 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
+    provenance: { provider: 'github', canonical_path: 'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/ausente.pdf' },
+  });
+  const result = reconcileLibraryCoverage({ catalog: c, physicalFiles: [
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md',
+  ]});
+  assert.equal(result.status, 'FAIL');
+  assert.deepEqual(result.missing_declared_paths, [{
+    path: 'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/ausente.pdf',
+    source_ids: ['pdf-ausente'],
+  }]);
+});
+
+test('markdown operacional sem catálogo não vira fonte cognitiva por inferência', () => {
+  const result = reconcileLibraryCoverage({ catalog, physicalFiles: [
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md',
+    'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/SESSION-20260909/RECEIPT.md',
+  ]});
+  assert.equal(result.status, 'PASS');
+  assert.deepEqual(result.unregistered_sources, []);
 });
 
 test('identidade estável usa external_id e versão, não nome nem caminho móvel', () => {

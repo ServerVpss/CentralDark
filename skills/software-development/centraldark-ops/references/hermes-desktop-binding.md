@@ -29,7 +29,7 @@ Logs: `desktop.log` + `agent.log`. Agent lines tagged `[YYYYMMDD_HHMMSS_hex]` co
 
 ## Dual measurement
 
-PASS only if two consecutive samples agree on: plane=CASA, host, PID, agent_session_id, workspace `K:\`, log_source. Write `LOGS/CASA/HERMES_DESKTOP/SESSION/CURRENT.json` only after agreement. Do not crystallize as a global rule if they diverge.
+PASS only if two consecutive samples agree on: plane=CASA, host, PID, agent_session_id, workspace `F:\CentralDark`, log_source. Write `F:\CentralDark\LOGS\CASA\HERMES_DESKTOP\SESSION\CURRENT.json` only after agreement. Do not crystallize as a global rule if they diverge.
 
 ## Preview vs runtime
 
