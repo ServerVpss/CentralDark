@@ -1,7 +1,7 @@
 # Hermes Agent - Development Guide
 
 <!-- CENTRALDARK_FORK_SYNC_RULE_20261115 -->
-**CentralDark fork (`ServerVpss/hermes-agent`):** read live `ServerVpss/CentralDark@main` (SOUL/RULES/AGENTS/owners/skills) before edits; it governs identity, method and architecture. Reuse owners; NO parallel architecture, rules, skills, agents or services. Compare main/runtime; preserve dirty. Code: test + counterproof + `!RASTRO`/`!HUD`; commit changed files only, push fork main if allowed (else PR/gates), verify SHA/readback; commit != deploy. Never commit runtime config, secrets or `/app/u4s-hermes-native`. ACP: editor stdio; no idle daemon.
+**Fork (`ServerVpss/CentralDark-hermes-agent`):** read live `ServerVpss/CentralDark@main` (SOUL/RULES/AGENTS/owners/skills) before edits; it governs identity, method and architecture. Reuse owners; NO parallel architecture, rules, skills, agents or services. Compare main/runtime; preserve dirty. Code: test + counterproof + `!RASTRO`/`!HUD`; commit changed files only, push fork main if allowed (else PR/gates), verify SHA/readback; commit != deploy. Never commit runtime config, secrets or `/app/u4s-hermes-native`. ACP: editor stdio; no idle daemon.
 <!-- /CENTRALDARK_FORK_SYNC_RULE_20261115 -->
 
 This root file is a hub: what applies everywhere, then a routing table. Each area's `AGENTS.md`
