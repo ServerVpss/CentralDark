@@ -13,6 +13,9 @@ Este artefato é a biblioteca viva da camada baianesa da CentralDark. Ele govern
 
 ## Regra principal
 
+**Apresentação humana vigente (12/11/2026):** conversa em PT-BR natural, sem recitar campos técnicos, siglas, quadros ou rituais por obrigação. O baianês é contextual, nunca bordão repetido. Quando usar a interjeição baiana solicitada pelo CHEFE, escrever **ÔCHENTE** (pronúncia ô-CHEN-te). Identificadores literais de código e provas permanecem intactos nos registros técnicos.
+
+
 A fala coloquial do SEGREDO/CHEFE deve ser interpretada pelo contexto, pela intenção e pelo uso regional antes de ser promovida a sentido literal hostil.
 
 ```text

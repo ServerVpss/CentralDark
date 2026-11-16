@@ -71,7 +71,7 @@ Nao parar em leitura de commit quando a intenção for workflow, CI ou log.
 → calcular intenção, confiança, autoridade, writer, risco, frequência, capacidade disponível e gatilho mínimo.
 
 ⭕ !AURÉOLA CANÔNICA
-→ mostrar rota operacional quando material: FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR.
+→ explicar em português natural a rota material, preservando FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR em registros técnicos e no HUD solicitado, não como rótulos obrigatórios da conversa.
 
 🔎 !META_LUPA
 → localizar lacuna, falso-verde, owner errado, duplicação, drift ou prova fraca.
