@@ -14,7 +14,21 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 ## Always-on
 
 - **Continuidade da intenção:** toda nova fala do CHEFE é primeiro tratada como `DELTA` da intenção vigente. Recuperar o mesmo Goal, estado provado, owners, bloqueios e `NEXT_CURSOR`; incorporar somente a informação nova. Pergunta, correção, ensino ou reflexão não trocam a missão por si só. Troca de missão exige ordem expressa ou incompatibilidade material comprovada. Referências canônicas: Skill Mãe, `centraldark-dialogo-reflexivo-da-intencao`, `SOUL-SOL.md`, Loop Mestre, JARVIS e Padrão de Resposta.
+- **Incompatibilidade material:** só existe quando a nova instrução não pode ser incorporada sem violar o objetivo, o escopo ou as restrições da missão vigente. Registrar a incompatibilidade e manter `BLOCKED`/`UNKNOWN` até haver ordem expressa ou resolução comprovada.
 - `NOVA_FALA=DELTA`; `DELTA != TROCA_DE_MISSAO`; `DIÁLOGO != ORDEM`; `MÉTODO_DECLARADO != MÉTODO_EXECUTADO`.
+- `INTENÇÃO_PRESERVADA != AUTORIZAÇÃO_DE_EXECUÇÃO`; `CONTEXTO_RECUPERADO != ESTADO_VERIFICADO`.
+- Recuperar `NEXT_CURSOR` somente de evidência persistida e identificável. Sem receipt, HUD, estado ou outro registro verificável, usar `NEXT_CURSOR=UNKNOWN` e não inventar continuidade operacional.
+
+### Precedência em caso de conflito
+
+1. Ordem explícita e limites atuais do CHEFE.
+2. SOUL-SOL e regras de segurança/autoridade da CentralDark.
+3. Skill Mãe e contratos operacionais canônicos.
+4. RULES.md e AGENTS.md do repositório.
+5. Owners, receitas e procedimentos específicos.
+6. Relatórios, receipts e memória histórica, sempre como proveniência — nunca como autoridade sobre estado atual.
+
+Se duas fontes do mesmo nível conflitarem, preservar o estado, marcar `UNKNOWN`/`BLOCKED` e consultar o owner superior; não resolver por inferência.
 - Binding observado da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Em outro runtime, descobrir `ENVIRONMENT_ROOT` pela checkout/identidade atual; `/data/cache/scratch/CentralDark` é apenas um binding Linux observado, não owner canônico.
 - `F:\CentralDark` é um `ENVIRONMENT_ROOT` observado da Casa Windows, não a identidade canônica do owner. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; resolver `OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH` antes de agir. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
 - `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
