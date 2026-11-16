@@ -10,6 +10,7 @@ import type { MemoryProviderStatus, MemoryStatusResponse } from '@/types/hermes'
 
 import { isExternalMemoryProvider } from '../helpers'
 import { ListRow, Pill } from '../primitives'
+import { MemoryWriteReviewDialog } from './write-review-dialog'
 
 const STATUS_TONE: Record<MemoryProviderStatus, 'destructive' | 'success' | 'warn'> = {
   missing: 'destructive',
@@ -207,12 +208,15 @@ export function MemoryLayersPanel({ builtin, profile, provider }: MemoryLayersPa
   }, [attempt, profile, revision])
 
   return (
-    <MemoryLayersSummary
-      builtin={builtin}
-      onRetry={() => setAttempt(n => n + 1)}
-      provider={provider}
-      status={status}
-      statusFailed={failed}
-    />
+    <>
+      <MemoryLayersSummary
+        builtin={builtin}
+        onRetry={() => setAttempt(n => n + 1)}
+        provider={provider}
+        status={status}
+        statusFailed={failed}
+      />
+      <MemoryWriteReviewDialog profile={profile} />
+    </>
   )
 }

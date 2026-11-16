@@ -11,7 +11,8 @@ import type {
   ElevenLabsVoicesResponse,
   MemoryProviderConfig,
   MemoryProviderOAuthStatus,
-  MemoryStatusResponse
+  MemoryStatusResponse,
+  PendingMemoryWritesResponse
 } from '@/types/hermes'
 
 import {
@@ -108,6 +109,27 @@ export function getMemoryStatus(profile?: null | string): Promise<MemoryStatusRe
   return hermesApi<MemoryStatusResponse>({
     ...profileScoped(profile),
     path: '/api/memory'
+  })
+}
+
+export function getPendingMemoryWrites(profile?: null | string): Promise<PendingMemoryWritesResponse> {
+  return hermesApi<PendingMemoryWritesResponse>({ ...profileScoped(profile), path: '/api/memory/write-approval/pending' })
+}
+export function decidePendingMemoryWrite(id: string, decision: 'approve' | 'reject', profile?: null | string) {
+  return hermesApi<{ ok: boolean }>({
+    ...profileScoped(profile), method: 'POST', body: {},
+    path: `/api/memory/write-approval/${encodeURIComponent(id)}/${decision}`
+  })
+}
+export function rejectAllPendingMemoryWrites(profile?: null | string) {
+  return hermesApi<{ ok: boolean; rejected: number }>({
+    ...profileScoped(profile), method: 'POST', body: {}, path: '/api/memory/write-approval/reject-all'
+  })
+}
+export function editPendingMemoryWrite(id: string, content: string, profile?: null | string) {
+  return hermesApi<{ ok: boolean }>({
+    ...profileScoped(profile), method: 'PUT', body: { content },
+    path: `/api/memory/write-approval/${encodeURIComponent(id)}`
   })
 }
 

@@ -299,41 +299,54 @@ def approval_callback_cleanup():
     from tools.terminal_tool import set_approval_callback
     set_approval_callback(None)
 
-def test_memory_inline_approve_writes(hermes_home, approval_callback_cleanup):
+def test_memory_foreground_stages_instead_of_timed_callback(hermes_home, approval_callback_cleanup):
     from tools.memory_tool import memory_tool, MemoryStore
     from tools.terminal_tool import set_approval_callback
     from tools import write_approval as wa
     _set_approval("memory", True)
-
-    calls = []
-    def approve_cb(command, description, **kw):
-        calls.append((command, description))
-        return "once"
-    set_approval_callback(approve_cb)
-
+    called = []
+    set_approval_callback(lambda *args, **kwargs: called.append(args) or "once")
     store = MemoryStore(); store.load_from_disk()
-    r = json.loads(memory_tool("add", "memory", "approved fact", store=store))
-    assert r["success"] is True
-    assert r.get("staged") is None  # real write, not staged
-    assert store.memory_entries == ["approved fact"]
-    assert wa.pending_count("memory") == 0
-    # The registered callback must actually be invoked (not the input() path).
-    assert len(calls) == 1
-    assert "approved fact" in calls[0][0]
-
-def test_memory_inline_deny_blocks(hermes_home, approval_callback_cleanup):
-    from tools.memory_tool import memory_tool, MemoryStore
-    from tools.terminal_tool import set_approval_callback
-    from tools import write_approval as wa
-    _set_approval("memory", True)
-    set_approval_callback(lambda command, description, **kw: "deny")
-
-    store = MemoryStore(); store.load_from_disk()
-    r = json.loads(memory_tool("add", "memory", "denied fact", store=store))
-    assert r["success"] is False
-    assert "denied" in r["error"].lower()
+    result = json.loads(memory_tool("add", "memory", "fato permanente", store=store))
+    assert result["success"] and result["staged"]
+    assert called == []
     assert store.memory_entries == []
-    assert wa.pending_count("memory") == 0  # denied, not staged
+    assert wa.pending_count("memory") == 1
+
+
+def test_memory_foreground_denial_callback_is_not_used(hermes_home, approval_callback_cleanup):
+    from tools.memory_tool import memory_tool, MemoryStore
+    from tools.terminal_tool import set_approval_callback
+    from tools import write_approval as wa
+    _set_approval("memory", True)
+    set_approval_callback(lambda *args, **kwargs: "deny")
+    store = MemoryStore(); store.load_from_disk()
+    result = json.loads(memory_tool("add", "memory", "revisável", store=store))
+    assert result["staged"] and wa.pending_count("memory") == 1
+    assert store.memory_entries == []
+
+
+def test_memory_review_edit_approve_and_reject(hermes_home):
+    from tools import write_approval as wa
+    from tools.memory_tool import MemoryStore
+    from hermes_cli.write_approval_commands import handle_pending_subcommand
+    _set_approval("memory", True)
+    store = MemoryStore(); store.load_from_disk()
+    record = wa.stage_write("memory", {"action": "add", "target": "user", "content": "antes"},
+                            summary="teste", origin="foreground")
+    rid = record["id"]
+    assert "APROVAÇÃO DE GRAVAÇÃO DE MEMÓRIA" in handle_pending_subcommand("memory", ["review", rid])
+    assert "USER.md" in handle_pending_subcommand("memory", ["e"])
+    assert "pendente" in handle_pending_subcommand("memory", ["c"])
+    assert "ainda não salvo" in handle_pending_subcommand("memory", ["edit", rid, "depois"])
+    assert wa.get_pending("memory", rid)["payload"]["content"] == "depois"
+    assert store.user_entries == []
+    assert "Approved 1" in handle_pending_subcommand("memory", ["a", rid], memory_store=store)
+    assert store.user_entries == ["depois"]
+    other = wa.stage_write("memory", {"action": "add", "target": "memory", "content": "remover"},
+                           summary="teste", origin="foreground")
+    assert "Rejected" in handle_pending_subcommand("memory", ["b", other["id"]])
+    assert wa.get_pending("memory", other["id"]) is None
 
 
 @pytest.mark.parametrize("context", ["single_query", "cron", "webhook"])

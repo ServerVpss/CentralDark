@@ -205,6 +205,20 @@ export interface FreeTierStatus {
   connector_nudge_due_in?: number | null
 }
 
+export interface PendingMemoryWrite {
+  id: string
+  origin: string
+  summary: string
+  action: string
+  created_at: number
+  payload: { target?: 'memory' | 'user'; action?: string; content?: string;
+             operations?: Array<{ action: string; content?: string; old_text?: string }> }
+}
+export interface PendingMemoryWritesResponse {
+  enabled: boolean
+  pending: PendingMemoryWrite[]
+}
+
 export interface MemoryProviderOAuthStatus {
   auth: 'apikey' | 'oauth' | null
   connected: boolean

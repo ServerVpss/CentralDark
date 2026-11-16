@@ -17,8 +17,9 @@ def _fmt_state(subsystem: str) -> str:
 def _fmt_pending_list(subsystem: str) -> str:
     records = wa.list_pending(subsystem)
     if not records:
-        return f"No pending {subsystem} writes."
-    lines = [f"Pending {subsystem} writes ({len(records)}):"]
+        return "Nenhuma gravação de memória pendente." if subsystem == wa.MEMORY else f"No pending {subsystem} writes."
+    lines = ([f"APROVAÇÃO DE GRAVAÇÃO DE MEMÓRIA — {len(records)} pendente(s):"]
+             if subsystem == wa.MEMORY else [f"Pending {subsystem} writes ({len(records)}):"])
     for r in records:
         origin = r.get("origin", "foreground")
         tag = " [auto]" if origin == "background_review" else ""
@@ -26,7 +27,11 @@ def _fmt_pending_list(subsystem: str) -> str:
         if subsystem == wa.MEMORY:
             lines.extend(f"      {line}" for line in _matched_entries(r["payload"]))
     lines.append("")
-    lines.append(f"Apply: /{subsystem} approve <id>   Reject: /{subsystem} reject <id>")
+    if subsystem == wa.MEMORY:
+        lines.append("Aprovar: /memory a <id> · Rejeitar: /memory b <id> · Revisar: /memory e")
+        lines.append("Editar: /memory edit <id> <novo texto> · Ver todas: /memory c · Rejeitar todas: /memory d")
+    else:
+        lines.append(f"Apply: /{subsystem} approve <id>   Reject: /{subsystem} reject <id>")
     if subsystem == wa.SKILLS:
         lines.append("Review full diff: /skills diff <id>")
     return "\n".join(lines)
@@ -44,17 +49,51 @@ def handle_pending_subcommand(
     if not args:
         return f"{_fmt_state(subsystem)}\n\n" + _fmt_pending_list(subsystem)
     sub, rest = args[0].lower(), args[1:]
-    if sub == "pending":
+    if sub == "pending" or (sub == "c" and subsystem == wa.MEMORY):
         return _fmt_pending_list(subsystem)
-    if sub in {"approve", "apply"}:
+    if subsystem == wa.MEMORY:
+        if sub in {"review", "e"}:
+            return _memory_review(rest)
+        if sub == "edit":
+            return _memory_edit(rest)
+        if sub == "d":
+            return _reject(subsystem, ["all"])
+    if sub in {"approve", "apply"} or (sub == "a" and subsystem == wa.MEMORY):
         return _approve(subsystem, rest, memory_store)
-    if sub in {"reject", "deny", "drop"}:
+    if sub in {"reject", "deny", "drop"} or (sub == "b" and subsystem == wa.MEMORY):
         return _reject(subsystem, rest)
     if sub == "diff" and subsystem == wa.SKILLS:
         return _diff(rest)
     if sub in {"approval", "mode"}:  # 'mode' kept as a back-compat alias
         return _set_approval(subsystem, rest, set_mode_fn)
     return None  # not ours — caller handles
+
+
+def _memory_review(rest: list[str]) -> str:
+    pending_id = rest[0] if rest else next((r["id"] for r in wa.list_pending(wa.MEMORY)), "")
+    rec = wa.get_pending(wa.MEMORY, pending_id) if pending_id else None
+    if rec is None:
+        return "Nenhuma gravação de memória encontrada para revisar."
+    payload = rec.get("payload") or {}
+    destination = "USER.md" if payload.get("target") == "user" else "MEMORY.md"
+    return ("APROVAÇÃO DE GRAVAÇÃO DE MEMÓRIA\\n"
+            f"ID: {rec['id']}\\nDestino: {destination}\\n"
+            f"Ação: {payload.get('action', '?')}\\nConteúdo exato proposto:\\n"
+            + json.dumps(payload, ensure_ascii=False, indent=2)
+            + "\\nA) Aprovar: /memory a " + rec["id"]
+            + "\\nB) Rejeitar: /memory b " + rec["id"]
+            + "\\nC) Ver todas: /memory c\\nD) Rejeitar todas: /memory d"
+            + "\\nE) Editar: /memory edit " + rec["id"] + " <novo texto>")
+
+
+def _memory_edit(rest: list[str]) -> str:
+    if len(rest) < 2:
+        return "Uso: /memory edit <id> <novo texto>"
+    try:
+        rec = wa.edit_pending_memory(rest[0], " ".join(rest[1:]))
+    except ValueError as exc:
+        return f"Não foi possível editar: {exc}"
+    return "Texto pendente atualizado, ainda não salvo.\\n" + _memory_review([rec["id"]])
 
 
 def _usage(subsystem: str) -> str:

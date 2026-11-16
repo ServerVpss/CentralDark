@@ -197,58 +197,41 @@ def _staged(subsystem: str) -> GateDecision:
     else:
         where = (f"pending records live in {_pending_path(subsystem, '').parent} "
                  f"(review from an interactive CLI session with {command})")
+    if subsystem == MEMORY:
+        return GateDecision(stage=True, message=f"APROVAÇÃO DE MEMÓRIA — gravação pendente, ainda não salva. {where}")
     return GateDecision(stage=True, message=(f"Staged for approval ({subsystem}.write_approval is on). "
                                              f"Not yet saved — {where}."))
 
 
 def evaluate_gate(subsystem: str, *, inline_summary: str = "", inline_detail: str = "") -> GateDecision:
-    """Decide what to do with a pending write: gate off → allow; gate on + skills (any origin) or
-    background → stage; gate on + memory + foreground → inline prompt when an interactive channel
-    exists, else stage. The gate only ever delays a write, never silently refuses it; ``blocked``
-    is produced only when the user actively denies the inline prompt."""
+    """Durable memory writes never use the generic timed tool approval callback."""
     if not write_approval_enabled(subsystem):
         return GateDecision(allow=True)
-    # Skills are too big to review inline; a background write runs in a daemon thread with no user.
-    if subsystem == SKILLS or current_origin() == "background_review":
-        return _staged(subsystem)
-    granted = _prompt_inline_memory_approval(inline_summary, inline_detail)
-    if granted is None:
-        return _staged(MEMORY)
-    if granted:
-        return GateDecision(allow=True)
-    return GateDecision(blocked=True, message="Memory write denied by user. The change was not saved.")
+    return _staged(subsystem)
 
 
-def _prompt_inline_memory_approval(summary: str, detail: str) -> Optional[bool]:
-    """Prompt inline for a memory write: True approved, False denied, None → stage. Uses the per-thread
-    CLI approval callback (``tools.terminal_tool.set_approval_callback``) directly, not
-    ``prompt_dangerous_approval``: that wrapper falls back to ``input()`` (deadlock-prone under
-    prompt_toolkit; silent deny in gateway sessions) and turns callback errors into a deny, whereas
-    here a missing channel or failed prompt must stage instead.
-
-    ``hermes chat -q`` (and so every kanban worker), cron and unattended platforms can register a callback too,
-    but nobody answers it: stage at once instead of waiting the approval timeout. See #15216.
-    """
-    from tools.approval_context import _no_user_can_answer
-    if _no_user_can_answer():
-        return None
-    try:
-        from tools.terminal_tool import _get_approval_callback
-    except Exception:
-        return None
-    callback = _get_approval_callback()
-    if callback is None:
-        return None
-    header = summary.strip() or "Save to memory?"
-    try:
-        from tools.approval_prompt import callback_accepts
-        extra = {"title": "Save to memory?"} if callback_accepts(callback, "title") else {}
-        choice = callback(detail.strip() or header, f"Save to memory: {header}", allow_permanent=False, **extra)
-    except Exception as e:
-        logger.error("Inline memory approval prompt failed: %s", e)
-        return None
-    # unknown outcome → stage rather than drop
-    return {"once": True, "session": True, "deny": False}.get(choice)
+def edit_pending_memory(pending_id: str, content: str) -> dict[str, Any]:
+    """Edit one proposed add/patch, preserving its pinned conflict target."""
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", pending_id or ""):
+        raise ValueError("ID pendente inválido.")
+    if not isinstance(content, str) or not content.strip():
+        raise ValueError("Informe o novo texto da memória.")
+    record = get_pending(MEMORY, pending_id)
+    if record is None or not isinstance(record.get("payload"), dict):
+        raise ValueError("Gravação de memória pendente não encontrada.")
+    payload = record["payload"]
+    if payload.get("action") == "batch":
+        ops = payload.get("operations")
+        if not isinstance(ops, list) or len(ops) != 1 or not isinstance(ops[0], dict) or ops[0].get("action") not in {"add", "patch"}:
+            raise ValueError("Revise este lote separadamente: edição única indisponível.")
+        ops[0]["content"] = content
+    elif payload.get("action") in {"add", "patch", "replace"}:
+        payload["content"] = content
+    else:
+        raise ValueError("Ação de memória sem texto editável.")
+    record["summary"] = "Memória revisada pelo CHEFE"
+    atomic_json_write(_pending_path(MEMORY, pending_id), record)
+    return record
 
 
 # --- Skill-specific helpers (gist + diff for the review affordances) ---

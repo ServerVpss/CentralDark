@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
 from hermes_cli.web_deps import late
 from hermes_cli.web_server_dashboard import _invalidate_plugins_hub_cache
@@ -23,7 +24,7 @@ from hermes_cli.web_server_memory import (
 )
 from hermes_cli.web_models import MemoryProviderConfigUpdate, MemoryProviderSetupRequest
 from hermes_cli.config_backend import CONFIG_MUTATION_LOCK
-from hermes_cli.web_routers._common import scoped_to_thread
+from hermes_cli.web_routers._common import destructive_profile, scoped_to_thread
 from plugins.memory.config_schema import (
     STORAGE_FLAT_JSON, STORAGE_PROVIDER, ProviderConfigSchema, ProviderField, get_provider_config_schema,
 )
@@ -482,6 +483,74 @@ def _write_memory_provider_config_values(name: str, provider: Any, values: dict[
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
+
+# Revisão de gravações persistentes: reutiliza o Write Gate.
+class MemoryWriteEditRequest(BaseModel):
+    content: str
+
+
+def _pending_id(value: str) -> str:
+    if not re.fullmatch(r"[A-Za-z0-9_-]{1,64}", value or ""):
+        raise HTTPException(400, detail="ID de memória inválido.")
+    return value
+
+
+@router.get("/api/memory/write-approval/pending")
+async def memory_pending(profile: Optional[str] = None):
+    def read():
+        from tools import write_approval as wa
+        return {"enabled": wa.write_approval_enabled(wa.MEMORY), "pending": wa.list_pending(wa.MEMORY)}
+    return await scoped_to_thread(profile, read)
+
+
+@router.post("/api/memory/write-approval/reject-all")
+async def memory_reject_all(profile: Optional[str] = None):
+    profile = destructive_profile(profile, "Rejeitar memórias pendentes")
+    def write():
+        from tools import write_approval as wa
+        records = wa.list_pending(wa.MEMORY)
+        count = sum(bool(wa.discard_pending(wa.MEMORY, row["id"])) for row in records)
+        return {"ok": count == len(records), "rejected": count}
+    return await scoped_to_thread(profile, write)
+
+
+@router.post("/api/memory/write-approval/{pending_id}/{decision}")
+async def memory_decide(pending_id: str, decision: str, profile: Optional[str] = None):
+    profile = destructive_profile(profile, "Decisão de memória")
+    _pending_id(pending_id)
+    if decision not in {"approve", "reject"}:
+        raise HTTPException(400, detail="Decisão inválida.")
+    def write():
+        from tools import write_approval as wa
+        record = wa.get_pending(wa.MEMORY, pending_id)
+        if record is None:
+            raise HTTPException(404, detail="Memória pendente não encontrada.")
+        if decision == "approve":
+            from tools.memory_tool import load_on_disk_store, apply_memory_pending
+            result = apply_memory_pending(record["payload"], load_on_disk_store())
+            if not result.get("success"):
+                raise HTTPException(409, detail=str(result.get("error") or "Não aplicada."))
+        if not wa.discard_pending(wa.MEMORY, pending_id):
+            raise HTTPException(409, detail="Fila alterada. Revise novamente.")
+        return {"ok": True, "id": pending_id, "decision": decision}
+    return await scoped_to_thread(profile, write)
+
+
+@router.put("/api/memory/write-approval/{pending_id}")
+async def memory_edit_pending(pending_id: str, body: MemoryWriteEditRequest,
+                              profile: Optional[str] = None):
+    profile = destructive_profile(profile, "Editar memória pendente")
+    _pending_id(pending_id)
+    def write():
+        from tools import write_approval as wa
+        try:
+            return {"ok": True, "pending": wa.edit_pending_memory(pending_id, body.content)}
+        except ValueError as exc:
+            raise HTTPException(400, detail=str(exc)) from exc
+    return await scoped_to_thread(profile, write)
+
+
+
 
 def _require_valid_memory_provider_name(name: str) -> None:
     """Reject provider names that could traverse outside the plugin dirs.

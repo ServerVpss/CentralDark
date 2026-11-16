@@ -18,7 +18,8 @@ from tests.gateway.fixtures.local_recovery_probe import Model, child_env, daemon
 _WRITES = {verb: 'control' for verb in ('approve', 'apply', 'reject', 'deny', 'drop', 'approval', 'mode')}
 # Every review subcommand the classic CLI serves, by the reach it needs on a local session: a
 # listing is a read; an approve/reject or the approval switch is a control.
-_REVIEW_VERBS = {'memory': {'pending': 'read', **_WRITES}, 'skills': {'pending': 'read', 'diff': 'read', **_WRITES}}
+_REVIEW_VERBS = {'memory': {'pending': 'read', 'review': 'read', 'e': 'read', 'c': 'read',
+                            'edit': 'control', 'a': 'control', 'b': 'control', 'd': 'control', **_WRITES}, 'skills': {'pending': 'read', 'diff': 'read', **_WRITES}}
 
 
 @pytest.mark.parametrize('subsystem', ['memory', 'skills'])
