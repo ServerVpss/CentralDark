@@ -17,6 +17,7 @@ import type { BundledLocale } from './types'
 import { zhOverrides } from './zh'
 import { zhHantOverrides } from './zh-hant'
 
+// pt-br uses a bundled near-complete flat pack, separately checked in pt-br.test.ts.
 // Overlays are partial, so a missing key renders English without failing typecheck
 // or catalog-completeness.test.ts (which reads the merged catalog). This reads each
 // locale's own overlay. overlay-gaps.json maps each English key to the locales that
@@ -32,7 +33,7 @@ const OVERLAYS = {
   ru: ruOverrides,
   zh: zhOverrides,
   'zh-hant': zhHantOverrides
-} satisfies Record<Exclude<BundledLocale, 'en'>, TranslationOverrides>
+} satisfies Record<Exclude<BundledLocale, 'en' | 'pt-br'>, TranslationOverrides>
 
 // `intro` is display-only; intro.test.tsx covers its translated rotation.
 const translatable = (tree: TranslationOverrides) => flattenMessageKeys(tree).filter(key => !key.startsWith('intro.'))
