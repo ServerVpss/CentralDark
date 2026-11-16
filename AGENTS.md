@@ -1,5 +1,9 @@
 # Hermes Agent - Development Guide
 
+<!-- CENTRALDARK_FORK_SYNC_RULE_20261115 -->
+**CentralDark fork (`ServerVpss/hermes-agent`):** authorized Hermes code edits must reuse the existing owner, test the affected scope, record counterproof and `!RASTRO`/`!HUD`, commit only changed files, push to this fork's `main` when allowed (otherwise use PR/gates), then verify SHA/readback. Never commit `/data` runtime config, secrets, or Hostinger's `/app/u4s-hermes-native`; commit is not deploy. ACP is editor-launched stdio: do not keep an unused ACP process alive as a substitute for an editor connection.
+<!-- /CENTRALDARK_FORK_SYNC_RULE_20261115 -->
+
 This root file is a hub: what applies everywhere, then a routing table. Each area's `AGENTS.md`
 loads automatically when you work in that directory; read it before editing there.
 `python scripts/check` caps this file at 12k chars and every root-to-area chain at 30k: long form
