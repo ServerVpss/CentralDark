@@ -1047,6 +1047,25 @@ probabilistic_fixed_point_contract:
   satisfaction_band_is_universal_gate: false
   fixed_point_requires: [CURRENT_GOAL_SUFFICIENT, AUDITABLE, REPAIRABLE, NO_MATERIAL_BLOCKER, EPHEMERAL_CLEANUP_IF_USED]
 
+meta_multibussola_proof_gates:
+  owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  evaluator: scripts/trigger-fabric/centraldark_master_cycle.py#evaluate_multibussola_gates
+  consumed_not_displayed: true
+  gates:
+    PROOF_TARGET_MATCH: state.proof_target_match
+    PROOF_OWNERSHIP: state.proof_ownership
+    INDEPENDENT_COUNTERPROOF: state.independent_counterproof|state.counterproof_survives
+    EXTERNAL_ANCHOR_WHEN_APPLICABLE: state.external_anchor
+    REMEDICAO_T1: state.remedicao_t1|state.t1_stable
+    REALITY_JUDGE: state.reality_judge
+  violated_absent_unknown_blocks_fixed_point_pass: true
+  blocking_verdict: FIXED_POINT_BLOCKED
+  not_applicable_requires: [EXTERNAL_ANCHOR_JUSTIFICATION, PROOF_EVIDENCE_REFERENCE]
+  arbitrary_not_applicable_is_exemption: false
+  receipt_fields: [gate_states, gate_violations, gate_evidence, gate_pass]
+  declared_gate_is_independent_verification: false
+  unknown_never_pass: true
+
 multi_agent_same_ruler:
   one_ai_is_system_unit: false
   same_ruler_for_all_engines: true
