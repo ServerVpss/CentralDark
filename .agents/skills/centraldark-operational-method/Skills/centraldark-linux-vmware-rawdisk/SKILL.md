@@ -77,3 +77,21 @@ Em 2026-11-03: VMware rodando D:\CENTRALDARK-OSh\CENTRALDARK-OSh.vmx; VMDK parti
 - UKUI_DESKTOP_AUTH=WAITING_FOR_HUMAN_PASSWORD; TAILSCALE_DEVICE_APPROVAL=PENDING; TAILSCALE_SERVE_RDP=NOT_CONFIGURED.
 - Replay: executar o launcher no Windows, conferir seu handshake, na tela RDP escolher Xorg, usuario CentralDark-OS e senha local. Para erro de sessao, consultar journalctl xrdp / xrdp-sesman e preservar os demais servicos.
 - NEVER claim fixed point da sessao grafica autenticada ou conexao tailnet ate provas especificas. Uso da VPN nunca substitui senha do usuario Linux.
+
+<!-- CENTRALDARK_VMWARE_SSH_CONFIG_OPENKYLIN_20261111 -->
+### Receita verificada: SSH Casa Windows para VMware openKylin (11/11/2026)
+
+Ambientes diferentes: alias openkylin = WSL2 (ProxyCommand); alias openkylin-vm ou CentralDark-OS-VM = VMware guest CentralDark-OS, porta 22. Nao confundir SSH Windows com SSH guest.
+
+Owner ativo: C:\Users\Administrador\.ssh\config_openkylin. Espelho versionado: F:\CentralDark\.ssh\config_openkylin. Preservar configuracao principal SSH e chaves existentes.
+
+Comando comprovado na Casa (somente leitura):
+
+    ssh -F 'C:\Users\Administrador\.ssh\config_openkylin' -o BatchMode=yes -o ConnectTimeout=8 -o ConnectionAttempts=1 openkylin-vm 'hostname; id -un; systemctl is-active ssh'
+
+Contraprova: CentralDark-OS / CentralDark-OS / active / SSH_EXIT=0. Chave existente, sem sudo ou senha. IP 192.168.35.130 foi observado, mas usar alias em novos comandos, nao IP fixo.
+
+Diagnostico: TCP 22 aberto nao prova autenticacao SSH; banner timeout nao prova senha incorreta. Conferir ssh -F [config] -G openkylin-vm e repetir teste read-only. IPQoS=none funcionou em teste de configuracao minima, mas a causa do timeout intermitente nao foi demonstrada; nao alterar sshd, IPQoS ou firewall por hipotese.
+
+Escopo: SSH_VMWARE=PASS; COCKPIT_HTTP_524=UNRESOLVED; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
+<!-- /CENTRALDARK_VMWARE_SSH_CONFIG_OPENKYLIN_20261111 -->

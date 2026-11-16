@@ -6,6 +6,38 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
+test("MCP encontra automaticamente a pasta de eventos da CentralDark", () => {
+  const entry = new URL("../src/log-funnel.js", import.meta.url);
+  const script = `import { getCentralLogLayout } from ${JSON.stringify(entry.href)}; process.stdout.write(getCentralLogLayout().root);`;
+  const env = { ...process.env };
+  delete env.CENTRALDARK_LOG_ROOT;
+  delete env.LOG_DIR;
+  const result = spawnSync(process.execPath, ["--input-type=module", "-e", script], { env, encoding: "utf8", timeout: 15000 });
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(result.stdout, fileURLToPath(new URL("../../../../logs/", entry)));
+});
+
+test("MCP respeita a pasta de logs configurada sem criar outro destino", () => {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-log-root-"));
+  try {
+    const entry = new URL("../src/log-funnel.js", import.meta.url);
+    const script = `
+      import { appendCentralEvent, getCentralLogLayout } from ${JSON.stringify(entry.href)};
+      const result = appendCentralEvent({ sector: "mcp", source: "unit", actor: "test", kind: "mcp_tool_call" });
+      if (!result.ok) throw Error("LOG_WRITE_FAILED");
+      process.stdout.write(getCentralLogLayout().root);
+    `;
+    const env = { ...process.env, CENTRALDARK_LOG_ROOT: tmp, LOG_DIR: path.join(tmp, "wrong") };
+    const result = spawnSync(process.execPath, ["--input-type=module", "-e", script], { env, encoding: "utf8", timeout: 15000 });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, tmp);
+    const day = new Date().toISOString().slice(0, 10);
+    assert.equal(fs.existsSync(path.join(tmp, "events", `${day}.jsonl`)), true);
+    assert.equal(fs.existsSync(path.join(tmp, "sectors", "mcp", `${day}.jsonl`)), true);
+    assert.equal(fs.existsSync(path.join(tmp, "wrong")), false);
+  } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+});
+
 test("agent observability ingere Grok/Hermes e extrai delegacao comprovada", async () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "centraldark-agentobs-"));
   const logs = path.join(tmp, "logs");
