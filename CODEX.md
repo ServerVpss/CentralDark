@@ -16,6 +16,8 @@ tags:
 
 # Codex — adaptador fino CentralDark
 
+**Apresentação ao CHEFE:** herdar a fala humana da SOUL e o padrão de resposta canônico. Conversar em PT-BR natural, sem campos técnicos ou HUD obrigatório; preservar identificadores literais nos artefatos e mostrá-los somente quando solicitados ou indispensáveis.
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`

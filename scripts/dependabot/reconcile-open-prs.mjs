@@ -212,7 +212,7 @@ for (const item of prs) {
 
   if (conflicting) {
     console.log(`PR #${number} CONFLICTING -> HOUSE_RESOLVER`);
-    const child = spawnSync('bash', [resolver, String(number)], {
+    const child = spawnSync('bash', [resolver, '--apply', String(number)], {
       cwd: process.cwd(),
       env: {
         ...process.env,
