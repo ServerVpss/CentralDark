@@ -148,6 +148,12 @@ class AutoSyncMaster:
         base = self._blob(base_ref, path)
         remote = self._blob(remote_ref, path)
         if base is None or remote is None or not local.is_file():
+            # BASE presente + remoto ausente + local ausente = remocao consistente
+            # nos dois lados: nao ha nada a reconciliar. Sem este ramo o
+            # classificador marcava conflito permanente em todo caminho que a
+            # main aposentou e o checkout local ja removeu.
+            if base is not None and remote is None and not local.is_file():
+                return ("DELETED_ON_BOTH_SIDES", 0)
             return ("PATH_SHAPE_OR_DELETE", 1)
         with tempfile.TemporaryDirectory(prefix="cd40-merge-") as td:
             root = Path(td)
@@ -192,6 +198,10 @@ class AutoSyncMaster:
                 continue
             verdict, hunks = self._three_way_probe(path, head, remote_ref)
             if verdict == "AUTO_MERGEABLE":
+                auto_mergeable.append(self._safe_path(path))
+            elif hunks == 0:
+                # Resolucao deterministica sem julgamento humano (ex.:
+                # DELETED_ON_BOTH_SIDES) nao e conflito semantico.
                 auto_mergeable.append(self._safe_path(path))
             else:
                 conflicts.append({"path": self._safe_path(path), "reason": verdict, "hunks": hunks})
