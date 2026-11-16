@@ -1,7 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { exigirAdmin } from "./admin.functions";
+
+// Verificação de admin fail-closed, mesmo padrão de maquina.functions.ts.
+// O import de admin.functions.ts quebrava o build SSR (exigirAdmin não é exportado lá).
+async function exigirAdmin(context: { supabase: { from: (name: string) => any }; userId: string }) {
+  const { data } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
+  if (!data) throw new Response("Proibido", { status: 403 });
+}
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/github";
 const GITHUB_API_URL = "https://api.github.com";
