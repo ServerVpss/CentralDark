@@ -76,14 +76,14 @@ def _memory_review(rest: list[str]) -> str:
         return "Nenhuma gravação de memória encontrada para revisar."
     payload = rec.get("payload") or {}
     destination = "USER.md" if payload.get("target") == "user" else "MEMORY.md"
-    return ("APROVAÇÃO DE GRAVAÇÃO DE MEMÓRIA\\n"
-            f"ID: {rec['id']}\\nDestino: {destination}\\n"
-            f"Ação: {payload.get('action', '?')}\\nConteúdo exato proposto:\\n"
+    return ("APROVAÇÃO DE GRAVAÇÃO DE MEMÓRIA\n"
+            f"ID: {rec['id']}\nDestino: {destination}\n"
+            f"Ação: {payload.get('action', '?')}\nConteúdo exato proposto:\n"
             + json.dumps(payload, ensure_ascii=False, indent=2)
-            + "\\nA) Aprovar: /memory a " + rec["id"]
-            + "\\nB) Rejeitar: /memory b " + rec["id"]
-            + "\\nC) Ver todas: /memory c\\nD) Rejeitar todas: /memory d"
-            + "\\nE) Editar: /memory edit " + rec["id"] + " <novo texto>")
+            + "\nA) Aprovar: /memory a " + rec["id"]
+            + "\nB) Rejeitar: /memory b " + rec["id"]
+            + "\nC) Ver todas: /memory c\nD) Rejeitar todas: /memory d"
+            + "\nE) Editar: /memory edit " + rec["id"] + " <novo texto>")
 
 
 def _memory_edit(rest: list[str]) -> str:
@@ -93,7 +93,7 @@ def _memory_edit(rest: list[str]) -> str:
         rec = wa.edit_pending_memory(rest[0], " ".join(rest[1:]))
     except ValueError as exc:
         return f"Não foi possível editar: {exc}"
-    return "Texto pendente atualizado, ainda não salvo.\\n" + _memory_review([rec["id"]])
+    return "Texto pendente atualizado, ainda não salvo.\n" + _memory_review([rec["id"]])
 
 
 def _usage(subsystem: str) -> str:
