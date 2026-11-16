@@ -33,6 +33,40 @@ actual_tlc23="$(sha256sum "$TLC23" | awk '{print $1}')"
 
 main_sha="$(git -C "$ROOT" ls-remote "$REMOTE" "refs/heads/$BRANCH" | awk 'NR==1 {print $1}')"
 [ -n "$main_sha" ] || fail "REMOTE_MAIN_NOT_FOUND"
+
+# --- GitHub API cross-check (optional, never blocking) ---
+# Confirms the canonical main HEAD through the official GitHub REST API and
+# records the verification result. Git remains the only transport: the API only
+# identifies state. No token is ever printed, logged, or written to the receipt.
+GITHUB_API_MAIN_SHA=""
+API_VERIFY="SKIPPED_NO_TOKEN"
+gh_token="${GITHUB_TOKEN:-}"
+if [ -z "$gh_token" ] && [ -r /data/.env ]; then
+  gh_token="$(sed -n 's/^GITHUB_TOKEN=//p' /data/.env | head -n1)"
+fi
+if [ -n "$gh_token" ] && command -v curl >/dev/null 2>&1; then
+  api_url="https://api.github.com/repos/ServerVpss/CentralDark/branches/main"
+  http_code="$(curl -sS --max-time 10 -o /tmp/.cd-api-main.json -w '%{http_code}' \
+    -H "Authorization: token ${gh_token}" \
+    -H "Accept: application/vnd.github+json" \
+    "$api_url" 2>/dev/null || echo "000")"
+  if [ "$http_code" = "200" ]; then
+    GITHUB_API_MAIN_SHA="$(python3 -c "import json,sys;print(json.load(open('/tmp/.cd-api-main.json')).get('commit',{}).get('sha',''))" 2>/dev/null || echo "")"
+    if [ -z "$GITHUB_API_MAIN_SHA" ]; then
+      API_VERIFY="UNKNOWN_PARSE"
+    elif [ "$GITHUB_API_MAIN_SHA" = "$main_sha" ]; then
+      API_VERIFY="MATCH"
+    else
+      API_VERIFY="MISMATCH"
+      say "WARNING: GitHub API main SHA differs from git remote main"
+    fi
+  else
+    API_VERIFY="UNKNOWN_API_HTTP_${http_code}"
+  fi
+  rm -f /tmp/.cd-api-main.json
+fi
+unset gh_token
+# -------------------------------------------------------
 git -C "$ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
 
 if [ "$SYNC_ROOT" = "$ROOT" ]; then
@@ -55,8 +89,18 @@ fi
 
 # This is the script-owned clean mirror. Never clean the operator's worktree.
 git -C "$SYNC_ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
-git -C "$SYNC_ROOT" reset --hard "$REMOTE/$BRANCH" >/dev/null
-git -C "$SYNC_ROOT" clean -fd >/dev/null
+# Idempotence gate: when the mirror already sits exactly on canonical main and is
+# clean, skip the destructive reset/clean. Local operator worktrees are never touched.
+already_synced=false
+if [ "$(git -C "$SYNC_ROOT" rev-parse HEAD 2>/dev/null || echo '')" = "$main_sha" ] \
+   && [ -z "$(git -C "$SYNC_ROOT" status --porcelain 2>/dev/null || echo dirty)" ]; then
+  already_synced=true
+  say "SYNC_MODE=NOOP_ALREADY_AT_MAIN_SHA"
+else
+  git -C "$SYNC_ROOT" reset --hard "$REMOTE/$BRANCH" >/dev/null
+  git -C "$SYNC_ROOT" clean -fd >/dev/null
+  say "SYNC_MODE=UPDATED_TO_MAIN_SHA"
+fi
 
 sync_head="$(git -C "$SYNC_ROOT" rev-parse HEAD)"
 [ "$sync_head" = "$main_sha" ] || fail "SYNC_HEAD_DOES_NOT_MATCH_REMOTE_MAIN"
@@ -86,12 +130,12 @@ else
 fi
 printf '%s\n' "$SKILL_SYNC_OUTPUT"
 
-python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" <<'PY'
+python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output = sys.argv[1:]
+output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced = sys.argv[1:]
 text = Path(output).read_text(encoding="utf-8", errors="replace")
 start = text.find("{")
 if start < 0:
@@ -107,6 +151,9 @@ receipt = {
     "status": overall_status,
     "sync_root": sync_root,
     "main_sha": main_sha,
+    "sync_mode": "NOOP_ALREADY_AT_MAIN_SHA" if already_synced == "true" else "UPDATED_TO_MAIN_SHA",
+    "api_verify": api_verify,
+    "api_main_sha": api_main_sha or None,
     "boot_status": status,
     "hud_status": hud.get("status"),
     "hud_reason": hud.get("reason"),
