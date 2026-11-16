@@ -281,3 +281,28 @@ run_agent.py, cli.py, batch_runner.py, environments/
 ```
 
 This chain means tool registration happens at import time, before any agent instance is created. Any `tools/*.py` file with a top-level `registry.register()` call is auto-discovered — no manual import list needed.
+
+## CentralDark Agent — integration map
+
+This fork is the code home for **CentralDark Agent** on the existing Hermes engine. The source of CentralDark identity, method, permissions, and owner contracts remains [CentralDark@main](https://github.com/ServerVpss/CentralDark/tree/main) during migration. Its legacy \`apps/modulos/HERMES-CORE/\` must not run as a second mission engine after equivalent behaviour is proved here. Transfer one capability at a time; document its old owner, native Hermes owner, tests, and readback before retiring anything.
+
+| CentralDark responsibility | Existing Hermes owner |
+| --- | --- |
+| Agent decisions, session lifecycle, context and memory | \`agent/\`, \`run_agent.py\`, \`hermes_state.py\` |
+| CLI and commands | \`hermes_cli/\` and \`cli.py\` |
+| Messaging, remote sessions and delivery | \`gateway/\` |
+| Skills and instructions | \`skills/\`, \`optional-skills/\`, or installed \`HERMES_HOME/skills/\` |
+| Plugin-based capabilities and integrations | \`plugins/\` via the published plugin API |
+| Reusable tool implementations | \`tools/\` only if no existing tool/skill/plugin owns the function |
+| Development and installation utilities | existing \`scripts/\`; skill-specific helpers stay under their skill |
+| Interface and visual identity | \`apps/desktop/\` and existing UI/theme owners |
+| Long-form developer and user documentation | **\`website/docs/\`**, not a parallel root \`docs/\` |
+
+### Knowledge versus runtime state
+
+**Versioned knowledge** belongs to existing source owners: \`AGENTS.md\`, \`SOUL.md\`, area \`AGENTS.md\`, appropriate skill files, and \`website/docs/\`. Do not copy the entire CentralDark \`docs/\` tree without reconciliation: retain provenance links until each document has one accepted owner and a tested consumer.
+
+**Live state** belongs to the profile's \`HERMES_HOME\`, resolved by \`hermes_constants.get_hermes_home()\`: default \`~/.hermes\` on Linux/macOS, \`%LOCALAPPDATA%/hermes\` on Windows, or the explicit runtime override (for example a managed container's persistent \`/data\` when configured). The gateway is the canonical session writer; \`state.db\` records sessions and messages, \`memories/MEMORY.md\` and \`memories/USER.md\` hold bounded memory, \`config.yaml\` settings, \`skills/\` installed skills, and \`cron/\` scheduled jobs. Never commit this live state, \`.env\`, credentials, profiles or private receipts to the public fork.
+
+**Migration gate:** inventory and compare → reuse the native owner → adapt the smallest delta → run relevant Hermes contract tests → prove runtime consumer/readback → only then retire the redundant CentralDark implementation. A document or merged commit does not prove deployment. Do not replace Hostinger-managed \`/opt/hermes\`, reset dirty checkouts, or start a second Gateway.
+
