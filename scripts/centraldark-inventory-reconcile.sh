@@ -626,7 +626,39 @@ ROOT="$CD_REPO_DIR"
 STATE="$CD_STATE_DIR"
 MODE="--inventory"
 if [ "$#" -gt 0 ];then MODE="$1";fi
-case "$MODE" in --inventory|--diff|--scan) ;; --help) echo 'Uso: centraldark-inventory-reconcile.sh [--menu|--kylin-menu|--inventory|--diff|--scan|--pulse --plan]';exit 0;; *) echo 'BLOCKED: repair requer owner e receita autorizada'; exit 64;; esac
+if [[ "$MODE" == "--tree-counts" ]]; then
+  command -v python3 >/dev/null || { echo 'BLOCKED: missing python3'; exit 2; }
+  TREE_REF="${CENTRALDARK_TREE_REF:-HEAD}"
+  TREE_SHA="$(git -C "$CD_REPO_DIR" rev-parse "$TREE_REF" 2>/dev/null)" || { echo "BLOCKED: invalid tree ref $TREE_REF"; exit 64; }
+  export CD_TREE_ROOT="$CD_REPO_DIR" CD_TREE_REF="$TREE_REF" CD_TREE_SHA="$TREE_SHA"
+  python3 - <<'PY'
+import collections, json, os, pathlib, subprocess
+root=pathlib.Path(os.environ['CD_TREE_ROOT'])
+ref=os.environ['CD_TREE_REF']
+sha=os.environ['CD_TREE_SHA']
+raw=subprocess.check_output(['git','ls-tree','-r','--name-only',ref],cwd=root,text=True)
+paths=[line for line in raw.splitlines() if line]
+areas=collections.Counter()
+extensions=collections.Counter()
+for rel in paths:
+ parts=pathlib.PurePosixPath(rel).parts
+ areas[parts[0] if parts else '(root)'] += 1
+ suffix=pathlib.PurePosixPath(rel).suffix.lower()
+ extensions[suffix or '(no_extension)'] += 1
+payload={
+ 'schema':'centraldark.tree-counts.v1',
+ 'ref':ref,
+ 'sha':sha,
+ 'files':len(paths),
+ 'areas':dict(sorted(areas.items())),
+ 'extensions':dict(sorted(extensions.items())),
+ 'source':'git ls-tree (versioned tree)',
+}
+print(json.dumps(payload,ensure_ascii=False,sort_keys=True))
+PY
+  exit 0
+fi
+case "$MODE" in --inventory|--diff|--scan) ;; --help) echo 'Uso: centraldark-inventory-reconcile.sh [--menu|--kylin-menu|--inventory|--diff|--scan|--tree-counts|--pulse --plan]';exit 0;; *) echo 'BLOCKED: repair requer owner e receita autorizada'; exit 64;; esac
 for x in git python3 flock timeout; do command -v "$x" >/dev/null || { echo "BLOCKED: missing $x";exit 2; }; done
 git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo 'BLOCKED: repo absent';exit 2; }
 umask 077
