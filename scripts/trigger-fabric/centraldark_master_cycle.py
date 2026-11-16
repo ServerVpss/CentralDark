@@ -145,6 +145,21 @@ MULTIBUSSOLA_PROOF_GATES = [
     "REMEDICAO_T1",
     "REALITY_JUDGE",
 ]
+# Gate -> campo explícito no estado. Ausente/nulo significa UNKNOWN, nunca satisfeito.
+MULTIBUSSOLA_GATE_FIELDS = {
+    "PROOF_TARGET_MATCH": "proof_target_match",
+    "PROOF_OWNERSHIP": "proof_ownership",
+    "INDEPENDENT_COUNTERPROOF": "independent_counterproof",
+    "EXTERNAL_ANCHOR_WHEN_APPLICABLE": "external_anchor",
+    "REMEDICAO_T1": "remedicao_t1",
+    "REALITY_JUDGE": "reality_judge",
+}
+# Dois gates têm fonte única já existente: derivar evita segundo dono da mesma verdade.
+MULTIBUSSOLA_GATE_DERIVED = {
+    "INDEPENDENT_COUNTERPROOF": "counterproof_survives",
+    "REMEDICAO_T1": "t1_stable",
+}
+GATE_NOT_APPLICABLE = "NOT_APPLICABLE"
 TIK_TAK_ROLE_ORDER = ["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"]
 TIK_TAK_ROLE_BINDINGS = {
     "GEOFF": "AUTOMATION_FACTORY",
@@ -568,6 +583,50 @@ def validate_human_identity_naming(text: str):
     }
 
 
+def evaluate_multibussola_gates(state):
+    """Avalia os seis gates obrigatórios. Gate violado, ausente ou desconhecido bloqueia PASS."""
+    gate_states = {}
+    violations = []
+    for gate in MULTIBUSSOLA_PROOF_GATES:
+        raw = state.get(MULTIBUSSOLA_GATE_FIELDS[gate])
+        if raw is None:
+            derived_field = MULTIBUSSOLA_GATE_DERIVED.get(gate)
+            if derived_field is not None:
+                raw = state.get(derived_field)
+
+        if gate == "EXTERNAL_ANCHOR_WHEN_APPLICABLE" and isinstance(raw, str):
+            if raw.strip().upper() == GATE_NOT_APPLICABLE:
+                justification = str(state.get("external_anchor_justification") or "").strip()
+                evidence = state.get("proof_evidence")
+                anchor_ref = ""
+                if isinstance(evidence, dict):
+                    anchor_ref = str(evidence.get("EXTERNAL_ANCHOR_WHEN_APPLICABLE") or "").strip()
+                if justification and anchor_ref:
+                    gate_states[gate] = GATE_NOT_APPLICABLE
+                    continue
+                # N/A exige justificativa E referência de evidência; texto solto não isenta.
+                gate_states[gate] = "UNKNOWN_NOT_APPLICABLE_UNJUSTIFIED"
+                violations.append(gate)
+                continue
+
+        if raw is True:
+            gate_states[gate] = "SATISFIED"
+        elif raw is False:
+            gate_states[gate] = "VIOLATED"
+            violations.append(gate)
+        else:
+            gate_states[gate] = "UNKNOWN"
+            violations.append(gate)
+
+    evidence = state.get("proof_evidence")
+    return {
+        "gate_states": gate_states,
+        "gate_violations": violations,
+        "gate_evidence": evidence if isinstance(evidence, dict) else {},
+        "gate_pass": not violations,
+    }
+
+
 def evaluate_multibussola_state(state):
     required = bool(state.get("required_bearings_covered"))
     contradiction = bool(state.get("material_contradiction"))
@@ -575,6 +634,7 @@ def evaluate_multibussola_state(state):
     unknown = int(state.get("unknown_material", 0))
     counterproof = bool(state.get("counterproof_survives"))
     t1 = bool(state.get("t1_stable"))
+    gate_result = evaluate_multibussola_gates(state)
 
     ephemeral_workspace_used = bool(state.get("ephemeral_workspace_used"))
     ephemeral_cleanup_readback_pass = bool(state.get("ephemeral_cleanup_readback_pass"))
@@ -591,7 +651,8 @@ def evaluate_multibussola_state(state):
     elif state.get("frontier_stable"):
         verdict = "FIXED_POINT_BLOCKED"
     elif unknown == 0 and counterproof and t1 and ephemeral_cleanup_ok:
-        verdict = "FIXED_POINT_PASS"
+        # Gate obrigatório violado, ausente ou UNKNOWN nunca vira PASS.
+        verdict = "FIXED_POINT_BLOCKED" if not gate_result["gate_pass"] else "FIXED_POINT_PASS"
     else:
         verdict = "LOCAL_FIXED_POINT_NOT_YET"
     return {
@@ -608,6 +669,10 @@ def evaluate_multibussola_state(state):
         "ephemeral_cleanup_readback_pass": ephemeral_cleanup_readback_pass,
         "ephemeral_unclassified_residue": ephemeral_unclassified_residue,
         "ephemeral_cleanup_ok": ephemeral_cleanup_ok,
+        "gate_states": gate_result["gate_states"],
+        "gate_violations": gate_result["gate_violations"],
+        "gate_evidence": gate_result["gate_evidence"],
+        "gate_pass": gate_result["gate_pass"],
         "verdict": verdict,
         "mission_state": "CLOSED" if verdict == "FIXED_POINT_PASS" and state.get("global_objective_closed") else "NOT_YET",
     }
