@@ -58,9 +58,9 @@ Use when a local checkout is ahead and dirty, another body is behind, and both m
    ```bash
    git add -- <path> [<path> ...]
    git diff --cached --name-only   # must equal the intended set, nothing else
-   git commit -- <path> [<path> ...]
+   git commit -m "<message>" -- <path> [<path> ...]
    ```
-   Committing with an explicit pathspec ignores anything else that happens to be staged.
+   Committing with an explicit pathspec ignores anything else that happens to be staged. Put the message flag **before** the `--`: after it, every token is a path, so `git commit -- <paths> -m "msg"` fails with *"did not match any file(s) known to git"*.
 3. Publish through the PR gate, not by pushing to `main` directly: branch → push → `gh pr create` → merge squash. Direct `git push origin main` is the one path that bypasses review and CI.
 4. When `git push` is rejected because the remote moved, fetch and rebase **your branch**, not a dirty shared checkout:
    ```bash
