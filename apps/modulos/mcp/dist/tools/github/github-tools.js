@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { assertNoRetiredCentralDarkHostedDeploy } from "./github.js";
+import { assertNoRetiredCentralDarkHostedDeploy, GH_CLI_OWNER_MARKER, ghCliCall } from "./github.js";
 const API = "https://api.github.com";
 const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
 const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
@@ -41,6 +41,7 @@ function safePath(p) {
     return clean;
 }
 async function gh(token, apiPath, init = {}) {
+    if (token === GH_CLI_OWNER_MARKER) return ghCliCall(apiPath, init);
     const res = await fetch(`${API}${apiPath}`, {
         ...init,
         headers: {

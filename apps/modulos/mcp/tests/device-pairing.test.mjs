@@ -201,3 +201,40 @@ test("pairing expira sem falso verde", () => {
     assert.equal(f.store.approve({ pairId: pair.pairId, code: pair.code }).ok, false);
   } finally { f.cleanup(); }
 });
+
+test("owner Supabase vincula dispositivo e permite revogacao propria sem chave admin", async () => {
+  const f = fixture();
+  let server;
+  try {
+    const pair = f.store.start({ deviceName: "client-win", executor: "remote-bridge" });
+    const consent = f.store.pendingConsent(pair.pairId);
+    const owner = "fb671c7f-4a18-4d89-b103-3a53979a5d9b";
+    assert.equal(f.store.approveWeb({ pairId: pair.pairId, code: pair.code,
+      nonce: consent.nonce, ownerUserId: owner }).ok, true);
+    const auth = f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
+    assert.equal(f.store.listDevices()[0].owner_user_id, owner);
+    assert.equal(f.store.refresh({ refreshToken: "invalid" }).ok, false);
+    const refresh = f.store.refresh({ refreshToken: auth.refresh_token });
+    assert.equal(refresh.ok, true);
+    assert.equal(f.store.heartbeat({ token: auth.token }).ok, false);
+    assert.equal(f.store.heartbeat({ token: refresh.token }).ok, true);
+    const { default: express } = await import("express");
+    const { createDevicePairingRouter } = await import("../src/device-pairing.js");
+    const app = express(); app.use(express.json());
+    app.use("/device", createDevicePairingRouter({ store: f.store }));
+    server = app.listen(0, "127.0.0.1");
+    await new Promise(resolve => server.once("listening", resolve));
+    const base = "http://127.0.0.1:" + server.address().port;
+    const revoke = async token => fetch(base + "/device/devices/self/revoke", {
+      method: "POST", headers: {"Content-Type": "application/json", Authorization: "Bearer " + token},
+      body: JSON.stringify({ device_id: auth.device_id }),
+    });
+    assert.equal((await revoke("incorrect")).status, 401);
+    assert.equal((await revoke(refresh.token)).status, 200);
+    assert.equal(f.store.heartbeat({token: refresh.token}).ok, false);
+    assert.equal(f.store.listDevices().length, 0);
+  } finally {
+    if (server) await new Promise(resolve => server.close(resolve));
+    f.cleanup();
+  }
+});
