@@ -143,6 +143,31 @@ say "WORKTREE_PRUNE_REMOVED=$PRUNE_REMOVED"
 say "WORKTREE_PRUNE_SKIPPED=$PRUNE_SKIPPED"
 say "WORKTREE_PRUNE_TTL_HOURS=$WORKTREE_TTL_HOURS"
 
+# --- retenção de áudio: arquivos antigos saem, recentes ficam ---
+# Só remove mídia gerada sob o diretório de áudio. Qualquer outro arquivo, ou
+# mídia dentro da janela de retenção, é preservado. Sem --force, sem wildcard solto.
+AUDIO_DIR="${CENTRALDARK_AUDIO_DIR:-/data/audio}"
+AUDIO_TTL_DAYS="${CENTRALDARK_AUDIO_TTL_DAYS:-7}"
+AUDIO_PRUNED=0
+AUDIO_PRUNED_BYTES=0
+if [ -d "$AUDIO_DIR" ]; then
+  audio_cutoff=$(( now_epoch - AUDIO_TTL_DAYS * 86400 ))
+  while IFS= read -r audio_path; do
+    [ -n "$audio_path" ] || continue
+    [ -f "$audio_path" ] || continue
+    audio_mtime="$(stat -c %Y "$audio_path" 2>/dev/null || echo "$now_epoch")"
+    [ "$audio_mtime" -lt "$audio_cutoff" ] || continue
+    audio_size="$(stat -c %s "$audio_path" 2>/dev/null || echo 0)"
+    if rm -f -- "$audio_path"; then
+      AUDIO_PRUNED=$((AUDIO_PRUNED + 1))
+      AUDIO_PRUNED_BYTES=$((AUDIO_PRUNED_BYTES + audio_size))
+    fi
+  done < <(find "$AUDIO_DIR" -type f \( -name '*.mp3' -o -name '*.wav' -o -name '*.ogg' -o -name '*.m4a' -o -name '*.opus' \) 2>/dev/null)
+fi
+say "AUDIO_RETENTION_DAYS=$AUDIO_TTL_DAYS"
+say "AUDIO_PRUNED=$AUDIO_PRUNED"
+say "AUDIO_PRUNED_BYTES=$AUDIO_PRUNED_BYTES"
+
 sync_head="$(git -C "$SYNC_ROOT" rev-parse HEAD)"
 [ "$sync_head" = "$main_sha" ] || fail "SYNC_HEAD_DOES_NOT_MATCH_REMOTE_MAIN"
 [ -z "$(git -C "$SYNC_ROOT" status --porcelain)" ] || fail "SYNC_WORKTREE_DIRTY_AFTER_CLEAN"
@@ -171,12 +196,12 @@ else
 fi
 printf '%s\n' "$SKILL_SYNC_OUTPUT"
 
-python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" "$PRUNE_REMOVED" "$PRUNE_SKIPPED" "$WORKTREE_TTL_HOURS" <<'PY'
+python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" "$PRUNE_REMOVED" "$PRUNE_SKIPPED" "$WORKTREE_TTL_HOURS" "$AUDIO_PRUNED" "$AUDIO_PRUNED_BYTES" "$AUDIO_TTL_DAYS" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced, prune_removed, prune_skipped, prune_ttl = sys.argv[1:]
+output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced, prune_removed, prune_skipped, prune_ttl, audio_pruned, audio_pruned_bytes, audio_ttl_days = sys.argv[1:]
 text = Path(output).read_text(encoding="utf-8", errors="replace")
 start = text.find("{")
 if start < 0:
@@ -198,6 +223,9 @@ receipt = {
     "worktrees_pruned": int(prune_removed),
     "worktrees_skipped": int(prune_skipped),
     "worktree_ttl_hours": int(prune_ttl),
+    "audio_pruned": int(audio_pruned),
+    "audio_pruned_bytes": int(audio_pruned_bytes),
+    "audio_retention_days": int(audio_ttl_days),
     "boot_status": status,
     "hud_status": hud.get("status"),
     "hud_reason": hud.get("reason"),
