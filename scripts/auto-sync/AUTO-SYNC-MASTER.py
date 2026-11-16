@@ -147,14 +147,32 @@ class AutoSyncMaster:
         local = self.repo_root / path
         base = self._blob(base_ref, path)
         remote = self._blob(remote_ref, path)
-        if base is None or remote is None or not local.is_file():
-            # BASE presente + remoto ausente + local ausente = remocao consistente
-            # nos dois lados: nao ha nada a reconciliar. Sem este ramo o
-            # classificador marcava conflito permanente em todo caminho que a
-            # main aposentou e o checkout local ja removeu.
-            if base is not None and remote is None and not local.is_file():
-                return ("DELETED_ON_BOTH_SIDES", 0)
-            return ("PATH_SHAPE_OR_DELETE", 1)
+        local_bytes = local.read_bytes() if local.is_file() else None
+        if base is None or remote is None or local_bytes is None:
+            # O caso "forma ausente" tem varias situacoes deterministicas que o
+            # classificador antes tratava todas como conflito permanente. Cada
+            # ramo abaixo decide por conteudo, nunca por suposicao.
+            if base is None:
+                # Caminho novo: nao existia na BASE.
+                if remote is None:
+                    # so existe no local: nao colide com a main.
+                    return ("NEW_LOCAL_ONLY", 0) if local_bytes is not None else ("NOT_APPLICABLE", 0)
+                if local_bytes is None:
+                    # so existe na main: o checkout ainda nao recebeu.
+                    return ("NEW_ON_REMOTE_ONLY", 0)
+                return (
+                    ("NEW_IDENTICAL_ON_BOTH_SIDES", 0)
+                    if local_bytes == remote
+                    else ("NEW_ON_BOTH_SIDES_DIFFER", 1)
+                )
+            if remote is None:
+                if local_bytes is None:
+                    # main aposentou e o local ja removeu: nada a reconciliar.
+                    return ("DELETED_ON_BOTH_SIDES", 0)
+                # main aposentou, local ainda tem (e talvez editado): exige dono.
+                return ("DELETED_ON_REMOTE_KEPT_LOCALLY", 1)
+            # BASE e remoto existem; o arquivo local sumiu.
+            return ("DELETED_LOCALLY_KEPT_ON_REMOTE", 1)
         with tempfile.TemporaryDirectory(prefix="cd40-merge-") as td:
             root = Path(td)
             bp, rp = root / "base", root / "remote"
