@@ -280,3 +280,19 @@ Proximo delta: teste dentro do backend Hermes de transporte persistente e contra
 ## Contrato read-only: alvo UIA dinamico para Hermes Visual (06/11/2026)
 
 A mesma Skill Mae expõe `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl -WindowTitle <janela> -ControlName <controle>` como descoberta **somente leitura** de janela, PID, HWND, monitor e centro do controle atual. O consumidor e o mesmo `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click --window-title <janela> --control-name <controle>`; preserva o driver Cua virtual e o overlay WGC existentes. Nao substituir por cursor fisico nem duplicar executores. Readback de UIA positivo na janela Hermes do monitor 4 em 06/11/2026, sem injetar input. Clique/efeito runtime desse caminho permanece UNKNOWN ate uso autorizado e verificacao independente.
+
+<!-- CENTRALDARK_ORACLE_REACQUIRE_ACTIVE_20261110 -->
+## 10/11/2026 — Chat do Oráculo reaparece em outra janela
+
+**INTENÇÃO do CHEFE:** quando um chat/aba fechar e reaparecer, o Hermes deve redescobrir a posição/identidade viva na operação atual, sem reutilizar PID, HWND, aba ou coordenada antigos. Não abrir segunda conversa nem criar novo watcher/serviço.
+
+**Owner que já realiza a descoberta:** `.agents/skills/centraldark-operational-method/scripts/Hermes-Oracle-Return.ps1` (ChatGPT/Oracle). Ele encontra a janela por UIA/URL exata em `Find-HermesEmbeddedTarget` ou busca no navegador; a versão anterior falhava imediatamente se o alvo estivesse ausente ao começar a chamada. `Identify-CentralDarkMonitors.ps1` continua responsável pelos quatro monitores e pelas coordenadas atuais quando houver clique visual; não duplicar seu mapa.
+
+**Delta aplicado e conferido na Casa e `main`:** parâmetro `-ReacquireSeconds` (padrão 10, intervalo aceito 0–30), que repete apenas a **descoberta read-only** da conversa a cada 450 ms, dentro de uma chamada existente, até reencontrar o URL esperado ou chegar ao limite. Depois de encontrar, o código revalida o campo e bloqueia envio quando alvo/rascunho muda. Múltiplas correspondências e alvos incorretos continuam bloqueados; não inventa URL nem faz login.
+
+**Testes:** PowerShell AST sem erro; `git diff --check` sem erro. Em `Inspect` com URI fictícia e `TargetSurface=HermesEmbedded`, atraso 0 resultou `BLOCKED` em 643 ms, atraso 1 resultou `BLOCKED` em 1344 ms. Não houve clique nem envio; teste positivo de fechar/reabrir a conversa real continua **PENDENTE**. Blob do source readback na `main`: `1ef1e36edf2a24dc2114fbb8fc5d680af98fc513`, igual ao `git hash-object` no arquivo da Casa.
+
+**Limite importante:** esta é uma procura repetida **somente durante uma chamada Hermes ativa**. Não garante vigilância permanente nem reinicia Goal parado. Na foto do CHEFE o Goal aparece pausado, com 18/20 versus 16/20 e `MCP_AUTH=BLOCKED`, `CASA_ACCESS=UNKNOWN/BLOCKED`; reautorizar/restaurar o próprio Goal é uma tarefa distinta. Não atribuir o fechamento da aba ao Hermes sem log que confirme.
+
+**Próximo teste real autorizado:** durante um Goal ativo, fechar e reabrir a mesma aba/conversa em até 10 s, fazer `Inspect` com URL idêntica, exigir nova janela/PID/URL, e confirmar reencontro sem envio; então aplicar readback do Goal/Oráculo. A inspeção pode ser repetida ao iniciar cada nova ação enquanto a missão estiver ativa; nada deve monitorar janelas continuamente fora desse fluxo.
+<!-- /CENTRALDARK_ORACLE_REACQUIRE_ACTIVE_20261110 -->
