@@ -60,7 +60,7 @@ References:
 
 ### Incrementos incorporados da instalacao mae
 
-1. Change to the CentralDark repository root. In Hermes terminal, run: `cd /c/CentralDark` (or `cd C:\CentralDark` if using Windows paths).
+1. Resolve the current CentralDark repository root from Git: `ROOT="$(git rev-parse --show-toplevel)"` in POSIX/Git Bash, or `$ROOT = (git rev-parse --show-toplevel)` in PowerShell; then change to `$ROOT`. Never assume a fixed drive or path.
 2. Execute the boot loader with a minimal input: `python scripts/trigger-fabric/centraldark_full_trigger_boot.py boot --input '{}'`
 5. Verify that `runtime_preflight_contract.status` equals `BOUND` and `canonical_consumption.status` equals `BOUND`. If either is not BOUND, treat the boot as blocked and output an exact blocker receipt containing the mismatched field and its value.
 7. The boot is considered successful when the HUD shows expected values and all contracts are BOUND; otherwise follow the blocker procedure defined in the CentralDark SOUL.

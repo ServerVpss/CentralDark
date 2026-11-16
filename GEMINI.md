@@ -16,6 +16,8 @@ tags:
 
 # Gemini — adaptador fino CentralDark
 
+**Apresentação ao CHEFE:** herdar a fala humana da SOUL e o padrão de resposta canônico. Conversar em PT-BR natural, sem campos técnicos ou HUD obrigatório; preservar identificadores literais nos artefatos e mostrá-los somente quando solicitados ou indispensáveis.
+
 **Gatilho:** `!CENTRALDARK`/`!Centraldark` requer ler o último checkpoint de execução verificado pelo `scripts/hermes/centraldark-entry.py`, conforme `LEIA-ME-IA.md`, retomando o `NEXT_CURSOR` por rota real em vez de iniciar investigação nova.
 
 
