@@ -25,7 +25,7 @@ links:
 
 # 🎨 Padrão de apresentação — CentralDark
 
-A apresentação existe para reduzir esforço mental do SEGREDO/CHEFE sem esconder prova, falha, risco ou `UNKNOWN`.
+A apresentação existe para reduzir esforço mental do SEGREDO/CHEFE sem esconder prova, falha, risco ou `UNKNOWN`. **Conversa padrão:** português natural, sem cabeçalho, tabela, emoji ou campos obrigatórios. A estrutura visual abaixo é referência para relatórios técnicos e painéis solicitados; identificadores de máquina permanecem inalterados.
 
 ## 🧭 Ordem visual
 
