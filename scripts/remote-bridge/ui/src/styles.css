@@ -1,19 +1,21 @@
 :root {
-  color: #f3efe4;
-  background: #10110f;
+  /* Tokens derivados da pele canonica do Cockpit: apps/instinto-superior/src/styles.css */
+  color: oklch(0.95 0.008 90);
+  background: oklch(0.12 0.012 260);
   font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --vscode-editor-background: #171816;
-  --vscode-editor-foreground: #f3efe4;
-  --surface: rgba(42, 43, 39, 0.78);
-  --surface-strong: #242521;
-  --line: rgba(255, 255, 255, 0.09);
-  --gold: #d6ad4b;
-  --gold-soft: #f5df9a;
-  --green: #62d17d;
-  --red: #ff756b;
-  --muted: #a9aa9f;
+  --vscode-editor-background: oklch(0.12 0.012 260);
+  --vscode-editor-foreground: oklch(0.95 0.008 90);
+  --surface: oklch(0.165 0.016 265);
+  --surface-strong: oklch(0.2 0.02 268);
+  --line: oklch(0.32 0.02 265 / 55%);
+  --gold: oklch(0.82 0.15 88);
+  --gold-soft: oklch(0.68 0.12 84);
+  --green: oklch(0.79 0.19 155);
+  --neon-green: var(--green); /* Mesmo token consumido por cd-port-breathe no Cockpit */
+  --red: oklch(0.65 0.21 25);
+  --muted: oklch(0.72 0.015 265);
 }
 
 * {
@@ -42,17 +44,36 @@ button {
 }
 
 .app-shell {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  min-height: 100vh;
   overflow: auto;
-  padding: 0 42px 24px;
+  padding: 0 34px 20px;
 }
 
 .topbar {
-  height: 72px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
+  padding-right: 150px; /* Windows titleBarOverlay native min/max/close controls */
   -webkit-app-region: drag;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex: 0 0 auto;
+  -webkit-app-region: no-drag;
+}
+
+.topbar-actions .icon-button {
+  white-space: nowrap;
+  min-height: 36px;
 }
 
 .brand {
@@ -64,12 +85,18 @@ button {
 .brand-mark {
   width: 38px;
   height: 38px;
+  flex: 0 0 38px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(214, 173, 75, 0.32);
-  border-radius: 12px;
-  background: rgba(214, 173, 75, 0.08);
-  font-size: 20px;
+  border: 1px solid #7e643b;
+  border-radius: 11px;
+  background: #221c14;
+  color: var(--gold);
+}
+.brand-mark svg {
+  width: 26px;
+  height: 26px;
+  display: block;
 }
 
 .brand div:last-child {
@@ -173,11 +200,12 @@ button {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  padding: 5px 9px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.075em;
+  white-space: nowrap;
 }
 
 .status-pill.pass {
@@ -239,6 +267,31 @@ button {
 .secondary-action {
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.035);
+}
+
+/* Single, restrained success cue; only the pairing surface changes. */
+.actions button.pairing-verified,
+.actions button.pairing-verified:disabled {
+  color: #bff4c9;
+  border-color: rgba(121, 211, 144, 0.55);
+  background: linear-gradient(115deg, rgba(84, 171, 111, 0.20), rgba(84, 171, 111, 0.07));
+  box-shadow: inset 0 0 0 1px rgba(144, 231, 160, 0.05), 0 0 16px rgba(83, 186, 108, 0.08);
+  cursor: default;
+  opacity: 1;
+  animation: pairing-confirmed-glow 900ms ease-out 1;
+}
+.actions button.pairing-verified:hover { transform: none; border-color: rgba(121, 211, 144, 0.55); }
+.action-receipt.pairing-success {
+  color: #bff4c9;
+  border-color: rgba(121, 211, 144, 0.24);
+  background: rgba(69, 157, 91, 0.075);
+}
+@keyframes pairing-confirmed-glow {
+  0% { box-shadow: 0 0 0 0 rgba(111, 213, 136, 0.28); }
+  100% { box-shadow: 0 0 16px rgba(83, 186, 108, 0.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .actions button.pairing-verified { animation: none; }
 }
 
 .actions button:hover {
@@ -326,10 +379,17 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 14px;
+}
+
+.card-title-row .status-pill {
+  margin-left: auto;
+  margin-right: 9px;
+  flex: 0 0 auto;
 }
 
 .card-title-row h3 {
+  min-width: 0;
   margin: 0;
   color: #c4c4ba;
   font-size: 12px;
@@ -352,13 +412,101 @@ button {
   line-height: 1.45;
 }
 
-footer {
+.status-footer {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 18px 3px 0;
-  color: #7f8077;
-  font-size: 11px;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: auto;
+  padding: 18px 14px 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.status-footer-last,
+.status-footer-session,
+.status-footer-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.status-footer-session { white-space: nowrap; }
+.status-footer-session svg { color: var(--gold); }
+.status-footer-session strong {
+  color: var(--vscode-editor-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.status-footer-refresh { margin-left: auto; }
+.status-footer-last strong {
+  color: var(--vscode-editor-foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.status-footer-last svg { color: var(--gold); }
+.status-footer-separator { opacity: 0.45; }
+.live-dot {
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.live-dot.online { background: var(--green); box-shadow: 0 0 0 3px oklch(0.79 0.19 155 / 12%); }
+.live-dot.busy { background: var(--gold); }
+.live-dot.idle { background: var(--muted); }
+
+/* Choreografia original do Cockpit: styles.css cd-port-breathe / cd-done-*.
+   Mesmo contrato visual, classes reutilizadas sem novo componente de tema. */
+@keyframes cd-port-breathe {
+  0%, 100% { transform: scale(0.82); box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-green) 0%, transparent); }
+  50% { transform: scale(1.12); box-shadow: 0 0 0 4px color-mix(in oklab, var(--neon-green) 18%, transparent); }
+}
+.cd-port-dot--pass { animation: cd-port-breathe 2.6s ease-in-out infinite; }
+
+.status-pill.pass::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: cd-port-breathe 2.6s ease-in-out infinite;
+}
+
+/* Confirmação DONE: primeiro fecha círculo, depois desenha o visto. */
+@keyframes cd-done-ring {
+  from { stroke-dashoffset: 63; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes cd-done-check {
+  from { stroke-dashoffset: 24; opacity: 0; }
+  1% { opacity: 1; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+.cd-done-ring {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: cd-done-ring 520ms cubic-bezier(.65, 0, .35, 1) forwards;
+}
+.cd-done-check {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  opacity: 0;
+  animation: cd-done-check 320ms cubic-bezier(.65, 0, .35, 1) 520ms forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-done-ring, .cd-done-check {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .cd-port-dot--pass, .status-pill.pass::before { animation: none; }
 }
 
 .spin {
@@ -403,4 +551,103 @@ footer {
   .app-shell {
     height: auto;
   }
+}
+
+/* Pele do Cockpit: mesmos tokens de apps/instinto-superior/src/styles.css. */
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 30px 20px;
+  background:
+    radial-gradient(48rem 26rem at 50% -15%, oklch(0.2 0.03 265 / 75%), transparent 72%),
+    var(--vscode-editor-background);
+}
+.login-card {
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 34px;
+  color: var(--vscode-editor-foreground);
+  background: linear-gradient(160deg, var(--surface-strong), var(--surface) 58%);
+  border: 1px solid oklch(0.82 0.15 88 / 36%);
+  border-radius: 20px;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.44), 0 0 28px oklch(0.82 0.15 88 / 5%);
+}
+.login-emblem {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--gold);
+  border-radius: 12px;
+  background: oklch(0.82 0.15 88 / 9%);
+}
+.login-eyebrow {
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.19em;
+}
+.login-card h1 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+}
+.login-card p { margin: 0; line-height: 1.55; }
+.login-card .login-description { color: var(--muted); font-size: 14px; }
+.login-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.login-card input {
+  width: 100%;
+  color: var(--vscode-editor-foreground);
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  min-height: 46px;
+  padding: 12px 14px;
+  font: inherit;
+}
+.login-card input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+.login-card .login-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  margin-top: 3px;
+  padding: 12px 16px;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  color: oklch(0.14 0.012 90);
+  font-weight: 750;
+  cursor: pointer;
+  transition: filter 180ms ease, box-shadow 180ms ease;
+}
+.login-card .login-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 0 8px 28px oklch(0.82 0.15 88 / 16%);
+}
+.login-card button:disabled { opacity: 0.6; cursor: wait; }
+.login-card .login-footnote {
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+.login-card .login-error {
+  color: #ffaca9;
+  font-size: 12px;
+  font-weight: 600;
 }

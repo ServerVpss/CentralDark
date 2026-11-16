@@ -58,7 +58,7 @@ A IA executa **todos estes passos ao mesmo tempo** (não em sequência):
 
 ## Estrutura do Relatório de Alinhamento
 
-A IA entrega o resultado neste formato fixo:
+Os campos de sincronização devem existir no registro técnico quando aplicáveis, mas a resposta ao CHEFE deve ser natural e breve. O formato abaixo é um exemplo para auditoria ou relatório solicitado, não um molde obrigatório em toda sessão:
 
 ```
 ## Relatório de Alinhamento — Sessão YYYY-MM-DD
@@ -75,7 +75,7 @@ A IA entrega o resultado neste formato fixo:
 ### 4. Pendências Identificadas
    Tabela: # | prioridade | título | situação
 
-Encerra com: "O que você quer atacar primeiro, Pivete?"
+Encerra com o próximo passo real, sem pergunta ritual se a intenção atual já estiver definida.
 ```
 
 ---

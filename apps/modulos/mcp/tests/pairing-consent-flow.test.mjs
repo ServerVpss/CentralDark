@@ -239,6 +239,68 @@ test('Remote Bridge: senha fallback exige código, nonce e senha válidos; limit
   assert.equal(replay.status,404);
 });
 
+test('Remote Bridge: Supabase JWT admin autoriza somente após clique, role e nonce (sem rede externa)',async()=>{
+  const existingFetch=globalThis.fetch;
+  const oldUrl=process.env.HUB_SUPABASE_URL;
+  const oldKey=process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+  process.env.HUB_SUPABASE_URL='https://centraldark-auth-test.invalid';
+  process.env.HUB_SUPABASE_PUBLISHABLE_KEY='sb_publishable_test_only';
+  let role='user';
+  const bearer='Bearer '+'T'.repeat(64);
+  globalThis.fetch=async(input,options={})=>{
+    const address=String(input);
+    if(address.startsWith('https://centraldark-auth-test.invalid/')){
+      if(options.headers?.Authorization!==bearer) return new Response('{}',{status:401});
+      if(address.includes('/auth/v1/user')) return new Response(JSON.stringify({
+        id:'00000000-0000-4000-8000-000000000001',is_anonymous:false
+      }),{status:200,headers:{'Content-Type':'application/json'}});
+      if(address.includes('/rest/v1/user_roles')) return new Response(
+        JSON.stringify(role==='admin'?[{role:'admin'}]:[]),
+        {status:200,headers:{'Content-Type':'application/json'}}
+      );
+      return new Response('{}',{status:404});
+    }
+    return existingFetch(input,options);
+  };
+  try{
+    const start=await request('/device/pair/start',json({
+      device_name:'TEST-REMOTE-SUPABASE',executor:'remote-bridge',surface:'windows-tray'
+    }));
+    assert.equal(start.status,201);
+    const pair=await start.json();
+    const page=await request('/authorize?'+new URLSearchParams({
+      client_id:'centraldark.remote-bridge',pair_id:pair.pair_id
+    }));
+    assert.equal(page.status,302);
+    const challenge=new URL(page.headers.get('location'));
+    const body={
+      client_id:'centraldark.remote-bridge',pair_id:pair.pair_id,
+      pair_code:pair.code,pair_nonce:challenge.searchParams.get('pair_nonce')
+    };
+    const withoutJwt=await request('/authorize',urlEncoded(body));
+    assert.equal(withoutJwt.status,302);
+    assert.match(new URL(withoutJwt.headers.get('location')).searchParams.get('error') || '', /Sessão administrativa ausente/);
+    const opts=(data)=>({...urlEncoded(data),headers:{...urlEncoded(data).headers,Authorization:bearer}});
+    const regularUser=await request('/authorize',opts(body));
+    assert.equal(regularUser.status,302);
+    assert.match(new URL(regularUser.headers.get('location')).searchParams.get('error') || '', /Sessão administrativa ausente/);
+    role='admin';
+    const badNonce=await request('/authorize',opts({...body,pair_nonce:'WRONG_NONCE'}));
+    assert.equal(badNonce.status,403);
+    const approved=await request('/authorize',opts(body));
+    assert.equal(approved.status,302);
+    assert.equal(new URL(approved.headers.get('location')).searchParams.get('success'),'1');
+    const completed=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+    assert.equal((await completed.json()).status,'approved');
+  }finally{
+    globalThis.fetch=existingFetch;
+    if(oldUrl===undefined) delete process.env.HUB_SUPABASE_URL;
+    else process.env.HUB_SUPABASE_URL=oldUrl;
+    if(oldKey===undefined) delete process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+    else process.env.HUB_SUPABASE_PUBLISHABLE_KEY=oldKey;
+  }
+});
+
 test('Expired pair cannot be confirmed; code alone never issues token',()=>{
   let now=0;
   const isolated=createDevicePairingStore({registryPath:join(tmp,'expired.json'),now:()=>now,ttlMs:500});
