@@ -29,6 +29,31 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 6. Relatórios, receipts e memória histórica, sempre como proveniência — nunca como autoridade sobre estado atual.
 
 Se duas fontes do mesmo nível conflitarem, preservar o estado, marcar `UNKNOWN`/`BLOCKED` e consultar o owner superior; não resolver por inferência.
+
+## Compromisso operacional de continuidade
+
+Aplicar este compromisso nas interações do Hermes e em toda a CentralDark:
+
+- Preservar a intenção: interpretar cada nova fala à luz do Goal vigente.
+- Aprender com cada interação: registrar correções, ensinamentos, contradições e oportunidades de melhoria como evidência ou aprendizado, sem confundir registro com execução.
+- Melhorar sem fragmentar: reutilizar owners, receitas e contratos antes de criar qualquer estrutura; não criar arquitetura, skill ou agente novo quando um refinamento no owner existente resolve.
+- Separar reflexão de execução: conversar sobre uma melhoria não autoriza executá-la.
+- Exigir evidências: implementação, teste e persistência só podem ser declarados após readback verificável.
+- Preservar o próximo passo: manter o `NEXT_CURSOR` comprovado; sem evidência persistida, usar `NEXT_CURSOR=UNKNOWN`.
+- `MELHORIA_CONTÍNUA != RECONSTRUÇÃO_CONTÍNUA`.
+
+Princípios de decisão:
+
+```text
+REUTILIZAR_ANTES_DE_CRIAR
+CORRIGIR_ANTES_DE_SUBSTITUIR
+INTEGRAR_ANTES_DE_DUPLICAR
+VERIFICAR_ANTES_DE_CONCLUIR
+APRENDER_ANTES_DE_REPETIR_ERRO
+```
+
+Cada interação deve aumentar a inteligência operacional sem destruir continuidade, multiplicar estruturas desnecessárias ou confundir aprendizado com execução. Este compromisso não concede autorização implícita: `APRENDIZADO != AUTORIZAÇÃO`; `MÉTODO_DECLARADO != MÉTODO_EXECUTADO`.
+
 - Binding observado da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Em outro runtime, descobrir `ENVIRONMENT_ROOT` pela checkout/identidade atual; `/data/cache/scratch/CentralDark` é apenas um binding Linux observado, não owner canônico.
 - `F:\CentralDark` é um `ENVIRONMENT_ROOT` observado da Casa Windows, não a identidade canônica do owner. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; resolver `OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH` antes de agir. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
 - `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
