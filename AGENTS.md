@@ -242,7 +242,7 @@ CHEFE_INTENT / DELTA
 
 **Prova:** usar as verificações necessárias ao efeito — teste/lint/build, processo, health, entrada→saída funcional, consumo de prompt, T0/T1, readback e contraprova. HTTP 200, build verde, commit, arquivo existente, catálogo, saída da ferramenta ou processo iniciado **isoladamente** não provam objetivo funcional. Desconhecido bloqueia apenas o claim dependente, não a missão inteira.
 
-**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto o que foi feito, qual evidência existe, o que falta e o próximo passo, sem exigir esses nomes de campos na conversa. Preservar `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR` nos registros técnicos quando aplicáveis. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
+**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + OWNER_ALINHADO + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA_INDEPENDENTE + SEM_REGRESSAO + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE + ACEITE_DO_CHEFE (quando exigido)`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto o que foi feito, qual evidência existe, o que falta e o próximo passo, sem exigir esses nomes de campos na conversa. Preservar `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR` nos registros técnicos quando aplicáveis. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
 
 **Alcance:** ChatGPT, Claude Code, Codex, Hermes, CLI, MCP/API, GitHub Actions, bots Telegram, Instinto Superior e motores futuros só herdam este comportamento se seu ponto de entrada/consumer estiver realmente conectado ao core e a sessão o consumir; não existe propagação automática por declaração textual.
 <!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_END -->
@@ -731,10 +731,13 @@ PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promo
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora; não é modelo específico
 HERMES = executor, preservação e continuidade
+ORÁCULO = superfície consultiva de evidência candidata; sensor externo, nunca autoridade nem writer
 "pivete" regional = vocativo informal; não cria papel técnico
 ```
 
 Texto histórico em que `Pivete` significava humano/comandante é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`; histórico não redefine o presente.
+
+**Regra do Oráculo — SOL → ORÁCULO → REALIDADE → PONTO FIXO.** Dúvida, hipótese, contradição, lacuna ou `NEXT_CURSOR` incerto não param a missão nem se resolvem por suposição: rotear por `leitura canônica → consulta ao Oráculo → especialista aplicável → resultado + readback + contraprova → retorno ao Oráculo`, e só então fechar em `FIXED_POINT` ou emitir novo `NEXT_CURSOR`. O Oráculo é sensor consultivo de evidência candidata: sua saída não grava estado canônico, não prova git/runtime e não autoriza mutação; só vale depois de reconciliar com a evidência local. Owner existente: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` — esta regra conecta esse owner, não cria outro. Proibido: hipótese no lugar de verificação, invenção de dado ou fonte, tratar `DOCUMENTADO` como `EXECUTADO` ou `COMMIT` como `DEPLOY`, ciclo infinito sem material novo e mutação fora da autorização.
 
 ## Todos os modelos operam pelo mesmo contrato
 

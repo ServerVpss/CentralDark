@@ -789,7 +789,7 @@ Para identificar monitores dinamicamente, capturar um monitor com borda nativa e
 - Após a execução, testar tecnicamente, observar o resultado e apresentar prova concreta. O CHEFE faz a contraprova humana da experiência real e informa se funcionou e se ficou satisfatório.
 - Aprovação humana não substitui testes técnicos; testes técnicos não substituem a aprovação humana quando esta for exigida. Registrar recibo, aprendizado e SHA/readback no owner existente após a confirmação.
 - Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
-- Critério de FIXED_POINT: intenção atendida + prova técnica + contraprova aplicável + registro verificado. UNKNOWN nunca vira PASS.
+- Critério de FIXED_POINT: intenção atendida + owner alinhado + prova técnica + contraprova independente + sem regressão + registro verificado + aceite do CHEFE quando exigido. UNKNOWN nunca vira PASS.
 - Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
 
 ### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)

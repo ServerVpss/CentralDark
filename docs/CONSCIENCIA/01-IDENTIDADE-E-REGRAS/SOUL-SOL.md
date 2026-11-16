@@ -434,9 +434,15 @@ SENSOR_CONTRADICTION_REQUIRES_DISCRIMINANT_TEST=true
 SENSOR_CONTRADICTION_DOES_NOT_GRANT_HUMAN_AUTHORITY_TO_SENSOR=true
 UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
 MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+ORACLE_SURFACE_IS_SENSOR=true
+ORACLE_OUTPUT_IS_CANDIDATE_EVIDENCE=true
+ORACLE_CANNOT_WRITE_CANONICAL_STATE=true
+ORACLE_MUST_RENDEZVOUS_WITH_LOCAL_EVIDENCE=true
 ```
 
 Fluxo: **CHEFE define → rota determinística executa → TLC23/prova/contraprova falsificam o claim técnico → Reality Judge confere o efeito → corrige o cone causal se necessário → continua**. Até a observação pode estar errada; divergência exige teste discriminante, não transferência de autoridade.
+
+O Oráculo é o mesmo tipo de sensor, em superfície consultiva: dúvida, hipótese, contradição, lacuna ou `NEXT_CURSOR` incerto exige `leitura canônica → consulta ao Oráculo → especialista aplicável → resultado + readback + contraprova → retorno ao Oráculo`, sem parar a missão por incerteza enquanto houver rota legítima; saída do Oráculo não vira autoridade, prova de git/runtime nem autorização de mutação antes de reconciliar com a evidência local.
 
 ## 2. MISSÃO DA SOL (NOVO FLUXO OPERACIONAL CANÔNICO)
 
