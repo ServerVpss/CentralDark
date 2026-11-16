@@ -16,31 +16,35 @@ Arquivo novo na raiz sem entrada neste registro é bloqueado pelo pre-commit hoo
 | Skill agente | `.agents/skills/root-file-contract-router/SKILL.md` |
 | Git hook | `.githooks/pre-commit-root-contract.sh` |
 
-## Core — Boot Obrigatório
+## Entrada e contratos registrados (consulta pertinente)
 
-| Arquivo | Papel | Boot | Status |
+| Arquivo | Papel | Ordem no catálogo | Status |
 |---|---|---|---|
 | `LEIA-ME-IA.md` | Entrypoint canônico de toda IA | 1 | ✅ linked |
 | `AGENTS.md` | Contrato operacional | 2 | ✅ linked |
-| `CLAUDE.md` | Bridge adapter Claude Code/Cowork | 3 | ✅ linked |
+| `CLAUDE.md` | Bridge adapter Claude Code/Cowork (condicional) | 3 | ✅ linked |
 | `CENTRALDARK_AI_BOOT.yaml` | Config de boot YAML | — | ✅ linked |
 | `SOURCES.json` | Registro de fontes | — | ✅ linked |
 | `SECOND-BRAIN.yml` | Config do brain | — | ✅ linked |
 | `ARCHITECTURE.mmd` | Diagrama de arquitetura | — | ✅ linked |
 | `README.md` | GitHub readme | — | standard |
 
+**A ordem no catálogo não é uma exigência de leitura integral:** a porta é `LEIA-ME-IA.md`; adaptadores carregam apenas quando pertinentes à superfície.
+
 ## Model Routers — Adaptadores por Engine
 
-Cada router aponta para `LEIA-ME-IA.md` como core. NÃO define identidade, autoridade ou merge policy.
+Cada adaptador aponta para `LEIA-ME-IA.md` e identifica apenas a superfície. Não define identidade, autoridade, merge policy nem segunda memória. `00-COMECE-AQUI-IA.md` é ponte de descoberta; `CLAUDE.md` permanece adaptador de Claude, não constituição universal.
 
-| Arquivo | Engine | Linhas |
+**Não manter número de linhas como contrato:** esse valor muda a cada commit. Para auditoria, medir diretamente o arquivo na ref/SHA inspecionada, sem propagar contagens históricas.
+
+| Arquivo | Superfície | Papel |
 |---|---|---|
-| `00-COMECE-AQUI-IA.md` | Universal (fallback) | 70 |
-| `CHATGPT.md` | ChatGPT | 73 |
-| `CODEX.md` | Codex | 40 |
-| `GEMINI.md` | Gemini | 33 |
-| `GROK.md` | Grok | 21 |
-| `.windsurfrules` | Windsurf | 33 |
+| `00-COMECE-AQUI-IA.md` | Universal | Ponte de descoberta |
+| `CHATGPT.md` | ChatGPT | Adaptador |
+| `CODEX.md` | Codex | Adaptador |
+| `GEMINI.md` | Gemini | Adaptador |
+| `GROK.md` | Grok | Adaptador |
+| `.windsurfrules` | Windsurf | Adaptador |
 
 ## Docs Operacionais
 

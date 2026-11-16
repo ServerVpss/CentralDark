@@ -90,6 +90,31 @@ class ScriptOnly(unittest.TestCase):
         code, out = m.delegate(self.args)
         self.assertEqual((code, out['verdict']), (70, 'UNKNOWN'))
 
+    def test_missing_registry_does_not_masquerade_as_missing_claim(self):
+        with patch.object(m, 'call', return_value=(5, {'verdict': 'DENY',
+                'reason': 'CLAIM_NOT_SEALED'})):
+            code, out = m.delegate(self.args)
+        self.assertEqual((code, out['verdict'], out['reason']),
+                         (70, 'UNKNOWN', 'RECIPE_REGISTRY_UNAVAILABLE'))
+        self.assertFalse(out['script_executed'])
+
+    def test_unavailable_runner_response_stays_unknown(self):
+        with patch.object(m, 'call', return_value=(70, {'verdict': 'UNKNOWN',
+                'reason': 'EXECUTOR_UNAVAILABLE:TimeoutExpired'})):
+            code, out = m.delegate(self.args)
+        self.assertEqual((code, out['verdict']), (70, 'UNKNOWN'))
+        self.assertFalse(out['script_executed'])
+
+    def test_empty_existing_registry_requires_scoped_delta(self):
+        registry = Path(self.tmp.name) / m.REGISTRY
+        registry.parent.mkdir(parents=True, exist_ok=True)
+        registry.write_text('{"claims": {}}', encoding='utf-8')
+        with patch.object(m, 'call', return_value=(5, {'verdict': 'DENY',
+                'reason': 'CLAIM_NOT_SEALED'})):
+            code, out = m.delegate(self.args)
+        self.assertEqual((code, out['verdict'], out['reason']),
+                         (3, 'DELTA_REQUIRED', 'CLAIM_NOT_SEALED'))
+
 
 if __name__ == '__main__':
     unittest.main()
