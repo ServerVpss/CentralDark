@@ -1276,7 +1276,10 @@
       "hud_owner": "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx",
       "hud_is_authority": false,
       "hud_is_runtime_proof": false,
-      "legacy_pr_mothers": [1562, 1757],
+      "legacy_pr_mothers": [
+        1562,
+        1757
+      ],
       "no_new_pr_mother": true,
       "global_dna_validation": {
         "required": true,
@@ -2194,6 +2197,25 @@
       "pombo64_trace_is_delivery_by_itself": false,
       "temporary_file_card_in_chat_is_not_proof_of_delivery_intent": true,
       "final_delivery_must_be_intentional_and_named": true
+    },
+    "windows_casa_location_policy": {
+      "host": "SEGREDO",
+      "temporary_build_download_cache_root": "F:\\TEMP",
+      "git_worktree_root": "F:\\_worktrees",
+      "existing_noncanonical_siblings_read_only": [
+        "F:\\_temp",
+        "F:\\tmp"
+      ],
+      "canonical_creator": "scripts/centraldark/ephemeral-workspace.mjs",
+      "preflight_command": "check-root",
+      "root_validation_required_before_write": true,
+      "os_tmpdir_is_not_authority": true,
+      "no_fallback_to_c_on_missing_f_root": true,
+      "per_process_temp_tmp_and_cache_binding_required_when_applicable": true,
+      "cleanup_existing_unknown_dirs_automatically": false,
+      "preserve_system_managed_install_and_runtime_paths": true,
+      "linux_binding_remains_separate": true,
+      "location_pass_is_not_cleanup_pass": true
     }
   },
   "log_incident_crystallization_contract": {
