@@ -145,6 +145,39 @@ da Forja). Nada escuta no endereco da LAN -> o `cloudflared` recebe conexao recu
 
 ---
 
+## OAuth do MCP quando o navegador esta em OUTRA maquina
+
+O `redirect_uri` do cliente e **loopback** (`http://127.0.0.1:<porta>/callback`) e aponta para a
+maquina ONDE O CLIENTE RODA, nao para o navegador. Se o navegador do CHEFE esta no celular/Windows
+e o cliente roda na VPS, o `127.0.0.1` do navegador e o proprio navegador -> `ERR_CONNECTION_REFUSED`.
+**Isso e normal, nao e defeito.** O `authorize` ja emitiu o `code`; ele so precisa ser entregue ao
+receptor do cliente.
+
+Fluxo que fecha (comprovado em 2026-11-17, 142 ferramentas descobertas com escopo `mcp`):
+
+```text
+1. subir UM receptor no host do cliente: 127.0.0.1:51070/callback
+   -> usar serve_forever em thread; handle_request() atende UMA conexao e morre
+      (uma simples checagem de porta ja consome esse unico atendimento)
+2. gerar PKCE proprio (verifier + challenge S256 + state) e reusar um client_id JA REGISTRADO
+   (o registro dinamico responde 403)
+3. pedir ao CHEFE: abrir a URL de authorize e, na pagina de erro, COPIAR a barra de endereco
+4. entregar essa URL no receptor do passo 1 (curl local) -> capturar o code
+5. POST /token com grant_type=authorization_code + code + redirect_uri + client_id + code_verifier
+6. usar o access_token em POST /api/mcp (JSON-RPC tools/list e tools/call)
+```
+
+Armadilhas:
+
+- **Cloudflare 1010** bloqueia o POST de `/token` vindo de `urllib`/curl sem UA de navegador. Mande
+  `User-Agent` de navegador real, senao a troca falha no edge (e o `code` continua valido).
+- **O `code` e de uso unico** e expira rapido: capture e troque na mesma janela.
+- Escopo `mcp` expoe ~142 das 160 ferramentas; `admin` libera o resto.
+- `tools/list` autenticado + um `tools/call` real com readback e o que fecha o circuito;
+  `/health` 200 nao prova consumo.
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
