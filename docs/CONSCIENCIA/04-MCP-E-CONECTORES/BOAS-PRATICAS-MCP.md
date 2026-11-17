@@ -108,6 +108,43 @@ Referência completa: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/CAPACIDADES-COGNI
 
 ---
 
+## Operacao: bind, porta e o 502 do host publico
+
+Sintoma: `https://mcp.centralldark.com/health` responde **502**, o tunel aparece `healthy` e o
+`admin.centralldark.com` (mesma maquina, outra porta) responde **200**. O MCP em si esta de pe —
+basta le-lo localmente. Ou seja: `TUNEL_SAUDAVEL != SERVICO_EXPOSTO`.
+
+Assinatura de causa raiz comprovada: o processo do MCP escuta **somente em `127.0.0.1:9100`**,
+enquanto o ingress do tunel `centraldark-casa-mcp` entrega em `http://192.168.35.130:9100` (a LAN
+da Forja). Nada escuta no endereco da LAN -> o `cloudflared` recebe conexao recusada -> 502.
+
+### Como medir sem chutar
+
+```text
+1. ss -ltnp | grep :9100            # em QUAL endereco o MCP escuta (0.0.0.0? 127.0.0.1? LAN?)
+2. curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:9100/health   # processo vivo?
+3. curl -s -o /dev/null -w '%{http_code}' http://192.168.35.130:9100/health # atende no ingress?
+4. Cloudflare: comparar o ingress ativo com os destinos que REALMENTE escutam
+5. analytics por hora: 530 -> tunel sem origem; 502 -> origem recusando; 401 -> servico OK, so auth
+```
+
+### Regras que ficam
+
+- **`127.0.0.1` fixo no codigo nao sobrevive a um ingress que aponta para a LAN.** O `app.listen`
+  deve ler o endereco de uma variavel (`MCP_HOST`), com **padrao loopback** — expor exige variavel
+  explicita.
+- **Nao troque a porta nem o ingress como primeira acao.** Confirme quem escuta onde antes de mexer
+  na topologia.
+- **Cuidado ao publicar sonda de diagnostico na mesma porta**: um listener em `100.x:9100`
+  (Tailscale Serve) impede o bind em `0.0.0.0:9100` e derruba o servico. Se usar sonda, aponte o
+  bind do servico para o endereco especifico da LAN ou remova a sonda antes.
+- **Reinicio de servico com `TimeoutStopSec` curto vira SIGKILL**: o processo do MCP demora a
+  morrer e o systemd registra `Failed with result 'timeout'` — isso nao e a causa do 502.
+- **`/mcp` e `/api/mcp` variam por build.** Nao declare rota inexistente por um unico 404: confirme
+  no MESMO build que esta servindo (`401` = rota existe e pede auth).
+
+---
+
 ## Conexões Rápidas
 
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
