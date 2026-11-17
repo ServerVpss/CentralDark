@@ -46,6 +46,30 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **Contrato obrigatório:** `NECESSIDADE → DOWNLOAD_MINIMO → OWNER → MENOR_DELTA → SUITE_PERTINENTE → RESULTADO_REAL → CONTRAPROVA → RECEIPT → LIMPEZA_SEGURA → READBACK → FIXED_POINT | NEXT_CURSOR`. `UNKNOWN != PASS`; `CLEANUP_BEFORE_RECEIPT=FORBIDDEN`; `FULL_CLONE_WITHOUT_NEED=FORBIDDEN`; `TEST_OWNER=CODE_WRITER`.
 <!-- /CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
 
+<!-- CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+## 👑 Chave do CHEFE: workflow travado não paralisa entrega autorizada (17/11/2026)
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@doc_ref: docs/CONSCIENCIA/APRENDIZADOS.md#104-receita-replay-able--diagnostico-e-fix-deterministico-de-falha-de-workflow-github
+@memory_ref: docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md
+@last_updated: 2026-11-17T20:10:07.007Z
+@prova: https://github.com/ServerVpss/CentralDark/pull/2125#issuecomment-6959176393
+@status: CANONICO_DOCUMENTADO_COM_CONTRAPROVA_DE_SQUASH_NA_MAIN
+@next_cursor: REUSAR_NO_PROXIMO_STARTUP_FAILURE_COM_GATES_REAIS
+-->
+
+**LEI:** `WORKFLOW_TRAVADO != MISSAO_PARALISADA`. Quando GitHub Actions retorna `startup_failure`/não cria jobs, **não esperar indefinidamente e não repetir o mesmo run sem mudança de evidência**. Distinguir falha da plataforma/inicialização de falha de testes do código. Consultar a receita existente em `APRENDIZADOS.md` #104 para diagnosticar o workflow em seu próprio owner; esse diagnóstico pode seguir em paralelo, **não se tornando porteiro de uma entrega já autorizada quando não é gate obrigatório**.
+
+**CHAVE NÃO É BYPASS:** a autorização expressa do SEGREDO/CHEFE define a intenção e pode permitir usar a rota legítima GitHub da missão: SOL coordena → Hermes/capacidades existentes executam testes locais reais → contraprova independente e varredura do diff → verificar owner, PR, HEAD/base, conflitos, reviews, segredos e proteções aplicáveis → promover somente pelo método que GitHub **aceitar sem force nem desativar regras**. Falta de check obrigatório real, conflito material, mudança de escopo, segredo ou teste local reprovado = **BLOQUEADO**, não `PASS`. `STARTUP_FAILURE != CI_GREEN`, `TESTE_LOCAL_PASS != CHECK_OBRIGATORIO_PASS`.
+
+**DUAS TRILHAS, SEM CONFUNDIR:** (A) para edição direta na `main` explicitamente permitida pelo contrato vigente, aplicar `COMMIT/PUSH_MAIN` após testes, sem PR ou squash fictício; (B) quando **já existe PR compatível** e o CHEFE autorizou sua promoção, usar `SQUASH_PR_TO_MAIN` com HEAD esperado e condições do GitHub satisfeitas. Não abrir segundo promotor/workflow/runner, não forçar push e não mudar branch protection para obter verde. Revalidar SHA da `main`, os blobs do owner e registrar recibo no PR existente + memória; `MERGED != DEPLOYED`.
+
+**Contraprova concreta (17/11/2026):** PR #2125 do Agente Remoto teve `startup_failure` nos workflows (sem CI verde); lint/build React, Rust 10/10 e build NSIS debug passaram localmente, com 55/55 blobs de fonte conferidos. Com autorização específica do CHEFE e merge permitido pelo GitHub, o **squash normal** produziu `main@a4440c675d2b4dfabf4b4e1c3b073d5b90b5255a`, confirmado por readback; o motor remoto Rust e a release final continuaram pendentes. Esta prova valida **essa promoção**, não autoriza pular gates de outros PRs.
+
+**Receita curta:** `STARTUP_FAILURE → CLASSIFICAR_O_GATE → REUSAR_TESTE_LOCAL_REAL → CONTRAPROVA → AUTORIZACAO_VIGENTE → DIRECT_MAIN_OU_PR_SQUASH_GITHUB_PERMITIDO → SHA_READBACK → RECEIPT`.
+<!-- /CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+
 
 ## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
 
