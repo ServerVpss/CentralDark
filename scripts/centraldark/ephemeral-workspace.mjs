@@ -17,6 +17,31 @@ import { isAbsolute, join, relative, resolve, sep } from "node:path";
 const MARKER = "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED";
 const MARKER_FILE = ".centraldark-ephemeral.json";
 const SCHEMA_VERSION = 1;
+const CASA_TEMP_ROOT = "F:\\TEMP";
+const CASA_WORKTREE_ROOT = "F:\\_worktrees";
+function isCasaWindows() {
+  return process.platform === "win32" &&
+    String(process.env.COMPUTERNAME || "").toUpperCase() === "SEGREDO";
+}
+function rootMatches(directory, base) {
+  const a = resolve(directory).toLowerCase();
+  const b = resolve(base).toLowerCase();
+  return a === b || isInside(b, a);
+}
+function checkCasaWorkspaceRoot(rootInput, purpose = "temporary-validation", owner = "") {
+  if (!isCasaWindows()) return;
+  if (!existsSync(CASA_TEMP_ROOT)) {
+    fail("CASA_TEMP_ROOT_MISSING_NO_C_FALLBACK", 3, { expectedRoot: CASA_TEMP_ROOT });
+  }
+  const root = resolve(rootInput);
+  const worktree = rootMatches(root, CASA_WORKTREE_ROOT);
+  if (rootMatches(root, CASA_TEMP_ROOT)) return;
+  if (worktree && /worktree/i.test(purpose) && owner && owner !== "UNKNOWN") return;
+  fail("CASA_EPHEMERAL_ROOT_NOT_CANONICAL", 3, {
+    requestedRoot: root, expectedRoot: CASA_TEMP_ROOT,
+    worktreeRoot: CASA_WORKTREE_ROOT, purpose,
+  });
+}
 const argv = process.argv.slice(2);
 
 function valueAfter(name, fallback = "") {
@@ -138,6 +163,7 @@ function summarize(path) {
 function createWorkspace({ rootInput, name, purpose, owner, removeEmptyRoot, pids = [] }) {
   validateName(name);
   if (!rootInput) fail("ROOT_REQUIRED");
+  checkCasaWorkspaceRoot(rootInput, purpose, owner);
   const root = resolve(rootInput);
   mkdirSync(root, { recursive: true });
   const realRoot = realpathSync(root);
@@ -357,7 +383,7 @@ function inventoryRoot(rootInput, prefixes = []) {
 }
 
 function selfTest() {
-  const requestedRoot = join(tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
+  const requestedRoot = join(isCasaWindows() ? CASA_TEMP_ROOT : tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
   const name = "workspace";
   let target = null;
   let canonicalRoot = requestedRoot;
@@ -400,6 +426,14 @@ if (argv.includes("--self-test")) {
 
 const command = argv[0];
 switch (command) {
+  case "check-root": {
+    const rootInput = valueAfter("--root");
+    if (!rootInput) fail("ROOT_REQUIRED");
+    checkCasaWorkspaceRoot(rootInput, valueAfter("--purpose"), valueAfter("--owner"));
+    emit({ ok: true, action: "check-root", state: "LOCATION_PASS",
+      root: resolve(rootInput), host: process.env.COMPUTERNAME || "UNKNOWN" });
+    break;
+  }
   case "create":
     createWorkspace({
       rootInput: valueAfter("--root"),
@@ -424,7 +458,7 @@ switch (command) {
     break;
   default:
     fail(
-      "USAGE: ephemeral-workspace.mjs create --root <dir> --name <safe-name> [--owner <owner>] [--purpose <text>] [--remove-empty-root] [--pid <pid>] | inventory --root <dir> [--prefix <prefix> ...] | status --path <dir> | register-pid --path <dir> --pid <pid> | cleanup --path <dir> | --self-test",
+      "USAGE: ephemeral-workspace.mjs check-root --root <dir> [--purpose <text>] [--owner <owner>] | create --root <dir> --name <safe-name> [--owner <owner>] [--purpose <text>] [--remove-empty-root] [--pid <pid>] | inventory --root <dir> [--prefix <prefix> ...] | status --path <dir> | register-pid --path <dir> --pid <pid> | cleanup --path <dir> | --self-test",
       1,
     );
 }
