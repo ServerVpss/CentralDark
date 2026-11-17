@@ -504,3 +504,14 @@ NEXT_CURSOR: compilar extens?o, empacotar VSIX do mesmo owner, instalar no VS Co
 - O registro do estado GUI ? diferente da publica??o no GitHub: ainda exigir SHA/readback do commit desta vers?o e diferenciar branch PR #1993, main, release e instala??o.
 - NEXT_CURSOR: preservar o menor delta na branch da PR #1993, conferir SHA/arquivos no GitHub; manter release hist?rico 0.2.2 intacto e n?o publicar automaticamente 0.2.5 sem prova/gates.
 <!-- /CENTRALDARK_NATIVE_EXPLORER_RESTORED_UIA_20261107 -->
+
+
+## Vibe Coding · terminal lateral supervisionado (candidato 17/11/2026)
+
+- Owner único: `skills/vs-code-restore/`. A interface existente passa a listar terminais da API VS Code com nome, PID e foco, sem expor comandos, saídas ou credenciais.
+- Comando `centraldark.openOneTerminalBeside`: cria somente `CentralDark · Worker 1 (manual)` no editor lateral, sem iniciar Hermes, modelo ou comando; reutiliza pelo nome quando já existir.
+- Receptor existente `src/remote-terminal.ts`: acrescenta `POST /open-terminal` ao listener **127.0.0.1** previamente pareado e opt-in. Exige Bearer, identidade do dispositivo, `requestId` UUID, `at` dentro de 20s, defesa de replay e aprovação modal local para criar. Não expõe interface HTTP na rede. Resposta `TERMINAL_CREATED`/ `TERMINAL_REUSED` comprova solicitação nativa; confirmação visual humana continua separada.
+- Hermes/ACP: usar apenas se a sessão puder chamar a rota existente com autorização real. ACP não fornece automaticamente o acesso a comandos do Extension Host. Não assumir ponte funcional.
+- Sem criação automática de workers, seleção de modelos, distribuição de escopo, chat paralelo ou novo orquestrador. Futuras sessões ficam sob Hermes e regras de writer único.
+- Gate de promoção: `npm run compile`, prova do comando visual, leitura e testes de autenticação/replay/consentimento do receptor e readback da extensão realmente instalada. Fonte publicada ≠ instalação. Não iniciar deploy automático.
+- NEXT_CURSOR: validar typescript e comportamento visual no mesmo VS Code, comprovar Hermes ACP → receptor privado, então testar um modelo de worker autorizado.
