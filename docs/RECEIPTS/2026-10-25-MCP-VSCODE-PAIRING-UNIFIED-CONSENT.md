@@ -138,3 +138,11 @@ Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro do
 **Menor delta no mesmo owner:** capturar `event.currentTarget`, validar `instanceof HTMLFormElement` e serializar `FormData` antes do primeiro `await`. Preservados os campos OAuth, o JWT, `redirect_uri`, PKCE, o owner `/authorize` e o consentimento explícito. Regressão acrescentada no teste existente para travar a ordem das operações. Prova local: TSX parse 0 erros; `pairing-consent-flow.test.mjs` **10 PASS / 0 FAIL**. Deploy e autorização humana pós-rebuild: UNKNOWN.
 <!-- /CENTRALDARK_OAUTH_FORMDATA_AWAIT_FIX_20261117 -->
 
+<!-- MCP_JSON_NO_REDIRECT_PKCE_20261117 -->
+### 17/11/2026 — resposta JSON no erro de PKCE para o consentimento do Cockpit
+**Diagnóstico público com navegador real em origem admin:** preflight `OPTIONS /authorize` = HTTP 204, cabeçalhos `Authorization,Content-Type` permitidos, e Chrome cross-origin leu HTTP 400 JSON de cliente inexistente. Logo, CORS/TLS/DNS não explicam todos os `Failed to fetch` observados. A causa comprovada no **código** de uma classe de falhas: `redirectWithOAuthError()` ainda emitia HTTP 302 para callback em `POST` JSON de PKCE inválido, enquanto o Cockpit usa `fetch(..., redirect: "error")`, que rejeita redirecionamentos com TypeError. O caso concreto do CHEFE ainda exige tentativa autenticada real para provar a causa final.
+
+**Menor delta existente:** em `apps/modulos/mcp/src/oauth.js`, somente para `res.locals.cockpitConsentJson` devolver HTTP 400 `{ok:false,error,error_description}` e `Cache-Control:no-store` sem navegar; o fluxo OAuth HTML legado mantém HTTP 302. Teste no owner `apps/modulos/mcp/tests/pairing-consent-flow.test.mjs` prova JSON 400 sem Location e preservação de state, PKCE, autenticação e pareamento: 10/10 PASS. Nenhuma alteração em segredos, CORS global, credenciais ou scopes.
+
+**Estado:** SOURCE_TEST=PASS; LIVE_OPTIONS=PASS; LIVE_BROWSER_CORS_INVALID_CLIENT=PASS; LIVE_REAL_CLIENT_OAUTH=UNKNOWN; DEPLOY=UNKNOWN. Não declarar FIXED_POINT antes do teste autenticado.
+<!-- /MCP_JSON_NO_REDIRECT_PKCE_20261117 -->

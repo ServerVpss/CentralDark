@@ -335,6 +335,20 @@ test('Cockpit Supabase: consentimento JSON exige admin, origem e PKCE; sem senha
     role='admin';
     const otherOrigin=await request('/authorize',post('https://outro.invalid'));
     assert.equal(otherOrigin.status,403);
+    // Antes: PKCE inv?lido devolvia 302, mas o Cockpit usa redirect:error;
+    // o browser apresentava TypeError Failed to fetch em vez do erro OAuth.
+    const invalidPkceBody={...data,code_challenge_method:'plain'};
+    const invalidPkceOpts={...urlEncoded(invalidPkceBody),headers:{
+      ...urlEncoded(invalidPkceBody).headers,Origin:'https://admin.centralldark.com',
+      Accept:'application/json',Authorization:bearer
+    }};
+    const rejected=await request('/authorize',invalidPkceOpts);
+    assert.equal(rejected.status,400);
+    assert.equal(rejected.headers.get('location'),null);
+    const rejectedData=await rejected.json();
+    assert.equal(rejectedData.ok,false);
+    assert.equal(rejectedData.error,'invalid_request');
+    assert.match(rejectedData.error_description,/PKCE/);
     const valid=await request('/authorize',post());
     assert.equal(valid.status,200);
     const response=await valid.json();
