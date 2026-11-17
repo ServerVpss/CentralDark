@@ -388,17 +388,22 @@ export async function handleAuthorize(req, res) {
             sendOwnerConsentPage(res, payload);
             return;
         }
-        const configuredPassword = getAdminPassword();
-        const submittedPassword = param(req, "password");
-        if (!configuredPassword) {
-            log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
-            return;
-        }
-        if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
-            log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
-            return;
+        // O logado no Cockpit já provou identidade: não pedir senha de novo.
+        // A senha segue apenas como fallback para quem não tem sessão admin.
+        const sessaoCockpit = isAdmin(req);
+        if (!sessaoCockpit) {
+            const configuredPassword = getAdminPassword();
+            const submittedPassword = param(req, "password");
+            if (!configuredPassword) {
+                log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+                return;
+            }
+            if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+                log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+                return;
+            }
         }
         const ownerToken = getOwnerToolToken();
         if (!ownerToken) {
@@ -426,7 +431,7 @@ export async function handleAuthorize(req, res) {
             cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
-            mode: "owner_password",
+            mode: sessaoCockpit ? "cockpit_session" : "owner_password",
         });
         res.redirect(302, back.toString());
     }

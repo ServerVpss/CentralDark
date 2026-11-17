@@ -2,8 +2,8 @@
  * #OBSERVACOES#
  * @owner apps/instinto-superior/src/routes/mcp-autorizar.tsx
  * @doc_ref docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md
- * @last_updated 2026-11-08T22:47:36Z
- * @implementado código dourado para Vibe Coding e Remote Bridge, com senha administrativa fallback
+ * @last_updated 2026-11-17T21:10:00Z
+ * @implementado pareamento por código com sessão do Cockpit; sem campo de senha na tela
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
@@ -26,8 +26,6 @@ const CAMPOS = [
 function AutorizarMcpNoCockpit() {
   const [params, alterar] = useState<URLSearchParams | null>(null);
   const [pairCode, alterarPairCode] = useState("");
-  const [senha, alterarSenha] = useState("");
-  const [metodo, alterarMetodo] = useState<"code" | "password">("code");
   const [novoPar, alterarNovoPar] = useState<{ code: string; pair_id: string; expires_at: string } | null>(null);
   const [pareando, alterarPareando] = useState(false);
   const [erroPar, alterarErroPar] = useState("");
@@ -52,9 +50,7 @@ function AutorizarMcpNoCockpit() {
   }
 
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    alterar(query);
-    alterarMetodo(query.get("auth_method") === "password" ? "password" : "code");
+    alterar(new URLSearchParams(window.location.search));
   }, []);
   const falha = params?.get("error");
   const sucesso = params?.get("success") === "1";
@@ -109,70 +105,43 @@ function AutorizarMcpNoCockpit() {
               </p>
             ) : null}
             <form method="post" action="https://mcp.centralldark.com/authorize" className="mt-6 space-y-4">
-              {dispositivo && <input type="hidden" name="auth_method" value={metodo} />}
+              <input type="hidden" name="auth_method" value="code" />
               {CAMPOS.map((campo) => (
                 <input key={campo} type="hidden" name={campo} value={params.get(campo) || ""} />
               ))}
+              <div className="rounded-lg border border-border bg-background p-4">
+                <p className="text-xs text-muted-foreground">Pareamento com código</p>
+                <Button type="button" className="glow-gold mt-2 w-full" disabled={pareando} onClick={gerarPareamento}>
+                  {pareando ? "Gerando…" : "Gerar código de pareamento"}
+                </Button>
+                {novoPar && (
+                  <div className="mt-3 text-center">
+                    <output className="block font-mono text-2xl font-bold tracking-wider text-gold" aria-label="Código de pareamento gerado">{novoPar.code}</output>
+                    <p className="mt-1 text-xs text-muted-foreground">Válido até {new Date(novoPar.expires_at).toLocaleTimeString("pt-BR")}</p>
+                    <Button type="button" variant="outline" className="mt-2 w-full"
+                      onClick={() => void navigator.clipboard?.writeText(novoPar.code)}>
+                      Copiar código
+                    </Button>
+                  </div>
+                )}
+                {erroPar && <p role="alert" className="mt-2 text-xs text-destructive">{erroPar}</p>}
+                <p className="mt-2 text-xs text-muted-foreground">Sua sessão no Cockpit já autentica. Sem senha.</p>
+              </div>
               {dispositivo ? (
-                <>
-                  <div className="flex flex-wrap gap-2" role="group" aria-label="Opção de autorização">
-                    <Button type="button" variant={metodo === "code" ? "default" : "outline"} onClick={() => alterarMetodo("code")}>
-                      Confirmar código
-                    </Button>
-                    <Button type="button" variant={metodo === "password" ? "default" : "outline"} onClick={() => alterarMetodo("password")}>
-                      Usar senha
-                    </Button>
-                  </div>
-                  <div className="rounded-lg border border-border bg-background p-4">
-                    <p className="text-xs text-muted-foreground">Pareamento com código</p>
-                    <Button type="button" className="glow-gold mt-2 w-full" disabled={pareando} onClick={gerarPareamento}>
-                      {pareando ? "Gerando…" : "Gerar código de pareamento"}
-                    </Button>
-                    {novoPar && (
-                      <div className="mt-3 text-center">
-                        <output className="block font-mono text-2xl font-bold tracking-wider text-gold" aria-label="Código de pareamento gerado">{novoPar.code}</output>
-                        <p className="mt-1 text-xs text-muted-foreground">Válido até {new Date(novoPar.expires_at).toLocaleTimeString("pt-BR")}</p>
-                        <Button type="button" variant="outline" className="mt-2 w-full"
-                          onClick={() => void navigator.clipboard?.writeText(novoPar.code)}>
-                          Copiar código
-                        </Button>
-                      </div>
-                    )}
-                    {erroPar && <p role="alert" className="mt-2 text-xs text-destructive">{erroPar}</p>}
-                  </div>
-                  {codigoVisivel ? (
+                codigoVisivel ? (
                   <>
                     <output className="block rounded-lg border border-border bg-background p-4 text-center font-mono text-3xl font-bold tracking-wider text-gold" aria-label="Código de pareamento">{codigoVisivel}</output>
                     <input type="hidden" name="pair_code" value={codigoVisivel} />
                   </>
                 ) : (
-                <label className="block text-sm">
-                  Código apresentado pelo {deviceLabel}
-                  <input type="text" autoComplete="off" required name="pair_code" value={pairCode}
-                    onChange={(e) => alterarPairCode(e.target.value.toUpperCase())}
-                    className="mt-2 w-full rounded-lg border border-border bg-background p-3 font-mono" />
-                </label>
-                  )}
-                  {metodo === "password" ? (
-                    <label className="block text-sm">
-                      Senha administrativa do MCP
-                      <input type="password" required autoComplete="current-password" name="password"
-                        value={senha} onChange={(e) => alterarSenha(e.target.value)}
-                        className="mt-2 w-full rounded-lg border border-border bg-background p-3" />
-                      <span className="mt-2 block text-xs text-muted-foreground">O código e o nonce continuam obrigatórios. A senha não fica no Bridge.</span>
-                    </label>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">Confirme com a sessão MCP ativa. Caso não esteja autenticado, selecione Usar senha.</p>
-                  )}
-                </>
-              ) : (
-                <label className="block text-sm">
-                  Autenticação do proprietário
-                  <input type="password" required autoComplete="current-password" name="password"
-                    value={senha} onChange={(e) => alterarSenha(e.target.value)}
-                    className="mt-2 w-full rounded-lg border border-border bg-background p-3" />
-                </label>
-              )}
+                  <label className="block text-sm">
+                    Código apresentado pelo {deviceLabel}
+                    <input type="text" autoComplete="off" required name="pair_code" value={pairCode}
+                      onChange={(e) => alterarPairCode(e.target.value.toUpperCase())}
+                      className="mt-2 w-full rounded-lg border border-border bg-background p-3 font-mono" />
+                  </label>
+                )
+              ) : null}
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button type="submit" className={confirmarCodigo ? "w-full" : undefined}>
                   {dispositivo ? "Confirmar pareamento" : "Autorizar"}
