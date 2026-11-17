@@ -22,6 +22,7 @@ const terminal = {
   show() {}
 };
 const fakeVsCode = {
+  ViewColumn: { Beside: -2 },
   window: {
     terminals: [terminal],
     showWarningMessage: async (message) => !consent ? undefined :
