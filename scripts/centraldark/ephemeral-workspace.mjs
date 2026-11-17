@@ -12,6 +12,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
+import { spawnSync } from "node:child_process";
 import { isAbsolute, join, relative, resolve, sep } from "node:path";
 
 const MARKER = "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED";
@@ -35,8 +36,23 @@ function checkCasaWorkspaceRoot(rootInput, purpose = "temporary-validation", own
   }
   const root = resolve(rootInput);
   const worktree = rootMatches(root, CASA_WORKTREE_ROOT);
-  if (rootMatches(root, CASA_TEMP_ROOT)) return;
-  if (worktree && /worktree/i.test(purpose) && owner && owner !== "UNKNOWN") return;
+  const base = rootMatches(root, CASA_TEMP_ROOT) ? CASA_TEMP_ROOT
+    : worktree && /worktree/i.test(purpose) && owner && owner !== "UNKNOWN"
+      ? CASA_WORKTREE_ROOT : null;
+  if (base) {
+    let existing = root;
+    while (!existsSync(existing)) {
+      const parent = resolve(existing, "..");
+      if (parent === existing) break;
+      existing = parent;
+    }
+    if (!existsSync(base) || !existsSync(existing) ||
+        !rootMatches(realpathSync(existing), realpathSync(base))) {
+      fail("CASA_EPHEMERAL_JUNCTION_OUTSIDE_CANONICAL_ROOT", 3,
+        { requestedRoot: root, existingAncestor: existing, expectedRoot: base });
+    }
+    return;
+  }
   fail("CASA_EPHEMERAL_ROOT_NOT_CANONICAL", 3, {
     requestedRoot: root, expectedRoot: CASA_TEMP_ROOT,
     worktreeRoot: CASA_WORKTREE_ROOT, purpose,
@@ -383,6 +399,13 @@ function inventoryRoot(rootInput, prefixes = []) {
 }
 
 function selfTest() {
+  if (isCasaWindows()) {
+    const denied = spawnSync(process.execPath, [process.argv[1], "check-root",
+      "--root", "C:\\", "--purpose", "build"], { encoding: "utf8", timeout: 5000 });
+    if (denied.status !== 3 || !String(denied.stderr).includes("CASA_EPHEMERAL_ROOT_NOT_CANONICAL")) {
+      fail("CASA_NONCANONICAL_ROOT_NEGATIVE_TEST_FAILED", 7);
+    }
+  }
   const requestedRoot = join(isCasaWindows() ? CASA_TEMP_ROOT : tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
   const name = "workspace";
   let target = null;
