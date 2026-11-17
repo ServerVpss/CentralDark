@@ -28,6 +28,28 @@ function AutorizarMcpNoCockpit() {
   const [pairCode, alterarPairCode] = useState("");
   const [senha, alterarSenha] = useState("");
   const [metodo, alterarMetodo] = useState<"code" | "password">("code");
+  const [novoPar, alterarNovoPar] = useState<{ code: string; pair_id: string; expires_at: string } | null>(null);
+  const [pareando, alterarPareando] = useState(false);
+  const [erroPar, alterarErroPar] = useState("");
+
+  async function gerarPareamento() {
+    alterarPareando(true);
+    alterarErroPar("");
+    try {
+      const resposta = await fetch("https://mcp.centralldark.com/device/pair/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ device_name: "Hermes Agent", executor: "hermes", surface: "chat" }),
+      });
+      const dados = await resposta.json();
+      if (!resposta.ok || !dados.ok) throw new Error(dados.error || "Falha ao gerar código");
+      alterarNovoPar({ code: dados.code, pair_id: dados.pair_id, expires_at: dados.expires_at });
+    } catch (erro) {
+      alterarErroPar(erro instanceof Error ? erro.message : "Falha ao gerar código");
+    } finally {
+      alterarPareando(false);
+    }
+  }
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -101,6 +123,23 @@ function AutorizarMcpNoCockpit() {
                       Usar senha
                     </Button>
                   </div>
+                  <div className="rounded-lg border border-border bg-background p-4">
+                    <p className="text-xs text-muted-foreground">Pareamento com código</p>
+                    <Button type="button" className="glow-gold mt-2 w-full" disabled={pareando} onClick={gerarPareamento}>
+                      {pareando ? "Gerando…" : "Gerar código de pareamento"}
+                    </Button>
+                    {novoPar && (
+                      <div className="mt-3 text-center">
+                        <output className="block font-mono text-2xl font-bold tracking-wider text-gold" aria-label="Código de pareamento gerado">{novoPar.code}</output>
+                        <p className="mt-1 text-xs text-muted-foreground">Válido até {new Date(novoPar.expires_at).toLocaleTimeString("pt-BR")}</p>
+                        <Button type="button" variant="outline" className="mt-2 w-full"
+                          onClick={() => void navigator.clipboard?.writeText(novoPar.code)}>
+                          Copiar código
+                        </Button>
+                      </div>
+                    )}
+                    {erroPar && <p role="alert" className="mt-2 text-xs text-destructive">{erroPar}</p>}
+                  </div>
                   {codigoVisivel ? (
                   <>
                     <output className="block rounded-lg border border-border bg-background p-4 text-center font-mono text-3xl font-bold tracking-wider text-gold" aria-label="Código de pareamento">{codigoVisivel}</output>
@@ -134,7 +173,7 @@ function AutorizarMcpNoCockpit() {
                     className="mt-2 w-full rounded-lg border border-border bg-background p-3" />
                 </label>
               )}
-              <div className="flex gap-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
                 <Button type="submit" className={confirmarCodigo ? "w-full" : undefined}>
                   {dispositivo ? "Confirmar pareamento" : "Autorizar"}
                 </Button>
