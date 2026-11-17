@@ -42,6 +42,10 @@
         "title": "CentralDark: Mostrar Trace (Saída)"
       },
       {
+        "command": "centraldark.openOneTerminalBeside",
+        "title": "CentralDark: Abrir 1 terminal no editor lateral"
+      },
+      {
         "command": "centraldark.focusExistingTerminal",
         "title": "CentralDark: VS Code — focar terminal existente"
       },
