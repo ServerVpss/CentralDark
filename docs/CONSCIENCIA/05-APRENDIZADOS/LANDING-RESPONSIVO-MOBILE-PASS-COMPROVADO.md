@@ -10,6 +10,27 @@ truth_rule: REALIDADE_IS_JUDGE
 
 # Lembrança — Landing responsiva no mobile por PASS comprovado
 
+## Documento canônico único — não criar outro
+
+Este é o **ÚNICO** documento do nível de conformidade mobile da landing. Se o nível mudar,
+**atualize este arquivo**. Nunca crie documento paralelo, cópia, variante ou "v2".
+
+```text
+UM_NIVEL_DE_CONFORMIDADE
+→ UM_DOCUMENTO
+→ UM_OWNER
+→ ATUALIZAR_O_MESMO_ARQUIVO
+```
+
+- **Código (fonte da verdade):** repo `segredounlock/app`, branch `main`.
+- **Nível de conformidade + contraprova + regras:** este arquivo.
+- **Ao mudar o nível:** editar este arquivo com a nova medição e o novo SHA. Não abrir outro.
+- **Arquitetura paralela é proibida:** duas versões do mesmo estado fazem o PASS virar falso verde,
+  porque não se sabe qual é a verdadeira.
+
+Regra: `NUNCA_CRIAR_ARQUITETURA_PARALELA`. Se partiu daqui, é aqui que continua.
+
+
 O CHEFE declarou conformidade 100% na responsividade mobile da landing do apex
 `centralldark.com`. Esta lembrança cristaliza o que foi comprovado, como foi medido e as
 regras que impedem o defeito de voltar.
