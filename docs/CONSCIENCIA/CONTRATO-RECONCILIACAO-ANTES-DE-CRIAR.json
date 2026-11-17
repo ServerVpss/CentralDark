@@ -2113,7 +2113,28 @@
       "stale_temp_requires_classification_before_delete": true,
       "active_process_or_open_handle_blocks_blind_delete": true,
       "receipt_required_for_material_temp_artifact": false,
-      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP"
+      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP",
+      "mission_trace_in_equivalent_pr_before_delete": true,
+      "new_pr_only_when_no_equivalent_pr": true,
+      "prefer_comment_in_existing_mission_pr": true,
+      "minimum_trace_fields": [
+        "MISSION_ID",
+        "INTENT",
+        "OWNER",
+        "TEMP_PATH",
+        "CLASSIFICATION",
+        "TEST_PROOF",
+        "PROMOTED_SHA_OR_NOT_PROMOTED",
+        "PR_URL",
+        "RESULT_READBACK",
+        "PENDING",
+        "CLEANUP_AUTHORITY",
+        "NEXT_CURSOR"
+      ],
+      "mission_pr_trace_is_not_uncommitted_bytes_backup": true,
+      "explicitly_authorized_discard_of_unpromoted_delta": "ALLOWED_WITH_TRACE_AND_UNKNOWN_CONTENT_LOSS_ACKNOWLEDGED",
+      "post_delete_readback_in_same_pr_required": true,
+      "trace_before_cleanup_and_cleanup_after_trace_are_distinct": true
     },
     "canonical_architecture": {
       "version_suffix_for_same_capability": "FORBIDDEN",
