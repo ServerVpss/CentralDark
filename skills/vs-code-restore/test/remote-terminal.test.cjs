@@ -7,6 +7,7 @@ const originalLoad = Module._load;
 let onEnd = null;
 let commands = [];
 let consent = true;
+let openedTerminals = 0;
 const terminal = {
   name: "pwsh",
   processId: Promise.resolve(31566),
@@ -23,7 +24,14 @@ const terminal = {
 const fakeVsCode = {
   window: {
     terminals: [terminal],
-    showWarningMessage: async () => consent ? "Executar uma vez" : undefined,
+    showWarningMessage: async (message) => !consent ? undefined :
+      message.includes("permitir abrir 1 terminal") ? "Abrir um terminal" : "Executar uma vez",
+    createTerminal: options => {
+      openedTerminals++;
+      const created = { name: options.name, processId: Promise.resolve(40000 + openedTerminals), show() {} };
+      fakeVsCode.window.terminals.push(created);
+      return created;
+    },
     onDidEndTerminalShellExecution: listener => {
       onEnd = listener;
       return { dispose() { onEnd = null; } };
@@ -108,4 +116,41 @@ test("wrong PID and denied local approval never reach shell", async () => {
   const denied = await invoke({ ...base, pid: 31566, requestId: crypto.randomUUID() });
   assert.equal(denied.status, "LOCAL_CONSENT_DENIED");
   assert.equal(commands.length, 1);
+});
+
+test("open-terminal: auth, consent, one visual worker, reuse and replay", async () => {
+  const request = () => ({ requestId: crypto.randomUUID(), at: new Date().toISOString() });
+  const invoke = async (payload, authenticated = true) => {
+    const response = await fetch(url + "/open-terminal", {
+      method: "POST",
+      headers: { ...(authenticated ? headers : {}), "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    return { httpStatus: response.status, result: await response.json() };
+  };
+  const unauth = await invoke(request(), false);
+  assert.equal(unauth.httpStatus, 401);
+  assert.equal(unauth.result.status, "AUTH_REQUIRED");
+  const stale = await invoke({ ...request(), at: new Date(Date.now() - 60_000).toISOString() });
+  assert.equal(stale.result.status, "INVALID_OPEN_ENVELOPE");
+
+  consent = false;
+  const denied = await invoke(request());
+  assert.equal(denied.result.status, "LOCAL_CONSENT_DENIED");
+  assert.equal(openedTerminals, 0);
+
+  consent = true;
+  const payload = request();
+  const created = await invoke(payload);
+  assert.equal(created.result.status, "TERMINAL_CREATED");
+  assert.equal(created.result.ok, true);
+  assert.equal(openedTerminals, 1);
+  assert.equal(fakeVsCode.window.terminals.length, 2);
+  assert.equal(fakeVsCode.window.terminals[1].name, "CentralDark · Worker 1 (manual)");
+
+  const replay = await invoke(payload);
+  assert.equal(replay.result.status, "REPLAY_BLOCKED");
+  const reused = await invoke(request());
+  assert.equal(reused.result.status, "TERMINAL_REUSED");
+  assert.equal(openedTerminals, 1);
 });
