@@ -71,3 +71,27 @@ O checkout VMware continha alteracoes locais uteis nao publicadas: ownerUserId o
 
 Prova local VMware: node --check nos tres arquivos e node --test tests/device-pairing.test.mjs com 11/11 PASS. A publicacao de fonte nao comprova consumo do servico, login Supabase nem tools/list autenticado. SOURCE_ONLY; RUNTIME=UNKNOWN; NEXT_CURSOR=validar integracao no consumer e pareamento autorizado sem reiniciar servicos por este commit.
 <!-- /COSTURA_VM_DEVICE_PAIRING_20261112 -->
+
+<!-- CENTRALDARK_OAUTH_SINGLE_SURFACE_SAMBA_20261117 -->
+## 17/11/2026 — consentimento OAuth e pareamento na mesma tela compacta
+
+#OBSERVACOES#
+@owner: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@code_ref: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@doc_ref: docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md
+@last_updated: 2026-11-17T21:27:49.471Z
+@escopo: apresentacao e formulario da rota /mcp-autorizar; sem novo OAuth, servidor ou store
+@implementado: UI com largura maxima 480px, simbolo ROV do template E:, tokens do Instinto Superior e dois contextos reais por client_id
+@estado: SOURCE_TESTED_LOCAL; RUNTIME_DEPLOY_NOT_PROVED
+@next_cursor: comprobar build e consumo do mesmo SHA na Forja; ligar Hermes/Bridge por cliente real; ler logs sem revelar segredos
+
+**Intencao do CHEFE:** adaptar o fluxo visual do `C:\Users\Administrador\Downloads\CentralDark-MCP-OAuth-Conceito.html` diretamente no owner existente na Forja (SMB `V:\apps\instinto-superior\src\routes\mcp-autorizar.tsx`), promover somente o delta verificado à `main` e sincronizar o arquivo correspondente da Casa sem sobrescrever seu checkout sujo.
+
+**Duas modalidades no mesmo /mcp-autorizar:** cliente OAuth MCP comum mostra consentimento e envia somente parametros existentes `client_id`, `redirect_uri`, `state`, `scope`, `code_challenge`, `code_challenge_method` ao `POST /authorize`. `centraldark.remote-bridge` e `centraldark.centraldark-vscode-restore` mostram pareamento, com `pair_id`, `pair_nonce` e `pair_code` da tentativa iniciada **pelo cliente real**. Credenciais/segredo de posse e tokens ficam exclusivamente no backend e no dispositivo solicitante. A UI nao fabrica logins, tokens ou transicoes de refresh do prototipo HTML.
+
+**Correção funcional do fluxo:** o botao generico `Gerar codigo de pareamento` no navegador foi retirado do consentimento MCP porque sua chamada `/device/pair/start` criava `executor=hermes` e recebia `pair_secret` apenas no navegador, nao no cliente que precisa consultar `/device/pair/status`. O fluxo real do Bridge/VS Code preserva o gerador no **cliente** e o codigo confirmado pelo dono nesta mesma rota; sem outro motor ou roteador.
+
+**Provas de fonte:** o owner na Forja foi escrito diretamente via Samba; TSX `typescript.transpileModule` sem erros de sintaxe; regressao isolada MCP `node --test apps/modulos/mcp/tests/pairing-consent-flow.test.mjs` = **9 PASS / 0 FAIL / exit 0** usando TEMP em F:\TEMP. O mesmo `/authorize` foi exercitado com Hermes, Bridge, VS Code, nonce, code, PKCE e token entregue somente ao cliente autorizado. Nenhum teste usou credencial real. Build completo de Cockpit, autenticacao humana ao vivo e deploy do mesmo SHA continuam provas separadas.
+
+**Invariantes:** `CSS_TOKENS_REUSED`, `ROV_LOGO_REUSED`, `SAME_AUTH_OWNER`, `NO_PASSWORD_FIELD`, `NO_SIMULATED_TOKEN_UI`, `MCP_AUTH != DEVICE_PAIRING`, `SOURCE != DEPLOYED`. Formulario real e clique humano preservados; sem mudanca em `apps/modulos/mcp/src/oauth.js` nem em regras de seguranca.
+<!-- /CENTRALDARK_OAUTH_SINGLE_SURFACE_SAMBA_20261117 -->
