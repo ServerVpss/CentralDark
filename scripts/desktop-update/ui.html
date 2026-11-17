@@ -20,10 +20,10 @@
   - Appearance follows the OS. Dark seeds are the installer's neutral
     charcoal (#232323 base, foreground #d6d6d6) — never brand blue.
 -->
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Hermes</title>
+<title>CentralDark Agente</title>
 <style>
   :root {
     --background: #ffffff;
@@ -105,10 +105,10 @@
 </head>
 <body>
   <div class="wrap">
-    <div id="loader" role="status" aria-label="Updating"></div>
+    <div id="loader" role="status" aria-label="Atualizando"></div>
     <div id="glyph"></div>
-    <h2 id="title">Updating Hermes</h2>
-    <p id="line">Hermes will open once done.</p>
+    <h2 id="title">Atualizando CentralDark Agente</h2>
+    <p id="line">O CentralDark Agente abrirá quando a atualização terminar.</p>
   </div>
 <script>
   /* ── Fourier Flow loader, ported verbatim from loader.tsx ─────────────── */
@@ -208,7 +208,25 @@
   let failures = 0
 
   const elapsedText = s =>
-    s < 60 ? `${s}s elapsed` : `${Math.floor(s / 60)}m ${s % 60}s elapsed`
+    s < 60 ? `${s}s decorridos` : `${Math.floor(s / 60)}min ${s % 60}s decorridos`
+
+  const stageLabels = new Map([
+    ["Downloading updates", "Baixando atualizações"],
+    ["Updating Node dependencies", "Atualizando dependências do Node.js"],
+    ["Updating Python dependencies (PM)", "Atualizando dependências do Python (PM)"],
+    ["Updating dependencies", "Atualizando dependências"],
+    ["Updating code and dependencies", "Atualizando código e dependências"],
+    ["Waiting for Hermes to close", "Aguardando o CentralDark Agente fechar"],
+    ["Retrying update", "Tentando atualizar novamente"],
+    ["Rebuilding Desktop", "Recompilando o aplicativo"],
+    ["Opening Hermes", "Abrindo CentralDark Agente"],
+    ["Installing the new app", "Instalando o novo aplicativo"],
+    ["Testing quiet update", "Testando atualização silenciosa"],
+    ["Reopen Hermes to finish.", "Abra o CentralDark Agente novamente para concluir."],
+    ["Update complete.", "Atualização concluída."],
+    ["Update complete. Reopen Hermes to finish (it could not restart itself).", "Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente)."]
+  ])
+  const displayStage = message => stageLabels.get(message) || message
 
   function settle(state) {
     settled = true
@@ -219,7 +237,7 @@
   function apply(state) {
     if (settled) return
     if (state.status === 'running') {
-      const stage = state.message || defaultLine
+      const stage = displayStage(state.message || defaultLine)
       const elapsed = Number(state.elapsed_seconds)
       lineEl.textContent = Number.isFinite(elapsed) && elapsed >= 0
         ? `${stage}\n${elapsedText(Math.floor(elapsed))}`
@@ -227,21 +245,21 @@
     } else if (state.status === 'done') {
       settle('done')
       glyphEl.textContent = '\u2713'
-      titleEl.textContent = 'Update complete'
-      lineEl.textContent = 'Opening Hermes\u2026\nYou can close this window.'
+      titleEl.textContent = 'Atualização concluída'
+      lineEl.textContent = 'Abrindo CentralDark Agente\u2026\nVocê pode fechar esta janela.'
     } else if (state.status === 'manual') {
       // Update landed but Hermes will NOT reopen itself (package skew,
       // sandbox helper, launch rejected). The orchestrator leaves this
       // window up; the message says what to do.
       settle('done')
       glyphEl.textContent = '\u2713'
-      titleEl.textContent = 'Update complete'
-      lineEl.textContent = state.message || 'Reopen Hermes to finish.'
+      titleEl.textContent = 'Atualização concluída'
+      lineEl.textContent = displayStage(state.message || 'Abra o CentralDark Agente novamente para concluir.')
     } else if (state.status === 'error') {
       settle('error')
       glyphEl.textContent = '\u2715'
-      titleEl.textContent = 'Failed to update'
-      lineEl.innerHTML = 'Run <code>hermes debug share</code> in a terminal to send a report.'
+      titleEl.textContent = 'Falha na atualização'
+      lineEl.innerHTML = 'Execute <code>hermes debug share</code> no terminal para enviar um relatório.'
     }
   }
 
@@ -279,8 +297,8 @@
         // honest, finite state even if the browser refuses the close request.
         settle('disconnected')
         glyphEl.textContent = '!'
-        titleEl.textContent = 'Update status unavailable'
-        lineEl.textContent = 'The progress connection was lost.\nCheck Hermes for the update result. You can close this window.'
+        titleEl.textContent = 'Status da atualização indisponível'
+        lineEl.textContent = 'A conexão de progresso foi perdida.\nConfira o resultado no CentralDark Agente. Você pode fechar esta janela.'
       }
     }
     if (!settled) setTimeout(poll, 400)

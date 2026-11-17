@@ -268,7 +268,7 @@ try {
     $OutputEncoding = [System.Text.Encoding]::UTF8
 } catch {}
 $script:Ui = $null
-$script:UiStage = "Hermes will open once done."   # until the first gate; matches ui.html
+$script:UiStage = "O CentralDark Agente abrirá quando a atualização terminar."   # until the first gate; matches ui.html
 $script:UiStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 # ── The shim: repo-owned HTML in a chromeless default-browser app window ───
@@ -511,16 +511,38 @@ function Publish-UiEvent([string]$Status, [string]$Message) {
     }
 }
 
+function Convert-UiDisplayText([string]$Message) {
+    # Tradução exclusiva da casca; etapas, recibos e comandos permanecem intactos.
+    $labels = @{
+        'Downloading updates' = 'Baixando atualizações'
+        'Updating Node dependencies' = 'Atualizando dependências do Node.js'
+        'Updating Python dependencies (PM)' = 'Atualizando dependências do Python (PM)'
+        'Updating dependencies' = 'Atualizando dependências'
+        'Updating code and dependencies' = 'Atualizando código e dependências'
+        'Waiting for Hermes to close' = 'Aguardando o CentralDark Agente fechar'
+        'Retrying update' = 'Tentando atualizar novamente'
+        'Rebuilding Desktop' = 'Recompilando o aplicativo'
+        'Opening Hermes' = 'Abrindo CentralDark Agente'
+        'Installing the new app' = 'Instalando o novo aplicativo'
+        'Testing quiet update' = 'Testando atualização silenciosa'
+        'Reopen Hermes to finish.' = 'Abra o CentralDark Agente novamente para concluir.'
+        'Update complete.' = 'Atualização concluída.'
+        'Update complete. Reopen Hermes to finish (it could not restart itself).' = 'Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente).'
+    }
+    if ($labels.ContainsKey($Message)) { return $labels[$Message] }
+    return $Message
+}
+
 function Get-UiElapsedText {
     $elapsed = [Math]::Floor($script:UiStopwatch.Elapsed.TotalSeconds)
-    if ($elapsed -lt 60) { return "${elapsed}s elapsed" }
+    if ($elapsed -lt 60) { return "${elapsed}s decorridos" }
     $minutes = [Math]::Floor($elapsed / 60)
     $seconds = $elapsed % 60
-    return "${minutes}m ${seconds}s elapsed"
+    return "${minutes}min ${seconds}s decorridos"
 }
 
 function Get-UiProgressLine {
-    return "$script:UiStage`r`n$(Get-UiElapsedText)"
+    return "$(Convert-UiDisplayText $script:UiStage)`r`n$(Get-UiElapsedText)"
 }
 
 function Publish-UiProgress([string]$Message) {
@@ -602,7 +624,7 @@ function Show-ProgressWindow {
             $mute = [System.Drawing.ColorTranslator]::FromHtml("#A8A8A8")
         }
         $form = New-Object System.Windows.Forms.Form
-        $form.Text = "Hermes"
+        $form.Text = "CentralDark Agente"
         $form.FormBorderStyle = "FixedSingle"
         $form.MaximizeBox = $false
         $form.MinimizeBox = $false
@@ -616,7 +638,7 @@ function Show-ProgressWindow {
         $bar.MarqueeAnimationSpeed = 30
         $bar.SetBounds(60, 128, 160, 8)
         $title = New-Object System.Windows.Forms.Label
-        $title.Text = "Updating Hermes"
+        $title.Text = "Atualizando CentralDark Agente"
         $title.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 12)
         $title.ForeColor = $fore
         $title.TextAlign = "MiddleCenter"
@@ -673,10 +695,10 @@ function Show-ErrorFinale([string]$Message) {
         $ui = $script:Ui
         if ($ui.Timer) { $ui.Timer.Stop() }
         $ui.Bar.Visible = $false
-        $ui.Title.Text = "Failed to update"
-        $ui.Sub.Text = "Run `"hermes debug share`" in a terminal to send a report."
+        $ui.Title.Text = "Falha na atualização"
+        $ui.Sub.Text = "Execute `"hermes debug share`" no terminal para enviar um relatório."
         $close = New-Object System.Windows.Forms.Button
-        $close.Text = "Close"
+        $close.Text = "Fechar"
         $close.SetBounds(100, 252, 80, 28)
         $close.FlatStyle = "Flat"
         $close.ForeColor = $ui.Title.ForeColor
@@ -715,10 +737,10 @@ function Show-ManualFinale([string]$Message) {
         $ui = $script:Ui
         if ($ui.Timer) { $ui.Timer.Stop() }
         $ui.Bar.Visible = $false
-        $ui.Title.Text = "Update complete"
-        $ui.Sub.Text = $Message
+        $ui.Title.Text = "Atualização concluída"
+        $ui.Sub.Text = Convert-UiDisplayText $Message
         $close = New-Object System.Windows.Forms.Button
-        $close.Text = "Close"
+        $close.Text = "Fechar"
         $close.SetBounds(100, 252, 80, 28)
         $close.FlatStyle = "Flat"
         $close.ForeColor = $ui.Title.ForeColor

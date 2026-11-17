@@ -168,7 +168,7 @@ function run (argv) {
   const closeButton = win.standardWindowButton($.NSWindowCloseButton)
   closeButton.enabled = false
 
-  win.title = 'Hermes'
+  win.title = 'CentralDark Agente'
   win.center
   win.releasedWhenClosed = false
   win.backgroundColor = bg
@@ -179,9 +179,9 @@ function run (argv) {
   loaderView.imageScaling = $.NSImageScaleProportionallyUpOrDown
   content.addSubview(loaderView)
 
-  const title = wrappedLabel('Updating Hermes', $.NSFont.systemFontOfSize(18), fg,
+  const title = wrappedLabel('Atualizando CentralDark Agente', $.NSFont.systemFontOfSize(18), fg,
     $.NSMakeRect(0, 178, 280, 26))
-  const line = wrappedLabel('Hermes will open once done.', $.NSFont.systemFontOfSize(12), null,
+  const line = wrappedLabel('O CentralDark Agente abrirá quando a atualização terminar.', $.NSFont.systemFontOfSize(12), null,
     $.NSMakeRect(24, 118, 232, 54))
   content.addSubview(title)
   content.addSubview(line)
@@ -204,7 +204,7 @@ function run (argv) {
       everPublished = true
       if (state.message) {
         message = String(state.message)
-        line.stringValue = message
+        line.stringValue = displayStage(message)
       }
       if (['done', 'manual', 'error'].includes(state.status)) settled = state.status
     } else if (everPublished) {
@@ -236,13 +236,13 @@ function run (argv) {
   // Terminal states: swap the loader for the glyph; title/line verbatim
   // from ui.html's apply().
   loaderView.hidden = true
-  title.stringValue = settled === 'error' ? 'Failed to update' : 'Update complete'
+  title.stringValue = settled === 'error' ? 'Falha na atualização' : 'Atualização concluída'
   if (settled === 'done') {
-    line.stringValue = 'Opening Hermes…\nYou can close this window.'
+    line.stringValue = 'Abrindo CentralDark Agente…\nVocê pode fechar esta janela.'
   } else if (settled === 'manual') {
-    line.stringValue = message || 'Reopen Hermes to finish.'
+    line.stringValue = displayStage(message || 'Abra o CentralDark Agente novamente para concluir.')
   } else {
-    line.stringValue = 'Run hermes debug share in a terminal to send a report.'
+    line.stringValue = 'Execute hermes debug share no terminal para enviar um relatório.'
   }
   const glyph = wrappedLabel(settled === 'error' ? '✕' : '✓',
     $.NSFont.systemFontOfSize(44), fg, $.NSMakeRect(0, 226, 280, 80))
@@ -256,6 +256,26 @@ function run (argv) {
     // even without it (the durable result dialog covers the rest).
     linger(15)
   }
+}
+
+function displayStage(message) {
+  const labels = {
+    "Downloading updates": "Baixando atualizações",
+    "Updating Node dependencies": "Atualizando dependências do Node.js",
+    "Updating Python dependencies (PM)": "Atualizando dependências do Python (PM)",
+    "Updating dependencies": "Atualizando dependências",
+    "Updating code and dependencies": "Atualizando código e dependências",
+    "Waiting for Hermes to close": "Aguardando o CentralDark Agente fechar",
+    "Retrying update": "Tentando atualizar novamente",
+    "Rebuilding Desktop": "Recompilando o aplicativo",
+    "Opening Hermes": "Abrindo CentralDark Agente",
+    "Installing the new app": "Instalando o novo aplicativo",
+    "Testing quiet update": "Testando atualização silenciosa",
+    "Reopen Hermes to finish.": "Abra o CentralDark Agente novamente para concluir.",
+    "Update complete.": "Atualização concluída.",
+    "Update complete. Reopen Hermes to finish (it could not restart itself).": "Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente)."
+  }
+  return labels[message] || message
 }
 
 function linger (seconds) {
