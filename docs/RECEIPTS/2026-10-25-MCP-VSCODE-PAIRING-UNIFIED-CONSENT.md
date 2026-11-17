@@ -95,3 +95,20 @@ Prova local VMware: node --check nos tres arquivos e node --test tests/device-pa
 
 **Invariantes:** `CSS_TOKENS_REUSED`, `ROV_LOGO_REUSED`, `SAME_AUTH_OWNER`, `NO_PASSWORD_FIELD`, `NO_SIMULATED_TOKEN_UI`, `MCP_AUTH != DEVICE_PAIRING`, `SOURCE != DEPLOYED`. Formulario real e clique humano preservados; sem mudanca em `apps/modulos/mcp/src/oauth.js` nem em regras de seguranca.
 <!-- /CENTRALDARK_OAUTH_SINGLE_SURFACE_SAMBA_20261117 -->
+
+<!-- CENTRALDARK_OAUTH_LAYOUT_UTF8_REPAIR_20261117 -->
+### 17/11/2026 — correção da renderização 480px e UTF-8 na mesma rota
+
+@owner: apps/instinto-superior/src/routes/mcp-autorizar.tsx
+@doc_ref: docs/RECEIPTS/2026-10-25-MCP-VSCODE-PAIRING-UNIFIED-CONSENT.md
+@status: SOURCE_ONLY; FULL_BUILD_AND_DEPLOY_UNKNOWN
+@next_cursor: validar componente renderizado na Forja no mesmo SHA, depois fluxo real com consentimento humano
+
+**Sintomas observados visualmente pelo CHEFE:** o painel ocupava quase toda a largura (utilitário Tailwind `max-w-[480px]` não foi respeitado no consumer) e os rótulos apresentavam `PROPRIET?RIO`, `Permiss?es`, `CENTRALDARK ? OS`. O defeito não é da regra de pareamento nem do OAuth: a fonte TSX tinha interrogações literais no lugar de caracteres UTF-8, introduzidas no transporte de texto, e a restrição de largura não se manifestava na renderização observada.
+
+**Menor delta no mesmo owner (Samba V:):** preservar todas as classes semânticas e handlers, acrescentar restrição CSS inline de 480px no section e alinhamento flex explícito no main para não depender exclusivamente da geração Tailwind dinâmica; substituir somente as cadeias textuais corrompidas (incluindo proprietário, permissões, confirmação, sessão, conexão, código, título, links) por Unicode correto. GitHub blob transmitido com escapes ASCII do JSON, conferido contra SHA Git blob dos bytes UTF-8 da Forja.
+
+**Invariantes:** mesmo `POST /authorize`, `pair_id`, `pair_nonce`, PKCE, credenciais no backend, clique humano e nenhum segredo novo no navegador. Layout responsivo `width:100%; maxWidth:480px`. `SOURCE_SAVED != DEPLOYED`; verificações funcionais e screenshot após rebuild são provas separadas.
+
+**Aprendizado:** nunca diagnosticar acentuação quebrada como CSS quando o próprio TSX já contém `?` nos textos. Verificar bytes UTF-8 no owner antes de construir, transmitir sem perda de Unicode e exigir readback de rótulos acentuados na `main` e na Casa.
+<!-- /CENTRALDARK_OAUTH_LAYOUT_UTF8_REPAIR_20261117 -->

@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/mcp-autorizar")({
   component: AutorizarMcpNoCockpit,
   head: () => ({ meta: [
-    { title: "CentralDark ? Autorizar acesso" },
+    { title: "CentralDark · Autorizar acesso" },
     { name: "robots", content: "noindex, nofollow" },
   ] }),
 });
@@ -31,7 +31,7 @@ const CLIENTE_VSCODE = "centraldark.centraldark-vscode-restore";
 const CLIENTE_BRIDGE = "centraldark.remote-bridge";
 
 function MarcaROV() {
-  // Mesmo SVG do template ROV CentralDark ? OS (E:/CentralDark/.../ROV-CentralDark-Templates).
+  // Mesmo SVG do template ROV CentralDark · OS (E:/CentralDark/.../ROV-CentralDark-Templates).
   return (
     <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.2"
       className="size-[25px]" aria-hidden="true">
@@ -54,7 +54,7 @@ function AutorizarMcpNoCockpit() {
   const clientId = params?.get("client_id") ?? "";
   const dispositivo = clientId === CLIENTE_BRIDGE || clientId === CLIENTE_VSCODE;
   const nome = dispositivo
-    ? (clientId === CLIENTE_BRIDGE ? "CentralDark Remote Bridge" : "CentralDark ? Vibe Coding")
+    ? (clientId === CLIENTE_BRIDGE ? "CentralDark Remote Bridge" : "CentralDark · Vibe Coding")
     : (params?.get("client_name") || clientId || "Cliente MCP");
   const codigoVisivel = dispositivo && params ? params.get("pair_code") || "" : "";
   const sucesso = params?.get("success") === "1" && dispositivo;
@@ -67,8 +67,10 @@ function AutorizarMcpNoCockpit() {
   const titulo = dispositivo ? "Confirmar pareamento" : "Autorizar acesso MCP";
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-background px-3 py-5 text-foreground sm:px-5">
+    <main className="flex min-h-dvh items-center justify-center bg-background px-3 py-5 text-foreground sm:px-5"
+      style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100dvh", width: "100%", padding: "20px 12px", boxSizing: "border-box" }}>
       <section className="w-full max-w-[480px] overflow-hidden rounded-2xl border border-border bg-card shadow-deep"
+        style={{ width: "100%", maxWidth: "480px", marginInline: "auto", boxSizing: "border-box" }}
         aria-label="Autorizacao CentralDark">
         <div className="h-0.5 bg-gradient-to-r from-gold/20 via-gold to-gold/20" aria-hidden="true" />
         <div className="space-y-4 px-4 py-5 sm:px-6 sm:py-6">
@@ -78,29 +80,29 @@ function AutorizarMcpNoCockpit() {
             </div>
             <div>
               <strong className="block text-[16px] font-semibold leading-tight tracking-tight">CentralDark</strong>
-              <small className="block font-mono text-[9px] tracking-widest text-muted-foreground">CENTRALDARK ? OS</small>
+              <small className="block font-mono text-[9px] tracking-widest text-muted-foreground">CENTRALDARK · OS</small>
             </div>
             <span className="ml-auto flex items-center gap-1 rounded-full border border-gold/30 px-2 py-1 font-mono text-[9px] font-medium tracking-wide text-gold">
-              <LockKeyhole aria-hidden="true" className="size-3" /> {dispositivo ? "PAREAMENTO" : "OAUTH ? PKCE"}
+              <LockKeyhole aria-hidden="true" className="size-3" /> {dispositivo ? "PAREAMENTO" : "OAUTH · PKCE"}
             </span>
           </header>
 
           {sucesso ? (
             <div role="status" className="space-y-3 py-3 text-center">
               <ShieldCheck aria-hidden="true" className="mx-auto size-9 text-neon-green" />
-              <h1 className="text-xl font-semibold">Confirma??o enviada</h1>
+              <h1 className="text-xl font-semibold">Confirmação enviada</h1>
               <p className="text-sm text-muted-foreground">
-                Retorne ao {nome} e confira o estado da conex?o no pr?prio aplicativo.
+                Retorne ao {nome} e confira o estado da conexão no próprio aplicativo.
               </p>
               <p className="text-xs text-muted-foreground">
-                O token do dispositivo n?o ? exibido nesta p?gina.
+                O token do dispositivo não é exibido nesta página.
               </p>
             </div>
           ) : !params ? (
-            <p role="status" className="py-4 text-sm text-muted-foreground">Carregando solicita??o?</p>
+            <p role="status" className="py-4 text-sm text-muted-foreground">Carregando solicitação…</p>
           ) : !clientId ? (
             <p role="alert" className="py-4 text-sm text-muted-foreground">
-              Inicie a conex?o pelo cliente MCP ou pelo aplicativo CentralDark para receber uma solicita??o v?lida.
+              Inicie a conexão pelo cliente MCP ou pelo aplicativo CentralDark para receber uma solicitação válida.
             </p>
           ) : (
             <>
@@ -108,14 +110,14 @@ function AutorizarMcpNoCockpit() {
                 <h1 className="text-2xl font-semibold tracking-tight">{titulo}</h1>
                 <p className="break-words text-xs leading-5 text-muted-foreground">
                   <strong className="font-semibold text-foreground">{nome}</strong>
-                  {dispositivo ? " solicita conectar este dispositivo ? CentralDark." : " solicita acesso aos recursos da sua CentralDark."}
+                  {dispositivo ? " solicita conectar este dispositivo à CentralDark." : " solicita acesso aos recursos da sua CentralDark."}
                 </p>
               </div>
 
               <div className="flex items-center justify-center gap-2 text-center" aria-label="Conexao solicitada">
                 <div className="min-w-0 flex-1 rounded-lg border border-border bg-background/50 px-2 py-2">
                   <p className="text-[10px] font-semibold text-foreground">CentralDark</p>
-                  <p className="font-mono text-[9px] text-muted-foreground">PROPRIET?RIO</p>
+                  <p className="font-mono text-[9px] text-muted-foreground">PROPRIETÁRIO</p>
                 </div>
                 <LockKeyhole className="size-4 shrink-0 text-gold" aria-hidden="true" />
                 <div className="min-w-0 flex-1 rounded-lg border border-border bg-background/50 px-2 py-2">
@@ -128,7 +130,7 @@ function AutorizarMcpNoCockpit() {
 
               <div className="overflow-hidden rounded-lg border border-border bg-background/50">
                 <div className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
-                  <strong className="text-xs">Permiss?es solicitadas</strong>
+                  <strong className="text-xs">Permissões solicitadas</strong>
                   <span className="truncate font-mono text-[10px] text-gold">{scopes.join(" ")}</span>
                 </div>
                 <div className="space-y-0 px-3">
@@ -161,14 +163,14 @@ function AutorizarMcpNoCockpit() {
                 {dispositivo && (
                   codigoVisivel ? (
                     <div className="rounded-lg border border-gold/30 bg-background px-3 py-3 text-center">
-                      <span className="block text-[10px] text-muted-foreground">C?digo solicitado pelo {nome}</span>
+                      <span className="block text-[10px] text-muted-foreground">Código solicitado pelo {nome}</span>
                       <output className="mt-1 block font-mono text-xl font-bold tracking-widest text-gold"
-                        aria-label="C?digo de pareamento">{codigoVisivel}</output>
+                        aria-label="Código de pareamento">{codigoVisivel}</output>
                       <input type="hidden" name="pair_code" value={codigoVisivel} />
                     </div>
                   ) : (
                     <label className="block text-xs">
-                      C?digo apresentado pelo {nome}
+                      Código apresentado pelo {nome}
                       <input type="text" name="pair_code" autoComplete="off" required
                         value={pairCode} onChange={e => alterarPairCode(e.target.value.toUpperCase())}
                         className="mt-2 block h-10 w-full rounded-md border border-input bg-background px-3 font-mono text-sm uppercase tracking-widest"
@@ -178,7 +180,7 @@ function AutorizarMcpNoCockpit() {
                 )}
                 {!autorizado && (
                   <p role="alert" className="text-xs text-destructive">
-                    Solicita??o incompleta. Reabra a conex?o pelo aplicativo solicitante.
+                    Solicitação incompleta. Reabra a conexão pelo aplicativo solicitante.
                   </p>
                 )}
                 <div className="grid grid-cols-2 gap-2">
@@ -192,12 +194,12 @@ function AutorizarMcpNoCockpit() {
               </form>
               <p className="flex items-center justify-center gap-1 text-center text-[10px] text-muted-foreground">
                 <ShieldCheck className="size-3 text-gold" aria-hidden="true" />
-                A sess?o e as permiss?es s?o validadas pelo servidor.
+                A sessão e as permissões são validadas pelo servidor.
               </p>
             </>
           )}
           <Link className="block text-center text-xs text-muted-foreground underline-offset-4 hover:text-gold hover:underline"
-            to="/sala-controle">Voltar ? Sala de Controle</Link>
+            to="/sala-controle">Voltar à Sala de Controle</Link>
         </div>
       </section>
     </main>
