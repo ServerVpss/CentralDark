@@ -1,6 +1,10 @@
 use crate::settings::ThemeId;
 use crate::{AppState, HaloState};
 use std::time::{Duration, Instant};
+#[cfg(target_os = "windows")]
+use std::sync::atomic::{AtomicBool, Ordering};
+#[cfg(target_os = "windows")]
+static CUA_RECOGNITION_ACTIVE: AtomicBool = AtomicBool::new(false);
 use tauri::{
     image::Image,
     menu::{CheckMenuItem, CheckMenuItemBuilder, MenuBuilder, MenuItemBuilder, SubmenuBuilder},
@@ -117,14 +121,15 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         let _ = settings.save();
     }
 
+    let open_control = MenuItemBuilder::with_id("open_agent_control", "Abrir Agente Remoto").build(app)?;
     let title = MenuItemBuilder::with_id("title", "CentralDark Halo")
         .enabled(false)
         .build(app)?;
-    let enable = CheckMenuItemBuilder::new("Enable Halo")
+    let enable = CheckMenuItemBuilder::new("Ativar Halo")
         .id("enable")
         .checked(initial.enabled)
         .build(app)?;
-    let cyber = CheckMenuItemBuilder::new("Cyber Blue")
+    let cyber = CheckMenuItemBuilder::new("Azul Cibernético")
         .id("theme_cyber_blue")
         .checked(initial.theme == ThemeId::CyberBlue)
         .build(app)?;
@@ -132,7 +137,7 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         .id("theme_sakura")
         .checked(initial.theme == ThemeId::Sakura)
         .build(app)?;
-    let minimal = CheckMenuItemBuilder::new("Minimal")
+    let minimal = CheckMenuItemBuilder::new("Minimalista")
         .id("theme_minimal")
         .checked(initial.theme == ThemeId::Minimal)
         .build(app)?;
@@ -141,25 +146,37 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         sakura: sakura.clone(),
         minimal: minimal.clone(),
     };
-    let themes = SubmenuBuilder::new(app, "Theme")
+    let themes = SubmenuBuilder::new(app, "Tema")
         .item(&cyber)
         .item(&sakura)
         .item(&minimal)
         .build()?;
-    let demo = MenuItemBuilder::with_id("demo", "Demo Mode").build(app)?;
-    let autostart = CheckMenuItemBuilder::new("Start at Login")
+    let demo = MenuItemBuilder::with_id("demo", "Modo de demonstração").build(app)?;
+    let autostart = CheckMenuItemBuilder::new("Iniciar com o sistema")
         .id("autostart")
         .checked(actual_autostart)
         .build(app)?;
-    let logs = MenuItemBuilder::with_id("logs", "Open Logs").build(app)?;
-    let quit = MenuItemBuilder::with_id("quit", "Quit").build(app)?;
+    let recognize_three = MenuItemBuilder::with_id(
+        "cua_recognize_three", "Reconhecer tela 3 (mouse virtual)"
+    ).enabled(cfg!(target_os = "windows")).build(app)?;
+    let recognize_all = MenuItemBuilder::with_id(
+        "cua_recognize_all", "Reconhecer todas as telas (mouse virtual)"
+    ).enabled(cfg!(target_os = "windows")).build(app)?;
+    let cua_menu = SubmenuBuilder::new(app, "Mouse virtual (Cua)")
+        .item(&recognize_three)
+        .item(&recognize_all)
+        .build()?;
+    let logs = MenuItemBuilder::with_id("logs", "Abrir registros").build(app)?;
+    let quit = MenuItemBuilder::with_id("quit", "Sair").build(app)?;
 
     let menu = MenuBuilder::new(app)
         .item(&title)
+        .item(&open_control)
         .separator()
         .item(&enable)
         .item(&themes)
         .item(&demo)
+        .item(&cua_menu)
         .item(&autostart)
         .separator()
         .item(&logs)
@@ -175,8 +192,12 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         .tooltip("CentralDark Halo")
         .menu(&menu)
         .show_menu_on_left_click(true)
-        .on_menu_event(move |app, event| match event.id().as_ref() {
-            "enable" => toggle_enabled(app, &enable_for_handler),
+        .on_menu_event(move |app, event| match event.id().as_ref() {            "enable" => toggle_enabled(app, &enable_for_handler),
+            "open_agent_control" => {
+                if let Err(error) = crate::show_agent_control(app) {
+                    log::warn!("Agente Remoto: {error}");
+                }
+            },
             "theme_cyber_blue" => {
                 set_theme(app, ThemeId::CyberBlue, &themes_for_handler);
             }
@@ -184,13 +205,23 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
             "theme_minimal" => set_theme(app, ThemeId::Minimal, &themes_for_handler),
             "demo" => {
                 if let Err(error) = crate::run_demo(app.clone()) {
-                    log::info!("Demo Mode not started: {error}");
+                    log::info!("Demonstração não iniciada: {error}");
                 }
             }
+            "cua_recognize_three" => {
+                if let Err(error) = start_cua_visual_recognition(app, Some(3)) {
+                    log::warn!("Reconhecimento visual indispon?vel: {error}");
+                }
+            },
+            "cua_recognize_all" => {
+                if let Err(error) = start_cua_visual_recognition(app, None) {
+                    log::warn!("Reconhecimento visual indispon?vel: {error}");
+                }
+            },
             "autostart" => toggle_autostart(app, &autostart_for_handler),
             "logs" => {
                 if let Err(error) = crate::platform::open_log_dir() {
-                    log::warn!("Could not open logs: {error}");
+                    log::warn!("Não foi possível abrir os registros: {error}");
                 }
             }
             "quit" => {
@@ -202,9 +233,90 @@ pub fn create_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
         .build(app)?;
 
     start_tray_breath(app.clone());
-    log::info!("System tray ready");
+    log::info!("Bandeja do sistema pronta");
     Ok(())
 }
+
+// CENTRALDARK_HALO_CUA_REUSE_20261114
+// O Halo somente DELEGA ao helper ja existente: o cua-driver continua sendo o
+// unico atuador. O overlay da Skill e usado somente durante o reconhecimento.
+// Nunca inicie outro daemon, copie o driver, nem mova o mouse fisico.
+#[cfg(target_os = "windows")]
+fn start_cua_visual_recognition(app: &AppHandle, monitor: Option<u8>) -> Result<(), String> {
+    use std::path::PathBuf;
+    use std::process::Command;
+    use std::os::windows::process::CommandExt;
+
+    let state = app.state::<AppState>();
+    let current = state.current.lock().unwrap_or_else(|e| e.into_inner()).state;
+    if current != HaloState::Idle {
+        return Err("O Halo está ocupado; preserve o overlay atual".into());
+    }
+    if CUA_RECOGNITION_ACTIVE.compare_exchange(
+        false, true, Ordering::AcqRel, Ordering::Acquire,
+    ).is_err() {
+        return Err("Já existe um reconhecimento visual em execução".into());
+    }
+
+    let result = (|| {
+        let relative = PathBuf::from(
+            ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py"
+        );
+        let mut roots = Vec::<PathBuf>::new();
+        if let Some(root) = std::env::var_os("CENTRALDARK_ROOT") {
+            roots.push(root.into());
+        }
+        if let Ok(exe) = std::env::current_exe() {
+            let mut cursor = exe.parent();
+            while let Some(path) = cursor {
+                roots.push(path.to_path_buf());
+                cursor = path.parent();
+            }
+        }
+        // Compatibilidade Casa/SEGREDO: fonte principal preexistente.
+        roots.push(PathBuf::from(r"F:\CentralDark"));
+        let script = roots.into_iter().map(|r| r.join(&relative))
+            .find(|p| p.is_file())
+            .ok_or("Helper Cua canônico não encontrado; configure CENTRALDARK_ROOT")?;
+        let python = std::env::var_os("CENTRALDARK_PYTHON_EXE")
+            .unwrap_or_else(|| "python".into());
+        std::thread::spawn(move || {
+            let mut command = Command::new(python);
+            command.arg(script);
+            match monitor {
+                Some(n) => { command.arg("--monitor").arg(n.to_string()); }
+                None => { command.arg("--all"); }
+            }
+            command.args(["--mode", "blink", "--blink-speed", "fast"]);
+            // GUI: sem console extra e sem alterar o cursor fisico.
+            command.creation_flags(0x0800_0000);
+            match command.output() {
+                Ok(out) if out.status.success() => {
+                    log::info!("Reconhecimento Cua concluído, monitor={monitor:?}");
+                }
+                Ok(out) => {
+                    log::warn!("Reconhecimento Cua falhou, exit={:?}", out.status.code());
+                }
+                Err(error) => {
+                    log::warn!("Não foi possível acionar o helper Cua: {error}");
+                }
+            }
+            CUA_RECOGNITION_ACTIVE.store(false, Ordering::Release);
+        });
+        Ok(())
+    })();
+
+    if result.is_err() {
+        CUA_RECOGNITION_ACTIVE.store(false, Ordering::Release);
+    }
+    result
+}
+
+#[cfg(not(target_os = "windows"))]
+fn start_cua_visual_recognition(_app: &AppHandle, _monitor: Option<u8>) -> Result<(), String> {
+    Err("O cursor virtual Cua exige Windows nesta versão".into())
+}
+// /CENTRALDARK_HALO_CUA_REUSE_20261114
 
 fn toggle_enabled(app: &AppHandle, item: &CheckMenuItem<tauri::Wry>) {
     let state = app.state::<AppState>();
@@ -215,7 +327,7 @@ fn toggle_enabled(app: &AppHandle, item: &CheckMenuItem<tauri::Wry>) {
             .unwrap_or_else(|poisoned| poisoned.into_inner());
         settings.enabled = !settings.enabled;
         if let Err(error) = settings.save() {
-            log::warn!("Could not save Enable Halo setting: {error}");
+            log::warn!("Não foi possível salvar a opção Ativar Halo: {error}");
         }
         settings.enabled
     };
@@ -231,7 +343,7 @@ fn toggle_enabled(app: &AppHandle, item: &CheckMenuItem<tauri::Wry>) {
             None,
         );
     }
-    log::info!("Enable Halo: {enabled}");
+    log::info!("Ativar Halo: {enabled}");
 }
 
 fn set_theme(app: &AppHandle, theme: ThemeId, items: &ThemeItems) {
@@ -243,7 +355,7 @@ fn set_theme(app: &AppHandle, theme: ThemeId, items: &ThemeItems) {
             .unwrap_or_else(|poisoned| poisoned.into_inner());
         settings.theme = theme;
         if let Err(error) = settings.save() {
-            log::warn!("Could not save theme: {error}");
+            log::warn!("Não foi possível salvar o tema: {error}");
         }
     }
     items.set_selected(theme);
@@ -251,7 +363,7 @@ fn set_theme(app: &AppHandle, theme: ThemeId, items: &ThemeItems) {
         "halo-theme",
         serde_json::json!({ "theme": theme.to_string() }),
     );
-    log::info!("Theme: {theme}");
+    log::info!("Tema: {theme}");
 }
 
 fn toggle_autostart(app: &AppHandle, item: &CheckMenuItem<tauri::Wry>) {
@@ -271,14 +383,14 @@ fn toggle_autostart(app: &AppHandle, item: &CheckMenuItem<tauri::Wry>) {
                 .unwrap_or_else(|poisoned| poisoned.into_inner());
             settings.start_at_login = desired;
             if let Err(error) = settings.save() {
-                log::warn!("Could not save autostart setting: {error}");
+                log::warn!("Não foi possível salvar a inicialização automática: {error}");
             }
             let _ = item.set_checked(desired);
-            log::info!("Start at Login: {desired}");
+            log::info!("Iniciar com o sistema: {desired}");
         }
         Err(error) => {
             let _ = item.set_checked(current);
-            log::warn!("Could not change Start at Login: {error}");
+            log::warn!("Não foi possível alterar a inicialização automática: {error}");
         }
     }
 }
