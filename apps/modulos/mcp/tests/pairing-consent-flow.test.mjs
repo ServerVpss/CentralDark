@@ -405,6 +405,12 @@ test('Cockpit mostra o codigo da tentativa e exige clique humano',async()=>{
   assert.match(page,/type="hidden" name="pair_code"/);
   assert.match(page,/Confirmar pareamento/);
   assert.match(page,/type="submit"/);
+  // O currentTarget do evento React pode tornar-se nulo apos um await.
+  assert.match(page,/const formulario = event\.currentTarget/);
+  assert.match(page,/formulario instanceof HTMLFormElement/);
+  assert.match(page,/new FormData\(formulario\)/);
+  assert.ok(page.indexOf("new FormData(formulario)") < page.indexOf("await supabase.auth.getSession()"));
+  assert.doesNotMatch(page,/new FormData\(event\.currentTarget\)/);
 });
 test('extensao distribuida contem o pareamento e dependencias compiladas',async()=>{
   const {readFileSync,existsSync}=await import('node:fs');

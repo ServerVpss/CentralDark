@@ -73,6 +73,16 @@ function AutorizarMcpNoCockpit() {
   async function enviarConsentimento(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!params || !autorizado || enviando) return;
+    // currentTarget pertence ao evento s?ncrono: capturar ANTES do primeiro await.
+    const formulario = event.currentTarget;
+    if (!(formulario instanceof HTMLFormElement)) {
+      alterarErroEnvio("Formul?rio de autoriza??o indispon?vel.");
+      return;
+    }
+    const body = new URLSearchParams();
+    new FormData(formulario).forEach((value, key) => {
+      if (typeof value === "string") body.append(key, value);
+    });
     alterarEnviando(true);
     alterarErroEnvio("");
     try {
@@ -82,10 +92,6 @@ function AutorizarMcpNoCockpit() {
       const token = data.session?.access_token;
       if (error || !token) throw new Error("Sessão do Cockpit expirada. Entre novamente na CentralDark.");
 
-      const body = new URLSearchParams();
-      new FormData(event.currentTarget).forEach((value, key) => {
-        if (typeof value === "string") body.append(key, value);
-      });
       const response = await fetch("https://mcp.centralldark.com/authorize", {
         method: "POST",
         headers: {

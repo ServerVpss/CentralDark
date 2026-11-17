@@ -129,3 +129,12 @@ Contraprova isolada sem usar credenciais reais: `node --test apps/modulos/mcp/te
 Estado: SOURCE_TESTED=PASS; OWNER_BRANCH_DEPLOYED=UNKNOWN; PRODUCTION_BROWSER_SESSION=NOT_TESTED; SUPABASE_CONFIG_RUNTIME=UNKNOWN. Não confundir fonte publicada com serviço atualizado.
 Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro domínio. Reutilizar identidade **validada no backend** via JWT e roles; nunca pedir senha administrativa de novo ou permitir token de usuário comum autorizar MCP.
 <!-- /CENTRALDARK_OAUTH_COCKPIT_SUPABASE_CONSENT_20261117 -->
+
+<!-- CENTRALDARK_OAUTH_FORMDATA_AWAIT_FIX_20261117 -->
+### 17/11/2026 — FormData antes do await no consentimento OAuth
+
+**Sintoma real:** `Failed to construct 'FormData': parameter 1 is not of type 'HTMLFormElement'` ao autorizar no Cockpit. **Causa comprovada na fonte:** `new FormData(event.currentTarget)` executava **depois** de `await supabase.auth.getSession()`. O `currentTarget` de evento React é válido durante a chamada síncrona, não necessariamente após a suspensão assíncrona. Não é erro de senha nem da configuração do MCP.
+
+**Menor delta no mesmo owner:** capturar `event.currentTarget`, validar `instanceof HTMLFormElement` e serializar `FormData` antes do primeiro `await`. Preservados os campos OAuth, o JWT, `redirect_uri`, PKCE, o owner `/authorize` e o consentimento explícito. Regressão acrescentada no teste existente para travar a ordem das operações. Prova local: TSX parse 0 erros; `pairing-consent-flow.test.mjs` **10 PASS / 0 FAIL**. Deploy e autorização humana pós-rebuild: UNKNOWN.
+<!-- /CENTRALDARK_OAUTH_FORMDATA_AWAIT_FIX_20261117 -->
+
