@@ -146,3 +146,7 @@ Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro do
 
 **Estado:** SOURCE_TEST=PASS; LIVE_OPTIONS=PASS; LIVE_BROWSER_CORS_INVALID_CLIENT=PASS; LIVE_REAL_CLIENT_OAUTH=UNKNOWN; DEPLOY=UNKNOWN. Não declarar FIXED_POINT antes do teste autenticado.
 <!-- /MCP_JSON_NO_REDIRECT_PKCE_20261117 -->
+
+<!-- MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
+**17/11/2026 ? Build m?nimo do mesmo owner para consumo:** \`apps/modulos/mcp/package.json\` define \`start: node dist/index.js\`; portanto publicar somente \`src/oauth.js\` n?o prova que o processo consome o delta. A leitura na Forja detectou \`dist/oauth.js\` compilado em 16/11, sem a valida??o de sess?o Cockpit e sem a resposta JSON de erro OAuth. Recompilei **apenas** \`src/oauth.js\` com TypeScript (target ES2022/ESNext/allowJs) diretamente para o \`dist/oauth.js\` existente; sa?da sem erros de compilador, \`node --check\` = PASS, hash readback conferido. Nenhum segundo owner ou motor criado. **Falta:** comprovar rebuild/restart do processo que serve /authorize e o clique de autoriza??o real ap?s atualiza??o (DEPLOY=UNKNOWN).
+<!-- /MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
