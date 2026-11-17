@@ -9,7 +9,8 @@
  * @pendente prova de autenticacao real, build do host e readback do deploy no mesmo SHA.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Check, KeyRound, LockKeyhole, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -46,6 +47,9 @@ function MarcaROV() {
 function AutorizarMcpNoCockpit() {
   const [params, alterarParams] = useState<URLSearchParams | null>(null);
   const [pairCode, alterarPairCode] = useState("");
+  const [erroEnvio, alterarErroEnvio] = useState("");
+  const [enviando, alterarEnviando] = useState(false);
+  const [confirmado, alterarConfirmado] = useState(false);
 
   useEffect(() => {
     alterarParams(new URLSearchParams(window.location.search));
@@ -57,7 +61,7 @@ function AutorizarMcpNoCockpit() {
     ? (clientId === CLIENTE_BRIDGE ? "CentralDark Remote Bridge" : "CentralDark · Vibe Coding")
     : (params?.get("client_name") || clientId || "Cliente MCP");
   const codigoVisivel = dispositivo && params ? params.get("pair_code") || "" : "";
-  const sucesso = params?.get("success") === "1" && dispositivo;
+  const sucesso = (params?.get("success") === "1" || confirmado) && dispositivo;
   const falha = params?.get("error") || "";
   const scopes = (params?.get("scope") || "mcp").split(/\s+/).filter(Boolean);
   const autorizado = dispositivo
@@ -65,6 +69,57 @@ function AutorizarMcpNoCockpit() {
     : Boolean(clientId && params?.get("redirect_uri") && params?.get("response_type") === "code"
       && params?.get("code_challenge") && params?.get("code_challenge_method") === "S256");
   const titulo = dispositivo ? "Confirmar pareamento" : "Autorizar acesso MCP";
+
+  async function enviarConsentimento(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!params || !autorizado || enviando) return;
+    alterarEnviando(true);
+    alterarErroEnvio("");
+    try {
+      // Reutilizar a mesma sessão do Cockpit; não pedir a senha do MCP novamente.
+      // O servidor valida JWT e user_roles=admin; sessão local nunca equivale a autorização.
+      const { data, error } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (error || !token) throw new Error("Sessão do Cockpit expirada. Entre novamente na CentralDark.");
+
+      const body = new URLSearchParams();
+      new FormData(event.currentTarget).forEach((value, key) => {
+        if (typeof value === "string") body.append(key, value);
+      });
+      const response = await fetch("https://mcp.centralldark.com/authorize", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        credentials: "omit",
+        redirect: "error",
+        body: body.toString(),
+      });
+      const result = await response.json();
+      if (!response.ok || result.ok !== true) {
+        throw new Error(result.error || result.error_description || "Não foi possível autorizar esta solicitação.");
+      }
+      if (dispositivo) {
+        alterarConfirmado(true);
+        return;
+      }
+      // O redirect já foi validado contra o cadastro do cliente no backend.
+      // Esta verificação adicional evita navegar fora do destino esperado.
+      const destino = new URL(String(result.redirect_to || ""));
+      const esperado = new URL(params.get("redirect_uri") || "");
+      if (destino.origin !== esperado.origin || destino.pathname !== esperado.pathname
+          || !["https:", "http:"].includes(destino.protocol)) {
+        throw new Error("Destino OAuth divergente do cliente registrado.");
+      }
+      window.location.assign(destino.toString());
+    } catch (error) {
+      alterarErroEnvio(error instanceof Error ? error.message : "Falha na autorização. Confira a sessão no Cockpit.");
+    } finally {
+      alterarEnviando(false);
+    }
+  }
 
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-3 py-5 text-foreground sm:px-5"
@@ -149,13 +204,13 @@ function AutorizarMcpNoCockpit() {
                 </div>
               </div>
 
-              {falha && (
+              {(erroEnvio || falha) && (
                 <p role="alert" className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-                  {falha}
+                  {erroEnvio || falha}
                 </p>
               )}
 
-              <form method="post" action="https://mcp.centralldark.com/authorize" className="space-y-3">
+              <form method="post" action="https://mcp.centralldark.com/authorize" onSubmit={enviarConsentimento} className="space-y-3">
                 <input type="hidden" name="auth_method" value="code" />
                 {CAMPOS.map(campo => (
                   <input key={campo} type="hidden" name={campo} value={params.get(campo) || ""} />
@@ -187,8 +242,8 @@ function AutorizarMcpNoCockpit() {
                   <Button type="button" variant="outline" onClick={() => window.history.back()}>
                     Cancelar
                   </Button>
-                  <Button type="submit" className="glow-gold" disabled={!autorizado}>
-                    {dispositivo ? "Confirmar" : "Autorizar"}
+                  <Button type="submit" className="glow-gold" disabled={!autorizado || enviando}>
+                    {enviando ? "Validando sessão..." : dispositivo ? "Confirmar" : "Autorizar"}
                   </Button>
                 </div>
               </form>

@@ -112,3 +112,20 @@ Prova local VMware: node --check nos tres arquivos e node --test tests/device-pa
 
 **Aprendizado:** nunca diagnosticar acentuação quebrada como CSS quando o próprio TSX já contém `?` nos textos. Verificar bytes UTF-8 no owner antes de construir, transmitir sem perda de Unicode e exigir readback de rótulos acentuados na `main` e na Casa.
 <!-- /CENTRALDARK_OAUTH_LAYOUT_UTF8_REPAIR_20261117 -->
+
+<!-- CENTRALDARK_OAUTH_COCKPIT_SUPABASE_CONSENT_20261117 -->
+## 2026-11-17 — sessão Cockpit para o consentimento OAuth MCP e Bridge
+
+Owner: `apps/modulos/mcp/src/oauth.js` e `apps/instinto-superior/src/routes/mcp-autorizar.tsx`.
+Intenção: corrigir o erro `Senha inválida` no consentimento de usuário já autenticado em `admin.centralldark.com`, sem criar outro autenticador, sem senha repetida, sem contornar papéis.
+Causa confirmada no código: o Cockpit guarda sessão Supabase; o `POST` HTML anterior para `mcp.centralldark.com/authorize` não carregava o `cd_admin` do MCP nem JWT Supabase. O servidor caía no fallback de `MCP_ADMIN_PASSWORD` e retornava `Senha inválida`, independentemente do login no Cockpit.
+
+Menor delta aplicado diretamente no owner da Forja via Samba `V:\`:
+- A rota React obtém `supabase.auth.getSession()` apenas no clique humano, envia o access JWT em `Authorization: Bearer` por `fetch` `POST /authorize` com `credentials: omit`, sem token em query, URL ou campo oculto.
+- O owner OAuth reutiliza a validação Supabase preexistente: `/auth/v1/user` e `user_roles.role=admin`; nega sessão inexistente e usuário comum. O modo JSON é limitado a `Origin: https://admin.centralldark.com`; mantém o fallback HTML legado sem inventar autenticação.
+- Após autorização, o servidor retorna `redirect_to` somente ao Cockpit verificado; a UI verifica origem/caminho registrados do callback antes de navegar. O pareamento VS Code/Bridge responde sucesso JSON, mantém segredo de posse somente no cliente e exige clique, código e nonce.
+
+Contraprova isolada sem usar credenciais reais: `node --test apps/modulos/mcp/tests/pairing-consent-flow.test.mjs` = **10/10 PASS**, inclusive negação de JWT ausente, negação de role não-admin, negação de Origin externo, callback PKCE/state preservado e pareamento VS Code com JWT admin. `node --check` do owner e do teste = PASS; compilação TypeScript/transpile da rota = 0 erros.
+Estado: SOURCE_TESTED=PASS; OWNER_BRANCH_DEPLOYED=UNKNOWN; PRODUCTION_BROWSER_SESSION=NOT_TESTED; SUPABASE_CONFIG_RUNTIME=UNKNOWN. Não confundir fonte publicada com serviço atualizado.
+Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro domínio. Reutilizar identidade **validada no backend** via JWT e roles; nunca pedir senha administrativa de novo ou permitir token de usuário comum autorizar MCP.
+<!-- /CENTRALDARK_OAUTH_COCKPIT_SUPABASE_CONSENT_20261117 -->

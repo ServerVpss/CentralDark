@@ -301,6 +301,80 @@ test('Remote Bridge: Supabase JWT admin autoriza somente após clique, role e no
   }
 });
 
+test('Cockpit Supabase: consentimento JSON exige admin, origem e PKCE; sem senha duplicada', async()=>{
+  const realFetch=globalThis.fetch;
+  const oldUrl=process.env.HUB_SUPABASE_URL, oldKey=process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+  process.env.HUB_SUPABASE_URL='https://centraldark-auth-test.invalid';
+  process.env.HUB_SUPABASE_PUBLISHABLE_KEY='sb_publishable_test_only';
+  let role='user';
+  const bearer='Bearer '+'T'.repeat(64);
+  globalThis.fetch=async(input,opts={})=>{
+    const url=String(input);
+    if(url.startsWith('https://centraldark-auth-test.invalid/')){
+      if(opts.headers?.Authorization!==bearer) return new Response('{}',{status:401});
+      if(url.includes('/auth/v1/user')) return new Response(JSON.stringify({id:'00000000-0000-4000-8000-000000000002',is_anonymous:false}),{status:200});
+      if(url.includes('/rest/v1/user_roles')) return new Response(JSON.stringify(role==='admin'?[{role:'admin'}]:[]),{status:200});
+      return new Response('{}',{status:404});
+    }
+    return realFetch(input,opts);
+  };
+  try{
+    const client=registerClient({client_name:'Hermes Cockpit JSON Test',redirect_uris:[base+'/cb-json'],token_endpoint_auth_method:'none'});
+    const data={client_id:client.client_id,redirect_uri:base+'/cb-json',response_type:'code',
+      code_challenge:'TEST_ONLY_PKCE_JSON',code_challenge_method:'S256',scope:'mcp',state:'STATE_JSON'};
+    const post=(origin='https://admin.centralldark.com',auth=bearer)=>({
+      ...urlEncoded(data),
+      headers:{...urlEncoded(data).headers,Origin:origin,Accept:'application/json',Authorization:auth}
+    });
+    const missing=await request('/authorize',post('https://admin.centralldark.com',''));
+    assert.equal(missing.status,401);
+    assert.equal((await missing.json()).ok,false);
+    const nonAdmin=await request('/authorize',post());
+    assert.equal(nonAdmin.status,401);
+    assert.match((await nonAdmin.json()).error,/administrador/);
+    role='admin';
+    const otherOrigin=await request('/authorize',post('https://outro.invalid'));
+    assert.equal(otherOrigin.status,403);
+    const valid=await request('/authorize',post());
+    assert.equal(valid.status,200);
+    const response=await valid.json();
+    assert.equal(response.ok,true);
+    const callback=new URL(response.redirect_to);
+    assert.equal(callback.pathname,'/cb-json');
+    assert.equal(callback.searchParams.get('state'),'STATE_JSON');
+    assert.ok(callback.searchParams.get('code'));
+    assert.equal(valid.headers.get('cache-control'),'no-store');
+    // A mesma sess?o admin pode aprovar uma tentativa VS Code iniciada pelo cliente.
+    const created=await request('/device/pair/start',json({
+      device_name:'TEST-VSCODE-JSON-ADMIN',executor:'vscode',surface:'test'
+    }));
+    assert.equal(created.status,201);
+    const pair=await created.json();
+    const consent=await request('/authorize?'+new URLSearchParams({
+      client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id
+    }));
+    assert.equal(consent.status,302);
+    const challenge=new URL(consent.headers.get('location'));
+    const deviceBody={
+      client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id,
+      pair_code:pair.code,pair_nonce:challenge.searchParams.get('pair_nonce')
+    };
+    const deviceOpts={...urlEncoded(deviceBody),headers:{
+      ...urlEncoded(deviceBody).headers,Origin:'https://admin.centralldark.com',
+      Accept:'application/json',Authorization:bearer
+    }};
+    const approvedDevice=await request('/authorize',deviceOpts);
+    assert.equal(approvedDevice.status,200);
+    assert.deepEqual(await approvedDevice.json(),{ok:true,approved:true});
+    const status=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+    assert.equal((await status.json()).status,'approved');
+  }finally{
+    globalThis.fetch=realFetch;
+    if(oldUrl===undefined) delete process.env.HUB_SUPABASE_URL; else process.env.HUB_SUPABASE_URL=oldUrl;
+    if(oldKey===undefined) delete process.env.HUB_SUPABASE_PUBLISHABLE_KEY; else process.env.HUB_SUPABASE_PUBLISHABLE_KEY=oldKey;
+  }
+});
+
 test('Expired pair cannot be confirmed; code alone never issues token',()=>{
   let now=0;
   const isolated=createDevicePairingStore({registryPath:join(tmp,'expired.json'),now:()=>now,ttlMs:500});
