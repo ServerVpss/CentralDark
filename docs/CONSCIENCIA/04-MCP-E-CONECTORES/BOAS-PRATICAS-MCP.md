@@ -183,3 +183,19 @@ Armadilhas:
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+<!-- MCP_CLOUDFLARE_1033_CASA_TUNNEL_DOWN_20261118 -->
+### 18/11/2026 — Error 1033/530 não é rota MCP: é o conector da Casa
+
+**Sintoma:** `https://mcp.centralldark.com/health` = **530** (Cloudflare Tunnel Error 1033), Ray ID `a5c2d70d6c81f521`, 18/11 00:25 UTC.
+
+**Diagnóstico discriminante (FRIA):** medidos no mesmo instante — `centralldark.com` = **200**, `gateway.centralldark.com` = **302**, mas `mcp.centralldark.com`, `admin.centralldark.com` e `multizap-mvp.centralldark.com` = **530**. Os três domínios caídos pertencem ao **túnel da Casa**; os dois vivos pertencem ao túnel `fe52c8b1-dcc3-46c3-ab75-ee41fa3c3555` da VPS. Logo, não é DNS, não é ingress do MCP, não é OAuth, não é CORS e não é o serviço MCP na Forja.
+
+**Causa observada:** a tailnet mostra `segredo-chefe-pc` (`100.122.246.22`) **offline**, last seen ~15 min, e `centraldark-os-forja` também offline via relay. Sondas TCP diretas na Casa (:8080/:9100/:9101) falharam. O conector Cloudflare que serve `mcp`/`admin` roda na Casa; máquina desligada = túnel sem conector = 530/1033.
+
+**O que NÃO foi feito:** nenhum túnel novo, nenhuma alteração de DNS/ingress/Cloudflare Access, nenhuma credencial tocada, nenhum restart de serviço remoto sem acesso autorizado, nenhuma exclusão. O túnel da VPS e o MCP da Forja (`/health` local 200, 160 tools) permanecem intactos.
+
+**Estado:** VPS_TUNNEL=PASS; FORJA_MCP=PASS; CASA_NODE=OFFLINE; CASA_TUNNEL=BLOCKED; AUTH=UNCHANGED; FIXED_POINT=NÃO — depende da Casa voltar e do conector existente reconectar.
+
+**NEXT_CURSOR:** quando `100.122.246.22` reaparecer na tailnet, conferir `cloudflared` na Casa pelo owner local e repetir os quatro domínios. Não criar túnel substituto.
+<!-- /MCP_CLOUDFLARE_1033_CASA_TUNNEL_DOWN_20261118 -->
