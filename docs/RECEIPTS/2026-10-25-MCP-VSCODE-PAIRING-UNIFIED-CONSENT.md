@@ -150,3 +150,24 @@ Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro do
 <!-- MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
 **17/11/2026 ? Build m?nimo do mesmo owner para consumo:** \`apps/modulos/mcp/package.json\` define \`start: node dist/index.js\`; portanto publicar somente \`src/oauth.js\` n?o prova que o processo consome o delta. A leitura na Forja detectou \`dist/oauth.js\` compilado em 16/11, sem a valida??o de sess?o Cockpit e sem a resposta JSON de erro OAuth. Recompilei **apenas** \`src/oauth.js\` com TypeScript (target ES2022/ESNext/allowJs) diretamente para o \`dist/oauth.js\` existente; sa?da sem erros de compilador, \`node --check\` = PASS, hash readback conferido. Nenhum segundo owner ou motor criado. **Falta:** comprovar rebuild/restart do processo que serve /authorize e o clique de autoriza??o real ap?s atualiza??o (DEPLOY=UNKNOWN).
 <!-- /MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
+
+<!-- MCP_RUNTIME_CODE_PROOF_20261118 -->
+### 18/11/2026 — prova de que o processo em execução consome o dist corrigido
+
+**Problema:** GitHub atualizado e arquivo corrigido no disco não provam que o servidor que atende `/authorize` carregou o código novo.
+
+**Antes → evidência → depois:**
+- Antes: `POST /authorize` com `Origin: https://outro.invalid` + `Accept: application/json` devolvia **HTTP 400**, igual ao caso legítimo — resposta **não discriminante**.
+- Evidência: o processo HTTP (PID `857060`, `dist/index.js`) iniciou às `00:02:55 +0300`, enquanto `dist/oauth.js` foi escrito às `02:49:21 +0300`. O processo carregava código anterior. O teste discriminante: o código novo exige **403** para origem não autorizada (`res.locals.cockpitConsentJson` em `oauth.js:320`).
+- Depois: reiniciado **somente** `centraldark-native-mcp-http.service` (o túnel STDIO não foi tocado). Novo PID `1064786`. O mesmo probe passou a devolver **HTTP 403** `access_denied / Origem de consentimento não autorizada`, tanto na LAN `192.168.35.130:9100` quanto em `https://mcp.centralldark.com/authorize`.
+
+**Contraprovas:** `OPTIONS /authorize` = **204** com `Access-Control-Allow-Origin: *` e headers `Authorization,Content-Type,Accept`; `/health` local e público = **200**, 160 tools, `catalogVersion 160-45340263b107`; suíte existente `pairing-consent-flow.test.mjs` + `device-pairing.test.mjs` = **21 PASS / 0 FAIL**; hashes de `src/oauth.js` e `dist/oauth.js` na Forja idênticos aos da `main` `a55449dc3b`.
+
+**Invariantes:** nenhuma senha nova, nenhum segredo no navegador, nenhuma alteração em CORS/DNS/Cloudflare, nenhum segundo túnel, nenhum segundo OAuth, nenhum `reset`/`clean`/`force`. Consentimento humano permanece obrigatório.
+
+**Armadilha registrada:** um HTTP 400 serviu inicialmente como falso sinal de "já corrigido" porque **ambas** as versões respondem 400 para cliente inexistente. Somente o teste com origem não autorizada (400 → 403) separou código antigo de código novo.
+
+**Estado:** RUNTIME_CODE=PASS; OPTIONS=PASS; TESTES=21/21 PASS; HEALTH=PASS; CLICK_HUMANO=UNKNOWN; FIXED_POINT=NÃO declarado sem clique e retorno OAuth do CHEFE.
+
+**NEXT_CURSOR:** apresentar `https://admin.centralldark.com/mcp-autorizar` ao CHEFE para o clique humano e conferir o retorno PKCE com `state`/`scope` preservados.
+<!-- /MCP_RUNTIME_CODE_PROOF_20261118 -->
