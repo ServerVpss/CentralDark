@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 15
     labels:
       - "🤖 AUTO"
@@ -28,7 +28,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/apps/modulos/Bolt/source"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 15
     labels:
       - "🤖 AUTO"
@@ -59,7 +59,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/apps/modulos/Bolt/source/docs"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       docs-security:
@@ -92,7 +92,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/apps/instinto-superior"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 15
     groups:
       instinto-security:
@@ -110,7 +110,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/apps/modulos/mcp"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 15
     groups:
       mcp-security:
@@ -128,7 +128,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/apps/modulos/oauth-broker"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       oauth-broker-security:
@@ -146,7 +146,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/apps/modulos/hub"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       hub-security:
@@ -164,7 +164,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/scripts/telegram-mtproto"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       telegram-security:
@@ -182,7 +182,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/apps/modulos/elite-gateway"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       elite-gateway-security:
@@ -200,7 +200,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     groups:
       actions-all:

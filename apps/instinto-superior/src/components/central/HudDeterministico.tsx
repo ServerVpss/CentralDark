@@ -20,7 +20,11 @@ type Lineage = {
   genesis: Node;
   nodes: Node[];
   source_blob_sha: string;
-  audit: { learning_sections: number; missing_legacy_numbers: number[] };
+  audit: {
+    learning_sections: number;
+    missing_legacy_numbers: number[];
+    duplicate_legacy_numbers: Array<{ legacy_learning_number: number; count: number; uids: string[] }>;
+  };
 };
 const lineage = lineageJson as Lineage;
 const nodes = [lineage.genesis, ...lineage.nodes];
@@ -389,6 +393,53 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </p>
           </div>
         )}
+        {/* #OBSERVACOES# @owner=HudDeterministico @doc_ref=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json
+            @last_updated=2026-11-17T11:14:05.874Z
+            @escopo=arvore de numeros historicos repetidos por UID sem renumerar ou criar outro owner */}
+        <div className="mt-5 rounded-lg border border-border p-4" data-cd-flow="instinto.HudDeterministico.genesis-legacy-tree">
+          <h4 className="text-sm font-semibold">Árvore de números históricos repetidos</h4>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {lineage.audit.learning_sections} registros ·{" "}
+            {lineage.audit.learning_sections - lineage.audit.duplicate_legacy_numbers.reduce((sum, group) => sum + group.count - 1, 0)} números distintos ·{" "}
+            {lineage.audit.duplicate_legacy_numbers.length} números repetidos.
+            Os números históricos ficam preservados; cada UID identifica um registro diferente.
+          </p>
+          <details className="mt-3">
+            <summary className="cursor-pointer text-sm font-medium">Ver árvore e abrir registros</summary>
+            <ol className="mt-3 grid gap-3" aria-label="Árvore de registros com numeração repetida">
+              {lineage.audit.duplicate_legacy_numbers.map(group => (
+                <li key={group.legacy_learning_number} className="rounded-md border border-border p-3">
+                  <details>
+                    <summary className="cursor-pointer text-sm font-semibold">
+                      #{group.legacy_learning_number} · {group.count} registros
+                    </summary>
+                    <ul className="mt-2 space-y-2">
+                      {group.uids.map(uid => {
+                        const nodeIndex = nodes.findIndex(node => node.uid === uid);
+                        const node = nodes[nodeIndex];
+                        return nodeIndex < 0 || !node ? null : (
+                          <li key={uid} className="flex flex-wrap items-center gap-2">
+                            <Button variant="outline" disabled={!integrity} onClick={() => {
+                              setPlaying(false);
+                              setCursor(nodeIndex);
+                              setSelected(uid);
+                              setGenesisCopy("IDLE");
+                            }}>{uid}</Button>
+                            <span className="min-w-0 flex-1 break-words text-xs">{node.title}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </details>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Lacunas históricas: {lineage.audit.missing_legacy_numbers.join(", ") || "nenhuma"}.
+            Este índice é documental; abrir um UID não executa nenhuma missão.
+          </p>
+        </div>
       </section>
       <section className="panel p-6" aria-labelledby="cd-seals-title">
         <h3 id="cd-seals-title" className="text-lg font-semibold">🔒 Cadeados históricos · sem duplicação</h3>
