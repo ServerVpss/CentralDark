@@ -171,3 +171,21 @@ Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro do
 
 **NEXT_CURSOR:** apresentar `https://admin.centralldark.com/mcp-autorizar` ao CHEFE para o clique humano e conferir o retorno PKCE com `state`/`scope` preservados.
 <!-- /MCP_RUNTIME_CODE_PROOF_20261118 -->
+
+<!-- MCP_SUPABASE_PUBLISHABLE_KEY_DIVERGENCE_20261118 -->
+### 18/11/2026 — causa da rejeição da sessão: chave Supabase divergente no backend
+
+**Sintoma:** tela de autorização MCP devolvia `Sessão do Cockpit ausente ou sem permissão de administrador`, embora a conta tivesse role `admin` no Supabase.
+
+**Diagnóstico discriminante (sem usar o token do CHEFE):** `verifyRemoteBridgeSupabaseAdmin()` em `apps/modulos/mcp/src/oauth.js:30` envia `apikey` junto do JWT do usuário. O processo HTTP (PID `1094355`) tinha `VITE_SUPABASE_PUBLISHABLE_KEY` com **36 chars, JWT legado `eyJ…`**; o frontend em `apps/instinto-superior/.env.local` tinha **46 chars, `sb_publishable_…`** do **mesmo projeto** (`lyoigsqluyktoclwdaft.supabase.co`). A chave antiga devolvia **`Invalid API key`** (401) em `/auth/v1/user` e `/rest/v1/user_roles` — a validação morria **antes** de ler o JWT. A mensagem genérica não distinguia as cinco saídas `false` da função.
+
+**Correção mínima aplicada na Forja:** alinhado `VITE_SUPABASE_PUBLISHABLE_KEY` no `EnvironmentFile` do próprio serviço (`/home/CentralDark-OS/CentralDark/.env`) ao valor **já existente** no owner do frontend. Nenhuma chave nova criada, nenhum valor exposto em log/chat/Git, nenhum segredo versionado. Reiniciado **somente** `centraldark-native-mcp-http.service`; túnel STDIO e cloudflared intactos.
+
+**Contraprova:** a chave em memória do novo PID passou a ter 46 chars / prefixo `sb_publishable_`; `/auth/v1/user` com token inválido mudou de `Invalid API key` para **`bad_jwt`**; `/rest/v1/user_roles` passou a devolver **`42501 permission denied`** (RLS) em vez de chave inválida — provando que a chave foi aceita e a cadeia chegou ao JWT/role. `POST /authorize` com origem não autorizada = **403**; health LAN/público = **200**; suíte existente = **21 PASS / 0 FAIL**.
+
+**Escopo preservado:** OAuth, PKCE, escopos, Cloudflare Access, Supabase, senha, CORS/DNS. Nenhum `reset`/`clean`/`force`. Clique humano do CHEFE permanece obrigatório.
+
+**Estado:** ROOT_CAUSE=PASS; RUNTIME_KEY=PASS; TESTES=21/21; HEALTH=PASS; CLICK_HUMANO=UNKNOWN; FIXED_POINT=NÃO declarado.
+
+**NEXT_CURSOR:** CHEFE clicar em `https://admin.centralldark.com/mcp-autorizar`; conferir retorno OAuth com `state`/`scope` preservados e `AUTHORIZATION_PROVED`.
+<!-- /MCP_SUPABASE_PUBLISHABLE_KEY_DIVERGENCE_20261118 -->
