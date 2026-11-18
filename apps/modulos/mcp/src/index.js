@@ -553,11 +553,17 @@ app.get("/oauth/callback", handleOAuthCallback);
 // ─────────────────────────────── MCP HTTP ────────────────────────────────
 function unauthorized(req, res, msg) {
     setCorsHeaders(res);
+    // JSON-RPC 2.0: a resposta de erro deve ecoar o id da requisição.
+    // O tunnel-client do OpenAI rejeita id null como "invalid_mcp_error",
+    // o que impede o challenge OAuth de chegar ao conector.
+    const rpcId = req.body && Object.prototype.hasOwnProperty.call(req.body, "id")
+        ? req.body.id
+        : null;
     res.setHeader("WWW-Authenticate", `Bearer realm="mcp", resource_metadata="${config.publicUrl}/.well-known/oauth-protected-resource", scope="mcp"`);
     res.status(401).json({
         jsonrpc: "2.0",
         error: { code: -32000, message: msg, data: { cid: req.cid } },
-        id: null,
+        id: rpcId,
         cid: req.cid,
     });
 }
