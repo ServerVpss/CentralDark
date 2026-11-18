@@ -1183,7 +1183,6 @@ CENTRALDARK_AI_BOOT:
     graph_runtime_source: "apps/modulos/status/graph-data.json"
     graph_projection_writer: "scripts/grafo-vivo/obsidian-nota.mjs"
     brain_graph_primary: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
-    brain_graph_legacy_compat: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
     brain_graph_freshness_key: "GRAPH_FINGERPRINT"
     brain_graph_stale_policy: "REGENERATE_FROM_LIVE_GRAPH_SOURCE"
     brain_graph_is_authority: false

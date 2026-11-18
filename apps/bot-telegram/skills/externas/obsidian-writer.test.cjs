@@ -135,3 +135,12 @@ test('nota gera ligacoes SELF; busca devolve apenas candidatos', () => {
   assert.equal(_test.readSelfNoteMetadata(fm + '# Historia').self_primary, 'Self-Memory');
   assert.doesNotMatch(_test.buildFrontmatter('Outro', '06-REUNIOES-NOTAS'), /centraldark_self_primary/);
 });
+
+test('alias legado do mapa usa a pasta oficial e o indice nao sobrescreve o manual', () => {
+  const brainDir = path.resolve(__dirname, '../../../../docs/BRAIN');
+  assert.equal(_test.resolveFolder('00 - Mapa do Sistema'), path.join(brainDir, '00-MAPA-SISTEMA'));
+  const source = fs.readFileSync(path.join(__dirname, 'obsidian-writer.cjs'), 'utf8');
+  assert.match(source, /path\.join\(BRAIN_DIR, '00-MAPA-SISTEMA', '01-HUB'\)/);
+  assert.match(source, /INDEX-GERADO\.md/);
+  assert.doesNotMatch(source, /path\.join\(BRAIN_DIR, '00 - Mapa do Sistema'\)/);
+});

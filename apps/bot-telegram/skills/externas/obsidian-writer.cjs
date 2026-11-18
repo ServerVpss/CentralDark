@@ -154,6 +154,8 @@ function buildFrontmatter(title, folderName, tags = [], noteContent = '') {
 function resolveFolder(folder) {
   if (!folder) return BRAIN_DIR;
   const requested = String(folder).trim();
+  // Redirecionar o alias antigo para a única pasta 00 oficial.
+  if (/^00\s*-\s*mapa do sistema\/?$/i.test(requested)) return path.join(BRAIN_DIR, '00-MAPA-SISTEMA');
   const cat = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(requested) ? requested : null;
   const selected = /^(?:07|07-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
   if (selected) {
@@ -178,7 +180,7 @@ function generateIndex() {
     const entries = fs.readdirSync(dir, { withFileTypes: true })
       .sort((a, b) => a.name.localeCompare(b.name));
     for (const entry of entries) {
-      if (entry.name === 'INDEX.md' || entry.name.startsWith('.')) continue;
+      if (entry.name === 'INDEX.md' || entry.name === 'INDEX-GERADO.md' || entry.name.startsWith('.')) continue;
       const indent = '  '.repeat(depth);
       if (entry.isDirectory()) {
         lines.push(`${indent}## 📁 ${entry.name}`);
@@ -190,11 +192,11 @@ function generateIndex() {
     }
   }
   walk(BRAIN_DIR);
-  const mapDir = path.join(BRAIN_DIR, '00 - Mapa do Sistema');
+  const mapDir = path.join(BRAIN_DIR, '00-MAPA-SISTEMA', '01-HUB');
   fs.mkdirSync(mapDir, { recursive: true });
-  const indexPath = path.join(mapDir, 'INDEX.md');
+  const indexPath = path.join(mapDir, 'INDEX-GERADO.md');
   fs.writeFileSync(indexPath, lines.join('\n'), 'utf-8');
-  return { ok: true, op: 'index', file: 'docs/BRAIN/00 - Mapa do Sistema/INDEX.md', notes: lines.filter(l => l.includes('[[')).length };
+  return { ok: true, op: 'index', file: 'docs/BRAIN/00-MAPA-SISTEMA/01-HUB/INDEX-GERADO.md', notes: lines.filter(l => l.includes('[[')).length };
 }
 
 function normalizeWikiTarget(value) {
@@ -491,5 +493,6 @@ module.exports = {
     extractWikiLinks,
     buildBrainGraph,
     searchBrain,
+    resolveFolder,
   },
 };

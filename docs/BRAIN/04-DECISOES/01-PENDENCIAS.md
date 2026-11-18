@@ -66,7 +66,7 @@ updated: 2026-06-29
 
 Antes de registrar qualquer ideia nova, verificar:
 1. Este arquivo
-2. `docs/BRAIN/00 - Mapa do Sistema/BRAIN.md`
+2. `docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md`
 3. `docs/CONSCIENCIA/07-PENDENCIAS-E-HORARIO.md`
 
 Se já existir algo parecido → atualizar a entrada existente, não criar nova.

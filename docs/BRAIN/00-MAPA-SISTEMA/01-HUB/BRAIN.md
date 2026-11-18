@@ -111,7 +111,6 @@ O Grafo Vivo do BRAIN é **projeção derivada** do source vivo, nunca um segund
 SOURCE=apps/modulos/status/graph-data.json
 WRITER=scripts/grafo-vivo/obsidian-nota.mjs
 PRIMARY=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
-LEGACY_COMPAT=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
 FRESHNESS_KEY=GRAPH_FINGERPRINT
 STALE_BRAIN_GRAPH != CURRENT
 GRAPH != AUTHORITY

@@ -11,7 +11,6 @@ owner: "scripts/grafo-vivo/obsidian-nota.mjs"
 writer: "CentralDark-GrafoVivo/cron-grafo-unificado"
 authority: false
 primary_projection: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
-legacy_compat_mirror: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
 ---
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
@@ -124,7 +123,6 @@ flowchart LR
 ```text
 PROJECTION_SOURCE=apps/modulos/status/graph-data.json
 PRIMARY_PROJECTION=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
-LEGACY_COMPAT_MIRROR=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
 FRESHNESS_KEY=GRAPH_FINGERPRINT
 GRAPH_FINGERPRINT=14890c4cd8a6a95a61acc4eee96e1df5c4099e2ba7e744c9d7e89e1211de6727
 MERMAID_KIND=flowchart
