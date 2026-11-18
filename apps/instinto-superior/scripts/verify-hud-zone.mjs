@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
@@ -68,6 +69,26 @@ test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   }
   assert.match(zone, /APRENDIZADOS-NEUROLINK-LINEAGE\.json/);
   assert.match(zone, /BLOCKED_UID_INTEGRITY/);
+});
+
+test("Genese agrupa numeros antigos por UID unico e aponta para o blob atual", () => {
+  const source = Buffer.from(read("docs/CONSCIENCIA/APRENDIZADOS.md"), "utf8");
+  const sha = createHash("sha1").update(`blob ${source.length}\0`).update(source).digest("hex");
+  assert.equal(lineage.source_blob_sha, sha);
+  const byNumber = new Map();
+  for (const node of lineage.nodes) {
+    const group = byNumber.get(node.legacy_learning_number) ?? [];
+    group.push(node.uid);
+    byNumber.set(node.legacy_learning_number, group);
+  }
+  const expected = [...byNumber.entries()]
+    .filter(([, uids]) => uids.length > 1)
+    .map(([legacy_learning_number, uids]) => ({ legacy_learning_number, count: uids.length, uids }))
+    .sort((a, b) => a.legacy_learning_number - b.legacy_learning_number);
+  assert.deepEqual(lineage.audit.duplicate_legacy_numbers, expected);
+  assert.equal(new Set(lineage.nodes.map(node => node.uid)).size, lineage.nodes.length);
+  assert.match(zone, /Árvore de números históricos repetidos/);
+  assert.match(zone, /setCursor\(nodeIndex\)/);
 });
 
 test("zone existente reutilizado com autenticacao", () => {
