@@ -1,4 +1,8 @@
 /**
+ * #OBSERVACOES# | BRAIN.OBSIDIAN.WRITER
+ * @owner: apps/bot-telegram/skills/externas/obsidian-writer.cjs
+ * @doc_ref: docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md
+ * @last_updated: 2026-11-18T12:25:21.798Z
  * Skill: obsidian-writer
  *
  * Cria e edita notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos.

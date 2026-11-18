@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 /**
+ * #OBSERVACOES# | BRAIN.GRAFO.UNICO
+ * @owner: scripts/grafo-vivo/obsidian-nota.mjs
+ * @doc_ref: docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md
+ * @last_updated: 2026-11-18T12:25:21.798Z
  * Nota viva do Grafo no Obsidian — lê graph-data.json e escreve uma nota Markdown
  * que renderiza no Obsidian (Mermaid nativo): topologia focada + saúde + auditoria.
  *

@@ -1,3 +1,8 @@
+/* #OBSERVACOES# | BRAIN.OBSIDIAN.WRITER.TEST
+ * @owner: apps/bot-telegram/skills/externas/obsidian-writer.test.cjs
+ * @doc_ref: docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md
+ * @last_updated: 2026-11-18T12:25:21.798Z
+ */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
