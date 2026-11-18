@@ -242,7 +242,7 @@ CHEFE_INTENT / DELTA
 
 **Prova:** usar as verificações necessárias ao efeito — teste/lint/build, processo, health, entrada→saída funcional, consumo de prompt, T0/T1, readback e contraprova. HTTP 200, build verde, commit, arquivo existente, catálogo, saída da ferramenta ou processo iniciado **isoladamente** não provam objetivo funcional. Desconhecido bloqueia apenas o claim dependente, não a missão inteira.
 
-**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto o que foi feito, qual evidência existe, o que falta e o próximo passo, sem exigir esses nomes de campos na conversa. Preservar `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR` nos registros técnicos quando aplicáveis. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
+**Fechamento:** `FIXED_POINT = OBJETIVO_AUTORIZADO_SUFICIENTE + OWNER_ALINHADO + EFEITO_MEDIDO + BACKCHECK + CONTRAPROVA_INDEPENDENTE + SEM_REGRESSAO + SEM_BLOCKER_MATERIAL + SEM_FALSO_VERDE + ACEITE_DO_CHEFE (quando exigido)`. Não declarar FIXED_POINT por documentação ou merge; corrigir falha causal e continuar quando houver capacidade autorizada. Informar em português direto o que foi feito, qual evidência existe, o que falta e o próximo passo, sem exigir esses nomes de campos na conversa. Preservar `FEITO | EVIDENCIA | FALTA [verbo+alvo+local] | ESTADO | NEXT_CURSOR` nos registros técnicos quando aplicáveis. Toda afirmação de gravação requer caminho + SHA + link + readback. Não silenciar alertas relevantes ou progresso necessário.
 
 **Alcance:** ChatGPT, Claude Code, Codex, Hermes, CLI, MCP/API, GitHub Actions, bots Telegram, Instinto Superior e motores futuros só herdam este comportamento se seu ponto de entrada/consumer estiver realmente conectado ao core e a sessão o consumir; não existe propagação automática por declaração textual.
 <!-- CENTRALDARK_SOL_EXECUTORA_DIRECT_20261015_END -->
@@ -339,6 +339,8 @@ LOCAL_TOOL_DENIAL != GLOBAL_BLOCKER
 BLOCKER_MUST_NAME_EXACT_TOOL_OR_LAYER=true
 AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
+
+**Gatilhos MVP/teste autorizado (16/11/2026):** `estamos em MVP`, `em teste`, `não é nada oficial`, `autonomia executa teste autorizado` e `criar senhas quando pedir` acionam a receita em [REGRA-SECRETS-E-VARIAVEIS.md](docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md#mvp-e-teste-autorizado--autonomia-sem-bloqueio-artificial-16112026). Em sistema autorizado do CHEFE, executar teste reversível e entregar usuário/senha **de demonstração gerados** no chat privado quando solicitado; não exigir escolha de senha humana como etapa vazia. `SENHA_GERADA != CONTA_CRIADA != LOGIN_TESTADO`; preservar fronteiras de produção, terceiros e publicação de segredos.
 
 Texto legado conflitante perde para o owner canônico.
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
@@ -729,10 +731,13 @@ PR existente compatível por OWNER+SCOPE+CAPABILITY não é opcional: é a promo
 SEGREDO/CHEFE = humano e autoridade final
 SOL = identidade operacional/coordenadora; não é modelo específico
 HERMES = executor, preservação e continuidade
+ORÁCULO = superfície consultiva de evidência candidata; sensor externo, nunca autoridade nem writer
 "pivete" regional = vocativo informal; não cria papel técnico
 ```
 
 Texto histórico em que `Pivete` significava humano/comandante é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`; histórico não redefine o presente.
+
+**Regra do Oráculo — SOL → ORÁCULO → REALIDADE → PONTO FIXO.** Dúvida, hipótese, contradição, lacuna ou `NEXT_CURSOR` incerto não param a missão nem se resolvem por suposição: rotear por `leitura canônica → consulta ao Oráculo → especialista aplicável → resultado + readback + contraprova → retorno ao Oráculo`, e só então fechar em `FIXED_POINT` ou emitir novo `NEXT_CURSOR`. O Oráculo é sensor consultivo de evidência candidata: sua saída não grava estado canônico, não prova git/runtime e não autoriza mutação; só vale depois de reconciliar com a evidência local. Owner existente: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` — esta regra conecta esse owner, não cria outro. Proibido: hipótese no lugar de verificação, invenção de dado ou fonte, tratar `DOCUMENTADO` como `EXECUTADO` ou `COMMIT` como `DEPLOY`, ciclo infinito sem material novo e mutação fora da autorização.
 
 ## Todos os modelos operam pelo mesmo contrato
 
@@ -1927,6 +1932,7 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 
 ## Code review
 
+- **Idioma da revisão Codex/GitHub:** produzir em português brasileiro os títulos, resumos, explicações, comentários e sugestões **que o revisor gera**. Preservar nomes de APIs, identificadores, comandos, caminhos e trechos de código sem tradução. A regra não controla os cabeçalhos fixos do serviço Codex (`Codex Review Summary`, estados automáticos) nem o template de e-mail do GitHub; não confundir esse limite com idioma da análise técnica.
 - revisar HEAD exato;
 - estado de HEAD anterior não aprova HEAD novo;
 - distinguir instrumento defeituoso de sistema observado;
@@ -1967,8 +1973,8 @@ PIVETE_ROLE=RETIRED
 
 RAIZ_LOCAL=DINAMICA
 # Resolver pelo arquivo de entrada e validar a raiz Git do checkout/worktree ativo.
-# K:\ nos registros abaixo é histórico, não binding de execução atual.
-# ROTA DE DADOS OBSIDIAN (CURRENT EM MIGRACAO, 2026-10-11): K:\CentralDark\.obsidian + K:\CentralDark\HUD.html foram medidos durante movimento F: -> K:. A referência histórica anterior K:\ permanece somente como histórico; a raiz operacional atual é K:\. Não usar K:\CentralDark como raiz Git nem reescrever paths de executores sem smoke test/receipts. C: pessoal intocável. Movimento ainda não comprovado concluído.
+# Referências a letras de disco usadas nos receipts de outubro/2026 são históricas, não bindings atuais.
+# ROOT_CURRENT: descobrir via arquivo de entrada, git rev-parse --show-toplevel e validação do remote/owner no runtime autorizado. A migração física de dados não comprova qual unidade é o checkout em uso. Obsidian/HUD e perfis privados exigem leitura do consumidor e prova no próprio ambiente; não reescrever paths nem mover dados sem autorização e contraprova.
 
 CASA_PRIMEIRO=SIM
 VPS_POR_ULTIMO=SIM
@@ -2249,7 +2255,7 @@ CONNECTOR_DOWN_ONCE
 → SE AINDA FALHAR: BLOCKED COM HOST, CAUSA, ROTAS TENTADAS E PRÓXIMA AÇÃO
 ```
 
-Casa local do CHEFE (`K:\`) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
+Casa local do CHEFE (checkout Git validado no runtime, sem letra de unidade fixa) herda o mesmo contrato. Mudança local importante não fica só em disco: mede, testa, contraprove, commita, sobe para branch/PR/main conforme autorização vigente e registra receipt.
 
 ```text
 LOCAL_ONLY_CHANGE_FORBIDDEN=true

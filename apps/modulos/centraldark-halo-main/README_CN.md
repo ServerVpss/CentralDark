@@ -17,6 +17,18 @@
   <img src="assets/previews/hero.gif" alt="CentralDark Halo 工作、提醒、完成三种状态演示" width="960">
 </p>
 
+<!-- CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
+## CentralDark 远程助手 — 下一候选版本 v0.1.9
+
+LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+**状态：开发草稿，尚未正式发布。** 当前三个应用版本配置仍为 **0.1.8**，以下原有下载和安装说明属于旧版 Halo。
+
+新版本计划使用 **React + Tauri/Rust**，保留已有的 Halo 屏幕提示效果，同时在 Windows 上提供可拖动、最小化、最大化、调整大小以及隐藏到系统托盘的原生应用窗口。原 Electron Bridge 应用继续保留，不会自动替换或删除。
+
+**安全边界：** 登录成功不代表已经允许设备配对、远程操作或管理员权限。远程访问必须经过设备所有者明确授权。设备配对、会话恢复、远程执行引擎与安装包的完整验证仍待完成。
+
+查看最新开发状态：docs/RELEASE_NOTES_v0.1.9.md；发布流程与必需的文档同步规则：docs/RELEASE.md。不要将开发版本当作正式安装包。
+<!-- /CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
 ## 不切窗口，也不会错过 Codex
 
 | Codex 状态 | 屏幕光效 | 含义 |
@@ -133,3 +145,14 @@ CentralDark Halo 是独立社区项目，与 OpenAI 无附属或背书关系。�
 ## License
 
 [MIT](LICENSE)
+
+
+<!-- CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+## 远程助手 v0.1.9 的 Windows 目录规划
+TREE_LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+v0.1.9 仍是开发草稿，尚未发布安装包。
+目标是在一个 Tauri/Rust exe 中集成 React 和原生 MCP 引擎。
+NSIS 安装目录按用户选择（当前用户或整台电脑）。
+个人数据目标位于 %LOCALAPPDATA%\CentralDark\AgenteRemoto。
+完整目录、旧版迁移和验收标准见 docs/INSTALLATION.md。
+<!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->

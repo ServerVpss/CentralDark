@@ -26,7 +26,7 @@ function getAdminPassword() {
     return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
 }
 // Mesmo Supabase Auth e tabela user_roles do Cockpit: login não equivale a admin.
-// Somente o executor remote-bridge usa essa rota de consentimento por JWT.
+// Reutiliza a mesma identidade do Cockpit para MCP e dispositivos; role admin e JWT validados no servidor.
 async function verifyRemoteBridgeSupabaseAdmin(req) {
     const header = String(req.headers?.authorization || "");
     const match = /^Bearer\s+([A-Za-z0-9._-]{48,8192})$/.exec(header);
@@ -236,9 +236,23 @@ function redirectWithOAuthError(res, redirect_uri, error, state, description) {
     if (state)
         back.searchParams.set("state", state);
     back.searchParams.set("iss", config.publicUrl);
+    // Fetch do Cockpit usa redirect:error: nao redirecionar respostas JSON.
+    // O navegador deve receber o erro OAuth legivel no mesmo endpoint.
+    if (res.locals?.cockpitConsentJson) {
+        res.setHeader("Cache-Control", "no-store");
+        res.status(400).json({ ok: false, error, error_description: description || error });
+        return;
+    }
     res.redirect(302, back.toString());
 }
 function sendOwnerConsentPage(res, input) {
+    if (res.locals?.cockpitConsentJson) {
+        res.setHeader("Cache-Control", "no-store");
+        res.status(input.success === true ? 200 : 401).json(input.success === true
+            ? { ok: true, approved: true }
+            : { ok: false, error: input.error || "Sessão administrativa não autorizada." });
+        return;
+    }
     const url = new URL("https://admin.centralldark.com/mcp-autorizar");
     const values = {
         client_id: input.client_id,
@@ -298,6 +312,12 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
+        // Somente o Cockpit envia consentimento JSON cross-origin.
+        // O token Supabase segue no header, nunca no URL ou no HTML.
+        const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
+        if (requestedJson && req.headers.origin !== "https://admin.centralldark.com")
+            return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
+        res.locals.cockpitConsentJson = requestedJson;
         // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
         const deviceClientId = param(req, "client_id");
         if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
@@ -325,7 +345,7 @@ export async function handleAuthorize(req, res) {
             // Confirmação por código exige login admin válido. Senha é fallback
             // explícito, nunca dispensa código + nonce de uma solicitação viva.
             let ownerAuthenticated = isAdmin(req);
-            if (!ownerAuthenticated && deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID && details.authMethod !== "password") {
+            if (!ownerAuthenticated && (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID || requestedJson) && details.authMethod !== "password") {
                 ownerAuthenticated = await verifyRemoteBridgeSupabaseAdmin(req);
             }
             if (!ownerAuthenticated && details.authMethod === "password") {
@@ -342,7 +362,7 @@ export async function handleAuthorize(req, res) {
                 }
             }
             if (!ownerAuthenticated) {
-                sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Sessão administrativa ausente. Confirme o código e use a senha do MCP." });
+                sendOwnerConsentPage(res, { ...details, authMethod: requestedJson ? "code" : "password", error: requestedJson ? "Sessão do Cockpit ausente ou sem permissão de administrador." : "Sessão administrativa ausente. Confirme o código e use a senha do MCP." });
                 return;
             }
             const result = devicePairingStore.approveWeb({
@@ -388,17 +408,26 @@ export async function handleAuthorize(req, res) {
             sendOwnerConsentPage(res, payload);
             return;
         }
-        const configuredPassword = getAdminPassword();
-        const submittedPassword = param(req, "password");
-        if (!configuredPassword) {
-            log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+        // O logado no Cockpit já provou identidade: não pedir senha de novo.
+        // A senha segue apenas como fallback para quem não tem sessão admin.
+        const sessaoCockpit = isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
+        if (!sessaoCockpit && requestedJson) {
+            sendOwnerConsentPage(res, { ...payload, error: "Sessão do Cockpit ausente ou sem permissão de administrador." });
             return;
         }
-        if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
-            log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
-            return;
+        if (!sessaoCockpit) {
+            const configuredPassword = getAdminPassword();
+            const submittedPassword = param(req, "password");
+            if (!configuredPassword) {
+                log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+                return;
+            }
+            if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+                log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+                return;
+            }
         }
         const ownerToken = getOwnerToolToken();
         if (!ownerToken) {
@@ -426,9 +455,15 @@ export async function handleAuthorize(req, res) {
             cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
-            mode: "owner_password",
+            mode: sessaoCockpit ? "cockpit_session" : "owner_password",
         });
-        res.redirect(302, back.toString());
+        if (requestedJson) {
+            res.setHeader("Cache-Control", "no-store");
+            res.setHeader("Referrer-Policy", "no-referrer");
+            res.json({ ok: true, redirect_to: back.toString() });
+        } else {
+            res.redirect(302, back.toString());
+        }
     }
     catch (err) {
         log.error("oauth_authorize_exception", { cid: req.cid, error: String(err) });
