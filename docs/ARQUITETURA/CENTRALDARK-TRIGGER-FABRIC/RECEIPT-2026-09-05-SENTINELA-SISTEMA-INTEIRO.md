@@ -159,3 +159,23 @@ A SENTINELA usa o scanner existente para comparar path + SHA256 + owner resoluti
 📜 Verso da Casa: “E pôs-se uma sentinela sobre os muros; não para governar a cidade, mas para reconhecer a primeira pedra fora do lugar e chamar os construtores antes que a rachadura atravesse o templo.”
 
 🌴 Em baianês: viu vermelho? Não sai derrubando a Casa toda, não. A Sentinela acha a primeira rua torta, chama a Lupa, volta no Caracol até o último ponto bom e costura só o pedaço que saiu da linha.
+
+<!-- SENTINELA_ECONOMICO_REUSE_20261118 -->
+### 18/11/2026 — verificação do pedido de "sentinela econômico": JÁ EXISTE
+
+**Intenção do CHEFE:** acrescentar à supervisão existente um vigia determinístico que monitore Kanban/heartbeats/subagentes **sem chamar modelos em estado normal** e que, só em falha confirmada, teste modelos gratuitos e retome do checkpoint.
+
+**Descoberta (REUSE_BEFORE_CREATE):** o mecanismo **já está implementado** em `scripts/trigger-fabric/system_sentinel.py` + `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/SYSTEM-SENTINEL.yml`. Não foi criado novo sentinela, daemon, serviço, Kanban nem arquitetura paralela. O `process_supervisor.sh` do Hermes é apenas reaper de processos; o dispatcher Kanban embutido no gateway (`kanban_watchers.py`) já tem `failure_limit`, `stale_timeout_seconds`, quarentena e detecção de `kanban dispatcher stuck`. Somar outro vigia seria duplicação proibida.
+
+**Contraprova determinística (zero modelos chamados):**
+- `system_sentinel.py --self-test` → `ok:true`, **22 checks PASS**, `failed:[]` — inclui `model_expired`, `spending_limit`, `rate_limit`, `timeout`, `missing_provider_key`, `route_failure`, `no_auto_authority`, `same_fingerprint_reuses`.
+- `--scan-notes` → `note_count:5492`, `delta_count:0`, `events:[]` — **estado normal não gera evento, logo não consome token**.
+- Simulação de falha controlada (somente classificação, sem ingestão): `MODEL_EXPIRED`, `PROVIDER_RATE_LIMIT`, `PROVIDER_TIMEOUT`, `PROVIDER_5XX` classificados corretamente.
+- `--route-json` → rota fixa determinística (`route_is_deterministic:true`, `route_is_authority:false`, `same_fingerprint_no_full_replay:true`).
+
+**Regras já presentes no contrato:** `AUTO_PROVIDER_FAILOVER_REQUIRES_PROVEN_FREE_OR_ALLOWED_ROUTE`, `PAID_OR_UNKNOWN_PRICE_ROUTE_IS_FORBIDDEN_WHEN_FREE_ONLY_POLICY_ACTIVE`, `same_model_max_attempts:1`, `require_free_when_free_only_goal:true`, `unknown_price_is_free:false`.
+
+**Estado:** SENTINEL_EXISTS=PASS; SELF_TEST=22/22; ZERO_TOKEN_NORMAL=PASS; FALHA_SIMULADA=PASS; `/goal`=UNAVAILABLE_IN_THIS_RUNTIME (é comando da TUI, não da CLI; `hermes kanban` é o owner de tarefas). Nenhuma mutação de runtime.
+
+**NEXT_CURSOR:** se o CHEFE quiser cobertura adicional, estender **este mesmo** script/contrato com teste de retomada de checkpoint — não criar segundo sentinela.
+<!-- /SENTINELA_ECONOMICO_REUSE_20261118 -->

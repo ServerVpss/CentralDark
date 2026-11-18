@@ -1,3 +1,5 @@
+> **ARQUIVADO — NÃO EXECUTAR.** O Cockpit atual substituiu a casca AionUi/Rakazo pela entrada CentralDarkBot. Os scripts e protótipos executáveis deste experimento foram retirados da main; este documento registra apenas evidência histórica. Serviços já implantados exigem reconciliação separada para evitar perda de sessões e dados.
+
 # CentralDark — Instinto Superior sobre AionUi v2.2.2
 
 ## Intenção

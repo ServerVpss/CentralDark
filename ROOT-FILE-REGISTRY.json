@@ -24,7 +24,7 @@
   },
   "categories": {
     "core": {
-      "description": "Fontes canônicas do sistema operacional. Boot obrigatório.",
+      "description": "Porta e contratos registrados por ordem de descoberta; leitura conforme o escopo, com adaptadores condicionais.",
       "files": {
         "LEIA-ME-IA.md": {
           "role": "canonical_entrypoint",
@@ -106,12 +106,11 @@
       }
     },
     "model_routers": {
-      "description": "Adaptadores finos por engine/modelo. Cada um aponta para LEIA-ME-IA.md como core.",
+      "description": "Adaptadores finos por engine/modelo. Apontam para LEIA-ME-IA.md. Linhas são medidas no SHA consultado, nunca fixadas neste registro.",
       "files": {
         "00-COMECE-AQUI-IA.md": {
           "role": "universal_ia_entrypoint",
           "owner": "SOL",
-          "lines": 70,
           "surfaces": [
             "this-registry"
           ],
@@ -120,7 +119,6 @@
         "CHATGPT.md": {
           "role": "chatgpt_adapter",
           "owner": "SOL",
-          "lines": 73,
           "surfaces": [
             "this-registry"
           ],
@@ -129,7 +127,6 @@
         "CODEX.md": {
           "role": "codex_adapter",
           "owner": "SOL",
-          "lines": 40,
           "surfaces": [
             "this-registry"
           ],
@@ -138,7 +135,6 @@
         "GEMINI.md": {
           "role": "gemini_adapter",
           "owner": "SOL",
-          "lines": 33,
           "surfaces": [
             "this-registry"
           ],
@@ -147,7 +143,6 @@
         "GROK.md": {
           "role": "grok_adapter",
           "owner": "SOL",
-          "lines": 21,
           "surfaces": [
             "this-registry"
           ],
@@ -156,7 +151,6 @@
         ".windsurfrules": {
           "role": "windsurf_adapter",
           "owner": "SOL",
-          "lines": 33,
           "surfaces": [
             "this-registry"
           ],

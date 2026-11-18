@@ -2,7 +2,7 @@
 title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
-source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
+source_of_truth: "ServerVpss/CentralDark@main (SOUL/RULES/AGENTS/owners) + estado real medido; entrada técnica não é segundo owner"
 updated: 2026-09-28
 ---
 
@@ -87,15 +87,15 @@ Texto legado conflitante perde para o owner canônico.
 
 Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independentemente de maiúsculas/minúsculas), isso é um **gatilho operacional**. A primeira operação do agente que atua neste repositório é localizar o **último checkpoint de execução VERIFICADO** e recuperar \`INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256\`. Não pedir ao CHEFE para digitar comandos, informar o ID ou copiar o manual; descobrir automaticamente a rota existente.
 
-**Owner único de checkpoint:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado operacional persistente mora em \`~/.hermes/centraldark/verified-execution/\` na VPS; a main contém código/contrato, não os arquivos privados de estado.
+**Owner único de checkpoint:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado privado de cada runtime fica em \`CENTRALDARK_HERMES_CHECKPOINTS\` ou, por padrão, em \`~/.hermes/centraldark/verified-execution/\` do usuário executor. A \`main\` contém código/contrato, não checkpoints privados; o estado de uma máquina não prova estado idêntico em outra.
 
-**Seleção de rota pelo runtime, sem redescoberta:**
+**Roteamento pelo owner e runtime medido, sem endereço legado obrigatório:**
 
-1. **VPS \`CENTRALDARK-OS\`**: executar \`python3 /root/.hermes/centraldark/bin/centraldark-entry.py --status\`. O modo sem flags devolve o fio; \`--continue\` avança o plano privado que já foi comprovado. Se o executável instalado não existir, usar a cópia do mesmo owner presente no checkout \`scripts/hermes/\` com \`PYTHONPATH\` apropriado (não inventar checkpoint).
-2. **Casa/VS Code Windows**: usar primeiro a bridge Tailscale/SSH e o alias já autorizados \`Segredo-VPS\` para consultar **o mesmo estado da VPS**, preferencialmente \`scripts/casa/centraldark-entry.ps1\`. Se a Casa estiver offline, tentar outro conector autorizado e devolver \`UNKNOWN\` preciso, não o inventário velho.
-3. **GitHub/Copilot/Claude/Codex/CLI externo**: seguir este mesmo contrato quando a tool realmente puder alcançar a VPS (MCP CentralDark ou SSH privado). A publicação do código ou instrução no GitHub **não** transporta sozinha o estado vivo da VPS.
-4. **Cockpit**: usar a aba Hermes do Instinto Superior → botão \`🪬 !CENTRALDARK · Continuar missão\`; leitura protegida e autenticada é executada no servidor que hospeda o cockpit, com owner VPS. Se o site rodar fora da VPS, apresentar \`UNKNOWN\`, sem fingir sincronização.
-5. **Novo contexto/modelo**: injetar o fio compacto devolvido pela entrada e continuar de \`NEXT_CURSOR\`; não despejar o histórico inteiro nem reexecutar etapas verdes. Para execução realmente automática usar plano validado pelo owner; se não houver plano, o agente resolve o próximo passo conforme o contrato e as ferramentas autorizadas da sua superfície.
+1. **Casa, Hostinger, VPS ou outro runtime:** identificar checkout/root Git válido e usar o mesmo owner `scripts/hermes/centraldark-entry.py --status` instalado no ambiente atual, com Python, permissões e estado do usuário executor. Conferir arquivo, identidade Git, host e recibo antes de executar. `/root/.hermes/centraldark/bin/centraldark-entry.py` é **rota de compatibilidade histórica da VPS somente onde comprovada**, não caminho universal.
+2. **Casa → VPS, somente quando for necessário o checkpoint remoto da VPS:** reutilizar o adaptador existente `scripts/casa/centraldark-entry.ps1` e o alias autorizado `Segredo-VPS` após validar o destino. Essa rota NÃO substitui checkpoints da Casa nem pressupõe que toda missão pertença à VPS.
+3. **GitHub, Codex, Claude, ChatGPT e outras superfícies sem shell:** utilizar conectores/receipts realmente acessíveis para a missão. Sem acesso ao estado vivo, marcar `UNKNOWN`; publicação de código não sincroniza automaticamente checkpoints entre máquinas.
+4. **Cockpit:** reutilizar o comando autenticado de continuidade existente somente quando comprovado. Identificar qual host, processo e owner alimentam a sessão; não presumir que ele esteja na VPS.
+5. **Nova conversa/modelo:** recuperar `INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256` apenas do mesmo contexto/mission_id e com prova. Não escolher o estado mais recente de outro runtime por conveniência; preservar green state e evitar replay de etapas já concluídas.
 
 **Regra de promoção:** somente exit 0 + critério de prova real ou verificador independente = checkpoint verde. Falha não move \`current.json\`; usar último PASS e replay da etapa falha. Se um plano já terminou, não repetir. O gatilho não remove aprovações que dependem de autorização real, não equivale a execução do CLI em superfícies sem runtime conectado e não autoriza interpretar o status de UI como prova.
 
@@ -441,7 +441,9 @@ herança semântica do contrato (L1). Só receipt de tool prova L3; só leitura
 do HEAD/runtime prova L4; só mutação + receipt prova L5.
 ## 1. Boot universal
 
-Carregue nesta ordem:
+Ler o núcleo canônico (SOUL, RULES, AGENTS e Skill Mãe) e consultar **somente os owners especializados pertinentes à intenção**. A sequência abaixo é índice de consulta, não ordem para carregar 17 documentos em toda interação. Conferir a existência e versão do owner na `main` atual; histórico não substitui CURRENT.
+
+Índice de fontes:
 
 1. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade operacional e continuidade.
 2. `AGENTS.md` — contrato geral dos agentes.
@@ -604,6 +606,8 @@ CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA
 CENTRALDARK_OS_TAG = CENTRALDARK|ACORDAR|CALIBRAR
 VMI3256920 = REMOVIDA_DA_TAILNET; NAO_E_VPS_CENTRALDARK
 ```
+
+A expressão `CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA` descreve a topologia histórica, **não fixa a raiz do projeto nem o checkpoint de todos os runtimes na VPS**. Para cada missão, descobrir owner e ambiente efetivo.
 
 `#ACORDAR` e `!CALIBRAR` usam o mesmo organismo e podem abrir **frentes paralelas de percepção/reconciliação**. Dez é teto de potência, não quota: uma tarefa simples usa a menor quantidade suficiente; missão ampla, incerta ou crítica pode usar todas as frentes aplicáveis.
 
