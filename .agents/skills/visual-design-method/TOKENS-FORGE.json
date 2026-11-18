@@ -157,7 +157,7 @@
     "nao_e": "não é tema, não é token, não é autoridade — é ferramenta"
   },
   "status_contract": {
-    "source": "docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json",
+    "source": "docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json",
     "PROVED": {
       "cor": "green",
       "token": "--verde"

@@ -211,8 +211,8 @@ personal_context_matrix:
     sem despejar a vida inteira no prompt e sem transformar memória antiga em verdade atual.
   reuse_existing_only: true
   owners:
-    persistent_history: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/"
-    chefe_history: "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/04-MEMORIAS/HISTORIA-CHEFE.md"
+    persistent_history: "docs/BRAIN/06-APRENDIZADOS-MEMORIAS/"
+    chefe_history: "docs/BRAIN/06-APRENDIZADOS-MEMORIAS/04-MEMORIAS/HISTORIA-CHEFE.md"
     memory_linker: "scripts/memory-linker/"
     memory_api: "apps/modulos/memoria-api/"
     graph_rag: "apps/modulos/HERMES-CORE/agents/GraphRAG-Master/"

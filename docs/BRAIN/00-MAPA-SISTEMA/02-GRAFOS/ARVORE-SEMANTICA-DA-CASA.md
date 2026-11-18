@@ -24,9 +24,9 @@ BRAIN
 ├─ 02-ENTRADA
 ├─ 03-DOCUMENTACAO
 ├─ 04-DECISOES
-├─ 06-REUNIOES-NOTAS
-├─ 07-APRENDIZADOS-MEMORIAS
-├─ 08-ARTEFATOS-VISUAIS
+├─ 05-REUNIOES-NOTAS
+├─ 06-APRENDIZADOS-MEMORIAS
+├─ 07-ARTEFATOS-VISUAIS
 └─ 09-RESERVA-CANONICA
 ```
 
@@ -63,9 +63,9 @@ VETOR       = proximidade por significado
 | `02-ENTRADA` | matéria nova | âmbar |
 | `03-DOCUMENTACAO` | documentação/biblioteca | azul/cyan |
 | `04-DECISOES` | decisões | laranja |
-| `06-REUNIOES-NOTAS` | encontros/notas | magenta |
-| `07-APRENDIZADOS-MEMORIAS` | aprendizado/memória | verde |
-| `08-ARTEFATOS-VISUAIS` | SVG/Mermaid/mapas/imagens | turquesa |
+| `05-REUNIOES-NOTAS` | encontros/notas | magenta |
+| `06-APRENDIZADOS-MEMORIAS` | aprendizado/memória | verde |
+| `07-ARTEFATOS-VISUAIS` | SVG/Mermaid/mapas/imagens | turquesa |
 | `09-RESERVA-CANONICA` | espaço reservado por necessidade provada | cinza |
 
 As cores são navegação, nunca verdade. Status `GREEN/YELLOW/RED` continua reservado para estado/prova temporal.
@@ -94,7 +94,7 @@ Quando houver capacidade existente no Router para SVG/Mermaid/visualização:
 NOTA/FONTE
 → capability router existente
 → SVG/MERMAID/ARTEFATO
-→ 08-ARTEFATOS-VISUAIS/<owner correto>
+→ 07-ARTEFATOS-VISUAIS/<owner correto>
 → backlink para fonte
 ```
 

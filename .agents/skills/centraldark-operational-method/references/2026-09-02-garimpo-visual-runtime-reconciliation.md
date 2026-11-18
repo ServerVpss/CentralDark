@@ -82,7 +82,7 @@ A `main` contém owner e gates de design existentes:
 .agents/skills/visual-design-method/scripts/check-relevo-3d.mjs
 .agents/skills/visual-design-method/scripts/validate-canonical-posters.mjs
 docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md
-docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/
+docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/
 ```
 
 O manifesto canônico atual possui quatro cartazes, inclusive:
@@ -520,7 +520,7 @@ PHASE_3_VISUAL_GARIMPO:
   rules:
     - hash every image
     - dedupe byte-identical
-    - classify against docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS
+    - classify against docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS
     - preserve CD-POSTER-01-PAPAGAIO and existing canonical posters
     - do not overwrite canonical image on similarity alone
     - bind useful new image to semantic owner/claim

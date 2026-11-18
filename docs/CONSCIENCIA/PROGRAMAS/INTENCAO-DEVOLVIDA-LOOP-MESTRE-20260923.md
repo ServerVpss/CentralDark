@@ -1170,7 +1170,7 @@ INTENCAO_CHEFE -> RECALL_GOAL/NEXT_CURSOR -> DESCOBERTA_CANDIDATA -> !MULTIBUSSO
 
 **Estados distintos da habilidade:** IDEIA | CANDIDATA | DOCUMENTADA | IMPLEMENTADA | TESTADA | COMPROVADA | REUTILIZADA. O desbloqueio operacional ocorre somente em COMPROVADA, por efeito real e receipt do escopo; explorar uma hipotese pode evoluir o capitulo narrativo, mas nao produz falsa prova de runtime.
 
-**Interface-alvo:** reusar apps/instinto-superior/src/components/central/CockpitShell.tsx e as capacidades existentes do HUD/Forja; nenhum cockpit paralelo. O HUD mostra progresso, origem, owner, receipt, SHA e NEXT_CURSOR, sem inventar estado vivo. XP simbolico conserva o owner docs/BRAIN/07-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md; novo nivel nao confere autoridade.
+**Interface-alvo:** reusar apps/instinto-superior/src/components/central/CockpitShell.tsx e as capacidades existentes do HUD/Forja; nenhum cockpit paralelo. O HUD mostra progresso, origem, owner, receipt, SHA e NEXT_CURSOR, sem inventar estado vivo. XP simbolico conserva o owner docs/BRAIN/06-APRENDIZADOS-MEMORIAS/PONTOS-E-NIVEIS-CHEFE.md; novo nivel nao confere autoridade.
 
 **Regra:** NEW_CONVERSATION != NEW_GOAL; DISCOVERY != EXECUTION; DOCUMENTED != IMPLEMENTED; IMPLEMENTED != PROVEN; XP_REQUIRES_RECEIPT; UNKNOWN != PASS; ONE_WRITER_PER_SCOPE=true.
 

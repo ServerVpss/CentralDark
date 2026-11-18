@@ -515,7 +515,7 @@ PUBLIC_PDF_CONTENT_UPLOAD=NO
 
 ### Aprendizado associado
 
-[[../../07-APRENDIZADOS-MEMORIAS/README|Código autoauditável, rastro de modificação e porta de entrada]].
+[[../../06-APRENDIZADOS-MEMORIAS/README|Código autoauditável, rastro de modificação e porta de entrada]].
 
 ### Índice por página — Manual TCU (2019)
 

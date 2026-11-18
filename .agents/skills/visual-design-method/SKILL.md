@@ -199,7 +199,7 @@ position), and any theme/token system already in place. Only extend.
 ## Canonical visual witnesses
 
 The four CentralDark posters are indexed at
-`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; their stable
+`docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; their stable
 IDs, source hashes, repository hashes and typed semantic relations live in
 that directory's `manifest.json`. Treat the posters as visual witnesses, not
 as executable authority. The design-system owner and governance text win on

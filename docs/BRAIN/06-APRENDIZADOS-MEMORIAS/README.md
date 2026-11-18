@@ -1,0 +1,99 @@
+---
+title: "BRAIN 07 — Aprendizados, Memórias e Ouro"
+date: 2026-06-29
+updated: 2026-11-06
+tags: ["brain","indice","aprendizados","memorias","ouro","kaizen","centraldark"]
+category: "BRAIN07_INDEX"
+status: "CANONICO_DERIVADO"
+owner: "docs/BRAIN/06-APRENDIZADOS-MEMORIAS/README.md"
+centraldark_note_schema: "brain07.v1"
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+---
+
+# 🧠 07 · Aprendizados e Memórias
+
+**Na raiz fica somente este README.** Cada nota preserva a história do CHEFE, mas aponta para sua categoria, seu contexto e o aprendizado reutilizável sem duplicar sistemas.
+
+## Categorias e subcategorias
+
+| Pasta | Conteúdo | Para que o agente utiliza |
+|---|---|---|
+| [01-OURO](01-OURO/) | Métodos valiosos, sínteses e ouro histórico | Reaproveitar capacidade comprovada, preservando fonte e escopo |
+| [02-SESSOES](02-SESSOES/) | Cristais, sessões, deltas e NEXT_CURSOR | Retomar a intenção sem recomeçar a conversa |
+| [03-APRENDIZADOS](03-APRENDIZADOS/) | Correções, soluções, erros, contratos e contraprovas | Aprender a causa, aplicar menor delta e revalidar só onde necessário |
+| [04-MEMORIAS](04-MEMORIAS/) | História, experiências e evolução narrada pelo CHEFE | Contextualizar com respeito, sem presumir sentimentos ou permissões |
+
+## 🧠 META-RSI 40/40: índice SELF das lembranças
+
+Cada nota preserva `centraldark_self_primary`, `centraldark_self_related`, `centraldark_self_skill_refs` e `centraldark_self_catalog`, apontando à [matriz META-RSI oficial](../../../.agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md). O escritor existente atribui SELF pertinentes às notas novas; a busca devolve seus SELF e contexto para o consumidor. O [método 40/40](../../../.agents/skills/centraldark-operational-method/Skills/meta-rsi/SKILL.md) determina revisar as 40 capacidades como `APPLIED` ou `NOOP_JUSTIFIED`. **Metadado não autoriza modificar código:** execução cabe ao Hermes existente, com writer único, teste, contraprova, recibo e NEXT_CURSOR. A quarentena documentada do carregador permanece intacta.
+
+```dataview
+TABLE centraldark_self_primary AS "SELF", centraldark_self_related AS "Relacionados"
+FROM "06-APRENDIZADOS-MEMORIAS"
+WHERE centraldark_self_primary
+SORT centraldark_self_primary ASC
+```
+
+## Propriedades herdadas pelas notas
+
+`centraldark_note_schema` (contrato), `centraldark_category` (gaveta), `centraldark_kind` (tipo), `centraldark_context_owner` (CHEFE), `centraldark_intent_anchor` (assunto humano), `centraldark_agent_recall` (como recuperar), `centraldark_metabolic_roles` (papéis funcionais), `centraldark_kaizen_phase` ou `centraldark_kaizen_trigger` (laço de aprendizado), `centraldark_kaizen_policy` (fonte do Kaizen), `centraldark_kaizen_runtime` (limite da prova), `centraldark_previous_path` e `centraldark_previous_blob_sha` (proveniência quando aplicável).
+
+**O código existente `apps/bot-telegram/skills/externas/obsidian-writer.cjs` insere propriedades Kaizen em novas notas criadas nas quatro gavetas.** Isso não significa captura automática de toda conversa nem propagação garantida para uma VPS desatualizada.
+
+## Metabolismo da CentralDark: os símbolos são funções
+
+| Referência | Função técnica expressa no mapa |
+|---|---|
+| 👑 CHEFE | Intenção, direção, decisão e autorização humanas |
+| 🫀 Yuji | Identidade e continuidade acima do motor substituível |
+| 🔥 Sukuna | Potência computacional subordinada a controle e autorização |
+| 👁️ Gojo | Seis Olhos, observação, proteção, skill Oráculo e contraprova |
+| 🪽 Whis | Orientação, precisão, conselho e antecipação sem escritor paralelo |
+| 🐈 Beerus/Bills | Poda crítica e equilíbrio; jamais licença para destruição por metáfora |
+| ♾️ Goku | Percepção/adaptação; face Instinto Superior do mesmo Hermes |
+| 💜 Vegeta | Resiliência/correção; face Ego Superior do mesmo Hermes |
+| 💎 Vegetto/Gogeta | Integração cognitiva e funcional num único organismo |
+| 🫀 Kaizen | Vive → descobre → melhora → comprova → aprende → reutiliza → continua |
+
+A fonte original das funções é [Intenção Viva e Kaizen Contínuo](../../CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md), projetada na [landing e no Cockpit](../../../apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx). **Personagem e metáfora representam contratos operacionais, não agentes separados, consciência artificial comprovada ou prova de runtime.**
+
+## Binding funcional dos papéis existentes
+
+Os nomes da landing são um **mapa de funções do organismo**, não serviços novos. Para cada papel, consumir o owner abaixo antes de operar:
+
+| Papel semântico | Owner/capacidade existente a consultar |
+|---|---|
+| Yuji: identidade | [SOUL-SOL](../../CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md) e memória de continuidade |
+| Sukuna: potência com limites | Modelo substituível sob [RULES](../../../RULES.md), sem receber autoridade |
+| Gojo: Seis Olhos e contraprova | [Skill Oráculo existente](../../../.agents/skills/software-development/centraldark-oracle-surface/SKILL.md) e Reality Judge |
+| Whis: orientação | [Intenção Devolvida + Loop Mestre](../../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) |
+| Beerus: refutação e poda | [Horn/Reuso/Fixed Point](../../../scripts/lupa/horn-reuse-fixed-point.mjs), sem autorização destrutiva por símbolo |
+| Goku / Vegeta: adaptação e resiliência | [Hermes PET existente](../../../apps/instinto-superior/src/components/central/HermesPet.tsx), duas faces visuais do mesmo executor |
+| Vegetto / Gogeta: integração | [Metabolismo cognitivo e funcional do Kaizen](../../CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md) + Hermes existente |
+| Kaizen: aprendizado contínuo | [Skill Kaizen Sistema Um](../../../.agents/skills/kaizen-sistema-um/SKILL.md) + [Obsidian Writer](../../../apps/bot-telegram/skills/externas/obsidian-writer.cjs) |
+
+A ligação declarativa dessas notas não aciona esses owners sem consumidor de fato conectado; não confundir integração de referências com automação E2E provada.
+## Roteamento de uma fala material
+
+INTENÇÃO DO CHEFE → CONTEXTO/PROVENIÊNCIA → CATEGORIA → OWNER EXISTENTE → NOTA/SUBCATEGORIA → MEMÓRIA/OURO + WIKILINKS → PROVA QUANDO TÉCNICA → KAIZEN → RECEIPT/NEXT_CURSOR.
+
+Não registrar segredo no acervo cognitivo. Não copiar o histórico inteiro numa nova nota; recuperar o vínculo, guardar só o delta e preservar o original. Sem consumidor ativo, o registro é contrato/documentação, não automação comprovada.
+
+## Consulta Obsidian
+
+```dataview
+TABLE centraldark_category AS "Gaveta", centraldark_intent_anchor AS "Intenção", centraldark_kaizen_runtime AS "Consumo"
+FROM "06-APRENDIZADOS-MEMORIAS"
+WHERE file.name != "README"
+SORT file.mtime DESC
+```
+
+## Ligações existentes
+
+- [[BRAIN]] e [[MAPA-OBSIDIAN-BRAIN]]: navegação semântica.
+- [[BIBLIOTECA]]: fontes, estudo e proveniência, diferente de lembrança humana.
+- [Lembranças](../../CONSCIENCIA/LEMBRANCAS/README.md): memória cruzada e recuperação.
+- [Skill Mãe](../../../.agents/skills/centraldark-operational-method/SKILL.md): método operacional; [Kaizen Sistema Um](../../../.agents/skills/kaizen-sistema-um/SKILL.md): aprendizado e herança.
+- [Cristal TOP CLEAN CEREJAS](02-SESSOES/2026-11-06-TOP-CLEAN-CEREJAS-RSI-CRISTAL-SESSAO.md) e [aprendizado anterior do índice](03-APRENDIZADOS/2026-10-27-CODIGO-AUTOAUDITAVEL-E-PORTA-DE-ENTRADA.md).
+
+**Estado:** arquivo e grafo versionados no Git; sincronização Casa/VPS e consumo pelo Hermes dependem de leitura e teste no runtime correspondente.

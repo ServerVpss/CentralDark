@@ -99,9 +99,9 @@ PERMISSAO_HISTORICA != PERMISSAO_ATUAL
 | `02-ENTRADA` | matéria bruta/candidata |
 | `03-DOCUMENTACAO` | documentação e biblioteca |
 | `04-DECISOES` | decisões e proveniência |
-| `06-REUNIOES-NOTAS` | notas humanas |
-| `07-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
-| `08-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
+| `05-REUNIOES-NOTAS` | notas humanas |
+| `06-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
+| `07-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
 
 ## Grafo Vivo dentro do BRAIN
 

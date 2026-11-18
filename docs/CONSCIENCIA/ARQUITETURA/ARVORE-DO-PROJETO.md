@@ -126,7 +126,7 @@ Todo motor entra pela mesma porta. Nome de modelo não muda o contrato.
 | Handoff entre IAs | `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` |
 | Promoção para main | `.github/workflows/autonomia-promocao.yml` |
 | Verificação de contrato | `scripts/trigger-fabric/verify_repo_contract.py` |
-| Cartazes canônicos | `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json` |
+| Cartazes canônicos | `docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/manifest.json` |
 
 ---
 

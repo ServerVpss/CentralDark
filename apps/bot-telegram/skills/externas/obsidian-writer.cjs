@@ -161,9 +161,9 @@ function resolveFolder(folder) {
   // Redirecionar o alias antigo para a única pasta 00 oficial.
   if (/^00\s*-\s*mapa do sistema\/?$/i.test(requested)) return path.join(BRAIN_DIR, '00-MAPA-SISTEMA');
   const cat = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(requested) ? requested : null;
-  const selected = /^(?:07|07-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
+  const selected = /^(?:06|06-APRENDIZADOS-MEMORIAS|06-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
   if (selected) {
-    const target = path.join(BRAIN_DIR, '07-APRENDIZADOS-MEMORIAS', selected);
+    const target = path.join(BRAIN_DIR, '06-APRENDIZADOS-MEMORIAS', selected);
     fs.mkdirSync(target, { recursive: true });
     return target;
   }
@@ -419,7 +419,7 @@ module.exports = {
 
     if (op === 'write') {
       if (!title || !content) return { error: 'Informe title e content' };
-      const dir = resolveFolder(folder || '07 - Reuniões & Notas');
+      const dir = resolveFolder(folder || '05-REUNIOES-NOTAS');
       const folderName = path.basename(dir);
       const enriched = injectLinks(content);
       const frontmatter = buildFrontmatter(title, folderName, [], content);

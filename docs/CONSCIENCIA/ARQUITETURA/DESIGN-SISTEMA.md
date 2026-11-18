@@ -171,7 +171,7 @@ O léxico cognitivo A–Z e as oito legendas do Modo Michelin não constituem pa
 
 Os quatro cartazes aprovados pelo SEGREDO/CHEFE são testemunhas visuais do
 mesmo design system e estão catalogados em
-[`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/`](../../BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md).
+[`docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/`](../../BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md).
 O `manifest.json` dessa pasta fixa hashes, proveniência e relações semânticas.
 Eles não criam paleta, runtime ou autoridade paralela: este documento continua
 o owner de design; a skill `visual-design-method` governa o método; índices e

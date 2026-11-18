@@ -106,7 +106,7 @@ Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independ
 <!-- CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
 ### 🪬 Continuidade entre todas as janelas e contas
 
-Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
+Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto Superior para uma missão CentralDark: recuperar a intenção vigente e o ponto de continuidade pelo owner já existente `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (§6.0, LOOP ÚNICO). Compartilhar `INTENT_ID | GOAL | OWNER | MAIN_SHA | PR_HEAD | ACTIVE_WRITER | STATUS | RECEIPT | NEXT_CURSOR`. As contas não compartilham memória automaticamente; conferir CURRENT e ferramentas da superfície. Uma única caneta por escopo, sem recomeçar a tarefa nem simular PASS. NOVA ARTE: acervo `docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`; apenas arte com binário, hash, manifesto, teste e readback recebe selo canônico.
 <!-- /CENTRALDARK_MULTI_WINDOW_CONTINUITY_V1 -->
 
 <!-- CENTRALDARK_ZENDRIVE_INVENTORY_CANONICAL_RECALL_20261022 -->
@@ -470,8 +470,8 @@ Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir de
 
 - `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MATERIAL-INGEST.md` — ingestão e aprendizado de matéria.
 - `docs/ARQUITETURA/LIBRARY-BINDING-CENTRALDARK.md` — binding de biblioteca/fontes.
-- `docs/BRAIN/08-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md` — cartazes canônicos, árvore principal.
-- `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md` — compatibilidade/índice visual existente.
+- `docs/BRAIN/07-ARTEFATOS-VISUAIS/01-CARTAZES-CANONICOS/README.md` — cartazes canônicos, árvore principal.
+- `docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md` — compatibilidade/índice visual existente.
 - `docs/CONSCIENCIA/02-PROTOCOLO-HANDOFF-IA.md` — handoff entre corpos/modelos.
 - `docs/CONSCIENCIA/ADMINISTRAVEIS.md` — capacidades administráveis.
 - docs/CONSCIENCIA/CONTRATO-HIBRIDO-GRAFO-LOGS-LOCAL.md — contrato híbrido de Grafo Vivo, logs, Casa/VPS e capacidades locais.

@@ -124,7 +124,7 @@ test('heranca Kaizen para notas BRAIN 07, sem prometer runtime', () => {
   assert.match(meta, /centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"/);
   assert.match(meta, /centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"/);
   assert.match(meta, /centraldark_metabolic_roles:/);
-  const nonBrain = _test.buildFrontmatter('Outra nota', '06-REUNIOES-NOTAS');
+  const nonBrain = _test.buildFrontmatter('Outra nota', '05-REUNIOES-NOTAS');
   assert.doesNotMatch(nonBrain, /centraldark_kaizen_trigger/);
 });
 
@@ -138,7 +138,7 @@ test('nota gera ligacoes SELF; busca devolve apenas candidatos', () => {
   const fm = _test.buildFrontmatter('Historia e memoria', '04-MEMORIAS', [], 'Lembrancas do CHEFE');
   assert.match(fm, /centraldark_self_primary: "Self-Memory"/);
   assert.equal(_test.readSelfNoteMetadata(fm + '# Historia').self_primary, 'Self-Memory');
-  assert.doesNotMatch(_test.buildFrontmatter('Outro', '06-REUNIOES-NOTAS'), /centraldark_self_primary/);
+  assert.doesNotMatch(_test.buildFrontmatter('Outro', '05-REUNIOES-NOTAS'), /centraldark_self_primary/);
 });
 
 test('alias legado do mapa usa a pasta oficial e o indice nao sobrescreve o manual', () => {
@@ -148,4 +148,10 @@ test('alias legado do mapa usa a pasta oficial e o indice nao sobrescreve o manu
   assert.match(source, /path\.join\(BRAIN_DIR, '00-MAPA-SISTEMA', '01-HUB'\)/);
   assert.match(source, /INDEX-GERADO\.md/);
   assert.doesNotMatch(source, /path\.join\(BRAIN_DIR, '00 - Mapa do Sistema'\)/);
+});
+
+test('numeração BRAIN 05-08 respeitada ao gravar notas e preservar alias de memória', () => {
+  const brainDir = path.resolve(__dirname, '../../../../docs/BRAIN');
+  assert.equal(_test.resolveFolder('06-APRENDIZADOS-MEMORIAS'), path.join(brainDir, '06-APRENDIZADOS-MEMORIAS', '02-SESSOES'));
+  assert.equal(_test.resolveFolder('06-APRENDIZADOS-MEMORIAS'), path.join(brainDir, '06-APRENDIZADOS-MEMORIAS', '02-SESSOES'));
 });
