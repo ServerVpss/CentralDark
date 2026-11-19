@@ -28,6 +28,11 @@ links:
 
 # 🗣️ Guia de comunicação — SEGREDO/CHEFE
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O guia de comunicação herda a Gramática SOL: placas claras para status, provas e ações; 👉 O QUE FAZER AGORA é a tradução humana de NEXT_CURSOR. Não mascarar estados nem alterar máquina. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 ## 👑 Identidade
 
 SEGREDO/CHEFE é o humano, autor da intenção e autoridade final. SOL coordena. HERMES executa, preserva e dá continuidade. `pivete` regional é vocativo informal e não cria segunda identidade técnica.

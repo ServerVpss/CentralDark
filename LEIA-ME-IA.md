@@ -80,6 +80,11 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Ao entrar na CentralDark, aplicar o mapa visual semântico da Gramática SOL e o padrão de emojis. Mostrar 👉 O QUE FAZER AGORA, não NEXT_CURSOR, para gente; nomes exatos seguem nos registros. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 **Conversa com o CHEFE (12/11/2026):** responder em português natural, sem despejar campos internos de continuidade, prova ou auditoria. Seguir a cláusula da SOUL e o [padrão de resposta existente](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). O formato técnico só aparece sob pedido; nomes de campos e scripts não mudam.
 
 <!-- CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->

@@ -1,6 +1,11 @@
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 ## HUD operacional — detalhes sob pedido, conversa natural por padrão
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O método da Gramática SOL rege os textos humanos de todos os agentes: 🧾 COMPROVANTE, 🧪 TESTES, 🔎 CONFERÊNCIA, ⛔ O QUE ESTÁ IMPEDINDO, 👉 O QUE FAZER AGORA, etc., conforme pertinência. Não expor NEXT_CURSOR como título. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
 

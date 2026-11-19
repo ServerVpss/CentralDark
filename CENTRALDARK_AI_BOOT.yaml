@@ -14,6 +14,12 @@ CENTRALDARK_AI_BOOT:
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
   human_communication_bridge:
     owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+    # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119
+    grammar: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml#mapa_visual_semantico_20261119"
+    emoji_owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+    human_next_step: "👉 O QUE FAZER AGORA"
+    preserve_machine_fields: true
+    runtime_consumption_requires_test: true
     inherits: ["RULES.md", "AGENTS.md"]
     consumers: ["SOL", "HERMES", "CODEX", "CLAUDE", "GEMINI", "TELEGRAM", "NOTIFICATIONS", "GITHUB_CI", "MCP_API", "CLI", "HUD", "OBSIDIAN", "INSTINTO_SUPERIOR", "VOICE"]
     green: "EFEITO_LOCAL_PROVADO"
