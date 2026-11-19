@@ -138,3 +138,54 @@ Aprendizado: sessão no Cockpit não se torna automaticamente cookie de outro do
 **Menor delta no mesmo owner:** capturar `event.currentTarget`, validar `instanceof HTMLFormElement` e serializar `FormData` antes do primeiro `await`. Preservados os campos OAuth, o JWT, `redirect_uri`, PKCE, o owner `/authorize` e o consentimento explícito. Regressão acrescentada no teste existente para travar a ordem das operações. Prova local: TSX parse 0 erros; `pairing-consent-flow.test.mjs` **10 PASS / 0 FAIL**. Deploy e autorização humana pós-rebuild: UNKNOWN.
 <!-- /CENTRALDARK_OAUTH_FORMDATA_AWAIT_FIX_20261117 -->
 
+<!-- MCP_JSON_NO_REDIRECT_PKCE_20261117 -->
+### 17/11/2026 — resposta JSON no erro de PKCE para o consentimento do Cockpit
+**Diagnóstico público com navegador real em origem admin:** preflight `OPTIONS /authorize` = HTTP 204, cabeçalhos `Authorization,Content-Type` permitidos, e Chrome cross-origin leu HTTP 400 JSON de cliente inexistente. Logo, CORS/TLS/DNS não explicam todos os `Failed to fetch` observados. A causa comprovada no **código** de uma classe de falhas: `redirectWithOAuthError()` ainda emitia HTTP 302 para callback em `POST` JSON de PKCE inválido, enquanto o Cockpit usa `fetch(..., redirect: "error")`, que rejeita redirecionamentos com TypeError. O caso concreto do CHEFE ainda exige tentativa autenticada real para provar a causa final.
+
+**Menor delta existente:** em `apps/modulos/mcp/src/oauth.js`, somente para `res.locals.cockpitConsentJson` devolver HTTP 400 `{ok:false,error,error_description}` e `Cache-Control:no-store` sem navegar; o fluxo OAuth HTML legado mantém HTTP 302. Teste no owner `apps/modulos/mcp/tests/pairing-consent-flow.test.mjs` prova JSON 400 sem Location e preservação de state, PKCE, autenticação e pareamento: 10/10 PASS. Nenhuma alteração em segredos, CORS global, credenciais ou scopes.
+
+**Estado:** SOURCE_TEST=PASS; LIVE_OPTIONS=PASS; LIVE_BROWSER_CORS_INVALID_CLIENT=PASS; LIVE_REAL_CLIENT_OAUTH=UNKNOWN; DEPLOY=UNKNOWN. Não declarar FIXED_POINT antes do teste autenticado.
+<!-- /MCP_JSON_NO_REDIRECT_PKCE_20261117 -->
+
+<!-- MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
+**17/11/2026 ? Build m?nimo do mesmo owner para consumo:** \`apps/modulos/mcp/package.json\` define \`start: node dist/index.js\`; portanto publicar somente \`src/oauth.js\` n?o prova que o processo consome o delta. A leitura na Forja detectou \`dist/oauth.js\` compilado em 16/11, sem a valida??o de sess?o Cockpit e sem a resposta JSON de erro OAuth. Recompilei **apenas** \`src/oauth.js\` com TypeScript (target ES2022/ESNext/allowJs) diretamente para o \`dist/oauth.js\` existente; sa?da sem erros de compilador, \`node --check\` = PASS, hash readback conferido. Nenhum segundo owner ou motor criado. **Falta:** comprovar rebuild/restart do processo que serve /authorize e o clique de autoriza??o real ap?s atualiza??o (DEPLOY=UNKNOWN).
+<!-- /MCP_DIST_OAUTH_CONSUMPTION_20261117 -->
+
+<!-- MCP_RUNTIME_CODE_PROOF_20261118 -->
+### 18/11/2026 — prova de que o processo em execução consome o dist corrigido
+
+**Problema:** GitHub atualizado e arquivo corrigido no disco não provam que o servidor que atende `/authorize` carregou o código novo.
+
+**Antes → evidência → depois:**
+- Antes: `POST /authorize` com `Origin: https://outro.invalid` + `Accept: application/json` devolvia **HTTP 400**, igual ao caso legítimo — resposta **não discriminante**.
+- Evidência: o processo HTTP (PID `857060`, `dist/index.js`) iniciou às `00:02:55 +0300`, enquanto `dist/oauth.js` foi escrito às `02:49:21 +0300`. O processo carregava código anterior. O teste discriminante: o código novo exige **403** para origem não autorizada (`res.locals.cockpitConsentJson` em `oauth.js:320`).
+- Depois: reiniciado **somente** `centraldark-native-mcp-http.service` (o túnel STDIO não foi tocado). Novo PID `1064786`. O mesmo probe passou a devolver **HTTP 403** `access_denied / Origem de consentimento não autorizada`, tanto na LAN `192.168.35.130:9100` quanto em `https://mcp.centralldark.com/authorize`.
+
+**Contraprovas:** `OPTIONS /authorize` = **204** com `Access-Control-Allow-Origin: *` e headers `Authorization,Content-Type,Accept`; `/health` local e público = **200**, 160 tools, `catalogVersion 160-45340263b107`; suíte existente `pairing-consent-flow.test.mjs` + `device-pairing.test.mjs` = **21 PASS / 0 FAIL**; hashes de `src/oauth.js` e `dist/oauth.js` na Forja idênticos aos da `main` `a55449dc3b`.
+
+**Invariantes:** nenhuma senha nova, nenhum segredo no navegador, nenhuma alteração em CORS/DNS/Cloudflare, nenhum segundo túnel, nenhum segundo OAuth, nenhum `reset`/`clean`/`force`. Consentimento humano permanece obrigatório.
+
+**Armadilha registrada:** um HTTP 400 serviu inicialmente como falso sinal de "já corrigido" porque **ambas** as versões respondem 400 para cliente inexistente. Somente o teste com origem não autorizada (400 → 403) separou código antigo de código novo.
+
+**Estado:** RUNTIME_CODE=PASS; OPTIONS=PASS; TESTES=21/21 PASS; HEALTH=PASS; CLICK_HUMANO=UNKNOWN; FIXED_POINT=NÃO declarado sem clique e retorno OAuth do CHEFE.
+
+**NEXT_CURSOR:** apresentar `https://admin.centralldark.com/mcp-autorizar` ao CHEFE para o clique humano e conferir o retorno PKCE com `state`/`scope` preservados.
+<!-- /MCP_RUNTIME_CODE_PROOF_20261118 -->
+
+<!-- MCP_SUPABASE_PUBLISHABLE_KEY_DIVERGENCE_20261118 -->
+### 18/11/2026 — causa da rejeição da sessão: chave Supabase divergente no backend
+
+**Sintoma:** tela de autorização MCP devolvia `Sessão do Cockpit ausente ou sem permissão de administrador`, embora a conta tivesse role `admin` no Supabase.
+
+**Diagnóstico discriminante (sem usar o token do CHEFE):** `verifyRemoteBridgeSupabaseAdmin()` em `apps/modulos/mcp/src/oauth.js:30` envia `apikey` junto do JWT do usuário. O processo HTTP (PID `1094355`) tinha `VITE_SUPABASE_PUBLISHABLE_KEY` com **36 chars, JWT legado `eyJ…`**; o frontend em `apps/instinto-superior/.env.local` tinha **46 chars, `sb_publishable_…`** do **mesmo projeto** (`lyoigsqluyktoclwdaft.supabase.co`). A chave antiga devolvia **`Invalid API key`** (401) em `/auth/v1/user` e `/rest/v1/user_roles` — a validação morria **antes** de ler o JWT. A mensagem genérica não distinguia as cinco saídas `false` da função.
+
+**Correção mínima aplicada na Forja:** alinhado `VITE_SUPABASE_PUBLISHABLE_KEY` no `EnvironmentFile` do próprio serviço (`/home/CentralDark-OS/CentralDark/.env`) ao valor **já existente** no owner do frontend. Nenhuma chave nova criada, nenhum valor exposto em log/chat/Git, nenhum segredo versionado. Reiniciado **somente** `centraldark-native-mcp-http.service`; túnel STDIO e cloudflared intactos.
+
+**Contraprova:** a chave em memória do novo PID passou a ter 46 chars / prefixo `sb_publishable_`; `/auth/v1/user` com token inválido mudou de `Invalid API key` para **`bad_jwt`**; `/rest/v1/user_roles` passou a devolver **`42501 permission denied`** (RLS) em vez de chave inválida — provando que a chave foi aceita e a cadeia chegou ao JWT/role. `POST /authorize` com origem não autorizada = **403**; health LAN/público = **200**; suíte existente = **21 PASS / 0 FAIL**.
+
+**Escopo preservado:** OAuth, PKCE, escopos, Cloudflare Access, Supabase, senha, CORS/DNS. Nenhum `reset`/`clean`/`force`. Clique humano do CHEFE permanece obrigatório.
+
+**Estado:** ROOT_CAUSE=PASS; RUNTIME_KEY=PASS; TESTES=21/21; HEALTH=PASS; CLICK_HUMANO=UNKNOWN; FIXED_POINT=NÃO declarado.
+
+**NEXT_CURSOR:** CHEFE clicar em `https://admin.centralldark.com/mcp-autorizar`; conferir retorno OAuth com `state`/`scope` preservados e `AUTHORIZATION_PROVED`.
+<!-- /MCP_SUPABASE_PUBLISHABLE_KEY_DIVERGENCE_20261118 -->

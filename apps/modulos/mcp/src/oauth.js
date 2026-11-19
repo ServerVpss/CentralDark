@@ -236,6 +236,13 @@ function redirectWithOAuthError(res, redirect_uri, error, state, description) {
     if (state)
         back.searchParams.set("state", state);
     back.searchParams.set("iss", config.publicUrl);
+    // Fetch do Cockpit usa redirect:error: nao redirecionar respostas JSON.
+    // O navegador deve receber o erro OAuth legivel no mesmo endpoint.
+    if (res.locals?.cockpitConsentJson) {
+        res.setHeader("Cache-Control", "no-store");
+        res.status(400).json({ ok: false, error, error_description: description || error });
+        return;
+    }
     res.redirect(302, back.toString());
 }
 function sendOwnerConsentPage(res, input) {

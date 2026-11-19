@@ -30,8 +30,11 @@ Use this class skill when a CentralDark file exists in a dirty remote checkout a
 - Use an isolated temporary directory for all merge experiments; never write the candidate over the worktree file.
 - `UNKNOWN != PASS`: a historical source, mirror match, HTTP/API success, or successful merge command does not prove current reconciliation.
 - Preserve local and canonical contributions when intent cannot be resolved deterministically; do not force a merge.
-- Re-read the exact target, refs, status, and hashes after analysis. Report `FIXED_POINT` only for the measured sub-scope; a stale repository HEAD blocks a global claim even when the target subtree matches the canonical ref.
-- Compare tracked content with Git object hashes or canonical tree entries, not only raw filesystem SHA-256; checkout filters and line endings can make byte hashes differ while Git content is equal.
+- Re-read the exact target, refs, status, and hashes after analysis. Emit `FIXED_POINT` only for the measured sub-scope; a stale repository HEAD blocks a global claim even when the target subtree matches the canonical ref.
+- After promoting a skill or runtime-facing change, verify every live Hermes skill root and attached cron job separately: compare the qualified skill name, source SHA, runtime file content, and job attachment. A corrected `main` is not a corrected runtime until those readbacks match.
+- For scheduled jobs, replace ambiguous short skill names with the qualified owner path, run one bounded proof execution, and classify `running`, `unknown`, timeout, or supervisor restart as `UNKNOWN` rather than `PASS`. Do not report sync until the execution reaches a durable terminal state with no ambiguity error.
+- Write the receipt with `SOURCE_SHA`, `RUNTIME_ROOTS`, `RUNTIME_HASHES`, `JOB_ID`, `JOB_SKILL`, `EXECUTION_ID`, `TERMINAL_STATE`, and `NEXT_CURSOR`; missing fields block the claim.
+- Compare tracked content with Git object hashes or canonical tree entries, not only raw filesystem SHA-256; checkout filters and line endings can make byte hashes differ while Git content can be equal.
 - Investigate untracked exception files by searching real consumers and runtime entrypoints before promoting them; preserve generated/ignored runtime data and do not version an unconsumed helper merely to make the tree look complete.
 - Return a compact receipt with target, current HEAD, canonical ref, exact hashes, operations, conflict state, independent readback, fixed-point scope, and next cursor.
 - Prove that the implementation target is a Git checkout before using Git status, branch, or HEAD as evidence; a copied or extracted directory is a working artifact, not a canonical owner.
