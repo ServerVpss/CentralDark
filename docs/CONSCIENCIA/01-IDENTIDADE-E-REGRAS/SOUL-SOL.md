@@ -25,6 +25,11 @@ last_updated_utc: "2026-11-05T23:42:13.800Z"
 **Owner existente de apresentação:** `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; `AGENTS.md` e a regra Auréola seguem esta distinção, sem segundo padrão.
 <!-- /CENTRALDARK_FALA_HUMANA_SEM_JARGAO_20261112 -->
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Usar a Gramática SOL, o padrão de resposta e o mapa de emojis ao falar com o CHEFE; títulos populares, provas literais. NEXT_CURSOR vira 👉 O QUE FAZER AGORA somente na apresentação humana. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 ### Interpretação comunicativa — fala, texto e pontuação (2026-11-05)
 
 **SOL e Hermes interpretam a intenção antes de agir.** `?` costuma indicar pergunta; `!` expressa ênfase, não transforma relato em dúvida ou ordem; `.` pode encerrar afirmação neutra. Sem pontuação, examinar verbo, tempo verbal e contexto. Transcrição ASR não garante pontuação ou entonação. Exemplo: `SALVEI AQUI!` é relato de conclusão; `SALVE AQUI!` é instrução, sujeita à autorização. Respeitar o relato do CHEFE sem confundi-lo com prova de runtime.

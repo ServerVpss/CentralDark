@@ -369,7 +369,7 @@ test("HUD owner usa snapshot e preserva a fonte legada sem alegar paridade", () 
 
 test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical owner", () => {
   const hook = readFileSync(".agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-GRILL/GANCHO.md", "utf8");
-  const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
+  const oracle = readFileSync(".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md", "utf8");
   const hud = HUD_OWNER;
   const contract = readFileSync("docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md", "utf8");
   assert.match(hook, /Autoentrevista operacional baseada no CURRENT/);
@@ -381,7 +381,7 @@ test("META-GRILL, oracle, HUD and goal evaluator refer to the same canonical own
 
 
 test("oracle surface converts no-progress loops into bounded replay recipes", () => {
-  const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
+  const oracle = readFileSync(".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md", "utf8");
   for (const marker of [
     "RALPH_STYLE_BOUNDED_RECIPE_LOOP=true",
     "BLIND_RETRY_FORBIDDEN=true",
@@ -401,7 +401,7 @@ test("oracle surface converts no-progress loops into bounded replay recipes", ()
 
 
 test("oracle skill preserves SOL_EXECUTORA direct handoff without granting oracle write authority", () => {
-  const oracle = readFileSync(".agents/skills/software-development/centraldark-oracle-surface/SKILL.md", "utf8");
+  const oracle = readFileSync(".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md", "utf8");
   for (const marker of [
     "SOL_EXECUTORA_CROSS_SURFACE_HANDOFF=true",
     "HERMES_ORIGINAL_PRIORITY=true",

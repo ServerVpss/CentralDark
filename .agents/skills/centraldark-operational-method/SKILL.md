@@ -11,6 +11,11 @@ HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HU
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Herdar a Gramática SOL e os símbolos canônicos para explicar execuções; provas continuam técnicas. 👉 O QUE FAZER AGORA é rótulo visível, NEXT_CURSOR continua campo técnico. Aplicação em runtime depende de leitura e teste. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
@@ -19,6 +24,7 @@ Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcio
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
+- [atendimento-whatsapp](Skills/atendimento-whatsapp/SKILL.md) — método operacional do atendimento WhatsApp, com contexto e aprendizados profissionais apontados para Meus-Trabalhos; execução e carregamento exigem prova.
 - [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)

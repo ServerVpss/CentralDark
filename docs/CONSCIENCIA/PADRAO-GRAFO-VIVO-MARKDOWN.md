@@ -30,6 +30,11 @@ links:
 
 # 🫀 Padrão do Grafo Vivo Markdown — CentralDark
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O Grafo Vivo apresenta títulos humanos conforme a Gramática SOL e o mapa de emojis, sem alterar nós, setas, chaves YAML, links nem NEXT_CURSOR técnico. Atualizar apenas os trechos tocados. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 ## 🧠 Intenção do Chefe
 
 Um assunto vivo deve continuar sendo **o mesmo nó** ao longo do tempo. O nome do arquivo não envelhece a cada dia. A data, o estado e a atualização ficam nas propriedades do cabeçalho.

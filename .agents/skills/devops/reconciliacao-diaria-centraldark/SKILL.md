@@ -1,5 +1,5 @@
 ---
-name: reconciliacao-diaria-centraldark
+name: devops-reconciliacao-diaria-centraldark
 description: Reconcile CentralDark state and update daily checklist.
 version: 1.0.0
 author: SOL (via Claude, sessão 2026-09-23)

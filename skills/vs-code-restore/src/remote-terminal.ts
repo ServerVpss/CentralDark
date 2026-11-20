@@ -14,6 +14,7 @@ const REQUEST_ID_RE = /^[a-f0-9-]{36}$/i;
 const DEVICE_ID_RE = /^[a-z0-9][a-z0-9_-]{0,63}$/;
 let server: http.Server | undefined;
 const inflight = new Set<number>();
+const TERMINAL_NAME = 'CentralDark · Worker 1 (manual)';
 const seenIds = new Set<string>();
 function sha(text: string): string { return createHash("sha256").update(text).digest("hex"); }
 function tokenMatches(supplied: string, expected: string): boolean {
@@ -44,6 +45,40 @@ async function terminalList(): Promise<{ name: string; pid: number | null; shell
     shellIntegration: Boolean(terminal.shellIntegration),
   })));
 }
+async function openOneTerminal(payload: Record<string, unknown>, deviceId: string): Promise<Record<string, unknown>> {
+  const requestId = typeof payload.requestId === 'string' ? payload.requestId : '';
+  const at = typeof payload.at === 'string' ? Date.parse(payload.at) : NaN;
+  if (!REQUEST_ID_RE.test(requestId) || !Number.isFinite(at) || Math.abs(Date.now() - at) > 20_000)
+    return {ok: false, status: 'INVALID_OPEN_ENVELOPE', deviceId, requestId};
+  if (seenIds.has(requestId)) return {ok: false, status: 'REPLAY_BLOCKED', deviceId, requestId};
+  seenIds.add(requestId);
+  if (seenIds.size > 500) {
+    const first = seenIds.values().next().value;
+    if (first) seenIds.delete(first);
+  }
+  const existing = vscode.window.terminals.find(t => t.name === TERMINAL_NAME);
+  if (existing) {
+    existing.show(false);
+    return {ok: true, status: 'TERMINAL_REUSED', deviceId, requestId, pid: (await existing.processId) ?? null};
+  }
+  const choice = await vscode.window.showWarningMessage(
+    'CentralDark: permitir abrir 1 terminal visual no editor lateral?',
+    {modal: true, detail: 'Nenhum modelo sera iniciado. Apenas um terminal sem comandos.'},
+    'Abrir um terminal'
+  );
+  if (choice !== 'Abrir um terminal')
+    return {ok: false, status: 'LOCAL_CONSENT_DENIED', deviceId, requestId};
+  // Recontar apos modal para evitar criar duplicata se o usuario abriu manualmente.
+  const now = vscode.window.terminals.find(t => t.name === TERMINAL_NAME);
+  const terminal = now ?? vscode.window.createTerminal({
+    name: TERMINAL_NAME, location: {viewColumn: vscode.ViewColumn.Beside, preserveFocus: false}
+  });
+  terminal.show(false);
+  return {ok: true, status: now ? 'TERMINAL_REUSED' : 'TERMINAL_CREATED',
+    deviceId, requestId, pid: (await terminal.processId) ?? null,
+    observedAt: new Date().toISOString()};
+}
+
 async function execute(payload: Record<string, unknown>, deviceId: string): Promise<Record<string, unknown>> {
   const requestId = typeof payload.requestId === "string" ? payload.requestId : "";
   const at = typeof payload.at === "string" ? Date.parse(payload.at) : NaN;
@@ -147,6 +182,11 @@ async function handle(req: http.IncomingMessage, res: http.ServerResponse, conte
   if (req.method === "GET" && req.url === "/terminals") {
     json(res, 200, { ok: true, status: "TERMINALS_READ", deviceId: configuredId,
       terminals: await terminalList() });
+    return;
+  }
+  if (req.method === "POST" && req.url === "/open-terminal") {
+    try { json(res, 200, await openOneTerminal(await bodyJson(req), configuredId)); }
+    catch { json(res, 400, {ok: false, status: "INVALID_BODY", deviceId: configuredId}); }
     return;
   }
   if (req.method === "POST" && req.url === "/execute") {

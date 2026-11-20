@@ -4,6 +4,11 @@ PORTA_CANONICA_IA=LEIA-ME-IA.md
 NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Para o leitor: a Gramática SOL e o mapa dos emojis dão títulos compreensíveis, como 👉 O QUE FAZER AGORA. Logs e APIs mantêm NEXT_CURSOR literal; publicação não comprova consumo do runtime. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 
 
 

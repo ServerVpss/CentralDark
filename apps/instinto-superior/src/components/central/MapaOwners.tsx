@@ -126,7 +126,7 @@ export function MapaOwners({
         <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { numero: "01", titulo: "Casa — Forja", caminho: "K:\\", resumo: "Código bruto, experimentos, aprendizados e testes." },
-            { numero: "02", titulo: "Apps — Cristalização", caminho: "K:\\apps", resumo: "Owners, tipagem, contratos, testes e funcionalidades validadas." },
+            { numero: "02", titulo: "Apps — Cristalização", caminho: "K:\\apps", resumo: "Responsáveis, tipagem, contratos, testes e funcionalidades validadas." },
             { numero: "03", titulo: "GitHub — main", caminho: "ServerVpss/CentralDark", resumo: "Código aprovado e versionado, sem material privado." },
             { numero: "04", titulo: "VPS — Execução", caminho: "<caminho-vps>", resumo: "Serviços, scripts e conhecimento local; uso offline conforme capacidades existentes." },
           ].map((etapa) => (
@@ -228,8 +228,8 @@ export function MapaOwners({
             { titulo: "🏠 K:\\ · FORJA", corpo: "Raiz Git, Instinto Superior, harness, apps, scripts, skills e trabalho normal de todas as IAs." },
             { titulo: "🔗 K: → F: · PESO", corpo: "Junctions seletivas preservam caminhos no K:, mas guardam bytes pesados no F:. K:\\_WORKER → F:\\_WORKER: prova histórica." },
             { titulo: "⛏️ F:\\ · GARIMPO", corpo: "TEMP, caches, worktrees isoladas, testes, bruto único, QUARANTINE e GARIMPO-CHEFE: classes e retenção separadas." },
-            { titulo: "🧠 K:\\docs · OBSIDIAN", corpo: "Memória e owners canônicos; sessões privadas de cada IA não formam um segundo cérebro." },
-            { titulo: "💎 GITHUB MAIN", corpo: "Só código e conhecimento versionáveis após teste, contraprova, aprovação e receipt." },
+            { titulo: "🧠 K:\\docs · OBSIDIAN", corpo: "Memória e responsáveis canônicos; sessões privadas de cada IA não formam um segundo cérebro." },
+            { titulo: "💎 GITHUB MAIN", corpo: "Só código e conhecimento versionáveis após teste, contraprova, aprovação e comprovante." },
             { titulo: "⚙️ VPS · RUNTIME", corpo: "Somente serviços e componentes necessários; merge não comprova implantação." },
           ].map((nodo) => (
             <div key={nodo.titulo} className="rounded-lg border border-border/70 bg-background/50 p-3">
@@ -249,7 +249,7 @@ export function MapaOwners({
           rel="noopener noreferrer"
           className="mt-3 inline-block text-xs text-emerald-400 underline underline-offset-2"
         >
-          Ler a intenção integral do CHEFE e o NEXT_CURSOR no receipt canônico ↗
+          Ler a intenção integral do CHEFE e o próximo passo no comprovante canônico ↗
         </a>
       </div>
 
@@ -271,7 +271,7 @@ export function MapaOwners({
           </div>
           <div>
             <span className="font-mono text-muted-foreground">Build local:</span>
-            <span className="ml-2 text-foreground">UNKNOWN (sem receipt vinculado)</span>
+            <span className="ml-2 text-foreground">Ainda não confirmado (sem comprovante vinculado)</span>
           </div>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
@@ -374,7 +374,7 @@ export function MapaOwners({
             <table className="w-full min-w-[36rem] text-left text-xs">
               <thead className="bg-muted/40">
                 <tr>
-                  <th className="p-2">Owner</th>
+                  <th className="p-2">Responsável</th>
                   <th className="p-2">C:\\ (SHA prefixo)</th>
                   <th className="p-2">K:\\ (SHA prefixo)</th>
                   <th className="p-2">Interpretação</th>
@@ -397,8 +397,8 @@ export function MapaOwners({
 
       {/* #OBSERVACOES# @owner: MapaOwners @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md */}
       <section aria-label="Mapa de áreas do cockpit" className="rounded-xl border border-border bg-surface/40 p-4">
-        <h4 className="text-base font-semibold">🧭 Áreas do cockpit → owners existentes</h4>
-        <p className="mt-2 text-xs text-muted-foreground">25 áreas do código. Clique de navegação não comprova a execução na API; efeito remoto exige readback.</p>
+        <h4 className="text-base font-semibold">🧭 Áreas do cockpit → responsáveis existentes</h4>
+        <p className="mt-2 text-xs text-muted-foreground">25 áreas do código. Clique de navegação não comprova a execução na API; efeito remoto exige conferência do resultado.</p>
         <div className="mt-4 grid min-w-0 gap-2 sm:grid-cols-2 xl:grid-cols-3">
           {COCKPIT_ABAS.filter(a => !a.privado || autenticado).map(a => (
             <article key={a.id} className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-border/70 bg-background/60 p-3">

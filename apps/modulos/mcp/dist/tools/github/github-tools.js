@@ -41,7 +41,8 @@ function safePath(p) {
     return clean;
 }
 async function gh(token, apiPath, init = {}) {
-    if (token === GH_CLI_OWNER_MARKER) return ghCliCall(apiPath, init);
+    if (token === GH_CLI_OWNER_MARKER)
+        return ghCliCall(apiPath, init);
     const res = await fetch(`${API}${apiPath}`, {
         ...init,
         headers: {

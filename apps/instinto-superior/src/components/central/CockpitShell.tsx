@@ -472,7 +472,7 @@ function CentralDarkGram({ abrirAdmin, abrirSync }: { abrirAdmin: () => void; ab
 }
 
 export function CockpitShell({ autenticado = false }: { autenticado?: boolean }) {
-  const { pele } = usePeleCockpit();
+  const { pele, selecionar } = usePeleCockpit();
   const modulos = useModulosCockpit();
   const [abaAtiva, definirAbaAtiva] = useState("visao");
   const [buscaNavegacao, definirBuscaNavegacao] = useState("");
