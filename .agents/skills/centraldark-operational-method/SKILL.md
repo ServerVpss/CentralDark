@@ -24,6 +24,7 @@ Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcio
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
 
+- [atendimento-whatsapp](Skills/atendimento-whatsapp/SKILL.md) — método operacional do atendimento WhatsApp, com contexto e aprendizados profissionais apontados para Meus-Trabalhos; execução e carregamento exigem prova.
 - [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
 - [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
 - [centraldark-boot](Skills/centraldark-boot/SKILL.md)
