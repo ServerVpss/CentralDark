@@ -1317,3 +1317,23 @@ Desktop Commander mostra dispositivos offline ao cliente, apesar de processos
 locais VPS; OAuth Broker Tailscale `fetch failed`; Browser ChatGPT só acessível
 no contexto de origem; `.vscode/tasks.json` continha doze `powershell.exe`.
 Não transportar estes estados voláteis como PASS para o próximo dia.
+
+## Mapeamento funcional da superfície e troca de esforço — MAP_SCREEN_VIA_EXISTING_PREVIEW_1 (2026-11-20)
+
+**Owner:** este skill. **Gatilho:** CHEFE pede mapear tela, verificar botões, mudar modelo ou esforço no CHAT_GLOBAL.
+**Pré-condição:** sentinel 22/22; `desktop_preview`/`drive_preview`/`annotate_preview` disponíveis; composer sem rascunho; TLC23=PROVED para mutação de regra lógica.
+
+Sequência comprovada:
+1. `desktop_preview action=read` + `drive_preview action=elements` na aba **já aberta**. Nunca `open`/`navigate` quando a superfície já existe.
+2. `annotate_preview action=hold` fixa contornos e nomes. Navegação ou `reload` limpa as anotações.
+3. Após cada mudança de UI, chamar `elements` de novo. Refs morrem em reload/navegação; `reload` devolve inventário completo.
+4. Usar refs, não seletor CSS genérico: `[aria-label*="Adicionar"]` acertou `Adicionar novo projeto`, não o anexo do composer.
+5. Modelo/esforço: `Selecionar modelo do ChatGPT` → `Selecionar modelo` (modelos) ou `Potência` (esforço). No Chat: GPT-5.6 Sol, 3 níveis. No Work: GPT-6.2 Sol, 9 níveis listados (`Nenhuma → Mínimo → Leve → Médio → Alto → Extra alto → Max → Ultra → Persistente`) com contador `2 of 5 → 3 of 5`. Clique em `Potência` trocou `High→Medium` (Chat) e `Leve→Médio` (Work); persistiu após reload. Tooltip `Esforço de raciocínio · Ctrl+Shift+M` existe, mas o atalho sintético não foi provado.
+6. Restauração obrigatória: limpar rascunho, fechar menus com `Escape` no composer e voltar ao modo original. Nenhum prompt enviado.
+
+**Prova:** `url=https://chatgpt.com/`; refs `mi-pot-ncia`, `inp-pergunte-ao-chatgpt`; deltas `6 High→6 Medium` e `Leve 2 of 5→Médio 3 of 5`; estado final `Chat`, sidebar expandida, composer vazio.
+**Contraprova:** `Ctrl+Shift+M` injetado por teclado sintético não disparou e vazou `Con` no composer; limpo com 3 Backspaces. `MODEL_CHANGE=NOT_PROVEN`; `EFFORT_CHANGE=PASS`.
+**Replay:** executado nos dois modos, Chat e Work. Não criar segundo observador nem skill irmã.
+
+### Contraprova do ciclo de 3 rodadas — GOAL_IDENTITY_PROVEN=FALSE
+Prova em `docs/CONSCIENCIA/RECEIPTS/2026-11-20-hermes-oracle-loop-3-rounds.md` (SHA-256 `54add8e29ef827dd5d6f510b01b48741c249db8f44b17caab9428210fc655a76`). Três voltas correlacionadas provam apenas o transporte Hermes↔CHAT_GLOBAL. Não provam identidade do Goal histórico nem o `LOOP_ID`: sessão `20260920_235705_013b82` = `SESSION_NOT_FOUND` no runtime atual; Goal vivo `goal:local-eb5e…` está `done` com texto diferente; `LOOP_ID=UNKNOWN`. Regra: após `3/3 PASS`, manter `GOAL_IDENTITY_PROVEN=FALSE` até leitura independente do owner; nunca fabricar LOOP_ID nem reabrir Goal concluído.
