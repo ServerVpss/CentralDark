@@ -30,7 +30,7 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 **PONTO DE CONTINUIDADE:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
 `NEXT_CURSOR=REVIEW_31_DIFFERENT_CONTENT_PATHS_AND_28_STATUS_DELETIONS_NO_LOSS`
 
-### CURRENT medido na Casa — 2026-11-09T02:21:25-03:00
+### 📍 PONTO DE PARTIDA medido na Casa — 2026-11-09T02:21:25-03:00
 
 | Campo | Valor |
 |---|---|
@@ -229,7 +229,7 @@ Para encerrar a sessão, o finalizer usa `CentralDark-Compass-End: true` no comm
 
 ---
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 1. **FIXED POINT:** Aguardar merge do PR #1416 + CI green on main
 2. **DELTA-CONTINUO.md:** Criado como owner canônico — `!CENTRALDARK SHARED`
@@ -238,7 +238,7 @@ Para encerrar a sessão, o finalizer usa `CentralDark-Compass-End: true` no comm
 
 ---
 
-## RECEIPT
+## 🧾 COMPROVANTE
 
 ## HANDO OFF (Handoff Contínuo)
 | Campo | Valor |
@@ -264,7 +264,7 @@ NEXT_CURSOR=FIXED_POINT_PENDING_MERGE
 ```
 
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID
@@ -292,7 +292,7 @@ Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Dis
 - **Fonte da verdade:** `ServerVpss/CentralDark@main` para código versionado; VPS é execução, Casa é forja. Sincronização usa fluxo Git/owners existente, não links entre máquinas.
 - **Portões:** `ONE_WRITER_PER_SCOPE`, `CURRENT > HISTORY`, `UNKNOWN != PASS`, `REUSE_BEFORE_CREATE`, `MERGED != DEPLOYED`, sem mudanças fora do PR dedicado.
 - **Observação inicial de 19/10:** leitura da VPS encontrou 9 processos cujo cwd está sob `/root/CentralDark`, 7 linhas de comando com o caminho e 2 referências no cron consultado. São contagens pontuais, não identidades nem dependências já migradas.
-- **NEXT_CURSOR:** confirmar aliases existentes e consumidores, classificar cada referência nominalmente, migrar só o primeiro consumidor com contraprova e manter transição documentada até fixed point.
+- **👉 O QUE FAZER AGORA:** confirmar aliases existentes e consumidores, classificar cada referência nominalmente, migrar só o primeiro consumidor com contraprova e manter a transição documentada até o objetivo estar concluído e conferido.
 
 
 <!-- #OBSERVACOES# @owner: DELTA-CONTINUO.md @doc_ref: docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md @last_updated: 2026-10-19T17:06:23.000Z @escopo: PR1873 Screenpipe Casa/VPS + Windows runner + K root @estado: DIAGNOSTICO_MEDIDO @next_cursor: identificar owner runner e corrigir causa do STOPPED somente com autorizacao de servico -->
@@ -339,4 +339,4 @@ Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Dis
 
 **Integração visual:** seção aditiva no owner \`apps/instinto-superior/src/components/central/MapaOwners.tsx\` — 4 cartões do pipeline, 3 camadas Claude, aviso de migração e ligação com este PR. É um **snapshot estático**, não API viva, e ainda exige build TypeScript/CI e contraprova visual no mesmo SHA.
 
-**NEXT_CURSOR:** validar TypeScript, PR checks no HEAD, exibição autenticada da seção existente; depois classificar e executar somente o primeiro lote de transferência privada com rollback.
+**👉 O QUE FAZER AGORA:** validar TypeScript, verificações do PR no HEAD e exibição autenticada da seção existente; depois classificar e executar somente o primeiro lote de transferência privada com caminho de volta.
