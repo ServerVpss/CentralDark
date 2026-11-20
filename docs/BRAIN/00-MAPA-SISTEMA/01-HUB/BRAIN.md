@@ -99,7 +99,6 @@ PERMISSAO_HISTORICA != PERMISSAO_ATUAL
 | `02-ENTRADA` | matéria bruta/candidata |
 | `03-DOCUMENTACAO` | documentação e biblioteca |
 | `04-DECISOES` | decisões e proveniência |
-| `05-DEVEDORES-CONTATOS` | domínio humano específico |
 | `06-REUNIOES-NOTAS` | notas humanas |
 | `07-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
 | `08-ARTEFATOS-VISUAIS` | cartazes/grafo visual |

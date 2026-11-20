@@ -19,7 +19,7 @@ estado_evidencia: UNKNOWN
 
 **OWNER:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
 
-**CAPACIDADE EXISTENTE:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`
+**CAPACIDADE EXISTENTE:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`
 
 **PRINCÍPIO:** Uma intenção, um coração, uma biblioteca e evolução contínua.
 
@@ -341,7 +341,7 @@ Se houver sucesso, conservar a prova e aproveitar o caminho.
 
 **Contrato de Intenção:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, seção 21.4.
 
-**Skill:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`, seção *Domain / Turn Skill Evolution*.
+**Skill:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`, seção *Domain / Turn Skill Evolution*.
 
 **VPS:** Git local na mesma HEAD consultada e arquivo da skill localizado na árvore do projeto.
 
@@ -932,7 +932,7 @@ METABOLISMO COGNITIVO ↔ METABOLISMO FUNCIONAL
 
 ## 🧬 Cristal integral — relações, metabolismo e aceitação do PR #1785 (08/10/2026)
 
-**Intenção:** preservar do início ao fim o pensamento arquitetural do CHEFE, sem transformar toda a construção em legendas simples e sem criar arquitetura paralela. **Proveniência:** este documento integral, `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`, `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx`. Esta seção é **aditiva**: nada anterior é apagado, reordenado, reescrito ou compactado, especialmente o poema **Entre a Intenção e a Palavra** preservado acima.
+**Intenção:** preservar do início ao fim o pensamento arquitetural do CHEFE, sem transformar toda a construção em legendas simples e sem criar arquitetura paralela. **Proveniência:** este documento integral, `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`, `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`, `apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx`. Esta seção é **aditiva**: nada anterior é apagado, reordenado, reescrito ou compactado, especialmente o poema **Entre a Intenção e a Palavra** preservado acima.
 
 ### I — Desenho histórico inalterado e todas as relações
 
@@ -980,7 +980,7 @@ METABOLISMO COGNITIVO ↔ METABOLISMO FUNCIONAL
 - **RCT** — transformar falha comprovada em teste/receita/receipt.
 - **DOMAIN** — preservar LOOP_ID, TURN_ID, PARENT_ID, OWNER_SCOPE e NEXT_CURSOR.
 
-Binding: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`; DOMAIN e Seis Olhos não criam novo agente, writer ou evaluator. Skill usada classifica `UNCHANGED_PROVEN|PATCH_CANDIDATE|PATCH_APPLIED|TEST_ADDED|RECEIPT_ADDED|DEGRADED|BLOCKED`. `MCP_ON != MCP_USED != EFFECT_PROVEN`.
+Binding: `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`; DOMAIN e Seis Olhos não criam novo agente, writer ou evaluator. Skill usada classifica `UNCHANGED_PROVEN|PATCH_CANDIDATE|PATCH_APPLIED|TEST_ADDED|RECEIPT_ADDED|DEGRADED|BLOCKED`. `MCP_ON != MCP_USED != EFFECT_PROVEN`.
 
 ### IV — Duas séries de sete batidas, sem substituição
 
@@ -1105,7 +1105,7 @@ Os dois conjuntos de vinte requisitos do `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DE
 
 ## 🧿 A evolução do Oráculo que não confunde texto visível com resposta completa
 
-**Origem:** Expansão de Domínio do CHEFE preservada no PR #1785. **Owner executável:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` v0.5.2; **owner de continuidade:** `apps/modulos/HERMES-CORE/core/continuity-guard.mjs`; **owner de provas/score:** `scripts/trigger-fabric/centraldark_master_cycle.py`, `scripts/lupa/horn-reuse-fixed-point.mjs` e Reality Judge já existentes.
+**Origem:** Expansão de Domínio do CHEFE preservada no PR #1785. **Owner executável:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md` v0.5.2; **owner de continuidade:** `apps/modulos/HERMES-CORE/core/continuity-guard.mjs`; **owner de provas/score:** `scripts/trigger-fabric/centraldark_master_cycle.py`, `scripts/lupa/horn-reuse-fixed-point.mjs` e Reality Judge já existentes.
 
 O Hermes continua **um só**. Geoff, Ian, Greg, Dex, Hermes e Realidade são papéis da mesma missão, nunca seis writers. Braintrust, JEV/System One e ferramentas externas são opções complementares, sujeitas a capacidade/preço/licença/prova quando selecionadas; não recriar scheduler, cérebro ou scorer porque uma marca existe.
 
@@ -1239,7 +1239,7 @@ Usar o browser oficial da Nous (snapshot, scroll, vision, console) quando expost
 **FONTES INTEGRAIS — DOIS CRISTAIS EXISTENTES, NÃO RESUMIR/REESCREVER:**
 - 📘 **Cristal funcional / Loop Mestre:** `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md` — semântica do CHEFE, 90+10, 40 requisitos, C01–C20, A01–A20, META-GRILL, TIK-TAK, Casa/VPS, OAuth, router, HUD, Goal/clauses G01–G12, anti-regressão, owners e receitas.
 - 📗 **Cristal poético e metabólico / Intenção Viva:** `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md` — texto integral *Entre a Intenção e a Palavra*, sete batidas operacionais + sete poéticas, 28 peças, biblioteca, NeuroLink, aprendizagem, metáforas, Gojo e sete funções, PET, identidades e convergência cognitivo-funcional, M01–M12.
-- 📙 **Skill/contrato único Oracle:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`.
+- 📙 **Skill/contrato único Oracle:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`.
 - 📒 **Superfícies preservadas:** `apps/instinto-superior/src/components/central/CockpitShell.tsx`, `HermesPet.tsx`, `MapaMetabolicoCristal.tsx`; HUD/Obsidian e Hermes CORE continuam em seus owners.
 
 ### I — DESCOBERTA: QUATRO FLUXOS, UM ÚNICO CORAÇÃO
@@ -1825,7 +1825,7 @@ NEXT_CURSOR=CLASSIFY_90_ITEMS_AND_MEASURE_E_F_K_TREES_READ_ONLY
 
 ### V.1 — Source atual / reaproveitamento
 
-- Skill única `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` **v0.5.1 medida em `main`**: já define `desktop_preview action=read`, `drive_preview action=elements/scroll`, estado `IN_PROGRESS` vs `COMPLETE`, fingerprint de mensagens, captura incremental, rolagem somente para causalidade e `NEXT_CURSOR`.
+- Skill única `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md` **v0.5.1 medida em `main`**: já define `desktop_preview action=read`, `drive_preview action=elements/scroll`, estado `IN_PROGRESS` vs `COMPLETE`, fingerprint de mensagens, captura incremental, rolagem somente para causalidade e `NEXT_CURSOR`.
 - Já existe contrato `WAIT_FOR_COMPLETE_CHAT_GLOBAL_RESPONSE` e `RESPONSE_INCOMPLETE`; melhorar **a precisão da leitura**, não duplicar mecanismos.
 - A captura de tela enviada pelo CHEFE mostra círculo com **reticências**, mas sua função não foi medida no DOM. Não afirmar que é botão de rolar, stop, menu ou gerar; a seta descendente relatada pode ser controle de rolagem em determinados estados, **hipótese, não regra universal**.
 - A busca de commits Oracle do GitHub nesta rodada encontrou candidatos, mas **não houve comparação exaustiva dos patches nem replay no Hermes Desktop**; não declarar browser fix implantado. A interface/CLI do **Nous/Hermes oficial** deve ser comparada à versão realmente instalada e aos comandos de Preview expostos antes de supor captura nativa de transcript, tool de aba nova ou acesso a DOM.
