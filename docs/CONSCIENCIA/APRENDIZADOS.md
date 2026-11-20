@@ -3582,6 +3582,39 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Comprovante:** SHA inicial `6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6` (PR head original) → SHA final `696313206b76710447f119981d49791eb872f35f` (head atualizado). `node --test apps/modulos/mcp/tests/`: 334 testes, 328 pass, 6 fail — todos os 6 decorcem de `centraldark-capabilities.test.mjs` e são pré-existentes na `main` e no PR-head sem meus deltas (não regressão). Sentinel `system_sentinel.py --self-test`: `ok:true, failed:[]`. Runtime MCP PID 244642 inalterado (`/tools.json` 161 ferramentas, `hermes_delegar_tarefa` presente). Blocked: `CASA_BRIDGE_TOKEN` ausente do execute MCP — `centraldark_casa_list_processes` só executará com o token injetado; o gate de deploy não é o responsável por manter a conexão. PRs #1900 e #1880 convergentes sobre `mcp-diagnostics.js`: aguardar decisão do CHEFE/owner antes de qualquer merge.
 - **Mnemônico do CHEFE:** `TRANSPORTE ATIVO != EXECUÇÃO COMPROVADA != DEPLOY AUTORIZADO`.
 
+### L237 — Merge condicional com guardas fail-closed, aviso de profile e unicidade de escopo
+
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L237`; `PREV_GLOBAL_UID=L236`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=237`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** merge autorizado, gate fail-closed, classificação de aviso, integridade de auditoria
+- **Data:** 2026-11-20
+- **Intenção:** executar o merge condicionalmente autorizado do PR #2153 com todos os gates do contrato medidos, sem deploy e sem perder o estado operacional (MCP ativo, 32 alterações locais e demais PRs).
+- **Aprendizado:** `GATES_MUST_BE_MEASURED_NOT_ASSUMED`; `FAIL_CLOSED_BEFORE_MERGE`; `PROFILE_NOISE_IS_NOT_AUDIT_FAILURE`; `OVERLAP_DE_ARQUIVO_NAO_E_DUPLICATA_DE_ESCOPO`.
+  1. Guarda de merge deve ser código fail-closed: se qualquer asserção falhar, o merge não executa. Duas falsas negativas vieram do comparador de testes (o sufixo de tempo `338ms` vs `332ms` entrava no nome) — normalizar nomes antes de comparar conjuntos.
+  2. O aviso `bash: /data/cache/scratch/cargo/env: No such file or directory` é ruído de `/data/.profile` (linha 1): reproduz até em `echo trivial_ok`, desaparece com `--noprofile`, deixa o stderr do audit com 0 bytes e o JSON íntegro (38/38 linhas, campos completos). Ruído de profile não é falha de auditoria.
+  3. Branch remota de PR pode ser apagada pelo GitHub após o merge (`delete_branch_on_merge` do repo). A proveniência precisa viver em `refs/pull/<n>/head`, branch local e bundle de rollback — nunca só na branch remota.
+  4. Sobreposição de arquivo entre PRs abertos não é duplicata de escopo: o PR #1900 espera 18 rotas = 16 (base reconciliada por este merge) + 2 novas. `scope.unique` se prova por delta causal, não por lista de arquivos.
+  5. Quando o `gh` local não oferece flag de confirmação, a rota oficial não-interativa é `PUT /repos/<owner>/<repo>/pulls/<n>/merge` com `merge_method=squash`, que preserva a convenção linear do repositório.
+- **Regra operacional:** VERIFICAR → CLASSIFICAR → FAIL-CLOSED → MERGE → READBACK → PERSISTIR.
+- **Comprovante:** `main` `4d927c47ad6f4e83f387c04c7a236932c1a0b97d` → `e2fff550451901161eac77d69c57b0df20877aa3` (squash, `mergedAt 2026-11-20T15:03:11Z`, `mergedBy segredounlock`); 24 arquivos integrados com `git diff origin/main <pr_head>` vazio; T0 `333/323/10` → T1 `334/327/7` (zero regressão; canário de 16 rotas e dispatcher read-only resolvidos); sentinel `ok:true`; TLC23 PROVED; runtime MCP PID 244642 intacto em `catalogVersion 161-9629d1fb55a7` (sem deploy); 32 alterações locais preservadas; PRs #1900 e #1880 OPEN e preservados.
+- **Mnemônico do CHEFE:** `MERGED != DEPLOYED` · `RUÍDO DE PROFILE != FALHA DE AUDITORIA` · `OVERLAP DE ARQUIVO != DUPLICATA DE ESCOPO`.
+
+### L238 — Cristalização de receita: determinismo, idempotência, verificador negativo e documento × realidade
+
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L238`; `PREV_GLOBAL_UID=L237`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=238`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** cristalização de receita, idempotência, teste negativo, documento × realidade
+- **Data:** 2026-11-20
+- **Intenção:** cristalizar o ROV do PR #2154 como receita reproduzível, idempotente e verificável — sem dependência de IA nos procedimentos já aprendidos — antes de solicitar o merge.
+- **Aprendizado:** `RECIPE_MUST_BE_REPRODUCIBLE`; `IDEMPOTENCY_PROVES_NO_MUTATION`; `NEGATIVE_TESTS_PROVE_THE_GATE`; `DOCUMENT_VS_REALITY_ARE_TWO_GATES`.
+  1. Contagem de falha de teste só fecha quando se parseia o detalhe (`test at <arquivo>:<linha>`) e se confere a soma com o `ℹ fail` do runner: T0=10 e T1=7 se decompõem em 1+2 resolvidos pelo PR e 7 pré-existentes mantidos. A classificação nominal revelou que o `dispatcher read-only` falhava por **assert** (esperava `/# fail 0/`, node 22 imprime `ℹ fail 0`) e não por defeito de produto — o subprocesso já reportava 9/9/0.
+  2. Determinismo: duas execuções com o mesmo estado de entrada geram JSON idêntico **exceto** o campo variável `audit_timestamp`. A prova exige nomear o campo variável explicitamente; sem isso, "diferente" vira falso positivo.
+  3. Idempotência: snapshot antes/depois (hashes de arquivos, refs, worktrees, backups, runtime, dirty, PRs). O único delta observado foi o campo `time` do próprio `/health` — o audit não muta, não duplica e não altera nada.
+  4. Verificador sem caso negativo não prova nada: 14 negativos (campo ausente, SHA inválido, PASS indevido com persistência `PENDING`, com `unknown` material, com gate bloqueado, sem rollback/cursor, verdict inválido, `merge_commit` inconsistente, referência de contrato divergente, `contract_version` divergente, schema fora do namespace, contrato ausente, recibo não-mapeamento).
+  5. Documento e realidade são dois gates: a matriz dos campos obrigatórios contra a realidade achou `readiness_counts` desatualizado e provou que, na REST API, PR mergeado devolve `state=closed` + `merged_at`/`merge_commit_sha` (o "MERGED" é projeção do `gh`).
+  6. Nomes de problema devem ser **códigos estáveis**; valores variáveis vão para `details` — assim o gate é automatizável sem parsing frágil.
+- **Regra operacional:** VERIFICAR → CLASSIFICAR → TESTAR (positivo e negativo) → EXECUTAR 2× → COMPARAR → SNAPSHOT → DECLARAR.
+- **Comprovante:** `python3 scripts/trigger-fabric/test_pr_rov_receipt_verifier.py` → 17/17 OK (3 positivos + 14 negativos), 9 checks emitidos; verificador no recibo real → `valid: true`, 9/9 PASS; matriz contrato × realidade → 18/18 PASS; dupla auditoria → JSON idêntico exceto `audit_timestamp` (stderr 0 bytes, exit 0); idempotência → hashes/refs/backups/worktree/runtime/dirty/PRs sem alteração; sentinel `ok:true`; TLC23 PROVED; runtime MCP PID 244642 intacto (`catalogVersion 161-9629d1fb55a7`); 32 alterações locais preservadas; PRs #1900/#1880 preservados.
+- **Mnemônico do CHEFE:** `MESMO DADO, MESMO RESULTADO` · `NEGATIVO PROVA O PORTÃO` · `DOCUMENTO NÃO É REALIDADE`.
+
 <!-- CENTRALDARK_ENSINAMENTO_KAIZEN_CHEFE_RESULTADOS_20261120 -->
 ## 📖 Evangelho da CentralDark — Livro do Kaizen, capítulo 1 (2026-11-20)
 
