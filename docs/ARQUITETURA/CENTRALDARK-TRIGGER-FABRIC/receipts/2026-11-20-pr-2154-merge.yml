@@ -9,10 +9,10 @@ local_head_sha: e40eeb43aa7b1a378d42c42611415031e88940fe
 worktree_state: "DIRTY_PRESERVED (32 entradas no checkout operacional e 32 em /data/CentralDark); worktree de trabalho sem alteracao rastreada; stash pre-existente preservado"
 sentinel_result: "PASS ok:true failed:[] (22 checks, re-execucao pos-cristalizacao)"
 tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
-open_pr_total: 37
-readiness_counts: "{UNKNOWN: 33, DRAFT: 2, NEEDS_RECONCILIATION: 2}"
-readiness_measured_at: "2026-11-20T16:10:20Z"
-readiness_source: "pr_rov_audit.py --contract (comando canonico do contrato) - medido na main d014cd6c, antes da abertura do PR documental"
+open_pr_total: 38
+readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 26, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+readiness_measured_at: "2026-11-20T16:20:15Z"
+readiness_source: "pr_rov_audit.py --contract (comando canonico do contrato) - medido na main d014cd6c com o PR documental #2155 aberto (38 PRs abertos; PR #2155 READY_TECHNICAL_WITHOUT_REVIEW_PROOF)"
 selected_pr: 2154
 decision:
   action: MERGE_EXECUTED
