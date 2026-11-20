@@ -6,7 +6,7 @@ Corpo visual final da CentralDark. Este repositório reúne a landing trilíngue
 
 - Código visual canônico: `ServerVpss/CentralDark/apps/instinto-superior`.
 - Contratos, runtime, governança e código visual convergem no mesmo repositório: `ServerVpss/CentralDark`.
-- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem owner paralelo.
+- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem responsável paralelo.
 - URL conhecida: <https://centraldark-instinto-superior.lovable.app>.
 
 Uma URL conhecida ou uma sincronização declarada não prova que o HEAD está publicado. O cockpit só promove deploy quando consegue medir e comparar os SHAs; ausência de fonte aparece como `UNKNOWN`.
