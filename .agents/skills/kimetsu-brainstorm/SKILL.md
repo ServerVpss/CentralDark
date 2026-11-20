@@ -556,7 +556,7 @@ CLASSIFICAÇÃO define se é spike, bounded ou architectural — e qual gate apl
 
 ### Fonte e status das 17 respirações
 
-Catálogo: `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md`.
+Catálogo: `docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md`.
 É **registro histórico de uma missão Dependabot**, não homologação universal. A rodada considera todas as 17 posições, mas aplica somente as relevantes: 1 Ucchuha (percepção), 2 Hinoko (causa), 3 Mafu (precisão), 4 Susamaru (monitoramento), 5 Kyojuro (síntese), 6 Gyomei (verificação), 7 Sangue, 8 Inferno, 9 Sol, 10 Linha, 11 Eclipse, 12 Amanhecer, 13 Flor, 14 Serpente, 15 Gato, 16 PekOpenedki, 17 Suprema. Formas 7–17 são **candidatas históricas**, não capacidades automaticamente comprovadas. Os estilos operacionais existentes **ÁGUA, TROVÃO, FERA, INSETO, CHAMAS** permanecem válidos.
 
 ### Técnica computacional selecionada pelo motivo, não pelo enfeite

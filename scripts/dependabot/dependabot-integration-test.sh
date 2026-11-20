@@ -169,7 +169,7 @@ fi
 # Teste 5: Verificar se documentação foi criada
 echo ""
 echo "🧪 Teste 5: Documentação de cristalização existe"
-if [ -f docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-cristalization.md ]; then
+if [ -f docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-cristalization.md ]; then
     echo "  ✅ Cristalização existe"
 else
     echo "  ❌ Cristalização não existe"
@@ -199,7 +199,7 @@ fi
 # Teste 8: Verificar se sumário executivo existe
 echo ""
 echo "🧪 Teste 8: Sumário executivo existe"
-if [ -f docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-resumo-executivo.md ]; then
+if [ -f docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-resumo-executivo.md ]; then
     echo "  ✅ Sumário existe"
 else
     echo "  ❌ Sumário não existe"

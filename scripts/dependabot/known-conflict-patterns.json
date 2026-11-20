@@ -81,7 +81,7 @@
       "PATH_PATTERN": "**/pnpm-lock.yaml",
       "OWNER": "scripts/dependabot/resolve-conflicts.sh",
       "CONFLICT_CLASS": "DEPENDENCY_LOCKFILE_BUMP",
-      "SOURCE_REF": "docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/OURO-CHEFE.md",
+      "SOURCE_REF": "docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/OURO-CHEFE.md",
       "KNOWN_CAUSE": "Single lockfile conflict chain when several Dependabot PRs touch the same lockfile.",
       "SAFE_RESOLUTION": "USE_PR_SIDE",
       "PRESERVE_RULE": "Keep PR-side bump, then rely on package-manager validation.",

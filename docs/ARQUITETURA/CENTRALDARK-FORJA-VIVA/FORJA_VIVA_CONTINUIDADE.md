@@ -35,7 +35,7 @@ O GraphPanel vivo ainda não carrega globalmente o sistema de peles. As superfí
 ## Arquivos deste delta
 
 - `docs/ARQUITETURA/CENTRALDARK-FORJA-VIVA/FORJA_VIVA_CONTINUIDADE_MERMAID.mmd`
-- `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/FORJA-VIVA/forja-viva-continuidade-4k.svg`
+- `docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/FORJA-VIVA/forja-viva-continuidade-4k.svg`
 - `docs/RECEIPTS/FORJA_VIVA_CONTINUIDADE_2026-09-15.md`
 
 ## Regra

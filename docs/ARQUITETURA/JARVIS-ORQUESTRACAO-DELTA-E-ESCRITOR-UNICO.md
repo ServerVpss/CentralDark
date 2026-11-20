@@ -181,7 +181,7 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 **Handoff obrigatório entre abas/contas:** transportar o envelope mínimo acima e evidência verificável (caminho, SHA, horário, resultado, código de saída). Se não houver canal automático entre contas, recuperar pelo repositório e pelo recibo existente; não declarar que duas conversas compartilham sessão. Mudou HEAD? Reconciliar antes de escrever; outra caneta ativa no mesmo owner? Somente leitura. Ausência de prova significa UNKNOWN, nunca PASS. Novo erro: agrupar por causa raiz, não repetir 250 correções independentes. Bloqueio de uma rota não invalida canais saudáveis.
 
-**Caminho das artes:** toda arte nova segue o owner `docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`: arquivo → fonte/hash → candidato → manifesto/validador → promoção → espelho Casa com readback. Arte no chat ou Library não prova arte no Git. **Não criar outra biblioteca.**
+**Caminho das artes:** toda arte nova segue o owner `docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/README.md`: arquivo → fonte/hash → candidato → manifesto/validador → promoção → espelho Casa com readback. Arte no chat ou Library não prova arte no Git. **Não criar outra biblioteca.**
 
 **Papel das janelas:** Instinto Superior = cockpit e observabilidade; Core/VS Code = bancada; Sandbox = experimento isolado; Artefatos = pacotes derivados; Docs = memória canônica; CentralDark-OS = runtime do produto, local e/ou remoto; Casa/VPS = hosts e logs físicos. Janela não vira owner; Codex opera no papel autorizado de Hermes, sem criar coordenador concorrente.
 
@@ -191,7 +191,7 @@ CHEFE (INTENT_ID / GOAL / AUTORIZAÇÃO)
 
 <!-- #OBSERVACOES#
 @owner: docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md
-@doc_ref: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md; docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md
+@doc_ref: docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md; docs/BRAIN/06-APRENDIZADOS-MEMORIAS/README.md
 @last_updated: 2026-10-27T12:16:16.618Z
 @escopo: vínculo lógico local-first, nomenclatura humana, reconciliação offline/online
 @implementado: contrato documental e ligações aos owners existentes
@@ -230,7 +230,7 @@ CASA OFFLINE: VPS EXECUTA APENAS CAPACIDADES AUTONOMAS JA COMPROVADAS;
 
 **Janela móvel/backcheck:** `EDITA → AVANCA → VOLTA ALGUMAS CASAS → CONFERE → (FALHA? MENOR CAUSA → COSTURA → RETESTA → BACKCHECK) → CONTINUA`. Não reiniciar missão entre modelos/janelas. Retestar só o cone causal afetado; não refazer verde com mesmo fingerprint sem evento material novo. Em conflito preservar ambos, um escritor por owner, sem `reset --hard`, `clean`, `force push` ou migração destrutiva.
 
-**Biblioteca:** `docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md` e `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md` registram conhecimento e PDFs no vault Obsidian/BRAIN, versionados por Git quando permitido. Enlaçar no mesmo grafo: [aprendizado](../BRAIN/07-APRENDIZADOS-MEMORIAS/README.md) · [acervo](../BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md) · [OS/kernel](CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md). Identidade, autoridade, documentação versionada, efeito no runtime e prova são camadas distintas.
+**Biblioteca:** `docs/BRAIN/06-APRENDIZADOS-MEMORIAS/README.md` e `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md` registram conhecimento e PDFs no vault Obsidian/BRAIN, versionados por Git quando permitido. Enlaçar no mesmo grafo: [aprendizado](../BRAIN/06-APRENDIZADOS-MEMORIAS/README.md) · [acervo](../BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/README.md) · [OS/kernel](CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md) · [Loop Mestre](../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md). Identidade, autoridade, documentação versionada, efeito no runtime e prova são camadas distintas.
 
 **Status desta seção:** `CONTRACT_UPDATED=YES`; `VPS_OFFLINE_FAILOVER_E2E=UNKNOWN`; `AUTO_CATCHUP_E2E=UNKNOWN`; `KERNEL_NATIVE_BOOT=UNKNOWN_NOT_PROVED`. Nenhuma dessas capacidades passa a existir por texto de prompt.
 

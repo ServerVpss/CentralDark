@@ -85,7 +85,7 @@ O conteúdo existente em `docs/BRAIN` não é descartado. Na primeira inicializa
 
 ## Cartazes, anexos canônicos e projeções
 
-`docs/BRAIN/08-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/` pertence à camada
+`docs/BRAIN/07-ARTEFATOS-VISUAIS/CARTAZES-CANONICOS/` pertence à camada
 canônica e, portanto, entra em `CASA-VAULT/00-CANONICO` pelo mesmo contrato de
 sync. O manifesto preserva o hash do PNG entregue e o hash da cópia WebP leve
 guardada no Git. Grafo, GraphRAG e memória vetorial podem indexar esses itens,
@@ -215,7 +215,7 @@ Quando o PR apontado pelo HUD fechar, for concluído ou esgotar comentários, ca
 ### 2026-10-15 — iPhone SEGREDO / Tailscale / Cockpit (T1 do aparelho)
 
 - **Selo delimitado:** iPhone `Connected` à Casa por Tailscale e Safari exibindo a página CentralDark Instinto Superior; `C01–C05 = 5/5` dentro do escopo de abertura móvel.
-- **Receipt canônico:** [Circuito iPhone → Tailscale → Casa → Cockpit](../BRAIN/07-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md).
+- **Receipt canônico:** [Circuito iPhone → Tailscale → Casa → Cockpit](../BRAIN/06-APRENDIZADOS-MEMORIAS/2026-10-15-CIRCUITO-IPHONE-TAILSCALE-CASA-COCKPIT.md).
 - **Não provado:** role Admin/logon no Safari, sync de vault iOS, persistência após reboot. Nunca inferir autorização pelo IP.
 - **Owners preservados:** Vite `apps/instinto-superior/vite.config.ts`, Tailscale Serve da Casa; Vault visualizador fica loopback 5174, sem exposição do BRAIN.
 <!-- /CENTRALDARK_IPHONE_TAILSCALE_MOBILE_T1_20261015 -->

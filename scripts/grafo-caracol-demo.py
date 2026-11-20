@@ -170,7 +170,7 @@ def main():
 
     svg = "\n".join(svg_parts)
 
-    out_path = "docs/BRAIN/08-ARTEFATOS-VISUAIS/mapa-cerebro-caracol.svg"
+    out_path = "docs/BRAIN/07-ARTEFATOS-VISUAIS/mapa-cerebro-caracol.svg"
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(svg)
 

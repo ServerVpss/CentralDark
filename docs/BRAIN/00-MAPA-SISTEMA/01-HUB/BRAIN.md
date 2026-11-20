@@ -2,7 +2,7 @@
 title: "BRAIN — CentralDark"
 status: DERIVED_VIEW
 date: 2026-06-29
-updated: 2026-08-26T08:38:00-03:00
+updated: 2026-11-18T12:25:21.798Z
 tags: [brain, centraldark, navegacao, obsidian, mapa]
 category: "M-Mapa-Sistema"
 sensitivity: INTERNAL
@@ -99,9 +99,9 @@ PERMISSAO_HISTORICA != PERMISSAO_ATUAL
 | `02-ENTRADA` | matéria bruta/candidata |
 | `03-DOCUMENTACAO` | documentação e biblioteca |
 | `04-DECISOES` | decisões e proveniência |
-| `06-REUNIOES-NOTAS` | notas humanas |
-| `07-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
-| `08-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
+| `05-REUNIOES-NOTAS` | notas humanas |
+| `06-APRENDIZADOS-MEMORIAS` | derivados de aprendizado/memória |
+| `07-ARTEFATOS-VISUAIS` | cartazes/grafo visual |
 
 ## Grafo Vivo dentro do BRAIN
 
@@ -111,13 +111,12 @@ O Grafo Vivo do BRAIN é **projeção derivada** do source vivo, nunca um segund
 SOURCE=apps/modulos/status/graph-data.json
 WRITER=scripts/grafo-vivo/obsidian-nota.mjs
 PRIMARY=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
-LEGACY_COMPAT=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
 FRESHNESS_KEY=GRAPH_FINGERPRINT
 STALE_BRAIN_GRAPH != CURRENT
 GRAPH != AUTHORITY
 ```
 
-O caminho com espaços é mantido somente como espelho de compatibilidade. Os dois arquivos devem carregar o mesmo `GRAPH_FINGERPRINT`; divergência manda regenerar pelo writer existente, não inventar outro grafo.
+A projeção do Grafo Vivo é escrita somente no caminho oficial. Se o fingerprint divergir da origem observada, o writer existente regenera a nota, sem criar pasta paralela.
 
 ## Propriedades
 
@@ -159,3 +158,13 @@ O histórico Git preserva versões antigas desta superfície sem permitir que el
 
 
 > **Binding vigente (2026-10-04):** `PIVETE` não é papel técnico. `SOL=coordenação cognitiva oficial`; `HERMES=execução/preservação/continuidade`. Ocorrência operacional antiga deve ser normalizada automaticamente; texto histórico permanece como proveniência.
+
+<!-- #OBSERVACOES# | BRAIN.MAPA.CANONICO
+@owner: docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md
+@last_updated: 2026-11-18T12:25:21.798Z
+@code_ref: CENTRALDARK_AI_BOOT.yaml
+@code_ref: scripts/grafo-vivo/obsidian-nota.mjs
+@code_ref: apps/bot-telegram/skills/externas/obsidian-writer.cjs
+@code_ref: apps/bot-telegram/skills/externas/obsidian-writer.test.cjs
+Decisão: a pasta com espaços foi eliminada porque seu único grafo era cópia Git idêntica. Writer e índice apontam somente à pasta 00-MAPA-SISTEMA. Histórico original preservado no Git.
+-->

@@ -110,7 +110,7 @@ Com o plugin **Iconize** instalado:
 3. Escolhe o ícone (tem centenas)
 
 Sugestões:
-- `00 - Mapa do Sistema` → 🗺️ map
+- `00-MAPA-SISTEMA` → 🗺️ map
 - `01 - Pendências` → 📋 clipboard
 - `02 - Arquitetura` → 🏗️ building
 - `05 - Documentação` → 📚 books
@@ -166,7 +166,7 @@ Quanto mais você usa, mais a IA entende seu jeito. Algumas coisas que ajudam:
 | Como o sistema funciona | `02 - Arquitetura` |
 | Decisões tomadas | `06 - Decisões` |
 | Coisas que aprendeu | `05 - Documentação` |
-| Mapa geral | `00 - Mapa do Sistema` |
+| Mapa geral | `00-MAPA-SISTEMA` |
 
 ---
 

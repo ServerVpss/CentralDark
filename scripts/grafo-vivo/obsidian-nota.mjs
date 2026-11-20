@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 /**
+ * #OBSERVACOES# | BRAIN.GRAFO.UNICO
+ * @owner: scripts/grafo-vivo/obsidian-nota.mjs
+ * @doc_ref: docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md
+ * @last_updated: 2026-11-18T12:25:21.798Z
  * Nota viva do Grafo no Obsidian — lê graph-data.json e escreve uma nota Markdown
  * que renderiza no Obsidian (Mermaid nativo): topologia focada + saúde + auditoria.
  *
@@ -21,8 +25,8 @@ const ROOT = process.env.CENTRALDARK_ROOT || '/root/CentralDark';
 const GRAPH_RELATIVE = 'apps/modulos/status/graph-data.json';
 const GRAPH = `${ROOT}/${GRAPH_RELATIVE}`;
 const PRIMARY_NOTE = `${ROOT}/docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md`;
-const LEGACY_NOTE = `${ROOT}/docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md`;
-const NOTE_TARGETS = [PRIMARY_NOTE, LEGACY_NOTE];
+
+const NOTE_TARGETS = [PRIMARY_NOTE];
 
 function edgeText(edge) {
   const label = edge.label ? ` (${edge.label})` : '';
@@ -99,7 +103,7 @@ owner: "scripts/grafo-vivo/obsidian-nota.mjs"
 writer: "CentralDark-GrafoVivo/cron-grafo-unificado"
 authority: false
 primary_projection: "docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md"
-legacy_compat_mirror: "docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md"
+
 ---
 
 # 🕸️ Grafo Vivo — Visão em Tempo Real
@@ -146,7 +150,7 @@ ${fluxos}
 \`\`\`text
 PROJECTION_SOURCE=${GRAPH_RELATIVE}
 PRIMARY_PROJECTION=docs/BRAIN/00-MAPA-SISTEMA/02-GRAFOS/GRAFO-VIVO.md
-LEGACY_COMPAT_MIRROR=docs/BRAIN/00 - Mapa do Sistema/GRAFO-VIVO.md
+
 FRESHNESS_KEY=GRAPH_FINGERPRINT
 GRAPH_FINGERPRINT=${projection.fingerprint}
 MERMAID_KIND=flowchart

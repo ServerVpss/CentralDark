@@ -164,7 +164,7 @@ Assim as “linhas da viola” ligam os territórios sem misturá-los: a informa
 | Conselho das Inteligências | [[CONSELHO-INTELIGENCIAS-CENTRALDARK]] | Grupo da Evolução, MTProto, Bot API, MCP, Biblioteca, HERMES |
 | GitHub e promoção | [[MOC-GitHub]] | decisões e documentação relacionadas |
 | ferramentas/MCP | [[MOC-MCP]] | [[02-ARQUITETURA]], [[MOC-Skills]] |
-| memória e aprendizado | [[BRAIN]] | `07-APRENDIZADOS-MEMORIAS` |
+| memória e aprendizado | [[BRAIN]] | `06-APRENDIZADOS-MEMORIAS` |
 | fontes, livros e referências | [[BIBLIOTECA]] | [[SEMANTIC-LINKER]], Knowledge Compiler, aprendizados/memórias |
 | Obsidian físico da Casa | [[OBSIDIAN-CASA-SINCRONIZACAO]] | [[TUTORIAL-OBSIDIAN]] |
 | documentação visual | [[DIAGRAMAS-CENTRALDARK]] | [[GRAFO-VIVO]] |

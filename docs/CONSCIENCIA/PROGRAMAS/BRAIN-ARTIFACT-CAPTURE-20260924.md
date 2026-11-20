@@ -13,7 +13,7 @@ owners:
   - "apps/bot-telegram/unified-bot.cjs"
   - "apps/modulos/hub"
   - "apps/modulos/obsidian-plugin-grafo-vivo"
-  - "docs/BRAIN/08-ARTEFATOS-VISUAIS"
+  - "docs/BRAIN/07-ARTEFATOS-VISUAIS"
   - "docs/BRAIN/09-ARTEFATOS"
 ---
 

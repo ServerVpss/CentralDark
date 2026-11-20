@@ -175,7 +175,7 @@ Não repetir perguntas respondidas pelo contexto. Não trocar a missão sem muda
 - 📂 [Pasta BRAIN completa](https://github.com/ServerVpss/CentralDark/tree/main/docs/BRAIN)
 - 🗺️ [00-MAPA.md — Mapa navegável](https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/00-MAPA-SISTEMA/01-HUB/00-MAPA.md)
 - 📚 [INDEX.md — Índice de notas](https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/00-MAPA-SISTEMA/01-HUB/INDEX.md)
-- 💗 [07 — Aprendizados e Memórias](https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md)
+- 💗 [07 — Aprendizados e Memórias](https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/06-APRENDIZADOS-MEMORIAS/README.md)
 - 🧬 [MAPA-DO-CEREBRO.md — Mapa operacional canônico](https://github.com/ServerVpss/CentralDark/blob/main/docs/CONSCIENCIA/MAPA-DO-CEREBRO.md)
 
 **Regra:** o BRAIN é navegação humana, memória organizada e projeção para Obsidian. Não substitui os responsáveis canônicos, o estado vivo nem as provas.
@@ -219,7 +219,7 @@ ServerVpss/CentralDark/
         │       ├── BRAIN.md
         │       ├── 00-MAPA.md
         │       └── INDEX.md
-        └── 07-APRENDIZADOS-MEMORIAS/
+        └── 06-APRENDIZADOS-MEMORIAS/
             └── README.md
 ```
 

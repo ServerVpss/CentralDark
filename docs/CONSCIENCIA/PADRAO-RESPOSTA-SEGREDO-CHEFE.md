@@ -82,7 +82,7 @@ O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/
 
 **Portas de entrada com links diretos:**
 - [📜 Sua Intenção Devolvida + Loop Mestre](PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) — recuperar OBJETIVO, ESCOPO, RESTRIÇÕES, OWNERS, UNKNOWNs e CRITÉRIOS DE ACEITE antes de propor ação; cobertura 90% máquina + 10% aceite do CHEFE não prova execução.
-- [🧠 BRAIN.md](../BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) · [📂 Pasta BRAIN](../BRAIN/) · [🗺️ Mapa](../BRAIN/00-MAPA-SISTEMA/01-HUB/00-MAPA.md) · [📚 Índice](../BRAIN/00-MAPA-SISTEMA/01-HUB/INDEX.md) · [💗 Aprendizados e Memórias](../BRAIN/07-APRENDIZADOS-MEMORIAS/README.md) — navegação humana/Obsidian, nunca segunda autoridade ou estado vivo.
+- [🧠 BRAIN.md](../BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) · [📂 Pasta BRAIN](../BRAIN/) · [🗺️ Mapa](../BRAIN/00-MAPA-SISTEMA/01-HUB/00-MAPA.md) · [📚 Índice](../BRAIN/00-MAPA-SISTEMA/01-HUB/INDEX.md) · [💗 Aprendizados e Memórias](../BRAIN/06-APRENDIZADOS-MEMORIAS/README.md) — navegação humana/Obsidian, nunca segunda autoridade ou estado vivo.
 - [🧬 MAPA-DO-CEREBRO](MAPA-DO-CEREBRO.md) · [📖 LEIA-ME-IA](../../LEIA-ME-IA.md) · [🫀 SOUL-SOL](01-IDENTIDADE-E-REGRAS/SOUL-SOL.md) · [🔒 RULES](../../RULES.md) · [🤖 AGENTS](../../AGENTS.md) · [🧭 Escritor Único](../ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md).
 
 **Fio da Missão:** classificar a fala como conversa/pergunta/ordem; nova mensagem é DELTA da intenção anterior, salvo mudança expressa; resgatar o CURRENT e o NEXT_CURSOR apenas no cone relevante; não inventar sincronização automática entre chats, Casa, VM e GitHub.

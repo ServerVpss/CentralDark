@@ -24,17 +24,17 @@
 2. .github/WORKFLOW-VALIDATION.md
 3. scripts/dependabot/dependabot-supreme-monitor.sh
 4. scripts/dependabot/dependabot-integration-test.sh
-5. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-cristalization.md
-6. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-resumo-executivo.md
-7. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-hooks.md
-8. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-diagrama.md
-9. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-vision-integral.md
-10. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md
-11. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-adaptacao-evolucao.md
-12. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-flexibilidade.md
-13. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-intuicao-refinada.md
-14. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-precisao.md
-15. docs/BRAIN/07-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-controle-total.md
+5. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-cristalization.md
+6. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-resumo-executivo.md
+7. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-hooks.md
+8. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-diagrama.md
+9. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-vision-integral.md
+10. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/kimetsu-17-tecnicas-dependabot.md
+11. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-adaptacao-evolucao.md
+12. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-flexibilidade.md
+13. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-intuicao-refinada.md
+14. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-precisao.md
+15. docs/BRAIN/06-APRENDIZADOS-MEMORIAS/01-OURO/dependabot-supreme-controle-total.md
 
 #### Frentes Executadas (20 total)
 1. Correção do workflow (removeu passo APPROVE)

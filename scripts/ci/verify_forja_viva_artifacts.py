@@ -5,7 +5,7 @@ from collections import defaultdict, deque
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
-ART=ROOT/'docs'/'BRAIN'/'08-ARTEFATOS-VISUAIS'/'CARTAZES-CANONICOS'/'FORJA-VIVA'
+ART=ROOT/'docs'/'BRAIN'/'07-ARTEFATOS-VISUAIS'/'CARTAZES-CANONICOS'/'FORJA-VIVA'
 DASH=ART/'forja-viva-dashboard-melhorado-4k.svg'
 CAR=ART/'mapa-cerebro-caracol-melhorado-4k.svg'
 NS='{http://www.w3.org/2000/svg}'
