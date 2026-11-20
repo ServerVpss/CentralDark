@@ -1590,3 +1590,14 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Memória:** Sempre comparar V, F e main antes de mover qualquer coisa. Preservar o owner mais atual e tudo que já funciona; aplicar somente a linha/hunk/semântica ausente que sobrevive à prova. Não duplicar conteúdo nem sincronizar pasta inteira por reflexo.
 - **Mnemônico:** `examinai tudo, retém o bem`.
 <!-- /CENTRALDARK_AUREULA_SELECTIVE_SYNC_V_F_MAIN_20261114 -->
+
+<!-- CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+### [2026-11-17] Chave do CHEFE — workflow travado não sequestra o trabalho
+- **Tags:** workflow, startup-failure, autonomia, hermes, github, pr, squash, main, contraprova, regras, kaizen
+- **Relevância:** alta
+- **Eixo:** presente; memória operacional resumida, não nova lei paralela
+- **Promovida:** sim — regra em `RULES.md`, aprendizado adicional em `APRENDIZADOS.md` #104
+- **Memória:** O CHEFE ensinou que `startup_failure` não pode segurar a CentralDark esperando um job que não inicia. SOL organiza; Hermes/capacidades autorizadas testam localmente; Reality Judge contraprova. Com autorização expressa e PR existente elegível, promover por **squash na main usando a API normal do GitHub**, sem force nem driblar proteção; direct-main autorizado não tem squash. Se um check é obrigatório por proteção real, não se finge verde: a promoção fica bloqueada até resolver legitimamente. Preservar a evidência do workflow falho e ler de volta o SHA publicado.
+- **Prova concreta:** PR #2125, `main@a4440c675d2b4dfabf4b4e1c3b073d5b90b5255a`, 55/55 blobs verificados. `CI_GREEN=NO`; `SOURCE_IN_MAIN=PASS`; programa remoto ainda com entregas pendentes. https://github.com/ServerVpss/CentralDark/pull/2125#issuecomment-6959176393
+- **Ponte canônica:** `RULES.md#chave-do-chefe-workflow-travado-nao-paralisa-entrega-autorizada-17112026` + `docs/CONSCIENCIA/APRENDIZADOS.md` (aprendizado #104). Não carregar histórico inteiro para aplicar a regra.
+<!-- /CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->

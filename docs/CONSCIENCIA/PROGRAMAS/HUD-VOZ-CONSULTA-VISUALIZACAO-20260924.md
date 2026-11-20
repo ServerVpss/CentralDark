@@ -14,7 +14,7 @@ UNKNOWN != PASS
 
 CHEFE fala → CentralDark consulta/executa pelos owners existentes → CHEFE ouve e visualiza o resultado.
 
-## Owners reconciliados no main
+## 👀 Responsáveis reconciliados na main
 
 - coração/saúde: `GET https://api.centralldark.com/heartbeat` em `apps/modulos/mcp/src/index.js`
 - roteamento: `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`
@@ -67,7 +67,7 @@ NO_NEW_SENTINEL_CORE=true
 NO_SECOND_HEARTBEAT=true
 NO_SECOND_ROUTER=true
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 1. validar build/lint do cockpit no mesmo HEAD
 2. observar CI do filho
@@ -192,6 +192,27 @@ MPRVA = getMe -> setMyShortDescription -> setMyDescription -> getMyDescription
 ```
 
 O teste impede regressão para `TOK_GUARDA`/owner antigo.
+
+@code_ref: scripts/set-bot-profile.sh
+@code_ref: scripts/set-bot-profile.test.mjs
+@last_updated: 2026-11-04T03:16:40.969Z
+
+<!-- GUARDIAO_SOURCE_RECONCILIATION_20261104 -->
+#### 🍒 SOURCE-ONLY — reconciliação do perfil oficial
+
+O arquivo enviado anteriormente e a `main` foram confrontados; a versão reconciliada fica no mesmo owner `scripts/set-bot-profile.sh`. **Guarda Principal = `GUARDA_PRINCIPAL_BOT_TOKEN`**; `GUARDA_TELEGRAM_BOT_TOKEN` pertence à cadeia de notificação legada, com owner em `scripts/guarda/`, e não deve substituir a chave do Guardião Casa.
+
+Contrato preservado: `set -euo pipefail`; `ONLY_GUARDIAO=1` não toca `srver1bot`; `--dry` não faz mutações; erro de `curl`/token ausente é contido por bot, registrado como falha ou `SKIP`. O heredoc de descrição agora usa atribuição via `cat` no lugar de `read -d '' || true`, evitando saída prematura sob `-e`.
+
+`read_key` percorre os cofres existentes até encontrar valor não vazio, sem imprimir tokens; `json_field` decodifica respostas JSON (jq local, Python como fallback); `post_ok` trata falha de transporte. O contracheque relê **short_description e description** e compara os valores exatos; `ok=true` isolado não comprova coincidência.
+
+**Provas em sandbox sem tokens reais:** `bash -n` PASS; 6/6 testes Node incluindo os três anteriores PASS; 6/6 casos Bash com `curl` simulado PASS (ambos os bots, isolamento, dry, cofre alternativo, resposta divergente e transporte falho). **São provas locais**, não execução da API real nem CI no HEAD remoto.
+
+**Domínio:** o script usa `mcp.centralldark.com` e `status.centralldark.com` (dois Ls). Nos três arquivos históricos consultados, as correspondências eram `centraldark.compiled-plan.v2` (schema); preservados sem substituição de texto. Dois arquivos de lembranças homônimos não têm SHA idêntico nesta consulta — não descartar nem classificar como duplicação byte-a-byte sem auditoria.
+
+`NEXT_CURSOR=REVIEW_CI_SAME_HEAD_AND_KEEP_HISTORICAL_REFS`. Sem alteração de segredos, sem runtime/VPS/deploy e sem exclusão de branches.
+<!-- /GUARDIAO_SOURCE_RECONCILIATION_20261104 -->
+
 
 ### Frente 4 — Shell / operador / contexto de auth
 

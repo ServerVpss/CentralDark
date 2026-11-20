@@ -1,3 +1,7 @@
+//! !RASTRO: observa somente eventos de ciclo de vida necessarios ao Halo.
+//! POR_QUE: evitar capturar conteudo de prompts ou historico de conversas.
+//! INVARIANTES: descartar duplicados e arquivos antigos; reiniciar watcher
+//! supervisionado sem criar outro processo executando operacoes remotas.
 use crate::state::{unix_time_ms, HaloEvent, HaloState, StateFile};
 use notify::{Config, RecommendedWatcher, RecursiveMode, Watcher};
 use std::sync::mpsc;
@@ -69,6 +73,8 @@ impl ActiveTurns {
     }
 }
 
+/// !RASTRO: extrair apenas identificador e transicao de atividade.
+/// POR_QUE: nao analisar nem guardar payloads de mensagens de usuario.
 fn activity_from_line(line: &str) -> Option<CodexActivityRecord> {
     // Match only the top-level event record shape. User text is JSON-escaped in
     // session records, so this avoids parsing, retaining, or logging payloads.
@@ -86,6 +92,8 @@ fn activity_from_line(line: &str) -> Option<CodexActivityRecord> {
     })
 }
 
+/// !RASTRO: validar registro de estado antes de renderizar Halo.
+/// INVARIANTE: evento velho, futuro ou malformado nao vira PASS visual.
 pub fn read_current_state(path: &Path) -> Result<HaloEvent, String> {
     let contents = std::fs::read_to_string(path).map_err(|error| error.to_string())?;
     let state_file: StateFile =
@@ -164,6 +172,8 @@ where
     }
 }
 
+/// !RASTRO: supervisionar watcher do estado Halo sem perder o loop em falhas.
+/// EFEITO: thread local observa state.json, sem alterar nem enviar seu conteudo.
 pub fn spawn<F>(state_file: PathBuf, on_state: F)
 where
     F: Fn(HaloEvent) + Send + Sync + 'static,
@@ -376,6 +386,8 @@ where
     }
 }
 
+/// !RASTRO: supervisionar apenas transicoes de atividade dos turnos.
+/// POR_QUE: o overlay acompanha execucao sem expor conversas nem criar executor.
 pub fn spawn_codex_activity<F>(sessions_dir: PathBuf, on_activity: F)
 where
     F: Fn(CodexActivity) + Send + Sync + 'static,

@@ -4,6 +4,11 @@ PORTA_CANONICA_IA=LEIA-ME-IA.md
 NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Para o leitor: a Gramática SOL e o mapa dos emojis dão títulos compreensíveis, como 👉 O QUE FAZER AGORA. Logs e APIs mantêm NEXT_CURSOR literal; publicação não comprova consumo do runtime. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 
 
 
@@ -61,7 +66,7 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 
 # 🪬 CentralDark — Instinto Superior
 
-**Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, AionUi, Rakazo, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
+**Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, CentralDarkBot, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
 
@@ -159,8 +164,7 @@ openKylin / VPS — mesmas receitas, readback no destino
      ▼
 🪬 INSTINTO SUPERIOR — Admin CentralDark
      ├── 🤖 Hermes: executor original / Loop Mestre / NEXT_CURSOR
-     ├── 🧠 AionUi: cockpit de agentes e modelos
-     │     └── 🤖 Rakazo: configuração de bots
+     ├── 🧠 CentralDarkBot: interface de agentes e modelos (fork OpenBot; integração pendente)
      ├── 🔐 Contas / Conexões: Hub e OAuth Broker existentes
      ├── 🔌 MCP CentralDark / Omni Router / APIs
      └── 🧿 HUD / Auditoria / Reality Judge
@@ -182,7 +186,7 @@ openKylin / VPS — mesmas receitas, readback no destino
 | Admin `/health`, `/mcp`, `/tools.json`, `/admin/mcp*` | Compatibilidade MCP existente → `127.0.0.1:9100` pelo Caddy | `/health` retornou **200**; não significa que todas as tools foram testadas. |
 | [centralldark.com](https://centralldark.com/) | **Portal de Módulos** — `src/paginas/portal-publico/pages/LandingCentralDark.tsx`, `Portal.tsx` | **REPUBLICAÇÃO PENDENTE**: o domínio respondeu HTTP 200, mas ainda encaminhava à interface legada do AionUi; HTTP 200 não prova o Portal publicado. |
 | `/portal`, `/telepainel/dashboard` | Catálogo de produtos e **TelePainel como módulo**, `src/app/rotas/rotas-telepainel.tsx`, `src/funcionalidades/telepainel/` | Código na `main`; publicação autenticada no domínio do Portal **ainda não medida**. |
-| AionUi / Rakazo | Ferramentas internas do Instinto, serviços históricos `25808` / `25810` | Serviços preservados; **botões e integração não equivalem a login ponta a ponta comprovado**. |
+| [CentralDarkBot](https://github.com/ServerVpss/CentralDarkBot) | Fork do OpenBot; interface de agentes via ACP, com Hermes como executor previsto | **FORK CONFIRMADO; WEB PRÓPRIA E INSTALAÇÃO AINDA NÃO PROVADAS**. Web oficial: `openbot.run/app`, com conta/host do OpenBot. Serviços históricos permanecem fora deste delta de UI. |
 | Hub / OAuth / contas | `apps/modulos/hub/`, `apps/modulos/oauth-broker/`, `apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx` | UI e backend com owners existentes; acesso individual a contas e provedores **não presumido**. |
 | Omni Router / Zendrive | `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`, launcher existente | **8099 OFFLINE** na última medição; recuperar o owner real PM2/systemd antes de tentar iniciar outro. |
 
