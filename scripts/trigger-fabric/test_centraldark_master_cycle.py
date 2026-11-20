@@ -352,6 +352,11 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "counterproof_survives": True,
             "t1_stable": True,
             "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
             "ephemeral_workspace_used": False,
         }
         result = MODULE.evaluate_multibussola_state(state)
@@ -368,6 +373,11 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "counterproof_survives": True,
             "t1_stable": True,
             "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
             "ephemeral_workspace_used": True,
             "ephemeral_cleanup_readback_pass": False,
             "ephemeral_unclassified_residue": 0,
@@ -386,6 +396,11 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "counterproof_survives": True,
             "t1_stable": True,
             "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
             "ephemeral_workspace_used": True,
             "ephemeral_cleanup_readback_pass": True,
             "ephemeral_unclassified_residue": 1,
@@ -403,6 +418,11 @@ class ContinuousDeltaContractTest(unittest.TestCase):
             "counterproof_survives": True,
             "t1_stable": True,
             "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
             "ephemeral_workspace_used": True,
             "ephemeral_cleanup_readback_pass": True,
             "ephemeral_unclassified_residue": 0,
@@ -451,6 +471,146 @@ class ContinuousDeltaContractTest(unittest.TestCase):
         for phrase in ("falei do centraldark visualize o painel ontem", "falou da centraldark faça o deploy"):
             for mode in ("text", "voice"):
                 self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+
+class MetaMultibussolaProofGateEnforcementTest(unittest.TestCase):
+    """GOAL CD-META-MULTIBUSSOLA-ENFORCEMENT — gate violado nunca vira PASS.
+
+    Contraprova de T0 (main c8273da1): quatro violações materiais produziam
+    FIXED_POINT_PASS porque evaluate_multibussola_state() não consumia
+    MULTIBUSSOLA_PROOF_GATES. Estes testes reproduzem a falha e passam a exigi-la
+    corrigida, sem tocar nos veredictos legítimos já comprovados.
+    """
+
+    @staticmethod
+    def baseline_state(**overrides):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": False,
+            # gates explícitos satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+        }
+        state.update(overrides)
+        return state
+
+    def verdict(self, **overrides):
+        return MODULE.evaluate_multibussola_state(self.baseline_state(**overrides))
+
+    def test_baseline_all_gates_satisfied_still_passes(self):
+        result = self.verdict()
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual([], result["gate_violations"])
+
+    def test_proof_target_mismatch_blocks(self):
+        result = self.verdict(proof_target_match=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("PROOF_TARGET_MATCH", result["gate_violations"])
+
+    def test_proof_ownership_unproven_blocks(self):
+        result = self.verdict(proof_ownership=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("PROOF_OWNERSHIP", result["gate_violations"])
+
+    def test_external_anchor_required_missing_blocks(self):
+        result = self.verdict(external_anchor=None)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_not_applicable_without_justification_blocks(self):
+        result = self.verdict(external_anchor="NOT_APPLICABLE")
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_not_applicable_with_justification_does_not_block(self):
+        result = self.verdict(
+            external_anchor="NOT_APPLICABLE",
+            external_anchor_justification="artefato local sem referencia externa aplicavel",
+            proof_evidence={
+                "EXTERNAL_ANCHOR_WHEN_APPLICABLE": "docs/CONSCIENCIA/MULTIBUSSOLA.md#15",
+            },
+        )
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("NOT_APPLICABLE", result["gate_states"]["EXTERNAL_ANCHOR_WHEN_APPLICABLE"])
+        self.assertNotIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_justification_without_evidence_ref_still_blocks(self):
+        # Contraprova da propria correcao: texto solto nao compra isencao.
+        result = self.verdict(
+            external_anchor="NOT_APPLICABLE",
+            external_anchor_justification="confia, nao precisa de ancora externa",
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_reality_judge_unavailable_blocks(self):
+        result = self.verdict(reality_judge=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("REALITY_JUDGE", result["gate_violations"])
+
+    def test_absent_gate_is_unknown_and_blocks(self):
+        state = self.baseline_state()
+        del state["proof_target_match"]
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertEqual("UNKNOWN", result["gate_states"]["PROOF_TARGET_MATCH"])
+        self.assertIn("PROOF_TARGET_MATCH", result["gate_violations"])
+
+    def test_counterproof_gate_never_yields_pass_when_violated(self):
+        result = self.verdict(counterproof_survives=False)
+        self.assertNotEqual("FIXED_POINT_PASS", result["verdict"])
+
+    def test_four_material_violations_together_block_with_named_gates(self):
+        result = self.verdict(
+            proof_target_match=False,
+            proof_ownership=False,
+            external_anchor=False,
+            reality_judge=False,
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        for gate in (
+            "PROOF_TARGET_MATCH",
+            "PROOF_OWNERSHIP",
+            "EXTERNAL_ANCHOR_WHEN_APPLICABLE",
+            "REALITY_JUDGE",
+        ):
+            self.assertIn(gate, result["gate_violations"])
+
+    def test_gate_output_exposes_states_and_violations_without_secret(self):
+        result = self.verdict(proof_ownership=False)
+        self.assertIn("gate_states", result)
+        self.assertEqual(len(MODULE.MULTIBUSSOLA_PROOF_GATES), len(result["gate_states"]))
+        self.assertIn("gate_evidence", result)
+        self.assertTrue(result["gate_pass"] is False)
+        serialized = repr(result)
+        for token in ("ghp_", "gho_", "github_pat_", "password", "token="):
+            self.assertNotIn(token, serialized)
+
+    def test_injected_gate_pass_field_cannot_bypass_evaluation(self):
+        # META_MULTIBUSSOLA aplicada a propria correcao: campo injetado nao compra verde.
+        result = self.verdict(
+            gate_pass=True,
+            proof_ownership=False,
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertFalse(result["gate_pass"])
+
+    def test_meta_multibussola_alias_still_resolves_original_owner(self):
+        receipt = MODULE.resolve("!multibussola_meta", chefe_source=True)
+        block = receipt["multibussola"]
+        self.assertTrue(block["active"])
+        self.assertEqual("META_MULTIBUSSOLA", block["profile"])
+        self.assertEqual("docs/CONSCIENCIA/MULTIBUSSOLA.md", block["owner"])
+
+
 
 if __name__ == "__main__":
     unittest.main()

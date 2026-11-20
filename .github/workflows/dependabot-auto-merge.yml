@@ -482,7 +482,7 @@ jobs:
           PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
         run: |
           set -euo pipefail
-          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" "${{ github.event.pull_request.number }}"
+          bash "$GITHUB_WORKSPACE/.ci-house/scripts/dependabot/resolve-conflicts.sh" --apply "${{ github.event.pull_request.number }}"
 
       - name: 🧭 Entregar promoção ao gate hosted de compatibilidade
         if: env.RESOLVE_REQUESTED != '1'
@@ -684,8 +684,15 @@ jobs:
               const failedChecks = relevantChecks.filter((check) =>
                 check.status === 'completed' && failureConclusions.has(String(check.conclusion || '').toLowerCase())
               );
+              // SKIPPED != PASS — mesma regra de scripts/github-autonomia-green-guard.mjs.
+              // Check ignorado por path-filter nao prova nada e nunca conta como gate aprovado.
+              const effectiveSuccessConclusions = ['success', 'neutral'];
+              const ignoredConclusions = ['skipped'];
               const successChecks = relevantChecks.filter((check) =>
-                check.status === 'completed' && ['success', 'neutral', 'skipped'].includes(String(check.conclusion || '').toLowerCase())
+                check.status === 'completed' && effectiveSuccessConclusions.includes(String(check.conclusion || '').toLowerCase())
+              );
+              const ignoredChecks = relevantChecks.filter((check) =>
+                check.status === 'completed' && ignoredConclusions.includes(String(check.conclusion || '').toLowerCase())
               );
 
               const combined = await github.rest.repos.getCombinedStatusForRef({
@@ -699,6 +706,8 @@ jobs:
               if (failedChecks.length) blockers.push(`CHECKS_FAILED_${failedChecks.length}`);
               if (badStatuses.length) blockers.push(`STATUSES_BAD_${badStatuses.length}`);
               if (!relevantChecks.length && !(combined.data.statuses || []).length) blockers.push('SAME_HEAD_PROOF_ABSENT');
+              // Gate efetivo exige ao menos um check realmente aprovado no mesmo HEAD.
+              if (!successChecks.length) blockers.push('NO_EFFECTIVE_GATE_PASS');
 
               const reviews = await github.paginate(github.rest.pulls.listReviews, {
                 owner, repo, pull_number: prNumber, per_page: 100,
@@ -724,6 +733,8 @@ jobs:
                 `CHECKS_PENDING=${pendingChecks.length}`,
                 `CHECKS_FAILED=${failedChecks.length}`,
                 `SUCCESS_CHECKS=${successChecks.length}`,
+                `IGNORED_CHECKS=${ignoredChecks.length}`,
+                'SKIPPED_IS_PASS=0',
                 `BAD_STATUSES=${badStatuses.length}`,
                 `BLOCKERS=${uniqueBlockers.join('|') || 'NONE'}`,
                 'MERGE_METHOD=squash',

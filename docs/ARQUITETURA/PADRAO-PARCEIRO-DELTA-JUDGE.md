@@ -431,14 +431,20 @@ Ausência de integração real com o painel = `UNPROVEN`, não PASS.
 
 ## 13. Saída de cada ciclo
 
-```text
-FEITO=
-EVIDENCIA=
-PENDENCIA=
-PROXIMO_PASSO=
-BOOT=
-FIO_DA_MISSAO=
+**Apresentação humana:**
 
+```text
+🧾 COMPROVANTE = o que foi feito e conferido
+🔎 CONFERÊNCIA = a evidência que sustenta o resultado
+⚠️ ATENÇÃO = o que ainda falta, está bloqueado ou não foi comprovado
+👉 O QUE FAZER AGORA = continuidade em linguagem natural
+🚀 INÍCIO DO SISTEMA = informação de boot somente quando for útil para a pessoa
+🧵 FIO DA MISSÃO = contexto que precisa continuar
+```
+
+**Registro técnico preservado:**
+
+```text
 MAIN_HEAD=
 ACTIVE_PR=
 ACTIVE_HEAD=

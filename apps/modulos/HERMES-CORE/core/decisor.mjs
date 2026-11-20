@@ -108,6 +108,45 @@ const ELITE_TOKEN = process.env.ELITE_ANTHROPIC_TOKEN || process.env.ANTHROPIC_A
 const cache = new Map();
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const CACHE_MAX    = 100;
+const cacheMetrics = {
+  hits: 0,
+  misses: 0,
+  expired: 0,
+  invalidated: 0,
+  evicted: 0,
+  lookups: 0,
+  lookup_latency_ms: 0,
+};
+
+export function getDecisionCacheMetrics() {
+  const lookups = cacheMetrics.lookups || 0;
+  return {
+    ...cacheMetrics,
+    ttl_ms: CACHE_TTL_MS,
+    size: cache.size,
+    max: CACHE_MAX,
+    hit_rate: lookups ? cacheMetrics.hits / lookups : 0,
+  };
+}
+
+export function resetDecisionCacheMetrics() {
+  cache.clear();
+  for (const key of Object.keys(cacheMetrics)) cacheMetrics[key] = 0;
+}
+
+// Probe determinístico: mede HIT/MISS/TTL/invalidação sem chamar nenhum modelo.
+export function decisionCacheProbe() {
+  resetDecisionCacheMetrics();
+  const valid = { estado: 'TESTE', terminou: false, ferramenta: 'ler_arquivo', args: {} };
+  verCache('missing');
+  salvarCache('valid', valid);
+  verCache('valid');
+  cache.get('valid').ts = Date.now() - CACHE_TTL_MS - 1;
+  verCache('valid');
+  salvarCache('invalid', { estado: 'UNKNOWN', terminou: false });
+  verCache('invalid');
+  return getDecisionCacheMetrics();
+}
 
 function contextoPersistido(state = {}) {
   if (!state || typeof state !== 'object' || Array.isArray(state)) return {};
@@ -127,18 +166,40 @@ function chaveCache(missao, historico, continuityState = {}) {
   return createHash('sha1').update(raw).digest('hex').slice(0, 16);
 }
 function verCache(k) {
+  const started = Date.now();
+  cacheMetrics.lookups += 1;
   const it = cache.get(k);
-  if (!it) return null;
-  if (Date.now() - it.ts > CACHE_TTL_MS) { cache.delete(k); return null; }
+  if (!it) {
+    cacheMetrics.misses += 1;
+    cacheMetrics.lookup_latency_ms += Date.now() - started;
+    return null;
+  }
+  if (Date.now() - it.ts > CACHE_TTL_MS) {
+    cache.delete(k);
+    cacheMetrics.expired += 1;
+    cacheMetrics.invalidated += 1;
+    cacheMetrics.misses += 1;
+    cacheMetrics.lookup_latency_ms += Date.now() - started;
+    return null;
+  }
   try {
-    return validarDecisao(it.valor);
+    const value = validarDecisao(it.valor);
+    cacheMetrics.hits += 1;
+    cacheMetrics.lookup_latency_ms += Date.now() - started;
+    return value;
   } catch {
     cache.delete(k);
+    cacheMetrics.invalidated += 1;
+    cacheMetrics.misses += 1;
+    cacheMetrics.lookup_latency_ms += Date.now() - started;
     return null;
   }
 }
 function salvarCache(k, valor) {
-  if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value);
+  if (cache.size >= CACHE_MAX) {
+    cache.delete(cache.keys().next().value);
+    cacheMetrics.evicted += 1;
+  }
   cache.set(k, { ts: Date.now(), valor });
 }
 
@@ -466,7 +527,8 @@ async function chamarEliteAnthropic(prompt, system) {
 }
 
 async function chamarRuntimeLocal(system, prompt) {
-  const statePath = process.env.HERMES_LOCAL_RUNTIME_STATE || '/root/.hermes/runtimes/llamacpp/server.json';
+  const hermesHome = process.env.HERMES_HOME || process.env.HOME || process.cwd();
+  const statePath = process.env.HERMES_LOCAL_RUNTIME_STATE || `${hermesHome}/.hermes/runtimes/llamacpp/server.json`;
   const state = JSON.parse(readFileSync(statePath, 'utf8'));
   const baseUrl = String(state?.base_url || '').replace(/\/$/, '');
   const apiKey = String(state?.api_key || '');

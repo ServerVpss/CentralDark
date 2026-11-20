@@ -50,6 +50,18 @@ def delegate(args: argparse.Namespace) -> tuple[int, dict]:
     common = ['--repo', str(repo), '--registry', args.registry, '--claim', args.claim,
               '--owner', args.owner, '--dependency-fingerprint', fingerprint]
     code, probe = call(base + ['replay'] + common)
+    registry = Path(args.registry)
+    if not registry.is_absolute():
+        registry = repo / registry
+    registry_missing = not registry.is_file()
+    if (code == 70 or probe.get('verdict') == 'UNKNOWN'
+            or (registry_missing and probe.get('reason') == 'CLAIM_NOT_SEALED')):
+        return 70, {'verdict': 'UNKNOWN',
+                    'reason': ('RECIPE_REGISTRY_UNAVAILABLE' if registry_missing
+                               else probe.get('reason', 'EXECUTOR_UNAVAILABLE')),
+                    'claim': args.claim, 'owner': args.owner,
+                    'dependency_fingerprint': fingerprint,
+                    'model_calls': 0, 'subagent_calls': 0, 'script_executed': False}
     if code != 0 or probe.get('verdict') != 'PASS':
         return 3, {'verdict': 'DELTA_REQUIRED', 'reason': probe.get('reason', probe.get('action', 'NOT_PROVEN')),
                    'claim': args.claim, 'owner': args.owner, 'dependency_fingerprint': fingerprint,

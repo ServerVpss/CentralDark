@@ -8,10 +8,10 @@ type CoordinatorStage = {
 
 const STAGES: CoordinatorStage[] = [
   { id: "intent", label: "Intenção recebida", owner: "CHEFE → SOL", status: "READY", detail: "Escopo e objetivo registrados." },
-  { id: "owner", label: "Owner resolvido", owner: "CentralDark Harness", status: "READY", detail: "Uma caneta por escopo; reutilização antes de criar." },
-  { id: "dispatch", label: "Despacho Hermes", owner: "apps/modulos/HERMES-CORE", status: "WAITING_RECEIPT", detail: "Aguardando receipt do executor existente." },
-  { id: "readback", label: "Readback da saída", owner: "CentralDark receipt", status: "WAITING_RECEIPT", detail: "Saída só promove o próximo passo após contraprova." },
-  { id: "next", label: "Próximo cursor", owner: "SOL coordenadora", status: "UNKNOWN", detail: "Derivado somente do receipt anterior." },
+  { id: "owner", label: "Responsável identificado", owner: "CentralDark Harness", status: "READY", detail: "Uma caneta por escopo; reutilização antes de criar." },
+  { id: "dispatch", label: "Despacho Hermes", owner: "apps/modulos/HERMES-CORE", status: "WAITING_RECEIPT", detail: "Aguardando a confirmação do Hermes." },
+  { id: "readback", label: "Confirmação do resultado", owner: "CentralDark receipt", status: "WAITING_RECEIPT", detail: "Saída só promove o próximo passo após contraprova." },
+  { id: "next", label: "Próximo passo", owner: "SOL coordenadora", status: "UNKNOWN", detail: "Definido a partir do resultado confirmado." },
 ];
 
 function badge(status: CoordinatorStage["status"]) {
@@ -27,15 +27,15 @@ export function CoordinatorDesk() {
         <div>
           <h3 id="coordinator-desk" className="font-semibold">🧭 Mesa do coordenador</h3>
           <p className="mt-1 text-xs text-muted-foreground">
-            SOL cria e encadeia receitas; Hermes executa; o receipt autoriza o próximo cursor.
+            SOL organiza o trabalho, Hermes executa e a confirmação orienta o próximo passo.
           </p>
         </div>
-        <span className="font-mono text-[10px] text-muted-foreground">LOOP_DIRECTIONAL</span>
+        <span className="font-mono text-[10px] text-muted-foreground">Fluxo de trabalho</span>
       </div>
       <div className="mt-3 overflow-x-auto">
         <table className="w-full min-w-[42rem] text-left text-xs">
           <thead className="border-b border-border text-muted-foreground">
-            <tr><th className="px-2 py-2">Etapa</th><th className="px-2 py-2">Owner</th><th className="px-2 py-2">Estado</th><th className="px-2 py-2">Regra</th></tr>
+            <tr><th className="px-2 py-2">Etapa</th><th className="px-2 py-2">Responsável</th><th className="px-2 py-2">Estado</th><th className="px-2 py-2">Regra</th></tr>
           </thead>
           <tbody>
             {STAGES.map((stage) => (
@@ -50,7 +50,7 @@ export function CoordinatorDesk() {
         </table>
       </div>
       <p className="mt-3 text-[11px] text-muted-foreground">
-        Sem receipt não há avanço automático. A mesa exibe o contrato; o estado vivo depende da leitura da rota Hermes/CI.
+        Sem confirmação, não há avanço automático. O andamento real depende das respostas do Hermes e dos testes.
       </p>
     </section>
   );

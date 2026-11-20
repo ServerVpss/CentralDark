@@ -137,7 +137,10 @@ test('VS Code: mesmo OAuth /authorize, identificação pelo client_id e código 
   const before=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
   assert.equal((await before.json()).status,'pending');
   const anonymous=await request('/authorize',urlEncoded(body));
-  assert.equal(anonymous.status,403);
+  assert.equal(anonymous.status,302);
+  const passwordFallback=new URL(anonymous.headers.get('location'));
+  assert.equal(passwordFallback.searchParams.get('auth_method'),'password');
+  assert.match(passwordFallback.searchParams.get('error') || '',/Sessão administrativa ausente/);
   const invalidNonce=await request('/authorize',urlEncoded({...body,pair_nonce:'wrong'},cookie));
   assert.equal(invalidNonce.status,403);
   const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'FFFF-FFFF'},cookie));
@@ -197,6 +200,195 @@ test('Remote Bridge: mesmo /authorize e consentimento, sem token na URL',async()
   assert.equal((await heartbeat.json()).ok,true);
 });
 
+test('Remote Bridge: senha fallback exige código, nonce e senha válidos; limita tentativas',async()=>{
+  const created=await request('/device/pair/start',json({
+    device_name:'BRIDGE-FALLBACK-TEST',executor:'remote-bridge',surface:'windows-tray'
+  }));
+  assert.equal(created.status,201);
+  const pair=await created.json();
+  const consent=await request('/authorize?'+new URLSearchParams({
+    client_id:'centraldark.remote-bridge',pair_id:pair.pair_id,auth_method:'password'
+  }));
+  assert.equal(consent.status,302);
+  const page=new URL(consent.headers.get('location'));
+  assert.equal(page.searchParams.get('auth_method'),'password');
+  const body={
+    client_id:'centraldark.remote-bridge',
+    pair_id:pair.pair_id,
+    pair_code:pair.code,
+    pair_nonce:page.searchParams.get('pair_nonce'),
+    auth_method:'password'
+  };
+  const invalid=await request('/authorize',urlEncoded({...body,password:'INCORRECT'}));
+  assert.equal(invalid.status,302);
+  assert.match(new URL(invalid.headers.get('location')).searchParams.get('error'),/Senha/);
+  const pending=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  assert.equal((await pending.json()).status,'pending');
+  const invalidCode=await request('/authorize',urlEncoded({...body,pair_code:'0000-0000',password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(invalidCode.status,403);
+  const invalidNonce=await request('/authorize',urlEncoded({...body,pair_nonce:'invalid',password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(invalidNonce.status,403);
+  const approved=await request('/authorize',urlEncoded({...body,password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(approved.status,302);
+  assert.equal(new URL(approved.headers.get('location')).searchParams.get('success'),'1');
+  const result=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+  const auth=await result.json();
+  assert.equal(auth.status,'approved');
+  assert.ok(auth.token?.length>=32);
+  const replay=await request('/authorize',urlEncoded({...body,password:process.env.MCP_ADMIN_PASSWORD}));
+  assert.equal(replay.status,404);
+});
+
+test('Remote Bridge: Supabase JWT admin autoriza somente após clique, role e nonce (sem rede externa)',async()=>{
+  const existingFetch=globalThis.fetch;
+  const oldUrl=process.env.HUB_SUPABASE_URL;
+  const oldKey=process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+  process.env.HUB_SUPABASE_URL='https://centraldark-auth-test.invalid';
+  process.env.HUB_SUPABASE_PUBLISHABLE_KEY='sb_publishable_test_only';
+  let role='user';
+  const bearer='Bearer '+'T'.repeat(64);
+  globalThis.fetch=async(input,options={})=>{
+    const address=String(input);
+    if(address.startsWith('https://centraldark-auth-test.invalid/')){
+      if(options.headers?.Authorization!==bearer) return new Response('{}',{status:401});
+      if(address.includes('/auth/v1/user')) return new Response(JSON.stringify({
+        id:'00000000-0000-4000-8000-000000000001',is_anonymous:false
+      }),{status:200,headers:{'Content-Type':'application/json'}});
+      if(address.includes('/rest/v1/user_roles')) return new Response(
+        JSON.stringify(role==='admin'?[{role:'admin'}]:[]),
+        {status:200,headers:{'Content-Type':'application/json'}}
+      );
+      return new Response('{}',{status:404});
+    }
+    return existingFetch(input,options);
+  };
+  try{
+    const start=await request('/device/pair/start',json({
+      device_name:'TEST-REMOTE-SUPABASE',executor:'remote-bridge',surface:'windows-tray'
+    }));
+    assert.equal(start.status,201);
+    const pair=await start.json();
+    const page=await request('/authorize?'+new URLSearchParams({
+      client_id:'centraldark.remote-bridge',pair_id:pair.pair_id
+    }));
+    assert.equal(page.status,302);
+    const challenge=new URL(page.headers.get('location'));
+    const body={
+      client_id:'centraldark.remote-bridge',pair_id:pair.pair_id,
+      pair_code:pair.code,pair_nonce:challenge.searchParams.get('pair_nonce')
+    };
+    const withoutJwt=await request('/authorize',urlEncoded(body));
+    assert.equal(withoutJwt.status,302);
+    assert.match(new URL(withoutJwt.headers.get('location')).searchParams.get('error') || '', /Sessão administrativa ausente/);
+    const opts=(data)=>({...urlEncoded(data),headers:{...urlEncoded(data).headers,Authorization:bearer}});
+    const regularUser=await request('/authorize',opts(body));
+    assert.equal(regularUser.status,302);
+    assert.match(new URL(regularUser.headers.get('location')).searchParams.get('error') || '', /Sessão administrativa ausente/);
+    role='admin';
+    const badNonce=await request('/authorize',opts({...body,pair_nonce:'WRONG_NONCE'}));
+    assert.equal(badNonce.status,403);
+    const approved=await request('/authorize',opts(body));
+    assert.equal(approved.status,302);
+    assert.equal(new URL(approved.headers.get('location')).searchParams.get('success'),'1');
+    const completed=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+    assert.equal((await completed.json()).status,'approved');
+  }finally{
+    globalThis.fetch=existingFetch;
+    if(oldUrl===undefined) delete process.env.HUB_SUPABASE_URL;
+    else process.env.HUB_SUPABASE_URL=oldUrl;
+    if(oldKey===undefined) delete process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+    else process.env.HUB_SUPABASE_PUBLISHABLE_KEY=oldKey;
+  }
+});
+
+test('Cockpit Supabase: consentimento JSON exige admin, origem e PKCE; sem senha duplicada', async()=>{
+  const realFetch=globalThis.fetch;
+  const oldUrl=process.env.HUB_SUPABASE_URL, oldKey=process.env.HUB_SUPABASE_PUBLISHABLE_KEY;
+  process.env.HUB_SUPABASE_URL='https://centraldark-auth-test.invalid';
+  process.env.HUB_SUPABASE_PUBLISHABLE_KEY='sb_publishable_test_only';
+  let role='user';
+  const bearer='Bearer '+'T'.repeat(64);
+  globalThis.fetch=async(input,opts={})=>{
+    const url=String(input);
+    if(url.startsWith('https://centraldark-auth-test.invalid/')){
+      if(opts.headers?.Authorization!==bearer) return new Response('{}',{status:401});
+      if(url.includes('/auth/v1/user')) return new Response(JSON.stringify({id:'00000000-0000-4000-8000-000000000002',is_anonymous:false}),{status:200});
+      if(url.includes('/rest/v1/user_roles')) return new Response(JSON.stringify(role==='admin'?[{role:'admin'}]:[]),{status:200});
+      return new Response('{}',{status:404});
+    }
+    return realFetch(input,opts);
+  };
+  try{
+    const client=registerClient({client_name:'Hermes Cockpit JSON Test',redirect_uris:[base+'/cb-json'],token_endpoint_auth_method:'none'});
+    const data={client_id:client.client_id,redirect_uri:base+'/cb-json',response_type:'code',
+      code_challenge:'TEST_ONLY_PKCE_JSON',code_challenge_method:'S256',scope:'mcp',state:'STATE_JSON'};
+    const post=(origin='https://admin.centralldark.com',auth=bearer)=>({
+      ...urlEncoded(data),
+      headers:{...urlEncoded(data).headers,Origin:origin,Accept:'application/json',Authorization:auth}
+    });
+    const missing=await request('/authorize',post('https://admin.centralldark.com',''));
+    assert.equal(missing.status,401);
+    assert.equal((await missing.json()).ok,false);
+    const nonAdmin=await request('/authorize',post());
+    assert.equal(nonAdmin.status,401);
+    assert.match((await nonAdmin.json()).error,/administrador/);
+    role='admin';
+    const otherOrigin=await request('/authorize',post('https://outro.invalid'));
+    assert.equal(otherOrigin.status,403);
+    // Antes: PKCE inv?lido devolvia 302, mas o Cockpit usa redirect:error;
+    // o browser apresentava TypeError Failed to fetch em vez do erro OAuth.
+    const invalidPkceBody={...data,code_challenge_method:'plain'};
+    const invalidPkceOpts={...urlEncoded(invalidPkceBody),headers:{
+      ...urlEncoded(invalidPkceBody).headers,Origin:'https://admin.centralldark.com',
+      Accept:'application/json',Authorization:bearer
+    }};
+    const rejected=await request('/authorize',invalidPkceOpts);
+    assert.equal(rejected.status,400);
+    assert.equal(rejected.headers.get('location'),null);
+    const rejectedData=await rejected.json();
+    assert.equal(rejectedData.ok,false);
+    assert.equal(rejectedData.error,'invalid_request');
+    assert.match(rejectedData.error_description,/PKCE/);
+    const valid=await request('/authorize',post());
+    assert.equal(valid.status,200);
+    const response=await valid.json();
+    assert.equal(response.ok,true);
+    const callback=new URL(response.redirect_to);
+    assert.equal(callback.pathname,'/cb-json');
+    assert.equal(callback.searchParams.get('state'),'STATE_JSON');
+    assert.ok(callback.searchParams.get('code'));
+    assert.equal(valid.headers.get('cache-control'),'no-store');
+    // A mesma sess?o admin pode aprovar uma tentativa VS Code iniciada pelo cliente.
+    const created=await request('/device/pair/start',json({
+      device_name:'TEST-VSCODE-JSON-ADMIN',executor:'vscode',surface:'test'
+    }));
+    assert.equal(created.status,201);
+    const pair=await created.json();
+    const consent=await request('/authorize?'+new URLSearchParams({
+      client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id
+    }));
+    assert.equal(consent.status,302);
+    const challenge=new URL(consent.headers.get('location'));
+    const deviceBody={
+      client_id:'centraldark.centraldark-vscode-restore',pair_id:pair.pair_id,
+      pair_code:pair.code,pair_nonce:challenge.searchParams.get('pair_nonce')
+    };
+    const deviceOpts={...urlEncoded(deviceBody),headers:{
+      ...urlEncoded(deviceBody).headers,Origin:'https://admin.centralldark.com',
+      Accept:'application/json',Authorization:bearer
+    }};
+    const approvedDevice=await request('/authorize',deviceOpts);
+    assert.equal(approvedDevice.status,200);
+    assert.deepEqual(await approvedDevice.json(),{ok:true,approved:true});
+    const status=await request('/device/pair/status',json({id:pair.pair_id,secret:pair.pair_secret}));
+    assert.equal((await status.json()).status,'approved');
+  }finally{
+    globalThis.fetch=realFetch;
+    if(oldUrl===undefined) delete process.env.HUB_SUPABASE_URL; else process.env.HUB_SUPABASE_URL=oldUrl;
+    if(oldKey===undefined) delete process.env.HUB_SUPABASE_PUBLISHABLE_KEY; else process.env.HUB_SUPABASE_PUBLISHABLE_KEY=oldKey;
+  }
+});
+
 test('Expired pair cannot be confirmed; code alone never issues token',()=>{
   let now=0;
   const isolated=createDevicePairingStore({registryPath:join(tmp,'expired.json'),now:()=>now,ttlMs:500});
@@ -227,6 +419,12 @@ test('Cockpit mostra o codigo da tentativa e exige clique humano',async()=>{
   assert.match(page,/type="hidden" name="pair_code"/);
   assert.match(page,/Confirmar pareamento/);
   assert.match(page,/type="submit"/);
+  // O currentTarget do evento React pode tornar-se nulo apos um await.
+  assert.match(page,/const formulario = event\.currentTarget/);
+  assert.match(page,/formulario instanceof HTMLFormElement/);
+  assert.match(page,/new FormData\(formulario\)/);
+  assert.ok(page.indexOf("new FormData(formulario)") < page.indexOf("await supabase.auth.getSession()"));
+  assert.doesNotMatch(page,/new FormData\(event\.currentTarget\)/);
 });
 test('extensao distribuida contem o pareamento e dependencias compiladas',async()=>{
   const {readFileSync,existsSync}=await import('node:fs');

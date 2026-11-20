@@ -190,7 +190,7 @@ Exemplos:
 
 O selo é pista semântica, não prova. O SHA, os gates aplicáveis e o receipt do runtime continuam sendo a prova.
 
-### Receipt obrigatório de micro-deploy
+### 🧾 Comprovante obrigatório de micro-deploy
 
 Quando houver promoção real, registrar quando aplicável:
 

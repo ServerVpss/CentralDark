@@ -7,9 +7,9 @@ updated: 2026-07-02
 
 # 🎨 PADRÃO STATUS VISUAL — Sincronia 4-Point
 
-> **Complementa** `21-PADRAO-APRESENTACAO.md`. Este é o formato **oficial** que TODA IA (Claude, GPT, Gemini, Lovable) deve usar quando o Pivete pedir "status", "situação", "como tá", "onde estamos" ou similar.
+> **Complementa** `21-PADRAO-APRESENTACAO.md`. Este é um modelo visual **opcional** para painéis e relatórios explicitamente solicitados. Perguntas como "status", "situação", "como tá" ou "onde estamos" recebem primeiro resposta natural e direta; não obrigam todas as IAs a montar um card.
 
-## 🧱 Template obrigatório
+## 🧱 Template de painel (uso opcional)
 
 ```
 🟢 **Status Geral — <Contexto>**
@@ -41,14 +41,14 @@ updated: 2026-07-02
 - ✅ = concluído nesta sessão
 
 ## 📏 Regras
-1. **Sempre** abrir com veredito 🟢/🟡/🔴 na 1ª linha.
+1. **Quando usar o card**, abrir com estado comprovado; sem inventar cor ou status.
 2. Card monospace com bordas `┌─├─└`. Nada de tabela markdown pra status.
 3. Máximo 4 seções internas. Se passar, virar sub-card.
 4. Fechar com "Só falta" + "Próxima ação" — nunca deixar aberto sem próximo passo.
 5. Se pergunta é trivial (1 linha), **NÃO** usar card. Card só quando há estado real pra mostrar.
 
 ## 🎯 Quando usar
-- "status", "situação", "como tá", "onde estamos", "resumo", "relatório"
+- Quando houver pedido explícito de painel, card visual ou relatório estruturado; "status" e "como tá" sozinhos não obrigam o card.
 - Ao concluir tarefa grande (relatório final)
 - Ao retomar sessão (reload)
 

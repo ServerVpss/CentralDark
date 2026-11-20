@@ -25,6 +25,30 @@ links:
 
 # 🎨 Padrão de Emojis — CentralDark
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+## 🗺️ Placas de leitura — significados que não mudam
+
+Este é o **owner dos símbolos**. A [Gramática SOL](01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml) aplica a regra ao escrever; o [padrão de resposta](PADRAO-RESPOSTA-SEGREDO-CHEFE.md) organiza o texto. O registry de **comandos e gatilhos** permanece a autoridade para emojis de comandos; estas placas identificam **assuntos**, não executam ações.
+
+| Placa fixa | Para que serve |
+| --- | --- |
+| 🧾 COMPROVANTE | Dados e identificação do registro |
+| 📍 PONTO DE PARTIDA | Situação inicial e condições existentes |
+| 🧪 TESTES | Verificações executadas e seus resultados |
+| 🔎 CONFERÊNCIA | Comparação entre relato e prova real |
+| 👀 O QUE FOI ENCONTRADO | Disponível, ausente ou divergente |
+| ⛔ O QUE ESTÁ IMPEDINDO | Bloqueios, causas e dependências |
+| 📊 COMO FICOU | Balanço do escopo realmente medido |
+| 👉 O QUE FAZER AGORA | Próximo passo necessário |
+| 🔒 PROTEÇÃO | Segurança e preservação |
+| ⚠️ ATENÇÃO | Riscos e inconsistências |
+| 👍 DEU CERTO | Apenas sucesso com prova suficiente |
+| 👎 NÃO DEU CERTO | Apenas falha realmente comprovada |
+
+**Regra:** uma seção independente recebe sua placa pertinente; usar apenas o necessário. Uma frase não vira relatório. 👍 só com prova; 👎 só com falha medida; `UNKNOWN` não vira aprovação; `BLOCKED` continua bloqueado. Emoji não substitui dados nem autoriza execução.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 Emoji na Casa é pista visual com significado. Não é decoração, não é prova e não deve contradizer o registry de gatilhos.
 
 ## 🧿 Gatilhos canônicos

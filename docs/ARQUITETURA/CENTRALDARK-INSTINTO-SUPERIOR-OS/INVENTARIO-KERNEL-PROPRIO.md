@@ -110,7 +110,7 @@ O cursor é de implementação do plano. Reparos já observados continuam com se
 | Drive | `apps/modulos/pivete-sync` |
 | Automação | `.github/workflows`, runtime Hermes; inventariar antes de criar jobs |
 | Channels | `apps/bot-telegram` |
-| Admin | `apps/modulos/mcp-admin-ui`, `scripts/contas-admin` |
+| Admin | `apps/instinto-superior/src/components/central/McpConsoleCentralDark.tsx`, `apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx`, `scripts/contas-admin` |
 | Cockpit | `docs/CONSCIENCIA/COCKPIT-AVANCO.json` |
 | Tempo | `central-horario` |
 

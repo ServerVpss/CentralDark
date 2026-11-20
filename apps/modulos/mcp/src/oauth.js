@@ -3,12 +3,15 @@ import crypto from "node:crypto";
 import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
 import { isAdmin } from "./admin.js";
+import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 
 // Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
 // Os demais clientes seguem OAuth 2.1+PKCE original, sem segunda tela.
 export const VSCODE_DEVICE_CLIENT_ID = "centraldark.centraldark-vscode-restore";
 export const REMOTE_BRIDGE_DEVICE_CLIENT_ID = "centraldark.remote-bridge";
 let devicePairingStore = null;
+// Limite de tentativas de senha por pareamento. Nunca registrar ou guardar a senha.
+const devicePasswordFailures = new Map();
 export function configureDevicePairingForOAuth(store) {
     if (!store || typeof store.pendingConsent !== "function" || typeof store.approveWeb !== "function")
         throw new Error("DEVICE_PAIRING_STORE_INVALID");
@@ -22,7 +25,43 @@ const clientMetadataCache = new Map();
 function getAdminPassword() {
     return (process.env.MCP_ADMIN_PASSWORD ?? process.env.CENTRALDARK_MCP_ADMIN_PASSWORD ?? "").trim();
 }
+// Mesmo Supabase Auth e tabela user_roles do Cockpit: login não equivale a admin.
+// Reutiliza a mesma identidade do Cockpit para MCP e dispositivos; role admin e JWT validados no servidor.
+async function verifyRemoteBridgeSupabaseAdmin(req) {
+    const header = String(req.headers?.authorization || "");
+    const match = /^Bearer\s+([A-Za-z0-9._-]{48,8192})$/.exec(header);
+    if (!match) return false;
+    const base = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const apikey = String(
+        process.env.HUB_SUPABASE_PUBLISHABLE_KEY ||
+        process.env.SUPABASE_PUBLISHABLE_KEY ||
+        process.env.VITE_SUPABASE_PUBLISHABLE_KEY || ""
+    );
+    if (!/^https:\/\/[a-z0-9.-]+$/i.test(base) || !apikey || apikey.startsWith("sb_secret_"))
+        return false;
+    const headers = { apikey, Authorization: "Bearer " + match[1], Accept: "application/json" };
+    try {
+        const opts = { headers, signal: AbortSignal.timeout(6000) };
+        const userResponse = await fetch(base + "/auth/v1/user", opts);
+        if (!userResponse.ok) return false;
+        const user = await userResponse.json();
+        if (!user?.id || user.is_anonymous === true) return false;
+        const roles = new URL(base + "/rest/v1/user_roles");
+        roles.searchParams.set("user_id", "eq." + user.id);
+        roles.searchParams.set("role", "eq.admin");
+        roles.searchParams.set("select", "role");
+        roles.searchParams.set("limit", "1");
+        const roleResponse = await fetch(roles, opts);
+        if (!roleResponse.ok) return false;
+        const data = await roleResponse.json();
+        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin";
+    } catch {
+        return false;
+    }
+}
 function getOwnerToolToken() {
+    // Reutiliza sessao gh somente apos OAuth admin autorizado; nao expor credencial.
+    if (ghCliAvailable()) return GH_CLI_OWNER_MARKER;
     return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
 }
 function timingSafeEqualText(a, b) {
@@ -197,9 +236,23 @@ function redirectWithOAuthError(res, redirect_uri, error, state, description) {
     if (state)
         back.searchParams.set("state", state);
     back.searchParams.set("iss", config.publicUrl);
+    // Fetch do Cockpit usa redirect:error: nao redirecionar respostas JSON.
+    // O navegador deve receber o erro OAuth legivel no mesmo endpoint.
+    if (res.locals?.cockpitConsentJson) {
+        res.setHeader("Cache-Control", "no-store");
+        res.status(400).json({ ok: false, error, error_description: description || error });
+        return;
+    }
     res.redirect(302, back.toString());
 }
 function sendOwnerConsentPage(res, input) {
+    if (res.locals?.cockpitConsentJson) {
+        res.setHeader("Cache-Control", "no-store");
+        res.status(input.success === true ? 200 : 401).json(input.success === true
+            ? { ok: true, approved: true }
+            : { ok: false, error: input.error || "Sessão administrativa não autorizada." });
+        return;
+    }
     const url = new URL("https://admin.centralldark.com/mcp-autorizar");
     const values = {
         client_id: input.client_id,
@@ -213,6 +266,7 @@ function sendOwnerConsentPage(res, input) {
         pair_id: input.device?.pairId,
         pair_code: input.device?.code,
         pair_nonce: input.device?.nonce,
+        auth_method: input.authMethod,
         error: input.error,
         success: input.success === true ? "1" : undefined,
     };
@@ -258,6 +312,12 @@ export function postRegister(req, res) {
 }
 export async function handleAuthorize(req, res) {
     try {
+        // Somente o Cockpit envia consentimento JSON cross-origin.
+        // O token Supabase segue no header, nunca no URL ou no HTML.
+        const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
+        if (requestedJson && req.headers.origin !== "https://admin.centralldark.com")
+            return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
+        res.locals.cockpitConsentJson = requestedJson;
         // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
         const deviceClientId = param(req, "client_id");
         if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
@@ -273,6 +333,7 @@ export async function handleAuthorize(req, res) {
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
                 isAdmin: isAdmin(req),
+                authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
             };
             if (req.method !== "POST") {
@@ -281,11 +342,34 @@ export async function handleAuthorize(req, res) {
             }
             // Token de dispositivo só é entregue via /device/pair/status
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
-            if (!isAdmin(req)) return oauthError(res, 403, "access_denied", "Sessão administrativa necessária.");
+            // Confirmação por código exige login admin válido. Senha é fallback
+            // explícito, nunca dispensa código + nonce de uma solicitação viva.
+            let ownerAuthenticated = isAdmin(req);
+            if (!ownerAuthenticated && (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID || requestedJson) && details.authMethod !== "password") {
+                ownerAuthenticated = await verifyRemoteBridgeSupabaseAdmin(req);
+            }
+            if (!ownerAuthenticated && details.authMethod === "password") {
+                const failures = devicePasswordFailures.get(pairId) || 0;
+                if (failures >= 5)
+                    return oauthError(res, 429, "access_denied", "Muitas tentativas. Inicie novo pareamento.");
+                const expected = getAdminPassword();
+                const submitted = param(req, "password");
+                ownerAuthenticated = Boolean(expected && submitted && timingSafeEqualText(submitted, expected));
+                if (!ownerAuthenticated) {
+                    devicePasswordFailures.set(pairId, failures + 1);
+                    sendOwnerConsentPage(res, { ...details, authMethod: "password", error: "Senha administrativa inválida ou não configurada." });
+                    return;
+                }
+            }
+            if (!ownerAuthenticated) {
+                sendOwnerConsentPage(res, { ...details, authMethod: requestedJson ? "code" : "password", error: requestedJson ? "Sessão do Cockpit ausente ou sem permissão de administrador." : "Sessão administrativa ausente. Confirme o código e use a senha do MCP." });
+                return;
+            }
             const result = devicePairingStore.approveWeb({
                 pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce")
             });
             if (!result.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+            devicePasswordFailures.delete(pairId);
             sendOwnerConsentPage(res, {...details, success: true});
             return;
         }
@@ -324,17 +408,26 @@ export async function handleAuthorize(req, res) {
             sendOwnerConsentPage(res, payload);
             return;
         }
-        const configuredPassword = getAdminPassword();
-        const submittedPassword = param(req, "password");
-        if (!configuredPassword) {
-            log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+        // O logado no Cockpit já provou identidade: não pedir senha de novo.
+        // A senha segue apenas como fallback para quem não tem sessão admin.
+        const sessaoCockpit = isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
+        if (!sessaoCockpit && requestedJson) {
+            sendOwnerConsentPage(res, { ...payload, error: "Sessão do Cockpit ausente ou sem permissão de administrador." });
             return;
         }
-        if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
-            log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
-            return;
+        if (!sessaoCockpit) {
+            const configuredPassword = getAdminPassword();
+            const submittedPassword = param(req, "password");
+            if (!configuredPassword) {
+                log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+                return;
+            }
+            if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+                log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+                return;
+            }
         }
         const ownerToken = getOwnerToolToken();
         if (!ownerToken) {
@@ -362,9 +455,15 @@ export async function handleAuthorize(req, res) {
             cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
-            mode: "owner_password",
+            mode: sessaoCockpit ? "cockpit_session" : "owner_password",
         });
-        res.redirect(302, back.toString());
+        if (requestedJson) {
+            res.setHeader("Cache-Control", "no-store");
+            res.setHeader("Referrer-Policy", "no-referrer");
+            res.json({ ok: true, redirect_to: back.toString() });
+        } else {
+            res.redirect(302, back.toString());
+        }
     }
     catch (err) {
         log.error("oauth_authorize_exception", { cid: req.cid, error: String(err) });

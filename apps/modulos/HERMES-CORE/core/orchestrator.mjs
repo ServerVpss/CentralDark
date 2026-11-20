@@ -7,21 +7,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname, extname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { createServer as httpCreateServer } from 'node:http';
 import { renameComRetry as renameComRetryUtil } from '../utils/fs-safe.mjs';
 import { continuityBlockReceipt, validateContinuityState } from './continuity-guard.mjs';
 import { registrar as registrarAprendizado } from '../agents/Knowledge-Collector/agent.mjs';
-
-// Carrega /root/CentralDark/.env no boot — PM2 não herda ~/.bashrc (DARKAI_URL, DARKAI_ANON_KEY, ELITE_ANTHROPIC_TOKEN)
-try {
-  for (const l of readFileSync('/root/CentralDark/.env', 'utf8').split('\n')) {
-    const line = l.split('#')[0].trim();
-    if (!line) continue;
-    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^['"]|['"]$/g, '');
-  }
-} catch {}
 
 // Sub-agentes — o Core só orquestra; todo trabalho pesado é deles.
 // (Auto-Diagnostico e Deploy-Watcher são standalone: rodam como missão/cron, não moram no loop do Core.)
@@ -31,13 +21,26 @@ const { auditar, auditarFinalizacao, resultadoAprovadoPeloCritic, vetar } = awai
 const { atualizarGrafo } = await import('../agents/GraphRAG-Master/agent.mjs'); // memória viva + auto-update do grafo
 const { calibrateRuntime, buildCalibrationMission, markCalibrationEnqueued, getCalibrationSummary } = await import('./runtime-calibrator.mjs'); // máquina de estado calibra o runtime; Hermes executa
 
-const BASE = dirname(dirname(fileURLToPath(import.meta.url))); // /root/CentralDark/apps/modulos/HERMES-CORE
-const PENDENTE  = `${BASE}/missions/pendente`;
-const LEGACY_PENDENTE = '/root/CentralDark/missoes/pendente'; // compat: produtores antigos convergem no mesmo Core
+const BASE = dirname(dirname(fileURLToPath(import.meta.url)));
+const REPO_ROOT = process.env.CENTRALDARK_REPO_ROOT || dirname(dirname(dirname(BASE)));
+const ENV_FILE = `${REPO_ROOT}/.env`;
+const PENDENTE = `${BASE}/missions/pendente`;
+const LEGACY_PENDENTE = `${REPO_ROOT}/missoes/pendente`;
 const ANDAMENTO = `${BASE}/missions/em-andamento`;
 const CONCLUIDA = `${BASE}/missions/concluidas`;
-const NOTIFY    = `${BASE}/utils/notify.mjs`;
-const INTERVAL  = 5000;
+const NOTIFY = `${BASE}/utils/notify.mjs`;
+
+// Carrega o .env do repositório descoberto no boot — PM2 não herda ~/.bashrc.
+try {
+  for (const l of readFileSync(ENV_FILE, 'utf8').split('\n')) {
+    const line = l.split('#')[0].trim();
+    if (!line) continue;
+    const m = line.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].replace(/^['\"]|['\"]$/g, '');
+  }
+} catch {}
+
+const INTERVAL = 5000;
 const MAX_FALHAS = 3;
 const RUNTIME_CALIBRATION_INTERVAL = Number(process.env.CENTRALDARK_RUNTIME_CALIBRATION_INTERVAL_MS || 60_000);
 
@@ -63,7 +66,7 @@ async function calibrarRuntimeInterno() {
     log(`[calibracao] verdict=${estado.verdict} wounds=${estado.wound_count} streak=${estado.streak} reward=${estado.reward}`);
 
     const headSha = await new Promise((resolve, reject) => {
-      exec("git -C /root/CentralDark rev-parse HEAD", { timeout: 10_000 }, (error, stdout, stderr) => {
+      exec(`git -C ${REPO_ROOT} rev-parse HEAD`, { timeout: 10_000 }, (error, stdout, stderr) => {
         if (error) return reject(new Error(String(stderr || error.message).trim()));
         resolve(String(stdout || "").trim());
       });
@@ -817,7 +820,7 @@ function registrarConclusao() { metricas.missoesConcluidas++; }
 function registrarFalha() { metricas.missoesFalhas++; }
 function registrarEtapa(ok) { metricas.totalEtapas++; if (!ok) metricas.totalFalhasEtapa++; }
 
-const RECONCILIATION_RECEIPT = '/root/CentralDark/.artifacts/system-sentinel/reconciliation.json';
+const RECONCILIATION_RECEIPT = `${REPO_ROOT}/.artifacts/system-sentinel/reconciliation.json`;
 let ultimaReconciliacao = null;
 
 async function reconciliarEstadoCanonico() {
@@ -835,10 +838,10 @@ async function reconciliarEstadoCanonico() {
   };
   try {
     const git = (comando) => new Promise((resolve, reject) => exec(comando, { timeout: 30_000 }, (err, stdout, stderr) => err ? reject(new Error(stderr.trim() || err.message)) : resolve(stdout.trim())));
-    const head = await git("git -C /root/CentralDark rev-parse HEAD");
-    const main = await git("git -C /root/CentralDark rev-parse origin/main");
+    const head = await git(`git -C ${REPO_ROOT} rev-parse HEAD`);
+    const main = await git(`git -C ${REPO_ROOT} rev-parse origin/main`);
     resultado.current = { head, origin_main: main, alinhado: head === main };
-    const checklist = '/root/CentralDark/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md';
+    const checklist = `${REPO_ROOT}/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md`;
     resultado.checklist_diario = { path: checklist, presente: existsSync(checklist) };
     try {
       const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'CentralDark-Hermes-Core' };
@@ -934,27 +937,98 @@ async function montarHealth() {
   };
 }
 
+const CAPABILITY_ROUTE = '/v1/capabilities/mission';
+const CAPABILITY_MAX_BODY = 128 * 1024;
+
+function writeJson(res, status, payload, headers = {}) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', ...headers });
+  res.end(JSON.stringify(payload));
+}
+
+function capabilityAuthorized(req) {
+  const configured = String(process.env.HERMES_CAPABILITY_TOKEN || '');
+  const supplied = String(req.headers.authorization || '');
+  if (!configured || !supplied.startsWith('Bearer ')) return false;
+  const candidate = Buffer.from(supplied.slice(7));
+  const expected = Buffer.from(configured);
+  return candidate.length === expected.length && timingSafeEqual(candidate, expected);
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.setEncoding('utf8');
+    req.on('data', (chunk) => {
+      body += chunk;
+      if (Buffer.byteLength(body, 'utf8') > CAPABILITY_MAX_BODY) {
+        reject(new Error('CAPABILITY_BODY_TOO_LARGE'));
+        req.destroy();
+      }
+    });
+    req.on('end', () => resolve(body));
+    req.on('error', reject);
+  });
+}
+
+async function enqueueAuthenticatedMission(req) {
+  if (!capabilityAuthorized(req)) return { status: 401, payload: { error: 'unauthorized' } };
+  if (req.method !== 'POST') return { status: 405, payload: { error: 'method_not_allowed' } };
+
+  let payload;
+  try { payload = JSON.parse(await readBody(req)); }
+  catch (error) { return { status: 400, payload: { error: String(error.message || 'invalid_json') } }; }
+
+  const mission = typeof payload?.mission === 'string' ? payload.mission.trim() : '';
+  const continuityState = payload?.continuity_state;
+  const validation = validateContinuityState(continuityState);
+  if (!mission || !validation.ok) {
+    return { status: 422, payload: { error: 'invalid_mission_contract', reasons: validation.reasons || ['MISSION_REQUIRED'] } };
+  }
+
+  await garantirRuntimeDirs();
+  const idempotency = String(payload.idempotency_key || '').trim();
+  const fingerprint = createHash('sha256').update(JSON.stringify({ mission, continuityState, idempotency })).digest('hex');
+  const filename = `http-${fingerprint.slice(0, 32)}.md`;
+  const missionPath = join(PENDENTE, filename);
+  const statePath = `${missionPath}.state.json`;
+  try {
+    await writeFile(statePath, `${JSON.stringify(continuityState, null, 2)}\\n`, { encoding: 'utf8', mode: 0o600, flag: 'wx' });
+    await writeFile(missionPath, `${mission}\\n`, { encoding: 'utf8', mode: 0o600, flag: 'wx' });
+  } catch (error) {
+    if (error?.code === 'EEXIST') return { status: 202, payload: { accepted: true, deduplicated: true, fingerprint } };
+    try { await rm(statePath, { force: true }); } catch {}
+    return { status: 500, payload: { error: 'mission_enqueue_failed' } };
+  }
+  return { status: 202, payload: { accepted: true, deduplicated: false, fingerprint, transport: 'HERMES_CORE_NATIVE_QUEUE' } };
+}
+
 function iniciarHealthServer() {
   const srv = httpCreateServer(async (req, res) => {
     try {
       const url = (req.url || '/').split('?')[0];
+      if (url === CAPABILITY_ROUTE) {
+        const result = await enqueueAuthenticatedMission(req);
+        return writeJson(res, result.status, result.payload);
+      }
+      if (url === '/v1/capabilities') {
+        if (!capabilityAuthorized(req)) return writeJson(res, 401, { error: 'unauthorized' });
+        return writeJson(res, 200, { service: 'hermes-core', transport: 'native_queue', capabilities: ['mission.enqueue'], ai_policy: 'SCRIPT_FIRST_AI_ON_VERIFIED_FAILURE_ONLY' });
+      }
       if (['/health', '/', '/status', '/metrics'].includes(url)) {
         const body = JSON.stringify(await montarHealth(), null, 2);
         res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
         res.end(body);
       } else {
-        res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' });
-        res.end('{"error":"not found"}');
+        writeJson(res, 404, { error: 'not found' });
       }
     } catch (e) {
-      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(JSON.stringify({ status: 'error', error: String(e.message || e) }));
+      writeJson(res, 500, { status: 'error', error: String(e.message || e) });
     }
   });
   srv.on('error', (e) => {
     log('[health] erro no server: ' + e.message + (e.code === 'EADDRINUSE' ? ' (porta ' + HEALTH_PORT + ' ocupada)' : ''));
   });
-  srv.listen(HEALTH_PORT, '0.0.0.0', () => log(`[health] 🩺 /health ouvindo em 0.0.0.0:${HEALTH_PORT}`));
+  srv.listen(HEALTH_PORT, '0.0.0.0', () => log(`[health] 🩺 /health e capacidades autenticadas ouvindo em 0.0.0.0:${HEALTH_PORT}`));
   return srv;
 }
 

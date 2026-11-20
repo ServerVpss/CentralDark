@@ -20,7 +20,23 @@ from fastapi import APIRouter, HTTPException, Request
 
 router = APIRouter(prefix="/pivete", tags=["pivete-compat"])
 
-REPO_ROOT = Path("/root/CentralDark")
+
+def _resolve_repo_root() -> Path:
+    configured = os.environ.get("CENTRALDARK_REPO_ROOT", "").strip()
+    if configured:
+        root = Path(configured).expanduser().resolve()
+        if (root / "LEIA-ME-IA.md").is_file() and (root / ".agents").is_dir():
+            return root
+        raise RuntimeError("CENTRALDARK_REPO_ROOT_INVALID")
+
+    source = Path(__file__).resolve()
+    for candidate in source.parents:
+        if (candidate / "LEIA-ME-IA.md").is_file() and (candidate / ".agents").is_dir():
+            return candidate
+    raise RuntimeError("CENTRALDARK_REPO_ROOT_NOT_FOUND")
+
+
+REPO_ROOT = _resolve_repo_root()
 LOG_SYNC = REPO_ROOT / "logs"
 
 # Allowlist explícita. Ordem = precedência de boot, não glob.

@@ -16,6 +16,8 @@ tags:
 
 # Codex — adaptador fino CentralDark
 
+**Apresentação ao CHEFE:** herdar a fala humana da SOUL e o padrão de resposta canônico. Conversar em PT-BR natural, sem campos técnicos ou HUD obrigatório; preservar identificadores literais nos artefatos e mostrá-los somente quando solicitados ou indispensáveis.
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
@@ -73,7 +75,7 @@ FUTURE_RULES_CONSUMED_FROM_CORE=true
 Regra de compatibilidade: se uma particularidade exclusiva do Codex precisar ser documentada, registrar somente a diferença física da superfície/tool. Regras comuns pertencem ao core, nunca a este arquivo.
 
 
-## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+## 🔥🪬 Estado atual herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
 
@@ -133,7 +135,7 @@ Não ler, copiar, publicar ou usar valores de `.env`, `secrets/`, `tokens/`, `se
 Este adaptador carrega os owners `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md`, `.agents/skills/meta-lupa/SKILL.md` e `.agents/skills/meta-lupa/AUTOLUPA_CANONICAL_SHA` por meio de `LEIA-ME-IA.md`, e emite `CENTRALDARK_AI_BOOT`. Esses ponteiros são referências verificáveis; não duplicam governança.
 
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO

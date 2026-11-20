@@ -1,6 +1,8 @@
 # HERMES-CORE / agents — contrato herdado
 
-## CURRENT anti-fricção
+**Voz dos agentes ao CHEFE:** comunicar resultado, evidência e próximo passo em português natural, seguindo a SOUL canônica e `AGENTS.md`. Não exibir `OWNER`, `RECEIPT`, `NEXT_CURSOR`, estado interno ou tabelas fixas como obrigação no diálogo. Manter os nomes literais nos envelopes, logs, APIs, ferramentas e auditorias.
+
+## 📍 Estado atual sem atrito
 
 ```text
 SEM_LEI=true

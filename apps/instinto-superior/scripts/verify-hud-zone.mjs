@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
@@ -12,6 +13,50 @@ const sourceBlob = spawnSync("git", ["show", `${hudInventory.source.main_sha}:${
 });
 const cockpit = read("apps/instinto-superior/src/components/central/CockpitShell.tsx");
 const zone = read("apps/instinto-superior/src/components/central/HudDeterministico.tsx");
+const syncFunctions = read("apps/instinto-superior/src/lib/sync.functions.ts");
+
+
+test("HUD vigente vem da main por marcador sem PR fixo nem segredo no browser", () => {
+  assert.ok(syncFunctions.includes('const HUD_FUNNEL_MARKER = "CENTRALDARK_HUD_FUNNEL_CONTINUITY"'));
+  assert.ok(syncFunctions.includes('process.env["GITHUB_TOKEN"] || process.env["GH_TOKEN"]'));
+  assert.ok(syncFunctions.includes('pulls?state=open&per_page=100&page='));
+  assert.ok(syncFunctions.includes('execFileSync("gh", ["auth", "status"]'));
+  assert.ok(syncFunctions.includes('"GH_CLI"'));
+  assert.ok(syncFunctions.includes('"GITHUB_API"'));
+  assert.ok(syncFunctions.includes("readHudViaGithubApi"));
+  assert.ok(syncFunctions.includes("readHudViaGhCli"));
+  assert.ok(zone.includes('import { lerHudVigente } from "@/lib/sync.functions";'));
+  assert.ok(zone.includes('queryKey: ["centraldark", "hud-funil-current"]'));
+  assert.ok(zone.includes("CENTRALDARK_HUD_FUNNEL_CONTINUITY"));
+  assert.ok(zone.includes("GITHUB_TOKEN/GH_TOKEN do ambiente"));
+  assert.ok(zone.includes("Nenhum segredo é enviado ao navegador"));
+  assert.ok(!zone.includes("process.env"));
+  assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
+});
+// #OBSERVACOES# @owner=apps/instinto-superior/scripts/verify-hud-zone.mjs
+// @doc_ref=docs/HUD/README.md @last_updated=2026-11-14T09:34:00Z
+// O gate testa o vinculo do leitor PR-comentario com HUD; nao declara runtime publicado.
+test("!HUD le comentarios do funil por MISSION_ID e expoe pendencias sem falso PASS", () => {
+  const agentes = read("AGENTS.md");
+  const contrato = read("docs/HUD/README.md");
+  assert.ok(syncFunctions.includes("HUD_MISSION_TAG"));
+  assert.ok(syncFunctions.includes("HUD_HALO_RECEIPT"));
+  assert.ok(syncFunctions.includes("parseHudRecibos"));
+  assert.ok(syncFunctions.includes("lerHudComentariosApi"));
+  assert.ok(syncFunctions.includes("lerHudComentariosGh"));
+  assert.ok(syncFunctions.includes("CENTRALDARK_HUD_ACTIVE_MISSION"));
+  assert.ok(syncFunctions.includes("activeMissionId"));
+  assert.ok(syncFunctions.includes("issues/" + '" + pr + "' + "/comments?per_page=100&page="));
+  assert.ok(syncFunctions.includes('recibosEstado: atual ? "PASS" : "BLOCKED"'));
+  assert.ok(syncFunctions.includes("CONCLUSAO_RELATADA"));
+  assert.ok(zone.includes("MISSÃO PERSISTENTE · RECIBO DO GITHUB"));
+  assert.ok(zone.includes("hudCurrent.data.missaoAtual.checklist.map"));
+  assert.ok(zone.includes("hudCurrent.data.missaoAtual.commentUrl"));
+  assert.ok(zone.includes("Caixas refletem declarações nos comentários"));
+  assert.ok(agentes.includes("LEITURA INTERCHATS DO FUNIL"));
+  assert.ok(contrato.includes("CENTRALDARK_HUD_MISSION_ID"));
+  assert.ok(!syncFunctions.includes("ACTIVE_FUNNEL_PR=1977"));
+});
 
 test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   const n = [lineage.genesis, ...lineage.nodes];
@@ -24,6 +69,26 @@ test("Genese usa a mesma fonte canonica sem renumerar UID", () => {
   }
   assert.match(zone, /APRENDIZADOS-NEUROLINK-LINEAGE\.json/);
   assert.match(zone, /BLOCKED_UID_INTEGRITY/);
+});
+
+test("Genese agrupa numeros antigos por UID unico e aponta para o blob atual", () => {
+  const source = Buffer.from(read("docs/CONSCIENCIA/APRENDIZADOS.md"), "utf8");
+  const sha = createHash("sha1").update(`blob ${source.length}\0`).update(source).digest("hex");
+  assert.equal(lineage.source_blob_sha, sha);
+  const byNumber = new Map();
+  for (const node of lineage.nodes) {
+    const group = byNumber.get(node.legacy_learning_number) ?? [];
+    group.push(node.uid);
+    byNumber.set(node.legacy_learning_number, group);
+  }
+  const expected = [...byNumber.entries()]
+    .filter(([, uids]) => uids.length > 1)
+    .map(([legacy_learning_number, uids]) => ({ legacy_learning_number, count: uids.length, uids }))
+    .sort((a, b) => a.legacy_learning_number - b.legacy_learning_number);
+  assert.deepEqual(lineage.audit.duplicate_legacy_numbers, expected);
+  assert.equal(new Set(lineage.nodes.map(node => node.uid)).size, lineage.nodes.length);
+  assert.match(zone, /Árvore de números históricos repetidos/);
+  assert.match(zone, /setCursor\(nodeIndex\)/);
 });
 
 test("zone existente reutilizado com autenticacao", () => {
@@ -581,24 +646,23 @@ test("Instinto Superior oferece 5 acoes humanas usando owners originais", () => 
   // Cada área deve ter um único gatilho; os sete gatilhos Radix duplicados
   // foram removidos do CockpitShell para evitar IDs/aria-controls repetidos.
   const navegacao = shell.split("const NAVEGACAO_PASTAS = [")[1]?.split("] as const;")[0] ?? "";
-  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,27);
+  assert.equal((navegacao.match(/\{ valor: "/g) || []).length,28);
   assert.ok(shell.includes('data-cd-flow={"instinto.CockpitShell.aba." + item.valor}'));
   assert.ok(shell.includes('(!item.soAdmin || autenticado)'));
   const icones = shell.split("const ICONES_NAVEGACAO = {")[1]?.split("} satisfies Record<")[0] ?? "";
   const chaves = [...icones.matchAll(/^  (?:"([^"]+)"|([a-z][a-z0-9]*)):/gm)].map((m) => m[1] || m[2]);
-  assert.equal(chaves.length, 27, "cada menu original deve ter ícone próprio");
-  assert.equal(new Set(chaves).size, 27, "não duplicar entradas do mapeamento");
+  assert.equal(chaves.length, 28, "cada menu original deve ter ícone próprio");
+  assert.equal(new Set(chaves).size, 28, "não duplicar entradas do mapeamento");
   const rotas = [...navegacao.matchAll(/\{ valor: "([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 27 rotas atuais");
+  assert.deepEqual([...chaves].sort(), [...rotas].sort(), "ícones devem corresponder às 28 rotas atuais");
   assert.ok(shell.includes('<IconeItemNavegacao valor={item.valor} />'));
-  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold") && shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-data-[state=active]/menuitem:text-primary"));
-  assert.ok(shell.includes("group-hover/menuitem:-translate-y-0.5"));
-  assert.ok(shell.includes("group-hover/menuitem:scale-105"));
-  assert.ok(shell.includes("group-hover/menuitem:shadow-[0_0_14px_-5px_var(--primary)]"));
-  assert.ok(shell.includes("group-hover/menuitem:text-neon-green"));
-  assert.ok(shell.includes("group-focus-within/menuitem:text-primary"));
-  assert.ok(shell.includes("motion-reduce:transform-none"));
+  assert.ok(shell.includes("bg-surface-2") && shell.includes("text-gold"));
+  assert.ok(shell.includes("hover:bg-primary/10"));
+  assert.ok(shell.includes("focus-visible:bg-primary/10"));
+  assert.ok(shell.includes("data-[state=active]:bg-primary/15"));
+  assert.ok(shell.includes("data-[state=active]:text-primary"));
+  assert.ok(shell.includes("group-data-[collapsible=icon]:justify-center"));
+  assert.ok(shell.includes("motion-reduce:transition-none"));
   assert.ok(!shell.includes('className="mr-2 shrink-0 text-xs group-data-[collapsible=icon]:mr-0"'));
   const landing = read("apps/instinto-superior/src/routes/index.tsx");
   assert.ok(landing.includes('rounded-lg border border-border bg-surface-2'));

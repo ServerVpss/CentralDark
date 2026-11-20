@@ -6,13 +6,15 @@ import { promisify } from "node:util";
 
 const execFileP = promisify(execFile);
 
+const HERMES_HOME = process.env.HERMES_HOME || process.env.HOME || process.cwd();
+
 export const CALIBRATION_STATE_PATH =
   process.env.CENTRALDARK_RUNTIME_CALIBRATION_STATE ||
-  "/root/.hermes/centraldark-runtime-calibration.json";
+  `${HERMES_HOME}/.hermes/centraldark-runtime-calibration.json`;
 
 const LOCAL_RUNTIME_STATE =
   process.env.HERMES_LOCAL_RUNTIME_STATE ||
-  "/root/.hermes/runtimes/llamacpp/server.json";
+  `${HERMES_HOME}/.hermes/runtimes/llamacpp/server.json`;
 
 const REPAIR_COOLDOWN_MS = Number(
   process.env.CENTRALDARK_RUNTIME_CALIBRATION_COOLDOWN_MS || 15 * 60_000,

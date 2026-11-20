@@ -57,7 +57,7 @@ TOOL_UNKNOWN
 → ASK_ONLY_MINIMUM_IDENTIFIER
 ```
 
-HUD mínimo:
+HUD técnico mínimo para ferramenta/diagnóstico, sem obrigação de exibição na conversa humana:
 
 ```text
 TOOL_OR_ROUTE=
@@ -85,7 +85,7 @@ CONFIDENCE_ACTING_PERCENT=
 → calcular intenção, confiança, autoridade, writer, risco, frequência, capacidade disponível e gatilho mínimo.
 
 ⭕ !AURÉOLA CANÔNICA
-→ mostrar rota operacional quando material: FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR.
+→ apresentar em português natural a rota pertinente quando material; manter FASE, EIXO, OWNER, DESTINO, NEXT_GATE, PROVA, FERIDA, NEXT_CURSOR nos registros internos, não como campos obrigatórios no chat.
 
 🔎 !META_LUPA
 → localizar lacuna, falso-verde, owner errado, duplicação, drift ou prova fraca.

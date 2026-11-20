@@ -55,6 +55,6 @@ credencial ausente/erro
 => FIGMA_HUB_RUNTIME=UNKNOWN|BLOCKED
 ```
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 test exact HEAD -> build/dist -> PR -> same-head CI -> merge -> seed provider on VPS -> /figma/status -> board node 0:1 -> receipt.

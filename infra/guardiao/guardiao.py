@@ -28,10 +28,25 @@ from heartbeat import enviar_heartbeat, registrar_evento_painel
 from notifier import notificar_telegram
 
 # ─── Constantes travadas ──────────────────────────────────────────
-RAIZ = Path("/root/CentralDark")
+def _resolve_repo_root() -> Path:
+    configured = os.environ.get("CENTRALDARK_REPO_ROOT", "").strip()
+    if configured:
+        root = Path(configured).expanduser().resolve()
+        if (root / "LEIA-ME-IA.md").is_file() and (root / ".agents").is_dir():
+            return root
+        raise RuntimeError("CENTRALDARK_REPO_ROOT_INVALID")
+
+    source = Path(__file__).resolve()
+    for candidate in source.parents:
+        if (candidate / "LEIA-ME-IA.md").is_file() and (candidate / ".agents").is_dir():
+            return candidate
+    raise RuntimeError("CENTRALDARK_REPO_ROOT_NOT_FOUND")
+
+
+RAIZ = _resolve_repo_root()
 WATCH_DIR = RAIZ / "docs" / "CONSCIENCIA"
-REGRAS = Path(__file__).parent / "guardiao_rules.yaml"
-LOG_DIR = Path(__file__).parent / "logs"
+REGRAS = Path(__file__).resolve().parent / "guardiao_rules.yaml"
+LOG_DIR = Path(__file__).resolve().parent / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
 # Trava de segurança: modo 'auto' proibido até esta data (10 dias a partir de 25/06/2026)

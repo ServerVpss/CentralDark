@@ -126,7 +126,7 @@ ${debate}
 CRÍTICAS CRUZADAS:
 ${criticas.map((c) => `## ${c.modelo} criticou:\n${c.texto}`).join("\n\n")}
 
-Entregue a resposta final consolidada em PT-BR, direta, sem meta-comentário sobre o processo. Só a resposta.`;
+Entregue a resposta final consolidada em PT-BR natural, direta e clara, como uma conversa humana. Não use cabeçalhos artificiais, siglas internas, campos obrigatórios, bordões repetidos nem meta-comentários sobre o processo. Preserve exatidão técnica, evidência e ressalvas relevantes; mostre identificadores literais quando necessários. Só a resposta.`;
 
       const juiz = await chamarModelo(agente.modelo_juiz, [
         { role: "system", content: systemBase },

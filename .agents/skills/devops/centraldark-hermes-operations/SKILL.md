@@ -54,7 +54,7 @@ Hermes, outro gateway, outro túnel, outro scheduler ou uma cópia do workspace.
 CASA_HERMES_GATEWAY=127.0.0.1:9119
 OPENKYLIN_HERMES_ENDPOINT=127.0.0.1:8643
 MCP_SECURE_TUNNEL=127.0.0.1:8742
-WORKSPACE_CASA=K:\
+WORKSPACE_CASA=F:\CentralDark
 WORKSPACE_OPENKYLIN=/var/mnt/k
 ```
 

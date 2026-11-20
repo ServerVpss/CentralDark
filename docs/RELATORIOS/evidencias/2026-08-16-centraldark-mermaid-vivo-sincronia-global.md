@@ -1,3 +1,27 @@
+---
+title: "CENTRALDARK — MERMAID VIVO DE SINCRONIA GLOBAL"
+status: "DOCUMENTAL_SEM_PROVA_RUNTIME_ATUAL"
+owner: "docs/RELATORIOS/evidencias/2026-08-16-centraldark-mermaid-vivo-sincronia-global.md"
+source_class: "INTERNAL"
+tipo: "evidencia_documental"
+data_criacao: "UNKNOWN"
+ultima_atualizacao: "UNKNOWN"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "716365981ef558e2a43a8aa0be171f8128756e5d5af77e05137e194f39066497"
+rastro:
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "5930ecff45611c151928307fe4d972b89fb8c4b3"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a:
+  - "docs/ARQUITETURA/EVIDENCE-ENVELOPE-CAUSAL.md"
+  - "docs/CONSCIENCIA/RECEIPTS/2026-10-21-JUKEBOX-CENTRALDARK-A-Z-001-N.md"
+estado_evidencia: "UNKNOWN"
+---
 # CENTRALDARK — MERMAID VIVO DE SINCRONIA GLOBAL
 
 > 👑 **CHEFE / SEGREDO** = humano, dono da intenção e autoridade final.

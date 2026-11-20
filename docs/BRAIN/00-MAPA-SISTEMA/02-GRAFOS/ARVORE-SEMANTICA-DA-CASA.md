@@ -24,7 +24,6 @@ BRAIN
 ├─ 02-ENTRADA
 ├─ 03-DOCUMENTACAO
 ├─ 04-DECISOES
-├─ 05-DEVEDORES-CONTATOS
 ├─ 06-REUNIOES-NOTAS
 ├─ 07-APRENDIZADOS-MEMORIAS
 ├─ 08-ARTEFATOS-VISUAIS
@@ -64,7 +63,6 @@ VETOR       = proximidade por significado
 | `02-ENTRADA` | matéria nova | âmbar |
 | `03-DOCUMENTACAO` | documentação/biblioteca | azul/cyan |
 | `04-DECISOES` | decisões | laranja |
-| `05-DEVEDORES-CONTATOS` | domínio humano específico | vermelho-terra |
 | `06-REUNIOES-NOTAS` | encontros/notas | magenta |
 | `07-APRENDIZADOS-MEMORIAS` | aprendizado/memória | verde |
 | `08-ARTEFATOS-VISUAIS` | SVG/Mermaid/mapas/imagens | turquesa |

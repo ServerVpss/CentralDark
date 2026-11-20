@@ -205,6 +205,71 @@ export function validateCatalog(catalog) {
   return { status: 'PASS', sources: sourceIds.size, entries: entryIds.size, horn_sector_gate: 'PROVEN_FOR_ALL_ENTRIES' };
 }
 
+
+const DEFAULT_COGNITIVE_FILE_EXTENSIONS = new Set(['.pdf', '.epub', '.jwpub']);
+
+function normalizeRepositoryPath(value) {
+  return String(value ?? '').trim().replaceAll('\\', '/').replace(/^\.?\//, '');
+}
+
+function sourceRepositoryPaths(source) {
+  const provenance = source?.provenance && typeof source.provenance === 'object' ? source.provenance : {};
+  return [
+    provenance.canonical_path,
+    source?.canonical_path,
+    provenance.text_index,
+    source?.text_index,
+  ].map(normalizeRepositoryPath).filter(Boolean);
+}
+
+// Read-only TREE <-> CATALOG coverage. Never mutates catalog.json.
+export function reconcileLibraryCoverage({
+  catalog,
+  physicalFiles = [],
+  libraryRoot = 'docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA',
+  cognitiveExtensions = DEFAULT_COGNITIVE_FILE_EXTENSIONS,
+} = {}) {
+  validateCatalog(catalog);
+  assertArray(physicalFiles, 'physicalFiles');
+
+  const root = normalizeRepositoryPath(libraryRoot).replace(/\/+$/, '');
+  const files = [...new Set(physicalFiles.map(normalizeRepositoryPath).filter(Boolean))].sort();
+  const physical = new Set(files);
+  const declaredPaths = new Map();
+
+  for (const source of catalog.sources) {
+    const sourceId = normalizeToken(source?.source_id);
+    for (const sourcePath of sourceRepositoryPaths(source)) {
+      if (!declaredPaths.has(sourcePath)) declaredPaths.set(sourcePath, []);
+      declaredPaths.get(sourcePath).push(sourceId);
+    }
+  }
+
+  const unregisteredSources = files.filter((filePath) => {
+    if (!(filePath === root || filePath.startsWith(root + '/'))) return false;
+    const slash = filePath.lastIndexOf('/');
+    const name = slash >= 0 ? filePath.slice(slash + 1) : filePath;
+    const dot = name.lastIndexOf('.');
+    const ext = dot >= 0 ? name.slice(dot).toLowerCase() : '';
+    return cognitiveExtensions.has(ext) && !declaredPaths.has(filePath);
+  });
+
+  const missingDeclaredPaths = [...declaredPaths.entries()]
+    .filter(([sourcePath]) => sourcePath === root || sourcePath.startsWith(root + '/'))
+    .filter(([sourcePath]) => !physical.has(sourcePath))
+    .map(([sourcePath, sourceIds]) => ({ path: sourcePath, source_ids: [...sourceIds].sort() }))
+    .sort((a, b) => a.path.localeCompare(b.path));
+
+  return {
+    status: unregisteredSources.length === 0 && missingDeclaredPaths.length === 0 ? 'PASS' : 'FAIL',
+    physical_files: files.length,
+    declared_repository_paths: declaredPaths.size,
+    unregistered_sources: unregisteredSources,
+    missing_declared_paths: missingDeclaredPaths,
+    catalog_mutated: false,
+  };
+}
+
 export function deriveSourceIdentity(source) {
   if (!source || typeof source !== 'object' || Array.isArray(source)) {
     throw new Error('SOURCE_REQUIRED_FOR_IDENTITY');

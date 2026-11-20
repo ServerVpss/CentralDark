@@ -128,7 +128,9 @@ Responda em português direto, sem papagaio. Quando o usuário perguntar se “j
 
 When the task is not just verifying but BUILDING a new integration section, see `references/cockpit-cerebro-build-pattern.md` for the full pattern: server functions, doc parsers, typed returns, and UI components.
 
-## Formato de resposta
+## Formato de registro técnico de verificação
+
+Manter este esquema de evidência nos recibos e ferramentas. A resposta humana deve dizer em frases curtas o que foi comprovado, o que falta e qual o próximo passo, sem recitar campos. Para auditoria solicitada, exibir:
 
 ```text
 VEREDITO=PASS|PARTIAL|UNKNOWN|BLOCKED

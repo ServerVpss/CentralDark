@@ -5,8 +5,8 @@ name: 🏅 Selo Fabric — selo universal de eventos
 on:
   push:
     branches: [main]
-  check_suite:
-    types: [completed]
+  # CENTRALDARK_SELO_FABRIC_LOOP_GUARD_20261120: check_suite removido.
+  # Gatilho recursivo gerou 25.229 runs sobre a mesma main e bloqueou startup.
   workflow_run:
     workflows:
       - ⚙️ porta-de-entrada

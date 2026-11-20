@@ -6,7 +6,7 @@ Corpo visual final da CentralDark. Este repositório reúne a landing trilíngue
 
 - Código visual canônico: `ServerVpss/CentralDark/apps/instinto-superior`.
 - Contratos, runtime, governança e código visual convergem no mesmo repositório: `ServerVpss/CentralDark`.
-- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem owner paralelo.
+- `ServerVpss/centraldark-instinto-superior` + Lovable: projeção/editor compatível; não são segunda autoridade nem responsável paralelo.
 - URL conhecida: <https://centraldark-instinto-superior.lovable.app>.
 
 Uma URL conhecida ou uma sincronização declarada não prova que o HEAD está publicado. O cockpit só promove deploy quando consegue medir e comparar os SHAs; ausência de fonte aparece como `UNKNOWN`.
@@ -51,13 +51,13 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 - **Menor delta:** gerar `/etc/centraldark/instinto-superior-auth-public.env` (0600, apenas aliases `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`, sem service-role) e adicionar drop-in `/etc/systemd/system/centraldark-instinto-superior-web.service.d/10-supabase-public.conf` com EnvironmentFile. Unit original intacta. Reinício somente do cockpit, não do MCP/Hermes.
 - **Readback:** `ActiveState=active`, `MainPID=128667`, ambiente novo contém as duas variáveis e nenhuma SERVICE_ROLE; `/auth`, `/auth/callback`, `/sala-controle` HTTP 200; nenhum novo `Missing Supabase` desde a inicialização do novo PID às 17:28:18 UTC. **HTTP 200 não comprova login admin.**
 - **Rollback:** remover somente drop-in `10-supabase-public.conf` e env derivado `instinto-superior-auth-public.env`, `systemctl daemon-reload`, reiniciar somente a unit do cockpit. Não mexer na `.env.production.local` nem em cookies.
-- **NEXT_CURSOR:** reentrar pelo navegador em `/auth`, testar chamada SSR com sessão verdadeira e confirmar `admin=true`. O erro `chrome-extension://.../inject-scripts/set-global.js` é da extensão Chrome e deve ser testado separadamente; não é prova da causa server-side.
+- **👉 O QUE FAZER AGORA:** reentrar pelo navegador em `/auth`, testar chamada SSR com sessão verdadeira e confirmar `admin=true`. O erro `chrome-extension://.../inject-scripts/set-global.js` é da extensão Chrome e deve ser testado separadamente; não é prova da causa server-side.
 - **Reality Judge:** `RUNTIME_ENV=PASS`, `SSR_ROUTES=PASS`, `SESSION_SERVER_FN=UNKNOWN`, `ADMIN_LOGIN_E2E=UNKNOWN`, `EXTENSION_ERROR=SEPARATE`, `GLOBAL_FIXED_POINT=FALSE`.
 
 
 ## 🪬 Manifesto incremental do harness privado
 
-O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o NEXT_CURSOR ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
+O contrato evolutivo, os responsáveis, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o próximo passo ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
 
 
 ## Túnel OpenAI na Forja Linux — 2026-11-01T19:13:55.777094+00:00
@@ -65,7 +65,7 @@ O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica,
 @owner: instinto.admin.mcp; @code_ref: src/lib/mcp-admin.functions.ts; src/components/central/McpAdminIntegrado.tsx
 @last_updated: 2026-11-01T19:13:55.777094+00:00
 O Admin MCP reutiliza autenticação Supabase e user_roles admin para receber CONTROL_PLANE_API_KEY. O servidor habilitado por CENTRALDARK_LOCAL_TUNNEL_ENABLED=1 grava atomicamente ~/.config/tunnel-client/centraldark-casa.env com modo 0600; o observador systemd do mesmo usuário inicia centraldark-mcp-tunnel.service. O valor nunca é retornado, logado ou enviado ao Vault remoto. O Cofre Supabase permanece dono das outras credenciais; isto configura o owner local específico do túnel. Sem sessão/admin, sem escrita. Readiness não equivale a chamada pelo plugin. Ambiente Linux: checkout medido, sem impor /root/CentralDark.
-Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. NEXT_CURSOR: build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
+Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. **👉 O QUE FAZER AGORA:** build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
 
 @code_ref: src/lib/cockpit.functions.ts; @last_updated: 2026-11-01T19:22:05.143254+00:00. Inventário executa ss/pgrep no Linux nativo, sem exigir WSL/PowerShell. CASA é papel explícito, não deduzido de hostname. TCP/UDP e processo STDIO mantêm provas separadas de execução funcional.
 
@@ -83,4 +83,21 @@ Screenpipe Linux: binário npm oficial da mesma versão0.4.51 já fixada no proj
 ## Regressão dos botões de sincronização — 2026-11-01T19:58:27.552347+00:00
 @code_ref: src/lib/sync.functions.ts; src/components/central/AutoSyncButton.tsx
 @last_updated: 2026-11-01T19:58:27.552347+00:00
+Botão Main mede sem publicar e retorna conflito se SHAs diferem; consulta bem-sucedida não significa convergência. Casa/Forja reutiliza syncCasaMain, bloqueia drift antes de merge/push e não adiciona arquivos automaticamente. Seleção/publicação de arquivos permanece com writer-safe-push-main existente. O botão antes rotulado "Sincronizar Tudo" agora diz "Sincronizar Casa/Main": continua usando o alvo local, sem acionar VMware por trás. VPS/VMware continua ação explícita e bloqueia checkout remoto sujo. O painel reaproveita a leitura `centraldark/estado-vivo`: compara SHA de `main` com SHA da VPS apenas quando ambos foram medidos; mostra SIM, NÃO ou NÃO VERIFICADO. A leitura do rastreador só pode representar a Casa Windows se tiver origem Windows confirmada; um checkout Linux não substitui a leitura da Casa. Mesma revisão Git não é prova de deploy nem de ausência de arquivos locais. Triton fornece inferência de modelos de IA e não realiza Git/SSH sync. O cartão `Código oficial` usa a API com `GITHUB_TOKEN` quando disponível ou a sessão **já autenticada** do `gh` CLI no usuário do serviço, exclusivamente no servidor, sem copiar/exibir tokens. Uma falha de acesso permanece `AUTH_REQUIRED`/`UNKNOWN`, nunca `PASS` por mera conexão HTTP. Sequência all interrompe no primeiro conflito, sem alcançar VPS. Regressão exige clique, readback do host e contraprova; navegação não é execução do motor.
 Botão Main mede sem publicar e retorna conflito se SHAs diferem; consulta bem-sucedida não significa convergência. Casa/Forja reutiliza syncCasaMain, bloqueia drift antes de merge/push e não adiciona arquivos automaticamente. Seleção/publicação de arquivos permanece com writer-safe-push-main existente. Sincronizar Tudo cobre Casa/Main; VPS é explícita e bloqueia checkout remoto sujo. Sequência all interrompe no primeiro conflito, sem alcançar VPS. Regressão exige clique, readback do host e contraprova; navegação não é execução do motor.
+
+
+## Reconciliação Casa/Main 3-way — 13/11/2026
+
+@code_ref: `scripts/auto-sync/AUTO-SYNC-MASTER.py`; `src/lib/sync.functions.ts`; `scripts/verify-sync-safety.mjs`  
+@last_updated: 2026-11-13T04:39:00Z
+
+O botão Casa/Main continua no mesmo owner `cockpit-sync`, mas checkout sujo não passa mais por `pull --rebase`, `checkout --ours`, `git add .` ou commit automático. O `AUTO-SYNC-MASTER.py --dry-run --json` mede `HEAD / merge-base / origin/main`, arquivos locais, mudanças remotas e interseção de caminhos; para cada sobreposição textual usa o merge-base real com `git merge-file -p` somente como **sonda**, sem modificar worktree, index ou HEAD.
+
+O Cockpit faz um único `fetch`, passa o `FETCH_HEAD` já medido ao planner com `--no-fetch` e mostra quantos caminhos são auto-mescláveis e quantos têm conflito semântico real. Conflito continua vermelho/pendente até writer do owner, teste e contraprova; plano não vira commit nem deploy. O arquivo de status usa replace atômico e o planner usa lock de writer único.
+
+Prova que motivou o delta: VM openKylin em `main@4207576f4c86`, `origin/main@b98dd1ae471a`, `ahead=0`, `behind=276`, 68 pendências locais, 49 caminhos sobrepostos; sonda 3-way encontrou 35 auto-mescláveis, 13 conflitos de conteúdo e 1 caminho sem par textual normal. Esses números são snapshot da medição de 13/11/2026, não estado eterno.
+
+`DRY_RUN != APPLY` · `PLAN != COMMIT` · `COMMIT != DEPLOYED` · `UNKNOWN != PASS`.
+
+**👉 O QUE FAZER AGORA:** atualizar o runtime do mesmo Cockpit com o responsável existente, repetir o clique Casa/Main, obter o manifesto dos conflitos, reconciliar as frentes pelo responsável correto e só então promover o checkout ao mesmo SHA da main.

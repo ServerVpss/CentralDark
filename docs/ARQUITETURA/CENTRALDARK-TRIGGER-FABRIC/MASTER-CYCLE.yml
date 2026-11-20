@@ -61,10 +61,42 @@ current_delivery_policy:
   vps_offline_blocks_repository_edit: false
   ssh_vps_only_when_reachable_and_authorized: true
   vps_unreachable_requires: REPORT_RUNTIME_READBACK_PENDING_WITHOUT_WAITING
-  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RECEIPT]
+  minimum_checks: [REMEASURE_CURRENT_MAIN, ONE_WRITER, DIFF_SECRET_SCAN, APPLICABLE_LOCAL_TESTS, CONTRAPROVA, MAIN_READBACK, RESOLVE_ACTIVE_TRACE_DESTINATION, RECEIPT_OR_HUD_LEDGER_WRITE_SAME_CYCLE, LEDGER_READBACK, RECEIPT]
   active_pr_collision: RECONCILE_OWNER_AND_SCOPE_BEFORE_WRITE
   material_failures: DO_NOT_CLAIM_PASS_OR_FIXED_POINT
   no_new_branch_or_workflow_by_default: true
+
+direct_main_trace_completion_gate:
+  owner: .agents/skills/centraldark-operational-method/SKILL.md
+  fiscal_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/RASTRO.md
+  fiscal_executor: scripts/trigger-fabric/rastro_fiscal.py
+  trigger_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  hud_owner: docs/HUD/README.md
+  write_cycle:
+    - DIRECT_MAIN_MATERIAL_WRITE
+    - COMMIT_REMOTE_PROVEN
+    - MAIN_READBACK
+    - RESOLVE_ACTIVE_TRACE_DESTINATION
+    - RECORD_COMMIT_DELTA_PROOF
+    - LEDGER_READBACK
+    - MISSION_STATE_READY_FOR_HUD
+    - CURRENT_OR_FIXED_POINT
+  complete_requires:
+    - COMMIT_SHA_PATH_LINK_READBACK
+    - ACTIVE_LEDGER_CURRENT
+    - COMPLETE_MATERIAL_COMMIT_CHAIN
+    - LEDGER_READBACK
+    - NEXT_CURSOR_IF_NOT_FIXED_POINT
+  on_trace_failure:
+    mutation_replay: FORBIDDEN
+    preserve_existing_commit: true
+    mode: TRACE_RECOVERY
+    status_until_repaired: PARTIAL_OR_BLOCKED
+  invariants:
+    COMMIT_PROVEN_IS_NOT_TRACE_COMPLETE: true
+    DIRECT_MAIN_COMMIT_IS_NOT_PR_BRANCH_COMMIT: true
+    HISTORICAL_PR_NUMBER_IS_NOT_ACTIVE_LEDGER_IDENTITY: true
+    RETURN_BEFORE_LEDGER_READBACK_IS_METHOD_FAILURE: true
 
 master_precedence:
   human_notation: "#CENTRALDARK > #ACORDAR"
@@ -690,6 +722,23 @@ communication_interface:
     parent_goal: STABLE_UNTIL_MATERIAL_TERMINAL_STATE
     micro_goal: DERIVED_FROM_CURRENT_WOUND
     phase_contract: REHYDRATE_NOT_REINVENT
+    pre_goal_checkpoint:
+      purpose: READ_AND_RECONCILE_BEFORE_NEW_GOAL_OR_ACTIVE_GOAL_REHYDRATION
+      mode: READ_ONLY_CONTEXT_PREFLIGHT_NOT_A_SECOND_EXECUTOR
+      human_sequence: "!CENTRALDARK → !RASTRO → !HUD → #ACORDAR → !AUREULA → !CALIBRAR → !MULTIBÚSSOLA → !META_LUPA → !RECONCILIAR → GOAL"
+      rastro_at_entry: READ_LATEST_VERIFIED_RECEIPT_AND_NEXT_CURSOR_ONLY
+      hud_at_entry: READ_CURRENT_MISSION_STATE_WITHOUT_INVENTING_GREEN
+      acordar: REHYDRATE_CHEFE_INTENT_AND_OWNER_NOT_RESTART_MISSION
+      aureula: REUSE_AUREOLA_CANONICA_ALIAS_AND_CLASSIFY_SURVIVING_EVIDENCE
+      calibrar_multibussola_meta_lupa: APPLY_RELEVANT_CRITERIA_WITHOUT_RITUAL_OR_REPEATED_TESTS
+      reconciliar_at_entry: RECONCILE_CONTEXT_AND_EXISTING_OWNER_BEFORE_GOAL_NOT_FORCE_DIRTY_SYNC
+      goal: DEFINE_OR_RESUME_VERIFIABLE_CLAUSES_WITH_CHEFE_AUTHORITY
+      after_goal_for_authorized_execution: "OWNER_EXISTENTE → MENOR_DELTA → HERMES_EXECUTE → OBSERVE → !CONTRAPROVA → !REMEDIÇÃO → !FIXED_POINT → !REGISTRA → !RASTRO → !BOOT"
+      rastro_after_registra: PRESERVE_EXISTING_MANDATORY_FINAL_FISCAL_GATE
+      boot_only_after_valid_effect_and_receipt: true
+      preserve_canonical_machine_chain: true
+      no_new_trigger_router_hud_writer_or_goal: true
+      missing_current_source: UNKNOWN_NOT_PASS
     execute_with_judgment_means: NEXT_STEP_INSIDE_ALREADY_AUTHORIZED_SCOPE
     progress_denominator: MATERIAL_DELIVERABLES_NOT_ITERATION_COUNT
     continuation_flow:
@@ -914,6 +963,41 @@ semantic_memory_links:
   graph_is_authority: false
   musical_metaphor_is_navigation_only: true
 
+existing_ssh_terminal_feedback_sync_contract:
+  recipe_id: CASA_EXISTING_SSH_TERMINAL_TO_LINUX
+  owner: .agents/skills/centraldark-operational-method/SKILL.md
+  trigger_owner: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml
+  feedback_owner: scripts/trigger-fabric/centraldark_full_trigger_boot.py
+  skill_sync_owner: .agents/skills/skill-synchronization/SKILL.md
+  skill_sync_executor: scripts/skill-sync-check.sh
+  hud_owner: docs/HUD/README.md
+  flow:
+    - EXISTING_SSH_TERMINAL_AVAILABLE
+    - TARGET_LOCK
+    - SSH_VISUAL_PROBE_PASS
+    - ONE_AUTHORIZED_LINUX_COMMAND
+    - SSH_REMOTE_EFFECT_READBACK
+    - REALTIME_FEEDBACK
+    - COUNTERPROOF
+    - SKILL_SYNC_IF_CANONICAL_SKILL_CHANGED
+    - MISSION_STATE_READY_FOR_HUD
+    - FIXED_POINT_OR_NEXT_CURSOR
+  hud_resolution:
+    fixed_point: FINALIZE_MISSION_STATE_IN_ACTIVE_FUNNEL
+    non_terminal_material_state: PUBLISH_CURRENT_STATE_AND_NEXT_CURSOR
+    active_funnel_resolution: DYNAMIC_BY_CENTRALDARK_HUD_FUNNEL_CONTINUITY
+    mission_pr_resolution: DYNAMIC_BY_GOAL_OWNER_SCOPE
+    hardcoded_pr_number_forbidden: true
+    readback_required: true
+  invariants:
+    WINDOW_FOCUSED_IS_NOT_CORRECT_TAB: true
+    SEND_ACCEPTED_IS_NOT_COMMAND_VISIBLE: true
+    COMMAND_VISIBLE_IS_NOT_LINUX_EFFECT_PROVEN: true
+    FEEDBACK_IS_NOT_MUTATION_PERMISSION: true
+    MAIN_RUNTIME_LOCK_IS_NOT_ACTIVE_SESSION_LOAD: true
+    HUD_UPDATED_IS_NOT_RUNTIME_PROVEN: true
+    CURRENT_STATE_MUST_NOT_BE_REPORTED_AS_FIXED_POINT: true
+
 adaptive_backcheck_contract:
   owner: "AGENTS.md#metodo-adaptativo-mesma-regua-avanco--backcheck-ponto-suficiente"
   creates_new_method: false
@@ -962,6 +1046,25 @@ probabilistic_fixed_point_contract:
   satisfaction_band_reference: "80..95"
   satisfaction_band_is_universal_gate: false
   fixed_point_requires: [CURRENT_GOAL_SUFFICIENT, AUDITABLE, REPAIRABLE, NO_MATERIAL_BLOCKER, EPHEMERAL_CLEANUP_IF_USED]
+
+meta_multibussola_proof_gates:
+  owner: docs/CONSCIENCIA/MULTIBUSSOLA.md
+  evaluator: scripts/trigger-fabric/centraldark_master_cycle.py#evaluate_multibussola_gates
+  consumed_not_displayed: true
+  gates:
+    PROOF_TARGET_MATCH: state.proof_target_match
+    PROOF_OWNERSHIP: state.proof_ownership
+    INDEPENDENT_COUNTERPROOF: state.independent_counterproof|state.counterproof_survives
+    EXTERNAL_ANCHOR_WHEN_APPLICABLE: state.external_anchor
+    REMEDICAO_T1: state.remedicao_t1|state.t1_stable
+    REALITY_JUDGE: state.reality_judge
+  violated_absent_unknown_blocks_fixed_point_pass: true
+  blocking_verdict: FIXED_POINT_BLOCKED
+  not_applicable_requires: [EXTERNAL_ANCHOR_JUSTIFICATION, PROOF_EVIDENCE_REFERENCE]
+  arbitrary_not_applicable_is_exemption: false
+  receipt_fields: [gate_states, gate_violations, gate_evidence, gate_pass]
+  declared_gate_is_independent_verification: false
+  unknown_never_pass: true
 
 multi_agent_same_ruler:
   one_ai_is_system_unit: false

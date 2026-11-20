@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
+import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 
 const [file, strategy, semanticKey = ''] = process.argv.slice(2);
@@ -15,8 +17,37 @@ function gitShow(stage) {
   });
 }
 
+function atomicReplace(file, content) {
+  const target = path.resolve(file);
+  let originalStat = null;
+  try { originalStat = fs.lstatSync(target); } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+  if (originalStat && (originalStat.isSymbolicLink() || !originalStat.isFile())) throw new Error('COSTURA_ATOMIC_TARGET_INVALID');
+  const next = Buffer.from(content, "utf8");
+  if (originalStat && fs.readFileSync(target).equals(next)) return;
+  const temp = path.join(path.dirname(target), "." + path.basename(target) + ".costura-" + randomUUID() + ".tmp");
+  let fd;
+  try {
+    fd = fs.openSync(temp, "wx", originalStat ? originalStat.mode & 0o777 : 0o600);
+    fs.writeFileSync(fd, next);
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+    fs.renameSync(temp, target);
+    if (!fs.readFileSync(target).equals(next)) throw new Error("COSTURA_ATOMIC_READBACK_MISMATCH");
+    if (process.platform !== "win32") {
+      const dirFd = fs.openSync(path.dirname(target), "r");
+      try { fs.fsyncSync(dirFd); } finally { fs.closeSync(dirFd); }
+    }
+  } finally {
+    if (fd !== undefined) fs.closeSync(fd);
+    if (fs.existsSync(temp)) fs.unlinkSync(temp);
+  }
+}
+
 function write(text) {
-  fs.writeFileSync(file, text.endsWith('\n') ? text : text + '\n', 'utf8');
+  atomicReplace(file, text.endsWith('\n') ? text : text + '\n');
 }
 
 function mergeJsonPatternsByIdMainFirst() {

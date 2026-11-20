@@ -14,6 +14,7 @@ function parseArgs(argv) {
     unknownClaimed: false,
     measurementRouteExists: false,
     json: true,
+    compact: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const key = argv[i];
@@ -26,6 +27,7 @@ function parseArgs(argv) {
     else if (key === '--unknown-claimed') args.unknownClaimed = true;
     else if (key === '--measurement-route-exists') args.measurementRouteExists = true;
     else if (key === '--text') args.json = false;
+    else if (key === '--compact') args.compact = true;
   }
   return args;
 }
@@ -110,7 +112,8 @@ if (requested === 'PERTINENT' || requested === 'INDEX') {
     count: sections.length,
     first: sections[0].number,
     last: sections.at(-1).number,
-    index,
+    index: args.compact ? undefined : index,
+    index_count: index.length,
     warnings,
     rule: 'SELECT_ONLY_WHAT_CAN_CHANGE_CURRENT_DECISION',
   };

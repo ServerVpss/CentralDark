@@ -19,6 +19,28 @@ Contraprova: o wrapper CuaDriverBackend.start() travou no handshake por 30 segun
 move_cursor em Windows usa coordenadas fisicas ABSOLUTAS do desktop virtual, inclusive negativas. scope=window controla apenas o cursor emulado. scope=desktop move o ponteiro fisico e nao pertence a esta receita. Nao combinar target com scope; o driver rejeita essa mistura.
 Cores pertencem a identidade da sessao, nao sao numeros de monitor. Nao fixar cor rosa/verde nem reusar HWND/PID antigo. Para automacao de janela, capturar e conferir PID/HWND atuais antes de enviar input com computer_use existente.
 
+## Receita unificada — localizar + marcar + apontar + agir
+
+O cursor Cua e o overlay Hermes formam **uma única trajetória visual**, não duas automações:
+
+```text
+TARGET_ID
+→ UIA_WINDOW/CONTROL
+→ PID + HWND CURRENT
+→ MONITOR_ID_HUMANO + MONITOR_RECT
+→ TARGET_MATCH
+→ MONITOR_MATCH
+→ show_overlay(mesmo monitor)
+→ CUA_SESSION
+→ set_agent_cursor_enabled(true)
+→ move_cursor(scope=window)
+→ ACTION_SINGLE
+→ READBACK independente
+→ hide_overlay + end_session
+```
+
+Regras: o overlay precisa marcar a tela que contém a janela/controle resolvido; o cursor virtual deve permanecer no mesmo monitor e `scope=window`; qualquer divergência de monitor, PID/HWND ou geometria exige redescoberta antes da ação. `OVERLAY_SHOWN != TARGET_PROVEN`, `CURSOR_MOVED != ACTION_PROVEN`, `CUA_CALL_OK != UI_EFFECT_PROVEN`.
+
 ## Prova e limites
 CHEFE confirmou cursor verde e rosa em 02/11/2026. Foto mostra hermes-443ff947f17d, identidade exata do teste persistente. Esta prova confirma render nativo, nao certifica topologia distinta ou ausencia de input por cor.
 Cua 0.28.2 retorna position:null fixo no get_agent_cursor_state Windows, que tambem causa tool_output_invalid no MCP. Resultado move_cursor=effect:unverifiable nao constitui prova visual. Confirmacao humana com identidade exata e suficiente para a prova especifica; nao repetir investigacao sem delta.

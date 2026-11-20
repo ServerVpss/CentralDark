@@ -21,7 +21,7 @@ intencao PDF
   -> render/verify
   -> operar
   -> re-render/verify
-  -> receipt/NEXT_CURSOR
+  -> comprovante / o que fazer agora
 ```
 
 ## Regra operacional
@@ -89,6 +89,6 @@ same capability + same scope
 
 Esse fixed point nao afirma que um PDF real ja foi editado. Ele prova que o contrato de roteamento, bridge e neutralidade esta fechado antes da execucao material.
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 Integrar o runner da Casa/VPS ao mesmo contrato: entrada JSON -> plano deterministico -> execucao da menor operacao -> render final -> receipt.
