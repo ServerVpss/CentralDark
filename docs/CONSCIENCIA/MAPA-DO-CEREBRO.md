@@ -16,6 +16,11 @@ writer: SOL
 
 # MAPA-DO-CEREBRO — UMA CASA, UMA DIREÇÃO
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O mapa do cérebro aponta para a Gramática SOL, o padrão de resposta e o dono dos emojis. Tradução humana de NEXT_CURSOR: 👉 O QUE FAZER AGORA. Sem segundo owner ou alteração de registros históricos. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 <!-- CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
 ## 🎛️ Jukebox do projeto — A–Z e 001–301 (índice derivado)
 
