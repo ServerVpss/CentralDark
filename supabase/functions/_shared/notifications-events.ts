@@ -80,7 +80,7 @@ function buildBody(input: NotifyInput, severity: Severity): string {
   const detalhe = short(input.body, "Sem detalhe adicional.");
   const technical = [
     p.source_surface ? `🌐 Superfície: ${short(p.source_surface)}` : "",
-    p.owner ? `👤 Owner: ${short(p.owner)}` : "",
+    p.owner ? `👤 Responsável: ${short(p.owner)}` : "",
     p.head_sha ? `🧾 HEAD/SHA: ${short(p.head_sha)}` : "",
     p.runtime ? `🫀 Runtime: ${short(p.runtime)}` : "",
     p.session_id ? `🧵 Sessão: ${short(p.session_id)}` : "",

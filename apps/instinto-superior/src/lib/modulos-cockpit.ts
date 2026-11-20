@@ -1,17 +1,17 @@
 /**
  * Preferencias VISUAIS de montagem do Cockpit. O owner dos processos permanece
- * no gateway Hermes/AionUI da VPS; este arquivo jamais gerencia systemd ou auth.
+ * no gateway Hermes/CentralDarkBot da VPS; este arquivo jamais gerencia systemd ou auth.
  */
 import { useEffect, useState } from "react";
 
-export type ModuloCockpit = "hermes" | "aionui";
+export type ModuloCockpit = "hermes" | "centraldarkbot";
 export type ModoModuloCockpit = "ativo" | "sob-demanda" | "desativado";
 
 const STORE = "centraldark.cockpit.modulos.v1";
 const EVENT = "centraldark:modulos-preferencias";
 export const MODULOS_PADRAO: Readonly<Record<ModuloCockpit, ModoModuloCockpit>> = {
   hermes: "sob-demanda",
-  aionui: "sob-demanda",
+  centraldarkbot: "sob-demanda",
 };
 
 function modoValido(valor: unknown): valor is ModoModuloCockpit {
@@ -25,7 +25,7 @@ export function lerModulosCockpit(): Record<ModuloCockpit, ModoModuloCockpit> {
     const bruto: unknown = JSON.parse(window.localStorage.getItem(STORE) || "{}");
     if (!bruto || typeof bruto !== "object") return padrao;
     const valores = bruto as Record<string, unknown>;
-    for (const id of ["hermes", "aionui"] as const) {
+    for (const id of ["hermes", "centraldarkbot"] as const) {
       if (modoValido(valores[id])) padrao[id] = valores[id];
     }
   } catch { /* Storage indisponivel: comportamento padrao seguro. */ }

@@ -7,9 +7,21 @@ h2 { font-size: 18px; margin: 10px 0 14px; }
 .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 button { background:var(--vscode-button-background); color:var(--vscode-button-foreground); border:0; padding:11px 4px; cursor:pointer; border-radius:3px; }
 button:hover { background:var(--vscode-button-hoverBackground); }
+.terminal-list { margin: 10px 0; padding: 8px; background:var(--vscode-editor-background); border:1px solid var(--vscode-panel-border); border-radius:4px; }
+.terminal-row { padding:5px 2px; font-size:12px; overflow-wrap:anywhere; }
+.terminal-row + .terminal-row { border-top:1px solid var(--vscode-panel-border); }
+.section-title {font-size:14px; margin:18px 0 8px;}
 small { display:block; margin-top:14px; opacity:0.8; line-height:1.5; }
 </style></head><body>
 <h2>🪬 CentralDark · Vibe Coding</h2>
+<h3 class="section-title">Hermes · Bancada supervisionada</h3>
+<div class="grid">
+<button data-cmd="centraldark.openOneTerminalBeside">Abrir 1 terminal ao lado</button>
+<button data-cmd="centraldark.readTerminalSnapshot">Atualizar sessões</button>
+</div>
+<div class="terminal-list" id="terminal-list" aria-live="polite">Lendo terminais existentes...</div>
+<small>Terminais observados pela API nativa. Estado de modelo/ACP: não verificado. Nenhum modelo inicia automaticamente.</small>
+<h3 class="section-title">Ferramentas existentes</h3>
 <div class="grid">
 <button data-cmd="centraldark.connectVpsSsh">Conectar ao servidor</button>
 <button data-cmd="centraldark.probeVpsSsh">Testar a conexão</button>
@@ -25,6 +37,20 @@ small { display:block; margin-top:14px; opacity:0.8; line-height:1.5; }
 <small>Pareamento no MCP pela identidade SSH da Casa. Token guardado no cofre protegido do VS Code.</small>
 <script nonce="__CSP_NONCE__">
 const vscode = acquireVsCodeApi();
+const list = document.getElementById('terminal-list');
+window.addEventListener('message', event => {
+  const data = event.data;
+  if (!data || data.type !== 'terminalSnapshot' || !Array.isArray(data.terminals)) return;
+  list.replaceChildren();
+  if (!data.terminals.length) { list.textContent = 'Nenhum terminal integrado ativo.'; return; }
+  for (const terminal of data.terminals) {
+    const row = document.createElement('div');
+    row.className = 'terminal-row';
+    row.textContent = (terminal.active ? '● ' : '○ ') + String(terminal.name) +
+      ' · PID: ' + (terminal.pid ?? 'UNKNOWN');
+    list.appendChild(row);
+  }
+});
 document.querySelectorAll('button[data-cmd]').forEach(b =>
   b.addEventListener('click', () => vscode.postMessage({command:b.getAttribute('data-cmd')})));
 </script></body></html>

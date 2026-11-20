@@ -1,4 +1,5 @@
 mod logging;
+mod session_vault;
 mod platform;
 mod settings;
 mod state;
@@ -17,6 +18,37 @@ use tauri::{
 use tauri_plugin_notification::NotificationExt;
 
 const OVERLAY_PREFIX: &str = "overlay-";
+const CONTROL_LABEL: &str = "agent-control";
+
+/// !RASTRO: abre ou restaura a UNICA janela interativa agent-control.
+/// POR_QUE: tela autenticada e controles de janela sem segundo WebView/renderer.
+/// INVARIANTES: reutiliza a janela existente, mantem overlays sem foco e
+/// acesso ao cofre somente pelo label agent-control.
+/// EFEITO: mostra e foca a janela; nao inicia acesso remoto.
+/// PROVA: tray -> abrir -> minimizar/ocultar -> abrir a mesma janela.
+pub(crate) fn show_agent_control(app: &AppHandle) -> Result<(), String> {
+    let window = match app.get_webview_window(CONTROL_LABEL) {
+        Some(existing) => existing,
+        None => WebviewWindowBuilder::new(
+            app, CONTROL_LABEL, WebviewUrl::App("index.html".into()),
+        )
+        .title("CentralDark Agente Remoto")
+        // Barra nativa substituida pela UI React; overlays preservados.
+        .decorations(false)
+        .resizable(true)
+        .inner_size(1020.0, 760.0)
+        .min_inner_size(540.0, 620.0)
+        .visible(false)
+        .build()
+        .map_err(|_| "AGENT_WINDOW_CREATE_FAILED")?,
+    };
+    if window.is_minimized().unwrap_or(false) {
+        window.unminimize().map_err(|_| "AGENT_WINDOW_RESTORE_FAILED")?;
+    }
+    window.show().map_err(|_| "AGENT_WINDOW_SHOW_FAILED")?;
+    window.set_focus().map_err(|_| "AGENT_WINDOW_FOCUS_FAILED")?;
+    Ok(())
+}
 
 #[derive(Debug)]
 pub struct RuntimeState {
@@ -37,6 +69,9 @@ pub struct AppState {
     timeout_tx: mpsc::Sender<TimeoutSchedule>,
 }
 
+/// !RASTRO: cria apenas a superficie Halo visual no monitor solicitado.
+/// POR_QUE: o efeito nao pode capturar cursor, foco nem eventos do cliente.
+/// INVARIANTES: click-through, transparent, sem capabilities de agent-control.
 fn create_overlay(
     app: &AppHandle,
     label: String,
@@ -46,7 +81,7 @@ fn create_overlay(
     let logical_size = monitor.size().to_logical::<f64>(scale);
     let logical_position = monitor.position().to_logical::<f64>(scale);
 
-    let window = WebviewWindowBuilder::new(app, label, WebviewUrl::App("index.html".into()))
+    let window = WebviewWindowBuilder::new(app, label, WebviewUrl::App("index.html#overlay".into()))
         .title("CentralDark Halo")
         .decorations(false)
         .transparent(true)
@@ -71,6 +106,9 @@ fn create_overlay(
     Ok(window)
 }
 
+/// !RASTRO: reconcilia overlays pela lista atual de monitores.
+/// POR_QUE: hotplug e reorganizacao nao devem multiplicar superficies antigas.
+/// PROVA: conferir um overlay por monitor e ausencia de janelas fantasmas.
 fn sync_overlays(app: &AppHandle) -> Result<Vec<WebviewWindow>, String> {
     let mut monitors = app
         .available_monitors()
@@ -190,8 +228,8 @@ fn apply_state(
     if state != previous {
         log::info!("State: {previous} -> {state}");
         match state {
-            HaloState::Attention => notify(app, "CentralDark precisa da sua atencao"),
-            HaloState::Completed => notify(app, "CentralDark concluiu a etapa"),
+            HaloState::Attention => notify(app, "A CentralDark precisa da sua atenção"),
+            HaloState::Completed => notify(app, "A CentralDark concluiu a etapa"),
             HaloState::Idle | HaloState::Working => {}
         }
     }
@@ -224,6 +262,9 @@ fn apply_real_event(app: &AppHandle, app_state: &AppState, event: HaloEvent) {
     );
 }
 
+/// !RASTRO: restaura o ultimo estado Halo validado sem inventar evento ativo.
+/// POR_QUE: reinicio nao deve mostrar atividade ficticia.
+/// EFEITO: atualiza o estado compartilhado dos overlays existentes.
 pub fn restore_latest_state(app: &AppHandle) {
     let state = app.state::<AppState>();
     let Some(path) = platform::state_file_path() else {
@@ -308,18 +349,18 @@ pub fn run_demo(app: AppHandle) -> Result<(), String> {
         .unwrap_or_else(|poisoned| poisoned.into_inner())
         .enabled;
     if !enabled {
-        return Err("Enable Halo before starting Demo Mode".to_owned());
+        return Err("Ative o Halo antes de iniciar a demonstração".to_owned());
     }
     state
         .demo_mode
         .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
-        .map_err(|_| "Demo Mode is already running".to_owned())?;
+        .map_err(|_| "A demonstração já está em execução".to_owned())?;
 
     let current = state.current.clone();
     let demo_mode = state.demo_mode.clone();
     let timeout_tx = state.timeout_tx.clone();
     std::thread::spawn(move || {
-        log::info!("Demo Mode started");
+        log::info!("Demonstração iniciada");
         for (halo_state, duration_ms) in [
             (HaloState::Working, 3_000),
             (HaloState::Attention, 3_000),
@@ -330,13 +371,16 @@ pub fn run_demo(app: AppHandle) -> Result<(), String> {
         }
         apply_state(&app, &current, &timeout_tx, HaloState::Idle, None);
         demo_mode.store(false, Ordering::Release);
-        log::info!("Demo Mode completed");
+        log::info!("Demonstração concluída");
         restore_latest_state(&app);
     });
     Ok(())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
+/// !RASTRO: bootstrap unico do aplicativo Tauri, bandeja e watchers.
+/// POR_QUE: evitar segundo executor e manter lifecycle das janelas no Rust.
+/// PROVA: inicio nativo, um tray, overlays e comandos do agent-control.
 pub fn run() {
     if let Err(error) = logging::init() {
         eprintln!("CentralDark Halo logging could not start: {error}");
@@ -347,6 +391,9 @@ pub fn run() {
         std::env::consts::OS,
         std::env::consts::ARCH
     );
+    // !RASTRO: inicializacao do mesmo processo nativo, sem gerar log paralelo.
+    logging::diag("startup", "ok", "NATIVE_BOOT");
+    logging::diag("remote_executor", "pending", "MOTOR_NOT_LINKED");
 
     let settings = Arc::new(Mutex::new(AppSettings::load()));
     let current = Arc::new(Mutex::new(RuntimeState {
@@ -372,7 +419,13 @@ pub fn run() {
                 .app_name("CentralDark Halo")
                 .build(),
         )
-        .manage(app_state)
+        .on_window_event(|window, event| {
+            if window.label() != CONTROL_LABEL { return; }
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                api.prevent_close();
+                let _ = window.hide();
+            }
+        })        .manage(app_state)
         .setup(move |app| {
             #[cfg(target_os = "macos")]
             app.handle()
@@ -381,6 +434,12 @@ pub fn run() {
             let overlays = sync_overlays(app.handle()).map_err(std::io::Error::other)?;
             log::info!("Overlay coverage ready for {} display(s)", overlays.len());
             tray::create_tray(app.handle())?;
+            // O DEV abre a MESMA janela React automaticamente para personalização;
+            // o release mantém o fluxo original de bandeja, sem segunda interface.
+            #[cfg(debug_assertions)]
+            if let Err(error) = show_agent_control(app.handle()) {
+                log::warn!("Agente Remoto DEV: janela indisponível: {error}");
+            }
             start_timeout_worker(app.handle().clone(), current.clone(), timeout_rx);
 
             if let Some(state_file) = platform::state_file_path() {
@@ -421,6 +480,16 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            session_vault::agent_supabase_auth_request,
+            session_vault::save_agent_session,
+            session_vault::load_agent_session,
+            session_vault::clear_agent_session,
+            session_vault::remote_pairing_status,
+            session_vault::start_remote_pairing,
+            session_vault::approve_remote_pairing,
+            session_vault::local_bridge_health,
+            session_vault::remote_network_status,
+            session_vault::open_cockpit_in_browser,
             get_state,
             get_settings,
             run_demo_command,
