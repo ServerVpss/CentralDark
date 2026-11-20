@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "5588772db7a50cbc0a4fdb5627dded505db5a94f",
+  "source_blob_sha": "61cd9c8061df33c75f901e7965f960c05e7b0194",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 249,
-    "highest_legacy_learning_number": 235,
+    "learning_sections": 250,
+    "highest_legacy_learning_number": 236,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -189,7 +189,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 235
+      "end": 236
     }
   },
   "nodes": [
@@ -2930,6 +2930,17 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L234",
+      "next_uid": "L236"
+    },
+    {
+      "uid": "L236",
+      "legacy_learning_number": 236,
+      "legacy_occurrence": 1,
+      "title": "Reconciliação PR #2153 com main — alinhamento definitivo do código CentralDark",
+      "document_order": 250,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L235",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]
