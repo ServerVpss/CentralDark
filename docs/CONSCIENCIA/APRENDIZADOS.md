@@ -3558,7 +3558,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 
 ### 235. !AUREULA — sincronização seletiva V ↔ F ↔ MAIN: examinai tudo, retém o bem
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L235`; `PREV_GLOBAL_UID=L234`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=235`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L235`; `PREV_GLOBAL_UID=L234`; `NEXT_GLOBAL_UID=L236`; `LEGACY_LEARNING_NUMBER=235`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** reconciliação, sincronização, fast loop, owner, Kaizen
 - **Data:** 2026-11-14
 - **Intenção:** transformar a reconciliação entre `V:\\` (VM/Samba), `F:\\CentralDark` (Casa) e `main` em um fluxo seletivo e determinístico, sem cópia cega nem duplicação.
@@ -3568,8 +3568,8 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Fixed point:** circuito só fecha quando as frentes aplicáveis concordam semanticamente no delta, os testes mínimos passam, a `main` recebe a versão canônica e o readback confirma ausência de duplicação.
 
 ### 236. Reconciliação PR #2153 com main — alinhamento definitivo do código CentralDark
-
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L236`; `PREV_GLOBAL_UID=L235`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=236`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+
 - **Categoria:** reconciliação, propriedade de código, deploy gate, prova
 - **Data:** 2026-11-20
 - **Intenção:** preservar 100% do estado operacional da CentralDark, reconciliar o código com `ServerVpss/CentralDark@main` e atualizar o PR #2153 (`feat/centraldark-os-circuito-e2e-alerta-20261120`) somente com deltas verificados e sem perda de trabalho.
@@ -3584,7 +3584,6 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 ### L237 — Merge condicional com guardas fail-closed, aviso de profile e unicidade de escopo
 
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L237`; `PREV_GLOBAL_UID=L236`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=237`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** merge autorizado, gate fail-closed, classificação de aviso, integridade de auditoria
 - **Data:** 2026-11-20
 - **Intenção:** executar o merge condicionalmente autorizado do PR #2153 com todos os gates do contrato medidos, sem deploy e sem perder o estado operacional (MCP ativo, 32 alterações locais e demais PRs).
@@ -3600,7 +3599,6 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 ### L238 — Cristalização de receita: determinismo, idempotência, verificador negativo e documento × realidade
 
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L238`; `PREV_GLOBAL_UID=L237`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=238`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** cristalização de receita, idempotência, teste negativo, documento × realidade
 - **Data:** 2026-11-20
 - **Intenção:** cristalizar o ROV do PR #2154 como receita reproduzível, idempotente e verificável — sem dependência de IA nos procedimentos já aprendidos — antes de solicitar o merge.
@@ -3613,14 +3611,16 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
   6. Nomes de problema devem ser **códigos estáveis**; valores variáveis vão para `details` — assim o gate é automatizável sem parsing frágil.
 - **Regra operacional:** VERIFICAR → CLASSIFICAR → TESTAR (positivo e negativo) → EXECUTAR 2× → COMPARAR → SNAPSHOT → DECLARAR.
 - **Comprovante:** `python3 scripts/trigger-fabric/test_pr_rov_receipt_verifier.py` → 17/17 OK (3 positivos + 14 negativos), 9 checks emitidos; verificador no recibo real → `valid: true`, 9/9 PASS; matriz contrato × realidade → 18/18 PASS; dupla auditoria → JSON idêntico exceto `audit_timestamp` (stderr 0 bytes, exit 0); idempotência → hashes/refs/backups/worktree/runtime/dirty/PRs sem alteração; sentinel `ok:true`; TLC23 PROVED; runtime MCP PID 244642 intacto (`catalogVersion 161-9629d1fb55a7`); 32 alterações locais preservadas; PRs #1900/#1880 preservados.
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L239`; `PREV_GLOBAL_UID=L238`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=239`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** incorporacao final ROV #2154 (merge oficial, readback, registros)
 - **Data:** 2026-11-20
 - **Intenção:** incorporar o PR #2154 na main via rota oficial, preservar o historico do merge do PR #2153 e registrar a nova SHA separadamente, sem tocar no runtime, no deploy ou nas 32 alteracoes locais.
 - **Aprendizado:** `MERGE_GATED_BY_HUMAN_AUTHORIZATION`: o gate nao e o branch protection (nulo neste repo) nem os status GitHub (null) — e a autorizacao explcita do CHEFE com todos os gates previamente medidos. Merge executado via `PUT /pulls/2154/merge` (squash canonical). Principio aplicado: `CURRENT > HISTORY` — a main passou de e2fff550451901161eac77d69c57b0df20877aa3 (merge #2153) para d014cd6cd9660e222b512ccd98629aebcc97235f (merge squash #2154, 4 arquivos, +552/-64).
 - **Regra de preservacao:** runtime MCP PID 244642 nao alterado (catalogVersion 161-9629d1fb55a7), deploy nao executado, 32 alteracoes locais preservadas, PRs #1900/#1880 permanecem OPEN. Historico do merge #2153 preservado: refs.bundle + /data/preservacao-centraldark-20261120/meta + L235-L238. Historico do merge #2154 registrado em L239 (nova SHA d014cd6c...), contento o fato que faltou: um learning nao era possivel gerar lixo, entao foi colocado apenas o .md dos aprendizados.
 - **Regra de ouro:** `UNKNOWN != PASS` — a main passou de e2fff550... para d014cd6c..., e o readback exige verificar isso via API e git antes de qualquer promocao posterior.
-- **Escopo do PASS:** o PASS deste registro cobre **integracao do merge e preservacao** (escopo declarado em `scope`). A promocao de runtime permanece missao separada, listada em `out_of_scope_for_this_receipt` — nunca dentro de `unknown`, para nao inflar nem esconder o que falta.
+- **Intenção:** consolidar o gate script-first como padrão do bootstrap existente e torná-lo o comportimento padrão do iniciador, sem criar novo sistema, sem mutar o runtime e sem tocar nas 32 alterações locais. (PR #2156 aberto, mergeable:true/clean, statusCheckRollup:null.)
+- **Aprendizado:** `RECOVERY_FIRST_DETERMINISTIC`: antes de qualquer ação ou chamada de modelo, o script já comprovado é executado em primeira linha: `cmd_script_first_preflight()` executa `scripts/trigger-fabric/system_sentinel.py --self-test`. `ok:true, failed:[]` → `script_first_recovery_passed`, modelo NUNCA autorizado. Falha verificada → `script_first_recovery_failed` e `script_first_model_authorized: true`; a IA só entra em diagnóstico após a recuperação determinística falhar comprovadamente.
+- **Data:** 2026-11-20 · commit `dd9d1dcc52ab` (PR #2156, 2 files, +71 linhas) · branch `chore/rov2154-merge-records` · TLC23 PROVED (`b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1`) como pré-condição do registro.
+- **Regra de preservacao:** runtime MCP PID 244642 nao alterado (`catalogVersion 161-9629d1fb55a7`), deploy nao executado, 32 alteracoes locais preservadas, PRs #1900/#1880 permanecem abertos, backups intactos. **Integracao do merge e preservacao:** o PASS deste registro cobre a integracao do merge e preservacao (escopo declarado em `scope`). A promocao de runtime permanece missao separada, listada em `out_of_scope_for_this_receipt` — nunca dentro de `unknown`, para nao inflar nem esconder o que falta.
 - **Defeito encontrado e corrigido antes da integracao:** o primeiro rascunho do recibo `2026-11-20-pr-2154-merge.yml` tinha YAML invalido (valor com `: ` nao citado) e `verdict: MERGE_EXECUTED`, fora do enum do contrato (`PASS|PARTIAL|BLOCKED|UNKNOWN`). Corrigido para YAML valido + `verdict: PASS` no escopo declarado; `pr_rov_audit.py --verify-receipt` → `valid: true`, 13/13 checks PASS. Regra: **recibo nunca entra na main sem passar pelo verificador que o le** — um YAML valido nao e o mesmo que um recibo conforme.
 - **Segundo defeito evitado pelo verificador:** `merge_readback.merge_commit` precisa ser igual a `receipt_persisted_in_main_sha`; e o verifier exige `contract_version == contract.schema` e `schema` derivado do namespace do contrato. Um recibo escrito a mao sem ler o owner passa em revisao visual e falha no gate.
 - **Prova:** merge API `PUT /pulls/2154/merge` -> {sha: d014cd6cd9660e222b512ccd98629aebcc97235f, merged: true}; `compare e2fff550...main` -> ahead_by 1, behind_by 0, 4 arquivos; 4 arquivos byte-identicos a HEAD do PR; TLC23 PROVED (b4e2a065...); sentinel ok:true failed:[]; 17/17 testes; matriz 18/18; idempotencia sem mutacao; runtime intacto.
