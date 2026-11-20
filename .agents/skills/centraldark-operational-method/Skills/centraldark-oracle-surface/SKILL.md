@@ -119,6 +119,8 @@ ERROR_LOCAL
 
 **GitHub/main:** immediately before writing, measure the current main SHA, existing owner, one writer and dirty state. Keep the delta in existing files, validate applicable syntax/lint/build/tests/diff, commit within authorization, read back the same SHA/files, and separately measure runtime effect. If main advances, STOP_WRITE → REMEASURE → RECALIBRATE → COSTURA → CONTINUE. COMMIT != DEPLOY; MERGED != DEPLOYED; file exists != runtime effect. Never push secrets or erase a dirty runtime to claim parity.
 
+**Dirty operator checkout:** publish canonical deltas from a clean mirror, never from the operator worktree. In the mirror: fetch, checkout `main`, preserve the prepared files with `git stash push -u`, anchor `git reset --hard origin/main`, restore with `git stash pop`, stage only the explicit paths, commit, push, then read back the commit SHA and file SHAs with `git show origin/main:<path> | sha256sum`. The operator worktree stays untouched; an unrelated dirty tree otherwise contaminates the commit and makes SHA readback ambiguous.
+
 **Sufficient fixed point:** PASS needs the *authorized objective sufficiently satisfied*, effect on the intended target, backcheck, independent counterproof, receipt/readback and no material blocker/false green. This does not require perfection or closing unrelated optional UNKNOWNs. Open material NEXT_READONLY_PROBE, pending work or recoverable failure forbids Goal done; explicit cancellation and genuine HUMAN_FRONTIER remain valid stops.
 
 **Response after work, not instead of work:**
@@ -766,10 +768,11 @@ Use an existing ping/heartbeat API only when its binding is available. A success
 1. **When the exact authorized ChatGPT conversation is ALREADY OPEN in Hermes Preview, do not call `action=open` or navigate.** First use `desktop_preview action=read` and `drive_preview action=elements` on that existing tab, if the Hermes session exposes those bindings. `action=open` applies only to an explicitly requested new destination after proving that no current authorized tab matches; never use `browser_navigate` or an external browser to replace an already-open Hermes Desktop Preview conversation.
 2. Read the page with `desktop_preview` `action=read` and verify its URL/identity, composer and response state; if Preview actions are unavailable in this runtime, record the exact toolset and use the existing measured UIAutomation fallback rather than inventing capability.
 3. For interaction, start `drive_preview` with `action=elements`, then act by returned refs.
-4. Send only pertinent, sanitized context. Never send secrets, tokens, private credentials, or unnecessary raw history.
-5. Include causal identifiers when testing: `INTENT_ID`, `EVENT_ID`, `CAUSATION_ID`, `SURFACE_ID`.
-6. Capture the response with `desktop_preview` `action=read`.
-7. Normalize the result as candidate evidence:
+4. When the CHEFE asks to map the screen, after `read` + `elements` call `annotate_preview action=hold` to freeze and name the visible controls, then report the fresh refs. `hold` is a visual map only; it proves no click, send, or effect. Clear it with `annotate_preview action=clear` when done.
+5. Send only pertinent, sanitized context. Never send secrets, tokens, private credentials, or unnecessary raw history.
+6. Include causal identifiers when testing: `INTENT_ID`, `EVENT_ID`, `CAUSATION_ID`, `SURFACE_ID`.
+7. Capture the response with `desktop_preview` `action=read`.
+8. Normalize the result as candidate evidence:
 
 ```yaml
 source: CHAT_GLOBAL
@@ -783,8 +786,18 @@ counterproof:
 next_readonly_probe:
 ```
 
-8. Reconcile with CURRENT docs, GitHub, runtime and existing owners before any action.
-9. Only the existing writer may mutate; test, counterprove, read back and write a receipt.
+9. Reconcile with CURRENT docs, GitHub, runtime and existing owners before any action.
+10. Only the existing writer may mutate; test, counterprove, read back and write a receipt.
+
+### Control probing on a live preview surface
+
+Use this when the CHEFE asks what each button does or asks to change model/effort.
+
+- After the first `drive_preview action=elements`, later inventories return only deltas; a reload resets the baseline and yields a fresh full inventory. Reload to recover a complete ref list instead of guessing a CSS selector.
+- Act by the returned ref, never by an aria-label substring: `[aria-label*="..."]` can match a sidebar control instead of the composer control. A wrong-target click is a binding error; reacquire refs and retry once.
+- Verify a control by `act → desktop_preview read → restore prior state`. For model/effort, compare the before/after text (`High, 3 of 3` → `Medium, 2 of 3`, or `Leve, 2 of 5` → `Médio, 3 of 5`); an unread menu is not a change.
+- Treat `drive_preview action=press` with `allow_shortcut=true` as a draft-writing risk: modifier presses can leak printable characters into the composer. Read back the composer after the probe, clear any draft with Backspace, and never claim the shortcut is proven without a clean readback.
+- Voice/dictation controls can create a local chat or start listening. End the mode and return to the original tab before reporting; never press the send/submit control while probing.
 
 ## Preview Tab Semantics
 
