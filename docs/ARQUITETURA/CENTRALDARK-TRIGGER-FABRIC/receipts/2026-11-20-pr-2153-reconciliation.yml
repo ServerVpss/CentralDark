@@ -3,75 +3,101 @@ contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-RO
 contract_version: centraldark.rov.pr-reconciliation.v1
 repository: ServerVpss/CentralDark
 tested_origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
-receipt_persisted_in_main_sha: PENDING_PR_2153_MERGE
-local_head_sha: c3fe2bf927815074814d991a22dc043393c71117
-worktree_state: "DIRTY_PRESERVED (32 arquivos modificados); nao-rastreados: <caminho-vps>/ (auditoria MCP, 3 arquivos cada; nao versionados)"
+receipt_persisted_in_main_sha: e2fff550451901161eac77d69c57b0df20877aa3
+local_head_sha: e2fff550451901161eac77d69c57b0df20877aa3
+worktree_state: "DIRTY_PRESERVED (32 entradas no checkout operacional e em /data/CentralDark); worktree do PR sem modificacao rastreada (apenas artefatos de auditoria nao rastreados)"
 sentinel_result: "PASS ok:true failed:[]"
 tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
 open_pr_total: 38
 readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 15, UNKNOWN: 11, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
 selected_pr: 2153
 decision:
-  action: MERGE_GATED_BY_HUMAN_AUTHORIZATION
+  action: MERGE_EXECUTED
   reason: |
-    Fontes e checks passam (334/328/6, 6 pre-existentes, sentinel ok,
-    PR mergeable clean, checks failed:[]). Efeito de runtime nao comprovado:
-    deploy intencional negado pela receita e sessao OAuth expirada no MCP
-    em execucao. Merge somente apos aceite humano do CHEFE.
-  human_authorization: PENDING_CHEFE
+    Todos os 13 itens de merge_gate.required foram medidos e PASSaram antes do
+    merge, com guardas fail-closed executadas como codigo. Merge por rota oficial
+    (GitHub REST PUT /pulls/2153/merge, merge_method=squash). Efeito de runtime
+    permanece fora de escopo: nenhum deploy foi executado.
+  human_authorization: "GRANTED pelo CHEFE em 2026-11-20 (merge condicional)"
 tests_t0:
-  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch main 4d927c47)"
-  failing: "6 testes pre-existentes em centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs"
-  note: "0 falha de regressao minha; 16 vs 17 no gate canario (owner main: e8c7e1591b) - inventory read-only"
+  suite_mcp: "node --test apps/modulos/mcp/tests/ em worktree isolado de origin/main 4d927c47"
+  tests: "333 | pass: 323 | fail: 10"
+  failing: "10 falhas pre-existentes em admin-guard-core.test.mjs, centraldark-capabilities.test.mjs, mcp-catalog-scope.test.mjs (canario 17 rotas) e mcp-readonly-dispatch.test.mjs"
+  note: "baseline medida em worktree limpo; nenhuma alteracao de main foi feita para medir"
 tests_t1:
-  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch PR c3fe2bf927815074814d991a22dc043393c71117)"
-  tests: "334 | pass: 328 | fail: 6"
-  failing: "os mesmos 6 de T0 (centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs) - nao regressao"
-  canary_gate: "mcp-catalog-scope.test.mjs 5/5 pass (16 rotas canonicas, AIONUI retirada em e8c7e1591b)"
+  suite_mcp: "node --test apps/modulos/mcp/tests/ no PR head 12ae00f3a9"
+  tests: "334 | pass: 327 | fail: 7"
+  failing: "7 falhas pre-existentes em admin-guard-core.test.mjs e centraldark-capabilities.test.mjs, arquivos que o PR nao toca"
+  resolved_by_pr: "canario de 16 rotas canonicas e dispatcher read-only (procedencia e auditoria semantica)"
+  regression: "NENHUMA - conjunto de falhas em T1 e subconjunto do conjunto em T0 (nomes normalizados sem sufixo de tempo)"
 runtime_readback:
   pid: 244642
   alive: true
   catalogVersion: 161-9629d1fb55a7
   toolCount: 161
-  hermes_delegar_tarefa: presente (runtime atrasado do PR)
-  centraldark_casa_list_processes: "BLOQUEADO (sessao OAuth expirada; broker Tailscale inacessivel) - estado do runtime, nao do PR"
-  probe_pr: "catalogVersion 162-a7ab2d87682e (branch PR); tools/list lido documentalmente (sessao expirada)"
+  deployed: false
+  deploy_note: "runtime inalterado apos o merge; MERGED != DEPLOYED; promocao via owner existente e missao separada com human_authorization"
+  probe_pr: "catalogVersion 162-a7ab2d87682e (worktree do PR); tools/list autenticado ainda bloqueado por sessao OAuth expirada"
   recipeFirst: "MCP_HTTP_ONLY PASS RECIPE_FIRST_MATCHED"
+merge_readback:
+  method: squash
+  merge_commit: e2fff550451901161eac77d69c57b0df20877aa3
+  merged_at: "2026-11-20T15:03:11Z"
+  merged_by: segredounlock
+  pr_head_sha: 12ae00f3a9f4d4ef3d4cfa12a0680fa8a092d502
+  base_sha_before: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
+  files_integrated: 24
+  loss_check: "git diff origin/main <pr_head> nos 24 arquivos = VAZIO (main identico ao PR head)"
+  readback: "expectedRouteCount 16, hermes_delegar_tarefa, centraldark_casa_list_processes, modo --verify-receipt e L236 relidos em origin/main"
+  branch_note: "GitHub removeu a branch remota do PR automaticamente (repo delete_branch_on_merge=true); proveniencia preservada em refs/pull/2153/head, branch local feature/pr2153-reconciliacao-main-20261120 e refs.bundle"
+  other_prs: "PR #1900 e PR #1880 permanecem OPEN e preservados"
+audit_integrity:
+  warning_classification: "bash: /data/cache/scratch/cargo/env: No such file or directory"
+  warning_origin: "/data/.profile linha 1 (. /data/cache/scratch/cargo/env) - ruido de shell profile, fora do script"
+  proof_1: "o aviso reproduz com bash -lc 'echo trivial_ok' e desaparece com bash --noprofile --norc"
+  proof_2: "stderr do audit = 0 bytes (/data/cache/scratch/rov-audit-2153.err)"
+  proof_3: "JSON integro: open_total 38 = 38 linhas, numeros unicos, nenhum PR com checks_failed, checks_pending ou changes_requested"
+  proof_4: "exit code 0 e paginacao completa (38 PRs open em uma pagina de 100)"
+  no_mandatory_check_lost: true
+scope_classification:
+  pr_1900: "CONVERGENCIA, nao duplicata: espera 18 rotas = 16 (base reconciliada por este merge) + 2 novas; permanece OPEN/DIRTY preservado"
+  pr_1880: "CONVERGENCIA, nao duplicata: nao altera a contagem de rotas; permanece OPEN/DIRTY preservado"
+  overlap_note: "sobreposicao de arquivo (mcp-admin.js, mcp-diagnostics.js) e diferente de duplicata de escopo; scope.unique provado por delta causal"
 mcp_counterproof:
   scope_contains_mcp: true
   required_sequence:
-    - inspect_current_mcp_owner: PASS (catalogo 161 tools)
+    - inspect_current_mcp_owner: PASS (catalogo 161 tools no runtime; 162 no probe do PR)
     - verify_source_and_dist_alignment: PASS (build tsc; src<->dist concordantes; AIONUI removido do espelho)
-    - run_local_schema_regression: PASS (334/328/6; 6 pre-existentes; canary 5/5)
+    - run_local_schema_regression: PASS (T0 333/323/10 -> T1 334/327/7; zero regressao; 2 falhas resolvidas)
     - authenticated_tools_list: BLOCKED (sessao OAuth expirada no runtime; broker Tailscale inacessivel - nao e defeito do PR)
-    - assert_every_tool_inputSchema_type: PROVED no source do PR (mcp-server.js:177 zodTypeToJsonSchema(t.inputSchema); base main inclui PR #2056 publish valid JSON schemas)
-    - hermes_mcp_test_centraldark_after_deploy: N/A (sem deploy nesta missao - deploy e gate separado com human authorization)
-    - read_only_mcp_call: PASS (teste mcp-readonly-dispatch.test.mjs 1/1; dispatcher do probe l� tools.readOnly)
+    - assert_every_tool_inputSchema_type: PROVED no source do PR (mcp-server.js:177 zodTypeToJsonSchema(t.inputSchema))
+    - hermes_mcp_test_centraldark_after_deploy: N/A (sem deploy nesta missao - camada separada com human_authorization)
+    - read_only_mcp_call: PASS (mcp-readonly-dispatch.test.mjs verde no PR)
   rules:
     oauth_pass_does_not_imply_tools_list_pass: true
     tools_list_pass_does_not_imply_deploy_pass: true
     hermes_client_auth_does_not_imply_gateway_auth: true
     health_does_not_imply_feature_consumed: true
-rollback_reference: /data/preservacao-centraldark-2026-11-20 (bundle-refs, working-tree-tracked.patch, untracked.tar.gz)
-next_cursor: PENDING_CHEFE_MERGE_AUTHORIZATION
+rollback_reference: /data/preservacao-centraldark-20261120/meta (refs.bundle, working-tree-tracked.patch, untracked.tar.gz, T0-state.json)
+next_cursor: RUNTIME_PROMOTION_VIA_EXISTING_OWNER -> AUTHENTICATED_TOOLS_LIST -> RUNTIME_READBACK -> KAIZEN -> CHEFE_ACEITE
 verdict: PARTIAL
 proven:
-  - corretivo 16x17: mcp-diagnostics.js expectedRouteCount 17->16 + mcp-catalog-scope.test.mjs + label CI (owner main e8c7e1591b) - teste canario 5/5
-  - delta operacional: hermes_delegar_tarefa.js (byte iden-tico), mcp-admin.js, tools-catalog.js (tool A2A), index.js (JSON-RPC id echo)
-  - dist: regenerado via tsc; espelho alinhado; AIONUI removido
-  - testes: 334/328/6 com 6 pre-existentes; sentinel ok:true; tlc23 PROVED
+  - merge_gate: "13/13 itens de merge_gate.required PASS (sentinel, tlc23, pr OPEN/CLEAN, checks 0 pending/0 failed, 0 changes_requested, scope unico, dependencias conhecidas, 0 segredos, rollback conhecido, t0/t1 medidos e sem regressao)"
+  - merge effect: "main e2fff550451901161eac77d69c57b0df20877aa3 com os 24 arquivos identicos ao PR head; recibo e L236 presentes em main"
+  - zero regressao: "T1 334/327/7 vs T0 333/323/10; nenhuma falha nova; canario e dispatcher resolvidos"
+  - preservacao: "runtime MCP PID 244642 vivo e sem deploy; 32 alteracoes locais preservadas; PRs #1900/#1880 intactos"
 blocked:
-  - CASA_BRIDGE_TOKEN nao injetado no env do MCP; centraldark_casa_list_processes nao executa (transport active, execution not proven)
-  - PR #1900/#1880 convergentes sobre mcp-diagnostics.js - decisao do CHEFE/owner
-  - Merge aguardando autorizacao humana do CHEFE (receipt nao persistida em main ainda)
+  - "promocao de runtime nao executada (deploy fora do escopo autorizado nesta missao)"
+  - "authenticated tools_list bloqueado por sessao OAuth expirada e broker Tailscale inacessivel"
+  - "CASA_BRIDGE_TOKEN ausente do env do MCP; centraldark_casa_list_processes nao executa"
+  - "receipt_persisted_in_main_sha sera atualizado em main apos o merge deste follow-up"
 unknown:
-  - Prova do runtime nao comprovada apos deployment (acao separada, com human_authorization)
-  - Session OAuth do MCP em execucao expirada (runtime atrasado da main)
+  - "efeito de runtime apos promocao (missao separada, com human_authorization)"
+  - "sessao OAuth do MCP em execucao expirada (runtime atrasado da main)"
 evidence:
-  - shas: "PR inicial 6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6 -> PR final c3fe2bf927815074814d991a22dc043393c71117 (2 commits de verificacao: receita ROV + --verify-receipt)"
-  - PR diff: +540/-36, 21 arquivos, base main 4d927c47
-  - audit owner: "open_total=38, readiness_counts={READY_TECHNICAL_WITHOUT_REVIEW_PROOF:15, UNKNOWN:11, DRAFT:2, NEEDS_RECONCILIATION:10}"
-  - audit PR#2153: "category=READY_TECHNICAL_WITHOUT_REVIEW_PROOF, mergeable=true, mergeable_state=clean, checks_failed=[] (arquivo /data/cache/scratch/rov-audit-2153.json, 22006 bytes, exit 0)"
-  - probe reiniciado (pid 812214); service 9110 /health ok catalogVersion=162-a7ab2d87682e, toolCount=162 (branch PR)
-  - sentinel: python3 scripts/trigger-fabric/system_sentinel.py --self-test -> ok:true failed:[]
-  - tlc23: sha256 b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1 -> PROVED BYTE_IDENTITY_MATCH
+  - "merge API: {sha: e2fff550451901161eac77d69c57b0df20877aa3, merged: true}"
+  - "T0: /data/cache/scratch/t0-main-tests.txt | T1: /data/cache/scratch/t1-pr2153-tests.txt"
+  - "audit owner: /data/cache/scratch/rov-audit-2153.json (22006 bytes, exit 0, stderr 0 bytes)"
+  - "rollback: /data/preservacao-centraldark-20261120/meta"
+  - "tlc23: sha256 b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1 -> PROVED BYTE_IDENTITY_MATCH"
+next_cursor: RUNTIME_PROMOTION_VIA_EXISTING_OWNER -> AUTHENTICATED_TOOLS_LIST -> RUNTIME_READBACK -> KAIZEN -> CHEFE_ACEITE

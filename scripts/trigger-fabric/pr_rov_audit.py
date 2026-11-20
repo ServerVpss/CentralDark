@@ -12,6 +12,7 @@ import time
 import urllib.error
 import urllib.request
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 import yaml
 from typing import Any
@@ -47,6 +48,16 @@ def repo_slug() -> str:
         raise RuntimeError("ORIGIN_IS_NOT_GITHUB")
     slug = url.split("github.com", 1)[1].lstrip(":/")
     return slug.removesuffix(".git")
+
+
+def git_ref(ref: str) -> str | None:
+    """Resolve uma ref local sem mutar o repositorio (readback minimo do contrato)."""
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--verify", ref], text=True
+        ).strip()
+    except subprocess.CalledProcessError:
+        return None
 
 
 def api_get(path: str, headers: dict[str, str]) -> Any:
@@ -110,6 +121,8 @@ def classify(detail: Any, checks: list[dict], reviews: list[dict]) -> dict:
         "number": detail["number"],
         "title": detail["title"],
         "url": detail["html_url"],
+        "html_url": detail["html_url"],
+        "state": detail.get("state"),
         "head_ref": detail["head"]["ref"],
         "head_sha": detail["head"]["sha"],
         "base_ref": detail["base"]["ref"],
@@ -117,6 +130,10 @@ def classify(detail: Any, checks: list[dict], reviews: list[dict]) -> dict:
         "mergeable": detail.get("mergeable"),
         "mergeable_state": state,
         "draft": detail.get("draft", False),
+        "changed_files": detail.get("changed_files"),
+        "labels": [label.get("name") for label in detail.get("labels", [])],
+        "checks": {"total": len(checks), "pending": pending, "failed": failed},
+        "reviews": {"approvals": approvals, "changes_requested": changes_requested},
         "checks_total": len(checks),
         "checks_pending": pending,
         "checks_failed": failed,
@@ -207,6 +224,8 @@ def main() -> int:
         rows = list(pool.map(lambda pr: audit_one(pr, headers, repo), prs))
     rows.sort(key=lambda row: row["number"], reverse=True)
     counts = Counter(row["category"] for row in rows)
+    current_origin_main_sha = git_ref("origin/main")
+    audit_timestamp = datetime.now(timezone.utc).isoformat()
     print(
         json.dumps(
             {
@@ -215,6 +234,8 @@ def main() -> int:
                 "repository": repo,
                 "open_total": len(rows),
                 "read_only": True,
+                "current_origin_main_sha": current_origin_main_sha,
+                "audit_timestamp": audit_timestamp,
                 "readiness_counts": dict(counts),
                 "rows": rows,
             },
