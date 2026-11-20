@@ -14,7 +14,7 @@ Uma intenção, um coração, uma biblioteca, evolução a cada batida.
 
 - OWNER da intenção: `docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md`
 - Cristalização de 2026-10-08: `docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md`
-- Seis Olhos (já existente): `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`
+- Seis Olhos (já existente): `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`
 - Laço de edição viva (já existente, dono do fluxo): `.agents/skills/centraldark-live-editing-fabric/SKILL.md`
 
 Esta skill não cria outro sistema: consulta e alimenta o que já existe.

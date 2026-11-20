@@ -8,7 +8,7 @@ status: "CANÔNICO"
 
 # CHECKPOINT-IA — Estado vivo para qualquer IA
 
-## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+## ⚡ SEM LEI OPERACIONAL — estado atual sem atrito
 
 Isto não cria lei nova. Remove poder de veto de ritual/checklist/gate sem dependência causal real.
 

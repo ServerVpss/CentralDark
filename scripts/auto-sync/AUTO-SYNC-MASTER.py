@@ -147,8 +147,32 @@ class AutoSyncMaster:
         local = self.repo_root / path
         base = self._blob(base_ref, path)
         remote = self._blob(remote_ref, path)
-        if base is None or remote is None or not local.is_file():
-            return ("PATH_SHAPE_OR_DELETE", 1)
+        local_bytes = local.read_bytes() if local.is_file() else None
+        if base is None or remote is None or local_bytes is None:
+            # O caso "forma ausente" tem varias situacoes deterministicas que o
+            # classificador antes tratava todas como conflito permanente. Cada
+            # ramo abaixo decide por conteudo, nunca por suposicao.
+            if base is None:
+                # Caminho novo: nao existia na BASE.
+                if remote is None:
+                    # so existe no local: nao colide com a main.
+                    return ("NEW_LOCAL_ONLY", 0) if local_bytes is not None else ("NOT_APPLICABLE", 0)
+                if local_bytes is None:
+                    # so existe na main: o checkout ainda nao recebeu.
+                    return ("NEW_ON_REMOTE_ONLY", 0)
+                return (
+                    ("NEW_IDENTICAL_ON_BOTH_SIDES", 0)
+                    if local_bytes == remote
+                    else ("NEW_ON_BOTH_SIDES_DIFFER", 1)
+                )
+            if remote is None:
+                if local_bytes is None:
+                    # main aposentou e o local ja removeu: nada a reconciliar.
+                    return ("DELETED_ON_BOTH_SIDES", 0)
+                # main aposentou, local ainda tem (e talvez editado): exige dono.
+                return ("DELETED_ON_REMOTE_KEPT_LOCALLY", 1)
+            # BASE e remoto existem; o arquivo local sumiu.
+            return ("DELETED_LOCALLY_KEPT_ON_REMOTE", 1)
         with tempfile.TemporaryDirectory(prefix="cd40-merge-") as td:
             root = Path(td)
             bp, rp = root / "base", root / "remote"
@@ -192,6 +216,10 @@ class AutoSyncMaster:
                 continue
             verdict, hunks = self._three_way_probe(path, head, remote_ref)
             if verdict == "AUTO_MERGEABLE":
+                auto_mergeable.append(self._safe_path(path))
+            elif hunks == 0:
+                # Resolucao deterministica sem julgamento humano (ex.:
+                # DELETED_ON_BOTH_SIDES) nao e conflito semantico.
                 auto_mergeable.append(self._safe_path(path))
             else:
                 conflicts.append({"path": self._safe_path(path), "reason": verdict, "hunks": hunks})
