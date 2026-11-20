@@ -1894,7 +1894,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### Cristal 2026-10-08 — Ralph-style bounded recipe loop e sync canônico da skill Oracle
-- **Owner:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`.
+- **Owner:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`.
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-08-oracle-anti-dumb-loop-recipe-promotion.md`.
 - **Intenção do CHEFE:** Hermes não deve gastar turnos em retry idêntico. Se o mesmo fingerprint não gera informação nova, parar o retry, reutilizar/derivar uma receita determinística, replayar uma vez, contraprovar e continuar no mesmo Goal/LOOP_ID.
 - **Evolução de skill:** somente delta generalizável e provado entra na **mesma skill** canônica na `main`; incidente específico fica em receipt/runtime state. Não criar Ralph paralelo, scheduler, router, brain ou skill irmã.

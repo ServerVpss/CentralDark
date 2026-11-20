@@ -59,12 +59,12 @@ const forgeAliases: readonly ForgeAlias[] = [
     readonly: true,
   },
   {
-    id: "MANUTENCAO", symbols: "🛠️ 👨🏻‍🔧", name: "Manutenção com owner único",
+    id: "MANUTENCAO", symbols: "🛠️ 👨🏻‍🔧", name: "Manutenção com responsável único",
     owner: ".agents/skills/centraldark-operational-method/SKILL.md",
     invocation: "!CENTRALDARK",
-    effect: "Recuperar missão, owner, testes, bloqueios e próximo cursor antes de intervir.",
+    effect: "Recuperar missão, responsável, testes, bloqueios e próximo passo antes de intervir.",
     improvement: "Evita consertar duas vezes e não altera checkout com trabalho em andamento.",
-    proof: "Receipt com causa, teste, readback e NEXT_CURSOR.",
+    proof: "Comprovante com causa, teste, conferência do resultado e próximo passo.",
     readonly: true,
   },
   {
@@ -89,9 +89,9 @@ const forgeAliases: readonly ForgeAlias[] = [
     id: "ANTECIPACAO", symbols: "🌞 🌟 ✨", name: "Outra melhoria antecipada",
     owner: ".agents/skills/centraldark-operational-method/SKILL.md",
     invocation: "#acordar → !calibrar → !CENTRALDARK",
-    effect: "Recuperar contexto, identificar delta útil e continuar o owner autorizado.",
+    effect: "Recuperar contexto, identificar a mudança útil e continuar com o responsável autorizado.",
     improvement: "Reduz redescoberta após boot/chat sem criar executor independente.",
-    proof: "Comparar a última prova ao CURRENT e registrar só a novidade verificável.",
+    proof: "Comparar a última prova ao estado atual e registrar só a novidade verificável.",
     readonly: true,
   },
   {
@@ -106,10 +106,10 @@ const forgeAliases: readonly ForgeAlias[] = [
   {
     id: "WORKTREE_CLEANUP", symbols: "🧹", name: "Faxina segura da Forja",
     owner: ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
-    invocation: "Consulte o owner main-pinned-runtime-fast-path → Worktree Teardown; não execute reset/clean diretamente",
+    invocation: "Consulte o responsável main-pinned-runtime-fast-path → desmontagem segura da área de trabalho; não execute reset/clean diretamente",
     effect: "Inventariar o scratch reutilizável, comprovar preservação do trabalho e só então liberar a bancada temporária.",
     improvement: "Mantém a Forja organizada, sem apagar worktrees ativas, commits locais ou arquivos que ainda não chegaram à main.",
-    proof: "Classificação do path, lock, source SHA, testes, receipt, main readback quando aplicável e efeito visual Casa quando solicitado.",
+    proof: "Classificação do caminho, trava, SHA da fonte, testes, comprovante, conferência da main quando aplicável e efeito visual na Casa quando solicitado.",
     readonly: true,
   },
 ] as const;
@@ -226,7 +226,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs text-neon-blue">HUD VIGENTE · PR E RECIBOS DO GITHUB</p>
-            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 CENTRALDARK_HUD_FUNNEL_CONTINUITY</h3>
+            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 Continuidade da missão</h3>
           </div>
           <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
             {hudCurrent.data?.missaoAtual?.estado ?? hudCurrent.data?.recibosEstado ?? hudCurrent.data?.status ?? "UNKNOWN"}
@@ -239,7 +239,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["main SHA", hudCurrent.data?.mainSha?.slice(0, 12) ?? "UNKNOWN"],
             ["PR HEAD", hudCurrent.data?.headSha?.slice(0, 12) ?? "UNKNOWN"],
             ["Medição", hudCurrent.data?.measuredAt ?? "UNKNOWN"],
-            ["NEXT_CURSOR", hudCurrent.data?.nextCursor ?? "UNKNOWN"],
+            ["Próximo passo", hudCurrent.data?.nextCursor ?? "UNKNOWN"],
             ["Recibos do PR", hudCurrent.data?.recibosEstado ?? "UNKNOWN"],
             ["Missão", hudCurrent.data?.missaoAtual?.missionId ?? "UNKNOWN"],
             ["Cursor do funil", hudCurrent.data?.funilNextCursor ?? "UNKNOWN"],
@@ -308,7 +308,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
               Abrir PR vigente
             </a>
           ) : null}
-          <span>{hudCurrent.data?.detail ?? "GitHub CURRENT ainda não medido."}</span>
+          <span>{hudCurrent.data?.detail ?? "Estado atual do GitHub ainda não medido."}</span>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
           Consulta server-side: GitHub API com GITHUB_TOKEN/GH_TOKEN do ambiente; fallback para gh autenticado no host.
@@ -322,19 +322,19 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <h3 id="cd-ingress-live" className="text-lg font-semibold">🪬 Porta de entrada · coordenação e execução</h3>
         <p className="mt-2 text-xs text-muted-foreground">
           SOL/JARVIS coordena esta missão por meio do chat. A sessão ativa,
-          o writer e o executor somente podem ser declarados pelo owner em runtime.
+          quem escreve e quem executa só podem ser declarados pelo responsável no programa em funcionamento.
         </p>
         <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {([
             ["Entrada desta missão", "SOL/JARVIS · contrato", "Não é sessão autenticada do cockpit"],
             ["Intenção atual", "UNKNOWN", "Nenhum campo de intenção fornecido pelo snapshot"],
-            ["Owner de observação", "cockpit.functions.ts", "Snapshot do mesmo cockpit"],
+            ["Responsável pela observação", "cockpit.functions.ts", "Snapshot do mesmo cockpit"],
             ["Writer ativo", "UNKNOWN", "A leitura não informa lease de escrita"],
             ["Executor ativo", "UNKNOWN", "Não presumir Hermes/Claude sem recibo"],
             ["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN",
-              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "SEM_READBACK"}; STDIO/Hermes exigem contraprova separada`],
+              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "Ainda sem conferência"}; STDIO/Hermes exigem contraprova separada`],
             ["Última evidência", estado?.atualizadoEm ?? "UNKNOWN", "Timestamp do snapshot, não do executor"],
-            ["NEXT_CURSOR", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme owner medido"],
+            ["Próximo passo", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme responsável medido"],
           ] as const).map(([rotulo, valor, ressalva]) => (
             <div key={rotulo} className="rounded-md border border-border p-3">
               <dt className="text-xs font-semibold">{rotulo}</dt>
@@ -451,7 +451,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           {historicalSeals.map(name => (
             <div key={name} className="rounded-md border border-border px-3 py-2 text-sm">
               <strong>{name}</strong>
-              <p className="text-xs text-muted-foreground">HISTÓRICO · CURRENT exige readback</p>
+              <p className="text-xs text-muted-foreground">HISTÓRICO · estado atual exige conferência</p>
             </div>
           ))}
         </div>
@@ -461,7 +461,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         </p>
       </section>
       <section className="panel p-6" aria-labelledby="cd-integridade-estado">
-        <p className="font-mono text-[10px] text-neon-blue">👁️🪡 CURRENT REALITY · PROJEÇÃO DO OWNER</p>
+        <p className="font-mono text-[10px] text-neon-blue">👁️🪡 REALIDADE ATUAL · PROJEÇÃO DO RESPONSÁVEL</p>
         <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
           <h3 id="cd-integridade-estado" className="text-lg font-semibold">🫀 Central de Integridade · Compasso Único</h3>
           <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground" role="status">
@@ -494,13 +494,13 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
                 <p className="text-sm font-semibold">{nome}</p>
                 <p className="mt-2 text-xs text-muted-foreground">{requisito}</p>
                 <p className="mt-2 font-mono text-xs text-muted-foreground">
-                  Sinal auxiliar do owner: {sinal ?? "UNKNOWN"} · ESTRELA NÃO ATESTADA
+                  Sinal auxiliar do responsável: {sinal ?? "UNKNOWN"} · ESTRELA NÃO ATESTADA
                 </p>
               </div>
             ))}
           </div>
           <p className="mt-3 text-xs text-muted-foreground" role="status">
-            NEXT_CURSOR: confrontar CI do SHA {estado?.mainSha?.slice(0, 12) ?? "UNKNOWN"}
+            👉 O QUE FAZER AGORA: confrontar CI do SHA {estado?.mainSha?.slice(0, 12) ?? "UNKNOWN"}
             {" "}e receipts de build, deploy e runtime. Uma medição HTTP, um commit ou este quadro
             não concedem estrelas automaticamente. O teste de critérios existe na esteira atual.
           </p>
@@ -508,12 +508,12 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {([
             ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
-            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Deploy e alinhamento com main exigem readback próprio."],
+            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Publicação e alinhamento com a main exigem conferência própria."],
             ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthFonte ?? "Host de origem não medido", "HTTP /health atesta somente essa rota, não integração completa."],
             ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
             ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem medida da Casa", "Estado só pode vir do host Windows Casa; conector remoto ≠ serviço."],
             ["👁️ Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem medida da VPS", "A porta 3030 da VPS pode ser o Graph Panel; exige assinatura Screenpipe."],
-            ["🧾 Receipts", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova receipt por artefato."],
+            ["🧾 Comprovantes", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova o comprovante por artefato."],
           ] as const).map(([nome, situacao, detalhe, limite]) => (
             <div key={nome} className="min-w-0 rounded-lg border border-border bg-muted/20 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -527,7 +527,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
                 </span>
               </div>
               <p className="mt-2 break-all font-mono text-xs text-foreground">
-                {detalhe ?? "SEM READBACK NESTA CONSULTA"}
+                {detalhe ?? "Ainda sem conferência nesta consulta"}
               </p>
               <p className="mt-2 text-xs text-muted-foreground">{limite}</p>
             </div>
@@ -535,14 +535,14 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
           <div className="rounded-lg border border-border p-4">
-            <h4 className="text-sm font-semibold">🧭 Gatilhos · mesma intenção, mesmo owner</h4>
+            <h4 className="text-sm font-semibold">🧭 Gatilhos · mesma intenção, mesmo responsável</h4>
             <p className="mt-2 text-xs text-muted-foreground">
               !CENTRALDARK → retomar missão · #ACORDAR → recuperar contexto ·
               !CALIBRAR → confrontar evidências · #CRISTALIZAR → registrar delta útil.
               São receitas de governança; este painel não envia comandos.
             </p>
             <p className="mt-3 break-all font-mono text-xs">
-              OWNER: apps/instinto-superior/src/lib/cockpit.functions.ts
+              Responsável técnico: apps/instinto-superior/src/lib/cockpit.functions.ts
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
               FONTE: {estado?.fonte ?? "UNKNOWN"} · valor observado no mesmo snapshot do cockpit.
@@ -555,11 +555,11 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
               Um arquivo aprovado só fica protegido de edição quando houver gate de escrita
-              comprovado, SHA do objeto, testes, contraprova e receipt. Selos documentais,
+              comprovado, SHA do objeto, testes, contraprova e comprovante. Selos documentais,
               botão verde ou main medida não concedem proteção real.
             </p>
             <p className="mt-3 text-xs">
-              <strong>NEXT_CURSOR:</strong>{" "}
+              <strong>👉 O QUE FAZER AGORA:</strong>{" "}
               <span className="break-words text-muted-foreground">
                 {estado?.nextCursor ?? "UNKNOWN · nenhuma continuação publicada por esta consulta"}
               </span>
@@ -569,7 +569,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
       </section>
       <section className="panel p-6" aria-labelledby="cd-daily-title">
         <h3 id="cd-daily-title" className="text-lg font-semibold">
-          📋 Check-list diário · projeção do owner existente
+          📋 Lista diária · projeção do responsável existente
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
           Sinais do mesmo estado do cockpit, sem outro coletor. O histórico canônico está em
@@ -585,7 +585,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["Desktop Commander Casa", estado?.desktop, estado?.desktopFonte ?? "Conector remoto não medido"],
             ["Desktop Commander VPS", estado?.desktopVps, estado?.desktopVpsFonte ?? "Conector remoto não medido"],
             ["Hermes Desktop", "UNKNOWN", "Sem sensor Hermes nesta consulta; fechado por escolha = NOT_REQUIRED"],
-            ["Receipts", estado?.receipts, estado?.receiptsHttp],
+            ["Comprovantes", estado?.receipts, estado?.receiptsHttp],
           ] as const).map(([nome, resultado, detalhe]) => (
             <div key={nome} className="rounded-md border border-border px-3 py-3">
               <dt className="text-sm font-semibold">{nome}</dt>
@@ -612,7 +612,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           🔧🛠️👨🏻‍🔧 👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️🧹 Forja Viva
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Escolha um símbolo para consultar a receita do owner. Selecionar ou copiar
+          Escolha um símbolo para consultar a receita do responsável. Selecionar ou copiar
           não dispara shell, tarefas, merges, instalações ou deploys. Zoom usa os controles
           nativos existentes do VS Code e do navegador.
         </p>
@@ -635,14 +635,14 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         {chosenForge?.id === "WORKTREE_CLEANUP" && (
           <div className="mt-4 rounded-lg border border-border p-4" role="region"
             aria-label="Checklist seguro da faxina de worktree">
-            <h4 className="text-sm font-semibold">🧹 CHECKLIST · receita do owner existente</h4>
+            <h4 className="text-sm font-semibold">🧹 CONFERÊNCIA · receita do responsável existente</h4>
             <ol className="mt-2 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
-              <li>Classificar OWNER, escopo, worktree, lock e realpath. Worktree ativa permanece.</li>
+              <li>Classificar responsável, escopo, área de trabalho, trava e caminho real. Área de trabalho ativa permanece.</li>
               <li>Inventariar staged, unstaged, arquivos untracked e commits só locais.</li>
-              <li>Concluir teste, contraprová-lo e registrar receipt com SHA e arquivos.</li>
-              <li>Confirmar publicação na main e readback do efeito quando aplicável.</li>
+              <li>Concluir o teste, contraprová-lo e registrar comprovante com SHA e arquivos.</li>
+              <li>Confirmar publicação na main e conferir o efeito quando aplicável.</li>
               <li>Quando o CHEFE quiser ver: build e prova visual na Casa existente.</li>
-              <li>Atualizar o checklist diário CURRENT do HUD com provas, sem duplicar histórico.</li>
+              <li>Atualizar a conferência diária do estado atual do HUD com provas, sem duplicar histórico.</li>
               <li>Somente com tudo preservado: limpar o scratch descartável sob lock e verificar novamente.</li>
             </ol>
             <p className="mt-3 text-xs" role="status">
@@ -650,7 +650,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
               Um scratch por escopo quando adequado; escritores independentes mantêm isolamento.
-              Ausência de receipt, arquivo único ou dúvida = KEEP_ACTIVE.
+              Ausência de comprovante, arquivo único ou dúvida = manter ativo.
             </p>
           </div>
         )}
@@ -660,7 +660,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             <h4 className="text-base font-semibold">{chosenForge.symbols} {chosenForge.name}</h4>
             <p className="text-sm"><strong>O que faz:</strong> {chosenForge.effect}</p>
             <p className="text-sm"><strong>Por que melhora:</strong> {chosenForge.improvement}</p>
-            <p className="break-all font-mono text-xs">OWNER: {chosenForge.owner}</p>
+            <p className="break-all font-mono text-xs">Responsável técnico: {chosenForge.owner}</p>
             <p className="break-all font-mono text-xs">RECEITA: {chosenForge.invocation}</p>
             <p className="text-xs text-muted-foreground"><strong>Prova exigida:</strong> {chosenForge.proof}</p>
             <p className="text-xs text-muted-foreground" role="status">
@@ -676,7 +676,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             <p className="text-xs text-muted-foreground" aria-live="polite">
               {forgeCopy === "COPIED_NOT_EXECUTED" ? "Copiado; nada foi executado."
                 : forgeCopy === "COPY_FAILED" ? "Cópia não disponível; texto acima continua visível."
-                : "Copiar é opcional. Execução requer autorização, owner e contraprova."}
+                : "Copiar é opcional. Execução requer autorização, responsável e contraprova."}
             </p>
           </div>
         )}
@@ -718,7 +718,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             <thead><tr className="border-b border-border">
               <th scope="col" className="p-2">TelePainel · preservado</th>
               <th scope="col" className="p-2">Instinto Superior · Admin</th>
-              <th scope="col" className="p-2">Owner original</th>
+              <th scope="col" className="p-2">Responsável original</th>
               <th scope="col" className="p-2">Prova</th>
             </tr></thead>
             <tbody>
@@ -739,7 +739,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED. Nenhum serviço é iniciado por esta tabela.
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
-          NEXT_CURSOR: Backup/Sync seguro → Consultas → Usuários → Banco de dados →
+          👉 O QUE FAZER AGORA: Backup/Sync seguro → Consultas → Usuários → Banco de dados →
           Planos/PIX → demais capacidades. Cliente só recebe recursos estáveis
           após autorização, isolamento de dados e regressão.
         </p>
@@ -748,13 +748,13 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
       <section className="panel p-6" aria-labelledby="cd-hud-legacy-owner-inventory">
         <p className="font-mono text-[10px] text-neon-blue">🪡🫀 MAPA DE ABSORÇÃO · SEM OUTRO HUD</p>
         <h3 id="cd-hud-legacy-owner-inventory" className="mt-2 text-lg font-semibold">
-          Inventário integral do HUD original por owner
+          Inventário integral do HUD original por responsável
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
           O arquivo legado foi varrido por estrutura: {hudMigrationSnapshot.counts.sections} títulos,
           {" "}{hudMigrationSnapshot.counts.controls} controles identificados com seletores e
           {" "}{hudMigrationSnapshot.counts.tabs} abas. O inventário não afirma que tudo já foi migrado.
-          Cada registro mostra sua origem e o owner que precisa fornecer a ação real.
+          Cada registro mostra sua origem e o responsável que precisa fornecer a ação real.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button variant="outline" type="button" disabled={!atualizar} onClick={atualizar}>
@@ -769,7 +769,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <label className="text-xs text-muted-foreground" htmlFor="hud-legado-busca">
-            Buscar capacidade ou owner
+            Buscar capacidade ou responsável
             <input id="hud-legado-busca" type="search" value={legadoBusca}
               onChange={e => { setLegadoBusca(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
               placeholder="MCP, Tailscale, Afterburner..."
@@ -827,15 +827,15 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         </div>
         {legadoAtual && (
           <div className="mt-4 space-y-2 rounded-lg border border-border p-4" role="region"
-            aria-label={"Owner do controle: " + legadoAtual.titulo}>
+            aria-label={"Responsável pelo controle: " + legadoAtual.titulo}>
             <h4 className="font-semibold">{legadoAtual.titulo}</h4>
-            <p className="break-all font-mono text-xs">OWNER: {legadoAtual.owner}</p>
+            <p className="break-all font-mono text-xs">Responsável técnico: {legadoAtual.owner}</p>
             <p className="text-xs text-muted-foreground">
               SOURCE: docs/HUD/HUD.html · linha {legadoAtual.line}
               {" · "}STATUS: {legadoAtual.estado}.
             </p>
             <p className="text-xs text-muted-foreground">
-              Verificar a função e o readback do owner antes de ativar.
+              Verificar a função e conferir o responsável antes de ativar.
               Botão listado não equivale a execução ou paridade demonstrada.
             </p>
             <a href={"https://github.com/ServerVpss/CentralDark/blob/" +
@@ -846,14 +846,14 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         )}
         <p className="mt-3 text-xs text-muted-foreground">
           Próximos deltas causais: sensores Afterburner, skill-sync E01–E10,
-          Fixed Point e autorização dos formulários privados. Manter uma função por owner.
+          Objetivo concluído e autorização dos formulários privados. Manter uma função por responsável.
         </p>
       </section>
       <GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
         source SHA {lineage.source_blob_sha.slice(0, 12)}.
-        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e readback individual.
+        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e conferência individual.
       </p>
     </section>
   );

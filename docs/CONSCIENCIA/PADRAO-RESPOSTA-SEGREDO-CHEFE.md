@@ -32,6 +32,44 @@ links:
 
 # 💬 Padrão de resposta — SEGREDO/CHEFE
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+## 🗺️ Mensagem com mapa visual — português claro na frente
+
+**Ordem permanente do CHEFE (19/11/2026):** cada mensagem com seções de status, diagnóstico, comprovante, auditoria, teste, encaminhamento ou resumo usa a placa correta do [mapa de emojis](PADRAO-EMOJIS.md), com título cotidiano e explicação compreensível. A **[Gramática SOL](01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml)** é a regra de formulação. **Este mesmo arquivo continua responsável pela apresentação** — sem outro HUD ou catálogo de respostas.
+
+**Princípio fundamental:** **o título deve ser entendido por qualquer brasileiro; o conteúdo pode continuar altamente técnico.** Mostre as provas, IDs, caminhos, números, hashes e riscos que forem necessários. Traduza o **rótulo visível**, não o campo da máquina. Se a mensagem for simples, responda de forma simples, sem preencher doze seções nem ditar emojis em voz.
+
+| Como aparece internamente | Como dizer às pessoas |
+| --- | --- |
+| `NEXT_CURSOR` | **👉 O QUE FAZER AGORA — Próximo passo** |
+| `CURRENT` | **📍 PONTO DE PARTIDA — Como está agora** |
+| `GREEN_STATE` | **📍 PONTO DE PARTIDA — Última versão funcionando** |
+| `OWNER` | **👀 O QUE FOI ENCONTRADO — Quem cuida disso** |
+| `DELTA` | **🔎 CONFERÊNCIA — O que mudou** |
+| `RECEIPT` | **🧾 COMPROVANTE** |
+| `READBACK` | **🔎 CONFERÊNCIA — Voltei e conferi** |
+| `COUNTERPROOF` | **🔎 CONFERÊNCIA — Verificação independente** |
+| `DEPLOY` | **📊 COMO FICOU — Versão colocada no ar** |
+| `RUNTIME` | **👀 O QUE FOI ENCONTRADO — Programa funcionando** |
+| `BLOCKED` | **⛔ O QUE ESTÁ IMPEDINDO** |
+| `UNKNOWN` | **👀 O QUE FOI ENCONTRADO — Ainda não confirmado** |
+| `NOT_RUN` | **🧪 TESTES — Não executado** |
+| `PENDING` | **👉 O QUE FAZER AGORA — Aguardando** |
+| `PASS` | **👍 DEU CERTO** |
+| `FAILED` | **👎 NÃO DEU CERTO** |
+| `FIXED_POINT` | **📊 COMO FICOU — Objetivo concluído e conferido** |
+| `SHA` | **🧾 COMPROVANTE — Identificação exata da versão** |
+
+**Estados nunca são maquiados:** `UNKNOWN != PASS`, `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`. 👍 não representa arquivo meramente criado, carregado ou publicado. 👎 exige erro real no alvo. ⛔ não some só porque a mensagem ficou mais bonita. Uma mesma prova continua com seu escopo, horário e versão.
+
+**Documentos da CentralDark:** ao apresentar um documento antigo, traduzir títulos e termos de explicação para o humano; ao editar, melhorar **somente a parte tocada**. Não renomear scripts, chaves JSON/YAML, endpoints, arquivos, links, logs, setas de diagramas, valores técnicos ou trechos históricos. Se uma interface ou relatório tiver “Detalhes técnicos”, manter ali o conteúdo original. Em voz, falar naturalmente, sem narrar ícones.
+
+**Exemplo curto:** 📍 **PONTO DE PARTIDA** — CRM no ar. 🧪 **TESTES** — modo DEV não concluiu a compilação. 📊 **COMO FICOU** — CRM público restaurado e respondendo 200. 👉 **O QUE FAZER AGORA** — corrigir a compilação antes de trocar o serviço.
+
+**Limite da prova:** publicar a regra não comprova que todos os runtimes e bots já a carregaram; testar cada consumidor antes de anunciar adoção efetiva.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 Este é o owner vivo do jeito de responder ao SEGREDO/CHEFE. **Regra vigente (12/11/2026):** falar naturalmente, resultado primeiro, sem cabeçalhos, siglas ou campos de máquina por padrão. Dizer “Próximo passo”, “Prova/Comprovante” e “Meta cumprida” somente após prova. Manter nomes técnicos literais em arquivos, comandos, logs, relatórios pedidos e evidências; o modo técnico não é obrigação de fala.
 
 O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/legado. Ele não cria um segundo padrão.
