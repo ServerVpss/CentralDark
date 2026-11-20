@@ -1411,7 +1411,7 @@ proven_path_replay_lock:
 
 oracle_surface_boot:
   marker: CENTRALDARK_ORACLE_CANONICAL_FIRST
-  owner: ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md"
+  owner: ".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md"
   query_builder: scripts/trigger-fabric/oracle_evidence_hook.py
   evidence_owner: supabase/functions/_shared/evidence-envelope.mjs
   persistence_entry: supabase/functions/agent-log/index.ts

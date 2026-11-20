@@ -183,6 +183,12 @@ mapfile -t SKILL_PATHS < <(
 )
 
 for path in "${SKILL_PATHS[@]}"; do
+  # One canonical owner: the legacy software-development copy is a duplicate,
+  # not an independent source. Skip it so the sync installs only the official
+  # centraldark-operational-method path.
+  if [[ "$path" == ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md" ]]; then
+    continue
+  fi
   canon="$TMP_DIR/canonical"
   if ! git show "$MAIN_SHA:$path" > "$canon" 2>/dev/null; then
     continue
