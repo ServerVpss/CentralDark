@@ -231,3 +231,6 @@ logs/auto-sync-status.json
 /.codeagentswarm/
 /c/
 /k/hermes-desktop-src/
+
+# Private work documents are tracked only in ServerVpss/Meus-Trabalhos.
+/MEUS-TRABALHOS/

@@ -102,7 +102,7 @@ O método do CHEFE define a VMware openKylin como `VPS_RUNTIME`, equivalente à 
 
 **Critérios:** corrigir apenas `install.sh` existente e bootstrap/empacotador proprietário; `CHECK_RC0 != INSTALL_READY`, `STRUCTURE_CREATED != INSTALLED`, `BUNDLE_DOCUMENTED != BUNDLE_VERIFIED`; respeitar FHS/caminhos absolutos e `ONE_WRITER_PER_SCOPE`. Não criar segundo instalador, runner ou script de teste no repositório.
 
-**NEXT_CURSOR:** remover efeitos colaterais de `--check/--help`, validar `CENTRALDARK_ROOT` absoluto, alinhar `installer.tar.gz` com checker e dependências, investigar HTTP 525 no owner existente e retestar no mesmo sandbox antes de promover `INSTALLER_FIXED_POINT`.
+**👉 O QUE FAZER AGORA:** remover efeitos colaterais de `--check/--help`, validar `CENTRALDARK_ROOT` absoluto, alinhar `installer.tar.gz` com checker e dependências, investigar HTTP 525 no responsável existente e retestar no mesmo sandbox antes de promover `INSTALLER_FIXED_POINT`.
 <!-- /CENTRALDARK_INSTALLER_SANDBOX_DETERMINISTIC_20261114 -->
 
 <!-- CENTRALDARK_INSTALLER_READONLY_ENTRY_20261114 -->
