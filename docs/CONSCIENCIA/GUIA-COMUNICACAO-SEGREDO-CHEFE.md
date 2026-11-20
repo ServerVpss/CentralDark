@@ -70,10 +70,10 @@ Ações irreversíveis fora do escopo vigente continuam fail-closed.
 Quando simples:
 
 ```text
-FEITO=
-EVIDENCIA=
-PENDENCIA=
-PROXIMO_PASSO=
+🧾 COMPROVANTE = o que foi realmente feito e conferido
+🔎 CONFERÊNCIA = a prova que sustenta o resultado
+⚠️ ATENÇÃO = o que ainda falta, está bloqueado ou não foi comprovado
+👉 O QUE FAZER AGORA = continuidade em linguagem natural
 ```
 
 Quando a missão muda estado ao longo da execução, 🧿 `#ACORDAR` reconcilia o delta antes da resposta final.
