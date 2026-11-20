@@ -106,7 +106,7 @@ Qual BOOT usar:
 Fio da missão:
 ```
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 ```text
 1. Ligar leitura dessas configs no runtime `apps/modulos/hub`.
@@ -127,4 +127,4 @@ Fio da missão:
 
 **PENDENTE:** ligar o consumidor do controle no runtime existente do Hub, verificar a conta Gmail conectada/autorizações, testar deduplicação e idempotência, observar evento real em `notifications_log`, verificar a projeção visual no Hub de Contas do Instinto Superior e produzir recibo E2E. Sem esses testes, `proof_state=CONFIGURED_NOT_RUNTIME_PROVEN`. Não prometer email enviado ou resolução automática nesta fase.
 
-**NEXT_CURSOR:** leitura do código atual de `apps/modulos/hub` + owner do Hub de Contas no Instinto → menor adaptador de consumo, sem disputar a branch do Auto Sync → testes → receipt → promoção conforme gates.
+**👉 O QUE FAZER AGORA:** ler o código atual de `apps/modulos/hub` e o responsável pelo Hub de Contas no Instinto → aplicar o menor adaptador de consumo, sem disputar a branch do Auto Sync → testar → guardar o comprovante técnico → promover conforme as proteções existentes.

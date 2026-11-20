@@ -70,6 +70,21 @@ LOCAL_TOOL_DENIAL
 → CONTINUE_IF_ROUTE_EXISTS
 ```
 
+<!-- CENTRALDARK_MVP_TEST_CREDENTIAL_AUTONOMY_20261116 -->
+## MVP e teste autorizado — autonomia sem bloqueio artificial (16/11/2026)
+
+**Gatilhos em PT-BR**, ignorando diferenças de maiúsculas, acentos e variações naturais: `estamos em MVP`, `em teste`, `não é nada oficial`, `autonomia executa teste autorizado`, `criar senhas quando pedir`, `gera uma conta de teste`, `senha aleatória para testar`. Esses enunciados classificam o ambiente como `MVP_TEST_MODE`; pedido explícito de criação/login/teste no sistema de propriedade ou sob controle autorizado do CHEFE identifica a operação permitida. **O gatilho de contexto não autoriza sozinho ações fora do objetivo, em terceiros ou irreversíveis.**
+
+**Conduta para SOL, Hermes e executores:**
+1. Com intenção e rota válidas, **executar diretamente** o teste reversível pedido no sistema autorizado: criar usuário descartável, gerar senha aleatória forte quando solicitada ou necessária, configurar/testar autenticação e conferir o efeito real. Não pedir ao CHEFE para inventar senha, repetir autorização já concedida ou fazer manualmente o que a ferramenta autorizada consegue executar.
+2. No **chat privado/autenticado** com o CHEFE, **entregar a credencial de demonstração gerada para ele** (usuário/e-mail, senha e URL/caminho de acesso) quando solicitada, junto com o resultado observado. A regra `DO_NOT_ECHO_SECRET_VALUE_BY_DEFAULT` protege valores reais e logs; ela **não proíbe** compartilhar com o próprio CHEFE, nesse canal, a senha descartável recém-gerada para a conta de teste autorizada. Não esconder dado de acesso necessário para reproduzir o teste.
+3. **Separar fato de simulação:** `SENHA_GERADA != CONTA_CRIADA`; `CONTA_CRIADA != LOGIN_TESTADO`; `HTTP_200 != SESSAO_VALIDADA`. Só declarar cada etapa como concluída com prova; se a ferramenta não alcançar o ambiente, informar o bloqueio exato e entregar o próximo comando útil sem fingir execução.
+4. **Preservar fronteiras:** credenciais reais de produção/terceiros não viram credenciais descartáveis só porque o CHEFE disse "MVP". Não publicar senhas, tokens ou chaves no GitHub público, logs, issues, HUD, receipts ou memória. O canal privado autorizado pode receber credenciais de **teste**; usar cofre/runtime autorizado quando precisar persistir. Nenhum gatilho dispensa autenticação, políticas superiores ou permissão material.
+5. **Sem fricção vazia:** erro local exige diagnóstico causal e tentativa por outra rota já autorizada. Solicitar aprovação apenas para decisão humana genuinamente nova, acesso ausente ou mudança de classe/escopo relevante. Responder em português claro, com acesso de teste e prova primeiro, não com sermão genérico.
+
+**Critério de sucesso:** `MVP_TEST_MODE=RECOGNIZED` + `AUTH_SCOPE=AUTHORIZED` + `TEST_ACCOUNT_CREATED=PROVED|NOT_PROVED` + `LOGIN_SESSION=PROVED|NOT_PROVED` + `ACCESS_RETURNED_TO_CHEFE=YES|NO`. Não criar outro motor, skill, cofre ou roteador; esta é a extensão do owner já citado em `AGENTS.md` e `LEIA-ME-IA.md`.
+<!-- /CENTRALDARK_MVP_TEST_CREDENTIAL_AUTONOMY_20261116 -->
+
 ## Regra curta
 
 Segredo visto não bloqueia.

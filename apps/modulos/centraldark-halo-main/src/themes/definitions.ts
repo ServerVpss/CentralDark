@@ -3,7 +3,7 @@ import type { HaloTheme, ThemeId } from "../types/themes";
 export const THEMES: Record<ThemeId, HaloTheme> = {
   "cyber-blue": {
     id: "cyber-blue",
-    name: "Cyber Blue",
+    name: "Azul Cibernético",
     mode: "full-edge",
     working: {
       color: "#35eaff",
@@ -63,7 +63,7 @@ export const THEMES: Record<ThemeId, HaloTheme> = {
 
   minimal: {
     id: "minimal",
-    name: "Minimal",
+    name: "Minimalista",
     mode: "minimal-bar",
     working: {
       color: "#4a9eff",

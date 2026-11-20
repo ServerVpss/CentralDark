@@ -71,7 +71,7 @@ COMMIT_REMOTE_PROVEN
 
 
 <!-- CENTRALDARK_GITHUB_FUNNEL_DYNAMIC_RESOLUTION_20261113 -->
-#### Receipt — resolução dinâmica do funil HUD · 13/11/2026
+#### 🧾 COMPROVANTE — resolução dinâmica do funil HUD · 13/11/2026
 
 - `OWNER=apps/instinto-superior/src/lib/github.functions.ts` · escopo separado do fixed point `cockpit-sync`.
 - causa observada: a `main` ainda continha `PR_FUNIL=1977` e `PR_ANTERIOR=1562`, em conflito com `CENTRALDARK_HUD_FUNNEL_CONTINUITY`.
@@ -83,7 +83,7 @@ COMMIT_REMOTE_PROVEN
 - `NEXT_CURSOR=VALIDATE_GITHUB_FUNNEL_RESOLVER_IN_RUNTIME → RECONCILE_CASA_WHEN_BRIDGE_AVAILABLE`.
 
 <!-- CENTRALDARK_VPS_RUNTIME_SYNC_RASTRO_20261113 -->
-#### Receipt — VPS Runtime Sync Semantic Diagnostics · 13/11/2026
+#### 🧾 COMPROVANTE — diagnóstico semântico da sincronização da VPS · 13/11/2026
 
 - `MISSION=VPS_RUNTIME_SYNC_SEMANTICALLY_SAFE` · `OWNER=cockpit-sync`.
 - cadeia material na `main`: `abf4483d13b304ee3e137e21c529ec5791895d4a` (bloqueio semântico) → `90acced7ad0209d89dc20dade3b0e30f6f5952af` (`hostOS`/origem da Casa) → `0ec29ea131a17671fe5e8748887f2982fc0d4d10` (HUD Casa/Main/VPS Runtime).
@@ -98,7 +98,7 @@ COMMIT_REMOTE_PROVEN
 - `NEXT_CURSOR=FIXED_POINT_COCKPIT_SYNC → PRESERVE_GITHUB_FUNCTIONS_OWNER_AS_SEPARATE_SCOPE`.
 
 
-### Fechamento ou publicação de CURRENT
+### 📊 Fechamento ou publicação do estado atual
 
 Evento canônico: `MISSION_STATE_READY_FOR_HUD`.
 

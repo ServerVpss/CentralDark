@@ -41,13 +41,13 @@
     "Sem isso o gate falha — pendencia sem plano vira divida invisivel."
   ],
   "versaoFormato": 1,
-  "revisadoEm": "2026-10-23",
-  "revisadoPor": "Chefe/SEGREDO via missao ADMIN_PROVIDER_CONTROL_PLANE_20260815",
+  "revisadoEm": "2026-11-17",
+  "revisadoPor": "Hermes (reconciliacao casa_pulse) sob ordem do Chefe",
   "geradoPor": "scripts/gerar-manifesto-destrutivas.mjs",
   "resumo": {
-    "descobertasNoCodigo": 21,
+    "descobertasNoCodigo": 22,
     "aprovadas": 12,
-    "emEngenhariaDeCompensacao": 9,
+    "emEngenhariaDeCompensacao": 10,
     "aprovadasNestaRodada": 0
   },
   "destrutivasAprovadas": [
@@ -436,6 +436,34 @@
       "responsavel": "CentralDark Casa; CHEFE — julgamento final",
       "ultimoTeste": "2026-10-24: implementação de fonte e testes negativos adicionados à PR #1945; runtime Windows ainda não medido.",
       "proximoExperimento": "Instalar na Casa autorizada, validar status e list_directory primeiro; depois prova de mutação reversível com compensação."
+    },
+    {
+      "nome": "centraldark_casa_pulse",
+      "grupo": "observability",
+      "arquivo": "src/tools/observability/operational-telemetry.js",
+      "anunciadaEmToolsJson": true,
+      "provider": "Casa (Tailscale) -> Trigger Fabric / Hermes",
+      "estado": "EM_ENGENHARIA_DE_COMPENSACAO",
+      "efeitoAtual": "QUARENTENA — bloqueada pontualmente; as demais destrutivas seguem liberadas.",
+      "porQueNaoPassa": "Nao e leitura pura: recebe evento da Casa e ENCAMINHA trabalho ao Trigger Fabric/Hermes. Sem captura do estado do enfileiramento antes de agir, um evento ja despachado nao tem como ser revertido; o dedupe existente nao e, por si, compensacao transacional.",
+      "compensacaoAConstruir": "receipt com event_id + dedupe persistente gravado ANTES do despacho e caminho de cancelamento do item no Trigger Fabric",
+      "comoDescobrir": "persistir event_id no dedupe antes de enfileirar; reler o item no Trigger Fabric apos o despacho para provar ACTION_PROVED",
+      "faltaNoHandler": "captura de STATE_BEFORE do enfileiramento e persistencia do receipt com operation_id/resource_id",
+      "gateFinal": {
+        "AUTHORIZATION_PROVED": true,
+        "STATE_BEFORE_CAPTURED": false,
+        "ACTION_PROVED": false,
+        "RECEIPT_PERSISTED": false,
+        "COMPENSATION_EXECUTED": false,
+        "ORIGINAL_STATE_RESTORED": false,
+        "DOUBLE_COMPENSATION_SAFE": false,
+        "NEGATIVE_TESTS_PASS": false,
+        "NO_SECRET_LEAK": false
+      },
+      "avaliadaEm": "2026-11-17",
+      "responsavel": "Hermes (reconciliacao de inventario) — implementacao; Chefe/SEGREDO — aprovacao final",
+      "ultimoTeste": "2026-11-17: reconciliacao de inventario — 22 destrutivas no runtime x 21 no manifesto; casa_pulse era a UNICA desconhecida e derrubava auditStartupReady",
+      "proximoExperimento": "gravar event_id no dedupe persistente antes do despacho, despachar um evento de teste e provar cancelamento do item no Trigger Fabric"
     }
   ],
   "politicaCatalogo": {

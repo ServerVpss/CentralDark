@@ -62,7 +62,7 @@ impl AppSettings {
 
     pub fn load() -> Self {
         let Some(path) = Self::config_path() else {
-            log::warn!("Application data directory is unavailable; using default settings");
+            log::warn!("Diret?rio de dados indispon?vel; usando configura??es padr?o");
             return Self::default();
         };
         Self::load_from(&path)
@@ -73,7 +73,7 @@ impl AppSettings {
             Ok(contents) => match serde_json::from_str::<Self>(&contents) {
                 Ok(settings) => settings,
                 Err(error) => {
-                    log::warn!("Settings are invalid; restoring defaults: {error}");
+                    log::warn!("Configura??es inv?lidas; restaurando padr?o: {error}");
                     let defaults = Self::default();
                     if let Err(save_error) = defaults.save_to(path) {
                         log::warn!("Could not replace invalid settings: {save_error}");
@@ -122,7 +122,7 @@ impl AppSettings {
             // Windows does not replace an existing destination with rename.
             if path.exists() {
                 fs::remove_file(path).map_err(|remove_error| {
-                    format!("Could not replace settings ({error}); remove failed: {remove_error}")
+                    format!("N?o foi poss?vel substituir as configura??es ({error}); remo??o falhou: {remove_error}")
                 })?;
                 fs::rename(&temporary, path).map_err(|rename_error| rename_error.to_string())?;
             } else {

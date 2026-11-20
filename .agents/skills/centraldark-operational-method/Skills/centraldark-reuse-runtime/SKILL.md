@@ -52,11 +52,23 @@ Perguntas obrigatórias:
 4. HEAD/runtime/prova mudaram?
 5. Existe contradição material nova?
 6. O consumidor real foi medido?
+7. A exposição existente foi medida em TODAS as camadas — `tailscale serve status`,
+   `tailscale funnel status` e `ingress:` do Cloudflare?
 
 Se a busca não foi executada:
 
 ```text
 CREATE_NOT_AUTHORIZED
+```
+
+## Exposição existente: checar antes de criar
+
+`cloudflared ingress != tailscale serve != funnel publico`. Uma UI local pode já estar exposta por Tailscale Serve mesmo ausente do `ingress:` do Cloudflare. Antes de afirmar "sem exposição" ou criar rota, proxy, ingress ou porta nova, medir as três camadas. Caso comprovado e contraprova:
+`docs/CONSCIENCIA/05-APRENDIZADOS/EXPOSICAO-UI-TUNNEL-CLIENT-TAILSCALE-COMPROVADO.md`.
+
+```text
+RECORDED != LOADED != APPLIED != EFFECT_PROVEN
+SYNCED_BYTES != ACTIVE_SESSION_LOAD
 ```
 
 ## Saída mínima

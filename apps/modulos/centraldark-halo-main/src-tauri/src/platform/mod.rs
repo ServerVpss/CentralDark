@@ -2,7 +2,12 @@ use std::path::PathBuf;
 
 /// Get the state directory where `state.json` is read from.
 pub fn state_dir() -> Option<PathBuf> {
-    dirs::home_dir().map(|home| home.join(".codex-halo"))
+    dirs::home_dir().map(|home| {
+        let canonical = home.join(".centraldark-halo");
+        let legacy = home.join(".codex-halo");
+        // Compatibilidade com dados preexistentes (sem migracao cega).
+        if canonical.exists() || !legacy.exists() { canonical } else { legacy }
+    })
 }
 
 /// Get the path to the state file.

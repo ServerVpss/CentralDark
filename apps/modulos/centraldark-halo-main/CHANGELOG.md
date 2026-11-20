@@ -2,6 +2,28 @@
 
 All notable changes are documented here.
 
+<!-- CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
+## [Unreleased] — v0.1.9 (candidata, não publicada)
+
+LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+
+### Implementado e verificado em DEV local
+- Regra incremental CODE_SEAL -> DOC_WRITER -> PROVA -> !HUD/!RASTRO -> commit autorizado, com gate no CI existente; sem release publicada.
+- Ajuste da trava documental: revisao de escopo tem timestamp proprio, mesmo quando a lista de arquivos nao muda.
+- Contraprovas locais: selo/doc completo aceito; sem selo, data antiga ou documento fora do escopo bloqueados.
+- Fonte futura do motor documentada: fork MIT ServerVpss/DesktopCommanderMCP na main; port Rust ainda nao implementado; agente Casa 0.2.48 preservado.
+- Evolução do Halo para a interface CentralDark Agente Remoto em React + Tauri/Rust, preservando o aplicativo Bridge Electron anterior.
+- Barra de título própria, minimizar, maximizar/restaurar, redimensionar e ocultar para a bandeja; overlays Halo preservados.
+- Nomes para o cliente padronizados e interface de login/painel responsiva, inclusive em janela estreita.
+- Rotas existentes de sessão protegida, pareamento e leituras de saúde integradas no código, sem equiparar conectividade à permissão de controle remoto.
+
+### Limites e pendências
+- O número dos três manifests continua 0.1.8; a v0.1.9 ainda NÃO possui tag, Release/NSIS, instalação validada ou SHA de distribuição.
+- Recuperação DPAPI após reiniciar, consentimento/pareamento E2E, motor remoto autorizado e ferramentas do Hermes exigem contraprovas.
+- Fonte C: e owner Git versionado F: ainda precisam de reconciliação segura e commit com docs no mesmo delta.
+
+Fonte canônica do candidato: docs/RELEASE_NOTES_v0.1.9.md. Gate obrigatório: docs/RELEASE.md.
+<!-- /CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
 ## [0.1.8] - 2026-07-20
 
 ### Fixed
@@ -98,3 +120,13 @@ All notable changes are documented here.
 [0.1.6]: https://github.com/qcodingdev/codex-halo/releases/tag/v0.1.6
 [0.1.7]: https://github.com/qcodingdev/codex-halo/releases/tag/v0.1.7
 [0.1.8]: https://github.com/qcodingdev/codex-halo/releases/tag/v0.1.8
+
+
+<!-- CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+### Arvore futura de instalacao e dados Windows v0.1.9
+TREE_LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+TREE_CANONICAL=docs/INSTALLATION.md
+Documentada a proposta de um exe com MCP Rust, NSIS por usuario
+ou maquina, AppData por perfil, paths CURRENT e plano de migracao
+com rollback. Sem alteracao de codigo, instalacao ou release.
+<!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->

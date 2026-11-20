@@ -811,7 +811,7 @@ O candidato selecionado é ligado às métricas do próprio receipt; não pode d
 
 Isso não prova ótimo global sobre candidatos nunca gerados ou nunca medidos.
 
-### Receipt forte opcional
+### 🧾 Comprovante forte opcional
 
 A evolução normal continua usando o contrato universal já existente. `crystal_claim=IRREDUCIBLE` é um claim **opcional e mais forte**; só então o receipt precisa acrescentar:
 
@@ -911,7 +911,7 @@ A aplicação é transversal: SOL, HERMES, agentes especialistas, workflows, fer
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
 
-## Constelação META interligada — hooks, perfis e owners sem proliferação
+## Constelação META interligada — hooks, perfis e responsáveis sem proliferação
 
 Os cinco donos META centrais continuam os já definidos neste contrato. A Casa também reutiliza hooks/perfis operacionais existentes que **não** criam novo cérebro, owner global ou engine:
 

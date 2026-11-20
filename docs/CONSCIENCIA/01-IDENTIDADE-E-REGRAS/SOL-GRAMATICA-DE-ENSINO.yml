@@ -4,6 +4,78 @@ owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 response_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
 intent_authority: SEGREDO/CHEFE
 
+# CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119: apresentacao humana; nao altera estrutura de maquina.
+mapa_visual_semantico_20261119:
+  status: "DOCUMENTED_NOT_RUNTIME_PROVEN"
+  principal: "Titulo entendido por qualquer brasileiro; conteudo pode ser altamente tecnico"
+  grammar_owner: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml"
+  display_owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  emoji_owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+  covers: [CHAT, VOICE, TELEGRAM, WHATSAPP, CLI, WEB, HUD, COCKPIT, MCP, IDE, DOCS, STATUS, AUDIT, NOTIFICATION]
+  presentation:
+    sections_only_when_useful: true
+    each_independent_section_has_semantic_title: true
+    short_answers_without_forced_headings: true
+    voice_says_meaning_not_pictogram: true
+    do_not_force_all_twelve_sections: true
+    explain_jargon_before_using: true
+    historical_text_preserved: true
+    machine_fields_unchanged: true
+    docs_review_only_touched_human_sections: true
+    runtime_consumption_requires_test: true
+  labels:
+    registro: "🧾 COMPROVANTE"
+    inicio: "📍 PONTO DE PARTIDA"
+    testes: "🧪 TESTES"
+    conferencia: "🔎 CONFERÊNCIA"
+    achados: "👀 O QUE FOI ENCONTRADO"
+    bloqueio: "⛔ O QUE ESTÁ IMPEDINDO"
+    resultado: "📊 COMO FICOU"
+    proxima_acao: "👉 O QUE FAZER AGORA"
+    protecao: "🔒 PROTEÇÃO"
+    atencao: "⚠️ ATENÇÃO"
+    sucesso: "👍 DEU CERTO"
+    falha: "👎 NÃO DEU CERTO"
+  human_glossary:
+    NEXT_CURSOR: "👉 O QUE FAZER AGORA — Próximo passo"
+    CURRENT: "📍 PONTO DE PARTIDA — Como está agora"
+    GREEN_STATE: "📍 PONTO DE PARTIDA — Última versão funcionando"
+    OWNER: "👀 O QUE FOI ENCONTRADO — Quem cuida disso"
+    DELTA: "🔎 CONFERÊNCIA — O que mudou"
+    RECEIPT: "🧾 COMPROVANTE"
+    READBACK: "🔎 CONFERÊNCIA — Voltei e conferi"
+    COUNTERPROOF: "🔎 CONFERÊNCIA — Verificação independente"
+    DEPLOY: "📊 COMO FICOU — Versão colocada no ar"
+    RUNTIME: "👀 O QUE FOI ENCONTRADO — Programa funcionando"
+    BLOCKED: "⛔ O QUE ESTÁ IMPEDINDO"
+    UNKNOWN: "👀 O QUE FOI ENCONTRADO — Ainda não confirmado"
+    NOT_RUN: "🧪 TESTES — Não executado"
+    PENDING: "👉 O QUE FAZER AGORA — Aguardando"
+    PASS: "👍 DEU CERTO"
+    FAILED: "👎 NÃO DEU CERTO"
+    FIXED_POINT: "📊 COMO FICOU — Objetivo concluído e conferido"
+    SHA: "🧾 COMPROVANTE — Identificação exata da versão"
+  truth:
+    UNKNOWN_IS_NOT_PASS: true
+    BLOCKED_REMAINS_BLOCKED: true
+    DOCUMENTED_IS_NOT_EXECUTED: true
+    LOADED_IS_NOT_CONSUMED: true
+    EMOJI_IS_NOT_PROOF: true
+    GREEN_REQUIRES_EVIDENCE: true
+    FAILURE_MUST_BE_SCOPED: true
+    PRESERVE_SHA_LOG_API_JSON_YAML_COMMANDS: true
+  examples:
+    - machine: "NEXT_CURSOR=TEST_OWNER"
+      human: "👉 O QUE FAZER AGORA — Testar a parte responsável"
+      machine_unchanged: true
+    - machine: "STATUS=BLOCKED"
+      human: "⛔ O QUE ESTÁ IMPEDINDO — Bloqueado; motivo no registro"
+      machine_unchanged: true
+    - machine: "STATUS=UNKNOWN"
+      human: "👀 O QUE FOI ENCONTRADO — Ainda não confirmado"
+      machine_unchanged: true
+
+
 purpose: >-
   Tornar o jeito de ensinar e responder da SOL reproduzível em qualquer modelo ou superfície:
   linguagem humana primeiro, precisão técnica preservada, explicação por mecanismo observável,
