@@ -1,0 +1,51 @@
+schema: centraldark.rov.pr-reconciliation.receipt.v1
+contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+contract_version: centraldark.rov.pr-reconciliation.v1
+scope: PR_2153_RECONCILIATION_MAIN
+verdict: PASS
+rov_fixed_point: false
+fixed_point_kind: MERGE_GATED_BY_HUMAN_AUTHORIZATION
+repository: ServerVpss/CentralDark
+canonical_branch: main
+origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
+pr_initial_head_sha: 6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6
+pr_final_head_sha: 696313206b76710447f119981d49791eb872f35f
+test_suite: apps/modulos/mcp/tests/
+test_result: "tests 334, pass 328, fail 6"
+test_failures: "todos decorrentes de centraldark-capabilities.test.mjs, pre-existentes em main e no PR-head sem deltas (nao regressao)"
+sentinel_result: "python3 scripts/trigger-fabric/system_sentinel.py --self-test"
+sentinel_status: ok:true, failed:[]
+runtime_mcp_pid: 244642
+runtime_mcp_command: node /data/cache/scratch/CentralDark/apps/modulos/mcp/src/index.js
+runtime_tool_count: 161
+runtime_tools_additions: ["hermes_delegar_tarefa"]
+runtime_unchanged: true
+pr_files_changed: 20
+pr_branch: feat/centraldark-os-circuito-e2e-alerta-20261120
+branch_local_commits: ["8eb8542d9f", "eab223cf92", "3be61fdcd3", "696313206b"]  # route canario, tool A2A, assert leitura-unica, dist sincronizado
+human_authorization_required_for_merge: true
+merge_gate: PR-MERGE-RECONCILIATION-ROV.yml (READ_ONLY preflight + sentinel + human authorization)
+decisions:
+  - corrective_delta_owner: apps/modulos/mcp/src/tools/core/mcp-diagnostics.js + mcp-catalog-scope.test.mjs + .github/workflows/centraldark-validate.yml
+    change: "17 -> 16 rotas canonicas (rota AIONUI deputada em e8c7e1591b); teste e label atualizados"
+    proof: "node --test apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs: pass 5/5"
+  - runtime_deliverable_author: apps/modulos/mcp/src/tools/core/hermes_delegar_tarefa.js + mcp-admin.js + tools-catalog.js
+    change: "tool de delegao A2A hermes_delegar_tarefa (byte identico ao checkout operacional), sem reintroducao de AIONUI"
+    proof: "runtime /tools.json: toolCount 161, hermes_delegar_tarefa presente; node --check OK"
+  - runtime_fix_author: apps/modulos/mcp/src/index.js
+    change: "eco de id JSON-RPC no 401 do desafio OAuth do tunel (cherry-pick de feb8d5887)"
+    proof: "lease da branch fix/mcp-oauth-jsonrpc-id-echo; aplicacao limpa no PR"
+  - dist: "recriacao via tsc -p tsconfig.json --noResolve; espelho alinhado ao src; AIONUI removida do espelho"
+    proof: "9 arquivos dist re-gerados, devidamente commitados; node --check OK"
+blockers:
+  - CASA_BRIDGE_TOKEN not in MCP process env (CASA_BRIDGE_TOKEN_NOT_CONFIGURED); centraldark_casa_list_processes cannot execute without token injection. Transport active, execution not yet proven.
+  - PR #1900 e #1880 convergentes sobre mcp-diagnostics.js; classificar supersede vs merge requer decisao do CHEFE/owner.
+  - Merge gate do repo requer autorizacao humana (nenhum merge executado nesta missao).
+tlc23_result:
+  status: PROVED
+  reason: BYTE_IDENTITY_MATCH
+  sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+  path: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+decisionnote: >
+  A falha 16x17 ao vier de main (e8c7e1591b). A correcao ficou no owner do gate.
+  PR atualizado e subido para review; merge aguardando autorizacao humana do CHEFE.
