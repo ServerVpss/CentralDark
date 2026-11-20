@@ -17,7 +17,8 @@ const bearerFrom = (req) => /^Bearer\s+(.+)$/i.exec(String(req.headers.authoriza
 const cleanText = (value, fallback = "") => String(value ?? fallback).trim().slice(0, 160);
 export function createDevicePairingStore(options = {}) {
     const registryPath = options.registryPath || DEFAULT_REGISTRY_PATH;
-    if (!isAbsolute(registryPath)) throw new Error("DEVICE_REGISTRY_PATH_NOT_ABSOLUTE");
+    if (!isAbsolute(registryPath))
+        throw new Error("DEVICE_REGISTRY_PATH_NOT_ABSOLUTE");
     const ttlMs = Number(options.ttlMs || DEFAULT_TTL_MS);
     const staleMs = Number(options.staleMs || DEFAULT_STALE_MS);
     const deviceTokenTtlMs = Number(options.deviceTokenTtlMs || DEFAULT_DEVICE_TOKEN_TTL_MS);
@@ -26,11 +27,15 @@ export function createDevicePairingStore(options = {}) {
     function readRegistry() {
         if (!existsSync(registryPath))
             return { version: 1, devices: [] };
-        if (!statSync(registryPath).isFile()) throw new Error("DEVICE_REGISTRY_PATH_NOT_FILE");
+        if (!statSync(registryPath).isFile())
+            throw new Error("DEVICE_REGISTRY_PATH_NOT_FILE");
         let parsed;
-        try { parsed = JSON.parse(readFileSync(registryPath, "utf8")); }
+        try {
+            parsed = JSON.parse(readFileSync(registryPath, "utf8"));
+        }
         catch (error) {
-            if (error instanceof SyntaxError) throw new Error("DEVICE_REGISTRY_INVALID_JSON");
+            if (error instanceof SyntaxError)
+                throw new Error("DEVICE_REGISTRY_INVALID_JSON");
             throw error;
         }
         if (!parsed || !Array.isArray(parsed.devices))
@@ -175,13 +180,13 @@ export function createDevicePairingStore(options = {}) {
         writeRegistry(registry);
         return { ok: true, device_id: device.device_id, token, token_expires_at: device.token_expires_at };
     }
-    // The possessing device can revoke itself without an MCP admin login.
+    // Logout can revoke only the device that proves possession of its own token.
     function revokeSelf({ token, deviceId }) {
         const registry = readRegistry();
         const tokenHash = sha256(token || "");
-        const idx = registry.devices.findIndex(entry =>
-            entry.device_id === deviceId && safeEqual(entry.token_hash || "", tokenHash));
-        if (idx < 0) return { ok: false, error: "invalid_device_token" };
+        const idx = registry.devices.findIndex(entry => entry.device_id === deviceId && safeEqual(entry.token_hash || "", tokenHash));
+        if (idx < 0)
+            return { ok: false, error: "invalid_device_token" };
         registry.devices.splice(idx, 1);
         writeRegistry(registry);
         return { ok: true, device_id: deviceId };

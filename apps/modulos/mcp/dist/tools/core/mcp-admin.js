@@ -33,6 +33,7 @@ import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
+import { DELEGATION_A2A_TOOL } from "./hermes_delegar_tarefa.js";
 import { mcpPolicyTools } from "./mcp-policy.js";
 import { canonicalRecipeFirstPreflight, GLOBAL_RECIPE_FIRST_CONTRACT } from "../deploy/centraldark-capabilities.js";
 import { ADMIN_CONFIRMATIONS, CATALOG_VERSION, guardDestructive, auditStartupSnapshot, getCanonicalExpectation, } from "../../lib/admin-guard.js";
@@ -185,6 +186,7 @@ const runtimeTools = [
     ...operationalTelemetryTools,
     ...piveteTools,
     ...youtubeMediaTools,
+    DELEGATION_A2A_TOOL,
 ];
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },
@@ -206,7 +208,6 @@ const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "HERMES_SHELL", transport: "HERMES", binding: "SHELL", capability: "EXECUTION_BODY", source: "docs/CONSCIENCIA/LEMBRANCAS/2026-10-02-SISTEMA-HIBRIDO-MULTIROTA-BIDIRECIONAL.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "HERMES_DELEGATED_COMMIT_PATH", transport: "HERMES_AGENT", binding: "PR#1748:c893a949b3051ae8a96cc4bc8b910857534c55e7", capability: "DELEGATED_TOOL_WRITE_COMMIT_PUSH_RECIPE", source: "experiments/aionui-centraldark-instinto-superior/HERMES-DELEGATION-SMOKE-2026-10-06.md", runtimeState: "PASS_ON_PR1748_REPLAY_REQUIRED_FOR_CURRENT" },
     { id: "GITHUB_RUNTIME", transport: "GITHUB", binding: "ServerVpss/CentralDark", capability: "CANONICAL_RECORD_AND_MICRODEPLOY_ROUTE", source: "CENTRALDARK_AI_BOOT.yaml", runtimeState: "MEASURE_AT_RUNTIME" },
-    { id: "AIONUI_MCP_STDIO", transport: "MCP_STDIO", binding: "AionUi->CentralDark", capability: "MCP_CATALOG_AND_NATIVE_BINDINGS", source: "scripts/vps/aionui-native-integrate.py", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "CAS_CLOUD_RELAY", transport: "WEBSOCKET_RELAY", binding: "Casa<->CAS Cloud VPS", capability: "REMOTE_AGENT_ORCHESTRATION", source: "docs/ARQUITETURA/CENTRALDARK-CAS-CLOUD-VPS.md", runtimeState: "MEASURE_AT_RUNTIME" },
     { id: "FIGMA_MCP_ACCOUNT", transport: "FIGMA_MCP", binding: "handle:SegredoiDEV|team:1676254220442096258", capability: "FIGMA_READ_ONLY_MCP", source: "Figma MCP whoami", runtimeState: "PASS_WHOAMI_READ_ONLY" },
     { id: "FIGMA_CENTRALDARK_FIGJAM", transport: "FIGJAM_MCP", binding: "file:H0xMJXAKrLxvXx3G1BlVYu|node:0:1", capability: "CENTRALDARK_DIAGRAM_READ", source: "Figma FigJam fluxo mestre", runtimeState: "PASS_READ_ONLY_MEASURED" },
