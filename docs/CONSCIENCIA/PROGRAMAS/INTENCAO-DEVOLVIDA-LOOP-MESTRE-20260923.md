@@ -777,9 +777,9 @@ Enviar command candidate confirmado ao executor e coletar eventos.
 
 Multi-conta Google + indexação Drive/armazenamentos autorizados.
 
-### F10 — Proof / Promotion / Receipt
+### F10 — Prova / promoção / comprovante
 
-Gates, testes, contraprova, Git, deploy causal e receipt #1562.
+Proteções, testes, contraprova, Git, publicação causal e comprovante #1562.
 
 ---
 
