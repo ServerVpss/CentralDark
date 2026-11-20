@@ -1,0 +1,73 @@
+schema: centraldark.rov.pr-reconciliation.receipt.v1
+contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+contract_version: centraldark.rov.pr-reconciliation.v1
+repository: ServerVpss/CentralDark
+scope: PR_2154_MERGE_INTEGRATION_AND_PRESERVATION
+tested_origin_main_sha: e2fff550451901161eac77d69c57b0df20877aa3
+receipt_persisted_in_main_sha: d014cd6cd9660e222b512ccd98629aebcc97235f
+local_head_sha: e40eeb43aa7b1a378d42c42611415031e88940fe
+worktree_state: "DIRTY_PRESERVED (32 entradas no checkout operacional e 32 em /data/CentralDark); worktree de trabalho sem alteracao rastreada; stash pre-existente preservado"
+sentinel_result: "PASS ok:true failed:[] (22 checks, re-execucao pos-cristalizacao)"
+tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
+open_pr_total: 38
+readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 26, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+readiness_measured_at: "2026-11-20T16:20:15Z"
+readiness_source: "pr_rov_audit.py --contract (comando canonico do contrato) - medido na main d014cd6c com o PR documental #2155 aberto (38 PRs abertos; PR #2155 READY_TECHNICAL_WITHOUT_REVIEW_PROOF)"
+selected_pr: 2154
+decision:
+  action: MERGE_EXECUTED
+  reason: "Todos os gates obrigatorios foram medidos e PASSaram antes do merge: HEAD e mergeability clean, sem branch protection no repositorio, reviews apenas do bot (gate humano = autorizacao do CHEFE), Sentinel ok:true failed:[], TLC23 PROVED, 17/17 testes do verificador, matriz 18/18, idempotencia provada e zero segredos no diff. Merge pela rota oficial PUT /pulls/2154/merge com merge_method=squash. Nenhum deploy foi executado."
+  human_authorization: "GRANTED pelo CHEFE em 2026-11-20 (merge condicional do PR #2154)"
+tests_t0:
+  suite: "python3 scripts/trigger-fabric/test_pr_rov_receipt_verifier.py na main d014cd6c"
+  tests: "17 | pass: 17 | fail: 0"
+  note: "baseline da suite ROV na main antes do commit documental"
+tests_t1:
+  suite: "python3 scripts/trigger-fabric/test_pr_rov_receipt_verifier.py no tip da branch documental"
+  tests: "17 | pass: 17 | fail: 0"
+  note: "mesma suite no tip documental; delta somente em arquivos de documentacao"
+runtime_readback:
+  pid: 244642
+  alive: true
+  catalogVersion: 161-9629d1fb55a7
+  toolCount: 161
+  deployed: false
+  deploy_note: "runtime inalterado; MERGED != DEPLOYED; promocao de runtime e missao separada com human_authorization"
+merge_readback:
+  method: squash
+  endpoint: PUT /pulls/2154/merge
+  merge_commit: d014cd6cd9660e222b512ccd98629aebcc97235f
+  merged_at: "2026-11-20T15:48:30Z"
+  pr_head_sha: e40eeb43aa7b1a378d42c42611415031e88940fe
+  base_sha_before: e2fff550451901161eac77d69c57b0df20877aa3
+  files_integrated: 4
+  files_identical_to_pr_head: true
+  files:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/receipts/2026-11-20-pr-2153-reconciliation.yml
+    - docs/CONSCIENCIA/APRENDIZADOS.md
+    - scripts/trigger-fabric/pr_rov_audit.py
+    - scripts/trigger-fabric/test_pr_rov_receipt_verifier.py
+  title: "CHEFE: readback pos-merge PR #2153 + evolucao deterministica do ROV #2154 (MERGE AUTORIZADO 2026-11-20)"
+  history_preserved: "merge #2153 e2fff550451901161eac77d69c57b0df20877aa3 permanece como parent direto e em refs.bundle + /data/preservacao-centraldark-20261120/meta"
+rollback_reference: /data/preservacao-centraldark-20261120/meta
+next_cursor: RUNTIME_PROMOTION_VIA_EXISTING_OWNER -> AUTHENTICATED_TOOLS_LIST -> RUNTIME_READBACK -> KAIZEN -> CHEFE_ACEITE
+verdict: PASS
+proven:
+  - merge_gate: "Sentinel ok:true failed:[] | TLC23 PROVED | branch rules sem protecao (required checks null, reviews nao obrigatorias) | autorizacao humana do CHEFE | escopo unico | zero segredos no diff | rollback conhecido"
+  - merge_effect: "main d014cd6cd9660e222b512ccd98629aebcc97235f com parent e2fff550451901161eac77d69c57b0df20877aa3 e os 4 arquivos byte-identicos ao head do PR"
+  - crystallization: "17/17 testes do verificador; 9/9 checks emitidos; matriz contrato x realidade 18/18; determinismo (2 execucoes identicas exceto audit_timestamp); idempotencia (nenhuma mutacao, duplicacao ou alteracao indevida)"
+  - preservation: "runtime MCP PID 244642 vivo e sem deploy; 32 alteracoes locais preservadas; PRs #1900 e #1880 intactos; backups com hashes inalterados"
+out_of_scope_for_this_receipt:
+  - "promocao de runtime (MCP deploy) - missao separada, exige human_authorization"
+  - "authenticated tools_list do runtime - sessao OAuth expirada no runtime; base de prova isolada no probe do PR"
+  - "CASA_BRIDGE_TOKEN ausente do env do MCP"
+blocked: []
+unknown: []
+evidence:
+  - "merge API: {sha: d014cd6cd9660e222b512ccd98629aebcc97235f, merged: true}"
+  - "main ref: d014cd6cd9660e222b512ccd98629aebcc97235f"
+  - "compare e2fff550...main: ahead_by 1, behind_by 0, 4 arquivos"
+  - "tests: /data/cache/scratch/rov-final-gate1.json e rov-final-gate2.json (identicos exceto audit_timestamp)"
+  - "idempotencia: /data/cache/scratch/rov-idempotency-final-2154.json"
+  - "matriz: /data/cache/scratch/rov-reality-matrix-2154.json"
+  - "rollback: /data/preservacao-centraldark-20261120/meta"
