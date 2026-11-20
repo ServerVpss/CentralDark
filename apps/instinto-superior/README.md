@@ -57,7 +57,7 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 
 ## 🪬 Manifesto incremental do harness privado
 
-O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o NEXT_CURSOR ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
+O contrato evolutivo, os responsáveis, o catálogo da Forja Viva, a gaveta histórica, a migração do HUD e o próximo passo ficam em [INSTINTO-MANIFESTO-INCREMENTAL.md](docs/INSTINTO-MANIFESTO-INCREMENTAL.md). Acrescentar deltas nesse mesmo documento; não criar manifesto paralelo. Os snapshots de inventário não provam runtime ou deploy.
 
 
 ## Túnel OpenAI na Forja Linux — 2026-11-01T19:13:55.777094+00:00
