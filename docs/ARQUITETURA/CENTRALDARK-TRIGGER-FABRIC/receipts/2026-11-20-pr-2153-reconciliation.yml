@@ -149,6 +149,21 @@ mcp_counterproof:
     hermes_client_auth_does_not_imply_gateway_auth: true
     health_does_not_imply_feature_consumed: true
 rollback_reference: /data/preservacao-centraldark-20261120/meta (refs.bundle, working-tree-tracked.patch, untracked.tar.gz, T0-state.json)
+rov2154_evolvement:
+  title: "Evolucao deterministica do ROV - CRISTALIZACAO FINAL - sem merge nem deploy"
+  branch: "chore/rov-2153-pos-merge-readback"
+  local_head_sha: 42eca2c9a57054b34b585d317c1ba09bc54e5295
+  pr_state: OPEN
+  decision: PREPARADO_PARA_MERGE
+  reason: "A cristalizacao do ROV foi entregue com 100% do escopo tecnico determinstico (7/7 itens PASS: divergencia T0xT1 classificada, determinismo, idempotencia, verifier positivo/negativo, realidade do contrato, preservacao, sem credenciais). O merge do PR #2154 requer autorizacao explicita do CHEFE e nao foi executado."
+  audit_2x_identical_excluding_timestamp: true
+  audit_proof: /data/cache/scratch/rov-determinism-proof-2154.json
+  idempotency_proof: /data/cache/scratch/rov-idempotency-final-2154.json
+  reality_matrix_proof: /data/cache/scratch/rov-reality-matrix-2154.json
+  verifier_proof: /data/cache/scratch/rov-final-verifier-proof-2154.json
+  verifier_result: "17/17 OK (3 positivos + 14 negativos), 9 checks emitidos"
+  technical_scope_coverage: "7/7 = 100% do escopo tecnico determinstico"
+  next_cursor_evolve: PENDING_CHEFE_APPROVAL_OF_PR_2154_MERGE
 next_cursor: RUNTIME_PROMOTION_VIA_EXISTING_OWNER -> AUTHENTICATED_TOOLS_LIST -> RUNTIME_READBACK -> KAIZEN -> CHEFE_ACEITE
 verdict: PARTIAL
 proven:
