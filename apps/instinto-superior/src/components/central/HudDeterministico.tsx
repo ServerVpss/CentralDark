@@ -106,7 +106,7 @@ const forgeAliases: readonly ForgeAlias[] = [
   {
     id: "WORKTREE_CLEANUP", symbols: "🧹", name: "Faxina segura da Forja",
     owner: ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
-    invocation: "Consulte o owner main-pinned-runtime-fast-path → Worktree Teardown; não execute reset/clean diretamente",
+    invocation: "Consulte o responsável main-pinned-runtime-fast-path → desmontagem segura da área de trabalho; não execute reset/clean diretamente",
     effect: "Inventariar o scratch reutilizável, comprovar preservação do trabalho e só então liberar a bancada temporária.",
     improvement: "Mantém a Forja organizada, sem apagar worktrees ativas, commits locais ou arquivos que ainda não chegaram à main.",
     proof: "Classificação do caminho, trava, SHA da fonte, testes, comprovante, conferência da main quando aplicável e efeito visual na Casa quando solicitado.",
@@ -226,7 +226,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs text-neon-blue">HUD VIGENTE · PR E RECIBOS DO GITHUB</p>
-            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 CENTRALDARK_HUD_FUNNEL_CONTINUITY</h3>
+            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 Continuidade da missão</h3>
           </div>
           <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
             {hudCurrent.data?.missaoAtual?.estado ?? hudCurrent.data?.recibosEstado ?? hudCurrent.data?.status ?? "UNKNOWN"}
@@ -322,7 +322,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <h3 id="cd-ingress-live" className="text-lg font-semibold">🪬 Porta de entrada · coordenação e execução</h3>
         <p className="mt-2 text-xs text-muted-foreground">
           SOL/JARVIS coordena esta missão por meio do chat. A sessão ativa,
-          o writer e o executor somente podem ser declarados pelo owner em runtime.
+          quem escreve e quem executa só podem ser declarados pelo responsável no programa em funcionamento.
         </p>
         <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {([
@@ -332,7 +332,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
             ["Writer ativo", "UNKNOWN", "A leitura não informa lease de escrita"],
             ["Executor ativo", "UNKNOWN", "Não presumir Hermes/Claude sem recibo"],
             ["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN",
-              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "SEM_READBACK"}; STDIO/Hermes exigem contraprova separada`],
+              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "Ainda sem conferência"}; STDIO/Hermes exigem contraprova separada`],
             ["Última evidência", estado?.atualizadoEm ?? "UNKNOWN", "Timestamp do snapshot, não do executor"],
             ["Próximo passo", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme responsável medido"],
           ] as const).map(([rotulo, valor, ressalva]) => (
@@ -451,7 +451,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
           {historicalSeals.map(name => (
             <div key={name} className="rounded-md border border-border px-3 py-2 text-sm">
               <strong>{name}</strong>
-              <p className="text-xs text-muted-foreground">HISTÓRICO · CURRENT exige readback</p>
+              <p className="text-xs text-muted-foreground">HISTÓRICO · estado atual exige conferência</p>
             </div>
           ))}
         </div>
@@ -508,7 +508,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {([
             ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
-            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Deploy e alinhamento com main exigem readback próprio."],
+            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Publicação e alinhamento com a main exigem conferência própria."],
             ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthFonte ?? "Host de origem não medido", "HTTP /health atesta somente essa rota, não integração completa."],
             ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
             ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem medida da Casa", "Estado só pode vir do host Windows Casa; conector remoto ≠ serviço."],
@@ -527,7 +527,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
                 </span>
               </div>
               <p className="mt-2 break-all font-mono text-xs text-foreground">
-                {detalhe ?? "SEM READBACK NESTA CONSULTA"}
+                {detalhe ?? "Ainda sem conferência nesta consulta"}
               </p>
               <p className="mt-2 text-xs text-muted-foreground">{limite}</p>
             </div>
@@ -853,7 +853,7 @@ export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentra
       <p className="text-xs text-muted-foreground">
         Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
         source SHA {lineage.source_blob_sha.slice(0, 12)}.
-        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e readback individual.
+        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e conferência individual.
       </p>
     </section>
   );
