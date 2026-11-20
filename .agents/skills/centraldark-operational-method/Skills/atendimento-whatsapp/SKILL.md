@@ -40,3 +40,27 @@ Reaproveitar o que existe; verificar resultado; acrescentar apenas o delta compr
 A conexão automática entre WhatsApp/OpenBot/CRM e os dois repositórios **não está comprovada** por este documento. Não alegar leitura, gravação, carregamento automático ou envio de mensagens sem comprovante do runtime. Nunca gravar telefone, nome de cliente, conversa privada, senha, token ou dado pessoal em arquivos de Skills ou aprendizados do GitHub.
 
 **Próxima verificação:** identificar o consumidor real do atendimento e provar a sequência `consultar método → recuperar contexto autorizado → executar com permissão → conferir → registrar aprendizado` no mesmo owner.
+
+<!-- CENTRALDARK_WHATSAPP_THREE_ROUTES_20261120 -->
+## 🔌 Acesso direto aos donos oficiais — três rotas, um só resultado
+
+Os dois agentes existentes do CentralDarkBot, **WhatsApp Orchestrator** e **Atendimento WhatsApp**, usam o próprio `AGENTS.md` do seu ambiente para descobrir esta capacidade e o repositório profissional. Não duplicar a Skill no OpenBot nem criar link simbólico ou outro servidor.
+
+**Fontes de verdade (consultar a branch `main` e conferir SHA):**
+- Instruções e novas técnicas operacionais: `ServerVpss/CentralDark@main`, nesta Skill. Provas e versões históricas dos métodos nativos do Atendimento: [receitas legadas preservadas](references/legado-openbot-preservado-2026-11-20.md). Essa referência não é outra Skill.
+- Trabalho e conhecimento profissional: `ServerVpss/Meus-Trabalhos@main`, `04-METODO-DE-TRABALHO/README.md` e `01-ATENDIMENTO-WHATSAPP/04-PLANEJAMENTO/APRENDIZADOS-ATENDIMENTO.md`.
+- Estado de agentes, conversas, filas, rotinas, anexos e permissões: **SQLite original do OpenBot**, não substituir por GitHub. Dados privados de clientes e autenticações permanecem no armazenamento autorizado.
+
+**Ordem de acesso e recuperação, sem simular execução:**
+1. **MCP CentralDark** cadastrado no OpenBot: testar acesso real à `main` e à ferramenta necessária, não presumir que `enabled` prova OAuth ou permissão.
+2. Se indisponível ou sem a capacidade necessária, **conector GitHub original do OpenBot**: usar a conexão já autenticada, se de fato responder, e registrar caminho/commit lido.
+3. Se ambas as alternativas falharem, **GitHub CLI `gh` da Casa**, pelo executor original e somente quando o agente estiver efetivamente no host autenticado. Conferir `gh auth status`, autorização e acesso ao repositório específico. Não copiar, imprimir ou transportar tokens.
+
+Se uma ação de escrita teve resposta incerta, **verificar primeiro se o commit/registro já existe** para impedir duplicação; não disparar a mesma mutação nas três rotas. Se falharem as três, preservar a tarefa pendente e o contexto, informar o bloqueio, não inventar gravação.
+
+**Cristalização:** recuperar a Skill e seu histórico antes de criar; aplicar apenas uma melhoria comprovada ao owner operacional existente, mediante autorização e validação; gravar aprendizados profissionais sem dados pessoais no arquivo único de `Meus-Trabalhos`; conferir commit SHA e leitura de volta. Não salvar técnicas operacionais como outra Skill na biblioteca local por padrão.
+
+**Proteção dos métodos legados:** as cinco receitas distintas recuperadas do agente Atendimento WhatsApp e suas assinaturas originais foram preservadas na referência acima. Os arquivos locais originais e as Skills nativas gerenciadas pelo OpenBot continuam intactos até existir prova de que o agente consome esta versão canônica; então avaliar desativação da cópia legada com contraprova de não regressão. **Não apagar nem sobrepor uma receita em funcionamento por causa da troca de endereço de registro.**
+
+**Papel de cada agente:** Orchestrator coordena e acompanha; Atendimento conversa, consulta e executa procedimentos autorizados. Ambos consultam as mesmas fontes sem competir pela escrita e preservam seus nomes, instruções de identidade e rotinas existentes.
+<!-- /CENTRALDARK_WHATSAPP_THREE_ROUTES_20261120 -->
