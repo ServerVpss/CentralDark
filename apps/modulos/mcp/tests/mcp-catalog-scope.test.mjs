@@ -43,3 +43,13 @@ test("PM2 diagnostic preserves execution failure before JSON parsing", () => {
   assert.match(deploy, /PM2_PROBE_EMPTY_OUTPUT/);
   assert.match(deploy, /PM2_SUMMARY_NOT_ARRAY/);
 });
+
+test("CentralDark OS roteia inventário somente leitura da Casa pelo MCP existente", () => {
+  const casa = readFileSync(new URL("../src/tools/casa/casa-private.js", import.meta.url), "utf8");
+  assert.match(casa, /name:"centraldark_casa_list_processes"/);
+  assert.match(casa, /annotations:annotations\(false,"Casa — Listar processos"\)/);
+  assert.match(casa, /callCasa\("POST","\/tool",\{name:"list_processes",arguments:\{\}\}\)/);
+  assert.match(casa, /process\.env\.CENTRALDARK_CASA_BRIDGE_TOKEN/);
+  assert.match(casa, /return "http:\/\/"\+host\+":9100"\+path/);
+  assert.match(casa, /CASA_BRIDGE_TOKEN_NOT_CONFIGURED/);
+});
