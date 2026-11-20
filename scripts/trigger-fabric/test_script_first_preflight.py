@@ -10,7 +10,7 @@ import runpy
 import sys
 import tempfile
 
-REPO = pathlib.Path("/data/cache/scratch/CentralDark-rov2153")
+REPO = pathlib.Path(__file__).resolve().parents[2]  # CentralDark root (dynamic; no hardcode)
 
 # O loader resolve centraldark_master_cycle no bootstrap publico; no sandbox
 # esse modulo nao esta instalado (apenas o tests coverage precisa). Duplica
