@@ -90,7 +90,7 @@ Qual BOOT usar:
 Fio da missao:
 ```
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 ```text
 EXPANSAO_DE_DOMINIO -> medir setor -> owner existente -> micro-commit -> CI/receipt -> status.centraldark -> proximo setor

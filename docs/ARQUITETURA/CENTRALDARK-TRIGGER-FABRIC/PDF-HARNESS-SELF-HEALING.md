@@ -81,6 +81,6 @@ same capability + same scope + different executor
   -> validation.ok=true
 ```
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 Ligar receipts reais de operacao PDF da Casa/VPS/MCP ao mesmo contrato: entrada PDF material, render antes, operacao, re-render, diff, receipt e promocao de regra somente com prova.

@@ -50,3 +50,13 @@
 - Receita canônica existente: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md e references/RECEITA-KINGSTON-20261103.md. Preservar a historia do WSL2 de 30/10; nao converter prova WSL2 em prova VMware.
 - Limite de verdade: SSH_VMWARE=PASS; COCKPIT_HTTP_524=PENDING; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
 <!-- /CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+
+<!-- CENTRALDARK_DESKCOMM_NEXTJS_STANDALONE_STATIC_20261119 -->
+### 2026-11-19 — DeskcommCRM: Next.js standalone com chunks ausentes (COSTURA)
+
+- 2026-11-19 | TIPO: correcao | CONTEXTO: Casa SEGREDO, DeskcommCRM Docker, troca do container LAB pelo CRM definitivo | CAUSA: imagem em uso servia HTML que referenciava 2 arquivos `/_next/static/chunks/*.js` ausentes na imagem; HTTP 404 com MIME `text/plain` impedia o frontend de carregar; hipótese inicial de cache isolado refutada pelo próprio HTML atual | ACAO_CORRETIVA: consultar `Dockerfile` e receita oficiais antes de improvisar; reconstruir a imagem existente com build Next.js `standalone` e copiar `.next/static` para o artefato final, como já previsto no Dockerfile; substituir somente o container do app após testar scripts e preservar Supabase/volumes/dados | CONFIRMADO_POR: recibo operacional da Casa relatado pelo CHEFE em 19/11/2026 (não reexecutado por este registro)
+- CONTRAPROVA RELATADA: antes login 23/25 scripts HTTP 200, 2/25 HTTP 404; depois login 25/25 PASS, página inicial 20/20 PASS, login HTTP 200, `/api/v1/health` HTTP 200, rebuild `exit 0`, imagem nova com SHA parcial `b1b1d3070f23…`.
+- REGRA REUTILIZÁVEL: `ERRO → LER HTML ATUAL + CHUNKS → COMPARAR CONTEÚDO DA IMAGEM → CONFERIR DOCKERFILE OFICIAL → MENOR DELTA NO BUILD → REBUILD → TESTAR TODOS OS ASSETS → CONTRAPROVA`. Não atribuir 404 a cache sem cotejar os arquivos que o HTML atual pede. Não criar Dockerfile alternativo, não reinstalar banco, não abrir investigação paralela depois de localizar a causa.
+- LIMITE DE PROVA: `STATIC_ASSETS=PASS` no recibo informado; `AUTHENTICATED_NAVIGATION=PENDING` (HTTP 200 do login não prova navegação autenticada). `DOCUMENTED != RUNTIME_CONSUMED`; registro não prova execução automática da receita por Hermes nem novos testes nesta gravação.
+- OWNER DA CORREÇÃO: `melgarafael/DeskcommCRM` (`Dockerfile` oficial, linhas 133–136 conforme relato); este arquivo é apenas o aprendizado empírico reutilizável da CentralDark, não uma cópia do projeto externo.
+<!-- /CENTRALDARK_DESKCOMM_NEXTJS_STANDALONE_STATIC_20261119 -->

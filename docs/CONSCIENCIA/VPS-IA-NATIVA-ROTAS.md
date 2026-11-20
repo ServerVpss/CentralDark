@@ -195,7 +195,7 @@ Discriminante importante: `deepseek-r1` e `kylin-deepseek-r1` não se comportara
 
 O provider `custom` do Hermes já suporta endpoint OpenAI-compatible. O menor delta escolhido foi um bridge loopback para adaptar `genai_text_*`, sem Ollama/vLLM/llama.cpp. O arquivo `~/.hermes/kylin_openai_bridge.py` ainda não passou health por erro local de Python no acesso a `XDG_RUNTIME_DIR`; logo `BRIDGE_FILE_EXISTS != BRIDGE_RUNNING` e `KYLIN_NATIVE_RESPONSE=PASS != HERMES_KYLIN_BINDING_PASS`.
 
-Next cursor: corrigir o bridge existente, provar `/health`, `/v1/models`, chat `BRIDGE_OK`, então configurar Hermes `provider=custom`, loopback `127.0.0.1:18435/v1`, modelo `kylin-deepseek-r1` e exigir `HERMES_VM_OK`.
+👉 **O QUE FAZER AGORA:** corrigir a ponte existente, provar `/health`, `/v1/models`, chat `BRIDGE_OK`, então configurar Hermes `provider=custom`, loopback `127.0.0.1:18435/v1`, modelo `kylin-deepseek-r1` e exigir `HERMES_VM_OK`.
 
 
 ## Fechamento CURRENT — Hermes + Kylin + AionUi agêntico — 04/10/2026
@@ -262,4 +262,4 @@ Para acesso interativo no PowerShell da Casa, reutilizar:
 
 **Veredito por escopo:** `CASA_TO_VPS_SSH_GIT=PASS`; `WINDOWS_NATIVE_SSH_BINARY=FAIL_OBSERVED`; `HERMES_A2A_ROUNDTRIP=UNKNOWN`; `VPS_HUD_CHECKOUT_SYNC=UNKNOWN`. Uma rota SSH que passou **não** comprova nenhum outro serviço.
 
-**NEXT_CURSOR:** reutilizar a rota SSH do Git para medições autorizadas Casa→VPS; preservar o worktree sujo e as modificações locais antes de qualquer reconciliação Git. Não criar segundo Hermes ou segundo owner por causa deste transporte.
+**👉 O QUE FAZER AGORA:** reutilizar a rota SSH do Git para medições autorizadas Casa→VPS; preservar o worktree sujo e as modificações locais antes de qualquer reconciliação Git. Não criar segundo Hermes nem segundo responsável por causa deste transporte.

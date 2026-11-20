@@ -33,6 +33,40 @@ actual_tlc23="$(sha256sum "$TLC23" | awk '{print $1}')"
 
 main_sha="$(git -C "$ROOT" ls-remote "$REMOTE" "refs/heads/$BRANCH" | awk 'NR==1 {print $1}')"
 [ -n "$main_sha" ] || fail "REMOTE_MAIN_NOT_FOUND"
+
+# --- GitHub API cross-check (optional, never blocking) ---
+# Confirms the canonical main HEAD through the official GitHub REST API and
+# records the verification result. Git remains the only transport: the API only
+# identifies state. No token is ever printed, logged, or written to the receipt.
+GITHUB_API_MAIN_SHA=""
+API_VERIFY="SKIPPED_NO_TOKEN"
+gh_token="${GITHUB_TOKEN:-}"
+if [ -z "$gh_token" ] && [ -r /data/.env ]; then
+  gh_token="$(sed -n 's/^GITHUB_TOKEN=//p' /data/.env | head -n1)"
+fi
+if [ -n "$gh_token" ] && command -v curl >/dev/null 2>&1; then
+  api_url="https://api.github.com/repos/ServerVpss/CentralDark/branches/main"
+  http_code="$(curl -sS --max-time 10 -o /tmp/.cd-api-main.json -w '%{http_code}' \
+    -H "Authorization: token ${gh_token}" \
+    -H "Accept: application/vnd.github+json" \
+    "$api_url" 2>/dev/null || echo "000")"
+  if [ "$http_code" = "200" ]; then
+    GITHUB_API_MAIN_SHA="$(python3 -c "import json,sys;print(json.load(open('/tmp/.cd-api-main.json')).get('commit',{}).get('sha',''))" 2>/dev/null || echo "")"
+    if [ -z "$GITHUB_API_MAIN_SHA" ]; then
+      API_VERIFY="UNKNOWN_PARSE"
+    elif [ "$GITHUB_API_MAIN_SHA" = "$main_sha" ]; then
+      API_VERIFY="MATCH"
+    else
+      API_VERIFY="MISMATCH"
+      say "WARNING: GitHub API main SHA differs from git remote main"
+    fi
+  else
+    API_VERIFY="UNKNOWN_API_HTTP_${http_code}"
+  fi
+  rm -f /tmp/.cd-api-main.json
+fi
+unset gh_token
+# -------------------------------------------------------
 git -C "$ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
 
 if [ "$SYNC_ROOT" = "$ROOT" ]; then
@@ -55,8 +89,84 @@ fi
 
 # This is the script-owned clean mirror. Never clean the operator's worktree.
 git -C "$SYNC_ROOT" fetch "$REMOTE" "$BRANCH" >/dev/null
-git -C "$SYNC_ROOT" reset --hard "$REMOTE/$BRANCH" >/dev/null
-git -C "$SYNC_ROOT" clean -fd >/dev/null
+# Idempotence gate: when the mirror already sits exactly on canonical main and is
+# clean, skip the destructive reset/clean. Local operator worktrees are never touched.
+already_synced=false
+if [ "$(git -C "$SYNC_ROOT" rev-parse HEAD 2>/dev/null || echo '')" = "$main_sha" ] \
+   && [ -z "$(git -C "$SYNC_ROOT" status --porcelain 2>/dev/null || echo dirty)" ]; then
+  already_synced=true
+  say "SYNC_MODE=NOOP_ALREADY_AT_MAIN_SHA"
+else
+  git -C "$SYNC_ROOT" reset --hard "$REMOTE/$BRANCH" >/dev/null
+  git -C "$SYNC_ROOT" clean -fd >/dev/null
+  say "SYNC_MODE=UPDATED_TO_MAIN_SHA"
+fi
+
+# --- housekeeping: prune stale clean worktrees inside the scratch root ---
+# Only checked-out files are removed; branch refs and commits stay in the repo, so
+# nothing is lost. Dirty worktrees, the canonical checkout and the sync mirror are
+# never touched. A failed removal (dirty, locked) is skipped, never forced.
+WORKTREE_TTL_HOURS="${CENTRALDARK_WORKTREE_TTL_HOURS:-24}"
+WORKTREE_PRUNE_MAX="${CENTRALDARK_WORKTREE_PRUNE_MAX:-10}"
+PRUNE_REMOVED=0
+PRUNE_SKIPPED=0
+scratch_root="$(dirname "$ROOT")"
+now_epoch="$(date +%s)"
+while IFS= read -r wt_path; do
+  [ -n "$wt_path" ] || continue
+  [ "$wt_path" = "$ROOT" ] && continue
+  [ "$wt_path" = "$SYNC_ROOT" ] && continue
+  case "$wt_path" in
+    "$scratch_root"/*) ;;
+    *) PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue ;;
+  esac
+  [ -d "$wt_path" ] || continue
+  if [ -n "$(git -C "$wt_path" status --porcelain 2>/dev/null)" ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  wt_age_s=$(( now_epoch - $(stat -c %Y "$wt_path" 2>/dev/null || echo "$now_epoch") ))
+  if [ "$wt_age_s" -lt $(( WORKTREE_TTL_HOURS * 3600 )) ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  if [ "$PRUNE_REMOVED" -ge "$WORKTREE_PRUNE_MAX" ]; then
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1)); continue
+  fi
+  if git -C "$ROOT" worktree remove "$wt_path" >/dev/null 2>&1; then
+    PRUNE_REMOVED=$((PRUNE_REMOVED + 1))
+    say "WORKTREE_PRUNED=$wt_path"
+  else
+    PRUNE_SKIPPED=$((PRUNE_SKIPPED + 1))
+  fi
+done < <(git -C "$ROOT" worktree list --porcelain | awk '/^worktree /{print $2}')
+git -C "$ROOT" worktree prune >/dev/null 2>&1 || true
+say "WORKTREE_PRUNE_REMOVED=$PRUNE_REMOVED"
+say "WORKTREE_PRUNE_SKIPPED=$PRUNE_SKIPPED"
+say "WORKTREE_PRUNE_TTL_HOURS=$WORKTREE_TTL_HOURS"
+
+# --- retenção de áudio: arquivos antigos saem, recentes ficam ---
+# Só remove mídia gerada sob o diretório de áudio. Qualquer outro arquivo, ou
+# mídia dentro da janela de retenção, é preservado. Sem --force, sem wildcard solto.
+AUDIO_DIR="${CENTRALDARK_AUDIO_DIR:-/data/audio}"
+AUDIO_TTL_DAYS="${CENTRALDARK_AUDIO_TTL_DAYS:-7}"
+AUDIO_PRUNED=0
+AUDIO_PRUNED_BYTES=0
+if [ -d "$AUDIO_DIR" ]; then
+  audio_cutoff=$(( now_epoch - AUDIO_TTL_DAYS * 86400 ))
+  while IFS= read -r audio_path; do
+    [ -n "$audio_path" ] || continue
+    [ -f "$audio_path" ] || continue
+    audio_mtime="$(stat -c %Y "$audio_path" 2>/dev/null || echo "$now_epoch")"
+    [ "$audio_mtime" -lt "$audio_cutoff" ] || continue
+    audio_size="$(stat -c %s "$audio_path" 2>/dev/null || echo 0)"
+    if rm -f -- "$audio_path"; then
+      AUDIO_PRUNED=$((AUDIO_PRUNED + 1))
+      AUDIO_PRUNED_BYTES=$((AUDIO_PRUNED_BYTES + audio_size))
+    fi
+  done < <(find "$AUDIO_DIR" -type f \( -name '*.mp3' -o -name '*.wav' -o -name '*.ogg' -o -name '*.m4a' -o -name '*.opus' \) 2>/dev/null)
+fi
+say "AUDIO_RETENTION_DAYS=$AUDIO_TTL_DAYS"
+say "AUDIO_PRUNED=$AUDIO_PRUNED"
+say "AUDIO_PRUNED_BYTES=$AUDIO_PRUNED_BYTES"
 
 sync_head="$(git -C "$SYNC_ROOT" rev-parse HEAD)"
 [ "$sync_head" = "$main_sha" ] || fail "SYNC_HEAD_DOES_NOT_MATCH_REMOTE_MAIN"
@@ -86,12 +196,12 @@ else
 fi
 printf '%s\n' "$SKILL_SYNC_OUTPUT"
 
-python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" <<'PY'
+python3 - "$boot_output" "$SYNC_ROOT" "$main_sha" "$RECEIPT_DIR" "$SKILL_SYNC_RC" "$SKILL_SYNC_OUTPUT" "$API_VERIFY" "$GITHUB_API_MAIN_SHA" "$already_synced" "$PRUNE_REMOVED" "$PRUNE_SKIPPED" "$WORKTREE_TTL_HOURS" "$AUDIO_PRUNED" "$AUDIO_PRUNED_BYTES" "$AUDIO_TTL_DAYS" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output = sys.argv[1:]
+output, sync_root, main_sha, receipt_dir, skill_sync_rc, skill_sync_output, api_verify, api_main_sha, already_synced, prune_removed, prune_skipped, prune_ttl, audio_pruned, audio_pruned_bytes, audio_ttl_days = sys.argv[1:]
 text = Path(output).read_text(encoding="utf-8", errors="replace")
 start = text.find("{")
 if start < 0:
@@ -107,6 +217,15 @@ receipt = {
     "status": overall_status,
     "sync_root": sync_root,
     "main_sha": main_sha,
+    "sync_mode": "NOOP_ALREADY_AT_MAIN_SHA" if already_synced == "true" else "UPDATED_TO_MAIN_SHA",
+    "api_verify": api_verify,
+    "api_main_sha": api_main_sha or None,
+    "worktrees_pruned": int(prune_removed),
+    "worktrees_skipped": int(prune_skipped),
+    "worktree_ttl_hours": int(prune_ttl),
+    "audio_pruned": int(audio_pruned),
+    "audio_pruned_bytes": int(audio_pruned_bytes),
+    "audio_retention_days": int(audio_ttl_days),
     "boot_status": status,
     "hud_status": hud.get("status"),
     "hud_reason": hud.get("reason"),

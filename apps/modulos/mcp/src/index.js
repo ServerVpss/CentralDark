@@ -776,7 +776,7 @@ app.post("/api/telemetry-ingest", (req, res) => {
 app.use((_req, res) => {
     res.status(404).json({ ok: false, error: "not_found" });
 });
-app.listen(config.port, "127.0.0.1", () => {
+app.listen(config.port, process.env.MCP_HOST || "127.0.0.1", () => {
     log.info("mcp_listening", {
         port: config.port,
         publicUrl: config.publicUrl,

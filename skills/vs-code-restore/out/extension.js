@@ -29,7 +29,7 @@ function activate(context) {
         await vscode.commands.executeCommand('workbench.view.explorer');
     }), vscode.commands.registerCommand('centraldark.zendriveCli', focusExistingCliTerminal),
     // Acessibilidade: rótulo literal VS Code para ditado/ASR; mesma implementação, nenhum novo executor.
-    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal), vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)), vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)), vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid), vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)), vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)), vscode.commands.registerCommand('centraldark.checkUpdates', () => (0, autoUpdater_1.checkVsCodeUpdates)(context, sshExecutable, VPS_ROUTES, true)), vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => (0, remote_terminal_1.configureRemoteTerminal)(context)), vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => (0, remote_terminal_1.remoteTerminalStatus)(context)), vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog), vscode.commands.registerCommand('centraldark.showTrace', () => {
+    vscode.commands.registerCommand('centraldark.focusExistingTerminal', focusExistingCliTerminal), vscode.commands.registerCommand('centraldark.openOneTerminalBeside', openOneTerminalBeside), vscode.commands.registerCommand('centraldark.probeVpsSsh', () => probeVpsSsh(false)), vscode.commands.registerCommand('centraldark.connectVpsSsh', () => probeVpsSsh(true)), vscode.commands.registerCommand('centraldark.locateVsCodeByPid', locateVsCodeByPid), vscode.commands.registerCommand('centraldark.pairVsCode', () => pairVsCode(context)), vscode.commands.registerCommand('centraldark.verifyVsCodePairing', () => verifyVsCodePairing(context)), vscode.commands.registerCommand('centraldark.checkUpdates', () => (0, autoUpdater_1.checkVsCodeUpdates)(context, sshExecutable, VPS_ROUTES, true)), vscode.commands.registerCommand('centraldark.remoteTerminalPair', () => (0, remote_terminal_1.configureRemoteTerminal)(context)), vscode.commands.registerCommand('centraldark.remoteTerminalStatus', () => (0, remote_terminal_1.remoteTerminalStatus)(context)), vscode.commands.registerCommand('centraldark.browserSurfacesCatalog', browserSurfacesCatalog), vscode.commands.registerCommand('centraldark.showTrace', () => {
         emitTrace('show_trace', 'PASS');
         traceOutput?.show(true);
     }));
@@ -71,6 +71,22 @@ function emitTerminalMetadata(event, exitCode) {
 }
 function registerTerminalTelemetry(context) {
     context.subscriptions.push(vscode.window.onDidStartTerminalShellExecution(() => emitTerminalMetadata('shell_start')), vscode.window.onDidEndTerminalShellExecution(event => emitTerminalMetadata('shell_end', event.exitCode)), vscode.window.onDidChangeTerminalShellIntegration(() => emitTerminalMetadata('shell_integration')));
+}
+const VIBE_TERMINAL_NAME = 'CentralDark · Worker 1 (manual)';
+// Somente interface nativa. Nenhum modelo, shell command ou agente e iniciado.
+function openOneTerminalBeside() {
+    const existing = vscode.window.terminals.find(t => t.name === VIBE_TERMINAL_NAME);
+    if (existing) {
+        existing.show(false);
+        emitTrace('terminal_open', 'OBSERVED');
+        return;
+    }
+    const terminal = vscode.window.createTerminal({
+        name: VIBE_TERMINAL_NAME,
+        location: { viewColumn: vscode.ViewColumn.Beside, preserveFocus: false }
+    });
+    terminal.show(false);
+    emitTrace('terminal_open', 'OBSERVED');
 }
 function focusExistingCliTerminal() {
     const terminals = vscode.window.terminals;
@@ -560,16 +576,33 @@ class CentralDarkVibeViewProvider {
         const allowed = new Set([
             'centraldark.connectVpsSsh', 'centraldark.probeVpsSsh',
             'centraldark.pairVsCode', 'centraldark.verifyVsCodePairing', 'centraldark.checkUpdates',
-            'centraldark.focusExistingTerminal', 'centraldark.locateVsCodeByPid',
+            'centraldark.focusExistingTerminal', 'centraldark.openOneTerminalBeside', 'centraldark.locateVsCodeByPid',
             'centraldark.mapWorkspace', 'centraldark.restoreWorkspace',
             'centraldark.showProjectFolders'
         ]);
+        const sendSnapshot = async () => {
+            const terminals = await Promise.all(vscode.window.terminals.slice(0, 30).map(async (t) => ({
+                name: t.name.slice(0, 80),
+                pid: (await t.processId) ?? null,
+                active: t === vscode.window.activeTerminal
+            })));
+            await view.webview.postMessage({ type: 'terminalSnapshot', terminals });
+        };
+        const change = vscode.window.onDidChangeActiveTerminal(() => { void sendSnapshot(); });
+        const opened = vscode.window.onDidOpenTerminal(() => { void sendSnapshot(); });
+        const closed = vscode.window.onDidCloseTerminal(() => { void sendSnapshot(); });
+        view.onDidDispose(() => { change.dispose(); opened.dispose(); closed.dispose(); });
+        void sendSnapshot();
         view.webview.onDidReceiveMessage((msg) => {
             if (!msg || typeof msg !== 'object')
                 return;
             const cmd = msg.command;
+            if (cmd === 'centraldark.readTerminalSnapshot') {
+                void sendSnapshot();
+                return;
+            }
             if (typeof cmd === 'string' && allowed.has(cmd))
-                void vscode.commands.executeCommand(cmd);
+                void vscode.commands.executeCommand(cmd).then(() => sendSnapshot());
         });
     }
 }

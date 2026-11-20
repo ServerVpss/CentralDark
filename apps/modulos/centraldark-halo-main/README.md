@@ -17,6 +17,20 @@
   <a href="demo/hero.html">Hero preview - CentralDark Halo source</a>
 </p>
 
+<!-- CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
+## CentralDark Agente Remoto — próximo candidato v0.1.9
+
+LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+**Estado: desenvolvimento (DRAFT), ainda não publicado.** A versão declarada nos manifests e nas instruções históricas abaixo continua **0.1.8**.
+
+O novo aplicativo de atendimento remoto utiliza a interface React sobre Tauri/Rust com o Halo visual preservado. No Windows, a janela moderna possui os controles nativos de minimizar, maximizar/restaurar, redimensionar e ocultar para a bandeja. O painel adapta cartões e formulários a janelas estreitas. O Bridge Electron original permanece preservado para outro projeto; não faz parte da nova interface leve.
+
+**Segurança:** autenticação da conta não equivale à autorização de pareamento, atendimento ou elevação administrativa. A conexão local, a rede privada e o MCP público são verificados separadamente. O atendimento remoto só pode ser disponibilizado após consentimento e contraprovas reais; a inicialização do motor nativo e a recuperação da sessão após reiniciar ainda estão pendentes.
+
+**Para testar em DEV:** usar o projeto React/Tauri existente. Não instalar o executável de depuração como Release. Consultar docs/ARCHITECTURE.md, docs/INSTALLATION.md e docs/RELEASE.md. O estado da v0.1.9 e seus gates estão em docs/RELEASE_NOTES_v0.1.9.md.
+
+**Nota:** as descrições de sinalização local, privacidade e pacotes 0.1.8 nas seções abaixo são do Halo anterior e não constituem promessas sobre o módulo de atendimento remoto 0.1.9.
+<!-- /CENTRALDARK_ROOT_DOCS_SYNC_20261115 -->
 ## One glance. Zero interruption.
 
 | Operational state | Halo | Meaning |
@@ -132,10 +146,10 @@ Release packaging:
 
 ```bash
 # macOS: real Universal .app, installers, hooks, README, ZIP
-bash scripts/release/package-macos.sh 0.1.4
+bash scripts/release/package-macos.sh 0.1.8
 
 # Windows PowerShell
-./scripts/release/package-windows.ps1 0.1.4
+./scripts/release/package-windows.ps1 0.1.8
 ```
 
 CI builds and verifies macOS Intel, macOS ARM64, macOS Universal, and Windows
@@ -166,3 +180,14 @@ endorsed by OpenAI. “Codex” is used only to describe compatibility.
 ## License
 
 [MIT](LICENSE)
+
+
+<!-- CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+## Arvore-alvo Agente Remoto v0.1.9 (ainda DRAFT)
+TREE_LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+O executavel desejado combina React, Tauri e MCP Rust no mesmo
+processo; a distribuicao usara NSIS currentUser/perMachine e
+dados separados em LocalAppData/CentralDark/AgenteRemoto.
+Paths NOMINAIS, mapa CURRENT/TARGET e gates: docs/INSTALLATION.md.
+Nenhum motor Rust integrado ou instalador 0.1.9 foi comprovado.
+<!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->

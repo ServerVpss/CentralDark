@@ -27,6 +27,11 @@ gmail_notification_truth_scope: "NOTIFICATION_CONTENT_ONLY"
 ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 ---
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Claude e subagentes seguem a Gramática SOL e o padrão de emojis; linguagem simples nos títulos e prova técnica exata no conteúdo; sem mostrar NEXT_CURSOR como manchete humana nem criar segundo contrato. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 Referências técnicas — sem cabeçalho obrigatório na conversa
