@@ -65,7 +65,7 @@ Os nomes da landing são um **mapa de funções do organismo**, não serviços n
 |---|---|
 | Yuji: identidade | [SOUL-SOL](../../CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md) e memória de continuidade |
 | Sukuna: potência com limites | Modelo substituível sob [RULES](../../../RULES.md), sem receber autoridade |
-| Gojo: Seis Olhos e contraprova | [Skill Oráculo existente](../../../.agents/skills/software-development/centraldark-oracle-surface/SKILL.md) e Reality Judge |
+| Gojo: Seis Olhos e contraprova | [Skill Oráculo existente](../../../.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md) e Reality Judge |
 | Whis: orientação | [Intenção Devolvida + Loop Mestre](../../CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) |
 | Beerus: refutação e poda | [Horn/Reuso/Fixed Point](../../../scripts/lupa/horn-reuse-fixed-point.mjs), sem autorização destrutiva por símbolo |
 | Goku / Vegeta: adaptação e resiliência | [Hermes PET existente](../../../apps/instinto-superior/src/components/central/HermesPet.tsx), duas faces visuais do mesmo executor |

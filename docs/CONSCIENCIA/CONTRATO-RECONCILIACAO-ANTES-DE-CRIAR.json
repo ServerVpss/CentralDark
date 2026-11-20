@@ -2975,7 +2975,7 @@
   "oracle_learning_replay_policy": {
     "marker": "CENTRALDARK_ORACLE_LEARNING_REPLAY",
     "status": "CANONICAL",
-    "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
+    "owner": ".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md",
     "one_success_is_replayable_recipe": false,
     "new_proven_path_flow": [
       "CRYSTALLIZE_MINIMUM_LEARNING",

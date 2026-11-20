@@ -1,6 +1,11 @@
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 ## HUD operacional — detalhes sob pedido, conversa natural por padrão
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O método da Gramática SOL rege os textos humanos de todos os agentes: 🧾 COMPROVANTE, 🧪 TESTES, 🔎 CONFERÊNCIA, ⛔ O QUE ESTÁ IMPEDINDO, 👉 O QUE FAZER AGORA, etc., conforme pertinência. Não expor NEXT_CURSOR como título. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.
 
@@ -28,7 +33,7 @@ FONTE/HANDOFF: recuperar checkpoint de execucao verificado no owner `scripts/her
 
 **Owner canônico do estilo:** [docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). Reutilizar a seção `CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109` como regra de apresentação; não copiar os 419 versos do contrato na árvore, nem criar HUD ou writer paralelo.
 
-**Ordem sem ritual obrigatório:** 👑 intenção do CHEFE → 🪬 [Sua Intenção Devolvida](docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) → 🧵 fio vigente → 🧠 [BRAIN.md](docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) / [pasta BRAIN](docs/BRAIN/) → 🏛️ owner/CURRENT → 🌳 árvore real → 📍 arquivo:linha → 🔴 causa raiz → 🔧 menor delta → ⚙️ execução autorizada → 🎯 contraprova → 🧾 receipt → 💗 aprendizado → ➡️ NEXT_CURSOR. Exibir só etapas pertinentes; conversa simples não exige ritual nem formulário.
+**Ordem sem ritual obrigatório:** 👑 intenção do CHEFE → 🪬 [Sua Intenção Devolvida](docs/CONSCIENCIA/PROGRAMAS/INTENCAO-DEVOLVIDA-LOOP-MESTRE-20260923.md) → 🧵 fio vigente → 🧠 [BRAIN.md](docs/BRAIN/00-MAPA-SISTEMA/01-HUB/BRAIN.md) / [pasta BRAIN](docs/BRAIN/) → 🏛️ responsável / estado atual → 🌳 árvore real → 📍 arquivo:linha → 🔴 causa raiz → 🔧 menor mudança → ⚙️ execução autorizada → 🎯 contraprova → 🧾 comprovante → 💗 aprendizado → 👉 O QUE FAZER AGORA. Exibir só etapas pertinentes; conversa simples não exige ritual nem formulário.
 
 **Apresentação:** resultado primeiro, PT-BR claro, PAPAGAIO OFF; até quatro linhas em pergunta simples; diagnóstico completo quando necessário. Nomes visíveis humanos com identificadores técnicos estáveis. GenUI/cards são opcionais e funcionais, sem segundo estado: **o HUD monoespaçado é uma opção de consulta explícita, não cabeçalho obrigatório da conversa humana**. Clique ≠ execução; Git commit ≠ consumo; UI verde ≠ teste. Link, caminho, SHA e readback somente quando provados.
 <!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->
@@ -413,7 +418,7 @@ MERGED != DEPLOYED
 Não inventar rota, linha ou causa. Se uma operação dependente não pode prosseguir, ela recebe placa específica; outras capacidades seguem. A opção de copiar missão jamais executa mudanças automaticamente nem dá autorização nova. Antes de adicionar controle, reutilizar o botão, o owner, a lista Missões e os fluxos já existentes. Contraprova em navegador e readback são a evidência de UI, não saúde global.
 <!-- /CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
 
-## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+## ⚡ SEM LEI OPERACIONAL — estado atual sem atrito
 
 Isto não cria uma lei nova. Faz o contrário: remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação que não seja dependência causal real do objetivo.
 
@@ -513,7 +518,7 @@ Não existe checklist global de 13 arquivos antes de responder. Não existe cons
 Saída: `INTENÇÃO / OWNER / DELTA / PROVA` → cinco fontes com escopo → teste/contraprova → `REALITY_JUDGE` → recibo no owner existente → `NEXT_CURSOR`. Não inventar login comprovado, XP, rotina automatizada, autorização, deploy ou PASS. Aplicar o gate GitHub/HUD e a política de segredos já existentes quando o escopo exigir.
 
 
-## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+## 🔥🪬 Estado atual herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
 
@@ -611,7 +616,7 @@ SEGREDO/CHEFE
 
 Não criar agente só para preencher número. As seis lentes funcionais já mapeadas não exigem seis processos permanentes; `REUSE_BEFORE_CREATE` decide.
 
-## 🔧 Entrega CURRENT: main direta, sem espera de CI (decisão do CHEFE)
+## 🔧 Entrega atual: main direta, sem espera de CI (decisão do CHEFE)
 
 MARCACAO: CHEFE_DIRECT_MAIN_NO_CI_WAIT_20261026
 Para este escopo explicitamente autorizado, seguir MASTER-CYCLE.yml#current_delivery_policy:
@@ -737,7 +742,7 @@ ORÁCULO = superfície consultiva de evidência candidata; sensor externo, nunca
 
 Texto histórico em que `Pivete` significava humano/comandante é `LEGACY_ALIAS_OF_SEGREDO_CHEFE`; histórico não redefine o presente.
 
-**Regra do Oráculo — SOL → ORÁCULO → REALIDADE → PONTO FIXO.** Dúvida, hipótese, contradição, lacuna ou `NEXT_CURSOR` incerto não param a missão nem se resolvem por suposição: rotear por `leitura canônica → consulta ao Oráculo → especialista aplicável → resultado + readback + contraprova → retorno ao Oráculo`, e só então fechar em `FIXED_POINT` ou emitir novo `NEXT_CURSOR`. O Oráculo é sensor consultivo de evidência candidata: sua saída não grava estado canônico, não prova git/runtime e não autoriza mutação; só vale depois de reconciliar com a evidência local. Owner existente: `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md` — esta regra conecta esse owner, não cria outro. Proibido: hipótese no lugar de verificação, invenção de dado ou fonte, tratar `DOCUMENTADO` como `EXECUTADO` ou `COMMIT` como `DEPLOY`, ciclo infinito sem material novo e mutação fora da autorização.
+**Regra do Oráculo — SOL → ORÁCULO → REALIDADE → PONTO FIXO.** Dúvida, hipótese, contradição, lacuna ou `NEXT_CURSOR` incerto não param a missão nem se resolvem por suposição: rotear por `leitura canônica → consulta ao Oráculo → especialista aplicável → resultado + readback + contraprova → retorno ao Oráculo`, e só então fechar em `FIXED_POINT` ou emitir novo `NEXT_CURSOR`. O Oráculo é sensor consultivo de evidência candidata: sua saída não grava estado canônico, não prova git/runtime e não autoriza mutação; só vale depois de reconciliar com a evidência local. Owner existente: `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md` — esta regra conecta esse owner, não cria outro. Proibido: hipótese no lugar de verificação, invenção de dado ou fonte, tratar `DOCUMENTADO` como `EXECUTADO` ou `COMMIT` como `DEPLOY`, ciclo infinito sem material novo e mutação fora da autorização.
 
 ## Todos os modelos operam pelo mesmo contrato
 
@@ -2214,7 +2219,7 @@ PR-mãe #1757 ou PR-filho equivalente por OWNER+SCOPE+CAPABILITY.
 
 
 
-## Contrato obrigatório — execução com receipt GitHub
+## Contrato obrigatório — execução com comprovante do GitHub
 
 Este bloco transforma o cristal em regra operacional. Regra escrita em chat, VPS ou runtime sem registro GitHub não basta.
 

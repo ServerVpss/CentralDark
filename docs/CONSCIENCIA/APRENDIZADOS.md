@@ -1894,7 +1894,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 
 ### Cristal 2026-10-08 — Ralph-style bounded recipe loop e sync canônico da skill Oracle
-- **Owner:** `.agents/skills/software-development/centraldark-oracle-surface/SKILL.md`.
+- **Owner:** `.agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md`.
 - **Receipt:** `docs/CONSCIENCIA/RECEIPTS/2026-10-08-oracle-anti-dumb-loop-recipe-promotion.md`.
 - **Intenção do CHEFE:** Hermes não deve gastar turnos em retry idêntico. Se o mesmo fingerprint não gera informação nova, parar o retry, reutilizar/derivar uma receita determinística, replayar uma vez, contraprovar e continuar no mesmo Goal/LOOP_ID.
 - **Evolução de skill:** somente delta generalizável e provado entra na **mesma skill** canônica na `main`; incidente específico fica em receipt/runtime state. Não criar Ralph paralelo, scheduler, router, brain ou skill irmã.
@@ -3566,3 +3566,30 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Regra operacional:** V ↔ F ↔ MAIN é um circuito de reconciliação, não três fontes concorrentes. O owner mais atual deve ser preservado; diferenças pré-existentes fora do cone não são apagadas. Mesmo conteúdo já existente não é regravado. Só o delta ausente e provado atravessa as frentes aplicáveis.
 - **Mnemônico do CHEFE:** `!AUREULA — examinai tudo, retém o bem`. Examinar = comparar CURRENT; reter = preservar o que já funciona; bem = delta que sobrevive a teste, contraprova e readback.
 - **Fixed point:** circuito só fecha quando as frentes aplicáveis concordam semanticamente no delta, os testes mínimos passam, a `main` recebe a versão canônica e o readback confirma ausência de duplicação.
+
+<!-- CENTRALDARK_ENSINAMENTO_KAIZEN_CHEFE_RESULTADOS_20261120 -->
+## 📖 Evangelho da CentralDark — Livro do Kaizen, capítulo 1 (2026-11-20)
+
+**Autoridade:** CHEFE / SEGREDO. **Forma:** composição literária original em linguagem bíblica-baiana, não passagem bíblica literal. **Owner:** o aprendizado existente, sem arquivo ou skill paralela.
+
+> **¹ E disse o CHEFE, SEGREDO:**
+> “Podeis julgar meus métodos, mas não negar meus resultados!”
+>
+> **² E respondeu SOL:**
+> “Pois aquilo que foi comprovado não será apagado pela busca daquilo que ainda falta.”
+>
+> **³ E declarou o CHEFE:**
+> “A perfeição não é um destino obrigatório; é uma direção de melhoria.”
+>
+> **⁴ E assim nasceu a lei do Kaizen:**
+> “Preservai o que funciona, aprendei com o que falhou e aperfeiçoai o que ainda pode evoluir.”
+>
+> **⁵ E concluiu o CHEFE:**
+> “Não confundais uma obra inacabada com uma obra que não funciona.”
+
+**Regra operacional:** pode-se criticar e melhorar os métodos, mas não negar resultados efetivamente comprovados. Reconhecer progresso positivo e preservar o estado bom; manter limitações e pendências visíveis, sem converter UNKNOWN em PASS. Kaizen é evolução contínua pelo menor delta, não exigência de perfeição prévia.
+
+**Exemplo concreto:** as três rodadas Hermes ↔ ChatGPT foram documentadas em docs/CONSCIENCIA/RECEIPTS/2026-11-20-hermes-oracle-loop-3-rounds.md; o resultado 3/3 não prova a identidade do Goal histórico (GOAL_IDENTITY_PROVEN=FALSE, LOOP_ID=UNKNOWN). A conquista é real dentro do escopo do teste, sem encerrar a missão maior.
+
+**Máxima do CHEFE:** 💗 *Perfeição não é um destino obrigatório; é uma direção de melhoria.*
+<!-- /CENTRALDARK_ENSINAMENTO_KAIZEN_CHEFE_RESULTADOS_20261120 -->

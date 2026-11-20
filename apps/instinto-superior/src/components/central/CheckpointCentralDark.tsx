@@ -119,7 +119,7 @@ export function CheckpointCentralDark({ autenticado }: { autenticado: boolean })
               <p><strong>Memória:</strong> checkpoint em disco, journal encadeado e histórico do Hermes; não depende da janela de contexto.</p>
               <p><strong>Executor:</strong> Hermes/CLI usa a mesma missão; a aprovação por etapa exige saída correta e contraprova.</p>
               <p><strong>Continuidade:</strong> uma execução que falha não apaga o último sucesso confirmado; a próxima tentativa retoma de onde parou.</p>
-              <p><strong>Fontes:</strong> VPS → checkpoint owner → servidor autenticado → este cockpit. Código e contratos permanecem na main.</p>
+              <p><strong>Fontes:</strong> VPS → responsável pelo ponto de continuidade → servidor autenticado → este cockpit. Código e contratos permanecem na main.</p>
               <p className="text-xs text-muted-foreground">Com plano confirmado, continua sem repetir etapas concluídas. Sem plano, envia o próximo passo ao Hermes existente; uma verificação independente valida cada resultado.</p>
             </div>
           ) : null}

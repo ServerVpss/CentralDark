@@ -1,5 +1,10 @@
 # HERMES TRISMEGISTUS CORE
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Hermes, bots, Telegram, CLI e painéis herdam Gramática SOL e símbolos canônicos. O humano lê 👉 O QUE FAZER AGORA e placas pertinentes; o recibo mantém NEXT_CURSOR e campos originais. Runtime não é provado por texto. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 <!-- HERMES_CORE_POSTURA_EXECUCAO_COM_PROVA_20261015 -->
 ## 🪬 Postura executor ágil — agir, ler retorno, recuperar, comprovar (delta no owner)
 
