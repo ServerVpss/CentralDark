@@ -7,7 +7,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { apiBase, type Estado } from "@/lib/cockpit.functions";
+import { apiBase, mcpBase, type Estado } from "@/lib/cockpit.functions";
 
 // Máquina viva: One Heart (/heartbeat + /health) lido no servidor, porque o site
 // publicado em https não pode chamar um IP http direto (conteúdo misto).
@@ -83,6 +83,9 @@ function ehObjeto(v: unknown): v is Json {
   return !!v && typeof v === "object" && !Array.isArray(v);
 }
 
+<<<<<<< HEAD
+async function sondar(caminho: string, base = apiBase()): Promise<SondaInterna> {
+=======
 async function exigirAdmin(context: { supabase: { from: (name: string) => any }; userId: string }) {
   const { data } = await context.supabase.from("user_roles").select("role").eq("user_id", context.userId).eq("role", "admin").maybeSingle();
   if (!data) throw new Response("Proibido", { status: 403 });
@@ -126,11 +129,12 @@ async function executarRtssOverlay(input: z.infer<typeof rtssInput>): Promise<Rt
 }
 
 async function sondar(caminho: string): Promise<SondaInterna> {
+>>>>>>> origin/main
   const medidoEm = new Date().toISOString();
   const controle = new AbortController();
   const timer = setTimeout(() => controle.abort(), TEMPO_MAXIMO_MS);
   try {
-    const r = await fetch(`${apiBase()}${caminho}`, {
+    const r = await fetch(`${base}${caminho}`, {
       headers: { accept: "application/json" },
       cache: "no-store",
       signal: controle.signal,
@@ -156,10 +160,19 @@ async function sondar(caminho: string): Promise<SondaInterna> {
         dados: null,
       };
     }
-    const ok = corpo["ok"];
+    // Uma rota só está saudável quando o payload pertence ao owner consultado.
+    const heart = caminho === "/heartbeat";
+    const ownerCerto = heart
+      ? corpo["service"] === "mcp-centraldark" && corpo["ok"] === true
+      : corpo["servico"] === "hermes-core";
+    const estado: Estado = !ownerCerto
+      ? "UNKNOWN"
+      : heart
+        ? corpo["self"] === "alive" ? "PASS" : corpo["self"] === "stale" ? "FAIL" : "UNKNOWN"
+        : corpo["status"] === "ok" ? "PASS" : "FAIL";
     return {
       caminho,
-      estado: ok === false ? "FAIL" : "PASS",
+      estado,
       http: r.status,
       erro: null,
       medidoEm,
@@ -287,7 +300,11 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<MaquinaViva> => {
     await exigirAdmin(context);
 
+<<<<<<< HEAD
+    const [heartbeat, health, discoServidor] = await Promise.all([sondar("/heartbeat", mcpBase()), sondar("/health"), medirDiscoServidor()]);
+=======
     const [heartbeat, health, discoServidor, gpuCasa] = await Promise.all([sondar("/heartbeat"), sondar("/health"), medirDiscoServidor(), medirGpuCasa()]);
+>>>>>>> origin/main
     const fontes = [heartbeat.dados, health.dados];
     const primeiro = <T>(fn: (d: unknown) => T | null) => {
       for (const f of fontes) {
@@ -317,7 +334,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
     let medidoPeloOwner: string | null = null;
     for (const f of fontes) {
       if (ehObjeto(f)) {
-        const t = f["measured_at"] ?? f["measuredAt"] ?? f["ts"] ?? f["timestamp"];
+        const t = f["measured_at"] ?? f["measuredAt"] ?? f["ts"] ?? f["timestamp"] ?? f["t"];
         if (typeof t === "string" && Number.isFinite(Date.parse(t))) {
           medidoPeloOwner = t;
           break;
@@ -330,7 +347,7 @@ export const lerMaquinaViva = createServerFn({ method: "GET" })
 
     const publico = ({ dados: _dados, ...resto }: SondaInterna): SondaViva => resto;
     return {
-      fonte: apiBase(),
+      fonte: `${mcpBase()}/heartbeat + ${apiBase()}/health`,
       medidoEm: new Date().toISOString(),
       heartbeat: publico(heartbeat),
       health: publico(health),
