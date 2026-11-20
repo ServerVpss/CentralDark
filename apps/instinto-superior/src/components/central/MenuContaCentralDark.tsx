@@ -175,7 +175,7 @@ export function MenuContaCentralDark(acoes: AcoesMenuConta) {
               reinicia serviços da VPS.
             </p>
             {([
-              ["aionui", "CentralDark Estúdio · AionUI"],
+              ["centraldarkbot", "CentralDarkBot · agentes"],
               ["hermes", "Hermes ONE"],
             ] as const).map(([id, titulo]) => (
               <label key={id} className="mb-3 flex flex-col gap-1 text-xs font-medium">

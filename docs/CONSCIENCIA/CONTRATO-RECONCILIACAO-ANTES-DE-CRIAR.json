@@ -1276,7 +1276,10 @@
       "hud_owner": "apps/modulos/Bolt/source/app/components/centraldark/CentralDarkUnifiedHud.client.tsx",
       "hud_is_authority": false,
       "hud_is_runtime_proof": false,
-      "legacy_pr_mothers": [1562, 1757],
+      "legacy_pr_mothers": [
+        1562,
+        1757
+      ],
       "no_new_pr_mother": true,
       "global_dna_validation": {
         "required": true,
@@ -2110,7 +2113,28 @@
       "stale_temp_requires_classification_before_delete": true,
       "active_process_or_open_handle_blocks_blind_delete": true,
       "receipt_required_for_material_temp_artifact": false,
-      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP"
+      "final_temp_residue_target": "ZERO_UNLESS_PROVEN_ACTIVE_OR_FORENSIC_KEEP",
+      "mission_trace_in_equivalent_pr_before_delete": true,
+      "new_pr_only_when_no_equivalent_pr": true,
+      "prefer_comment_in_existing_mission_pr": true,
+      "minimum_trace_fields": [
+        "MISSION_ID",
+        "INTENT",
+        "OWNER",
+        "TEMP_PATH",
+        "CLASSIFICATION",
+        "TEST_PROOF",
+        "PROMOTED_SHA_OR_NOT_PROMOTED",
+        "PR_URL",
+        "RESULT_READBACK",
+        "PENDING",
+        "CLEANUP_AUTHORITY",
+        "NEXT_CURSOR"
+      ],
+      "mission_pr_trace_is_not_uncommitted_bytes_backup": true,
+      "explicitly_authorized_discard_of_unpromoted_delta": "ALLOWED_WITH_TRACE_AND_UNKNOWN_CONTENT_LOSS_ACKNOWLEDGED",
+      "post_delete_readback_in_same_pr_required": true,
+      "trace_before_cleanup_and_cleanup_after_trace_are_distinct": true
     },
     "canonical_architecture": {
       "version_suffix_for_same_capability": "FORBIDDEN",
@@ -2194,6 +2218,25 @@
       "pombo64_trace_is_delivery_by_itself": false,
       "temporary_file_card_in_chat_is_not_proof_of_delivery_intent": true,
       "final_delivery_must_be_intentional_and_named": true
+    },
+    "windows_casa_location_policy": {
+      "host": "SEGREDO",
+      "temporary_build_download_cache_root": "F:\\TEMP",
+      "git_worktree_root": "F:\\_worktrees",
+      "existing_noncanonical_siblings_read_only": [
+        "F:\\_temp",
+        "F:\\tmp"
+      ],
+      "canonical_creator": "scripts/centraldark/ephemeral-workspace.mjs",
+      "preflight_command": "check-root",
+      "root_validation_required_before_write": true,
+      "os_tmpdir_is_not_authority": true,
+      "no_fallback_to_c_on_missing_f_root": true,
+      "per_process_temp_tmp_and_cache_binding_required_when_applicable": true,
+      "cleanup_existing_unknown_dirs_automatically": false,
+      "preserve_system_managed_install_and_runtime_paths": true,
+      "linux_binding_remains_separate": true,
+      "location_pass_is_not_cleanup_pass": true
     }
   },
   "log_incident_crystallization_contract": {
@@ -2932,7 +2975,7 @@
   "oracle_learning_replay_policy": {
     "marker": "CENTRALDARK_ORACLE_LEARNING_REPLAY",
     "status": "CANONICAL",
-    "owner": ".agents/skills/software-development/centraldark-oracle-surface/SKILL.md",
+    "owner": ".agents/skills/centraldark-operational-method/Skills/centraldark-oracle-surface/SKILL.md",
     "one_success_is_replayable_recipe": false,
     "new_proven_path_flow": [
       "CRYSTALLIZE_MINIMUM_LEARNING",

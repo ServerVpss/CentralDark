@@ -17,7 +17,7 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 ```
 <!-- /CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 
-## 🧭 CURRENT CONTINUITY — 2026-11-09
+## 📍 CONTINUIDADE DO ESTADO ATUAL — 2026-11-09
 
 > O snapshot de 2026-08-28 está classificado como histórico e preservado abaixo. Esta seção registra a medição atual da mesma missão.
 
@@ -26,9 +26,9 @@ AUTHORIZED_ALTERNATE_ROUTE_BEFORE_HUMAN_BLOCKER=true
 **PRÓXIMO PASSO:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
 
 **PONTO DE CONTINUIDADE:** revisar os 31 caminhos com conteúdo diferente do remoto, identificar os owners e os destinos de migração, e preparar a reconciliação sem perda dos 28 caminhos deletados em apps/modulos/status/.
-**NEXT_CURSOR:** REVIEW_31_DIFFERENT_CONTENT_PATHS_AND_28_STATUS_DELETIONS_NO_LOSS
+🧾 **Registro técnico:** `NEXT_CURSOR=REVIEW_31_DIFFERENT_CONTENT_PATHS_AND_28_STATUS_DELETIONS_NO_LOSS`
 
-### CURRENT medido na Casa — 2026-11-09T02:21:25-03:00
+### 📍 PONTO DE PARTIDA medido na Casa — 2026-11-09T02:21:25-03:00
 
 | Campo | Valor |
 |---|---|
@@ -217,7 +217,7 @@ Este handoff foi preparado para ser entregue manualmente quando o CHEFE decidir.
 === END HANDOFF ===
 
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID
