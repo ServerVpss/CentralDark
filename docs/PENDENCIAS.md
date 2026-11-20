@@ -50,6 +50,27 @@ CHEFE → OpenBot / SOL [intenção e responsável]
 
 **Estado da primeira costura:** `CODE_ROUTE_COMMITTED`; `A2A_AUTH_TASK=UNKNOWN`; `HOSTINGER_USE_NEW_TOOL=NOT_DEPLOYED`; `HALO_MOTOR_LINK=NOT_PROVEN`; `CRM_COCKPIT_E2E=NOT_PROVEN`.
 
+<!-- HOSTINGER_HANDOFF_20261120 -->
+### 🚦 Correção do rumo — Hermes Hostinger executa, Casa preservada (20/11/2026)
+
+**Nova ordem do CHEFE:** interromper a tentativa de commit a partir da pasta de visualização do VS Code (`C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`, sem `.git`). Preservar o checkout `F:\CentralDark` (main atrasada e worktree suja). **Hermes da Hostinger recebe o handoff do PR #2153; deve buscar a branch remota no checkout Git autorizado, testar o delta e promover ao ar somente após gates.** SOL/OpenBot coordena; um writer por escopo; nenhuma nova arquitetura.
+
+**Evidência recebida do OpenBot:** Hermes informou ACK da missão `CENTRALDARK_OS_CIRCUITO_E2E_20261120` e bloqueio da edição no workspace sem Git. ACK relatado não prova nova ferramenta consumida pelo runtime.
+
+**Readback MCP Hostinger (mesma sessão):** `mcp_status.ok=true`, `runtimeTools=155`, `routeCount=17`; `centraldark_casa_status=CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; deploy nativo consultado com `centraldark_deploy_capabilities.status=INCOMPLETE`, `centraldark_deploy_scratch_status=SCRATCH_MISSING`, `centraldark_deploy_root_gate=ROOT_GATE_MISSING`; `admin_ssh_microdeploy(mode=status)=AUTHENTICATED_ADMIN_SESSION_REQUIRED`. A URL A2A e Agent Card HTTP 200 apenas provam descoberta, não execução de tarefa.
+
+**Sequência mínima que Hermes deve consumir, sob autorização real e sem inventar estado:**
+1. Pela conta GitHub já autorizada, ler a branch exata `feat/centraldark-os-circuito-e2e-alerta-20261120` do `ServerVpss/CentralDark` e pin do HEAD; medir checkout legítimo e alterações locais **sem reset/clean/pull cegos**. Usar checkout limpo já existente ou scratch autorizado sem afetar runtime/worktree sujo. Não exigir `.git` dentro da pasta visual da Casa.
+2. Executar testes existentes incluindo `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs`; validar `centraldark_casa_list_processes` no catálogo e fronteira readonly, testando bloqueio sem Bearer e nenhuma escrita. Trazer output e status reais.
+3. Verificar a fonte segura do `CENTRALDARK_CASA_BRIDGE_TOKEN` no **processo que consome a variável** e o `CENTRALDARK_CASA_TAILSCALE_HOST=segredo-chefe-pc.tail89b909.ts.net`, validado na Casa por `tailscale status --json`. Não colocar token ou valor sensível no PR/log. Reutilizar cofre e Bridge existentes.
+4. Através da rota MCP e Tailscale já implementada (Casa `:9100` → loopback `:9101`), testar `initialize → tools/list → centraldark_casa_list_processes` com leitura autorizada e recibo que identifique **SEGREDO**. O destino precisa ser Windows, não shell do contêiner.
+5. Para promover o serviço ao ar, primeiro resolver os gates oficiais `SCRATCH_MISSING`, `ROOT_GATE_MISSING` e sessão admin; comprovar source SHA permitido pela receita `MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK` e as proteções da `main`. Como o código está apenas no PR Draft, **não tratar commit de branch como deploy da main**. Fazer promoção apenas com os gates e aprovação exigidos pelo owner existente, e com readback do runtime.
+6. Reusar a mesma missão/recibo no CRM/Cockpit/Kaizen. O segundo PC entra apenas após pareamento, consentimento do usuário e credencial específica; primeiro ensaio em SEGREDO, somente leitura.
+
+**Estado:** `HANDOFF_DOCUMENTED=PASS`; `HERMES_HOSTINGER_ACCEPTED=UNKNOWN`; `PR_TESTS_RUN=UNKNOWN`; `PRODUCTION_DEPLOY=BLOCKED_BY_RUNTIME_GATES`; `CASA_MCP_E2E=UNKNOWN`. Não marcar verde por commit, URL 200 ou ACK isolado.
+
+<!-- /HOSTINGER_HANDOFF_20261120 -->
+
 ### 🎯 Critérios para tirar do ALERTA
 - [ ] 1. Owner e único writer por função comprovados, sem processos duplicados.
 - [ ] 2. OpenBot delega missão identificada ao Hermes e recebe ACK com ID único.
