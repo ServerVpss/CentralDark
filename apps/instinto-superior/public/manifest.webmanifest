@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "CentralDark — Instinto Superior",
+  "short_name": "Instinto Superior",
+  "description": "Cockpit do harness privado CentralDark; a conexão é necessária para sensores, conta, automações e operações.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090b13",
+  "theme_color": "#090b13",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ]
+}
