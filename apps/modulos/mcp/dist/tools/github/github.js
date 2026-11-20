@@ -12,22 +12,27 @@ export function ghCliCall(path, init = {}) {
     // gh api usa exclusivamente o login guardado pelo proprio gh; nenhum segredo e lido ou emitido.
     const { GH_TOKEN, GITHUB_TOKEN, GH_ENTERPRISE_TOKEN, GITHUB_ENTERPRISE_TOKEN, ...safeEnv } = process.env;
     const args = ["api", endpoint, "--method", method, "--header", "Accept: application/vnd.github+json"];
-    if (init.body !== undefined) args.push("--input", "-");
+    if (init.body !== undefined)
+        args.push("--input", "-");
     try {
         const result = execFileSync("gh", args, {
             env: safeEnv, encoding: "utf8", timeout: 12000, maxBuffer: 4000000,
             input: init.body, stdio: ["pipe", "pipe", "pipe"],
         }).trim();
         return result ? JSON.parse(result) : null;
-    } catch {
+    }
+    catch {
         throw new GitHubError(502, "GitHub CLI: chamada autorizada nao concluiu", null);
     }
 }
 export function ghCliAvailable() {
-    try { return Boolean(ghCliCall("/user")?.login); }
-    catch { return false; }
+    try {
+        return Boolean(ghCliCall("/user")?.login);
+    }
+    catch {
+        return false;
+    }
 }
-
 const LABEL_ALIASES = new Map([
     ["assign:chatgpt", ["🧠 AGENTE-CHATGPT"]],
     ["assign:claude", ["🧠 AGENTE-CLAUDE"]],
@@ -120,7 +125,8 @@ export class GitHubError extends Error {
     }
 }
 async function ghFetch(token, path, init) {
-    if (token === GH_CLI_OWNER_MARKER) return ghCliCall(path, init);
+    if (token === GH_CLI_OWNER_MARKER)
+        return ghCliCall(path, init);
     const res = await fetch(`${GITHUB_API}${path}`, {
         ...init,
         headers: {
@@ -156,7 +162,9 @@ export async function checkToken(token, owner, repo) {
         const user = ghCliCall("/user");
         let permissions;
         if (owner && repo) {
-            try { permissions = ghCliCall(repoBase(owner, repo))?.permissions; }
+            try {
+                permissions = ghCliCall(repoBase(owner, repo))?.permissions;
+            }
             catch { /* permissao nao provada */ }
         }
         return {
@@ -169,7 +177,6 @@ export async function checkToken(token, owner, repo) {
             advice: "Sessao gh CLI autenticada; permissao de escrita requer prova por operacao.",
         };
     }
-
     const res = await fetch(`${GITHUB_API}/user`, {
         headers: {
             Accept: "application/vnd.github+json",

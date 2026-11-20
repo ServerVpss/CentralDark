@@ -46,3 +46,12 @@ Sem gap comprovado, a resposta correta é reutilizar, corrigir ou não mudar.
 - runtime só é exigido como prova quando o claim pertence ao runtime.
 
 Histórico MultiZap permanece no Git e em documentação histórica; ele não dirige a identidade operacional atual da CentralDark.
+
+
+## Regra operacional — caminhos absolutos persistentes
+
+Esta seção documenta o procedimento de compatibilidade; o owner canônico permanece em /AGENTS.md e no instalador existente. Em toda instalação, atualização ou mudança de rota, identificar a raiz persistente real do host, resolver caminhos absolutos e conferir o processo que consome a configuração. Nunca tratar cópia de arquivos como deploy.
+
+Hostinger, observação de 20/11/2026: projeto copiado em `/data/CentralDark/` (apps, docs, scripts); MCP ainda executava `/data/cache/scratch/CentralDark/apps/modulos/mcp/src/index.js` pelo watchdog `/data/scripts/centraldark-mcp-watchdog.sh`. Scratch é temporário; não usar como destino durável.
+
+Para a futura instalação na Contabo pelo `install.sh` e fork CentralDark/Hermes: detectar e parametrizar a raiz persistente do destino (reutilizar variável existente antes de criar outra), derivar caminhos absolutos de apps/scripts/docs/MCP/watchdog, verificar permissões e caminhos com realpath, validar comando/cwd do processo e configuração consumida, testar e registrar readback. Não assumir que Contabo tem a mesma estrutura /data da Hostinger. Não criar segundo motor, túnel, MCP ou instalador. Preservar cofre e segredos fora do Git. Nenhuma migração de runtime, restart, merge ou deploy sem autorização e gates. `COPIED != RUNNING`; `DOCUMENTED != EXECUTED`; `UNKNOWN != PASS`.

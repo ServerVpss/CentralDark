@@ -3,6 +3,91 @@
 Fonte ÚNICA de pendências do projeto. Qualquer item novo entra aqui.
 Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 
+<!-- CENTRALDARK_OS_E2E_ALERTA_20261120 -->
+## 🔴 ALERTA PRIORITÁRIO — CENTRALDARK OS, primeiro circuito de atendimento remoto (20/11/2026)
+
+**Intenção do CHEFE:** fechar um ciclo real com peças já existentes: CRM de atendimento → OpenBot/SOL e especialistas (coordenação) → Hermes (executor) → MCP/Hostinger (transporte de ferramentas) → CentralDark Agente Remoto no segundo computador autorizado → resultado e comprovante → Cockpit (somente observação) → Kaizen. **FOCO TOTAL NESTA MISSÃO.** Este registro é um alerta de execução, não um novo cérebro, HUD, gateway, aplicativo ou arquitetura.
+
+**Estado geral:** 🔴 ALERTA / **E2E NÃO PROVADO**. Infraestrutura parcialmente ativa não equivale a delegação bem-sucedida; não concluir nem remover legado antes da contraprova.
+
+### 🧠 Responsáveis existentes (sem duplicação)
+- **Coordenação:** OpenBot, SOL/JARVIS e especialistas já instalados. Estado visual não prova delegação.
+- **Execução:** Hermes existente (Casa/Hostinger conforme runtime identificado); somente um executor de comandos por tarefa.
+- **MCP / Bridge:** `apps/modulos/mcp` e `scripts/remote-bridge` no repositório canônico; preservar tokens/rotas/allowlist e bloqueios de escrita.
+- **Agente Remoto / Halo:** fonte local observada em `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander\centraldark-halo-main`; ponte local observada em `source_remote_bridge`. Validar owner versionado antes de promover código.
+- **CRM:** fonte local `F:\DeskcommCRM-LAB` e aplicativo `deskcomm-crm-app-1`; projeto independente, não copiar código nem tratar a pasta local como conteúdo da main.
+- **Cockpit:** owner visual existente `apps/instinto-superior` (somente projeção do estado medido); **protótipo visual PR #2119 fora do escopo desta alteração**.
+- **Kaizen:** usar owner de aprendizado e receitas existentes, não um ledger novo.
+
+### 🔍 Observações de 20/11/2026 (prova limitada)
+- Casa SEGREDO: Docker `deskcomm-crm-app-1` saudável; Supabase Auth/DB/Realtime e WAHA ativos; `https://atendimento.centralldark.com/` e `http://127.0.0.1:3132/` responderam HTTP 200. Não houve login autenticado real durante esta medição.
+- CRM: `app/api/mcp/route.ts` permite Bearer `dsk_…` ou OAuth; `lib/mcp/servidor-externo/chamada.ts` já possui cliente MCP com `initialize → tools/list → tools/call`. O servidor filtra organização/escopos.
+- Descoberta pública OAuth do CRM anunciou endereço privado `*.ts.net:10000` no recurso e no `WWW-Authenticate` do `/api/mcp` (HTTP 401 sem token); configurar a origem pública no owner existente e medir novamente, **não** inferir login funcional só pelo 401.
+- Conector MCP da Hostinger respondeu com catálogo 155 ferramentas/17 rotas; o adaptador Casa retornou `CASA_BRIDGE_TOKEN_NOT_CONFIGURED`, e a ponte Tailscale retornou `TAILSCALE_OAUTH_BROKER_UNREACHABLE`. Nenhum segredo deve entrar em Git, log ou PR.
+- Halo Tauri: `src-tauri/src/lib.rs` contém diagnóstico `MOTOR_NOT_LINKED`; sessão/pareamento DPAPI já existem em `session_vault.rs`, mas execução remota nativa e consumo pelo CRM não foram provados.
+- OpenBot apresenta especialistas e Hermes; **delegação OpenBot → Hermes → máquina de teste → CRM não foi observada**. Cockpit e Kaizen não receberam recibo E2E comprovado.
+
+### 🔄 Ciclo de execução único — coordenação no OpenBot, motor no Hermes
+
+**Decisão do CHEFE (20/11/2026):** a janela de trabalho é o VS Code da Casa, no projeto local `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`; OpenBot/SOL coordena os especialistas existentes e entrega **uma tarefa identificada** ao Hermes. Hermes usa o A2A existente na Hostinger para delegação **quando a chamada JSON-RPC autenticada estiver comprovada**, e o MCP CentralDark já conectado para ferramentas. Agente Remoto/Bridge no Windows executa localmente; CRM atende; Cockpit somente observa; Kaizen aprende. Não instalar a IA completa no PC do cliente; não criar outro servidor.
+
+```text
+CHEFE → OpenBot / SOL [intenção e responsável]
+→ Hermes [A2A: missão + ACK, autorização real]
+→ MCP CentralDark Hostinger [tools/list e tools/call existentes]
+→ Tailscale Serve privado :9100 → Bridge Casa 127.0.0.1:9101
+→ motor DesktopCommanderMCP local stdio [somente leitura no primeiro teste]
+→ retorno autenticado à mesma missão → CRM → Cockpit [observação] → Kaizen
+```
+
+**A2A medido na Casa em 20/11/2026:** `/a2a` e `/a2a/.well-known/agent-card.json` no Hostinger Tailscale responderam HTTP 200; Agent Card anuncia `agente_remoto`, JSON-RPC 1.0, bearer e `toolset.mcp-centraldark`/`delegation`. `AGENT_CARD_200 != A2A_TASK_EXECUTED`: não provaram envio autenticado ou resultado de ferramenta.
+
+**Primeiro delta de código nesta branch:** `apps/modulos/mcp/src/tools/casa/casa-private.js` passa a expor `centraldark_casa_list_processes` usando o `callCasa("POST","/tool",{name:"list_processes",arguments:{}})` existente, com anotação de somente leitura. `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs` ganhou guarda estática para a ferramenta e a fronteira da ponte. Não altera motor, não muda cofre, não habilita escrita e não instala no runtime. **COMMITADO NO PR != TESTE EXECUTADO != CONSUMIDO NA HOSTINGER.**
+
+**Contrato de cada tarefa:** um `mission_id` único, origem, destino/dispositivo autorizado, owner/escritor, escopo de leitura, aceitação/ACK do Hermes, ferramenta, resultado, horário e contraprova; usar os envelopes, Kanban e recibos canônicos existentes, sem criar novos registros paralelos. A leitura de `list_processes` deve inicialmente chegar na Casa SEGREDO. Segundo computador somente após pareamento e consentimento separados, com credencial própria.
+
+**Quem implementa o restante:** SOL/JARVIS coordenando no OpenBot da Casa; Hermes operando o VS Code já aberto e só os arquivos do escopo autorizado; um writer por arquivo/etapa. O PR #2153 recebe os commits e a prova. PR #2119 continua restrito ao visual.
+
+**Estado da primeira costura:** `CODE_ROUTE_COMMITTED`; `A2A_AUTH_TASK=UNKNOWN`; `HOSTINGER_USE_NEW_TOOL=NOT_DEPLOYED`; `HALO_MOTOR_LINK=NOT_PROVEN`; `CRM_COCKPIT_E2E=NOT_PROVEN`.
+
+<!-- HOSTINGER_HANDOFF_20261120 -->
+### 🚦 Correção do rumo — Hermes Hostinger executa, Casa preservada (20/11/2026)
+
+**Nova ordem do CHEFE:** interromper a tentativa de commit a partir da pasta de visualização do VS Code (`C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`, sem `.git`). Preservar o checkout `F:\CentralDark` (main atrasada e worktree suja). **Hermes da Hostinger recebe o handoff do PR #2153; deve buscar a branch remota no checkout Git autorizado, testar o delta e promover ao ar somente após gates.** SOL/OpenBot coordena; um writer por escopo; nenhuma nova arquitetura.
+
+**Evidência recebida do OpenBot:** Hermes informou ACK da missão `CENTRALDARK_OS_CIRCUITO_E2E_20261120` e bloqueio da edição no workspace sem Git. ACK relatado não prova nova ferramenta consumida pelo runtime.
+
+**Readback MCP Hostinger (mesma sessão):** `mcp_status.ok=true`, `runtimeTools=155`, `routeCount=17`; `centraldark_casa_status=CASA_BRIDGE_TOKEN_NOT_CONFIGURED`; deploy nativo consultado com `centraldark_deploy_capabilities.status=INCOMPLETE`, `centraldark_deploy_scratch_status=SCRATCH_MISSING`, `centraldark_deploy_root_gate=ROOT_GATE_MISSING`; `admin_ssh_microdeploy(mode=status)=AUTHENTICATED_ADMIN_SESSION_REQUIRED`. A URL A2A e Agent Card HTTP 200 apenas provam descoberta, não execução de tarefa.
+
+**Sequência mínima que Hermes deve consumir, sob autorização real e sem inventar estado:**
+1. Pela conta GitHub já autorizada, ler a branch exata `feat/centraldark-os-circuito-e2e-alerta-20261120` do `ServerVpss/CentralDark` e pin do HEAD; medir checkout legítimo e alterações locais **sem reset/clean/pull cegos**. Usar checkout limpo já existente ou scratch autorizado sem afetar runtime/worktree sujo. Não exigir `.git` dentro da pasta visual da Casa.
+2. Executar testes existentes incluindo `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs`; validar `centraldark_casa_list_processes` no catálogo e fronteira readonly, testando bloqueio sem Bearer e nenhuma escrita. Trazer output e status reais.
+3. Verificar a fonte segura do `CENTRALDARK_CASA_BRIDGE_TOKEN` no **processo que consome a variável** e o `CENTRALDARK_CASA_TAILSCALE_HOST=segredo-chefe-pc.tail89b909.ts.net`, validado na Casa por `tailscale status --json`. Não colocar token ou valor sensível no PR/log. Reutilizar cofre e Bridge existentes.
+4. Através da rota MCP e Tailscale já implementada (Casa `:9100` → loopback `:9101`), testar `initialize → tools/list → centraldark_casa_list_processes` com leitura autorizada e recibo que identifique **SEGREDO**. O destino precisa ser Windows, não shell do contêiner.
+5. Para promover o serviço ao ar, primeiro resolver os gates oficiais `SCRATCH_MISSING`, `ROOT_GATE_MISSING` e sessão admin; comprovar source SHA permitido pela receita `MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK` e as proteções da `main`. Como o código está apenas no PR Draft, **não tratar commit de branch como deploy da main**. Fazer promoção apenas com os gates e aprovação exigidos pelo owner existente, e com readback do runtime.
+6. Reusar a mesma missão/recibo no CRM/Cockpit/Kaizen. O segundo PC entra apenas após pareamento, consentimento do usuário e credencial específica; primeiro ensaio em SEGREDO, somente leitura.
+
+**Estado:** `HANDOFF_DOCUMENTED=PASS`; `HERMES_HOSTINGER_ACCEPTED=UNKNOWN`; `PR_TESTS_RUN=UNKNOWN`; `PRODUCTION_DEPLOY=BLOCKED_BY_RUNTIME_GATES`; `CASA_MCP_E2E=UNKNOWN`. Não marcar verde por commit, URL 200 ou ACK isolado.
+
+<!-- /HOSTINGER_HANDOFF_20261120 -->
+
+### 🎯 Critérios para tirar do ALERTA
+- [ ] 1. Owner e único writer por função comprovados, sem processos duplicados.
+- [ ] 2. OpenBot delega missão identificada ao Hermes e recebe ACK com ID único.
+- [ ] 3. Hermes executa ferramenta real usando o MCP existente, sem caminho paralelo.
+- [ ] 4. Hostinger/CRM/Bridge completam autenticação e transporte na mesma tarefa, com origem OAuth pública coerente e vínculo ao dispositivo.
+- [ ] 5. Usuário e dispositivo explicitamente pareados; consentimento visível, escopos mínimos, revogação e expiração testados; nenhum token compartilhado entre clientes.
+- [ ] 6. Agente Remoto no PC de teste chama **somente leitura** (`list_processes`) e devolve resultado real ao CRM; Halo/Bridge/MCP sem motor concorrente.
+- [ ] 7. Cockpit mostra estados reais do mesmo ID de missão, inclusive falha/pendência, sem assumir o papel de executor.
+- [ ] 8. Hermes retorna recibo verificável (host, sessão, ferramenta, timestamp, resultado sanitizado) e Kaizen registra o aprendizado no owner existente.
+- [ ] Contraprova final: PC SEGREDO (CRM) → PC de teste (agente instalado e autorizado) → recibo no CRM e Cockpit, com prova de revogação.
+
+**Travas:** modo somente leitura no primeiro ensaio; não fazer acesso oculto, alteração de arquivos, deploy, merge, reset, migração destrutiva nem cópia de DPAPI; respeitar aprovação do dono do dispositivo e gates do repo. `DOCUMENTADO != EXECUTADO`; `UNKNOWN != PASS`. PR em Draft até cumprir os critérios ou revisão do CHEFE.
+
+**Próximo passo (NEXT_CURSOR):** alinhar owner e loading seguro do token Casa no runtime que efetivamente consome a variável; reconferir OAuth público do CRM; ligar o motor MCP no Halo existente, sem nova instância; testar o primeiro `initialize → tools/list → tools/call` de leitura entre PCs com autorização; ligar o recibo ao Cockpit e ao Kaizen.
+
+<!-- /CENTRALDARK_OS_E2E_ALERTA_20261120 -->
+
 ---
 
 ## 🟡 #1 — Migração centralldark.com + telepainel.centralldark.com ✅ concluído
