@@ -78,7 +78,7 @@ docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json
 
 
 
-## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+## 🔥🪬 Estado atual herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
 
@@ -129,7 +129,7 @@ CHEFE_FALA
 ```
 
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=VALID_IF_NO_WRITE_OR_EXPLICIT_RASTRO

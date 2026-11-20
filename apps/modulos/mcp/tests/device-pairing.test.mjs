@@ -1,9 +1,64 @@
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { homedir, tmpdir } from "node:os";
+import { isAbsolute, join } from "node:path";
 import test from "node:test";
 import { createDevicePairingStore } from "../src/device-pairing.js";
+
+test("registro padrao descobre pasta do usuario sem depender de VPS ou cwd", () => {
+  const store = createDevicePairingStore();
+  assert.equal(store.registryPath, join(homedir(), ".centraldark", "mcp-device-registry.json"));
+  assert.equal(isAbsolute(store.registryPath), true);
+});
+
+test("registro dinamico confirma e recebe heartbeat na pasta do usuario, sem EISDIR", () => {
+  const home = mkdtempSync(join(tmpdir(), "centraldark-pair-home-"));
+  try {
+    const moduleUrl = new URL("../src/device-pairing.js", import.meta.url).href;
+    const script = `
+      import { createDevicePairingStore } from ${JSON.stringify(moduleUrl)};
+      const store = createDevicePairingStore();
+      const pair = store.start({ deviceName: "test-device" });
+      if (!store.approve({ pairId: pair.pairId, code: pair.code }).ok) throw Error("approve_failed");
+      const auth = store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
+      if (auth.status !== "approved" || !store.heartbeat({ token: auth.token }).ok) throw Error("heartbeat_failed");
+    `;
+    const run = spawnSync(process.execPath, ["--input-type=module", "-e", script], {
+      cwd: home,
+      env: { ...process.env, HOME: home, USERPROFILE: home, CENTRALDARK_DEVICE_REGISTRY_PATH: "" },
+      encoding: "utf8",
+      timeout: 45000,
+    });
+    assert.equal(run.status, 0, run.stderr);
+    const dataDir = join(home, ".centraldark");
+    const dataFile = join(dataDir, "mcp-device-registry.json");
+    assert.equal(existsSync(dataFile), true);
+    if (process.platform !== "win32") {
+      assert.equal(statSync(dataDir).mode & 0o777, 0o700);
+      assert.equal(statSync(dataFile).mode & 0o777, 0o600);
+    }
+  } finally { rmSync(home, { recursive: true, force: true }); }
+});
+
+test("registro rejeita caminho relativo sem depender da pasta de execucao", () => {
+  assert.throws(() => createDevicePairingStore({ registryPath: "registry.json" }), /DEVICE_REGISTRY_PATH_NOT_ABSOLUTE/);
+});
+
+test("registro rejeita pasta como arquivo e preserva conteudo existente", () => {
+  const dir = mkdtempSync(join(tmpdir(), "centraldark-pair-invalid-"));
+  try {
+    const store = createDevicePairingStore({ registryPath: dir });
+    const pair = store.start({ deviceName: "test" });
+    assert.throws(() => store.approve({ pairId: pair.pairId, code: pair.code }), /DEVICE_REGISTRY_PATH_NOT_FILE/);
+    const invalid = join(dir, "registry.json");
+    writeFileSync(invalid, "{invalido", { mode: 0o600 });
+    const broken = createDevicePairingStore({ registryPath: invalid });
+    const item = broken.start({ deviceName: "test" });
+    assert.throws(() => broken.approve({ pairId: item.pairId, code: item.code }), /DEVICE_REGISTRY_INVALID_JSON/);
+    assert.equal(readFileSync(invalid, "utf8"), "{invalido");
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
 
 function fixture() {
   const dir = mkdtempSync(join(tmpdir(), "centraldark-pair-"));
@@ -145,4 +200,41 @@ test("pairing expira sem falso verde", () => {
     assert.equal(f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret }).status, "expired");
     assert.equal(f.store.approve({ pairId: pair.pairId, code: pair.code }).ok, false);
   } finally { f.cleanup(); }
+});
+
+test("owner Supabase vincula dispositivo e permite revogacao propria sem chave admin", async () => {
+  const f = fixture();
+  let server;
+  try {
+    const pair = f.store.start({ deviceName: "client-win", executor: "remote-bridge" });
+    const consent = f.store.pendingConsent(pair.pairId);
+    const owner = "fb671c7f-4a18-4d89-b103-3a53979a5d9b";
+    assert.equal(f.store.approveWeb({ pairId: pair.pairId, code: pair.code,
+      nonce: consent.nonce, ownerUserId: owner }).ok, true);
+    const auth = f.store.status({ pairId: pair.pairId, pairSecret: pair.pairSecret });
+    assert.equal(f.store.listDevices()[0].owner_user_id, owner);
+    assert.equal(f.store.refresh({ refreshToken: "invalid" }).ok, false);
+    const refresh = f.store.refresh({ refreshToken: auth.refresh_token });
+    assert.equal(refresh.ok, true);
+    assert.equal(f.store.heartbeat({ token: auth.token }).ok, false);
+    assert.equal(f.store.heartbeat({ token: refresh.token }).ok, true);
+    const { default: express } = await import("express");
+    const { createDevicePairingRouter } = await import("../src/device-pairing.js");
+    const app = express(); app.use(express.json());
+    app.use("/device", createDevicePairingRouter({ store: f.store }));
+    server = app.listen(0, "127.0.0.1");
+    await new Promise(resolve => server.once("listening", resolve));
+    const base = "http://127.0.0.1:" + server.address().port;
+    const revoke = async token => fetch(base + "/device/devices/self/revoke", {
+      method: "POST", headers: {"Content-Type": "application/json", Authorization: "Bearer " + token},
+      body: JSON.stringify({ device_id: auth.device_id }),
+    });
+    assert.equal((await revoke("incorrect")).status, 401);
+    assert.equal((await revoke(refresh.token)).status, 200);
+    assert.equal(f.store.heartbeat({token: refresh.token}).ok, false);
+    assert.equal(f.store.listDevices().length, 0);
+  } finally {
+    if (server) await new Promise(resolve => server.close(resolve));
+    f.cleanup();
+  }
 });

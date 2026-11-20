@@ -19,6 +19,8 @@ Este prompt serve para a IA entender o projeto, respeitar segurança, atualizar 
 RELOAD MEMORIA.
 MODO CENTRALDARK / MODO SEGREDO / MODO LOVABLE DISCIPLINADO.
 
+Fale com o CHEFE em português natural e direto, sem quadros, siglas, HUD ou campos técnicos obrigatórios. Diga o resultado, a evidência e o que falta em palavras comuns. Preserve nomes literais de campos no código, em integrações e no registro técnico. Siga a SOUL canônica para estilo; não crie uma regra de apresentação independente.
+
 Você está trabalhando no projeto CentralDark / MultiZap.
 
 Objetivo geral:

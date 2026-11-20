@@ -4,11 +4,16 @@ PORTA_CANONICA_IA=LEIA-ME-IA.md
 NETWORK_PORT_IS_NOT_AI_ENTRYPOINT=true
 ON_!CALIBRAR_OR_#ACORDAR=READ_LEIA-ME-IA.md_FIRST
 -->
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Para o leitor: a Gramática SOL e o mapa dos emojis dão títulos compreensíveis, como 👉 O QUE FAZER AGORA. Logs e APIs mantêm NEXT_CURSOR literal; publicação não comprova consumo do runtime. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 
 
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências internas — sem cabeçalho obrigatório na conversa
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -23,8 +28,7 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Mostrar os campos internos no HUD apenas quando solicitado; em conversa comum, explicar em linguagem natural.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 
@@ -57,19 +61,19 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 - **Quatro janelas/monitores**: inventário físico por Skill Mãe; WinDisc/desktop virtual => UNKNOWN. Teste opcional Identificar usa função nativa do Windows somente em sessão física e via executor autorizado.
 - Mudou: anotar por quê, por quê não outra forma, owner, contrato, timestamp UTC, estado real, última compilação/prova e NEXT_CURSOR. Publicar por owner da Forja existente; **COMMIT != DEPLOYED**.
 
-**Última alteração neste índice:** 2026-10-26T10:05:23Z. O SHA desta atualização deve ser associado ao recibo do commit, não pré-inventado no texto.
+**Regra de atualização deste índice:** registrar o SHA real do commit/receipt; o estado de outubro é histórico e não descreve automaticamente os runtimes atuais.
 <!-- /CENTRALDARK_LIVE_CONNECTION_CIRCUIT_20261026 -->
 
 # 🪬 CentralDark — Instinto Superior
 
-**Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, AionUi, Rakazo, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
+**Uma CentralDark, um comando, vários módulos.** O **Instinto Superior** é a porta administrativa; o **Portal de Módulos** é a vitrine e entrada dos produtos; o **TelePainel** é um módulo dentro desse Portal. Hermes, CentralDarkBot, MCP, Omni Router, Hub de Contas e provedores têm owners internos e **não devem disputar o Admin**.
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
 
 
 ## Navegação operacional — Casa, Forja 1, GitHub e VPS
 
-> **Mapa físico dos diretórios do `K:\` (25/10/2026).** Presença de arquivo ≠ execução, skill carregada ou sincronização comprovada. Preservar contratos e histórico nas seções seguintes.
+> **Raiz descoberta em cada runtime, não por letra de disco.** Identificar a localização real do checkout, validar `git rev-parse --show-toplevel`, o remote Git, o HEAD e o owner consumidor. Histórico físico anterior pertence aos receipts datados; não define o caminho CURRENT da Casa, Hostinger, VM ou VPS. Presença de arquivo ≠ execução, skill carregada ou sync comprovado.
 
 ### Por onde uma IA deve começar
 
@@ -84,37 +88,36 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 
 **ONE_SYSTEM_ONLY · REUSE_BEFORE_CREATE · ONE_WRITER_PER_SCOPE.** Não duplicar Hermes, MCP, gateway, cockpit, skill-mãe, catálogo ou sincronizador.
 
-### Estrutura atual: pastas principais da Casa
+### Estrutura versionada (relativa à raiz Git do checkout verificado)
 
 ```text
-K:\                                      # Raiz CentralDark / Casa
-├── README.md                             # Índice humano e para IAs
-├── LEIA-ME-IA.md                         # Porta de boot canônica
-├── AGENTS.md                             # Contrato do workspace
-├── .agents\skills\
-│   ├── centraldark-operational-method\   # Método e referências
-│   ├── kimetsu-brainstorm\               # Técnicas e gates
-│   ├── skill-synchronization\            # Sync de skills
-│   └── autonomous-ai-agents\hermes-agent\ # Contrato Hermes
-├── apps\
-│   ├── instinto-superior\                # Admin/Cockpit
-│   └── modulos\
-│       ├── HERMES-CORE\                  # Núcleo tipado executor
-│       └── mcp\                          # Barramento MCP
-├── docs\
-│   ├── ARQUITETURA\                      # Contratos
-│   ├── BRAIN\                            # Memória canônica versionável
-│   ├── CONSCIENCIA\                      # Aprendizados, lembranças e provas
-│   └── HUD\                              # Visualização e observabilidade
-├── scripts\
-│   ├── casa\                             # Casa, Obsidian e sync
-│   └── vps\                              # VPS, sync e deploy
-├── WSL\openKylin\                        # Forja 1 / WSL2, disco K:
-├── .obsidian\                            # Configuração local Obsidian
-├── infra\                                # Infraestrutura
-├── tests\                                # Testes
-└── skills\                               # Skills portáteis
+<ROOT_GIT_VALIDADO>/
+├── README.md                             # Índice humano
+├── LEIA-ME-IA.md                         # Porta técnica de entrada
+├── AGENTS.md                             # Contrato dos agentes
+├── .agents/skills/
+│   ├── centraldark-operational-method/   # Skill Mãe
+│   ├── kimetsu-brainstorm/
+│   ├── skill-synchronization/
+│   └── autonomous-ai-agents/hermes-agent/
+├── apps/
+│   ├── instinto-superior/                # Cockpit
+│   └── modulos/
+│       ├── HERMES-CORE/
+│       └── mcp/
+├── docs/
+│   ├── ARQUITETURA/
+│   ├── BRAIN/
+│   ├── CONSCIENCIA/
+│   └── HUD/
+├── scripts/
+│   ├── casa/
+│   └── vps/
+├── infra/
+└── tests/
 ```
+
+**Não é mapa de unidades físicas.** Para localizar Obsidian, WSL, backups, perfis e instalações, consultar o owner pertinente no ambiente de destino e obter readback. Não assumir que o diretório do checkout contém todos os dados locais.
 
 Índice **selecionado e verificado**; outras pastas, backups, caches, dados privados e segredos existem, mas não são automaticamente publicáveis ou sincronizáveis.
 
@@ -123,12 +126,12 @@ K:\                                      # Raiz CentralDark / Casa
 ```text
 CHEFE / Windows — autoridade e aceite
          ↕
-openKylin / FORJA 1 — WSL2 no K: ↔ Obsidian / BRAIN
+openKylin / FORJA 1 — raiz medida no próprio ambiente ↔ Obsidian / BRAIN
          │ HERMES-CORE + scripts tipados + MCP
          │ POMBO/checksum, testes, receipts, contraprova
          ▼ somente o delta aprovado
 Git/GitHub main — CRISTAL (código, documentos, aprendizados)
-         ↕ sincronização bidirecional reconciliada
+         ↕ sync por owner, validado em cada sentido
 openKylin / VPS — mesmas receitas, readback no destino
 ```
 
@@ -147,7 +150,7 @@ openKylin / VPS — mesmas receitas, readback no destino
 
 ### Pacote de skills e referência em português
 
-- **Nosso pacote:** [`K:\.agents\skills\centraldark-operational-method\`](.agents/skills/centraldark-operational-method/), junto com Kimetsu e o owner de sincronização.
+- **Nosso pacote:** [Skill Mãe](.agents/skills/centraldark-operational-method/), localizada por caminho relativo à raiz Git validada, junto com Kimetsu e o owner de sincronização.
 - **Complemento externo:** [Hermes Brasil](https://github.com/Hermes-brasil/hermes-brasil) contém `skills/`, `guides/`, README e CONTRIBUTING em português. É fonte de estudo; não substitui o Hermes ou o método da CentralDark.
 - **Ciclo de qualquer agente:** boot → intenção → descoberta do owner → estado vivo → menor delta → testes → recibo/contraprova → aceite quando promover → readback Casa/GitHub/VPS.
 
@@ -161,8 +164,7 @@ openKylin / VPS — mesmas receitas, readback no destino
      ▼
 🪬 INSTINTO SUPERIOR — Admin CentralDark
      ├── 🤖 Hermes: executor original / Loop Mestre / NEXT_CURSOR
-     ├── 🧠 AionUi: cockpit de agentes e modelos
-     │     └── 🤖 Rakazo: configuração de bots
+     ├── 🧠 CentralDarkBot: interface de agentes e modelos (fork OpenBot; integração pendente)
      ├── 🔐 Contas / Conexões: Hub e OAuth Broker existentes
      ├── 🔌 MCP CentralDark / Omni Router / APIs
      └── 🧿 HUD / Auditoria / Reality Judge
@@ -184,7 +186,7 @@ openKylin / VPS — mesmas receitas, readback no destino
 | Admin `/health`, `/mcp`, `/tools.json`, `/admin/mcp*` | Compatibilidade MCP existente → `127.0.0.1:9100` pelo Caddy | `/health` retornou **200**; não significa que todas as tools foram testadas. |
 | [centralldark.com](https://centralldark.com/) | **Portal de Módulos** — `src/paginas/portal-publico/pages/LandingCentralDark.tsx`, `Portal.tsx` | **REPUBLICAÇÃO PENDENTE**: o domínio respondeu HTTP 200, mas ainda encaminhava à interface legada do AionUi; HTTP 200 não prova o Portal publicado. |
 | `/portal`, `/telepainel/dashboard` | Catálogo de produtos e **TelePainel como módulo**, `src/app/rotas/rotas-telepainel.tsx`, `src/funcionalidades/telepainel/` | Código na `main`; publicação autenticada no domínio do Portal **ainda não medida**. |
-| AionUi / Rakazo | Ferramentas internas do Instinto, serviços históricos `25808` / `25810` | Serviços preservados; **botões e integração não equivalem a login ponta a ponta comprovado**. |
+| [CentralDarkBot](https://github.com/ServerVpss/CentralDarkBot) | Fork do OpenBot; interface de agentes via ACP, com Hermes como executor previsto | **FORK CONFIRMADO; WEB PRÓPRIA E INSTALAÇÃO AINDA NÃO PROVADAS**. Web oficial: `openbot.run/app`, com conta/host do OpenBot. Serviços históricos permanecem fora deste delta de UI. |
 | Hub / OAuth / contas | `apps/modulos/hub/`, `apps/modulos/oauth-broker/`, `apps/instinto-superior/src/components/central/ConexoesCentralDark.tsx` | UI e backend com owners existentes; acesso individual a contas e provedores **não presumido**. |
 | Omni Router / Zendrive | `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`, launcher existente | **8099 OFFLINE** na última medição; recuperar o owner real PM2/systemd antes de tentar iniciar outro. |
 
@@ -210,23 +212,17 @@ openKylin / VPS — mesmas receitas, readback no destino
 **Owners:** `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml`, `MASTER-CYCLE.yml`, `AUREOLA-BAHIA-BIBLICA.yml`, `HERMES-AUTOCONFIG-RUNTIME.yml`, `apps/modulos/HERMES-CORE/`. A Auréola mostra a rota e os versos como orientação humana, **não substitui logs, HEAD, gates nem runtime medido**. O Hermes é o executor existente; `NEXT_CURSOR` preserva continuidade, sem inventar outro executor.
 
 
-### 🧿 Casa e missões do HUD — atualização de evidências (11/10/2026)
+### 🧿 Casa e missões do HUD — evidência histórica versus estado atual
 
-> **Rota CURRENT aferida na Casa (11/10/2026, 22:17 BRT):** o vault está em `K:\` no SSD, com `K:\.obsidian` presente e `K:\HUD.html` lido diretamente (309.368 bytes; SHA-256 `960F6F23EB07F386E3CABD02DBB696F71777E90A0E087D5157AA1AA802979A5E`). O leitor do **CORPO ÚNICO** em `K:\scripts\CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` foi corrigido para esse caminho e a GUI confirmou `[HUD] PASS` + `[PROVA / ARQUIVO] PASS` no log local. **Isso comprova a rota e o monitor da Casa, não o término integral da migração `F:` → `K:`, o sync do GitHub/Obsidian, nem deploy na VPS.** Endereços antigos `C:\Users\Administrador\Documents\Obsidian Vault`, `F:` e `E:` são legados, não a rota de leitura do HUD. `C:` pessoal preservado.
-> **Contraprova técnica:** backup do BAT anterior em `K:\scripts\_backups\CENTRALDARK-CORPO-UNICO-HUD-LOGS.before-k-hud-route-20261012.bat`; leitura física do arquivo, parser PowerShell e reinício de uma única janela PASS; log 11/10 22:17:44 BRT. Código local ainda **não** equivale a checkout `main` sincronizado. Este registro na `main` documenta a correção, não transfere o BAT nem sobrescreve o HUD dourado `docs/HUD/HUD.html`.
+Os caminhos físicos e hashes medidos em outubro de 2026 pertencem ao histórico, **não são bindings válidos por padrão**. Para preservar a proveniência, consultar o [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md), o [contrato Obsidian/Casa](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md) e os receipts específicos da missão. **Este README não fixa letras de unidade ou raízes absolutas da Casa.**
 
-A seção **Missões — clica, copia, cola** do único owner [docs/HUD/HUD.html](docs/HUD/HUD.html) foi reconciliada com o README e a leitura física da Casa. **As sete missões continuam abertas por suas cláusulas finais**, mas fatos já comprovados não devem reaparecer como decisões em branco.
+- **Casa, HUD e launchers:** localizar o owner ativo e sua raiz efetiva no runtime; conferir arquivo, hash, processo consumidor e funcionamento. Usar [HUD canônico](docs/HUD/HUD.html) como referência versionada, sem inferir que a cópia física está sincronizada.
+- **Obsidian e memória:** o owner prevê cofre privado e espelho em `docs/BRAIN/`, reconciliados por hashes e preservação de conflitos. Não presumir migração física concluída.
+- **Perfis e backups:** preservar locais e segredos; nenhuma movimentação automática é autorizada pela leitura deste índice.
+- **Admin e produtos:** verificar disponibilidade, autenticação e deploy no próprio destino, sem confundir código publicado, HTTP 200 e funcionalidade pronta.
+- **VPS:** medir a árvore Git, alterações pendentes e o runtime efetivo antes de sincronizar ou promover qualquer deploy.
 
-- **Casa, scripts e HUD físico:** `K:\scripts\` é a pasta corrente do launcher `CENTRALDARK-ABRIR-TUDO.bat` e do monitor `CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat`; a GUI única agora resolve `K:\HUD.html` e loga esse caminho. O antigo `F:\scripts` e `Downloads\CRISTAL LOGICA\scripts` não devem ser usados como rota corrente. O receipt Corpo Único T3 permanece **histórico**: [receipt Corpo Único — T3](docs/CONSCIENCIA/RECEIPTS/2026-10-08-corpo-unico-hud-casa-main-reconciliation.md).
-- **Casa, perfis e garimpo:** `F:\UnifiedRuntime` preserva perfis Segredo/Fulano, com `Fulanoo` físico observado; nenhum perfil foi migrado automaticamente. `K:\_MAPA_CASA\GARIMPO-CHEFE` não foi encontrado no caminho testado. `F:\_MAPA_CASA` existe, com `chefe-gabinete`, mas a coleção Garimpo precisa de localização própria; não inferir realocação só pelo nome do disco.
-- **Obsidian:** a decisão já está no owner [HERMES-CASA-OBSIDIAN-SYNC.md](docs/ARQUITETURA/HERMES-CASA-OBSIDIAN-SYNC.md): cofre privado separado + espelho canônico `docs/BRAIN` por hashes e preservação de conflitos. Implementação no caminho físico/current e sincronização E2E continuam provas independentes.
-- **Admin versus produtos:** os endereços e responsabilidades já constam deste README; a missão restante não é redescobrir cockpit, mas **comprovar login/autorização Lovable**. Identidade visual e escolha futura de `centraldark.exe` não são requisito automático para o Admin web funcionar; TelePainel/CRM/Multizap/bot exigem comparação funcional por owner.
-
-**Não promover deploy por esta atualização:** o HUD `/root/CentralDark/docs/HUD/HUD.html` da VPS estava **modificado** (`git hash-object=274ce5bdb9a3c84a4559b1fb8facf4877384e3ea`), checkout `5344bd87074c` com 42 entradas dirty/untracked; o HUD anterior da `main` era blob `196a0bab3e6af2add003864aa49071e5931f6ea5`. O `HUD.html` físico do cofre do Windows tinha SHA-256 `960f6f23eb07f386e3cabd02dbb696f71777e90a0e087d5157aa1aa802979a5e`. **São três superfícies a reconciliar por diff e writer único**, sem reset, overwrite ou alegar mirror já concluído.
-
-`MISION_SOURCE_UPDATED=MAIN_ONLY`; `VPS_HUD_DEPLOY=UNKNOWN`; `CASA_OBSIDIAN_HUD_SYNC=UNKNOWN`; `MISSIONS_GLOBAL_DONE=FALSE`.
-
-**Próximas comprovações:** `AUTHENTICATED_SALA_CONTROLE_SMOKE`; `RESTORE_EXISTING_PORTAL_AND_TELEPAINEL_DEPLOY`; `RECOVER_EXISTING_OMNI_PM2_OWNER`. `UNKNOWN != PASS`; falha local não é falha de toda a CentralDark.
+`SOURCE_UPDATED != RUNTIME_SYNCED` · `DEPLOYED != VERIFIED` · `UNKNOWN != PASS`. Os detalhes datados permanecem nos receipts e owners próprios, sem reescrever seus registros históricos.
 
 ## 🧪 Workflows e badges — sinais, não provas globais
 
@@ -385,7 +381,7 @@ Proibido: `text-white`, `bg-black`, `bg-[#...]`, gradientes roxo/índigo genéri
 - **Portal de Módulos (destino):** https://centralldark.com — publicação ainda pendente na função de Portal.
 - **Painel de status:** https://status.centralldark.com — consultar saúde separadamente.
 - **GitHub canônico:** `ServerVpss/CentralDark@main`.
-- **Checkout VPS:** `/root/CentralDark/` — conferir HEAD, árvore suja, workflows e runtime. **Não pressupor sync automático.**
+- **Checkout VPS:** descobrir a raiz Git no runtime autorizado; conferir remote, HEAD, árvore suja, workflows e processo consumidor. **Não pressupor sync automático.**
 
 ## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
 

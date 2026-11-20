@@ -19,7 +19,6 @@ const REQUIRED_OWNER_FILES = [
 const WEB_SURFACES = [
   { root: 'src/', bootstrap: 'src/main.tsx' },
   { root: 'apps/modulos/hub/src/', bootstrap: 'apps/modulos/hub/src/main.tsx' },
-  { root: 'apps/modulos/mcp-admin-ui/src/', bootstrap: 'apps/modulos/mcp-admin-ui/src/main.tsx' },
   { root: 'apps/modulos/obsidian-plugin-grafo-vivo/src/', bootstrap: 'apps/modulos/obsidian-plugin-grafo-vivo/src/main.ts' },
   { root: 'apps/modulos/Bolt/source/app/', bootstrap: 'apps/modulos/Bolt/source/app/entry.client.tsx' },
 ];

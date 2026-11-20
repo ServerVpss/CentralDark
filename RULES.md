@@ -13,6 +13,13 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Toda superfície e agente que ler estas RULES herda a Gramática SOL e os 12 símbolos do padrão de emojis; títulos humanos populares, dados de máquina intactos, sem 👍 sem prova. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
+**Apresentação universal ao CHEFE (12/11/2026):** toda superfície e agente herda a regra de fala humana da SOUL. Responder diretamente em português natural, sem siglas, quadros, percentuais, cerimônias ou rótulos internos obrigatórios. Exibir detalhes técnicos quando solicitados ou necessários para entender a prova. Esta é uma regra de apresentação, não muda comandos, nomes de campos, segurança, registros, aprovações ou validação.
+
 <!-- CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
 ## 🧹 Lei oficial: baixar só o necessário, testar o que alterou, limpar após recibo
 
@@ -31,10 +38,42 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 **FAXINA SEGURA PÓS-RECIBO:** o agente/executor que criou arquivos temporários, worktrees ou scripts auxiliares fica responsável por removê-los **somente depois** de validar o resultado e registrar recibo/rastro recuperável. Antes de limpar: provar que o temporário foi criado pela operação, está dentro de caminho isolado autorizado, não contém alterações exclusivas sem salvamento e não está em uso; conferir leitura de volta do commit/artefato preservado. Nunca apagar backups, worktrees preexistentes, arquivos do usuário, logs/receipts necessários ou conteúdo desconhecido. Reutilizar `scripts/lupa/worktree-teardown-gate.mjs` onde aplicável; não executar `git clean -fdx`, `reset --hard` ou remoção ampla como "faxina". Se a prova faltar, **preservar e informar PENDING_CLEANUP**, sem falso verde.
 
+**RASTRO NO PR ANTES DE DESCARTAR (17/11/2026, decisão expressa do CHEFE):** cada executor que cria temporários, cópias isoladas ou worktrees deve **registrar no PR equivalente da missão** (ou criar um PR de rastro no owner documental existente somente se não houver PR correspondente) um recibo recuperável **antes da exclusão**. A prova mínima inclui `MISSION_ID`, intenção, owner, caminho exato do temporário, classificação, resultado dos testes, URLs de PR/commit/release, SHA/readback do que foi efetivamente promovido, pendências, autorização para descarte e próximo passo. Quando não houver código novo e já existir PR da missão, **comentário nele é suficiente: não criar PR duplicado**. Só depois descartar os resíduos próprios, não ativos, e registrar o readback de ausência **no mesmo PR**. Se o CHEFE optar expressamente por descartar modificações que não foram promovidas, registrar `UNPROMOTED_DISCARD_AUTHORIZED` sem obrigá-lo a conservar cópias. **Rastro de PR preserva decisões, provas e links, não o conteúdo de arquivos nunca commitados**; jamais anunciar que código não publicado foi salvo só porque o rastro existe. Não confundir exclusão pelo CHEFE de legado explicitamente descartado com autorização autônoma para apagar arquivos de outra missão, dados persistentes ou caminhos desconhecidos. `TRACE_BEFORE_DELETE` e `DELETE_READBACK` são provas separadas; se faltarem, não declarar limpeza concluída.
+
+**DESTINO CANÔNICO DE TEMPORÁRIOS — CASA WINDOWS SEGREDO (17/11/2026):** antes de compilar, criar clone isolado, baixar dependências, extrair pacotes ou produzir caches/logs transitórios na Casa, resolver e registrar o destino físico. O binding existente, já documentado em `docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/GARIMPO-CHEFE.md`, é **`F:\TEMP`** para scratch de build, testes, downloads e cache. Criar subpasta de missão isolada apenas *dentro desse diretório existente*, preferindo reutilização e o criador já canônico `scripts/centraldark/ephemeral-workspace.mjs` (marcador `.centraldark-ephemeral.json`). **`F:\_worktrees` é um setor diferente, usado somente para worktrees Git identificados e autorizados.** Diretórios preexistentes `F:\_temp` e `F:\tmp` não viram novos padrões por sua existência: inventariar, classificar e atribuir owner antes de migrar ou excluir.
+
+**TRAVA DE DESTINO:** `$env:TEMP`, `$env:TMP`, `os.tmpdir()`, `%LOCALAPPDATA%\Temp` e o diretório corrente **não determinam sozinhos o destino** de arquivos intencionais da CentralDark. Em cada missão Windows na Casa, resolver explicitamente a raiz; ajustar `TEMP`, `TMP` e caches das ferramentas *no escopo dos processos filhos*, quando aplicável; medir espaço, symlink/junction, locks e resíduos do owner. Se `F:\TEMP` não estiver disponível, **BLOQUEAR** e informar: não usar silenciosamente `C:` ou criar uma nova pasta na raiz de `F:`. O cache ou a instalação *obrigatória* gerida pelo próprio Windows/VS Code é outro escopo: não mover/apagar esses diretórios por inferência. Linux e VPS seguem seus próprios caminhos físicos medidos, sem aplicar caminho Windows.
+
+**LOCAL CORRETO ≠ LIMPEZA CORRETA:** nunca usar “apaguei ao terminar” como justificativa para ter criado no lugar errado. Primeiro verificar o local com `scripts/centraldark/ephemeral-workspace.mjs check-root --root F:\TEMP --purpose build`, depois criar; ao fim, seguir a limpeza segura já existente com marker, recibo e readback. Não limpar automaticamente diretórios anteriores ou a raiz `F:`. **Falha causal de 17/11/2026:** foi usado implicitamente `C:\Users\...\AppData\Local\Temp` para build isolado, apesar do destino `F:\TEMP` já medido. Corrigir a *seleção do destino* antes da próxima operação, não apenas a limpeza.
+
 **REGRA GLOBAL DE CICLO DO WORKTREE:** todo worktree criado pelo executor nesta operação é temporário por padrão e deve ser removido na mesma operação após `RECEIPT + READBACK` do resultado publicado. O executor deve registrar o caminho, o SHA preservado e a confirmação de que o worktree está limpo antes do teardown; então deve executar o teardown seguro, confirmar que o caminho e o registro Git foram removidos e marcar `WORKTREE_CLEANUP=PASS`. Exceções somente para worktree explicitamente pertencente ao CHEFE/outro escritor, prova ainda pendente, alteração local não salva ou bloqueio de remoção; nesses casos, `WORKTREE_CLEANUP=PENDING` com caminho e motivo obrigatório. Worktree temporário não pode permanecer por conveniência, e ausência de teardown não pode ser declarada como limpeza.
 
 **Contrato obrigatório:** `NECESSIDADE → DOWNLOAD_MINIMO → OWNER → MENOR_DELTA → SUITE_PERTINENTE → RESULTADO_REAL → CONTRAPROVA → RECEIPT → LIMPEZA_SEGURA → READBACK → FIXED_POINT | NEXT_CURSOR`. `UNKNOWN != PASS`; `CLEANUP_BEFORE_RECEIPT=FORBIDDEN`; `FULL_CLONE_WITHOUT_NEED=FORBIDDEN`; `TEST_OWNER=CODE_WRITER`.
 <!-- /CENTRALDARK_MINIMUM_FETCH_TEST_CLEANUP -->
+
+<!-- CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+## 👑 Chave do CHEFE: workflow travado não paralisa entrega autorizada (17/11/2026)
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@doc_ref: docs/CONSCIENCIA/APRENDIZADOS.md#104-receita-replay-able--diagnostico-e-fix-deterministico-de-falha-de-workflow-github
+@memory_ref: docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md
+@last_updated: 2026-11-17T20:10:07.007Z
+@prova: https://github.com/ServerVpss/CentralDark/pull/2125#issuecomment-6959176393
+@status: CANONICO_DOCUMENTADO_COM_CONTRAPROVA_DE_SQUASH_NA_MAIN
+@next_cursor: REUSAR_NO_PROXIMO_STARTUP_FAILURE_COM_GATES_REAIS
+-->
+
+**LEI:** `WORKFLOW_TRAVADO != MISSAO_PARALISADA`. Quando GitHub Actions retorna `startup_failure`/não cria jobs, **não esperar indefinidamente e não repetir o mesmo run sem mudança de evidência**. Distinguir falha da plataforma/inicialização de falha de testes do código. Consultar a receita existente em `APRENDIZADOS.md` #104 para diagnosticar o workflow em seu próprio owner; esse diagnóstico pode seguir em paralelo, **não se tornando porteiro de uma entrega já autorizada quando não é gate obrigatório**.
+
+**CHAVE NÃO É BYPASS:** a autorização expressa do SEGREDO/CHEFE define a intenção e pode permitir usar a rota legítima GitHub da missão: SOL coordena → Hermes/capacidades existentes executam testes locais reais → contraprova independente e varredura do diff → verificar owner, PR, HEAD/base, conflitos, reviews, segredos e proteções aplicáveis → promover somente pelo método que GitHub **aceitar sem force nem desativar regras**. Falta de check obrigatório real, conflito material, mudança de escopo, segredo ou teste local reprovado = **BLOQUEADO**, não `PASS`. `STARTUP_FAILURE != CI_GREEN`, `TESTE_LOCAL_PASS != CHECK_OBRIGATORIO_PASS`.
+
+**DUAS TRILHAS, SEM CONFUNDIR:** (A) para edição direta na `main` explicitamente permitida pelo contrato vigente, aplicar `COMMIT/PUSH_MAIN` após testes, sem PR ou squash fictício; (B) quando **já existe PR compatível** e o CHEFE autorizou sua promoção, usar `SQUASH_PR_TO_MAIN` com HEAD esperado e condições do GitHub satisfeitas. Não abrir segundo promotor/workflow/runner, não forçar push e não mudar branch protection para obter verde. Revalidar SHA da `main`, os blobs do owner e registrar recibo no PR existente + memória; `MERGED != DEPLOYED`.
+
+**Contraprova concreta (17/11/2026):** PR #2125 do Agente Remoto teve `startup_failure` nos workflows (sem CI verde); lint/build React, Rust 10/10 e build NSIS debug passaram localmente, com 55/55 blobs de fonte conferidos. Com autorização específica do CHEFE e merge permitido pelo GitHub, o **squash normal** produziu `main@a4440c675d2b4dfabf4b4e1c3b073d5b90b5255a`, confirmado por readback; o motor remoto Rust e a release final continuaram pendentes. Esta prova valida **essa promoção**, não autoriza pular gates de outros PRs.
+
+**Receita curta:** `STARTUP_FAILURE → CLASSIFICAR_O_GATE → REUSAR_TESTE_LOCAL_REAL → CONTRAPROVA → AUTORIZACAO_VIGENTE → DIRECT_MAIN_OU_PR_SQUASH_GITHUB_PERMITIDO → SHA_READBACK → RECEIPT`.
+<!-- /CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
 
 
 ## 🐧 CENTRALDARK LINUX-FIRST — decisão vigente do CHEFE (2026-11-01)
@@ -48,6 +87,26 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **RECEITA:** `OWNER EXISTENTE → IDENTIFICAR REFERÊNCIA OPERACIONAL WINDOWS → MEDIR DESTINO REAL LINUX → MENOR DELTA → TESTE → READBACK → COMMIT/SHA → KAIZEN`. Código-fonte, Hermes e gateway só serão declarados rodando no Linux quando isso for medido no destino.
 
 **NEXT_CURSOR:** `SSH_OPENKYLIN → SOURCE_LINUX → HERMES_CLI → GATEWAY_LINUX → GIT_GH_LINUX → VPS_SOB_DEMANDA`.
+
+
+## 🪬 Nomenclatura obrigatória — VPS DA CASA (decisão 2026-11-09)
+
+<!-- #OBSERVACOES#
+@owner: RULES.md
+@doc_ref: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
+@last_updated: 2026-11-09
+@escopo: distinguir servidor openKylin provisório em VMware de VPS externa
+@estado: DOCUMENTADO_COM_PROVAS_PONTUAIS
+@next_cursor: testar autostart VMware apos reboot e espelhamento seguro para Hostinger
+-->
+
+**VPS da Casa = openKylin/CentralDark-OS rodando na VM VMware da Casa SEGREDO**, hoje o alvo operacional Linux de serviços, MCP e Cockpit. **VPS externa = host remoto independente (Hostinger/VPS anteriormente usado)**, mantido como alvo futuro de promoção/mirror, não excluído nem confundido com a VM local. A identidade do produto CentralDark-OS não é a identidade de nenhuma máquina: dizer que o **produto** não é uma VPS não nega o papel **servidor/VPS da Casa** exercido pela VM.
+
+**Prova de configuração (09/11/2026):** `VmwareAutostartService` passou de `Manual` a `Auto`; `vmAutoStart.xml` existente aponta somente para `E:\\VMs\\CENTRALDARK-OS\\CENTRALDARK-OSh.vmx` em ordem `1`. `vmrun list` manteve a VM ligada e o MCP guest ativo (`enabled`, `active`, `/health` 200). **Boot pós-reinício = PENDENTE, não prometer continuidade ininterrupta.**
+
+**Regras:** não declarar 24/7 quando o PC/VM depende de boot/energia; registrar a localização real antes de executar; não promover configuração/estado para VPS externa automaticamente; preservar dirty state, owners e segredos e exigir comparação SHA + testes + readback no destino. `VM_LOCAL_RUNNING != VPS_EXTERNA_DEPLOYED`. Sem nova arquitetura/segundo writer.
+
+
 
 
 *Regras canônicas para agentes, motores, skills, conectores e superfícies que entram no organismo CentralDark.*
@@ -262,6 +321,14 @@ NO_V1_V2_V3=true
 NO_BLIND_OVERWRITE=true
 GREEN_STATE_MUST_BE_PRESERVED=true
 ```
+
+<!-- CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
+**Regra reforçada do CHEFE — melhorar o que já funciona, sem começar do zero:** antes de criar qualquer solução, procure no owner atual a função, extensão, configuração e receita que já resolvem parte do pedido. Reaproveite o original, aplique só o ajuste necessário, confira a mudança no local em que ela será usada e registre no mesmo owner o que mudou, o que funcionou e o que ainda falta. Se achar erro da mesma origem ao lado, corrija no cone autorizado e reteste; não replique arquitetura, não apague o trabalho de outra frente nem invente tarefa quando o objetivo já estiver atendido.
+
+**Critério para fechar:** `REUSOU_O_EXISTENTE → MELHOROU_O_NECESSÁRIO → FUNCIONOU_NO_ALVO → REGISTROU_NO_OWNER → CONTINUOU_O_FIO`. Código alterado, teste, documento, publicação e uso real são estados diferentes; não chamar um pelo nome do outro. Falha, limite ou dependência não confirmada ficam explícitos. Explicar o resultado ao CHEFE em português natural, sem recitar o ritual.
+
+**Exemplo aprendido:** a tradução PT-BR do `CENTRALDARK HARNES` reutilizou o pacote já instalado do VS Code e o Vite já existente (porta 5199), sem um novo tradutor; o módulo servido passou a entregar `Fechar Workspace` e `Duplicar Espaço de trabalho`. A receita e suas limitações estão na [skill existente de construção do Desktop](.agents/skills/centraldark-operational-method/Skills/centraldark-builder-destop/SKILL.md). Isso não declara todas as extensões web equivalentes às nativas nem publicação automática da fonte local na `main`.
+<!-- /CENTRALDARK_KAIZEN_REUSE_EVOLVE_TEST_REGISTER_20261109 -->
 
 ### 4. Vínculo CHEFE ↔ agente
 
@@ -717,9 +784,9 @@ Não autoriza generalizar que toda capability futura está provada.
 
 ## Como reportar problema
 
-Quando detectar problema, não traga drama: traga discriminante.
+Quando detectar problema, não traga drama: traga discriminante. Ao CHEFE, explicar em frases naturais a causa, o impacto, a prova e o próximo passo pertinente, sem etiquetas obrigatórias.
 
-Formato mínimo:
+Modelo de registro técnico mínimo (não é formulário obrigatório no chat):
 
 ```text
 ALVO=

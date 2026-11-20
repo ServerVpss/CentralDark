@@ -7,6 +7,23 @@ authority: "SEGREDO/CHEFE"
 operational_rule: false
 source_image_sha256: "c33f206bb2821e228abdc57945665c87ef23fc8bd86adf437d068b702b10ea0b"
 source_image_size: "2048x1252"
+source_class: "INTERNAL"
+tipo: "evidencia_documental"
+data_criacao: "2026-08-17"
+ultima_atualizacao: "UNKNOWN"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "61905573a5d5b9fda5c0dcf3251642fe2ccaf3b0deb676a48009f8984b5f2a07"
+rastro:
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "74ef28c26b9c5307a90ea513c2cc9c6fbecc7953"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a: []
+estado_evidencia: "UNKNOWN"
 ---
 
 # Registro visual — muitos olhos, recibo e uma direção

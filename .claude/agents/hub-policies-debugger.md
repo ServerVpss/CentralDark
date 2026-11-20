@@ -78,9 +78,9 @@ Antes de propor ao usuário:
 - Gerar **diff final** clara mostrando linhas adicionadas/removidas
 - NÃO fazer deploy ou restart de serviços PM2 sem confirmação explícita
 
-## Formato da Resposta Final
+## Resultado do diagnóstico
 
-Após completar o diagnóstico, estruture assim:
+Após o diagnóstico, falar com o CHEFE em português natural: explicar a causa, o que foi corrigido, a prova e o que falta, sem obrigar sete títulos ou blocos de relatório. Quando for solicitado um laudo técnico estruturado, usar o modelo abaixo (mantendo todos os dados de rastreabilidade nos registros internos):
 
 1. **Causa Raiz Encontrada**
    - Descrição técnica clara e concisa

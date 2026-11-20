@@ -79,37 +79,37 @@ test("audit event crosses existing log layer used by admin SSE", () => {
   assert.equal(live.meta.status, "PASS");
 });
 
-test("Tool Call Lens reutiliza SSE admin e exporta so metadados de auditoria", () => {
-  const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
-  assert.match(src, /subscribeAuditEvents\(\(evento\) =>/);
-  assert.match(src, /mcp_tool_call/);
-  assert.match(src, /id="toolLensRows"/);
-  assert.match(src, /function toolLensAlternar\(/);
-  assert.match(src, /function toolLensRever\(/);
-  assert.match(src, /toolLensRegistrar\(d\)/);
-  const begin = src.indexOf("subscribeAuditEvents((evento) =>");
-  const end = src.indexOf("function extrairRota(", begin);
-  const observer = src.slice(begin, end);
+test("Tool Call Lens reutiliza audit logger no MCP e visual do Cockpit", () => {
+  const backend = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  const visual = fs.readFileSync(new URL("../../../instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx", import.meta.url), "utf8");
+  assert.match(backend, /subscribeAuditEvents\(\(evento\) =>/);
+  assert.match(backend, /mcp_tool_call/);
+  const begin = backend.indexOf("subscribeAuditEvents((evento) =>");
+  const end = backend.indexOf("function extrairRota(", begin);
+  const observer = backend.slice(begin, end);
   assert.ok(begin >= 0 && end > begin);
   assert.doesNotMatch(observer, /evento\.(?:input|result|error)/);
-  assert.ok(observer.includes("mcp_host_pid"));
-  assert.ok(observer.includes("durationMs"));
-  assert.ok(observer.includes("correlation_id"));
+  for (const campo of ["mcp_host_pid", "durationMs", "correlation_id", "call_id"]) assert.ok(observer.includes(campo));
+  for (const marker of ["function ToolCallLensMcp()", "q=mcp_tool_call&limit=100", "MCP_AUDIT", "Pausar", "Rever / Atualizar", "PASS", "FAIL"]) assert.ok(visual.includes(marker), marker);
 });
 
-
-test("CORS admin fica restrito a GET de logs/metricas e origem do cockpit", () => {
+test("CORS usa allowlist de origem e preserva autenticacao admin", () => {
   const src = fs.readFileSync(new URL("../src/index.js", import.meta.url), "utf8");
-  assert.ok(src.includes('https://admin.centralldark.com'));
-  assert.ok(src.includes('CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS'));
-  assert.ok(src.includes('req.method === "GET"'));
-  assert.ok(src.includes('path === "/admin/api/logs"'));
-  assert.ok(src.includes('path === "/admin/api/metricas"'));
-  assert.ok(src.includes('cockpitAdminReadOrigins.has(origin)'));
-  assert.ok(src.includes('res.setHeader("Access-Control-Allow-Credentials", "true")'));
-  assert.ok(src.includes('res.vary("Origin")'));
+  const backend = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  for (const marker of [
+    'https://admin.centralldark.com',
+    'CENTRALDARK_COCKPIT_ADMIN_READ_ORIGINS',
+    'cockpitAdminReadOrigins.has(origin)',
+    'path.startsWith("/admin/api/")',
+    'path === "/admin/login"',
+    'path.startsWith("/device/")',
+    'res.setHeader("Access-Control-Allow-Origin", origin)',
+    'res.setHeader("Access-Control-Allow-Credentials", "true")',
+    'res.vary("Origin")',
+  ]) assert.ok(src.includes(marker), marker);
+  assert.match(backend, /export function isAdmin\(req\)/);
+  assert.match(backend, /export function adminBuscarLogs\(req, res\) \{\s*if \(!isAdmin\(req\)\)/);
 });
-
 
 test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => {
   const script = fs.readFileSync(new URL(
@@ -132,22 +132,12 @@ test("Forja Tool Call Lens preserva quatro gates e nao faz merge/deploy", () => 
 });
 
 
-test("Forja 4x chama apenas o intent-cycle do proprio MCP e pede recibos", () => {
-  const src = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
-  assert.match(src, /id="forja4Btn"/);
-  assert.match(src, /function forja4Iniciar\(/);
-  assert.match(src, /function forja4Verificar\(/);
-  assert.match(src, /origin \+ '\/admin\/api\/intent'/);
-  assert.match(src, /mode: 'AUTONOMO'/);
-  assert.match(src, /dispatch: true/);
-  assert.match(src, /NO_MERGE_NO_DEPLOY/);
-  assert.match(src, /forja4x\?\.stages/);
-  assert.ok(src.includes("ANTIRREGRESSAO"));
-  assert.ok(src.includes("INSTALAR"));
-  assert.ok(src.includes("CONECTAR"));
-  assert.ok(src.includes("PROVAR"));
+test("Forja conserva intent-cycle e diagnostico E2E nos owners atuais", () => {
+  const backend = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  const visual = fs.readFileSync(new URL("../../../instinto-superior/src/components/central/McpConsoleCentralDark.tsx", import.meta.url), "utf8");
+  for (const marker of ["export function adminIntentRun", "runIntentCycle(req.body", "SAME_ORIGIN_REQUIRED", "ORIGIN_REQUIRED", "export async function adminE2E"]) assert.ok(backend.includes(marker), marker);
+  for (const marker of ["Executar diagnóstico MCP E2E", "/admin/api/e2e", "/admin/api/intent"]) assert.ok(visual.includes(marker), marker);
 });
-
 
 test("Inventario ZENDRIVE 20261018 nao transforma rota em falso verde", () => {
   const source = fs.readFileSync(new URL("../src/tools/core/mcp-admin.js", import.meta.url), "utf8");
@@ -188,7 +178,7 @@ test("Casa prioriza Tailscale, preserva RDC apenas como fallback", () => {
   const catalog = source.split("const AUTHORIZED_ROUTE_CATALOG = Object.freeze([")[1]?.split("]);")[0] ?? "";
   assert.ok(catalog.indexOf('id: "TAILSCALE_PRIVATE_ROUTE"') < catalog.indexOf('id: "RDC_DESKTOP_COMMANDER"'));
   assert.match(catalog, /priority: "FALLBACK_ONLY"/);
-  assert.match(catalog, /fallbackRequires: "PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE"/);
+  assert.match(catalog, /fallbackRequires: "EXPLICIT_CHEFE_OPT_IN_AND_PRIMARY_ROUTE_FAILED_AND_AUTHORIZED_DEVICE_ONLINE"/);
   assert.match(catalog, /id: "MCP_REMOTE_OAUTH"/);
 });
 
@@ -209,4 +199,19 @@ test("31 ferramentas RDC mapeadas no catalogo sem liberar execucao automatica", 
   const doc = fs.readFileSync(new URL("../../../../docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md", import.meta.url), "utf8");
   assert.ok(doc.includes("31 ferramentas do Desktop Commander: equivalência tipada"));
   for (const name of names) assert.ok(doc.includes("| " + name + " |"), "linha da matriz ausente: " + name);
+});
+
+test("UI admin historica convergiu no Cockpit sem perder controles", () => {
+  const visual = fs.readFileSync(new URL("../../../instinto-superior/src/components/central/McpConsoleCentralDark.tsx", import.meta.url), "utf8");
+  const backend = fs.readFileSync(new URL("../src/admin.js", import.meta.url), "utf8");
+  const oauth = fs.readFileSync(new URL("../src/oauth.js", import.meta.url), "utf8");
+  for (const marker of [
+    "McpAuditoriaFiltrada", "McpFerramentasPorCategoria", "McpConector",
+    "McpEmissaoChave", "McpResumoVivo", "McpOperacionalLegado", "Sair do MCP",
+    'aria-label="CID"', 'aria-label="Rota"', 'aria-label="Nível"', 'aria-label="Texto livre"',
+    "Buscar", "Limpar", "Nova chave · emitir", "/api/mcp", "Hermes ·",
+  ]) assert.ok(visual.includes(marker), marker);
+  assert.match(backend, /linha\.meta\?\.cid \|\| linha\.meta\?\.correlation_id/);
+  assert.match(oauth, /export function handleIssueKey\(req, res\)/);
+  assert.doesNotMatch(visual, /https:\/\/mcp\.centralldark\.com\/mcp["']/);
 });

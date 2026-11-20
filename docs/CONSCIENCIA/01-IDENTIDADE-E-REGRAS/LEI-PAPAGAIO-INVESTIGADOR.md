@@ -99,7 +99,7 @@ e devolve ela do tamanho que ela tem.
 
 🦜 **PAPAGAIO OFF:** mostra somente o caminho relevante à operação, sem repetir explicações ou informações já comprovadas. Entrega o resultado, a prova necessária e o próximo movimento útil.
 
-🦜 **PAPAGAIO FIEL:** mantém o HUD original, com as mesmas dez missões, na mesma ordem e estrutura. **A cada medição, apresenta primeiro o HUD completo e atualizado em tempo real**, alterando somente cores, porcentagens, estados e evidências comprovadas. Nunca apresenta uma medição antiga como atual.
+🦜 **PAPAGAIO FIEL:** mantém o HUD original, com as mesmas dez missões, na mesma ordem e estrutura. **Quando o CHEFE pedir apresentação do HUD, mostra o painel completo com medições atuais comprovadas**, alterando somente cores, porcentagens, estados e evidências comprovadas. Nunca apresenta uma medição antiga como atual.
 
 🌳 **ÁRVORE VIVA:** apresenta toda a arquitetura interligada, apontando diretamente para os arquivos, executáveis, configurações, serviços e responsáveis existentes. Preserva os caminhos e o legado. Atualiza somente o que a realidade comprovou que mudou.
 

@@ -1,5 +1,7 @@
 # Claude Code — adapter fino CentralDark
 
+**Conversa humana:** herdar a voz da SOUL (`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`). Falar em português natural, direto, sem expor raciocínio interno, siglas ou campos de máquina como resposta padrão. Provas continuam precisas; status estruturado só quando solicitado ou necessário para diagnosticar.
+
 ```text
 PROVIDER_ADAPTER=true
 CANONICAL_AGENT_CORE=LEIA-ME-IA.md

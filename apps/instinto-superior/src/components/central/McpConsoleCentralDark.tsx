@@ -13,6 +13,11 @@ const PAINEIS = [
   { id: "rotas", title: "Rotas", publico: false, endpoint: "/admin/api/rotas" },
   { id: "tools", title: "Ferramentas", publico: false, endpoint: "/admin/api/tools" },
   { id: "logs", title: "Logs", publico: false, endpoint: "/admin/api/logs" },
+  { id: "auditoria", title: "Auditoria detalhada", publico: false, endpoint: "/admin/api/logs" },
+  { id: "profunda", title: "Saúde profunda", publico: true, endpoint: "/health/deep" },
+  { id: "conector", title: "Conector", publico: true, endpoint: "/health" },
+  { id: "oauth", title: "Clientes OAuth", publico: true, endpoint: "/.well-known/oauth-authorization-server" },
+  { id: "chaves", title: "Chaves", publico: false, endpoint: "/admin/api/rotas" },
   { id: "metricas", title: "Métricas", publico: false, endpoint: "/admin/api/metricas" },
   { id: "snapshot", title: "Observabilidade", publico: false, endpoint: "/admin/api/operational-snapshot" },
   { id: "grok", title: "Grok", publico: false, endpoint: "/admin/api/grok/control" },
@@ -54,6 +59,182 @@ function JanelaJson({ dados }: { dados: unknown }) {
       {JSON.stringify(dados, null, 2)}
     </pre>
   );
+}
+
+
+/** Audita pelo backend MCP existente. Não captura chamadas externas automaticamente. */
+type LinhaAuditoria = { t?: string; level?: string; rota?: string; cid?: string; msg?: string; meta?: { toolName?: string; call_id?: string; correlation_id?: string; status?: string; durationMs?: number } };
+function McpAuditoriaFiltrada() {
+  const inicial = { rota: "", cid: "", level: "", q: "" };
+  const [filtros, setFiltros] = useState(inicial);
+  const [logs, setLogs] = useState<LinhaAuditoria[]>([]);
+  const [estado, setEstado] = useState("SEM_CONSULTA");
+  const [busy, setBusy] = useState(false);
+  async function consultar(f = filtros) {
+    setBusy(true);
+    const params = new URLSearchParams({ limit: "200" });
+    Object.entries(f).forEach(([key, value]) => { if (value.trim()) params.set(key, value.trim()); });
+    try {
+      const data = await solicitar("/admin/api/logs?" + params.toString());
+      if (!Array.isArray(data["logs"])) throw Error("MCP_LOG_SCHEMA_UNKNOWN");
+      setLogs(data["logs"] as LinhaAuditoria[]);
+      setEstado("LOGS_RETORNADOS=" + data["logs"].length);
+    } catch (error) {
+      setLogs([]); setEstado(error instanceof Error ? error.message : "MCP_LOG_UNAVAILABLE");
+    } finally { setBusy(false); }
+  }
+  useEffect(() => { void consultar(inicial); }, []);
+  return <section className="space-y-3" aria-label="Auditoria de chamadas MCP">
+    <p className="text-xs text-muted-foreground">Filtro por rota, CID, nível e texto · /admin/api/logs. Buffer desde último reinício; Tool Call Lens completo permanece em Observabilidade.</p>
+    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+      <input aria-label="Rota" placeholder="Rota" value={filtros.rota} onChange={e => setFiltros(f => ({...f, rota: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+      <input aria-label="CID" placeholder="CID / correlação" value={filtros.cid} onChange={e => setFiltros(f => ({...f, cid: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+      <select aria-label="Nível" value={filtros.level} onChange={e => setFiltros(f => ({...f, level: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm"><option value="">Todos</option><option value="error">ERROR</option><option value="warn">WARN</option><option value="info">INFO</option><option value="debug">DEBUG</option></select>
+      <input aria-label="Texto livre" placeholder="Buscar texto" value={filtros.q} onChange={e => setFiltros(f => ({...f, q: e.target.value}))} className="rounded border border-border bg-background p-2 text-sm" />
+    </div>
+    <div className="flex gap-2">
+      <Button type="button" size="sm" onClick={() => void consultar()} disabled={busy}>Buscar</Button>
+      <Button type="button" size="sm" variant="outline" onClick={() => { setFiltros(inicial); void consultar(inicial); }} disabled={busy}>Limpar</Button>
+    </div>
+    <p role="status" className="text-xs">{busy ? "CONSULTANDO" : estado}</p>
+    <div role="log" className="max-h-96 overflow-y-auto rounded border border-border p-3 font-mono text-xs">
+      {logs.map((l,i) => <p key={String(l.t ?? i) + String(i)} className="border-b border-border/50 py-1">
+        {l.t ?? "SEM_DATA"} · {l.level ?? "UNKNOWN"} · {l.rota ?? "-"} · CID {l.cid ?? l.meta?.correlation_id ?? "-"} · {l.meta?.toolName ?? ""} {l.meta?.["status"] ?? ""} {l.meta?.durationMs ?? ""}ms · {l.msg ?? ""}
+      </p>)}
+      {!logs.length && !busy ? <p className="text-muted-foreground">Sem resultados nesta leitura.</p> : null}
+    </div>
+  </section>;
+}
+function McpFerramentasPorCategoria({ data }: { data: Resultado | null }) {
+  const [busca, setBusca] = useState("");
+  const raw = data?.["categorias"];
+  const groups = raw && typeof raw === "object" && !Array.isArray(raw) ? Object.entries(raw as Record<string, unknown>) : [];
+  return <section className="space-y-3">
+    <p className="text-xs text-muted-foreground">{typeof data?.["total"] === "number" ? data["total"] : "UNKNOWN"} ferramentas declaradas. TOOL_LISTED != TOOL_ACTIVE.</p>
+    <input aria-label="Buscar ferramenta MCP" placeholder="Buscar ferramentas por nome ou descrição" value={busca} onChange={e => setBusca(e.target.value)} className="w-full rounded border border-border bg-background p-2 text-sm" />
+    {groups.map(([categoria, itens]) => {
+      const tools = Array.isArray(itens) ? (itens as {name: string; description?: string}[]).filter(t => String(t.name || "").toLowerCase().includes(busca.toLowerCase()) || String(t.description || "").toLowerCase().includes(busca.toLowerCase())) : [];
+      return tools.length ? <div key={categoria} className="rounded border border-border p-3"><strong className="text-sm">{categoria} ({tools.length})</strong>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">{tools.map(t => <div key={t.name} className="rounded bg-background/50 p-2 text-xs"><code className="font-bold">{t.name}</code><p className="mt-1 text-muted-foreground">{t.description || "Descrição indisponível"}</p></div>)}</div>
+      </div> : null;
+    })}
+    {!groups.length ? <p className="text-xs">Catálogo indisponível nesta sessão.</p> : null}
+  </section>;
+}
+
+
+/** O frontend antigo tinha exemplos /mcp; desde PR #1946 a API HTTP canônica é /api/mcp. */
+function McpConector() {
+  const [estado, setEstado] = useState("");
+  const url = MCP + "/api/mcp";
+  const exemplos = [
+    { titulo: "Claude Desktop", codigo: JSON.stringify({mcpServers: {centraldark: {type:"http",url}}},null,2) },
+    { titulo: "Cursor", codigo: JSON.stringify({mcpServers:{centraldark:{url,transport:"http"}}},null,2) },
+    { titulo: "Codex CLI", codigo: '[mcp_servers.centraldark]\nurl = "' + url + '"' },
+    { titulo: "Streamable HTTP", codigo: "Endpoint: " + url + "\nAutorização: OAuth 2.1 pelo servidor MCP" },
+  ];
+  return <section className="space-y-3">
+    <p className="text-sm">Destino: <code>{url}</code>. Exemplo de configuração, não prova de pareamento; confirme o formato aceito por cada cliente. Nunca cole tokens nos exemplos.</p>
+    <div className="grid gap-3 sm:grid-cols-2">{exemplos.map(item => <div key={item.titulo} className="rounded border border-border p-3">
+      <div className="flex items-center justify-between gap-2"><strong className="text-sm">{item.titulo}</strong>
+        <Button type="button" variant="outline" size="sm" onClick={() => void navigator.clipboard.writeText(item.codigo).then(() => setEstado("Copiado: "+item.titulo), () => setEstado("COPY_UNAVAILABLE"))}>Copiar</Button></div>
+      <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all rounded bg-background p-2 text-xs">{item.codigo}</pre>
+    </div>)}</div>
+    <p role="status" className="text-xs">{estado}</p>
+  </section>;
+}
+/** Emissão real, explicitamente autorizada, sem armazenar ou renderizar segredo como JSON. */
+function McpEmissaoChave() {
+  const [agente,setAgente]=useState("");
+  const [senha,setSenha]=useState("");
+  const [scope,setScope]=useState("mcp");
+  const [tokens,setTokens]=useState<{access:string;refresh:string;expires:number}|null>(null);
+  const [estado,setEstado]=useState("Emissão protegida por senha do MCP.");
+  const [ocupado,setOcupado]=useState(false);
+  async function emitir(e: React.FormEvent) {
+    e.preventDefault();setOcupado(true);setTokens(null);
+    try {
+      const r=await solicitar("/admin/api/issue-key",{method:"POST",body:JSON.stringify({password:senha,agent_name:agente.trim(),scope})});
+      if(typeof r["access_token"]!=="string")throw Error("TOKEN_NOT_RETURNED");
+      setTokens({access:r["access_token"],refresh:typeof r["refresh_token"]==="string"?r["refresh_token"]:"",expires:typeof r["expires_in"]==="number"?r["expires_in"]:0});
+      setSenha("");setEstado("Token criado no MCP. Copie apenas para o cliente autorizado e depois descarte da tela.");
+    } catch(err){setEstado(err instanceof Error?err.message:"ISSUE_KEY_UNAVAILABLE");}
+    finally{setOcupado(false);}
+  }
+  function copiar(s:string,tipo:string){void navigator.clipboard.writeText(s).then(()=>setEstado(tipo+" copiado."),()=>setEstado("COPY_UNAVAILABLE"));}
+  return <section className="space-y-3">
+    <p className="text-sm">O backend existente implementa <code>POST /admin/api/issue-key</code>. Emite token de acesso e refresh; não implementa listagem ou revogação neste painel. Nada é gravado no armazenamento do navegador.</p>
+    <form onSubmit={e=>void emitir(e)} className="grid gap-2 rounded border border-border p-3 sm:grid-cols-3">
+      <input aria-label="Agente" required maxLength={80} placeholder="Nome do agente" value={agente} onChange={e=>setAgente(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <input aria-label="Escopo" required maxLength={80} placeholder="Escopo" value={scope} onChange={e=>setScope(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <input aria-label="Senha admin MCP" required type="password" autoComplete="off" placeholder="Senha admin MCP" value={senha} onChange={e=>setSenha(e.target.value)} className="rounded border border-border bg-background p-2 text-sm"/>
+      <div className="sm:col-span-3"><Button type="submit" disabled={ocupado}>{ocupado?"Emitindo…":"Nova chave · emitir"}</Button></div>
+    </form>
+    {tokens?<div className="rounded border border-amber-500/50 p-3 text-sm">
+      <p>Validade do acesso: {tokens.expires||"UNKNOWN"} segundos. Segredo exibido somente por cópia sob sua ação.</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button type="button" size="sm" onClick={()=>copiar(tokens.access,"Token de acesso")}>Copiar acesso</Button>
+        {tokens.refresh?<Button type="button" size="sm" variant="outline" onClick={()=>copiar(tokens.refresh,"Token refresh")}>Copiar refresh</Button>:null}
+        <Button type="button" size="sm" variant="outline" onClick={()=>{setTokens(null);setEstado("Tokens descartados da memória desta tela.");}}>Descartar</Button>
+      </div>
+    </div>:null}
+    <p role="status" className="text-xs">{estado}</p>
+  </section>;
+}
+function McpOperacionalLegado({dados}:{dados:Resultado|null}) {
+  const runtime=dados?.["runtime"] as Record<string,unknown>|undefined;
+  const forensic=dados?.["forensic"] as Record<string,unknown>|undefined;
+  const pattern=dados?.["patternAlignment"] as Record<string,unknown>|undefined;
+  const campos=[["Veredito",dados?.["verdict"]],["MCP PID",runtime?.["pid"]],["Forensic",forensic?.["status"]],["Alinhamento",pattern?.["marker"]],["Unknowns",pattern?.["unknownCount"]]];
+  const semHandler=["Fechar recibo duplicado","Medir Evidence Ledger","Montar pacote do desktop","Atualizar topologia","Revalidar Fixed Point","Rodar contraprova"];
+  const fixed=dados?.["verdict"]==="FIXED_POINT";
+  const warning=["RED","ORANGE","YELLOW"].includes(String(pattern?.["marker"]??""))||dados?.["verdict"]==="UNKNOWN_NOT_PASS";
+  const observed=forensic?.["status"]==="OBSERVED";
+  const state=fixed?"FIXED POINT":warning?"ALERTA":observed?"ATIVO":dados?"MEDINDO":"PROJECTION";
+  const motion=fixed?"animate-bounce":warning?"animate-pulse":observed?"animate-bounce":"animate-pulse";
+  return <section className="space-y-3">
+    <div role="status" className="flex items-center gap-3 rounded border border-border p-3" title="MOVIMENTO != DECORAÇÃO; derivado do snapshot">
+      <span aria-hidden="true" className={"inline-flex size-10 items-center justify-center rounded border border-primary/30 bg-primary/10 text-2xl "+motion}>🤖</span>
+      <div><strong className="block text-sm">Hermes · {state}</strong><p className="text-xs text-muted-foreground">Sinal visual vinculado ao snapshot MCP. Movimento não prova execução.</p></div>
+    </div>
+    <p className="text-xs text-muted-foreground">HUD original absorvido como projeção de dados do mesmo backend. Linha do tempo antiga era estática; seis botões não tinham handler. Eles não são executores.</p>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{campos.map(([titulo,valor])=><div key={String(titulo)} className="rounded border border-border p-3"><span className="block text-xs text-muted-foreground">{String(titulo)}</span><strong className="break-all text-sm">{valor==null?"UNKNOWN":String(valor)}</strong></div>)}</div>
+    <p className="text-xs font-semibold">Ações históricas sem execução comprovada:</p><div className="flex flex-wrap gap-2">{semHandler.map(t=><button key={t} type="button" disabled title="Sem handler real no frontend antigo" className="rounded border border-border p-2 text-xs opacity-50">{t} · não implementado</button>)}</div>
+  </section>;
+}
+
+
+/** Seis indicadores históricos, sem inventar ferramentas ativas ou bloqueadas. */
+function McpResumoVivo() {
+  const [health,setHealth]=useState<Resultado|null>(null);
+  const [deep,setDeep]=useState<Resultado|null>(null);
+  const [tools,setTools]=useState<Resultado|null>(null);
+  const [medido,setMedido]=useState("");
+  async function atualizar() {
+    const resultados=await Promise.allSettled([solicitar("/health"),solicitar("/health/deep"),solicitar("/admin/api/tools")]);
+    setHealth(resultados[0].status==="fulfilled"?resultados[0].value:null);
+    setDeep(resultados[1].status==="fulfilled"?resultados[1].value:null);
+    setTools(resultados[2].status==="fulfilled"?resultados[2].value:null);
+    setMedido(new Date().toLocaleTimeString("pt-BR"));
+  }
+  useEffect(()=>{void atualizar();const timer=setInterval(()=>void atualizar(),30000);return()=>clearInterval(timer);},[]);
+  const total=tools?.["total"]??health?.["toolCount"]??"UNKNOWN";
+  const uptime=deep?.["uptimeLegivel"]??(typeof deep?.["uptimeSec"]==="number"?Math.round(deep["uptimeSec"]/60)+" min":"UNKNOWN");
+  const campos=[
+    ["Status MCP",health?.["ok"]===true?"RESPONDENDO":"UNKNOWN"],
+    ["Tools totais",total],
+    ["Tools ativas","NÃO MEDIDO"],
+    ["Bloqueadas","NÃO MEDIDO"],
+    ["Uptime",uptime],
+    ["Versão",health?.["version"]??"UNKNOWN"],
+  ];
+  return <section className="space-y-3" aria-label="Métricas da Ponte MCP">
+    <div className="flex flex-wrap items-center justify-between gap-2"><p className="text-xs text-muted-foreground">Métricas reais · saúde, catálogo e health/deep · leitura a cada 30s · {medido||"SEM LEITURA"}</p><Button type="button" size="sm" variant="outline" onClick={()=>void atualizar()}>Atualizar métricas</Button></div>
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">{campos.map(([titulo,valor])=><div key={String(titulo)} className="rounded border border-border p-3">
+      <p className="text-[11px] text-muted-foreground">{String(titulo)}</p><strong className="break-all text-sm">{String(valor)}</strong>
+    </div>)}</div>
+    <p className="text-xs text-muted-foreground">A UI antiga mostrava tools ativas = total e bloqueadas = 0 sem prova. Aqui esses valores continuam NÃO MEDIDOS.</p>
+  </section>;
 }
 
 export function McpConsoleCentralDark() {
@@ -98,6 +279,16 @@ export function McpConsoleCentralDark() {
     return () => window.removeEventListener("centraldark:mcp-open-pairing", abrirPareamento);
   }, []);
 
+  async function sair() {
+    definirOcupado(true); definirErro("");
+    try {
+      await fetch(MCP + "/admin/logout", { credentials:"include", redirect:"manual", cache:"no-store" });
+      const prova = await fetch(MCP + "/admin/api/tools", { credentials:"include", cache:"no-store" });
+      if(prova["status"] !== 401) throw Error("LOGOUT_NOT_CONFIRMED");
+      definirAutenticado(false); definirConteudo(null); definirAtualizadoEm("");
+    } catch(err){definirErro(err instanceof Error?err.message:"LOGOUT_UNAVAILABLE");}
+    finally{definirOcupado(false);}
+  }
   async function entrar(evento: React.FormEvent) {
     evento.preventDefault();
     definirOcupado(true);
@@ -149,6 +340,7 @@ export function McpConsoleCentralDark() {
         <Button type="button" variant="outline" onClick={() => void atualizar(aba)} disabled={ocupado}>
           {ocupado ? "Consultando…" : "↻ Atualizar"}
         </Button>
+        {autenticado ? <Button type="button" variant="outline" onClick={() => void sair()} disabled={ocupado}>Sair do MCP</Button> : null}
       </div>
 
       <nav className="mt-5 flex flex-wrap gap-2" aria-label="Áreas do MCP">
@@ -195,7 +387,8 @@ export function McpConsoleCentralDark() {
             Executar diagnóstico MCP E2E
           </Button>
         ) : null}
-        {conteudo ? <JanelaJson dados={conteudo} /> : (
+        {(aba.id === "status" || aba.id === "saude") ? <McpResumoVivo /> : null}
+        {aba.id === "auditoria" && autenticado ? <McpAuditoriaFiltrada /> : aba.id === "tools" && autenticado ? <McpFerramentasPorCategoria data={conteudo} /> : aba.id === "conector" ? <McpConector /> : aba.id === "chaves" && autenticado ? <McpEmissaoChave /> : aba.id === "snapshot" && autenticado ? <McpOperacionalLegado dados={conteudo} /> : aba.id === "oauth" ? <section className="space-y-2 text-sm"><p>Clientes OAuth registrados: não há endpoint administrativo de listagem. O MCP oferece DCR via POST /register; metadata abaixo é descoberta, não cadastro de clientes.</p>{conteudo ? <JanelaJson dados={conteudo} /> : null}</section> : conteudo ? <JanelaJson dados={conteudo} /> : (
           <p className="rounded-xl border border-border px-4 py-6 text-sm text-muted-foreground">
             {ocupado ? "Consultando API…" : "Sem dados desta leitura."}
           </p>

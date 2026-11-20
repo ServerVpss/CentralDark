@@ -91,7 +91,7 @@ test('cache legado inválido é descartado antes de bloquear o fallback', async 
 
   assert.ok(inicio >= 0);
   assert.ok(fim > inicio);
-  assert.match(trecho, /return validarDecisao\(it\.valor\)/);
+  assert.match(trecho, /const value = validarDecisao\(it\.valor\)/);
   assert.match(trecho, /catch\s*\{/);
   assert.match(trecho, /cache\.delete\(k\)/);
   assert.match(trecho, /return null/);

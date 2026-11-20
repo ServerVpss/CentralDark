@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { randomUUID } from "node:crypto";
 import winston from "winston";
@@ -13,7 +14,7 @@ import { appendCentralEvent } from "./log-funnel.js";
 // ONDE    > apps/modulos/mcp/src/audit-logger.js linha 5.
 // RESOLVE > aceita MCP_LOG_DIR (preferido) e LOG_DIR (o que o PM2 ja define),
 //           e o default aponta para o diretorio canonico.
-const CENTRAL_LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "/root/CentralDark/logs";
+const CENTRAL_LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || fileURLToPath(new URL("../../../../logs/", import.meta.url));
 const LOG_DIR = process.env.MCP_LOG_DIR || process.env.LOG_DIR || path.join(CENTRAL_LOG_ROOT, "mcp");
 if (!process.env.MCP_LOG_DIR && process.env.LOG_DIR) {
     console.warn("[audit-logger] MCP_LOG_DIR ausente; usando LOG_DIR como fallback:", LOG_DIR);
@@ -139,7 +140,7 @@ export function buildAuditEnvelope(entry = {}) {
         trace_id: source.trace_id ?? source.traceId ?? context.trace_id ?? null,
         span_id: source.span_id ?? source.spanId ?? context.span_id ?? null,
         parent_span_id: source.parent_span_id ?? source.parentSpanId ?? context.parent_span_id ?? null,
-        actor: source.actor ?? source.callerUser ?? context.actor ?? null,
+        actor: source.actor ?? source.clientLabel ?? source.callerUser ?? context.actor ?? null,
         channel: source.channel ?? context.channel ?? null,
         phase: source.phase ?? "execution",
         method: source.method ?? "unknown",

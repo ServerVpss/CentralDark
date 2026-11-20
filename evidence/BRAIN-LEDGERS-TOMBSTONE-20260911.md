@@ -1,3 +1,25 @@
+---
+title: "BRAIN cristalizacao ledgers — tombstone"
+status: "DOCUMENTAL_SEM_PROVA_RUNTIME_ATUAL"
+owner: "evidence/BRAIN-LEDGERS-TOMBSTONE-20260911.md"
+source_class: "INTERNAL"
+tipo: "evidencia_documental"
+data_criacao: "UNKNOWN"
+ultima_atualizacao: "UNKNOWN"
+ultima_modificacao: "2026-11-12T18:33:38-03:00"
+ultima_verificacao: "2026-11-12T18:33:38-03:00"
+fuso_horario: "America/Sao_Paulo"
+hash_conteudo: "10828ac67f8556cbdd7dcb50d7576300941ba7088b93e2d77a795cd35da03e94"
+rastro:
+  - tipo: "CONCILIACAO_PROPRIEDADES"
+    momento: "2026-11-12T18:33:38-03:00"
+    origem_commit: "4eadc58541700ad63279d226109e4ed1373fada4"
+    resultado: "SOMENTE_METADADOS"
+    prova_runtime: "UNKNOWN"
+grupo_notas: "03-evidencias-contraprovas"
+relacionado_a: []
+estado_evidencia: "UNKNOWN"
+---
 # BRAIN cristalizacao ledgers — tombstone
 
 ## Why

@@ -40,14 +40,14 @@ function receitaCompleta(evento: NotificationLog): string {
   const publicacao = typeof meta["publication_mode"] === "string" ? meta["publication_mode"] : "NOT_ATTESTED";
   const fonte = typeof meta["source_surface"] === "string" ? meta["source_surface"] : "NOT_ATTESTED";
   return [
-    `MISSÃO: ${evento.titulo}`, `OWNER: ${owner}`, `EVENTO: ${evento.id}`,
-    `DATA: ${evento.created_at}`,
+    `Missão: ${evento.titulo}`, `Responsável: ${owner}`, `Evento: ${evento.id}`,
+    `Data: ${evento.created_at}`,
     `ESTADO DA PROVA: ${estadoProva}`,
     `PUBLICAÇÃO: ${publicacao} · FONTE: ${fonte}`,
     evento.mensagem,
-    cursor ? `PRÓXIMO: ${cursor}` : "",
+    cursor ? `Próximo passo: ${cursor}` : "",
     cmd ? `COMANDO COMPLETO: ${cmd}` : "",
-    "Execução depende de aprovação, gate e recibo.",
+    "A execução exige autorização quando necessária, verificação e comprovante.",
   ].filter(Boolean).join("\n").slice(0, 12000);
 }
 /** Mesmo ledger e auth da CentralDark. Aviso NÃO executa agentes, nem prova o runtime. */
@@ -279,7 +279,7 @@ export function CentralNotificacoes(props: Props) {
           <summary className="cursor-pointer font-medium">Ver detalhes técnicos</summary>
           <div className="mt-2 space-y-1">
             <p>Fonte: notifications_log com RLS e Realtime. Telegram usa notification_routes.</p>
-            <p>Roteamento para setor, Hermes ou Harness depende de adapter autorizado e recibo; single/parallel não são execução comprovada.</p>
+            <p>Encaminhar para o setor ou Hermes exige conexão autorizada e confirmação real. Escolher execução única ou paralela não comprova que a tarefa aconteceu.</p>
           </div>
         </details>
       </div>

@@ -45,7 +45,7 @@ test('T1: rejeição normal por evidência insuficiente permanece RUNNING e cont
   assert.match(trecho, /terminal_state: 'RUNNING'/);
   assert.match(trecho, /terminal_reason: 'FINALIZATION_GATE_BLOCKED'/);
   assert.match(trecho, /continue;/);
-  assert.doesNotMatch(trecho, /terminalState = 'BLOCKED'/);
+  assert.match(trecho, /REPEATED_FINALIZATION_NO_PROGRESS/);
   assert.doesNotMatch(trecho, /registrarConclusao\(\)/);
 });
 
@@ -170,6 +170,7 @@ test('T14 Executor: commit_push falha fechado e só fica verde após ler o HEAD 
 test('T16 entrypoint PM2 legado converge no Core e fila antiga não cria segundo Hermes', () => {
   assert.match(legacyEntrypointSource, /legacy-compat-to-hermes-core/);
   assert.match(legacyEntrypointSource, /HERMES-CORE\/core\/orchestrator\.mjs/);
-  assert.match(source, /const LEGACY_PENDENTE = '\/root\/CentralDark\/missoes\/pendente'/);
+  assert.match(source, /const REPO_ROOT = process\.env\.CENTRALDARK_REPO_ROOT/);
+  assert.match(source, /const LEGACY_PENDENTE = `\$\{REPO_ROOT\}\/missoes\/pendente`/);
   assert.match(source, /for \(const inbox of \[PENDENTE, LEGACY_PENDENTE\]\)/);
 });

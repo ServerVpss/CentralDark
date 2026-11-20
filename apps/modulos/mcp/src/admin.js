@@ -520,7 +520,7 @@ export function adminBuscarLogs(req, res) {
     for (let i = LOG_BUFFER.length - 1; i >= 0 && out.length < limit; i--) {
         const linha = LOG_BUFFER[i];
         const r = extrairRota(linha).toLowerCase();
-        const c = String(linha.meta?.cid || "").toLowerCase();
+        const c = String(linha.meta?.cid || linha.meta?.correlation_id || "").toLowerCase();
         if (rota && !r.includes(rota)) continue;
         if (cid && !c.includes(cid)) continue;
         if (level && linha.level !== level) continue;

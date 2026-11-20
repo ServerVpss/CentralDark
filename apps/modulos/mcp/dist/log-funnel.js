@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { randomUUID } from "node:crypto";
-const LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || "/root/CentralDark/logs";
+const LOG_ROOT = process.env.CENTRALDARK_LOG_ROOT || process.env.LOG_DIR || fileURLToPath(new URL("../../../../logs/", import.meta.url));
 const EVENTS_DIR = path.join(LOG_ROOT, "events");
 const SECTORS_DIR = path.join(LOG_ROOT, "sectors");
 const SERVICES_DIR = path.join(LOG_ROOT, "services");

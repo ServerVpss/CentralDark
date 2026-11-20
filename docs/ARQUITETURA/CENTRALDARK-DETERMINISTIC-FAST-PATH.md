@@ -6,7 +6,7 @@
 Criar um modo explícito de depuração/admin que privilegia comandos secos, mensuráveis e reproduzíveis, reduzindo conversa ornamental sem remover os gates da Casa.
 
 ## Owner existente
-- UI admin: `apps/modulos/mcp-admin-ui`
+- UI admin: `apps/instinto-superior/src/components/central/McpConsoleCentralDark.tsx` e `ObservabilidadeCentralDark.tsx`
 - Backend/admin: `apps/modulos/mcp/src/admin.js`
 - Método universal: reutilizar os gates existentes de `REUSE_BEFORE_CREATE`, prova pós-ação, contraprova, receipt e `UNKNOWN != PASS`.
 
@@ -74,7 +74,7 @@ DIRTY_WORKTREE
 ```
 
 ## UI Admin
-O rumo correto é adicionar um seletor em `mcp-admin-ui` dentro do painel admin existente, não criar outra aplicação.
+O rumo correto é usar o Admin do Instinto Superior, único owner visual, sem criar outra aplicação. A pasta independente `apps/modulos/mcp-admin-ui` foi aposentada no delta de convergência, sem transformar contrato documentado em botão implementado.
 
 Estados previstos:
 - `NORMAL`

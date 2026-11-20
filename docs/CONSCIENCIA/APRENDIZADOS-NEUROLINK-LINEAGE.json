@@ -2,7 +2,7 @@
   "schema": "centraldark.learning-neurolink-lineage.v2",
   "status": "CANONICAL_DERIVED_INDEX",
   "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
-  "source_blob_sha": "cdcca2d65b501b50ea3b7055d280e33b89169ac3",
+  "source_blob_sha": "5588772db7a50cbc0a4fdb5627dded505db5a94f",
   "semantics": {
     "front_a": "GLOBAL_HISTORICAL_LINEAGE_BY_STABLE_UID_AND_DOCUMENT_ORDER",
     "front_b": "STRICT_COGNITIVE_NUMERIC_CHAIN_FROM_115",
@@ -20,8 +20,8 @@
     "relation_type": "HISTORICAL_GENESIS"
   },
   "audit": {
-    "learning_sections": 235,
-    "highest_legacy_learning_number": 223,
+    "learning_sections": 249,
+    "highest_legacy_learning_number": 235,
     "duplicate_legacy_numbers": [
       {
         "legacy_learning_number": 16,
@@ -160,6 +160,22 @@
           "L220B",
           "L220C"
         ]
+      },
+      {
+        "legacy_learning_number": 228,
+        "count": 2,
+        "uids": [
+          "L228A",
+          "L228B"
+        ]
+      },
+      {
+        "legacy_learning_number": 229,
+        "count": 2,
+        "uids": [
+          "L229",
+          "L229B"
+        ]
       }
     ],
     "missing_legacy_numbers": [
@@ -173,7 +189,7 @@
     ],
     "strict_cognitive_sequence": {
       "start": 115,
-      "end": 223
+      "end": 235
     }
   },
   "nodes": [
@@ -2760,6 +2776,160 @@
       "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
       "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
       "prev_uid": "L222",
+      "next_uid": "L224"
+    },
+    {
+      "uid": "L224",
+      "legacy_learning_number": 224,
+      "legacy_occurrence": 1,
+      "title": "Hermes: prompt interativo de sudo não é sudo do shell nem rota de subagente",
+      "document_order": 236,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L223",
+      "next_uid": "L225"
+    },
+    {
+      "uid": "L225",
+      "legacy_learning_number": 225,
+      "legacy_occurrence": 1,
+      "title": "PENDING/UNKNOWN exige pesquisa, menor melhoria e prova persistente",
+      "document_order": 237,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L224",
+      "next_uid": "L226"
+    },
+    {
+      "uid": "L226",
+      "legacy_learning_number": 226,
+      "legacy_occurrence": 1,
+      "title": "Fonte da verdade recuperada antes da resposta operacional",
+      "document_order": 238,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L225",
+      "next_uid": "L227"
+    },
+    {
+      "uid": "L227",
+      "legacy_learning_number": 227,
+      "legacy_occurrence": 1,
+      "title": "MCP CentralDark: OAuth e descoberta de ferramentas comprovados",
+      "document_order": 239,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L226",
+      "next_uid": "L228A"
+    },
+    {
+      "uid": "L228A",
+      "legacy_learning_number": 228,
+      "legacy_occurrence": 1,
+      "title": "Hermes fork: delta mínimo, teste isolado e promoção segura",
+      "document_order": 240,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L227",
+      "next_uid": "L229"
+    },
+    {
+      "uid": "L229",
+      "legacy_learning_number": 229,
+      "legacy_occurrence": 1,
+      "title": "Feedback + readback fecham a ação; capability bloqueada não encerra a missão",
+      "document_order": 241,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L228A",
+      "next_uid": "L230"
+    },
+    {
+      "uid": "L230",
+      "legacy_learning_number": 230,
+      "legacy_occurrence": 1,
+      "title": "Browser + Desktop Commander em paralelo para contexto visual e runtime",
+      "document_order": 242,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L229",
+      "next_uid": "L231"
+    },
+    {
+      "uid": "L231",
+      "legacy_learning_number": 231,
+      "legacy_occurrence": 1,
+      "title": "Não promover owner sem consumidor material na main",
+      "document_order": 243,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L230",
+      "next_uid": "L232"
+    },
+    {
+      "uid": "L232",
+      "legacy_learning_number": 232,
+      "legacy_occurrence": 1,
+      "title": "Reconciliação de Casa e VMware por vinte frentes, com escritor único",
+      "document_order": 244,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L231",
+      "next_uid": "L233"
+    },
+    {
+      "uid": "L233",
+      "legacy_learning_number": 233,
+      "legacy_occurrence": 1,
+      "title": "Conflitos reais em Casa/VMware: checkpoints imutáveis, leitura paralela e menor delta por owner",
+      "document_order": 245,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L232",
+      "next_uid": "L228B"
+    },
+    {
+      "uid": "L228B",
+      "legacy_learning_number": 228,
+      "legacy_occurrence": 2,
+      "title": "Fast loop direto: mesmo owner em Casa e VM; CI profundo somente como contraprova",
+      "document_order": 246,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L233",
+      "next_uid": "L229B"
+    },
+    {
+      "uid": "L229B",
+      "legacy_learning_number": 229,
+      "legacy_occurrence": 2,
+      "title": "Persist-first: aprendizado confirmado deve ser gravado antes de ser relatado no chat",
+      "document_order": 247,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L228B",
+      "next_uid": "L234"
+    },
+    {
+      "uid": "L234",
+      "legacy_learning_number": 234,
+      "legacy_occurrence": 1,
+      "title": "Ouro de branch só é apagado depois de absorção causal, teste e readback",
+      "document_order": 248,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L229B",
+      "next_uid": "L235"
+    },
+    {
+      "uid": "L235",
+      "legacy_learning_number": 235,
+      "legacy_occurrence": 1,
+      "title": "!AUREULA — sincronização seletiva V ↔ F ↔ MAIN: examinai tudo, retém o bem",
+      "document_order": 249,
+      "source_path": "docs/CONSCIENCIA/APRENDIZADOS.md",
+      "relation_type": "CANONICAL_DOCUMENT_CONTINUITY",
+      "prev_uid": "L234",
       "next_uid": "PENDING_NEXT_CURSOR"
     }
   ]

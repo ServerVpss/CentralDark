@@ -206,6 +206,20 @@ def test_final_sem_selo_explicito_nao_exige_rastro():
     assert rel['selo_ok'] is True
 
 
+def test_contrato_novo_exige_selo_explicito():
+    rel = selo.auditar([_final(seal_contract="selo-xp/v1", seal_claimed=False,
+                               delivered_trace_refs=["test:trace"])])
+    assert rel["selo_ok"] is False
+    assert len(rel["sem_selo"]) == 1
+
+
+def test_contrato_novo_com_selo_e_rastro_passa():
+    rel = selo.auditar([_final(seal_contract="selo-xp/v1", seal_claimed=True,
+                               delivered_trace_refs=["test:trace"])])
+    assert rel["selo_ok"] is True
+    assert rel["sem_selo"] == []
+
+
 # --------------------------------------------------------- recibo de XP
 
 def test_recibo_expoe_antes_e_depois():

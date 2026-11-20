@@ -225,12 +225,28 @@ def test_final_unique():
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MF", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     fin = pre + ["finish-use", "--mission-id", "MF", "--verdict", "APROVAR", "--autolupa", "sim",
-                 "--point-fixed", "sim", "--result", "CONCLUIDO"]
+                 "--point-fixed", "sim", "--result", "CONCLUIDO", "--seal-claimed", "sim",
+                 "--delivered-trace-refs", "test:trace"]
     subprocess.run(fin, check=True)
     r = subprocess.run(fin, capture_output=True, text=True)
     assert "FINAL_IDEMPOTENT" in r.stdout
     finals = [x for x in _read_ledger() if x["event"] == "FINAL"]
     assert len(finals) == 1
+
+
+def test_finish_without_seal_is_rejected_before_final():
+    fresh_ledger()
+    import subprocess
+    pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
+    subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MNOSELO", "--skill-path", "p",
+                          "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
+    r = subprocess.run(pre + ["finish-use", "--mission-id", "MNOSELO", "--verdict", "BLOQUEAR",
+                              "--autolupa", "nao", "--point-fixed", "nao", "--result", "BLOQUEADO"],
+                       capture_output=True, text=True)
+    assert r.returncode != 0
+    assert "--seal-claimed" in r.stderr
+    assert not any(x.get("event") == "FINAL" and x.get("mission_id") == "MNOSELO"
+                   for x in _read_ledger())
 
 
 def test_replay_idempotent():
@@ -244,10 +260,12 @@ def test_final_conflict_divergent():
     subprocess.run(pre + ["begin-use", "--repo", "R", "--mission-id", "MC", "--skill-path", "p",
                           "--skill-ref", "r", "--skill-commit-sha", "c", "--workspace-head", "h"], check=True)
     subprocess.run(pre + ["finish-use", "--mission-id", "MC", "--verdict", "APROVAR", "--autolupa", "sim",
-                          "--point-fixed", "sim", "--result", "CONCLUIDO"], check=True)
+                          "--point-fixed", "sim", "--result", "CONCLUIDO", "--seal-claimed", "sim",
+                          "--delivered-trace-refs", "test:trace"], check=True)
     # mudar resultado -> hash diverge
     r = subprocess.run(pre + ["finish-use", "--mission-id", "MC", "--verdict", "CORRIGIR", "--autolupa", "sim",
-                              "--point-fixed", "nao", "--result", "BLOQUEADO"], capture_output=True, text=True)
+                              "--point-fixed", "nao", "--result", "BLOQUEADO", "--seal-claimed", "sim",
+                              "--delivered-trace-refs", "test:trace"], capture_output=True, text=True)
     assert r.returncode == 2 and "FINAL_CONFLICT" in r.stderr
 
 
@@ -267,7 +285,8 @@ def test_interruption_recovery():
     import subprocess
     pre = [sys.executable, os.path.join(SKILL, "scripts", "meta_lupa.py")]
     r = subprocess.run(pre + ["finish-use", "--mission-id", "MO", "--verdict", "BLOQUEAR",
-                              "--autolupa", "nao", "--point-fixed", "nao", "--result", "BLOQUEADO"], check=True)
+                              "--autolupa", "nao", "--point-fixed", "nao", "--result", "BLOQUEADO",
+                              "--seal-claimed", "sim", "--delivered-trace-refs", "test:trace"], check=True)
     assert r.returncode == 0
 
 
@@ -311,7 +330,8 @@ def test_suite_check_separation():
     subprocess.run(pre + ["finish-use", "--mission-id", "MS", "--verdict", "APROVAR", "--autolupa", "sim",
                           "--point-fixed", "sim", "--test-suites", "2", "--checks", "25", "--test-cases", "32",
                           "--property-cases", "4", "--pass", "32", "--fail", "0", "--xp-valid", "1",
-                          "--xp-rejected", "0", "--result", "CONCLUIDO"], check=True)
+                          "--xp-rejected", "0", "--result", "CONCLUIDO", "--seal-claimed", "sim",
+                          "--delivered-trace-refs", "test:trace"], check=True)
     fin = [x for x in _read_ledger() if x["event"] == "FINAL"][0]
     assert fin["test_suites"] == 2 and fin["checks"] == 25 and fin["property_cases"] == 4
 

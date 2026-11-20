@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 
 const file = process.argv[2];
 if (!file) {
@@ -74,5 +75,31 @@ if (/^(<<<<<<< |=======|>>>>>>> )/m.test(resolved)) {
   process.exit(4);
 }
 
-fs.writeFileSync(file, resolved);
+function atomicReplace(file, content) {
+  const target = path.resolve(file);
+  const originalStat = fs.lstatSync(target);
+  if (originalStat.isSymbolicLink() || !originalStat.isFile()) throw new Error('COSTURA_ATOMIC_TARGET_INVALID');
+  const next = Buffer.from(content, "utf8");
+  if (fs.readFileSync(target).equals(next)) return;
+  const temp = path.join(path.dirname(target), "." + path.basename(target) + ".costura-" + randomUUID() + ".tmp");
+  let fd;
+  try {
+    fd = fs.openSync(temp, "wx", originalStat.mode & 0o777);
+    fs.writeFileSync(fd, next);
+    fs.fsyncSync(fd);
+    fs.closeSync(fd);
+    fd = undefined;
+    fs.renameSync(temp, target);
+    if (!fs.readFileSync(target).equals(next)) throw new Error("COSTURA_ATOMIC_READBACK_MISMATCH");
+    if (process.platform !== "win32") {
+      const dirFd = fs.openSync(path.dirname(target), "r");
+      try { fs.fsyncSync(dirFd); } finally { fs.closeSync(dirFd); }
+    }
+  } finally {
+    if (fd !== undefined) fs.closeSync(fd);
+    if (fs.existsSync(temp)) fs.unlinkSync(temp);
+  }
+}
+
+atomicReplace(file, resolved);
 console.log(`SEMANTIC_ALL_RESOLVED path=${file} conflicts=${conflicts} preserved_both=${preservedBoth} identical=${identical}`);

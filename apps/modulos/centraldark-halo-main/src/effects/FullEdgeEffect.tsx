@@ -8,12 +8,12 @@ interface FullEdgeEffectProps {
 }
 
 /**
- * Full-edge light effect: renders glowing borders around the entire screen.
+ * Efeito luminoso nas bordas de toda a tela.
  */
 export const FullEdgeEffect: React.FC<FullEdgeEffectProps> = ({ theme, state }) => {
   const config = theme[state];
   const vars = getEffectVars(config);
-  const message = state === "working" ? "CENTRALDARK IS WORKING" : state === "attention" ? "CENTRALDARK NEEDS YOU" : "TASK COMPLETED";
+  const message = state === "working" ? "CENTRALDARK ESTÁ TRABALHANDO" : state === "attention" ? "A CENTRALDARK PRECISA DE VOCÊ" : "TAREFA CONCLUÍDA";
 
   return (
     <div

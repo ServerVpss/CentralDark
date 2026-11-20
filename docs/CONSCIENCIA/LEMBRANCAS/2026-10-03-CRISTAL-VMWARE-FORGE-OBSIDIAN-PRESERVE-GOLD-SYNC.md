@@ -209,3 +209,13 @@ A limpeza física e a cópia permanecem pendentes até a rota Windows estar viva
 ## NEXT_CURSOR
 
 Reabrir a rota Windows; confirmar Desktop Commander fora da shared; executar limpeza do conteúdo antigo de `E:\VMs\CENTRALDARK-OS\SHARED\CentralDark`; copiar o conteúdo de `K:\` para a shared; comparar contagem/hash/amostragem; então subir a VM e provar a nova CASA/forja antes de retomar `CASA/VMware -> main -> VPS`.
+
+<!-- CENTRALDARK_OBSIDIAN_CUA_UI_MAP_20261114 -->
+## Adendo de realidade — 2026-11-14 · Obsidian/Cua (Casa)
+
+- **CURRENT medido:** cofre visual aberto em `F:\CentralDark\docs` no Obsidian 1.15.1; Vault Orrery 2.3.0. As rotas VMware/E: deste registro de 03/10 são contexto histórico, não substituem o caminho atual da Casa.
+- **Memória navegável, sem criar segunda base:** a árvore de acessibilidade de `cua-driver get_window_state` retornou 165 controles (inventário parcial), com busca, painéis, ações, Node Inspector, propriedades e hiperlinks. Isso possibilita leitura operacional por `tree_markdown`/elementos diretamente, dispensando capturas repetidas para localizar nomes visíveis.
+- **Atuador canônico:** `blink_cursor.py` usa Cua virtual e overlay Hermes. Clique com entrega `background` foi despachado e limpo; efeito visual ainda `UNKNOWN`. CLI oficial detectada, mas `DISABLED` até habilitação e readback.
+- **Contrato futuro:** app lido → mapa de controles e capacidades candidatas → teste dirigido → contraprova do efeito → só então capacidade PROVEN no owner existente. Nunca inferir de um botão listado que ele funciona; não registrar conteúdo afetivo pessoal como permissão operacional.
+- **Relacionado:** `docs/CONSCIENCIA/APRENDIZADOS.md` e `.agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md`.
+<!-- /CENTRALDARK_OBSIDIAN_CUA_UI_MAP_20261114 -->

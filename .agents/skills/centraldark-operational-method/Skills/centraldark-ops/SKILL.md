@@ -13,8 +13,49 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 
 ## Always-on
 
-- Workspace operational = `K:\\`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace.
-- `K:\\` is the canonical repo root; `E:/CentralDark` exists but is **not** a git repo (`TARGET_MATCH=false`). Preserve it — never move, delete, or overwrite. `C:/` is not a repo destination in this execution. `TARGET_MATCH=false` does not authorize deletion; an unclassified duplicate is UNKNOWN. Do not call `E:/CentralDark` canonical even if missions/goals cite it as such — measured reality (git repo present) wins over mission text.
+- **Continuidade da intenção:** toda nova fala do CHEFE é primeiro tratada como `DELTA` da intenção vigente. Recuperar o mesmo Goal, estado provado, owners, bloqueios e `NEXT_CURSOR`; incorporar somente a informação nova. Pergunta, correção, ensino ou reflexão não trocam a missão por si só. Troca de missão exige ordem expressa ou incompatibilidade material comprovada. Referências canônicas: Skill Mãe, `centraldark-dialogo-reflexivo-da-intencao`, `SOUL-SOL.md`, Loop Mestre, JARVIS e Padrão de Resposta.
+- **Incompatibilidade material:** só existe quando a nova instrução não pode ser incorporada sem violar o objetivo, o escopo ou as restrições da missão vigente. Registrar a incompatibilidade e manter `BLOCKED`/`UNKNOWN` até haver ordem expressa ou resolução comprovada.
+- `NOVA_FALA=DELTA`; `DELTA != TROCA_DE_MISSAO`; `DIÁLOGO != ORDEM`; `MÉTODO_DECLARADO != MÉTODO_EXECUTADO`.
+- `INTENÇÃO_PRESERVADA != AUTORIZAÇÃO_DE_EXECUÇÃO`; `CONTEXTO_RECUPERADO != ESTADO_VERIFICADO`.
+- Recuperar `NEXT_CURSOR` somente de evidência persistida e identificável. Sem receipt, HUD, estado ou outro registro verificável, usar `NEXT_CURSOR=UNKNOWN` e não inventar continuidade operacional.
+
+### Precedência em caso de conflito
+
+1. Ordem explícita e limites atuais do CHEFE.
+2. SOUL-SOL e regras de segurança/autoridade da CentralDark.
+3. Skill Mãe e contratos operacionais canônicos.
+4. RULES.md e AGENTS.md do repositório.
+5. Owners, receitas e procedimentos específicos.
+6. Relatórios, receipts e memória histórica, sempre como proveniência — nunca como autoridade sobre estado atual.
+
+Se duas fontes do mesmo nível conflitarem, preservar o estado, marcar `UNKNOWN`/`BLOCKED` e consultar o owner superior; não resolver por inferência.
+
+## Compromisso operacional de continuidade
+
+Aplicar este compromisso nas interações do Hermes e em toda a CentralDark:
+
+- Preservar a intenção: interpretar cada nova fala à luz do Goal vigente.
+- Aprender com cada interação: registrar correções, ensinamentos, contradições e oportunidades de melhoria como evidência ou aprendizado, sem confundir registro com execução.
+- Melhorar sem fragmentar: reutilizar owners, receitas e contratos antes de criar qualquer estrutura; não criar arquitetura, skill ou agente novo quando um refinamento no owner existente resolve.
+- Separar reflexão de execução: conversar sobre uma melhoria não autoriza executá-la.
+- Exigir evidências: implementação, teste e persistência só podem ser declarados após readback verificável.
+- Preservar o próximo passo: manter o `NEXT_CURSOR` comprovado; sem evidência persistida, usar `NEXT_CURSOR=UNKNOWN`.
+- `MELHORIA_CONTÍNUA != RECONSTRUÇÃO_CONTÍNUA`.
+
+Princípios de decisão:
+
+```text
+REUTILIZAR_ANTES_DE_CRIAR
+CORRIGIR_ANTES_DE_SUBSTITUIR
+INTEGRAR_ANTES_DE_DUPLICAR
+VERIFICAR_ANTES_DE_CONCLUIR
+APRENDER_ANTES_DE_REPETIR_ERRO
+```
+
+Cada interação deve aumentar a inteligência operacional sem destruir continuidade, multiplicar estruturas desnecessárias ou confundir aprendizado com execução. Este compromisso não concede autorização implícita: `APRENDIZADO != AUTORIZAÇÃO`; `MÉTODO_DECLARADO != MÉTODO_EXECUTADO`.
+
+- Binding observado da Casa = `F:\CentralDark`. Hermes install on `C:` is APP_INSTALL_DIR, not workspace. Em outro runtime, descobrir `ENVIRONMENT_ROOT` pela checkout/identidade atual; `/data/cache/scratch/CentralDark` é apenas um binding Linux observado, não owner canônico.
+- `F:\CentralDark` é um `ENVIRONMENT_ROOT` observado da Casa Windows, não a identidade canônica do owner. `K:\\`, `C:\\` e `E:\\CentralDark` são referências legadas, de instalação ou de proveniência até readback específico; resolver `OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH` antes de agir. `TARGET_MATCH=false` não autoriza exclusão; duplicata não classificada permanece UNKNOWN.
 - `GOAL_DONE` must always be tied to the exact mission ID and scope. `TARGET_PATH_GOAL_DONE=true` does not imply `ZENDRIVE_GOAL_DONE=true`, nor vice versa. Never conflate one mission's completion with system-wide completion. Report blockers that belong to other missions separately, never as failures of the completed mission.
 - Dirty local worktree: measure it, do not `reset --hard` unless CHEFE explicitly authorizes that exact tree.
 - Authorized technical work is action-first: do not return tool menus, internal topology, or approval prompts when the machine can measure, scan, test, reconcile, or write a reversible receipt inside the active scope. Return the decision/receipt with proof, UNKNOWN, blockers, and next cursor.
@@ -22,6 +63,10 @@ CHEFE is final authority. SOL coordinates. Hermes executes. Do not invent a para
 - UNKNOWN != PASS. ACTION != PROOF. PID != SESSION_ID. HISTORY != CURRENT_STATE.
 - One writer per scope. Restart only the named PM2 process. Never `restart all`.
 - ERR_MODULE_NOT_FOUND on a CentralDark module is not a license to fabricate a stub: do not create an empty module just to make the test green. Search git history for the refactor commit that removed it (`git log --all -- <path>`), locate the legacy owner (often `src/legacy/.../*.original.*.txt` or a moved `dist/`), and restore the real implementation from there. Verify with `node -e "import('./path').then(()=>console.log('IMPORT_OK'))"` before running the test suite. The test's own git/spawn buffer limits (ENOBUFS on huge repos) are environment issues, not import failures — classify them separately.
+
+## Communication operational contract
+
+Write reports in clear Portuguese first: result, evidence, risk, correction, and next step. Every material finding must name its source (`GitHub`, `Casa`, `Hostinger`, log, or real test) and confidence (`CONFIRMADO`, `PROVÁVEL`, `DESCONHECIDO`, or `BLOQUEADO`). Never present illustrative counts, hypotheses, or historical claims as current runtime facts; counts and SHAs require a measured readback. Keep technical paths, lines, and identifiers available as proof without letting them obscure the decision.
 
 ## Autonomia do Hermes na VPS — mesma missão, sem micro-passos
 
@@ -31,6 +76,10 @@ A autorização vigente do CHEFE permite que Hermes conclua **sequências operac
 - Classificar `bash/node/python`, cron, systemd, binários, secrets, dependências, source SHA, runtime SHA e consumidor antes do delta. Scripts locais necessários podem ser executados quando o efeito esperado for reversível e delimitado; não executar conteúdo remoto não verificado nem operação destrutiva sem gate específico.
 - `approvals.mode=smart` permanece controle de risco. Não reconfigurar `~/.hermes/config.yaml`, nem usar `off`, YOLO ou allowlist irrestrita de `recursive delete`, `delete in root path` e `pipe remote content to shell`. Evitar micro-aprovação para trabalho normal não significa desabilitar guardas críticos.
 - Ao entrar uma evolução em `main`, o **mesmo** `scripts/vps/auto-sync-main.sh` invoca `scripts/skill-sync-check.sh --apply` apenas se o fast-forward válido alterar `.agents/skills/`, com `CENTRALDARK_SKILL_SYNC_REF` pinado no mesmo SHA. Revalidar `MAIN_RUNTIME_LOCK`, processo consumidor e carregamento da sessão; **sync de arquivos não é reload nem autoriza PASS operacional**. Se checkout dirty bloquear avanço, preservar alterações e registrar `BLOCKED` no PR, sem reset automático.
+- A API GitHub no auto-sync **só identifica estado, nunca transporta arquivos**: `GET /repos/ServerVpss/CentralDark/branches/main` confirma o HEAD canônico e grava `api_verify=MATCH|MISMATCH|UNKNOWN_*` no receipt; git continua sendo o único transporte. Motivo: somar verificação sem criar segundo sincronizador nem caminho de escrita paralelo.
+- Falha de API **nunca bloqueia** o ciclo: token ausente, HTTP não-200 ou timeout produzem `api_verify=UNKNOWN_*` e o sync conclui igual. Motivo: indisponibilidade de API não é prova de repositório errado.
+- Token de API resolve por `GITHUB_TOKEN` ou leitura de `/data/.env`, e a variável é limpa com `unset` ao fim do bloco; nunca imprimir, logar ou gravar o valor no receipt. Motivo: receipt é artefato versionado e público.
+- Com espelho já no SHA do `main` e limpo, pular `reset --hard` e `clean -fd` (`SYNC_MODE=NOOP_ALREADY_AT_MAIN_SHA`). Motivo: idempotência real; operação destrutiva sem delta é risco sem ganho. O worktree do operador nunca é resetado — só o espelho do próprio script.
 
 **NEXT_CURSOR:** `CURRENT_MAIN -> CHECKOUT_FF -> SKILL_SYNC_SHA -> HERMES_SESSION_LOAD -> OWNER_LOCAL_EXECUTION -> RECEIPT_PR -> HUD_SEAL`; `UNKNOWN != PASS`.
 
@@ -46,7 +95,7 @@ A autorização vigente do CHEFE permite que Hermes conclua **sequências operac
   6. If a path has `.git` but is not in `.gitmodules`, not in `git worktree list`, and `git -C <path> rev-parse --show-toplevel` differs from the root, **then** investigate whether it is a distinct repo, legacy artifact, or symlink/junction.
 - Caddy: if live import already equals main, do not reload for ritual.
 - **Hermes Desktop browser automation**: `browser_exec` with `local=true` renders to the **right-hand preview rail**, not a separate window. The rail has hide/restore (preserves state) and detach (opens standalone window) controls. Timeout on `browser_exec local=true` means the preview engine is unavailable (can happen in headless/VPS environments or when Hermes Desktop is not running locally); fallback is manual browser open or text-based web extraction (`web_extract`).
-- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, copy only the useful delta into `K:\\workspace\\temp` or the existing owner. Do not make C: the workspace. Do not ask the human to move pastes by hand.
+- Ingress: Hermes `AppData\\Local\\hermes\\attachments\\` is a read-only door. SHA-256, classify, resolve the current `ENVIRONMENT_ROOT`, then copy only the useful delta into `<ENVIRONMENT_ROOT>/workspace/temp` or the existing owner. Do not promote a drive letter to canonical identity. Do not ask the human to move pastes by hand.
 - "Configura na VPS" is not a VPS mutation until measurement names a VPS owner. GitHub `action_required` with empty jobs is the autonomia owner, not PM2/Caddy/runner.
 - Code change while Casa git is dirty/behind: do not patch that tree. `git worktree add` from `origin/main` (or live main SHA) and write only the named owner files. See `references/autonomia-actions.md`.
 
@@ -86,6 +135,17 @@ não usar `restart all`. Reaproveitar o MESMO HUD `docs/HUD/HUD.html`
 com VER PENDENCIA / ACEITAR MISSAO; consultar o método existente em
 `docs/CONSCIENCIA/APRENDIZADOS/2026-10-06-VPS-AUTONOMOUS-GIT-SYNC-METHOD.md`.
 
+## Environment root / materialization binding
+
+Reusable recipes persist `TARGET_ID + OWNER_RELATIVE_PATH`; the physical checkout is resolved at runtime.
+
+```text
+OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH
+→ PATH_EXISTS → MATERIALIZATION_SCOPE → TARGET_MATCH
+```
+
+Use `MINIMAL_DEPENDENCY_CONE` for isolated unit/function proof with a known dependency cone. Use `REQUIRED_CHECKOUT_SCOPE` when Git identity, guards, relative imports, repository traversal or integration semantics participate. `MATERIALIZED_PATH != CANONICAL_OWNER`; `ENVIRONMENT_ROOT != OWNER`; `PATH_RESOLVED != PATH_EXISTS`.
+
 ## Communication and environment clarity
 
 Always read `references/hermes-desktop-communication-style.md` when working with CHEFE in Hermes Desktop — it covers communication density preference and browser automation behavior in the preview rail.
@@ -97,6 +157,27 @@ Para organizar pastas e arquivos digitais, reutilizar o plano `docs/CENTRALDARK/
 ## Paired operational skill
 
 This skill is paired with the CentralDark operational family: `centraldark-hermes-operations`, `reconciliacao-diaria-centraldark`, `github-actions-runner-diagnostics`, and `skill-synchronization`. When the trigger is Hermes-specific (update, cron, Desktop/backend boot, SSH/no-mux, VPS Hermes version, port/firewall proof for Hermes routes), load `centraldark-hermes-operations` too. When the trigger is daily state, checklist, abandoned deltas, or skill drift, load the matching sibling too. `centraldark-ops` carries the broader CASA/GitHub/VPS operating contract; siblings carry concrete procedures. They are one operational family, not competing owners.
+
+## Casa → sessão SSH existente → Linux
+
+Quando houver terminal SSH já aberto e visível para o openKylin/CentralDark-OS, reutilizar `RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX` da Skill Mãe e carregar `centraldark-hermes-visual-computer-use` para o Target Lock da superfície.
+
+```text
+WINDOW/TAB CURRENT
+→ PID/TITLE/RECT + MONITOR
+→ FOCUS
+→ pwd; hostname (probe read-only)
+→ READBACK VISUAL DA MESMA ABA
+→ SSH_TARGET_MATCH
+→ cd <ENVIRONMENT_ROOT resolvido>
+→ ONE LINUX COMMAND
+→ READBACK VISUAL
+→ PROVA INDEPENDENTE QUANDO MATERIAL
+```
+
+A sessão já aberta é transporte, não autoridade. Windows Terminal/Remote Desktop Commander controla a entrada; o **efeito pertence ao Linux remoto** somente quando o shell remoto mostra o resultado esperado. Se a entrada cair em outra aba, painel ou terminal, classificar `WRONG_SURFACE`, congelar retry, reacquirir e repetir apenas o probe — nunca o comando material às cegas.
+
+Para `.env`, systemd e secrets: consumir variáveis já carregadas no processo/EnvironmentFile sem imprimir valores; provar por estado, nome da binding e efeito. `ENV_FILE_LOADED != REMOTE_AUTH_PROVEN`; `HTTP_200` deve ser atribuído ao endpoint/escopo exato testado.
 
 ## VPS — resiliência semântica sob drift técnico
 
@@ -195,7 +276,7 @@ LOCAL_CONFIG_SEALED → VPS_IS_CONSEQUENCE → REPLAY_WHEN_ROUTE_RETURNS
    - Confirm the named PR with `gh pr view N --repo ServerVpss/CentralDark --json number,state,mergedAt,mergeCommit,headRefOid`
    - Local `origin/main` can be stale; GitHub SHA is the promotion target.
 2. **Casa**
-   - `git -C K:/ status -sb` and `rev-parse HEAD`
+   - `git -C F:/CentralDark status -sb` and `rev-parse HEAD`
    - Record dirty/behind. Do not fetch-reset unless ordered.
    - Session binding: see `references/hermes-desktop-binding.md`.
 3. **VPS** via SSH host `segredo-vpss` (config in `~/.ssh/config`, user root).
@@ -210,7 +291,7 @@ LOCAL_CONFIG_SEALED → VPS_IS_CONSEQUENCE → REPLAY_WHEN_ROUTE_RETURNS
 7. **Prove compile/validate**: `python3 -m py_compile` for Python; `caddy validate --config /etc/caddy/Caddyfile` for Caddy.
 8. **Restart only if content changed** and only the owning process.
 9. **Counterproof** both stripped upstream and public prefixed URL. Capture PM2 restart deltas so you can assert no other process moved.
-10. **Receipt** under `K:\\LOGS\\CASA\\...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Stop. Do not crystallize a dirty checkout as main.
+10. **Receipt** under `<ENVIRONMENT_ROOT>/LOGS/CASA/...` with MAIN_HEAD, CASA_HEAD, VPS_SOURCE, RUNTIME_OWNER, health codes, deployed blob SHAs, UNKNOWN list. Persist the owner as a repo-relative path and record the resolved absolute path only as execution evidence. Stop. Do not crystallize a dirty checkout as main.
 
 ## Hermes Desktop boot/update failure trigger
 

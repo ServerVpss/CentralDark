@@ -2,7 +2,7 @@
 title: "LEIA-ME-IA"
 status: "CANÔNICO"
 scope: "Porta de entrada única para qualquer IA que conectar no CentralDark"
-source_of_truth: "Este arquivo + SOUL canônica + estado real medido"
+source_of_truth: "ServerVpss/CentralDark@main (SOUL/RULES/AGENTS/owners) + estado real medido; entrada técnica não é segundo owner"
 updated: 2026-09-28
 ---
 
@@ -16,7 +16,7 @@ Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.
 <!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
-## 🔒 CABEÇALHO OBRIGATÓRIO — FIX POINT
+## 🔒 Referências de verificação — sem cabeçalho obrigatório na conversa
 
 Gatilho único: **!CENTRALDARK** (alias **#CENTRALDARK**). O dono do ciclo é
 **docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml**,
@@ -31,8 +31,8 @@ HUD compacto do ciclo ativo: **🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐**.
 As estrelas desse título são **identidade visual, não estrelas conquistadas**.
 Michelin de fato = avaliação pelo owner **RULES.md**, com receipts e mesmo SHA.
 FIXED_POINT = verificação pelo owner **scripts/lupa/horn-reuse-fixed-point.mjs**,
-não pelo cabeçalho. Exibir no HUD: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
-XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido.
+não pelo cabeçalho. Exibir no HUD técnico somente quando solicitado: INTENÇÃO, FASE, NÍVEL APENAS COM FONTE,
+XP SOMENTE COM RECEIPT, LAST_PASS, NEXT_CURSOR e VEREDITO medido; na conversa comum usar palavras naturais.
 Status desconhecido = UNKNOWN; sem conexão com o repositório, informar fonte
 indisponível e nunca afirmar carregamento automático.
 
@@ -80,20 +80,27 @@ Texto legado conflitante perde para o owner canônico.
 
 # LEIA-ME-IA — comece por aqui
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Ao entrar na CentralDark, aplicar o mapa visual semântico da Gramática SOL e o padrão de emojis. Mostrar 👉 O QUE FAZER AGORA, não NEXT_CURSOR, para gente; nomes exatos seguem nos registros. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
+**Conversa com o CHEFE (12/11/2026):** responder em português natural, sem despejar campos internos de continuidade, prova ou auditoria. Seguir a cláusula da SOUL e o [padrão de resposta existente](docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md). O formato técnico só aparece sob pedido; nomes de campos e scripts não mudam.
+
 <!-- CENTRALDARK_AUTOREHYDRATE_LATEST_CHECKPOINT_20261018 -->
 ## 🪬 !CENTRALDARK — entrada automática do último checkpoint (todas as superfícies)
 
 Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independentemente de maiúsculas/minúsculas), isso é um **gatilho operacional**. A primeira operação do agente que atua neste repositório é localizar o **último checkpoint de execução VERIFICADO** e recuperar \`INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256\`. Não pedir ao CHEFE para digitar comandos, informar o ID ou copiar o manual; descobrir automaticamente a rota existente.
 
-**Owner único de checkpoint:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado operacional persistente mora em \`~/.hermes/centraldark/verified-execution/\` na VPS; a main contém código/contrato, não os arquivos privados de estado.
+**Responsável único pelo ponto de continuidade:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado privado de cada runtime fica em \`CENTRALDARK_HERMES_CHECKPOINTS\` ou, por padrão, em \`~/.hermes/centraldark/verified-execution/\` do usuário executor. A \`main\` contém código/contrato, não checkpoints privados; o estado de uma máquina não prova estado idêntico em outra.
 
-**Seleção de rota pelo runtime, sem redescoberta:**
+**Roteamento pelo owner e runtime medido, sem endereço legado obrigatório:**
 
-1. **VPS \`CENTRALDARK-OS\`**: executar \`python3 /root/.hermes/centraldark/bin/centraldark-entry.py --status\`. O modo sem flags devolve o fio; \`--continue\` avança o plano privado que já foi comprovado. Se o executável instalado não existir, usar a cópia do mesmo owner presente no checkout \`scripts/hermes/\` com \`PYTHONPATH\` apropriado (não inventar checkpoint).
-2. **Casa/VS Code Windows**: usar primeiro a bridge Tailscale/SSH e o alias já autorizados \`Segredo-VPS\` para consultar **o mesmo estado da VPS**, preferencialmente \`scripts/casa/centraldark-entry.ps1\`. Se a Casa estiver offline, tentar outro conector autorizado e devolver \`UNKNOWN\` preciso, não o inventário velho.
-3. **GitHub/Copilot/Claude/Codex/CLI externo**: seguir este mesmo contrato quando a tool realmente puder alcançar a VPS (MCP CentralDark ou SSH privado). A publicação do código ou instrução no GitHub **não** transporta sozinha o estado vivo da VPS.
-4. **Cockpit**: usar a aba Hermes do Instinto Superior → botão \`🪬 !CENTRALDARK · Continuar missão\`; leitura protegida e autenticada é executada no servidor que hospeda o cockpit, com owner VPS. Se o site rodar fora da VPS, apresentar \`UNKNOWN\`, sem fingir sincronização.
-5. **Novo contexto/modelo**: injetar o fio compacto devolvido pela entrada e continuar de \`NEXT_CURSOR\`; não despejar o histórico inteiro nem reexecutar etapas verdes. Para execução realmente automática usar plano validado pelo owner; se não houver plano, o agente resolve o próximo passo conforme o contrato e as ferramentas autorizadas da sua superfície.
+1. **Casa, Hostinger, VPS ou outro runtime:** identificar checkout/root Git válido e usar o mesmo owner `scripts/hermes/centraldark-entry.py --status` instalado no ambiente atual, com Python, permissões e estado do usuário executor. Conferir arquivo, identidade Git, host e recibo antes de executar. `/root/.hermes/centraldark/bin/centraldark-entry.py` é **rota de compatibilidade histórica da VPS somente onde comprovada**, não caminho universal.
+2. **Casa → VPS, somente quando for necessário o checkpoint remoto da VPS:** reutilizar o adaptador existente `scripts/casa/centraldark-entry.ps1` e o alias autorizado `Segredo-VPS` após validar o destino. Essa rota NÃO substitui checkpoints da Casa nem pressupõe que toda missão pertença à VPS.
+3. **GitHub, Codex, Claude, ChatGPT e outras superfícies sem shell:** utilizar conectores/receipts realmente acessíveis para a missão. Sem acesso ao estado vivo, marcar `UNKNOWN`; publicação de código não sincroniza automaticamente checkpoints entre máquinas.
+4. **Cockpit:** reutilizar o comando autenticado de continuidade existente somente quando comprovado. Identificar qual host, processo e owner alimentam a sessão; não presumir que ele esteja na VPS.
+5. **Nova conversa/modelo:** recuperar `INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256` apenas do mesmo contexto/mission_id e com prova. Não escolher o estado mais recente de outro runtime por conveniência; preservar green state e evitar replay de etapas já concluídas.
 
 **Regra de promoção:** somente exit 0 + critério de prova real ou verificador independente = checkpoint verde. Falha não move \`current.json\`; usar último PASS e replay da etapa falha. Se um plano já terminou, não repetir. O gatilho não remove aprovações que dependem de autorização real, não equivale a execução do CLI em superfícies sem runtime conectado e não autoriza interpretar o status de UI como prova.
 
@@ -123,7 +130,7 @@ Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto
 
 
 
-## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+## ⚡ SEM LEI OPERACIONAL — estado atual sem atrito
 
 Isto não cria uma lei nova. Remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação sem dependência causal real.
 
@@ -439,7 +446,9 @@ herança semântica do contrato (L1). Só receipt de tool prova L3; só leitura
 do HEAD/runtime prova L4; só mutação + receipt prova L5.
 ## 1. Boot universal
 
-Carregue nesta ordem:
+Ler o núcleo canônico (SOUL, RULES, AGENTS e Skill Mãe) e consultar **somente os owners especializados pertinentes à intenção**. A sequência abaixo é índice de consulta, não ordem para carregar 17 documentos em toda interação. Conferir a existência e versão do owner na `main` atual; histórico não substitui CURRENT.
+
+Índice de fontes:
 
 1. `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md` — identidade operacional e continuidade.
 2. `AGENTS.md` — contrato geral dos agentes.
@@ -460,7 +469,7 @@ Carregue nesta ordem:
 17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh` e registry estruturado em `scripts/dependabot/known-conflict-patterns.json`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
-### 1.0 Índice de owners canônicos especializados
+### 1.0 Índice de responsáveis canônicos especializados
 
 Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir desta porta; ser canônico sem rota de entrada é órfão. Owners especializados atuais:
 
@@ -602,6 +611,8 @@ CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA
 CENTRALDARK_OS_TAG = CENTRALDARK|ACORDAR|CALIBRAR
 VMI3256920 = REMOVIDA_DA_TAILNET; NAO_E_VPS_CENTRALDARK
 ```
+
+A expressão `CENTRALDARK_OS = VPS_CANONICA + LINUX_EXECUTOR + PONTE_CASA` descreve a topologia histórica, **não fixa a raiz do projeto nem o checkpoint de todos os runtimes na VPS**. Para cada missão, descobrir owner e ambiente efetivo.
 
 `#ACORDAR` e `!CALIBRAR` usam o mesmo organismo e podem abrir **frentes paralelas de percepção/reconciliação**. Dez é teto de potência, não quota: uma tarefa simples usa a menor quantidade suficiente; missão ampla, incerta ou crítica pode usar todas as frentes aplicáveis.
 
@@ -1166,23 +1177,25 @@ TASKS_SECRETAS
 ## 14. Fechamento
 
 ```text
-O_QUE_FOI_FEITO=
-EVIDENCIA=
-O_QUE_NAO_FOI_TOCADO=
-ESTADO_REAL=
-PENDENCIA=
-RISCO_RESIDUAL=
-ROLLBACK=
-PROXIMO_PASSO=
+🧾 COMPROVANTE = o que foi feito e conferido
+🔎 CONFERÊNCIA = a prova que sustenta o resultado
+🔒 PROTEÇÃO = o que foi preservado e não foi alterado
+📊 COMO FICOU = estado real observado
+⚠️ ATENÇÃO = o que ainda falta ou exige cuidado
+⚠️ RISCO QUE RESTOU = risco material ainda existente
+🔒 COMO DESFAZER = caminho de volta quando aplicável
+👉 O QUE FAZER AGORA = continuidade em linguagem natural
 ```
 
 Aprendizado que muda comportamento deve entrar no canônico; conversa sem efeito não polui o repo.
 
-## 15. Coroa operacional — cadeia visível do escopo no topo
+## 15. Mapa operacional do escopo — exibição sob pedido
 
-Toda resposta ou comando **técnico/operacional** da Casa deve começar com uma linha de título em destaque que mostre a cadeia aplicável ao **escopo atual**. Isto vale especialmente para `#ACORDAR`, `!CENTRALDARK`, `!CALIBRAR`, `!DELTAUTIL`, auditoria, GitHub/PR/CI, runtime, MCP, deploy, contraprova, remediação e Fixed Point.
+A cadeia do escopo permanece como dado de verificação e pode ser exibida em um cabeçalho técnico **quando o CHEFE pedir HUD ou auditoria estruturada**. Em qualquer conversa comum, inclusive sobre `#ACORDAR`, `!CENTRALDARK`, GitHub, MCP ou deploy, responder primeiro em português natural, sem título ritualizado nem campos internos obrigatórios.
 
-A cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+Quando exibida a pedido, a cadeia visível é um **mapa operacional externo** para o SEGREDO/CHEFE enxergar quem manda, onde a missão está e qual gate vem depois. Ela **não é cadeia de pensamento privada**, não expõe raciocínio oculto e não transforma fase ainda não executada em PASS.
+
+O identificador legado abaixo vale para o HUD e o registro técnico, não para exibição automática na conversa comum.
 
 ```text
 VISIBLE_SCOPE_CHAIN_BANNER_REQUIRED=true
@@ -1228,7 +1241,7 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID
@@ -1245,7 +1258,7 @@ RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
 
 
-## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+## 🔥🪬 Estado atual herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
 

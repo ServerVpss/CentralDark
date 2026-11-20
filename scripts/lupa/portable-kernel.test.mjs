@@ -129,7 +129,7 @@ test('trabalhar estudar e ensinar é contrato obrigatório e transversal antes d
   for (const marker of required) assert.ok(pattern.includes(marker), `missing ${marker}`);
 
   const schoolIndex = pattern.indexOf('## Escola operacional embutida — trabalhar, estudar e ensinar');
-  const simpleIndex = pattern.indexOf('## Camada final obrigatória — NO TEU MODO, SIMPLES');
+  const simpleIndex = pattern.indexOf('## Tradução humana integrada — seção técnica opcional');
   const depthIndex = pattern.indexOf('DEPTH_FIRST=true');
   const compressionIndex = pattern.indexOf('COMPRESSION_AFTER=true');
   assert.ok(schoolIndex >= 0, 'missing school layer section');
@@ -138,7 +138,7 @@ test('trabalhar estudar e ensinar é contrato obrigatório e transversal antes d
   assert.ok(pattern.includes('PROCESS_TELEMETRY != RESULT'), 'transversal teaching must not turn process telemetry into result');
 });
 
-test('camada final simples e fechamento semântico são contratos obrigatórios do sistema', () => {
+test('tradução humana integrada e fechamento semântico preservam contrato técnico', () => {
   const pattern = readFileSync(RESPONSE_PATTERN, 'utf8');
   const required = [
     'SIMPLE_FINAL_LAYER_REQUIRED=true',
@@ -177,8 +177,9 @@ test('camada final simples e fechamento semântico são contratos obrigatórios 
   ]) {
     assert.ok(pattern.includes(phrase), `missing semantic closure example ${phrase}`);
   }
+  assert.ok(pattern.includes('Não adicionar uma segunda tradução nem um rodapé de campos por obrigação.'), 'conversa humana não pode exigir rodapé de máquina');
   const closureIndex = pattern.indexOf('### Fechamento semântico — não parar em rótulo, negação ou “outra coisa”');
-  const simpleIndex = pattern.indexOf('## Camada final obrigatória — NO TEU MODO, SIMPLES');
+  const simpleIndex = pattern.indexOf('## Tradução humana integrada — seção técnica opcional');
   assert.ok(closureIndex >= 0 && closureIndex < simpleIndex, 'semantic closure must be defined before the final simple layer');
 });
 

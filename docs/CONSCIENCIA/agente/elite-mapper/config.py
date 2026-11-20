@@ -1,13 +1,29 @@
 """
 config.py — Configurações centrais do Elite Mapper
 """
+import os
 import re
 from pathlib import Path
 
 # ─── Diretórios ───────────────────────────────────────────────────────────────
 
-ROOT_DIR     = Path("/root/CentralDark")
-AGENT_DIR    = Path(__file__).parent
+def _resolve_repo_root() -> Path:
+    configured = os.environ.get("CENTRALDARK_REPO_ROOT", "").strip()
+    if configured:
+        root = Path(configured).expanduser().resolve()
+        if (root / "LEIA-ME-IA.md").is_file() and (root / ".agents").is_dir():
+            return root
+        raise RuntimeError("CENTRALDARK_REPO_ROOT_INVALID")
+
+    source = Path(__file__).resolve()
+    for candidate in source.parents:
+        if (candidate / "LEIA-ME-IA.md").is_file() and (candidate / ".agents").is_dir():
+            return candidate
+    raise RuntimeError("CENTRALDARK_REPO_ROOT_NOT_FOUND")
+
+
+ROOT_DIR     = _resolve_repo_root()
+AGENT_DIR    = Path(__file__).resolve().parent
 REPORTS_DIR  = AGENT_DIR / "relatorios"
 SECRETS_FILE = ROOT_DIR / "secrets" / "mcp.env"
 

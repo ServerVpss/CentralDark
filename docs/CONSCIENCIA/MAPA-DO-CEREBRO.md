@@ -16,6 +16,11 @@ writer: SOL
 
 # MAPA-DO-CEREBRO — UMA CASA, UMA DIREÇÃO
 
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** O mapa do cérebro aponta para a Gramática SOL, o padrão de resposta e o dono dos emojis. Tradução humana de NEXT_CURSOR: 👉 O QUE FAZER AGORA. Sem segundo owner ou alteração de registros históricos. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+
 <!-- CENTRALDARK_JUKEBOX_AZ_NUMERICO_20261021 -->
 ## 🎛️ Jukebox do projeto — A–Z e 001–301 (índice derivado)
 
@@ -32,7 +37,7 @@ writer: SOL
 
 Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem enquanto a chave material da prova não mudar.
 
-## Norte CURRENT — direto, sem ritual obrigatório
+## 📍 Norte do estado atual — direto, sem ritual obrigatório
 
 ```text
 👑 CHEFE fala
@@ -429,6 +434,22 @@ Essa camada é apresentação. Não é autoridade religiosa, não altera prova e
 - `docs/BRAIN/00-MAPA-SISTEMA/BRAIN.md` — entrada humana do vault.
 - `docs/CONSCIENCIA/APRENDIZADOS.md` — aprendizados duráveis.
 
+## Direct Main Trace Completion Gate
+
+Quando uma mudança material entra direto na `main`, o método só considera o ciclo de escrita completo depois do rastro CURRENT:
+
+```text
+OWNER WRITE
+→ COMMIT
+→ MAIN READBACK
+→ RESOLVE ACTIVE LEDGER
+→ COMMIT→DELTA→PROOF
+→ LEDGER READBACK
+→ CURRENT/FIXED_POINT
+```
+
+`COMMIT_PROVEN != TRACE_COMPLETE`. Se o commit já existe mas o ledger ficou faltando, usar `TRACE_RECOVERY`: preservar o SHA e reparar apenas o rastro. O funil vigente é resolvido por marcador; PR histórico não é identidade canônica.
+
 ## Regra final
 
 ```text
@@ -592,6 +613,7 @@ INTENÇÃO DO CHEFE
 | 🧪 Hermes WebUI antiga | `apps/modulos/WebUI/` | DONOR de capacidades/UX | DONOR_IS_NOT_SOURCE_OF_TRUTH |
 | 🌐 Rede privada | Tailscale + `scripts/remote-bridge/README-HUMANO-BRIDGE-TAILSCALE-OAUTH.md` | PRIVATE_SPINE | transporte != GUI |
 | ⌨️ Controle remoto textual | SSH + `docs/CONSCIENCIA/05-SSH-VPS.md` | CONTROL_PLANE | usar para reparar serviços/GUI quando shell estiver vivo |
+| 🪟→🐧 Terminal SSH já aberto Casa→Linux | Skill Mãe + `centraldark-hermes-visual-computer-use` + `centraldark-ops` | reutilizar a sessão SSH visível como superfície de comando do Linux | `CASA_EXISTING_SSH_TERMINAL_TO_LINUX`: probe visível primeiro; janela focada ≠ aba correta; comando enviado ≠ efeito remoto provado |
 | 🖱️ Desktop remoto interativo | AnyDesk no runtime alvo | INTERACTIVE_GUI | GUI != network spine |
 | 🆘 Resgate fora de banda | Contabo VNC/Rescue | OUT_OF_BAND_RESCUE | usar quando SO/rede interna não sustentarem as rotas normais |
 | 🐧 Corpo/SO | `centraldark-os` / openKylin runtime | substrate operacional | OS != identidade CentralDark |
@@ -623,9 +645,16 @@ FAILOVER_BEFORE_BLOCKED=true
 GUI_FAILURE_CAN_BE_REPAIRED_OVER_SSH=true
 SSH_FAILURE_CAN_BE_REPAIRED_OVER_GUI_WHEN_GUI_IS_LIVE=true
 OS_OR_NETWORK_FAILURE_CAN_ESCALATE_TO_VNC_RESCUE=true
+EXISTING_SSH_TERMINAL_REUSE_BEFORE_NEW_SESSION=true
+WINDOW_FOCUSED_IS_NOT_CORRECT_TAB=true
+SEND_ACCEPTED_IS_NOT_COMMAND_VISIBLE=true
+COMMAND_VISIBLE_IS_NOT_LINUX_EFFECT_PROVEN=true
+SSH_TARGET_REQUIRES_VISIBLE_READONLY_PROBE=true
 ```
 
-### Receipt vivo — acesso remoto observado em 2026-10-01
+**Rota indexada:** `CASA_EXISTING_SSH_TERMINAL_TO_LINUX` → Skill Mãe → Hermes Visual Computer Use → centraldark-ops. Reutilizar a janela/aba SSH existente somente depois de reacquirir o alvo vivo; executar `pwd; hostname` ou probe equivalente read-only e confirmar o resultado na mesma aba antes do comando material. Se uma ferramenta criar/selecionar superfície errada, congelar retry e voltar ao probe; não duplicar sessão SSH por reflexo.
+
+### 🧾 Comprovante vivo — acesso remoto observado em 2026-10-01
 
 Este bloco é **snapshot de runtime**, não lei eterna. Invalidar ao mudar tailnet, IP, serviço, sessão gráfica, firewall, DNS ou reboot relevante.
 
@@ -688,7 +717,7 @@ SECTOR_OWNER_UNKNOWN
 
 Owner vigente: [docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md](../ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md). Recuperar a seção **Plano vigente recuperável — 2026-10-01** antes de integrar AionUi/AionCore. PLAN_STATUS=CANONICAL_DESIGN_BINDING_PENDING; NEXT_CURSOR=S0_INVENTORY_AND_OWNER_BINDING. A tabela de setores localiza capacidades; não comprova bindings em runtime.
 
-### Casa como cliente da IA na VPS — CURRENT 2026-10-01
+### Casa como cliente da IA na VPS — estado observado em 2026-10-01
 
 No momento a Casa consome a API; a IA nativa executa na VPS. Rotas, imagem, diagrama e teste discriminante: [VPS-IA-NATIVA-ROTAS.md](VPS-IA-NATIVA-ROTAS.md). Pontuação, embedding e TTS com inferência PASS; conversa KylinBot PASS após reutilização de OAuth Codex da Casa; MCP instalado ainda não é sessão provada. Papel futuro Casa/GPU permanece plano, não obrigação atual.
 
@@ -864,7 +893,7 @@ IDEIA_DO_CHEFE → SOL_GOAL_INCREMENTAL → AGENTS/SOUL/RULES → OWNER_PERTINEN
 
 **Aceite incremental:** SOURCE_LINK_PROVEN + STABLE_SYMBOL_ID + LEGEND_AVAILABLE + F12_POSITION_PROVEN + EVENT_TRACE_DEDUPED + UI_AUTHORIZED + LIVE_HEARTBEAT_PROVEN + FAILURE_NEGATIVE_TEST + SHA_READBACK. Critérios sem prova permanecem UNKNOWN, sem paralisar outros cones. Sem gravação no runtime/VS Code, este registro é somente `DOCUMENTED`.
 
-**NEXT_CURSOR:** na PR/owner `skills/vs-code-restore`, conferir writer/HEAD, implementar anotação por função/linha + link para `MAPA-DO-CEREBRO.md`; build da extensão e readback de uma linha demonstrativa no VS Code; na PR visual `#1832`, integrar estados reais ao Cockpit, sem converter mock em sensor.
+**👉 O QUE FAZER AGORA:** na PR e no responsável `skills/vs-code-restore`, conferir writer/HEAD, implementar anotação por função/linha + link para `MAPA-DO-CEREBRO.md`; build da extensão e conferência de uma linha demonstrativa no VS Code; na PR visual `#1832`, integrar estados reais ao Cockpit, sem converter mock em sensor.
 
 
 <!-- CENTRALDARK_UX_PTBR_HARNESS_CHEFE_20261021 -->
@@ -990,7 +1019,7 @@ A esfera do JARVIS pode estar animada em repouso. **Animação não comprova áu
 
 **Diagrama de rotas no Excalidraw do mesmo cofre:** [CENTRALDARK — FigJam Omni 8099 + rotas canônicas](../BRAIN/Excalidraw/CENTRALDARK-FIGJAM-ROTAS.excalidraw.md). Fonte FigJam [Omni 8099](https://www.figma.com/board/eE4FS10ymxxlXDJAgWavCh); projeção dos fluxos existentes de `FLOW-REGISTRY.json`, sem criar nova rota. A atualização usa o gate já existente: `node scripts/lupa/diagram-route-gate.mjs --sync-obsidian`. `--check-obsidian` detecta desatualização sem escrever. O FigJam original não foi alterado. A projeção da fonte FigJam usa a última leitura autorizada, não sincronização ao vivo do Figma. Grupo 02 — Loop Mestre e Execução; provas no Grupo 03.
 
-**CURRENT:** regra de linguagem documentada na branch; efeito no Cockpit, build, merge, deploy e sincronização do vault local = `UNKNOWN` até prova independente.
+**📍 PONTO DE PARTIDA:** regra de linguagem documentada na branch; efeito no Cockpit, build, merge, deploy e sincronização do vault local = `UNKNOWN` até prova independente.
 
-**NEXT_CURSOR:** `GLOSSARIO_PTBR → INVENTARIO_UI_OWNER → TEXTOS_POR_ESTADO → TESTES → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
+**👉 O QUE FAZER AGORA:** seguir a sequência técnica registrada em `GLOSSARIO_PTBR → INVENTARIO_UI_OWNER → TEXTOS_POR_ESTADO → TESTES → CONTRAPROVA_VISUAL → RECEIPT → FIXED_POINT`.
 <!-- /CENTRALDARK_UX_PTBR_HARNESS_CHEFE_20261021 -->

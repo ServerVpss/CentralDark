@@ -8,7 +8,7 @@ interface MinimalBarEffectProps {
 }
 
 /**
- * Minimal bar effect: a thin status line at the top center of the screen.
+ * Efeito minimalista: linha de estado no topo da tela.
  */
 export const MinimalBarEffect: React.FC<MinimalBarEffectProps> = ({ theme, state }) => {
   const config = theme[state];
