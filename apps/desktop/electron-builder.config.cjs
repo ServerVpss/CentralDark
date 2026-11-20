@@ -57,7 +57,7 @@ const channelRequest = channelBuildRequest()
 
 /** @typedef {import("app-builder-lib").Configuration} Configuration */
 
-const [owner, repo] = (process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark-hermes-agent').split('/')
+const [owner, repo] = (process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark').split('/')
 if (!owner || !repo) {
   throw new Error(`invalid GITHUB_REPOSITORY ${process.env.GITHUB_REPOSITORY}`)
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Native Hermes cron adapter: use the existing Hermes updater for this fork.
+# Native Hermes cron adapter: update the canonical CentralDark checkout.
 # Silent when synced; no independent daemon, git reset, stash or upstream push.
 set -euo pipefail
 
@@ -19,14 +19,14 @@ fail() {
 }
 
 case "${1:-}" in ''|--check-only) ;; *) fail 'invalid option' ;; esac
-[[ "$(basename "$root")" == 'hermes-agent' && -d "$root/.git" ]] || fail 'unexpected checkout location'
+[[ -e "$root/.git" && -f "$root/hermes" && -d "$root/CentralDark" ]] || fail 'unexpected CentralDark checkout layout'
 [[ ! -e "$root/.git/index.lock" ]] || fail 'git operation in progress'
 [[ "$(git -C "$git_root" branch --show-current 2>/dev/null)" == main ]] || fail 'not on main'
 
 origin="$(git -C "$git_root" remote get-url origin 2>/dev/null)" || fail 'origin missing'
 case "${origin,,}" in
-  https://github.com/servervpss/centraldark-hermes-agent|https://github.com/servervpss/centraldark-hermes-agent.git|git@github.com:servervpss/centraldark-hermes-agent|git@github.com:servervpss/centraldark-hermes-agent.git|ssh://git@github.com/servervpss/centraldark-hermes-agent|ssh://git@github.com/servervpss/centraldark-hermes-agent.git) ;;
-  *) fail 'origin is not the CentralDark fork' ;;
+  https://github.com/servervpss/centraldark|https://github.com/servervpss/centraldark.git|git@github.com:servervpss/centraldark|git@github.com:servervpss/centraldark.git|ssh://git@github.com/servervpss/centraldark|ssh://git@github.com/servervpss/centraldark.git) ;;
+  *) fail 'origin is not ServerVpss/CentralDark' ;;
 esac
 
 tracked_changes="$(git -C "$git_root" status --porcelain=v1 --untracked-files=no 2>/dev/null)" || fail 'cannot read worktree'
@@ -37,7 +37,7 @@ if ! git -C "$git_root" fetch --no-tags origin 'refs/heads/main:refs/remotes/ori
   fail 'fetch unavailable; local files unchanged'
 fi
 local_sha="$(git -C "$git_root" rev-parse HEAD 2>/dev/null)" || fail 'cannot read local SHA'
-target_sha="$(git -C "$git_root" rev-parse refs/remotes/origin/main 2>/dev/null)" || fail 'cannot read fork SHA'
+target_sha="$(git -C "$git_root" rev-parse refs/remotes/origin/main 2>/dev/null)" || fail 'cannot read CentralDark main SHA'
 if [[ "$local_sha" == "$target_sha" ]]; then
   [[ "${1:-}" != --check-only ]] || printf 'IN_SYNC %s\n' "$local_sha"
   exit 0

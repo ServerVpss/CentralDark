@@ -4,13 +4,13 @@ import { extractReleaseHighlights, latestMergedPrTitles, updateNotesSource, upda
 
 describe('update notes', () => {
 
-  it('links update notes to the CentralDark fork, not the Hermes upstream', () => {
+  it('links update notes to the canonical CentralDark repository, not Hermes upstream', () => {
     const status = { currentSha: '23103a2', targetSha: '6546972' }
     expect(updateNotesUrl({ kind: 'prs' }, status)).toBe(
-      'https://github.com/ServerVpss/CentralDark-hermes-agent/compare/23103a2...6546972'
+      'https://github.com/ServerVpss/CentralDark/compare/23103a2...6546972'
     )
     expect(updateNotesUrl({ kind: 'release', tag: 'v0.23.1' }, status)).toBe(
-      'https://github.com/ServerVpss/CentralDark-hermes-agent/releases/tag/v0.23.1'
+      'https://github.com/ServerVpss/CentralDark/releases/tag/v0.23.1'
     )
   })
   it('summarizes a release as its highlight headlines, and falls back to the first bullet list', () => {

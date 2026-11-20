@@ -6,7 +6,7 @@
  * caller keeps the commit changelog when nothing comes back.
  */
 
-const REPOSITORY = 'ServerVpss/CentralDark-hermes-agent'
+const REPOSITORY = 'ServerVpss/CentralDark'
 const API = `https://api.github.com/repos/${REPOSITORY}`
 const SITE = `https://github.com/${REPOSITORY}`
 const MAX_ITEMS = 5
