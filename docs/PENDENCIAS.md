@@ -27,6 +27,29 @@ Status: 🔴 alta · 🟡 média · 🟢 baixa · ✅ concluído
 - Halo Tauri: `src-tauri/src/lib.rs` contém diagnóstico `MOTOR_NOT_LINKED`; sessão/pareamento DPAPI já existem em `session_vault.rs`, mas execução remota nativa e consumo pelo CRM não foram provados.
 - OpenBot apresenta especialistas e Hermes; **delegação OpenBot → Hermes → máquina de teste → CRM não foi observada**. Cockpit e Kaizen não receberam recibo E2E comprovado.
 
+### 🔄 Ciclo de execução único — coordenação no OpenBot, motor no Hermes
+
+**Decisão do CHEFE (20/11/2026):** a janela de trabalho é o VS Code da Casa, no projeto local `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`; OpenBot/SOL coordena os especialistas existentes e entrega **uma tarefa identificada** ao Hermes. Hermes usa o A2A existente na Hostinger para delegação **quando a chamada JSON-RPC autenticada estiver comprovada**, e o MCP CentralDark já conectado para ferramentas. Agente Remoto/Bridge no Windows executa localmente; CRM atende; Cockpit somente observa; Kaizen aprende. Não instalar a IA completa no PC do cliente; não criar outro servidor.
+
+```text
+CHEFE → OpenBot / SOL [intenção e responsável]
+→ Hermes [A2A: missão + ACK, autorização real]
+→ MCP CentralDark Hostinger [tools/list e tools/call existentes]
+→ Tailscale Serve privado :9100 → Bridge Casa 127.0.0.1:9101
+→ motor DesktopCommanderMCP local stdio [somente leitura no primeiro teste]
+→ retorno autenticado à mesma missão → CRM → Cockpit [observação] → Kaizen
+```
+
+**A2A medido na Casa em 20/11/2026:** `/a2a` e `/a2a/.well-known/agent-card.json` no Hostinger Tailscale responderam HTTP 200; Agent Card anuncia `agente_remoto`, JSON-RPC 1.0, bearer e `toolset.mcp-centraldark`/`delegation`. `AGENT_CARD_200 != A2A_TASK_EXECUTED`: não provaram envio autenticado ou resultado de ferramenta.
+
+**Primeiro delta de código nesta branch:** `apps/modulos/mcp/src/tools/casa/casa-private.js` passa a expor `centraldark_casa_list_processes` usando o `callCasa("POST","/tool",{name:"list_processes",arguments:{}})` existente, com anotação de somente leitura. `apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs` ganhou guarda estática para a ferramenta e a fronteira da ponte. Não altera motor, não muda cofre, não habilita escrita e não instala no runtime. **COMMITADO NO PR != TESTE EXECUTADO != CONSUMIDO NA HOSTINGER.**
+
+**Contrato de cada tarefa:** um `mission_id` único, origem, destino/dispositivo autorizado, owner/escritor, escopo de leitura, aceitação/ACK do Hermes, ferramenta, resultado, horário e contraprova; usar os envelopes, Kanban e recibos canônicos existentes, sem criar novos registros paralelos. A leitura de `list_processes` deve inicialmente chegar na Casa SEGREDO. Segundo computador somente após pareamento e consentimento separados, com credencial própria.
+
+**Quem implementa o restante:** SOL/JARVIS coordenando no OpenBot da Casa; Hermes operando o VS Code já aberto e só os arquivos do escopo autorizado; um writer por arquivo/etapa. O PR #2153 recebe os commits e a prova. PR #2119 continua restrito ao visual.
+
+**Estado da primeira costura:** `CODE_ROUTE_COMMITTED`; `A2A_AUTH_TASK=UNKNOWN`; `HOSTINGER_USE_NEW_TOOL=NOT_DEPLOYED`; `HALO_MOTOR_LINK=NOT_PROVEN`; `CRM_COCKPIT_E2E=NOT_PROVEN`.
+
 ### 🎯 Critérios para tirar do ALERTA
 - [ ] 1. Owner e único writer por função comprovados, sem processos duplicados.
 - [ ] 2. OpenBot delega missão identificada ao Hermes e recebe ACK com ID único.
