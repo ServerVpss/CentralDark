@@ -184,7 +184,7 @@ jobs:
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$HEAD_SHA"
 
-      - name: 🧪 Canary MCP — reconciliar catálogo e 17 rotas (sem alterar runtime)
+      - name: 🧪 Canary MCP — reconciliar catálogo e rotas canônicas (sem alterar runtime)
         shell: bash
         working-directory: .ci-centraldark-validate
         run: |
