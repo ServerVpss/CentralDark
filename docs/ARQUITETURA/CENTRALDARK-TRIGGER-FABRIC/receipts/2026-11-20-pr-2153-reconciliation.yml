@@ -9,7 +9,9 @@ worktree_state: "DIRTY_PRESERVED (32 entradas no checkout operacional e em /data
 sentinel_result: "PASS ok:true failed:[]"
 tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
 open_pr_total: 38
-readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 15, UNKNOWN: 11, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 26, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+readiness_measured_at: "2026-11-20T15:28:45Z"
+readiness_source: "pr_rov_audit.py run2 (identico ao run1 exceto audit_timestamp); 38 PRs abertos incluindo o PR #2154 (evolucao do ROV)"
 selected_pr: 2153
 decision:
   action: MERGE_EXECUTED
@@ -30,6 +32,73 @@ tests_t1:
   failing: "7 falhas pre-existentes em admin-guard-core.test.mjs e centraldark-capabilities.test.mjs, arquivos que o PR nao toca"
   resolved_by_pr: "canario de 16 rotas canonicas e dispatcher read-only (procedencia e auditoria semantica)"
   regression: "NENHUMA - conjunto de falhas em T1 e subconjunto do conjunto em T0 (nomes normalizados sem sufixo de tempo)"
+failure_classification:
+  method: "parsing do bloco 'test at <arquivo>:<linha>' do node:test; contagem conferida com 'ℹ fail' do runner"
+  arithmetic: "soma T0=10 (runner 10) | soma T1=7 (runner 7) | delta=3 | aritmetica fechada: true"
+  t0_items:
+    - "mcp-catalog-scope.test.mjs:8 | 17 canonical routes include all four canary bindings | 1 | RESOLVIDO_PELO_PR | defeito real do owner: expectedRouteCount 17 vs 16 rotas (AIONUI removida em e8c7e1591b); T0 falhou com actual=16 expected=17"
+    - "mcp-readonly-dispatch.test.mjs:8 | dispatcher read-only, procedencia e auditoria semantica (subprocesso isolado) | 2 | RESOLVIDO_PELO_PR | defeito de assert do teste (esperava /# fail 0/, node 22 imprime 'ℹ fail 0'); o comportamento do produto ja era 9/9/0 - evidencia no proprio erro do T0; o PR corrigiu o assert, nao a regra"
+    - "admin-guard-core.test.mjs:92 | politica expandida: 20 conhecidos, 12 aprovados e 8 em revisao | 2 | PRE_EXISTENTE_MANTIDO | arquivo nao tocado pelo PR"
+    - "admin-guard-core.test.mjs:178 | hash chain: 20 processos preservam sequencia unica | 2 | PRE_EXISTENTE_MANTIDO | arquivo nao tocado pelo PR"
+    - "admin-guard-core.test.mjs:535 | transporte propaga identidade e impede destrutiva direta | 2 | PRE_EXISTENTE_MANTIDO | arquivo nao tocado pelo PR"
+    - "centraldark-capabilities.test.mjs:38 | prioridade zero global consulta receita antes de qualquer execucao | 1 | PRE_EXISTENTE_MANTIDO | arquivo nao tocado pelo PR"
+  t1_items:
+    - "admin-guard-core.test.mjs:92 | politica expandida | 2 | PRE_EXISTENTE_MANTIDO"
+    - "admin-guard-core.test.mjs:178 | hash chain | 2 | PRE_EXISTENTE_MANTIDO"
+    - "admin-guard-core.test.mjs:535 | transporte propaga identidade | 2 | PRE_EXISTENTE_MANTIDO"
+    - "centraldark-capabilities.test.mjs:38 | prioridade zero global | 1 | PRE_EXISTENTE_MANTIDO"
+  delta_explained: "10 - 7 = 3 = 1 (canario de rotas) + 2 (dispatcher read-only); nenhuma falha nova em T1"
+  regression: "NENHUMA - conjunto de falhas em T1 e subconjunto do conjunto em T0"
+determinism:
+  procedure: "pr_rov_audit.py executado 2x com o mesmo estado de entrada; comparacao sem o campo variavel audit_timestamp"
+  run1: "2026-11-20T15:28:37Z | exit 0 | stderr 0 bytes | open_total 38"
+  run2: "2026-11-20T15:28:45Z | exit 0 | stderr 0 bytes | open_total 38"
+  identical_without_timestamp: true
+  identical_fields: "open_total, readiness_counts, current_origin_main_sha, rows (numero, head_sha, base_sha, category, checks, reviews, labels, changed_files)"
+  variable_fields: "audit_timestamp (unico)"
+  artifact: /data/cache/scratch/rov-determinism-proof-2154.json
+idempotency:
+  procedure: "snapshot antes e depois das duas execucoes (hashes de arquivos, worktree, refs, backups, runtime, dirty count, PRs)"
+  files_changed: "NENHUM (hashes identicos para owner, teste, contrato e recibo)"
+  refs_changed: "NENHUM (2268 refs remotos; branches locais inalteradas)"
+  backups_changed: "NENHUM (refs.bundle, working-tree-tracked.patch, untracked.tar.gz, T0-state.json com hashes identicos)"
+  worktree_changed: "NENHUM (git status identico; worktrees identicos)"
+  runtime_changed: "NAO - PID 244642, catalogVersion 161-9629d1fb55a7 e toolCount 161 identicos; unico delta e o campo time do proprio /health"
+  local_changes_preserved: "32 no checkout operacional e 32 em /data/CentralDark"
+  concurrent_prs_preserved: "PR #1900 e PR #1880 permanecem OPEN e CONFLICTING/DIRTY; nenhum foi tocado"
+  conclusion: "SEGUNDA EXECUCAO NAO MUTOU, NAO DUPLICOU E NAO ALTEROU NADA"
+verifier_tests:
+  suite: scripts/trigger-fabric/test_pr_rov_receipt_verifier.py
+  runner: "python3 scripts/trigger-fabric/test_pr_rov_receipt_verifier.py (unittest, sem rede e sem IA)"
+  total: 17
+  positive: 3
+  negative: 14
+  result: "17/17 OK"
+  checks_emitted: 9
+  negative_cases:
+    - "campo obrigatorio ausente (MISSING_FIELD)"
+    - "SHA invalido em local_head_sha (SHA_INVALID:local_head_sha)"
+    - "SHA invalido em receipt_persisted_in_main_sha (SHA_INVALID:receipt_persisted_in_main_sha)"
+    - "PASS indevido com persistencia PENDING (PASS_REQUIRES_RECEIPT_PERSISTED_IN_MAIN)"
+    - "PASS indevido com unknown material (PASS_WITH_MATERIAL_UNKNOWN)"
+    - "PASS indevido com gate bloqueado (PASS_WITH_BLOCKED_GATE)"
+    - "PASS indevido sem rollback e sem next_cursor (PASS_REQUIRES_ROLLBACK_AND_CURSOR)"
+    - "verdict fora do enum (VERDICT_INVALID)"
+    - "merge_commit inconsistente com receipt_persisted_in_main_sha (MERGE_COMMIT_INCONSISTENT)"
+    - "referencia de contrato divergente (CONTRACT_REFERENCE_MISMATCH)"
+    - "contract_version divergente do schema do contrato (CONTRACT_VERSION_MISMATCH)"
+    - "schema fora do namespace do contrato (SCHEMA_MISMATCH)"
+    - "contrato inexistente (CONTRACT_NOT_FOUND)"
+    - "recibo que nao e mapeamento (RECEIPT_NOT_A_MAPPING)"
+contract_field_reality:
+  method: "cada campo de receipts.required_fields verificado contra a realidade (git, API GitHub, re-execucao do sentinel, sha256 recomputado, artefatos em disco)"
+  total_required: 17
+  total_checks: 18
+  passed: 18
+  divergences_found_and_fixed:
+    - "readiness_counts do recibo estava no classificador pre-merge; corrigido para o valor medido no audit atual (26/2/10) com timestamp e fonte"
+    - "a checagem de selected_pr usava state da REST API; para PR mergeado o GitHub devolve state=closed + merged_at/merge_commit_sha - o recibo estava correto, o check foi corrigido"
+  artifact: /data/cache/scratch/rov-reality-matrix-2154.json
 runtime_readback:
   pid: 244642
   alive: true
@@ -56,8 +125,9 @@ audit_integrity:
   warning_origin: "/data/.profile linha 1 (. /data/cache/scratch/cargo/env) - ruido de shell profile, fora do script"
   proof_1: "o aviso reproduz com bash -lc 'echo trivial_ok' e desaparece com bash --noprofile --norc"
   proof_2: "stderr do audit = 0 bytes (/data/cache/scratch/rov-audit-2153.err)"
-  proof_3: "JSON integro: open_total 38 = 38 linhas, numeros unicos, nenhum PR com checks_failed, checks_pending ou changes_requested"
+  proof_3: "JSON integro no audit pre-merge (rov-audit-2153.json): open_total 38 = 38 linhas, numeros unicos, nenhum PR com checks_failed, checks_pending ou changes_requested"
   proof_4: "exit code 0 e paginacao completa (38 PRs open em uma pagina de 100)"
+  proof_5: "audit pos-merge executado 2x: JSON identico exceto audit_timestamp, stderr 0 bytes, nenhuma verificacao obrigatoria perdida (determinism + idempotency acima)"
   no_mandatory_check_lost: true
 scope_classification:
   pr_1900: "CONVERGENCIA, nao duplicata: espera 18 rotas = 16 (base reconciliada por este merge) + 2 novas; permanece OPEN/DIRTY preservado"

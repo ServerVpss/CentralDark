@@ -6,6 +6,7 @@ import argparse
 import base64
 import concurrent.futures
 import json
+import re
 import subprocess
 import sys
 import time
@@ -154,36 +155,134 @@ def audit_one(pr: Any, headers: dict[str, str], repo: str) -> dict:
     return classify(detail, checks, reviews)
 
 
+SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
+VERDICTS = {"PASS", "PARTIAL", "BLOCKED", "UNKNOWN"}
+
+
+def _check(checks: dict[str, str], problems: list[str], details: list[str], name: str, ok: bool, code: str = "", detail: str = "") -> bool:
+    """Registra o resultado de um check: 'problems' guarda codigos estaveis
+    (sem valor variavel) e 'details' guarda o contexto legivel."""
+    checks[name] = "PASS" if ok else "FAIL"
+    if not ok:
+        problems.append(code or name)
+        if detail:
+            details.append(f"{name}:{detail}")
+    return ok
+
+
+def _sha_value(data: dict, key: str, allow_pending: bool) -> str | None:
+    value = str(data.get(key) or "")
+    if not value:
+        return None
+    if allow_pending and value.startswith("PENDING_"):
+        return value
+    return value if SHA_PATTERN.match(value) else None
+
+
+def _schema_base(schema: str) -> str:
+    """Namespace do id de schema: 'a.b.v1' -> 'a.b' (convencao de versao do repo)."""
+    return schema.rsplit(".v", 1)[0] if ".v" in schema else schema
+
+
 def verify_receipt(receipt_path: Path, contract_path: Path) -> dict:
     """Valida um recibo ROV contra o contrato, sem alterar estado.
 
-    Regras:
-      - todos os receipts.required_fields do contrato estao presentes;
-      - verdict pertence a {PASS, PARTIAL, BLOCKED, UNKNOWN};
-      - verdict PASS exige receipt_persisted_in_main_sha != PENDING;
-      - verdict PARTIAL exige ao menos um campo em 'blocked'/'unknown'.
-    Saida: {valid, problems, missing} (json para readback).
+    Regras derivadas do contrato (PR-MERGE-RECONCILIATION-ROV.yml):
+      - receipts.required_fields: todo campo obrigatorio presente;
+      - receipts.secret_policy: apenas sha/owner/status/result/url sao valores de prova;
+      - verdict.pass_only_when: PASS exige recibo persistido, sem unknown material,
+        sem gate bloqueado, rollback conhecido e next_cursor persistido;
+      - inventory.no_claim_without: SHAs de prova precisam ser SHA-1 valido (40 hex);
+      - receipt.schema deve derivar do namespace do schema do contrato e
+        receipt.contract_version deve ser igual ao schema do contrato.
+    Saida: {valid, problems, details, missing, checks}.
     """
     contract = Path(contract_path)
-    if not contract.exists():
-        return {"valid": False, "problems": [f"CONTRACT_NOT_FOUND:{contract}"]}
-    contract_data = yaml.safe_load(contract.read_text(encoding="utf-8"))
-    required = contract_data.get("receipts", {}).get("required_fields", [])
-    try:
-        data = yaml.safe_load(receipt_path.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001
-        return {"valid": False, "problems": [f"RECEIPT_PARSE_FAIL:{exc}"]}
-    missing = [k for k in required if k not in data]
+    receipt = Path(receipt_path)
+    checks: dict[str, str] = {}
     problems: list[str] = []
-    if missing:
-        problems.append(f"MISSING_FIELD:{','.join(missing)}")
+    details: list[str] = []
+    missing: list[str] = []
+    if not contract.exists():
+        return {"valid": False, "problems": ["CONTRACT_NOT_FOUND"], "details": [f"contract={contract}"], "missing": [], "checks": {}}
+    try:
+        contract_data = yaml.safe_load(contract.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001
+        return {"valid": False, "problems": ["CONTRACT_PARSE_FAIL"], "details": [str(exc)], "missing": [], "checks": {}}
+    try:
+        data = yaml.safe_load(receipt.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001
+        return {"valid": False, "problems": ["RECEIPT_PARSE_FAIL"], "details": [str(exc)], "missing": [], "checks": {}}
+    if not isinstance(data, dict):
+        return {"valid": False, "problems": ["RECEIPT_NOT_A_MAPPING"], "details": [f"type={type(data).__name__}"], "missing": [], "checks": {}}
+    required = contract_data.get("receipts", {}).get("required_fields", [])
+    missing = [key for key in required if key not in data]
+    _check(checks, problems, details, "REQUIRED_FIELDS_PRESENT", not missing, "MISSING_FIELD", ",".join(missing))
+
+    contract_ref = str(data.get("contract") or "")
+    contract_name = contract.name
+    _check(
+        checks, problems, details, "CONTRACT_REFERENCE_MATCHES",
+        contract_ref == contract_name or contract_ref.endswith(contract_name),
+        "CONTRACT_REFERENCE_MISMATCH", f"receipt.contract={contract_ref}",
+    )
+
+    receipt_schema = str(data.get("schema") or "")
+    contract_schema = str(contract_data.get("schema") or "")
+    contract_base = _schema_base(contract_schema)
+    receipt_base = _schema_base(receipt_schema)
+    _check(
+        checks, problems, details, "SCHEMA_DERIVED_FROM_CONTRACT",
+        bool(contract_schema) and (receipt_base == contract_base or receipt_base.startswith(contract_base + ".")),
+        "SCHEMA_MISMATCH", f"receipt.schema={receipt_schema}",
+    )
+    receipt_version = str(data.get("contract_version") or "")
+    _check(
+        checks, problems, details, "CONTRACT_VERSION_MATCHES",
+        bool(contract_schema) and receipt_version == contract_schema,
+        "CONTRACT_VERSION_MISMATCH", f"receipt.contract_version={receipt_version}",
+    )
+
+    tested = _sha_value(data, "tested_origin_main_sha", False)
+    _check(checks, problems, details, "SHA_FORMAT:tested_origin_main_sha", tested is not None, "SHA_INVALID:tested_origin_main_sha", str(data.get("tested_origin_main_sha")))
+    local = _sha_value(data, "local_head_sha", False)
+    _check(checks, problems, details, "SHA_FORMAT:local_head_sha", local is not None, "SHA_INVALID:local_head_sha", str(data.get("local_head_sha")))
+    persisted = _sha_value(data, "receipt_persisted_in_main_sha", True)
+    persisted_is_sha = persisted is not None and SHA_PATTERN.match(persisted) is not None
+    checks["SHA_FORMAT:receipt_persisted_in_main_sha"] = "PASS" if persisted_is_sha else "FAIL"
+    if not persisted_is_sha:
+        problems.append("SHA_INVALID:receipt_persisted_in_main_sha")
+        details.append(f"SHA_FORMAT:receipt_persisted_in_main_sha:{data.get('receipt_persisted_in_main_sha')}")
+
     verdict = data.get("verdict")
-    if verdict not in {"PASS", "PARTIAL", "BLOCKED", "UNKNOWN"}:
-        problems.append(f"VERDICT_INVALID:{verdict!r}")
-    persisted = str(data.get("receipt_persisted_in_main_sha", ""))
-    if "PENDING_" in persisted and verdict == "PASS":
-        problems.append("PASS_REQUIRES_RECEIPT_PERSISTED_IN_MAIN")
-    return {"valid": len(problems) == 0, "problems": problems, "missing": missing}
+    _check(checks, problems, details, "VERDICT_IN_ENUM", verdict in VERDICTS, "VERDICT_INVALID", f"verdict={verdict}")
+
+    blocked = data.get("blocked") or []
+    unknown = data.get("unknown") or []
+    rollback = str(data.get("rollback_reference") or "").strip()
+    cursor = str(data.get("next_cursor") or "").strip()
+    if verdict == "PASS":
+        _check(checks, problems, details, "PASS_REQUIRES_RECEIPT_PERSISTED", persisted_is_sha, "PASS_REQUIRES_RECEIPT_PERSISTED_IN_MAIN")
+        _check(checks, problems, details, "PASS_REQUIRES_NO_MATERIAL_UNKNOWN", not unknown, "PASS_WITH_MATERIAL_UNKNOWN", f"unknown={len(unknown)}")
+        _check(checks, problems, details, "PASS_REQUIRES_NO_BLOCKED_GATE", not blocked, "PASS_WITH_BLOCKED_GATE", f"blocked={len(blocked)}")
+        _check(checks, problems, details, "PASS_REQUIRES_ROLLBACK_AND_CURSOR", bool(rollback and cursor), "PASS_REQUIRES_ROLLBACK_AND_CURSOR")
+
+    merge_readback = data.get("merge_readback") or {}
+    merge_commit = str(merge_readback.get("merge_commit") or "")
+    if merge_commit:
+        _check(
+            checks, problems, details, "MERGE_COMMIT_CONSISTENT",
+            SHA_PATTERN.match(merge_commit) is not None and merge_commit == str(data.get("receipt_persisted_in_main_sha") or ""),
+            "MERGE_COMMIT_INCONSISTENT", f"merge_readback.merge_commit={merge_commit}",
+        )
+
+    return {
+        "valid": len(problems) == 0,
+        "problems": problems,
+        "details": details,
+        "missing": missing,
+        "checks": checks,
+    }
 
 
 def main() -> int:
