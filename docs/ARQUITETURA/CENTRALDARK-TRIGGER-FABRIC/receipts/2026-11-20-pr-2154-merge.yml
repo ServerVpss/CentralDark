@@ -1,0 +1,39 @@
+schema: centraldark.rov.pr-reconciliation.receipt.v1
+contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+contract_version: centraldark.rov.pr-reconciliation.v1
+repository: ServerVpss/CentralDark
+receipt_persisted_in_main_sha: d014cd6cd9660e222b512ccd98629aebcc97235f
+tested_origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
+merge_readback:
+  method: squash (PUT /pulls/2154/merge canonical REST endpoint)
+  merge_commit: d014cd6cd9660e222b512ccd98629aebcc97235f
+  merged_at: "2026-11-20T15:48:30Z"
+  pr_head_sha: e40eeb43aa7b1a378d42c42611415031e88940fe
+  pr_title: CHEFE: readback pós-merge PR #2153 + evolucao deterministica do ROV #2154 (MERGE AUTORIZADO 2026-11-20)
+  base_sha_before: e2fff550451901161eac77d69c57b0df20877aa3
+  files_integrated: 4
+  files_sha:
+    - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/receipts/2026-11-20-pr-2153-reconciliation.yml
+    - docs/CONSCIENCIA/APRENDIZADOS.md
+    - scripts/trigger-fabric/pr_rov_audit.py
+    - scripts/trigger-fabric/test_pr_rov_receipt_verifier.py
+  files_identical_to_pr_head: true
+  human_authorization: "CHEFE 2026-11-20: merge PR #2154_condicional, apos todos os gates obrigatorios"
+route:
+  endpoint: PUT /pulls/2154/merge
+  merge_method: squash
+  delete_branch_on_merge: true (remote ref removed after merge - preserved on disk/worktree)
+verdict: MERGE_EXECUTED
+proven:
+  - tests: "17/17 OK (suíte pr_rov_receipt_verifier.py, unitário, sem rede, sem IA)"
+  - contract_reality_matrix: "18/18 PASS (17 campos obrigatórios)"
+  - determinism: "duas execucoes da auditoria idênticas exceto audit_timestamp"
+  - idempotency: "snapshot antes/depois: nenhuma mutacao, duplicacao ou alteracao indevida"
+  - sentinel: "ok:true failed:[] (re-execucao)"
+  - tlc23: "PROVED byte-identity sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
+  - runtime: "PID 244642 intacto, catalogVersion 161-9629d1fb55a7, nao alterado"
+  - preservation: "32 alteracoes locais operacionais + 32 em /data/CentralDark, PR #1900/#1880 intactos"
+rollback_reference: /data/preservacao-centraldark-20261120/meta
+next_cursor_evolve: PENDING_NO_MORE_MERGES_IN_THIS_WINDOW
+next_cursor: RUNTIME_PROMOTION_VIA_EXISTING_OWNER -> AUTHENTICATED_TOOLS_LIST -> RUNTIME_READBACK -> KAIZEN -> CHEFE_ACEITE
+verdict_final: MERGE_EXECUTED
