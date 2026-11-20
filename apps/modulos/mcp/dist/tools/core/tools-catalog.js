@@ -39,6 +39,7 @@ import { geminiTools } from "../gemini/gemini.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { observabilityTools } from "../observability/agent-patterns.js";
 import { buildkiteTools } from "../buildkite/buildkite.js";
+import { DELEGATION_A2A_TOOL } from "./hermes_delegar_tarefa.js";
 const TOOL_NAME_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 const CATALOG_OWNER = "centraldark-mcp";
 const SOURCE_CATALOG = "apps/modulos/mcp/src/tools/core/tools-catalog.js";
@@ -72,6 +73,7 @@ const TOOL_GROUPS = [
     ["youtube", youtubeMediaTools, "youtube", "hybrid"],
     ["observability", observabilityTools, "hermes", "deterministic"],
     ["buildkite", buildkiteTools, "buildkite", "hybrid"],
+    ["hermes-delegacao-a2a", [DELEGATION_A2A_TOOL], "hermes", "deterministic"],
 ];
 const RAW_TOOLS = TOOL_GROUPS.flatMap(([, tools]) => tools);
 const TOOL_DECLARATIONS = new Map();

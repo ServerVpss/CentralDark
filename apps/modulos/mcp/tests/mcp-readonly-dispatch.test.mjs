@@ -11,6 +11,10 @@ test("dispatcher read-only, procedencia e auditoria semantica (subprocesso isola
   delete env.NODE_TEST_CONTEXT;
   const r = spawnSync(process.execPath, ["--test", file], { encoding: "utf8", timeout: 120000, env });
   assert.equal(r.status, 0, `${r.stdout}\n${r.stderr}`.slice(-3000));
-  assert.match(r.stdout, /# fail 0/);
-  assert.match(r.stdout, /# pass 9/);
+  // node:test 22 imprime o resumo com "ℹ tests N / pass N / fail N" (sem o '#' que a
+  // versao antiga esperava). Valida o resultado REAL do escalao; o comportamento
+  // sotestado nao e mascarado, apenas o formato do assert e corrigido.
+  assert.match(r.stdout, /ℹ tests 9/);
+  assert.match(r.stdout, /ℹ pass 9/);
+  assert.match(r.stdout, /ℹ fail 0/);
 });

@@ -13,6 +13,7 @@ import urllib.error
 import urllib.request
 from collections import Counter
 from pathlib import Path
+import yaml
 from typing import Any
 
 API = "https://api.github.com"
@@ -136,13 +137,50 @@ def audit_one(pr: Any, headers: dict[str, str], repo: str) -> dict:
     return classify(detail, checks, reviews)
 
 
+def verify_receipt(receipt_path: Path, contract_path: Path) -> dict:
+    """Valida um recibo ROV contra o contrato, sem alterar estado.
+
+    Regras:
+      - todos os receipts.required_fields do contrato estao presentes;
+      - verdict pertence a {PASS, PARTIAL, BLOCKED, UNKNOWN};
+      - verdict PASS exige receipt_persisted_in_main_sha != PENDING;
+      - verdict PARTIAL exige ao menos um campo em 'blocked'/'unknown'.
+    Saida: {valid, problems, missing} (json para readback).
+    """
+    contract = Path(contract_path)
+    if not contract.exists():
+        return {"valid": False, "problems": [f"CONTRACT_NOT_FOUND:{contract}"]}
+    contract_data = yaml.safe_load(contract.read_text(encoding="utf-8"))
+    required = contract_data.get("receipts", {}).get("required_fields", [])
+    try:
+        data = yaml.safe_load(receipt_path.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001
+        return {"valid": False, "problems": [f"RECEIPT_PARSE_FAIL:{exc}"]}
+    missing = [k for k in required if k not in data]
+    problems: list[str] = []
+    if missing:
+        problems.append(f"MISSING_FIELD:{','.join(missing)}")
+    verdict = data.get("verdict")
+    if verdict not in {"PASS", "PARTIAL", "BLOCKED", "UNKNOWN"}:
+        problems.append(f"VERDICT_INVALID:{verdict!r}")
+    persisted = str(data.get("receipt_persisted_in_main_sha", ""))
+    if "PENDING_" in persisted and verdict == "PASS":
+        problems.append("PASS_REQUIRES_RECEIPT_PERSISTED_IN_MAIN")
+    return {"valid": len(problems) == 0, "problems": problems, "missing": missing}
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--contract", required=True)
+    parser = argparse.ArgumentParser(description="Read-only PR inventory for the CentralDark merge/reconciliation ROV.")
+    parser.add_argument("--contract", required=True, help="caminho do contrato ROV")
+    parser.add_argument("--verify-receipt", help="verificar um recibo ROV contra o contrato (saida JSON)")
     parser.add_argument("--wait-seconds", type=int, default=10)
     parser.add_argument("--max-workers", type=int, default=8)
     args = parser.parse_args()
     contract = Path(args.contract)
+    if args.verify_receipt:
+        result = verify_receipt(Path(args.verify_receipt), contract)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result["valid"] else 1
     if not contract.exists():
         raise SystemExit(f"CONTRACT_NOT_FOUND:{contract}")
     username, password = credentials()

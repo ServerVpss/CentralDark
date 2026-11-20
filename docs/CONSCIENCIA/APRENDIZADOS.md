@@ -3567,6 +3567,21 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Mnemônico do CHEFE:** `!AUREULA — examinai tudo, retém o bem`. Examinar = comparar CURRENT; reter = preservar o que já funciona; bem = delta que sobrevive a teste, contraprova e readback.
 - **Fixed point:** circuito só fecha quando as frentes aplicáveis concordam semanticamente no delta, os testes mínimos passam, a `main` recebe a versão canônica e o readback confirma ausência de duplicação.
 
+### 236. Reconciliação PR #2153 com main — alinhamento definitivo do código CentralDark
+
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L236`; `PREV_GLOBAL_UID=L235`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=236`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** reconciliação, propriedade de código, deploy gate, prova
+- **Data:** 2026-11-20
+- **Intenção:** preservar 100% do estado operacional da CentralDark, reconciliar o código com `ServerVpss/CentralDark@main` e atualizar o PR #2153 (`feat/centraldark-os-circuito-e2e-alerta-20261120`) somente com deltas verificados e sem perda de trabalho.
+- **Aprendizado:** `PRESERVE_FIRST=true`; `ONE_WRITER_PER_SCOPE=true`; `CURRENT + MAIN_MUST_BOTH_BE_TRUE`; `UNKNOWN != PASS`; `ACTION != PROOF`.
+  1. O `dist/` é build do `src` pelo `tsc` oficial do módulo MCP — nunca editá-lo à mão; sempre regenerar o espelho a partir do `src` e commitar.
+  2. A contagem canônica do catálogo deve seguir o `AUTHORIZED_ROUTE_CATALOG`, não um número congelado de outra revisão. O commit `e8c7e1591b` retirou a rota `AIONUI_MCP_STDIO` (protótipo legado) sem atualizar o `expectedRouteCount` do gate canário, deixando `main` com 16 rotas versus 17 declarados. Correção aplicada somente no owner do gate (`mcp-diagnostics.js` + test + label CI), sem tocar o runtime.
+  3. Diferenças do checkout operacional comprovadas como "vivas no runtime" (tool de delegação A2A `hermes_delegar_tarefa`, fix do eco JSON-RPC no 401) foram incorporadas ao worktree do PR, preservando o processo MCP (PID 244642).
+  4. O merge do PR não foi executado: o gate do repo exige leitura prévia, sentinel determinístico verificado `ok:true` e autorização humana do CHEFE. A regra `READ_ONLY != DEPLOY_AUTORIZADO` foi aplicada.
+- **Regra operacional:** PRESERVAR → COMPARAR → RECONCILIAR → TESTAR → CONTRAPROVA → APROVAÇÃO → MERGE (apenas após autorização) → READBACK → APRENDIZADO.
+- **Comprovante:** SHA inicial `6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6` (PR head original) → SHA final `696313206b76710447f119981d49791eb872f35f` (head atualizado). `node --test apps/modulos/mcp/tests/`: 334 testes, 328 pass, 6 fail — todos os 6 decorcem de `centraldark-capabilities.test.mjs` e são pré-existentes na `main` e no PR-head sem meus deltas (não regressão). Sentinel `system_sentinel.py --self-test`: `ok:true, failed:[]`. Runtime MCP PID 244642 inalterado (`/tools.json` 161 ferramentas, `hermes_delegar_tarefa` presente). Blocked: `CASA_BRIDGE_TOKEN` ausente do execute MCP — `centraldark_casa_list_processes` só executará com o token injetado; o gate de deploy não é o responsável por manter a conexão. PRs #1900 e #1880 convergentes sobre `mcp-diagnostics.js`: aguardar decisão do CHEFE/owner antes de qualquer merge.
+- **Mnemônico do CHEFE:** `TRANSPORTE ATIVO != EXECUÇÃO COMPROVADA != DEPLOY AUTORIZADO`.
+
 <!-- CENTRALDARK_ENSINAMENTO_KAIZEN_CHEFE_RESULTADOS_20261120 -->
 ## 📖 Evangelho da CentralDark — Livro do Kaizen, capítulo 1 (2026-11-20)
 

@@ -48,6 +48,14 @@ export const casaPrivateTools=[
     inputSchema:z.object({path:filePath}),
     handler:async({path})=>json(await callCasa("POST","/tool",{name:"list_directory",arguments:{path}}))
   },
+  // Primeiro teste E2E: a Casa já permite list_processes no motor MIT local.
+  // Expor a mesma leitura no MCP Hostinger sem novo executor, SSH ou escrita.
+  {name:"centraldark_casa_list_processes",
+    description:"Lista processos do Windows na Casa autorizada pela ponte Tailscale; não executa comandos.",
+    annotations:annotations(false,"Casa — Listar processos"),
+    inputSchema:z.object({}),
+    handler:async()=>json(await callCasa("POST","/tool",{name:"list_processes",arguments:{}}))
+  },
   {name:"centraldark_casa_read_file",
     description:"Lê arquivo da Casa SEGREDO pelo Tailscale privado e engine local.",
     annotations:annotations(false,"Casa — Ler arquivo"),

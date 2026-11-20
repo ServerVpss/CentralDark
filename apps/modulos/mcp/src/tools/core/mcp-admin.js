@@ -34,6 +34,7 @@ import { vpsLazyTools } from "../vps/vps-lazy.js";
 import { vpsRunOnceTools } from "../vps/vps-run-once.js";
 import { youtubeMediaTools } from "../media/youtube-transcript.js";
 import { mcpDiagnosticsTools } from "./mcp-diagnostics.js";
+import { DELEGATION_A2A_TOOL } from "./hermes_delegar_tarefa.js";
 import { mcpPolicyTools } from "./mcp-policy.js";
 import { canonicalRecipeFirstPreflight, GLOBAL_RECIPE_FIRST_CONTRACT } from "../deploy/centraldark-capabilities.js";
 import {
@@ -187,6 +188,7 @@ const runtimeTools = [
     ...operationalTelemetryTools,
     ...piveteTools,
     ...youtubeMediaTools,
+    DELEGATION_A2A_TOOL,
 ];
 const AUTHORIZED_ROUTE_CATALOG = Object.freeze([
     { id: "MCP_VPS_NATIVE_HTTP", transport: "MCP_HTTP", binding: "VPS:127.0.0.1:9100", capability: "MCP_CENTRALDARK", source: "apps/modulos/mcp/src/mcp-server.js", runtimeState: "MEASURE_AT_RUNTIME" },

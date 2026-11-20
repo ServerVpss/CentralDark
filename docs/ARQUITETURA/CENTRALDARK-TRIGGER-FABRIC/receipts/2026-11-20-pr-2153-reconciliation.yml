@@ -1,0 +1,77 @@
+schema: centraldark.rov.pr-reconciliation.receipt.v1
+contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
+contract_version: centraldark.rov.pr-reconciliation.v1
+repository: ServerVpss/CentralDark
+tested_origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
+receipt_persisted_in_main_sha: PENDING_PR_2153_MERGE
+local_head_sha: c3fe2bf927815074814d991a22dc043393c71117
+worktree_state: "DIRTY_PRESERVED (32 arquivos modificados); nao-rastreados: <caminho-vps>/ (auditoria MCP, 3 arquivos cada; nao versionados)"
+sentinel_result: "PASS ok:true failed:[]"
+tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
+open_pr_total: 38
+readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 15, UNKNOWN: 11, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+selected_pr: 2153
+decision:
+  action: MERGE_GATED_BY_HUMAN_AUTHORIZATION
+  reason: |
+    Fontes e checks passam (334/328/6, 6 pre-existentes, sentinel ok,
+    PR mergeable clean, checks failed:[]). Efeito de runtime nao comprovado:
+    deploy intencional negado pela receita e sessao OAuth expirada no MCP
+    em execucao. Merge somente apos aceite humano do CHEFE.
+  human_authorization: PENDING_CHEFE
+tests_t0:
+  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch main 4d927c47)"
+  failing: "6 testes pre-existentes em centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs"
+  note: "0 falha de regressao minha; 16 vs 17 no gate canario (owner main: e8c7e1591b) - inventory read-only"
+tests_t1:
+  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch PR c3fe2bf927815074814d991a22dc043393c71117)"
+  tests: "334 | pass: 328 | fail: 6"
+  failing: "os mesmos 6 de T0 (centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs) - nao regressao"
+  canary_gate: "mcp-catalog-scope.test.mjs 5/5 pass (16 rotas canonicas, AIONUI retirada em e8c7e1591b)"
+runtime_readback:
+  pid: 244642
+  alive: true
+  catalogVersion: 161-9629d1fb55a7
+  toolCount: 161
+  hermes_delegar_tarefa: presente (runtime atrasado do PR)
+  centraldark_casa_list_processes: "BLOQUEADO (sessao OAuth expirada; broker Tailscale inacessivel) - estado do runtime, nao do PR"
+  probe_pr: "catalogVersion 162-a7ab2d87682e (branch PR); tools/list lido documentalmente (sessao expirada)"
+  recipeFirst: "MCP_HTTP_ONLY PASS RECIPE_FIRST_MATCHED"
+mcp_counterproof:
+  scope_contains_mcp: true
+  required_sequence:
+    - inspect_current_mcp_owner: PASS (catalogo 161 tools)
+    - verify_source_and_dist_alignment: PASS (build tsc; src<->dist concordantes; AIONUI removido do espelho)
+    - run_local_schema_regression: PASS (334/328/6; 6 pre-existentes; canary 5/5)
+    - authenticated_tools_list: BLOCKED (sessao OAuth expirada no runtime; broker Tailscale inacessivel - nao e defeito do PR)
+    - assert_every_tool_inputSchema_type: PROVED no source do PR (mcp-server.js:177 zodTypeToJsonSchema(t.inputSchema); base main inclui PR #2056 publish valid JSON schemas)
+    - hermes_mcp_test_centraldark_after_deploy: N/A (sem deploy nesta missao - deploy e gate separado com human authorization)
+    - read_only_mcp_call: PASS (teste mcp-readonly-dispatch.test.mjs 1/1; dispatcher do probe l� tools.readOnly)
+  rules:
+    oauth_pass_does_not_imply_tools_list_pass: true
+    tools_list_pass_does_not_imply_deploy_pass: true
+    hermes_client_auth_does_not_imply_gateway_auth: true
+    health_does_not_imply_feature_consumed: true
+rollback_reference: /data/preservacao-centraldark-2026-11-20 (bundle-refs, working-tree-tracked.patch, untracked.tar.gz)
+next_cursor: PENDING_CHEFE_MERGE_AUTHORIZATION
+verdict: PARTIAL
+proven:
+  - corretivo 16x17: mcp-diagnostics.js expectedRouteCount 17->16 + mcp-catalog-scope.test.mjs + label CI (owner main e8c7e1591b) - teste canario 5/5
+  - delta operacional: hermes_delegar_tarefa.js (byte iden-tico), mcp-admin.js, tools-catalog.js (tool A2A), index.js (JSON-RPC id echo)
+  - dist: regenerado via tsc; espelho alinhado; AIONUI removido
+  - testes: 334/328/6 com 6 pre-existentes; sentinel ok:true; tlc23 PROVED
+blocked:
+  - CASA_BRIDGE_TOKEN nao injetado no env do MCP; centraldark_casa_list_processes nao executa (transport active, execution not proven)
+  - PR #1900/#1880 convergentes sobre mcp-diagnostics.js - decisao do CHEFE/owner
+  - Merge aguardando autorizacao humana do CHEFE (receipt nao persistida em main ainda)
+unknown:
+  - Prova do runtime nao comprovada apos deployment (acao separada, com human_authorization)
+  - Session OAuth do MCP em execucao expirada (runtime atrasado da main)
+evidence:
+  - shas: "PR inicial 6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6 -> PR final c3fe2bf927815074814d991a22dc043393c71117 (2 commits de verificacao: receita ROV + --verify-receipt)"
+  - PR diff: +540/-36, 21 arquivos, base main 4d927c47
+  - audit owner: "open_total=38, readiness_counts={READY_TECHNICAL_WITHOUT_REVIEW_PROOF:15, UNKNOWN:11, DRAFT:2, NEEDS_RECONCILIATION:10}"
+  - audit PR#2153: "category=READY_TECHNICAL_WITHOUT_REVIEW_PROOF, mergeable=true, mergeable_state=clean, checks_failed=[] (arquivo /data/cache/scratch/rov-audit-2153.json, 22006 bytes, exit 0)"
+  - probe reiniciado (pid 812214); service 9110 /health ok catalogVersion=162-a7ab2d87682e, toolCount=162 (branch PR)
+  - sentinel: python3 scripts/trigger-fabric/system_sentinel.py --self-test -> ok:true failed:[]
+  - tlc23: sha256 b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1 -> PROVED BYTE_IDENTITY_MATCH
