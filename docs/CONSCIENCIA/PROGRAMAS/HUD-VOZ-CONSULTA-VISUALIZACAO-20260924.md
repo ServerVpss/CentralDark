@@ -14,7 +14,7 @@ UNKNOWN != PASS
 
 CHEFE fala → CentralDark consulta/executa pelos owners existentes → CHEFE ouve e visualiza o resultado.
 
-## Owners reconciliados no main
+## 👀 Responsáveis reconciliados na main
 
 - coração/saúde: `GET https://api.centralldark.com/heartbeat` em `apps/modulos/mcp/src/index.js`
 - roteamento: `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`
@@ -67,7 +67,7 @@ NO_NEW_SENTINEL_CORE=true
 NO_SECOND_HEARTBEAT=true
 NO_SECOND_ROUTER=true
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 1. validar build/lint do cockpit no mesmo HEAD
 2. observar CI do filho
