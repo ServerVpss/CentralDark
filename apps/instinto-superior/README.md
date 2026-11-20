@@ -51,7 +51,7 @@ Veja `docs/CONVERGENCIA-CAPACIDADES-2026-09-25.md` para a matriz de reaproveitam
 - **Menor delta:** gerar `/etc/centraldark/instinto-superior-auth-public.env` (0600, apenas aliases `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`, sem service-role) e adicionar drop-in `/etc/systemd/system/centraldark-instinto-superior-web.service.d/10-supabase-public.conf` com EnvironmentFile. Unit original intacta. Reinício somente do cockpit, não do MCP/Hermes.
 - **Readback:** `ActiveState=active`, `MainPID=128667`, ambiente novo contém as duas variáveis e nenhuma SERVICE_ROLE; `/auth`, `/auth/callback`, `/sala-controle` HTTP 200; nenhum novo `Missing Supabase` desde a inicialização do novo PID às 17:28:18 UTC. **HTTP 200 não comprova login admin.**
 - **Rollback:** remover somente drop-in `10-supabase-public.conf` e env derivado `instinto-superior-auth-public.env`, `systemctl daemon-reload`, reiniciar somente a unit do cockpit. Não mexer na `.env.production.local` nem em cookies.
-- **NEXT_CURSOR:** reentrar pelo navegador em `/auth`, testar chamada SSR com sessão verdadeira e confirmar `admin=true`. O erro `chrome-extension://.../inject-scripts/set-global.js` é da extensão Chrome e deve ser testado separadamente; não é prova da causa server-side.
+- **👉 O QUE FAZER AGORA:** reentrar pelo navegador em `/auth`, testar chamada SSR com sessão verdadeira e confirmar `admin=true`. O erro `chrome-extension://.../inject-scripts/set-global.js` é da extensão Chrome e deve ser testado separadamente; não é prova da causa server-side.
 - **Reality Judge:** `RUNTIME_ENV=PASS`, `SSR_ROUTES=PASS`, `SESSION_SERVER_FN=UNKNOWN`, `ADMIN_LOGIN_E2E=UNKNOWN`, `EXTENSION_ERROR=SEPARATE`, `GLOBAL_FIXED_POINT=FALSE`.
 
 
@@ -65,7 +65,7 @@ O contrato evolutivo, os owners, o catálogo da Forja Viva, a gaveta histórica,
 @owner: instinto.admin.mcp; @code_ref: src/lib/mcp-admin.functions.ts; src/components/central/McpAdminIntegrado.tsx
 @last_updated: 2026-11-01T19:13:55.777094+00:00
 O Admin MCP reutiliza autenticação Supabase e user_roles admin para receber CONTROL_PLANE_API_KEY. O servidor habilitado por CENTRALDARK_LOCAL_TUNNEL_ENABLED=1 grava atomicamente ~/.config/tunnel-client/centraldark-casa.env com modo 0600; o observador systemd do mesmo usuário inicia centraldark-mcp-tunnel.service. O valor nunca é retornado, logado ou enviado ao Vault remoto. O Cofre Supabase permanece dono das outras credenciais; isto configura o owner local específico do túnel. Sem sessão/admin, sem escrita. Readiness não equivale a chamada pelo plugin. Ambiente Linux: checkout medido, sem impor /root/CentralDark.
-Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. NEXT_CURSOR: build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
+Estado: implementação local, testes/runtime em validação; nenhuma promoção VPS. **👉 O QUE FAZER AGORA:** build, HTTP, acesso admin e chave real, readyz e chamada no plugin.
 
 @code_ref: src/lib/cockpit.functions.ts; @last_updated: 2026-11-01T19:22:05.143254+00:00. Inventário executa ss/pgrep no Linux nativo, sem exigir WSL/PowerShell. CASA é papel explícito, não deduzido de hostname. TCP/UDP e processo STDIO mantêm provas separadas de execução funcional.
 
@@ -100,4 +100,4 @@ Prova que motivou o delta: VM openKylin em `main@4207576f4c86`, `origin/main@b98
 
 `DRY_RUN != APPLY` · `PLAN != COMMIT` · `COMMIT != DEPLOYED` · `UNKNOWN != PASS`.
 
-NEXT_CURSOR: atualizar o runtime do mesmo Cockpit com esse owner, repetir o clique Casa/Main, obter o manifesto dos conflitos, reconciliar as frentes por owner e só então promover o checkout ao mesmo SHA da main.
+**👉 O QUE FAZER AGORA:** atualizar o runtime do mesmo Cockpit com o responsável existente, repetir o clique Casa/Main, obter o manifesto dos conflitos, reconciliar as frentes pelo responsável correto e só então promover o checkout ao mesmo SHA da main.
