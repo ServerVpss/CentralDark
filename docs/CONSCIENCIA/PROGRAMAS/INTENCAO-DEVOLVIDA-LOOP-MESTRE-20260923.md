@@ -904,7 +904,7 @@ UNKNOWN != PASS
    : REUSE_SEAL_AND_WAIT
 ```
 
-## NEXT_CURSOR
+## 👉 O QUE FAZER AGORA
 
 ```text
 1. medir owners exatos do cockpit onde o painel entra;
@@ -1061,7 +1061,7 @@ O CHEFE autorizou a promoção **documental integral** do PR #1785. A transcriç
 
 **Discriminante para promover a hipótese a efeito (ainda não executado):** mostrar o Hermes recuperar automaticamente uma receita canônica **antes da decisão**, carregar `learning_ref` e `proof_key` para o mesmo Goal e, em teste controlado, (a) não repetir um efeito já comprovado no mesmo alvo e versão, (b) retestar só o cone quando o fingerprint divergir, (c) produzir receipt, contraprova e readback. `KNOWLEDGE_ALREADY_RECORDED=PASS_CODE_READ`; `PREDICISION_AUTOCONSUMPTION=UNKNOWN`; `RUNTIME_OWNER_BINDING=UNKNOWN`; `GLOBAL_FIXED_POINT=NOT_PROVEN`.
 
-**NEXT_CURSOR:** no owner original do Hermes, conferir decisor→recuperação pertinente→prova→efeito; corrigir somente o ponto de encaixe que a medição demonstrar, sem repetir Gênesis nem reiniciar missão.
+**👉 O QUE FAZER AGORA:** no responsável original do Hermes, conferir decisor → recuperação pertinente → prova → efeito; corrigir somente o ponto de encaixe que a medição demonstrar, sem repetir Gênesis nem reiniciar missão.
 
 ### 2026-10-12 — REGISTRA: preflight cruzado das cinco fontes do CHEFE
 
@@ -1125,7 +1125,7 @@ GOAL_ID + INTENT_FIXED
 
 **FIXED_POINT_STATUS=PARTIAL_CRYSTAL_REGISTERED; GLOBAL_FIXED_POINT=NOT_PROVEN.** O selo aprovado aqui cobre a receita/documentação e a contraprova histórica da ponte; publicação da galeria, merge limpo #1830, checks same-HEAD, runtime de builder e continuidade após reinicialização permanecem `UNKNOWN/BLOCKED` conforme aplicabilidade.
 
-**NEXT_CURSOR:** medir o HEAD e checks atuais do #1830; conciliar os quatro conflitos em worktree isolada sem tocar no checkout dirty da Casa, preservando 0.1.1 + avanços 0.1.3; rodar TypeScript/lint/build no SHA a promover; verificar galeria autenticada no cockpit realmente publicado; confrontar log cursor Casa/VPS; retomar o GOAL existente a partir do primeiro critério C01–C12 sem PASS. `ONE_SYSTEM_ONLY=true`.
+**👉 O QUE FAZER AGORA:** medir o HEAD e as verificações atuais do #1830; conciliar os quatro conflitos em worktree isolada sem tocar no checkout sujo da Casa, preservando 0.1.1 + avanços 0.1.3; rodar TypeScript/lint/build no SHA a promover; verificar galeria autenticada no cockpit realmente publicado; confrontar log cursor Casa/VPS; retomar o GOAL existente a partir do primeiro critério C01–C12 sem PASS. `ONE_SYSTEM_ONLY=true`.
 
 ### 🌟 !MICHELIN — seta de qualidade do Loop Mestre (2026-10-21)
 
@@ -1139,7 +1139,7 @@ A intenção do CHEFE acrescenta `🌟 !MICHELIN` ao **mesmo** `!CENTRALDARK` en
 
 `MERGED != DEPLOYED`: o card só aparece no Cockpit publicado depois do `build:vps` da VPS, que é decisão do CHEFE e está com o outro agente.
 
-### NEXT_CURSOR
+### 👉 O QUE FAZER AGORA
 
 ```text
 1. Rodar o sensor ao vivo (casa_jea.py suite → validar-harness-casa-jea.mjs --live) quando o Hermes precisar agir na Casa; ⚠️ mostra a causa e não rebaixa o PROVEN.
@@ -1176,7 +1176,7 @@ INTENCAO_CHEFE -> RECALL_GOAL/NEXT_CURSOR -> DESCOBERTA_CANDIDATA -> !MULTIBUSSO
 
 **Escopo desta batida:** somente contrato documental canonicamente versionado na main. Nenhum gatilho executavel, painel, teste CI, runtime Casa/VPS ou experiencia autenticada recebe PASS por causa deste texto.
 
-**NEXT_CURSOR:** no mesmo Goal, inventariar o consumo real de !KAIZEN/!MULTIBUSSOLA no motor/gatilhos existentes; corrigir somente eventual falta comprovada de normalizacao de voz ou exibicao no Cockpit e produzir receipt do mesmo SHA antes de desbloquear habilidade.
+**👉 O QUE FAZER AGORA:** no mesmo objetivo, inventariar o consumo real de !KAIZEN/!MULTIBUSSOLA no motor/gatilhos existentes; corrigir somente eventual falta comprovada de normalização de voz ou exibição no Cockpit e produzir comprovante do mesmo SHA antes de desbloquear habilidade.
 
 <!-- /CENTRALDARK_GAMIFIED_KAIZEN_MULTIBUSSOLA_20261025 -->
 
@@ -1253,7 +1253,7 @@ Uma instância lógica de **Gateway central no openKylin da Casa** é compartilh
 
 **ESTADO DESTE COMMIT:** DOCUMENTED, não MIGRATED nem DEPLOYED. Não foram desinstalados componentes, fechadas portas, formatada VPS ou alterados perfis ao escrever este contrato.
 
-**NEXT_CURSOR:** pelo executor/owner que já existe, identificar somente as duplicações reais de Gateway/CLI/serviços; fazer as interfaces atuais compartilhar o serviço Linux; desligar duplicações substituídas preservando outros processos; reproduzir na VPS os scripts validados e configurar os endpoints públicos; registrar receipts e diferenças observadas. Nenhuma nova arquitetura.
+**👉 O QUE FAZER AGORA:** pelo executor e responsável que já existem, identificar somente as duplicações reais de Gateway/CLI/serviços; fazer as interfaces atuais compartilhar o serviço Linux; desligar duplicações substituídas preservando outros processos; reproduzir na VPS os scripts validados e configurar os endpoints públicos; registrar receipts e diferenças observadas. Nenhuma nova arquitetura.
 
 <!-- /CENTRALDARK_FORJA_UNICA_GATEWAY_UNICO_CASA_GITHUB_VPS_20261031 -->
 
