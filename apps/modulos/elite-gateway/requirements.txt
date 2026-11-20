@@ -55,6 +55,6 @@ typing_extensions==4.16.0
 urllib3==2.8.0
 xlsxwriter==3.3.1
 # Omni Router FastAPI runtime: required in Casa and VPS (missing from prior manifest).
-fastapi>=0.162.6,<1
+fastapi>=0.163.1,<1
 uvicorn>=0.54.0,<1
 pydantic>=2.14.3,<3
