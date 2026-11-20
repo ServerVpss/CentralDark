@@ -92,7 +92,7 @@ Texto legado conflitante perde para o owner canônico.
 
 Quando o CHEFE disser **\`!CENTRALDARK\`** (incluindo \`!Centraldark\`, independentemente de maiúsculas/minúsculas), isso é um **gatilho operacional**. A primeira operação do agente que atua neste repositório é localizar o **último checkpoint de execução VERIFICADO** e recuperar \`INTENCAO | MISSAO | ULTIMO_PASS | NEXT_CURSOR | RECEIPT_SHA256\`. Não pedir ao CHEFE para digitar comandos, informar o ID ou copiar o manual; descobrir automaticamente a rota existente.
 
-**Owner único de checkpoint:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado privado de cada runtime fica em \`CENTRALDARK_HERMES_CHECKPOINTS\` ou, por padrão, em \`~/.hermes/centraldark/verified-execution/\` do usuário executor. A \`main\` contém código/contrato, não checkpoints privados; o estado de uma máquina não prova estado idêntico em outra.
+**Responsável único pelo ponto de continuidade:** \`scripts/hermes/verified-checkpoint.py\` (prova/journal/plan); **adaptador de entrada:** \`scripts/hermes/centraldark-entry.py\` (localiza \`latest\`, verifica cadeia SHA-256 e devolve o fio). Esses adaptadores não criam outro Hermes, memória nem scheduler. O estado privado de cada runtime fica em \`CENTRALDARK_HERMES_CHECKPOINTS\` ou, por padrão, em \`~/.hermes/centraldark/verified-execution/\` do usuário executor. A \`main\` contém código/contrato, não checkpoints privados; o estado de uma máquina não prova estado idêntico em outra.
 
 **Roteamento pelo owner e runtime medido, sem endereço legado obrigatório:**
 
@@ -130,7 +130,7 @@ Ao abrir ChatGPT (qualquer conta), Codex, Hermes, VS Code, Casa, VPS ou Instinto
 
 
 
-## ⚡ SEM LEI OPERACIONAL — ANTI-FRICÇÃO CURRENT
+## ⚡ SEM LEI OPERACIONAL — estado atual sem atrito
 
 Isto não cria uma lei nova. Remove poder de veto de ritual, checklist, gate narrativo, nome de método, modelo, branch, PR, label ou revalidação sem dependência causal real.
 
@@ -469,7 +469,7 @@ Ler o núcleo canônico (SOUL, RULES, AGENTS e Skill Mãe) e consultar **somente
 17. `.agents/skills/git-conflict-resolve-house-standard/SKILL.md` quando houver PR em conflito, main avançando sob PR aberto, ou dependabot travado — padrão único, motor em `scripts/dependabot/resolve-conflicts.sh` e registry estruturado em `scripts/dependabot/known-conflict-patterns.json`.
 18. estado atual de branch, HEAD, PR, runtime, writer e ferramentas aplicáveis.
 
-### 1.0 Índice de owners canônicos especializados
+### 1.0 Índice de responsáveis canônicos especializados
 
 Documentos com `status: CANÔNICO` precisam permanecer alcançáveis a partir desta porta; ser canônico sem rota de entrada é órfão. Owners especializados atuais:
 
@@ -1177,14 +1177,14 @@ TASKS_SECRETAS
 ## 14. Fechamento
 
 ```text
-O_QUE_FOI_FEITO=
-EVIDENCIA=
-O_QUE_NAO_FOI_TOCADO=
-ESTADO_REAL=
-PENDENCIA=
-RISCO_RESIDUAL=
-ROLLBACK=
-PROXIMO_PASSO=
+🧾 COMPROVANTE = o que foi feito e conferido
+🔎 CONFERÊNCIA = a prova que sustenta o resultado
+🔒 PROTEÇÃO = o que foi preservado e não foi alterado
+📊 COMO FICOU = estado real observado
+⚠️ ATENÇÃO = o que ainda falta ou exige cuidado
+⚠️ RISCO QUE RESTOU = risco material ainda existente
+🔒 COMO DESFAZER = caminho de volta quando aplicável
+👉 O QUE FAZER AGORA = continuidade em linguagem natural
 ```
 
 Aprendizado que muda comportamento deve entrar no canônico; conversa sem efeito não polui o repo.
@@ -1241,7 +1241,7 @@ FLUXO FUNCIONAL → 🔴 DESVIO → ↩️ 1 CASA ATRÁS → MESMO OWNER
 
 No jeito do CHEFE: **a vela mostra a intenção, o astrolábio mede a realidade, o meridiano prende o owner certo e a carta do GitHub registra onde a embarcação realmente está.** O título mostra essa rota antes da resposta, sem inventar costa verde no mapa.
 
-## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · owner: `AGENTS.md`)
+## 🔏 !RASTRO — LEI DO RASTRO (cadeado obrigatório · responsável: `AGENTS.md`)
 
 ```text
 RESPONSE_WITHOUT_TRACE=INVALID
@@ -1258,7 +1258,7 @@ RASTRO_FISCAL_BEFORE_CURRENT_LEDGER_RETURN=true
 Vale para qualquer motor (Claude, ChatGPT, Codex, Gemini, Grok, Hermes, CI). Disse que gravou → mostra ID, caminho, link e prova de leitura de volta. Sem isso, não aconteceu.
 
 
-## 🔥🪬 Contrato CURRENT herdado — intenção contínua + META-GRILL + FIO VERDE
+## 🔥🪬 Estado atual herdado — intenção contínua + META-GRILL + FIO VERDE
 
 Este arquivo **não cria contrato, owner, cérebro ou arquitetura paralela**. Herda o contrato CURRENT da SOUL; o legado continua vivo como compatibilidade, não como segunda arquitetura.
 
