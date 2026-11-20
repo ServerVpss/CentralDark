@@ -32,6 +32,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unicodedata
 from pathlib import Path
@@ -1239,9 +1240,75 @@ def canonical_boot_snapshot(repo: Path) -> dict:
     }
 
 
+def cmd_script_first_preflight(repo: Path) -> dict:
+    """Script-first deterministic recovery gate (contrato ROV: recovery_first).
+
+    Regra principal: o script ja sabe comprovar; a IA so e chamada quando a
+    recuperacao deterministica falhou VERDADEIRAMENTE e verificadamente.
+    Execute o sentinel existente (scripts/trigger-fabric/system_sentinel.py)
+    em estado read-only; nao muta runtime, nao escreve arquivo usuario.
+
+    Saidas:
+      script_first_recovery_passed      = sentinel ok:true, failed:[]
+      script_first_recovery_failed      = sentinel falhou/erro/verificada
+      script_first_model_authorized     = True somente quando failed
+    """
+    sentinel = repo / "scripts" / "trigger-fabric" / "system_sentinel.py"
+    out = {
+        "script_first_recovery_passed": False,
+        "script_first_recovery_failed": False,
+        "script_first_model_authorized": False,
+        "script_first_sentinel_command": str(sentinel),
+        "script_first_sentinel_method": "self_test()",
+    }
+    if not sentinel.is_file():
+        out.update({"script_first_recovery_failed": True,
+                    "script_first_recovery_error": "SENTINEL_NOT_FOUND",
+                    "script_first_model_authorized": True})
+        return out
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(sentinel), "--self-test"],
+            cwd=str(repo), capture_output=True, text=True, encoding="utf-8",
+            errors="replace", timeout=120,
+        )
+        try:
+            payload = json.loads(proc.stdout)
+        except json.JSONDecodeError:
+            payload = {"raw": proc.stdout[:200], "error": "INVALID_JSON"}
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        out.update({"script_first_recovery_failed": True,
+                    "script_first_recovery_error": f"{type(exc).__name__}: {exc}",
+                    "script_first_model_authorized": True})
+        return out
+    out["script_first_sentinel_exit"] = proc.returncode
+    out["script_first_sentinel_checks"] = len(payload.get("checks", {}))
+    if payload.get("ok") is True and payload.get("failed") == []:
+        out["script_first_recovery_passed"] = True
+        out["script_first_sentinel_checks"] = len(payload.get("checks", {}))
+    else:
+        out["script_first_recovery_failed"] = True
+        out["script_first_recovery_error"] = payload.get("failed")
+        out["script_first_model_authorized"] = True
+    return out
+
+
 def cmd_boot(args: argparse.Namespace) -> int:
     repo = discover_boot_repo(getattr(args, "repo", None))
     active = explicit_command_context(args.input)
+
+    # Gate determinstico: script-first (contrato recovery_first).
+    script_first = cmd_script_first_preflight(repo)
+    if script_first.get("script_first_recovery_failed"):
+        print(json.dumps({
+            "schema": "centraldark.full-trigger-boot.v1",
+            "status": "SCRIPT_FIRST_RECOVERY_FAILED",
+            "script_first": script_first,
+            "reason": script_first.get("script_first_recovery_error"),
+            "canonical_boot_loaded": True,
+            "operational_boot_executed": False,
+        }, ensure_ascii=True, indent=2))
+        return 6
 
     # Read the canonical contract first. Runtime and mission gates may limit
     # continuation, but must not erase this read-only result.
@@ -1354,6 +1421,10 @@ def cmd_boot(args: argparse.Namespace) -> int:
             "proof_divergence": "DELTA_NEW",
         },
     }
+    # gate script-first: decisao determinstica injeta no json de boot
+    result["script_first_recovery_passed"] = script_first.get("script_first_recovery_passed", False)
+    result["script_first_recovery_failed"] = script_first.get("script_first_recovery_failed", False)
+    result["script_first_model_authorized"] = script_first.get("script_first_model_authorized", False)
     print(json.dumps(result, indent=2, ensure_ascii=True))
     if not active:
         return 4
