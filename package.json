@@ -91,7 +91,7 @@
     "react-resizable-panels": "^2.1.9",
     "react-router-dom": "^7.18.5",
     "recharts": "^2.15.4",
-    "screenpipe": "0.4.51",
+    "screenpipe": "0.4.58",
     "screenpipe-mcp": "0.20.4",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.1",
