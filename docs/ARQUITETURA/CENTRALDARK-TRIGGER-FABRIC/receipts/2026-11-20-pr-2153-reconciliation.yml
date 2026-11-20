@@ -1,51 +1,75 @@
 schema: centraldark.rov.pr-reconciliation.receipt.v1
 contract: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PR-MERGE-RECONCILIATION-ROV.yml
 contract_version: centraldark.rov.pr-reconciliation.v1
-scope: PR_2153_RECONCILIATION_MAIN
-verdict: PASS
-rov_fixed_point: false
-fixed_point_kind: MERGE_GATED_BY_HUMAN_AUTHORIZATION
 repository: ServerVpss/CentralDark
-canonical_branch: main
-origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
-pr_initial_head_sha: 6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6
-pr_final_head_sha: 696313206b76710447f119981d49791eb872f35f
-test_suite: apps/modulos/mcp/tests/
-test_result: "tests 334, pass 328, fail 6"
-test_failures: "todos decorrentes de centraldark-capabilities.test.mjs, pre-existentes em main e no PR-head sem deltas (nao regressao)"
-sentinel_result: "python3 scripts/trigger-fabric/system_sentinel.py --self-test"
-sentinel_status: ok:true, failed:[]
-runtime_mcp_pid: 244642
-runtime_mcp_command: node /data/cache/scratch/CentralDark/apps/modulos/mcp/src/index.js
-runtime_tool_count: 161
-runtime_tools_additions: ["hermes_delegar_tarefa"]
-runtime_unchanged: true
-pr_files_changed: 20
-pr_branch: feat/centraldark-os-circuito-e2e-alerta-20261120
-branch_local_commits: ["8eb8542d9f", "eab223cf92", "3be61fdcd3", "696313206b"]  # route canario, tool A2A, assert leitura-unica, dist sincronizado
-human_authorization_required_for_merge: true
-merge_gate: PR-MERGE-RECONCILIATION-ROV.yml (READ_ONLY preflight + sentinel + human authorization)
-decisions:
-  - corrective_delta_owner: apps/modulos/mcp/src/tools/core/mcp-diagnostics.js + mcp-catalog-scope.test.mjs + .github/workflows/centraldark-validate.yml
-    change: "17 -> 16 rotas canonicas (rota AIONUI deputada em e8c7e1591b); teste e label atualizados"
-    proof: "node --test apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs: pass 5/5"
-  - runtime_deliverable_author: apps/modulos/mcp/src/tools/core/hermes_delegar_tarefa.js + mcp-admin.js + tools-catalog.js
-    change: "tool de delegao A2A hermes_delegar_tarefa (byte identico ao checkout operacional), sem reintroducao de AIONUI"
-    proof: "runtime /tools.json: toolCount 161, hermes_delegar_tarefa presente; node --check OK"
-  - runtime_fix_author: apps/modulos/mcp/src/index.js
-    change: "eco de id JSON-RPC no 401 do desafio OAuth do tunel (cherry-pick de feb8d5887)"
-    proof: "lease da branch fix/mcp-oauth-jsonrpc-id-echo; aplicacao limpa no PR"
-  - dist: "recriacao via tsc -p tsconfig.json --noResolve; espelho alinhado ao src; AIONUI removida do espelho"
-    proof: "9 arquivos dist re-gerados, devidamente commitados; node --check OK"
-blockers:
-  - CASA_BRIDGE_TOKEN not in MCP process env (CASA_BRIDGE_TOKEN_NOT_CONFIGURED); centraldark_casa_list_processes cannot execute without token injection. Transport active, execution not yet proven.
-  - PR #1900 e #1880 convergentes sobre mcp-diagnostics.js; classificar supersede vs merge requer decisao do CHEFE/owner.
-  - Merge gate do repo requer autorizacao humana (nenhum merge executado nesta missao).
-tlc23_result:
-  status: PROVED
-  reason: BYTE_IDENTITY_MATCH
-  sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
-  path: docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
-decisionnote: >
-  A falha 16x17 ao vier de main (e8c7e1591b). A correcao ficou no owner do gate.
-  PR atualizado e subido para review; merge aguardando autorizacao humana do CHEFE.
+tested_origin_main_sha: 4d927c47ad6f4e83f387c04c7a236932c1a0b97d
+receipt_persisted_in_main_sha: PENDING_PR_2153_MERGE
+local_head_sha: 2d86df5710686c5af324fba13b0058c956ce1fd3
+worktree_state: "DIRTY_PRESERVED (32 arquivos modificados); nao-rastreados: <caminho-vps>/ (auditoria MCP, 3 arquivos cada; nao versionados)"
+sentinel_result: "PASS ok:true failed:[]"
+tlc23_result: "PROVED BYTE_IDENTITY_MATCH sha256=b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
+open_pr_total: 38
+readiness_counts: "{READY_TECHNICAL_WITHOUT_REVIEW_PROOF: 15, UNKNOWN: 11, DRAFT: 2, NEEDS_RECONCILIATION: 10}"
+selected_pr: 2153
+decision:
+  action: MERGE_GATED_BY_HUMAN_AUTHORIZATION
+  reason: |
+    Fontes e checks passam (334/328/6, 6 pre-existentes, sentinel ok,
+    PR mergeable clean, checks failed:[]). Efeito de runtime nao comprovado:
+    deploy intencional negado pela receita e sessao OAuth expirada no MCP
+    em execucao. Merge somente apos aceite humano do CHEFE.
+  human_authorization: PENDING_CHEFE
+tests_t0:
+  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch main 4d927c47)"
+  failing: "6 testes pre-existentes em centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs"
+  note: "0 falha de regressao minha; 16 vs 17 no gate canario (owner main: e8c7e1591b) - inventory read-only"
+tests_t1:
+  suite_mcp: "node --test apps/modulos/mcp/tests/ (branch PR 2d86df5710)"
+  tests: "334 | pass: 328 | fail: 6"
+  failing: "os mesmos 6 de T0 (centraldark-capabilities.test.mjs + mcp-readonly-dispatch.test.mjs) - nao regressao"
+  canary_gate: "mcp-catalog-scope.test.mjs 5/5 pass (16 rotas canonicas, AIONUI retirada em e8c7e1591b)"
+runtime_readback:
+  pid: 244642
+  alive: true
+  catalogVersion: 161-9629d1fb55a7
+  toolCount: 161
+  hermes_delegar_tarefa: presente (runtime atrasado do PR)
+  centraldark_casa_list_processes: "BLOQUEADO (sessao OAuth expirada; broker Tailscale inacessivel) - estado do runtime, nao do PR"
+  probe_pr: "catalogVersion 162-a7ab2d87682e (branch PR); tools/list lido documentalmente (sessao expirada)"
+  recipeFirst: "MCP_HTTP_ONLY PASS RECIPE_FIRST_MATCHED"
+mcp_counterproof:
+  scope_contains_mcp: true
+  required_sequence:
+    - inspect_current_mcp_owner: PASS (catalogo 161 tools)
+    - verify_source_and_dist_alignment: PASS (build tsc; src<->dist concordantes; AIONUI removido do espelho)
+    - run_local_schema_regression: PASS (334/328/6; 6 pre-existentes; canary 5/5)
+    - authenticated_tools_list: BLOCKED (sessao OAuth expirada no runtime; broker Tailscale inacessivel - nao e defeito do PR)
+    - assert_every_tool_inputSchema_type: PROVED no source do PR (mcp-server.js:177 zodTypeToJsonSchema(t.inputSchema); base main inclui PR #2056 publish valid JSON schemas)
+    - hermes_mcp_test_centraldark_after_deploy: N/A (sem deploy nesta missao - deploy e gate separado com human authorization)
+    - read_only_mcp_call: PASS (teste mcp-readonly-dispatch.test.mjs 1/1; dispatcher do probe l� tools.readOnly)
+  rules:
+    oauth_pass_does_not_imply_tools_list_pass: true
+    tools_list_pass_does_not_imply_deploy_pass: true
+    hermes_client_auth_does_not_imply_gateway_auth: true
+    health_does_not_imply_feature_consumed: true
+rollback_reference: /data/preservacao-centraldark-2026-11-20 (bundle-refs, working-tree-tracked.patch, untracked.tar.gz)
+next_cursor: PENDING_CHEFE_MERGE_AUTHORIZATION
+verdict: PARTIAL
+proven:
+  - corretivo 16x17: mcp-diagnostics.js expectedRouteCount 17->16 + mcp-catalog-scope.test.mjs + label CI (owner main e8c7e1591b) - teste canario 5/5
+  - delta operacional: hermes_delegar_tarefa.js (byte iden-tico), mcp-admin.js, tools-catalog.js (tool A2A), index.js (JSON-RPC id echo)
+  - dist: regenerado via tsc; espelho alinhado; AIONUI removido
+  - testes: 334/328/6 com 6 pre-existentes; sentinel ok:true; tlc23 PROVED
+blocked:
+  - CASA_BRIDGE_TOKEN nao injetado no env do MCP; centraldark_casa_list_processes nao executa (transport active, execution not proven)
+  - PR #1900/#1880 convergentes sobre mcp-diagnostics.js - decisao do CHEFE/owner
+  - Merge aguardando autorizacao humana do CHEFE (receipt nao persistida em main ainda)
+unknown:
+  - Prova do runtime nao comprovada apos deployment (acao separada, com human_authorization)
+  - Session OAuth do MCP em execucao expirada (runtime atrasado da main)
+evidence:
+  - shas: PR inicial 6bed8a4055ded13e6e6e0941225be3c8c4ea1bf6 -> PR final 2d86df5710686c5af324fba13b0058c956ce1fd3
+  - PR diff: +540/-36, 21 arquivos, base main 4d927c47
+  - audit owner: open_total=38, readiness_counts={READY_TECHNICAL_WITHOUT_REVIEW_PROOF:15, UNKNOWN:11, DRAFT:2, NEEDS_RECONCILIATION:10}
+  - sentinel: python3 scripts/trigger-fabric/system_sentinel.py --self-test -> ok:true failed:[]
+  - tlc23: sha256 b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1 -> PROVED BYTE_IDENTITY_MATCH
