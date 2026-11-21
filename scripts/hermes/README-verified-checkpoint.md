@@ -81,6 +81,22 @@ O primeiro entrega **Git trailers** para a mensagem do próximo commit, e o segu
 
 O campo `source_commit` identifica o commit **anterior observado**, pois o SHA do novo commit só existe depois da gravação. Checkpoints antigos não são reescritos: aparecem com atribuição `UNKNOWN` quando faltar informação. Um passo que informe novos responsáveis passa por nova execução/contraprova antes de ser promovido como verde.
 
+<!-- CENTRALDARK_CHECKPOINT_ATTRIBUTION_PROOF_20261121 -->
+### 🧾 Prova da integração — PR #1994, 21/11/2026
+
+A correção deste mesmo owner adicionou identidade declarada, sem substituir as provas técnicas. Testados no computador SEGREDO, em diretório temporário e sem modificar a instalação operacional: **6/6 testes PASS**. O receipt foi produzido pela mesma CLI com os campos preenchidos para a missão e mostrou `VERIFIED_100`. A cadeia `events.jsonl` retornou `HASH_CHAIN_PASS` (2 eventos: 1 falha da chamada inicial no PowerShell, seguida de 1 execução verificada). **A falha inicial permaneceu no histórico.**
+
+- Missão: `centraldark-checkpoint-attribution-20261121`.
+- Autoridade declarada: CHEFE; responsável da missão: SOL; executor: SOL via GitHub e Casa.
+- Owner técnico: `scripts/hermes/verified-checkpoint.py`; PR: `#1994`.
+- Commit da versão testada: `057f6c2f255e0dc1bc2c85760dd7f85ccb6346cf`.
+- Receipt SHA-256: `04fbe64a64393fc491d239c97c287b2d6a4ed695c906675eeef719b5ad8a63b9`.
+- Próximo passo: `RECONCILIAR_PR_1994_COM_MAIN_PRESERVANDO_OWNER`.
+
+Esta prova cobre a suíte isolada e o checkout do PR, **não** demonstra merge em `main`, carregamento da nova versão no runtime nem CI no mesmo HEAD. O corpo do PR contém o resumo com readback. A identidade declarada não equivale a autenticação da pessoa nem autoriza promoção automática.
+
+<!-- /CENTRALDARK_CHECKPOINT_ATTRIBUTION_PROOF_20261121 -->
+
 ## 4. Recuperar o último fio de QUALQUER terminal ou sessão
 
 \`\`\`bash
