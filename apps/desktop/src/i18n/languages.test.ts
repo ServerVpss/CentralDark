@@ -96,6 +96,26 @@ describe('desktop i18n languages', () => {
     expect(TRANSLATIONS['pt-br'].settings.nav.backup).toBe('Backup e transferência')
   })
 
+  it('keeps CentralDark product and agent names distinct without renaming engine commands', () => {
+    expect(TRANSLATIONS['pt-br'].updates.appName).toBe('CentralDark · OS')
+    expect(ptBrMessages['updates.availableBody']).toContain('CentralDark · OS')
+    expect(ptBrMessages['updates.applyingBody']).toContain('CentralDark · OS')
+    expect(ptBrMessages['updates.stages.update']).toBe('Atualizando CentralDark · OS…')
+    expect(ptBrMessages['notifications.updateHermes']).toBe('Atualizar CentralDark · OS')
+    expect(ptBrMessages['appTour.messaging.text']).toContain('CentralDark · Agente')
+    expect(ptBrMessages['assistant.thread.errorCodes.SESSION_OWNER_BUSY.title']).toContain('CentralDark · Agente')
+    expect(ptBrMessages['boot.ready']).toBe('CentralDark · OS pronto')
+
+    // These are protocol/compatibility identities, not branding labels.
+    expect(ptBrMessages['updates.applyStatus.owed']).toContain('`hermes update`')
+    expect(ptBrMessages['assistant.catalogInstall.requiresHermes']).toBe('Hermes {0}')
+
+    const uiUpdaterStrings = Object.entries(ptBrMessages).filter(([key]) => key.startsWith('updates.'))
+    for (const [key, value] of uiUpdaterStrings) {
+      expect(value, key).not.toMatch(/\\bHermes\\b/)
+    }
+  })
+
   it('round-trips every picker option through its display.language value to a registered catalog', () => {
     for (const option of LOCALE_OPTIONS) {
       expect(normalizeLocale(option.configValue)).toBe(option.id)
