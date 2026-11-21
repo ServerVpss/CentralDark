@@ -60,12 +60,12 @@ light_colors:
   voice_status_bg: "#F5F5F5"
 
 branding:
-  agent_name: "CENTRAL DARK"
+  agent_name: "CentralDark · Terminal"
   prompt_symbol: "❯"
   help_header: "COMANDOS DISPONÍVEIS"
-  welcome: "UMA INTENCAO. UM ORGANISMO. UMA CENTRALDARK. Bem-vindo à CENTRAL DARK. Digite sua mensagem ou /help para comandos."
-  goodbye: "Até logo. CENTRAL DARK permanece ativa."
-  response_label: " ✦ CENTRAL DARK "
+  welcome: "CentralDark · Terminal pronto. Digite sua mensagem ou /help para ver os comandos."
+  goodbye: "Até logo."
+  response_label: " ✦ CentralDark · Agente "
 
 tool_prefix: "┊"
 
@@ -76,7 +76,7 @@ banner_logo: |-
   [bold #E9B849] | |    |  __| | . ` |  | |  |  _  /   / /\ \ | |      | |  | |/ /\ \ |  _  /|  <[/]
   [bold #68E0D5] | |____| |____| |\  |  | |  | | \ \  / ____ \| |____  | |__| / ____ \| | \ \| . \[/]
   [bold #68E0D5]  \_____|______|_| \_|  |_|  |_|  \_\/_/    \_\______| |_____/_/    \_\_|  \_\_|\_\[/]
-  [bold #F8EAC8]                         C E N T R A L   D A R K[/]
+  [bold #F8EAC8]                      CENTRALDARK · OS — TERMINAL[/]
   [bold #68E0D5]                 UMA INTENCAO · UM ORGANISMO · UMA CENTRALDARK[/]
 
 banner_hero: |-
