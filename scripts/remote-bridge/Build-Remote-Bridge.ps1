@@ -1,1 +1,0 @@
-K:/scripts/remote-bridge/canonical/Build-Remote-Bridge.ps1

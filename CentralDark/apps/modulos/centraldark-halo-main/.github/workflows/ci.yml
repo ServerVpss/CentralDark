@@ -1,0 +1,198 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality / macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Mesmo workflow: qualquer delta de codigo em PR ou push main exige docs e notas da candidata.
+      - name: Release docs trace gate
+        if: github.event_name != 'workflow_dispatch'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$BASE_SHA"
+          changed="$(git diff --name-only "$BASE_SHA" HEAD)"
+          # !RASTRO: gate UNICO, progressivo: selo no diff -> writer -> docs/data -> HUD -> PR.
+          # O workflow nao controla o editor local nem prova ordem temporal das edicoes.
+          if ! printf '%s\n' "$changed" | grep -Eq '^(src/|src-tauri/|hooks/|scripts/|tests/|\.github/workflows/|package\.json$|pnpm-lock\.yaml$|docs/|CHANGELOG\.md$|CONTRIBUTING\.md$|README(_CN)?\.md$|SECURITY\.md$|CODE_OF_CONDUCT\.md$)'; then
+            echo 'Delta fora do escopo material: N/A.'
+            exit 0
+          fi
+          printf '%s\n' "$changed" | grep -Fxq 'docs/RELEASE.md' || { echo 'BLOQUEADO: guia de release nao alterado'; exit 1; }
+          guide_diff="$(git diff --unified=0 "$BASE_SHA" HEAD -- docs/RELEASE.md)"
+          printf '%s\n' "$guide_diff" | grep -Eq '^\+LAST_UPDATED_UTC=[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$' || { echo 'BLOQUEADO: LAST_UPDATED_UTC do guia nao atualizado'; exit 1; }
+          candidate="$(sed -n 's/^NEXT_RELEASE_CANDIDATE=//p' docs/RELEASE.md | tail -1)"
+          [[ "$candidate" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'BLOQUEADO: candidata invalida'; exit 1; }
+          notes="docs/RELEASE_NOTES_v${candidate}.md"
+          [[ -f "$notes" ]] || { echo "BLOQUEADO: notas $notes ausentes"; exit 1; }
+          printf '%s\n' "$changed" | grep -Fxq "$notes" || { echo "BLOQUEADO: $notes nao atualizado"; exit 1; }
+          notes_diff="$(git diff --unified=0 "$BASE_SHA" HEAD -- "$notes")"
+          printf '%s\n' "$notes_diff" | grep -Eq '^\+RELEASE_LAST_UPDATED_UTC=[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$' || { echo 'BLOQUEADO: ultima atualizacao da candidata nao registrada'; exit 1; }
+          grep -Eq '^DOC_SCOPE_UPDATED=[^[:space:]]' "$notes" || { echo 'BLOQUEADO: writer sem mapa documental'; exit 1; }
+          grep -Eq '^DOC_SCOPE_REVIEWED_NOOP=' "$notes" || { echo 'BLOQUEADO: writer sem justificativa NOOP'; exit 1; }
+          printf '%s\n' "$notes_diff" | grep -Eq '^\+DOC_SCOPE_REVIEW_UTC=[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$' || { echo 'BLOQUEADO: writer nao revisou o escopo neste delta'; exit 1; }
+          release_stamp="$(sed -n 's/^RELEASE_LAST_UPDATED_UTC=//p' "$notes" | tail -1)"
+          scope_stamp="$(sed -n 's/^DOC_SCOPE_REVIEW_UTC=//p' "$notes" | tail -1)"
+          [ "$release_stamp" = "$scope_stamp" ] || { echo 'BLOQUEADO: revisao do escopo e release com datas divergentes'; exit 1; }
+          printf '%s\n' "$notes_diff" | grep -Eq '^\+HUD_RECEIPT_REF=https://github\.com/ServerVpss/CentralDark/' || { echo 'BLOQUEADO: falta referencia do recibo HUD da missao'; exit 1; }
+          doc_scope="$(sed -n 's/^DOC_SCOPE_UPDATED=//p' "$notes" | tail -1)"
+          IFS=',' read -r -a documented_paths <<< "$doc_scope"
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            case "$file" in
+              docs/*.md|docs/*.mdx|docs/*.txt|CHANGELOG.md|CONTRIBUTING.md|README.md|README_CN.md|SECURITY.md|CODE_OF_CONDUCT.md)
+                [ -f "$file" ] || { echo "BLOQUEADO: documento removido sem rastro: $file"; exit 1; }
+                covered=0
+                for listed in "${documented_paths[@]}"; do
+                  if [ "$listed" = "$file" ]; then covered=1; break; fi
+                done
+                [ "$covered" -eq 1 ] || { echo "BLOQUEADO: documento $file fora do escopo do writer"; exit 1; }
+                file_diff="$(git diff --unified=0 "$BASE_SHA" HEAD -- "$file")"
+                printf '%s\n' "$file_diff" | grep -Eq '^\+(RELEASE_)?LAST_UPDATED_UTC=[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z$' || { echo "BLOQUEADO: $file sem nova data de modificacao"; exit 1; }
+                ;;
+              src/*|src-tauri/src/*|hooks/*|scripts/*)
+                case "$file" in
+                  *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.rs|*.ps1|*.sh|*.py|*.css)
+                    [ -f "$file" ] || { echo "BLOQUEADO: codigo removido sem recibo: $file"; exit 1; }
+                    source_diff="$(git diff --unified=0 "$BASE_SHA" HEAD -- "$file")"
+                    printf '%s\n' "$source_diff" | grep -Eiq '^\+[^+].*(@rastro|!RASTRO)' || { echo "BLOQUEADO: $file tocado sem selo atualizado no proprio diff"; exit 1; }
+                    for field in '@owner' '@doc_ref' '@last_updated'; do
+                      printf '%s\n' "$source_diff" | grep -Eiq "^\+[^+].*${field}" || { echo "BLOQUEADO: $file sem ${field} atualizado no proprio codigo"; exit 1; }
+                    done
+                    ;;
+                esac
+                ;;
+            esac
+          done <<< "$changed"
+          echo 'CODE_SEAL=PASS DOC_WRITER_SCOPE=DECLARED DOC_LAST_MODIFIED=PASS HUD_REF=DECLARED'
+          echo 'RELEASE_DOC_TRACE=PASS (gate local ao diff; nao prova semantica/hud consumido)'
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: cargo fmt --manifest-path src-tauri/Cargo.toml --check
+      - run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+      - run: cargo test --manifest-path src-tauri/Cargo.toml
+      - name: Test macOS hook merge safety
+        run: |
+          fixture="$RUNNER_TEMP/config.toml"
+          cp tests/fixtures/config.toml "$fixture"
+          command='/bin/bash "/Users/example/.codex-halo/centraldark-halo-hook.sh"'
+          osascript -l JavaScript scripts/macos/manage-hooks.js install "$fixture" "$command"
+          test "$(osascript -l JavaScript scripts/macos/manage-hooks.js verify "$fixture")" = "5"
+          osascript -l JavaScript scripts/macos/manage-hooks.js install "$fixture" "$command"
+          test "$(osascript -l JavaScript scripts/macos/manage-hooks.js verify "$fixture")" = "5"
+          osascript -l JavaScript scripts/macos/manage-hooks.js uninstall "$fixture"
+          test "$(osascript -l JavaScript scripts/macos/manage-hooks.js verify "$fixture")" = "0"
+          grep -q 'command = "existing-tool"' "$fixture"
+
+  macos-targets:
+    name: Build / ${{ matrix.name }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS Intel
+            target: x86_64-apple-darwin
+            artifact: macos-intel
+          - name: macOS Apple Silicon
+            target: aarch64-apple-darwin
+            artifact: macos-apple-silicon
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tauri build --no-bundle --target "${{ matrix.target }}"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: src-tauri/target/${{ matrix.target }}/release/centraldark-halo-lite
+          if-no-files-found: error
+
+  macos-universal:
+    name: Build / macOS Intel + ARM64 + Universal
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-apple-darwin,aarch64-apple-darwin
+      - run: pnpm install --frozen-lockfile
+      - run: bash scripts/release/package-macos.sh 0.1.8
+      - name: Verify Universal app
+        run: |
+          binary="src-tauri/target/universal-apple-darwin/release/bundle/macos/CentralDark Halo.app/Contents/MacOS/centraldark-halo-lite"
+          lipo "$binary" -verify_arch x86_64 arm64
+          plutil -lint "src-tauri/target/universal-apple-darwin/release/bundle/macos/CentralDark Halo.app/Contents/Info.plist"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: codex-halo-macos-universal
+          path: dist/release/CentralDark-Halo-macOS-Universal-v0.1.8.zip
+          if-no-files-found: error
+
+  windows-x64:
+    name: Build / Windows x64
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+      - run: pnpm install --frozen-lockfile
+      - name: Test Windows hook merge safety
+        shell: pwsh
+        run: |
+          $fixture = Join-Path $env:RUNNER_TEMP "config.toml"
+          Copy-Item tests/fixtures/config.toml $fixture
+          $command = 'powershell.exe -File "C:\Users\example\.codex-halo\centraldark-halo-hook.ps1"'
+          & scripts/windows/Manage-CentralDark-HaloHooks.ps1 Install $fixture $command
+          if ((& scripts/windows/Manage-CentralDark-HaloHooks.ps1 Verify $fixture) -ne 5) { exit 1 }
+          & scripts/windows/Manage-CentralDark-HaloHooks.ps1 Install $fixture $command
+          if ((& scripts/windows/Manage-CentralDark-HaloHooks.ps1 Verify $fixture) -ne 5) { exit 1 }
+          & scripts/windows/Manage-CentralDark-HaloHooks.ps1 Uninstall $fixture
+          if ((& scripts/windows/Manage-CentralDark-HaloHooks.ps1 Verify $fixture) -ne 0) { exit 1 }
+          if (-not ((Get-Content -Raw $fixture) -like '*command = "existing-tool"*')) { exit 1 }
+      - shell: pwsh
+        run: scripts/release/package-windows.ps1 0.1.8
+      - uses: actions/upload-artifact@v7
+        with:
+          name: codex-halo-windows-x64
+          path: dist/release/CentralDark-Halo-Windows-x64-v0.1.8.zip
+          if-no-files-found: error

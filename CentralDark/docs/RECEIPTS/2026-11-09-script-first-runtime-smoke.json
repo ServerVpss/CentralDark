@@ -1,0 +1,54 @@
+{
+  "schema": "centraldark.proven-replay.result.v1",
+  "verdict": "REUSE_CRYSTAL",
+  "action": "REUSE_PROVEN_PATH_NO_RETHINK",
+  "executed": true,
+  "execution_policy": "READ_ONLY",
+  "dependency_fingerprint": "74c7c98d6fee33d967f2dd016dbdc7d0ef1af16f76a584295bbc95925c10a356",
+  "binding_names": [],
+  "execution": [
+    {
+      "command_template_sha256": "f70f3738f7121edc536880b2db6923c04c0538e101eebbf3eef4f675dad177f3",
+      "exit_code": 0,
+      "stdout_sha256": "73d94670c0d7b0b1c21d522bba84a3ed13dc5b22aadf55df90b70d20a7381223",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 3852,
+      "stderr_bytes": 0
+    },
+    {
+      "command_template_sha256": "6c01df4962ebe919a9cbe1d0a2bd2af7777ca3e16fd77488bdfe3afc14761406",
+      "exit_code": 0,
+      "stdout_sha256": "1e23cae95413668ab9b042fd3dfec872354c25b087f076dcccb638d5ecb89482",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 342,
+      "stderr_bytes": 0
+    }
+  ],
+  "proof": [
+    {
+      "command_template_sha256": "b472f3954762cdf25e216ede0a5fc4a23b6c29ec54650687b95fa004b094c438",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    },
+    {
+      "command_template_sha256": "70faec7f13a41ac080a4257cf4904b82c225b55d118939ac385513a86734e3ec",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 0,
+      "stderr_bytes": 0
+    }
+  ],
+  "execution_pass": true,
+  "proof_pass": true,
+  "expected_effect": "UNIT_SELFTEST_AND_FINGERPRINT_PASS",
+  "expected_effect_match": true,
+  "raw_output_byte_equality_required": false,
+  "reinterpret_from_zero": false,
+  "claim": "PROVEN_REPLAY_EXECUTOR_PATH",
+  "owner": "scripts/trigger-fabric/centraldark_full_trigger_boot.py",
+  "lock_key": "650b355d88d3054d7febc6f0718691cc2f4adbcc4ded6353354952a21546ed93"
+}

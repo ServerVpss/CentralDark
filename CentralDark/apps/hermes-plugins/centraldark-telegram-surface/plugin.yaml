@@ -1,0 +1,11 @@
+name: centraldark-telegram-surface
+version: 0.1.0
+description: "CentralDark menu overlay for the active Hermes Telegram adapter."
+author: "ServerVpss/CentralDark"
+provides_platform_handlers:
+  - telegram
+optional_env:
+  - name: TELEGRAM_HOME_CHANNEL
+    description: "Reserved home channel identifier; not read by this safe menu overlay."
+    prompt: "Telegram home channel"
+    password: false

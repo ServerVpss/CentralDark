@@ -1,0 +1,616 @@
+#!/usr/bin/env python3
+# #OBSERVACOES# | CENTRALDARK.AUREOLA_TRIGGER_COUNTERPROOF
+# @owner: scripts/trigger-fabric/test_centraldark_master_cycle.py
+# @doc_ref: docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/README.md
+# @last_updated: 2026-11-02T02:20:39.000Z
+# @escopo: regressão do gatilho Auréola, aliases, trilha visual e separação reconhecimento/execução.
+import importlib.util
+import pathlib
+import tempfile
+import unittest
+
+MODULE_PATH = pathlib.Path(__file__).with_name("centraldark_master_cycle.py")
+SPEC = importlib.util.spec_from_file_location("centraldark_master_cycle", MODULE_PATH)
+MODULE = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(MODULE)
+
+
+class ContinuousDeltaContractTest(unittest.TestCase):
+    def test_aureola_is_explicit_trigger_and_renders_truthful_route(self):
+        for alias in ("!AUREULA", "#AUREOLA", "!AUREURLA", "!AURÉOLA CANÔNICA"):
+            with self.subTest(alias=alias):
+                receipt = MODULE.resolve(alias, chefe_source=True)
+                trace = receipt["aureola_route_trace"]
+                self.assertTrue(receipt["aureola"]["explicit_trigger_active"])
+                self.assertEqual("RENDERED", trace["status"])
+                self.assertIn("⭕ !AURÉOLA CANÔNICA [RECONHECIDO · ✅ PASS]", trace["visual_chain"])
+                self.assertIn("👑 !CENTRALDARK [NÃO ACIONADO · ➖ NOT_INVOKED]", trace["visual_chain"])
+                self.assertIn("TRILHA OBSERVADA", MODULE.render_aureola_trace(trace))
+                self.assertFalse(trace["recognition_is_execution_proof"])
+
+    def test_aureola_trace_uses_reported_status_and_keeps_unknown(self):
+        receipt = MODULE.resolve(
+            "⭕ !AURÉOLA CANÔNICA", chefe_source=True,
+            phase_status={"ACORDAR": "FAIL", "OWNER": "PASS"},
+        )
+        entries = {step["trigger_id"]: step for step in receipt["aureola_route_trace"]["entries"]}
+        self.assertEqual("OBSERVED", entries["ACORDAR"]["recognition_status"])
+        self.assertEqual("FAIL", entries["ACORDAR"]["execution_status"])
+        self.assertEqual("NOT_INVOKED", entries["MICHELIN"]["execution_status"])
+        self.assertIn("#ACORDAR [OBSERVADO · ❌ FAIL]", receipt["aureola_route_trace"]["visual_chain"])
+
+    def test_explicit_master_activates_session(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertTrue(receipt["next_master_active"])
+        self.assertIn("DELTA_UTIL", receipt["expanded_chain"])
+
+    def test_master_exposes_visual_trigger_chain_and_intent_alignment(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        self.assertTrue(receipt["visual_trigger_chain"].startswith("⭕ !AURÉOLA CANÔNICA → 👑 !CENTRALDARK → 🌅 ACORDAR → 🎯 CALIBRAR"))
+        self.assertIn("🧾 REGISTRA → 🔏 RASTRO → 🚀 BOOT", receipt["visual_trigger_chain"])
+        self.assertEqual("VISIBLE_ROUTE_DEBUGGER", receipt["aureola"]["role"])
+        self.assertEqual("STOP_AND_RECONCILE", receipt["aureola"]["mismatch_action"])
+        self.assertFalse(receipt["aureola"]["route_trace_is_technical_proof"])
+        alignment = receipt["intent_alignment"]
+        self.assertEqual("CALIBRAR", alignment["phase"])
+        self.assertEqual("🎯", alignment["emoji"])
+        self.assertEqual(80, alignment["threshold_percent"])
+        self.assertEqual("INTERPRETATION_ALIGNMENT_NOT_RUNTIME_PASS", alignment["percentage_means"])
+        self.assertTrue(alignment["continuous_recalibration"])
+        self.assertTrue(alignment["do_not_parrot_chefe"])
+        self.assertTrue(alignment["align_thought_not_wording"])
+        self.assertEqual("DELTA_TO_ACTIVE_INTENT_FIRST", alignment["new_chefe_material"])
+        self.assertTrue(alignment["preserve_compatible_active_intent"])
+        self.assertEqual("EXPLICIT_REPLACE_OR_PROVEN_MATERIAL_INCOMPATIBILITY", alignment["replacement_requires"])
+        self.assertTrue(alignment["pertinence_first"])
+        self.assertTrue(alignment["minimum_sufficient_loop"])
+        self.assertTrue(alignment["triggers_are_conditional_not_ritual"])
+
+    def test_bot_entry_activates_without_plain_word_guess(self):
+        receipt = MODULE.resolve("fala normal", bot_entry=True, chefe_source=True)
+        self.assertEqual("BOT_ENTRY", receipt["activation_source"])
+        self.assertTrue(receipt["delta_harvest"]["candidate_from_chefe"])
+
+    def test_active_session_processes_chefe_material_as_candidate(self):
+        receipt = MODULE.resolve(
+            "tudo muda conforme a realidade",
+            master_active=True,
+            chefe_source=True,
+        )
+        harvest = receipt["delta_harvest"]
+        self.assertTrue(harvest["active"])
+        self.assertFalse(harvest["claim_is_fact"])
+        self.assertFalse(receipt["mutation_authorized"])
+
+    def test_other_source_does_not_become_chefe_delta(self):
+        receipt = MODULE.resolve(
+            "uma janela disse que passou",
+            master_active=True,
+            chefe_source=False,
+        )
+        self.assertFalse(receipt["delta_harvest"]["active"])
+
+    def test_plain_mention_outside_session_is_not_activation(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve("CentralDark", chefe_source=True, input_mode=mode)
+            self.assertFalse(receipt["master_cycle_active"])
+        receipt = MODULE.resolve("CentralDark é o nome do repo")
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertEqual("NO_MATCH", receipt["status"])
+
+    def test_operational_master_phrase_matches_text_and_voice(self):
+        for mode in ("text", "voice"):
+            receipt = MODULE.resolve(
+                "CentralDark visualize o painel", chefe_source=True, input_mode=mode
+            )
+            self.assertTrue(receipt["master_cycle_active"])
+            self.assertTrue(receipt["explicit_match"])
+
+    def test_all_contract_verbs_dispatch_identically_in_text_and_voice(self):
+        verbs = (
+            "visualize", "veja", "mostra", "leia", "observe", "mede",
+            "faça", "faz", "executa", "corrige", "pluga", "costura", "sobe",
+            "continue", "continua", "prossiga", "retome",
+            "cristaliza", "registra", "sela", "receipt", "rastro",
+            "contraprova", "valida", "testa", "verifica",
+        )
+        for verb in verbs:
+            receipts = [
+                MODULE.resolve(f"CentralDark {verb} alvo", chefe_source=True, input_mode=mode)
+                for mode in ("text", "voice")
+            ]
+            self.assertEqual(receipts[0]["master_cycle_active"], receipts[1]["master_cycle_active"], verb)
+            self.assertTrue(receipts[0]["master_cycle_active"], verb)
+            self.assertEqual(receipts[0]["expanded_chain"], receipts[1]["expanded_chain"], verb)
+
+    def test_natural_master_requires_payload_except_resume(self):
+        for mode in ("text", "voice"):
+            for phrase in ("CentralDark", "CentralDark visualize"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"])
+            self.assertTrue(MODULE.resolve("CentralDark continue", chefe_source=True, input_mode=mode)["master_cycle_active"])
+
+    def test_screen_repetition_and_time_are_not_proof(self):
+        receipt = MODULE.resolve(
+            "quatro telas repetem que o runtime está verde amanhã",
+            master_active=True,
+            chefe_source=True,
+        )
+        harvest = receipt["delta_harvest"]
+        self.assertFalse(harvest["screen_is_runtime_proof"])
+        self.assertFalse(harvest["repetition_is_independent_proof"])
+        self.assertFalse(harvest["temporal_label_is_authority"])
+
+    def test_negated_master_does_not_activate(self):
+        receipt = MODULE.resolve("não execute !CENTRALDARK agora", chefe_source=True)
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertFalse(receipt["next_master_active"])
+        self.assertTrue(receipt["master_ambiguous_or_negated"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+
+    def test_imported_master_marker_cannot_create_chefe_session(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=False)
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertTrue(receipt["untrusted_master_attempt"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+
+    def test_session_file_connects_two_independent_invocations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            state_file = pathlib.Path(directory) / "master-session.json"
+            first = MODULE.resolve_with_session_state(
+                "!CENTRALDARK",
+                state_file=state_file,
+                chefe_source=True,
+            )
+            second = MODULE.resolve_with_session_state(
+                "agora mede o próximo delta",
+                state_file=state_file,
+                chefe_source=True,
+            )
+        self.assertTrue(first["session_state"]["persisted"])
+        self.assertEqual("LOADED", second["session_state"]["load_status"])
+        self.assertEqual("INHERITED_SESSION", second["activation_source"])
+        self.assertTrue(second["delta_harvest"]["candidate_from_chefe"])
+
+    def test_negated_delta_alias_remains_ambiguous_without_chefe_context(self):
+        receipt = MODULE.resolve("não execute !DELTAUTIL agora")
+        self.assertFalse(receipt["delta_harvest"]["active"])
+        self.assertTrue(receipt["delta_harvest"]["ambiguous_or_negated"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+
+    def test_acordar_enters_centraldark_master_funnel(self):
+        receipt = MODULE.resolve("#ACORDAR", chefe_source=True)
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertEqual("SUBTRIGGER_FUNNEL", receipt["activation_source"])
+        self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
+        self.assertIn("ACORDAR", receipt["master_funnel"]["matched_trigger_ids"])
+        self.assertTrue(receipt["master_funnel"]["normalized_to_master"])
+
+    def test_centralutil_enters_master_and_delta_harvest(self):
+        receipt = MODULE.resolve("!CENTRALUTIL", chefe_source=True)
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertEqual("SUBTRIGGER_FUNNEL", receipt["activation_source"])
+        self.assertIn("DELTA_UTIL", receipt["master_funnel"]["matched_trigger_ids"])
+        self.assertTrue(receipt["delta_harvest"]["explicit_signal_active"])
+        self.assertTrue(receipt["delta_harvest"]["route_to_existing_owner"])
+
+    def test_all_explicit_operational_triggers_use_one_master_entry(self):
+        cases = {
+            "#ACORDAR": "ACORDAR",
+            "!CALIBRAR": "CALIBRAR",
+            "!MULTIBUSSOLA": "MULTIBUSSOLA",
+            "!META_LUPA": "META_LUPA",
+            "!RECONCILIAR": "RECONCILIAR",
+            "!CENTRALUTIL": "DELTA_UTIL",
+            "!CONTRAPROVA": "CONTRAPROVA",
+            "!REMEDICAO": "REMEDICAO",
+            "!MICHELIN": "MICHELIN",
+            "!TIK-TAK": "TIK_TAK",
+            "!FIXED_POINT": "FIXED_POINT",
+            "!REGISTRA": "REGISTRA",
+            "!RASTRO": "RASTRO",
+            "!BOOT": "BOOT",
+            "!FABLE_LOOP": "FABLE_LOOP",
+            "!GARIMPO_UNIVERSAL": "GARIMPO_UNIVERSAL",
+        }
+        for token, expected in cases.items():
+            with self.subTest(token=token):
+                receipt = MODULE.resolve(token, chefe_source=True)
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertEqual("!CENTRALDARK", receipt["master_funnel"]["canonical_entry"])
+                self.assertIn(expected, receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertTrue(receipt["master_funnel"]["all_explicit_human_triggers_enter_master_once"])
+
+    def test_michelin_reuses_master_and_does_not_award_stars(self):
+        for token in ("!MICHELIN", "#MICHELIN", "!CENTRALDARK !MICHELIN"):
+            with self.subTest(token=token):
+                receipt = MODULE.resolve(token, chefe_source=True)
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertIn("MICHELIN", receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertIn("MICHELIN", receipt["expanded_chain"])
+                self.assertLess(receipt["expanded_chain"].index("REALITY_JUDGE"), receipt["expanded_chain"].index("MICHELIN"))
+                self.assertLess(receipt["expanded_chain"].index("MICHELIN"), receipt["expanded_chain"].index("FIXED_POINT"))
+                self.assertIn("🌟 !MICHELIN", receipt["visual_trigger_chain"])
+                self.assertEqual("UNKNOWN", receipt["michelin"]["status"])
+                self.assertEqual(0, receipt["michelin"]["stars_awarded"])
+                self.assertFalse(receipt["michelin"]["star_award_from_trigger"])
+                self.assertFalse(receipt["michelin"]["public_smoke_is_certificate"])
+                self.assertTrue(receipt["michelin"]["same_head_proof_required"])
+
+    def test_michelin_plain_word_cannot_trigger_and_negation_denied(self):
+        self.assertFalse(MODULE.resolve("Michelin três estrelas", chefe_source=True)["master_cycle_active"])
+        denied = MODULE.resolve("não use !MICHELIN", chefe_source=True)
+        self.assertFalse(denied["master_cycle_active"])
+        self.assertIn("MICHELIN", denied["master_funnel"]["ambiguous_trigger_ids"])
+
+    def test_michelin_composes_with_inherited_master_without_new_router(self):
+        receipt = MODULE.resolve("!MICHELIN", chefe_source=True, master_active=True)
+        self.assertEqual("INHERITED_SESSION", receipt["activation_source"])
+        self.assertTrue(receipt["master_funnel"]["master_reentry_guard"])
+        self.assertEqual("RULES.md", receipt["michelin"]["owner"])
+        self.assertIn("MICHELIN", receipt["master_funnel"]["requested_phases"])
+
+    def test_garimpo_universal_reuses_harvester_across_surfaces(self):
+        for mode, phrase in (
+            ("text", "!CENTRALDARK !GARIMPO_UNIVERSAL"),
+            ("voice", "CentralDark garimpo universal"),
+        ):
+            with self.subTest(mode=mode):
+                receipt = MODULE.resolve(
+                    phrase,
+                    chefe_source=True,
+                    input_mode=mode,
+                    source_surface=mode,
+                    session_id="same-intent-session",
+                )
+                self.assertTrue(receipt["master_cycle_active"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["matched_trigger_ids"])
+                self.assertIn("GARIMPO_UNIVERSAL", receipt["master_funnel"]["requested_modes"])
+                harvest = receipt["delta_harvest"]
+                self.assertTrue(harvest["active"])
+                self.assertTrue(harvest["garimpo_universal_active"])
+                self.assertEqual(".agents/skills/session-intelligence-harvester/SKILL.md", harvest["owner"])
+                self.assertEqual("OWNER+CAPABILITY+SCOPE", harvest["semantic_identity"])
+                self.assertTrue(harvest["multi_surface_parallel_candidates"])
+                self.assertTrue(harvest["one_canonical_finalizer_per_scope"])
+                self.assertTrue(harvest["candidate_lane_is_not_canonical_write"])
+                self.assertEqual("DROP_DUPLICATE", harvest["same_finding_without_new_evidence"])
+                self.assertEqual(
+                    "LAST_GOOD_STATE->INPUT_DIFF->REUSE_PROOF_OR_TARGETED_REVALIDATION",
+                    harvest["next_executor_replay"],
+                )
+
+
+
+    def test_tik_tak_wraps_master_loop_and_preserves_remeasurement_without_swarm(self):
+        receipt = MODULE.resolve("!TIK-TAK", chefe_source=True)
+        contract = receipt["tik_tak"]
+        self.assertTrue(receipt["master_cycle_active"])
+        self.assertIn("TIK_TAK", receipt["master_funnel"]["requested_phases"])
+        self.assertTrue(contract["active"])
+        self.assertEqual("REGRA-ZERO-CENTRALDARK", contract["canonical_rule"])
+        self.assertEqual("AUTOMATION_FACTORY_OUTER_LOOP", contract["semantic_family"])
+        self.assertTrue(contract["wraps_master_cycle"])
+        self.assertEqual("/goal", contract["goal_step"])
+        self.assertEqual(["GEOFF", "IAN", "GREG", "DEX", "HERMES", "REALIDADE"], contract["role_order"])
+        self.assertEqual({
+            "GEOFF": "AUTOMATION_FACTORY",
+            "IAN": "STRUCTURAL_SKEPTIC",
+            "GREG": "OBSERVABILITY_PROOF",
+            "DEX": "HUMAN_AGENT_COORDINATION",
+            "HERMES": "EXECUTION_ROLE",
+            "REALIDADE": "REALITY_JUDGE",
+        }, contract["role_bindings"])
+        self.assertEqual(["IMPLEMENTACAO", "SIMPLIFICACAO"], contract["geoff_formula"])
+        self.assertTrue(contract["greg_verdict_required_before_green"])
+        self.assertTrue(contract["dex_approval_required_for_critical_delta"])
+        self.assertTrue(contract["ci_pending_is_not_pass"])
+        self.assertTrue(contract["merge_is_not_deploy"])
+        self.assertTrue(contract["hermes_is_executor"])
+        self.assertTrue(contract["reality_is_judge"])
+        self.assertTrue(contract["select_existing_executor_only"])
+        self.assertTrue(contract["works_above_coding_agents"])
+        self.assertTrue(contract["invalidate_only_affected_stale_proof"])
+        self.assertTrue(contract["remeasure_current_target"])
+        self.assertTrue(contract["rerun_affected_gates"])
+        self.assertTrue(contract["same_head_counterproof_required"])
+        self.assertTrue(contract["preserve_unaffected_valid_proof"])
+        self.assertEqual("PROOF_OR_FIXED_POINT_OR_NEXT_CURSOR", contract["continue_until"])
+        self.assertFalse(contract["fanout_agents"])
+        self.assertFalse(contract["is_swarm_trigger"])
+        self.assertFalse(contract["creates_new_owner"])
+        self.assertFalse(contract["creates_new_brain_or_router"])
+
+    def test_active_master_does_not_reenter_on_subtrigger(self):
+        receipt = MODULE.resolve("#ACORDAR", master_active=True, chefe_source=True)
+        self.assertEqual("INHERITED_SESSION", receipt["activation_source"])
+        self.assertTrue(receipt["master_funnel"]["master_reentry_guard"])
+        self.assertFalse(receipt["master_funnel"]["normalized_to_master"])
+
+    def test_negated_subtrigger_does_not_open_master(self):
+        receipt = MODULE.resolve("não execute #ACORDAR agora", chefe_source=True)
+        self.assertFalse(receipt["master_cycle_active"])
+        self.assertEqual("UNKNOWN", receipt["status"])
+        self.assertIn("ACORDAR", receipt["master_funnel"]["ambiguous_trigger_ids"])
+
+    def test_master_chain_opens_and_closes_tlc23_around_reality_fixed_point(self):
+        receipt = MODULE.resolve("!CENTRALDARK", chefe_source=True)
+        chain = receipt["expanded_chain"]
+        self.assertEqual("TLC23_OPEN", chain[0])
+        self.assertLess(chain.index("REMEDICAO"), chain.index("REALITY_JUDGE"))
+        self.assertLess(chain.index("REALITY_JUDGE"), chain.index("FIXED_POINT"))
+        self.assertLess(chain.index("FIXED_POINT"), chain.index("TLC23_CLOSE"))
+        self.assertEqual(["REGISTRA", "RASTRO", "HANDOFF", "BOOT"], chain[-4:])
+
+
+    def test_fixed_point_allows_no_ephemeral_workspace(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+            "ephemeral_workspace_used": False,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("CLOSED", result["mission_state"])
+        self.assertTrue(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_blocks_used_workspace_without_cleanup_readback(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": False,
+            "ephemeral_unclassified_residue": 0,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("LOCAL_FIXED_POINT_NOT_YET", result["verdict"])
+        self.assertEqual("NOT_YET", result["mission_state"])
+        self.assertFalse(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_blocks_unclassified_temp_residue(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": True,
+            "ephemeral_unclassified_residue": 1,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("LOCAL_FIXED_POINT_NOT_YET", result["verdict"])
+        self.assertFalse(result["ephemeral_cleanup_ok"])
+
+    def test_fixed_point_passes_after_ephemeral_cleanup_readback(self):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            # gates obrigatorios satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+            "ephemeral_workspace_used": True,
+            "ephemeral_cleanup_readback_pass": True,
+            "ephemeral_unclassified_residue": 0,
+        }
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("CLOSED", result["mission_state"])
+        self.assertTrue(result["ephemeral_cleanup_ok"])
+
+    def test_embedded_self_test_passes(self):
+        result = MODULE.self_test()
+        failed = [c for c in result["cases"] if not c["ok"]]
+        self.assertTrue(result["ok"], failed)
+
+    def test_grammar_verbs_open_master_same_in_text_and_voice(self):
+        for phrase in ("CentralDark faça o deploy", "centraldark faz isso", "centraldark continua",
+                       "centraldark cristaliza isso", "centraldark contraprova este caso", "centraldark, visualize o estado"):
+            for mode in ("text", "voice"):
+                receipt = MODULE.resolve(phrase, chefe_source=True, input_mode=mode)
+                self.assertTrue(receipt["master_cycle_active"], (phrase, mode))
+
+    def test_verbs_come_from_grammar_owner(self):
+        self.assertIn("centraldark faça", MODULE.GRAMMAR_VERB_PHRASES)
+        self.assertIn("centraldark contraprova", MODULE.GRAMMAR_VERB_PHRASES)
+
+    def test_plain_word_neutral_in_text_and_voice(self):
+        # decisão do CHEFE 2026-09-27: paridade — só "CentralDark + verbo" ou marcador abre o mestre
+        for phrase in ("centraldark", "central dark", "CentralDark"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+    def test_discussion_and_negation_do_not_open_master(self):
+        for phrase in ("estou falando sobre #ACORDAR", "falei de centraldark faça ontem", "centraldark não faça nada"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+
+    def test_exclamation_after_wake_word_still_dispatches(self):
+        # restaurado: ab3d904 foi desfeito por escrita sobre base velha (df995f2)
+        for phrase in ("CentralDark! Faça o deploy", "centraldark!!! visualize o painel"):
+            for mode in ("text", "voice"):
+                self.assertTrue(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+        self.assertTrue(MODULE.resolve("!CENTRALDARK", chefe_source=True)["master_cycle_active"])
+
+    def test_talking_about_it_does_not_dispatch(self):
+        for phrase in ("falei do centraldark visualize o painel ontem", "falou da centraldark faça o deploy"):
+            for mode in ("text", "voice"):
+                self.assertFalse(MODULE.resolve(phrase, chefe_source=True, input_mode=mode)["master_cycle_active"], (phrase, mode))
+
+
+class MetaMultibussolaProofGateEnforcementTest(unittest.TestCase):
+    """GOAL CD-META-MULTIBUSSOLA-ENFORCEMENT — gate violado nunca vira PASS.
+
+    Contraprova de T0 (main c8273da1): quatro violações materiais produziam
+    FIXED_POINT_PASS porque evaluate_multibussola_state() não consumia
+    MULTIBUSSOLA_PROOF_GATES. Estes testes reproduzem a falha e passam a exigi-la
+    corrigida, sem tocar nos veredictos legítimos já comprovados.
+    """
+
+    @staticmethod
+    def baseline_state(**overrides):
+        state = {
+            "required_bearings_covered": True,
+            "material_contradiction": False,
+            "local_analysis_stable": True,
+            "unknown_material": 0,
+            "counterproof_survives": True,
+            "t1_stable": True,
+            "global_objective_closed": True,
+            "ephemeral_workspace_used": False,
+            # gates explícitos satisfeitos: PASS exige os seis gates
+            "proof_target_match": True,
+            "proof_ownership": True,
+            "external_anchor": True,
+            "reality_judge": True,
+        }
+        state.update(overrides)
+        return state
+
+    def verdict(self, **overrides):
+        return MODULE.evaluate_multibussola_state(self.baseline_state(**overrides))
+
+    def test_baseline_all_gates_satisfied_still_passes(self):
+        result = self.verdict()
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual([], result["gate_violations"])
+
+    def test_proof_target_mismatch_blocks(self):
+        result = self.verdict(proof_target_match=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("PROOF_TARGET_MATCH", result["gate_violations"])
+
+    def test_proof_ownership_unproven_blocks(self):
+        result = self.verdict(proof_ownership=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("PROOF_OWNERSHIP", result["gate_violations"])
+
+    def test_external_anchor_required_missing_blocks(self):
+        result = self.verdict(external_anchor=None)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_not_applicable_without_justification_blocks(self):
+        result = self.verdict(external_anchor="NOT_APPLICABLE")
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_not_applicable_with_justification_does_not_block(self):
+        result = self.verdict(
+            external_anchor="NOT_APPLICABLE",
+            external_anchor_justification="artefato local sem referencia externa aplicavel",
+            proof_evidence={
+                "EXTERNAL_ANCHOR_WHEN_APPLICABLE": "docs/CONSCIENCIA/MULTIBUSSOLA.md#15",
+            },
+        )
+        self.assertEqual("FIXED_POINT_PASS", result["verdict"])
+        self.assertEqual("NOT_APPLICABLE", result["gate_states"]["EXTERNAL_ANCHOR_WHEN_APPLICABLE"])
+        self.assertNotIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_external_anchor_justification_without_evidence_ref_still_blocks(self):
+        # Contraprova da propria correcao: texto solto nao compra isencao.
+        result = self.verdict(
+            external_anchor="NOT_APPLICABLE",
+            external_anchor_justification="confia, nao precisa de ancora externa",
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("EXTERNAL_ANCHOR_WHEN_APPLICABLE", result["gate_violations"])
+
+    def test_reality_judge_unavailable_blocks(self):
+        result = self.verdict(reality_judge=False)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertIn("REALITY_JUDGE", result["gate_violations"])
+
+    def test_absent_gate_is_unknown_and_blocks(self):
+        state = self.baseline_state()
+        del state["proof_target_match"]
+        result = MODULE.evaluate_multibussola_state(state)
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertEqual("UNKNOWN", result["gate_states"]["PROOF_TARGET_MATCH"])
+        self.assertIn("PROOF_TARGET_MATCH", result["gate_violations"])
+
+    def test_counterproof_gate_never_yields_pass_when_violated(self):
+        result = self.verdict(counterproof_survives=False)
+        self.assertNotEqual("FIXED_POINT_PASS", result["verdict"])
+
+    def test_four_material_violations_together_block_with_named_gates(self):
+        result = self.verdict(
+            proof_target_match=False,
+            proof_ownership=False,
+            external_anchor=False,
+            reality_judge=False,
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        for gate in (
+            "PROOF_TARGET_MATCH",
+            "PROOF_OWNERSHIP",
+            "EXTERNAL_ANCHOR_WHEN_APPLICABLE",
+            "REALITY_JUDGE",
+        ):
+            self.assertIn(gate, result["gate_violations"])
+
+    def test_gate_output_exposes_states_and_violations_without_secret(self):
+        result = self.verdict(proof_ownership=False)
+        self.assertIn("gate_states", result)
+        self.assertEqual(len(MODULE.MULTIBUSSOLA_PROOF_GATES), len(result["gate_states"]))
+        self.assertIn("gate_evidence", result)
+        self.assertTrue(result["gate_pass"] is False)
+        serialized = repr(result)
+        for token in ("ghp_", "gho_", "github_pat_", "password", "token="):
+            self.assertNotIn(token, serialized)
+
+    def test_injected_gate_pass_field_cannot_bypass_evaluation(self):
+        # META_MULTIBUSSOLA aplicada a propria correcao: campo injetado nao compra verde.
+        result = self.verdict(
+            gate_pass=True,
+            proof_ownership=False,
+        )
+        self.assertEqual("FIXED_POINT_BLOCKED", result["verdict"])
+        self.assertFalse(result["gate_pass"])
+
+    def test_meta_multibussola_alias_still_resolves_original_owner(self):
+        receipt = MODULE.resolve("!multibussola_meta", chefe_source=True)
+        block = receipt["multibussola"]
+        self.assertTrue(block["active"])
+        self.assertEqual("META_MULTIBUSSOLA", block["profile"])
+        self.assertEqual("docs/CONSCIENCIA/MULTIBUSSOLA.md", block["owner"])
+
+
+
+if __name__ == "__main__":
+    unittest.main()

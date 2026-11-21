@@ -1,242 +1,44 @@
+# Dependabot configuration for hermes-agent.
+#
+# Deliberately scoped to github-actions only.
+#
+# We do NOT enable Dependabot for pip / npm / any source-dependency ecosystem
+# because we pin source dependencies exactly (uv.lock, pnpm-lock.yaml,
+# package-lock.json) as part of our supply-chain posture. Automatic
+# version-bump PRs against those pins would undermine the strategy — pins are
+# moved deliberately, after review, not on a schedule.
+#
+# github-actions is the exception: action pins (we use full commit SHAs per
+# supply-chain policy) must be updated when upstream actions publish
+# patches — usually themselves security fixes. Dependabot opens a PR with
+# the new SHA and release notes; we review and merge like any other PR.
+#
+# Security-update PRs for source dependencies (opened ONLY when a CVE is
+# published affecting a currently-pinned version) are enabled separately
+# via the repo's Dependabot security updates setting
+# (Settings → Code security → Dependabot → Dependabot security updates).
+# Those are CVE-only, not schedule-driven, and do not conflict with our
+# pinning strategy — they fire when a pinned version becomes known-bad,
+# which is exactly when we want to move the pin.
+
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 15
-    labels:
-      - "🤖 AUTO"
-      - "🔄 GIT"
-      - "👑 PERMITO-SEGREDO"
-      - "✨ MELHORIA"
-      - "🤖 IA-EXECUTAR"
-    commit-message:
-      prefix: "🤖 deps"
-      include: "scope"
-    groups:
-      radix-ui:
-        patterns:
-          - "@radix-ui/*"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-
-  # Bolt/source concentra os alertas Dependabot do app. Um PR por dependência
-  # toca o mesmo lockfile e aumenta conflito; agrupamos por classe para reduzir ruído.
-  - package-ecosystem: "npm"
-    directory: "/apps/modulos/Bolt/source"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 15
-    labels:
-      - "🤖 AUTO"
-      - "🔄 GIT"
-      - "👑 PERMITO-SEGREDO"
-      - "✨ MELHORIA"
-      - "🤖 IA-EXECUTAR"
-    commit-message:
-      prefix: "🤖 deps"
-      include: "scope"
-    groups:
-      bolt-source-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      bolt-source-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-
-  - package-ecosystem: "pip"
-    directory: "/apps/modulos/Bolt/source/docs"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      docs-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      docs-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-    labels:
-      - "🤖 AUTO"
-      - "🔄 GIT"
-      - "👑 PERMITO-SEGREDO"
-      - "✨ MELHORIA"
-      - "🤖 IA-EXECUTAR"
-    commit-message:
-      prefix: "🤖 deps"
-      include: "scope"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"
-
-  # Aplicações privadas fora do monorepo raiz: cada lockfile precisa de um
-  # owner Dependabot próprio para receber security/version updates.
-  - package-ecosystem: "npm"
-    directory: "/apps/instinto-superior"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 15
-    groups:
-      instinto-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      instinto-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/modulos/mcp"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 15
-    groups:
-      mcp-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      mcp-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/modulos/oauth-broker"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      oauth-broker-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      oauth-broker-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/modulos/mcp-admin-ui"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      mcp-admin-ui-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      mcp-admin-ui-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "npm"
-    directory: "/apps/modulos/hub"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      hub-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      hub-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "npm"
-    directory: "/scripts/telegram-mtproto"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      telegram-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      telegram-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  - package-ecosystem: "pip"
-    directory: "/apps/modulos/elite-gateway"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      elite-gateway-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-      elite-gateway-deps:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(actions)"
+      include: "scope"
     groups:
-      actions-all:
-        patterns:
-          - "*"
+      # Batch routine action bumps into one PR per week to reduce noise.
+      # Security updates still open individually and bypass grouping.
+      actions-minor-patch:
         update-types:
           - "minor"
           - "patch"
-    labels:
-      - "🤖 AUTO"
-      - "🔄 GIT"
-      - "👑 PERMITO-SEGREDO"
-      - "✨ MELHORIA"
-      - "🤖 IA-EXECUTAR"
-    commit-message:
-      prefix: "🛠️ ações"
-      include: "scope"
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - "version-update:semver-major"

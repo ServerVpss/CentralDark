@@ -1,0 +1,860 @@
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Button } from "@/components/ui/button";
+import lineageJson from "../../../../../docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json";
+import type { EstadoCentralDark } from "@/lib/cockpit.functions";
+import { lerSaudeInfraCentralDark } from "@/lib/conexoes.functions";
+import { lerHudVigente } from "@/lib/sync.functions";
+import { GavetaForja } from "@/components/central/InfraestruturaSistema";
+import hudMigrationSnapshot from "@/data/hud-migration.snapshot.json";
+
+type Node = {
+  uid: string;
+  title: string;
+  prev_uid: string | null;
+  next_uid: string | null;
+  legacy_learning_number: number;
+};
+type Lineage = {
+  genesis: Node;
+  nodes: Node[];
+  source_blob_sha: string;
+  audit: {
+    learning_sections: number;
+    missing_legacy_numbers: number[];
+    duplicate_legacy_numbers: Array<{ legacy_learning_number: number; count: number; uids: string[] }>;
+  };
+};
+const lineage = lineageJson as Lineage;
+const nodes = [lineage.genesis, ...lineage.nodes];
+const required = ["owner", "scope", "proof-key", "source-sha", "receipt", "readback", "observed-at", "next-cursor"] as const;
+const historicalSeals = [
+  "VPS Auto-Sync", "gh CLI VPS", "SSH Casa → VPS", "GitHub Fonte Canônica",
+  "Tailscale Mesh", "SHARED.zip Vault", "AionUI VPS", "CAS Cloud VPS",
+  "Hermes Desktop → Cockpit", "Screenpipe Casa", "HUD Corpo Único",
+  "One Heart VPS", "Runtime / Modelo VPS", "Hermes WebUI", "MCP CentralDark",
+] as const;
+
+
+type ForgeAlias = Readonly<{
+  id: string;
+  symbols: string;
+  name: string;
+  owner: string;
+  invocation: string;
+  effect: string;
+  improvement: string;
+  proof: string;
+  readonly: boolean;
+}>;
+const forgeAliases: readonly ForgeAlias[] = [
+  {
+    id: "DIAGNOSTICAR", symbols: "🔧 🪛", name: "Diagnóstico sem mutação",
+    owner: "skills/vs-code-restore/SKILL.md",
+    invocation: "CentralDark: Mostrar Trace (Saída)",
+    effect: "Focar a trilha sanitizada já existente e identificar sinal, origem e bloqueio.",
+    improvement: "Reutiliza a extensão/saída original, sem novo log bruto ou coletor.",
+    proof: "Evento nativo e ACK no funil; comando da paleta instalado não implica ativação.",
+    readonly: true,
+  },
+  {
+    id: "MANUTENCAO", symbols: "🛠️ 👨🏻‍🔧", name: "Manutenção com responsável único",
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md",
+    invocation: "!CENTRALDARK",
+    effect: "Recuperar missão, responsável, testes, bloqueios e próximo passo antes de intervir.",
+    improvement: "Evita consertar duas vezes e não altera checkout com trabalho em andamento.",
+    proof: "Comprovante com causa, teste, conferência do resultado e próximo passo.",
+    readonly: true,
+  },
+  {
+    id: "OLHO", symbols: "👀 👁️", name: "Olho e contraprova",
+    owner: "apps/instinto-superior/src/components/central/ObservabilidadeCentralDark.tsx",
+    invocation: "!calibrar",
+    effect: "Comparar fontes Casa/VPS/CI e separar SOURCE, BUILD, INSTALLED e UI.",
+    improvement: "O mesmo painel de observabilidade sustenta os selos, sem sinais inventados.",
+    proof: "Resposta autorizada com horário, origem e contraprova real.",
+    readonly: true,
+  },
+  {
+    id: "LINHAGEM", symbols: "🪡 🎄", name: "Aprendizado e costura de UID",
+    owner: "docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json",
+    invocation: "#acordar",
+    effect: "Retomar Gênesis, aprendizagem, selos e recibos pelo UID original.",
+    improvement: "Preserva IDs históricos e evita duplicar cadeados e receitas já seladas.",
+    proof: "Prev/next íntegros e receita canônica; replay documental não é execução.",
+    readonly: true,
+  },
+  {
+    id: "ANTECIPACAO", symbols: "🌞 🌟 ✨", name: "Outra melhoria antecipada",
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md",
+    invocation: "#acordar → !calibrar → !CENTRALDARK",
+    effect: "Recuperar contexto, identificar a mudança útil e continuar com o responsável autorizado.",
+    improvement: "Reduz redescoberta após boot/chat sem criar executor independente.",
+    proof: "Comparar a última prova ao estado atual e registrar só a novidade verificável.",
+    readonly: true,
+  },
+  {
+    id: "FORJA_PACOTE", symbols: "☄️ 🔥 ⚒️", name: "Forja e plug-and-play",
+    owner: "apps/instinto-superior/package.json",
+    invocation: "npm run build:plugplay",
+    effect: "Rodar teste de paridade, build existente e empacotar saída filtrada com manifesto e SHA256.",
+    improvement: "Uma identidade de pacote e receita compilável, sem publicar nem limpar checkout vivo.",
+    proof: "Exit 0 de teste/build, ZIP validado e SHA; instalação/deploy exigem prova separada.",
+    readonly: false,
+  },
+  {
+    id: "WORKTREE_CLEANUP", symbols: "🧹", name: "Faxina segura da Forja",
+    owner: ".agents/skills/main-pinned-runtime-fast-path/SKILL.md",
+    invocation: "Consulte o responsável main-pinned-runtime-fast-path → desmontagem segura da área de trabalho; não execute reset/clean diretamente",
+    effect: "Inventariar o scratch reutilizável, comprovar preservação do trabalho e só então liberar a bancada temporária.",
+    improvement: "Mantém a Forja organizada, sem apagar worktrees ativas, commits locais ou arquivos que ainda não chegaram à main.",
+    proof: "Classificação do caminho, trava, SHA da fonte, testes, comprovante, conferência da main quando aplicável e efeito visual na Casa quando solicitado.",
+    readonly: true,
+  },
+] as const;
+
+
+// #OBSERVACOES# | CENTRALDARK.INSTINTO.ADMIN_CAPABILITY_REUSE_20261018
+// Origem TelePainel permanece funcional. Este mapa é inventário estático,
+// NÃO prova conexão, autorização, publicação nem disponibilidade para cliente.
+const telepainelAdminCapabilities = [
+  { origem: "Dashboard", destino: "Visão geral", owner: "src/apps/modulos/telepainel/pages/Index.tsx", status: "PARCIAL" },
+  { origem: "Meu Bot", destino: "CentralDark Gram / Admin de Bots", owner: "src/apps/modulos/telepainel/pages/Bots.tsx", status: "PARCIAL" },
+  { origem: "Consultas", destino: "Admin · Consultas", owner: "src/apps/modulos/telepainel/pages/Consultas.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Logs", destino: "Raio-X / Recibos", owner: "src/apps/modulos/telepainel/pages/QueryLogs.tsx", status: "PARCIAL" },
+  { origem: "Usuários do Bot", destino: "Admin · Usuários de bots", owner: "src/apps/modulos/telepainel/pages/TelegramUsers.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Usuários do Painel", destino: "Admin · Identidades e permissões", owner: "src/apps/modulos/telepainel/pages/UsuariosPainel.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Planos", destino: "Admin · Planos e assinaturas", owner: "src/apps/modulos/telepainel/pages/Plans.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Lucros PIX", destino: "Admin · Financeiro", owner: "src/apps/modulos/telepainel/pages/PixTransactions.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Capability Router", destino: "Sistema · Catálogo de capacidades", owner: "src/shared/layout/Sidebar.tsx", status: "PARCIAL" },
+  { origem: "Teste de Módulos", destino: "Forja · Testes", owner: "src/apps/modulos/telepainel/pages/TesteModulos.tsx", status: "PARCIAL" },
+  { origem: "Auditoria", destino: "Recibos / Ledger", owner: "src/shared/layout/Sidebar.tsx", status: "PARCIAL" },
+  { origem: "Segurança", destino: "Admin / Cofre", owner: "src/apps/modulos/telepainel/pages/Security.tsx", status: "PARCIAL" },
+  { origem: "Banco de Dados", destino: "Sistema · Banco de dados", owner: "src/apps/modulos/telepainel/pages/DatabaseInfo.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Dicas Splash", destino: "Design Center · Dicas", owner: "src/apps/modulos/telepainel/pages/MenuTips.tsx", status: "NAO_INTEGRADO" },
+  { origem: "Configurações", destino: "Admin · Preferências / Backup / Limpeza", owner: "src/apps/modulos/telepainel/pages/Settings.tsx", status: "PARCIAL" },
+] as const;
+
+/** Reaproveita o zone do Instinto Superior; não cria outro HUD ou executor. */
+export function HudDeterministico({ estado, atualizar }: { estado?: EstadoCentralDark; atualizar?: () => void }) {
+  const lerProvaMcp = useServerFn(lerSaudeInfraCentralDark);
+  // Mesma chave da aba Conexoes: uma medicao, duas superficies do cockpit.
+  const provaMcp = useQuery({
+    queryKey: ["centraldark", "saude-hub-mcp"],
+    queryFn: () => lerProvaMcp(),
+    refetchInterval: 60_000,
+    retry: false,
+  });
+  const lerHudCurrent = useServerFn(lerHudVigente);
+  const hudCurrent = useQuery({
+    queryKey: ["centraldark", "hud-funil-current"],
+    queryFn: () => lerHudCurrent(),
+    refetchInterval: 30_000,
+    retry: false,
+  });
+  const [cursor, setCursor] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [genesisCopy, setGenesisCopy] = useState<"IDLE" | "COPIED" | "FAILED">("IDLE");
+  const [forgeSelected, setForgeSelected] = useState<string | null>(null);
+  const [legadoBusca, setLegadoBusca] = useState("");
+  const [legadoAba, setLegadoAba] = useState("todos");
+  const [legadoTipo, setLegadoTipo] = useState("controles");
+  const [legadoPagina, setLegadoPagina] = useState(1);
+  const [legadoSelecionado, setLegadoSelecionado] = useState<string | null>(null);
+  const legadoRegistros = useMemo(() => (legadoTipo === "controles"
+    ? hudMigrationSnapshot.controls : hudMigrationSnapshot.sections)
+    .filter(registro =>
+      (legadoAba === "todos" || registro.aba === legadoAba) &&
+      (!legadoBusca.trim() || [registro.titulo, registro.id, registro.owner]
+        .some(campo => campo.toLocaleLowerCase("pt-BR")
+          .includes(legadoBusca.trim().toLocaleLowerCase("pt-BR"))))), [
+    legadoAba, legadoBusca, legadoTipo,
+  ]);
+  const legadoTotalPaginas = Math.max(1, Math.ceil(legadoRegistros.length / 20));
+  const legadoPaginaAtual = Math.min(legadoPagina, legadoTotalPaginas);
+  const legadoVisiveis = legadoRegistros.slice((legadoPaginaAtual - 1) * 20, legadoPaginaAtual * 20);
+  const legadoAtual = legadoRegistros.find(registro => registro.id === legadoSelecionado);
+
+  const [forgeCopy, setForgeCopy] = useState<"IDLE" | "COPIED_NOT_EXECUTED" | "COPY_FAILED">("IDLE");
+  const chosenForge = forgeAliases.find(action => action.id === forgeSelected);
+  const integrity = useMemo(() => nodes.every((n, i) =>
+    i === 0 ? n.uid === "L000" && n.prev_uid == null :
+    n.prev_uid === nodes[i - 1]!.uid && nodes[i - 1]!.next_uid === n.uid
+  ) && nodes.at(-1)?.next_uid === "PENDING_NEXT_CURSOR", []);
+  useEffect(() => {
+    if (!playing || !integrity) return;
+    const id = window.setInterval(() => {
+      setCursor(previous => {
+        if (previous >= nodes.length - 1) { setPlaying(false); return previous; }
+        return previous + 1;
+      });
+    }, 180);
+    return () => window.clearInterval(id);
+  }, [playing, integrity]);
+  const item = nodes[cursor]!;
+  const done = integrity && cursor === nodes.length - 1;
+  const selectedNode = nodes.find(node => node.uid === selected);
+  const recipe = selectedNode ? [
+    "INTENCAO=NEUROLINK_OPERACIONAL",
+    "UID=" + selectedNode.uid,
+    "PREV=" + (selectedNode.prev_uid ?? "GENESIS"),
+    "NEXT=" + (selectedNode.next_uid ?? "PENDING_NEXT_CURSOR"),
+    "OWNER=HERMES_EXISTENTE",
+    "ESTADO=SOLICITACAO_NAO_ENVIADA",
+    "CRITERIO=READBACK_RECEIPT_CONTRAPROVA"
+  ].join("; ") : "";
+  return (
+    <section className="space-y-6" aria-label="HUD histórico integrado, selos e Gênesis">
+      <header className="panel p-6">
+        <p className="text-xs text-neon-blue">HUD CANÔNICO → ZONE EXISTENTE</p>
+        <h2 className="mt-2 text-2xl font-semibold">Selos · Cadeados · Gênesis</h2>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Capacidades documentais transferidas ao Instinto Superior. O arquivo docs/HUD/HUD.html
+          permanece como referência. Replay documental não é execução, deploy ou selo operacional.
+        </p>
+        <p className="mt-3 text-xs text-muted-foreground" role="status">
+          PARIDADE PARCIAL · Fonte NeuroLink: {lineage.audit.learning_sections} aprendizados
+          e Gênese L000. Migração de todos os sensores do HUD: em andamento.
+        </p>
+      </header>
+      {/* #OBSERVACOES# @owner: HudDeterministico @doc_ref: docs/HUD/README.md
+          @last_updated: 2026-11-12T23:59:04.000Z
+          CURRENT vem do servidor do Cockpit; credenciais e gh nunca entram no browser. */}
+      <section className="panel p-6" aria-labelledby="cd-hud-current-live">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs text-neon-blue">HUD VIGENTE · PR E RECIBOS DO GITHUB</p>
+            <h3 id="cd-hud-current-live" className="mt-1 text-lg font-semibold">🪬 Continuidade da missão</h3>
+          </div>
+          <span className="rounded-md border border-border px-2 py-1 font-mono text-xs">
+            {hudCurrent.data?.missaoAtual?.estado ?? hudCurrent.data?.recibosEstado ?? hudCurrent.data?.status ?? "UNKNOWN"}
+          </span>
+        </div>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            ["PR vigente", hudCurrent.data?.activePr ? `#${hudCurrent.data.activePr}` : "UNKNOWN"],
+            ["Fonte", hudCurrent.data?.source ?? "UNAVAILABLE"],
+            ["main SHA", hudCurrent.data?.mainSha?.slice(0, 12) ?? "UNKNOWN"],
+            ["PR HEAD", hudCurrent.data?.headSha?.slice(0, 12) ?? "UNKNOWN"],
+            ["Medição", hudCurrent.data?.measuredAt ?? "UNKNOWN"],
+            ["Próximo passo", hudCurrent.data?.nextCursor ?? "UNKNOWN"],
+            ["Recibos do PR", hudCurrent.data?.recibosEstado ?? "UNKNOWN"],
+            ["Missão", hudCurrent.data?.missaoAtual?.missionId ?? "UNKNOWN"],
+            ["Cursor do funil", hudCurrent.data?.funilNextCursor ?? "UNKNOWN"],
+          ] as const).map(([rotulo, valor]) => (
+            <div key={rotulo} className="rounded-md border border-border p-3">
+              <dt className="text-xs font-semibold">{rotulo}</dt>
+              <dd className="mt-1 break-words font-mono text-xs">{valor}</dd>
+            </div>
+          ))}
+        </dl>
+        {/* #OBSERVACOES# @owner=HudDeterministico @doc_ref=docs/HUD/README.md
+            @last_updated=2026-11-14T09:34:00Z
+            Recibos GitHub sao checkpoint documental, caixas marcadas nao comprovam runtime. */}
+        {hudCurrent.data?.missaoAtual ? (
+          <div className="mt-4 rounded-md border border-amber-500/40 bg-amber-500/5 p-4"
+               aria-label="Ultimo recibo de missao do funil GitHub" role="status">
+            <p className="text-xs font-semibold">MISSÃO PERSISTENTE · RECIBO DO GITHUB</p>
+            <h4 className="mt-2 text-sm font-semibold">{hudCurrent.data.missaoAtual.titulo}</h4>
+            <p className="mt-1 font-mono text-xs">
+              {hudCurrent.data.missaoAtual.missionId} · {hudCurrent.data.missaoAtual.estado}
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Autor: {hudCurrent.data.missaoAtual.autor ?? "UNKNOWN"} ·
+              Atualizado: {hudCurrent.data.missaoAtual.atualizadoEm ?? "UNKNOWN"}
+            </p>
+            <p className="mt-2 break-words text-xs">
+              Próximo passo: {hudCurrent.data.missaoAtual.nextCursor ?? "UNKNOWN"}
+            </p>
+            {hudCurrent.data.missaoAtual.checklist.length ? (
+              <ul className="mt-3 space-y-1 text-xs" aria-label="Pendências registradas no PR">
+                {hudCurrent.data.missaoAtual.checklist.map((item, i) => (
+                  <li key={i}><span aria-hidden="true">{item.marcado ? "☑" : "☐"}</span> {item.texto}</li>
+                ))}
+              </ul>
+            ) : null}
+            <p className="mt-3 text-xs text-muted-foreground">
+              Caixas refletem declarações nos comentários. Conferir SHA e contraprova antes de promover PASS.
+              O checkpoint local Hermes e a missão ativa do CHEFE devem ser confrontados.
+            </p>
+            <a href={hudCurrent.data.missaoAtual.commentUrl} target="_blank" rel="noreferrer"
+               className="mt-2 inline-block text-xs underline">Abrir recibo no PR vigente</a>
+          </div>
+        ) : (
+          <div className="mt-4 text-xs text-amber-400" role="status">
+            <p>Recibos da missão: {hudCurrent.data?.recibosEstado ?? "UNKNOWN"}.
+              {hudCurrent.data?.recibosEstado === "BLOCKED"
+                ? " Há mais de uma missão; conferir o marcador ativo no PR e a intenção do CHEFE."
+                : " Comentários não lidos ou missão não identificada; não inferir estado atual."}
+            </p>
+            {hudCurrent.data?.recibosEstado === "BLOCKED" && hudCurrent.data?.recibos?.length ? (
+              <ul className="mt-2 space-y-1" aria-label="Missões disponíveis no funil">
+                {hudCurrent.data.recibos.map(item => (
+                  <li key={item.commentId}>
+                    <a href={item.commentUrl} target="_blank" rel="noreferrer" className="underline">
+                      {item.missionId} · {item.estado}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        )}
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          {hudCurrent.data?.url ? (
+            <a href={hudCurrent.data.url} target="_blank" rel="noreferrer" className="underline">
+              Abrir PR vigente
+            </a>
+          ) : null}
+          <span>{hudCurrent.data?.detail ?? "Estado atual do GitHub ainda não medido."}</span>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground">
+          Consulta server-side: GitHub API com GITHUB_TOKEN/GH_TOKEN do ambiente; fallback para gh autenticado no host.
+          MCP permanece fallback operacional do agente quando o servidor não consegue consultar. Nenhum segredo é enviado ao navegador.
+        </p>
+      </section>
+      {/* Incremento 2026-10-16: ingress observável, sem atribuir sessão por adivinhação.
+          Contrato: UNIVERSAL-ENGINE-METHOD.yml#sol_chat_entrypoint_handoff_2026_10_16
+          O chat é entrada nesta missão; a interface só exibe fatos do snapshot real. */}
+      <section className="panel p-6" aria-labelledby="cd-ingress-live">
+        <h3 id="cd-ingress-live" className="text-lg font-semibold">🪬 Porta de entrada · coordenação e execução</h3>
+        <p className="mt-2 text-xs text-muted-foreground">
+          SOL/JARVIS coordena esta missão por meio do chat. A sessão ativa,
+          quem escreve e quem executa só podem ser declarados pelo responsável no programa em funcionamento.
+        </p>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {([
+            ["Entrada desta missão", "SOL/JARVIS · contrato", "Não é sessão autenticada do cockpit"],
+            ["Intenção atual", "UNKNOWN", "Nenhum campo de intenção fornecido pelo snapshot"],
+            ["Responsável pela observação", "cockpit.functions.ts", "Snapshot do mesmo cockpit"],
+            ["Writer ativo", "UNKNOWN", "A leitura não informa lease de escrita"],
+            ["Executor ativo", "UNKNOWN", "Não presumir Hermes/Claude sem recibo"],
+            ["Receita em uso", provaMcp.data?.mcpRecipe ?? "UNKNOWN",
+              `MCP HTTP · ${provaMcp.data?.mcpRecipeStatus ?? "Ainda sem conferência"}; STDIO/Hermes exigem contraprova separada`],
+            ["Última evidência", estado?.atualizadoEm ?? "UNKNOWN", "Timestamp do snapshot, não do executor"],
+            ["Próximo passo", estado?.nextCursor ?? "UNKNOWN", "Continuação conforme responsável medido"],
+          ] as const).map(([rotulo, valor, ressalva]) => (
+            <div key={rotulo} className="rounded-md border border-border p-3">
+              <dt className="text-xs font-semibold">{rotulo}</dt>
+              <dd className="mt-1 break-words font-mono text-xs">{valor}</dd>
+              <dd className="mt-1 text-xs text-muted-foreground">{ressalva}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-genesis-title">
+        <div className="flex flex-wrap justify-between gap-3">
+          <h3 id="cd-genesis-title" className="text-lg font-semibold">🪬 Gênesis → Fixed Point</h3>
+          <span className="text-xs text-muted-foreground" role="status">
+            {integrity ? (done ? "REPLAY DOCUMENTAL PASS" : "CONTINUIDADE DOCUMENTAL") : "BLOCKED_UID_INTEGRITY"}
+          </span>
+        </div>
+        <p className="mt-3 font-mono text-3xl text-gold" aria-live="polite">{item.uid}</p>
+        <p className="mt-2 text-sm">{item.title}</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {item.prev_uid ?? "GÊNESE"} → {item.uid} → {item.next_uid}
+        </p>
+        <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted" role="progressbar"
+          aria-label="Continuidade documental NeuroLink" aria-valuemin={0}
+          aria-valuemax={nodes.length - 1} aria-valuenow={cursor}>
+          <div className="h-full bg-neon-green" style={{ width: ((cursor / Math.max(1, nodes.length - 1)) * 100) + "%" }} />
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {cursor} / {nodes.length - 1} elos · UIDs preservados, inclusive duplicatas e lacunas históricas.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-2">
+          <Button disabled={!integrity || done} onClick={() => setPlaying(true)}>▶ Reproduzir</Button>
+          <Button variant="outline" disabled={!integrity || done} onClick={() => { setPlaying(false); setCursor(i => Math.min(i + 1, nodes.length - 1)); }}>Uma batida</Button>
+          <Button variant="outline" onClick={() => setPlaying(false)}>Pausar</Button>
+          <Button variant="outline" onClick={() => { setPlaying(false); setCursor(0); setSelected(null); }}>Voltar à Gênese</Button>
+          <Button variant="outline" onClick={() => { setSelected(item.uid); setGenesisCopy("IDLE"); }}>Receita do UID</Button>
+        </div>
+        {selectedNode && (
+          <div className="mt-5 rounded-lg border border-border p-4">
+            <p className="text-sm font-semibold">Hermes tipado · missão preparada</p>
+            <code className="mt-2 block break-all text-xs">{recipe}</code>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Somente prévia determinística, disponível sem IA. Nenhuma tarefa foi enviada
+              ou executada. O despacho real deve utilizar o Hermes Gateway autorizado.
+            </p>
+            <Button className="mt-3" variant="outline" onClick={() => {
+              if (typeof navigator !== "undefined" && navigator.clipboard) {
+                void navigator.clipboard.writeText(recipe)
+                  .then(() => setGenesisCopy("COPIED"))
+                  .catch(() => setGenesisCopy("FAILED"));
+              }
+            }}>Copiar missão tipada</Button>
+            <p className="mt-2 text-xs text-muted-foreground" aria-live="polite">
+              {genesisCopy === "COPIED" ? "Missão copiada; nada foi enviado ao Hermes."
+                : genesisCopy === "FAILED" ? "Falha ao copiar; receita continua visível, sem despacho."
+                : "Cópia pendente de clique; sessão Hermes não vinculada nesta interface."}
+            </p>
+          </div>
+        )}
+        {/* #OBSERVACOES# @owner=HudDeterministico @doc_ref=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json
+            @last_updated=2026-11-17T11:14:05.874Z
+            @escopo=arvore de numeros historicos repetidos por UID sem renumerar ou criar outro owner */}
+        <div className="mt-5 rounded-lg border border-border p-4" data-cd-flow="instinto.HudDeterministico.genesis-legacy-tree">
+          <h4 className="text-sm font-semibold">Árvore de números históricos repetidos</h4>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {lineage.audit.learning_sections} registros ·{" "}
+            {lineage.audit.learning_sections - lineage.audit.duplicate_legacy_numbers.reduce((sum, group) => sum + group.count - 1, 0)} números distintos ·{" "}
+            {lineage.audit.duplicate_legacy_numbers.length} números repetidos.
+            Os números históricos ficam preservados; cada UID identifica um registro diferente.
+          </p>
+          <details className="mt-3">
+            <summary className="cursor-pointer text-sm font-medium">Ver árvore e abrir registros</summary>
+            <ol className="mt-3 grid gap-3" aria-label="Árvore de registros com numeração repetida">
+              {lineage.audit.duplicate_legacy_numbers.map(group => (
+                <li key={group.legacy_learning_number} className="rounded-md border border-border p-3">
+                  <details>
+                    <summary className="cursor-pointer text-sm font-semibold">
+                      #{group.legacy_learning_number} · {group.count} registros
+                    </summary>
+                    <ul className="mt-2 space-y-2">
+                      {group.uids.map(uid => {
+                        const nodeIndex = nodes.findIndex(node => node.uid === uid);
+                        const node = nodes[nodeIndex];
+                        return nodeIndex < 0 || !node ? null : (
+                          <li key={uid} className="flex flex-wrap items-center gap-2">
+                            <Button variant="outline" disabled={!integrity} onClick={() => {
+                              setPlaying(false);
+                              setCursor(nodeIndex);
+                              setSelected(uid);
+                              setGenesisCopy("IDLE");
+                            }}>{uid}</Button>
+                            <span className="min-w-0 flex-1 break-words text-xs">{node.title}</span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </details>
+                </li>
+              ))}
+            </ol>
+          </details>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Lacunas históricas: {lineage.audit.missing_legacy_numbers.join(", ") || "nenhuma"}.
+            Este índice é documental; abrir um UID não executa nenhuma missão.
+          </p>
+        </div>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-seals-title">
+        <h3 id="cd-seals-title" className="text-lg font-semibold">🔒 Cadeados históricos · sem duplicação</h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {historicalSeals.length} nomes recuperados do HUD legado. São registros históricos,
+          não selos de runtime promovidos automaticamente.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {historicalSeals.map(name => (
+            <div key={name} className="rounded-md border border-border px-3 py-2 text-sm">
+              <strong>{name}</strong>
+              <p className="text-xs text-muted-foreground">HISTÓRICO · estado atual exige conferência</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          Novo selo só é permitido com: {required.join(" · ")}.
+          Selar não dispara nova execução e não renumera Gênesis.
+        </p>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-integridade-estado">
+        <p className="font-mono text-[10px] text-neon-blue">👁️🪡 REALIDADE ATUAL · PROJEÇÃO DO RESPONSÁVEL</p>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <h3 id="cd-integridade-estado" className="text-lg font-semibold">🫀 Central de Integridade · Compasso Único</h3>
+          <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground" role="status">
+            {estado?.atualizadoEm ? "Medido: " + estado.atualizadoEm : "MEDIÇÃO NÃO DISPONÍVEL"}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O CHEFE decide · Hermes executa · a Lupa faz a contraprova. Tudo deriva da consulta já usada
+          pelo cockpit: sem segundo sensor, sem nova arquitetura e sem verde por aparência.
+        </p>
+        <div className="mt-4 rounded-lg border border-border bg-muted/10 p-4" id="cd-michelin-3-estrelas">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h4 className="font-semibold">🧬 Michelin · três estrelas de qualidade</h4>
+            <span className="rounded-full border border-amber-500/40 px-2 py-1 font-mono text-xs text-amber-700 dark:text-amber-400">
+              SEM CERTIFICAÇÃO RUNTIME NESTA CONSULTA
+            </span>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Metáfora de rigor técnico, sem vínculo com o guia gastronômico. As estrelas pertencem
+            a uma entrega no mesmo SHA, não à CentralDark inteira. Estado de source não substitui
+            checks concluídos, instalação, foto autenticada e recibos vivos.
+          </p>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {([
+              ["☆ 1 · Construir", "Testes, lint, build e autenticação no mesmo SHA.", estado?.build],
+              ["☆☆ 2 · Integrar", "CI concluída com sucesso no mesmo SHA, ponte e não duplicação.", estado?.actions],
+              ["☆☆☆ 3 · Provar", "Deploy, visual autenticado, Casa ↔ VPS e logs com recibos recentes.", estado?.deploy],
+            ] as const).map(([nome, requisito, sinal]) => (
+              <div key={nome} className="rounded-md border border-border p-3">
+                <p className="text-sm font-semibold">{nome}</p>
+                <p className="mt-2 text-xs text-muted-foreground">{requisito}</p>
+                <p className="mt-2 font-mono text-xs text-muted-foreground">
+                  Sinal auxiliar do responsável: {sinal ?? "UNKNOWN"} · ESTRELA NÃO ATESTADA
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground" role="status">
+            👉 O QUE FAZER AGORA: confrontar CI do SHA {estado?.mainSha?.slice(0, 12) ?? "UNKNOWN"}
+            {" "}e receipts de build, deploy e runtime. Uma medição HTTP, um commit ou este quadro
+            não concedem estrelas automaticamente. O teste de critérios existe na esteira atual.
+          </p>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {([
+            ["🐙 GitHub / main", estado?.github, estado?.mainSha?.slice(0, 12), "Referência do HEAD medido; CI do mesmo HEAD ainda exige prova."],
+            ["🖥️ VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12), "Publicação e alinhamento com a main exigem conferência própria."],
+            ["🔌 API CentralDark", estado?.apiHealth, estado?.apiHealthFonte ?? "Host de origem não medido", "HTTP /health atesta somente essa rota, não integração completa."],
+            ["🏠 Site local", estado?.casaSite, estado?.casaSiteHttp, "Disponibilidade HTTP não comprova o deploy visual."],
+            ["👁️ Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem medida da Casa", "Estado só pode vir do host Windows Casa; conector remoto ≠ serviço."],
+            ["👁️ Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem medida da VPS", "A porta 3030 da VPS pode ser o Graph Panel; exige assinatura Screenpipe."],
+            ["🧾 Comprovantes", estado?.receipts, estado?.receiptsHttp, "Endpoint acessível não comprova o comprovante por artefato."],
+          ] as const).map(([nome, situacao, detalhe, limite]) => (
+            <div key={nome} className="min-w-0 rounded-lg border border-border bg-muted/20 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h4 className="text-sm font-semibold">{nome}</h4>
+                <span className={"rounded-full border px-2 py-1 font-mono text-xs " +
+                  (situacao === "PASS" ? "border-emerald-500/50 text-emerald-600 dark:text-emerald-400" :
+                    situacao === "FAIL" || situacao === "BLOCKED" ? "border-red-500/50 text-red-600 dark:text-red-400" :
+                    "border-amber-500/50 text-amber-700 dark:text-amber-400")}
+                  aria-label={"Estado de " + nome + ": " + (situacao ?? "UNKNOWN")}>
+                  {situacao ?? "UNKNOWN"}
+                </span>
+              </div>
+              <p className="mt-2 break-all font-mono text-xs text-foreground">
+                {detalhe ?? "Ainda sem conferência nesta consulta"}
+              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{limite}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold">🧭 Gatilhos · mesma intenção, mesmo responsável</h4>
+            <p className="mt-2 text-xs text-muted-foreground">
+              !CENTRALDARK → retomar missão · #ACORDAR → recuperar contexto ·
+              !CALIBRAR → confrontar evidências · #CRISTALIZAR → registrar delta útil.
+              São receitas de governança; este painel não envia comandos.
+            </p>
+            <p className="mt-3 break-all font-mono text-xs">
+              Responsável técnico: apps/instinto-superior/src/lib/cockpit.functions.ts
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              FONTE: {estado?.fonte ?? "UNKNOWN"} · valor observado no mesmo snapshot do cockpit.
+            </p>
+          </div>
+          <div className="rounded-lg border border-border p-4">
+            <h4 className="text-sm font-semibold">🔒 Cadeado de conclusão · não presumido</h4>
+            <p className="mt-2 font-mono text-xs text-amber-700 dark:text-amber-400" role="status">
+              LOCK_ENFORCEMENT = UNKNOWN · CI_EXACT_HEAD = UNKNOWN
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Um arquivo aprovado só fica protegido de edição quando houver gate de escrita
+              comprovado, SHA do objeto, testes, contraprova e comprovante. Selos documentais,
+              botão verde ou main medida não concedem proteção real.
+            </p>
+            <p className="mt-3 text-xs">
+              <strong>👉 O QUE FAZER AGORA:</strong>{" "}
+              <span className="break-words text-muted-foreground">
+                {estado?.nextCursor ?? "UNKNOWN · nenhuma continuação publicada por esta consulta"}
+              </span>
+            </p>
+          </div>
+        </div>
+      </section>
+      <section className="panel p-6" aria-labelledby="cd-daily-title">
+        <h3 id="cd-daily-title" className="text-lg font-semibold">
+          📋 Lista diária · projeção do responsável existente
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Sinais do mesmo estado do cockpit, sem outro coletor. O histórico canônico está em
+          docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md; nenhum item é selado ao abrir a tela.
+        </p>
+        <dl className="mt-4 grid gap-3 sm:grid-cols-2">
+          {([
+            ["GitHub main", estado?.github, estado?.mainSha?.slice(0, 12)],
+            ["API CentralDark", estado?.apiHealth, estado?.apiHealthHttp],
+            ["VPS / deploy", estado?.deploy, estado?.vpsSha?.slice(0, 12)],
+            ["Screenpipe Casa", estado?.screenpipe, estado?.screenpipeFonte ?? "Sem prova na Casa"],
+            ["Screenpipe VPS", estado?.screenpipeVps, estado?.screenpipeVpsFonte ?? "Sem prova na VPS"],
+            ["Desktop Commander Casa", estado?.desktop, estado?.desktopFonte ?? "Conector remoto não medido"],
+            ["Desktop Commander VPS", estado?.desktopVps, estado?.desktopVpsFonte ?? "Conector remoto não medido"],
+            ["Hermes Desktop", "UNKNOWN", "Sem sensor Hermes nesta consulta; fechado por escolha = NOT_REQUIRED"],
+            ["Comprovantes", estado?.receipts, estado?.receiptsHttp],
+          ] as const).map(([nome, resultado, detalhe]) => (
+            <div key={nome} className="rounded-md border border-border px-3 py-3">
+              <dt className="text-sm font-semibold">{nome}</dt>
+              <dd className="mt-1 font-mono text-xs text-muted-foreground">
+                {resultado ?? "UNKNOWN"} · {detalhe ?? "Sem contraprova nesta consulta"}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 text-xs text-muted-foreground">
+          API HTTP 200, presença de processo ou tarefa fechada por escolha não comprovam
+          o funcionamento de todo o sistema. Integridade e selagem exigem recibo individual.
+        </p>
+        <a className="mt-3 inline-block text-sm text-neon-blue underline" target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/ServerVpss/CentralDark/blob/main/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md">
+          Abrir checklist diário canônico · histórico e receitas
+        </a>
+      </section>
+
+      <section className="panel p-6" aria-labelledby="cd-forge-aliases-title">
+        <p className="font-mono text-[10px] text-neon-blue">FIXED_POINT preservado · atalhos por capacidade</p>
+        <h3 id="cd-forge-aliases-title" className="mt-2 text-lg font-semibold">
+          🔧🛠️👨🏻‍🔧 👀👁️🪡🎄🌞🌟✨☄️🔥🪛⚒️🧹 Forja Viva
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Escolha um símbolo para consultar a receita do responsável. Selecionar ou copiar
+          não dispara shell, tarefas, merges, instalações ou deploys. Zoom usa os controles
+          nativos existentes do VS Code e do navegador.
+        </p>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {forgeAliases.map(action => (
+            <Button
+              key={action.id}
+              type="button"
+              variant={forgeSelected === action.id ? "default" : "outline"}
+              onClick={() => { setForgeSelected(action.id); setForgeCopy("IDLE"); }}
+              aria-pressed={forgeSelected === action.id}
+              className="h-auto justify-start whitespace-normal text-left"
+              title={action.name}
+            >
+              <span aria-hidden>{action.symbols}</span>
+              <span>{action.name}</span>
+            </Button>
+          ))}
+        </div>
+        {chosenForge?.id === "WORKTREE_CLEANUP" && (
+          <div className="mt-4 rounded-lg border border-border p-4" role="region"
+            aria-label="Checklist seguro da faxina de worktree">
+            <h4 className="text-sm font-semibold">🧹 CONFERÊNCIA · receita do responsável existente</h4>
+            <ol className="mt-2 list-inside list-decimal space-y-1 text-xs text-muted-foreground">
+              <li>Classificar responsável, escopo, área de trabalho, trava e caminho real. Área de trabalho ativa permanece.</li>
+              <li>Inventariar staged, unstaged, arquivos untracked e commits só locais.</li>
+              <li>Concluir o teste, contraprová-lo e registrar comprovante com SHA e arquivos.</li>
+              <li>Confirmar publicação na main e conferir o efeito quando aplicável.</li>
+              <li>Quando o CHEFE quiser ver: build e prova visual na Casa existente.</li>
+              <li>Atualizar a conferência diária do estado atual do HUD com provas, sem duplicar histórico.</li>
+              <li>Somente com tudo preservado: limpar o scratch descartável sob lock e verificar novamente.</li>
+            </ol>
+            <p className="mt-3 text-xs" role="status">
+              Estado de limpeza desta interface: UNKNOWN · nenhuma faxina foi executada por este botão.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Um scratch por escopo quando adequado; escritores independentes mantêm isolamento.
+              Ausência de comprovante, arquivo único ou dúvida = manter ativo.
+            </p>
+          </div>
+        )}
+        {chosenForge && (
+          <div className="mt-5 space-y-3 rounded-lg border border-border p-4" role="region"
+            aria-label={"Receita selecionada: " + chosenForge.name}>
+            <h4 className="text-base font-semibold">{chosenForge.symbols} {chosenForge.name}</h4>
+            <p className="text-sm"><strong>O que faz:</strong> {chosenForge.effect}</p>
+            <p className="text-sm"><strong>Por que melhora:</strong> {chosenForge.improvement}</p>
+            <p className="break-all font-mono text-xs">Responsável técnico: {chosenForge.owner}</p>
+            <p className="break-all font-mono text-xs">RECEITA: {chosenForge.invocation}</p>
+            <p className="text-xs text-muted-foreground"><strong>Prova exigida:</strong> {chosenForge.proof}</p>
+            <p className="text-xs text-muted-foreground" role="status">
+              {chosenForge.readonly ? "RECEITA SOMENTE LEITURA" : "EXECUÇÃO PENDENTE DE OPERADOR"}
+              {" · "}SOURCE_DEFINED · RUNTIME_NOT_PROVEN
+            </p>
+            <Button type="button" variant="outline" onClick={() => {
+              if (!navigator.clipboard) { setForgeCopy("COPY_FAILED"); return; }
+              void navigator.clipboard.writeText(chosenForge.invocation)
+                .then(() => setForgeCopy("COPIED_NOT_EXECUTED"))
+                .catch(() => setForgeCopy("COPY_FAILED"));
+            }}>Copiar receita · não executar</Button>
+            <p className="text-xs text-muted-foreground" aria-live="polite">
+              {forgeCopy === "COPIED_NOT_EXECUTED" ? "Copiado; nada foi executado."
+                : forgeCopy === "COPY_FAILED" ? "Cópia não disponível; texto acima continua visível."
+                : "Copiar é opcional. Execução requer autorização, responsável e contraprova."}
+            </p>
+          </div>
+        )}
+      </section>
+
+
+      <section className="panel p-6" aria-labelledby="cd-admin-capabilities">
+        <p className="font-mono text-[10px] text-neon-blue">🪬 REUSO DE CAPACIDADES · TELEPAINEL PRESERVADO</p>
+        <h3 id="cd-admin-capabilities" className="mt-2 text-lg font-semibold">
+          Instinto Superior Administrativo · matriz de extração
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O TelePainel continua sendo um produto próprio, com seus botões e rotas preservados.
+          Esta matriz documenta candidatos à integração administrativa na CentralDark,
+          sem duplicar serviços ou conceder acesso automático aos futuros clientes.
+        </p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Origem preservada</p>
+            <p className="text-lg font-semibold">TelePainel · 15 destinos</p>
+            <p className="text-xs text-muted-foreground">Não remover seus controles.</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Casca atual</p>
+            <p className="text-lg font-semibold">Instinto Admin · em evolução</p>
+            <p className="text-xs text-muted-foreground">Cada handler e permissão exige teste.</p>
+          </div>
+          <div className="rounded-md border border-border p-3">
+            <p className="text-xs text-muted-foreground">Casca de cliente</p>
+            <p className="text-lg font-semibold">Versão estável · NÃO LIBERADA</p>
+            <p className="text-xs text-muted-foreground">Sem herdar credenciais ou privilégios Admin.</p>
+          </div>
+        </div>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[660px] text-left text-xs">
+            <caption className="pb-2 text-left text-xs text-muted-foreground">
+              Inventário estático de origem, destino e dono. PARCIAL não é teste positivo.
+            </caption>
+            <thead><tr className="border-b border-border">
+              <th scope="col" className="p-2">TelePainel · preservado</th>
+              <th scope="col" className="p-2">Instinto Superior · Admin</th>
+              <th scope="col" className="p-2">Responsável original</th>
+              <th scope="col" className="p-2">Prova</th>
+            </tr></thead>
+            <tbody>
+              {telepainelAdminCapabilities.map(cap => (
+                <tr key={cap.origem} className="border-b border-border/60">
+                  <td className="p-2 font-medium">{cap.origem}</td>
+                  <td className="p-2">{cap.destino}</td>
+                  <td className="break-all p-2 font-mono text-[10px]">{cap.owner}</td>
+                  <td className="p-2 text-amber-700 dark:text-amber-400">{cap.status} · RUNTIME UNKNOWN</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-muted-foreground" role="status">
+          6 atalhos rápidos e 6 abas de Configurações também permanecem na origem;
+          Backup é stub, a integração e a recuperação não estão comprovadas.
+          SOURCE_IN_CODE != WIRED != TESTED != DEPLOYED. Nenhum serviço é iniciado por esta tabela.
+        </p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          👉 O QUE FAZER AGORA: Backup/Sync seguro → Consultas → Usuários → Banco de dados →
+          Planos/PIX → demais capacidades. Cliente só recebe recursos estáveis
+          após autorização, isolamento de dados e regressão.
+        </p>
+      </section>
+
+      <section className="panel p-6" aria-labelledby="cd-hud-legacy-owner-inventory">
+        <p className="font-mono text-[10px] text-neon-blue">🪡🫀 MAPA DE ABSORÇÃO · SEM OUTRO HUD</p>
+        <h3 id="cd-hud-legacy-owner-inventory" className="mt-2 text-lg font-semibold">
+          Inventário integral do HUD original por responsável
+        </h3>
+        <p className="mt-2 text-sm text-muted-foreground">
+          O arquivo legado foi varrido por estrutura: {hudMigrationSnapshot.counts.sections} títulos,
+          {" "}{hudMigrationSnapshot.counts.controls} controles identificados com seletores e
+          {" "}{hudMigrationSnapshot.counts.tabs} abas. O inventário não afirma que tudo já foi migrado.
+          Cada registro mostra sua origem e o responsável que precisa fornecer a ação real.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button variant="outline" type="button" disabled={!atualizar} onClick={atualizar}>
+            👀 Atualizar estado do cockpit
+          </Button>
+          <a className="self-center text-xs text-neon-blue underline" target="_blank"
+            rel="noopener noreferrer"
+            href={"https://github.com/ServerVpss/CentralDark/blob/" +
+              hudMigrationSnapshot.source.main_sha + "/docs/HUD/HUD.html"}>
+            Fonte original · {hudMigrationSnapshot.source.blob_sha.slice(0, 12)}
+          </a>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-busca">
+            Buscar capacidade ou responsável
+            <input id="hud-legado-busca" type="search" value={legadoBusca}
+              onChange={e => { setLegadoBusca(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              placeholder="MCP, Tailscale, Afterburner..."
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground" />
+          </label>
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-tipo">
+            Tipo de inventário
+            <select id="hud-legado-tipo" value={legadoTipo}
+              onChange={e => { setLegadoTipo(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground">
+              <option value="controles">Botões / controles</option>
+              <option value="secoes">Seções e funcionalidades</option>
+            </select>
+          </label>
+          <label className="text-xs text-muted-foreground" htmlFor="hud-legado-aba">
+            Aba de origem
+            <select id="hud-legado-aba" value={legadoAba}
+              onChange={e => { setLegadoAba(e.target.value); setLegadoPagina(1); setLegadoSelecionado(null); }}
+              className="mt-1 w-full rounded-md border border-border bg-background p-2 text-sm text-foreground">
+              {["todos", "global", "hud", "mapa", "forja", "operacao"].map(x =>
+                <option key={x} value={x}>{x.toUpperCase()}</option>)}
+            </select>
+          </label>
+        </div>
+        <p role="status" className="mt-3 text-xs text-muted-foreground">
+          {legadoRegistros.length} itens neste filtro · página {legadoPaginaAtual}/{legadoTotalPaginas}
+          {" · "}PARIDADE TOTAL NÃO COMPROVADA.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          {legadoVisiveis.map(entry => (
+            <Button key={entry.tipo + entry.id} type="button" variant="outline"
+              className="h-auto justify-start whitespace-normal text-left"
+              aria-pressed={legadoSelecionado === entry.id}
+              onClick={() => setLegadoSelecionado(entry.id)}>
+              <span className="min-w-0 break-words text-xs">
+                {entry.titulo} <span className="text-muted-foreground">
+                  ({entry.aba} · {entry.estado})
+                </span>
+              </span>
+            </Button>
+          ))}
+        </div>
+        {legadoRegistros.length === 0 && (
+          <p className="mt-3 text-sm text-muted-foreground">Nenhum registro nesse filtro.</p>
+        )}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button type="button" variant="outline" disabled={legadoPaginaAtual <= 1}
+            onClick={() => { setLegadoPagina(p => Math.max(1, p - 1)); setLegadoSelecionado(null); }}>
+            ← Anterior
+          </Button>
+          <Button type="button" variant="outline" disabled={legadoPaginaAtual >= legadoTotalPaginas}
+            onClick={() => { setLegadoPagina(p => Math.min(legadoTotalPaginas, p + 1)); setLegadoSelecionado(null); }}>
+            Próxima →
+          </Button>
+        </div>
+        {legadoAtual && (
+          <div className="mt-4 space-y-2 rounded-lg border border-border p-4" role="region"
+            aria-label={"Responsável pelo controle: " + legadoAtual.titulo}>
+            <h4 className="font-semibold">{legadoAtual.titulo}</h4>
+            <p className="break-all font-mono text-xs">Responsável técnico: {legadoAtual.owner}</p>
+            <p className="text-xs text-muted-foreground">
+              SOURCE: docs/HUD/HUD.html · linha {legadoAtual.line}
+              {" · "}STATUS: {legadoAtual.estado}.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Verificar a função e conferir o responsável antes de ativar.
+              Botão listado não equivale a execução ou paridade demonstrada.
+            </p>
+            <a href={"https://github.com/ServerVpss/CentralDark/blob/" +
+              hudMigrationSnapshot.source.main_sha + "/docs/HUD/HUD.html#L" + legadoAtual.line}
+              target="_blank" rel="noopener noreferrer"
+              className="text-xs text-neon-blue underline">Inspecionar controle original</a>
+          </div>
+        )}
+        <p className="mt-3 text-xs text-muted-foreground">
+          Próximos deltas causais: sensores Afterburner, skill-sync E01–E10,
+          Objetivo concluído e autorização dos formulários privados. Manter uma função por responsável.
+        </p>
+      </section>
+      <GavetaForja {...(estado?.mainSha ? { mainShaAtual: estado.mainSha } : {})} />
+      <p className="text-xs text-muted-foreground">
+        Fonte: docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json ·
+        source SHA {lineage.source_blob_sha.slice(0, 12)}.
+        Restante do HUD: sensores, API, telemetria e temas exigem correspondência e conferência individual.
+      </p>
+    </section>
+  );
+}
