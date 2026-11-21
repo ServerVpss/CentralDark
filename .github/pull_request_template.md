@@ -80,6 +80,27 @@ INTENÇÃO
 
 `CHAT_REPORT_WITHOUT_PERSISTED_RECEIPT=INVALID_FOR_MATERIAL_DELTA`.
 
+## 🪪 Identidade da execução e do checkpoint
+
+O mesmo responsável técnico `scripts/hermes/verified-checkpoint.py` gera as informações da etapa comprovada. No PR ativo deste escopo, incluir o texto de `render --mission ID_DA_MISSAO --format pr`. **Não abrir outro PR a cada checkpoint** e não inventar autoria ou execução onde não houver prova.
+
+```yaml
+CENTRALDARK_CHECKPOINT_IDENTITY:
+  mission: UNKNOWN
+  step: UNKNOWN
+  authorized_by: UNKNOWN
+  mission_owner: UNKNOWN
+  executor: UNKNOWN
+  technical_owner: UNKNOWN
+  source_commit: UNKNOWN
+  pr_ref: UNKNOWN
+  receipt_sha256: UNKNOWN
+  proof_status: UNKNOWN
+  next_cursor: UNKNOWN
+```
+
+Nos commits que referenciam um checkpoint comprovado, acrescentar os **Git trailers** produzidos por `render --format commit`. Esse comando não grava commits, não atualiza PRs e não autentica os nomes declarados; o writer da missão precisa aplicar, testar, publicar e fazer leitura de volta. O `source_commit` nunca deve ser confundido com o SHA do próprio commit recém-criado.
+
 ## Ciclo de PR e !REGISTRA
 
 Antes de abrir este PR, confirme que ele é realmente o próximo veículo de promoção do escopo:
