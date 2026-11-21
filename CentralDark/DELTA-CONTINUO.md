@@ -1,5 +1,35 @@
 # DELTA-CONTINUO — CentralDark
 
+
+<!-- CENTRALDARK_OS_DESKTOP_UPDATE_CHECKPOINT_20261121 -->
+## 🏛️ Checkpoint CentralDark · OS — instalação da Casa (21/11/2026)
+
+**Escopo:** checkpoint da atualização do produto no computador SEGREDO, sem criar novo owner, atualizar credenciais nem alterar configurações de execução. Código público versionado: ServerVpss/CentralDark@main.
+
+| Evidência observada | Resultado |
+| --- | --- |
+| Checkout instalado | `%LOCALAPPDATA%\hermes\hermes-agent`, branch `main`, HEAD `abffe39a745b5ac95523d7ef320085d8ffc341f0` |
+| GitHub `main` antes deste checkpoint documental | `abffe39a745b5ac95523d7ef320085d8ffc341f0`: mesmo SHA |
+| Árvore de trabalho da instalação | `git status --porcelain` vazio; nenhum arquivo local pendente |
+| Atualizador | `Update complete.` (21/11/2026 às 15h43 -03:00); marcador de atualização ausente |
+| Desktop | Etapa `Building desktop packaged app` concluída no log; executável e Webapp presentes |
+| Gateway | Processo PID `2424` ativo; tarefa agendada `Hermes_Gateway` registrada |
+| CLI | Versão `v0.23.1+26266.gabffe39` |
+| Alterações guardadas | 6 stashes na instalação; nenhuma descartada ou reaplicada |
+| Forja `F:\CentralDark` | Branch `main`; HEAD observado `8ebfa8fedab`; 232 caminhos versionados alterados; **não sincronizada nem modificada** |
+| Automação Windows `cua-driver` | Atualização adiada por UAC; **PENDENTE** |
+| Verificação visual completa | Ainda não executada para todas as superfícies; **UNKNOWN** |
+
+**Checkpoint operacional canônico:** `CentralDark/scripts/hermes/verified-checkpoint.py`, missão `centraldark-os-update-20261121`, etapa `installed-main-and-clean-checkout`. Execução: `git rev-parse HEAD` correspondeu ao SHA acima; contraprova `git diff-index --quiet HEAD --` terminou com código zero. Resultado: `VERIFIED_100` para essa etapa, `HASH_CHAIN_PASS` com um evento. SHA do checkpoint: `71fb6ed82002815028673473100fba61bb23af1410f51fcf67362b85394010d2`. Estado e logs privados preservados em `%USERPROFILE%\.hermes\centraldark\verified-execution\centraldark-os-update-20261121`; **não transferidos ao Git**.
+
+**Correção aplicada no owner existente:** `pm/packages.py` trata a junção do cache UV; `scripts/build/node-deps.mjs` elimina o user-agent `npm/11.17.0` herdado ao executar o `pnpm` validado pelo `pm/lock.json`. A regressão ficou em `tests-js/node-deps.test.mjs`, commits `87e677fe9fd5865e89ce3e2b7c4d2c7e038e2a6f` e `abffe39a745b5ac95523d7ef320085d8ffc341f0`. Execução na Casa confirmada; código publicado não substitui prova visual/CI.
+
+**Proteção:** esta atualização documental não contém stashes, logs pessoais, tokens nem os 232 arquivos modificados na Forja. Não usar `git reset --hard`, `git clean`, stash destrutivo nem merge forçado em `F:\CentralDark`. O checkout operacional instalado e o checkout da Forja são raízes distintas: `INSTALLED_MAIN_MATCH=PASS`, `UPDATE_RESULT=PASS`, `CHECKPOINT_CHAIN=PASS`, `F_FORGE_RECONCILIATION=PENDING`.
+
+**👉 O QUE FAZER AGORA:** comparar visualmente a identidade CentralDark · OS no Desktop, tratar `cua-driver` apenas com autorização UAC e reconciliar `F:\CentralDark` por owners com preservação. `NEXT_CURSOR=VERIFY_DESKTOP_VISUAL_AND_PRESERVE_F_DIRTY_WITH_OWNER_RECONCILIATION`.
+
+<!-- /CENTRALDARK_OS_DESKTOP_UPDATE_CHECKPOINT_20261121 -->
+
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global
 Owner: `docs/GOVERNANCA/REGRA-SECRETS-E-VARIAVEIS.md`
