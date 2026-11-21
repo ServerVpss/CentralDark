@@ -112,7 +112,7 @@ describe('desktop i18n languages', () => {
 
     const uiUpdaterStrings = Object.entries(ptBrMessages).filter(([key]) => key.startsWith('updates.'))
     for (const [key, value] of uiUpdaterStrings) {
-      expect(value, key).not.toMatch(/\\bHermes\\b/)
+      expect(value, key).not.toMatch(/\bHermes\b/)
     }
   })
 
