@@ -55,6 +55,32 @@ python3 "$H" run --mission forja-arquivo --step criar-marca \
 
 Em tarefas reais, o verificador precisa testar o efeito desejado (conteúdo, resultado do serviço, teste funcional), não apenas a saída textual. O exemplo cria \`/tmp/centraldark-marca-de-teste\` sob escopo da própria experiência.
 
+## 3.1. Quem autorizou, quem executou, commit e PR
+
+O próprio owner `scripts/hermes/verified-checkpoint.py` registra atribuição por etapa (autoridade declarada, responsável da missão, executor, owner técnico, commit de origem e PR de referência). Valores não demonstrados ficam `UNKNOWN`; declarações de identidade não são autenticação. A cadeia SHA-256 e a contraprova de cada etapa continuam independentes desses rótulos.
+
+Exemplo de um novo checkpoint (a autorização e os nomes devem corresponder à missão real):
+
+```bash
+python3 "$H" run --mission exemplo --step validar --next PR_REVIEW \
+  --authorized-by "CHEFE (declarado)" --responsible "SOL" \
+  --executor "SOL via ferramentas" \
+  --technical-owner "scripts/hermes/verified-checkpoint.py" \
+  --source-commit "65bac5b53161bd2e2cf2a1813da7152fa6752e4e" \
+  --pr-ref "#1994" --expect "OI_OK" -- python3 -c "print('OI_OK')"
+```
+
+Para gerar um resumo de um receipt já verificado, sem criar commit nem editar PR:
+
+```bash
+python3 "$H" render --mission exemplo --format commit
+python3 "$H" render --mission exemplo --format pr
+```
+
+O primeiro entrega **Git trailers** para a mensagem do próximo commit, e o segundo uma seção Markdown para o corpo do **PR existente**. A template oficial de PR contém o mesmo contrato de atribuição. O writer autorizado aplica a mensagem e o body e depois confere o SHA/readback. **RENDER != PUBLISHED**: o renderizador nunca abre PR nem escreve no GitHub. Não colocar segredos, sessões ou logs privados nesses textos.
+
+O campo `source_commit` identifica o commit **anterior observado**, pois o SHA do novo commit só existe depois da gravação. Checkpoints antigos não são reescritos: aparecem com atribuição `UNKNOWN` quando faltar informação. Um passo que informe novos responsáveis passa por nova execução/contraprova antes de ser promovido como verde.
+
 ## 4. Recuperar o último fio de QUALQUER terminal ou sessão
 
 \`\`\`bash
