@@ -123,6 +123,27 @@ class MissionProofTests(unittest.TestCase):
         self.assertEqual(state["attribution"]["executor"], "SOL")
         self.assertTrue(state["attribution_complete"])
 
+    def test_historical_receipt_without_attribution_preserves_hash_chain(self):
+        import hashlib
+        old = {"schema": "centraldark.hermes.verified-execution.v1",
+               "prev_sha256": "0" * 64, "outcome": "VERIFIED",
+               "mission": "historic", "step": "before-attribution",
+               "next_cursor": "continue", "at": "2026-11-20T00:00:00+00:00"}
+        digest = hashlib.sha256(json.dumps(old, ensure_ascii=False,
+                                           sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+        old["sha256"] = digest
+        folder = self.root / "state" / "historic"
+        folder.mkdir(parents=True)
+        (folder / "events.jsonl").write_text(json.dumps(old, ensure_ascii=False) + "\n")
+        verify = self.run_cli("verify", "--mission", "historic")
+        self.assertEqual(verify.returncode, 0, verify.stderr)
+        self.assertEqual(json.loads(verify.stdout)["status"], "HASH_CHAIN_PASS")
+        state = json.loads(self.run_cli("status", "--mission", "historic").stdout)
+        self.assertFalse(state["attribution_complete"])
+        self.assertEqual(state["attribution"]["executor"], "UNKNOWN")
+        self.assertIn("CentralDark-Executor: UNKNOWN",
+                      self.run_cli("render", "--mission", "historic", "--format", "commit").stdout)
+
     def test_independent_verifier_and_tamper_detection(self):
         result = self.root / "evidence"
         action = f"from pathlib import Path; Path({str(result)!r}).write_text('OK')"
