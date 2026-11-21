@@ -13,6 +13,10 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 
 # 👑🪬 CentralDark RULES
 
+<!-- CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+**🏛️ Nomenclatura pública obrigatória:** `CentralDark · OS` identifica produto, instalação, atualização e versão; `CentralDark · Agente` identifica o executor conversacional; `CentralDark · Terminal` identifica CLI/TUI; `CentralDark · OS — Painel` identifica Web. Fonte de identidade: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`. O motor Hermes e a atribuição upstream continuam reconhecidos; comandos, pacotes, protocolos, `HERMES_HOME`, `.hermes/`, API, hashes e IDs não podem ser renomeados por estética. Reaproveitar componentes existentes, não criar segunda infraestrutura. Documentado não equivale a carregado.
+<!-- /CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 **🗺️ Mapa visual semântico — 19/11/2026:** Toda superfície e agente que ler estas RULES herda a Gramática SOL e as referências semânticas do padrão de emojis (sem paleta fechada para conversa humana); títulos humanos populares, dados de máquina intactos, sem 👍 sem prova. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
