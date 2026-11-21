@@ -168,7 +168,7 @@ function run (argv) {
   const closeButton = win.standardWindowButton($.NSWindowCloseButton)
   closeButton.enabled = false
 
-  win.title = 'CentralDark Agente'
+  win.title = 'CentralDark · OS'
   win.center
   win.releasedWhenClosed = false
   win.backgroundColor = bg
@@ -179,9 +179,9 @@ function run (argv) {
   loaderView.imageScaling = $.NSImageScaleProportionallyUpOrDown
   content.addSubview(loaderView)
 
-  const title = wrappedLabel('Atualizando CentralDark Agente', $.NSFont.systemFontOfSize(18), fg,
+  const title = wrappedLabel('Atualizando CentralDark · OS', $.NSFont.systemFontOfSize(18), fg,
     $.NSMakeRect(0, 178, 280, 26))
-  const line = wrappedLabel('O CentralDark Agente abrirá quando a atualização terminar.', $.NSFont.systemFontOfSize(12), null,
+  const line = wrappedLabel('O CentralDark · OS abrirá quando a atualização terminar.', $.NSFont.systemFontOfSize(12), null,
     $.NSMakeRect(24, 118, 232, 54))
   content.addSubview(title)
   content.addSubview(line)
@@ -238,9 +238,9 @@ function run (argv) {
   loaderView.hidden = true
   title.stringValue = settled === 'error' ? 'Falha na atualização' : 'Atualização concluída'
   if (settled === 'done') {
-    line.stringValue = 'Abrindo CentralDark Agente…\nVocê pode fechar esta janela.'
+    line.stringValue = 'Abrindo CentralDark · OS…\nVocê pode fechar esta janela.'
   } else if (settled === 'manual') {
-    line.stringValue = displayStage(message || 'Abra o CentralDark Agente novamente para concluir.')
+    line.stringValue = displayStage(message || 'Abra o CentralDark · OS novamente para concluir.')
   } else {
     line.stringValue = 'Execute hermes debug share no terminal para enviar um relatório.'
   }
@@ -265,15 +265,15 @@ function displayStage(message) {
     "Updating Python dependencies (PM)": "Atualizando dependências do Python (PM)",
     "Updating dependencies": "Atualizando dependências",
     "Updating code and dependencies": "Atualizando código e dependências",
-    "Waiting for Hermes to close": "Aguardando o CentralDark Agente fechar",
+    "Waiting for Hermes to close": "Aguardando o CentralDark · OS fechar",
     "Retrying update": "Tentando atualizar novamente",
     "Rebuilding Desktop": "Recompilando o aplicativo",
-    "Opening Hermes": "Abrindo CentralDark Agente",
+    "Opening Hermes": "Abrindo CentralDark · OS",
     "Installing the new app": "Instalando o novo aplicativo",
     "Testing quiet update": "Testando atualização silenciosa",
-    "Reopen Hermes to finish.": "Abra o CentralDark Agente novamente para concluir.",
+    "Reopen Hermes to finish.": "Abra o CentralDark · OS novamente para concluir.",
     "Update complete.": "Atualização concluída.",
-    "Update complete. Reopen Hermes to finish (it could not restart itself).": "Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente)."
+    "Update complete. Reopen Hermes to finish (it could not restart itself).": "Atualização concluída. Abra o CentralDark · OS novamente para finalizar (ele não conseguiu reiniciar automaticamente)."
   }
   return labels[message] || message
 }
