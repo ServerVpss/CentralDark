@@ -57,8 +57,16 @@ def _wings(*glyphs) -> list[list[str]]:
 
 
 # Branding shared by every Hermes-named built-in (mono/daylight override help_header).
-_HERMES_BRANDING: dict[str, str] = _branding(
-    "Hermes", "☤", "Goodbye! ☤", prompt="❯", help_header="(^_^)? Available Commands")
+# Keep the legacy Python identifier and skin ids for compatibility. Only the
+# human-facing identity of the existing terminal is now CentralDark.
+_HERMES_BRANDING: dict[str, str] = {
+    **_branding("Hermes", "☤", "Goodbye! ☤", prompt="❯"),
+    "agent_name": "CentralDark · Terminal",
+    "welcome": "CentralDark · Terminal pronto. Digite sua mensagem ou /help para comandos.",
+    "goodbye": "Até logo.",
+    "response_label": " ✦ CentralDark · Agente ",
+    "help_header": "COMANDOS DISPONÍVEIS",
+}
 
 _BUILTIN_SKINS: dict[str, dict[str, Any]] = {
     "default": {
@@ -342,7 +350,7 @@ _BUILTIN_SKINS: dict[str, dict[str, Any]] = {
     }}
 
 _active_skin: Optional[SkinConfig] = None
-_active_skin_name: str = "default"
+_active_skin_name: str = "central-dark"
 # Routed multiplex profiles: (name, skin) per home key. ``display.skin`` and ``<home>/skins/*.yaml``
 # are per profile, and the relay display name / TUI skin payload are read under each profile's
 # override — one module slot would be last-writer-wins across profiles. Unscoped keeps the module slot.
@@ -478,15 +486,15 @@ def get_active_skin_name() -> str:
     home_key = _routed_home_key()
     if home_key is not None:
         entry = _active_skin_by_home.get(home_key)
-        return entry[0] if entry else "default"
+        return entry[0] if entry else "central-dark"
     return _active_skin_name
 
 
 def init_skin_from_config(config: dict) -> None:
     """Initialize the active skin from CLI config at startup."""
     display = config.get("display") or {}
-    skin_name = display.get("skin", "default") if isinstance(display, dict) else "default"
-    set_active_skin(skin_name.strip() if isinstance(skin_name, str) and skin_name.strip() else "default")
+    skin_name = display.get("skin", "central-dark") if isinstance(display, dict) else "central-dark"
+    set_active_skin(skin_name.strip() if isinstance(skin_name, str) and skin_name.strip() else "central-dark")
 
 
 def _active_branding(key: str, fallback: str) -> str:
