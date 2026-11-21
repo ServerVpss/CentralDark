@@ -45,5 +45,28 @@ export const ptBr: Translations = {
       ...base.sidebar.projects,
       branchOff: () => ({ before: 'criar branch a partir de ', after: '' })
     }
+  },
+  // Backup & Transfer has two structured lists that a flat string catalog cannot carry.
+  // Keep these in the existing pt-br TypeScript owner, alongside other structured overrides.
+  settings: {
+    ...base.settings,
+    backup: {
+      ...base.settings.backup,
+      replaces: [
+        'Memória',
+        'Personalidade',
+        'Habilidades',
+        'Conversas',
+        'Tarefas agendadas',
+        'Configurações',
+        'Chaves de API e credenciais'
+      ],
+      keeps: [
+        'Acesso ao Nous Portal',
+        'Modelo e provedor',
+        'Ferramentas do Hermes Cloud',
+        'Configurações do agendador'
+      ]
+    }
   }
 }
