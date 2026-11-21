@@ -31,6 +31,20 @@ afterEach(() => {
   vi.useRealTimers()
 })
 
+test('starts with the CentralDark OS identity and maps upstream stage codes to Portuguese', async () => {
+  const fetch = vi.fn(async () => ({
+    ok: true,
+    json: async () => ({ status: 'running', message: 'Waiting for Hermes to close', elapsed_seconds: 2 })
+  }))
+  const document = openPage(fetch)
+  assert.equal(document.title, 'CentralDark · OS')
+  assert.equal(document.getElementById('title').textContent, 'Atualizando CentralDark · OS')
+  assert.equal(document.getElementById('line').textContent, 'O CentralDark · OS abrirá quando a atualização terminar.')
+  await vi.advanceTimersByTimeAsync(1000)
+  assert.match(document.getElementById('line').textContent, /Aguardando o CentralDark · OS fechar/)
+  assert.deepEqual(fetch.mock.calls.map(x => x[0]), ['/progress'])
+})
+
 test.each(['done', 'manual', 'error'])('renders %s before acknowledging terminal delivery', async status => {
   let document
   const requests = []
