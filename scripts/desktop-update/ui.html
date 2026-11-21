@@ -23,7 +23,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>CentralDark Agente</title>
+<title>CentralDark · OS</title>
 <style>
   :root {
     --background: #ffffff;
@@ -107,8 +107,8 @@
   <div class="wrap">
     <div id="loader" role="status" aria-label="Atualizando"></div>
     <div id="glyph"></div>
-    <h2 id="title">Atualizando CentralDark Agente</h2>
-    <p id="line">O CentralDark Agente abrirá quando a atualização terminar.</p>
+    <h2 id="title">Atualizando CentralDark · OS</h2>
+    <p id="line">O CentralDark · OS abrirá quando a atualização terminar.</p>
   </div>
 <script>
   /* ── Fourier Flow loader, ported verbatim from loader.tsx ─────────────── */
@@ -216,15 +216,15 @@
     ["Updating Python dependencies (PM)", "Atualizando dependências do Python (PM)"],
     ["Updating dependencies", "Atualizando dependências"],
     ["Updating code and dependencies", "Atualizando código e dependências"],
-    ["Waiting for Hermes to close", "Aguardando o CentralDark Agente fechar"],
+    ["Waiting for Hermes to close", "Aguardando o CentralDark · OS fechar"],
     ["Retrying update", "Tentando atualizar novamente"],
     ["Rebuilding Desktop", "Recompilando o aplicativo"],
-    ["Opening Hermes", "Abrindo CentralDark Agente"],
+    ["Opening Hermes", "Abrindo CentralDark · OS"],
     ["Installing the new app", "Instalando o novo aplicativo"],
     ["Testing quiet update", "Testando atualização silenciosa"],
-    ["Reopen Hermes to finish.", "Abra o CentralDark Agente novamente para concluir."],
+    ["Reopen Hermes to finish.", "Abra o CentralDark · OS novamente para concluir."],
     ["Update complete.", "Atualização concluída."],
-    ["Update complete. Reopen Hermes to finish (it could not restart itself).", "Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente)."]
+    ["Update complete. Reopen Hermes to finish (it could not restart itself).", "Atualização concluída. Abra o CentralDark · OS novamente para finalizar (ele não conseguiu reiniciar automaticamente)."]
   ])
   const displayStage = message => stageLabels.get(message) || message
 
@@ -246,7 +246,7 @@
       settle('done')
       glyphEl.textContent = '\u2713'
       titleEl.textContent = 'Atualização concluída'
-      lineEl.textContent = 'Abrindo CentralDark Agente\u2026\nVocê pode fechar esta janela.'
+      lineEl.textContent = 'Abrindo CentralDark · OS\u2026\nVocê pode fechar esta janela.'
     } else if (state.status === 'manual') {
       // Update landed but Hermes will NOT reopen itself (package skew,
       // sandbox helper, launch rejected). The orchestrator leaves this
@@ -254,7 +254,7 @@
       settle('done')
       glyphEl.textContent = '\u2713'
       titleEl.textContent = 'Atualização concluída'
-      lineEl.textContent = displayStage(state.message || 'Abra o CentralDark Agente novamente para concluir.')
+      lineEl.textContent = displayStage(state.message || 'Abra o CentralDark · OS novamente para concluir.')
     } else if (state.status === 'error') {
       settle('error')
       glyphEl.textContent = '\u2715'
@@ -298,7 +298,7 @@
         settle('disconnected')
         glyphEl.textContent = '!'
         titleEl.textContent = 'Status da atualização indisponível'
-        lineEl.textContent = 'A conexão de progresso foi perdida.\nConfira o resultado no CentralDark Agente. Você pode fechar esta janela.'
+        lineEl.textContent = 'A conexão de progresso foi perdida.\nConfira o resultado no CentralDark · OS. Você pode fechar esta janela.'
       }
     }
     if (!settled) setTimeout(poll, 400)

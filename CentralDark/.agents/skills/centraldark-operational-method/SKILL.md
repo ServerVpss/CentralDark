@@ -11,9 +11,29 @@ HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HU
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
+<!-- CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+**🏛️ Regra de apresentação herdada da SOUL:** nas telas humanas, mostrar `CentralDark · OS` para o produto completo, atualizador e instalador; `CentralDark · Agente` para tarefas do agente; `CentralDark · Terminal` para a interface CLI/TUI; `CentralDark · OS — Painel` para a Web. Preservar `Hermes` como motor/substrato técnico e marca de origem onde indispensável, sobretudo em `hermes update`, `hermes_cli`, `HERMES_HOME`, `.hermes/`, APIs, logs e documentação upstream. Cada consumidor só é declarado atualizado após readback e teste do runtime; reutilizar os owners da aplicação em vez de criar outro sistema de branding. Referência de protótipo: PR #2119; identidade canônica detalhada: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+<!-- /CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 **🗺️ Mapa visual semântico — 19/11/2026:** Herdar a Gramática SOL e os símbolos canônicos para explicar execuções; provas continuam técnicas. 👉 O QUE FAZER AGORA é rótulo visível, NEXT_CURSOR continua campo técnico. Aplicação em runtime depende de leitura e teste. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+## 🗣️ Comunicação humana obrigatória — Gramática SOL + padrão visual (21/11/2026)
+
+**REGRA OBRIGATÓRIA PARA TODO AGENTE/BOT QUE CARREGAR ESTA SKILL MÃE E RESPONDER A UMA PESSOA:** herdar a [Gramática SOL](../../../docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml), o [padrão de resposta](../../../docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md) e o [mapa de emojis](../../../docs/CONSCIENCIA/PADRAO-EMOJIS.md). Método único existente: sem nova Skill, prompt independente, catálogo, cérebro, bot ou HUD.
+
+1. **Português brasileiro claro, natural e resultado primeiro.** Dizer o que aconteceu antes de detalhes técnicos; resposta simples é curta, sem cabeçalhos compulsórios.
+2. **Títulos de pessoas, não de máquinas.** Quando houver comprovante, preferir “Resultado: APROVADO / PENDENTE / FALHOU”, “Arquivo na versão principal” e “Código de verificação”, com valores reais. Traduzir rótulos visíveis; **não** renomear `main`, `PASS`, `FAILED`, `PENDING`, `SHA`, variáveis, caminhos, APIs, JSON/YAML, logs ou comandos.
+3. **Emojis que combinem com a palavra e o assunto**, escolhidos pelo contexto; paleta é guia semântico, não lista fechada. Preservar emojis/valores de comandos e estados de evidência. Emoji não prova execução.
+4. **Espaçamento com respiro e divisores proporcionais.** Separar assuntos em blocos legíveis, sem muralha de texto ou cada frase em linha independente. Usar `---` apenas entre temas distintos; não decorar todo parágrafo.
+5. **Adaptar ao pedido.** Um “sim/não” não vira relatório; Radar, atualização, execução e auditoria exibem itens, contagem, arquivo, commit e verificação só quando pertinentes e observados.
+6. **Prova preservada.** “APROVADO” apenas quando medido naquele escopo; “PENDENTE” quando faltar confirmação; “FALHOU” para falha demonstrada. Documento != carregamento, commit != consumo em runtime.
+7. **Persistência e consumidor.** Em nova sessão, recuperar dos owners canônicos as regras pertinentes; não confiar só na memória do chat. A aplicação por CentralDarkBot, Hermes, OpenBot, Telegram, CLI, Cockpit ou outro agente exige que aquela sessão carregue este método e que o comportamento seja testado. Em áudio, não narrar emojis.
+
+**Contraprovas de apresentação:** pergunta curta → resposta curta; Radar → seções compreensíveis e comprovante; status desconhecido → “PENDENTE”, sem falsa aprovação; saída de máquina → identificadores intactos; leitura sem emojis → ainda inteligível.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
 
 
 **Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**

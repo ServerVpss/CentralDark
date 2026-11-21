@@ -32,6 +32,10 @@ links:
 **🗺️ Mapa visual semântico — 19/11/2026:** O guia de comunicação herda a Gramática SOL: placas claras para status, provas e ações; 👉 O QUE FAZER AGORA é a tradução humana de NEXT_CURSOR. Não mascarar estados nem alterar máquina. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+**📖 Guia humano obrigatório para agentes que o carregam:** aplicar a Gramática SOL pela Skill Mãe, português claro e títulos comuns; emojis combinam com a palavra e variam conforme contexto, sem paleta fechada; deixar espaço entre assuntos e usar `---` somente para temas realmente distintos. “Resultado: APROVADO / PENDENTE / FALHOU”, “Arquivo na versão principal” e “Código de verificação” são rótulos de apresentação, nunca substituem `main`, SHA, logs ou campos internos. Resposta breve não precisa virar formulário; comprovante completo apenas com execução e prova. A única autoridade detalhada de apresentação permanece `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
 
 ## 👑 Identidade
 

@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { type ReactElement, type ReactNode, useState } from 'react'
 
-import { BrandMark } from '@/components/brand-mark'
+import { CentralDarkBrandMark } from '@/components/brand-mark'
 import { Button } from '@/components/ui/button'
 import { Codicon } from '@/components/ui/codicon'
 import type { DesktopUpdateStatus, DesktopVersionInfo } from '@/global'
@@ -217,10 +217,10 @@ function relativeTime(ms: number | undefined, u: Translations['updates']): strin
 }
 
 /**
- * The "Hermes Desktop / version / brand mark" hero shared by the About page
- * and the updates overlay, including the bundle-out-of-sync warning. The
- * heading render is injectable so a dialog surface can emit a DialogTitle
- * for its accessible name while About keeps a plain h2.
+ * CentralDark OS identity shared by About > Version & Updates and update
+ * dialogs. Uses the approved inline SVG lockup from CentralDarkBrandMark.
+ * The accessible title stays available in dialogs without duplicating the
+ * visible wordmark. Version details and update controls remain unchanged.
  */
 export function VersionHero({
   renderHeading,
@@ -234,20 +234,18 @@ export function VersionHero({
 
   return (
     <div className="flex flex-col items-center gap-3 pt-6 pb-2 text-center">
-      <BrandMark className="size-16" />
-      <div>
-        {renderHeading ? (
-          renderHeading(u.appName)
-        ) : (
-          <h2 className="text-lg font-semibold tracking-tight">{u.appName}</h2>
-        )}
-        <p className="mt-1 text-xs text-muted-foreground">
-          {version?.appVersion ? u.version(shortVersion(version.appVersion)) : u.versionUnavailable}
-          {version?.channel
-            ? ` · ${Object.entries(u.channels).find(([name]: [string, string]): boolean => name === version.channel)?.[1] ?? version.channel}`
-            : ''}
-        </p>
-      </div>
+      <CentralDarkBrandMark />
+      {renderHeading ? (
+        <div className="sr-only">{renderHeading('CentralDark · OS')}</div>
+      ) : (
+        <h2 className="sr-only">CentralDark · OS</h2>
+      )}
+      <p className="text-xs text-muted-foreground">
+        {version?.appVersion ? u.version(shortVersion(version.appVersion)) : u.versionUnavailable}
+        {version?.channel
+          ? ` · ${Object.entries(u.channels).find(([name]: [string, string]): boolean => name === version.channel)?.[1] ?? version.channel}`
+          : ''}
+      </p>
       {(version?.bundleSwapPending || version?.bundleOutOfSync) && (
         <div className="mx-auto w-full max-w-2xl rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-left text-sm">
           <div className="flex items-start gap-2">

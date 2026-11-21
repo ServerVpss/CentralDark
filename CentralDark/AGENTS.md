@@ -5,6 +5,10 @@
 **🗺️ Mapa visual semântico — 19/11/2026:** O método da Gramática SOL rege os textos humanos de todos os agentes: 🧾 COMPROVANTE, 🧪 TESTES, 🔎 CONFERÊNCIA, ⛔ O QUE ESTÁ IMPEDINDO, 👉 O QUE FAZER AGORA, etc., conforme pertinência. Não expor NEXT_CURSOR como título. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+**🗣️ Comunicação obrigatória dos agentes:** toda resposta humana herda a Gramática SOL + a Skill Mãe operacional, com português claro, títulos cotidianos, espaçamento entre assuntos e emojis contextuais, nunca paleta fechada. Divisores `---` somente entre temas distintos; resposta curta não vira relatório. Em comprovantes, usar “Resultado: APROVADO/PENDENTE/FALHOU”, “Arquivo na versão principal” e “Código de verificação”, preservando IDs reais, SHA, caminhos, provas e estados técnicos. A regra está nos owners `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`, `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md` e `.agents/skills/centraldark-operational-method/SKILL.md`; **não criar outro contrato** nem declarar consumo sem teste.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
 
 <!-- CENTRALDARK_MINIMUM_COMMIT_SYNC_RULE_20261107 -->
 **REGRA FIXA DO CHEFE — NENHUM DELTA SEM COMMIT; CASA SEM ATRASO:** toda alteração útil, por menor que seja, deve ser registrada no owner existente e receber commit específico, publicação na `main` conforme proteções e leitura de confirmação. Nunca encerrar um ciclo como sincronizado enquanto o checkout da Casa estiver com commits atrás da `main`.

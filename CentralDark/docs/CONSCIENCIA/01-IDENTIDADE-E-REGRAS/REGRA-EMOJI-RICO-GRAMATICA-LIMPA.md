@@ -15,6 +15,10 @@ aqui está **como pintar** — e a fronteira entre enriquecer e poluir.
 
 **Prioridade de comunicação (12/11/2026):** os moldes, limites de emoji e cabeçalhos abaixo se aplicam a notificações e recibos estruturados que realmente exijam esse formato, não à conversa humana comum. O CHEFE recebe primeiro uma resposta natural em PT-BR, sem blocos ou rótulos obrigatórios. Não alterar gabaritos, verificadores ou dados técnicos.
 
+<!-- CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
+**Complemento de apresentação aprovado em 21/11/2026:** esta paleta, os exemplos e limites numéricos abaixo continuam **referência para notificações/recibos estruturados**, não uma restrição de vocabulário visual na conversa normal. Em respostas livres, Radar explicado ao CHEFE e mensagens de agentes, usar emojis escolhidos pelo **significado contextual**, sem tabela fixa; espaço e títulos claros valem mais que contagem mecânica. Português brasileiro visível: “Resultado: APROVADO / PENDENTE / FALHOU”, “Código de verificação” e “Arquivo na versão principal” quando pertinentes; manter status de máquina, nomes técnicos e provas intactos. Divisores horizontais apenas para temas diferentes. Este é o **mesmo contrato de apresentação** de `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`, não outro estilo paralelo.
+<!-- /CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
+
 ## 1. Princípio único
 
 ```text
@@ -66,8 +70,7 @@ legível e organizada — está certo. Se a mensagem ficar buraco sem eles, viro
 | 📌 | commit, marco fixado | ancoragem |
 | 🔒 | segurança, segredo, fronteira | bloqueio de segurança |
 
-**Emoji fora dessa paleta não entra em mensagem operacional da Casa.** A paleta é
-fechada justamente para o olho aprender o mapa uma vez e nunca errar depois.
+**Paleta de referência, não proibição universal:** esta tabela orienta notificações estruturadas que adotam o gabarito. Em respostas humanas e conversas livres, escolher emojis pelo significado de cada assunto, sem lista fechada. Preservar símbolos oficiais de gatilhos e estados; não usar um emoji para alterar o sentido ou simular prova.
 
 ## 4. Gramática limpa — o que fica no lugar do emoji
 

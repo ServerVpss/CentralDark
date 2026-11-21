@@ -31,6 +31,10 @@ ui_identity_rule: "UI_PATTERN != PRODUCT_IDENTITY"
 **🗺️ Mapa visual semântico — 19/11/2026:** Claude e subagentes seguem a Gramática SOL e o padrão de emojis; linguagem simples nos títulos e prova técnica exata no conteúdo; sem mostrar NEXT_CURSOR como manchete humana nem criar segundo contrato. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+**🗣️ Claude Code e subagentes — apresentação humana obrigatória:** carregar a gramática e a regra de resposta canônicas da CentralDark via Skill Mãe, sem prompt/skill paralela. Responder em português brasileiro natural; títulos cotidianos; emojis pertinentes sem paleta fechada; espaçamento entre assuntos; separador `---` só para temas distintos; comprovantes em português (“Resultado: APROVADO / PENDENTE / FALHOU”, “Código de verificação” e “Arquivo na versão principal”) quando houver prova. Resposta simples é curta. Não mudar campos de máquina, logs, comandos, `main`, SHA, gatilhos nem afirmar que o runtime carregou a regra sem teste.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
 
 
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->

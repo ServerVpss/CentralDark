@@ -7,6 +7,7 @@ import { en } from '@/i18n/en'
 import type { UpdateApplyState } from '@/store/updates'
 import { $backendUpdateApply, $backendUpdateStatus, $updateApply, $updateStatus } from '@/store/updates'
 
+import { CentralDarkBrandMark } from './brand-mark'
 import { deriveUpdateStatus, UpdateStatusCard, VersionHero } from './update-status'
 
 // VersionHero is the shared About/overlay hero. Its module imports the real
@@ -42,6 +43,19 @@ const IDLE_APPLY: UpdateApplyState = {
 function derive(status: DesktopUpdateStatus | null, apply: UpdateApplyState = IDLE_APPLY, checking = false) {
   return deriveUpdateStatus({ apply, checking, status, target: 'client', u: en.updates })
 }
+
+
+describe('CentralDark update branding', () => {
+  it('uses the ROV vector and CentralDark OS wordmark instead of a bitmap', () => {
+    const { container } = render(<CentralDarkBrandMark />)
+
+    expect(screen.getByText('CentralDark')).toBeTruthy()
+    expect(screen.getByText('CENTRALDARK · OS')).toBeTruthy()
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 32 32')
+    expect(container.querySelector('path')?.getAttribute('d')).toBe('M5.5 16c5.5-7 15.5-7 21 0-5.5 7-15.5 7-21 0Z')
+  })
+})
 
 describe('deriveUpdateStatus', () => {
   it('names the stable release only when the checkout is on it', () => {
@@ -271,6 +285,24 @@ describe('VersionHero bundle banners', () => {
 
     return relaunchApp
   }
+
+  it('uses the CentralDark OS brand on About without duplicating the visible title', () => {
+    const { container } = render(<VersionHero version={version({})} />)
+
+    expect(screen.getByText('CentralDark')).toBeTruthy()
+    expect(screen.getByText('CENTRALDARK · OS')).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'CentralDark · OS' })).toBeTruthy()
+    expect(screen.getByText(en.updates.version('0.19.0'))).toBeTruthy()
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('svg')?.getAttribute('viewBox')).toBe('0 0 32 32')
+  })
+
+  it('keeps the accessible dialog title while displaying the same CentralDark mark', () => {
+    render(<VersionHero renderHeading={heading => <h2>{heading}</h2>} version={version({})} />)
+
+    expect(screen.getByRole('heading', { name: 'CentralDark · OS' })).toBeTruthy()
+    expect(screen.getByText('CENTRALDARK · OS')).toBeTruthy()
+  })
 
   it('shows an R2 channel name that is not a built-in translated label', (): void => {
     render(<VersionHero version={version({ channel: 'pm-preview' })} />)

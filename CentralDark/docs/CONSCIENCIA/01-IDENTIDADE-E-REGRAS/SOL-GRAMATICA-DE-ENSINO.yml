@@ -4,6 +4,39 @@ owner: docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md
 response_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
 intent_authority: SEGREDO/CHEFE
 
+# CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 — obrigatório na apresentação humana; IDs de máquina não mudam.
+comunicacao_ptbr_visual_obrigatoria_20261121:
+  authority: SEGREDO_CHEFE
+  status: DOCUMENTED_NOT_RUNTIME_PROVEN
+  mandatory_for_human_facing_response: true
+  applies_to_agents_consuming_this_grammar: true
+  method_owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+  response_owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+  emoji_owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+  covers: [CHAT, VOICE, WHATSAPP, OPENBOT, CENTRALDARKBOT, HERMES, TELEGRAM, CLI, WEB, IDE, HUD, COCKPIT]
+  human_presentation:
+    pt_br_natural_first: true
+    result_first_and_no_forced_audit: true
+    everyday_titles_and_labels: true
+    result_labels: ["Resultado: APROVADO", "Resultado: PENDENTE", "Resultado: FALHOU"]
+    sha_label: "Código de verificação"
+    git_main_label: "Arquivo na versão principal"
+    emojis_match_context_not_fixed_dictionary: true
+    semantic_state_and_trigger_emojis_preserved: true
+    space_between_subject_blocks: true
+    markdown_horizontal_divider_only_for_distinct_topics: true
+    no_automatic_divider_after_each_sentence: true
+    short_question_short_reply: true
+    complete_receipt_for_actual_execution_only: true
+    text_stays_clear_without_emojis: true
+    voice_says_meaning_not_symbols: true
+  protections:
+    technical_fields_json_yaml_logs_paths_hashes_commands_unchanged: true
+    result_label_requires_corresponding_proof: true
+    no_claim_of_runtime_consumption_from_documentation_alone: true
+    no_parallel_communication_owner: true
+  runtime_validation: TEST_EACH_CONSUMER_BEFORE_DECLARING_ACTIVE
+
 # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119: apresentacao humana; nao altera estrutura de maquina.
 mapa_visual_semantico_20261119:
   status: "DOCUMENTED_NOT_RUNTIME_PROVEN"

@@ -15,6 +15,10 @@ A execução de toda intenção segue o owner existente [centraldark-operational
 Este bloco é apenas um ponteiro: identidade permanece na SOUL, gates no `RULES.md`, instruções de agentes no `AGENTS.md` e receitas na Skill Mãe. Não criar biblioteca paralela nem afirmar que a migração física ou o carregamento pelo Hermes já foram comprovados.
 <!-- /CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+**🗣️ Porta de entrada de comunicação:** antes de responder a pessoas, aplicar a Gramática SOL (`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`) e o dono de apresentação (`docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`) pela Skill Mãe existente. **Obrigatório para qualquer agente que consumir esta entrada:** português brasileiro natural, resultado primeiro, rótulos humanos em português, emojis pertinentes ao tema sem paleta fechada, espaçamento legível, `---` só entre assuntos diferentes e resposta curta para pergunta curta. Preservar todos os campos técnicos e provas. Registro na `main` não demonstra consumo no runtime.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
 <!-- FIX_POINT_7_CANONICAL_REFS_V1 -->
 ## 🔒 Referências de verificação — sem cabeçalho obrigatório na conversa
 

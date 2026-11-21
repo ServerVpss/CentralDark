@@ -33,15 +33,15 @@ describe('I18nProvider', () => {
     vi.restoreAllMocks()
   })
 
-  it('defaults to English without a config client', () => {
+  it('defaults to Brazilian Portuguese without a config client', () => {
     render(
       <I18nProvider configClient={null}>
         <LanguageProbe />
       </I18nProvider>
     )
 
-    expect(screen.getByTestId('locale').textContent).toBe('en')
-    expect(screen.getByTestId('label').textContent).toBe('Language')
+    expect(screen.getByTestId('locale').textContent).toBe('pt-br')
+    expect(screen.getByTestId('label').textContent).toBe('Idioma')
   })
 
   it('normalizes an initial locale alias and switches translations', async () => {
@@ -58,6 +58,24 @@ describe('I18nProvider', () => {
 
     await waitFor(() => expect(screen.getByTestId('locale').textContent).toBe('en'))
     expect(screen.getByTestId('label').textContent).toBe('Language')
+  })
+
+  it('uses pt-br on first run when no display.language is saved', async () => {
+    const configClient: I18nConfigClient = {
+      getConfig: vi.fn().mockResolvedValue({}),
+      saveConfig: vi.fn()
+    }
+
+    render(
+      <I18nProvider configClient={configClient}>
+        <LanguageProbe />
+      </I18nProvider>
+    )
+
+    await waitFor(() => expect(screen.getByTestId('loading').textContent).toBe('false'))
+    expect(screen.getByTestId('locale').textContent).toBe('pt-br')
+    expect(screen.getByTestId('label').textContent).toBe('Idioma')
+    expect(configClient.saveConfig).not.toHaveBeenCalled()
   })
 
   it('loads the initial locale from display.language config', async () => {
@@ -104,7 +122,7 @@ describe('I18nProvider', () => {
     expect(configClient.saveConfig).not.toHaveBeenCalled()
   })
 
-  it('keeps English usable when config loading fails', async () => {
+  it('keeps Portuguese usable when config loading fails', async () => {
     const configClient: I18nConfigClient = {
       getConfig: vi.fn().mockRejectedValue(new Error('config unavailable')),
       saveConfig: vi.fn()
@@ -118,8 +136,8 @@ describe('I18nProvider', () => {
 
     await waitFor(() => expect(screen.getByTestId('loading').textContent).toBe('false'))
 
-    expect(screen.getByTestId('locale').textContent).toBe('en')
-    expect(screen.getByTestId('label').textContent).toBe('Language')
+    expect(screen.getByTestId('locale').textContent).toBe('pt-br')
+    expect(screen.getByTestId('label').textContent).toBe('Idioma')
     expect(configClient.saveConfig).not.toHaveBeenCalled()
   })
 
@@ -137,8 +155,8 @@ describe('I18nProvider', () => {
 
     await waitFor(() => expect(screen.getByTestId('loading').textContent).toBe('false'))
 
-    expect(screen.getByTestId('locale').textContent).toBe('en')
-    expect(screen.getByTestId('label').textContent).toBe('Language')
+    expect(screen.getByTestId('locale').textContent).toBe('pt-br')
+    expect(screen.getByTestId('label').textContent).toBe('Idioma')
     expect(configClient.saveConfig).not.toHaveBeenCalled()
     // …but remembers the ask so a backend pack for it can be fetched.
     expect($requestedLocale.get()).toBe('it')
@@ -157,7 +175,7 @@ describe('I18nProvider', () => {
     )
 
     await waitFor(() => expect(screen.getByTestId('loading').textContent).toBe('false'))
-    expect(screen.getByTestId('locale').textContent).toBe('en')
+    expect(screen.getByTestId('locale').textContent).toBe('pt-br')
 
     const dispose = registerAppLocale(
       'pl',

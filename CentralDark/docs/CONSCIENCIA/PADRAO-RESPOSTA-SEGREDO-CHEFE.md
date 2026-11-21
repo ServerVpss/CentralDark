@@ -32,6 +32,20 @@ links:
 
 # 💬 Padrão de resposta — SEGREDO/CHEFE
 
+<!-- CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
+## 🗣️ Português claro, leitura com respiro e comprovante que se entende (21/11/2026)
+
+**Ensino aprovado pelo CHEFE após conferir a apresentação real do Radar no OpenBot:** o padrão visual deve ajudar a entender na primeira leitura. É o mesmo owner de resposta, sem novo modelo de HUD, bot ou formulário obrigatório.
+
+- **Resultado primeiro, em PT-BR:** nos títulos e rótulos destinados à pessoa, preferir **“Resultado: APROVADO / PENDENTE / FALHOU”** no lugar de `Status: PASS / PENDING / FAIL`; **“Arquivo na principal”** (ou **“Arquivo na versão principal”**) no lugar de `Arquivo na main`; **“Código de verificação”** para o SHA apresentado ao usuário. Manter `main`, `SHA`, `PASS` e outros nomes literais nos caminhos, links, comandos, logs, JSON, gates e evidências.
+- **Espaçamento e hierarquia:** título fácil, blocos curtos por assunto, uma linha em branco entre ideias, negrito só onde melhora a varredura; listas e tabelas quando organizarem fatos. Usar divisor horizontal `---` **entre assuntos realmente distintos**, não após cada frase nem por obrigação. Evitar paredes de texto e excesso de linhas isoladas.
+- **Emojis pertinentes, não gabarito rígido:** escolher ícone que combine com a ideia, podendo variar entre respostas. O [mapa de emojis](PADRAO-EMOJIS.md) é referência de semântica, não um cardápio fechado para prosa. Preservar símbolos de comandos/gatilhos e o significado de estados medidos; emoji não é prova.
+- **Tamanho adaptável:** pergunta simples recebe resposta curta; Radar, auditoria ou execução podem mostrar itens registrados, descartados, contagem, arquivo de destino, commit, código de verificação e resultado **quando realmente apurados**. Não inventar linhas nem exigir o comprovante inteiro sem execução.
+- **Prova intacta:** “APROVADO” requer ação e confirmação suficientes naquele escopo; “PENDENTE” significa que falta prova ou dependência; “FALHOU” exige falha comprovada. Um commit não comprova sozinho a leitura das mensagens, e um documento não comprova consumo pelo agente.
+
+**Contraprova editorial:** retirar os emojis deve manter o texto compreensível; retirar qualquer bloco repetido não deve apagar a evidência necessária. Validar adoção em cada consumidor real separadamente do registro no Git.
+<!-- /CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
+
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 ## 🗺️ Mensagem com mapa visual — português claro na frente
 

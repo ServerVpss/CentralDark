@@ -50,8 +50,8 @@ export const pt: Translations = {
   },
 
   app: {
-    brand: "Hermes Agent",
-    brandShort: "HA",
+    brand: "CentralDark · OS",
+    brandShort: "CD",
     closeNavigation: "Fechar navegação",
     closeModelTools: "Fechar modelo e ferramentas",
     footer: {
@@ -129,8 +129,8 @@ export const pt: Translations = {
     starting: "A iniciar",
     startedInBackground: "Iniciado em segundo plano — verifique os registos para acompanhar",
     stopped: "Parado",
-    updateHermes: "Atualizar Hermes",
-    updatingHermes: "A atualizar Hermes…",
+    updateHermes: "Atualizar CentralDark · OS",
+    updatingHermes: "Atualizando CentralDark · OS…",
     waitingForOutput: "À espera de saída…",
   },
 

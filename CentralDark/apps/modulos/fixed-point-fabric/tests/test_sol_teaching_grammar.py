@@ -387,6 +387,36 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertTrue((self.repo / path).exists(), f"missing owner: {path}")
 
+    def test_comunicacao_ptbr_visual_obrigatoria_propaga_para_owners_existentes(self):
+        # Documentar a regra não prova seu consumo em runtime: este teste
+        # impede regressão dos ponteiros canônicos e das traduções humanas.
+        marker = "CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121"
+        self.assertIn("comunicacao_ptbr_visual_obrigatoria_20261121:", self.grammar)
+        self.assertIn("mandatory_for_human_facing_response: true", self.grammar)
+        self.assertIn("emojis_match_context_not_fixed_dictionary: true", self.grammar)
+        self.assertIn("markdown_horizontal_divider_only_for_distinct_topics: true", self.grammar)
+        self.assertIn("runtime_validation: TEST_EACH_CONSUMER_BEFORE_DECLARING_ACTIVE", self.grammar)
+        owners = (
+            ".agents/skills/centraldark-operational-method/SKILL.md",
+            "AGENTS.md",
+            "RULES.md",
+            "LEIA-ME-IA.md",
+            "CLAUDE.md",
+            "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+            "apps/modulos/HERMES-CORE/prompts/hermes-core.md",
+            "docs/CONSCIENCIA/GUIA-COMUNICACAO-SEGREDO-CHEFE.md",
+            "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-ESTILO-DE-FALA-AUREOLA.md",
+        )
+        for owner in owners:
+            with self.subTest(owner=owner):
+                self.assertIn(marker, (self.repo / owner).read_text(encoding="utf-8"))
+        self.assertIn("CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121", self.response)
+        emoji_rule = (self.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-EMOJI-RICO-GRAMATICA-LIMPA.md").read_text(encoding="utf-8")
+        self.assertNotIn("Emoji fora dessa paleta não entra em mensagem operacional da Casa.", emoji_rule)
+        self.assertIn("não uma restrição de vocabulário visual", emoji_rule)
+        self.assertIn("Código de verificação", self.response)
+        self.assertIn("Resultado: APROVADO", self.response)
+
 if __name__ == "__main__":
     unittest.main()
 

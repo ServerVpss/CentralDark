@@ -26,11 +26,15 @@ links:
 # 🎨 Padrão de Emojis — CentralDark
 
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
-## 🗺️ Placas de leitura — significados que não mudam
+## 🗺️ Placas de leitura — referências semânticas (não obrigatórias)
+
+<!-- CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
+**Refinamento visual aprovado em 21/11/2026:** as placas abaixo são **referências úteis, não emojis obrigatórios nem lista fechada** para conversa humana. O autor escolhe um símbolo coerente com a palavra/assunto e pode variar naturalmente. Evitar adorno em excesso, repetições e símbolos que contrariem o fato. Para títulos de Radar e comprovantes, preferir PT-BR; usar `---` só entre blocos de assuntos diferentes, com espaços suficientes para leitura. A fonte da organização textual continua sendo [Padrão de resposta](PADRAO-RESPOSTA-SEGREDO-CHEFE.md). **Exceção técnica:** os símbolos de gatilhos/registry e as classificações de estado medido preservam seus significados oficiais; sem trocar verde/amarelo/vermelho por estética.
+<!-- /CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
 
 Este é o **owner dos símbolos**. A [Gramática SOL](01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml) aplica a regra ao escrever; o [padrão de resposta](PADRAO-RESPOSTA-SEGREDO-CHEFE.md) organiza o texto. O registry de **comandos e gatilhos** permanece a autoridade para emojis de comandos; estas placas identificam **assuntos**, não executam ações.
 
-| Placa fixa | Para que serve |
+| Referência visual | Para que serve |
 | --- | --- |
 | 🧾 COMPROVANTE | Dados e identificação do registro |
 | 📍 PONTO DE PARTIDA | Situação inicial e condições existentes |
