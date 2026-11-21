@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { SETTINGS_ROUTE } from '@/app/routes'
 import { SETTING_IDS } from '@/app/settings/settings-manifest'
 import { settingsSearchTargetQuery } from '@/app/settings/settings-search'
-import { BrandMark } from '@/components/brand-mark'
+import { CentralDarkBrandMark } from '@/components/brand-mark'
 import { SyncStatusCard } from '@/components/sync-status-card'
 import { Button } from '@/components/ui/button'
 import { CopyButton } from '@/components/ui/copy-button'
@@ -450,7 +450,7 @@ function IdleView({
   return (
     <div className="grid gap-5 px-6 pb-6 pt-7 pr-8">
       <div className="flex flex-col items-center gap-3 text-center">
-        <BrandMark className="size-16" />
+        <CentralDarkBrandMark className="mb-[13px]" />
 
         <DialogTitle className="text-center text-xl">{title}</DialogTitle>
         <DialogDescription className="text-center text-sm">{body}</DialogDescription>
