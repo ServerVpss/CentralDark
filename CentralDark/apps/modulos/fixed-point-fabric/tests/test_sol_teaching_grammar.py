@@ -413,7 +413,7 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121", self.response)
         emoji_rule = (self.repo / "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/REGRA-EMOJI-RICO-GRAMATICA-LIMPA.md").read_text(encoding="utf-8")
         self.assertNotIn("Emoji fora dessa paleta não entra em mensagem operacional da Casa.", emoji_rule)
-        self.assertIn("não restringe", emoji_rule)
+        self.assertIn("não uma restrição de vocabulário visual", emoji_rule)
         self.assertIn("Código de verificação", self.response)
         self.assertIn("Resultado: APROVADO", self.response)
 
