@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { TRANSLATIONS } from './catalog'
-import { DEFAULT_LOCALE, isLocale, isSupportedLocaleValue, LOCALE_OPTIONS, normalizeLocale } from './languages'
+import { DEFAULT_LOCALE, isLocale, isSupportedLocaleValue, LOCALE_OPTIONS, normalizeLocale, resolveInitialLocale } from './languages'
 
 describe('desktop i18n languages', () => {
   it('normalizes supported locale aliases', () => {
@@ -37,10 +37,19 @@ describe('desktop i18n languages', () => {
     expect(normalizeLocale('Español')).toBe('es')
   })
 
-  it('falls back to English for empty or unsupported values', () => {
+  it('falls back to Brazilian Portuguese for empty or unsupported values', () => {
     expect(normalizeLocale(null)).toBe(DEFAULT_LOCALE)
     expect(normalizeLocale('')).toBe(DEFAULT_LOCALE)
     expect(normalizeLocale('it')).toBe(DEFAULT_LOCALE)
+  })
+
+  it('uses pt-br on a new install and preserves an explicitly saved language', () => {
+    expect(DEFAULT_LOCALE).toBe('pt-br')
+    expect(resolveInitialLocale(undefined, 'en-US')).toBe('pt-br')
+    expect(resolveInitialLocale(null, 'es-MX')).toBe('pt-br')
+    expect(resolveInitialLocale('en', 'pt-BR')).toBe('en')
+    expect(resolveInitialLocale('es', 'en-US')).toBe('es')
+    expect(TRANSLATIONS[DEFAULT_LOCALE].language.label).toBe('Idioma')
   })
 
   it('distinguishes exact locale ids from supported config aliases', () => {
