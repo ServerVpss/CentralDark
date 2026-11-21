@@ -89,3 +89,23 @@ test("Nao aceita normalizacao de /../ ou de caminho diferente como se fosse apen
     ), false
   );
 });
+
+test("Claude Code CIMD aceita porta dinamica somente para o callback registrado", () => {
+  const claude = client("http://localhost/callback");
+  claude.client_id = "https://claude.ai/oauth/claude-code-client-metadata";
+  assert.equal(redirectUriRegistered(claude, "http://localhost:43904/callback"), true);
+  assert.equal(redirectUriRegistered(claude, "http://localhost:40788/callback"), true);
+  assert.equal(redirectUriRegistered(claude, "http://localhost/callback"), true);
+  for (const uri of [
+    "http://localhost:0/callback",
+    "http://localhost:65536/callback",
+    "http://localhost:43904/other",
+    "http://localhost:43904/callback?extra=1",
+    "http://localhost:43904/callback#fragment",
+    "http://user@localhost:43904/callback",
+    "http://127.0.0.1:43904/callback",
+    "http://evil.com:43904/callback",
+  ]) assert.equal(redirectUriRegistered(claude, uri), false, uri);
+  assert.equal(redirectUriRegistered(client("http://localhost/callback"), "http://localhost:43904/callback"), false);
+  assert.equal(redirectUriRegistered({...claude, token_endpoint_auth_method: "client_secret_post"}, "http://localhost:43904/callback"), false);
+});
