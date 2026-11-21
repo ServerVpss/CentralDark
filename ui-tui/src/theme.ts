@@ -252,13 +252,13 @@ export function themeToneHex(tone: string): string {
 // ── Defaults ─────────────────────────────────────────────────────────
 
 const BRAND: ThemeBrand = {
-  name: 'Hermes Agent',
-  icon: '☤',
+  name: 'CentralDark · Terminal',
+  icon: '◎',
   prompt: '❯',
-  welcome: 'Type your message or /help for commands.',
-  goodbye: 'Goodbye! ☤',
+  welcome: 'CentralDark · Terminal pronto. Digite sua mensagem ou /help para comandos.',
+  goodbye: 'Até logo.',
   tool: '┊',
-  helpHeader: '(^_^)? Commands'
+  helpHeader: 'COMANDOS DISPONÍVEIS'
 }
 
 const cleanPromptSymbol = (s: string | undefined, fallback: string) => {
