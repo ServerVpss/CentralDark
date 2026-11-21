@@ -12,7 +12,8 @@ import {
 } from './registry'
 import type { BundledLocale, Locale } from './types'
 
-export const DEFAULT_LOCALE: BundledLocale = 'en'
+// CentralDark Desktop starts in Portuguese unless the user explicitly saved another language.
+export const DEFAULT_LOCALE: BundledLocale = 'pt-br'
 
 export const LOCALE_OPTIONS = [
   {
@@ -228,7 +229,7 @@ export function isLocale(value: unknown): value is Locale {
 }
 
 /** Alias table first (`zh-TW` → `zh-hant`), then any registered id as-is
- *  (lowercased, `_` → `-`), else English. */
+ *  (lowercased, `_` → `-`), else the CentralDark default (pt-br). */
 export function normalizeLocale(value: unknown): Locale {
   if (typeof value !== 'string') {
     return DEFAULT_LOCALE
@@ -269,13 +270,14 @@ export function osPreferredLocale(tag: string | null | undefined): Locale | null
   return (base && LOCALE_ALIASES[normalize(base)]) || null
 }
 
-/** An explicit choice must win even when it differs from the OS language. */
-export function resolveInitialLocale(saved: string | null | undefined, osLocale: string | null | undefined): Locale {
+/** Respect an explicit choice; otherwise start in pt-br regardless of the OS locale.
+ * This inferred default is not written over a user's saved preference. */
+export function resolveInitialLocale(saved: string | null | undefined, _osLocale: string | null | undefined): Locale {
   if (isSupportedLocaleValue(saved)) {
     return normalizeLocale(saved)
   }
 
-  return osPreferredLocale(osLocale) ?? DEFAULT_LOCALE
+  return DEFAULT_LOCALE
 }
 
 /** The `display.language` value for a picker choice — the bundled option's
