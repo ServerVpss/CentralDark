@@ -34,7 +34,7 @@ links:
 
 Este é o **owner dos símbolos**. A [Gramática SOL](01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml) aplica a regra ao escrever; o [padrão de resposta](PADRAO-RESPOSTA-SEGREDO-CHEFE.md) organiza o texto. O registry de **comandos e gatilhos** permanece a autoridade para emojis de comandos; estas placas identificam **assuntos**, não executam ações.
 
-| Placa fixa | Para que serve |
+| Referência visual | Para que serve |
 | --- | --- |
 | 🧾 COMPROVANTE | Dados e identificação do registro |
 | 📍 PONTO DE PARTIDA | Situação inicial e condições existentes |
