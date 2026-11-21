@@ -14,7 +14,7 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 # 👑🪬 CentralDark RULES
 
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
-**🗺️ Mapa visual semântico — 19/11/2026:** Toda superfície e agente que ler estas RULES herda a Gramática SOL e os 12 símbolos do padrão de emojis; títulos humanos populares, dados de máquina intactos, sem 👍 sem prova. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+**🗺️ Mapa visual semântico — 19/11/2026:** Toda superfície e agente que ler estas RULES herda a Gramática SOL e as referências semânticas do padrão de emojis (sem paleta fechada para conversa humana); títulos humanos populares, dados de máquina intactos, sem 👍 sem prova. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 
 <!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
