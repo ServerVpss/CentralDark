@@ -93,6 +93,20 @@ test('selection fails closed on implicit, unknown or missing workspaces', () => 
   expect(existsSync(join(source, 'node_modules'))).toBe(false)
 }, 30000)
 
+test('a stale npm identity cannot break an install with the verified pnpm', () => {
+  const { source, env } = fixture()
+  const manifestPath = join(source, 'package.json')
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+  manifest.scripts.preinstall = JSON.parse(readFileSync(join(repo, 'package.json'), 'utf8')).scripts.preinstall
+  json(manifestPath, manifest)
+
+  // Windows installed through npm can keep this user agent in user variables.
+  // The pin guard must still see the managed pnpm, never an inherited npm CLI.
+  const inherited = { ...env, npm_config_user_agent: 'npm/11.17.0 node/v26.5.1 win32 x64 workspaces/false' }
+  prepareNodeDependencies({ source, workspaces: ['web'], env: inherited })
+  expect(installs(source)).toBe(1)
+}, 60000)
+
 test('read-only dependency preparation reuses complete receipts but refuses missing inputs', () => {
   const { source, env } = fixture()
   const options = { source, workspaces: ['web'], reuse: true, env }
