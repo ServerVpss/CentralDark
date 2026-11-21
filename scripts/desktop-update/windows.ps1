@@ -268,7 +268,7 @@ try {
     $OutputEncoding = [System.Text.Encoding]::UTF8
 } catch {}
 $script:Ui = $null
-$script:UiStage = "O CentralDark Agente abrirá quando a atualização terminar."   # until the first gate; matches ui.html
+$script:UiStage = "O CentralDark · OS abrirá quando a atualização terminar."   # until the first gate; matches ui.html
 $script:UiStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
 # ── The shim: repo-owned HTML in a chromeless default-browser app window ───
@@ -519,15 +519,15 @@ function Convert-UiDisplayText([string]$Message) {
         'Updating Python dependencies (PM)' = 'Atualizando dependências do Python (PM)'
         'Updating dependencies' = 'Atualizando dependências'
         'Updating code and dependencies' = 'Atualizando código e dependências'
-        'Waiting for Hermes to close' = 'Aguardando o CentralDark Agente fechar'
+        'Waiting for Hermes to close' = 'Aguardando o CentralDark · OS fechar'
         'Retrying update' = 'Tentando atualizar novamente'
         'Rebuilding Desktop' = 'Recompilando o aplicativo'
-        'Opening Hermes' = 'Abrindo CentralDark Agente'
+        'Opening Hermes' = 'Abrindo CentralDark · OS'
         'Installing the new app' = 'Instalando o novo aplicativo'
         'Testing quiet update' = 'Testando atualização silenciosa'
-        'Reopen Hermes to finish.' = 'Abra o CentralDark Agente novamente para concluir.'
+        'Reopen Hermes to finish.' = 'Abra o CentralDark · OS novamente para concluir.'
         'Update complete.' = 'Atualização concluída.'
-        'Update complete. Reopen Hermes to finish (it could not restart itself).' = 'Atualização concluída. Abra o CentralDark Agente novamente para finalizar (ele não conseguiu reiniciar automaticamente).'
+        'Update complete. Reopen Hermes to finish (it could not restart itself).' = 'Atualização concluída. Abra o CentralDark · OS novamente para finalizar (ele não conseguiu reiniciar automaticamente).'
     }
     if ($labels.ContainsKey($Message)) { return $labels[$Message] }
     return $Message
@@ -624,7 +624,7 @@ function Show-ProgressWindow {
             $mute = [System.Drawing.ColorTranslator]::FromHtml("#A8A8A8")
         }
         $form = New-Object System.Windows.Forms.Form
-        $form.Text = "CentralDark Agente"
+        $form.Text = "CentralDark · OS"
         $form.FormBorderStyle = "FixedSingle"
         $form.MaximizeBox = $false
         $form.MinimizeBox = $false
@@ -638,7 +638,7 @@ function Show-ProgressWindow {
         $bar.MarqueeAnimationSpeed = 30
         $bar.SetBounds(60, 128, 160, 8)
         $title = New-Object System.Windows.Forms.Label
-        $title.Text = "Atualizando CentralDark Agente"
+        $title.Text = "Atualizando CentralDark · OS"
         $title.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 12)
         $title.ForeColor = $fore
         $title.TextAlign = "MiddleCenter"
