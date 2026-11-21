@@ -17,6 +17,10 @@ source_adapted_from: "Moltbook RULES.md structure; CentralDark canon prevails"
 **🗺️ Mapa visual semântico — 19/11/2026:** Toda superfície e agente que ler estas RULES herda a Gramática SOL e os 12 símbolos do padrão de emojis; títulos humanos populares, dados de máquina intactos, sem 👍 sem prova. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+**⚖️ Regra obrigatória de comunicação ao humano:** todo agente/bot que consome as regras CentralDark aplica português brasileiro claro, organização visual com respiro, emoji pertinente ao assunto (não fixo), divisor `---` apenas para assuntos diferentes e rótulos entendíveis como “Resultado: APROVADO / PENDENTE / FALHOU”. Ficam intocados nomes de comandos, valores de API, `main`, SHA, logs, segurança e exigências de prova. A única fonte da Gramática é `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml` e o dono de apresentação é `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; método de execução: `.agents/skills/centraldark-operational-method/SKILL.md`. Sem segundo protocolo e sem alegar runtime atualizado antes de teste.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
 
 **Apresentação universal ao CHEFE (12/11/2026):** toda superfície e agente herda a regra de fala humana da SOUL. Responder diretamente em português natural, sem siglas, quadros, percentuais, cerimônias ou rótulos internos obrigatórios. Exibir detalhes técnicos quando solicitados ou necessários para entender a prova. Esta é uma regra de apresentação, não muda comandos, nomes de campos, segurança, registros, aprovações ou validação.
 
