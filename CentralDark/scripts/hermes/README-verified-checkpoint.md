@@ -55,6 +55,48 @@ python3 "$H" run --mission forja-arquivo --step criar-marca \
 
 Em tarefas reais, o verificador precisa testar o efeito desejado (conteúdo, resultado do serviço, teste funcional), não apenas a saída textual. O exemplo cria \`/tmp/centraldark-marca-de-teste\` sob escopo da própria experiência.
 
+## 3.1. Quem autorizou, quem executou, commit e PR
+
+O próprio owner `scripts/hermes/verified-checkpoint.py` registra atribuição por etapa (autoridade declarada, responsável da missão, executor, owner técnico, commit de origem e PR de referência). Valores não demonstrados ficam `UNKNOWN`; declarações de identidade não são autenticação. A cadeia SHA-256 e a contraprova de cada etapa continuam independentes desses rótulos.
+
+Exemplo de um novo checkpoint (a autorização e os nomes devem corresponder à missão real):
+
+```bash
+python3 "$H" run --mission exemplo --step validar --next PR_REVIEW \
+  --authorized-by "CHEFE (declarado)" --responsible "SOL" \
+  --executor "SOL via ferramentas" \
+  --technical-owner "scripts/hermes/verified-checkpoint.py" \
+  --source-commit "65bac5b53161bd2e2cf2a1813da7152fa6752e4e" \
+  --pr-ref "#1994" --expect "OI_OK" -- python3 -c "print('OI_OK')"
+```
+
+Para gerar um resumo de um receipt já verificado, sem criar commit nem editar PR:
+
+```bash
+python3 "$H" render --mission exemplo --format commit
+python3 "$H" render --mission exemplo --format pr
+```
+
+O primeiro entrega **Git trailers** para a mensagem do próximo commit, e o segundo uma seção Markdown para o corpo do **PR existente**. A template oficial de PR contém o mesmo contrato de atribuição. O writer autorizado aplica a mensagem e o body e depois confere o SHA/readback. **RENDER != PUBLISHED**: o renderizador nunca abre PR nem escreve no GitHub. Não colocar segredos, sessões ou logs privados nesses textos.
+
+O campo `source_commit` identifica o commit **anterior observado**, pois o SHA do novo commit só existe depois da gravação. Checkpoints antigos não são reescritos: aparecem com atribuição `UNKNOWN` quando faltar informação. Um passo que informe novos responsáveis passa por nova execução/contraprova antes de ser promovido como verde.
+
+<!-- CENTRALDARK_CHECKPOINT_ATTRIBUTION_PROOF_20261121 -->
+### 🧾 Prova da integração — PR #1994, 21/11/2026
+
+A correção deste mesmo owner adicionou identidade declarada, sem substituir as provas técnicas. Testados no computador SEGREDO, em diretório temporário e sem modificar a instalação operacional: **6/6 testes PASS**. O receipt foi produzido pela mesma CLI com os campos preenchidos para a missão e mostrou `VERIFIED_100`. A cadeia `events.jsonl` retornou `HASH_CHAIN_PASS` (2 eventos: 1 falha da chamada inicial no PowerShell, seguida de 1 execução verificada). **A falha inicial permaneceu no histórico.**
+
+- Missão: `centraldark-checkpoint-attribution-20261121`.
+- Autoridade declarada: CHEFE; responsável da missão: SOL; executor: SOL via GitHub e Casa.
+- Owner técnico: `scripts/hermes/verified-checkpoint.py`; PR: `#1994`.
+- Commit da versão testada: `057f6c2f255e0dc1bc2c85760dd7f85ccb6346cf`.
+- Receipt SHA-256: `04fbe64a64393fc491d239c97c287b2d6a4ed695c906675eeef719b5ad8a63b9`.
+- Próximo passo: `RECONCILIAR_PR_1994_COM_MAIN_PRESERVANDO_OWNER`.
+
+Esta prova cobre a suíte isolada e o checkout do PR, **não** demonstra merge em `main`, carregamento da nova versão no runtime nem CI no mesmo HEAD. O corpo do PR contém o resumo com readback. A identidade declarada não equivale a autenticação da pessoa nem autoriza promoção automática.
+
+<!-- /CENTRALDARK_CHECKPOINT_ATTRIBUTION_PROOF_20261121 -->
+
 ## 4. Recuperar o último fio de QUALQUER terminal ou sessão
 
 \`\`\`bash
