@@ -524,7 +524,7 @@ export function createCheckoutStrategy(deps: CheckoutStrategyDeps): CheckoutStra
     deps.emitUpdateProgress({
       stage: 'restart',
       message:
-        'Updating Hermes — this window will close and the updater will open. Don’t reopen Hermes yourself; it restarts automatically when the update finishes.',
+        'Atualizando CentralDark · OS — esta janela será fechada e o atualizador abrirá. Não reabra o aplicativo; ele iniciará automaticamente ao terminar.',
       percent: 100
     })
     deps.repairMacUpdaterHelper(updater)
@@ -764,7 +764,7 @@ export function createCheckoutStrategy(deps: CheckoutStrategyDeps): CheckoutStra
     deps.emitUpdateProgress({
       stage: 'restart',
       message:
-        'Updating Hermes — this window will close. Don’t reopen Hermes yourself; it restarts automatically when the update finishes.',
+        'Atualizando CentralDark · OS — esta janela será fechada. Não reabra o aplicativo; ele iniciará automaticamente ao terminar.',
       percent: 100
     })
 
