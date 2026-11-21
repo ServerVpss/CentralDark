@@ -955,9 +955,9 @@ def hud_first_gate(repo: Path) -> dict:
     # Compare the worktree through Git's configured clean filter (including
     # core.autocrlf), then compare any runtime mirror to the exact main blob.
     try:
-        main_blob_oid = git("rev-parse", f"{head}:{rel}")
+        main_blob_oid = git("rev-parse", f"{head}:./{rel}")
         worktree_blob_oid = git("hash-object", f"--path={rel}", str(source))
-        result = subprocess.run(["git", "-C", str(repo), "show", f"{head}:{rel}"],
+        result = subprocess.run(["git", "-C", str(repo), "show", f"{head}:./{rel}"],
                                 stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                                 timeout=12, check=False)
         if result.returncode != 0 or not main_blob_oid or worktree_blob_oid != main_blob_oid:
