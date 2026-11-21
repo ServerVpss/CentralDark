@@ -70,8 +70,7 @@ legível e organizada — está certo. Se a mensagem ficar buraco sem eles, viro
 | 📌 | commit, marco fixado | ancoragem |
 | 🔒 | segurança, segredo, fronteira | bloqueio de segurança |
 
-**Emoji fora dessa paleta não entra em mensagem operacional da Casa.** A paleta é
-fechada justamente para o olho aprender o mapa uma vez e nunca errar depois.
+**Paleta de referência, não proibição universal:** esta tabela orienta notificações estruturadas que adotam o gabarito. Em respostas humanas e conversas livres, escolher emojis pelo significado de cada assunto, sem lista fechada. Preservar símbolos oficiais de gatilhos e estados; não usar um emoji para alterar o sentido ou simular prova.
 
 ## 4. Gramática limpa — o que fica no lugar do emoji
 
