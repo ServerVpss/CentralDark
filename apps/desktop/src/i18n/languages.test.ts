@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import { TRANSLATIONS } from './catalog'
+import desktopKeys from '../../../../locales/_keys.desktop.json'
+import ptBrMessages from './pt-br.messages.json'
 import { DEFAULT_LOCALE, isLocale, isSupportedLocaleValue, LOCALE_OPTIONS, normalizeLocale, resolveInitialLocale } from './languages'
 
 describe('desktop i18n languages', () => {
@@ -68,6 +70,30 @@ describe('desktop i18n languages', () => {
     expect(isLocale('fr')).toBe(true)
     expect(isLocale('de')).toBe(true)
     expect(isLocale('es')).toBe(true)
+  })
+
+  it('covers every translatable English Desktop key in pt-br without dropping structured values', () => {
+    // Four inherited structural keys and the two new backup lists are provided
+    // as typed values rather than string keys in pt-br.messages.json.
+    const structuredKeys = new Set([
+      'composer.followUpPlaceholders',
+      'composer.newSessionPlaceholders',
+      'intro.custom',
+      'sidebar.projects.branchOff',
+      'settings.backup.keeps',
+      'settings.backup.replaces'
+    ])
+    const missing = desktopKeys.keys.filter(
+      key => !structuredKeys.has(key) && !Object.hasOwn(ptBrMessages, key)
+    )
+    expect(missing).toEqual([])
+    const backup = TRANSLATIONS['pt-br'].settings.backup
+    expect(backup.replaces).toContain('Memória')
+    expect(backup.keeps).toContain('Acesso ao Nous Portal')
+    expect(backup.confirmTitle('Teste')).toContain('Teste')
+    expect(backup.botsOff('Telegram', 'Agente')).toContain('Agente')
+    expect(backup.backupHelp).toContain('local protegido')
+    expect(TRANSLATIONS['pt-br'].settings.nav.backup).toBe('Backup e transferência')
   })
 
   it('round-trips every picker option through its display.language value to a registered catalog', () => {
