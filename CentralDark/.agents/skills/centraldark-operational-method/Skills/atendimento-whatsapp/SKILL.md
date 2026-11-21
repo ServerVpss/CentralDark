@@ -63,4 +63,19 @@ Se uma ação de escrita teve resposta incerta, **verificar primeiro se o commit
 **Proteção dos métodos legados:** as cinco receitas distintas recuperadas do agente Atendimento WhatsApp e suas assinaturas originais foram preservadas na referência acima. Os arquivos locais originais e as Skills nativas gerenciadas pelo OpenBot continuam intactos até existir prova de que o agente consome esta versão canônica; então avaliar desativação da cópia legada com contraprova de não regressão. **Não apagar nem sobrepor uma receita em funcionamento por causa da troca de endereço de registro.**
 
 **Papel de cada agente:** Orchestrator coordena e acompanha; Atendimento conversa, consulta e executa procedimentos autorizados. Ambos consultam as mesmas fontes sem competir pela escrita e preservam seus nomes, instruções de identidade e rotinas existentes.
+<!-- CENTRALDARK_WHATSAPP_BROWSER_STATUS_EVIDENCE_20261121 -->
+## 🔎 Estado do WhatsApp Web — verificar no navegador nativo antes de declarar desconexão
+
+**Incidente observado em 21/11/2026:** o OpenBot classificou uma aba `web.whatsapp.com` como "desconectada" porque apareceu o texto "Protegida com a criptografia de ponta a ponta". Essa frase é informativa, não é evidência de logout. Na sequência da mesma missão o Radar leu 12 prévias de grupos e publicou o resultado no `ServerVpss/Meus-Trabalhos@main`, com commit e readback. A gravação remota está provada; o estado preciso da sessão no instante do primeiro aviso não foi medido.
+
+**Diagnóstico obrigatório usando somente a aba e as ferramentas nativas do OpenBot:**
+1. Reobservar `web.whatsapp.com` na **mesma aba e no mesmo perfil**. Verificar URL, conteúdo visível e estado do carregamento. Aguardar pelo recurso nativo `wait_for`/equivalente uma condição objetiva (lista de conversas/grupos ou login/QR) com limite de espera e repetir a leitura; não iniciar uma sessão concorrente.
+2. **CONECTADO** quando a lista de grupos/conversas e prévias atuais realmente estiverem acessíveis. **LOGIN_NECESSARIO** apenas quando a tela de login ou QR for observada. **FALHA_DA_PAGINA** quando houver erro real de navegação. **CARREGANDO/INDETERMINADO** se aparecer somente a mensagem de criptografia, timeout isolado ou informação contraditória. Não transformar `INDETERMINADO` em "WhatsApp desconectado".
+3. Se o resultado continuar indeterminado após a espera limitada, registrar somente o que foi observado: estado da aba, evidência, horário e motivo da pendência. Não inventar leitura de grupos, não forçar logout, limpeza de cookies, reinicialização, relogin nem QR.
+4. Se a mesma missão obtiver depois leitura válida das prévias, **retificar explicitamente** qualquer aviso anterior de desconexão. Distinguir `WHATSAPP_BROWSER_STATUS`, `RADAR_DATA_READ` e `GITHUB_WRITE_PROOF`; sucesso do commit não comprova acesso ao WhatsApp e falha visual isolada não comprova desconexão.
+5. Manter a regra vigente do Radar: ler somente as prévias permitidas, sem abrir conversas privadas nem enviar mensagens sem autorização. Aprendizados e atualizações documentais devem ser escritos no arquivo existente no `Meus-Trabalhos@main`, com commit SHA e readback; não criar outra biblioteca local.
+
+**Contraprova:** cenário A (criptografia durante carregamento) → `CARREGANDO/INDETERMINADO`; B (lista acessível) → `CONECTADO`; C (QR de login confirmado) → `LOGIN_NECESSARIO`; D (erro explícito) → `FALHA_DA_PAGINA`. Essas classificações são critérios de teste, não prova de que a UI atual esteja em qualquer um desses estados.
+<!-- /CENTRALDARK_WHATSAPP_BROWSER_STATUS_EVIDENCE_20261121 -->
+
 <!-- /CENTRALDARK_WHATSAPP_THREE_ROUTES_20261120 -->
