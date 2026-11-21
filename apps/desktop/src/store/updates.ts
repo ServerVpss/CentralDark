@@ -764,7 +764,7 @@ export async function applyUpdates(opts: DesktopUpdateApplyOptions = {}): Promis
   }
 
   dismissNotification(UPDATE_TOAST_ID)
-  $updateApply.set({ ...IDLE, applying: true, stage: 'prepare', message: 'Starting update…' })
+  $updateApply.set({ ...IDLE, applying: true, stage: 'prepare', message: translateNow('updates.stages.prepare') })
 
   try {
     const result = await bridge.apply(opts)
