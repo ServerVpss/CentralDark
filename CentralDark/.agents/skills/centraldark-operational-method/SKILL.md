@@ -11,6 +11,10 @@ HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HU
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # CENTRALDARK — Capacidade Operacional de Todo o Sistema
 
+<!-- CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+**🏛️ Regra de apresentação herdada da SOUL:** nas telas humanas, mostrar `CentralDark · OS` para o produto completo, atualizador e instalador; `CentralDark · Agente` para tarefas do agente; `CentralDark · Terminal` para a interface CLI/TUI; `CentralDark · OS — Painel` para a Web. Preservar `Hermes` como motor/substrato técnico e marca de origem onde indispensável, sobretudo em `hermes update`, `hermes_cli`, `HERMES_HOME`, `.hermes/`, APIs, logs e documentação upstream. Cada consumidor só é declarado atualizado após readback e teste do runtime; reutilizar os owners da aplicação em vez de criar outro sistema de branding. Referência de protótipo: PR #2119; identidade canônica detalhada: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+<!-- /CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+
 <!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
 **🗺️ Mapa visual semântico — 19/11/2026:** Herdar a Gramática SOL e os símbolos canônicos para explicar execuções; provas continuam técnicas. 👉 O QUE FAZER AGORA é rótulo visível, NEXT_CURSOR continua campo técnico. Aplicação em runtime depende de leitura e teste. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
 <!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
