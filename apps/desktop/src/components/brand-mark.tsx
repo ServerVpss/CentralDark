@@ -19,3 +19,37 @@ export function BrandMark({ className, ...props }: React.ComponentProps<'span'>)
     </span>
   )
 }
+
+// The CentralDark identity from the approved ROV HTML's sidebar:
+// inline vector + gold tile + wordmark, not a PNG or a second brand asset.
+// This does not replace the existing Hermes icon on unrelated surfaces.
+export function CentralDarkBrandMark({ className, ...props }: React.ComponentProps<'span'>) {
+  return (
+    <span
+      aria-label="CentralDark — CentralDark OS"
+      className={cn('inline-flex max-w-full items-center gap-[11px] text-left', className)}
+      role="img"
+      {...props}
+    >
+      <span
+        aria-hidden="true"
+        className="grid size-[43px] shrink-0 place-items-center rounded-[11px] border border-[#7e643b] bg-[#221c14] text-[#e6bd75]"
+      >
+        <svg className="size-[29px]" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 32 32">
+          <circle cx="16" cy="16" r="12" />
+          <path d="M5.5 16c5.5-7 15.5-7 21 0-5.5 7-15.5 7-21 0Z" />
+          <circle cx="16" cy="16" r="3.7" />
+          <path d="M16 1v4m0 22v4M1 16h4m22 0h4" />
+        </svg>
+      </span>
+      <span className="flex min-w-0 flex-col">
+        <strong className="text-[20px] leading-[1.2] font-semibold tracking-[-.045em] text-foreground">
+          CentralDark
+        </strong>
+        <small className="mt-[3px] text-[10px] leading-[1.6] tracking-[.08em] text-muted-foreground">
+          CENTRALDARK · OS
+        </small>
+      </span>
+    </span>
+  )
+}
