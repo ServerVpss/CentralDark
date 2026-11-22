@@ -5,6 +5,18 @@ set -euo pipefail
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)"
 ROOT="${CENTRALDARK_SOURCE_ROOT:-$(git -C "$SCRIPT_DIR/../.." rev-parse --show-toplevel)}"
 ROOT="$(realpath "$ROOT")"
+# After PR #2160, canonical files live under a subdir (CentralDark/ or CentralDark-Core/).
+# Dynamic discovery: find the subdir containing the boot script.
+_project_root() {
+  local _probe="$1"
+  if [[ ! -f "$_probe/scripts/trigger-fabric/centraldark_full_trigger_boot.py" ]]; then
+    local _sub
+    _sub="$(find "$_probe" -maxdepth 1 -type d -name 'CentralDark*' -exec test -f '{}/scripts/trigger-fabric/centraldark_full_trigger_boot.py' \; -print -quit 2>/dev/null)"
+    _probe="${_sub:-$_probe/CentralDark}"
+  fi
+  printf '%s' "$_probe"
+}
+SYNC_PROJECT_ROOT="$(_project_root "$ROOT")"
 REMOTE="${CENTRALDARK_REMOTE:-origin}"
 BRANCH="${CENTRALDARK_BRANCH:-main}"
 SYNC_ROOT_INPUT="${CENTRALDARK_SYNC_ROOT:-${ROOT%/*}/CentralDark-auto-sync}"
@@ -15,7 +27,7 @@ else
 fi
 SYNC_OWNER_MARKER="${SYNC_ROOT}.centraldark-auto-sync-owner"
 RECEIPT_DIR="${CENTRALDARK_RECEIPT_DIR:-${ROOT%/*}/centraldark-auto-sync}"
-TLC23="${ROOT}/docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf"
+TLC23="${SYNC_PROJECT_ROOT}/docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf"
 TLC23_SHA="b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1"
 BOOT="scripts/trigger-fabric/centraldark_full_trigger_boot.py"
 
@@ -23,7 +35,7 @@ say() { printf '%s\n' "$*"; }
 fail() { say "CENTRALDARK_AUTO_SYNC=BLOCKED"; say "REASON=$*"; exit 2; }
 
 [ -e "$ROOT/.git" ] || fail "CANONICAL_REPO_NOT_FOUND"
-[ -f "$ROOT/$BOOT" ] || fail "BOOT_LOADER_NOT_FOUND"
+[ -f "$SYNC_PROJECT_ROOT/$BOOT" ] || fail "BOOT_LOADER_NOT_FOUND"
 [ -f "$TLC23" ] || fail "TLC23_NOT_FOUND"
 command -v git >/dev/null 2>&1 || fail "GIT_NOT_FOUND"
 command -v python3 >/dev/null 2>&1 || fail "PYTHON3_NOT_FOUND"
@@ -102,6 +114,10 @@ else
   say "SYNC_MODE=UPDATED_TO_MAIN_SHA"
 fi
 
+# After sync, recompute SYNC_PROJECT_ROOT from the clean mirror (not the dirty ROOT).
+# This ensures the boot script runs against the clean mirror's files.
+SYNC_PROJECT_ROOT="$(_project_root "$SYNC_ROOT")"
+
 # --- housekeeping: prune stale clean worktrees inside the scratch root ---
 # Only checked-out files are removed; branch refs and commits stay in the repo, so
 # nothing is lost. Dirty worktrees, the canonical checkout and the sync mirror are
@@ -175,7 +191,7 @@ sync_head="$(git -C "$SYNC_ROOT" rev-parse HEAD)"
 boot_output="$(mktemp "${TMPDIR:-/tmp}/centraldark-auto-sync.XXXXXX")"
 trap 'rm -f "$boot_output"' EXIT
 set +e
-python3 "$SYNC_ROOT/$BOOT" boot --input '{}' >"$boot_output"
+CENTRALDARK_REPO_ROOT="$SYNC_PROJECT_ROOT" python3 "$SYNC_PROJECT_ROOT/$BOOT" boot --input '{}' >"$boot_output"
 boot_rc=$?
 set -e
 # The loader returns 4 for a clean main read with no active mission. The JSON
