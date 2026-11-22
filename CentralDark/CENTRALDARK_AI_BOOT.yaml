@@ -12,11 +12,65 @@ CENTRALDARK_AI_BOOT:
   unified_surface_parity_contract: LOADED
   unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  # CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122
+  github_connector_entry:
+    status: CANONICAL_REQUIRED_NOT_RUNTIME_PROVEN
+    scope: "ServerVpss/CentralDark@main"
+    triggers: [GITHUB_CONNECTOR_CONNECTED_TO_CENTRALDARK, CHEFE_SAYS_GITHUB_CONNECTED, NEW_CENTRALDARK_REPO_SESSION]
+    trigger_is_agent_obligation_not_native_github_event: true
+    read_order_mandatory:
+      - "CENTRALDARK_AI_BOOT.yaml"
+      - "LEIA-ME-IA.md"
+    require_fresh_repo_read: true
+    do_not_use_memory_as_read_proof: true
+    validate_each: [PATH, NONEMPTY_CONTENT, SOURCE_COMMIT_OR_BLOB_SHA, ORDER, READ_RESULT]
+    on_read_error: "PENDENTE; MOSTRAR_ARQUIVO_FALTANTE; NAO_DECLARAR_BOOT_LIDO"
+    first_visible_block: "🪬 BOOT CENTRALDARK — GitHub"
+    first_visible_format: YAML
+    agent_responsibility_banner: "🧠 Responsabilidade assumida pelo agente"
+    agent_owns_git_read_and_tests: true
+    never_delegate_available_readback_or_tests_to_chefe: true
+    show_real_receipt_not_synthetic_success: true
+    custom_instructions_trigger_if_user_adds_later: OPTIONAL_NOT_PROVEN
+    receipt_keys: [repository, ref, first_file, first_sha, second_file, second_sha, read_order, read_status, operational_cycle]
+    receipt_only_after_two_real_reads: true
+    show_before_operational_answer: true
+    style: "EMOJI_NO_TITULO; DIVISOR_MARKDOWN_SOMENTE_ENTRE_ASSUNTOS"
+    complete_existing_cycle:
+      - "READ_BOOT_FIRST"
+      - "READ_LEIA_ME_IA_SECOND"
+      - "READ_SOUL_RULES_AGENTS_AND_SKILL_MAE_AS_PERTINENT"
+      - "RECOVER_KIT_PROFESSOR_AND_CONTEXT_RELEVANT_TO_INTENT"
+      - "RECOVER_PERTINENT_LEMBRANCAS_APRENDIZADOS_AND_LAST_VERIFIED_CHECKPOINT"
+      - "MEASURE_GITHUB_MAIN_AND_CURRENT_WITH_EXISTING_HUD_ENTRY_GATE"
+      - "REUSE_OWNER_AND_EXECUTE_ONLY_AUTHORIZED_DELTA"
+      - "TEST_AND_COUNTERPROVE"
+      - "PRESENT_REAL_RECEIPT_AND_NEXT_STEP"
+    existing_boot_reader: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+    existing_boot_reader_command: "github-entry"
+    hud_first_means_first_operational_action_after_governance_read: true
+    no_duplicate_boot_or_memory: true
+    tool_calls_must_be_made_by_consumer: true
+    github_connector_cannot_be_reconfigured_by_repo_document_only: true
+    github_connection_is_not_runtime_proof: true
   human_communication_bridge:
     owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
     # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119
     grammar: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml#mapa_visual_semantico_20261119"
     emoji_owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+    multi_subject_style: "EMOJI_SEMANTICO + TITULO_COTIDIANO; --- SOMENTE_ENTRE_ASSUNTOS"
+    single_subject_style: "RESPOSTA_CURTA_SEM_DIVISOR_ARTIFICIAL"
+    mcp_professor_entry:
+      handshake_owner: "apps/modulos/mcp/src/mcp-server.js#PIVETE_BOOT_INSTRUCTIONS"
+      trigger: "MCP_INITIALIZE"
+      welcome_tool: kit_boas_vindas
+      rules_tool: ler_regras_inviolaveis
+      memory_when_relevant: [personal_context_search, consultar_memoria_reserva]
+      learn_when_relevant: puxar_aprendizados
+      learning_owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
+      handshake_instructions_are_automatic: true
+      tool_calls_require_client: true
+      runtime_consumer_proof_required: true
     human_next_step: "👉 O QUE FAZER AGORA"
     preserve_machine_fields: true
     runtime_consumption_requires_test: true
@@ -693,6 +747,13 @@ CENTRALDARK_AI_BOOT:
     enabled: true
     explicit_in_every_boot_receipt: true
     no_useful_delta_left_behind: true
+    all_material_useful_learning_requires_persistent_owner_registration: true
+    agente_responsavel_por_registro_teste_e_readback: true
+    relevant_existing_triggers: ["!DELTAÚTIL", "!AURÉOLA CANÔNICA"]
+    existing_learning_owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
+    learning_flow: [IDENTIFY_USEFUL_DELTA, REUSE_CANONICAL_OWNER, REGISTER_IN_EXISTING_OWNER, TEST_AFFECTED_SCOPE, COMMIT_OR_APPROVED_PR, VERIFY_SHA_AND_READBACK, RETURN_TO_CURRENT_INTENT]
+    report_pending_if_cannot_persist: true
+    never_claim_saved_without_path_sha_link_readback: true
     raw_material_is_not_delta_util: true
     repetition_is_intent_signal_not_runtime_proof: true
     canonical_rule: "DELTA_UTIL_SOBREVIVENTE -> CENTRALDARK_AI_BOOT.delta_util + OWNER_CANONICO"

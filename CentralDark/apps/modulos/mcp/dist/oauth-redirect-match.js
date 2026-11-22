@@ -36,6 +36,15 @@ export function redirectUriRegistered(client, requested) {
         return true;
     if (client.token_endpoint_auth_method !== "none")
         return false;
+    // Client ID Metadata Document do Claude Code, sem ampliar hosts ou rotas.
+    if (client.client_id === "https://claude.ai/oauth/claude-code-client-metadata" &&
+        client.redirect_uris.includes("http://localhost/callback")) {
+        const match = /^http:\/\/localhost:([0-9]{1,5})\/callback$/.exec(requested);
+        if (match) {
+            const port = Number(match[1]);
+            return port >= 1 && port <= 65535;
+        }
+    }
     const incoming = parsedLoopback(requested);
     if (!incoming)
         return false;

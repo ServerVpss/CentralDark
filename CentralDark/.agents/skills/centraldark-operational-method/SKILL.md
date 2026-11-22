@@ -955,3 +955,9 @@ ACTION_SINGLE
 - `FEEDBACK_OK != EFFECT_PROVEN`; `ACTION != PROOF`; `UNKNOWN != PASS`.
 - Filosofia: `REUSE_BEFORE_CREATE + KAIZEN`.
 <!-- /CENTRALDARK_FEEDBACK_READBACK_LOOP_20261113 -->
+
+<!-- CENTRALDARK_INVARIANT_MATH_OPS_20261122_INDEX -->
+### 📐 Método matemático operacional — axiomas, eliminação, contraprova e ponto fixo (22/11/2026)
+
+Quando a intenção pedir execução verificável complexa (ex.: publicação Cloudflare) ou registro de aprendizado de método, carregar [Engenharia por invariantes, hipóteses, contraprova e ponto fixo](references/ENGENHARIA-POR-INVARIANTES-CONTRAPROVA-E-PONTO-FIXO.md), referência **desta mesma Skill Mãe**. Contratos: trivalência VERDADEIRO/FALSO/DESCONHECIDO; invariantes A1–A5 escopados; hipóteses com teste discriminante; grafo de dependências; menor delta; testes e contraprova; indução operacional parcial; recibo; FIXED_POINT escopado. Sem nova skill/gate, sem probabilidade inventada, sem ritual obrigatório para tarefa simples. `DEPLOY != PROOF`; `HTTP_200 != SITE_CORRETO`; `STATIC_ASSETS_EMBEDDED != STATIC_ASSETS_NATIVE`. Aplicação no runtime exige consumo e teste real.
+<!-- /CENTRALDARK_INVARIANT_MATH_OPS_20261122_INDEX -->
