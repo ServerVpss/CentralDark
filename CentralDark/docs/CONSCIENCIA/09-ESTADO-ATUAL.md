@@ -99,3 +99,48 @@ Decisões seladas mantidas: Sentry descartado; grafo oficial = grafo.centralldar
 - [[CONSCIENCIA]] — documento mestre
 - [[PROTOCOLO-INICIALIZACAO]] — boot sequence de sessão IA
 - `docs/PENDENCIAS.md` — **única** lista de pendências
+
+---
+
+<!-- CENTRALDARK_ROV_CHECKPOINT_20261122T1013Z -->
+## Checkpoint de coordenacao persistente - ROV CentralDark-Core (22/11/2026 as 10:13 UTC)
+
+mission: CENTRALDARK-CORE-RENAME-ROV
+authority: SEGREDO_CHEFE
+coordinator: SOL
+executor: HERMES
+status: PENDENTE_DE_RECONCILIACAO_E_TESTES
+
+source: ServerVpss/CentralDark@main
+pr: 2167 (https://github.com/ServerVpss/CentralDark/pull/2167)
+main_sha: fe57c0cf6f4f7020d1e7566bc3082bbca69ce5f6
+pr_head_sha: c1d19e8f8f590a17670df37ca3a2bf12258f3e89
+pr_base_sha: 6ca7f4031f67f1ac62ee7d4f3ecd655ff3f90be4
+pr_state: draft, open, mergeable_state=dirty, 17552 changed_files
+desired_name: CentralDark-Core
+core_tree_sha: ec66b7e0d5a0044fd79f40b2e499e05a95867f7b (identico antes/depois; 30 entradas status=renamed, nenhum blob editado)
+
+casa_root: F:/CentralDark (git rev-parse --show-toplevel comprovado)
+casa_head_sha: 8ebfa8fedabbd61ea151b3dbb749dd969233248c
+casa_worktree: 278 entradas dirty, preservadas
+casa_test_path: F:/CentralDark/CentralDark = False; F:/CentralDark/CentralDark-Core = False
+writer_scope: um unico Writer; Hermes executa; SOL coordena
+
+especialistas (papéis, nao autoridades independentes):
+- Ian: guardrails/estrutura - BLOQUEIO registrado; exige caminho exato e reconciliaçao do PR
+- Dex: promoçao/deploy - HOLD; rollback preparado; sem force-push nem reset destrutivo
+- Geoff: loop - E0..E7 (rename no GitHub, Casa apenas fast-forward)
+- Greg: auditoria T01-T15 - classificaçao pendente
+
+completed_steps: E0 (SHAs, owners, PR, Casa medidos); leitura real dos owners canonicos em CentralDark/
+remaining_steps: E1 reconciliar PR/rebase; E2 rename+boot; E3 consumidores; E4 T01-T15; E5 promover; E6 Casa ff; E7 ponto fixo
+
+blockers verificados: PR dirty e base desatualizada; ~25 referencias ao caminho antigo em boot/CI/skills; Casa nao tem pasta CentralDark/ a renomear
+rollback: snapshot HEAD+status+docker/PM2; reverter entrada raiz para CentralDark preservando ec66b7e0...; nunca reset --hard nem git clean
+tests_T01_T15: PENDENTE (nenhum executado com prova ate este checkpoint)
+next_action: Hermes reconciliar PR 2167 sobre fe57c0cf e corrigir referencias de caminho, sem tocar na Casa
+persistence_owner: CentralDark/docs/CONSCIENCIA/09-ESTADO-ATUAL.md
+fixed_point: PENDING_UNTIL_PROVEN
+
+regra aplicada: SUMARIO COMPARTILHADO - uma CentralDark, uma coordenacao, um executor. CHEFE autoriza; SOL coordena; Hermes executa; realidade verifica; Kaizen aprende.
+<!-- /CENTRALDARK_ROV_CHECKPOINT_20261122T1013Z -->
