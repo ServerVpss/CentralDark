@@ -271,3 +271,14 @@ FIXED_POINT=NO
 **Decisão:** `NO-GO` para promoção enquanto `CI_EXACT_SHA != PASS`, `RUNTIME_PID_9100_SOURCE_SHA=UNKNOWN` ou `CANARY_T1=NOT_PROVEN`. Manter PR aberta com writer único; recuperar gate no SHA final, materializar canário em scratch com runtime/port isolados e credenciais de teste, comparar endpoint e fingerprints, atestar backup/rollback e só então autorizar promoção. 
 
 NEXT_CURSOR=`CI_EXACT_SHA_PASS → PID_9100_SERVICE_EXEC_SHA → ISOLATED_CANARY_TEST → PORT_HEALTH_17_ROUTES → ROLLBACK_PROOF → PROMOTION_GO_NO_GO → RECEIPT_FINAL`.
+
+
+## Contraprova adicional — 2026-11-11, catálogo autenticado e openKylin
+
+- `mcp_status` e `mcp_admin_catalog` (plugin CentralDark autenticado) retornaram `catalogFingerprint=b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa`, `catalogVersion=v1-f8ff6720fec3`; `mcp_status.routeCount=17`.
+- SRC e DIST em `F:\CentralDark\apps\modulos\mcp` exibem exatamente esse fingerprint nas três declarações de cada arquivo. IDs das 17 rotas coincidem entre SRC e DIST. Hash Git local SRC `17cfc35a55fc5b9555ffa23a48f1efdd47edcc1e`; DIST `608c8e0f021f47697ca2866c03277ea323a63c17`.
+- Contraprova executável: `node --test apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs apps/modulos/mcp/tests/tools-catalog-metadata.test.mjs`: 8/8 no Windows e 8/8 no openKylin, `exit=0` em ambos. A comparação foi acrescentada ao gate existente; nenhum teste foi desligado.
+- O fingerprint `80f0a0fab...` dos registros antigos correspondia à medição histórica de 13 rotas. Não constitui a expectativa atual para os arquivos SRC/DIST. Histórico preservado acima.
+- openKylin `CentralDark-OS`, SSH autenticado: MCP porta 9100 escutando; `GET /health` respondeu `ok=true`, `service=mcp-centraldark`, `catalogVersion=160-45340263b107`, `toolCount=160`. Essa superfície local não foi identificada como a mesma sessão do plugin remoto; os denominadores não são comparáveis sem escopo.
+- `RUNTIME_PID_9100_SOURCE_SHA=UNKNOWN`: fingerprint/saúde não prova qual código o processo carregou. `MCP_SOURCE_DIST_RUNTIME_FULL_PARITY=UNKNOWN`; `DEPLOY=NO`; `FIXED_POINT=NO` até CI no HEAD, canário e readback de processo.
+- `NEXT_CURSOR=VERIFICAR_SHA_PROCESSO_MCP_9100 + CI_HEAD_EXATO + CANARIO_AUTORIZADO + CONTRAPROVA_RUNTIME`, sem alterar o motor nem sobrescrever mudanças locais.
