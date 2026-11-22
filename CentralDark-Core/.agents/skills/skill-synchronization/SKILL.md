@@ -137,7 +137,7 @@ SYNCED != EXECUTED.
 O mesmo owner `scripts/skill-sync-check.sh` preserva **dois universos distintos**:
 
 - **Sincronizacao autorizada:** somente `SKILL.md` da `main` com `centraldark_autosync: true` via `--check|--apply|--seal`, writer unico, lock, backup e contraprova SHA.
-- **Descoberta ampliada:** Hermes possui `skills.external_dirs` nativo. Registre `/root/CentralDark/.agents/skills` nessa configuracao do perfil Hermes para que ele descubra o catalogo do projeto sem copiar todos os arquivos para `~/.hermes/skills`, preservando as skills locais e precedencia original.
+- **Descoberta ampliada:** Hermes possui `skills.external_dirs` nativo. Registre `/root/CentralDark/CentralDark-Core/.agents/skills` nessa configuracao do perfil Hermes para que ele descubra o catalogo do projeto sem copiar todos os arquivos para `~/.hermes/skills`, preservando as skills locais e precedencia original.
 
 **Causa observada em 18/10/2026:** `hermes serve` tinha cwd `/root/.hermes/hermes-agent`; gateway cwd `/root/.hermes`. Apesar de `/root/CentralDark` figurar em `skills.trusted_project_dirs`, o descobridor de skills de projeto nao examina o repo quando o cwd da sessao fica fora dele.
 
@@ -146,7 +146,7 @@ Contrato do perfil local (o cofre/config nao vai para GitHub):
 ```yaml
 skills:
   external_dirs:
-    - /root/CentralDark/.agents/skills
+    - /root/CentralDark/CentralDark-Core/.agents/skills
 ```
 
 Nao substituir outros caminhos preexistentes; adicionar com backup privado e permissao `0600`, sem ler segredos em logs. A funcao de readback do script informa `HERMES_NATIVE_CATALOG_BINDING=CONFIGURED|NOT_CONFIGURED|CONFIG_UNAVAILABLE|SOURCE_UNAVAILABLE`. O estado `CONFIGURED` comprova apenas o cadastro do caminho, nao prova uma skill individual disponivel nem uma sessao atualizada.

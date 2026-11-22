@@ -1,18 +1,18 @@
 name: ⚙️ bot-server validate (Lotes 2–10)
 
-# Em todo PR que toca CentralDark/apps/bot-server/, roda os 8 validadores
+# Em todo PR que toca CentralDark-Core/apps/bot-server/, roda os 8 validadores
 # offline criados nos Lotes 2 a 10. Sem rede, sem secrets, sem WuzAPI real.
 
 on:
   pull_request:
     branches: [main]
     paths:
-      - "CentralDark/apps/bot-server/**"
+      - "CentralDark-Core/apps/bot-server/**"
       - ".github/workflows/bot-server-validate.yml"
   push:
     branches: [main]
     paths:
-      - "CentralDark/apps/bot-server/**"
+      - "CentralDark-Core/apps/bot-server/**"
   workflow_dispatch:
 
 permissions:
@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 5
     defaults:
       run:
-        working-directory: CentralDark/apps/bot-server
+        working-directory: CentralDark-Core/apps/bot-server
 
     steps:
       - name: 🔹 Checkout

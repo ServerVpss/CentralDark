@@ -1,9 +1,9 @@
 [submodule "skills/pretty-mermaid"]
-	path = CentralDark/skills/pretty-mermaid
+	path = CentralDark-Core/skills/pretty-mermaid
 	url = https://github.com/imxv/Pretty-mermaid-skills.git
 	branch = main
 
 [submodule "apps/modulos/deepseek-harness"]
-	path = CentralDark/apps/modulos/deepseek-harness
+	path = CentralDark-Core/apps/modulos/deepseek-harness
 	url = https://github.com/deepseek-ai/deepseek-harness.git
 	branch = master

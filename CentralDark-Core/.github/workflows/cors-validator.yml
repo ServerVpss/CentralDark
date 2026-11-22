@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "CentralDark/infra/caddy/**"
-      - "CentralDark/apps/bot-server/**"
+      - "CentralDark-Core/infra/caddy/**"
+      - "CentralDark-Core/apps/bot-server/**"
       - "scripts/checker/cors-validator.mjs"
       - ".github/workflows/cors-validator.yml"
 

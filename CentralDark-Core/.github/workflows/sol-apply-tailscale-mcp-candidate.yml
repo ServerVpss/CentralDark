@@ -62,7 +62,7 @@ jobs:
           echo
           echo '=== HERMES SKILL BIND ==='
           [[ -L /root/.hermes/skills/skill-workshop ]] || { echo 'HERMES_BIND_NOT_SYMLINK'; exit 30; }
-          [[ "$(readlink -f /root/.hermes/skills/skill-workshop)" == "/root/CentralDark/.agents/skills/skill-workshop" ]] || { echo 'HERMES_BIND_TARGET_MISMATCH'; exit 31; }
+          [[ "$(readlink -f /root/.hermes/skills/skill-workshop)" == "/root/CentralDark/CentralDark-Core/.agents/skills/skill-workshop" ]] || { echo 'HERMES_BIND_TARGET_MISMATCH'; exit 31; }
           [[ -f /root/.hermes/skills/skill-workshop/SKILL.md ]] || { echo 'HERMES_SKILL_MISSING'; exit 32; }
           echo 'TAILSCALE_PRIVATE_ROUTE=PASS'
           echo 'HERMES_SKILL_WORKSHOP_BIND=PASS'

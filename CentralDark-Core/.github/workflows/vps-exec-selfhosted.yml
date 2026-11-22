@@ -117,7 +117,7 @@ jobs:
     env:
       HOME: /root
       REPO_DIR: /root/CentralDark
-      MCP_DIR: /root/CentralDark/apps/modulos/mcp
+      MCP_DIR: /root/CentralDark/CentralDark-Core/apps/modulos/mcp
       GH_TOKEN: ${{ github.token }}
       PM2_APP: CentralDark-MCP
       WEBHOOK_APP: CentralDark-WebhookDeploy

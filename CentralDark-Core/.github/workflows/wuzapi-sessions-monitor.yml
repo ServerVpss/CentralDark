@@ -56,7 +56,7 @@ jobs:
       - name: 🔹 Commitar JSON se mudou
         if: steps.ssh.outputs.skip != 'true'
         run: |
-          FILE=CentralDark/apps/projeto-dashboard/wuzapi-sessions.json
+          FILE=CentralDark-Core/apps/projeto-dashboard/wuzapi-sessions.json
           if git diff --quiet -- "$FILE"; then
             echo "sem mudanças"; exit 0
           fi
