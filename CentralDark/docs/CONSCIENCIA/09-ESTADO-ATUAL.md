@@ -137,14 +137,22 @@ remaining_steps: E1 reconciliar PR/rebase; E2 rename+boot; E3 consumidores; E4 T
 
 blockers verificados: PR dirty e base desatualizada; ~25 referencias ao caminho antigo em boot/CI/skills; Casa nao tem pasta CentralDark/ a renomear
 rollback: snapshot HEAD+status+docker/PM2; reverter entrada raiz para CentralDark preservando ec66b7e0...; nunca reset --hard nem git clean
-tests_T01_T15: 0 PROVADO / 0 QUEBRADO / 15 EVIDENCIA FALTANTE (Greg @ 22/11/2026)
+tests_T01_T15 (Hermes @ 22/11/2026, verificado no GitHub pela SOL): 10 APROVADO / 3 FALHOU / 2 PENDENTE
+  - aprovados: T01,T02,T03,T04,T05,T06,T09,T10,T11,T15
+  - falhas: T07 (override invalido aceito - pre-existente), T12 (CI startup_failure tambem na main), T13 (ff da Casa bloqueado por ~75 sujos)
+  - pendentes: T08 (Halo runtime), T14 (runtime MCP/Bridge)
+  - PR 2167: MERGEABLE/CLEAN, head aa3a3035404eb679b66eb07c0cf1b1b590eb55ba, base a5ae8f68697706018de47ddb1658d17f0095568a, merge NAO realizado
+  - arvore do Core ec66b7e0 preservada no rename; 17552 R + 1 M (.gitmodules), 0 A/0 D; 13 linhas de caminho em 7 arquivos
+  - Casa inalterada: HEAD 8ebfa8f, 278 sujos manifesto hash diff=0; ff-only recusado
+  - comprovante:共享/Transfers/ea468366.../comprovante-centraldark-core-rename-rov.yaml
+  - regra: UNKNOWN != PASS impede ponto fixo
   - causa: receita T01-T15 nao existe versionada em ServerVpss/CentralDark; nao ha como classificar isoladamente sem inventar criterio
   - ci: 1 check (Supabase Preview) conclusion=skipped; status=pending com 0 statuses; conclusion=success ausente
   - contraprova minima pendente: receita T01-T15 versionada; execucao com log SHA-256/hora/ator; readback no SHA rebaseado; grep zero correspondencias nas ~25 referencias antigas; git cat-file c1d19e8^{tree}=ec66b7e0 e diff --name-status so R100; Test-Path + git status na Casa apos ff
   - regra: UNKNOWN != PASS impede promocao
 next_action: Hermes reconciliar PR 2167 sobre fe57c0cf e corrigir referencias de caminho, sem tocar na Casa
 persistence_owner: CentralDark/docs/CONSCIENCIA/09-ESTADO-ATUAL.md
-fixed_point: PENDING_UNTIL_PROVEN
+fixed_point: NAO_DECLARADO (10/15 APROVADO, 3 FALHOU, 2 PENDENTE)
 
 regra aplicada: SUMARIO COMPARTILHADO - uma CentralDark, uma coordenacao, um executor. CHEFE autoriza; SOL coordena; Hermes executa; realidade verifica; Kaizen aprende.
 <!-- /CENTRALDARK_ROV_CHECKPOINT_20261122T1013Z -->
