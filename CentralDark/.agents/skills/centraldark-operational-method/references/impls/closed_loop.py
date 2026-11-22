@@ -109,16 +109,17 @@ class ClosedLoop:
             return False
 
     def _check_gateway(self) -> bool:
-        """Gateway Hermes: HTTP 200 = OK, 301/302/401/500 = NEGATIVO"""
+        """Gateway Hermes local: HTTP 200 no localhost:8642/health"""
         try:
             req = urllib.request.Request(
-                "https://gateway.centralldark.com/health",
+                "http://localhost:8642/health",
                 headers={"User-Agent": "ClosedLoop/1.0"}
             )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                return resp.status == 200
-        except urllib.error.HTTPError:
-            return False
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                if resp.status == 200:
+                    data = json.loads(resp.read().decode())
+                    return data.get("status") == "ok"
+                return False
         except Exception:
             return False
 

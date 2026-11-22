@@ -111,16 +111,17 @@ class GreenStateManager:
         return False
 
     def _check_gateway(self) -> bool:
-        """Gateway Hermes: HTTP 200 = OK, 301/302/401/500 = NEGATIVO"""
+        """Gateway Hermes local: HTTP 200 no localhost:8642/health"""
         try:
             req = urllib.request.Request(
-                "https://gateway.centralldark.com/health",
+                "http://localhost:8642/health",
                 headers={"User-Agent": "ClosedLoop/1.0"}
             )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                return resp.status == 200
-        except urllib.error.HTTPError:
-            return False
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                if resp.status == 200:
+                    data = json.loads(resp.read().decode())
+                    return data.get("status") == "ok"
+                return False
         except Exception:
             return False
 
@@ -154,12 +155,27 @@ class GreenStateManager:
                 headers={"User-Agent": "ClosedLoop/1.0"}
             )
             with urllib.request.urlopen(req, timeout=10) as resp:
-                return resp.status == 200
+                if resp.status != 200:
+                    return False
+                body = resp.read().decode()
+                return "CentralDark" in body or "centralldark" in body.lower()
         except Exception:
             return False
 
     def _check_hermes(self) -> bool:
-        return True  # Hermes runtime is running (verified by monitor)
+        """Hermes: gateway run + dashboard 18787 processos ativos (ps aux)."""
+        try:
+            result = subprocess.run(
+                ["ps", "aux"], capture_output=True, text=True, timeout=5
+            )
+            if result.returncode != 0:
+                return False
+            out = result.stdout
+            has_gateway = "gateway run" in out
+            has_dashboard = "dashboard" in out and "18787" in out
+            return has_gateway and has_dashboard
+        except Exception:
+            return False
 
     def _check_dns(self) -> bool:
         import subprocess as _sp2
