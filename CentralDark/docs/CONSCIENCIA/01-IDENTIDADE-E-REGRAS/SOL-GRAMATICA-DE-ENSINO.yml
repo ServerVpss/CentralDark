@@ -18,6 +18,10 @@ comunicacao_ptbr_visual_obrigatoria_20261121:
     pt_br_natural_first: true
     result_first_and_no_forced_audit: true
     everyday_titles_and_labels: true
+    each_distinct_subject_title_starts_with_context_emoji: true
+    menu_style_telegram_for_multi_subject_messages: true
+    markdown_divider_between_distinct_subjects: "---"
+    never_insert_divider_within_single_subject: true
     result_labels: ["Resultado: APROVADO", "Resultado: PENDENTE", "Resultado: FALHOU"]
     sha_label: "Código de verificação"
     git_main_label: "Arquivo na versão principal"
@@ -36,6 +40,15 @@ comunicacao_ptbr_visual_obrigatoria_20261121:
     no_claim_of_runtime_consumption_from_documentation_alone: true
     no_parallel_communication_owner: true
   runtime_validation: TEST_EACH_CONSUMER_BEFORE_DECLARING_ACTIVE
+  mcp_professor_continuity:
+    on_connection: "MCP_INITIALIZE_INSTRUCTIONS"
+    welcome_tool: kit_boas_vindas
+    rules_tool: ler_regras_inviolaveis
+    memory_tools_when_relevant: [personal_context_search, consultar_memoria_reserva]
+    learning_tool_when_relevant: puxar_aprendizados
+    learning_owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
+    caller_must_invoke_tools: true
+    instructions_are_not_automatic_tool_calls: true
 
 # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119: apresentacao humana; nao altera estrutura de maquina.
 mapa_visual_semantico_20261119:

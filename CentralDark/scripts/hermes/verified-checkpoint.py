@@ -24,6 +24,67 @@ import uuid
 SCHEMA = "centraldark.hermes.verified-execution.v1"
 VALID_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$")
 
+ATTRIBUTION_FIELDS = ("authorized_by", "mission_owner", "executor", "technical_owner",
+                      "source_commit", "pr_ref")
+
+def normalize_attribution(values=None):
+    """Declared identity never substitutes for verified proof or authorization."""
+    if values is None:
+        values = {}
+    if not isinstance(values, dict) or set(values) - set(ATTRIBUTION_FIELDS):
+        stop("ATTRIBUTION_FIELDS_INVALID")
+    normalized = {}
+    for field in ATTRIBUTION_FIELDS:
+        value = values.get(field) or "UNKNOWN"
+        if not isinstance(value, str) or len(value) > 180 or not value.strip():
+            stop("ATTRIBUTION_VALUE_INVALID_" + field)
+        value = value.strip()
+        if any(ord(c) < 32 or ord(c) == 127 for c in value):
+            stop("ATTRIBUTION_CONTROL_CHARACTER_" + field)
+        if field == "source_commit" and value != "UNKNOWN" and not re.fullmatch(r"[a-fA-F0-9]{7,40}", value):
+            stop("ATTRIBUTION_COMMIT_INVALID")
+        if field == "pr_ref" and value != "UNKNOWN" and not re.fullmatch(
+            r"(?:#[1-9][0-9]*|https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/[1-9][0-9]*)", value
+        ):
+            stop("ATTRIBUTION_PR_INVALID")
+        normalized[field] = value
+    return normalized
+
+def attribution_complete(values):
+    return all(values.get(field, "UNKNOWN") != "UNKNOWN"
+               for field in ("authorized_by", "mission_owner", "executor", "technical_owner"))
+
+def render_attribution(current, target):
+    """Generate text for a commit or PR, without writing to GitHub."""
+    identity = normalize_attribution(current.get("attribution"))
+    fields = {
+        "Mission": current["mission"],
+        "Step": current["step"],
+        "Authorized-By": identity["authorized_by"],
+        "Responsible": identity["mission_owner"],
+        "Executor": identity["executor"],
+        "Technical-Owner": identity["technical_owner"],
+        "Source-Commit": identity["source_commit"],
+        "PR": identity["pr_ref"],
+        "Receipt-SHA256": current["sha256"],
+        "Proof-Status": current.get("outcome", "UNKNOWN"),
+        "Attribution-Status": ("DECLARED_COMPLETE_NOT_AUTHENTICATED"
+                               if attribution_complete(identity) else "INCOMPLETE_UNKNOWN"),
+        "Next-Cursor": current.get("next_cursor", "UNKNOWN")
+    }
+    if target == "commit":
+        return "\n".join("CentralDark-" + key + ": " + str(value) for key, value in fields.items())
+    return "\n".join([
+        "### Identidade e prova do checkpoint", "",
+        "| Campo | Valor declarado ou observado |",
+        "| --- | --- |",
+        *("| " + k.replace("-", " ") + " | " + str(v).replace("|", "&#124;") + " |"
+          for k, v in fields.items()),
+        "",
+        "Identidades declaradas nao autenticam autoria; o SHA verifica o receipt da etapa."
+    ])
+
+
 def encode(data):
     return json.dumps(data, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
@@ -172,7 +233,7 @@ def execute(argv, cwd, timeout, stdout_path, stderr_path):
             err.write(b"Executable not found\n")
             return 127
 
-def step(folder, mission, step_id, cursor, argv, expect, verifier, intent, timeout, cwd, plan_hash="", index=None):
+def step(folder, mission, step_id, cursor, argv, expect, verifier, intent, timeout, cwd, plan_hash="", index=None, attribution=None):
     if not VALID_NAME.fullmatch(step_id):
         stop("STEP_ID_INVALID")
     if not argv or not argv[0]:
@@ -185,9 +246,13 @@ def step(folder, mission, step_id, cursor, argv, expect, verifier, intent, timeo
     if not Path(cwd).is_dir():
         stop("CWD_MISSING")
     prev, current, _, _, _ = read_chain(folder)
-    signature = sha(encode({"mission": mission, "step": step_id, "next": cursor,
-                            "argv": argv, "expect": expect or "", "verify": verifier or [],
-                            "cwd": cwd, "plan": plan_hash}))
+    identity = normalize_attribution(attribution)
+    fingerprint = {"mission": mission, "step": step_id, "next": cursor,
+                   "argv": argv, "expect": expect or "", "verify": verifier or [],
+                   "cwd": cwd, "plan": plan_hash}
+    if any(value != "UNKNOWN" for value in identity.values()):
+        fingerprint["attribution"] = identity
+    signature = sha(encode(fingerprint))
     if current and current.get("fingerprint") == signature:
         print(json.dumps({"ok": True, "status": "REUSED_VERIFIED", "step": step_id,
                           "next_cursor": current["next_cursor"], "receipt_sha256": current["sha256"]}, ensure_ascii=False))
@@ -206,6 +271,7 @@ def step(folder, mission, step_id, cursor, argv, expect, verifier, intent, timeo
     record = add_event(folder, prev, {
         "at": datetime.now(timezone.utc).isoformat(), "mission": mission, "step": step_id,
         "step_index": index, "intent": intent, "next_cursor": cursor, "fingerprint": signature,
+        "attribution": identity, "attribution_complete": attribution_complete(identity),
         "plan_sha256": plan_hash, "outcome": "VERIFIED" if passed else "FAILED",
         "command_exit": code, "expect_pass": match, "verify_exit": verify_code,
         "stdout_sha256": file_hash(stdout_path), "stderr_sha256": file_hash(stderr_path),
@@ -220,13 +286,19 @@ def step(folder, mission, step_id, cursor, argv, expect, verifier, intent, timeo
 def main():
     cli = argparse.ArgumentParser(description="CentralDark Hermes: executar -> contraprovar -> checkpoint -> retomar")
     subs = cli.add_subparsers(dest="action", required=True)
-    for name in ("run", "plan", "status", "resume", "verify"):
+    for name in ("run", "plan", "status", "resume", "verify", "render"):
         p = subs.add_parser(name)
         p.add_argument("--mission", required=True)
         if name == "run":
             p.add_argument("--step", required=True)
             p.add_argument("--next", required=True)
             p.add_argument("--intent", default="")
+            p.add_argument("--authorized-by", default="UNKNOWN")
+            p.add_argument("--responsible", default="UNKNOWN")
+            p.add_argument("--executor", default="UNKNOWN")
+            p.add_argument("--technical-owner", default="UNKNOWN")
+            p.add_argument("--source-commit", default="UNKNOWN")
+            p.add_argument("--pr-ref", default="UNKNOWN")
             p.add_argument("--expect")
             p.add_argument("--verify-command", help="comando independente, separado com shlex; sem shell implícito")
             p.add_argument("--timeout", type=int, default=180)
@@ -238,6 +310,8 @@ def main():
             p.add_argument("--cwd", default=os.getcwd())
         if name == "resume":
             p.add_argument("--format", choices=("prompt", "json"), default="prompt")
+        if name == "render":
+            p.add_argument("--format", choices=("commit", "pr"), required=True)
     args = cli.parse_args()
     if args.mission == "latest" and args.action in ("run", "plan"):
         stop("LATEST_IS_READ_ONLY_USE_NAMED_MISSION")
@@ -247,7 +321,13 @@ def main():
             argv = args.command[1:] if args.command[:1] == ["--"] else args.command
             ok = step(folder, args.mission, args.step, args.next, argv, args.expect,
                       shlex.split(args.verify_command) if args.verify_command else None,
-                      args.intent, args.timeout, args.cwd)
+                      args.intent, args.timeout, args.cwd, attribution={
+                          "authorized_by": args.authorized_by,
+                          "mission_owner": args.responsible,
+                          "executor": args.executor,
+                          "technical_owner": args.technical_owner,
+                          "source_commit": args.source_commit,
+                          "pr_ref": args.pr_ref})
             if not ok:
                 raise SystemExit(1)
         elif args.action == "plan":
@@ -276,8 +356,13 @@ def main():
                 if check is not None and (not isinstance(check, list) or not all(isinstance(x, str) for x in check)):
                     stop("PLAN_VERIFY_ARGV_INVALID")
                 cursor = item.get("next_cursor") or (steps[idx + 1]["id"] if idx + 1 < len(steps) else "COMPLETO")
+                inherited = obj.get("attribution") or {}
+                overridden = item.get("attribution") or {}
+                if not isinstance(inherited, dict) or not isinstance(overridden, dict):
+                    stop("PLAN_ATTRIBUTION_INVALID")
                 if not step(folder, args.mission, item["id"], cursor, argv, item.get("expect"),
-                            check, obj.get("intent", ""), args.timeout, args.cwd, plan_hash, idx):
+                            check, obj.get("intent", ""), args.timeout, args.cwd, plan_hash, idx,
+                            {**inherited, **overridden}):
                     raise SystemExit(1)
             print(json.dumps({"ok": True, "status": "PLAN_COMPLETE", "mission": args.mission,
                               "steps": len(steps), "plan_sha256": plan_hash}, ensure_ascii=False))
@@ -292,6 +377,8 @@ def main():
                                   "next_cursor": (current or {}).get("next_cursor"),
                                   "last_failure": (failed or {}).get("step"),
                                   "current_sha256": (current or {}).get("sha256"),
+                                  "attribution": normalize_attribution((current or {}).get("attribution")),
+                                  "attribution_complete": attribution_complete(normalize_attribution((current or {}).get("attribution"))),
                                   "storage": str(folder)}, ensure_ascii=False))
             elif args.action == "resume":
                 if not current:
@@ -304,8 +391,19 @@ def main():
                     print("ULTIMO_PASS=" + current["step"])
                     print("NEXT_CURSOR=" + current["next_cursor"])
                     print("PROVA_SHA256=" + current["sha256"])
+                    identity = normalize_attribution(current.get("attribution"))
+                    print("AUTORIZADO_POR_DECLARADO=" + identity["authorized_by"])
+                    print("RESPONSAVEL_MISSAO=" + identity["mission_owner"])
+                    print("EXECUTOR_DECLARADO=" + identity["executor"])
+                    print("OWNER_TECNICO=" + identity["technical_owner"])
+                    print("PR_REFERENCIA=" + identity["pr_ref"])
+                    print("ATRIBUICAO_VERIFICADA=NAO")
                     print("CONTINUE_A_PARTIR_DE_NEXT_CURSOR_SEM_REPETIR_PASS")
                     print("O_CHECKPOINT_E_PERSISTENTE_FORA_DO_CONTEXTO_DA_SESSAO")
+            elif args.action == "render":
+                if not current:
+                    stop("NO_VERIFIED_CHECKPOINT", 4)
+                print(render_attribution(current, args.format))
 
 if __name__ == "__main__":
     main()

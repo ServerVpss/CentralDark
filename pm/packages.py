@@ -13,7 +13,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-from pm.filesystem import long_root, native, remove_tree, retry_held
+from pm.filesystem import is_junction, long_root, native, remove_tree, retry_held
 from pm.package import (
     DebPackage,
     InstallError,
@@ -430,6 +430,14 @@ def uv_cache_dir() -> Path:
     from pm.paths import repo_root, store_root
 
     machine_cache = uv_cache_path()
+    # On Windows a cache slot may be a directory junction, including one whose
+    # destination does not exist yet (e.g. a relocated drive after a reboot).
+    # uv's Rust create_dir_all rejects the junction itself with WinError 183.
+    # Use the existing filesystem junction probe and address the real target;
+    # seeding/marker creation restores a missing target without deleting or
+    # replacing the user's link, credentials, or cache.
+    if is_junction(machine_cache):
+        machine_cache = Path(os.readlink(machine_cache))
     marker = machine_cache / ".seeded"
     # The marker names the lock whose payload was merged. An update ships a new payload cache for
     # a new lock; a bare "done" marker skipped it forever, so plugin rebuilds fetched the new pins

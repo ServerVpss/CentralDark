@@ -19,6 +19,45 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
         cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
 
+    def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
+        mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
+        self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)
+        self.assertIn('markdown_divider_between_distinct_subjects: "---"', self.grammar)
+        self.assertIn("Aprendizado cristalizado em 22/11/2026", self.response)
+        self.assertIn("mcp_professor_entry:", self.entry_boot)
+        self.assertIn("tool_calls_require_client: true", self.entry_boot)
+        self.assertIn("kit_boas_vindas", mcp)
+        self.assertIn("ler_regras_inviolaveis", mcp)
+        self.assertIn("personal_context_search", mcp)
+        self.assertIn("puxar_aprendizados", mcp)
+        self.assertIn("COMO RESPONDER — menu visual aprovado", mcp)
+
+    def test_github_entry_requires_boot_then_leia_and_yaml_readback(self):
+        import subprocess
+        import sys
+        script = self.repo / "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+        run = subprocess.run([sys.executable, str(script), "github-entry",
+                              "--repo", str(self.repo)],
+                             capture_output=True, text=True, timeout=40)
+        self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+        self.assertIn("centraldark_github_entry:", run.stdout)
+        self.assertIn("read_order: BOOT_THEN_LEIA", run.stdout)
+        self.assertIn("read_status: APROVADO", run.stdout)
+        self.assertLess(run.stdout.index('file_1: "CENTRALDARK_AI_BOOT.yaml"'),
+                        run.stdout.index('file_2: "LEIA-ME-IA.md"'))
+        self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.boot)
+        self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.entry_boot)
+        self.assertIn("github_connector_entry:", self.entry_boot)
+        self.assertIn("github_connector_cannot_be_reconfigured_by_repo_document_only: true", self.entry_boot)
+        self.assertIn("read_status", self.boot)
+        self.assertIn("never_delegate_available_readback_or_tests_to_chefe: true", self.entry_boot)
+        self.assertIn("all_material_useful_learning_requires_persistent_owner_registration: true", self.entry_boot)
+        self.assertIn('relevant_existing_triggers: ["!DELTAÚTIL", "!AURÉOLA CANÔNICA"]', self.entry_boot)
+        self.assertIn("Responsabilidade assumida pelo agente", self.boot)
+        learning = (self.repo / "docs/CONSCIENCIA/APRENDIZADOS.md").read_text(encoding="utf-8")
+        self.assertIn("Atualização útil do aprendizado 6 — 22/11/2026", learning)
+        self.assertIn("não pode ser transferida ao CHEFE", learning)
+
     # Existing CentralDark test runner is invoked by verify_repo_contract.py
     # and CI. These checks make Papagaio presentation drift a failing contract.
     @staticmethod

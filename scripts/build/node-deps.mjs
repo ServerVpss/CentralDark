@@ -254,7 +254,7 @@ function dependencyInputs({ source, workspaces, env, nativeToolchain, electron }
     inputs.update(file).update('\0').update(existsSync(join(source, file)) ? readFileSync(join(source, file)) : '<missing>').update('\0')
   }
   const nativeKey = nativeToolchain === undefined ? undefined : JSON.stringify(nativeToolchain)
-  return { lockText, projects, selected, prepareElectron, pnpm, args, key: inputs.digest('hex'), nativeKey }
+  return { lockText, projects, selected, prepareElectron, pnpm, version, args, key: inputs.digest('hex'), nativeKey }
 }
 
 /** Install the full requested workspace union in one strict, locked operation.
@@ -276,7 +276,7 @@ export function prepareNodeDependencies({ source, workspaces, env = process.env,
   let selected
   try {
     const inputs = dependencyInputs({ source, workspaces, env, nativeToolchain, electron })
-    const { lockText, projects, prepareElectron, pnpm, args, key, nativeKey } = inputs
+    const { lockText, projects, prepareElectron, pnpm, version, args, key, nativeKey } = inputs
     selected = inputs.selected
     const previous = previousTrees(source, lock.check)
     previous.recover()
@@ -293,7 +293,16 @@ export function prepareNodeDependencies({ source, workspaces, env = process.env,
     try {
       console.log(`node-deps: installing workspace dependencies with pnpm (${selected.join(', ')})...`)
       lock.check()
-      lock.run(pnpm, args, { cwd: source, env })
+      // An installed Windows shell can inherit npm_config_user_agent=npm/... .
+      // pnpm install may pass that stale identity into root lifecycle scripts,
+      // despite our strict pnpm version check above. Pin the user-agent config
+      // for the verified executable, not for arbitrary npm callers.
+      const pnpmEnv = { ...env }
+      for (const key of Object.keys(pnpmEnv)) {
+        if (/^p?npm_config_user_agent$/i.test(key)) delete pnpmEnv[key]
+      }
+      pnpmEnv.pnpm_config_user_agent = `pnpm/${version} npm/? node/${process.versions.node} ${process.platform} ${process.arch}`
+      lock.run(pnpm, args, { cwd: source, env: pnpmEnv })
       if (!installedLockMatches(lockText, installedLock, selected)) {
         throw new Error(`pnpm did not record the locked install of ${selected.join(', ')} in ${installedLock}`)
       }

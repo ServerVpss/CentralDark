@@ -64,6 +64,86 @@ class MissionProofTests(unittest.TestCase):
         self.assertEqual((state["verified"], state["events"], state["next_cursor"]), (3, 4, "FINISHED"))
         self.assertEqual(json.loads(self.run_cli("verify", "--mission", "b").stdout)["status"], "HASH_CHAIN_PASS")
 
+    def test_receipt_roles_and_rendered_commit_pr_trailers(self):
+        base = ("run", "--mission", "attr", "--step", "checked", "--next", "review", "--expect", "OK")
+        roles = ("--authorized-by", "CHEFE (declarado)", "--responsible", "SOL",
+                 "--executor", "SOL via GitHub", "--technical-owner", "scripts/hermes/verified-checkpoint.py",
+                 "--source-commit", "65bac5b53161bd2e2cf2a1813da7152fa6752e4e", "--pr-ref", "#1994")
+        good = self.run_cli(*base, *roles, "--", sys.executable, "-c", "print('OK')")
+        self.assertEqual(good.returncode, 0, good.stderr)
+        state = json.loads(self.run_cli("status", "--mission", "attr").stdout)
+        self.assertTrue(state["attribution_complete"])
+        self.assertEqual(state["attribution"]["executor"], "SOL via GitHub")
+        detail = json.loads(self.run_cli("resume", "--mission", "attr", "--format", "json").stdout)
+        self.assertEqual(detail["attribution"]["mission_owner"], "SOL")
+        self.assertIn("RESPONSAVEL_MISSAO=SOL", self.run_cli("resume", "--mission", "attr").stdout)
+        commit = self.run_cli("render", "--mission", "attr", "--format", "commit")
+        self.assertEqual(commit.returncode, 0, commit.stderr)
+        self.assertIn("CentralDark-Executor: SOL via GitHub", commit.stdout)
+        self.assertIn("CentralDark-PR: #1994", commit.stdout)
+        self.assertIn("CentralDark-Receipt-SHA256: " + detail["sha256"], commit.stdout)
+        self.assertIn("DECLARED_COMPLETE_NOT_AUTHENTICATED", commit.stdout)
+        pr = self.run_cli("render", "--mission", "attr", "--format", "pr")
+        self.assertEqual(pr.returncode, 0, pr.stderr)
+        self.assertIn("Identidade e prova do checkpoint", pr.stdout)
+        self.assertIn("SOL via GitHub", pr.stdout)
+        self.assertIn("DECLARED_COMPLETE_NOT_AUTHENTICATED", pr.stdout)
+        repeated = self.run_cli(*base, *roles, "--", sys.executable, "-c", "print('OK')")
+        self.assertEqual(repeated.returncode, 0)
+        self.assertIn("REUSED_VERIFIED", repeated.stdout)
+        self.assertEqual(json.loads(self.run_cli("status", "--mission", "attr").stdout)["events"], 1)
+
+        legacy = self.run_cli("run", "--mission", "legacy", "--step", "old",
+                              "--next", "new", "--expect", "OK",
+                              "--", sys.executable, "-c", "print('OK')")
+        self.assertEqual(legacy.returncode, 0, legacy.stderr)
+        default_state = json.loads(self.run_cli("status", "--mission", "legacy").stdout)
+        self.assertFalse(default_state["attribution_complete"])
+        self.assertEqual(default_state["attribution"]["mission_owner"], "UNKNOWN")
+        self.assertIn("CentralDark-Executor: UNKNOWN",
+                      self.run_cli("render", "--mission", "legacy", "--format", "commit").stdout)
+
+    def test_invalid_identity_and_plan_inheritance(self):
+        invalid = self.run_cli("run", "--mission", "invalid", "--step", "bad",
+                               "--next", "next", "--expect", "OK",
+                               "--responsible", "SOL\nInjected: YES",
+                               "--", sys.executable, "-c", "print('OK')")
+        self.assertEqual(invalid.returncode, 2)
+        self.assertIn("ATTRIBUTION_CONTROL_CHARACTER", invalid.stderr)
+        plan = {"schema": "centraldark.hermes.execution-plan.v1", "mission": "planattr",
+                "attribution": {"authorized_by": "CHEFE", "mission_owner": "SOL",
+                                "executor": "Hermes", "technical_owner": "owner existente"},
+                "steps": [{"id": "one", "argv": [sys.executable, "-c", "print('OK')"],
+                           "expect": "OK", "attribution": {"executor": "SOL"}}]}
+        p = self.root / "attribution-plan.json"
+        p.write_text(json.dumps(plan))
+        good = self.run_cli("plan", "--mission", "planattr", "--file", str(p))
+        self.assertEqual(good.returncode, 0, good.stdout + good.stderr)
+        state = json.loads(self.run_cli("status", "--mission", "planattr").stdout)
+        self.assertEqual(state["attribution"]["executor"], "SOL")
+        self.assertTrue(state["attribution_complete"])
+
+    def test_historical_receipt_without_attribution_preserves_hash_chain(self):
+        import hashlib
+        old = {"schema": "centraldark.hermes.verified-execution.v1",
+               "prev_sha256": "0" * 64, "outcome": "VERIFIED",
+               "mission": "historic", "step": "before-attribution",
+               "next_cursor": "continue", "at": "2026-11-20T00:00:00+00:00"}
+        digest = hashlib.sha256(json.dumps(old, ensure_ascii=False,
+                                           sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+        old["sha256"] = digest
+        folder = self.root / "state" / "historic"
+        folder.mkdir(parents=True)
+        (folder / "events.jsonl").write_text(json.dumps(old, ensure_ascii=False) + "\n")
+        verify = self.run_cli("verify", "--mission", "historic")
+        self.assertEqual(verify.returncode, 0, verify.stderr)
+        self.assertEqual(json.loads(verify.stdout)["status"], "HASH_CHAIN_PASS")
+        state = json.loads(self.run_cli("status", "--mission", "historic").stdout)
+        self.assertFalse(state["attribution_complete"])
+        self.assertEqual(state["attribution"]["executor"], "UNKNOWN")
+        self.assertIn("CentralDark-Executor: UNKNOWN",
+                      self.run_cli("render", "--mission", "historic", "--format", "commit").stdout)
+
     def test_independent_verifier_and_tamper_detection(self):
         result = self.root / "evidence"
         action = f"from pathlib import Path; Path({str(result)!r}).write_text('OK')"

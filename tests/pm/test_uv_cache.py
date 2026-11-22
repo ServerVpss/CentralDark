@@ -50,6 +50,32 @@ def test_uv_cache_dir_cold_machine_no_payload(monkeypatch, tmp_path):
     assert (machine / ".seeded").is_file()
 
 
+def test_uv_cache_dir_recovers_dangling_windows_junction_without_replacing_it(monkeypatch, tmp_path):
+    """uv receives the junction target; a missing target is recreated in place."""
+    home = tmp_path / "home"
+    slot = home / "cache" / "uv"
+    slot.parent.mkdir(parents=True)
+    target = tmp_path / "relocated" / "uv"
+
+    import hermes_constants
+    import pm.paths as paths_mod
+
+    monkeypatch.setattr(hermes_constants, "get_default_hermes_root", lambda: home)
+    monkeypatch.setattr(paths_mod, "store_root", lambda: tmp_path / "no-payload" / "tools")
+    monkeypatch.setattr(pkgs, "is_junction", lambda path: path == slot)
+    readlink = pkgs.os.readlink
+    monkeypatch.setattr(pkgs.os, "readlink", lambda path: str(target) if path == slot else readlink(path))
+
+    assert not target.exists()
+    cache = pkgs.uv_cache_dir()
+
+    assert cache == target
+    assert cache.is_dir()
+    assert (cache / ".seeded").is_file()
+    # The alias is not replaced or deleted by this operation.
+    assert not slot.exists()
+
+
 def test_bundle_uses_shipped_environment_until_an_extension_is_committed(monkeypatch, tmp_path):
     import json
     from pm import paths
