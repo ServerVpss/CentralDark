@@ -137,7 +137,11 @@ remaining_steps: E1 reconciliar PR/rebase; E2 rename+boot; E3 consumidores; E4 T
 
 blockers verificados: PR dirty e base desatualizada; ~25 referencias ao caminho antigo em boot/CI/skills; Casa nao tem pasta CentralDark/ a renomear
 rollback: snapshot HEAD+status+docker/PM2; reverter entrada raiz para CentralDark preservando ec66b7e0...; nunca reset --hard nem git clean
-tests_T01_T15: PENDENTE (nenhum executado com prova ate este checkpoint)
+tests_T01_T15: 0 PROVADO / 0 QUEBRADO / 15 EVIDENCIA FALTANTE (Greg @ 22/11/2026)
+  - causa: receita T01-T15 nao existe versionada em ServerVpss/CentralDark; nao ha como classificar isoladamente sem inventar criterio
+  - ci: 1 check (Supabase Preview) conclusion=skipped; status=pending com 0 statuses; conclusion=success ausente
+  - contraprova minima pendente: receita T01-T15 versionada; execucao com log SHA-256/hora/ator; readback no SHA rebaseado; grep zero correspondencias nas ~25 referencias antigas; git cat-file c1d19e8^{tree}=ec66b7e0 e diff --name-status so R100; Test-Path + git status na Casa apos ff
+  - regra: UNKNOWN != PASS impede promocao
 next_action: Hermes reconciliar PR 2167 sobre fe57c0cf e corrigir referencias de caminho, sem tocar na Casa
 persistence_owner: CentralDark/docs/CONSCIENCIA/09-ESTADO-ATUAL.md
 fixed_point: PENDING_UNTIL_PROVEN
