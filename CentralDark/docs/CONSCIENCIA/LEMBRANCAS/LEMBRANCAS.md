@@ -1601,3 +1601,13 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Prova concreta:** PR #2125, `main@a4440c675d2b4dfabf4b4e1c3b073d5b90b5255a`, 55/55 blobs verificados. `CI_GREEN=NO`; `SOURCE_IN_MAIN=PASS`; programa remoto ainda com entregas pendentes. https://github.com/ServerVpss/CentralDark/pull/2125#issuecomment-6959176393
 - **Ponte canônica:** `RULES.md#chave-do-chefe-workflow-travado-nao-paralisa-entrega-autorizada-17112026` + `docs/CONSCIENCIA/APRENDIZADOS.md` (aprendizado #104). Não carregar histórico inteiro para aplicar a regra.
 <!-- /CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+
+<!-- CENTRALDARK_INVARIANT_MATH_OPS_20261122_MEMORY -->
+### [2026-11-22] CHEFE ensinou execução por axiomas, eliminação, contraprova e ponto fixo
+- **Tags:** matemática operacional, Euclides, lógica trivalente, hipóteses, indução, grafos, META-LUPA, Michelin, Kaizen, Cloudflare, Hermes, prova, FIXED_POINT.
+- **Relevância:** alta; recuperar **somente quando pertinente** à execução verificável, auditoria ou aprendizado do método.
+- **Memória do ensinamento:** o CHEFE combinou `!CENTRALDARK !METALUPA` com uma missão real de prévia Cloudflare e valorizou o método porque o Hermes deixou de depender de relatórios narrativos, passou a dividir hipóteses, invariantes, provas, contraprovas e limites. SOL coordena; Hermes executa; realidade verifica; Kaizen aprende. A analogia matemática orienta verificação parcial, não prova formal total nem nova lei.
+- **Comprovante histórico:** navegador mostrou o site no endereço `centraldark-site-preview.centraldark.workers.dev`; PowerShell em 22/11/2026 21:16:10 UTC confirmou HTTPS `HTTP/1.1 200 OK` e HTML. O Worker usava assets incorporados, não binding nativo; o apex `centralldark.com` não foi validado por esta missão.
+- **Rota de reuso:** `.agents/skills/centraldark-operational-method/references/ENGENHARIA-POR-INVARIANTES-CONTRAPROVA-E-PONTO-FIXO.md` (receita integral), `docs/CONSCIENCIA/APRENDIZADOS.md` (lição), `.agents/skills/meta-lupa/references/matematica-e-calibracao.md` (métodos probabilísticos opcionais, sem números fabricados).
+- **Regra:** carregar só o trecho pertinente; `ACTION != PROOF`, `UNKNOWN != PASS`, `CURRENT > HISTORY`, `REUSE_BEFORE_CREATE`. Próxima execução mede consumo da versão canônica antes de alegar aprendizagem automática.
+<!-- /CENTRALDARK_INVARIANT_MATH_OPS_20261122_MEMORY -->
