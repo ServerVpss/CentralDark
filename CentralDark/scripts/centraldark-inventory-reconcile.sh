@@ -48,6 +48,20 @@ if [[ "$CD_REPO_DIR" != /* || "$CD_STATE_DIR" != /* ]]; then
   echo 'BLOCKED: repositorio e estado precisam de caminhos absolutos' >&2
   exit 64
 fi
+# Adaptador do Semáforo Linux no owner atual; preserva --pulse e --tree-counts.
+if [[ "${1:-}" == "--semaforo" || "${1:-}" == "--semaforo-apply" ]]; then
+  SEMAFORO="$CD_SCRIPT_DIR/installer/centraldark-semaforo-linux.sh"
+  if [[ ! -f "$SEMAFORO" ]]; then
+    echo "PENDENTE: Semáforo Linux ausente: $SEMAFORO" >&2
+    exit 2
+  fi
+  export CENTRALDARK_REPO="$CD_REPO_DIR"
+  export CENTRALDARK_INVENTORY_STATE_DIR="$CD_STATE_DIR"
+  if [[ "$1" == "--semaforo-apply" ]]; then
+    exec bash "$SEMAFORO" --apply
+  fi
+  exec bash "$SEMAFORO" --check
+fi
 if [[ "${1:-}" == "--menu" || "${1:-}" == "--kylin-menu" ]]; then
   set -u
   if [[ -t 1 ]]; then
@@ -169,7 +183,7 @@ PY
         ;;
       10)
         # CENTRALDARK_FORJA_SOURCE_GIT_GH_MENU10 — somente inventário da Forja Linux.
-        _cd_title '🍒 10 SOURCE / GIT / GH DA FORJA LINUX'
+        _cd_title '🍒 10 FONTE / GIT DA FORJA LINUX'
         # CENTRALDARK_FORJA_CONNECTED_VPS_SAME_CORE_20261101 — a conexão de 2026-11-01 é prova histórica, não o estado vivo de outros hosts.
         _cd_status '🪬 ARQUITETURA=ONE_CORE_LINUX_FORJA -> GITHUB_MAIN -> VPS_SAME_APPROVED_SHA_ONLY_ON_CHEFE_ORDER'
         _cd_status '🎯 FORJA_REMOTE_SHELL=HISTORICAL_PASS_2026-11-01T03:28:21Z; VPS_SHA_PARITY=NOT_TESTED'
@@ -330,6 +344,18 @@ except (ValueError,TypeError):
         _cd_status '⚪ MCP_DESKTOP_RUNTIME=UNKNOWN (suporte documentado nao equivale a servico provado)'
         _cd_status '🔒 READ_ONLY, SEM_SEGREDOS, SEM_NOVO_MOTOR, SEM_INSTALACAO'
         ;;
+      14)
+        _cd_title '🧿 SEMÁFORO CENTRALDARK | CONFERIR'
+        bash "$CD_SCRIPT_DIR/centraldark-inventory-reconcile.sh" --semaforo
+        printf '\nPressione ENTER para voltar ao menu... '
+        IFS= read -r _cd_enter || true
+        ;;
+      15)
+        _cd_title '🛡️ SEMÁFORO CENTRALDARK | APLICAR COM CÓPIA DE SEGURANÇA'
+        bash "$CD_SCRIPT_DIR/centraldark-inventory-reconcile.sh" --semaforo-apply
+        printf '\nPressione ENTER para voltar ao menu... '
+        IFS= read -r _cd_enter || true
+        ;;
     esac
   }
   while :; do
@@ -341,8 +367,10 @@ except (ValueError,TypeError):
     printf '║ 🤖 05 KYTENSOR 🦀 06 KYLINBOT      ║\n'
     printf '║ 💬 07 CONVERSA 📊 08 DIAGNOSTICO   ║\n'
     printf '║ 📝 09 RECIBOS  🚪 00 SAIR           ║\n'
-    printf '║ 🍒 10 SOURCE / GIT / GH DA FORJA   ║\n'
-    printf '║ 📊 11 MONITOR     🧿 12 XIAO K/KART ║\n'    printf '║ 🪬 13 MCP / MULTIMODAL / CHANNELS  ║\n'
+    printf '║ 🍒 10 FONTE / GIT DA FORJA          ║\n'
+    printf '║ 📊 11 MONITOR      🧿 12 XIAO K/KART ║\n'
+    printf '║ 🪬 13 MCP / MULTIMODAL / CANAIS    ║\n'
+    printf '║ 14 SEMÁFORO        15 RECONCILIAR   ║\n'
 
 
     printf '%s╚══════════════════════════════════════╝%s\n' "$_cd_cyan" "$_cd_reset"
@@ -350,7 +378,7 @@ except (ValueError,TypeError):
     IFS= read -r _cd_choice || exit 0
     case "$_cd_choice" in
       0|00|q|Q) exit 0 ;;
-      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12|13) _cd_section "$((10#$_cd_choice))" ;;
+      1|01|2|02|3|03|4|04|5|05|6|06|7|07|8|08|9|09|10|11|12|13|14|15) _cd_section "$((10#$_cd_choice))" ;;
       *) _cd_status 'Opcao invalida' ;;
     esac
   done
