@@ -45,11 +45,18 @@ class ClosedLoop:
         self.stopped = False
 
     def run(self, layers: List[str], max_iters: int = 20) -> Tuple[bool, Dict[str, bool], int]:
+        """
+        Executa o loop até max_iters ou nova evidência material.
+
+        NOTA: O método NÃO determina FIXED_POINT final.
+        O usuário (ou VALIDADOR independente) decide se o estado é convezo.
+        O ClosedLoop apenas executa e retorna o estado observado.
+        """
         self.iteration = 0
         self.stopped = False
         results: Dict[str, bool] = {}
 
-        while not self.stopped and self.iteration < max_iters:
+        while self.iteration < max_iters:
             self.iteration += 1
             results = {}
             for layer in layers:
@@ -61,15 +68,10 @@ class ClosedLoop:
                 new_material=new_material,
             ))
 
-            # Sanity: n+1 e n+2 sem novo fato → Fixed Point detectado
-            if len(self.history) >= 2:
-                h1, h0 = self.history[-1], self.history[-2]
-                if not h1.new_material and not h0.new_material:
-                    self.stopped = True
-                    self.history[-1].stop_reason = "no_new_material_2_consecutive"
-
-            if self.stopped:
-                break
+            # NOTA CRÍTICA: Não auto-determinar FIXED_POINT.
+            # O método executa e retorna estado. O julgamento final
+            # (FIXED_POINT) é da validação independente do usuário.
+            # Apenas o usuário com múltiplas evidências pode declarar.
 
         return self.stopped, results, self.iteration
 
