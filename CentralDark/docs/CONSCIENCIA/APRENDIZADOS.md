@@ -3656,3 +3656,28 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Aprendizado:** `RECOVERY_FIRST_DETERMINISTIC`: antes de qualquer ação ou chamada de modelo, o script ja comprovado e executado em primeira linha: `cmd_script_first_preflight()` executa `scripts/trigger-fabric/system_sentinel.py --self-test`. `ok:true, failed:[]` -> `script_first_recovery_passed`, modelo NUNCA autorizado. Falha verificada -> `script_first_recovery_failed` e `script_first_model_authorized: true`; a IA somente entra em diagnostico apos a recuperacao deterministica falhar comprovadamente.
 - **Data:** 2026-11-20 · commit `dd9d1dcc52ab` (PR #2156, 3 arquivos, +71 linhas) + `8e667ff17bee` (L240, manifesta de lineage); branch `chore/rov2154-merge-records`; TLC23 PROVED (`b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1`) como precondicao do registro.
 - **Regra de preservacao:** runtime MCP PID 244642 nao alterado (`catalogVersion 161-9629d1fb55a7`), deploy nao executado, 32 alteracoes locais preservadas, PRs #1900/#1880 permanecem abertos, backups intactos. **Integracao do merge e preservacao:** o PASS deste registro cobre a integracao do merge e preservacao (escopo declarado em `scope`). A promocao de runtime permanece missao separada, listada em `out_of_scope_for_this_receipt` — nunca dentro de `unknown`, para nao inflar nem esconder o que falta.
+### 176. Formalização matemático-operacional EICPF derivada de missão real Cloudflare Workers
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176`; `PREV_GLOBAL_UID=L175`; `NEXT_GLOBAL_UID=L177`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **Categoria:** metodo-operacional
+- **Data:** 2026-11-22
+- **Contexto:** Missão de publicar prévia estática CentralDark na conta Cloudflare oficial via Workers Static Assets, sem túnel, preservando Gateway Hermes, MCP, DNS, túneis e worker `centraldark-mcp-reserve-route`. A missão expôs gaps entre ferramentas (Wrangler não aceita Global API Key), formato de worker (ESM vs Service Worker), assets (API multipart vs embed base64), e SSL assíncrono (HTTPS pending).
+- **Aprendizado:** A formalização **Engenharia por Invariantes, Contraprova e Ponto Fixo (EICPF)** emerge da prática real:
+  1. **5 Axiomas imutáveis** (Identidade, Integridade, Preservação, Verificabilidade, Reversibilidade) com `APROVADO ⇔ A1∧A2∧A3∧A4∧A5` e `DESCONHECIDO ≠ PASS`.
+  2. **Lógica trivalente** (VERDADEIRO/FALSO/DESCONHECIDO) onde DESCONHECIDO não colapsa e vira alvo de medição.
+  3. **Eliminação de hipóteses** por testes mínimos discriminantes com `IG > C_test` (ganho informacional > custo).
+  4. **Grafo operacional** de dependências REAIS (inspecionadas, não assumidas) separando estático/dinâmico/autenticado.
+  4. **Máquina de estados** com transições validadas por contraprova (`RUNNING → VERIFIED` só com `CONTRAPROVA=PASS`).
+  5. **Contraprova independente obrigatória**: executor ≠ validador, tool_execução ≠ tool_verificação, runtime_alvo ≠ proxy.
+  6. **Menor delta** (Δ_min) com blast_radius ⊆ writer_scope e `REUSE_BEFORE_CREATE`.
+  7. **Fixed Point** via TLC23 Horn Closure: parar quando `¬novo_fato_material` por ≥2 iterações consecutivas.
+  8. **Integração Kimetsu**: seletor de respiração (ÁGUA/FERA/INSETO/CHAMAS/TROVÃO) + métodos computacionais (ToT/GoT/ReAct/AoT/SoT/PoT/CoT-SC) baseados em flags observadas.
+- **Evidência Real (Cloudflare Mission 22/11/2026):**
+  - H1-H5 testadas: 4 PASS, 1 DESCONHECIDO (HTTPS SSL provisioning externo)
+  - Worker deploy via REST API (Global Key) ✓ | Wrangler falhou (erro 10000) → lição: `TOOL_MISS ≠ CAPABILITY_MISS`
+  - Assets embed base64 no worker JS ✓ | Assets API multipart falhou → lição: `REUSE_BEFORE_CREATE`
+  - SHA256 de 3 assets conferem bit-a-bit com fonte `/data/www/centralldark` ✓
+  - HTTP funcional: `http://centraldark-site-preview.centraldark.workers.dev` ✓
+  - HTTPS: `DESCONHECIDO` (SSL automático assíncrono, fora de controle) → classificação `PARTIAL` legítima
+  - Preservação: `centraldark-mcp-reserve-route` inalterado, Gateway/MCP/DNS/Tunnels intactos ✓
+- **Registro de Avaliação:** Branch `hermes/eicpf-formalizacao-20261122`, commit SHA pendente, documento `.agents/skills/centraldark-operational-method/references/ENGENHARIA-POR-INVARIANTES-CONTRAPROVA-E-PONTO-FIXO-HERMES.md`.
+- **Próximo Cursor:** Comparação A/B com versão SOL (quando existir) usando 7 critérios ponderados (100 pts); integrar superior na versão canônica.

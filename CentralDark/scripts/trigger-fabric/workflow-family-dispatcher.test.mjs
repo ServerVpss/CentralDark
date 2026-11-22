@@ -11,15 +11,33 @@ import {
   verifyWorkflowFamilyContract,
 } from "./workflow-family-dispatcher.mjs";
 
-test("71 workflows pertencem exatamente a 7 familias", () => {
+test("73 workflows pertencem exatamente a 7 familias", () => {
   const registry = loadRegistry();
   const registered = registeredWorkflowSet(registry);
   assert.equal(Object.keys(registry.families).length, 7);
-  assert.equal(registered.size, 71);
+  assert.equal(registered.size, 73);
 });
 
-test("somente Trigger Fabric possui relogio schedule", () => {
-  assert.deepEqual(scheduleOwners(), [CLOCK_OWNER]);
+test("cron automatico permanece pausado por ordem do CHEFE, com owner unico e dispatch manual", () => {
+  const report = verifyWorkflowFamilyContract();
+  assert.deepEqual(scheduleOwners(), []);
+  assert.equal(report.ok, true, report.errors.join("\n"));
+  assert.equal(report.clock_owner, CLOCK_OWNER);
+  assert.equal(report.clock_mode, "MANUAL_PAUSED_BY_CHEFE");
+  assert.equal(report.clock_scheduler_active, false);
+});
+
+test("clock sem owner correto ou pausa nao comprovada continua reprovado", () => {
+  const registry = loadRegistry();
+  for (const invalid of [
+    { ...registry, clock_mode: "ACTIVE" },
+    { ...registry, clock_owner: ".github/workflows/inexistente.yml" },
+    { ...registry, clock_mode: "UNKNOWN" },
+  ]) {
+    const report = verifyWorkflowFamilyContract(undefined, invalid);
+    assert.equal(report.ok, false);
+    assert.ok(report.errors.some((error) => error.startsWith("CLOCK_OWNER_VIOLATION")));
+  }
 });
 
 test("19 capabilities declaram ARM_ROUTER sem criar segundo relogio", () => {

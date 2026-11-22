@@ -69,7 +69,18 @@ export function verifyWorkflowFamilyContract(root = ROOT, registry = loadRegistr
   if (live.length !== declared.length) errors.push("WORKFLOW_DENOMINATOR:live=" + live.length + ":declared=" + declared.length);
 
   const schedulers = scheduleOwners(root);
-  if (schedulers.length !== 1 || schedulers[0] !== CLOCK_OWNER) {
+  const clockSourcePath = resolve(root, CLOCK_OWNER);
+  const clockSource = existsSync(clockSourcePath) ? readFileSync(clockSourcePath, "utf8") : "";
+  const clockIsRegistered = registry.clock_owner === CLOCK_OWNER && registered.has(CLOCK_OWNER);
+  const clockActive = registry.clock_mode === "ACTIVE" && clockIsRegistered
+    && schedulers.length === 1 && schedulers[0] === CLOCK_OWNER;
+  // CHEFE paused automatic heavy CI on 2026-10-23; preserve manual dispatch.
+  // A paused clock is a declared owner, never an active cron or a runtime PASS.
+  const clockManuallyPaused = registry.clock_mode === "MANUAL_PAUSED_BY_CHEFE"
+    && clockIsRegistered && schedulers.length === 0
+    && clockSource.includes("CI pesado sob demanda: pausado automatico por ordem do CHEFE (2026-10-23).")
+    && /^  workflow_dispatch:\s*$/m.test(clockSource);
+  if (!clockActive && !clockManuallyPaused) {
     errors.push("CLOCK_OWNER_VIOLATION:" + (schedulers.join(",") || "none"));
   }
 
@@ -122,7 +133,9 @@ export function verifyWorkflowFamilyContract(root = ROOT, registry = loadRegistr
     errors,
     workflow_count: live.length,
     family_count: families.length,
-    clock_owner: schedulers.length === 1 ? schedulers[0] : null,
+    clock_owner: clockActive || clockManuallyPaused ? CLOCK_OWNER : null,
+    clock_mode: clockManuallyPaused ? "MANUAL_PAUSED_BY_CHEFE" : clockActive ? "ACTIVE" : "UNVERIFIED",
+    clock_scheduler_active: clockActive,
     schedule_bindings: (registry.schedule_bindings || []).length,
     capability_count: capabilities.size,
     arm_catalog: Object.keys(catalog),

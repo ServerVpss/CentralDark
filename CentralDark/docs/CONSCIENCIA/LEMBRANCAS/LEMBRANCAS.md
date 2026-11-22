@@ -1601,3 +1601,31 @@ Conteúdo: Receita canônica: inspecionar a interface já aberta pelo Browser e 
 - **Prova concreta:** PR #2125, `main@a4440c675d2b4dfabf4b4e1c3b073d5b90b5255a`, 55/55 blobs verificados. `CI_GREEN=NO`; `SOURCE_IN_MAIN=PASS`; programa remoto ainda com entregas pendentes. https://github.com/ServerVpss/CentralDark/pull/2125#issuecomment-6959176393
 - **Ponte canônica:** `RULES.md#chave-do-chefe-workflow-travado-nao-paralisa-entrega-autorizada-17112026` + `docs/CONSCIENCIA/APRENDIZADOS.md` (aprendizado #104). Não carregar histórico inteiro para aplicar a regra.
 <!-- /CENTRALDARK_WORKFLOW_STARTUP_FAILURE_CHEFE_KEY_20261117 -->
+
+<!-- CENTRALDARK_EICPF_FORMALIZACAO_CLOUDFLARE_20261122 -->
+### [2026-11-22] EICPF — Engenharia por Invariantes, Contraprova e Ponto Fixo (Versão Hermes)
+- **Tags:** metodo-operacional, invariantes, contraprova, ponto-fixo, kimetsu, cloudflare, workers, hermes, avaliacao-ab
+- **Relevância:** alta
+- **Promovida:** em avaliação (branch hermes/eicpf-formalizacao-20261122)
+- **Memória:** Formalização matemático-operacional derivada da missão real de publicação da prévia CentralDark na Cloudflare (22/11/2026). A missão expôs: Wrangler CLI não aceita Global API Key (erro 10000), worker ESM format não suportado (requer Service Worker `addEventListener`), assets multipart API complexa (fallback embed base64 funcionou), SSL workers.dev assíncrono (HTTPS pending, HTTP ok).
+- **Formalização EICPF (5 Axiomas + Lógica Trivalente + Eliminação Hipóteses + Grafo Operacional + Máquina Estados + Contraprova Independente + Menor Delta + Fixed Point):**
+  - **Axiomas:** A1 Identidade, A2 Integridade (SHA256), A3 Preservação (R0⊆R1∪Autorizada), A4 Verificabilidade (prova independente), A5 Reversibilidade. `APROVADO ⇔ A1∧A2∧A3∧A4∧A5`.
+  - **Lógica Trivalente:** {VERDADEIRO, FALSO, DESCONHECIDO} — DESCONHECIDO não colapsa, vira alvo de medição.
+  - **Eliminação Hipóteses:** Teste mínimo discriminante, `IG > C_test`, não repetir com recibo válido.
+  - **Grafo Operacional:** Dependências REAIS inspecionadas (estático/dinâmico/autenticado), zero `/api/*` no carregamento inicial.
+  - **Máquina Estados:** PENDING→DESIGN_GATE→DELEGATED→RUNNING→VERIFIED→COMPLETE/PARTIAL; `RUNNING→VERIFIED` só com `CONTRAPROVA=PASS`.
+  - **Contraprova Independente:** Executor≠Validador, tool_exec≠tool_verif, runtime_alvo≠proxy, teste negativo ativo.
+  - **Menor Delta:** Δ_min com blast_radius⊆writer_scope, REUSE_BEFORE_CREATE.
+  - **Fixed Point:** TLC23 Horn Closure — parar quando `¬novo_fato_material` por ≥2 iterações.
+  - **Kimetsu Integration:** Seletor de respiração + métodos computacionais (ToT/GoT/ReAct/AoT/SoT/PoT/CoT-SC) baseados em flags observadas.
+- **Resultado Real (Cloudflare 22/11/2026):**
+  - 4/5 hipóteses PASS, 1 DESCONHECIDO (HTTPS SSL externo) → classificação PARTIAL
+  - Worker deploy REST API ✓ | Wrangler falhou → `TOOL_MISS ≠ CAPABILITY_MISS`
+  - Assets embed base64 ✓ | Assets API falhou → `REUSE_BEFORE_CREATE`
+  - SHA256 3 assets conferem com fonte ✓
+  - HTTP funcional ✓ | HTTPS DESCONHECIDO (fator externo)
+  - Preservação total: Gateway/MCP/DNS/Tunnels/worker-reserva intactos ✓
+- **Documento:** `.agents/skills/centraldark-operational-method/references/ENGENHARIA-POR-INVARIANTES-CONTRAPROVA-E-PONTO-FIXO-HERMES.md`
+- **Branch:** `hermes/eicpf-formalizacao-20261122` (para comparação A/B com versão SOL)
+- **Próximo Cursor:** Comparação A/B 7 critérios (100 pts); integrar superior na versão canônica.
+<!-- /CENTRALDARK_EICPF_FORMALIZACAO_CLOUDFLARE_20261122 -->

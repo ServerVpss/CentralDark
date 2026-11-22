@@ -100,59 +100,21 @@ Decisões seladas mantidas: Sentry descartado; grafo oficial = grafo.centralldar
 - [[PROTOCOLO-INICIALIZACAO]] — boot sequence de sessão IA
 - `docs/PENDENCIAS.md` — **única** lista de pendências
 
----
+## CENTRALDARK_BIDIRECTIONAL_ALIGNMENT
 
-<!-- CENTRALDARK_ROV_CHECKPOINT_20261122T1013Z -->
-## Checkpoint de coordenacao persistente - ROV CentralDark-Core (22/11/2026 as 10:13 UTC)
-
-mission: CENTRALDARK-CORE-RENAME-ROV
-authority: SEGREDO_CHEFE
-coordinator: SOL
-executor: HERMES
-status: PENDENTE_DE_RECONCILIACAO_E_TESTES
-
-source: ServerVpss/CentralDark@main
-pr: 2167 (https://github.com/ServerVpss/CentralDark/pull/2167)
-main_sha: 26a53a19e0c75e89f6a01ec9144822c4aaafbbd7
-pr_head_sha: c1d19e8f8f590a17670df37ca3a2bf12258f3e89
-pr_base_sha: 6ca7f4031f67f1ac62ee7d4f3ecd655ff3f90be4
-pr_state: draft, open, mergeable_state=dirty, 17552 changed_files
-desired_name: CentralDark-Core
-core_tree_sha: ec66b7e0d5a0044fd79f40b2e499e05a95867f7b (identico antes/depois; 30 entradas status=renamed, nenhum blob editado)
-
-casa_root: F:/CentralDark (git rev-parse --show-toplevel comprovado)
-casa_head_sha: 8ebfa8fedabbd61ea151b3dbb749dd969233248c
-casa_worktree: 278 entradas dirty, preservadas
-casa_test_path: F:/CentralDark/CentralDark = False; F:/CentralDark/CentralDark-Core = False
-writer_scope: um unico Writer; Hermes executa; SOL coordena
-
-especialistas (papéis, nao autoridades independentes):
-- Ian: guardrails/estrutura - BLOQUEIO registrado; exige caminho exato e reconciliaçao do PR
-- Dex: promoçao/deploy - HOLD; rollback preparado; sem force-push nem reset destrutivo
-- Geoff: loop - E0..E7 (rename no GitHub, Casa apenas fast-forward)
-- Greg: auditoria T01-T15 - REATIVADO em 22/11/2026 as 11:35 UTC apos interrupcao indevida; classificacao em andamento
-
-completed_steps: E0 (SHAs, owners, PR, Casa medidos); leitura real dos owners canonicos em CentralDark/
-remaining_steps: E1 reconciliar PR/rebase; E2 rename+boot; E3 consumidores; E4 T01-T15; E5 promover; E6 Casa ff; E7 ponto fixo
-
-blockers verificados: PR dirty e base desatualizada; ~25 referencias ao caminho antigo em boot/CI/skills; Casa nao tem pasta CentralDark/ a renomear
-rollback: snapshot HEAD+status+docker/PM2; reverter entrada raiz para CentralDark preservando ec66b7e0...; nunca reset --hard nem git clean
-tests_T01_T15 (Hermes @ 22/11/2026, verificado no GitHub pela SOL): 10 APROVADO / 3 FALHOU / 2 PENDENTE
-  - aprovados: T01,T02,T03,T04,T05,T06,T09,T10,T11,T15
-  - falhas: T07 (override invalido aceito - pre-existente), T12 (CI startup_failure tambem na main), T13 (ff da Casa bloqueado por ~75 sujos)
-  - pendentes: T08 (Halo runtime), T14 (runtime MCP/Bridge)
-  - PR 2167: MERGEABLE/CLEAN, head aa3a3035404eb679b66eb07c0cf1b1b590eb55ba, base a5ae8f68697706018de47ddb1658d17f0095568a, merge NAO realizado
-  - arvore do Core ec66b7e0 preservada no rename; 17552 R + 1 M (.gitmodules), 0 A/0 D; 13 linhas de caminho em 7 arquivos
-  - Casa inalterada: HEAD 8ebfa8f, 278 sujos manifesto hash diff=0; ff-only recusado
-  - comprovante:共享/Transfers/ea468366.../comprovante-centraldark-core-rename-rov.yaml
-  - regra: UNKNOWN != PASS impede ponto fixo
-  - causa: receita T01-T15 nao existe versionada em ServerVpss/CentralDark; nao ha como classificar isoladamente sem inventar criterio
-  - ci: 1 check (Supabase Preview) conclusion=skipped; status=pending com 0 statuses; conclusion=success ausente
-  - contraprova minima pendente: receita T01-T15 versionada; execucao com log SHA-256/hora/ator; readback no SHA rebaseado; grep zero correspondencias nas ~25 referencias antigas; git cat-file c1d19e8^{tree}=ec66b7e0 e diff --name-status so R100; Test-Path + git status na Casa apos ff
-  - regra: UNKNOWN != PASS impede promocao
-next_action: Hermes reconciliar PR 2167 sobre fe57c0cf e corrigir referencias de caminho, sem tocar na Casa
-persistence_owner: CentralDark/docs/CONSCIENCIA/09-ESTADO-ATUAL.md
-fixed_point: NAO_DECLARADO (10/15 APROVADO, 3 FALHOU, 2 PENDENTE)
-
-regra aplicada: SUMARIO COMPARTILHADO - uma CentralDark, uma coordenacao, um executor. CHEFE autoriza; SOL coordena; Hermes executa; realidade verifica; Kaizen aprende.
-<!-- /CENTRALDARK_ROV_CHECKPOINT_20261122T1013Z -->
+- coordinator: SOL_JARVIS
+- specialists: EXISTING_TEAM
+- executor: HERMES
+- single_writer: true
+- canonical_repo: ServerVpss/CentralDark
+- main_sha: 610b31429e3983d7fb79245e0be89c8c4b64b632
+- pr_2167: head aa3a3035404eb679b66eb07c0cf1b1b590eb55ba; base a5ae8f68697706018de47ddb1658d17f0095568a; state DRAFT; nao mergeado
+- casa_head: 8ebfa8f dirty=278 (registro SOL) | readback local: a0a3b3c0884790de01bf4913998f8aea4551f286, dirty 6
+- vps_head: BLOCKED_SSH_PUBLICKEY (segred-vpss publickey denied; sem mudar identidade ou config ssh)
+- pendencias:
+  1. runtime guard reload -> VERIFY: gateway HTTP 200 ok version 1.6.0; guard carregada e saindo; sem reinicio de servicos
+  2. persistir variavel no hPanel -> PENDENTE: nao ha acesso ao painel (credencial da admin requisitada)
+  3. validar rename CentralDark/ -> CentralDark-Core/ -> VERIFY: PR#2167 head aa3a3035, base a5ae8f68, 17552 renames R100 com conteudo preservado; PR DRAFT nao mergeado
+  4. resolver SKILL_SYNC=BLOCKED_OWNER_MISSING -> VERIFY: owner canonico .agents/skills/skill-synchronization/SKILL.md; executor CentralDark/scripts/skill-sync-check.sh presente e executavel; state.tsv sem linhas BLOCKED; commit auto-sync 832b6f541b96720c02d71966feb47affaf730025 (blob ad4ef6d977dea3098382aca158b2b9a77f767780) na branch fix/mcp-oauth-jsonrpc-id-echo-sync; readback linha 191: [[ -f "$SKILL_SYNC_CHECKER" ]]
+  5. recarregamento do processo -> NOT_PERFORMED: proibido reiniciar servicos nessa missao; runtime ja carregado e health ok
+- next_action: devolver ao CHEFE/SOL o recibo; manter 278 dirty da Casa e estado do VPS; aguardar decisao sobre PR 2167 (DRAFT) e hPanel

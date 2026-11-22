@@ -3,6 +3,7 @@
   "status": "CANONICO_BINDING_SUBORDINADO",
   "owner": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml",
   "clock_owner": ".github/workflows/trigger-fabric-package.yml",
+  "clock_mode": "MANUAL_PAUSED_BY_CHEFE",
   "dispatcher": "scripts/trigger-fabric/workflow-family-dispatcher.mjs",
   "authority_owner": "scripts/lupa/authority-approval.mjs",
   "promotion_owner": ".github/workflows/autonomia-promocao.yml",
@@ -10,7 +11,7 @@
     "ONE_CLOCK": true,
     "ONE_DISPATCHER": true,
     "FAMILY_COUNT": 7,
-    "WORKFLOW_COUNT_BASELINE": 71,
+    "WORKFLOW_COUNT_BASELINE": 73,
     "SCHEDULE_OUTSIDE_CLOCK": "FORBIDDEN",
     "UNREGISTERED_WORKFLOW": "FAIL",
     "CAPABILITY_LOSS_ALLOWED": false,
@@ -45,10 +46,11 @@
       ]
     },
     "PR_GITHUB": {
-      "count": 11,
+      "count": 12,
       "workflows": [
         ".github/workflows/autonomia-promocao.yml",
         ".github/workflows/bots-labels-seed.yml",
+        ".github/workflows/centraldark-pr-dos-red.yml",
         ".github/workflows/dependabot-auto-merge.yml",
         ".github/workflows/dispatcher-bots.yml",
         ".github/workflows/farm-co-author.yml",
@@ -73,9 +75,10 @@
       ]
     },
     "CASA_DESKTOP": {
-      "count": 6,
+      "count": 7,
       "workflows": [
         ".github/workflows/centraldark-desktop-windows-installer.yml",
+        ".github/workflows/centraldark-vscode-release.yml",
         ".github/workflows/installer-deterministic.yml",
         ".github/workflows/inventario-casa.yml",
         ".github/workflows/remote-desktop-multi-account-hosted-deploy.yml",
@@ -519,5 +522,4 @@
       "capability": "SENTINELA_DIVERGENCIAS"
     }
   }
-
 }
