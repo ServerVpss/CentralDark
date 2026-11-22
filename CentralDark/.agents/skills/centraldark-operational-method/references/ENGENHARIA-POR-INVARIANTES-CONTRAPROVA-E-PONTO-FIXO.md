@@ -198,5 +198,5 @@ METODO_OPERACIONAL:
 
 **Portas de controle para próxima missão:** validar o fingerprint, recuperar último PASS, ler esta referência somente se pertinente; executar teste discriminante novo em vez de refazer toda auditoria. O registro em `main` **não** demonstra que Hermes ou qualquer outra superfície já consumiu esta nova versão.
 
-**Referências relacionadas:** `../SKILL.md`; `fixed-point-terminal-receipt-contraprova.md`; `AUTO-MELHORIA-COM-PROVA.md`; `../../meta-lupa/references/matematica-e-calibracao.md`; `../../../docs/CONSCIENCIA/APRENDIZADOS.md`; `../../../docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`.
+**Referências relacionadas:** `../SKILL.md`; `fixed-point-terminal-receipt-contraprova.md`; `AUTO-MELHORIA-COM-PROVA.md`; `../../meta-lupa/references/matematica-e-calibracao.md`; `../../../../docs/CONSCIENCIA/APRENDIZADOS.md`; `../../../../docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md`.
 <!-- /CENTRALDARK_INVARIANT_MATH_OPS_20261122 -->
