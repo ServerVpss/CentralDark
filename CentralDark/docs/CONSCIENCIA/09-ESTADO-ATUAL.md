@@ -113,7 +113,7 @@ status: PENDENTE_DE_RECONCILIACAO_E_TESTES
 
 source: ServerVpss/CentralDark@main
 pr: 2167 (https://github.com/ServerVpss/CentralDark/pull/2167)
-main_sha: fe57c0cf6f4f7020d1e7566bc3082bbca69ce5f6
+main_sha: 26a53a19e0c75e89f6a01ec9144822c4aaafbbd7
 pr_head_sha: c1d19e8f8f590a17670df37ca3a2bf12258f3e89
 pr_base_sha: 6ca7f4031f67f1ac62ee7d4f3ecd655ff3f90be4
 pr_state: draft, open, mergeable_state=dirty, 17552 changed_files
@@ -130,7 +130,7 @@ especialistas (papéis, nao autoridades independentes):
 - Ian: guardrails/estrutura - BLOQUEIO registrado; exige caminho exato e reconciliaçao do PR
 - Dex: promoçao/deploy - HOLD; rollback preparado; sem force-push nem reset destrutivo
 - Geoff: loop - E0..E7 (rename no GitHub, Casa apenas fast-forward)
-- Greg: auditoria T01-T15 - classificaçao pendente
+- Greg: auditoria T01-T15 - REATIVADO em 22/11/2026 as 11:35 UTC apos interrupcao indevida; classificacao em andamento
 
 completed_steps: E0 (SHAs, owners, PR, Casa medidos); leitura real dos owners canonicos em CentralDark/
 remaining_steps: E1 reconciliar PR/rebase; E2 rename+boot; E3 consumidores; E4 T01-T15; E5 promover; E6 Casa ff; E7 ponto fixo
