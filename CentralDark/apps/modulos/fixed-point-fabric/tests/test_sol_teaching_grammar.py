@@ -50,6 +50,13 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("github_connector_entry:", self.entry_boot)
         self.assertIn("github_connector_cannot_be_reconfigured_by_repo_document_only: true", self.entry_boot)
         self.assertIn("read_status", self.boot)
+        self.assertIn("never_delegate_available_readback_or_tests_to_chefe: true", self.entry_boot)
+        self.assertIn("all_material_useful_learning_requires_persistent_owner_registration: true", self.entry_boot)
+        self.assertIn('relevant_existing_triggers: ["!DELTAÚTIL", "!AURÉOLA CANÔNICA"]', self.entry_boot)
+        self.assertIn("Responsabilidade assumida pelo agente", self.boot)
+        learning = (self.repo / "docs/CONSCIENCIA/APRENDIZADOS.md").read_text(encoding="utf-8")
+        self.assertIn("Atualização útil do aprendizado 6 — 22/11/2026", learning)
+        self.assertIn("não pode ser transferida ao CHEFE", learning)
 
     # Existing CentralDark test runner is invoked by verify_repo_contract.py
     # and CI. These checks make Papagaio presentation drift a failing contract.
