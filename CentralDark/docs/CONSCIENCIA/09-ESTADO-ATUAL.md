@@ -99,3 +99,22 @@ Decisões seladas mantidas: Sentry descartado; grafo oficial = grafo.centralldar
 - [[CONSCIENCIA]] — documento mestre
 - [[PROTOCOLO-INICIALIZACAO]] — boot sequence de sessão IA
 - `docs/PENDENCIAS.md` — **única** lista de pendências
+
+## CENTRALDARK_BIDIRECTIONAL_ALIGNMENT
+
+- coordinator: SOL_JARVIS
+- specialists: EXISTING_TEAM
+- executor: HERMES
+- single_writer: true
+- canonical_repo: ServerVpss/CentralDark
+- main_sha: 610b31429e3983d7fb79245e0be89c8c4b64b632
+- pr_2167: head aa3a3035404eb679b66eb07c0cf1b1b590eb55ba; base a5ae8f68697706018de47ddb1658d17f0095568a; state DRAFT; nao mergeado
+- casa_head: 8ebfa8f dirty=278 (registro SOL) | readback local: a0a3b3c0884790de01bf4913998f8aea4551f286, dirty 6
+- vps_head: BLOCKED_SSH_PUBLICKEY (segred-vpss publickey denied; sem mudar identidade ou config ssh)
+- pendencias:
+  1. runtime guard reload -> VERIFY: gateway HTTP 200 ok version 1.6.0; guard carregada e saindo; sem reinicio de servicos
+  2. persistir variavel no hPanel -> PENDENTE: nao ha acesso ao painel (credencial da admin requisitada)
+  3. validar rename CentralDark/ -> CentralDark-Core/ -> VERIFY: PR#2167 head aa3a3035, base a5ae8f68, 17552 renames R100 com conteudo preservado; PR DRAFT nao mergeado
+  4. resolver SKILL_SYNC=BLOCKED_OWNER_MISSING -> VERIFY: owner canonico .agents/skills/skill-synchronization/SKILL.md; executor CentralDark/scripts/skill-sync-check.sh presente e executavel; state.tsv sem linhas BLOCKED
+  5. recarregamento do processo -> NOT_PERFORMED: proibido reiniciar servicos nessa missao; runtime ja carregado e health ok
+- next_action: devolver ao CHEFE/SOL o recibo; manter 278 dirty da Casa e estado do VPS; aguardar decisao sobre PR 2167 (DRAFT) e hPanel
