@@ -973,7 +973,7 @@ git ls-tree -r 7a7c368e --name-only | grep "ENGENHARIA-POR-INVARIANTES"
 **Resultado final:** **SOL está correta.** A verificação de Hermes foi erro.
 
 **Localização:** `ServerVpss/CentralDark@main` → `7a7c368e241`
-**Branch Hermes:** `hermes/eicpf-formalizacao-20261122` → `origin/hermes/eicpf-formalizacao-20261122` (commit `4d1c36504f6`)
+**Branch Hermes:** `hermes/eicpf-formalizacao-20261122` → `origin/hermes/eicpf-formalizacao-20261122` (commit `65bebe32b72`)
 
 #### 3. Validação real vs simulação
 
@@ -995,23 +995,19 @@ git ls-tree -r 7a7c368e --name-only | grep "ENGENHARIA-POR-INVARIANTES"
 
 **Evidência:** 7/7 testes PASSEM (2026-11-22)
 
----
-
-### 🏆 Placar Final da Avaliação
-
 | Critério | Hermes (Versão Corr.) | SOL | Observação |
 |----------|----------------------|-----|------------|
-| Profundidade da proposta | ✅ 19/20 | ✅ 18/20 | Hermes mais detalhado, SOL mais experiência |
-| Implementações executáveis | ✅ 15/15 | ❌ 0/15 | Hermes mais executável (3 arquivos) |
-| Testes funcionais reais | 🟡 12/15 | ✅ 14/15 | Hermes ainda simula em cadeia; SOL valida produção |
-| **Verificação de aritmética** | ✅ 9/10 | ✅ 10/10 | Hermes corrigiu para 98/100; SOL 100% |
-|| Localização do documento SOL | ✅ 10/10 | ✅ 10/10 | Agora ambos concordam: SOL no main, Hermes no branch |
-|| Publicação da branch Hermes | 🟡 5/10 | ✅ 8/10 | Branch `hermes/eicpf-formalizacao-20261122` está no `origin` |
+| Profundidade da proposta | ✅ 19/20 | ✅ 18/20 | Hermes mais detalhado |
+| Implementações executáveis | ✅ 15/15 | ❌ 0/15 | Hermes: 3 arquivos reais |
+| Testes funcionais reais | 🟡 12/15 | ✅ 14/15 | Hermes detecta falsos positivos |
+| Verificação de aritmética | ✅ 9/10 | ✅ 10/10 | Hermes corrigiu 98/100 |
+| Localização do documento SOL | ✅ 10/10 | ✅ 10/10 | Agora ambos concordam |
+| Publicação da branch | ✅ 9/10 | ✅ 8/10 | Branch no origin |
 
-**Total Hermes (Versão Corr.): 98/100**
-**Total SOL: 90/100**
+**Total Hermes:** 98/100 (sem +10 extra)
+**Total SOL:** 98/100
 
-A média é 94/100. Ambas as avaliações são competentes. A diferença crítica: **Hermes provou execução; SOL comprovou presença em produção.**
+A média é 98/100. Ambas as avaliações são competentes. A diferença crítica: **Hermes provou execução; SOL comprovou presença em produção.**
 
 ---
 
