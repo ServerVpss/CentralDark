@@ -112,7 +112,7 @@ app.use(express.json({
     limit: "2mb",
     verify: (req, _res, buf) => {
         const url = String(req.originalUrl || req.url || "");
-        if (url.startsWith("/integrations/buildkite/webhook") || url === "/webhook") {
+        if (url.startsWith("/integrations/buildkite/webhook") || url === "/webhook" || url === "/integrations/hermes/events") {
             req.rawBody = Buffer.from(buf);
         }
     },
@@ -137,6 +137,96 @@ app.post("/integrations/buildkite/webhook", (req, res) => {
         });
     }
 });
+// Hermes outbound webhook receiver: validates HMAC-SHA256, replay protection, forwards to SOL
+async function handleHermesEvents(req, res) {
+    const rawBody = Buffer.isBuffer(req.rawBody) ? req.rawBody : null;
+    if (!rawBody)
+        return res.status(400).json({ ok: false, error: "RAW_BODY_REQUIRED" });
+    const hmacHeader = req.get("x-hermes-signature-256");
+    const configuredSecret = String(process.env.HERMES_WEBHOOK_SECRET || "").trim();
+    if (!configuredSecret || typeof hmacHeader !== "string" || !hmacHeader.startsWith("sha256=")) {
+        log.warn("hermes_events_rejected", { reason: "INVALID_SIGNATURE_HEADER", cid: req.cid });
+        return res.status(401).json({ ok: false, error: "INVALID_SIGNATURE" });
+    }
+    const expected = `sha256=${crypto.createHmac("sha256", configuredSecret).update(rawBody).digest("hex")}`;
+    const actualBuf = Buffer.from(hmacHeader);
+    const expectedBuf = Buffer.from(expected);
+    if (actualBuf.length !== expectedBuf.length || !crypto.timingSafeEqual(actualBuf, expectedBuf)) {
+        log.warn("hermes_events_rejected", { reason: "SIGNATURE_MISMATCH", cid: req.cid });
+        return res.status(401).json({ ok: false, error: "INVALID_SIGNATURE" });
+    }
+    let payload;
+    try {
+        payload = JSON.parse(rawBody.toString("utf8"));
+    }
+    catch {
+        return res.status(400).json({ ok: false, error: "INVALID_JSON" });
+    }
+    // Replay protection: delivery_id + timestamp inside signed body
+    const deliveryId = String(payload.delivery_id || "").trim();
+    const timestampStr = String(payload.timestamp || "").trim();
+    if (!deliveryId) {
+        log.warn("hermes_events_rejected", { reason: "MISSING_DELIVERY_ID", cid: req.cid });
+        return res.status(400).json({ ok: false, error: "MISSING_DELIVERY_ID" });
+    }
+    const ts = Date.parse(timestampStr);
+    if (!Number.isFinite(ts)) {
+        log.warn("hermes_events_rejected", { reason: "INVALID_TIMESTAMP", cid: req.cid });
+        return res.status(400).json({ ok: false, error: "INVALID_TIMESTAMP" });
+    }
+    const now = Date.now();
+    const maxAgeMs = 5 * 60 * 1000; // 5 minutes
+    if (now - ts > maxAgeMs || ts - now > 60 * 1000) {
+        log.warn("hermes_events_rejected", { reason: "TIMESTAMP_OUT_OF_WINDOW", ageMs: now - ts, cid: req.cid });
+        return res.status(400).json({ ok: false, error: "TIMESTAMP_OUT_OF_WINDOW" });
+    }
+    // Simple in-memory replay cache (bounded)
+    if (!global.__hermesReplayCache)
+        global.__hermesReplayCache = new Set();
+    const cache = global.__hermesReplayCache;
+    if (cache.size > 10000) {
+        const first = cache.values().next().value;
+        cache.delete(first);
+    }
+    if (cache.has(deliveryId)) {
+        log.warn("hermes_events_rejected", { reason: "REPLAY_DETECTED", deliveryId, cid: req.cid });
+        return res.status(409).json({ ok: false, error: "REPLAY_DETECTED" });
+    }
+    cache.add(deliveryId);
+    // Extract event info for logging
+    const eventName = String(payload.hook_event_name || "unknown");
+    const profile = String(payload.profile || "unknown");
+    const correlationId = String(payload.correlation_id || "");
+    // Forward to SOL via admin log (visible in dashboard) and log-funnel
+    pushAdminLog("info", "hermes_events_received", {
+        cid: req.cid,
+        event: eventName,
+        profile,
+        delivery_id: deliveryId,
+        correlation_id: correlationId,
+    });
+    // Also append to central log-funnel for persistence
+    try {
+        const mod = await import("./log-funnel.js");
+        mod.appendCentralEvent({
+            sector: "hermes",
+            service: "outbound-webhook",
+            source: "mcp:integrations/hermes/events",
+            kind: "hermes_event",
+            level: "info",
+            key: deliveryId,
+            correlation_id: correlationId,
+            message: `Hermes event: ${eventName}`,
+            data: { event: eventName, profile, delivery_id: deliveryId },
+            sha: null,
+        });
+    }
+    catch {
+        // log-funnel optional; don't fail the webhook
+    }
+    return res.status(200).json({ ok: true, received: true, event: eventName });
+}
+app.post("/integrations/hermes/events", handleHermesEvents);
 // GitHub deploy.centralldark.com -> this API. The handler validates the raw
 // HMAC body, then delegates mutation to the canonical VPS sync owner.
 app.get("/deploy/health", githubDeployHealth);
