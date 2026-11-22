@@ -115,6 +115,6 @@ Decisões seladas mantidas: Sentry descartado; grafo oficial = grafo.centralldar
   1. runtime guard reload -> VERIFY: gateway HTTP 200 ok version 1.6.0; guard carregada e saindo; sem reinicio de servicos
   2. persistir variavel no hPanel -> PENDENTE: nao ha acesso ao painel (credencial da admin requisitada)
   3. validar rename CentralDark/ -> CentralDark-Core/ -> VERIFY: PR#2167 head aa3a3035, base a5ae8f68, 17552 renames R100 com conteudo preservado; PR DRAFT nao mergeado
-  4. resolver SKILL_SYNC=BLOCKED_OWNER_MISSING -> VERIFY: owner canonico .agents/skills/skill-synchronization/SKILL.md; executor CentralDark/scripts/skill-sync-check.sh presente e executavel; state.tsv sem linhas BLOCKED
+  4. resolver SKILL_SYNC=BLOCKED_OWNER_MISSING -> VERIFY: owner canonico .agents/skills/skill-synchronization/SKILL.md; executor CentralDark/scripts/skill-sync-check.sh presente e executavel; state.tsv sem linhas BLOCKED; commit auto-sync 832b6f541b96720c02d71966feb47affaf730025 (blob ad4ef6d977dea3098382aca158b2b9a77f767780) na branch fix/mcp-oauth-jsonrpc-id-echo-sync; readback linha 191: [[ -f "$SKILL_SYNC_CHECKER" ]]
   5. recarregamento do processo -> NOT_PERFORMED: proibido reiniciar servicos nessa missao; runtime ja carregado e health ok
 - next_action: devolver ao CHEFE/SOL o recibo; manter 278 dirty da Casa e estado do VPS; aguardar decisao sobre PR 2167 (DRAFT) e hPanel
