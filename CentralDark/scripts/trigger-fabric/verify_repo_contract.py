@@ -93,7 +93,19 @@ def check_neurolink_numeric_chain(path='docs/CONSCIENCIA/APRENDIZADOS.md', start
     sections={}
     for i,m in enumerate(matches):
         n=int(m.group(1)); end=matches[i+1].start() if i+1 < len(matches) else len(text)
-        if n >= start: sections[n]=text[m.start():end]
+        body=text[m.start():end]
+        # Front A preserves historical headings with repeated legacy numbers.
+        # Only explicit NeuroLink cognitive lessons belong to the strict Front B chain.
+        if n >= start and '**NeuroLink:**' in body:
+            cognitive = re.search(r'(?m)^- \*\*NeuroLink:\*\*[^\n]*?LEARNING_ID=(\d+)', body)
+            if not cognitive:
+                problems.append(f'COGNITIVE_ID_MISSING_IN_LEGACY_SECTION:{n}')
+                continue
+            cognitive_id=int(cognitive.group(1))
+            if cognitive_id in sections:
+                problems.append(f'DUPLICATE_COGNITIVE_ID:{cognitive_id}')
+            else:
+                sections[cognitive_id]=body
     if not sections:
         problems.append(f'NO_LEARNINGS_FROM_{start}')
     else:
@@ -333,15 +345,25 @@ check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
  '"RDC_DESKTOP_COMMANDER"',
- 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+ 'catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa"',
  'routeReturned: routes.length',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG')
 check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
  '"centraldark_unified_capability_catalog"',
  '"SCREENPIPE_LOCAL_SENSOR"',
  '"RDC_DESKTOP_COMMANDER"',
- 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+ 'catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa"',
 ], classification='MCP_UNIFIED_CAPABILITY_CATALOG_DIST_PARITY')
+# The fingerprint expectation above is the authenticated 2026-11-11 live readback
+# (mcp_status + mcp_admin_catalog, 17 routes), not the older 13-route receipt.
+# Prove that the route catalog and tool metadata still obey their executable tests.
+check_command(
+ 'apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs + tools-catalog-metadata.test.mjs',
+ ['node', '--test',
+  str(ROOT/'apps/modulos/mcp/tests/mcp-catalog-scope.test.mjs'),
+  str(ROOT/'apps/modulos/mcp/tests/tools-catalog-metadata.test.mjs')],
+ classification='MCP_SOURCE_DIST_CATALOG_EXECUTABLE_COUNTERPROOF',
+)
 check('docs/CONSCIENCIA/LEMBRANCAS/2026-10-06-MCP-UNIFIED-CAPABILITY-CATALOG-METABOLISM.md',[
  'LEARNING_168_MCP_UNIFIED_CAPABILITY_CATALOG=true',
  'SCREENPIPE_AND_RDC_SHARE_ONE_MCP_CATALOG=true',
@@ -1823,12 +1845,12 @@ check_command(
 check('apps/modulos/mcp/src/tools/core/mcp-admin.js',[
  '"HERMES_DELEGATED_COMMIT_PATH"',
  '"SCREENPIPE_CLI_RECORDER"',
- 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+ 'catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa"',
 ], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_SRC')
 check('apps/modulos/mcp/dist/tools/core/mcp-admin.js',[
  '"HERMES_DELEGATED_COMMIT_PATH"',
  '"SCREENPIPE_CLI_RECORDER"',
- 'catalogFingerprint: "80f0a0fab518ab8d15bbf6651b5471813369c53e56902d905883caa97c7405c7"',
+ 'catalogFingerprint: "b526d18f8701a14ec3a2628ae71ee3af04b67e75d538e9c3ae0ca0ca2b7835aa"',
 ], classification='HERMES_SCREENPIPE_METABOLISM_CATALOG_DIST')
 check('docs/CONSCIENCIA/RECEIPTS/2026-10-06-hermes-screenpipe-catalog-metabolism.md',[
  'HERMES_DELEGATED_COMMIT_PATH=PASS_ON_PR1748',
@@ -1850,7 +1872,7 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json',[
  '"ONE_CLOCK": true',
  '"ONE_DISPATCHER": true',
  '"FAMILY_COUNT": 7',
- '"WORKFLOW_COUNT_BASELINE": 71',
+ '"WORKFLOW_COUNT_BASELINE": 73',
  '"ARM_ROUTER": true',
  '"FALLBACK_BEFORE_NEW_CAPABILITY": true',
  '"ARM_FAILURE_IS_CAPABILITY_FAILURE": false',
