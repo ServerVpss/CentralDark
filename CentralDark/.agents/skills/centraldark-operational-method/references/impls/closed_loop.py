@@ -109,17 +109,16 @@ class ClosedLoop:
             return False
 
     def _check_gateway(self) -> bool:
-        """Gateway Hermes: any HTTP response (301/302/200) = service up"""
+        """Gateway Hermes: HTTP 200 = OK, 301/302/401/500 = NEGATIVO"""
         try:
             req = urllib.request.Request(
                 "https://gateway.centralldark.com/health",
                 headers={"User-Agent": "ClosedLoop/1.0"}
             )
             with urllib.request.urlopen(req, timeout=10) as resp:
-                return True  # Qualquer código de resposta = gateway respondendo
-        except urllib.error.HTTPError as e:
-            # 301/302/401 = gateway respondendo (redirect/auth)
-            return True
+                return resp.status == 200
+        except urllib.error.HTTPError:
+            return False
         except Exception:
             return False
 

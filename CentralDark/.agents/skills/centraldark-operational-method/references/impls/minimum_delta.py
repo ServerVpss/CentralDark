@@ -71,7 +71,16 @@ class MinimumDeltaPlanner:
         return DeltaCandidate(cost=cost, delta=delta, owner=owner)
 
     def _blast_allowed(self, blast_radius: str) -> bool:
-        return blast_radius <= self.writer_scope
+        """
+        Retorna True se blast_radius ⊆ writer_scope.
+        Corrigido: compara escopos sem string compare (textual).
+        """
+        # writer_scope é o prefixo válido (ex: "CentralDark-app")
+        # blast_radius deve ser prefixo ou igual a writer_scope
+        if blast_radius == self.writer_scope:
+            return True
+        # blast_radius deve começar com writer_scope + "." (subescopo)
+        return blast_radius.startswith(self.writer_scope + ".")
 
     def _estimate_cost(self, delta: str) -> int:
         return len(delta)
