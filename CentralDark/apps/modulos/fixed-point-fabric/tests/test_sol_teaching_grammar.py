@@ -19,6 +19,19 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
         cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
 
+    def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
+        mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
+        self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)
+        self.assertIn('markdown_divider_between_distinct_subjects: "---"', self.grammar)
+        self.assertIn("Aprendizado cristalizado em 22/11/2026", self.response)
+        self.assertIn("mcp_professor_entry:", self.entry_boot)
+        self.assertIn("tool_calls_require_client: true", self.entry_boot)
+        self.assertIn("kit_boas_vindas", mcp)
+        self.assertIn("ler_regras_inviolaveis", mcp)
+        self.assertIn("personal_context_search", mcp)
+        self.assertIn("puxar_aprendizados", mcp)
+        self.assertIn("COMO RESPONDER — menu visual aprovado", mcp)
+
     # Existing CentralDark test runner is invoked by verify_repo_contract.py
     # and CI. These checks make Papagaio presentation drift a failing contract.
     @staticmethod

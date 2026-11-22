@@ -17,6 +17,19 @@ CENTRALDARK_AI_BOOT:
     # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119
     grammar: "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml#mapa_visual_semantico_20261119"
     emoji_owner: "docs/CONSCIENCIA/PADRAO-EMOJIS.md"
+    multi_subject_style: "EMOJI_SEMANTICO + TITULO_COTIDIANO; --- SOMENTE_ENTRE_ASSUNTOS"
+    single_subject_style: "RESPOSTA_CURTA_SEM_DIVISOR_ARTIFICIAL"
+    mcp_professor_entry:
+      handshake_owner: "apps/modulos/mcp/src/mcp-server.js#PIVETE_BOOT_INSTRUCTIONS"
+      trigger: "MCP_INITIALIZE"
+      welcome_tool: kit_boas_vindas
+      rules_tool: ler_regras_inviolaveis
+      memory_when_relevant: [personal_context_search, consultar_memoria_reserva]
+      learn_when_relevant: puxar_aprendizados
+      learning_owner: "docs/CONSCIENCIA/APRENDIZADOS.md"
+      handshake_instructions_are_automatic: true
+      tool_calls_require_client: true
+      runtime_consumer_proof_required: true
     human_next_step: "👉 O QUE FAZER AGORA"
     preserve_machine_fields: true
     runtime_consumption_requires_test: true
