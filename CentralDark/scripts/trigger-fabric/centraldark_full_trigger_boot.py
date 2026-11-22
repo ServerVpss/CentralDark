@@ -1293,8 +1293,57 @@ def cmd_script_first_preflight(repo: Path) -> dict:
     return out
 
 
+# CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122
+def github_entry_readback(repo: Path) -> dict:
+    """Leitura deterministica BOOT -> LEIA, sem simular GitHub remoto."""
+    files = (Path("CENTRALDARK_AI_BOOT.yaml"), Path("LEIA-ME-IA.md"))
+    checked = []
+    for i, rel in enumerate(files):
+        target = (repo / rel).resolve()
+        if not target.is_relative_to(repo) or not target.is_file():
+            return {"status": "PENDENTE", "read_order": "BOOT_THEN_LEIA", "files": checked,
+                    "reason": "FILE_MISSING:" + rel.as_posix()}
+        payload = target.read_bytes()
+        try:
+            content = payload.decode("utf-8")
+        except UnicodeDecodeError:
+            return {"status": "PENDENTE", "read_order": "BOOT_THEN_LEIA", "files": checked,
+                    "reason": "INVALID_UTF8:" + rel.as_posix()}
+        marker = "CENTRALDARK_AI_BOOT:" if i == 0 else 'title: "LEIA-ME-IA"'
+        if not content.strip() or marker not in content[:350]:
+            return {"status": "PENDENTE", "read_order": "BOOT_THEN_LEIA", "files": checked,
+                    "reason": "CONTENT_NOT_VALID:" + rel.as_posix()}
+        checked.append({"path": rel.as_posix(), "sha256": hashlib.sha256(payload).hexdigest(),
+                        "bytes": len(payload), "status": "LIDO"})
+    return {"status": "APROVADO", "read_order": "BOOT_THEN_LEIA",
+            "source": "LOCAL_CHECKOUT_NOT_GITHUB_CONNECTOR", "files": checked}
+
+
+def cmd_github_entry(args: argparse.Namespace) -> int:
+    """Recibo YAML para o leitor de boot existente, sem arquivo temporario."""
+    repo = discover_boot_repo(getattr(args, "repo", None))
+    proof = github_entry_readback(repo)
+    print("centraldark_github_entry:")
+    print("  source: LOCAL_CHECKOUT_NOT_GITHUB_CONNECTOR")
+    print("  read_order: BOOT_THEN_LEIA")
+    print("  read_status: " + proof["status"])
+    for i, f in enumerate(proof.get("files", []), 1):
+        print(f"  file_{i}: " + json.dumps(f["path"], ensure_ascii=False))
+        print(f"  sha256_{i}: " + f["sha256"])
+    if proof["status"] != "APROVADO":
+        print("  reason: " + json.dumps(proof.get("reason", "UNKNOWN"), ensure_ascii=False))
+    return 0 if proof["status"] == "APROVADO" else 9
+
+
 def cmd_boot(args: argparse.Namespace) -> int:
     repo = discover_boot_repo(getattr(args, "repo", None))
+    github_entry = github_entry_readback(repo)
+    if github_entry["status"] != "APROVADO":
+        print(json.dumps({"schema": "centraldark.full-trigger-boot.v1",
+                          "status": "CANONICAL_ENTRY_READ_BLOCKED",
+                          "github_entry": github_entry,
+                          "operational_boot_executed": False}, ensure_ascii=False, indent=2))
+        return 9
     active = explicit_command_context(args.input)
 
     # Gate determinstico: script-first (contrato recovery_first).
@@ -1313,6 +1362,7 @@ def cmd_boot(args: argparse.Namespace) -> int:
     # Read the canonical contract first. Runtime and mission gates may limit
     # continuation, but must not erase this read-only result.
     canonical = canonical_boot_snapshot(repo)
+    canonical["github_entry_readback"] = github_entry
     canonical["document_organization_route"] = document_organization_route(repo, args.input)
     hud_first = hud_first_gate(repo)
     if hud_first["status"] != "PASS":
@@ -1954,6 +2004,10 @@ def cmd_reopen_check(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
+
+    ge = sub.add_parser("github-entry")
+    ge.add_argument("--repo", default=None)
+    ge.set_defaults(func=cmd_github_entry)
 
     b = sub.add_parser("boot")
     b.add_argument("--repo", default=None)

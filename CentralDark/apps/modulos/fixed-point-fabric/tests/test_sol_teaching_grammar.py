@@ -32,6 +32,25 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("puxar_aprendizados", mcp)
         self.assertIn("COMO RESPONDER — menu visual aprovado", mcp)
 
+    def test_github_entry_requires_boot_then_leia_and_yaml_readback(self):
+        import subprocess
+        import sys
+        script = self.repo / "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+        run = subprocess.run([sys.executable, str(script), "github-entry",
+                              "--repo", str(self.repo)],
+                             capture_output=True, text=True, timeout=40)
+        self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+        self.assertIn("centraldark_github_entry:", run.stdout)
+        self.assertIn("read_order: BOOT_THEN_LEIA", run.stdout)
+        self.assertIn("read_status: APROVADO", run.stdout)
+        self.assertLess(run.stdout.index('file_1: "CENTRALDARK_AI_BOOT.yaml"'),
+                        run.stdout.index('file_2: "LEIA-ME-IA.md"'))
+        self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.boot)
+        self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.entry_boot)
+        self.assertIn("github_connector_entry:", self.entry_boot)
+        self.assertIn("github_connector_cannot_be_reconfigured_by_repo_document_only: true", self.entry_boot)
+        self.assertIn("read_status", self.boot)
+
     # Existing CentralDark test runner is invoked by verify_repo_contract.py
     # and CI. These checks make Papagaio presentation drift a failing contract.
     @staticmethod

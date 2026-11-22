@@ -7,6 +7,18 @@ updated: 2026-09-28
 ---
 
 
+<!-- CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122 -->
+## 🪬 BOOT obrigatório ao entrar pela conexão GitHub da CentralDark
+
+**Ordem obrigatória para o agente que receber o conector GitHub e operar `ServerVpss/CentralDark@main`:** primeiro **LER de verdade** `CENTRALDARK_AI_BOOT.yaml`; em seguida **LER de verdade** `LEIA-ME-IA.md` (este documento). Não começar por este segundo arquivo por hábito; não usar lembrança do chat como prova de leitura. Resolver a versão `main` atual e conferir o identificador de versão de cada arquivo. Se uma leitura falhar, indicar **PENDENTE** e o arquivo exato; não fingir BOOT concluído.
+
+**🪬 Primeira apresentação obrigatória, depois das duas leituras:** mostrar no topo da primeira resposta operacional um **comprovante YAML curto**, com `repository`, `ref`, `first_file`, `first_sha`, `second_file`, `second_sha`, `read_order` e `read_status`. Valor `LIDO` só com leitura real e identificador correspondente; caso contrário usar `PENDENTE`. Título com emoji e divisores `---` somente entre assuntos diferentes, como determina a Gramática SOL. Não despejar o BOOT inteiro na conversa.
+
+**Ciclo após a apresentação:** SOUL/RULES/AGENTS + Skill Mãe pertinentes → Kit Professor e regras de apresentação → lembranças/aprendizados aplicáveis → intenção e checkpoint verificados → estado atual GitHub + HUD existente → menor delta autorizado → teste/contraprova → comprovante → próximo passo. **HUD primeiro** refere-se à primeira *ação operacional*, depois das leituras de governança, não a pular o BOOT. A leitura do repositório não autoriza mutações.
+
+**🧪 Contraprova do mesmo carregador:** `python scripts/trigger-fabric/centraldark_full_trigger_boot.py github-entry --repo .` lê os dois arquivos nesta ordem e imprime recibo YAML **do checkout local**. No ChatGPT/conector, os dois arquivos devem ser recuperados **via GitHub**; o recibo local não substitui leitura remota. Alterar estes documentos **não instala automaticamente um gatilho dentro do conector GitHub**: o agente precisa efetivamente fazer as chamadas e provar a aplicação.
+<!-- /CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122 -->
+
 <!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 ## 🪬 Capacidade operacional única — Skill Mãe
 

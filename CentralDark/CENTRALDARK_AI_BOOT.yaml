@@ -12,6 +12,42 @@ CENTRALDARK_AI_BOOT:
   unified_surface_parity_contract: LOADED
   unified_surface_parity_skill: LOADED
   source_of_truth: "ServerVpss/CentralDark + runtime medido"
+  # CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122
+  github_connector_entry:
+    status: CANONICAL_REQUIRED_NOT_RUNTIME_PROVEN
+    scope: "ServerVpss/CentralDark@main"
+    triggers: [GITHUB_CONNECTOR_CONNECTED_TO_CENTRALDARK, CHEFE_SAYS_GITHUB_CONNECTED, NEW_CENTRALDARK_REPO_SESSION]
+    trigger_is_agent_obligation_not_native_github_event: true
+    read_order_mandatory:
+      - "CENTRALDARK_AI_BOOT.yaml"
+      - "LEIA-ME-IA.md"
+    require_fresh_repo_read: true
+    do_not_use_memory_as_read_proof: true
+    validate_each: [PATH, NONEMPTY_CONTENT, SOURCE_COMMIT_OR_BLOB_SHA, ORDER, READ_RESULT]
+    on_read_error: "PENDENTE; MOSTRAR_ARQUIVO_FALTANTE; NAO_DECLARAR_BOOT_LIDO"
+    first_visible_block: "🪬 BOOT CENTRALDARK — GitHub"
+    first_visible_format: YAML
+    receipt_keys: [repository, ref, first_file, first_sha, second_file, second_sha, read_order, read_status, operational_cycle]
+    receipt_only_after_two_real_reads: true
+    show_before_operational_answer: true
+    style: "EMOJI_NO_TITULO; DIVISOR_MARKDOWN_SOMENTE_ENTRE_ASSUNTOS"
+    complete_existing_cycle:
+      - "READ_BOOT_FIRST"
+      - "READ_LEIA_ME_IA_SECOND"
+      - "READ_SOUL_RULES_AGENTS_AND_SKILL_MAE_AS_PERTINENT"
+      - "RECOVER_KIT_PROFESSOR_AND_CONTEXT_RELEVANT_TO_INTENT"
+      - "RECOVER_PERTINENT_LEMBRANCAS_APRENDIZADOS_AND_LAST_VERIFIED_CHECKPOINT"
+      - "MEASURE_GITHUB_MAIN_AND_CURRENT_WITH_EXISTING_HUD_ENTRY_GATE"
+      - "REUSE_OWNER_AND_EXECUTE_ONLY_AUTHORIZED_DELTA"
+      - "TEST_AND_COUNTERPROVE"
+      - "PRESENT_REAL_RECEIPT_AND_NEXT_STEP"
+    existing_boot_reader: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
+    existing_boot_reader_command: "github-entry"
+    hud_first_means_first_operational_action_after_governance_read: true
+    no_duplicate_boot_or_memory: true
+    tool_calls_must_be_made_by_consumer: true
+    github_connector_cannot_be_reconfigured_by_repo_document_only: true
+    github_connection_is_not_runtime_proof: true
   human_communication_bridge:
     owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
     # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119
