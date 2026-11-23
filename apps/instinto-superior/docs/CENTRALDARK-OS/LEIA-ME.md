@@ -1,5 +1,5 @@
 # 🪬 CENTRALDARK — LEIA-ME | Contrato de entrada e handoff
-**Criado/atualizado:** `2026-11-23T06:41:36-03:00` · **Fuso:** America/Bahia (UTC-03:00)
+**Criado/atualizado:** `2026-11-23T07:16:50-03:00` · **Fuso:** America/Bahia (UTC-03:00)
 **Escopo único:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 
 > Este arquivo ensina **como trabalhar**. O `CHECKPOINT.md` registra **onde paramos**. Os dois ficam juntos na raiz. Não criar versões paralelas, outro HUD, novo checkpoint ou outro mecanismo só para documentar a missão.
@@ -108,3 +108,13 @@ Após cada **delta material** realmente concluído ou bloqueado, registrar:
 **Resultado primeiro**, PT-BR simples, emoji e título por assunto. Depois evidência, estado `APROVADO / PENDENTE / FALHOU` e **Próximo passo**. Se não houver teste, escrever `NÃO VERIFICADO`.
 
 **Próxima leitura:** `CHECKPOINT.md`. Ele é o HUD vivo do projeto e o handoff do dia.
+
+## 8. 🧿 FIXED_POINT BIBLIOTECA APROVADO EM 23/11
+**Data/hora do registro:** `2026-11-23T07:16:50-03:00`
+**Aceite explícito do CHEFE:** "Ficou sim" (resposta à pergunta de conformidade após a Biblioteca ser exibida e o arraste/área dos botões ser testado).
+**Escopo exato do gosto aprovado:** Biblioteca ROV nativa React, 20 receitas originais, galeria dourada, cartões, filtros, busca, janela de receitas, alinhamento dos eixos; título Electron arrastável, reserva de espaço para minimizar/maximizar/fechar e botão de recolhimento operante.
+**Não incluídos no aceite:** conexão real ao Hermes, operações de rede, voz, sessão, emparelhamento, Halo, merge/deploy, bugs novos ou telas não mostradas.
+
+**Onde o código fica versionado neste PR:** `apps/instinto-superior/docs/CENTRALDARK-OS/native-react/ui/`, fiel à origem da Casa `source_remote_bridge/ui/` para revisão do código aprovado. **Esse caminho armazena a fonte de referência do React, não registra um runtime adicional nem afirma que `apps/desktop` já consome essa implementação.** A Casa continua sendo a execução DEV comprovada; promoção ao aplicativo canônico requer integração e testes próprios. Arquivos de sessão, credenciais, segredos, dependências instaladas, binários e build local ficam fora do commit.
+
+**Obrigação após esta aprovação:** versionar o código desse delta com **os dois Markdown no mesmo commit do PR #2119**, registrar comentário com aceite e evidências e realizar readback de ambos os espelhos. O SHA final do commit deve ser consultado no PR, não escrito previamente aqui (um SHA no arquivo alteraria o próprio commit e criaria referência circular).

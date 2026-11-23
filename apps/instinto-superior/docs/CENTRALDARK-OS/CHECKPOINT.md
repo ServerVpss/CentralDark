@@ -1,5 +1,5 @@
 # 👑🪬 CENTRALDARK — CHECKPOINT | !HUD + !RASTRO
-**Última atualização (Bahia):** `2026-11-23T06:41:36-03:00` · **Dia operacional:** `2026-11-23` · **Fuso:** `America/Bahia (UTC-03:00)`
+**Última atualização (Bahia):** `2026-11-23T07:16:50-03:00` · **Dia operacional:** `2026-11-23` · **Fuso:** `America/Bahia (UTC-03:00)`
 **Pasta deste handoff:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 **Primeiro arquivo a ler:** `LEIA-ME.md` · **Responsabilidade do arquivo:** documentar o estado **observado**, não inventar execução.
 **Git nesta pasta:** **NÃO APLICÁVEL** — sem `.git` na raiz e nos quatro subprojetos inspecionados em 23/11. Nenhum commit/push deste trabalho está comprovado.
@@ -102,3 +102,19 @@ As horas dos arquivos vêm da última modificação do sistema de arquivos; a ho
 **Estados nunca inferidos:** documento ≠ processo; build ≠ sistema integrado; HTTP 200 ≠ motor conectado; ação ≠ readback; memória de conversa ≠ prova do estado vivo.
 
 **FIXED_POINT:** **PENDENTE** para integração completa. **Checkpoint documental:** **APROVADO somente após readback dos dois arquivos**.
+
+## 🧿 !RASTRO — BIBLIOTECA_APROVADA_EM_20261123
+**Horário Bahia:** 2026-11-23T07:16:50-03:00 · **Aceite literal:** "Ficou sim" (resposta após demonstração da Biblioteca corrigida). **Gate:** `GOSTO_APROVADO`, somente para o ponto fixo mostrado; `COMMIT_PR_COM_READBACK` depende de verificação no PR #2119.
+
+**Alterações técnicas comprovadas antes do aceite:**
+- Galeria React reproduz estilo dourado do HTML original; 20 receitas e conteúdo preservados, categorias e busca; filtros `Auditoria` 4 / `Todos` 20, abertura e fechamento do template. Cópia para clipboard continua sem teste direto registrado.
+- Alinhamento comum de categorias, título, busca e cartões; medição anterior mostrou até 2 px de diferença.
+- `native-shell.css`: barra de título arrastável, região dos botões nativos reservada em 156 px, área dos botões da sidebar preservada como não arrastável.
+- Teste real de arraste Electron: `DX=101`, `DY=44` e retorno com `RESTORE_DIFF=8,4`; `HTCAPTION=2`, controles nativos separados; recolher/expandir testado; `npm run check && npm run build` passou após o ajuste.
+- **Owner:** `source_remote_bridge/ui/src/native-os/` na Casa. Publicação do código aprovado neste PR em `apps/instinto-superior/docs/CENTRALDARK-OS/native-react/ui/` como fonte versionada para revisão, sem outra instância rodando.
+
+**Pendências anteriores continuam abertas:** motor (`engine_connected=false` na última prova), conversa com Hermes ainda local, `Ctrl+Shift+S` sem contraprova conclusiva e integração Halo/Bridge/MCP. Conformidade visual não aprova esses itens. Nas próximas mudanças de interface, repetir `mostrar → perguntar → obter aceite`.
+
+**Comprovante da publicação:** consultar último commit e comentário no PR #2119 para SHA/link real. **Não declarar** código conectado a `apps/desktop`, entregue em produção, mergeado ou deployado.
+
+**Próximo passo:** conferir código versionado, igualdade dos dois Markdown Casa↔GitHub e comentário do PR; depois retomar menor pendência autorizada.
