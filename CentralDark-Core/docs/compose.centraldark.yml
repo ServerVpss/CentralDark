@@ -1,0 +1,70 @@
+# CENTRALDARK OS — Compose parametrizado (um arquivo, dois destinos)
+#
+# Hostinger (principal):
+#   HERMES_DATA_DIR=/data/.hermes HERMES_UID=337 HERMES_GID=337 \
+#   docker compose -f CentralDark/docs/compose.centraldark.yml --profile hostinger up -d
+#
+# Casa (reserva):
+#   HERMES_DATA_DIR=${USERPROFILE}/.hermes HERMES_UID=10000 HERMES_GID=10000 \
+#   docker compose -f CentralDark/docs/compose.centraldark.yml --profile casa up -d
+#
+# NENHUM segredo é versionado. API_SERVER_KEY entra via .env local / hPanel.
+
+services:
+  gateway-hostinger:
+    image: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    container_name: centraldark-gateway-hostinger
+    restart: unless-stopped
+    network_mode: host
+    profiles: [hostinger]
+    volumes:
+      - ${HERMES_DATA_DIR:-/data/.hermes}:/opt/data
+    environment:
+      HERMES_UID: ${HERMES_UID:-337}
+      HERMES_GID: ${HERMES_GID:-337}
+      HERMES_HOME: /opt/data
+    command: ["gateway", "run"]
+
+  dashboard-hostinger:
+    image: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    container_name: centraldark-dashboard-hostinger
+    restart: unless-stopped
+    network_mode: host
+    profiles: [hostinger]
+    depends_on: [gateway-hostinger]
+    volumes:
+      - ${HERMES_DATA_DIR:-/data/.hermes}:/opt/data
+    environment:
+      HERMES_UID: ${HERMES_UID:-337}
+      HERMES_GID: ${HERMES_GID:-337}
+    command: ["dashboard", "--host", "127.0.0.1", "--port", "18787", "--no-open"]
+
+  gateway-casa:
+    image: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    container_name: centraldark-gateway-casa
+    restart: unless-stopped
+    profiles: [casa]
+    volumes:
+      - ${HERMES_DATA_DIR:-${USERPROFILE}/.hermes}:/opt/data
+    environment:
+      HERMES_UID: ${HERMES_UID:-10000}
+      HERMES_GID: ${HERMES_GID:-10000}
+      HERMES_HOME: /opt/data
+    ports:
+      - "127.0.0.1:${HERMES_GATEWAY_PORT:-8642}:8642"
+    command: ["gateway", "run"]
+
+  dashboard-casa:
+    image: ${HERMES_IMAGE:-nousresearch/hermes-agent:latest}
+    container_name: centraldark-dashboard-casa
+    restart: unless-stopped
+    profiles: [casa]
+    depends_on: [gateway-casa]
+    volumes:
+      - ${HERMES_DATA_DIR:-${USERPROFILE}/.hermes}:/opt/data
+    environment:
+      HERMES_UID: ${HERMES_UID:-10000}
+      HERMES_GID: ${HERMES_GID:-10000}
+    ports:
+      - "127.0.0.1:${HERMES_DASHBOARD_PORT:-9119}:9119"
+    command: ["dashboard", "--host", "0.0.0.0", "--port", "9119", "--no-open", "--insecure"]
