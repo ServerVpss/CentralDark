@@ -192,6 +192,27 @@ INTENÇÃO
 **Medição de 05/11/2026 (histórica, não usar IDs como constantes):** Casa Windows com duas janelas Chrome visíveis por UIA e abas disponíveis pela sessão Browser; Tailscale administrativo numa janela distinta. Cua 0.28.2 inicialmente parado, então `cua-driver serve` iniciou o daemon padrão; `autostart enable` registrou entrada nativa; build WGC existente foi reaproveitado no diretório `runtime` da Skill F:; `blink_cursor.py --monitor 2 --mode position` devolveu `execution=completed` em `(960,-702)`, sem prova humana do render. `Casa Commander /health` respondeu 200 com `engine_connected=false`; logo, não atribuir cliques a essa rota. O usuário confirmou antes o método de mouse/overlay, mas nenhum clique de página Tailscale foi executado nesta medição. **NEXT_CURSOR:** confirmar visualmente a prévia e provar um clique autorizado com readback na janela corrente; manter a recuperação de autenticação Tailscale como missão separada.
 
 
+<!-- CENTRALDARK_UI_FASTPATH_COST_GATE_20261123 -->
+### 🧿 Automação rápida por custo medido — PID, HWND, UIA/DOM e imagem por exceção
+
+**Owner:** esta Skill Mãe; usar as rotas já existentes de [Browser/UIA](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md). Não criar outro agente, driver, cache, watcher ou motor visual. Esta decisão **especializa** a rota rápida abaixo: "estado visível" significa estado estrutural acessível por padrão, não screenshot obrigatório. Mantém a autorização, um escritor por recurso, o cursor virtual Cua quando exigido e a contraprova independente.
+
+**Algoritmo:** (1) validar intenção/autorização + alvo vivo por processo **PID** e janela **HWND**; (2) inspecionar só a subárvore **UI Automation (GUI)** ou **DOM da aba/origem correta**; (3) validar nome/tipo, unicidade, habilitação, identidade, retângulo, janela, sessão e foco; (4) executar uma única ação pela rota autorizada, preferindo padrão acessível quando ele realmente emite o evento esperado; (5) reler o **menor estado alterado** e fazer contraprova de arquivo/processo/rede quando a intenção exigir. Não confundir **HWND** (janela) com **HWID** (hardware), nem inspeção DOM com manipulação já comprovada.
+
+**Portão de imagem (SCREENSHOT_GATE):** usar screenshot/WGC **somente** se (a) o CHEFE pedir uma imagem, (b) o resultado exigir inspeção de pixels, cor, sobreposição, alinhamento, OCR ou desenho, (c) UIA/DOM estiver inacessível, ambíguo ou contraditório, ou (d) for necessária contraprova visual do efeito. Preferir recorte **da janela/região autorizada**, evitando exposição de outros monitores e dados privados. Uma nova foto da **mesma tela sem mudança** não adiciona prova; reutilizar observação vigente. Mudou geometria, DPI, DOM, sessão, monitor ou controle? Invalidar e reler. Não dispensar captura quando ela for a única prova suficiente.
+
+**Modelo matemático (tempos em ms, risco como restrição dura):**
+- `T_base = T_PID_HWND + T_UIA_DOM + T_ACAO + T_READBACK`.
+- `E[T_estrutural] = T_base + p_insuficiente * T_fallback_visual`. Só estimar `p_insuficiente` quando houver amostra comparável; sem amostra, `UNKNOWN`.
+- `E[T_visual] = T_captura + T_transferencia + T_interpretacao + T_ACAO + T_READBACK` (incluir tempo de recaptura e correção quando efetivamente ocorrido).
+- Escolher `argmin E[T_rota]` **entre rotas que satisfazem autorização, suficiência de evidência e risco permitido**. A rota aparentemente mais rápida nunca elimina identidade, validação do alvo nem readback. Na ausência de tempos medidos, preferir a rota estrutural suficiente e escalar somente mediante gatilho de imagem; **não alegar percentual de ganho**.
+- Para duas leituras read-only **ambas necessárias**, `T_serie = T_A + T_B`; `T_paralelo = max(T_A,T_B) + T_coordenacao`. Paralelizar quando capacidade/segurança permitirem e `T_coordenacao < min(T_A,T_B)`; não iniciar segundo sensor somente para preencher checklist.
+
+**Cache leve:** reutilizar apenas o seletor, contexto e fingerprint atuais `DEVICE|SESSION|PID|HWND|ORIGIN/TAB|CONTROL_ID|RECT|DPI|OWNER`; confirmar a parte que importa antes da ação. Invalidar no evento `WINDOW_CLOSED|PID_CHANGED|HWND_CHANGED|TAB_ORIGIN_CHANGED|DOM_RERENDER|CONTROL_CHANGED|FOCUS_MISMATCH|LAYOUT_DPI_CHANGED|AUTH_CHANGED|AMBIGUOUS`. Nada de PID, HWND, coordenadas ou UID históricos como constantes. Evitar varredura global UIA repetida; preferir `FromHandle(HWND) -> FindFirst` no escopo vivo, seletor DOM exato ou cache validado. Sensores de leitura podem paralelizar; clique, digitação, envio e commit permanecem seriais.
+
+**Kaizen mensurável:** cronometrar com relógio monotônico `T_PID_HWND|T_UIA_DOM|T_CAPTURA|T_ACAO|T_READBACK|T_TOTAL`, `CAPTURAS_N|UIA_N|FALLBACK_N|RETRY_N|TARGET_MATCH|UI_EFFECT|COUNTERPROOF`. Medir primeiro o baseline e depois A/B em tarefas equivalentes e autorizadas (referência: >=20 rodadas por rota, aquecimento separado, sem efeitos duplicados), informar mediana/p50, p95, taxa de falha e custo de recuperação. `ganho_% = 100*(mediana_base - mediana_nova)/mediana_base` apenas com baseline > 0 e amostras reais. `FASTPATH_DOCUMENTADO != RUNTIME_CARREGADO`; `SEM_MEDICAO != GANHO_PROVADO`; `COMANDO_OK != EFEITO_COMPROVADO`.
+<!-- /CENTRALDARK_UI_FASTPATH_COST_GATE_20261123 -->
+
 ## Rota rápida universal — manuseio de interface por qualquer modelo
 
 Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma interface gráfica. Ela é deliberadamente curta e independe do modelo, do aplicativo e da ferramenta de automação.
@@ -199,10 +220,10 @@ Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma int
 ```text
 INTENÇÃO EXPLÍCITA
 → IDENTIFICAR JANELA ATUAL PELO TÍTULO + PROCESSO + IDENTIFICADOR VIVO
-→ CAPTURAR ESTADO VISÍVEL ANTES DA AÇÃO
+→ OBTER ESTADO ESTRUTURAL UIA/DOM SUFICIENTE; IMAGEM SÓ PELO SCREENSHOT_GATE
 → SEPARAR AVISO PERIFÉRICO DE FALHA DO SISTEMA
 → TENTAR O CONTROLE ACESSÍVEL EXATO UMA VEZ
-→ SE FALHAR: CAPTURA NOVA + REGIÃO CORRETA + COORDENADA ATUAL
+→ SE CONTROLE INSUFICIENTE: REVALIDAR ALVO; CAPTURA REGIONAL APENAS SE NECESSÁRIA
 → SE O PRIMEIRO CLIQUE SÓ FOCAR O BOTÃO: ENTER UMA VEZ
 → RELER A MESMA JANELA
 → PROVAR O RUNTIME POR UMA ROTA INDEPENDENTE
