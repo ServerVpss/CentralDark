@@ -1,4 +1,0 @@
-[submodule "skills/pretty-mermaid"]
-	path = CentralDark/skills/pretty-mermaid
-	url = https://github.com/imxv/Pretty-mermaid-skills.git
-	branch = main
