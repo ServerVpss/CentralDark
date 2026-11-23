@@ -17,6 +17,7 @@ mod paths;
 mod update;
 
 use std::sync::Arc;
+use tauri::Manager;
 use tokio::sync::Mutex;
 
 /// How the installer was invoked. Resolved once from the process args in
@@ -150,6 +151,14 @@ pub fn run() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_shell::init())
         .manage(Arc::new(AppState::new(mode)))
+        // A bandeja nao altera o contrato: X continua encerrando o instalador.
+        .on_window_event(|window, event| {
+            if window.label() == "main" {
+                if let tauri::WindowEvent::CloseRequested { .. } = event {
+                    window.app_handle().exit(0);
+                }
+            }
+        })
         .setup(|app| {
             use tauri::Manager;
             // LSUIElement keeps the launcher hand-off out of the Dock. A
@@ -158,6 +167,51 @@ pub fn run() {
             // before Tauri was constructed and cannot reach this callback.
             #[cfg(target_os = "macos")]
             app.set_activation_policy(tauri::ActivationPolicy::Regular);
+
+            // Windows: o mesmo olho dourado na barra de tarefas e na bandeja.
+            // Reaproveita o icone nativo embutido, sem nova janela ou executor.
+            #[cfg(target_os = "windows")]
+            {
+                use tauri::menu::{MenuBuilder, MenuItemBuilder};
+                use tauri::tray::TrayIconBuilder;
+
+                if let Some(icon) = app.default_window_icon().cloned() {
+                    if let Some(win) = app.get_webview_window("main") {
+                        if let Err(err) = win.set_icon(icon.clone()) {
+                            tracing::warn!(?err, "icone da janela nao atualizado");
+                        }
+                    }
+                    let open = MenuItemBuilder::with_id("show-installer", "Abrir CentralDark-OS")
+                        .build(app)?;
+                    let quit = MenuItemBuilder::with_id("exit-installer", "Sair do instalador")
+                        .build(app)?;
+                    let menu = MenuBuilder::new(app)
+                        .item(&open)
+                        .separator()
+                        .item(&quit)
+                        .build()?;
+                    TrayIconBuilder::with_id("centraldark-os")
+                        .icon(icon)
+                        .icon_as_template(false)
+                        .tooltip("CentralDark-OS")
+                        .menu(&menu)
+                        .show_menu_on_left_click(true)
+                        .on_menu_event(|handle, event| match event.id().as_ref() {
+                            "show-installer" => {
+                                if let Some(win) = handle.get_webview_window("main") {
+                                    let _ = win.show();
+                                    let _ = win.set_focus();
+                                }
+                            }
+                            "exit-installer" => handle.exit(0),
+                            _ => {}
+                        })
+                        .build(app)?;
+                    tracing::info!("icone do olho registrado na bandeja do CentralDark-OS");
+                } else {
+                    tracing::warn!("icone nativo do instalador indisponivel");
+                }
+            }
 
             // First run / repair install, or Update mode: reveal the UI.
             match app.get_webview_window("main") {

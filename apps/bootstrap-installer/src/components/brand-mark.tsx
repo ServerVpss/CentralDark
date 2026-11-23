@@ -6,12 +6,12 @@ export function BrandMark({ className, ...props }: React.ComponentProps<'span'>)
   return (
     <span
       aria-label="CentralDark · OS"
-      className={cn('inline-flex size-14 shrink-0 items-center justify-center', className)}
+      className={cn('inline-flex shrink-0 items-center justify-center', className || 'size-14')}
       role="img"
       {...props}
     >
-      <span className="grid size-full place-items-center rounded-[11px] border border-[#7e643b] bg-[#221c14] text-[#e6bd75]">
-        <svg aria-hidden="true" className="size-8" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 32 32">
+      <span className="centraldark-rov-mark grid place-items-center">
+        <svg aria-hidden="true" className="centraldark-rov-eye" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth={1.2}>
           <circle cx="16" cy="16" r="12" />
           <path d="M5.5 16c5.5-7 15.5-7 21 0-5.5 7-15.5 7-21 0Z" />
           <circle cx="16" cy="16" r="3.7" />
