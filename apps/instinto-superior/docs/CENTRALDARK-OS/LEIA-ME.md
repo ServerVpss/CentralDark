@@ -1,5 +1,5 @@
 # 🪬 CENTRALDARK — LEIA-ME | Contrato de entrada e handoff
-**Criado/atualizado:** `2026-11-23T06:31:20-03:00` · **Fuso:** America/Bahia (UTC-03:00)
+**Criado/atualizado:** `2026-11-23T06:41:36-03:00` · **Fuso:** America/Bahia (UTC-03:00)
 **Escopo único:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 
 > Este arquivo ensina **como trabalhar**. O `CHECKPOINT.md` registra **onde paramos**. Os dois ficam juntos na raiz. Não criar versões paralelas, outro HUD, novo checkpoint ou outro mecanismo só para documentar a missão.
@@ -34,7 +34,7 @@
 
 - Reutilizar antes de criar; um owner e um escritor por escopo; preservar CENTRALDARK AGENTE, login, pareamento, cofre e Core.
 - Observar em leitura antes de agir. Para interfaces, preferir **PID → HWND → GUI/UIA ou DOM → AÇÃO → READBACK**. Screenshot só quando aparência/pixels, ausência de seletor ou contraprova visual exigirem.
-- Alteração autorizada → teste objetivo → contraprova independente → atualização do checkpoint → resposta com estado.
+- Alteração autorizada → teste objetivo → contraprova independente → **mostrar o ponto fixo e perguntar “E aí, CHEFE, ficou do seu gosto?”** → **só após aprovação explícita fazer commit + comentário no PR e atualizar ambos os documentos** → readback; para tarefas não visuais seguir o gate técnico aplicável.
 - **UNKNOWN != PASS · ACTION != PROOF · DOCUMENTED != EXECUTED · EXISTS != RUNNING · MERGED != DEPLOYED.**
 - Nunca escrever tokens, senhas, sessões ou segredos nos dois Markdown; registrar apenas caminhos públicos, SHA-256 de arquivos não secretos e status.
 - Não ativar permissões reais por causa de seletores visuais. Distinguir chat local, Bridge operacional e conexão real do motor MCP.
@@ -79,6 +79,23 @@ Após cada **delta material** realmente concluído ou bloqueado, registrar:
 **Critério de conclusão:** `CASA_2_ARQUIVOS = PR_2_ARQUIVOS` (conteúdo correspondente) **e** `COMMIT_NO_PR` confirmado **e** `READBACK` dos dois lados. **Se GitHub ou Casa estiver inacessível, não declarar concluído; marcar PENDENTE e manter o estado comprovado**, sem inventar SHA. Comentário no PR sem commit dos dois arquivos não satisfaz a regra. Não empurrar arquivos de runtime para o PR só por documentação: o React nativo vive atualmente na Casa e o HTML do PR é referência documental, até uma promoção explícita do código.
 
 **Escopo de autorização:** esta missão autoriza publicar os dois documentos no PR #2119; mudanças futuras seguem a autorização específica do CHEFE e os gates do repositório. Nunca fazer merge, deploy ou force-push por causa do checkpoint.
+
+### 🧿 FIXED_POINT DE GOSTO — aprovação visual obrigatória antes de cristalizar
+
+**Este gate tem precedência sobre a regra automática de commit acima para alterações visuais, de UX e de comportamento que o CHEFE precisa avaliar.** Editar ou testar não é autorização de publicar o acabamento como aceito.
+
+**Fluxo operacional obrigatório em cada ponto fixo visual:**
+1. **Executar o menor delta solicitado**, com testes técnicos e readback. Não transferir execução para o CHEFE.
+2. **Mostrar o resultado real** na janela correta do aplicativo ou em evidência visual adequada, com antes/depois quando necessário; distinguir execução, demonstração e limitação. Não simular visualização nem afirmar “ficou bom” sem resposta do CHEFE.
+3. **Perguntar exatamente:** **“E aí, CHEFE, ficou do seu gosto?”**. Fazer esta pergunta **após mostrar cada ponto fixo que depende do gosto do CHEFE**, e não a cada passo de ferramenta.
+4. **Se o CHEFE pedir ajustes ou não responder:** `AGUARDANDO_CONFORMIDADE_DO_CHEFE` / `AJUSTE_SOLICITADO`. Corrigir a mesma interface, mostrar de novo e repetir a pergunta; **sem commit de aceitação e sem comentário declarando aprovação**. Preservar versão anterior e pendências.
+5. **Se o CHEFE responder positivamente** sobre o resultado mostrado (“ficou bom”, “aprovado”, “perfeito”, “é isso”, equivalente inequívoco): esta fala é **CONFORMIDADE_DO_GOSTO = APROVADA** e **autoriza automaticamente, para aquele delta e escopo, o registro/versionamento e comentário no PR existente**, sem perguntar novamente “posso fazer commit?”. A aprovação não cobre modificações invisíveis ou posteriores.
+6. **Após aprovação e testes concluídos:** atualizar **ambos** `LEIA-ME.md` e `CHECKPOINT.md` na Casa e no PR, registrar o gosto aprovado, data/hora Bahia, escopo, owner, testes, !HUD e !RASTRO, e **fazer um único commit do delta aprovado + ambos os arquivos na branch do PR #2119**. Publicar **comentário no mesmo PR** com fala de aceite (paráfrase fiel), antes/depois, SHA real, arquivos, provas e pendências. Atualizar o corpo do PR quando necessário; confirmar readback Casa ↔ PR ↔ commit ↔ comentário.
+7. **Se falhar teste, GitHub, commit ou readback:** `PENDENTE`, não chamar `FIXED_POINT` de concluído. Aprovação estética **não** substitui gates técnicos, autorização separada para mudanças de segurança, produção, deploy ou merge.
+
+**Estados distintos:** `DESIGN_EDITADO` → `TECNICAMENTE_TESTADO` → `MOSTRADO_AO_CHEFE` → `AGUARDANDO_CONFORMIDADE` → `GOSTO_APROVADO` → `COMMIT_PR_COM_READBACK` → `FIXED_POINT_REGISTRADO`. Nada de `GOSTO_APROVADO` por inferência, por build verde ou por silêncio. Aplicar este método a cada interface/área editada do projeto, sem novo arquivo nem segundo PR.
+
+**Exceção clara:** correções urgentes de segurança ou regras técnicas com autorização explícita própria podem seguir seus gates específicos, sem usar “gosto” para mascarar funcionamento. A atualização desta **regra documental**, solicitada diretamente pelo CHEFE, não é um ponto fixo de design visual e deve ser registrada como norma; a pergunta de gosto aplica-se à próxima apresentação de interface.
 
 ## 6. Operação DEV e limites de segurança
 - Conferir `source_remote_bridge/ui/package.json` antes dos comandos. Receita encontrada: `npm run dev:live` a partir de `source_remote_bridge/ui`; a rota existente usa `../installer/Build-Remote-Bridge.ps1 -Dev`.

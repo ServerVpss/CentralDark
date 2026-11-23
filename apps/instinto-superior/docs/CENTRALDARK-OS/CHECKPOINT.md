@@ -1,5 +1,5 @@
 # 👑🪬 CENTRALDARK — CHECKPOINT | !HUD + !RASTRO
-**Última atualização (Bahia):** `2026-11-23T06:31:20-03:00` · **Dia operacional:** `2026-11-23` · **Fuso:** `America/Bahia (UTC-03:00)`
+**Última atualização (Bahia):** `2026-11-23T06:41:36-03:00` · **Dia operacional:** `2026-11-23` · **Fuso:** `America/Bahia (UTC-03:00)`
 **Pasta deste handoff:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 **Primeiro arquivo a ler:** `LEIA-ME.md` · **Responsabilidade do arquivo:** documentar o estado **observado**, não inventar execução.
 **Git nesta pasta:** **NÃO APLICÁVEL** — sem `.git` na raiz e nos quatro subprojetos inspecionados em 23/11. Nenhum commit/push deste trabalho está comprovado.
@@ -12,6 +12,13 @@
 - `apps/instinto-superior/docs/CENTRALDARK-OS/CHECKPOINT.md`
 
 **A cada delta:** atualizar ambos na Casa e na branch do PR; registrar um **commit contendo os dois arquivos**, readback de ambos, hora BRT e SHA real; atualizar o corpo do **mesmo PR** com `!HUD`, `!RASTRO`, pendências herdadas e **Próximo passo**. Se não puder validar os dois lados, **PENDENTE**. A pasta local continua sem `.git`, portanto não afirmar que houve `git commit` nela. **A versão React em execução na Casa não é automaticamente código versionado no PR:** o PR contém o HTML de referência e documentos de continuidade; nenhuma sincronização do código React está implícita. O **commit concluído** desta missão deve ser consultado no próprio PR (SHA externo ao documento, evitando referência circular).
+
+## 🧿 !HUD — Gate obrigatório de conformidade do gosto
+**Instrução do CHEFE recebida em 23/11/2026:** toda edição visual apresentada em um ponto fixo precisa ser mostrada no aplicativo real, seguida da pergunta **“E aí, CHEFE, ficou do seu gosto?”**. Se disser “ficou bom”, “aprovado”, “perfeito” ou equivalente inequívoco sobre **esse resultado mostrado**, o agente deve **registrar automaticamente**: atualizar os dois Markdown na Casa e no PR, fazer commit do **delta aprovado + os dois documentos** na branch deste **mesmo PR #2119**, comentar no PR e conferir SHA/readback. **Não pedir uma segunda autorização para o commit.**
+
+**Enquanto não houver aprovação estética:** `AGUARDANDO_CONFORMIDADE_DO_CHEFE`. Se houver ressalva, `AJUSTE_SOLICITADO`: melhorar, reexibir e perguntar de novo; não congelar o design como aprovado. `TECNICAMENTE_APROVADO != GOSTO_APROVADO != VERSIONADO`. A fala do CHEFE, o escopo exato, o horário Bahia, o commit e o link do comentário são provas independentes a registrar. Sem resposta ou sem prova do commit: **PENDENTE**.
+
+**Estado deste gate nesta data:** **REGRA DOCUMENTAL SOLICITADA/ACEITA** pelo CHEFE; **nenhuma nova alteração visual está sendo apresentada como aprovada neste delta**. Os testes de interface anteriores continuam com seus estados próprios; o próximo refinamento visual deve seguir a pergunta antes de cristalizar um commit.
 
 ## 🎯 Missão vigente
 Manter **uma CentralDark Agente Remoto** com interface React nativa no Remote Bridge, navegação e Histórico do CENTRALDARK · OS, e preservar Halo, pareamento e motor MCP. Melhorar a aparência sem quebrar funções nem confundir protótipo local com agente conectado.
@@ -31,6 +38,8 @@ Manter **uma CentralDark Agente Remoto** com interface React nativa no Remote Br
 | 10 | Integração Halo Tauri ↔ Bridge ↔ MCP | 🟡 PENDENTE | Componentes existem em pastas separadas; estado de execução ponta a ponta **não comprovado**; ver pendências herdadas |
 | 11 | Git local e publicação documental no PR #2119 | 🟡 RECONFERIR PR | Pasta da Casa não é checkout; conferir commit remoto e dois arquivos no próprio PR; HTML do PR não equivale ao React em execução |
 
+| 12 | Aprovação visual do CHEFE antes de commit | 🟢 REGRA DOCUMENTADA · próximo visual aguardará aceite | Testar → mostrar → **“E aí, CHEFE, ficou do seu gosto?”** → receber aceite → commit + comentário no PR. A aprovação da regra não aprova automaticamente as telas anteriores. |
+
 **Último bom observado:** o Electron exibiu **Novo chat**, ambos os menus de opções abriram, a navegação `Novo chat → CENTRALDARK AGENTE → Novo chat` passou, e o build Vite foi aprovado. Isso **não** prova integração operacional do Hermes.
 
 ## 🕒 Atualizações implementadas HOJE — 23/11/2026 (BRT)
@@ -46,6 +55,8 @@ Manter **uma CentralDark Agente Remoto** com interface React nativa no Remote Br
 
 | 06:31:20 | Handoff duplicado e contrato de dois arquivos/um commit no PR #2119 | `LEIA-ME.md`, `CHECKPOINT.md` locais e seus espelhos no PR | Commit e readback: consultar o próprio PR; sem deploy, merge nem promoção do React |
 
+| 06:41:36 | Novo contrato de ponto fixo do gosto do CHEFE | `LEIA-ME.md` e `CHECKPOINT.md` | Regra operacional aprovada como instrução; publicação do compromisso documental será confirmada pelo SHA do PR, sem confundir norma com aprovação de interface. |
+
 As horas dos arquivos vêm da última modificação do sistema de arquivos; a hora do registro de auditoria é a da leitura. Não são prova de que cada função foi usada nesses horários.
 
 ## 🟡 Pendências HERDADAS — abertas antes de 23/11/2026
@@ -58,6 +69,7 @@ As horas dos arquivos vêm da última modificação do sistema de arquivos; a ho
 ## 🟡 Pendências surgidas HOJE — 23/11/2026
 | ID | Pendência | Situação / próximo teste |
 |---|---|---|
+| P-20261123-04 | **Aplicar o gate do gosto à próxima apresentação visual** | **AGUARDANDO PRÓXIMO PONTO FIXO:** apresentar a alteração, perguntar “E aí, CHEFE, ficou do seu gosto?”, registrar aprovação real antes de commit + comentário no PR. Não retroagir aprovação para o código React ainda não versionado. |
 | P-20261123-01 | `Ctrl+Shift+S` não teve sucesso comprovado nas simulações de teclado | **PENDENTE** — testar teclado físico focado no Electron; se falhar, inspecionar o evento no `main.cjs`, preload e React; botão da barra passou |
 | P-20261123-02 | Tela **Novo chat** só envia mensagens para o estado React local | **PENDENTE** — identificar owner/mecanismo de chat do Hermes e integrar somente quando autorizado; não inventar respostas |
 | P-20261123-03 | Comparação visual final Novo chat × HTML original | **PENDENTE** — layout estrutural e menus passaram; conferir pixels, espaçamento e texto completo lado a lado antes do acabamento final |
