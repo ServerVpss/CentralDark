@@ -10,6 +10,28 @@ updated: 2026-07-02
 > **Regra fixa do projeto:** todo o ecossistema CentralDark usa o mesmo design.
 > Não criar paleta nova, fonte nova ou sombra nova sem combinar antes.
 
+
+<!-- CENTRALDARK_VISUAL_HERANCA_20261124 -->
+## 🪬 Lei de modernidade herdada — todos os projetos (24/11/2026)
+
+**Decisão do CHEFE:** toda interface nova ou alterada — desktop, janelas auxiliares, instalador, atualizador, autenticação/pareamento, painel, site e futuros projetos — deve **herdar a identidade e os componentes do Design System CentralDark já existente**, sem criar design system paralelo, reescrever funcionalidade ou inventar paleta/fonte/sombra. Este documento é o **owner transversal do contrato visual**; cada aplicação mantém seu owner de implementação e seus tokens/estilos concretos.
+
+**Herança não significa forçar um único tema.** Consultar o tema/pele ativo e os identificadores já registrados. A Esmeralda é a identidade institucional documentada aqui; respeitar os temas globais `emerald`/`operational`/`forge` e as quatro peles independentes do Cockpit (`default`/`ouro`/`ops`/`esmeralda`). Não misturar os dois seletores, inventar quinta pele ou converter automaticamente a aparência Forja/dourada em verde. Preservar o design aprovado do CENTRALDARK · OS (PR #2119) em sua própria superfície.
+
+**Contrato de adoção para toda aplicação:**
+1. **Antes de desenhar:** localizar este owner, `visual-design-method`, o design local (`apps/desktop/DESIGN.md`, quando for o desktop) e a fonte de tokens/componentes no código.
+2. **Reusar primeiro:** componentes de janela, botões, tipografia, cores semânticas, elevação, foco, movimento, responsividade e acessibilidade do tema ativo; adaptar tecnologia diferente por mapeamento de tokens, **sem copiar runtime/handlers**.
+3. **Paridade integral:** incluir instalador, updater externo, splash, login, erros, permissões, modais, notificações e janelas auxiliares, não apenas a página principal. Estados claros/escuros e `prefers-reduced-motion` quando aplicáveis.
+4. **Preservar comportamento:** scripts de atualização, autenticação, IPC, sessão, nomes técnicos Hermes e interfaces de compatibilidade não mudam por decisão estética. História/atribuição upstream permanece.
+5. **Exceção controlada:** componente visual exclusivo só quando os owners existentes não atendem; justificar o motivo, registrar no mesmo owner e aprovar a escolha humana quando necessário.
+6. **Provar antes de aprovar:** checar tokens e builds, comparar telas no runtime real, testar fluxo funcional e regressões nos temas existentes. `DOCUMENTED != EXECUTED`; `MERGED != DEPLOYED`; `STATIC_CHECK_PASS != VISUAL_PASS`.
+
+**Rastro da descoberta:** em 24/11/2026 a janela externa de atualização do CENTRALDARK · OS ainda usava `scripts/desktop-update/ui.html` (superfície independente), enquanto o desktop já tinha `apps/desktop/src/app/native-os/NativeShell.tsx` e `apps/desktop/src/app/updates-overlay.tsx`. Conclusão: modernização no app principal **não garante** modernização das outras janelas nem que o binário instalado contenha o mesmo commit. Corrigir o menor delta em cada owner, com teste; não criar atualizador novo.
+
+**Implementação e continuidade:** `CentralDark-Core/.agents/skills/visual-design-method/SKILL.md` governa o método; `CentralDark-Core/LEIA-ME-IA.md` é ponte de entrada; `CentralDark-Core/docs/CONSCIENCIA/APRENDIZADOS.md` guarda a lição; `CentralDark-Core/docs/CONSCIENCIA/LEMBRANCAS/README.md` aponta para a decisão. **Esta cláusula documenta a obrigação; não afirma paridade de runtime comprovada.**
+<!-- /CENTRALDARK_VISUAL_HERANCA_20261124 -->
+
+
 ---
 
 ## Identidade
