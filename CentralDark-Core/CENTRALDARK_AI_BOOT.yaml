@@ -30,6 +30,16 @@ CENTRALDARK_AI_BOOT:
 
     # CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 — mesmo BOOT, nenhuma segunda memoria/renderer.
     presentation_gate: BOOT_YAML_PLUS_MISSION_HUD
+    # CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124
+    hybrid_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]
+    hybrid_fallback_only_when_previous_failed: true
+    hybrid_mission_identity: MISSION_ID_WITH_PR_COMMENTS_AND_CHECKPOINT
+    hybrid_document_proof: [BOOT_THEN_LEIA, PATH, GIT_BLOB_SHA]
+    hybrid_cli_command: "scripts/trigger-fabric/centraldark_full_trigger_boot.py github-hybrid-hud"
+    host_must_supply_connector_tools: true
+    python_cannot_call_chatgpt_connector_directly: true
+    human_notices: PTBR_SIMPLE_BOT_WITHOUT_TRACEBACK
+    chatgpt_hermes_runtime_consumer_proof_required: true
     presentation_gate_mandatory: true
     first_mission_response_requires: [BOOT_READBACK_YAML, CURRENT_MISSION_HUD]
     show_yaml_first_then_hud: true

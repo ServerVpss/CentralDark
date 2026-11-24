@@ -25,6 +25,7 @@ mutante exige autorizacao mecanica explicita (--allow-mutation).
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import json
 import math
@@ -1386,6 +1387,176 @@ def cmd_github_entry(args: argparse.Namespace) -> int:
     return 0
 
 
+
+# CENTRALDARK_HYBRID_ROUTE_20261124 -- no parallel owner or token sharing.
+# Official and CentralDark MCP adapters are provided by the host agent.
+# The executable CLI fallback uses the host's existing gh authentication.
+HYBRID_ORDER=("GITHUB_OFICIAL","CENTRALDARK_MCP","GH_CLI")
+HYBRID_FILES=("CentralDark-Core/CENTRALDARK_AI_BOOT.yaml",
+              "CentralDark-Core/LEIA-ME-IA.md")
+
+def hybrid_git_sha(data: bytes) -> str:
+    return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
+
+def hybrid_gh_api(endpoint: str):
+    if not re.fullmatch(r"repos/ServerVpss/CentralDark/(?:contents/[\w./-]+|pulls/[0-9]+|issues/[0-9]+/comments(?:\?per_page=100&page=[0-9]+)?)",endpoint):
+        raise ValueError("INVALID_ENDPOINT")
+    cmd=["gh","api",endpoint,"-X","GET"]
+    if "/contents/" in endpoint:
+        cmd+=["-f","ref=main"]
+    try:
+        p=subprocess.run(cmd,capture_output=True,timeout=25,check=False)
+    except (OSError,subprocess.TimeoutExpired):
+        raise ValueError("CLI_UNAVAILABLE") from None
+    if p.returncode:
+        raise ValueError("REMOTE_UNAVAILABLE")
+    try:
+        return json.loads(p.stdout)
+    except ValueError:
+        raise ValueError("REMOTE_RESPONSE_INVALID") from None
+
+def hybrid_gh_file(path,ref):
+    if ref!="main" or path not in HYBRID_FILES:
+        raise ValueError("FILE_NOT_ALLOWED")
+    result=hybrid_gh_api("repos/ServerVpss/CentralDark/contents/"+path)
+    if not isinstance(result,dict) or result.get("encoding")!="base64":
+        raise ValueError("FILE_INVALID")
+    try:
+        decoded=base64.b64decode(result["content"].replace("\n","").replace("\r",""),validate=True)
+        content=decoded.decode("utf-8")
+    except (KeyError,ValueError,UnicodeError):
+        raise ValueError("INVALID_CONTENT") from None
+    return {"path":result.get("path"),"sha":result.get("sha"),"content":content}
+
+def hybrid_verify_file(item,path):
+    if not isinstance(item,dict) or item.get("path")!=path:
+        raise ValueError("PATH_MISMATCH")
+    content,sha=item.get("content"),item.get("sha")
+    if not isinstance(content,str) or not isinstance(sha,str):
+        raise ValueError("MISSING_FILE_PROOF")
+    raw=content.encode("utf-8")
+    marker="CENTRALDARK_AI_BOOT:" if path.endswith(".yaml") else 'title: "LEIA-ME-IA"'
+    if not raw or len(raw)>1048576 or hybrid_git_sha(raw)!=sha.lower() or marker not in content[:350]:
+        raise ValueError("INVALID_FILE_PROOF")
+    return {"path":path,"sha":sha.lower(),"bytes":len(raw)}
+
+def hybrid_readback(adapters=None,gh_reader=None):
+    providers=dict(adapters or {})
+    providers["GH_CLI"]=gh_reader or hybrid_gh_file
+    attempts=[]
+    for name in HYBRID_ORDER:
+        reader=providers.get(name)
+        if reader is None:
+            attempts.append({"source":name,"status":"NO_ADAPTER"})
+            continue
+        try:
+            files=[hybrid_verify_file(reader(path,"main"),path) for path in HYBRID_FILES]
+        except (ValueError,TypeError,KeyError,OSError,RuntimeError):
+            attempts.append({"source":name,"status":"FAILED"})
+            continue
+        attempts.append({"source":name,"status":"APROVADO"})
+        return {"status":"APROVADO","source":name,"files":files,"attempts":attempts}
+    return {"status":"PENDENTE","source":"NONE","files":[],"attempts":attempts}
+
+def hybrid_pr_hud(pr_number,mission_id,api=None):
+    """PR explicit; latest edited is a candidate, never the mission authority."""
+    result={"status":"PENDENTE","mission_id":mission_id,"next":"Encontrar o PR correto da missão."}
+    if pr_number is None or not 0<pr_number<100000000:
+        return result
+    api=api or hybrid_gh_api
+    try:
+        pr=api("repos/ServerVpss/CentralDark/pulls/"+str(pr_number))
+        comments=[]
+        for page in range(1,21):
+            batch=api("repos/ServerVpss/CentralDark/issues/"+str(pr_number)+"/comments?per_page=100&page="+str(page))
+            if not isinstance(batch,list):
+                raise ValueError("COMMENTS_RESPONSE_INVALID")
+            comments.extend(batch)
+            if len(batch)<100:
+                break
+        else:
+            raise ValueError("COMMENTS_PAGINATION_INCOMPLETE")
+    except (ValueError,TypeError,KeyError,OSError):
+        result["next"]="Conferir o PR assim que o GitHub estiver acessível."
+        return result
+    if not isinstance(pr,dict) or not isinstance(comments,list):
+        return result
+    sha=(pr.get("head") or {}).get("sha","")
+    if pr.get("state")!="open" or not re.fullmatch(r"[0-9a-f]{40}",sha):
+        return result
+    matches=[]
+    for c in comments:
+        body=c.get("body") if isinstance(c,dict) else None
+        if not isinstance(body,str):
+            continue
+        m=re.search(r"<!-- CENTRALDARK_HUD_MISSION_ID:([A-Za-z0-9_.-]+) -->",body)
+        if m and (not mission_id or m.group(1)==mission_id):
+            matches.append((c.get("created_at",""),c.get("id",0),m.group(1),body))
+    matches.sort()
+    if mission_id and not matches:
+        result["next"]="Conferir a identificação da missão no comentário do PR."
+        return result
+    chosen=matches[-1] if matches else None
+    dimensions=[]
+    if chosen:
+        for m in re.finditer(r"(?m)^- \[([xX ])\] ([^\r\n]+)",chosen[3]):
+            name=re.sub(r"^[🟢🟡🔴⚪]\s*","",m.group(2)).strip()[:110]
+            dimensions.append({"name":name,"declared_checked":m.group(1).lower()=="x"})
+    result.update({"status":"PR_LIDO","mission_id":chosen[2] if chosen else "UNKNOWN",
+                   "pr":pr_number,"head":sha,"title":str(pr.get("title",""))[:110],
+                   "dimensions":dimensions,"fixed_point":"PENDENTE",
+                   "next":"Conferir as provas e continuar do último ponto válido."})
+    return result
+
+def hybrid_bot_text(proof,mission):
+    """Visible notices in everyday Portuguese; diagnostics stay in JSON."""
+    q=chr(96)*3
+    out=["🪬 BOOT CENTRALDARK — GitHub",q+"yaml",
+         "repository: ServerVpss/CentralDark","ref: main",
+         "read_order: BOOT → LEIA",
+         "read_status: "+("LIDO" if proof["status"]=="APROVADO" else "PENDENTE"),
+         "source: "+proof["source"],"presentation_gate: BOOT_YAML_PLUS_MISSION_HUD"]
+    for i,f in enumerate(proof["files"],1):
+        out+=["file_"+str(i)+": "+f["path"],"sha_"+str(i)+": "+f["sha"]]
+    out+=[q,"","🪬 CENTRALDARK — HUD DA MISSÃO"]
+    if proof["status"]!="APROVADO":
+        out+=["🟡 Não consegui conferir os arquivos. A missão não foi alterada.",
+              "➡️ Próximo passo: recuperar uma das conexões disponíveis."]
+    elif mission["status"]!="PR_LIDO":
+        out+=["🟡 Os arquivos estão conferidos, mas falta identificar a missão certa.",
+              "➡️ Próximo passo: "+mission["next"]]
+    else:
+        out+=["🎯 Missão: "+mission["title"],"🧵 Fio: "+mission["mission_id"],
+              "📂 PR: #"+str(mission["pr"]),"🔖 Versão: "+mission["head"][:12],
+              "🟢 Arquivos do projeto conferidos.",
+            "🟢 PR e conversa da missão encontrados.",
+            "📊 Etapas da missão:"]
+        for i,entry in enumerate(mission["dimensions"],1):
+            out+=[str(i).zfill(2)+". 🟡 "+entry["name"]+
+                  (" — registrado, conferir prova" if entry["declared_checked"] else " — pendente")]
+        total=len(mission["dimensions"])
+        registered=sum(1 for d in mission["dimensions"] if d["declared_checked"])
+        out+=["📈 Andamento: "+str(registered)+" de "+str(total)+
+              " registrados no PR (ainda precisam de comprovação).",
+              "🧭 Ponto de continuidade: PR e comentários recuperados.",
+              "➡️ Próximo passo: "+mission["next"],
+              "🟡 Objetivo final: PENDENTE"]
+    return "\n".join(out)
+
+def cmd_github_hybrid_hud(args):
+    if hasattr(sys.stdout, "reconfigure"):
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        except (OSError, ValueError):
+            pass
+    proof=hybrid_readback()
+    mission=hybrid_pr_hud(args.pr,args.mission_id) if proof["status"]=="APROVADO" else {"status":"PENDENTE"}
+    if args.format=="json":
+        print(json.dumps({"boot":proof,"mission":mission},ensure_ascii=False,indent=2))
+    else:
+        print(hybrid_bot_text(proof,mission))
+    return 0 if proof["status"]=="APROVADO" and mission["status"]=="PR_LIDO" else 9
+
 def cmd_boot(args: argparse.Namespace) -> int:
     repo = discover_boot_repo(getattr(args, "repo", None))
     github_entry = github_entry_readback(repo)
@@ -2059,6 +2230,12 @@ def build_parser() -> argparse.ArgumentParser:
     ge = sub.add_parser("github-entry")
     ge.add_argument("--repo", default=None)
     ge.set_defaults(func=cmd_github_entry)
+
+    hy = sub.add_parser("github-hybrid-hud")
+    hy.add_argument("--pr", type=int, default=None)
+    hy.add_argument("--mission-id", default="")
+    hy.add_argument("--format", choices=("bot","json"), default="bot")
+    hy.set_defaults(func=cmd_github_hybrid_hud)
 
     b = sub.add_parser("boot")
     b.add_argument("--repo", default=None)

@@ -35,6 +35,10 @@ links:
 <!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 **PORTA VISUAL DO CHEFE:** ao iniciar ou reancorar uma conversa de missao, **YAML de leitura canônica + HUD visual** na mesma resposta, em ordem. O YAML confirma fontes e SHAs observados; o HUD mostra a mesma missao, dimensoes, provas por cor e `NEXT_CURSOR` em nome humano `Próximo passo`. Durante toda conversa operacional, acompanhar e atualizar o HUD no mesmo fio. Nao repetir YAML em pergunta casual salvo novo boot/reancoragem; nao emitir so YAML e abandonar o fio. Status falsos e percentuais imaginados sao proibidos. Teste de porta: YAML+HUD=PASS se duas partes presentes e referem-se ao mesmo contexto; YAML sem HUD=FAIL; HUD sem fontes verificadas deve ter origem PENDENTE.
 <!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+
+<!-- CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124 -->
+**Avisos humanos sobre conexões:** dizer somente o que aconteceu e de onde a missão foi recuperada, em frases simples de bot. Exemplo: "Encontrei a missão pela Casa." / "Ainda não consegui ler. O trabalho anterior foi preservado." Não mostrar ao CHEFE mensagens de exceção, status HTTP ou falhas de autenticação na resposta principal; guardar o diagnóstico técnico no recibo. Manter o YAML + HUD na primeira resposta da missão e os mesmos checkpoints nas respostas operacionais. Não inventar prova verde a partir de comentário.
+<!-- /CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
 ## 🪬 HUD da missão — padrão visual obrigatório nas respostas operacionais
 

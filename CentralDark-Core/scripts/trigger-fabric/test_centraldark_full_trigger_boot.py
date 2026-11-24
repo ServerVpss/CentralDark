@@ -864,6 +864,63 @@ def test_github_entry_yaml_preserves_read_order_and_optional_continuity():
         assert "read_status: PENDENTE" in output.getvalue()
         pending.assert_not_called()
 
+
+def test_hybrid_fallback_order():
+    log=[]
+    def item(path,ref):
+        assert ref=="main"
+        content="CENTRALDARK_AI_BOOT:\n" if path.endswith(".yaml") else 'title: "LEIA-ME-IA"\n'
+        return {"path":path,"sha":mod.hybrid_git_sha(content.encode()),"content":content}
+    def ok(label):
+        def read(path,ref):
+            log.append(label)
+            return item(path,ref)
+        return read
+    def fail(label):
+        def read(path,ref):
+            log.append(label)
+            raise ValueError("DOWN")
+        return read
+    a=mod.hybrid_readback({"GITHUB_OFICIAL":ok("official"),"CENTRALDARK_MCP":ok("mcp")},
+                          gh_reader=ok("gh"))
+    assert a["source"]=="GITHUB_OFICIAL" and log==["official","official"]
+    log.clear()
+    b=mod.hybrid_readback({"GITHUB_OFICIAL":fail("official"),"CENTRALDARK_MCP":ok("mcp")},
+                          gh_reader=ok("gh"))
+    assert b["source"]=="CENTRALDARK_MCP" and log==["official","mcp","mcp"]
+    log.clear()
+    c=mod.hybrid_readback({"GITHUB_OFICIAL":fail("official"),"CENTRALDARK_MCP":fail("mcp")},
+                          gh_reader=ok("gh"))
+    assert c["source"]=="GH_CLI" and log==["official","mcp","gh","gh"]
+    log.clear()
+    def bad(path,ref):
+        return {"path":path,"sha":"0"*40,"content":"CENTRALDARK_AI_BOOT:\n"}
+    d=mod.hybrid_readback({"GITHUB_OFICIAL":bad,"CENTRALDARK_MCP":fail("mcp")},
+                          gh_reader=fail("gh"))
+    assert d["status"]=="PENDENTE" and d["source"]=="NONE"
+    assert "Não consegui conferir" in mod.hybrid_bot_text(d,{"status":"PENDENTE"})
+    assert "DOWN" not in mod.hybrid_bot_text(d,{"status":"PENDENTE"})
+
+
+def test_hybrid_mission_scope_and_bot_text():
+    mission="CENTRALDARK_BOOT_HUD_ATOMIC_20261124"
+    def api(endpoint):
+        if "/pulls/" in endpoint:
+            return {"state":"open","title":"BOOT e HUD","head":{"sha":"a"*40}}
+        return [
+            {"id":1,"created_at":"2026-11-24T09:00:00Z","body":
+             "<!-- CENTRALDARK_HUD_MISSION_ID:"+mission+" -->\n"
+             "- [x] Etapa comprovada\n- [ ] Conferir o Hermes"},
+            {"id":2,"created_at":"2026-11-24T10:00:00Z","body":
+             "<!-- CENTRALDARK_HUD_MISSION_ID:OUTRA_MISSAO -->\n- [x] Outra tarefa"}]
+    current=mod.hybrid_pr_hud(2171,mission,api=api)
+    assert current["status"]=="PR_LIDO" and current["mission_id"]==mission
+    assert len(current["dimensions"])==2
+    assert mod.hybrid_pr_hud(2171,"MISSAO_AUSENTE",api=api)["status"]=="PENDENTE"
+    view=mod.hybrid_bot_text({"status":"APROVADO","source":"GH_CLI","files":[]},current)
+    assert "🪬 BOOT CENTRALDARK" in view and "🪬 CENTRALDARK — HUD DA MISSÃO" in view
+    assert "📂 PR: #2171" in view and "registrado, conferir prova" in view
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -910,6 +967,8 @@ if __name__ == "__main__":
         test_hud_failure_keeps_canonical_readback_and_skips_resume,
         test_github_entry_continuity_reuses_verified_checkpoint_only,
         test_github_entry_yaml_preserves_read_order_and_optional_continuity,
+        test_hybrid_fallback_order,
+        test_hybrid_mission_scope_and_bot_text,
     ]
     for test in tests:
         test()

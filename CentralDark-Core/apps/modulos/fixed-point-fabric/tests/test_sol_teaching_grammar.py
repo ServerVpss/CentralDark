@@ -46,6 +46,17 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("Commit/PR != ChatGPT global configurado", agent_block)
         self.assertNotIn("HUD completo apenas no modo solicitado", agent_block)
 
+    def test_hybrid_sources_and_bot_messages_bound_to_canonical_owners(self):
+        agents = (self.repo / "AGENTS.md").read_text(encoding="utf-8")
+        hud = (self.repo / "docs/HUD/README.md").read_text(encoding="utf-8")
+        self.assertIn("hybrid_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]", self.entry_boot)
+        self.assertIn("python_cannot_call_chatgpt_connector_directly: true", self.entry_boot)
+        for text in (agents, hud, self.method, self.response):
+            self.assertIn("CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124", text)
+        self.assertIn("AVISOS HUMANOS DE BOT", agents)
+        self.assertIn("github-hybrid-hud", hud)
+        self.assertIn("GitHub oficial", agents)
+
     def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
         mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
         self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)

@@ -33,6 +33,8 @@ updated: 2026-09-28
 **Alcance real:** isto e obrigacao de cada agente que carregou a entrada. Documento no Git nao instala por si so um gatilho nativo em qualquer chat do ChatGPT ou no motor do Hermes; consumo precisa ser testado separadamente por superficie. Nao criar outro HUD/BOOT/estado.
 <!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 
+**Recuperação por três caminhos, na ordem:** GitHub oficial → CentralDark/MCP → gh autenticado da Casa. Ao falhar uma conexão, procurar a próxima, sem confundir o PR mais recente com a missão vigente. O mesmo carregador oferece github-hybrid-hud --pr NUMERO --mission-id ID para consulta pela Casa/Hermes. Manter YAML + HUD e avisos simples de bot. Fonte detalhada: AGENTS.md#CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124.
+
 
 <!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 ## 🪬 Capacidade operacional única — Skill Mãe
