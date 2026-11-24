@@ -26,6 +26,12 @@ last_updated_utc: "2026-11-05T23:42:13.800Z"
 **Referência visual sem novo owner:** PR #2119, artefato `apps/instinto-superior/docs/CENTRALDARK-OS.html`; interface funcional existente: `apps/instinto-superior/src/components/central/CockpitShell.tsx`. A evolução visível do fork Hermes reutiliza **seus próprios componentes Desktop, scripts de atualização, TUI/CLI e Web**, sem outro executor. Publicação do código na `main` não basta: requer teste e leitura visual após atualização.
 <!-- /CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
 
+<!-- CENTRALDARK_VISUAL_HERANCA_20261124 -->
+**🎨 Lei visual permanente do CHEFE (24/11/2026):** qualquer projeto/superfície CENTRALDARK herda o sistema visual canônico do Core em `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md` e o tema ativo do aplicativo, reutilizando componentes e tokens antes de criar outros. A mesma qualidade de janela deve alcançar instalador, updater externo, login, splash, erros e demais superfícies; o contrato é **herança e paridade**, não imposição de uma paleta única. O método vive em `.agents/skills/visual-design-method/SKILL.md`; `apps/desktop/DESIGN.md` continua dono dos componentes desktop. Preservar Hermes técnico e origem upstream; `DOCUMENTED != RUNTIME_VERIFIED`.
+<!-- /CENTRALDARK_VISUAL_HERANCA_20261124 -->
+
+
+
 > **Status:** CANÔNICO por autorização explícita do SEGREDO/CHEFE em 2026-08-14.
 > **Origem:** SOUL aprovada pelo SEGREDO/CHEFE + aprendizados operacionais provados no CentralDark.
 > **Autoria da identidade, história, valores, direção e intenção:** SEGREDO/CHEFE.
