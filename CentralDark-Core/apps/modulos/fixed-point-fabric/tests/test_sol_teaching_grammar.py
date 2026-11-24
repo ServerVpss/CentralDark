@@ -55,7 +55,7 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
             self.assertIn("CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124", text)
         self.assertIn("AVISOS HUMANOS DE BOT", agents)
         self.assertIn("github-hybrid-hud", hud)
-        self.assertIn("GitHub oficial", agents)
+        self.assertIn("conector oficial GitHub", agents)
 
     def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
         mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
