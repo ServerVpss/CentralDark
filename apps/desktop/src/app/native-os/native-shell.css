@@ -1,6 +1,12 @@
 /* Native React shell: a single DOM tree, a single resize owner, no iframe. */
-.cdos-shell {
+/* Native shell and the persistent xterm overlay must read the SAME surface token.
+   xterm resolves its canvas color from document.body, outside .cdos-shell. */
+:root:has(.cdos-shell) {
   --cdos-bg: #101113;
+  --ui-terminal-surface-background: var(--cdos-bg);
+}
+
+.cdos-shell {
   --cdos-nav: #131416;
   --cdos-panel: #191a1d;
   --cdos-inset: #121315;
