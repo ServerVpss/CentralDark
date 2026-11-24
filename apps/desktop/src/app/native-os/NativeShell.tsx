@@ -89,6 +89,13 @@ export function NativeShell({ children }) {
   const contentRef = useRef(null);
   const actualWidth = collapsed ? 56 : width;
 
+  // The original Hermes titlebar is viewport-fixed; reserve the CentralDark rail
+  // so its session toggle and unread badge stay above the Hermes sessions pane.
+  useLayoutEffect(() => {
+    document.documentElement.style.setProperty("--cdos-native-sidebar-width", `${actualWidth}px`);
+    return () => document.documentElement.style.removeProperty("--cdos-native-sidebar-width");
+  }, [actualWidth]);
+
   useEffect(() => {
     try { localStorage.setItem(WIDTH_KEY, String(width)); } catch {}
   }, [width]);
@@ -282,7 +289,8 @@ export function NativeShell({ children }) {
   }, []);
 
   return <div className={["cdos-shell", collapsed && "cdos-collapsed", dragging && "cdos-resizing"]
-    .filter(Boolean).join(" ")} style={{ "--cdos-menu-width": actualWidth + "px" }}>
+    .filter(Boolean).join(" ")} data-cdos-view={page === "hermes" ? "hermes" : "native"}
+    style={{ "--cdos-menu-width": actualWidth + "px" }}>
     <aside ref={sidebarRef} id="cdos-sidebar" className="cdos-sidebar" aria-label="Navegação CENTRALDARK · OS">
       <div className="cdos-sidebar-header">
         <div className="cdos-brand">

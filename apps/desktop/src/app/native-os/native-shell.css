@@ -188,6 +188,16 @@
   height: 100%;
   min-width: 0;
 }
+/* Hermes keeps its session/titlebar controls fixed to the viewport.
+   Their left cluster must begin after the CentralDark outer sidebar. */
+body:has(.cdos-shell[data-cdos-view="hermes"]) [data-titlebar-cluster="left"] {
+  left: calc(var(--cdos-native-sidebar-width, 218px) + var(--titlebar-controls-left, 14px)) !important;
+}
+/* The Hermes sessions toggle (including its unread badge) belongs to Hermes,
+   never to the CentralDark native pages such as Chat, Agent or Library. */
+body:has(.cdos-shell[data-cdos-view="native"]) [data-titlebar-cluster="left"] {
+  display: none !important;
+}
 .cdos-agent-page .app-shell { height: 100%; min-height: 100%; width: 100%; padding: 0 22px 22px; }
 .cdos-agent-page .topbar { padding-right: 150px; }
 .cdos-collapsed .cdos-sidebar-header { flex-direction: column; padding: 11px 4px; gap: 3px; }
@@ -458,7 +468,7 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
-/* Restore the original overlapping logo/toggle interaction when collapsed. */
+/* Original collapsed behavior: logo at rest, toggle on hover/focus. */
 .cdos-collapsed .cdos-sidebar-header {
   position: relative;
   display: grid;
@@ -504,6 +514,9 @@
   background: #e6bd75;
   color: #e6bd75;
   animation: cdos-status-pulse 5.8s ease-in-out -1.8s infinite;
+}
+.cdos-collapsed .cdos-section-trigger:has(> .cdos-library-pulse) {
+  position: relative;
 }
 .cdos-collapsed .cdos-library-pulse {
   position: absolute;
