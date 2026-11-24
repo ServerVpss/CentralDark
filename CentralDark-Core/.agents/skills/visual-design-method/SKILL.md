@@ -18,7 +18,7 @@ The Core design document is the single cross-project visual contract; implementa
 stays with its existing component owner (e.g. `apps/desktop/DESIGN.md`).
 
 Do not conflate the three global theme IDs with the four Cockpit skins or force the
-Esmeralda palette on a Forja/Ouro surface. Maintain semantics, accessiblity, keyboard,
+Esmeralda palette on a Forja/Ouro surface. Maintain semantics, accessibility, keyboard,
 responsive layouts, motion preferences and existing functionality; technical Hermes
 identifiers/upstream attribution remain for compatibility. Use a small adapter for
 different UI technologies when needed.
