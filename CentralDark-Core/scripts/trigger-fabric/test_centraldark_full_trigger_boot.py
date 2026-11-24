@@ -807,6 +807,59 @@ def test_hud_failure_keeps_canonical_readback_and_skips_resume():
     continuity.assert_not_called()
 
 
+
+def test_github_entry_continuity_reuses_verified_checkpoint_only():
+    valid = {"status": "RECOVERED", "integrity": "HASH_CHAIN_PASS",
+             "mission": "test-mission", "last_step": "ok",
+             "next_cursor": "NEXT_OK", "receipt_sha256": "a" * 64,
+             "verified_steps": 1}
+    with patch.object(mod, "hermes_continuity_preflight", return_value=valid):
+        result = mod.github_entry_continuity(REPO)
+    assert result["status"] == "APROVADO"
+    assert result["proof_reuse"] == "VERIFIED_CHECKPOINT"
+    assert result["next_cursor"] == "NEXT_OK"
+
+    for invalid in (
+        {**valid, "integrity": "FAILED"},
+        {**valid, "receipt_sha256": "garbage"},
+        {"status": "BLOCKED", "reason": "NO_VERIFIED_CHECKPOINT"},
+    ):
+        with patch.object(mod, "hermes_continuity_preflight", return_value=invalid):
+            result = mod.github_entry_continuity(REPO)
+        assert result["status"] == "PENDENTE"
+        assert result["proof_reuse"] == "NOT_VERIFIED"
+
+
+def test_github_entry_yaml_preserves_read_order_and_optional_continuity():
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        (root / "CENTRALDARK_AI_BOOT.yaml").write_text("CENTRALDARK_AI_BOOT:\n", encoding="utf-8")
+        (root / "LEIA-ME-IA.md").write_text('title: "LEIA-ME-IA"\n', encoding="utf-8")
+        with patch.object(mod, "discover_boot_repo", return_value=root), \
+             patch.object(mod, "hermes_continuity_preflight", return_value={
+                 "status": "BLOCKED", "reason": "NO_VERIFIED_CHECKPOINT"
+             }):
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                result = mod.cmd_github_entry(argparse.Namespace(repo=None))
+        printed = output.getvalue()
+        assert result == 0, printed
+        assert "read_order: BOOT_THEN_LEIA" in printed
+        assert "read_status: APROVADO" in printed
+        assert "continuity_status: PENDENTE" in printed
+        assert "proof_reuse: NOT_VERIFIED" in printed
+        assert "document_fingerprint: " in printed
+
+        (root / "LEIA-ME-IA.md").unlink()
+        with patch.object(mod, "discover_boot_repo", return_value=root), \
+             patch.object(mod, "hermes_continuity_preflight") as pending:
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                result = mod.cmd_github_entry(argparse.Namespace(repo=None))
+        assert result == 9
+        assert "read_status: PENDENTE" in output.getvalue()
+        pending.assert_not_called()
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -851,6 +904,8 @@ if __name__ == "__main__":
         test_hud_gate_rejects_normalized_content_drift,
         test_missing_checkpoint_blocks_resume_after_canonical_main_read,
         test_hud_failure_keeps_canonical_readback_and_skips_resume,
+        test_github_entry_continuity_reuses_verified_checkpoint_only,
+        test_github_entry_yaml_preserves_read_order_and_optional_continuity,
     ]
     for test in tests:
         test()

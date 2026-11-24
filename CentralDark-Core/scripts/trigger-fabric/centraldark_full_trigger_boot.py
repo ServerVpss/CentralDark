@@ -1027,7 +1027,7 @@ def hermes_continuity_preflight(repo: Path) -> dict:
     if not entry.is_file() or entry.is_symlink():
         return result
     try:
-        proc = subprocess.run(["python3", str(entry), "--status"], cwd=str(repo),
+        proc = subprocess.run([sys.executable, str(entry), "--status"], cwd=str(repo),
                               capture_output=True, text=True, encoding="utf-8", errors="replace",
                               timeout=20, env=os.environ.copy())
     except (OSError, subprocess.TimeoutExpired) as exc:
@@ -1296,6 +1296,7 @@ def cmd_script_first_preflight(repo: Path) -> dict:
 # CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122
 def github_entry_readback(repo: Path) -> dict:
     """Leitura deterministica BOOT -> LEIA, sem simular GitHub remoto."""
+    repo = repo.resolve()  # Windows: caminho curto 8.3 e nome completo representam o mesmo root.
     files = (Path("CENTRALDARK_AI_BOOT.yaml"), Path("LEIA-ME-IA.md"))
     checked = []
     for i, rel in enumerate(files):
@@ -1319,8 +1320,31 @@ def github_entry_readback(repo: Path) -> dict:
             "source": "LOCAL_CHECKOUT_NOT_GITHUB_CONNECTOR", "files": checked}
 
 
+
+def github_entry_continuity(repo: Path) -> dict:
+    """Reaproveita APENAS o checkpoint ja validado pelo owner existente."""
+    checkpoint = hermes_continuity_preflight(repo)
+    if (checkpoint.get("status") != "RECOVERED"
+            or checkpoint.get("integrity") != "HASH_CHAIN_PASS"
+            or not re.fullmatch(r"[a-fA-F0-9]{64}", str(checkpoint.get("receipt_sha256", "")))):
+        return {
+            "status": "PENDENTE",
+            "proof_reuse": "NOT_VERIFIED",
+            "reason": str(checkpoint.get("reason") or "CHECKPOINT_PROOF_INCOMPLETE"),
+        }
+    return {
+        "status": "APROVADO",
+        "proof_reuse": "VERIFIED_CHECKPOINT",
+        "mission": checkpoint.get("mission", "UNKNOWN"),
+        "last_step": checkpoint.get("last_step", "UNKNOWN"),
+        "next_cursor": checkpoint.get("next_cursor", "UNKNOWN"),
+        "receipt_sha256": checkpoint["receipt_sha256"],
+        "verified_steps": checkpoint.get("verified_steps", "UNKNOWN"),
+    }
+
+
 def cmd_github_entry(args: argparse.Namespace) -> int:
-    """Recibo YAML para o leitor de boot existente, sem arquivo temporario."""
+    """BOOT/LEIA sempre lidos; continuidade e reuse opcionais e fail-closed."""
     repo = discover_boot_repo(getattr(args, "repo", None))
     proof = github_entry_readback(repo)
     print("centraldark_github_entry:")
@@ -1332,7 +1356,22 @@ def cmd_github_entry(args: argparse.Namespace) -> int:
         print(f"  sha256_{i}: " + f["sha256"])
     if proof["status"] != "APROVADO":
         print("  reason: " + json.dumps(proof.get("reason", "UNKNOWN"), ensure_ascii=False))
-    return 0 if proof["status"] == "APROVADO" else 9
+        print("  continuity_status: NOT_ATTEMPTED_INVALID_ENTRY")
+        return 9
+
+    # Fingerprint de documentos, NAO cache substituto da leitura obrigatoria.
+    fingerprint_material = "\n".join(f["sha256"] for f in proof["files"]).encode("ascii")
+    print("  document_fingerprint: " + hashlib.sha256(fingerprint_material).hexdigest())
+    continuity = github_entry_continuity(repo)
+    print("  continuity_status: " + continuity["status"])
+    print("  proof_reuse: " + continuity["proof_reuse"])
+    print("  continuity_scope: LOCAL_RUNTIME_LAST_VERIFIED_NOT_CURRENT_CHAT")
+    if continuity["status"] == "APROVADO":
+        for key in ("mission", "last_step", "next_cursor", "receipt_sha256", "verified_steps"):
+            print("  " + key + ": " + json.dumps(continuity[key], ensure_ascii=False))
+    else:
+        print("  continuity_reason: " + json.dumps(continuity["reason"], ensure_ascii=False))
+    return 0
 
 
 def cmd_boot(args: argparse.Namespace) -> int:
