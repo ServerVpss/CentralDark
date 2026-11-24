@@ -27,6 +27,21 @@ CENTRALDARK_AI_BOOT:
     on_read_error: "PENDENTE; MOSTRAR_ARQUIVO_FALTANTE; NAO_DECLARAR_BOOT_LIDO"
     first_visible_block: "🪬 BOOT CENTRALDARK — GitHub"
     first_visible_format: YAML
+
+    # CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 — mesmo BOOT, nenhuma segunda memoria/renderer.
+    presentation_gate: BOOT_YAML_PLUS_MISSION_HUD
+    presentation_gate_mandatory: true
+    first_mission_response_requires: [BOOT_READBACK_YAML, CURRENT_MISSION_HUD]
+    show_yaml_first_then_hud: true
+    hud_must_not_be_skipped_on_first_chat: true
+    on_reanchor_or_new_chat: REPLAY_YAML_THEN_HUD_WITH_FRESH_READBACK
+    operational_replies: HUD_AND_MISSION_THREAD_CONTINUITY
+    mission_thread_fields: [MISSION_ID, LAST_PROVEN, NEXT_CURSOR, FIXED_POINT]
+    hud_when_no_verified_checkpoint: PENDENTE_WITH_GITHUB_PR_RESOLUTION
+    github_pr_resolve_by_mission_identity_not_update_time_only: true
+    current_hud_marker: CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124
+    chatgpt_native_trigger_install_proven: false
+    hermes_native_consumer_loading_proven: false
     agent_responsibility_banner: "🧠 Responsabilidade assumida pelo agente"
     agent_owns_git_read_and_tests: true
     never_delegate_available_readback_or_tests_to_chefe: true

@@ -1351,6 +1351,12 @@ def cmd_github_entry(args: argparse.Namespace) -> int:
     print("  source: LOCAL_CHECKOUT_NOT_GITHUB_CONNECTOR")
     print("  read_order: BOOT_THEN_LEIA")
     print("  read_status: " + proof["status"])
+    # O proprio carregador emite o cadeado: humano deve renderizar YAML + HUD.
+    print("  presentation_gate: BOOT_YAML_PLUS_MISSION_HUD")
+    print("  mission_hud_required: true")
+    print("  mission_hud_owner: AGENTS.md#CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124")
+    print("  mission_hud_first_chat: MANDATORY")
+    print("  mission_thread_required_fields: [MISSION_ID, LAST_PROVEN, NEXT_CURSOR, FIXED_POINT]")
     for i, f in enumerate(proof.get("files", []), 1):
         print(f"  file_{i}: " + json.dumps(f["path"], ensure_ascii=False))
         print(f"  sha256_{i}: " + f["sha256"])
@@ -1366,6 +1372,12 @@ def cmd_github_entry(args: argparse.Namespace) -> int:
     print("  continuity_status: " + continuity["status"])
     print("  proof_reuse: " + continuity["proof_reuse"])
     print("  continuity_scope: LOCAL_RUNTIME_LAST_VERIFIED_NOT_CURRENT_CHAT")
+    print("  mission_hud_source: " + (
+        "VERIFIED_LOCAL_CHECKPOINT_PLUS_MATCHED_PR_REQUIRED"
+        if continuity["status"] == "APROVADO" else "PENDENTE_RESOLVE_MISSION_PR"))
+    print("  mission_hud_next_cursor: " + json.dumps(
+        continuity.get("next_cursor", "RESOLVE_MISSION_PR_AND_CHECKPOINT"),
+        ensure_ascii=False))
     if continuity["status"] == "APROVADO":
         for key in ("mission", "last_step", "next_cursor", "receipt_sha256", "verified_steps"):
             print("  " + key + ": " + json.dumps(continuity[key], ensure_ascii=False))

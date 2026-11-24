@@ -21,6 +21,19 @@ updated: 2026-09-28
 **🧪 Contraprova do mesmo carregador:** `python scripts/trigger-fabric/centraldark_full_trigger_boot.py github-entry --repo .` lê os dois arquivos nesta ordem e imprime recibo YAML **do checkout local**. No ChatGPT/conector, os dois arquivos devem ser recuperados **via GitHub**; o recibo local não substitui leitura remota. Alterar estes documentos **não instala automaticamente um gatilho dentro do conector GitHub**: o agente precisa efetivamente fazer as chamadas e provar a aplicação.
 <!-- /CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122 -->
 
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+## 🔒 YAML + HUD inseparaveis na retomada de missao
+
+**Gate obrigatorio do MESMO BOOT:** ao iniciar uma conversa/sessao sobre a CentralDark ou receber `!CENTRALDARK`, a primeira resposta operacional e a primeira resposta apos reancoragem devem apresentar **dois componentes juntos, nessa ordem**: (1) YAML do BOOT com `repository/ref`, os dois arquivos lidos na ordem `BOOT → LEIA`, SHAs reais e estado de leitura; (2) **🪬 CENTRALDARK — HUD DA MISSÃO** com intencao, fio/`MISSION_ID`, PR/commit correspondentes quando identificados, tabela de dimensoes e semaforo 🟢🟡🔴⚪, progresso somente com total verificavel, ultimo estado provado, próximo passo e `FIXED_POINT`. `YAML_SEM_HUD` e `HUD_SEM_BOOT_VALIDO` reprovam a entrada da missao.
+
+**O HUD acompanha o restante da conversa de missao:** novas mensagens sao DELTAs da missao atual; nao zerar o fio, trocar de PR por data, perder o `NEXT_CURSOR` ou omitir pendencias. Atualizar o quadro da mesma missao a cada resposta operacional; se a fala for uma pergunta simples que nao pedir estado, responder breve mas **preservar internamente o mesmo fio** para a proxima resposta. Ao mudar a missao, exigir identidade nova e recompor a dupla YAML + HUD.
+
+**Fontes:** primeiro `ServerVpss/CentralDark@main` para o contrato; PR vigente da intencao (corpo, commits e comentarios por `MISSION_ID`); checkpoint local verificado (`verified-checkpoint.py`) quando acessivel. Nao confundir ultimo PR editado com missao automaticamente. Sem comprovante, mostrar **🟡 PENDENTE** com origem; nao preencher SHA, checkpoint ou porcentagem por adivinhacao. O conteudo do YAML/Markdown pode ser apresentado em cartao/tabela quando o ambiente suportar.
+
+**Alcance real:** isto e obrigacao de cada agente que carregou a entrada. Documento no Git nao instala por si so um gatilho nativo em qualquer chat do ChatGPT ou no motor do Hermes; consumo precisa ser testado separadamente por superficie. Nao criar outro HUD/BOOT/estado.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+
+
 <!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 ## 🪬 Capacidade operacional única — Skill Mãe
 

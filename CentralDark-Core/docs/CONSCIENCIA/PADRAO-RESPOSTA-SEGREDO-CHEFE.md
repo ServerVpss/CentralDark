@@ -32,6 +32,9 @@ links:
 
 # 💬 Padrão de resposta — SEGREDO/CHEFE
 
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+**PORTA VISUAL DO CHEFE:** ao iniciar ou reancorar uma conversa de missao, **YAML de leitura canônica + HUD visual** na mesma resposta, em ordem. O YAML confirma fontes e SHAs observados; o HUD mostra a mesma missao, dimensoes, provas por cor e `NEXT_CURSOR` em nome humano `Próximo passo`. Durante toda conversa operacional, acompanhar e atualizar o HUD no mesmo fio. Nao repetir YAML em pergunta casual salvo novo boot/reancoragem; nao emitir so YAML e abandonar o fio. Status falsos e percentuais imaginados sao proibidos. Teste de porta: YAML+HUD=PASS se duas partes presentes e referem-se ao mesmo contexto; YAML sem HUD=FAIL; HUD sem fontes verificadas deve ter origem PENDENTE.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
 ## 🪬 HUD da missão — padrão visual obrigatório nas respostas operacionais
 

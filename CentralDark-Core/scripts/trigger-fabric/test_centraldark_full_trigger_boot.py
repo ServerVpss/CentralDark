@@ -849,6 +849,10 @@ def test_github_entry_yaml_preserves_read_order_and_optional_continuity():
         assert "continuity_status: PENDENTE" in printed
         assert "proof_reuse: NOT_VERIFIED" in printed
         assert "document_fingerprint: " in printed
+        assert "presentation_gate: BOOT_YAML_PLUS_MISSION_HUD" in printed
+        assert "mission_hud_required: true" in printed
+        assert "mission_hud_source: PENDENTE_RESOLVE_MISSION_PR" in printed
+        assert "mission_hud_next_cursor: " in printed
 
         (root / "LEIA-ME-IA.md").unlink()
         with patch.object(mod, "discover_boot_repo", return_value=root), \

@@ -1,3 +1,6 @@
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+**YAML E HUD DA MESMA MISSAO:** primeira resposta/reancoragem = YAML BOOT (readback real, SHA, ordem) imediatamente acompanhado do HUD da missao (checkpoints, dimensoes, cores e proximo passo). Subsequentemente manter o HUD na conversa operacional, atualizando somente o delta do mesmo `MISSION_ID`; sempre preservar `LAST_PROVEN` e `NEXT_CURSOR`. Nenhuma missao muda por PR mais recente sozinho. A origem/estado sempre visivel mesmo sem comprovante (PENDENTE). Este e o mesmo HUD, nao segundo ledger. O renderizador de ChatGPT usa cartao/tabela quando suportado; Hermes/CLI usam Markdown equivalente.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # 👑🪬 CentralDark — continuidade da missão e HUD
 

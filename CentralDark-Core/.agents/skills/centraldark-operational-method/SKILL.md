@@ -6,6 +6,9 @@ centraldark_autosync_policy: main-runtime-lock
 oracle_review_on_change: true
 ---
 
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+BOOT VISUAL ATOMICO: em nova conversa de missao/reancoragem do !CENTRALDARK, sempre apresentar o YAML do BOOT seguido do HUD da missao na mesma resposta. O HUD permanece visivel em todas as respostas operacionais subsequentes, com `MISSION_ID`, `LAST_PROVEN`, `NEXT_CURSOR` e pendencias (🟢🟡🔴⚪); em pergunta simples, manter o fio sem recitar o quadro. Consumo depende de carregamento real pelo ChatGPT/Hermes; `DOCUMENTED != CONSUMED`. Owner: AGENTS.md + PADRAO-RESPOSTA-SEGREDO-CHEFE.md.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 HUD UNIVERSAL: aplicar `AGENTS.md#CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124` e o owner `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`. Em resposta operacional sobre missão, checkpoint, progresso, teste, PR, retomada ou próximo passo, apresentar o HUD humano automaticamente (intenção, fio, dimensões numeradas, 🟢/🟡/🔴/⚪, andamento, continuidade, FIXED_POINT), mesmo sem `!HUD`/`#HUD`. Em pergunta factual curta sem status de missão, responder curto. Rich UI no ChatGPT quando disponível; Markdown equivalente no Hermes/CLI/Cockpit. O quadro técnico monoespaçado permanece opcional. Nunca declarar adoção em outro consumidor sem prova de carregamento e resposta real; `UNKNOWN != PASS`.
 <!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->

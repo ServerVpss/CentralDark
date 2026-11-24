@@ -1,6 +1,9 @@
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 ## HUD operacional — apresentacao automatica para missoes
 
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+**GATE PRIMEIRA RESPOSTA:** nao apresentar apenas o YAML do BOOT. Ao abrir nova conversa de missao ou receber !CENTRALDARK, apresentar na MESMA RESPOSTA, nesta ordem: `🪬 BOOT CENTRALDARK — GitHub` com YAML e SHAs/ordem reais → `🪬 CENTRALDARK — HUD DA MISSÃO` com fio da missao, dimensoes, bolinhas 🟢🟡🔴⚪, ultimo estado comprovado e proximo passo. Mesmo em fonte inacessivel, YAML `PENDENTE` e HUD com pendencias reais permanecem visiveis; nunca mascarar. Cada nova resposta operacional da mesma missao preserva e atualiza o HUD; perguntas simples podem ser curtas, mas nao redefinem o fio ou seu cursor. Nova missao/reancoragem exige dupla de entrada novamente. Usar sempre o owner de resposta e o funil existente; nao duplicar HUD, memoria ou protocolo. `BOOT_YAML_PLUS_MISSION_HUD` e o gate; `YAML_SEM_HUD=FALHOU`.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
 **CONTRATO DE APRESENTACAO DO HUD DA MISSAO (24/11/2026):** em TODA resposta humana sobre a missao operacional vigente (retomada, checkpoint, progresso, estado, teste, execucao, PR, auditoria, handoff ou fechamento), o agente que carregou este contrato **mostra o HUD automaticamente na conversa**, sem esperar `!HUD`/`#HUD`. Isso inclui ChatGPT, Hermes/CLI, Cockpit e outros consumidores **quando realmente carregarem o contrato**. Nao cria segundo HUD, banco ou memoria; reutiliza o mesmo `MISSION_ID`, PR da missao, checkpoint Hermes e `NEXT_CURSOR`. Pedido curto que nao solicita estado de missao continua resposta curta e nao precisa de tabela.
 
