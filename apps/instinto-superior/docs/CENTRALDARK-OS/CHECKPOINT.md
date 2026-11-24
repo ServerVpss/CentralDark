@@ -1,8 +1,33 @@
 # 👑🪬 CENTRALDARK — CHECKPOINT | !HUD + !RASTRO
-**Última atualização (Bahia):** `2026-11-23T07:16:50-03:00` · **Dia operacional:** `2026-11-23` · **Fuso:** `America/Bahia (UTC-03:00)`
+**Última atualização (Bahia):** `2026-11-24T07:03:06-03:00` · **Dia operacional:** `2026-11-24` · **Fuso:** `America/Bahia (UTC-03:00)`
 **Pasta deste handoff:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 **Primeiro arquivo a ler:** `LEIA-ME.md` · **Responsabilidade do arquivo:** documentar o estado **observado**, não inventar execução.
 **Git nesta pasta:** **NÃO APLICÁVEL** — sem `.git` na raiz e nos quatro subprojetos inspecionados em 23/11. Nenhum commit/push deste trabalho está comprovado.
+
+## 🧿 !HUD ATUAL — 24/11/2026 | GOSTO APROVADO
+**Registro BRT:** `2026-11-24T07:03:06-03:00` · **Aceite literal:** “Sim ficou ficou do meu gosto”.
+
+**Objetivo:** preservar a casca React do CENTRALDARK · OS e corrigir letras, bandeja e ícones. **Owner:** `F:\CentralDark\apps\desktop`.
+
+**🟢 APROVADO (últimas contraprovas reais em 23/11):**
+- Letras PT-BR corrigidas; DOM da janela: `badCharOnPage=false` e `centralDarkWordmark=true`; alternância `Novo chat` → `CENTRALDARK AGENTE` passou.
+- Electron recompilado com `tsc --build tsconfig.electron.json` e `bundle-electron-main.mjs --dev` (exit 0), reiniciado pela chamada nativa `relaunchApp`.
+- Ícone efetivo HICON do Electron PID `20708`, HWND `2493010`: `C` dourado confirmado por extração da janela (PID/HWND são efêmeros).
+- Bandeja IPC `enabled=true, available=true` persistiu após reinício. Teste real: minimizar → janela invisível, PID vivo; restaurar → janela visível, não minimizada e em primeiro plano.
+- Barra fixada mostrou ícone dourado; `Hermes.lnk` teve só `IconLocation` atualizado; `TargetPath` permaneceu apontando para Hermes.exe antigo. Backup feito.
+- Arte de origem confirmada: Bridge `ui/assets/tray.png`. Arquivos F: `assets/icon.ico` SHA-256 `3d276d9aa989359c145ceb219a32a716d902480c8064ac3a30ee47a9f143a4e5`; `assets/centraldark.png` SHA-256 `38d7bfcd209a4d94459fda158c13e8040a48ef96b484683b36ce741c33914e22`.
+
+**🟡 PENDÊNCIAS herdadas de 22–23/11 (continuam abertas):** `P-20261122-01` Halo/Bridge/MCP ponta a ponta; `P-20261122-02` motor Casa conectado; `P-20261122-03` autenticação/pareamento real; `P-20261123-01` Ctrl+Shift+S; `P-20261123-02` chat ao motor; `P-20261123-03` comparação visual integral com o HTML; IPC das ações do Bridge no Electron Hermes ainda não comprovado.
+
+**!RASTRO:** correções de texto nos arquivos `src/i18n/pt-br.ts` e `src/components/chat/intro.tsx`; nomes de bandeja em `electron/minimize-to-tray.ts`; ícone e resolução em `electron/main.ts`, `assets/icon.ico`, `assets/centraldark.png`. Backups locais da Casa preservados.
+
+**Estado Git:** aceite do gosto não equivale a commit. Confirmar código + `LEIA-ME.md` + `CHECKPOINT.md` no MESMO commit da branch `feat/centraldark-os-rov-ui-20261117` do PR #2119; ler SHA e diff remoto para declarar versionado. Não confundir versão com deploy.
+
+**Último bom:** Electron DEV com Vite `:5174` e bandeja funcionando. O atalho fixado ainda ABRE a instalação antiga; só sua imagem foi alterada.
+
+**Próximo passo:** conferir readback da branch e comentário do PR #2119; seguir só as pendências autorizadas pelo CHEFE.
+
+---
 
 ## 🏛️ Sincronização obrigatória com o GitHub
 **PR vigente:** [#2119 — CENTRALDARK · OS](https://github.com/ServerVpss/CentralDark/pull/2119) · **branch:** `feat/centraldark-os-rov-ui-20261117` · **estado na consulta inicial:** aberto, rascunho; nenhum merge ou deploy autorizado.

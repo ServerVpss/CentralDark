@@ -47,6 +47,7 @@ import type { DesktopRegistryConnection } from '@/global'
 import { getProfileSoul, updateProfileSoul } from '@/hermes'
 import { useResizeObserver } from '@/hooks/use-resize-observer'
 import { type Translations, useI18n } from '@/i18n'
+import { connectionLabelForDisplay } from '@/lib/connection-display'
 import { sortConnectionsForDisplay } from '@/lib/connection-display'
 import { triggerHaptic } from '@/lib/haptics'
 import { hostHas } from '@/lib/host-capabilities'
@@ -1223,9 +1224,11 @@ function FleetRestGroup({
   const { t } = useI18n()
   const p = t.profiles
 
+  const displayGatewayLabel = connectionLabelForDisplay(group, t.catalog?.thisComputer ?? 'Este computador')
+
   const dividerLabel = group.reachable
-    ? p.fleet.gateway(group.label)
-    : `${group.needsSignIn ? `${p.fleet.gateway(group.label)} · ${t.settings.toolsets.needsSignIn}` : p.fleet.gatewayUnreachable(group.label)}${group.error ? `\n${group.error}` : ''}`
+    ? p.fleet.gateway(displayGatewayLabel)
+    : `${group.needsSignIn ? `${p.fleet.gateway(displayGatewayLabel)} · ${t.settings.toolsets.needsSignIn}` : p.fleet.gatewayUnreachable(displayGatewayLabel)}${group.error ? `\n${group.error}` : ''}`
 
   const defaultKey = fleetRouteKey(group.connectionId, group.defaultAgent.profile)
   // Off the active gateway, This device wears its device glyph, not Home. The
@@ -1236,7 +1239,7 @@ function FleetRestGroup({
     <>
       <FleetDivider connection={group} first={first} label={dividerLabel} reachable={group.reachable} />
       <span
-        aria-label={p.fleet.gateway(group.label)}
+        aria-label={p.fleet.gateway(displayGatewayLabel)}
         className="flex shrink-0 items-center gap-1"
         data-active="false"
         data-connection-id={group.connectionId}
@@ -1248,7 +1251,9 @@ function FleetRestGroup({
           active={false}
           connectionId={group.connectionId}
           glyph={localDefault ? 'device-desktop' : 'home'}
-          label={localDefault ? p.fleet.localDevice : p.fleet.onGateway(group.defaultAgent.profile, group.label)}
+          label={
+            localDefault ? p.fleet.localDevice : p.fleet.onGateway(group.defaultAgent.profile, displayGatewayLabel)
+          }
           muted
           onSelect={() => onSelect(group.defaultAgent)}
           pending={pendingRoute === defaultKey}

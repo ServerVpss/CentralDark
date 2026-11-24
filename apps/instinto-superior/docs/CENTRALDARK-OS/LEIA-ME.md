@@ -1,5 +1,5 @@
 # 🪬 CENTRALDARK — LEIA-ME | Contrato de entrada e handoff
-**Criado/atualizado:** `2026-11-23T07:16:50-03:00` · **Fuso:** America/Bahia (UTC-03:00)
+**Criado/atualizado:** `2026-11-24T07:03:06-03:00` · **Fuso:** America/Bahia (UTC-03:00)
 **Escopo único:** `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander`
 
 > Este arquivo ensina **como trabalhar**. O `CHECKPOINT.md` registra **onde paramos**. Os dois ficam juntos na raiz. Não criar versões paralelas, outro HUD, novo checkpoint ou outro mecanismo só para documentar a missão.
@@ -118,3 +118,18 @@ Após cada **delta material** realmente concluído ou bloqueado, registrar:
 **Onde o código fica versionado neste PR:** `apps/instinto-superior/docs/CENTRALDARK-OS/native-react/ui/`, fiel à origem da Casa `source_remote_bridge/ui/` para revisão do código aprovado. **Esse caminho armazena a fonte de referência do React, não registra um runtime adicional nem afirma que `apps/desktop` já consome essa implementação.** A Casa continua sendo a execução DEV comprovada; promoção ao aplicativo canônico requer integração e testes próprios. Arquivos de sessão, credenciais, segredos, dependências instaladas, binários e build local ficam fora do commit.
 
 **Obrigação após esta aprovação:** versionar o código desse delta com **os dois Markdown no mesmo commit do PR #2119**, registrar comentário com aceite e evidências e realizar readback de ambos os espelhos. O SHA final do commit deve ser consultado no PR, não escrito previamente aqui (um SHA no arquivo alteraria o próprio commit e criaria referência circular).
+
+## 9. Revisão operacional — 24/11/2026 | conformidade do CHEFE
+**Registro BRT:** `2026-11-24T07:03:06-03:00` · **Aceite literal:** “Sim ficou ficou do meu gosto”.
+
+**Escopo do aceite:** interface CENTRALDARK · OS demonstrada na Casa: acentos PT-BR, marca `CENTRALDARK · OS`, ícone dourado na janela, barra de tarefas e bandeja, minimizar/restaurar. O aceite não prova motor, login real nem deploy.
+
+**Owner desta alteração:** `F:\CentralDark\apps\desktop` (Electron do Hermes integrado à casca React nativa); o Bridge original em `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander\source_remote_bridge\ui` continua separado. Não alterar `CentralDark-Core`.
+
+**Método repetível:** auditar PID → HWND → DOM/UIA → ação → readback; compilar; confirmar IPC de bandeja `enabled=true, available=true`; testar minimizar → janela invisível e PID vivo → restaurar → janela visível e em foco; extrair HICON da janela e inspecionar o ícone fixado separadamente. Não inferir ícone do atalho a partir do HICON.
+
+**Arte aprovada:** o `C` dourado de `source_remote_bridge/ui/assets/tray.png` (NÃO o arquivo `tray.ico` do Bridge, que traz outra imagem). No disco F: `apps/desktop/assets/icon.ico` e `apps/desktop/assets/centraldark.png`.
+
+**Atalho Windows:** `Hermes.lnk` da barra fixada foi ajustado **somente no campo IconLocation** para o ícone do disco F. O TargetPath continua apontando para a instalação antiga Hermes.exe; nunca alterar o alvo sem autorização.
+
+**Registro da conformidade:** conforme o gate deste LEIA-ME, versionar o código aprovado e estes dois documentos na branch do PR #2119, conferir hashes e comentar o recibo no PR. Não fazer commit direto na `main`, merge nem deploy. Último SHA deve ser consultado no PR, evitando referência circular.

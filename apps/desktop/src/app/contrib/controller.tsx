@@ -98,6 +98,7 @@ import { $statusbarVisible } from '@/store/statusbar-prefs'
 import { isBrowserWindow, isHudWindow } from '@/store/windows'
 
 import { BrowserPopoutShell } from '../chat/browser-popout-shell'
+import { NativeShell } from '../native-os/NativeShell'
 import type { SessionDragPayload } from '../chat/composer/inline-refs'
 import { watchPreviewTiles } from '../chat/preview-tile'
 import { watchRouteTiles } from '../chat/route-tile'
@@ -820,6 +821,7 @@ export function ContribController() {
         {/* App-owned answer to a plugin's ctx.preview.executeJavaScript. Plugins
             run in every window kind, so each shell mounts it. */}
         <PluginPreviewConsentDialog />
+        <NativeShell>
         <div
           className="flex h-full min-h-0 w-screen flex-col bg-(--ui-bg-chrome) text-(--ui-text-primary)"
           // Window-glass hook: this div and the sidebar-wrapper above it are
@@ -845,6 +847,7 @@ export function ContribController() {
           <TermsButterbar />
           {statusbarVisible && <WiredPane part="statusbar" />}
         </div>
+        </NativeShell>
       </ContribWiring>
     </SidebarProvider>
   )
