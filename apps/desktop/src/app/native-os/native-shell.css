@@ -165,7 +165,7 @@
   width: 2px;
   height: 34px;
   border-radius: 3px;
-  background: #85878f;
+  background: #c4c8cf;
 }
 .cdos-resize:is(:hover,:focus-visible) > span,
 .cdos-resizing .cdos-resize > span { background: var(--cdos-gold); }
