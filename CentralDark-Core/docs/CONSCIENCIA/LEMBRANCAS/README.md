@@ -11,7 +11,7 @@ updated: 2026-08-21
 <!-- CENTRALDARK_VISUAL_HERANCA_20261124 -->
 ### 🪬 Lembrança útil — modernidade herdada (24/11/2026)
 
-**Decisão do CHEFE:** todos os projetos e todas as janelas da CentralDark devem herdar a arquitetura e a modernidade visual existentes — inclusive atualizador externo, instalador, login e janelas auxiliares — sem criar outro aplicativo/design system. O Core já contém a lei em `../ARQUITETURA/DESIGN-SISTEMA.md`? **Não:** o owner correto é `../ARQUITETURA/DESIGN-SISTEMA.md` a partir de `docs/CONSCIENCIA/LEMBRANCAS/`, isto é, `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`. A skill `visual-design-method` aplica o método e cada aplicativo conserva seus tokens/skins ativos. A janela de update independente foi a lacuna observada; ainda não é prova de correção de runtime.
+**Decisão do CHEFE:** todos os projetos e todas as janelas da CentralDark devem herdar a arquitetura e a modernidade visual existentes — inclusive atualizador externo, instalador, login e janelas auxiliares — sem criar outro aplicativo/design system. A fonte canônica é `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md` (a partir desta pasta: `../ARQUITETURA/DESIGN-SISTEMA.md`). A skill `visual-design-method` aplica o método e cada aplicativo conserva seus tokens/skins ativos. A janela de update independente foi a lacuna observada; ainda não é prova de correção de runtime.
 
 Esta seção é **ponte de memória curta**, não uma cópia dos tokens nem uma segunda especificação. Para executar, ler o owner canônico e seu recibo na branch vigente.
 <!-- /CENTRALDARK_VISUAL_HERANCA_20261124 -->
