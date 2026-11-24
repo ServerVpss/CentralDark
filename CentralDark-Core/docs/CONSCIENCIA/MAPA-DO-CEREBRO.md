@@ -37,6 +37,10 @@ writer: SOL
 
 Este MOC é **mapa de navegação**, não um segundo cérebro e não um snapshot eterno de runtime. Números de tools, processos, portas e serviços só valem enquanto a chave material da prova não mudar.
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+**Mapa do cristal YAML + HUD (24/11/2026):** BOOT/LEIA → AGENTS/SOUL/padrão de resposta → GitHub oficial, CentralDark MCP ou gh Casa (primeira fonte válida) → PR/corpo/commits/comentários por MISSION_ID → checkpoint local verificado → HUD com dimensões/checkpoints/cores/andamento/Próximo passo → aprendizagem L229B e memória mem/index.md. BRAIN e LEMBRANCAS permanecem índices de navegação/contexto, nunca estado vivo. Consumo no modelo exige verificação separada.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
 ## 📍 Norte do estado atual — direto, sem ritual obrigatório
 
 ```text

@@ -57,6 +57,39 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("github-hybrid-hud", hud)
         self.assertIn("conector oficial GitHub", agents)
 
+    def test_crystal_memory_learning_remembrance_and_core_are_one_contract(self):
+        marker = 'CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124'
+        paths = {
+            'learning': 'docs/CONSCIENCIA/APRENDIZADOS.md',
+            'memory': 'mem/index.md',
+            'remembrance': 'docs/CONSCIENCIA/LEMBRANCAS/README.md',
+            'history': 'docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md',
+            'brain': 'docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md',
+            'map': 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',
+            'soul': 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
+            'handoff': 'docs/CONTINUIDADE/proxima-ia.md',
+            'chatgpt': 'CHATGPT.md',
+            'codex': 'CODEX.md',
+            'agents': 'AGENTS.md',
+            'leia': 'LEIA-ME-IA.md',
+        }
+        docs = {key: (self.repo / path).read_text(encoding='utf-8') for key,path in paths.items()}
+        for key, content in docs.items():
+            self.assertEqual(content.count('<!-- '+marker+' -->'), 1, key)
+        self.assertIn('L229B', docs['learning'])
+        self.assertIn('13/13', docs['learning'])
+        self.assertIn('HISTORICAL_REDIRECT', docs['history'])
+        self.assertIn('não deve mais ser carregado como memória operacional atual em massa', docs['history'])
+        self.assertIn('BOOT', docs['handoff'])
+        self.assertIn('GitHub oficial', docs['soul'])
+        self.assertIn('YAML BOOT + HUD', docs['codex'])
+        self.assertIn('não altera automaticamente as Personalizações', docs['chatgpt'])
+        self.assertIn('prova', docs['memory'])
+        self.assertIn('PR #2171', docs['brain'])
+        self.assertIn('mission_first_response_gate: BOOT_YAML_PLUS_MISSION_HUD',
+            (self.repo / 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml').read_text(encoding='utf-8'))
+        self.assertIn('hybrid_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]', self.entry_boot)
+        self.assertIn('GITHUB_OFICIAL', self.method)
     def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
         mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
         self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)

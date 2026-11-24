@@ -35,6 +35,10 @@ updated: 2026-09-28
 
 **Recuperação por três caminhos, na ordem:** GitHub oficial → CentralDark/MCP → gh autenticado da Casa. Ao falhar uma conexão, procurar a próxima, sem confundir o PR mais recente com a missão vigente. O mesmo carregador oferece github-hybrid-hud --pr NUMERO --mission-id ID para consulta pela Casa/Hermes. Manter YAML + HUD e avisos simples de bot. Fonte detalhada: AGENTS.md#CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124.
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+Rota de memoria e nucleo para esta formula: docs/CONSCIENCIA/APRENDIZADOS.md#L229B; mem/index.md; docs/CONSCIENCIA/LEMBRANCAS/README.md; docs/CONTINUIDADE/proxima-ia.md; docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md. Recuperar apenas o contexto pertinente sem reler a historia toda; regras operacionais continuam AGENTS.md + padrao de resposta + Skill Mae; nao declarar consumo ChatGPT/Hermes so por commit.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
 
 <!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 ## 🪬 Capacidade operacional única — Skill Mãe

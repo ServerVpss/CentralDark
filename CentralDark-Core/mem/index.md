@@ -10,6 +10,16 @@
 
 Este índice não é uma segunda SOUL nem inventário de runtime. Ele roteia somente memória compatível com o contrato atual.
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+## Preferência operacional e recuperação do fio — 24/11/2026
+- Apresentação da missão: YAML real de BOOT/LEIA e SHA, seguido imediatamente pelo HUD, com intenção, MISSION_ID, PR, commit, checkpoints 🟢/🟡/🔴/⚪, barra de andamento apenas medida, ponto de continuidade, Próximo passo e FIXED_POINT. Atualizar a mesma missão a cada resposta operacional; pergunta casual pode ser curta.
+- Três fontes em ordem: GitHub oficial → CentralDark/MCP → gh Casa, com leitura e SHA confirmados. Resolver PR/corpo/commits/comentários por intenção + MISSION_ID; usar checkpoint Hermes verificado para prova de execução. Último PR editado e [x] são candidatos, não comprovação.
+- Comunicação: mensagens simples de bot em PT-BR, sem tokens/tracebacks; detalhes permanecem no recibo. Não declarar novo chat ChatGPT nem resposta Hermes como comprovados por um commit.
+- Donos da regra: AGENTS.md + padrão de resposta + BOOT/LEIA + Skill Mãe. Aprendizado L229B em docs/CONSCIENCIA/APRENDIZADOS.md; lembrança contextual em docs/CONSCIENCIA/LEMBRANCAS/README.md; passagem de turno em docs/CONTINUIDADE/proxima-ia.md. Este índice é navegação, não um segundo estado.
+- Fio desta decisão: MISSION_ID=CENTRALDARK_BOOT_HUD_ATOMIC_20261124, PR #2171; conferir comentários recentes e checkpoint real antes de tratar registro histórico como estado atual.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+
 ## Identidade
 
 ```text

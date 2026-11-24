@@ -9,6 +9,9 @@ ROTAS DO MESMO BOOT: primeiro conector oficial GitHub autorizado; se falhar, con
 
 O PR da missão deve corresponder ao MISSION_ID da intenção, conferindo corpo, commits e comentários. Último PR alterado não é prova de missão vigente. Checkbox de PR é declaração, não execução: somente promover para verde após contraprova. Manter LAST_PROVEN e NEXT_CURSOR da mesma missão em cada resposta operacional. A entrada Python github-hybrid-hud no carregador existente usa gh local em modo somente leitura; conectores oficiais e MCP só podem ser chamados pelo agente que os recebeu, via adapters (não por magia dentro do Python).
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+CRISTAL PERSISTENTE: aprendizado L229B em docs/CONSCIENCIA/APRENDIZADOS.md; indice de preferencia em mem/index.md; lembranca contextual em docs/CONSCIENCIA/LEMBRANCAS/README.md (LEMBRANCAS.md continua HISTORICAL_REDIRECT); roteiro em docs/CONTINUIDADE/proxima-ia.md; navegacao BRAIN/07-APRENDIZADOS-MEMORIAS/README.md. Esses documentos remetem aos owners AGENTS + padrao de resposta, nao viram segundo HUD, owner, banco ou executor. Estado vivo e PR por MISSION_ID mais checkpoint verificado; nova conversa ChatGPT so aprovada apos consumo real.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
 AVISOS HUMANOS DE BOT: dizer "Consegui recuperar o projeto pelo GitHub", "O primeiro caminho não respondeu; recuperei pela CentralDark", "Os conectores não responderam; recuperei pelo computador da Casa" ou "Não consegui acessar agora; a missão ficou preservada". Sem traceback, código HTTP, stack ou tokens nos avisos principais. Primeiro contato da missão e reancoragem: YAML + HUD na mesma resposta. Hermes e ChatGPT somente considerados atualizados depois de consumo e resposta real conferida, não apenas pelo commit.
 <!-- /CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
