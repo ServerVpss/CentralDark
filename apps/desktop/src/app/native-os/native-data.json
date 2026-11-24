@@ -1,0 +1,702 @@
+{
+  "source": "CENTRALDARK-OS.html (PR #2119)",
+  "records": [
+    {
+      "id": "current",
+      "date": "Atual",
+      "time": "A verificar",
+      "title": "O que está aberto agora?",
+      "detail": "Casa · janelas dos monitores e painel",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Pendência",
+      "basis": "Falta verificar",
+      "window": "VS Code / Code-OSS",
+      "monitor": "A confirmar",
+      "body": "Faltam imagens recentes dos dois monitores. A etapa da instalação e a pasta do projeto também precisam de confirmação.",
+      "missing": "O que falta conferir: imagem, horário, nome da janela, monitor e registro do Hermes."
+    },
+    {
+      "id": "hud",
+      "date": "08 NOV",
+      "time": "Histórico",
+      "title": "Uma versão anterior do painel apareceu no editor",
+      "detail": "Casa · arquivo do painel aberto",
+      "env": "Casa · Windows",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por imagem",
+      "window": "VS Code / Code-OSS",
+      "monitor": "A confirmar",
+      "file": "docs/HUD/README.md",
+      "lines": "593–601 na captura",
+      "body": "A imagem mostra o arquivo do painel aberto na seção de sensores. Ainda falta confirmar em qual monitor a janela apareceu e o que está aberto agora.",
+      "links": [
+        [
+          "Imagem original",
+          "https://chatgpt.com/library?file_id=libfile_a3ea8b036af481918d047243aea31d80&account_id=personal"
+        ],
+        [
+          "Instruções do painel no GitHub",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/docs/HUD/README.md#L1-L7"
+        ]
+      ]
+    },
+    {
+      "id": "electron",
+      "date": "08 NOV",
+      "time": "Histórico",
+      "title": "Arquivo do Code-OSS encontrado",
+      "detail": "Casa · pasta do Code-OSS e janela do Electron",
+      "env": "Casa · Windows",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por imagem",
+      "window": "Explorer / Electron",
+      "monitor": "A confirmar",
+      "file": "Code - OSS.exe",
+      "path": "centraldark desktop-1145.2\\.build\\electron\\Code - OSS.exe",
+      "image": "electron",
+      "body": "A imagem mostra o arquivo do Code-OSS na pasta de desenvolvimento e o Electron aberto na tela inicial.",
+      "missing": "Falta confirmar a versão final, o idioma e o endereço completo da pasta do projeto."
+    },
+    {
+      "id": "launch",
+      "date": "08 NOV",
+      "time": "Histórico",
+      "title": "O Electron abriu na tela inicial",
+      "detail": "Casa · janela Electron",
+      "env": "Casa · Windows",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por imagem",
+      "window": "Explorer / Electron",
+      "monitor": "A confirmar",
+      "file": "Code - OSS.exe",
+      "image": "launch",
+      "body": "O Electron abriu na tela inicial e pediu o caminho do aplicativo.",
+      "missing": "Falta uma imagem do editor aberto para comparar."
+    },
+    {
+      "id": "done",
+      "date": "08 NOV",
+      "time": "02:57 BRT",
+      "title": "O relato diz que a instalação terminou",
+      "detail": "Casa · falta conferir o resultado",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Correção",
+      "basis": "Relato anterior",
+      "window": "Visual Studio Installer",
+      "monitor": "A confirmar",
+      "file": "vswhere",
+      "tech": "SDK result 0x0 · vswhere isComplete=True",
+      "body": "Um relato diz que o Windows SDK e o Spectre x64 foram instalados. Falta conferir o registro original e o estado atual.",
+      "missing": "O que falta conferir: registros do instalador e do vswhere com horário e origem."
+    },
+    {
+      "id": "sdk",
+      "date": "08 NOV",
+      "time": "02:29 BRT",
+      "title": "O instalador pediu um arquivo",
+      "detail": "Casa · Windows SDK DirectX x64 Remote",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Correção",
+      "basis": "Relato anterior",
+      "window": "Visual Studio Installer",
+      "monitor": "A confirmar",
+      "file": "MSI do Windows SDK",
+      "tech": "Windows SDK DirectX x64 Remote · MSI 10.1.26100.8249 · OK / Browse",
+      "path": "Endereço completo a confirmar",
+      "body": "Segundo o relato, o instalador pediu um arquivo do Windows SDK no pacote 1 de 51. A janela tinha os botões OK e Procurar (Browse). O relato diz que o arquivo foi reposto.",
+      "missing": "Faltam a imagem do aviso e o registro original para confirmar o endereço pedido."
+    },
+    {
+      "id": "monitor",
+      "date": "07 NOV",
+      "time": "Histórico",
+      "title": "VS Code localizado à direita",
+      "detail": "Casa · monitor 1 na direita, em pé",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Descoberta",
+      "basis": "Registro anterior",
+      "window": "VS Code / Code-OSS",
+      "monitor": "Direita · monitor 1",
+      "tech": "PID 31056 · HWND 329050",
+      "body": "Um registro anterior localizou o VS Code no monitor 1, à direita. Falta uma imagem que confirme a posição. A janela do monitor de cima ainda precisa ser identificada.",
+      "links": [
+        [
+          "Ver registro · linhas 1128–1136",
+          "https://chatgpt.com/library?file_id=libfile_6ffd3830eb008191927b8bc514659413&account_id=personal"
+        ]
+      ]
+    },
+    {
+      "id": "upper",
+      "date": "Atual",
+      "time": "A verificar",
+      "title": "Qual janela está no monitor de cima?",
+      "detail": "Casa · monitor superior",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Pendência",
+      "basis": "Falta verificar",
+      "window": "Janela a confirmar",
+      "monitor": "Superior",
+      "body": "Falta uma imagem recente do monitor de cima. Ainda não sabemos em qual monitor o instalador apareceu."
+    },
+    {
+      "id": "contract",
+      "date": "08 NOV",
+      "time": "Fonte",
+      "title": "Instruções do painel conferidas no GitHub",
+      "detail": "GitHub · arquivos que registram o progresso",
+      "env": "GitHub · main",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por registro",
+      "window": "GitHub",
+      "file": "docs/HUD/README.md",
+      "lines": "1–7",
+      "branch": "main",
+      "commit": "cc726d175a3a0430bd7ddaf9305d8c69e318347d",
+      "tech": "current.json · events.jsonl",
+      "body": "As instruções do painel indicam onde ficam o estado da tarefa e o histórico de verificações.",
+      "links": [
+        [
+          "README do HUD · linhas 1–7",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/docs/HUD/README.md#L1-L7"
+        ],
+        [
+          "Commit lido",
+          "https://github.com/ServerVpss/CentralDark/commit/cc726d175a3a0430bd7ddaf9305d8c69e318347d"
+        ]
+      ]
+    },
+    {
+      "id": "owner",
+      "date": "08 NOV",
+      "time": "Fonte",
+      "title": "Código de leitura do progresso encontrado",
+      "detail": "GitHub · código da CentralDark",
+      "env": "GitHub · main",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por registro",
+      "window": "GitHub",
+      "file": "scripts/hermes/centraldark-entry.py",
+      "lines": "22–35",
+      "branch": "main",
+      "commit": "cc726d175a3a0430bd7ddaf9305d8c69e318347d",
+      "body": "O código lê o último registro e avisa quando ele está ausente ou quando a verificação do histórico falha.",
+      "links": [
+        [
+          "Código que lê o registro · linhas 22–35",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/scripts/hermes/centraldark-entry.py#L22-L35"
+        ],
+        [
+          "Código que guarda o registro · linhas 23–58",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/scripts/hermes/verified-checkpoint.py#L23-L58"
+        ]
+      ]
+    },
+    {
+      "id": "reconcile",
+      "date": "07 NOV",
+      "time": "Histórico",
+      "title": "A sincronização com a Casa ficou bloqueada",
+      "detail": "GitHub · tentativa de 7 de novembro",
+      "env": "GitHub · main",
+      "status": "broken",
+      "type": "Pendência",
+      "basis": "Registro anterior",
+      "window": "GitHub",
+      "file": "docs/HUD/README.md",
+      "lines": "19–27",
+      "branch": "main",
+      "commit": "3abb839991ec829a5cdba1217a5d894541978cb0",
+      "body": "Em 7 de novembro, alterações locais bloquearam a sincronização. Falta comparar as versões atuais para saber se o bloqueio continua.",
+      "links": [
+        [
+          "Ver registro · linhas 19–27",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/docs/HUD/README.md#L19-L27"
+        ]
+      ]
+    },
+    {
+      "id": "pr",
+      "date": "07 NOV",
+      "time": "Histórico",
+      "title": "O painel cita a revisão #1977",
+      "detail": "GitHub · Corpo Único",
+      "env": "GitHub · main",
+      "status": "proven",
+      "type": "Descoberta",
+      "basis": "Confirmado por registro",
+      "window": "GitHub",
+      "file": "docs/HUD/README.md",
+      "lines": "29–38",
+      "pr": "#1977",
+      "commit": "253ab540c5f60488ed3f514eb106a1def08a5efa",
+      "body": "As instruções do painel citam a revisão #1977 na aba Reconciliação. O estado atual da revisão precisa de uma consulta própria.",
+      "links": [
+        [
+          "Referência no HUD · linhas 29–38",
+          "https://github.com/ServerVpss/CentralDark/blob/cc726d175a3a0430bd7ddaf9305d8c69e318347d/docs/HUD/README.md#L29-L38"
+        ],
+        [
+          "PR #1977",
+          "https://github.com/ServerVpss/CentralDark/pull/1977"
+        ]
+      ]
+    },
+    {
+      "id": "vm",
+      "date": "Atual",
+      "time": "A verificar",
+      "title": "Tela da máquina virtual a confirmar",
+      "detail": "openKylin · faltam imagem e versão do projeto",
+      "env": "VM · openKylin",
+      "status": "missing",
+      "type": "Pendência",
+      "basis": "Falta verificar",
+      "window": "Janela a confirmar",
+      "monitor": "A confirmar",
+      "body": "Faltam uma imagem do openKylin, o nome da janela e a versão do projeto. Com esses dados dá para comparar a tela com a da Casa."
+    },
+    {
+      "id": "ptbr",
+      "date": "08 NOV",
+      "time": "Histórico",
+      "title": "O Code-OSS pode usar a tradução do VS Code?",
+      "detail": "Casa · idioma do Code-OSS",
+      "env": "Casa · Windows",
+      "status": "missing",
+      "type": "Hipótese",
+      "basis": "Hipótese",
+      "window": "VS Code / Code-OSS",
+      "monitor": "A confirmar",
+      "body": "A tradução do VS Code pode funcionar no Code-OSS. Falta conferir se as versões são compatíveis e ver o editor em português.",
+      "missing": "O que falta conferir: dados da tradução, versão do Code-OSS e imagem do editor."
+    }
+  ],
+  "images": {
+    "electron": {
+      "src": "/native-evidence/electron.png",
+      "caption": "Arquivo do Code-OSS e janela do Electron",
+      "alt": "Captura histórica do Explorer em .build/electron e da janela Electron com a tela padrão",
+      "url": "https://chatgpt.com/library?file_id=libfile_d96751a4047481919f146edc3931a5d6&account_id=personal"
+    },
+    "launch": {
+      "src": "/native-evidence/launch.png",
+      "caption": "Tela padrão do Electron",
+      "alt": "Captura histórica do Electron com a instrução Code - OSS.exe path-to-app",
+      "url": "https://chatgpt.com/library?file_id=libfile_d5d24b9ea3d88191a61b1cabd8bebf3a&account_id=personal"
+    }
+  },
+  "statuses": {
+    "missing": "A confirmar",
+    "proven": "Confirmado",
+    "broken": "Com problema"
+  },
+  "sections": [
+    {
+      "label": "Começar aqui",
+      "icon": "✦",
+      "items": [
+        [
+          "geral",
+          "Geral",
+          "◈"
+        ],
+        [
+          "visao",
+          "Resumo",
+          "◉"
+        ],
+        [
+          "jornada",
+          "Aprender jogando",
+          "◇"
+        ],
+        [
+          "portal",
+          "Portal",
+          "◎"
+        ]
+      ]
+    },
+    {
+      "label": "Acompanhar",
+      "icon": "◉",
+      "items": [
+        [
+          "sistema",
+          "Saúde do sistema",
+          "♡"
+        ],
+        [
+          "admin",
+          "Administração",
+          "♙"
+        ],
+        [
+          "sync",
+          "Minha oficina",
+          "⇄"
+        ],
+        [
+          "recibos",
+          "Comprovantes",
+          "✓"
+        ],
+        [
+          "raioxvivo",
+          "Raio-X",
+          "⌕"
+        ]
+      ]
+    },
+    {
+      "label": "Criar e montar",
+      "icon": "◇",
+      "items": [
+        [
+          "builder-bolt",
+          "Construtor",
+          "⚒"
+        ],
+        [
+          "centraldarkbot",
+          "Estúdio",
+          "▣"
+        ],
+        [
+          "design",
+          "Aparência",
+          "◈"
+        ],
+        [
+          "arquitetura",
+          "Mapa do sistema",
+          "⌘"
+        ],
+        [
+          "agent-mode",
+          "Modo assistente",
+          "✧"
+        ],
+        [
+          "html-consolidation",
+          "Histórico de páginas",
+          "▤"
+        ]
+      ]
+    },
+    {
+      "label": "Forja (ferramentas)",
+      "icon": "⚒",
+      "items": [
+        [
+          "forja",
+          "Forja",
+          "⚒"
+        ],
+        [
+          "forja-regras",
+          "Regras",
+          "≡"
+        ],
+        [
+          "forja-inventario",
+          "Inventário",
+          "▦"
+        ],
+        [
+          "gram-permissions",
+          "Permissões",
+          "♙"
+        ]
+      ]
+    },
+    {
+      "label": "Assistentes e ideias",
+      "icon": "✧",
+      "items": [
+        [
+          "hermes",
+          "Hermes",
+          "✦"
+        ],
+        [
+          "goals",
+          "Metas",
+          "◎"
+        ],
+        [
+          "dream-reviewer",
+          "Revisão noturna",
+          "☾"
+        ],
+        [
+          "genesis",
+          "Gênesis",
+          "◇"
+        ],
+        [
+          "obsidian",
+          "Obsidian",
+          "◈"
+        ],
+        [
+          "pr1873",
+          "Mapa de mudanças",
+          "⇢"
+        ]
+      ]
+    },
+    {
+      "label": "Mensagens e arquivos",
+      "icon": "✉",
+      "items": [
+        [
+          "gram",
+          "Mensagens",
+          "✉"
+        ],
+        [
+          "unigram",
+          "Unigram",
+          "✉"
+        ],
+        [
+          "downloads",
+          "Baixar arquivos",
+          "⇩"
+        ]
+      ]
+    }
+  ],
+  "nextSteps": [
+    [
+      "Identificar as duas janelas",
+      "Conferir imagens recentes dos dois monitores. Anotar a janela, o monitor e o horário."
+    ],
+    [
+      "Conferir a etapa do instalador",
+      "Ler o registro da instalação. Conferir o pacote, a pasta pedida e o botão que apareceu."
+    ],
+    [
+      "Comparar as versões do projeto",
+      "Conferir a pasta e a versão do projeto na Casa e no openKylin. Comparar com o GitHub."
+    ],
+    [
+      "Conferir o último registro do painel",
+      "Ler o registro do Hermes e conferir o que já foi verificado e o que vem a seguir."
+    ]
+  ],
+  "templates": [
+    {
+      "file": "01-METAPROMPT-GERADOR-ROV.md",
+      "index": "01",
+      "kind": "Orquestração",
+      "category": "orquestração",
+      "title": "Gerador de ROV",
+      "summary": "Transforma um objetivo humano em uma receita executável, segura e comprovável.",
+      "accent": "#e9b44c",
+      "content": "# 01 — Metaprompt gerador de ROV\n\nUse este template com o modelo forte.\n\n```text\nVocê é o gerador de Receitas Operacionais Verificáveis da CentralDark.\n\nReceba o objetivo abaixo e transforme-o em uma receita executável.\n\nNão entregue somente explicação.\nNão entregue somente código.\nEntregue instrução, lógica, proteção, teste e prova.\n\nAntes de criar o comando:\n\n1. Identifique a intenção real.\n2. Identifique o owner canônico.\n3. Separe CURRENT conhecido de suposição.\n4. Identifique o ambiente e o shell correto.\n5. Avalie o risco e o blast radius.\n6. Use a menor mudança possível.\n7. Reutilize scripts e validators existentes quando forem adequados.\n\nGere a resposta nesta ordem:\n\nINTENÇÃO=\nOWNER=\nCURRENT=\nESCOPO=\nAMBIENTE=\nCLASSIFICAÇÃO=SPIKE|BOUNDED|ARCHITECTURAL\nRISCO=LOW|MEDIUM|HIGH\n\nPRÉ-CONDIÇÕES=\n- ...\n\nAÇÕES_PROIBIDAS=\n- ...\n\nCOMANDO_EXECUTÁVEL=\n```powershell\n<comando completo e editável>\n```\n\nou:\n\n```bash\n<comando completo e editável>\n```\n\nLÓGICA_DO_COMANDO=\n- explique cada parte de forma curta;\n\nCRITÉRIOS_PASS=\n- ...\n\nCRITÉRIOS_FAIL=\n- ...\n\nCRITÉRIOS_UNKNOWN=\n- ...\n\nRECIBO=\n- caminho do arquivo;\n- campos obrigatórios;\n- formato do resultado;\n\nCONTRAPROVA=\n- teste independente que confirma o efeito;\n\nNEXT_CURSOR=\n- próximo passo seguro;\n\nREGRAS:\n\n- Não invente caminhos, arquivos, serviços, versões ou resultados.\n- Use variáveis no início do comando para facilitar a edição.\n- Valide os caminhos antes de agir.\n- Por padrão, use somente leitura.\n- Não exclua, sobrescreva, faça reset, limpeza, commit, push, merge ou deploy sem autorização explícita.\n- Se não houver prova, use UNKNOWN.\n- Não transforme UNKNOWN em PASS.\n- Não declare execução se apenas criou o comando.\n- Separe documentação, execução e prova.\n- Se faltar informação, faça uma pergunta curta ou gere uma etapa de auditoria segura.\n\nOBJETIVO DO USUÁRIO:\n<cole aqui o objetivo>\n\nCONTEXTO DISPONÍVEL:\n<cole aqui caminhos, logs, arquivos, erros e restrições>\n```\n\n## Quando usar\n\nUse este template para criar os outros comandos.\nEle é o template mais importante do pacote.\n\n"
+    },
+    {
+      "file": "02-AUDITORIA-SOMENTE-LEITURA.md",
+      "index": "02",
+      "kind": "Auditoria",
+      "category": "auditoria",
+      "title": "Auditoria somente leitura",
+      "summary": "Mede o estado atual sem tocar no alvo. Ideal para começar qualquer investigação.",
+      "accent": "#00eaff",
+      "content": "# 02 — Auditoria somente leitura\n\n```text\nCrie uma ROV de auditoria somente leitura.\n\nObjetivo:\n<o que deve ser verificado>\n\nAlvo:\n<arquivo, pasta, serviço, URL ou repositório>\n\nAmbiente:\n<Windows/PowerShell/Linux/Bash/VM/Docker>\n\nA auditoria deve:\n\n- validar que o alvo existe;\n- ler o estado atual;\n- coletar tamanho, data, versão, status ou hash quando aplicável;\n- registrar erros de leitura;\n- não alterar nada;\n- gerar um recibo com data e hora;\n- retornar PASS, FAIL, UNKNOWN ou BLOCKED.\n\nNão use comandos destrutivos.\nNão crie arquivos dentro do alvo.\nSe precisar de um recibo, grave-o somente em:\n<diretório seguro para recibo>\n\nRetorne:\n\n1. comando executável;\n2. explicação curta;\n3. critérios de aceite;\n4. formato do recibo;\n5. NEXT_CURSOR.\n```\n\n"
+    },
+    {
+      "file": "03-COMPARAR-DIRETORIOS.md",
+      "index": "03",
+      "kind": "Auditoria",
+      "category": "auditoria",
+      "title": "Comparar diretórios",
+      "summary": "Compara caminhos, datas e hashes sem copiar, sincronizar ou apagar.",
+      "accent": "#00eaff",
+      "content": "# 03 — Comparar diretórios\n\n```text\nCrie uma ROV para comparar dois diretórios sem modificá-los.\n\nDiretório canônico:\n<CAMINHO_CANÔNICO>\n\nDiretório candidato:\n<CAMINHO_CANDIDATO>\n\nJanela de análise:\n<exemplo: últimos 15 dias>\n\nIgnorar:\n- .git\n- node_modules\n- caches\n- dependências baixadas\n- artefatos gerados\n- <outras exclusões>\n\nO comando deve:\n\n- validar os dois diretórios;\n- comparar caminhos relativos;\n- comparar tamanho e data;\n- calcular SHA-256 somente nos candidatos relevantes;\n- classificar cada caso;\n- gerar um recibo JSON fora dos diretórios analisados.\n\nUse estas classificações, quando aplicáveis:\n\n- IGUAL\n- SOMENTE_CANÔNICO\n- SOMENTE_CANDIDATO\n- CANDIDATO_MAIS_NOVO_DIFERENTE\n- CANÔNICO_MAIS_NOVO_DIFERENTE\n- DIFERENTE_MESMA_DATA\n- UNKNOWN_HASH_ERROR\n\nNão copie.\nNão sincronize.\nNão apague.\nNão use robocopy /MIR.\nNão use reset ou clean do Git.\n\nRetorne contagens, lista dos conflitos e caminho do recibo.\nPare após a auditoria.\n```\n\n"
+    },
+    {
+      "file": "04-RECONCILIAR-DELTAS.md",
+      "index": "04",
+      "kind": "Reconciliação",
+      "category": "reconciliação",
+      "title": "Reconciliar deltas",
+      "summary": "Aplica somente os arquivos aprovados em um recibo anterior.",
+      "accent": "#f6e1a4",
+      "content": "# 04 — Reconciliar deltas comprovados\n\n```text\nCrie uma ROV para reconciliar somente os arquivos aprovados em um recibo anterior.\n\nDestino canônico:\n<CAMINHO_DESTINO>\n\nFonte:\n<CAMINHO_FONTE>\n\nRecibo de auditoria:\n<CAMINHO_RECIBO>\n\nLista autorizada:\n<CAMINHO_LISTA_OU_CRITÉRIO>\n\nRegras:\n\n- leia o recibo antes de alterar qualquer coisa;\n- copie somente os caminhos autorizados;\n- valide o hash antes da cópia;\n- crie backup reversível se a política exigir;\n- não substitua arquivo mais novo sem autorização;\n- não copie itens SOMENTE_FONTE sem revisão;\n- não apague a fonte;\n- não use espelhamento cego;\n- registre cada arquivo alterado;\n- leia o hash depois da cópia;\n- gere um novo recibo.\n\nSe qualquer arquivo sair da lista autorizada, pare com BLOCKED.\nSe o hash final não coincidir, marque FAIL.\n```\n\n"
+    },
+    {
+      "file": "05-INTEGRIDADE-HASH.md",
+      "index": "05",
+      "kind": "Reconciliação",
+      "category": "reconciliação",
+      "title": "Integridade por hash",
+      "summary": "Confirma se origem e destino têm o mesmo conteúdo comprovado.",
+      "accent": "#f6e1a4",
+      "content": "# 05 — Integridade por hash\n\n```text\nCrie uma ROV para confirmar a integridade de arquivos ou de uma cópia.\n\nOrigem:\n<CAMINHO_ORIGEM>\n\nDestino:\n<CAMINHO_DESTINO>\n\nAlgoritmo:\nSHA-256\n\nO comando deve:\n\n- verificar se os arquivos existem;\n- verificar tamanho;\n- calcular o hash da origem;\n- calcular o hash do destino;\n- comparar os valores;\n- informar arquivos ausentes;\n- registrar erro de acesso;\n- gerar recibo.\n\nClassificação:\n\n- PASS se tamanho e hash coincidirem;\n- FAIL se o hash divergir;\n- BLOCKED se faltar acesso;\n- UNKNOWN se a leitura não for comprovada.\n\nNão apague arquivos iguais.\nHash igual não autoriza exclusão.\n```\n\n"
+    },
+    {
+      "file": "06-AUDITORIA-GIT-MAIN.md",
+      "index": "06",
+      "kind": "Auditoria Git",
+      "category": "auditoria",
+      "title": "Auditoria Git e main",
+      "summary": "Lê branch, SHA, divergência, dirty state e worktrees sem reset destrutivo.",
+      "accent": "#00eaff",
+      "content": "# 06 — Auditoria Git e main\n\n```text\nCrie uma ROV somente leitura para auditar um repositório Git.\n\nRepositório:\n<CAMINHO_REPOSITÓRIO>\n\nBranch canônica:\n<main ou outra>\n\nRemote canônico:\n<origin ou URL>\n\nA auditoria deve mostrar:\n\n- branch atual;\n- HEAD local;\n- SHA da branch remota;\n- divergência ahead/behind;\n- arquivos modificados;\n- arquivos não rastreados;\n- worktrees ativas;\n- commits recentes relevantes;\n- conflitos aparentes;\n- existência de alterações locais.\n\nNão execute:\n\n- git reset --hard;\n- git clean -fd;\n- checkout destrutivo;\n- merge automático;\n- rebase automático;\n- push;\n- force push.\n\nSe houver alterações locais, preserve-as e marque a necessidade de reconciliação.\nGere um recibo com os SHAs observados.\n```\n\n"
+    },
+    {
+      "file": "07-DIAGNOSTICO-SERVICO-LOCAL.md",
+      "index": "07",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Serviço local",
+      "summary": "Separa processo, porta, endpoint, log e saúde real do serviço.",
+      "accent": "#88dfb0",
+      "content": "# 07 — Diagnóstico de serviço local\n\n```text\nCrie uma ROV para diagnosticar um serviço local.\n\nServiço ou aplicação:\n<NOME>\n\nPorta esperada:\n<PORTA>\n\nEndereço esperado:\n<127.0.0.1 ou outro>\n\nProcesso esperado:\n<PROCESSO>\n\nO comando deve verificar, nesta ordem:\n\n1. processo;\n2. porta escutando;\n3. endpoint de saúde;\n4. log recente;\n5. dependências imediatas;\n6. diferença entre configurado, autenticado, conectado e ativo.\n\nNão reinicie o serviço automaticamente.\nNão mate processos.\nNão altere configuração.\n\nRelate cada camada separadamente.\nUma porta aberta não prova que a interface funciona.\nUm processo ativo não prova que o serviço está saudável.\nGere recibo com hora e comandos executados.\n```\n\n"
+    },
+    {
+      "file": "08-DIAGNOSTICO-API-UI.md",
+      "index": "08",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "API e interface",
+      "summary": "Investiga erro visual, rede, CORS, autenticação e backend no owner certo.",
+      "accent": "#88dfb0",
+      "content": "# 08 — Diagnóstico de API e interface\n\n```text\nCrie uma ROV para investigar um erro visível em uma interface.\n\nPágina ou aplicação:\n<URL OU CAMINHO>\n\nMensagem observada:\n<ERRO>\n\nEndpoint relacionado:\n<URL OU UNKNOWN>\n\nO diagnóstico deve separar:\n\n- erro visual;\n- erro de rede;\n- erro de CORS;\n- erro de autenticação;\n- erro de backend;\n- configuração incorreta;\n- serviço fora do ar;\n- falha ainda não comprovada.\n\nLeia o código responsável pelo comportamento antes de propor mudança.\nLocalize o owner canônico.\nNão remova chamadas, domínios ou autenticação apenas por tentativa.\nNão declare correção sem teste do caminho real.\n\nCritérios mínimos:\n\n- linha e arquivo do problema;\n- causa comprovada ou marcada UNKNOWN;\n- menor delta proposto;\n- teste antes e depois;\n- contraprova independente;\n- recibo.\n```\n\n"
+    },
+    {
+      "file": "09-DEPENDENCIAS-E-BUILD.md",
+      "index": "09",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Dependências e build",
+      "summary": "Valida ferramenta, lockfile, dependências e retorno do build sem atualizar nada.",
+      "accent": "#88dfb0",
+      "content": "# 09 — Dependências e build\n\n```text\nCrie uma ROV para verificar dependências e build sem alterar o código.\n\nProjeto:\n<CAMINHO_PROJETO>\n\nGerenciador:\n<npm/pnpm/yarn/pip/cargo/outro>\n\nComando esperado de validação:\n<comando>\n\nO comando deve:\n\n- identificar o manifesto correto;\n- identificar a versão da ferramenta;\n- verificar se as dependências estão instaladas;\n- detectar lockfile presente;\n- verificar scripts disponíveis;\n- executar somente o teste autorizado;\n- registrar saída e código de retorno;\n- separar falha de ambiente de falha do código.\n\nNão atualizar dependências.\nNão apagar lockfile.\nNão gerar arquivo dentro do repositório sem informar.\nNão afirmar que o build passou se a ferramenta não existir.\n\nUse PASS, FAIL, UNKNOWN ou BLOCKED.\nGere recibo.\n```\n\n"
+    },
+    {
+      "file": "10-DOCKER-WSL-VM.md",
+      "index": "10",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Docker, WSL ou VM",
+      "summary": "Distingue aplicativo instalado, processo, backend, rede, volume e interface.",
+      "accent": "#88dfb0",
+      "content": "# 10 — Docker, WSL ou VM\n\n```text\nCrie uma ROV para diagnosticar Docker, WSL ou máquina virtual.\n\nAmbiente:\n<Docker Desktop/WSL/VMware/outro>\n\nNome do alvo:\n<NOME>\n\nObjetivo:\n<o que deve funcionar>\n\nA auditoria deve separar:\n\n- aplicativo instalado;\n- processo ativo;\n- backend selecionado;\n- distribuição ou VM disponível;\n- rede disponível;\n- volume montado;\n- serviço respondendo;\n- interface visual aberta.\n\nNão concluir que está funcionando apenas porque a janela abriu.\nNão reinstalar automaticamente.\nNão excluir containers, imagens, volumes ou máquinas.\nNão reiniciar o ambiente sem autorização.\n\nFaça primeiro leitura e diagnóstico.\nInforme exatamente qual camada falhou.\nUse comandos compatíveis com o sistema encontrado.\nGere recibo com o estado antes, os comandos e o estado depois.\n```\n\n"
+    },
+    {
+      "file": "11-RECIBO-E-FECHAMENTO.md",
+      "index": "11",
+      "kind": "Fechamento",
+      "category": "fechamento",
+      "title": "Recibo e fechamento",
+      "summary": "Confere evidência, contraprova e estado final sem repetir ação destrutiva.",
+      "accent": "#ff8b73",
+      "content": "# 11 — Recibo, contraprova e fechamento\n\n```text\nCrie uma ROV para revisar uma operação já executada.\n\nObjetivo original:\n<GOAL>\n\nReceita usada:\n<CAMINHO OU TEXTO DA ROV>\n\nSaída do executor:\n<LOG OU CAMINHO>\n\nRecibo:\n<CAMINHO>\n\nFaça a revisão sem repetir operações destrutivas.\n\nConfirme:\n\n- intenção preservada;\n- owner correto;\n- escopo respeitado;\n- comando realmente executado;\n- saída real disponível;\n- teste executado;\n- contraprova executada;\n- estado final medido;\n- erros tratados;\n- alterações não autorizadas inexistentes.\n\nVeredito permitido:\n\n- FIXED_POINT\n- PASS\n- PARTIAL\n- FAIL\n- UNKNOWN\n- BLOCKED\n\nNão use PASS se faltar qualquer prova material.\nNão confunda comando criado com comando executado.\nNão confunda commit com deploy.\nNão confunda porta aberta com aplicação saudável.\n\nRetorne:\n\nRESULTADO=\nEVIDÊNCIA=\nCONTRAPROVA=\nPENDÊNCIAS=\nNEXT_CURSOR=\n```\n\n"
+    },
+    {
+      "file": "12-INTENCAO-PARA-GOAL-ROV.md",
+      "index": "12",
+      "kind": "Orquestração",
+      "category": "orquestração",
+      "title": "Da ideia à receita",
+      "summary": "Transforma seu pedido em um GOAL claro e no primeiro passo seguro.",
+      "accent": "#e9b44c",
+      "content": "# 12 — Transformar uma intenção em GOAL e ROV\n\nUse quando você sabe o que quer, mas ainda não sabe explicar em termos técnicos.\n\n## Objetivo\nTransformar uma frase simples em um plano que outro agente consiga executar sem mudar o que você pediu.\n\n```text\nINTENÇÃO DO USUÁRIO:\n<escreva do seu jeito, sem tentar usar termos técnicos>\n\nRESULTADO ESPERADO:\n<como você vai reconhecer que ficou pronto>\n\nCONTEXTO JÁ CONHECIDO:\n<arquivos, telas, conversas, decisões ou caminhos já confirmados>\n\nO modelo deve:\n1. Reescrever a intenção em uma frase simples.\n2. Separar fatos confirmados, dúvidas e suposições.\n3. Identificar o owner: arquivo, serviço ou módulo responsável.\n4. Localizar o estado atual antes de propor mudança.\n5. Dividir o trabalho em etapas pequenas.\n6. Escolher a primeira etapa que gere prova útil.\n7. Fazer somente uma pergunta se faltar um dado que impeça a ação.\n\nEntregue:\n- GOAL em linguagem simples;\n- resultado que será visto pelo usuário;\n- owner provável e evidência que confirma o owner;\n- escopo incluído e excluído;\n- risco e pré-condições;\n- primeira ROV executável;\n- critérios PASS, FAIL, UNKNOWN e BLOCKED;\n- recibo e NEXT_CURSOR.\n\nNão invente caminhos nem arquitetura.\nNão transforme uma ideia em autorização para deploy, commit ou exclusão.\nNão faça perguntas sobre dados que já estejam no contexto.\n```\n\n## Resultado esperado\nUma intenção clara, um primeiro passo seguro e uma forma objetiva de saber se funcionou.\n"
+    },
+    {
+      "file": "13-RETOMAR-CONTEXTO-E-CONTINUIDADE.md",
+      "index": "13",
+      "kind": "Orquestração",
+      "category": "orquestração",
+      "title": "Retomar de onde parou",
+      "summary": "Recupera o último ponto comprovado sem perder alterações ou repetir trabalho.",
+      "accent": "#e9b44c",
+      "content": "# 13 — Retomar trabalho sem perder o contexto\n\nUse quando um agente parar, trocar de sessão ou parecer ter esquecido onde estava trabalhando.\n\n```text\nOBJETIVO ORIGINAL:\n<GOAL ou descrição simples>\n\nPROJETO E AMBIENTE:\n<caminho local, VM, container ou serviço, se conhecido>\n\nFONTES DE CONTINUIDADE:\n<documentos, recibos, logs, commits, branches e conversas conhecidas>\n\nFaça primeiro uma auditoria somente leitura.\n\nProcure nesta ordem:\n1. Último recibo com resultado e horário.\n2. NEXT_CURSOR registrado.\n3. CURRENT ou checkpoint mais recente.\n4. Branch, HEAD e worktrees.\n5. Alterações locais ainda não commitadas.\n6. Último comando realmente executado e sua saída.\n7. Testes já aprovados e testes pendentes.\n\nSepare:\n- CONFIRMADO: existe evidência direta;\n- RELATADO: alguém informou, mas falta prova atual;\n- UNKNOWN: não foi possível verificar;\n- CONFLITO: duas fontes mostram estados diferentes.\n\nNão reexecute etapas já comprovadas.\nNão descarte alterações locais.\nNão troque de pasta, branch, VM ou container por suposição.\nNão faça reset, clean, commit, push ou deploy.\n\nRetorne:\nCURRENT=\nÚLTIMO_PONTO_CONFIRMADO=\nALTERAÇÕES_PRESERVADAS=\nPENDÊNCIAS=\nRISCO_IMEDIATO=\nNEXT_CURSOR=\nRECIBO=\n```\n\n## Resultado esperado\nO agente retoma do ponto real. Ele não recomeça o projeto nem apaga trabalho anterior.\n"
+    },
+    {
+      "file": "14-DIAGNOSTICO-MCP-CASA-E-PONTE.md",
+      "index": "14",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Conexão Casa e MCP",
+      "summary": "Descobre em qual camada a conexão parou, sem mudar configurações.",
+      "accent": "#88dfb0",
+      "content": "# 14 — Diagnosticar MCP Casa e a ponte de conexão\n\nUse quando o MCP, a Casa, o navegador ou outro computador não responder.\n\n```text\nALVO:\n<nome do MCP ou serviço>\n\nENDEREÇO LOCAL:\n<ex.: http://127.0.0.1:9101/health>\n\nENDEREÇO TAILSCALE:\n<domínio ou IP já cadastrado>\n\nMÁQUINA:\n<nome do computador>\n\nOBJETIVO:\nDescobrir em qual trecho a conexão parou, sem reiniciar nem alterar configuração.\n\nVerifique separadamente:\n1. O processo local existe?\n2. A porta local está escutando?\n3. O endpoint local responde?\n4. O serviço informa engine_connected?\n5. O Tailscale está conectado nesta máquina?\n6. O domínio Tailscale resolve para o destino esperado?\n7. A rota publicada aponta para o serviço local correto?\n8. O MCP consegue chamar a ferramenta de leitura?\n9. A autenticação está válida?\n10. A conexão está realmente ativa?\n\nNão confunda:\n- instalado com iniciado;\n- iniciado com saudável;\n- autenticado com conectado;\n- domínio resolvido com rota funcional;\n- MCP disponível com ferramenta executada.\n\nNão revele tokens, cookies, chaves ou dados de sessão.\nNão altere ACL, DNS, serve, firewall ou credenciais.\nNão reinicie processos nem abra pareamento automaticamente.\n\nRetorne uma tabela:\nCAMADA | ESTADO | EVIDÊNCIA | PRÓXIMO PASSO\n\nVereditos:\nPASS, FAIL, UNKNOWN ou BLOCKED.\nGere recibo fora da pasta do serviço.\n```\n\n## Resultado esperado\nVocê vê exatamente onde a conexão falhou. Nenhuma configuração muda durante o diagnóstico.\n"
+    },
+    {
+      "file": "15-MAPEAR-OWNER-E-ROTAS.md",
+      "index": "15",
+      "kind": "Auditoria",
+      "category": "auditoria",
+      "title": "Encontrar o lugar certo",
+      "summary": "Mostra onde a capacidade vive e quem depende dela antes de mover arquivos.",
+      "accent": "#00eaff",
+      "content": "# 15 — Mapear owner, chamadas e rotas\n\nUse antes de mover uma pasta, juntar módulos ou alterar uma tela.\n\n```text\nOBJETIVO:\n<capacidade ou tela que será investigada>\n\nREPOSITÓRIO:\n<caminho local ou URL já conhecida>\n\nLOCAL SUSPEITO:\n<pasta, arquivo ou rota que chamou atenção>\n\nFaça somente leitura.\n\nMapeie:\n1. Onde a capacidade é implementada.\n2. Quais arquivos formam sua interface.\n3. Quais serviços ou módulos ela chama.\n4. Quem chama essa capacidade.\n5. Quais rotas, menus e extensões a exibem.\n6. Quais testes cobrem o comportamento.\n7. Qual documentação declara o owner.\n8. Se existem cópias, versões antigas ou implementações concorrentes.\n\nPara cada ligação, mostre:\nORIGEM -> DESTINO -> EVIDÊNCIA (arquivo e linha).\n\nClassifique cada item:\nOWNER_CANÔNICO, CONSUMIDOR, ADAPTADOR, TESTE, DOCUMENTAÇÃO, LEGADO ou UNKNOWN.\n\nNão conclua que uma pasta é o owner apenas pelo nome.\nNão mova, renomeie ou copie arquivos.\nNão crie uma segunda arquitetura.\nNão altere imports nem rotas.\n\nEntregue:\n- mapa da árvore relevante;\n- fluxo de chamadas;\n- owner comprovado;\n- dependências e consumidores;\n- riscos de mudança;\n- menor delta recomendado;\n- NEXT_CURSOR.\n```\n\n## Resultado esperado\nVocê sabe onde a capacidade realmente mora e quem depende dela antes de decidir onde ela deve ficar.\n"
+    },
+    {
+      "file": "16-VALIDACAO-VISUAL-DA-INTERFACE.md",
+      "index": "16",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Conferir o que aparece na tela",
+      "summary": "Valida a página no navegador, incluindo visual, rolagem e botões.",
+      "accent": "#88dfb0",
+      "content": "# 16 — Validar o visual de uma interface\n\nUse quando uma página abre, mas você precisa saber se o visual está correto.\n\n```text\nPÁGINA:\n<URL local ou endereço autorizado>\n\nREFERÊNCIA VISUAL:\n<caminho da imagem ou página de referência>\n\nOBJETIVO:\n<o que precisa aparecer ou mudar>\n\nValide em navegador real, quando disponível.\n\nObserve:\n1. A página abre sem erro?\n2. O tema e as cores correspondem à referência?\n3. Cabeçalho, menus, cartões e painéis aparecem?\n4. Textos estão legíveis em português?\n5. Rolagem vertical e horizontal funcionam?\n6. Botões executam a ação esperada?\n7. Modais abrem e fecham?\n8. O layout funciona na largura da tela usada?\n9. O console e a rede mostram erros relevantes?\n\nRegistre:\n- URL e horário;\n- resolução da tela;\n- captura antes e depois, se houver mudança;\n- elementos aprovados;\n- elementos ausentes ou incorretos;\n- erros do console;\n- passos usados para reproduzir.\n\nNão altere o CSS durante a auditoria.\nNão considere uma captura isolada prova de todas as interações.\nNão declare PASS se a página não foi aberta no navegador real.\n\nVeredito:\nPASS, PARTIAL, FAIL, UNKNOWN ou BLOCKED.\n```\n\n## Resultado esperado\nUma avaliação do que a pessoa realmente vê, separada da validação do código.\n"
+    },
+    {
+      "file": "17-TRADUZIR-SOMENTE-O-VISUAL-PTBR.md",
+      "index": "17",
+      "kind": "Runtime",
+      "category": "runtime",
+      "title": "Traduzir a interface",
+      "summary": "Traduz somente os textos que o usuário vê. Preserva código e scripts.",
+      "accent": "#88dfb0",
+      "content": "# 17 — Traduzir somente os textos visíveis da interface para PT-BR\n\nUse quando o objetivo é traduzir o site sem traduzir scripts, logs internos ou documentação técnica.\n\n```text\nPROJETO:\n<caminho do projeto>\n\nPÁGINAS E TELAS:\n<rotas ou áreas incluídas>\n\nIDIOMA DE DESTINO:\nPortuguês do Brasil (pt-BR)\n\nESCOPO:\nSomente textos apresentados ao usuário na interface.\n\nInclua:\n- títulos e subtítulos;\n- menus, abas e botões;\n- rótulos e campos;\n- mensagens de ajuda;\n- estados vazios;\n- alertas e confirmações;\n- textos de onboarding;\n- mensagens de erro mostradas na tela.\n\nExclua:\n- nomes de variáveis e funções;\n- nomes de arquivos e rotas técnicas;\n- logs internos;\n- comentários de código;\n- scripts de automação;\n- documentação de desenvolvimento;\n- mensagens internas que não aparecem na interface.\n\nAntes de editar:\n1. Liste as telas e os arquivos que controlam os textos.\n2. Identifique o catálogo ou mecanismo de tradução existente.\n3. Reutilize o mecanismo atual.\n4. Registre textos sem tradução e textos dinâmicos.\n5. Preserve termos de produto que devem continuar iguais.\n\nDepois de editar:\n1. Verifique se não restaram textos visíveis em inglês no escopo.\n2. Verifique acentos, concordância e consistência.\n3. Execute os testes disponíveis no ambiente correto.\n4. Abra as telas no navegador e valide o resultado.\n5. Registre o que ficou fora do escopo.\n\nNão traduza tudo por busca e substituição cega.\nNão altere backend ou runtime sem necessidade comprovada.\nNão faça commit, push ou deploy nesta ROV.\n\nEntregue lista de arquivos, resumo das mudanças, testes, capturas e NEXT_CURSOR.\n```\n\n## Resultado esperado\nO usuário vê a interface em PT-BR. O código interno continua com seus nomes técnicos.\n"
+    },
+    {
+      "file": "18-PLANEJAR-MIGRACAO-DE-MODULO.md",
+      "index": "18",
+      "kind": "Reconciliação",
+      "category": "reconciliação",
+      "title": "Planejar mudança de pasta",
+      "summary": "Mapeia dependências e prepara uma migração reversível. Não move nada.",
+      "accent": "#f6e1a4",
+      "content": "# 18 — Planejar a migração de um módulo\n\nUse quando uma capacidade precisa mudar de pasta ou entrar em um módulo central.\n\n```text\nCAPACIDADE:\n<nome da capacidade>\n\nORIGEM ATUAL:\n<caminho confirmado>\n\nDESTINO PRETENDIDO:\n<caminho pretendido>\n\nREPOSITÓRIO:\n<caminho do repositório>\n\nFaça primeiro o mapa, sem mover arquivos.\n\nConfirme:\n1. Owner atual e motivo da escolha.\n2. Arquivos que formam a capacidade.\n3. Imports e referências que apontam para a origem.\n4. Rotas, comandos, serviços e extensões que a utilizam.\n5. Configurações e caminhos absolutos.\n6. Testes e documentação relacionados.\n7. Dados ou segredos que não podem ser movidos.\n8. Mudanças de inicialização necessárias.\n\nMonte um plano em etapas:\n- preparação;\n- migração de um escopo pequeno;\n- atualização de referências;\n- testes;\n- contraprova;\n- rollback reversível.\n\nRegras:\n- preservar a origem até a nova rota estar validada;\n- não duplicar owner;\n- não criar V2 ou arquitetura paralela;\n- não mover segredos;\n- não apagar a origem nesta etapa;\n- não alterar outros módulos sem relação direta.\n\nPare antes da primeira mudança e apresente:\nCURRENT, DELTA proposto, arquivos afetados, riscos, testes e critério de rollback.\n\nA migração só começa com autorização explícita.\n```\n\n## Resultado esperado\nUm plano de migração com dependências conhecidas e retorno seguro. Esta receita não move nada.\n"
+    },
+    {
+      "file": "19-GATE-ANTES-DO-COMMIT.md",
+      "index": "19",
+      "kind": "Fechamento",
+      "category": "fechamento",
+      "title": "Conferir antes do commit",
+      "summary": "Revisa diff, arquivos e testes antes de autorizar o commit.",
+      "accent": "#ff8b73",
+      "content": "# 19 — Gate de validação antes do commit\n\nUse quando o trabalho parece pronto e você quer confirmar o que pode ser registrado no Git.\n\n```text\nREPOSITÓRIO:\n<caminho>\n\nBRANCH:\n<branch esperada>\n\nESCOPO AUTORIZADO:\n<arquivos ou objetivo>\n\nTESTES ESPERADOS:\n<comandos conhecidos>\n\nFaça uma auditoria antes do commit.\n\nVerifique:\n1. Branch e HEAD atuais.\n2. Arquivos modificados, adicionados e removidos.\n3. Arquivos não rastreados.\n4. Diff completo dentro do escopo.\n5. Segredos, tokens e dados locais no diff.\n6. Formatação e erros simples.\n7. Testes pertinentes no ambiente correto.\n8. Diferença entre teste não executado e teste reprovado.\n9. Se o trabalho pertence ao repositório e branch corretos.\n\nNão inclua arquivos fora do escopo.\nNão use git add, commit, push, merge, reset ou clean.\nNão descarte alterações preexistentes.\nNão declare que o commit está pronto se houver teste obrigatório UNKNOWN.\n\nRetorne:\n- SHA e branch;\n- lista de arquivos por estado;\n- resumo do diff;\n- testes e resultados;\n- riscos e pendências;\n- arquivos elegíveis para staging;\n- veredito PASS, PARTIAL, FAIL, UNKNOWN ou BLOCKED;\n- NEXT_CURSOR.\n\nO usuário decide se autoriza o commit.\n```\n\n## Resultado esperado\nUma lista clara do que pode entrar no commit. A receita não cria o commit.\n"
+    },
+    {
+      "file": "20-ROV-MICHELIN-IA-MCP-HERMES-VISUAL.yml",
+      "index": "20",
+      "kind": "Orquestração",
+      "category": "orquestração",
+      "title": "Michelin: IA + MCP + Hermes Visual",
+      "summary": "Receita completa: observação multimodal, clique Cua autorizado, readback e contraprova.",
+      "accent": "#e9b44c",
+      "content": "# CentralDark ROV — Michelin: multimodal, MCP e Hermes Visual\nschema: centraldark.rov.v1\nid: ROV-20-MICHELIN-IA-MCP-HERMES-VISUAL\nversao: \"1.0\"\nidioma: pt-BR\nestado_documental: DOCUMENTADO_NAO_EXECUTADO\ndata_referencia: \"2026-11-07\"\n\nINTENÇÃO:\n  objetivo: >-\n    Receber a ordem do CHEFE, interpretar o contexto multimodal,\n    localizar o controle real na janela autorizada, acionar somente\n    o executor visual existente e provar o efeito por readback.\n  exemplo: \"Abra Estado do MCP na Sala de Controle.\"\n  criterio_de_pronto: \"Objetivo confirmado por prova visual e independente; nao basta enviar clique.\"\n\nOWNER:\n  repositorio: ServerVpss/CentralDark\n  branch: main\n  entrada: LEIA-ME-IA.md\n  regras: RULES.md\n  agentes: AGENTS.md\n  skill_mae: .agents/skills/centraldark-operational-method/SKILL.md\n  hermes_visual: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md\n  identificador: .agents/skills/centraldark-operational-method/scripts/Identify-CentralDarkMonitors.ps1\n  clique: .agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py\n  transporte: apps/modulos/mcp/\n  interface: apps/instinto-superior/\n  comprovacao: \"Usar receipts e checkpoints do mesmo owner; nao criar segundo ledger.\"\n\nCURRENT:\n  historico_nao_equivale_a_estado_vivo: true\n  observado_anteriormente:\n    - \"UIAutomation identificou o controle Estado do MCP na Casa.\"\n    - \"Cursor Cua com overlay executou clique; readback confirmou navegacao.\"\n    - \"O painel depois exibiu Failed to fetch; backend nao foi comprovado.\"\n    - \"MCP publico OAuth e tools/list por plugin permaneciam pendentes.\"\n  revalidar:\n    - \"HEAD e worktree atual\"\n    - \"janela, monitor, PID e HWND atuais\"\n    - \"alvo UIAutomation unico e visivel\"\n    - \"Cua ativo com overlay\"\n    - \"OAuth, tools/list e tool call reais, quando o pedido exigir MCP\"\n  principio: \"DOCUMENTED != EXECUTED; DISPATCHED != EFFECT_PROVEN; UNKNOWN != PASS\"\n\nESCOPO:\n  incluir:\n    - \"Interpretar ordem do CHEFE sem ampliar o alvo.\"\n    - \"Observar screenshot/UIAutomation/Browser por rotas autorizadas existentes.\"\n    - \"Resolver controle atual, monitor e janela antes de clicar.\"\n    - \"Chamar somente Hermes Visual e Cua ja instalados.\"\n    - \"Comparar antes/depois e backend quando pertinente.\"\n    - \"Emitir recibo no contrato existente e NEXT_CURSOR.\"\n  excluir:\n    - \"novo motor, novo MCP, novo HUD, nova ponte ou segundo escritor\"\n    - \"alteracao de Cloudflare, OAuth, secrets ou runtime sem diagnostico e autorizacao\"\n    - \"reset, clean, force push, delecao de worktrees, merge e deploy implicitos\"\n\nAMBIENTE:\n  alvo_visual: \"Casa SEGREDO — Windows, PowerShell, UIAutomation e Cua\"\n  checkout_referencia: 'F:\\CentralDark'\n  forja: \"openKylin/Linux — apenas sondagem SSH/Bash quando explicitamente pertinente\"\n  modelo: \"ChatGPT/IA multimodal decide; nao faz clique sem ferramenta conectada.\"\n  plugin: \"Ponto de entrada opcional do ChatGPT; nao e executor.\"\n  mcp: \"Protocolo de chamadas; autenticacao e ferramentas exigem prova real.\"\n  skill: \"Metodo operacional reutilizado.\"\n  hermes: \"Executor visual existente.\"\n\nCLASSIFICAÇÃO: BOUNDED\nRISCO: MEDIUM\nBLAST_RADIUS: \"Uma janela e um controle; mutacao visual somente com autorizacao.\"\nPRÉ_CONDIÇÕES:\n  - \"Checkout e paths dos owners acessiveis.\"\n  - \"Sessao Windows autorizada e identificavel; nenhum outro writer na mesma janela.\"\n  - \"Ordem de clique explicitamente autorizada, quando modo CLICK.\"\n  - \"Alvo UIAutomation unico; titulo, PID, HWND e monitor atuais.\"\n  - \"Cua ativo e pronto com overlay; nao iniciar daemon paralelo.\"\n  - \"Receita Kimetsu/Michelin consultada no owner antes de mutar.\"\n\nAÇÕES_PROIBIDAS:\n  - \"Clicar quando alvo for ausente, duplicado, invisivel ou stale.\"\n  - \"Usar coordenadas ou PIDs gravados historicamente.\"\n  - \"Substituir Cua virtual por mouse fisico ou bypass de auth.\"\n  - \"Repetir clique por falta de resposta sem reobservar.\"\n  - \"Copiar tokens, cookies, screenshots privadas ou segredos para receipts.\"\n  - \"Declarar PASS por retorno de CLI, commit ou tela isolada.\"\n\nCOMANDO_EXECUTÁVEL:\n  shell: powershell\n  modo_padrao: AUDIT\n  instrucao: \"Na Casa, editar somente variaveis iniciais; por padrao NENHUM clique.\"\n  script: |\n    $ErrorActionPreference = 'Stop'\n    $Repo = 'F:\\CentralDark'\n    $WindowTitle = 'CentralDark'\n    $ControlName = 'Estado do MCP'\n    $Mode = 'AUDIT'          # AUDIT ou CLICK\n    $Autorizacao = ''        # Para CLICK: CHEFE_AUTORIZOU_CLIQUE\n\n    $Method = Join-Path $Repo '.agents\\skills\\centraldark-operational-method'\n    $Owner = Join-Path $Method 'SKILL.md'\n    $Resolver = Join-Path $Method 'scripts\\Identify-CentralDarkMonitors.ps1'\n    $Cursor = Join-Path $Method 'Skills\\centraldark-hermes-visual-computer-use\\scripts\\blink_cursor.py'\n    foreach ($p in @($Repo,$Owner,$Resolver,$Cursor)) {\n      if (-not (Test-Path -LiteralPath $p)) { throw \"UNKNOWN: caminho ausente: $p\" }\n    }\n    $Head = (& git -C $Repo rev-parse HEAD)\n    if ($LASTEXITCODE -ne 0) { throw 'UNKNOWN: Git nao respondeu' }\n    $Before = @(& powershell.exe -NoProfile -NonInteractive -File $Resolver -ResolveControl -WindowTitle $WindowTitle -ControlName $ControlName)\n    if ($LASTEXITCODE -ne 0 -or $Before.Count -eq 0) { throw 'BLOCKED: alvo nao comprovado' }\n    try { $Target = $Before[-1] | ConvertFrom-Json }\n    catch { throw 'BLOCKED: resultado UIAutomation invalido' }\n    if ($Target.input_dispatched -ne $false -or [int]$Target.pid -le 0 -or [int]$Target.hwnd -le 0 -or [int]$Target.monitor -le 0) {\n      throw 'BLOCKED: janela/monitor/alvo sem prova atual'\n    }\n\n    $ActionStatus = 'AUDIT_ONLY'\n    if ($Mode -eq 'CLICK') {\n      if ($Autorizacao -ne 'CHEFE_AUTORIZOU_CLIQUE') { throw 'BLOCKED: falta autorizacao explicita' }\n      & python $Cursor --mode click --window-title $WindowTitle --control-name $ControlName\n      if ($LASTEXITCODE -ne 0) { throw 'FAIL: executor Cua retornou erro' }\n      $ActionStatus = 'DISPATCHED_EFFECT_UNKNOWN'\n    } elseif ($Mode -ne 'AUDIT') {\n      throw 'BLOCKED: modo desconhecido'\n    }\n    [pscustomobject]@{\n      schema = 'centraldark.rov.receipt.v1'\n      objetivo = $ControlName\n      head = ($Head | Select-Object -First 1)\n      window = $WindowTitle\n      pid = $Target.pid\n      hwnd = $Target.hwnd\n      monitor = $Target.monitor\n      modo = $Mode\n      resultado_execucao = $ActionStatus\n      readback_visual = 'UNKNOWN'\n      prova_runtime = 'UNKNOWN'\n      time_utc = [datetime]::UtcNow.ToString('o')\n    } | ConvertTo-Json -Depth 5\n\nLÓGICA_DO_COMANDO:\n  - \"01 Verifica os owners reais e coleta HEAD sem tocar no checkout.\"\n  - \"02 Usa ResolveControl do script canônico para identificar janela e botão.\"\n  - \"03 Bloqueia alvo ambiguo, ausente ou sem IDs reais.\"\n  - \"04 Em AUDIT apenas informa identidade e contexto.\"\n  - \"05 Em CLICK autorizado, chama blink_cursor.py existente com resolucao dinamica.\"\n  - \"06 Retorno do clique fica DISPATCHED_EFFECT_UNKNOWN ate contraprova.\"\n\nCRITÉRIOS_PASS:\n  auditoria: \"Owners presentes, alvo unico, valores atuais e verificacao sem erro.\"\n  execucao: \"Autorizacao, Cua sem erro e rastro de chamada.\"\n  objetivo: \"Estado visual posterior e fonte independente confirmam a intencao.\"\nCRITÉRIOS_FAIL:\n  - \"Executor com erro, clique em alvo errado, alteracao incorreta ou backend com erro.\"\nCRITÉRIOS_UNKNOWN:\n  - \"Sem readback, janela inacessivel, monitor ambiguo, OAuth ausente ou plugin desconectado.\"\n  - \"Execucao despachada sem evidência do efeito.\"\n\nRECIBO:\n  destino: \"Checkpoint/receipt canônico da Skill Mãe e docs/HUD/README.md para resumo documental.\"\n  gravacao_automatica_por_este_comando: false\n  formato: \"JSON com timestamp UTC\"\n  campos:\n    - intent_id\n    - owner\n    - head\n    - dispositivo\n    - window\n    - pid\n    - hwnd\n    - monitor\n    - alvo\n    - autorizacao\n    - antes\n    - acao\n    - depois_visual\n    - prova_backend\n    - counterproof\n    - verdict\n    - next_cursor\n\nCONTRAPROVA:\n  visual: \"Reler a mesma janela via UIAutomation e, quando disponivel, Browser.get_tab_context.\"\n  independente: \"Verificar resposta do backend ou efeito real pelo owner pertinente.\"\n  mcp_publico: \"Provar OAuth discovery -> tools/list -> tool call autorizado -> logs correlacionados.\"\n  teste_de_falsificacao: \"Se clicou mas backend falhou, marcar PARTIAL ou FAIL, nao PASS completo.\"\n  estados: [PASS, FAIL, PARTIAL, UNKNOWN, BLOCKED]\n  regressao: \"Verificar que nenhuma janela ou arquivo fora de escopo mudou.\"\n\nNEXT_CURSOR:\n  - \"Medir ferramentas visuais ja expostas no catalogo MCP.\"\n  - \"Identificar somente lacunas; reutilizar owner e transporte existentes.\"\n  - \"Provar uma chamada visual autorizada pelo caminho ChatGPT -> MCP -> Hermes.\"\n  - \"Fazer readback visual e independente; registrar receipt e fixed point.\"\n  - \"Sem alterar OAuth ou deploy sem ordem e contraprova.\"\n\nREGRAS:\n  - REUSE_BEFORE_CREATE\n  - ONE_SYSTEM_ONLY\n  - ONE_WRITER_PER_SCOPE\n  - ZERO_REGRESSION\n  - UNKNOWN_NE_PASS\n  - ACTION_NE_PROOF\n  - DOCUMENTED_NE_EXECUTED\n  - MERGED_NE_DEPLOYED\n  - \"A prova visual nao substitui protecoes tecnicas obrigatorias da main.\"\n\nSELO:\n  identidade: \"MICHELIN TRÊS ESTRELAS\"\n  julgamento: \"Somente receipts e verificacoes reais atribuem PASS.\"\n  atual: \"DOCUMENTADO; EXECUCAO DE CLIQUE E2E PELO MCP PUBLICO UNKNOWN.\"\n"
+    }
+  ]
+}
