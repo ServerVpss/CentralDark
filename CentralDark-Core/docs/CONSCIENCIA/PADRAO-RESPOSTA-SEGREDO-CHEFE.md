@@ -32,6 +32,16 @@ links:
 
 # 💬 Padrão de resposta — SEGREDO/CHEFE
 
+<!-- CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
+## 🪬 HUD da missão — padrão visual obrigatório nas respostas operacionais
+
+**Decisão do CHEFE em 24/11/2026:** quando a resposta trata da missão vigente, sua retomada, progresso, checkpoints, PR, testes ou próximas pendências, apresentar automaticamente o **mesmo HUD vivo** no próprio chat, inclusive quando o CHEFE não digitou `!HUD`. Regra de formatação humana para ChatGPT, Hermes, ferramentas próprias e outros consumidores que a carregarem; não altera os pesos ou as políticas do modelo por gravar um arquivo.
+
+**Quadro humano:** titulo `🪬 CENTRALDARK — HUD DA MISSÃO`; intenção + fio da missão + PR/commit/responsáveis; dimensões numeradas em tabela com bolinhas `🟢`, `🟡`, `🔴`, `⚪`; andamento com contagem e barra somente se houver denominador; ponto de continuidade; próximo passo; FIXED_POINT comprovado ou pendente. A quantidade de linhas é descoberta na missão, não copiada do exemplo de 12. Preservar as quatro classes: feito com prova, pendente/UNKNOWN, falha medida e futuro. Sem fonte atual, mostrar `HISTÓRICO` ou `PENDENTE`, sem fingir progresso vivo.
+
+**Adaptação:** ChatGPT/superfície rica: cartão, tabela e barra quando suportados; Hermes/terminal/Telegram: Markdown legível com as mesmas dimensões e estados; áudio: resumo natural. Em pergunta simples que não pede estado operacional, responder curto. Mesmo owner `AGENTS.md#CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124` e mesmo `docs/HUD/README.md`; sem memória, HUD, canal ou renderizador paralelo. Exigir readback do consumidor antes de afirmar que adotou a regra.
+<!-- /CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124 -->
+
 <!-- CENTRALDARK_PTBR_ESPACAMENTO_VISUAL_RADAR_20261121 -->
 ## 🗣️ Português claro, leitura com respiro e comprovante que se entende (21/11/2026)
 
@@ -110,7 +120,7 @@ O caminho antigo `2026-06-20-padrao-resposta-pivete.md` fica somente como alias/
 
 **Nomes humanos visíveis, IDs técnicos preservados:** MISSION = Fio da Missão; CURRENT = Estado atual; OWNER = Responsável; DELTA = O que mudou; EXECUTION = Execução; COUNTERPROOF = Contraprova; RECEIPT = Comprovante; KAIZEN = Aprendizados; NEXT_CURSOR = Próximo Passo; marcador de retomada = Ponto de Continuidade. Distinguir Fio, Próximo Passo e Ponto de Continuidade; não renomear API, arquivo, variável ou log.
 
-**HUD visual/GenUI:** cards, grid, tabela, gráfico, links e controles **somente quando a superfície suportar e acrescentar clareza**. Um HUD/uma missão/um estado/um cursor. Celular: cartões verticais; desktop: comparações quando úteis. Todo controle precisa de comportamento real; CLIQUE ≠ EXECUÇÃO; EXECUÇÃO ≠ PROVA; PROVA ≠ ACEITE. Sem visual suportado, usar Markdown ou o HUD monoespaçado existente. **O quadro técnico do AGENTS.md fica disponível quando o CHEFE pedir HUD/auditoria, não no topo de cada resposta. Os registros de máquina continuam íntegros; GenUI é opcional.** Status: 🟢 PROVADO; 🔴 QUEBRADO; 🟡 PENDENTE; ⚪ FUTURO. Nunca declarar HUD/consumer validado só porque esta seção foi publicada.
+**HUD visual/GenUI:** para qualquer resposta de estado operacional da missão, o HUD humano é automático conforme `CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124`: card, tabela, semáforo e barra quando suportados, com equivalente Markdown para terminal/Hermes. Um HUD/uma missão/um estado/um cursor; celular em cartões verticais. O quadro monoespaçado é alternativa, não requisito da interface rica. Perguntas breves sem pedido de progresso continuam curtas. Nenhuma cor substitui SHA, prova ou evidência. Nunca alegar consumidor validado só porque esta seção foi publicada.
 
 **Aceite:** preservar os campos do HUD, links e caminhos reais, status individual, evidência, proteção de dados, autorizações e NEXT_CURSOR. Provar exibição/controle na superfície real separadamente do commit. Registro documental ≠ consumo do runtime.
 <!-- /CENTRALDARK_SOL_RESPONSE_GENUI_V12_20261109 -->

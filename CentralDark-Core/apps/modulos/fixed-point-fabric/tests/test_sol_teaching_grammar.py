@@ -19,6 +19,33 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
         cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
 
+    def test_auto_mission_hud_required_in_all_existing_owners(self):
+        """Contrato visual unico: verifica o mesmo HUD em todas as entradas operacionais."""
+        marker = "CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124"
+        agents = (self.repo / "AGENTS.md").read_text(encoding="utf-8")
+        hud = (self.repo / "docs/HUD/README.md").read_text(encoding="utf-8")
+        self.assertEqual(agents.count("<!-- " + marker + " -->"), 1)
+        self.assertEqual(self.response.count("<!-- " + marker + " -->"), 1)
+        agent_block = agents.split("<!-- " + marker + " -->", 1)[1].split("<!-- /" + marker + " -->", 1)[0]
+        response_block = self.response.split("<!-- " + marker + " -->", 1)[1].split("<!-- /" + marker + " -->", 1)[0]
+        for required in (
+            "automaticamente", "🪬 CENTRALDARK — HUD DA MISSÃO",
+            "🎯 INTENÇÃO", "🧵 FIO DA MISSÃO", "📊 DIMENSÕES E CHECKPOINTS",
+            "📈 ANDAMENTO", "🧭 PONTO DE CONTINUIDADE",
+            "➡️ PRÓXIMO PASSO", "FIXED_POINT", "🟢 PROVADO",
+            "🟡 PENDENTE", "🔴 FALHOU", "⚪ FUTURO",
+            "MISSION_ID", "CURRENT_MEDIDO", "HISTORICO",
+        ):
+            self.assertIn(required, agent_block, required)
+        for required in ("automaticamente", "ChatGPT", "Hermes", "Markdown", "12", "FIXED_POINT"):
+            self.assertIn(required, response_block, required)
+        self.assertIn(marker, self.method)
+        self.assertIn(marker, hud)
+        self.assertIn("Em pergunta factual curta sem status de missão, responder curto.", self.method)
+        self.assertIn("A quantidade de linhas é descoberta na missão", response_block)
+        self.assertIn("Commit/PR != ChatGPT global configurado", agent_block)
+        self.assertNotIn("HUD completo apenas no modo solicitado", agent_block)
+
     def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
         mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
         self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)
