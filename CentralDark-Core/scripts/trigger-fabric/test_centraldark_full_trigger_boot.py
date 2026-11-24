@@ -920,6 +920,11 @@ def test_hybrid_mission_scope_and_bot_text():
     view=mod.hybrid_bot_text({"status":"APROVADO","source":"GH_CLI","files":[]},current)
     assert "🪬 BOOT CENTRALDARK" in view and "🪬 CENTRALDARK — HUD DA MISSÃO" in view
     assert "📂 PR: #2171" in view and "registrado, conferir prova" in view
+    assert "Encontrei seu trabalho pelo computador da Casa." in view
+    view_mcp=mod.hybrid_bot_text({"status":"APROVADO","source":"CENTRALDARK_MCP","files":[]},current)
+    assert "Encontrei seu trabalho pela CentralDark." in view_mcp
+    view_official=mod.hybrid_bot_text({"status":"APROVADO","source":"GITHUB_OFICIAL","files":[]},current)
+    assert "Encontrei seu trabalho pelo GitHub." in view_official
 
 if __name__ == "__main__":
     tests = [

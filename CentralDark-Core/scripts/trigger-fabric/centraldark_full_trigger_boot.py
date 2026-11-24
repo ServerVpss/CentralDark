@@ -1526,6 +1526,12 @@ def hybrid_bot_text(proof,mission):
         out+=["🟡 Os arquivos estão conferidos, mas falta identificar a missão certa.",
               "➡️ Próximo passo: "+mission["next"]]
     else:
+        fonte_humana={
+            "GITHUB_OFICIAL":"Encontrei seu trabalho pelo GitHub.",
+            "CENTRALDARK_MCP":"Encontrei seu trabalho pela CentralDark.",
+            "GH_CLI":"Encontrei seu trabalho pelo computador da Casa.",
+        }
+        out.append("✅ "+fonte_humana.get(proof["source"],"Encontrei os arquivos do projeto."))
         out+=["🎯 Missão: "+mission["title"],"🧵 Fio: "+mission["mission_id"],
               "📂 PR: #"+str(mission["pr"]),"🔖 Versão: "+mission["head"][:12],
               "🟢 Arquivos do projeto conferidos.",
