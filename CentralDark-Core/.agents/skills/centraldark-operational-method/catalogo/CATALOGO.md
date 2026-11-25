@@ -107,6 +107,11 @@ No Windows, os quatro cursores podem permanecer visíveis ao mesmo tempo, mas o 
 
 Prova da Casa em 25/11/2026: replay dinâmico resolveu `DISPLAY1..4` pelo binding humano atual, criou quatro sessões, completou cinco estágios, retornou `completed=true` e `cleanup=true`. A confirmação humana da demonstração anterior do mesmo método foi positiva; cada replay novo continua exigindo prova própria antes de afirmar visibilidade humana.
 
+
+### Presets de velocidade comprovados
+
+A mesma receita `CENTRALDARK_CURSOR_MOUSE_DEMO` possui níveis verificados: **30% = DEMONSTRATIVO**, **50% = FLUIDO** e **100% = RÁPIDO**. O executor converte esses nomes/percentuais nos timings medidos; nenhum deles cria outro método ou outro writer. Prova: [cursor-mouse-speed-presets-20261125.json](comprovacoes/cursor-mouse-speed-presets-20261125.json).
+
 ## Descoberta e auditoria
 
 - **Inventário importado**: [ARQUIVOS.json](ARQUIVOS.json), com SHA256 dos 15 arquivos de 11 módulos.
