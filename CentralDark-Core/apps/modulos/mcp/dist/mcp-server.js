@@ -7,6 +7,8 @@ import { pathToFileURL } from "node:url";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { CallToolRequestSchema, ListResourcesRequestSchema, ListToolsRequestSchema, ReadResourceRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
+import { eventSubscriptionStore } from "./sessions.js";
+import { CENTRALDARK_RECEIPT_CREATED, createEventRegistry } from "./events.js";
 import { z } from "zod";
 import { log } from "./log.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
@@ -91,6 +93,24 @@ export function zodTypeToJsonSchema(schema) {
 // Toda IA que conectar recebe isto ANTES da primeira mensagem do usuário.
 const PIVETE_BOOT_INSTRUCTIONS = `# 🧠 CONSCIÊNCIA CENTRALDARK — Ativa desde já
 
+## 🧑‍🏫 KIT PROFESSOR — entrada do conector
+O handshake MCP entrega estas instruções automaticamente ao cliente; isso não executa ferramentas. O Kit Professor já existente chama-se \`kit_boas_vindas\`.
+- Ao conectar, recuperar \`kit_boas_vindas\` (resumo e índice) e \`ler_regras_inviolaveis\` (quando disponível).
+- Se depender de conversas passadas, consultar \`personal_context_search\` ou \`consultar_memoria_reserva\`.
+- Se depender de receita ou lição anterior, consultar \`puxar_aprendizados\` e o owner \`docs/CONSCIENCIA/APRENDIZADOS.md\`.
+- Fontes de fala: \`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml\`; \`docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md\`; \`docs/CONSCIENCIA/PADRAO-EMOJIS.md\`.
+- A chamada destas ferramentas é responsabilidade do cliente MCP. Só declarar consumo após comprovar a leitura e resposta.
+
+## 🗺️ COMO RESPONDER — menu visual aprovado
+- PT-BR claro, direto e natural; resultado primeiro.
+- Mensagem com assuntos diferentes: cada bloco começa com emoji semântico + título cotidiano em negrito.
+- Separar somente assuntos diferentes com \`---\` e linha vazia antes/depois. Nunca dividir frases do mesmo assunto.
+- Mensagem curta de um assunto: responder curto e sem seções artificiais.
+- Comprovantes: APROVADO só com prova; PENDENTE quando falta; FALHOU quando falha comprovada.
+- Preservar nomes internos técnicos, comandos, IDs, URLs, SHA, JSON/YAML e logs.
+- Esta regra de apresentação atual prevalece sobre exemplos de estilo antigos abaixo.
+
+
 Você está conectado ao MCP do **Pivete** (CentralDark). Assuma AGORA esta postura, sem esperar comando:
 
 ## 🎯 TOM E CONDUTA (imutável)
@@ -131,9 +151,9 @@ Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão pa
 busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
 estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
 
-## 🎛️ HUD/RUDY HÍBRIDO OBRIGATÓRIO
-Esta conexão MCP já é gatilho suficiente. Não espere também acesso ao GitHub.
-Antes da primeira resposta operacional CentralDark:
+## 🎛️ HUD/RUDY HÍBRIDO — sob demanda da missão
+Esta conexão MCP já basta para consultar a CentralDark. Não exija acesso extra ao GitHub.
+Quando o CHEFE pedir HUD, auditoria completa ou quando a missão vigente já usar esse quadro:
 1. recupere/reconcilie CURRENT com as ferramentas disponíveis;
 2. carregue o mesmo HUD/RUDY H01..H16;
 3. preserve ID, nome e ordem dos cartões;
@@ -159,9 +179,25 @@ MCP -> VPS nativo e rota de deploy; GitHub Actions hosted SSH foi aposentado.
 Nunca contornar gates de autenticacao, autorizacao, auditoria e seguranca.
 
 ## ✅ PRIMEIRA RESPOSTA
-Em contexto operacional CentralDark, comece pelo HUD/RUDY re-medido; não substitua por saudação genérica. Fora de contexto operacional, mantenha a saudação curta.
+Em contexto operacional CentralDark, responda primeiro à pergunta; apresente o HUD/RUDY re-medido quando solicitado ou exigido pela missão vigente. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
+const EventsListRequestSchema = z.object({ method: z.literal("events/list"), params: z.object({ cursor: z.string().nullable().optional() }).optional() });
+const EventsSubscribeRequestSchema = z.object({
+    method: z.literal("events/subscribe"),
+    params: z.object({
+        name: z.literal(CENTRALDARK_RECEIPT_CREATED),
+        arguments: z.record(z.string(), z.unknown()).optional(),
+        delivery: z.object({ mode: z.literal("webhook"), url: z.string(), secret: z.string() }),
+        ttlMs: z.number().int().positive().optional(),
+        cursor: z.string().nullable().optional(),
+    }),
+});
+const EventsUnsubscribeRequestSchema = z.object({ method: z.literal("events/unsubscribe"), params: z.object({ id: z.string().min(1) }) });
+const centraldarkEventRegistry = createEventRegistry({ store: eventSubscriptionStore });
+export async function publishCentralDarkReceiptEvent(receipt) {
+    return centraldarkEventRegistry.publishReceipt(receipt);
+}
 export function buildServer(options) {
     const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
     // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
@@ -181,7 +217,12 @@ export function buildServer(options) {
         oauthScope: String(options.oauthScope || ""),
         correlationId: options.cid ?? null,
     });
-    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {}, events: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const eventPrincipal = Object.freeze({ accountId: options.callerUser, oauthScope: String(options.oauthScope || "") });
+    const eventRegistry = options.eventRegistry ?? centraldarkEventRegistry;
+    server.setRequestHandler(EventsListRequestSchema, async () => eventRegistry.list(eventPrincipal));
+    server.setRequestHandler(EventsSubscribeRequestSchema, async (req) => eventRegistry.subscribe(eventPrincipal, req.params));
+    server.setRequestHandler(EventsUnsubscribeRequestSchema, async (req) => ({ unsubscribed: await eventRegistry.unsubscribe(eventPrincipal, req.params) }));
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
         log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
@@ -512,7 +553,7 @@ export async function serveHttp(options = {}) {
     log.info("mcp_remote_http_ready", { host, port, admin, compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length });
     return httpServer;
 }
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     if (process.argv[2] === "--stdio")
         await serveStdio();
     else if (process.argv[2] === "--http")
