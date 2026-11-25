@@ -5,14 +5,16 @@
 set -euo pipefail
 
 MANUAL=0
+PRINT_RESOLVED_ROOT=0
 RESTART_SERVICE=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --manual) MANUAL=1; shift ;;
+    --print-resolved-root) PRINT_RESOLVED_ROOT=1; shift ;;
     --restart-service)
       [[ $# -ge 2 && -n "${2:-}" ]] || { echo "USAGE: --restart-service NAME" >&2; exit 64; }
       RESTART_SERVICE="$2"; MANUAL=1; shift 2 ;;
-    *) echo "UNKNOWN_OPTION=$1 (use --manual [--restart-service NAME])" >&2; exit 64 ;;
+    *) echo "UNKNOWN_OPTION=$1 (use --manual | --print-resolved-root | --restart-service NAME)" >&2; exit 64 ;;
   esac
 done
 
@@ -53,9 +55,15 @@ resolve_repo_root() {
 }
 
 REPO="$(resolve_repo_root)" || { echo "CENTRALDARK_REPO_ROOT_NOT_FOUND" >&2; exit 2; }
+if [[ "$PRINT_RESOLVED_ROOT" -eq 1 ]]; then
+  printf '%s\n' "$REPO"
+  exit 0
+fi
 LOG="$REPO/logs/auto-sync.log"
 mkdir -p "$(dirname "$LOG")"
-LOCKFILE="/tmp/centraldark-auto-sync.lock"
+# O lock pertence a este checkout, mas fica no diretório de runtime já ignorado.
+# Assim dois checkouts não competem e o mecanismo não suja o Git.
+LOCKFILE="$REPO/logs/.auto-sync.lock"
 
 exec 200>"$LOCKFILE"
 flock -n 200 || { printf '%s [SKIP] owner lock busy\n' "$(date -u +%FT%TZ)" >> "$LOG"; exit 0; }
@@ -96,8 +104,8 @@ restart_if_needed() {
   [[ -n "$RESTART_SERVICE" ]] || return 0
   local prefix="" unit="" active=""
   case "$RESTART_SERVICE" in
-    centraldark-native-mcp-http.service) prefix="apps/modulos/mcp/" ;;
-    hermes-gateway.service) prefix="apps/modulos/HERMES-CORE/" ;;
+    centraldark-native-mcp-http.service) prefix="CentralDark-Core/apps/modulos/mcp/" ;;
+    hermes-gateway.service) prefix="CentralDark-Core/apps/modulos/HERMES-CORE/" ;;
     *) log "BLOCKED" "RESTART_SERVICE_NOT_ALLOWLISTED name=$RESTART_SERVICE"; return 3 ;;
   esac
   if [[ "$from" == "$to" ]]; then

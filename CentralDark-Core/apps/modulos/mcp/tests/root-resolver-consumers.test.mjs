@@ -17,12 +17,13 @@ test("o bridge semântico deriva o script do Core validado", () => {
   );
 });
 
-test("o webhook usa a raiz canônica resolvida para o script de sincronização", () => {
+test("o webhook usa o script canônico do Core e ele existe fisicamente", () => {
   assert.equal(canonicalSyncRepoPath(), config.vps.repoPath);
   assert.equal(
-    path.join(canonicalSyncRepoPath(), "scripts", "vps", "auto-sync-main.sh"),
-    path.join(config.vps.repoPath, "scripts", "vps", "auto-sync-main.sh"),
+    canonicalSyncScriptPath(),
+    path.join(config.vps.corePath, "scripts", "vps", "auto-sync-main.sh"),
   );
+  assert.ok(existsSync(canonicalSyncScriptPath()));
 });
 
 test("os artefatos dist reutilizam o mesmo resolvedor canônico", () => {
@@ -31,4 +32,9 @@ test("os artefatos dist reutilizam o mesmo resolvedor canônico", () => {
     path.join(distConfig.vps.corePath, "infra", "mcp", "semantic_bridge.py"),
   );
   assert.equal(distCanonicalSyncRepoPath(), distConfig.vps.repoPath);
+  assert.equal(
+    distCanonicalSyncScriptPath(),
+    path.join(distConfig.vps.corePath, "scripts", "vps", "auto-sync-main.sh"),
+  );
+  assert.ok(existsSync(distCanonicalSyncScriptPath()));
 });

@@ -15,7 +15,8 @@ git -C "$ROOT" init -q -b main
 git -C "$ROOT" config user.email "test@centraldark.local"
 git -C "$ROOT" config user.name "CentralDark test"
 touch "$ROOT/.gitkeep"
-git -C "$ROOT" add .gitkeep
+printf 'logs/\n' > "$ROOT/.gitignore"
+git -C "$ROOT" add .
 git -C "$ROOT" commit -qm fixture
 
 set +e

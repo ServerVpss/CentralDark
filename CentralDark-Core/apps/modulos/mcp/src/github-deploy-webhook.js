@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import path from "node:path";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { config } from "./config.js";
@@ -27,9 +28,13 @@ export function canonicalSyncRepoPath() {
   return config.vps.repoPath;
 }
 
+export function canonicalSyncScriptPath() {
+  return path.join(config.vps.corePath, "scripts", "vps", "auto-sync-main.sh");
+}
+
 async function runCanonicalSync() {
   const repo = canonicalSyncRepoPath();
-  const script = `${repo}/scripts/vps/auto-sync-main.sh`;
+  const script = canonicalSyncScriptPath();
   await execFileAsync("bash", [script], {
     cwd: repo,
     env: { ...process.env, REPO_DIR: repo, BRANCH: "main" },
