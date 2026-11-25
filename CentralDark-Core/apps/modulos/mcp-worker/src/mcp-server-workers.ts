@@ -48,7 +48,7 @@ export async function handleWorkerMcpRequest(
   
   const serverInstance = buildServer({ 
     ...options, 
-    token: token || env.CENTRALDARK_ADMIN_KEY || "" 
+    token: token || null 
   });
   
   // Connect the server to the transport
@@ -73,8 +73,8 @@ export async function handleWorkerMcpRequest(
 export function parseBearerToken(request: Request, env: Env): string | null {
   const authorization = request.headers.get("Authorization");
   if (!authorization) {
-    // Fall back to admin key from environment
-    return env.CENTRALDARK_ADMIN_KEY || null;
+    // Fail closed: no token, no fallback
+    return null;
   }
   const parts = authorization.trim().split(" ");
   if (parts.length === 2 && parts[0].toLowerCase() === "bearer") {

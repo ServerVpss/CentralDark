@@ -109,6 +109,7 @@ export default {
         responseHeaders.delete("transfer-encoding");
         responseHeaders.delete("connection");
 
+      try {
         return new Response(responseBody, {
           status: response.status,
           headers: responseHeaders,
