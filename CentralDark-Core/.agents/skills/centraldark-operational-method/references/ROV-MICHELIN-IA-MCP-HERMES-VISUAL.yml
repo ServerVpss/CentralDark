@@ -570,3 +570,50 @@ DEMONSTRACAO_CURSOR_MOUSE:
     cleanup: true
     human_visual_confirmation_of_prior_same_method: CONFIRMED
     human_visual_confirmation_of_this_specific_replay: PENDENTE
+
+
+CURSOR_MOUSE_SPEED_PRESETS:
+  recipe_id: CENTRALDARK_CURSOR_MOUSE_DEMO
+  status: TECHNICALLY_VERIFIED_2026_11_25
+  invariant:
+    writer: ONE_WRITER_PER_SCOPE
+    cua_sessions: 4_EPHEMERAL
+    route_human_monitors: [4, 2, 1, 3, 4]
+    physical_mouse: UNTOUCHED
+  presets:
+    "30":
+      label: DEMONSTRATIVO
+      glide_ms: 1000
+      stage_pause_ms: 700
+      hold_seconds: 1.5
+      run_id: 805578b8
+      mean_stage_seconds: 7.427
+      process_runtime_seconds: 62.81
+      completed: true
+      cleanup: true
+    "50":
+      label: FLUIDO
+      aliases: [fluido]
+      glide_ms: 600
+      stage_pause_ms: 400
+      hold_seconds: 1.0
+      run_id: f6851b04
+      mean_stage_seconds: 5.799
+      process_runtime_seconds: 52.22
+      completed: true
+      cleanup: true
+    "100":
+      label: RAPIDO
+      aliases: [rapido]
+      glide_ms: 180
+      stage_pause_ms: 100
+      hold_seconds: 0.5
+      run_id: effefb90
+      mean_stage_seconds: 3.993
+      process_runtime_seconds: 40.40
+      completed: true
+      cleanup: true
+  human_visual_confirmation_of_each_specific_speed_replay: PENDENTE
+  invalid_unverified_percent_policy: REJECT
+  receipt: catalogo/comprovacoes/cursor-mouse-speed-presets-20261125.json
+
