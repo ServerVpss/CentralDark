@@ -9,7 +9,7 @@
  */
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { buildServer } from "../mcp/src/mcp-server.js";
+import { buildServer } from "../../mcp/src/mcp-server.js";
 
 // Configuração do Workers
 interface Env {
