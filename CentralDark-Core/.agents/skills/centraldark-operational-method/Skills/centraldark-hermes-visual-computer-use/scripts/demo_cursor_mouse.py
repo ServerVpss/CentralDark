@@ -11,6 +11,12 @@ from pathlib import Path
 DEFAULT_ROUTE = (4, 2, 1, 3, 4)
 HORIZONTAL_POINTS = ((0.234, 0.667), (0.443, 0.556), (0.651, 0.444), (0.833, 0.333))
 VERTICAL_POINTS = ((0.259, 0.281), (0.491, 0.411), (0.722, 0.542), (0.889, 0.672))
+SPEED_PRESETS = {
+    30: {"label": "DEMONSTRATIVO", "glide_ms": 1000, "stage_pause_ms": 700, "hold_seconds": 1.5},
+    50: {"label": "FLUIDO", "glide_ms": 600, "stage_pause_ms": 400, "hold_seconds": 1.0},
+    100: {"label": "RAPIDO", "glide_ms": 180, "stage_pause_ms": 100, "hold_seconds": 0.5},
+}
+PRESET_ALIASES = {"fluido": 50, "rapido": 100}
 
 def powershell_screens():
     script = (
@@ -68,15 +74,45 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--loops", type=int, default=1)
-    parser.add_argument("--glide-ms", type=int, default=380)
-    parser.add_argument("--stage-pause-ms", type=int, default=450)
-    parser.add_argument("--hold-seconds", type=float, default=2.0)
+    speed = parser.add_mutually_exclusive_group()
+    speed.add_argument("--speed-percent", type=int, choices=tuple(SPEED_PRESETS))
+    speed.add_argument("--preset", choices=tuple(PRESET_ALIASES))
+    parser.add_argument("--glide-ms", type=int)
+    parser.add_argument("--stage-pause-ms", type=int)
+    parser.add_argument("--hold-seconds", type=float)
     parser.add_argument("--config", type=Path, default=Path(__file__).resolve().parents[1] / "default.json")
     args = parser.parse_args()
     if not 1 <= args.loops <= 5:
         parser.error("--loops deve ficar entre 1 e 5")
-    if not 100 <= args.glide_ms <= 1500:
+
+    manual_timing = any(value is not None for value in (
+        args.glide_ms, args.stage_pause_ms, args.hold_seconds
+    ))
+    if (args.speed_percent is not None or args.preset is not None) and manual_timing:
+        parser.error("preset/percentual nao pode ser combinado com timing manual")
+
+    speed_percent = args.speed_percent
+    if args.preset is not None:
+        speed_percent = PRESET_ALIASES[args.preset]
+
+    if speed_percent is not None:
+        selected = SPEED_PRESETS[speed_percent]
+        speed_label = selected["label"]
+        glide_ms = selected["glide_ms"]
+        stage_pause_ms = selected["stage_pause_ms"]
+        hold_seconds = selected["hold_seconds"]
+    else:
+        speed_label = "CUSTOM"
+        glide_ms = args.glide_ms if args.glide_ms is not None else 380
+        stage_pause_ms = args.stage_pause_ms if args.stage_pause_ms is not None else 450
+        hold_seconds = args.hold_seconds if args.hold_seconds is not None else 2.0
+
+    if not 100 <= glide_ms <= 1500:
         parser.error("--glide-ms deve ficar entre 100 e 1500")
+    if not 0 <= stage_pause_ms <= 5000:
+        parser.error("--stage-pause-ms deve ficar entre 0 e 5000")
+    if not 0 <= hold_seconds <= 30:
+        parser.error("--hold-seconds deve ficar entre 0 e 30")
 
     mapped = load_monitor_map(args.config)
     route = list(DEFAULT_ROUTE)
@@ -88,6 +124,13 @@ def main():
         "physical_mouse": "UNTOUCHED",
         "dispatch": "ORDERED_SUBSEQUENT",
         "windows_true_concurrent_input": False,
+        "speed_percent": speed_percent,
+        "speed_label": speed_label,
+        "timing": {
+            "glide_ms": glide_ms,
+            "stage_pause_ms": stage_pause_ms,
+            "hold_seconds": hold_seconds,
+        },
         "screens": {str(n): mapped[n] for n in sorted(mapped)},
     }
     if args.dry_run:
@@ -113,7 +156,7 @@ def main():
                 "session": session,
                 "style": "comet_swoop",
                 "timing": "fixed",
-                "glide_duration_ms": args.glide_ms,
+                "glide_duration_ms": glide_ms,
                 "effects": {"trail": "on", "glow": "on"}
             })
 
@@ -138,8 +181,8 @@ def main():
                     "destinations": destinations,
                     "dispatch_seconds": round(time.perf_counter() - stage_started, 3)
                 })
-                time.sleep(args.stage_pause_ms / 1000)
-        time.sleep(args.hold_seconds)
+                time.sleep(stage_pause_ms / 1000)
+        time.sleep(hold_seconds)
     finally:
         for session in started:
             try:
