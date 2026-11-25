@@ -33,6 +33,7 @@ const delivery = {
 };
 const receipt = {
   event_id: "evt_receipt_001",
+  account_id: "gabriel",
   mission_id: "mission-001",
   repository: "ServerVpss/CentralDark",
   pr_number: 2175,
@@ -93,7 +94,7 @@ test("events/subscribe exige principal autorizado e idempotência por contrato",
     store,
     verifyCallback: async () => { verifications += 1; return { ok: true }; },
   });
-  const params = { name: CENTRALDARK_RECEIPT_CREATED, arguments: { mission_id: "mission-001", pr_number: 2175 }, delivery };
+  const params = { name: CENTRALDARK_RECEIPT_CREATED, arguments: { account_id: "gabriel", mission_id: "mission-001", repository: "ServerVpss/CentralDark", head_sha: "a".repeat(40), pr_number: 2175 }, delivery };
   const first = await registry.subscribe(principal, params);
   const second = await registry.subscribe(principal, params);
   assert.equal(first.id, second.id);
@@ -105,6 +106,20 @@ test("events/subscribe exige principal autorizado e idempotência por contrato",
   await assert.rejects(() => registry.subscribe({ accountId: "gabriel", oauthScope: "" }, params), /EVENTS_FORBIDDEN/);
 });
 
+test("inscrição de outra conta não recebe recibo fora do seu escopo", async () => {
+  const store = memoryStore();
+  const sent = [];
+  const registry = createEventRegistry({ store, verifyCallback: async () => ({ ok: true }), deliver: async (...args) => { sent.push(args); return { status: 202 }; } });
+  await registry.subscribe({ accountId: "outra-conta", oauthScope: "mcp" }, {
+    name: CENTRALDARK_RECEIPT_CREATED,
+    arguments: { account_id: "outra-conta", mission_id: "mission-001", repository: "ServerVpss/CentralDark", head_sha: "a".repeat(40) },
+    delivery,
+  });
+  const result = await registry.publishReceipt(receipt);
+  assert.equal(result.delivered, 0);
+  assert.equal(sent.length, 0);
+});
+
 test("assinatura de entrega usa o corpo exato e evento duplicado é ignorado", async () => {
   const store = memoryStore();
   const sent = [];
@@ -113,7 +128,7 @@ test("assinatura de entrega usa o corpo exato e evento duplicado é ignorado", a
     verifyCallback: async () => ({ ok: true }),
     deliver: async (subscription, body, headers) => { sent.push({ subscription, body, headers }); return { status: 202 }; },
   });
-  await registry.subscribe(principal, { name: CENTRALDARK_RECEIPT_CREATED, arguments: { mission_id: "mission-001" }, delivery });
+  await registry.subscribe(principal, { name: CENTRALDARK_RECEIPT_CREATED, arguments: { account_id: "gabriel", mission_id: "mission-001", repository: "ServerVpss/CentralDark", head_sha: "a".repeat(40) }, delivery });
   const first = await registry.publishReceipt(receipt);
   const duplicate = await registry.publishReceipt(receipt);
   assert.equal(first.delivered, 1);
@@ -128,7 +143,7 @@ test("assinatura de entrega usa o corpo exato e evento duplicado é ignorado", a
 test("evento com SHA inválido não é entregue e cancelamento é idempotente", async () => {
   const store = memoryStore();
   const registry = createEventRegistry({ store, verifyCallback: async () => ({ ok: true }) });
-  const subscribed = await registry.subscribe(principal, { name: CENTRALDARK_RECEIPT_CREATED, arguments: {}, delivery });
+  const subscribed = await registry.subscribe(principal, { name: CENTRALDARK_RECEIPT_CREATED, arguments: { account_id: "gabriel", mission_id: "mission-001", repository: "ServerVpss/CentralDark", head_sha: "a".repeat(40) }, delivery });
   const rejected = await registry.publishReceipt({ ...receipt, event_id: "evt_bad_sha", head_sha: "stale" });
   assert.equal(rejected.rejected, "STALE_SHA");
   assert.equal(await registry.unsubscribe(principal, { id: subscribed.id }), true);

@@ -1,6 +1,7 @@
 import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto";
 import { lookup } from "node:dns/promises";
 import https from "node:https";
+import { fileURLToPath } from "node:url";
 
 export const CENTRALDARK_RECEIPT_CREATED = "centraldark.receipt.created";
 const MAX_BODY_BYTES = 256 * 1024;
@@ -8,6 +9,11 @@ const MAX_RETRIES = 3;
 const MAX_TTL_MS = 24 * 60 * 60 * 1000;
 const SHA = /^[a-f0-9]{40}$/i;
 const FINGERPRINT = /^[a-f0-9]{64}$/i;
+const PRINCIPAL_CONFIG = [];
+const DIRECTORY_NAME = fileURLToPath(import.meta.url);
+const PRINCIPAL_ALLOWED = new RegExp(
+  String.raw`^(?:${PRINCIPAL_CONFIG.map((c) => c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})$`
+);
 
 const EVENT_DEFINITION = Object.freeze({
   name: CENTRALDARK_RECEIPT_CREATED,
@@ -16,8 +22,10 @@ const EVENT_DEFINITION = Object.freeze({
   argumentsSchema: {
     type: "object",
     properties: {
+      account_id: { type: "string" },
       mission_id: { type: "string" },
       repository: { type: "string" },
+      head_sha: { type: "string", pattern: "^[a-f0-9]{40}$" },
       pr_number: { type: "integer", minimum: 1 },
       status: { type: "string" },
     },
@@ -25,39 +33,76 @@ const EVENT_DEFINITION = Object.freeze({
   },
   payloadSchema: {
     type: "object",
-    required: ["event_id", "mission_id", "repository", "pr_number", "head_sha", "receipt_fingerprint", "evidence_ref", "status", "timestamp"],
+    required: [
+      "event_id",
+      "mission_id",
+      "repository",
+      "pr_number",
+      "head_sha",
+      "receipt_fingerprint",
+      "evidence_ref",
+      "status",
+      "timestamp",
+    ],
   },
 });
 
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
-  if (value && typeof value === "object") return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonical(value[key])}`).join(",")}}`;
+  }
   return JSON.stringify(value);
 }
 
 function secretBytes(secret) {
-  if (typeof secret !== "string" || !secret.startsWith("whsec_")) throw new Error("EVENTS_INVALID_DELIVERY_SECRET");
+  if (typeof secret !== "string" || !secret.startsWith("whsec_")) {
+    throw new Error("EVENTS_INVALID_DELIVERY_SECRET");
+  }
   const encoded = secret.slice("whsec_".length);
   let bytes;
-  try { bytes = Buffer.from(encoded, "base64"); } catch { throw new Error("EVENTS_INVALID_DELIVERY_SECRET"); }
-  if (bytes.length < 24 || bytes.length > 64 || bytes.toString("base64") !== encoded) throw new Error("EVENTS_INVALID_DELIVERY_SECRET");
+  try {
+    bytes = Buffer.from(encoded, "base64");
+  } catch {
+    throw new Error("EVENTS_INVALID_DELIVERY_SECRET");
+  }
+  if (bytes.length < 24 || bytes.length > 64 || bytes.toString("base64") !== encoded) {
+    throw new Error("EVENTS_INVALID_DELIVERY_SECRET");
+  }
   return bytes;
 }
 
 function publicAddress(address) {
   if (address.includes(":")) return !(/^(::1|fc|fd|fe80:)/i.test(address));
   const parts = address.split(".").map(Number);
-  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) return false;
+  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) {
+    return false;
+  }
   const [a, b] = parts;
-  return !(a === 0 || a === 10 || a === 127 || a >= 224 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168));
+  return (
+    !(a === 0 || a === 10 || a === 127 || a >= 224) &&
+    !(a === 169 && b === 254) &&
+    !(a === 172 && b >= 16 && b <= 31) &&
+    !(a === 192 && b === 168)
+  );
 }
 
 export async function validateCallbackUrl(value) {
   let url;
-  try { url = new URL(String(value)); } catch { throw new Error("EVENTS_CALLBACK_URL_INVALID"); }
-  if (url.protocol !== "https:" || url.username || url.password || !url.hostname) throw new Error("EVENTS_CALLBACK_URL_INVALID");
+  try {
+    url = new URL(String(value));
+  } catch {
+    throw new Error("EVENTS_CALLBACK_URL_INVALID");
+  }
+  if (url.protocol !== "https:" || url.username || url.password || !url.hostname) {
+    throw new Error("EVENTS_CALLBACK_URL_INVALID");
+  }
   const answers = await lookup(url.hostname, { all: true, verbatim: true });
-  if (!answers.length || answers.some((answer) => !publicAddress(answer.address))) throw new Error("EVENTS_CALLBACK_ADDRESS_FORBIDDEN");
+  if (!answers.length || answers.some((answer) => !publicAddress(answer.address))) {
+    throw new Error("EVENTS_CALLBACK_ADDRESS_FORBIDDEN");
+  }
   return { url, addresses: answers };
 }
 
@@ -65,21 +110,30 @@ async function securePost(urlValue, headers, body) {
   const { url, addresses } = await validateCallbackUrl(urlValue);
   const address = addresses[0];
   return await new Promise((resolve, reject) => {
-    const request = https.request({
-      protocol: "https:", hostname: url.hostname, servername: url.hostname,
-      port: url.port || 443, path: `${url.pathname}${url.search}`, method: "POST",
-      headers: { ...headers, "content-length": Buffer.byteLength(body) },
-      lookup: (_host, _options, callback) => callback(null, address.address, address.family),
-      timeout: 10_000,
-    }, (response) => {
-      const chunks = [];
-      let size = 0;
-      response.on("data", (chunk) => {
-        size += chunk.length;
-        if (size <= 16 * 1024) chunks.push(chunk);
-      });
-      response.on("end", () => resolve({ status: response.statusCode ?? 0, body: Buffer.concat(chunks).toString("utf8") }));
-    });
+    const request = https.request(
+      {
+        protocol: "https:",
+        hostname: url.hostname,
+        servername: url.hostname,
+        port: url.port || 443,
+        path: `${url.pathname}${url.search}`,
+        method: "POST",
+        headers: { ...headers, "content-length": Buffer.byteLength(body) },
+        lookup: (_host, _options, callback) => callback(null, address.address, address.family),
+        timeout: 10_000,
+      },
+      (response) => {
+        const chunks = [];
+        let size = 0;
+        response.on("data", (chunk) => {
+          size += chunk.length;
+          if (size <= 16 * 1024) chunks.push(chunk);
+        });
+        response.on("end", () =>
+          resolve({ status: response.statusCode ?? 0, body: Buffer.concat(chunks).toString("utf8") })
+        );
+      }
+    );
     request.once("timeout", () => request.destroy(new Error("EVENTS_CALLBACK_TIMEOUT")));
     request.once("error", reject);
     request.end(body);
@@ -97,17 +151,26 @@ function signedHeaders(secret, eventId, body, timestamp = Math.floor(Date.now() 
   };
 }
 
+async function defaultDeliver(subscription, body, headers) {
+  return securePost(subscription.delivery.url, headers, body);
+}
+
 function allowedPrincipal(principal) {
-  return Boolean(principal?.accountId) && /(?:^|\s)mcp(?:\s|$)/.test(String(principal.oauthScope || ""));
+  return Boolean(principal?.accountId) && principal.oauthScope === "mcp";
 }
 
 function validateArguments(argumentsValue) {
   if (argumentsValue == null) return {};
-  if (!argumentsValue || Array.isArray(argumentsValue) || typeof argumentsValue !== "object") throw new Error("EVENTS_INVALID_ARGUMENTS");
-  const allowed = new Set(["mission_id", "repository", "pr_number", "status"]);
+  if (!argumentsValue || Array.isArray(argumentsValue) || typeof argumentsValue !== "object") {
+    throw new Error("EVENTS_INVALID_ARGUMENTS");
+  }
+  const allowed = new Set(["account_id", "mission_id", "repository", "head_sha", "pr_number", "status"]);
   for (const key of Object.keys(argumentsValue)) if (!allowed.has(key)) throw new Error("EVENTS_INVALID_ARGUMENTS");
+  if (argumentsValue.mission_id != null && typeof argumentsValue.mission_id !== "string") throw new Error("EVENTS_INVALID_ARGUMENTS");
+  if (argumentsValue.repository != null && typeof argumentsValue.repository !== "string") throw new Error("EVENTS_INVALID_ARGUMENTS");
   if (argumentsValue.pr_number != null && (!Number.isInteger(argumentsValue.pr_number) || argumentsValue.pr_number < 1)) throw new Error("EVENTS_INVALID_ARGUMENTS");
-  for (const key of ["mission_id", "repository", "status"]) if (argumentsValue[key] != null && typeof argumentsValue[key] !== "string") throw new Error("EVENTS_INVALID_ARGUMENTS");
+  if (argumentsValue.head_sha != null && typeof argumentsValue.head_sha !== "string") throw new Error("EVENTS_INVALID_ARGUMENTS");
+  if (argumentsValue.status != null && typeof argumentsValue.status !== "string") throw new Error("EVENTS_INVALID_ARGUMENTS");
   return structuredClone(argumentsValue);
 }
 
@@ -124,7 +187,7 @@ function validateReceipt(receipt) {
   return null;
 }
 
-export function createEventRegistry({ store, verifyCallback, deliver = securePost, now = () => Date.now() }) {
+export function createEventRegistry({ store, verifyCallback, deliver = defaultDeliver, now = () => Date.now() }) {
   if (!store) throw new Error("EVENTS_STORE_REQUIRED");
   const verifier = verifyCallback ?? (async (subscription) => {
     const challenge = randomUUID();
@@ -154,11 +217,16 @@ export function createEventRegistry({ store, verifyCallback, deliver = securePos
     const id = `sub_${createHash("sha256").update(identity).digest("hex").slice(0, 32)}`;
     const existing = store.getSubscription(id);
     const subscription = {
-      id, account_id: principal.accountId, name: params.name, arguments: argumentsValue,
+      id,
+      account_id: principal.accountId,
+      name: params.name,
+      arguments: argumentsValue,
       delivery: { mode: "webhook", url: params.delivery.url, secret: params.delivery.secret },
-      expires_at: new Date(now() + ttlMs).toISOString(), updated_at: new Date(now()).toISOString(),
+      expires_at: new Date(now() + ttlMs).toISOString(),
+      updated_at: new Date(now()).toISOString(),
+      state: "active",
     };
-    if (!existing || existing.delivery?.secret !== subscription.delivery.secret) {
+    if (!existing || existing.delivery?.secret !== params.delivery.secret) {
       const verification = await verifier(subscription);
       if (!verification?.ok) throw new Error(`EVENTS_CALLBACK_${verification?.reason || "FAILED"}`);
     }
@@ -182,7 +250,7 @@ export function createEventRegistry({ store, verifyCallback, deliver = securePos
     const body = JSON.stringify(event);
     if (Buffer.byteLength(body) > MAX_BODY_BYTES) return { delivered: 0, rejected: "EVENT_TOO_LARGE" };
     const body_sha256 = createHash("sha256").update(body).digest("hex");
-    const targets = store.listSubscriptions().filter((subscription) => subscription.name === event.name && Date.parse(subscription.expires_at) > now() && matches(subscription.arguments, receipt));
+    const targets = store.listSubscriptions().filter((subscription) => subscription.name === event.name && Date.parse(subscription.expires_at) > now() && subscription.account_id === receipt.account_id && matches(subscription.arguments, receipt));
     let delivered = 0;
     const failures = [];
     for (const subscription of targets) {
