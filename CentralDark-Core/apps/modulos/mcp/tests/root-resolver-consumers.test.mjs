@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 
 const { config } = await import("../src/config.js");
 const { semanticBridgePath } = await import("../src/tools/cognitivo/semantic.js");
-const { canonicalSyncRepoPath } = await import("../src/github-deploy-webhook.js");
 const { config: distConfig } = await import("../dist/config.js");
 const { semanticBridgePath: distSemanticBridgePath } = await import("../dist/tools/cognitivo/semantic.js");
-const { canonicalSyncRepoPath: distCanonicalSyncRepoPath } = await import("../dist/github-deploy-webhook.js");
+const { canonicalSyncRepoPath, canonicalSyncScriptPath } = await import("../src/github-deploy-webhook.js");
+const { canonicalSyncRepoPath: distCanonicalSyncRepoPath, canonicalSyncScriptPath: distCanonicalSyncScriptPath } = await import("../dist/github-deploy-webhook.js");
 
 test("o bridge semântico deriva o script do Core validado", () => {
   assert.equal(

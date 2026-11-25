@@ -30,47 +30,49 @@ function isCentralDarkRoot(dir) {
     return ["agent", "gateway", "CentralDark-Core/CENTRALDARK_AI_BOOT.yaml",
         "CentralDark-Core/LEIA-ME-IA.md"].every(marker => existsSync(path.join(dir, marker)));
 }
-
 function normalizeRoot(candidate) {
     const resolved = path.resolve(candidate);
-    if (isCentralDarkRoot(resolved)) return resolved;
+    if (isCentralDarkRoot(resolved))
+        return resolved;
     if (path.basename(resolved) === "CentralDark-Core" && isCentralDarkRoot(path.dirname(resolved))) {
         return path.dirname(resolved);
     }
     return null;
 }
-
 function discoverCentralDarkRoot(start = _moduleDir) {
     let dir = path.resolve(start);
     for (;;) {
         const root = normalizeRoot(dir);
-        if (root) return root;
+        if (root)
+            return root;
         const parent = path.dirname(dir);
-        if (parent === dir) return null;
+        if (parent === dir)
+            return null;
         dir = parent;
     }
 }
-
 function repoRootFromEnv() {
     const discovered = discoverCentralDarkRoot();
     for (const name of ["CENTRALDARK_REPO_ROOT", "VPS_REPO_PATH"]) {
         const value = opt(name, "");
-        if (!value || value.toLowerCase() === "auto") continue;
+        if (!value || value.toLowerCase() === "auto")
+            continue;
         // A Windows drive path is not a relative Linux path, or vice versa.
-        if (!path.isAbsolute(value) && (path.win32.isAbsolute(value) || path.posix.isAbsolute(value))) continue;
+        if (!path.isAbsolute(value) && (path.win32.isAbsolute(value) || path.posix.isAbsolute(value)))
+            continue;
         const candidate = path.isAbsolute(value) ? value : discovered && path.resolve(discovered, value);
         if (candidate) {
             const root = normalizeRoot(candidate);
-            if (root) return root;
+            if (root)
+                return root;
         }
     }
-    if (discovered) return discovered;
+    if (discovered)
+        return discovered;
     throw new Error("CENTRALDARK_REPO_ROOT_NOT_FOUND: use a validated CentralDark checkout or explicit root");
 }
-
 const repoRoot = repoRootFromEnv();
 const coreRoot = path.join(repoRoot, "CentralDark-Core");
-
 export const config = {
     port: Number(opt("MCP_PORT", "9100")),
     publicUrl: opt("MCP_PUBLIC_URL", "https://mcp.centralldark.com"),

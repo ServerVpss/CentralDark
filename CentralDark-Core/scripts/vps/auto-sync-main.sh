@@ -16,8 +16,45 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-REPO="/root/CentralDark"
-LOG="$REPO/scripts/vps/auto-sync.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+CORE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd -P)"
+DISCOVERED_REPO="$(cd "$CORE_ROOT/.." && pwd -P)"
+
+is_centraldark_root() {
+  local candidate="$1"
+  [[ -e "$candidate/.git" && -d "$candidate/agent" && -d "$candidate/gateway" && \
+     -d "$candidate/tools" && -d "$candidate/plugins" && -d "$candidate/apps" && \
+     -d "$candidate/CentralDark-Core" ]]
+}
+
+resolve_repo_root() {
+  local configured="" candidate=""
+  for configured in "${CENTRALDARK_REPO_ROOT:-}" "${VPS_REPO_PATH:-}"; do
+    [[ -n "$configured" && "${configured,,}" != "auto" ]] || continue
+    if [[ "$configured" == /* ]]; then
+      candidate="$configured"
+    else
+      candidate="$DISCOVERED_REPO/$configured"
+    fi
+    if [[ -d "$candidate" ]]; then
+      candidate="$(cd "$candidate" && pwd -P)"
+      [[ "$(basename "$candidate")" != "CentralDark-Core" ]] || candidate="$(cd "$candidate/.." && pwd -P)"
+      if is_centraldark_root "$candidate"; then
+        printf '%s\n' "$candidate"
+        return 0
+      fi
+    fi
+  done
+  if is_centraldark_root "$DISCOVERED_REPO"; then
+    printf '%s\n' "$DISCOVERED_REPO"
+    return 0
+  fi
+  return 1
+}
+
+REPO="$(resolve_repo_root)" || { echo "CENTRALDARK_REPO_ROOT_NOT_FOUND" >&2; exit 2; }
+LOG="$REPO/logs/auto-sync.log"
+mkdir -p "$(dirname "$LOG")"
 LOCKFILE="/tmp/centraldark-auto-sync.lock"
 
 exec 200>"$LOCKFILE"
@@ -79,7 +116,7 @@ restart_if_needed() {
     log "BLOCKED" "SERVICE_UNIT_READ_FAILED service=$RESTART_SERVICE"
     return 3
   }
-  if [[ "$unit" != *"/root/CentralDark/"* && "$unit" != *"WorkingDirectory=/root/CentralDark"* ]]; then
+  if [[ "$unit" != *"$REPO/"* && "$unit" != *"WorkingDirectory=$REPO"* ]]; then
     log "BLOCKED" "SERVICE_SOURCE_OUTSIDE_CHECKOUT service=$RESTART_SERVICE; CHECKOUT_SYNC_ONLY; RUNTIME_UNKNOWN"
     return 3
   fi
@@ -171,7 +208,7 @@ fi
 # canonical main->VPS sync. They are restored after every path, including
 # fetch/merge failures; tracked edits still block above.
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
-PRESERVE_DIR="/root/CentralDark-preserve/auto-sync-untracked-$STAMP"
+PRESERVE_DIR="$(dirname "$REPO")/$(basename "$REPO")-preserve/auto-sync-untracked-$STAMP"
 PRESERVE_MANIFEST="$PRESERVE_DIR/MANIFEST.tsv"
 RESTORED=0
 mkdir -p "$PRESERVE_DIR/untracked"
