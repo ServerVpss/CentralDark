@@ -9,7 +9,7 @@
  */
 
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { buildServer } from "./mcp-server.js";
+import { buildServer } from "../mcp/src/mcp-server.js";
 
 // Configuração do Workers
 interface Env {
@@ -58,21 +58,37 @@ export default {
 
     // MCP streamable HTTP endpoint
     if (url.pathname === "/mcp" && request.method === "POST") {
-      try {
-        // Extract token from Authorization header
-        const token = parseBearerToken(request);
+      // Require authentication: no Bearer token = 401
+      const token = parseBearerToken(request);
+      if (!token) {
+        return new Response(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            error: {
+              code: -32001,
+              message: "Unauthorized: missing Bearer token",
+            },
+            id: null,
+          }),
+          {
+            status: 401,
+            headers: {
+              "Content-Type": "application/json",
+              "WWW-Authenticate": "Bearer",
+            },
+          }
+        );
+      }
 
-        // Build server with the token (authorization)
-        const server = buildServer({
-          token: token,
-          // Preserve the identity of CentralDark
-          label: "centraldark-mcp-workers",
-          clientLabel: "cloudflare-workers",
-          // Only authorized reading tools by default
-          admin: false,
-          // OAuth scope
-          oauthScope: "mcp",
-        });
+      // Build server with the token (authorization)
+      const server = buildServer({
+        token,
+        label: "centraldark-mcp-workers",
+        clientLabel: "cloudflare-workers",
+        // Only authorized reading tools by default
+        admin: false,
+        oauthScope: "mcp",
+      });
 
         // Create Web Standard transport (Cloudflare Workers compatible)
         const transport = new WebStandardStreamableHTTPServerTransport({

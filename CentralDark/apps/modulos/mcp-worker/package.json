@@ -1,0 +1,19 @@
+{
+  "name": "@centraldark/mcp-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Servidor MCP CentralDark para Cloudflare Workers",
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "types": "cp ../mcp/src/config.js src/config.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20261123.0"
+  }
+}

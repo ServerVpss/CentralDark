@@ -2,5 +2,4 @@ name = "centraldark-mcp"
 main = "src/index.ts"
 compatibility_date = "2026-11-24"
 compatibility_flags = ["nodejs_compat"]
-routes = ["centraldark.workers.dev/mcp"]
-vars = { CENTRALDARK_MCP_REMOTE_TOKEN = "" }
+routes = ["centraldark-mcp.centraldark.workers.dev/mcp"]
