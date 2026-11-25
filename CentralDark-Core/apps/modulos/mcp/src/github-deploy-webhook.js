@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { config } from "./config.js";
 
 const execFileAsync = promisify(execFile);
 let running = false;
@@ -22,8 +23,12 @@ function log(message) {
   process.stdout.write(`[deploy-webhook] ${message}\n`);
 }
 
+export function canonicalSyncRepoPath() {
+  return config.vps.repoPath;
+}
+
 async function runCanonicalSync() {
-  const repo = process.env.VPS_REPO_PATH || "/root/CentralDark";
+  const repo = canonicalSyncRepoPath();
   const script = `${repo}/scripts/vps/auto-sync-main.sh`;
   await execFileAsync("bash", [script], {
     cwd: repo,
