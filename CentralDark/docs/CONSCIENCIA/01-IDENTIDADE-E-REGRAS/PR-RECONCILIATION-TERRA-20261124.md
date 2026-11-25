@@ -60,8 +60,8 @@
 
 ## PR NO GITHUB
 **PR #2174:** https://github.com/ServerVpss/CentralDark/pull/2174
-- **Commit:** `76726484aea`
-- **Additions:** 85 | **Deletions:** 0
+- **Commit (HEAD):** `6dcd2508552`
+- **Additions:** 86 | **Deletions:** 0
 - **State:** OPEN (aguarda aprovação CHEFE)
 
 ---
