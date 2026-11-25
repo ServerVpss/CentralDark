@@ -1,65 +1,85 @@
-# 📝 PR #2172 — RECONCILIAÇÃO DE IDENTIDADE: REMOÇÃO DE TERRA
+# 📝 PR #2174 — RECONCILIAÇÃO DE IDENTIDADE: IDENTIDADE DINÂMICA (SEM TERRA FIXA)
 
 **State:** DRAFT · Não mesclado · Aprovação: CHEFE  
-**Date:** 2026-11-24
+**Date:** 2026-11-24  
+**Owner:** TERRA (orquestrador — função, não identidade fixa)
 
 ---
 
-## RESUMO
-Correção da identidade pública em `/data/SOUL.md` (arquivo de configuração fora do repositório, no HERMES_HOME `/data`). O sistema de montagem do system prompt carrega `SOUL.md` da home do agente como identidade primária.
+## PRINCÍPIO FUNDAMENTAL
+**Identidade pública = escolhida pelo CHEFE.**
+**Nome do agente != Modelo. Nome do agente != Papel. Nome do agente != Motor.**
 
-### Alterações aplicadas
+**PROIBIDO IMPORTAR IDENTIDADE FIXA:** TERRA, HERMES, SOL OU QUALQUER OUTRA.
+
+- Papéis são funções dinâmicas.
+- Modelos são motores substituíveis.
+- Capacidades definem quem executa.
+- Um orquestrador lógico por missão.
+- Um writer por escopo.
+- Autoridade final = CHEFE responsável.
+
+---
+
+## ALTERAÇÕES APLICADAS
+
 | Arquivo | Alteração | Status |
 |---|---|---|
-| `/data/SOUL.md` | Header: `TERRA \| ORQUESTRADOR DE AGENTES` → `OS \| ORQUESTRADOR DE AGENTES` | ✅ Aplicado |
-| `/data/SOUL.md` | `**TERRA, o orquestrador leve da CentralDark**` → `**CENTRALDARK · AGENT**, o orquestrador leve da CentralDark` | ✅ Aplicado |
-| `/data/SOUL.md` | Hierarquia: `TERRA: coordena...` → `SOL ORQUESTRA: coordena...` | ✅ Aplicado |
-| `/data/SOUL.md` | Cadeia: `TERRA ORQUESTRA → ESPECIALISTA ATUA` → `HERMES EXECUTA → REALIDADE VERIFICA` | ✅ Aplicado |
+| `/data/SOUL.md` | Header: `TERRA \| ORQUESTRADOR` → `OS — IDENTIDADE DINÂMICA` | ✅ Aplicado |
+| `/data/SOUL.md` | Identidade fixa `TERRA` → Princípio: identidade escolhida pelo CHEFE | ✅ Aplicado |
+| `/data/SOUL.md` | Hierarquia fixa → Funções dinâmicas (não identidades) | ✅ Aplicado |
+| `/data/SOUL.md` | Cadeia: `TERRA ORQUESTRA` → `ORQUESTRADOR (escolhido por missão)` | ✅ Aplicado |
 
 ### Preservação
 - **Motor:** `hermes`, `hermes_cli`, `HERMES_HOME`, `.hermes/` — preservados
-- **Identificadores técnicos:** Nomes técnicos mantidos
+- **Identificadores técnicos:** Mantidos
 - **Endpoints, arquivos de estado, protocolos, sessões:** Não alterados
-- **Secretos:** `config.yaml`, `.env` não alterados
+- **Secretos:** Não expostos
 
 ---
 
 ## TESTES E CONTRAPROVAS
 
-### 1. Verificação de função do system prompt
+### 1. Localização da origem
 - **Fonte:** `system_prompt.py::_identity_parts()` → `load_soul_md()` → `_agent_home()` → `/data`
-- **Comprovado:** `/data/SOUL.md` é o arquivo primário de identidade carregado no system prompt
-- **Resultado:** ✓ Ponto de entrada comprovado
+- **Comprovado:** `/data/SOUL.md` é o arquivo primário de identidade
+- **Resultado:** ✓ Origem comprovada
 
-### 2. Contrapo da alteração
-- **Antes:** `CENTRALDARK — TERRA | ORQUESTRADOR DE AGENTES` + `**TERRA, o orquestrador leve**`
-- **Depois:** `CENTRALDARK · OS — ORQUESTRADOR DE AGENTES` + `**CENTRALDARK · AGENT**, o orquestrador leve`
-- **Contraprova:** Regra de apresentação em `SKILL.md` e `SOUL-SOL.md` era consistente com a correção
-- **Resultado:** ✓ Contrapo aplicável, alteração necessária e correta
+### 2. Correção aplicada
+- **Antes:** Identidade fixa `TERRA` importada no system prompt
+- **Depois:** Princípio de identidade dinâmica escolhida pelo CHEFE
+- **Contraprova:** Regra em `SKILL.md`/`SOUL-SOL.md` de nomenclatura não fixa identidade
+- **Resultado:** ✓ Correção necessária e correta
 
-### 3. Codificação do engine
-- `hermes`, `hermes_cli`, `HERMES_HOME`, `.hermes/` — **não alterados**
-- Prosseguir em produção sem reinício para validação
-- **Resultado:** ✓ Preservação confirmada
+### 3. Validação externa
+- `validate_unified_surface_parity_contract.py` → `UNIFIED_SURFACE_PARITY_CONTRACT=PASS` (exit 0)
+- `CENTRALDARK_UNIFIED_SURFACE_PARITY_01` — contrato validado
 
 ---
 
-## PRÓXIMOS PASSOS (pendentes)
-1. **Validação de runtime** — abrir nova sessão e ler prompt efetivamente carregado
-2. **Verificar ausência de TERRA no system prompt** — readback do novo prompt
-3. **Verificar HEAD do git** — `git log -1 --oneline` no branch `fix/identity-reconciliation-terra`
-4. **Registrar no PR #2172** e confirmar que o registro aparece no GitHub
+## PR NO GITHUB
+**PR #2174:** https://github.com/ServerVpss/CentralDark/pull/2174
+- **Commit:** `17099e28835`
+- **Additions:** 65 | **Deletions:** 0
+- **State:** OPEN (aguarda aprovação CHEFE)
+
+---
+
+## PENDÊNCIAS
+1. **Testar nova sessão** (readback do system prompt) — pendente (requer ambiente)
+2. **Aprovação CHEFE** — aguardando
+3. **Merge** — apenas após aprovação
 
 ---
 
 ## REFERÊNCIAS
 - `system_prompt.py::_identity_parts()` → `load_soul_md()` → `_agent_home()` → `/data/SOUL.md`
-- `SOUL.md` — identidade primária carregada no system prompt (fora do repositório)
-- `SKILL.md` — regras de apresentação (`centraldark-operational-method`)
-- `SOUL-SOL.md` — contrato de nomenclatura (`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/`)
+- `SKILL.md` (`centraldark-operational-method`) — regras de apresentação
+- `SOUL-SOL.md` — contrato de nomenclatura
+- `CENTRALDARK_UNIFIED_SURFACE_PARITY_01` — contrato validado
 
 ---
 
-**Autor:** TERRA (orquestrador)  
+**Autor:** ORQUESTRADOR (função dinâmica, não identidade fixa)  
 **Data:** 2026-11-24  
 **Status:** EM DRAFT · ESPERA APROVAÇÃO DO CHEFE
