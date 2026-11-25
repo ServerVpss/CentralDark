@@ -96,6 +96,17 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 
 **Sincronização deliberada e preservação:** executar `scripts/atualizar-catalogo-self-healing.ps1 -SincronizarSkillsCentralDark` a partir desta Skill-Mãe. Importa **somente** as pastas CentralDark conhecidas, preserva arquivos originais e exige destino sem edição local antes de atualizar cópias divergentes. O atualizador já existente registra SHA, datas e histórico no índice vivo. Não mover o owner original nem eliminar caminhos usados pelos loaders até que exista prova de substituição funcional.
 
+
+## Demonstração comercial — CURSOR_MOUSE coordenado
+
+**Receita:** `CENTRALDARK_CURSOR_MOUSE_DEMO`. Os comandos `!CENTRALDARK iniciar teste do mouse`, `!CENTRALDARK iniciar teste do mause`, `!CENTRALDARK iniciar teste do cursor` e `!CENTRALDARK iniciar teste do cursor_mouse` são aliases da mesma intenção.
+
+Owner: [centraldark-hermes-visual-computer-use](../Skills/centraldark-hermes-visual-computer-use/SKILL.md). Executor: [demo_cursor_mouse.py](../Skills/centraldark-hermes-visual-computer-use/scripts/demo_cursor_mouse.py). A receita mantém **um writer**, cria quatro sessões Cua efêmeras, deixa quatro cursores virtuais visíveis, percorre a rota humana `4 → 2 → 1 → 3 → 4` e encerra todas as sessões no final. O mouse físico permanece intocado porque `move_cursor` usa `scope=window`.
+
+No Windows, os quatro cursores podem permanecer visíveis ao mesmo tempo, mas o daemon despacha os movimentos em ordem subsequente; isso é **paralelismo visual coordenado**, não quatro inputs físicos concorrentes. A tentativa de quatro writers concorrentes em 25/11/2026 gerou timeouts e foi rejeitada. A rota aprovada preserva `ONE_WRITER_PER_SCOPE`.
+
+Prova da Casa em 25/11/2026: replay dinâmico resolveu `DISPLAY1..4` pelo binding humano atual, criou quatro sessões, completou cinco estágios, retornou `completed=true` e `cleanup=true`. A confirmação humana da demonstração anterior do mesmo método foi positiva; cada replay novo continua exigindo prova própria antes de afirmar visibilidade humana.
+
 ## Descoberta e auditoria
 
 - **Inventário importado**: [ARQUIVOS.json](ARQUIVOS.json), com SHA256 dos 15 arquivos de 11 módulos.

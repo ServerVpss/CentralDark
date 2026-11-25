@@ -535,3 +535,38 @@ SELO:
   metodo_visual_historico: COMPROVADO_PARCIALMENTE
   plugin_mcp_e2e: UNKNOWN
   fixed_point: PENDING
+
+DEMONSTRACAO_CURSOR_MOUSE:
+  recipe_id: CENTRALDARK_CURSOR_MOUSE_DEMO
+  owner: "Skills/centraldark-hermes-visual-computer-use"
+  executor: "Skills/centraldark-hermes-visual-computer-use/scripts/demo_cursor_mouse.py"
+  aliases:
+    - "!CENTRALDARK iniciar teste do mouse"
+    - "!CENTRALDARK iniciar teste do mause"
+    - "!CENTRALDARK iniciar teste do cursor"
+    - "!CENTRALDARK iniciar teste do cursor_mouse"
+  writer: ONE_WRITER_PER_SCOPE
+  sessions: 4_EPHEMERAL_CUA_SESSIONS
+  route_human_monitors: [4, 2, 1, 3, 4]
+  cursor_motion:
+    style: comet_swoop
+    timing: fixed
+    glide_duration_ms: 380
+    effects: [trail, glow]
+  input:
+    scope: window
+    physical_mouse: UNTOUCHED
+    windows_true_concurrent_input: false
+    semantics: PARALLELISMO_VISUAL_COORDENADO_COM_DESPACHO_SUBSEQUENTE
+  counterproof:
+    four_concurrent_writers: REJECTED_TIMEOUTS_2026_11_25
+    canonical_route: ONE_WRITER
+  evidence_2026_11_25:
+    device: SEGREDO
+    run_id: c99b8cb4
+    dynamic_monitor_binding: PASS
+    stages_completed: 5
+    completed: true
+    cleanup: true
+    human_visual_confirmation_of_prior_same_method: CONFIRMED
+    human_visual_confirmation_of_this_specific_replay: PENDENTE
