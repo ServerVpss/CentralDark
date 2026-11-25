@@ -13478,7 +13478,7 @@ function createWindow() {
           void loadRendererLoadErrorPage(mainWindow, {
             errorCode: details?.exitCode,
             errorDescription:
-              'The desktop renderer crashed repeatedly (Windows STATUS_STACK_BUFFER_OVERRUN / 0xC0000409). GPU fallback could not recover the window.',
+              'A interface gráfica falhou repetidamente (Windows STATUS_STACK_BUFFER_OVERRUN / 0xC0000409). O modo alternativo de GPU não conseguiu recuperar a janela.',
             repairHint: 'hermes desktop --force-build',
             reloadUrl: DEV_SERVER || pathToFileURL(resolveRendererIndex()).toString()
           })
@@ -13535,7 +13535,7 @@ function createWindow() {
         void loadRendererLoadErrorPage(mainWindow, {
           errorCode: details?.errorCode,
           url: details?.url,
-          errorDescription: 'The desktop renderer failed to load repeatedly after the update.',
+          errorDescription: 'A interface gráfica não conseguiu carregar após várias tentativas depois da atualização.',
           repairHint: 'hermes desktop --force-build',
           reloadUrl: DEV_SERVER || pathToFileURL(resolveRendererIndex()).toString()
         })
@@ -13555,10 +13555,10 @@ function createWindow() {
         const exit = details?.exitCode === undefined ? '' : `, exit code ${String(details.exitCode)}`
         rememberLog(`[renderer:main] renderer terminated while live (reason=${reason}${exit}); surfacing recovery page`)
         void loadRendererLoadErrorPage(mainWindow, {
-          title: 'Hermes desktop UI was terminated',
+          title: 'A interface do Instinto Superior foi interrompida',
           errorDescription:
-            `The desktop UI process was terminated unexpectedly (reason: ${reason}${exit}). ` +
-            'Your sessions and the background gateway are unaffected — reload to continue.',
+            `O processo da interface gráfica foi encerrado inesperadamente (motivo: ${reason}${exit.replace(', exit code ', ', código de saída ')}). ` +
+            'Suas sessões e o gateway em segundo plano não foram afetados — recarregue para continuar.',
           reloadUrl: DEV_SERVER || pathToFileURL(resolveRendererIndex()).toString()
         })
       }
@@ -13595,7 +13595,7 @@ function createWindow() {
     )
     void loadRendererLoadErrorPage(mainWindow, {
       errorCode: 'ERR_FILE_NOT_FOUND',
-      errorDescription: `The desktop renderer bundle is incomplete after the last update (${tornAssets.length} missing file(s)).`,
+      errorDescription: `Os arquivos da interface gráfica estão incompletos após a última atualização (${tornAssets.length} arquivo(s) ausente(s)).`,
       missingAssets: tornAssets,
       repairHint: 'hermes desktop --force-build',
       reloadUrl: pathToFileURL(rendererIndex).toString()

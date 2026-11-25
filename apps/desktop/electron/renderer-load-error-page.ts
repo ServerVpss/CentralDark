@@ -66,7 +66,7 @@ function reloadButtonJs(details: RendererLoadErrorDetails): string {
     : 'location.reload()'
 
   return (
-    '<button id="reload" type="button">Reload</button>\n' +
+    '<button id="reload" type="button">Recarregar</button>\n' +
     `  <script>document.getElementById("reload").addEventListener("click", () => ${target})</script>`
   )
 }
@@ -89,9 +89,9 @@ function missingAssetsList(missingAssets?: string[]): string {
   const items = assets.map(asset => `<li><code>${escapeHtml(asset)}</code></li>`).join('')
 
   return (
-    `<p>The renderer bundle is missing ${missingAssets!.length} module file(s) ` +
-    `(first ${assets.length} shown) — the last update replaced the app while ` +
-    `its files were locked.</p><ul>${items}</ul>`
+    `<p>Faltam ${missingAssets!.length} arquivo(s) de módulo da interface gráfica ` +
+    `(mostrando os primeiros ${assets.length}) — a última atualização substituiu o aplicativo enquanto ` +
+    `seus arquivos estavam bloqueados.</p><ul>${items}</ul>`
   )
 }
 
@@ -104,13 +104,13 @@ export function buildRendererLoadErrorPage(details: RendererLoadErrorDetails = {
   const code =
     details.errorCode === undefined || details.errorCode === null ? '' : ` (${escapeHtml(details.errorCode)})`
 
-  const title = escapeHtml(details.title || 'Hermes couldn\u2019t start the desktop UI')
-  const description = escapeHtml(details.errorDescription || 'The desktop renderer failed to load.')
+  const title = escapeHtml(details.title || 'O Instinto Superior não conseguiu iniciar a interface gráfica')
+  const description = escapeHtml(details.errorDescription || 'Não foi possível carregar a interface gráfica.')
   const url = details.url ? `<p><code>${escapeHtml(details.url)}</code></p>` : ''
-  const repair = details.repairHint ? `<p>Repair with: <code>hermes desktop --force-build</code></p>` : ''
+  const repair = details.repairHint ? `<p>Para reparar, execute: <code>hermes desktop --force-build</code></p>` : ''
 
   return `<!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <title>${title}</title>
@@ -165,8 +165,8 @@ export function buildRendererLoadErrorPage(details: RendererLoadErrorDetails = {
   ${url}
   ${missingAssetsList(details.missingAssets)}
   ${repair}
-  <p>If this keeps happening, check <code>logs/desktop.log</code> and try
-  <code>hermes desktop --force-build</code>, then restart the app.</p>
+  <p>Se o problema persistir, consulte <code>logs/desktop.log</code> e execute
+  <code>hermes desktop --force-build</code>, depois reinicie o aplicativo.</p>
   ${reloadButtonJs(details)}
 </main>
 </body>
