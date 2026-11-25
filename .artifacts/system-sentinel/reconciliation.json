@@ -1,0 +1,49 @@
+{
+  "schema": "centraldark.reconciliation.v1",
+  "observado_em": "2026-11-09T16:14:41.010Z",
+  "fonte": "HERMES_CORE_HEARTBEAT",
+  "status": "PASS",
+  "current": {
+    "head": "5fa478dead6c4f0bde10aaab0e4e271e230fe985",
+    "origin_main": "5fa478dead6c4f0bde10aaab0e4e271e230fe985",
+    "alinhado": true
+  },
+  "checklist_diario": {
+    "path": "/data/cache/scratch/CentralDark/docs/BRAIN/00-MAPA-SISTEMA/CHECK-LIST-DIARIO.md",
+    "presente": true
+  },
+  "pr_mother_1562": {
+    "status": "NOT_OPEN",
+    "motivo": "NAO_LISTADO_ABERTO"
+  },
+  "prs_abertos": {
+    "status": "PASS",
+    "total": 23,
+    "numeros": [
+      1998,
+      1997,
+      1996,
+      1995,
+      1994,
+      1993,
+      1992,
+      1991,
+      1978,
+      1977,
+      1962,
+      1958,
+      1931,
+      1911,
+      1905,
+      1904,
+      1900,
+      1880,
+      1879,
+      1860,
+      1843,
+      1840,
+      1839
+    ]
+  },
+  "regra": "UNKNOWN_NAO_VIRA_PASS"
+}

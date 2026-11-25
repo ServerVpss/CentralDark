@@ -1,0 +1,10 @@
+/data/cache/scratch/CentralDark/apps/modulos/centraldark-halo-main/src-tauri/target/debug/deps/version_check-79d478a2d6ba8ed6.d: /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/lib.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/version.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/channel.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/date.rs
+
+/data/cache/scratch/CentralDark/apps/modulos/centraldark-halo-main/src-tauri/target/debug/deps/libversion_check-79d478a2d6ba8ed6.rlib: /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/lib.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/version.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/channel.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/date.rs
+
+/data/cache/scratch/CentralDark/apps/modulos/centraldark-halo-main/src-tauri/target/debug/deps/libversion_check-79d478a2d6ba8ed6.rmeta: /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/lib.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/version.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/channel.rs /data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/date.rs
+
+/data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/lib.rs:
+/data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/version.rs:
+/data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/channel.rs:
+/data/cache/scratch/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/src/date.rs:
