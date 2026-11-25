@@ -146,6 +146,29 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 **Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sess├úo dele. Indicou Casa Agent/rota/autentica├º├úo e teste remoto real como pend├¬ncias. Essas s├úo declara├º├Áes do pr├│prio painel e n├úo substituem medi├º├Áes independentes em cada ambiente.
 <!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
 
+
+<!-- CENTRALDARK_CURSOR_MOUSE_DEMO_20261125 -->
+## Demonstração canônica — Cursor/Mouse coordenado
+
+`RECIPE_ID=CENTRALDARK_CURSOR_MOUSE_DEMO`
+
+**Gatilhos equivalentes:**
+- `!CENTRALDARK iniciar teste do mouse`
+- `!CENTRALDARK iniciar teste do mause`
+- `!CENTRALDARK iniciar teste do cursor`
+- `!CENTRALDARK iniciar teste do cursor_mouse`
+
+Todos resolvem para a mesma receita. Não criar outro cursor, daemon, overlay, agente ou writer.
+
+**Executor existente evoluído:** `scripts/demo_cursor_mouse.py`. Ele lê `default.json`, mede a geometria atual dos quatro monitores Windows, aplica o binding humano já aprovado e usa o `cua-driver` já ativo.
+
+**Sequência:** `ONE_WRITER → 4 SESSIONS CUA → ENABLE CURSORS → COMET_SWOOOP + TRAIL + GLOW → rota 4→2→1→3→4 → CLEANUP`. As sessões são efêmeras e ganham ID novo por execução. Não catalogar PID/HWND/coordenada histórica como identidade permanente.
+
+**Semântica do paralelismo no Windows:** os quatro cursores ficam visíveis ao mesmo tempo, porém o writer único envia `move_cursor(scope=window)` em ordem subsequente. A tentativa com quatro writers concorrentes causou timeout no daemon e não é a receita. Portanto: `PARALELISMO_VISUAL_COORDENADO=true`, `WINDOWS_TRUE_CONCURRENT_INPUT=false`, `PHYSICAL_MOUSE=UNTOUCHED`.
+
+**Prova Casa 25/11/2026:** replay dinâmico do executor completou a rota `4 → 2 → 1 → 3 → 4`, quatro sessões, cinco estágios e encerrou com `completed=true` + `cleanup=true`. A demonstração anterior do mesmo método foi confirmada visualmente pelo CHEFE. Um replay futuro deve produzir recibo próprio; execução anterior não prova visibilidade futura.
+<!-- /CENTRALDARK_CURSOR_MOUSE_DEMO_20261125 -->
+
 <!-- CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
 ## Terminal SSH existente na Casa ÔåÆ Linux CentralDark-OS
 
