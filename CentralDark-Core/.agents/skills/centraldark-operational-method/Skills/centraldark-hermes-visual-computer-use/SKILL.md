@@ -169,6 +169,23 @@ Todos resolvem para a mesma receita. Não criar outro cursor, daemon, overlay, a
 **Prova Casa 25/11/2026:** replay dinâmico do executor completou a rota `4 → 2 → 1 → 3 → 4`, quatro sessões, cinco estágios e encerrou com `completed=true` + `cleanup=true`. A demonstração anterior do mesmo método foi confirmada visualmente pelo CHEFE. Um replay futuro deve produzir recibo próprio; execução anterior não prova visibilidade futura.
 <!-- /CENTRALDARK_CURSOR_MOUSE_DEMO_20261125 -->
 
+<!-- CENTRALDARK_CURSOR_MOUSE_SPEED_PRESETS_20261125 -->
+### Velocidades verificadas da mesma demonstração
+
+A receita `CENTRALDARK_CURSOR_MOUSE_DEMO` tem três níveis comprovados na Casa SEGREDO em 25/11/2026. Eles alteram somente tempo de movimento/pausa; writer, quatro sessões Cua, rota, estilo, mouse físico e cleanup permanecem iguais.
+
+| Entrada humana | Percentual | glide_ms | stage_pause_ms | hold_seconds | Média medida por etapa |
+|---|---:|---:|---:|---:|---:|
+| `30%` | 30 | 1000 | 700 | 1.5 | 7.43 s |
+| `FLUIDO` ou `50%` | 50 | 600 | 400 | 1.0 | 5.80 s |
+| `RÁPIDO` ou `100%` | 100 | 180 | 100 | 0.5 | 3.99 s |
+
+O executor aceita `--speed-percent 30|50|100`, `--preset fluido` ou `--preset rapido`. Percentuais fora desses três níveis não são chamados de verificados. Timing manual legado continua disponível quando nenhum preset é solicitado.
+
+Recibo técnico: `catalogo/comprovacoes/cursor-mouse-speed-presets-20261125.json`. `30%/50%/100%` tiveram `completed=true` e `cleanup=true`; a confirmação visual humana de cada replay específico não é inferida pelo script.
+<!-- /CENTRALDARK_CURSOR_MOUSE_SPEED_PRESETS_20261125 -->
+
+
 <!-- CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
 ## Terminal SSH existente na Casa ÔåÆ Linux CentralDark-OS
 
