@@ -12,7 +12,7 @@ import {
   WebStandardStreamableHTTPServerTransport,
   WebStandardStreamableHTTPServerTransport as WebStdTransport,
 } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
-import { buildServer, handleMcpRequest, serveStdio } from "./mcp-server.js";
+import { buildServer, handleMcpRequest, serveStdio } from "../mcp/src/mcp-server.js";
 import { randomUUID } from "crypto";
 
 // Web Standard Response implementaçao para o transport
