@@ -2,7 +2,7 @@
 
 **State:** DRAFT · Não mesclado · Aprovação: CHEFE  
 **Date:** 2026-11-24  
-**Owner:** TERRA (orquestrador — função, não identidade fixa)
+**Owner:** ORQUESTRADOR (função dinâmica, não identidade fixa)
 
 ---
 
@@ -32,6 +32,7 @@
 
 ### Preservação
 - **Motor:** `hermes`, `hermes_cli`, `HERMES_HOME`, `.hermes/` — preservados
+- **Identidade do modelo:** `You are Hermes Agent, built by Nous Research` — identidade técnica do modelo (Nous Research), **não** nome público; a apresentação pública é escolhida pelo CHEFE
 - **Identificadores técnicos:** Mantidos
 - **Endpoints, arquivos de estado, protocolos, sessões:** Não alterados
 - **Secretos:** Não expostos
@@ -59,8 +60,8 @@
 
 ## PR NO GITHUB
 **PR #2174:** https://github.com/ServerVpss/CentralDark/pull/2174
-- **Commit:** `17099e28835`
-- **Additions:** 65 | **Deletions:** 0
+- **Commit:** `76726484aea`
+- **Additions:** 85 | **Deletions:** 0
 - **State:** OPEN (aguarda aprovação CHEFE)
 
 ---
@@ -80,6 +81,6 @@
 
 ---
 
-**Autor:** ORQUESTRADOR (função dinâmica, não identidade fixa)  
+**AUTOR:** ORQUESTRADOR (função dinâmica, não identidade fixa)  
 **Data:** 2026-11-24  
 **Status:** EM DRAFT · ESPERA APROVAÇÃO DO CHEFE
