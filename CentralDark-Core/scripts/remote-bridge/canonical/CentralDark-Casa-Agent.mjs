@@ -3,9 +3,9 @@
 // Não usa mcp.desktopcommander.app; exige segredo compartilhado de bridge.
 import { createServer } from "node:http";
 import { spawn } from "node:child_process";
-import { timingSafeEqual } from "node:crypto";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
-import { resolve } from "node:path";
+import { isAbsolute, resolve } from "node:path";
 import { hostname } from "node:os";
 
 const ENGINE = "@wonderwhy-er/desktop-commander@0.2.48";
@@ -171,8 +171,71 @@ async function body(req){
   }
   return JSON.parse(data||"{}");
 }
-export function createCasaAgent(){
+// This authority is held by the local consent adapter, never by an HTTP handler.
+// A grant permits exactly one directory listing at the path shown in local consent.
+export function createLocalSupportSessions({ now = () => performance.now() } = {}) {
+  let active;
+  const validId = (value) => typeof value === "string" && /^[A-Za-z0-9_-]{1,80}$/.test(value);
+  return {
+    approveLocal({ confirmed, operatorId, deviceId, directory, ttlMs = 60_000 }) {
+      if (confirmed !== true || !validId(operatorId) || !validId(deviceId)
+          || typeof directory !== "string" || !isAbsolute(directory) || directory.includes("\0")
+          || !Number.isInteger(ttlMs) || ttlMs < 1 || ttlMs > 60_000)
+        throw Error("SUPPORT_CONSENT_INVALID");
+      const grant = randomBytes(32).toString("base64url");
+      active = { grant, operatorId, deviceId, directory: resolve(directory), expires: now() + ttlMs, consumed: false };
+      return grant;
+    },
+    revokeLocal() { active = undefined; },
+    check({ grant, operatorId, deviceId, name, args }, consume = false) {
+      const session = active;
+      const validGrant = typeof grant === "string" && /^[A-Za-z0-9_-]{43}$/.test(grant);
+      if (!session || !validGrant || !timingSafeEqual(Buffer.from(grant), Buffer.from(session.grant))
+          || session.operatorId !== operatorId || session.deviceId !== deviceId
+          || session.consumed || now() >= session.expires)
+        return { error: "SUPPORT_SESSION_DENIED" };
+      if (name !== "list_directory" || Object.keys(args).length !== 1 || args.path !== session.directory)
+        return { error: "SUPPORT_SCOPE_DENIED" };
+      if (consume) session.consumed = true;
+      return {
+        args: { path: session.directory, depth: 1 },
+        stillActive: () => active === session && now() < session.expires,
+      };
+    },
+  };
+}
+
+export function createCasaAgent({ supportSessions = createLocalSupportSessions() } = {}){
   if(TOKEN.length<24) throw Error("CENTRALDARK_CASA_BRIDGE_TOKEN_MISSING_OR_SHORT");
+  async function readWithConsent(req, name, args) {
+    const input = {
+      grant: req.headers["x-centraldark-support-session"],
+      operatorId: req.headers["x-centraldark-support-operator"],
+      deviceId: req.headers["x-centraldark-support-device"],
+      name, args,
+    };
+    const supplied = req.headers["x-centraldark-trace-id"];
+    const trace = typeof supplied === "string" && /^[0-9a-f]{32}$/.test(supplied)
+      ? supplied : randomBytes(16).toString("hex");
+    const report = (status) => emitOperationalEvent("SUPPORT_READ", status + " reference=CD-" + trace);
+    const deny = (code) => { report(code); return { error: code, reference: "CD-" + trace }; };
+    const preflight = supportSessions.check(input);
+    if (preflight.error) return deny(preflight.error);
+    try {
+      await engine();
+      const decision = supportSessions.check(input, true);
+      if (decision.error) return deny(decision.error);
+      const value = await rpc("tools/call", { name: "list_directory", arguments: decision.args });
+      if (!decision.stillActive()) return deny("SUPPORT_SESSION_DENIED");
+      if (!Array.isArray(value?.content) || value.isError === true) return deny("SUPPORT_READ_FAILED");
+      lastAuthorizedTool = { tool: "list_directory", kind: "READ_ONLY", at: new Date().toISOString(), verified: true };
+      mqttPublish("receipt", lastAuthorizedTool);
+      report("PASS");
+      return { value, reference: "CD-" + trace };
+    } catch {
+      return deny("SUPPORT_UPSTREAM_NOT_PROVEN");
+    }
+  }
   return createServer(async(req,res)=>{
     if(req.method==="GET"&&req.url==="/health")
       return send(res,200,{ok:true,name:"CentralDark Casa Commander",engine_connected:ready,remote_vendor:false,
@@ -204,35 +267,18 @@ export function createCasaAgent(){
           return ok({protocolVersion:"2025-06-18",capabilities:{tools:{listChanged:false}},
             serverInfo:{name:"CentralDark Casa Commander",version:"1.0.0"}});
         if(input.method==="ping")return ok({});
-        if(input.method==="tools/list"){
-          emitOperationalEvent("MCP_TOOLS_LIST", "REQUESTED");
-          await engine();
-          const catalog=await rpc("tools/list",{});
-          const allowWrite=process.env.CENTRALDARK_CASA_WRITE_ENABLED==="true";
-          const tools=(Array.isArray(catalog?.tools)?catalog.tools:[])
-            .filter(tool=>READ_ONLY_TOOLS.has(tool.name)||allowWrite);
-          emitOperationalEvent("MCP_TOOLS_LIST", "PASS");
-          return ok({tools});
-        }
+        if(input.method==="tools/list")
+          return ok({tools:[{name:"list_directory",description:"One directory approved locally for one read.",
+            inputSchema:{type:"object",properties:{path:{type:"string"}},required:["path"],additionalProperties:false}}]});
         if(input.method==="tools/call"){
           const name=String(input.params?.name||"");
           const args=input.params?.arguments;
           if(!/^[a-z_]{3,64}$/.test(name)||!args||typeof args!=="object"||Array.isArray(args))
             return err(-32602,"MCP_TOOL_INPUT_INVALID");
-          if(!READ_ONLY_TOOLS.has(name)&&process.env.CENTRALDARK_CASA_WRITE_ENABLED!=="true")
-            return err(-32003,"CASA_WRITE_DISABLED");
-          emitOperationalEvent("TOOL_REQUEST",name);
-          await engine();
-          const result=await rpc("tools/call",{name,arguments:args});
-          if(result?.isError!==true){
-            lastAuthorizedTool={
-              tool:name,kind:READ_ONLY_TOOLS.has(name)?"READ_ONLY":"MUTATION",
-              at:new Date().toISOString(),verified:true,
-            };
-            mqttPublish("receipt",lastAuthorizedTool);
-          }
-          emitOperationalEvent("TOOL_RESULT",name+" "+(result?.isError===true?"FAILED":"PASS"));
-          return ok(result);
+          const result = await readWithConsent(req, name, args);
+          if (result.error) return send(res,200,{jsonrpc:"2.0",id,
+            error:{code:-32003,message:result.error,data:{reference:result.reference}}});
+          return ok({...result.value, _meta:{...(result.value?._meta || {}), centraldarkReference:result.reference}});
         }
         return err(-32601,"MCP_METHOD_NOT_FOUND");
       }catch{
@@ -246,28 +292,17 @@ export function createCasaAgent(){
       return send(res,401,{ok:false,error:"CASA_BRIDGE_AUTH_REQUIRED"});
     let input;
     try{input=await body(req);}catch(e){return send(res,400,{ok:false,error:String(e.message)});}
-    const name=String(input.name||"");
+    const name=String(input?.name||"");
     if(!/^[a-z_]{3,64}$/.test(name)||typeof input.arguments!=="object"||input.arguments===null||Array.isArray(input.arguments))
       return send(res,400,{ok:false,error:"MCP_TOOL_INPUT_INVALID"});
-    if(!READ_ONLY_TOOLS.has(name)&&process.env.CENTRALDARK_CASA_WRITE_ENABLED!=="true")
-      return send(res,403,{ok:false,error:"CASA_WRITE_DISABLED"});
-    try{
-      emitOperationalEvent("TOOL_REQUEST", name);
-      await engine();
-      const value=await rpc("tools/call",{name,arguments:input.arguments});
-      if (value?.isError !== true) {
-        lastAuthorizedTool = {
-          tool: name, kind: READ_ONLY_TOOLS.has(name) ? "READ_ONLY" : "MUTATION",
-          at: new Date().toISOString(), verified: true,
-        };
-        mqttPublish("receipt", lastAuthorizedTool);
-      }
-      emitOperationalEvent("TOOL_RESULT", name + " " + (value?.isError === true ? "FAILED" : "PASS"));
-      send(res,200,{ok:value?.isError!==true,tool:name,result:value,execution:"CASA_ENGINE_RESULT"});
-    }catch(e){
-      emitOperationalEvent("TOOL_RESULT", name + " NOT_PROVEN");
-      send(res,502,{ok:false,error:String(e.message).slice(0,800),execution:"NOT_PROVEN"});
+    const result = await readWithConsent(req, name, input.arguments);
+    if (result.error) {
+      const status = result.error === "SUPPORT_UPSTREAM_NOT_PROVEN" ? 502
+        : result.error === "SUPPORT_READ_FAILED" ? 422 : 403;
+      return send(res,status,{ok:false,error:result.error,reference:result.reference});
     }
+    return send(res,200,{ok:true,tool:"list_directory",result:result.value,
+      execution:"CASA_ENGINE_RESULT",reference:result.reference});
   });
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
