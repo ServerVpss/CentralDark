@@ -64,6 +64,10 @@ O catálogo público (`/mcp-public`) é leitura livre. Ação que exige `/mcp` a
 
 ---
 
+### Criação e alteração de ferramentas MCP
+
+Aplicar o [padrão obrigatório de observabilidade](../../../.agents/skills/centraldark-operational-method/SKILL.md#observabilidade-obrigatória-na-criação-de-ferramentas) do BOOT. O evento de execução não substitui a leitura do efeito. Validar a ferramenta por sua chamada MCP oficial, com a autorização aplicável, um sucesso comprovado e uma recusa/falha controlada com código seguro. Catálogo, `initialize` ou `tools/list` isoladamente não provam execução. Reutilizar o logger do owner e não enviar logs integrais para o registro de decisões.
+
 ## Áreas Sensíveis — Autorização Literal Obrigatória
 
 Nunca tocar sem o Pivete dizer literalmente **"Pode seguir"** ou **"PERMITO SEGREDO: (ação)"**:
