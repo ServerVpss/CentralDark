@@ -55,6 +55,15 @@ CENTRALDARK_AI_BOOT:
     tool_calls_must_be_made_by_consumer: true
     github_connector_cannot_be_reconfigured_by_repo_document_only: true
     github_connection_is_not_runtime_proof: true
+  lei_do_ciclo_completo:
+    obrigatoria: true
+    escopo: "Bot CentralDark e qualquer agente que operar no repositório, inclusive apenas pelo GitHub."
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+    criterio: "Não encerrar como CONCLUIDO por plano, edição, commit, merge, deploy ou resposta do Bot isoladamente."
+    provas_obrigatorias: [LEITURA_DO_ALVO, EFEITO_NO_ALVO, CONTRAPROVA, RECIBO_CANONICO, CONFERENCIA_APOS_FAXINA]
+    alvo: "Usar a instalação real e a revisão efetivamente consumida quando a missão envolver execução; cópia isolada prova só o ensaio, não implantação geral. Em leitura, comprovar o recurso lido e registrar SEM_TEMPORARIOS quando aplicável."
+    continuidade: "Resolver as etapas possíveis no escopo autorizado, inclusive recuperar falhas reversíveis. Se houver bloqueio externo comprovado, registrar prova, motivo e próxima ação; não declarar CONCLUIDO."
+    autorizacao: "Não contornar aprovação, não ampliar escrita, não repetir ação de efeito incerto nem usar limpeza geral para concluir."
   faxina_apos_teste:
     obrigatoria: true
     escopo: "Todo o repositório ServerVpss/CentralDark, inclusive operações só pelo GitHub, Bot CentralDark, Casa e CI."
