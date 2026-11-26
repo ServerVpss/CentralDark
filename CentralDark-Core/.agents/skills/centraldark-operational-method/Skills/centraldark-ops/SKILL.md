@@ -257,6 +257,30 @@ Registrar sempre separadamente:
 
 Quando a VPS estiver desligada, manter `VPS_RUNTIME_READBACK=DEFERRED/OFFLINE`, sem bloquear `LOCAL_SCRIPT`, `LOCAL_READBACK`, build ou testes locais. Só declarar a promoção concluída depois do readback na VPS; isso não rebaixa nem invalida a prova local.
 
+## EasyPanel: promover da Casa para a Contabo
+
+Use esta receita quando o CHEFE pedir para reproduzir ou promover o CentralDark OS da Casa para a Contabo no EasyPanel. A autorização de documentar, inventariar ou preparar a promoção não autoriza implantação, exposição pública ou desativação de serviços.
+
+### Estrutura canônica
+
+| Ordem lógica | Serviço no projeto `centraldark` | Responsabilidade | Condição |
+| --- | --- | --- | --- |
+| 01 | `status` | Monitoramento e saúde do CentralDark OS | Serviço principal |
+| 02 | `hermes` | Motor de inteligência e execução | Serviço principal |
+| 03 | `mcp` | Comunicação, autenticação e ferramentas | Serviço principal |
+| 04 | `bridge` | Comunicação com os dispositivos da Casa | Planejado; criar só com necessidade, autorização e receita comprovadas |
+| 05 | `postgres` / `redis` | Persistência / estado | Usar somente os serviços necessários, após comprovar a dependência |
+
+Um único projeto `centraldark` por ambiente, com serviços por responsabilidade. Não criar um projeto por serviço nem reunir todos os serviços em um contêiner. A numeração não altera nomes nem define a ordem visual dos cartões. Usar a rede interna compartilhada do projeto e os nomes dos serviços para as dependências internas autorizadas; não publicar portas ou domínios para resolver comunicação interna. Uma preparação isolada não comprova a rede interna final.
+
+### Execução, contraprova e registro
+
+1. **Inventariar a Casa em leitura.** Identificar o projeto, os serviços existentes, a revisão do código, a receita de construção, a imagem, as dependências, a rede interna, os volumes e os testes de saúde. Registrar nomes de variáveis e referências a segredos, nunca os valores. Separar o que foi comprovado do que foi planejado.
+2. **Comparar a Contabo.** Reutilizar o projeto `centraldark` se existir. Promover a mesma receita comprovada, parametrizando somente as diferenças de ambiente. Verificar a imagem e os arquivos relevantes; não copiar indiscriminadamente volumes, segredos ou o estado da Casa. Não alterar a Casa ou a Hostinger como efeito colateral.
+3. **Preparar e implantar um serviço por vez, dentro do escopo autorizado.** Conferir as dependências, a política de acesso e o caminho de reversão. Se houver instância anterior no destino, não iniciar uma segunda instância com escrita no mesmo estado. Verificar portas e domínios efetivos, inclusive domínios gerados pelo EasyPanel; se houver exposição não autorizada, não implantar. Se a implantação falhar, interromper a nova instância antes de restaurar a anterior.
+4. **Comprovar no destino.** Registrar a revisão e a imagem efetivamente executadas, o estado dos serviços e as conexões internas esperadas. Para o MCP, saúde e rejeição sem token são provas separadas da autorização, emissão de token, `initialize` e `tools/list` autenticados. Quando ChatGPT e OpenBot estiverem no escopo, validar cada cliente separadamente. Não declarar equivalência só porque o serviço aparece no EasyPanel.
+5. **Atualizar o HUD da missão existente.** Na missão atual de promoção, preservar o HUD #1977 conforme o contrato do HUD; não usar esse número como destino fixo para outras missões. Registrar a prova da Casa, a prova da Contabo, as diferenças de ambiente, os bloqueios, o próximo passo e eventual reversão. Não marcar `FIXED_POINT` enquanto faltar prova obrigatória. `DOCUMENTED != EXECUTED`; `MERGED != DEPLOYED`; `UNKNOWN != PASS`.
+
 ## VPS é consequência do config local (não bloqueador)
 
 Quando o config local está selado como cristal, a VPS é downstream: replay com bindings trocados, não fonte de verdade.

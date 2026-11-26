@@ -296,3 +296,17 @@ A mesma Skill Mae expõe `scripts/Identify-CentralDarkMonitors.ps1 -ResolveContr
 
 **Próximo teste real autorizado:** durante um Goal ativo, fechar e reabrir a mesma aba/conversa em até 10 s, fazer `Inspect` com URL idêntica, exigir nova janela/PID/URL, e confirmar reencontro sem envio; então aplicar readback do Goal/Oráculo. A inspeção pode ser repetida ao iniciar cada nova ação enquanto a missão estiver ativa; nada deve monitorar janelas continuamente fora desse fluxo.
 <!-- /CENTRALDARK_ORACLE_REACQUIRE_ACTIVE_20261110 -->
+
+## Navegador administrativo
+
+**Gatilho:** pedido para localizar, conferir ou alterar um recurso em EasyPanel, Cloudflare ou outro painel autenticado. Entrada: BOOT → LEIA-ME-IA → seção “Método único” da [Skill-Mãe](../SKILL.md). A [centraldark-ops](../Skills/centraldark-ops/SKILL.md#easypanel-promover-da-casa-para-a-contabo) mantém a receita de promoção, não a receita de navegador.
+
+1. **Identificar o alvo.** Confirmar ambiente, conta/organização, domínio, janela, perfil, aba e página. Usar evidência atual; não copiar IDs nem posições de sessões anteriores. Separar o endereço do EasyPanel do domínio de um serviço.
+2. **Escolher a rota.** Preferir o conector oficial quando ele cobre a operação. Para conferir a interface, usar a aba autorizada. Localizar o controle por função, nome acessível e contexto do formulário ou cartão. Se houver botões iguais, restringir ao recurso correto. Usar a automação visual autorizada só quando DOM e acessibilidade forem insuficientes; alvo ambíguo significa parar sem clicar.
+3. **Executar e reler.** Inspecionar antes; preencher e conferir os campos; salvar uma vez se autorizado. Reler a mesma página/recurso, inclusive depois de recarregar quando seguro. Confirmar o efeito pelo conector ou runtime quando o resultado exigir prova independente. Paralelizar leituras de escopos independentes; serializar ações no mesmo alvo.
+4. **Recuperar sem duplicar.** Em erro, timeout ou confirmação ausente, reler estado e atualizar referências dos controles antes de tentar de novo. Só repetir se a primeira ação não tiver produzido efeito e a autorização continuar válida. Se o resultado for incerto, não repetir. Aprovação negada, CAPTCHA, login ou confirmação humana seguem os controles da sessão; não trocar de ferramenta para contorná-los. Não guardar senhas, cookies ou tokens nos recibos.
+5. **Registrar.** Anotar alvo, rota usada, controle, antes/depois, prova independente, limite e próximo passo. Provar reutilização por outro agente começando pelo BOOT sem fornecer o caminho da seção, registrando a revisão carregada e uma nova observação real. Um teste explícito numa branch não prova carregamento automático de todas as sessões.
+
+**Exemplo provado, EasyPanel:** abrir o projeto `centraldark` e o serviço `mcp`; em **Fonte**, ler de volta o Compose salvo; em **Domínios**, conferir o domínio do serviço de forma explícita. Salvar o Compose não foi implantar. O EasyPanel gerou um domínio automaticamente; a remoção ficou bloqueada, sem tentativa por outra rota e sem iniciar a segunda instância.
+
+**Exemplo provado, Cloudflare:** consultar o aplicativo Cloudflare Access pelo conector oficial e verificar, no navegador, o comportamento do endereço do EasyPanel. Um redirecionamento para login confirma o desafio do Cloudflare Access, não a autorização da conta; chegar ao EasyPanel numa sessão autenticada prova o acesso daquela sessão. Não confundir DNS, política do Cloudflare Access e disponibilidade do serviço.

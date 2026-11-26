@@ -10,6 +10,10 @@ Receita operacional unica: [centraldark-builder-destop](../Skills/centraldark-bu
 
 [Reflective Intent Dialogue](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): escuta reflexiva, reparo conversacional, metacomunicação e continuidade da intenção. Seleção: qualquer conversa CentralDark, correção, nova ideia lateral, ou observação que não deve interromper missão ativa. Sempre conectado à Skill Mãe; operacionalmente junto de Kimetsu Remix + Michelin 3 Estrelas. Skill catalogada não comprova consumo do Hermes.
 
+## Navegador administrativo
+
+Gatilhos: conferir painel, botão, formulário, configuração, EasyPanel ou Cloudflare. Carregar o [Método único da Skill-Mãe](../SKILL.md#método-único-contexto-vivo-navegador-monitores-e-edição-visual-05112026) e a [receita de navegador administrativo](../references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#navegador-administrativo). Para promoção entre ambientes, seguir [centraldark-ops](../Skills/centraldark-ops/SKILL.md#easypanel-promover-da-casa-para-a-contabo).
+
 ## Roteamento por intenção
 
 1. Ler o pedido atual: **AÇÃO**, **ALVO**, **AMBIENTE**, **CRITÉRIO DE ACEITE**.

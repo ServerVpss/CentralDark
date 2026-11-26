@@ -7,6 +7,8 @@ updated: 2026-08-27
 
 {{FILE:/tmp/pr316/aprendizados.md}}
 
+**Aprendizado aplicado ao Método Operacional CentralDark:** [Navegador administrativo: EasyPanel e Cloudflare Access (26/11/2026)](APRENDIZADOS/2026-11-26-navegador-administrativo-easypanel-cloudflare.md). Registro complementar, sem alterar a cadeia NeuroLink abaixo.
+
 <!-- NEUROLINK_GLOBAL_BEGIN -->
 ## 🧠 NeuroLink global — duas frentes
 
