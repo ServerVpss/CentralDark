@@ -181,7 +181,7 @@ HEURISTIC_DOCUMENT_FILES=22
 CURRENT_MANIFEST_VERSION=0.1.8
 NEXT_RELEASE_CANDIDATE=0.1.9
 RELEASE_CANDIDATE_STATUS=DRAFT_NOT_RELEASED
-LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+LAST_UPDATED_UTC=2026-11-19T09:06:53.084Z
 RELEASE_DOC_SYNC=LOCAL_ONLY_NOT_COMMITTED
 
 **Delta documentado:** regra de release por owner/versao criada. Workflow PR e push main atualizado com gate de rastreabilidade; smoke local positivo/negativo PASS, sintaxe Bash PASS; CI remoto ainda NOT_RUN. Historico v0.1.8 preservado; nenhum manifesto, instalador ou versao distribuida foi alterado.
@@ -239,6 +239,134 @@ migracao com rollback, upgrade/uninstall/purge, operacao MCP
 com consentimento, logs sem segredos, hashes e readback.
 Instalador ZIP legado Halo nao equivale ao NSIS v0.1.9.
 <!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+
+<!-- CENTRALDARK_HALO_FOCUS_CUA_20261119 -->
+## Halo escopado e cursor Cua no mesmo binario — 19/11/2026
+
+LAST_HALO_FOCUS_REVIEW_UTC=2026-11-19T09:06:53.084Z
+OWNER=src-tauri/src/lib.rs + src-tauri/src/halo_focus.rs + src-tauri/src/state.rs
+RECIPE_OWNER=scripts/windows/Test-State.ps1
+SOURCE=centraldark-halo-main (mesmo projeto de compilacao, sem daemon paralelo)
+OPENBOT_REFERENCE=https://github.com/nightly-labs/openbot/blob/main/docs/architecture/computer-use.md
+COPY_OF_OPENBOT_CODE=NONE
+
+Receita original aprovada: estado `working` colore todas as telas; cursor Cua virtual funciona separadamente. Este delta preserva ALL como padrao sem campo novo e agrega monitor/janela especificos. Apenas o Halo pinta: nunca chamar `show_overlay` do Hermes Visual. Cua e o atuador do cursor, nao o renderer da borda.
+
+PowerShell dentro desta arvore (depois de iniciar um binario compilado desta fonte):
+
+```powershell
+# ALL: compatibilidade total (sem target no JSON)
+& .\scripts\windows\Test-State.ps1 -State working
+& .\scripts\windows\Test-State.ps1 -State completed
+& .\scripts\windows\Test-State.ps1 -State idle
+
+# Monitor humano 1, direita (4 monitores na topologia confirmada)
+& .\scripts\windows\Test-State.ps1 -State working -Monitor 1 -BlinkCursor
+& .\scripts\windows\Test-State.ps1 -State idle
+
+# SOMENTE janela do aplicativo, se titulo for unico e janela ativa
+& .\scripts\windows\Test-State.ps1 -State working -WindowTitle 'OpenBot' -BlinkCursor
+& .\scripts\windows\Test-State.ps1 -State idle
+```
+
+Regras: `target.kind` = all | monitor | window; monitor recebe bounds fisicos validos; window recebe PID + HWND especificos e confirmados no Win32. Nao usar DISPLAY1 como numero humano. Janela perde destaque ao minimizar, ocultar ou ficar em segundo plano; o tracker da mesma instancia Halo acompanha movimento sem acionar mouse fisico. Topologia alterada e alvos invalidos falham fechados; sem selecionado nao pintar tela errada. Um so cursor Cua por vez, 3 ciclos com encerramento de sessao. Sem driver ou daemon novo.
+
+O script original `blink_cursor.py` e o overlay Hermes nao sao empacotados neste binario; apenas os comportamentos nativos de Cua foram integrados ao Halo. A escolha automatica de alvo por agente externo precisa emitir o alvo no evento existente, nao e inferida de uma mera mudanca de estado. A imagem do app instalado nao foi substituida.
+
+VALIDATION_LOCAL_RUST_CHECK=PASS
+VALIDATION_LOCAL_RUST_TESTS=14_PASS
+VALIDATION_LOCAL_FRONTEND_LINT=PASS
+VALIDATION_LOCAL_FRONTEND_BUILD=PASS
+VALIDATION_TEST_STATE_PS_PARSER=PASS
+EXE_DEBUG_BUILD=PASS
+EXE_RELEASE_BUILD=PENDING_AT_2026-11-19T09:06:53.084Z
+WINDOW_VISUAL_TEST=PENDING
+RELEASE_SOURCE_SYNC=LOCAL_ONLY_NOT_COMMITTED
+NEXT_CURSOR=FINISH_RELEASE_EXE_THEN_REAL_DEVICE_TARGET_TEST_AND_PRESERVE_OLD_BINARY
+<!-- /CENTRALDARK_HALO_FOCUS_CUA_20261119 -->
+
+
+<!-- CENTRALDARK_HALO_ROV_PDF_GATE_20261119 -->
+## ROV · Halo + Cua · descoberta Windows e foco visual (19/11/2026)
+
+@owner: centraldark-halo-main
+@recipe: scripts/windows/Test-State.ps1
+@pdf_gate: F:/CentralDark/docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/PDF-GATE-GLOBAL-CENTRALDARK.md
+@tlc23: F:/CentralDark/docs/CONSCIENCIA/04-MCP-E-CONECTORES/tlc23.pdf
+@tlc23_sha256: b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1
+@last_updated: 2026-11-19T10:34:52Z
+@scope: LOCAL_CASA_CANDIDATE_NOT_RELEASED
+
+**Intencao consolidada (CHEFE):** o Halo e o unico renderer da cor de atividade; o
+Cua e o cursor virtual. O overlay antigo Hermes nao participa. O alvo pode ser
+todas as telas, um DISPLAY real do Windows, o monitor humano legado da Casa ou
+a janela ativa (PID + HWND). Um unico app/renderer/processo; sem novo writer.
+
+### ROV: reproduzir a receita, observar o efeito, verificar o mesmo escopo
+
+1. Descoberta sem mutacao: `scripts/windows/Test-State.ps1 -ListDisplays` lista
+   quantidade, IDs DISPLAYn, geometria (x,y,largura,altura) e tela principal.
+2. Selecionar so um display real: `-State working -DisplayId 1 -BlinkCursor`.
+   `-Monitor 1..4` e o binding humano especifico da Casa e NAO significa
+   necessariamente DISPLAY1..4 nem serve como topologia de outro Windows.
+3. Para a janela ativa, `-State working -ForegroundWindow -BlinkCursor`;
+   captura PID+HWND atual, nunca rouba foreground, e a moldura acompanha somente
+   a janela selecionada enquanto ela continuar valida e ativa.
+4. Sem alvo, `-State working` preserva ALL legado em todas as telas.
+5. Sequencia comum: WORKING -> Cua virtual 3 piscadas -> COMPLETED -> IDLE.
+   Em falha, usar finally para IDLE. Consultar state.json + log do Halo e
+   comparar resultado, formato e efeito, sem declarar PASS so por comando aceito.
+6. Contraprovas: DISPLAY inexistente deve falhar fechado; alvo simultaneo
+   monitor/janela e listagem combinada com mutacao devem ser rejeitados.
+   Nao tocar mouse fisico nem exibir overlay Hermes.
+7. Ao mudar o hardware, redescobrir binding do Windows e repetir o MESMO teste.
+   Falta de prova em outro computador = UNKNOWN, nao reprovar nem fingir PASS.
+
+### Prova observada, distinta de promessas de automacao
+
+- Casa SEGREDO: monitor humano 1=DISPLAY1 direita (1920,-840,1080x1920);
+  2=DISPLAY4 superior (0,-1080,1920x1080); 3=DISPLAY2 esquerda
+  (-1080,-840,1080x1920); 4=DISPLAY3 inferior (0,0,1920x1080).
+- 4/4 ciclos legados, 12 piscadas Cua em logs, quatro limpezas/idle: PASS.
+- Descoberta -ListDisplays: 4/4 alvos Windows: PASS.
+- -DisplayId 99: rejeicao fail-closed, estado idle preservado: PASS.
+- -DisplayId 1 + BlinkCursor: alvo correto, 3 piscadas no log, idle: PASS.
+- -ForegroundWindow: PID + HWND do proprio Halo; 3 piscadas e idle: PASS.
+- Parser PowerShell: 0 erros; guards de alvo ambiguo e listagem: PASS.
+- CHEFE confirmou visualmente os testes de all, individual e janela no ambiente
+  avaliado. A portabilidade para maquinas com topologia diferente segue UNKNOWN.
+- Processo observado: centraldark-halo-lite.exe (PID 32488); executavel
+  preservado. Mudanca de receita PowerShell nao implica rebuild nem pacote final.
+
+### PDF Gate matematico (TLC23 original lido ANTES deste adendo)
+
+Fonte: formulas/clausulas de Horn, propagacao de fatos, deteccao de contradicao,
+modelo minimo e ponto fixo. Aplicar a condicoes booleanas medidas, sem alegar
+que o PDF melhora sozinho os modelos/servicos.
+
+```text
+OWNER_EXISTE & ALVO_WINDOWS_VALIDO & EVENT_WORKING & CUA_CLEANUP & IDLE
+  -> PASS_TECNICO_ESCOPADO
+PASS_TECNICO_ESCOPADO & VISUAL_CONFIRMADO & ZERO_REGRESSAO
+  -> FIXED_POINT_DO_TESTE
+ALVO_INVALIDO | ALVO_AMBIGUO | FALHA_CLEANUP | CONTRADICAO
+  -> FAIL_CLOSED (nenhuma promocao)
+SEM_OBSERVACAO -> UNKNOWN (nao PASS)
+```
+
+Propagar apenas fatos demonstrados ate nao surgir nenhum fato novo.
+`!self_refineament`: comparar falha e impacto; `!self_correction`: corrigir
+somente o cone; `!self_aprimorament`: aperfeicoar o owner existente;
+`!self_critiquismo`: buscar contraprova; `!self_cristalization`: selar a
+receita com proveniencia/hash e rerodar teste. Sao gatilhos semanticos,
+nao demonstracao de autoexecucao independente.
+REUSE_BEFORE_CREATION=true; REUSE_BEFORE_CRYSTALLIZATION=true.
+SOURCE_ONLY != RELEASED; DOCUMENTED != EXECUTED; UNKNOWN != PASS.
+
+NEXT_CURSOR: reconciliar apenas o delta do Test-State.ps1 (Casa C:) com owner
+versionado em F:/CentralDark, validar gates no mesmo HEAD, build/instalacao
+em computador adicional e demonstrar selecao automatica por tarefa real.
+<!-- /CENTRALDARK_HALO_ROV_PDF_GATE_20261119 -->
 
 
 <!-- CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->
