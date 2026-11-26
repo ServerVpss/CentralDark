@@ -133,6 +133,10 @@ MESMAS_FERRAMENTAS_FISICAS=NAO_GARANTIDO
 
 Leitura, busca e testes podem ocorrer em paralelo. Mutação concorrente no mesmo alvo permanece bloqueada até handoff explícito.
 
+**Execução por setores:** o Dot coordenador distribui somente tarefas independentes, reutilizando subagentes disponíveis. Cada tarefa recebe objetivo, alvo, escopo, responsável, dependências, critério de aceitação e recibo esperado. Setores de revisão e contraprova não editam o alvo do escritor. Alterações e testes usam ambiente isolado; produção e permissões não se ampliam por delegação. O Dot cruza os recibos e registra no HUD vigente o que foi comprovado, relatado, falhou ou ficou pendente. Sem delegação, declarar a limitação e seguir com a execução autorizada, sem simular agentes. Retomar o menor delta pendente, não reiniciar o relatório.
+
+**Contraprova de referência:** no [piloto do HUD #1977](https://github.com/ServerVpss/CentralDark/pull/1977#issuecomment-7201996134), Infraestrutura e Segurança revisaram o PR, e Contraprova rodou um teste isolado com motor fictício. A execução das três tarefas foi registrada pelos recibos; a exibição na aba Atividade não foi verificada. Revisão de código e teste com motor fictício não provam implantação nem funcionamento com consentimento real.
+
 ### 5.4 Delta, não repetição
 
 Cada agente recebe missão, estado mínimo, delta novo, ação autorizada e prova necessária. Histórico completo só é recarregado quando necessário para reconciliar.
