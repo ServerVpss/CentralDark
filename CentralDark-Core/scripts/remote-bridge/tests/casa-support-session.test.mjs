@@ -102,10 +102,21 @@ test("local grant is required and limits both bridge dispatch paths", async () =
     assert.equal(dispatches,0);
     outcome = "ok";
     grant = approve();
-    const replies = await Promise.all([request({grant}),request({grant})]);
-    assert.deepEqual(replies.map(r=>r.status).sort(),[200,403]);
-    assert.equal(replies.find(r=>r.status===200).body.reference,"CD-"+trace);
+    const replies = await Promise.all([request({grant}),request({grant,route:"/mcp"})]);
+    const succeeded = replies.filter(({body}) => body.ok === true || Boolean(body.result));
+    const denied = replies.filter(({body}) =>
+      body.error === "SUPPORT_SESSION_DENIED" || body.error?.message === "SUPPORT_SESSION_DENIED");
+    assert.equal(succeeded.length,1);
+    assert.equal(denied.length,1);
+    assert.equal(succeeded[0].body.reference ?? succeeded[0].body.result?._meta.centraldarkReference,"CD-"+trace);
+    assert.equal(denied[0].body.reference ?? denied[0].body.error.data.reference,"CD-"+trace);
     assert.equal(dispatches,1);
+    const successMcp = await request({grant:approve(),route:"/mcp"});
+    assert.equal(successMcp.status,200);
+    assert.equal(successMcp.body.id,8);
+    assert.equal(successMcp.body.result.content[0].text,"fixture-only");
+    assert.equal(successMcp.body.result._meta.centraldarkReference,"CD-"+trace);
+    assert.equal(dispatches,2);
     grant = approve();
     outcome="error";
     const failure=await request({grant,route:"/mcp"});
@@ -116,7 +127,7 @@ test("local grant is required and limits both bridge dispatch paths", async () =
     assert.equal((await request({grant:approve()})).body.error,"SUPPORT_SESSION_DENIED");
     outcome="expire-in-flight";
     assert.equal((await request({grant:approve()})).body.error,"SUPPORT_SESSION_DENIED");
-    assert.equal(dispatches,4);
+    assert.equal(dispatches,5);
     assert.ok(logs.some(x => x.includes("PASS reference=CD-"+trace)));
     assert.ok(logs.some(x => x.includes("SUPPORT_READ_FAILED reference=CD-"+trace)));
     assert.ok(logs.some(x => x.includes("SUPPORT_SESSION_DENIED reference=CD-"+trace)));
