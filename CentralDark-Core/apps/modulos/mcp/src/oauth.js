@@ -310,7 +310,40 @@ export function postRegister(req, res) {
         cid: req.cid,
     });
 }
+// Observability only: this identifier never participates in authorization.
+const SUPPORT_TRACE_HEADER = "x-centraldark-trace-id";
+const SUPPORT_CAUSES = new Set(["EROFS", "EACCES", "EPERM", "ENOSPC", "EIO", "ENOENT", "ETIMEDOUT",
+    "ECONNRESET", "DEVICE_REGISTRY_INVALID_JSON", "DEVICE_REGISTRY_INVALID", "DEVICE_REGISTRY_PATH_NOT_FILE"]);
+function supportTrace(value) {
+    return typeof value === "string" && value.length === 32 && /^[0-9a-f]+$/.test(value) ? value : null;
+}
+function oauthFailureDetails(error) {
+    const frames = [];
+    const visited = new Set();
+    let cause;
+    for (let cursor = error; cursor && !visited.has(cursor) && visited.size < 4; cursor = cursor.cause) {
+        visited.add(cursor);
+        if (SUPPORT_CAUSES.has(cursor.code)) cause = cursor.code;
+        else if (SUPPORT_CAUSES.has(cursor.message)) cause = cursor.message;
+        // Never persist error.stack as text: only known module names and recorded coordinates.
+        const lines = typeof cursor.stack === "string" ? cursor.stack.slice(0, 16000).split("\n").slice(1, 24) : [];
+        for (const line of lines) {
+            const m = line.match(/^\s+at\s+(?:([\w.]+)\s+\()?[^\r\n]*[\/]((?:device-pairing|oauth)\.js):(\d{1,7}):(\d{1,7})\)?$/);
+            if (m && frames.length < 8) {
+                const functions = ["approve", "approveWeb", "readRegistry", "writeRegistry", "handleAuthorize"];
+                const fn = m[1]?.split(".").at(-1);
+                frames.push({ ...(functions.includes(fn) ? { function: fn } : {}), file: m[2], line: Number(m[3]), column: Number(m[4]) });
+            }
+        }
+    }
+    return {
+        ...(cause ? { cause } : {}),
+        ...(frames[0] ? { source_file: frames[0].file, source_line: frames[0].line,
+            ...(frames[0].function ? { function: frames[0].function } : {}), stack_trace: frames } : {}),
+    };
+}
 export async function handleAuthorize(req, res) {
+    let traceId = null;
     try {
         // Somente o Cockpit envia consentimento JSON cross-origin.
         // O token Supabase segue no header, nunca no URL ou no HTML.
@@ -320,6 +353,19 @@ export async function handleAuthorize(req, res) {
         res.locals.cockpitConsentJson = requestedJson;
         // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
         const deviceClientId = param(req, "client_id");
+        if (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
+            traceId = supportTrace(req.headers?.[SUPPORT_TRACE_HEADER]);
+            if (traceId) {
+                res.setHeader(SUPPORT_TRACE_HEADER, traceId);
+                res.once("finish", () => {
+                    const httpStatus = res.statusCode;
+                    const write = httpStatus >= 400 ? log.warn : log.info;
+                    write("remote_pairing_request", { component: "mcp", module: "pairing",
+                        action: req.method === "POST" ? "owner_approval" : "owner_challenge",
+                        http_status: httpStatus, trace_id: traceId, reference: "CD-" + traceId });
+                });
+            }
+        }
         if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
             if (!devicePairingStore)
                 return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
@@ -466,7 +512,11 @@ export async function handleAuthorize(req, res) {
         }
     }
     catch (err) {
-        log.error("oauth_authorize_exception", { cid: req.cid, error: String(err) });
+        log.error("oauth_authorize_exception", { cid: req.cid, component: "mcp", module: traceId ? "pairing" : "oauth",
+            action: req.method === "POST" ? "owner_approval" : "owner_challenge",
+            error: "OAUTH_AUTHORIZE_EXCEPTION", http_status: res.headersSent ? res.statusCode : 500,
+            ...(traceId ? { trace_id: traceId, reference: "CD-" + traceId } : {}), retryable: false,
+            ...oauthFailureDetails(err) });
         if (!res.headersSent) {
             res.status(500).send("Erro interno no authorize OAuth.");
         }

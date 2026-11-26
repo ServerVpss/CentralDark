@@ -12,6 +12,12 @@ updated: 2026-07-02
 
 ---
 
+## Mensagens de erro em duas camadas
+
+Na interface do cliente, use **PT-BR simples**: diga o que não foi possível fazer e qual ação é segura agora. Não mostre código interno, HTTP, stack, token ou caminho de arquivo. Quando existir um rastro verificável, exiba **Referência do atendimento: CD-…** e o botão **Copiar referência**, com confirmação acessível. Preserve a referência selecionável se a cópia falhar.
+
+No log, mantenha o diagnóstico técnico seguro e a mesma referência. Use **Tentar novamente** apenas se a repetição for segura; se o efeito anterior for incerto, use uma ação de verificação. Exemplo: **Não foi possível vincular seu dispositivo.** Verifique se o vínculo foi concluído. Se o problema continuar, fale com o suporte.
+
 ## Identidade
 
 - **Apelido oficial:** Esmeralda
