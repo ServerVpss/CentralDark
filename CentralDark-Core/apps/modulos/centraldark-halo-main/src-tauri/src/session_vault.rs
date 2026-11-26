@@ -197,6 +197,10 @@ struct PendingRemotePair {
     code: String,
     expires_at: String,
 }
+// Serialize o ciclo do pareamento antes de ler o estado local. O MCP entrega os tokens uma unica vez.
+static PAIRING_FLOW_LOCK: std::sync::LazyLock<tauri::async_runtime::Mutex<()>> =
+    std::sync::LazyLock::new(|| tauri::async_runtime::Mutex::new(()));
+
 static PENDING_REMOTE_PAIR: PairMutex<Option<PendingRemotePair>> = PairMutex::new(None);
 
 fn device_auth_file() -> Result<PathBuf, String> {
@@ -449,6 +453,7 @@ pub(crate) async fn remote_pairing_status(window: tauri::WebviewWindow) -> Resul
 
 async fn remote_pairing_status_impl(window: tauri::WebviewWindow) -> Result<Value, String> {
     require_control_window(&window)?;
+    let _pairing_guard = PAIRING_FLOW_LOCK.lock().await;
     let owner = native_owner(&window)?;
     let owner_id = owner.pointer("/user/id").and_then(Value::as_str);
     if let Some(auth) = load_device_auth()? {
@@ -506,8 +511,11 @@ async fn remote_pairing_status_impl(window: tauri::WebviewWindow) -> Result<Valu
 pub(crate) async fn start_remote_pairing(window: tauri::WebviewWindow) -> Result<Value, String> {
     crate::logging::diag("pairing_start", "start", "REQUESTED");
     require_control_window(&window)?;
+    let pairing_guard = PAIRING_FLOW_LOCK.lock().await;
     let _ = native_owner(&window)?;
     if load_device_auth()?.is_some() {
+        // O status adquire a mesma trava e rele o estado atual.
+        drop(pairing_guard);
         return remote_pairing_status(window).await;
     }
     let pending_pair = {
@@ -548,6 +556,7 @@ pub(crate) async fn start_remote_pairing(window: tauri::WebviewWindow) -> Result
 pub(crate) async fn approve_remote_pairing(window: tauri::WebviewWindow) -> Result<Value, String> {
     crate::logging::diag("pairing_approval", "start", "OWNER_APPROVAL_REQUESTED");
     require_control_window(&window)?;
+    let _pairing_guard = PAIRING_FLOW_LOCK.lock().await;
     let owner = native_owner(&window)?;
     let pending = PENDING_REMOTE_PAIR.lock()
         .map_err(|_| "PAIRING_LOCK_FAILED")?.clone().ok_or("PAIRING_NOT_PENDING")?;
