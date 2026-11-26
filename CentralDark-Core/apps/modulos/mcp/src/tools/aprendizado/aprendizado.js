@@ -77,6 +77,10 @@ function dataBR() {
 // Editar aqui = todas as IAs conectadas passam a herdar a fonte nova.
 const FONTES_APRENDIZADO = [
     { path: "LEIA-ME-IA.md", titulo: "Porta de entrada (resumo de 1 página)" },
+    { path: "CENTRALDARK_AI_BOOT.yaml", titulo: "Lei do Ciclo Completo e observabilidade obrigatória" },
+    { path: ".agents/skills/centraldark-operational-method/SKILL.md", titulo: "Skill-Mãe: observabilidade obrigatória e faxina após o teste" },
+    { path: "docs/CONSCIENCIA/04-MCP-E-CONECTORES/BOAS-PRATICAS-MCP.md", titulo: "Boas Práticas do MCP" },
+    { path: "docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.pdf", titulo: "Manual do TCU: organização de pastas e arquivos digitais" },
     { path: "docs/CONSCIENCIA/CONSCIENCIA.md", titulo: "Consciência mestra" },
     { path: "docs/PENDENCIAS.md", titulo: "Setor único de pendências" },
     { path: "docs/INSTALADOR/README.md", titulo: "Índice do instalador" },
@@ -110,6 +114,13 @@ export const aprendizadoTools = [
             partes.push(`- Para GitHub, use \`github_read\`, \`github_commit\` e \`github_dispatch\` quando tiver permissao.`);
             partes.push(`- Para shell, use \`execute_command\`; ele respeita \`MCP_ALLOW_VPS_COMMANDS\`, timeout e truncamento.`);
             partes.push(`- Nao abrir .env, secrets, tokens, sessoes, bancos locais, chaves ou credenciais.`);
+            partes.push(``);
+            partes.push("## Boas práticas obrigatórias antes de editar");
+            partes.push("- **Trabalhe por setor.** Leia o BOOT, a seção pertinente da Skill-Mãe e o owner. Localize arquivos e dependências com busca, índice e leitura por caminho. Não baixe nem clone o projeto inteiro por padrão. Se precisar isolar, copie apenas os arquivos do setor alterado e as dependências indispensáveis. Amplie somente com motivo registrado.");
+            partes.push("- **Organize pelo owner.** Reuse a hierarquia existente por setor, assunto e função; dê nomes estáveis aos arquivos e guarde recibos no local canônico. Consulte o manual do TCU para organização. Não duplique pastas, Skills, coletores ou fontes da verdade.");
+            partes.push("- **Comprove o ciclo completo.** No alvo autorizado, prove o efeito esperado e uma falha controlada quando aplicável. Cruze o log seguro com uma leitura independente do efeito e registre revisão, alvo, resultado e limites no recibo. Teste isolado, commit e deploy não provam execução no alvo. Sem prova, não marque CONCLUIDO ou FIXED_POINT.");
+            partes.push("- **Toda ferramenta nova, integração ou mudança de fluxo exige log seguro.** Registre etapa, estado e código estável; separe solicitação, aguardando, sucesso verificado e falha. Não registre senhas, tokens, códigos de pareamento ou payloads brutos.");
+            partes.push("- **Faça a faxina após o teste.** Registre a prova antes da limpeza; confira caminho, dono e uso. Remova somente temporários autorizados da tarefa, preserve os arquivos do usuário, o trabalho alheio e a evidência necessária. Confira o estado depois, mesmo se o teste falhar; sem temporários, registre SEM_TEMPORARIOS.");
             partes.push(``);
             partes.push(`## Indice de caminhos vivos`);
             partes.push(``);
