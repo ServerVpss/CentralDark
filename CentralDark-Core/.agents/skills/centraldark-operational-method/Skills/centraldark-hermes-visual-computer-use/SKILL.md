@@ -320,3 +320,53 @@ ACTION_WITHOUT_PROVEN_EFFECT
 
 **Kaizen/NEXT_CURSOR:** uma sessao por operacao autorizada; avisar monitor/efeito antes; perguntar sobre visibilidade apenas se a confirmacao ainda nao foi recebida; manter recibo tecnico e prova humana distintos; validar cone, commit, push conforme gate e readback sem levar mutacoes de outros owners.
 <!-- /CENTRALDARK_WORKING_CURSOR_MOTION_VISUAL_PASS_20261114 -->
+
+
+## 26/11/2026 - Fluxo compacto de automacao visual
+
+Reutilizar o alvo vivo (PID/HWND, conversa, monitor, geometria) e a mesma sessao Cua durante uma operacao autorizada. Nao repetir leitura integral da Skill, enumeracao dos quatro monitores, nem pedir nova confirmacao da mesma intencao. Redescobrir apenas quando janela, conversa, geometria, foco do controle ou permissao mudarem, ou o alvo ficar ambiguo.
+
+Agrupar em uma chamada remota quando possivel: validar alvo e campo livre (preservar rascunho alheio), digitar, reler o valor exato, enviar uma vez, confirmar a nova mensagem na conversa e encerrar a sessao. Usar o overlay e cursor existentes quando houver acao visual. Nao enviar de novo se a resposta for incerta; consultar o estado antes de qualquer tentativa. Se background for recusado expressamente, usar somente o fallback autorizado do driver, verificando o alvo; nao contornar autorizacoes. Resposta do agente nao prova efeito externo.
+
+Separar preparacao, entrega e efeito: DRAFT_VERIFIED, SENT_VERIFIED, ACK_VERIFIED e EFFECT_PROVED. Usar recibo compacto com alvo, estado, tempo monotonic e motivo de bloqueio, sem segredos. Nao confundir espera da resposta com falha de envio. Acompanhar tarefas por dependencia; um escritor por escopo. Nao criar daemon, watcher, driver ou Skill paralelos.
+
+Delta do codigo: o clique Cua usa HWND explicito e falha fechado quando o driver recusa background, em vez de registrar despacho falso. O agrupamento de envio acima e uma receita operacional; ainda requer implementacao/teste integrado antes de declarar automatizacao permanente. Medir chamadas remotas e tempo real em cenarios equivalentes antes de divulgar ganho percentual.
+
+
+<!-- CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->
+## 26/11/2026 - Halo nativo oficial da Skill Mae (confirmacao humana)
+
+Owner de renderizacao: centraldark-halo-main, aplicativo ja em execucao.
+A Skill Mae e os agentes reutilizam a entrada de estado existente do Halo;
+Cua e o atuador de mouse virtual e input; Blink e a sinalizacao do alvo.
+Nao criar outro aplicativo, renderer, cursor, daemon ou API concorrente.
+Nao sobrepor HermesVisual e Halo na mesma tela.
+
+Receita aprovada no ambiente Casa (build DEV do Segredo Agente Remoto):
+`scripts/windows/Test-State.ps1 -State working -Monitor 1 -BlinkCursor`;
+depois `-State attention -Monitor 1`, `-State completed -Monitor 1`
+e `-State idle` no encerramento. Reutilizar o mesmo alvo vivo; usar
+PID/HWND ou monitor confirmado e redescobrir somente se mudar.
+A rota existente grava atomicamente o evento de ciclo de vida em state.json,
+no diretorio .centraldark-halo ou fallback .codex-halo ja selecionado.
+Preservar writer ativo, rascunhos, permissoes e mouse fisico; nao fabricar
+estados ou escrever sobre operacao de outro agente. Azul = trabalho real;
+amarelo = atencao realmente necessaria; verde = etapa comprovada; idle =
+fim da propria operacao. A sequencia completa de cores e apenas teste,
+nao uma simulacao de atividade para cada operacao real.
+
+Recibo tecnico do teste 26/11: monitor humano 1, processo
+centraldark-halo-lite PID 25260; log UTC 21:38:06.686 idle -> working,
+21:38:10.769 working -> attention, 21:38:12.798 attention -> completed,
+21:38:14.767 completed -> idle. Exit 0, runtime 10.27 s, state final idle.
+O CHEFE confirmou visualmente a sequencia de cores no monitor 1.
+VISUAL_STATES=PASS; CUA_BLINK_VISIBLE=UNKNOWN (nao foi confirmado
+separadamente neste teste). Nenhum servico reiniciado.
+
+Limite: o executavel testado pertence ao checkout DEV em C: e sua fonte
+diverge da arvore F:; nesta ainda falta halo_focus.rs. Este registro nao
+prova paridade, build, deploy ou integracao com o envio compacto.
+Proximo passo: reconciliar o owner nativo do Halo, preservar os gates e
+testar o fluxo de envio compacto integrado ao mesmo Halo, sem renderer
+duplicado. Medir latencia real; nao extrapolar ganho percentual.
+<!-- /CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->

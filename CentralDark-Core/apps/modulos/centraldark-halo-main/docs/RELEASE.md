@@ -239,3 +239,42 @@ migracao com rollback, upgrade/uninstall/purge, operacao MCP
 com consentimento, logs sem segredos, hashes e readback.
 Instalador ZIP legado Halo nao equivale ao NSIS v0.1.9.
 <!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+
+
+<!-- CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->
+## 26/11/2026 - Halo nativo oficial da Skill Mae (confirmacao humana)
+
+Owner de renderizacao: centraldark-halo-main, aplicativo ja em execucao.
+A Skill Mae e os agentes reutilizam a entrada de estado existente do Halo;
+Cua e o atuador de mouse virtual e input; Blink e a sinalizacao do alvo.
+Nao criar outro aplicativo, renderer, cursor, daemon ou API concorrente.
+Nao sobrepor HermesVisual e Halo na mesma tela.
+
+Receita aprovada no ambiente Casa (build DEV do Segredo Agente Remoto):
+`scripts/windows/Test-State.ps1 -State working -Monitor 1 -BlinkCursor`;
+depois `-State attention -Monitor 1`, `-State completed -Monitor 1`
+e `-State idle` no encerramento. Reutilizar o mesmo alvo vivo; usar
+PID/HWND ou monitor confirmado e redescobrir somente se mudar.
+A rota existente grava atomicamente o evento de ciclo de vida em state.json,
+no diretorio .centraldark-halo ou fallback .codex-halo ja selecionado.
+Preservar writer ativo, rascunhos, permissoes e mouse fisico; nao fabricar
+estados ou escrever sobre operacao de outro agente. Azul = trabalho real;
+amarelo = atencao realmente necessaria; verde = etapa comprovada; idle =
+fim da propria operacao. A sequencia completa de cores e apenas teste,
+nao uma simulacao de atividade para cada operacao real.
+
+Recibo tecnico do teste 26/11: monitor humano 1, processo
+centraldark-halo-lite PID 25260; log UTC 21:38:06.686 idle -> working,
+21:38:10.769 working -> attention, 21:38:12.798 attention -> completed,
+21:38:14.767 completed -> idle. Exit 0, runtime 10.27 s, state final idle.
+O CHEFE confirmou visualmente a sequencia de cores no monitor 1.
+VISUAL_STATES=PASS; CUA_BLINK_VISIBLE=UNKNOWN (nao foi confirmado
+separadamente neste teste). Nenhum servico reiniciado.
+
+Limite: o executavel testado pertence ao checkout DEV em C: e sua fonte
+diverge da arvore F:; nesta ainda falta halo_focus.rs. Este registro nao
+prova paridade, build, deploy ou integracao com o envio compacto.
+Proximo passo: reconciliar o owner nativo do Halo, preservar os gates e
+testar o fluxo de envio compacto integrado ao mesmo Halo, sem renderer
+duplicado. Medir latencia real; nao extrapolar ganho percentual.
+<!-- /CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->
