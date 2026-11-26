@@ -7,6 +7,7 @@ import { homedir } from 'node:os';
 import { compileIntent, reconcileIntent } from './intent-cycle.js';
 import { getOperationalSnapshot } from './operational-telemetry.js';
 import { appendCentralEvent } from './log-funnel.js';
+import { publishCentralDarkReceiptEvent } from './mcp-server.js';
 const ROOT = process.env.CENTRALDARK_ROOT || join(homedir(), 'CentralDark');
 const STATE_PATH = join(ROOT, 'logs', 'intent-loop-state.json');
 const INBOX = join(ROOT, 'apps/modulos/HERMES-CORE/missions/pendente');
@@ -335,6 +336,29 @@ export function runIntentCycle(payload, { dispatch = false } = {}) {
         message: result.state + ' ' + result.nextCursor,
         data: { mode: result.mode, queued: result.queued, criteria: result.criteria.map(c => ({ id: c.id, status: c.status })), executionProven: result.executionProven }
     });
+    // A emissão é opt-in por recibo com PR explícito. Ela não reentra no ciclo
+    // de intenção: eventos de transporte nunca são tratados como novo recibo.
+    if (Number.isInteger(payload?.pr_number) && payload.pr_number > 0 && SHA.test(String(result.currentHead || ''))) {
+        const event = {
+            event_id: `evt_receipt_${result.fingerprint.slice(0, 24)}`,
+            mission_id: String(input.goalId || result.fingerprint),
+            repository: String(payload.repository || 'ServerVpss/CentralDark'),
+            pr_number: payload.pr_number,
+            head_sha: result.currentHead,
+            receipt_fingerprint: result.fingerprint,
+            evidence_ref: String(logged.ok ? `log-funnel:${logged.event_id}` : `intent:${result.fingerprint}`),
+            status: result.state,
+            timestamp: result.observedAt,
+        };
+        void publishCentralDarkReceiptEvent(event).then((delivery) => appendCentralEvent({
+            sector: 'consciencia', service: 'mcp-events', source: 'intent-cycle', kind: 'mcp_event_delivery',
+            level: delivery.failures?.length ? 'warn' : 'info', key: event.event_id, sha: event.head_sha,
+            message: 'centraldark.receipt.created', data: { delivered: delivery.delivered, failures: delivery.failures?.length || 0 },
+        })).catch((error) => appendCentralEvent({
+            sector: 'consciencia', service: 'mcp-events', source: 'intent-cycle', kind: 'mcp_event_delivery',
+            level: 'warn', key: event.event_id, sha: event.head_sha, message: 'centraldark.receipt.created blocked', data: { error: String(error) },
+        }));
+    }
     return { ...result, logReceipt: logged.ok ? logged.event_id : null };
 }
 export function publicIntentStatus() {
