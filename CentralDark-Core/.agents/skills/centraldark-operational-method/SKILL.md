@@ -40,6 +40,16 @@ HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HU
 
 Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
 
+<!-- CENTRALDARK_CONTINUIDADE_MULTIAGENTE_UNIVERSAL_20261127 -->
+## Continuidade universal — uma missão, DELTAs e handoff entre PRs (27/11/2026)
+
+**Aplicação obrigatória a todo consumidor autorizado desta Skill Mãe, não somente SOL, Hermes ou Dot:** carregar e aplicar o [contrato existente de orquestração, escritor único e DELTA](../../../docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md#53-um-escritor-por-escopo). O agente, modelo, interface e transporte são substituíveis; a continuidade pertence ao projeto. Usar o `!RASTRO`/`!HUD` ou ledger equivalente vigente e o PR da missão resolvidos pelo owner atual, sem fixar números históricos.
+
+**Método operacional:** recuperar o checkpoint e a intenção vigente → distribuir tarefas independentes pelo limite real da superfície → reconciliar recibos e preencher vagas liberadas quando a fila nativa autorizada permitir → contraprova → DELTAÚTIL → registrar e reler no rastro vigente → continuar o menor delta autorizado. Sem capacidade de delegação, executar diretamente; sem provas, manter UNKNOWN. Uma caneta por escopo, nenhum envio duplicado, nenhuma ampliação de permissões. **Quem efetuar o merge tem a obrigação de abrir o PR sucessor de continuidade do projeto no mesmo ciclo**, revalidando main e transferindo identificador do projeto, GOAL_ID ainda ativo, escopo, merge SHA, cadeia de provas, pendências, NEXT_CURSOR e handoff explícito do writer. Conferir o PR sucessor e vínculos no !RASTRO/!HUD vigente antes de concluir o ciclo; reconciliar sucessor da mesma transição já existente sem duplicá-lo. Mesmo quando uma missão atingir FIXED_POINT, preservar seu encerramento e registrar o handoff material da continuidade do projeto no owner existente, sem reabrir trabalho aprovado. Somente fechamento explícito autorizado do projeto encerra a cadeia; bloqueio objetivo mantém a obrigação e cursor de recuperação com o responsável pelo merge, sem transferir ao CHEFE. Não criar PR vazio, mudança artificial, ledger paralelo ou ampliar permissões. Merge não equivale a deploy nem a handoff confirmado.
+
+**Prova e limite:** o loop operacional de múltiplos DELTAs na mesma missão foi observado em [HUD #1977, RENDER-13–22](https://github.com/ServerVpss/CentralDark/pull/1977#issuecomment-7206523507); o exemplo não torna Dot ou Desktop Commander requisitos. Reposição automática de vagas, execução sem novos turnos, handoff automático de PRs e consumo por todos os runtimes ainda exigem prova própria. Aplicar este método nos turnos disponíveis; não afirmar execução em background nem criar scheduler por inferência. Preservar consentimento, revogação, orçamento, gates e limites do runtime. Sem novo dado ou delta material, não inventar trabalho. `DOCUMENTED != CONSUMED`; `MERGED != DEPLOYED != FIXED_POINT`.
+<!-- /CENTRALDARK_CONTINUIDADE_MULTIAGENTE_UNIVERSAL_20261127 -->
+
 ## Biblioteca operacional centralizada (23 Skills)
 
 Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
@@ -738,6 +748,100 @@ Para alvo visual, o Target Lock inclui também: `MONITOR_ID_HUMANO`, `MONITOR_RE
 ## Mapa integral em leitura progressiva, sem perda
 
 **REGRA:** a Skill Mãe foi indexada por completo, nao reduzida por exclusao. Carregar primeiro este arquivo; consultar somente a referencia que corresponde a intencao e ao owner. A ausencia de uma secao no arquivo principal nao revoga seus contratos. Nunca atribuir PASS a historico.
+
+### Contratos centrais — consumo obrigatório no primeiro carregamento
+
+Este resumo normativo mantém no entrypoint as obrigações vigentes extraídas para o corpus em 30/10. Aplicar estas regras a cada ação material; abrir a referência pertinente para a receita e a justificativa. A leitura do índice ou a presença de um link não comprova consumo da referência nem execução. Preservar autorização vigente, gates, escopo e escritor único; nenhum destes contratos amplia permissões.
+
+**Intenção, missão e autoconsulta.** Recuperar a missão e o plano canônico antes de tratar o sintoma. Consultar o owner e o estado atual antes de perguntar novamente ou contrariar a intenção; se a contraprova não a derrubar, continuar o menor delta autorizado. Cada decisão material reentra no mesmo ciclo, sem criar outro motor. [Missão e SELF-GRILL](references/CORPUS-04-ROTAS-RECENTES-20261030.md#missão-plano-e-ramo-operacional). Plano recuperável do Cockpit: `docs/ARQUITETURA/CENTRALDARK-INSTINTO-SUPERIOR-OS/INVENTARIO-KERNEL-PROPRIO.md`; plano registrado não prova integração executada.
+
+```text
+MISSION_NE_OPERATIONAL_SYMPTOM=true
+RECOVER_CANONICAL_PLAN_BEFORE_IMPLEMENTATION=true
+DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
+CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
+TRY_TO_FALSIFY_CHEFE_INTUITION_AGAINST_CANON_AND_CURRENT=true
+GENERIC_MODEL_PRIOR_MUST_NOT_OVERRIDE_CANONICAL_METHOD=true
+EVERY_MATERIAL_DECISION_REENTERS_SAME_LOOP=true
+DOCS_ARE_EXTERNALIZED_METHOD_NOT_MIND_READING=true
+```
+
+**Reuso por invariantes.** Inventariar o que já existe, separar capacidade de interface e selecionar o menor conjunto que distingue as alternativas. Legado pode doar capacidade, mas não substitui o owner vigente. Reutilizar evidência aplicável com fingerprint compatível; mudança material, drift ou contradição exigem remedição do cone afetado. [Contrato e algoritmo completos](references/CORPUS-03-CONTRATOS-E-GATES-20261030.md#padrão-aprendido-do-chefe--transformação-de-sistemas-por-invariantes).
+
+```text
+SYSTEM_TRANSFORMATION_BY_INVARIANTS=true
+INTENT_OWNER=SEGREDO/CHEFE
+NO_MIND_READING=true
+MANIFEST_PATTERN_CAN_BE_GENERALIZED=true
+UNSTATED_MENTAL_CONTRACT=UNKNOWN
+REUSE_BEFORE_CREATE_AT_SYSTEM_SCALE=true
+CAPABILITY_NE_INTERFACE=true
+OWNER_NE_BUTTON=true
+ENGINE_NE_IDENTITY=true
+TRANSPORT_NE_PRODUCT=true
+LEGACY_CAN_BE_DONOR=true
+DONOR_IS_NOT_SOURCE_OF_TRUTH=true
+BIG_CATALOG_SELECT_DISCRIMINANT_FEW=true
+SEMANTIC_TOKEN_EXPANDS_TO_OWNER_CONTRACT_RECIPE_GATES=true
+APPLICABLE_EVIDENCE_REUSE=true
+REDUNDANT_REPROOF_WITHOUT_INFORMATION_GAIN=FORBIDDEN
+NEW_MATERIAL_CHANGE_OR_DRIFT_OR_CONTRADICTION=REMEASURE
+PAPAGAIO_MODE=OFF
+```
+
+**Setor, owner e ciclo de Skills.** Antes de escolher ferramenta, resolver intenção → setor → owner → rota viva. Uma rota falha não prova falha global; testar as alternativas autorizadas do mesmo setor quando discriminantes, mantendo UNKNOWN onde faltar evidência. Carregar somente as capacidades necessárias e reutilizá-las enquanto contexto e versão forem aplicáveis. Após o efeito, registrar apenas delta reutilizável comprovado; ausência de delta é NO_CHANGE, falha ou efeito parcial não viram receita completa. [Roteamento e lifecycle](references/CORPUS-03-CONTRATOS-E-GATES-20261030.md#roteamento-por-setor-antes-da-ferramenta). O catálogo e as receitas permanecem nesta Skill Mãe e em `Skills/`, sem biblioteca paralela.
+
+```text
+SECTOR_ROUTER_REQUIRED=true
+SECTOR_ROUTER_OWNER=docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
+ROUTE_INTENT_TO_SECTOR_BEFORE_TOOL=true
+ROUTE_BY_CAPABILITY_NOT_TOOL_NAME=true
+SECTOR_OWNER_UNKNOWN_STAYS_UNKNOWN=true
+ONE_PATH_FAILURE_IS_NOT_SYSTEM_FAILURE=true
+MULTI_PATH_FAILOVER_BEFORE_GLOBAL_BLOCKED=true
+SKILL_NEED_EVALUATED_BEFORE_MATERIAL_ACTION=true
+SKILL_SELECTION_BY_INTENT_SECTOR_OWNER=true
+EXISTING_SKILL_REUSE_BEFORE_CREATE=true
+LOADED_SKILL_REUSED_WHILE_CONTEXT_AND_VERSION_APPLY=true
+RELOAD_ON_NEED_CONTEXT_OR_VERSION_CHANGE=true
+POST_ACTION_SKILL_DELTA_REQUIRES_EVIDENCE=true
+NO_NEW_REUSABLE_DELTA=NO_CHANGE
+UNPROVEN_RECIPE=CANDIDATE
+PARTIAL_EFFECT_IS_NOT_COMPLETE_RECIPE=true
+ONE_SKILL_PER_COMMAND_REQUIRED=false
+FULL_CATALOG_LOAD_REQUIRED=false
+```
+
+**Comparação pareada somente quando necessária.** Se reuso e rota determinística ainda deixarem ambiguidade material entre alternativas viáveis, comparar o mesmo alvo e baseline com o mesmo esquema de evidência. Reality Judge verifica efeito técnico; preferência subjetiva pertence ao humano. Sem evidência discriminante não há vencedor. Leitura pode ser paralela; mutações preservam escritor único, isolamento e rollback. Reaplicar a rota vencedora com fingerprint compatível antes de redescobrir. [Pairwise Reality Selection e limites de evidência](references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md#pairwise-reality-selection--comparar-rotas-e-cristalizar-o-vencedor).
+
+```text
+PAIRWISE_REALITY_SELECTION=true
+PAIRWISE_IS_CONDITIONAL_NOT_RITUAL=true
+PAIRWISE_ONLY_WHEN=MATERIAL_ROUTE_AMBIGUITY_SURVIVES_REUSE_AND_DETERMINISTIC_FAST_PATH
+SAME_INTENT_REQUIRED=true
+SAME_TARGET_REQUIRED=true
+SAME_BASELINE_OR_EQUIVALENT_BINDINGS_REQUIRED=true
+SAME_EVIDENCE_SCHEMA_REQUIRED=true
+REALITY_JUDGE_SELECTS_TECHNICAL_EFFECT_WINNER=true
+ELOQUENCE_OR_MODEL_CONFIDENCE_IS_NOT_WINNER_PROOF=true
+HUMAN_PREFERENCE_SELECTS_SUBJECTIVE_GOALS=true
+NO_DISCRIMINATING_EVIDENCE=NO_WINNER
+TIE_OR_INCOMPARABLE=UNKNOWN
+LOSER_IS_NOT_DELETED_BLINDLY=true
+WINNER_REQUIRES=PROOF+COUNTERPROOF+EFFECT_READBACK
+WINNER_CRYSTAL_REQUIRES=OWNER+SEQUENCE+BINDINGS+FINGERPRINT+PROOF+COUNTERPROOF+EXPECTED_EFFECT+EVIDENCE+NEXT_CURSOR
+REPLAY_WINNER_BEFORE_REDISCOVERY=true
+CHANGED_FINGERPRINT=REVALIDATE_AFFECTED_CONE_ONLY
+EXTERNAL_UI_IS_SEMANTIC_INPUT_NOT_INTERNAL_PROOF=true
+```
+
+**Writer único por escopo.** Um Writer por escopo mutavel. Leitores investigam em paralelo; escrita exige alvo claro, escopo autorizado, writer identificado, permissão do host, baseline medido e rollback aplicável. Fazer handoff antes de outro writer atuar no mesmo escopo. Reutilizar a autorização vigente; isolamento por worktree depende da necessidade concreta. [Contrato completo](references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md#writer-unico-por-escopo).
+
+#### Gate de falsificação (MetaLupa)
+
+UNKNOWN, ANOMALY, ACHADO_PENDENTE, BLOCKED, SKIPPED, timeout ou ausência de log/revisão não equivalem a PASS. HTTP 200, painel verde, processo vivo, arquivo existente ou job agendado são sinais parciais. Só promover a conclusão material com evidência suficiente, coerente e ligada ao mesmo alvo/HEAD. [Gate e contraprovas](references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md#gate-de-falsificação-metalupa).
+
+### Referências integrais sob demanda
 
 - [Nucleo operacional: identidade, Git, execucao, receitas, probes](references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md) (linhas originais 150-1369).
 - [Licoes e historico legado, incluindo repeticoes preservadas](references/CORPUS-02-LICOES-LEGADO-20261030.md) (1370-2751).

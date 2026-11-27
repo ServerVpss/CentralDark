@@ -687,16 +687,59 @@ PY
   exit 0
 fi
 case "$MODE" in --inventory|--diff|--scan) ;; --help) echo 'Uso: centraldark-inventory-reconcile.sh [--menu|--kylin-menu|--inventory|--diff|--scan|--tree-counts|--pulse --plan]';exit 0;; *) echo 'BLOCKED: repair requer owner e receita autorizada'; exit 64;; esac
-for x in git python3 flock timeout; do command -v "$x" >/dev/null || { echo "BLOCKED: missing $x";exit 2; }; done
+for x in git timeout; do command -v "$x" >/dev/null || { echo "BLOCKED: missing $x";exit 2; }; done
+CD_INVENTORY_PYTHON="$(command -v -- "${PYTHON_BIN:-python3}")" || { echo 'BLOCKED: inventory Python unavailable';exit 2; }
+[[ -x "$CD_INVENTORY_PYTHON" ]] || { echo 'BLOCKED: inventory Python not executable';exit 2; }
 git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 || { echo 'BLOCKED: repo absent';exit 2; }
 umask 077
 mkdir -p "$STATE"
-exec 9>"$STATE/.lock"
-flock -n 9 || { echo 'BLOCKED: another inventory run';exit 75; }
 export CD_ROOT="$ROOT" CD_STATE="$STATE"
-python3 - <<'PY'
-import subprocess,json,os,pathlib,datetime,hashlib
-root=pathlib.Path(os.environ['CD_ROOT']);state=pathlib.Path(os.environ['CD_STATE']);repo='ServerVpss/CentralDark'
+"$CD_INVENTORY_PYTHON" - <<'PY'
+import subprocess,json,os,pathlib,datetime,hashlib,errno,platform
+
+def cygpath(flag,value):
+ try:
+  p=subprocess.run(['cygpath',flag,str(value)],text=True,capture_output=True,timeout=5)
+ except (OSError,subprocess.TimeoutExpired):
+  raise SystemExit('BLOCKED: Windows path conversion unavailable')
+ if p.returncode or not p.stdout.strip():
+  raise SystemExit('BLOCKED: Windows path conversion unavailable')
+ return p.stdout.strip()
+
+def native_path(value):
+ # Git Bash may already have converted exported paths for native Python.
+ if os.name=='nt' and value.startswith('/'):
+  value=cygpath('-w',value)
+ p=pathlib.Path(value)
+ if not p.is_absolute():
+  raise SystemExit('BLOCKED: inventory path must be absolute')
+ return p
+
+root=native_path(os.environ['CD_ROOT']);state=native_path(os.environ['CD_STATE']);repo='ServerVpss/CentralDark'
+receipt_display=cygpath('-u',state/'centraldark-inventory-reconcile.json') if os.name=='nt' else str(state/'centraldark-inventory-reconcile.json')
+# Same canonical .lock as --pulse. POSIX flock interoperates with the shell
+# owner; native Windows uses a nonblocking byte lock for this same inventory.
+try:
+ inventory_lock=(state/'.lock').open('a+b')
+except OSError:
+ print('BLOCKED: inventory lock unavailable');raise SystemExit(2)
+try:
+ if os.name=='nt':
+  import msvcrt
+  inventory_lock.seek(0,os.SEEK_END)
+  if inventory_lock.tell()==0:
+   inventory_lock.write(b'\0');inventory_lock.flush()
+  inventory_lock.seek(0)
+  msvcrt.locking(inventory_lock.fileno(),msvcrt.LK_NBLCK,1)
+ else:
+  import fcntl
+  fcntl.flock(inventory_lock.fileno(),fcntl.LOCK_EX|fcntl.LOCK_NB)
+except OSError as exc:
+ if exc.errno in (errno.EACCES,errno.EAGAIN) or getattr(exc,'winerror',None)==33:
+  print('BLOCKED: another inventory run');raise SystemExit(75)
+ print('BLOCKED: inventory lock unavailable');raise SystemExit(2)
+# Keep inventory_lock alive through the atomic receipt write; process exit
+# releases it on success and on every exception, with no second lock or daemon.
 def call(args,timeout=12):
  try:
   p=subprocess.run(args,cwd=root,text=True,capture_output=True,timeout=timeout)
@@ -704,8 +747,11 @@ def call(args,timeout=12):
  except (OSError,subprocess.TimeoutExpired):return (124,'')
 def sector(code):return 'CONNECTED' if code==0 else 'SEM_ACESSO'
 v={'schema':'centraldark.reconcile.v1','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'sources':{},'owners':{}}
+v['measurement_scope']={'kind':'local_host','host':platform.node(),'os':platform.system(),
+ 'repository_root':str(root),'legacy_vps_keys':'local_checkout','remote_vps':'NOT_MEASURED',
+ 'remote_sources':['github']}
 s=v['sources']
-for field,cmd in [('vps_head',['git','rev-parse','HEAD']),('vps_origin_main',['git','rev-parse','origin/main']),('dirty',['git','status','--porcelain','-uno'])]:
+for field,cmd in [('vps_head',['git','rev-parse','HEAD']),('vps_origin_main',['git','rev-parse','origin/main']),('dirty',['git','--no-optional-locks','status','--porcelain','-uno'])]:
  c,o=call(cmd);s[field]={'status':sector(c),'value':o if field!='dirty' and c==0 else None,'changed_count':len(o.splitlines()) if field=='dirty' and c==0 else None}
 c,_=call(['gh','auth','status'],6);s['gh_auth']={'status':sector(c)}
 if c==0:
@@ -733,12 +779,12 @@ for rel in ('scripts/centraldark-inventory-reconcile.sh','scripts/vps/centraldar
 s['gmail']={'status':'SEM_ACESSO','reason':'Gmail is an external authorized connector, not an env to scrape'}
 
 import collections,re,time
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo,ZoneInfoNotFoundError
 started=time.monotonic()
 # Priorizar a raiz REAL do checkout; ambientes adicionais são opcionais.
 roots=list(dict.fromkeys([root]+[
- pathlib.Path(x) for x in os.environ.get(
-  'CENTRALDARK_SCAN_ROOTS','/data:/home:/root:/opt:/srv:/usr/local:/var/opt'
+ native_path(x) if os.name=='nt' else pathlib.Path(x) for x in os.environ.get(
+  'CENTRALDARK_SCAN_ROOTS','' if os.name=='nt' else '/data:/home:/root:/opt:/srv:/usr/local:/var/opt'
  ).split(os.pathsep) if x
 ]))
 skip={'.git','node_modules','.ssh','.cache','.npm','secrets','private','__pycache__','.venv','venv','build','dist'}
@@ -790,7 +836,14 @@ equal=[sorted(group) for group in same.values() if len(group)>1]
 normalized=[sorted(file for file,sha in group) for group in norm.values() if len({sha for file,sha in group})>1]
 candidates=[sorted(group) for group in names.values() if len(group)>1]
 fp=hashlib.sha256('\n'.join(file+' '+sha for file,sha,n in discovered).encode()).hexdigest()
-v['brasilia']=datetime.datetime.now(ZoneInfo('America/Sao_Paulo')).strftime('%Y-%m-%dT%H:%M:%S%z')
+try:
+ v['brasilia']=datetime.datetime.now(ZoneInfo('America/Sao_Paulo')).strftime('%Y-%m-%dT%H:%M:%S%z')
+ v['measurement_scope']['brasilia_timezone']='IANA_America/Sao_Paulo'
+ s['timezone']={'status':'CONNECTED','zone':'America/Sao_Paulo'}
+except ZoneInfoNotFoundError:
+ v['brasilia']='UNKNOWN'
+ v['measurement_scope']['brasilia_timezone']='UNKNOWN_TZDATA_UNAVAILABLE'
+ s['timezone']={'status':'UNKNOWN','reason':'TZDATA_UNAVAILABLE'}
 v['portability']={
  'classification':'READ_ONLY_SIGNALS_NOT_CONFIRMED_DEFECTS',
  'searched_script_files':len(discovered),
@@ -799,7 +852,7 @@ v['portability']={
  'candidate_files':portability_files[:800],
  'truncated':len(portability_files)>800,
  'requires_owner_review':True,
- 'source':'current Linux filesystem (not GitHub tree)'
+ 'source':'current '+platform.system()+' filesystem (not GitHub tree)'
 }
 v['duplicates']={'policy':'NEVER_DELETE_AUTOMATICALLY','scanned_scripts_folders':len(folders),'scanned_script_files':len(discovered),
 'exact_bytes_count':len(equal),'normalized_content_count':len(normalized),'name_candidates_count':len(candidates),
@@ -833,7 +886,7 @@ print('🔎 ARQUIVOS_SCRIPTS='+str(v['duplicates']['scanned_script_files']))
 print('♻️ MESMOS_BYTES='+str(v['duplicates']['exact_bytes_count'])+' NORMALIZADOS='+str(v['duplicates']['normalized_content_count'])+' CANDIDATOS='+str(v['duplicates']['name_candidates_count']))
 for k,x in s.items():print('SECTOR='+k+' STATUS='+x.get('status','MIXED'))
 print('OWNER_SCRIPTS_DISCOVERED='+str(sum(x['status']=='EXISTS' for x in v['owners'].values())))
-print('RECEIPT='+str(latest))
+print('RECEIPT='+receipt_display)
 print('PORTABILITY_CANDIDATES='+str(v['portability']['candidate_count'])+' SIGNALS='+json.dumps(v['portability']['signal_file_counts'],sort_keys=True))
 print('🟡 SCAN_PARTIAL='+str(v['duplicates']['partial']).upper()+' SKIPPED='+json.dumps(v['duplicates']['skipped'],sort_keys=True))
 print('NO_RUNTIME_REPAIR=TRUE; RECEIPT_UPDATED=TRUE; NO_NEW_GH=TRUE; NO_AUTO_CREDENTIAL_SEARCH=TRUE')

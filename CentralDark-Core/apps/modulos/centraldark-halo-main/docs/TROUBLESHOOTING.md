@@ -86,6 +86,16 @@ entries from older releases.
 <!-- /CENTRALDARK_REMOTE_AGENT_DEV_20261114 -->
 
 
+### Logs do Agente Remoto: investigar, reproduzir e verificar
+
+1. Abra **Logs** no menu da bandeja. No Windows, o caminho ativo pode ser `%LOCALAPPDATA%\Codex Halo\logs\centraldark-halo.log` (legado) ou `%LOCALAPPDATA%\CentralDark Halo\logs\centraldark-halo.log`, conforme a instalação.
+2. Anote o horário e execute uma ação uma vez. Filtre por `AGENT_DIAG`: `start` é solicitação, `pending` é aguardando verificação, `ok` é sucesso da etapa e `error` registra a causa classificada. Confirme o mesmo código da tela no arquivo. Não trate uma rota saudável ou a geração de código como pareamento verificado.
+3. Para login, leia `login`, `signup`, `session_restore`, `supabase_auth` e `vault_ipc`; para pareamento, leia `pairing_start`, `pairing_approval`, `pairing` e `mcp_heartbeat`. O cadastro do dispositivo, a confirmação e o heartbeat são etapas separadas.
+4. Para os cartões, leia `local_bridge` (Este computador), `mcp_public` (saúde do MCP), `remote_executor` (atendimento remoto), `tailscale` (Rede privada) e `status_monitor` (atualidade da leitura). Use `manual_refresh`, `open_panel` e `logout` para os botões. A saúde pública do MCP não autoriza iniciar atendimento.
+5. Falhas inesperadas são classificadas em `frontend` (JavaScript/React) ou `native_runtime` (panic Rust). O registro não contém mensagem bruta, pilha, URL, e-mail, senha, token, código de pareamento ou resposta do servidor. Eventos periódicos idênticos são descartados; uma mudança ou recuperação aparece novamente. Não envie o arquivo completo sem revisão.
+
+A contraprova mínima de uma mudança no log é: testar no aplicativo nativo, encontrar a ação, o estado e o código no arquivo, e testar que dados arbitrários são rejeitados. Testes de falha de login ou do servidor não devem usar credenciais reais nem alterar um vínculo ativo.
+
 <!-- CENTRALDARK_NATIVE_WINDOW_20261114 -->
 ### Moldura Bridge/Tauri e circuito remoto — 14/11/2026
 
