@@ -22,3 +22,9 @@ jobs:
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: node --test tests/device-pairing.test.mjs tests/pairing-consent-flow.test.mjs tests/desktop-pairing-preview.test.mjs
       - run: npm run build
+      - name: Verify tracked pairing runtime matches source
+        run: git diff --exit-code -- dist/desktop-pairing-config.js dist/device-pairing.js dist/index.js dist/oauth.js dist/oauth-redirect-match.js
+      - name: Test compiled pairing runtime
+        env:
+          CENTRALDARK_PAIRING_TEST_TARGET: dist
+        run: node --test tests/desktop-pairing-preview.test.mjs

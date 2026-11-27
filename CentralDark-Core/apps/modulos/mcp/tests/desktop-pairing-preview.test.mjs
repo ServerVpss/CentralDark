@@ -4,8 +4,10 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import express from "express";
-import { DESKTOP_SURFACE, DESKTOP_ORIGIN, SUPABASE_ORIGIN, getDesktopPairingConfig } from "../src/desktop-pairing-config.js";
-import { createDevicePairingStore, createDevicePairingRouter } from "../src/device-pairing.js";
+const moduleTarget = process.env.CENTRALDARK_PAIRING_TEST_TARGET || "src";
+assert.ok(moduleTarget === "src" || moduleTarget === "dist", "Invalid pairing test target");
+const { DESKTOP_SURFACE, DESKTOP_ORIGIN, SUPABASE_ORIGIN, getDesktopPairingConfig } = await import(`../${moduleTarget}/desktop-pairing-config.js`);
+const { createDevicePairingStore, createDevicePairingRouter } = await import(`../${moduleTarget}/device-pairing.js`);
 
 const env = {CENTRALDARK_DESKTOP_PAIRING_ENABLED:"1",HUB_SUPABASE_URL:SUPABASE_ORIGIN,HUB_SUPABASE_PUBLISHABLE_KEY:"sb_publishable_test"};
 test("descoberta fecha sem habilitação e rejeita outra origem/chave privilegiada",()=>{
@@ -51,7 +53,7 @@ test("HTTP local: mesma store, origin MCP e Supabase mock, sem rede externa",asy
   for(const [key,value] of Object.entries({...env,MCP_STATE_FILE:join(dir,"sessions.json"),MCP_SESSION_SECRET:"test-only-secret",MCP_ADMIN_COOKIE_SECRET:"test-only-cookie",MCP_PUBLIC_URL:"http://127.0.0.1"})){backup[key]=process.env[key];process.env[key]=value;}
   let server;
   try {
-    const {handleAuthorize,configureDevicePairingForOAuth}=await import("../src/oauth.js");
+    const {handleAuthorize,configureDevicePairingForOAuth}=await import(`../${moduleTarget}/oauth.js`);
     const store=createDevicePairingStore({registryPath:join(dir,"registry.json")});
     configureDevicePairingForOAuth(store);
     const app=express();
