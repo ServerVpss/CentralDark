@@ -47,7 +47,7 @@ jobs:
 
       - name: Prepare locked Desktop build and test toolchain
         id: pm
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           extras: '[]'

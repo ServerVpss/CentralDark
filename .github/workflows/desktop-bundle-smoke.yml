@@ -111,7 +111,7 @@ jobs:
 
       - name: Set up driver tools only
         id: tools
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           packages: ffmpeg

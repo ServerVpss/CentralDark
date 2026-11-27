@@ -1,8 +1,8 @@
 name: "CI — revisão de runs falhos a cada 5 minutos"
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
+  # Cadência */5 registrada em WORKFLOW-FAMILIES.json sob o clock owner único.
+  # O clock permanece MANUAL_PAUSED_BY_CHEFE; workflow_dispatch preserva a execução manual.
   workflow_dispatch:
     inputs:
       lookback_minutes:
@@ -139,7 +139,9 @@ jobs:
         if: always()
         run: |
           echo "OWNER=CI_FAILED_RUN_WATCHDOG"
-          echo "SCHEDULE=*/5 * * * *"
+          echo "SCHEDULE_BINDING=*/5 * * * *"
+          echo "CLOCK_OWNER=.github/workflows/trigger-fabric-package.yml"
+          echo "CLOCK_MODE=MANUAL_PAUSED_BY_CHEFE"
           echo "ACTION=RERUN_RED_RUNS_OR_DISPATCH_EXISTING_RUNNER_RECOVERY"
           echo "RUN_ATTEMPT=1_ONLY"
           echo "RUNNER_RECOVERY_OWNER=.github/workflows/vps-wake-hosted-ssh.yml"

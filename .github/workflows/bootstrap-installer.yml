@@ -120,7 +120,7 @@ jobs:
             || { echo "::error::installed HEAD $head != pinned ${{ steps.source.outputs.sha }}"; exit 1; }
 
       - name: Prepare tools for the real small-graph installer test
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
 
       - name: Prepare isolated acceptance-test dependencies
         shell: bash

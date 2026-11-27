@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y patchelf
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           extras: '[]'
           test-environment: 'true'
@@ -80,7 +80,7 @@ jobs:
           # A stable run passes the claim commit. Every other event tests its own head SHA.
           ref: ${{ inputs.commit || github.sha }}
           persist-credentials: false
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           # tests-js generates real icons; the wrapper needs core Pillow/resvg.
@@ -136,7 +136,7 @@ jobs:
           # A stable run passes the claim commit. Every other event tests its own head SHA.
           ref: ${{ inputs.commit || github.sha }}
           persist-credentials: false
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           archive-inputs: true
           cache-python: false

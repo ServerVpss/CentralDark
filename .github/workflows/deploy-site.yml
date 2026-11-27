@@ -65,14 +65,14 @@ jobs:
 
       - name: Get GitHub App token
         id: app-token
-        uses: ./.github/actions/get-app-token
+        uses: $/.github/actions/get-app-token
         with:
           client-id: ${{ vars.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Set up the locked site toolchain
         id: pm
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           extras: '[]'
