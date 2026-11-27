@@ -9,3 +9,7 @@ As tabelas Supabase mcp_devices e mcp_remote_calls da migração 20261127211129 
 ## Prova do runtime compilado
 
 O entrypoint de producao e `dist/index.js`. Os artefatos rastreados do cone desktop (`desktop-pairing-config`, `device-pairing`, `index`, `oauth`, `oauth-redirect-match`) devem corresponder ao build de `src/` no mesmo SHA. O ultimo tambem preserva a validacao de redirects OAuth ja existente em source. O workflow valida a paridade do cone e repete os testes de pareamento com `CENTRALDARK_PAIRING_TEST_TARGET=dist`. Nao incluir drift compilado de outros owners. A UI ja foi publicada no Pages https://centraldark-mcp.pages.dev (deployment 403db5ef; recibo no PR #1); o dominio MCP e o transporte permanecem sujeitos aos gates de runtime.
+
+## Compatibilidade com a rota MCP em runtime
+
+O container anterior ja reconhecia `X-CentralDark-Pairing-Route: mcp-v1` para o Remote Bridge. Preservamos essa selecao de destino em GET, sem codigo nem segredo na URL. A confirmacao JSON pelo dominio MCP exige tentativa viva do executor Remote Bridge, projeto Supabase fixo, administrador verificado, codigo e nonce; a feature flag ainda bloqueia a confirmacao enquanto indisponivel. O fluxo legado no dominio admin nao e alterado e o token legado nao se torna token desktop. A selecao por header ou origem nao concede autorizacao.
