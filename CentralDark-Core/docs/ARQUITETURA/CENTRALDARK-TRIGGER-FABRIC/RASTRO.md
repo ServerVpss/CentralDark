@@ -100,6 +100,8 @@ Regras determinísticas:
 - `COMMIT_EXISTS=PASS` com `LEDGER_ACTIVE=FAIL|UNKNOWN` resulta em write publicado porém `TRACE_COMPLETE != PASS`; não repetir o commit, recuperar apenas o rastro;
 - retorno ao CHEFE antes de `LEDGER_READBACK` é `METHOD_FAILURE`.
 
+`COMMIT_PROVEN != TRACE_COMPLETE`: confirmar o commit publicado prova o write; o rastro só se completa depois de registrar e reler a cadeia `COMMIT → DELTA → PROVA` no ledger CURRENT.
+
 `DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT` e `COMMIT_READBACK != LEDGER_READBACK`.
 
 

@@ -48,7 +48,7 @@ jobs:
             xdg-utils libatspi2.0-0 libdrm2 libgbm1 libasound2t64
 
       - name: Set up the locked desktop toolchain
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           extras: '["all"]'

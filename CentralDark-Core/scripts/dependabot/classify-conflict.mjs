@@ -116,7 +116,10 @@ if (['package.json', 'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock'].include
   reason = 'DEPENDENCY_MANIFEST_OR_LOCKFILE_PRESERVE_PR_DELTA';
   conflictId = 'DEPENDENCY_MANIFEST_OR_LOCKFILE';
 } else {
-  const known = matchKnown(normalized);
+  // Registry paths originally were relative to Core before consolidation.
+  const known = matchKnown(normalized) ||
+    (normalized.startsWith('CentralDark-Core/') ?
+      matchKnown(normalized.slice('CentralDark-Core/'.length)) : null);
   if (known) {
     conflictId = String(known.CONFLICT_ID || 'KNOWN');
     source = 'known-conflict-patterns.json';

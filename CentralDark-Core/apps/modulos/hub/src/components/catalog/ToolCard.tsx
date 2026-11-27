@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import {
   Activity, AlertTriangle, CheckCircle2, XCircle,
-  Github, ShieldCheck, FileText, Server, ListChecks,
+  FolderGit2, ShieldCheck, FileText, Server, ListChecks,
   Sparkles, Database, Wrench, FolderTree, Brain, Package,
 } from 'lucide-react';
 
@@ -23,7 +23,7 @@ interface ToolCardProps {
 
 // Ícone + cor original por categoria (paleta esmeralda CentralDark)
 const CATEGORY_STYLE: Record<string, { icon: React.ReactNode; ring: string; bg: string }> = {
-  github:     { icon: <Github      className="h-5 w-5" />, ring: 'ring-slate-500/40',   bg: 'bg-slate-500/10 text-slate-200' },
+  github:     { icon: <FolderGit2  className="h-5 w-5" />, ring: 'ring-slate-500/40',   bg: 'bg-slate-500/10 text-slate-200' },
   admin:      { icon: <ShieldCheck className="h-5 w-5" />, ring: 'ring-rose-500/40',    bg: 'bg-rose-500/10 text-rose-300' },
   docs:       { icon: <FileText    className="h-5 w-5" />, ring: 'ring-sky-500/40',     bg: 'bg-sky-500/10 text-sky-300' },
   vps:        { icon: <Server      className="h-5 w-5" />, ring: 'ring-emerald-500/40', bg: 'bg-emerald-500/10 text-emerald-300' },

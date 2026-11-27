@@ -304,6 +304,28 @@ Conteúdo: Quando o alvo for local, subir/editar/testar no CENTRALDARK-OS e cons
 
 Conteúdo: Correção vigente do CHEFE: o sujeito operacional é a inteligência CentralDark / CentralDark-OS / Instinto Superior. Claude, ChatGPT, Codex e outros são motores, braços ou interfaces. Em meta-grill e receipts, falar CentralDark executou; citar modelo só quando for detalhe de canal/ferramenta.
 
+## 2026-09-30 — Autoridade do CHEFE e Reality Judge pós-efeito
+
+Origem: correção explícita do SEGREDO/CHEFE durante a operação CentralDark-OS, cristalizada na main.
+
+```text
+CHEFE_AUTHORITY_IS_SINGLETON=true
+DETERMINISTIC_ROUTE_FIRST=true
+REALITY_JUDGE_AFTER_EFFECT=true
+REALITY_JUDGE_BEFORE_MATERIAL_PASS_CLAIM=true
+REALITY_JUDGE_IS_NOT_EXECUTION_PERMISSION=true
+REALITY_JUDGE_IS_NOT_HUMAN_AUTHORITY=true
+CHEFE_AUTHORITY_IS_NOT_REDUCED_BY_SENSOR=true
+OBSERVED_REALITY_CAN_BE_WRONG_OR_PARTIAL=true
+TLC23_PROOF_COUNTERPROOF_SERVE_EXECUTION=true
+UNKNOWN_BLOCKS_ONLY_AFFECTED_CLAIM=true
+MACHINE_RESOLVABLE_BLOCKER_AUTO_CONTINUE=true
+```
+
+Lembrança operacional: realidade observada é evidência técnica, não soberania humana. Sensor/log/modelo/cache/workflow podem estar errados ou parciais. Contradição abre teste discriminante, prova/contraprova e remediação do cone afetado; não rebaixa intenção, autonomia ou governança do CHEFE.
+
+Proveniência recuperada: [commit 8b328efea9d59f17ada3592a585ab10deae09f1b](https://github.com/ServerVpss/CentralDark/commit/8b328efea9d59f17ada3592a585ab10deae09f1b), preservada no último estado íntegro `974e9784c38afc6cb2bae4d0d63fd373837b39e5`. A restauração do registro não comprova consumo em runtime.
+
 ### [2026-10-01] Multi-conta não fragmenta a Casa; capability encontra o melhor binding vivo
 - **Data:** 2026-10-01
 - **Tags:** multi-conta, capability, voice, centraldark, rdc, vps, casa, sol-executora, continuidade

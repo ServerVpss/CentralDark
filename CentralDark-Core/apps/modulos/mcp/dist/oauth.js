@@ -2,6 +2,7 @@
 import crypto from "node:crypto";
 import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
+import { DESKTOP_SURFACE, DESKTOP_ORIGIN, getDesktopPairingConfig } from "./desktop-pairing-config.js";
 import { isAdmin } from "./admin.js";
 import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 // Mesmo /authorize: o client_id canônico seleciona o modo de dispositivo.
@@ -26,20 +27,20 @@ function getAdminPassword() {
 }
 // Mesmo Supabase Auth e tabela user_roles do Cockpit: login não equivale a admin.
 // Reutiliza a mesma identidade do Cockpit para MCP e dispositivos; role admin e JWT validados no servidor.
-async function verifyRemoteBridgeSupabaseAdmin(req) {
+async function verifyRemoteBridgeSupabaseAdmin(req, desktopConfig = null) {
     const header = String(req.headers?.authorization || "");
     const match = /^Bearer\s+([A-Za-z0-9._-]{48,8192})$/.exec(header);
     if (!match)
         return false;
-    const base = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
-    const apikey = String(process.env.HUB_SUPABASE_PUBLISHABLE_KEY ||
+    const base = desktopConfig?.supabaseUrl || String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const apikey = desktopConfig?.supabasePublishableKey || String(process.env.HUB_SUPABASE_PUBLISHABLE_KEY ||
         process.env.SUPABASE_PUBLISHABLE_KEY ||
         process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "");
     if (!/^https:\/\/[a-z0-9.-]+$/i.test(base) || !apikey || apikey.startsWith("sb_secret_"))
         return false;
     const headers = { apikey, Authorization: "Bearer " + match[1], Accept: "application/json" };
     try {
-        const opts = { headers, signal: AbortSignal.timeout(6000) };
+        const opts = { headers, signal: AbortSignal.timeout(6000), ...(desktopConfig ? { redirect: "error" } : {}) };
         const userResponse = await fetch(base + "/auth/v1/user", opts);
         if (!userResponse.ok)
             return false;
@@ -55,7 +56,7 @@ async function verifyRemoteBridgeSupabaseAdmin(req) {
         if (!roleResponse.ok)
             return false;
         const data = await roleResponse.json();
-        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin";
+        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin" ? (desktopConfig ? user.id : true) : false;
     }
     catch {
         return false;
@@ -256,7 +257,7 @@ function sendOwnerConsentPage(res, input) {
             : { ok: false, error: input.error || "Sessão administrativa não autorizada." });
         return;
     }
-    const url = new URL("https://admin.centralldark.com/mcp-autorizar");
+    const url = new URL(input.desktopPairing ? DESKTOP_ORIGIN + "/mcp-autorizar" : "https://admin.centralldark.com/mcp-autorizar");
     const values = {
         client_id: input.client_id,
         client_name: input.client_name,
@@ -267,7 +268,7 @@ function sendOwnerConsentPage(res, input) {
         state: input.client_state,
         scope: input.scope,
         pair_id: input.device?.pairId,
-        pair_code: input.device?.code,
+        pair_code: input.desktopPairing ? undefined : input.device?.code,
         pair_nonce: input.device?.nonce,
         auth_method: input.authMethod,
         error: input.error,
@@ -314,16 +315,71 @@ export function postRegister(req, res) {
         cid: req.cid,
     });
 }
+// Observability only: this identifier never participates in authorization.
+const SUPPORT_TRACE_HEADER = "x-centraldark-trace-id";
+const SUPPORT_CAUSES = new Set(["EROFS", "EACCES", "EPERM", "ENOSPC", "EIO", "ENOENT", "ETIMEDOUT",
+    "ECONNRESET", "DEVICE_REGISTRY_INVALID_JSON", "DEVICE_REGISTRY_INVALID", "DEVICE_REGISTRY_PATH_NOT_FILE"]);
+function supportTrace(value) {
+    return typeof value === "string" && value.length === 32 && /^[0-9a-f]+$/.test(value) ? value : null;
+}
+function oauthFailureDetails(error) {
+    const frames = [];
+    const visited = new Set();
+    let cause;
+    for (let cursor = error; cursor && !visited.has(cursor) && visited.size < 4; cursor = cursor.cause) {
+        visited.add(cursor);
+        if (SUPPORT_CAUSES.has(cursor.code))
+            cause = cursor.code;
+        else if (SUPPORT_CAUSES.has(cursor.message))
+            cause = cursor.message;
+        // Never persist error.stack as text: only known module names and recorded coordinates.
+        const lines = typeof cursor.stack === "string" ? cursor.stack.slice(0, 16000).split("\n").slice(1, 24) : [];
+        for (const line of lines) {
+            const m = line.match(/^\s+at\s+(?:([\w.]+)\s+\()?[^\r\n]*[\/]((?:device-pairing|oauth)\.js):(\d{1,7}):(\d{1,7})\)?$/);
+            if (m && frames.length < 8) {
+                const functions = ["approve", "approveWeb", "readRegistry", "writeRegistry", "handleAuthorize"];
+                const fn = m[1]?.split(".").at(-1);
+                frames.push({ ...(functions.includes(fn) ? { function: fn } : {}), file: m[2], line: Number(m[3]), column: Number(m[4]) });
+            }
+        }
+    }
+    return {
+        ...(cause ? { cause } : {}),
+        ...(frames[0] ? { source_file: frames[0].file, source_line: frames[0].line,
+            ...(frames[0].function ? { function: frames[0].function } : {}), stack_trace: frames } : {}),
+    };
+}
 export async function handleAuthorize(req, res) {
+    let traceId = null;
     try {
         // Somente o Cockpit envia consentimento JSON cross-origin.
         // O token Supabase segue no header, nunca no URL ou no HTML.
         const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
-        if (requestedJson && req.headers.origin !== "https://admin.centralldark.com")
+        const deviceClientId = param(req, "client_id");
+        const desktopPair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID &&
+            devicePairingStore?.pendingConsent(param(req, "pair_id"))?.surface === DESKTOP_SURFACE;
+        const desktopConfig = desktopPair ? getDesktopPairingConfig() : null;
+        if (desktopPair && !desktopConfig)
+            return oauthError(res, 503, "server_error", "Pareamento Desktop CentralDark indisponível.");
+        if (requestedJson && req.headers.origin !== (desktopPair ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
             return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
+        if (desktopPair && req.method === "POST" && !requestedJson)
+            return oauthError(res, 403, "access_denied", "Confirme pelo login Supabase do domínio MCP.");
         res.locals.cockpitConsentJson = requestedJson;
         // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
-        const deviceClientId = param(req, "client_id");
+        if (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
+            traceId = supportTrace(req.headers?.[SUPPORT_TRACE_HEADER]);
+            if (traceId) {
+                res.setHeader(SUPPORT_TRACE_HEADER, traceId);
+                res.once("finish", () => {
+                    const httpStatus = res.statusCode;
+                    const write = httpStatus >= 400 ? log.warn : log.info;
+                    write("remote_pairing_request", { component: "mcp", module: "pairing",
+                        action: req.method === "POST" ? "owner_approval" : "owner_challenge",
+                        http_status: httpStatus, trace_id: traceId, reference: "CD-" + traceId });
+                });
+            }
+        }
         if (deviceClientId === VSCODE_DEVICE_CLIENT_ID || deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
             if (!devicePairingStore)
                 return oauthError(res, 503, "server_error", "Registro de dispositivos indisponível.");
@@ -336,6 +392,7 @@ export async function handleAuthorize(req, res) {
                 client_id: deviceClientId,
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
+                desktopPairing: Boolean(desktopPair),
                 isAdmin: isAdmin(req),
                 authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: { pairId: pair.pairId, code: pair.code, nonce: pair.nonce }
@@ -348,6 +405,17 @@ export async function handleAuthorize(req, res) {
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
             // Confirmação por código exige login admin válido. Senha é fallback
             // explícito, nunca dispensa código + nonce de uma solicitação viva.
+            // A sessão web NÃO é copiada para o dispositivo. A prova é um token opaco exclusivo.
+            if (desktopPair) {
+                const ownerUserId = await verifyRemoteBridgeSupabaseAdmin(req, desktopConfig);
+                if (typeof ownerUserId !== "string" || !ownerUserId)
+                    return oauthError(res, 403, "access_denied", "Conta CentralDark sem autorização de administrador.");
+                const approved = devicePairingStore.approveWeb({ pairId, code: param(req, "pair_code"), nonce: param(req, "pair_nonce"), ownerUserId });
+                if (!approved.ok)
+                    return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+                sendOwnerConsentPage(res, { ...details, success: true });
+                return;
+            }
             let ownerAuthenticated = isAdmin(req);
             if (!ownerAuthenticated && (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID || requestedJson) && details.authMethod !== "password") {
                 ownerAuthenticated = await verifyRemoteBridgeSupabaseAdmin(req);
@@ -472,7 +540,11 @@ export async function handleAuthorize(req, res) {
         }
     }
     catch (err) {
-        log.error("oauth_authorize_exception", { cid: req.cid, error: String(err) });
+        log.error("oauth_authorize_exception", { cid: req.cid, component: "mcp", module: traceId ? "pairing" : "oauth",
+            action: req.method === "POST" ? "owner_approval" : "owner_challenge",
+            error: "OAUTH_AUTHORIZE_EXCEPTION", http_status: res.headersSent ? res.statusCode : 500,
+            ...(traceId ? { trace_id: traceId, reference: "CD-" + traceId } : {}), retryable: false,
+            ...oauthFailureDetails(err) });
         if (!res.headersSent) {
             res.status(500).send("Erro interno no authorize OAuth.");
         }

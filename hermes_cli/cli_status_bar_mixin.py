@@ -641,7 +641,10 @@ class CLIStatusBarMixin:
             return
         try:
             started = getattr(self, "_turn_summary_start", 0.0) or 0.0
-            line = collector.render(max(0.0, time.monotonic() - started) if started else 0.0)
+            from agent.i18n import get_language
+
+            line = collector.render(max(0.0, time.monotonic() - started) if started else 0.0,
+                                    language=get_language())
             if line and getattr(self, "_modern_layout", False):
                 from hermes_cli.cli_modern_layout import turn_footer
                 _cprint(turn_footer(line))

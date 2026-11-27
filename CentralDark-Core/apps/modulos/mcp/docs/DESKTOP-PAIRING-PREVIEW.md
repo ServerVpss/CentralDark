@@ -1,0 +1,11 @@
+# CentralDark Desktop Commander — prova de pareamento
+
+Compatível com o PR https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/pull/1. Reutiliza a store existente e o mesmo /authorize. O recurso inicia desabilitado: CENTRALDARK_DESKTOP_PAIRING_ENABLED=1 só após deploy da página React no domínio MCP, roteamento correto e validação CI. A URL Supabase e a chave pública já usadas pelo backend devem corresponder ao projeto oficial. Nenhuma chave administrativa nova.
+
+Fluxo exclusivo de teste: GET /api/mcp-info, POST /device/desktop/start, GET /authorize?client_id=centraldark.remote-bridge&pair_id=..., consentimento JSON com JWT Supabase admin e código digitado, POST /device/pair/status, POST /device/desktop/session/check, POST /device/devices/self/revoke. O segredo de posse não vai ao navegador. Token opaco com validade máxima de cinco minutos; não autoriza refresh, heartbeat nem chamadas remotas. A conta é validada no servidor e vinculada ao registro do dispositivo. O cliente não recebe tokens Supabase. Sessões e outros clientes existentes permanecem com o fluxo anterior.
+
+As tabelas Supabase mcp_devices e mcp_remote_calls da migração 20261127211129 permanecem fechadas. Transporte Realtime, identidade restrita por dispositivo, despacho, registro definitivo e revogação de sessões exigem uma segunda etapa. Não publicar pacote NPM, migrar DNS, alterar URLs de callback nem desligar o túnel por este PR. Prova local usa uma fixture isolada, sem autenticação real. Teste real requer aprovação humana em navegador.
+
+## Prova do runtime compilado
+
+O entrypoint de producao e `dist/index.js`. Os artefatos rastreados do cone desktop (`desktop-pairing-config`, `device-pairing`, `index`, `oauth`, `oauth-redirect-match`) devem corresponder ao build de `src/` no mesmo SHA. O ultimo tambem preserva a validacao de redirects OAuth ja existente em source. O workflow valida a paridade do cone e repete os testes de pareamento com `CENTRALDARK_PAIRING_TEST_TARGET=dist`. Nao incluir drift compilado de outros owners. A UI ja foi publicada no Pages https://centraldark-mcp.pages.dev (deployment 403db5ef; recibo no PR #1); o dominio MCP e o transporte permanecem sujeitos aos gates de runtime.

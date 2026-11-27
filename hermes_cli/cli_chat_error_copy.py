@@ -70,6 +70,13 @@ def chat_error_response(
 
         text = str(error or "").strip()
         if reason in SITE_FAILURE_CODES and text:
+            if reason == "gateway_connection":
+                from hermes_cli.gateway_client import DISCONNECTED, NOT_SENT
+
+                if text == DISCONNECTED:
+                    return t("cli.error.gateway_disconnected")
+                if text == NOT_SENT:
+                    return t("cli.error.gateway_not_sent")
             return text
     else:
         from agent.error_classifier import classify_api_error

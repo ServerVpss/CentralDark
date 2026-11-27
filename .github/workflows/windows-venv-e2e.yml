@@ -53,7 +53,7 @@ jobs:
           ref: ${{ inputs.commit || github.sha }}
 
       - name: Set up locked Python and test dependencies
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           extras: '["messaging"]'
           test-environment: 'true'

@@ -411,12 +411,12 @@ Regra de prova: GitHub real medido ganha de print, memória de chat, texto colad
 
 ## 🔒 HUD único — entrada canônica obrigatória (CHEFE 09/10)
 
-Owner de conteúdo: `docs/HUD/HUD.html` em `ServerVpss/CentralDark@main`. Owner de boot: `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. Owner de materialização: `.github/workflows/vps-exec-selfhosted.yml`. Esta é uma obrigação **causal de confiança do control plane**, não um veto de saúde auxiliar nem um segundo painel.
+Owner de conteúdo: [HudDeterministico do Cockpit](apps/instinto-superior/src/components/central/HudDeterministico.tsx) em `ServerVpss/CentralDark@main`, conforme `hud_first_gate()` de `scripts/trigger-fabric/centraldark_full_trigger_boot.py`. A continuidade segue [docs/HUD/README.md](docs/HUD/README.md). O HTML anterior foi retirado da árvore em `a29dacd4c40fcdabd49c5559d56eae4b7d6c0488`; sua [fonte histórica fixada](https://github.com/ServerVpss/CentralDark/blob/0f2b35f390a8f45330bd31a95aec355e1c58621c/docs/HUD/HUD.html) permanece ligada ao [inventário de migração](apps/instinto-superior/src/data/hud-migration.snapshot.json), que declara `full_migration_proven=false`. A presença do componente não comprova migração integral ou consumo no runtime. Esta é uma obrigação **causal de confiança do control plane**, sem segundo painel.
 
 ```text
 GLOBAL_HUD_FIRST_MAIN_VPS_FAIL_CLOSED=true
-CANONICAL_HUD=docs/HUD/HUD.html@main
-VPS_HUD_PROJECTION=/root/.centraldark/HUD.html
+CANONICAL_HUD=apps/instinto-superior/src/components/central/HudDeterministico.tsx@main
+VPS_HUD_PROJECTION=EXPLICIT_CENTRALDARK_HUD_RUNTIME_PATH_ONLY
 READ_HUD_BEFORE_CENTRALDARK_GOAL=true
 MAIN_LIVE_HEAD_REQUIRED=true
 MATERIALIZED_BYTES_SHA256_MUST_MATCH_MAIN=true
@@ -426,12 +426,12 @@ SCREENPIPE_KYLIN_OPTIONAL_FAILURE=PLACA_NO_HUD_AND_CONTINUE_UNAFFECTED
 OLD_HEALTHY_PROCESSES_NOT_KILLED_BY_GATE=true
 ```
 
-**Ordem:** ler o `HUD.html` do commit remoto vivo de `main`; confrontar o hash e o corpo HTML com o HUD materializado na VPS; só com readback `PASS` permitir **novo** boot, Goal de execução e promoção de deploy. Não tratar um `HTTP 200`, um `git HEAD` igual ou um arquivo existente como prova substituta. Gate reprovado não concede acesso administrativo, não autoriza sobrescrever checkout dirty, não mata serviços já vivos e não impede investigação/leitura para repará-lo. Com fonte íntegra, erros opcionais exibem **placa própria com motivo, prova, owner, receita e NEXT_CURSOR**, aproveitando a seção existente `Missões — clica, copia, cola onde for resolver`; não criam nova arquitetura. Uma superfície não ligada a esse gate permanece `UNKNOWN` — nunca declarar aplicação global comprovada só pelo documento.
+**Ordem:** ler o componente do Cockpit no commit remoto vivo de `main` e confrontar o blob com o checkout, pelo gate existente. Espelho de runtime só é considerado quando informado explicitamente em `CENTRALDARK_HUD_RUNTIME_PATH`; nesse caso, conferir existência e bytes com a mesma fonte. A antiga projeção HTML na VPS é proveniência histórica, não destino presumido. Só com readback `PASS` do gate permitir **novo** boot, Goal de execução e promoção de deploy; a prova funcional da interface continua exigida para alegar consumo no runtime. Não tratar um `HTTP 200`, um `git HEAD` igual ou um arquivo existente como prova substituta. Gate reprovado não concede acesso administrativo, não autoriza sobrescrever checkout dirty, não mata serviços já vivos e não impede investigação/leitura para repará-lo. Com fonte íntegra, erros opcionais exibem **placa própria com motivo, prova, owner, receita e NEXT_CURSOR**, aproveitando a seção existente `Missões — clica, copia, cola onde for resolver`; não criam nova arquitetura. Uma superfície não ligada a esse gate permanece `UNKNOWN` — nunca declarar aplicação global comprovada só pelo documento.
 
 <!-- CENTRALDARK_HUD_FERIDA_PLACA_MVP_V1 -->
 ## 🩹 HUD único — ferida, placa, receita e continuidade
 
-**Owner existente:** docs/HUD/HUD.html. Regra operacional de todas as superfícies e agentes que leem/escrevem status no HUD, sem criar outro HUD, serviço, gate ou contrato paralelo.
+**Owner existente:** [HudDeterministico do Cockpit](apps/instinto-superior/src/components/central/HudDeterministico.tsx), com continuidade em [docs/HUD/README.md](docs/HUD/README.md). Regra operacional de todas as superfícies e agentes que leem/escrevem status no HUD, sem criar outro HUD, serviço, gate ou contrato paralelo.
 
 ```text
 YELLOW_OR_FAIL_OR_UNKNOWN_OR_PENDING -> VER_PENDENCIA_REQUIRED
@@ -2762,7 +2762,7 @@ NO_PARALLEL_ARCHITECTURE=true
 NO_V1_V2_V3=true
 ```
 
-Consumidores operacionais devem resolver a raiz via `git rev-parse --show-toplevel` ou equivalente, validando identidade do repo (remote + HEAD). Caminhos fixos em docs/receipts/histórico são preservados (não operacionais).
+Consumidores operacionais devem resolver a raiz via `git rev-parse --show-toplevel` ou equivalente, validando identidade do repo (remote + HEAD). Caminhos fixos registrados em documentos, recibos e histórico são preservados como proveniência, sem virar bindings operacionais.
 
 Bot AI CentralDark (owner: AGENTS.md + .agents/skills/centraldark-operational-method/SKILL.md) herda esta regra: descobrir raiz dinamicamente, validar, não criar bot paralelo.
 

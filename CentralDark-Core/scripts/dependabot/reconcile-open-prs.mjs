@@ -6,13 +6,30 @@ const token = process.env.GITHUB_TOKEN || '';
 const repository = process.env.GITHUB_REPOSITORY || 'ServerVpss/CentralDark';
 const repoDir = process.env.REPO_DIR || '/root/CentralDark';
 const resolver = process.env.RESOLVER || '.ci-house/scripts/dependabot/resolve-conflicts.sh';
-const targetPr = Number(process.env.TARGET_PR || 0) || null;
+const rawTarget = process.env.TARGET_PR || '';
+const reconciliationOnly = process.env.COSTURA_RECONCILIATION_ONLY === '1';
+if (reconciliationOnly && rawTarget && !/^[1-9][0-9]*$/.test(rawTarget)) {
+  console.error('BLOCKED_INVALID_TARGET_PR');
+  process.exit(2);
+}
+const targetPr = Number(rawTarget || 0) || null;
 const protectedPrs = new Set(
   String(process.env.PROTECTED_PRS || '1562')
     .split(',')
     .map(v => Number(v.trim()))
     .filter(Number.isFinite),
 );
+
+if (reconciliationOnly) {
+  for (const ledger of [1562, 1757, 1977]) protectedPrs.add(ledger);
+}
+function reconciliationEligible(pr) {
+  return pr?.state === 'open' && !pr.draft && !protectedPrs.has(Number(pr.number)) &&
+    pr.head?.repo?.full_name === repository && pr.base?.ref === 'main' &&
+    Boolean(pr.head?.ref) && pr.head.ref !== 'main' &&
+    /^[0-9a-f]{40}$/.test(pr.head?.sha || '') &&
+    ['segredounlock', 'dependabot[bot]'].includes(pr.user?.login);
+}
 
 if (!token) {
   console.error('BLOCKED_MISSING_GITHUB_TOKEN');
@@ -177,6 +194,28 @@ for (const item of prs) {
     continue;
   }
 
+  if (reconciliationOnly) {
+    if (!reconciliationEligible(pr)) {
+      receipt.action = 'SKIP_OUTSIDE_RECONCILIATION_SCOPE';
+      receipt.state = 'PROTECTED';
+      summary.push(receipt);
+      continue;
+    }
+    if (pr.mergeable === null || pr.mergeable === undefined) {
+      receipt.action = 'MERGEABILITY_UNKNOWN';
+      receipt.state = 'UNKNOWN';
+      blocked += 1;
+      summary.push(receipt);
+      continue;
+    }
+    if (pr.mergeable !== false && !['dirty', 'behind'].includes(pr.mergeable_state)) {
+      receipt.action = 'SKIP_NO_RECONCILIATION_NEEDED';
+      receipt.state = 'NOOP';
+      summary.push(receipt);
+      continue;
+    }
+  }
+
   const expectedHead = pr.head.sha;
   const update = await api(`/pulls/${number}/update-branch`, {
     method: 'PUT',
@@ -187,6 +226,11 @@ for (const item of prs) {
     receipt.action = 'UPDATE_BRANCH_REQUESTED';
     receipt.state = 'SYNCHRONIZING';
     acted += 1;
+    if (reconciliationOnly) {
+      receipt.state = 'SYNCHRONIZING_AWAIT_READBACK_AND_CI';
+      summary.push(receipt);
+      continue;
+    }
     // A atualização pode suprimir synchronize com GITHUB_TOKEN; reentrar no owner explicitamente.
     const routed = await dispatchCanonicalOwner(await getPr(number));
     receipt.canonical_event = routed.event_type;
@@ -207,6 +251,12 @@ for (const item of prs) {
   }
 
   pr = await remeasureMergeability(number);
+  if (reconciliationOnly && (!reconciliationEligible(pr) || pr.head.sha !== expectedHead)) {
+    receipt.action = 'SKIP_SOURCE_CHANGED';
+    receipt.state = 'DEFERRED';
+    summary.push(receipt);
+    continue;
+  }
   const mergeState = String(pr?.mergeable_state || 'unknown').toLowerCase();
   const conflicting = pr?.mergeable === false || mergeState === 'dirty';
 
@@ -219,13 +269,30 @@ for (const item of prs) {
         PR_HEAD_REF: pr.head.ref,
         REPO_DIR: repoDir,
         GITHUB_TOKEN: token,
+        ...(reconciliationOnly ? {
+          COSTURA_COMPATIBLE_ONLY: '1',
+          COSTURA_EXPECTED_PR_SHA: expectedHead,
+        } : {}),
       },
       encoding: 'utf8',
     });
     if (child.stdout) process.stdout.write(child.stdout);
     if (child.stderr) process.stderr.write(child.stderr);
 
-    if (child.status === 0) {
+    if (reconciliationOnly && child.status === 0) {
+      const live = await getPr(number);
+      const claimedHead = (child.stdout || '').match(/RESOLVED_AND_PUSHED pr=\d+ head_ref=\S+ head=([0-9a-f]{40})/)?.[1];
+      if (claimedHead && claimedHead === live.head?.sha && claimedHead !== expectedHead) {
+        receipt.action = 'CONFLICT_RESOLUTION_HEAD_VERIFIED';
+        receipt.state = 'AWAIT_SAME_HEAD_CI';
+        receipt.head_after = claimedHead;
+        acted += 1;
+      } else {
+        receipt.action = 'CONFLICT_RESOLUTION_READBACK_PENDING';
+        receipt.state = 'UNKNOWN';
+        blocked += 1;
+      }
+    } else if (child.status === 0) {
       receipt.action = 'CONFLICT_RESOLVED_AND_PUSHED';
       receipt.state = 'NEW_HEAD_EXPECTED';
       acted += 1;
@@ -246,6 +313,12 @@ for (const item of prs) {
     continue;
   }
 
+  if (reconciliationOnly) {
+    receipt.action = 'NO_CONFLICT_AFTER_REMEASURE';
+    receipt.state = 'AWAIT_SAME_HEAD_CI';
+    summary.push(receipt);
+    continue;
+  }
   receipt.proof = await measureProof(pr);
   console.log(`PR #${number} REQUIRED_PROOF=${receipt.proof.state} head=${pr.head.sha} verdicts=${JSON.stringify(receipt.proof.verdicts || [])}`);
   const proofState = receipt.proof.green ? 'success'

@@ -43,7 +43,7 @@ jobs:
 
       - name: Get GitHub App token
         id: app-token
-        uses: ./.github/actions/get-app-token
+        uses: $/.github/actions/get-app-token
         with:
           client-id: ${{ vars.APP_CLIENT_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}

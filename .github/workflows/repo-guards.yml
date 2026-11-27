@@ -370,7 +370,7 @@ jobs:
       # The generator runs on a Hermes runtime interpreter; [] exports one as HERMES_PYTHON.
       # Its dependency phase also runs the frozen-lock check, so a stale uv.lock fails this step;
       # the uv.lock step below still runs and says why.
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         id: setup-pm
         if: ${{ !cancelled() }}
         with:

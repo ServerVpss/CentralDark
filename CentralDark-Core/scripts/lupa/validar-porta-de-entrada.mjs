@@ -124,7 +124,7 @@ function isNullOid(value) {
 function caminhosCitados(texto) {
   const encontrados = new Set();
   const padroes = [
-    /\[[^\]]*\]\(([^)\s#]+)\)/g,
+    /\[[^\]]*\]\(([^)\s]+)\)/g,
     /`([^`\n]+\.(?:md|mdc|mjs|js|json|py|sh|ps1|yml|yaml))`/g,
     /(?:^|[\s(>])((?:docs|scripts|apps|infra|conexao-ia|\.agents|\.github|\.claude|\.cursor)\/[^\s`)"',;]+)/gm,
   ];
@@ -138,6 +138,8 @@ function caminhosCitados(texto) {
       // Tokens tipados `OWNER=docs/...` referenciam o valor, não o token inteiro.
       candidate = candidate.replace(/^[A-Z_][A-Z0-9_]*=(?=(?:docs|scripts|apps|infra|conexao-ia|\.agents|\.github|\.claude|\.cursor)\/)/, "");
       if (!candidate || candidate.startsWith("http") || candidate.startsWith("#")) continue;
+      // Markdown fragments name a section, not part of the checkout filename.
+      candidate = candidate.split("#", 1)[0];
       if (!candidate.includes("/") && !ENTRADAS.includes(candidate)) continue;
       candidate = posix.normalize(candidate);
       if (candidate.startsWith("../") || candidate.startsWith("/")) continue;

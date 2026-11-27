@@ -92,7 +92,7 @@ jobs:
 
       - name: Restore native dependency candidates
         id: native-cache
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: restore
           source: ${{ github.workspace }}
@@ -116,7 +116,7 @@ jobs:
       # PRs can restore candidates but never gain a cache-writing lane here.
       - name: Save native dependency candidates before assembly
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && (inputs.ref == '' || inputs.ref == github.sha) }}
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: save
           source: ${{ github.workspace }}

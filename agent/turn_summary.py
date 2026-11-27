@@ -140,8 +140,8 @@ class TurnSummaryCollector:
     def tally(self) -> TurnTally:
         return self._tally
 
-    def render(self, elapsed_seconds: float) -> str:
-        return format_turn_summary(elapsed_seconds, self._tally)
+    def render(self, elapsed_seconds: float, *, language: str | None = None) -> str:
+        return format_turn_summary(elapsed_seconds, self._tally, language=language)
 
 
 def format_elapsed(seconds: float) -> str:
@@ -163,7 +163,25 @@ def _pluralize(count: int, plural_noun: str) -> str:
     return f"1 {plural_noun}"
 
 
-def format_turn_summary(elapsed_seconds: float, tally: TurnTally | None, *, max_segments: int = _MAX_SEGMENTS) -> str:
+def _summary_label(group: str, label: str, language: str | None) -> str:
+    if language is None:
+        return label
+    from agent.i18n import t
+
+    key = f"cli.turn_summary.{group}.{label.replace(' ', '_')}"
+    translated = t(key, lang=language)
+    return label if translated == key else translated
+
+
+def _display_count(count: int, plural: str, language: str | None) -> str:
+    number, _, noun = _pluralize(count, plural).partition(" ")
+    return f"{number} {_summary_label('noun', noun, language)}"
+
+
+def format_turn_summary(
+    elapsed_seconds: float, tally: TurnTally | None, *,
+    max_segments: int = _MAX_SEGMENTS, language: str | None = None,
+) -> str:
     """Render the per-turn accounting line, or ``""`` when there's nothing to say.
     Pure; gating (``display.turn_summary``, quiet mode, CLI-only) is the caller's job."""
     if tally is None:
@@ -172,23 +190,23 @@ def format_turn_summary(elapsed_seconds: float, tally: TurnTally | None, *, max_
     ordered = [v for v in _VERB_PRIORITY if v in tally.verbs] + [v for v in tally.verbs if v not in _VERB_PRIORITY]
     segments: list[str] = []
     for verb in ordered:
-        parts = [_pluralize(count, plural) for plural, count in tally.verbs[verb].items() if count]
+        parts = [_display_count(count, plural, language) for plural, count in tally.verbs[verb].items() if count]
         if not parts:
             continue
-        segment = f"{verb} {', '.join(parts)}"
+        segment = f"{_summary_label('verb', verb, language)} {', '.join(parts)}"
         if verb == _EDIT_VERB and tally.has_line_deltas:
             segment += f" +{tally.lines_added} -{tally.lines_removed}"
         segments.append(segment)
 
     if tally.other_tools:
-        segments.append(f"called {_pluralize(tally.other_tools, 'tools')}")
+        segments.append(f"{_summary_label('verb', 'called', language)} {_display_count(tally.other_tools, 'tools', language)}")
 
     if not segments and tally.total_tools == 0 and elapsed_seconds < _MIN_TOOLLESS_SECONDS:
         return ""
 
     if max_segments > 0 and len(segments) > max_segments:
         hidden = len(segments) - max_segments
-        segments = segments[:max_segments] + [f"+{hidden} more"]
+        segments = segments[:max_segments] + [f"+{hidden} {_summary_label('verb', 'more', language)}"]
 
     return f"{SUMMARY_PREFIX} " + " · ".join([format_elapsed(elapsed_seconds)] + segments)
 
