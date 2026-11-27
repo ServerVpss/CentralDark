@@ -18,7 +18,7 @@ import { isAbsolute, join, relative, resolve, sep } from "node:path";
 const MARKER = "CENTRALDARK_EPHEMERAL_WORKSPACE_CLEAN_REQUIRED";
 const MARKER_FILE = ".centraldark-ephemeral.json";
 const SCHEMA_VERSION = 1;
-const CASA_TEMP_ROOT = "F:\\TEMP";
+const CASA_TEMP_ROOT = "F:\\.tmp";
 const CASA_WORKTREE_ROOT = "F:\\_worktrees";
 function isCasaWindows() {
   return process.platform === "win32" &&
@@ -400,10 +400,12 @@ function inventoryRoot(rootInput, prefixes = []) {
 
 function selfTest() {
   if (isCasaWindows()) {
-    const denied = spawnSync(process.execPath, [process.argv[1], "check-root",
-      "--root", "C:\\", "--purpose", "build"], { encoding: "utf8", timeout: 5000 });
-    if (denied.status !== 3 || !String(denied.stderr).includes("CASA_EPHEMERAL_ROOT_NOT_CANONICAL")) {
-      fail("CASA_NONCANONICAL_ROOT_NEGATIVE_TEST_FAILED", 7);
+    for (const deniedRoot of ["C:\\", "F:\\TEMP", "F:\\tmp"]) {
+      const denied = spawnSync(process.execPath, [process.argv[1], "check-root",
+        "--root", deniedRoot, "--purpose", "build"], { encoding: "utf8", timeout: 5000 });
+      if (denied.status !== 3 || !String(denied.stderr).includes("CASA_EPHEMERAL_ROOT_NOT_CANONICAL")) {
+        fail("CASA_NONCANONICAL_ROOT_NEGATIVE_TEST_FAILED", 7, { deniedRoot });
+      }
     }
   }
   const requestedRoot = join(isCasaWindows() ? CASA_TEMP_ROOT : tmpdir(), `centraldark-ephemeral-selftest-${process.pid}-${Date.now()}`);
