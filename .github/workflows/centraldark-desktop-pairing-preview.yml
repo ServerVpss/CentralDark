@@ -1,0 +1,24 @@
+name: CentralDark desktop pairing preview
+on:
+  pull_request:
+    paths:
+      - 'CentralDark-Core/apps/modulos/mcp/**'
+      - '.github/workflows/centraldark-desktop-pairing-preview.yml'
+permissions:
+  contents: read
+jobs:
+  pairing:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: CentralDark-Core/apps/modulos/mcp
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: node --test tests/device-pairing.test.mjs tests/pairing-consent-flow.test.mjs tests/desktop-pairing-preview.test.mjs
+      - run: npm run build
