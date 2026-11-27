@@ -69,6 +69,8 @@ UNKNOWN_TOOL_STATE -> UNKNOWN
 
 A execução física só pode começar quando o runtime medir uma ferramenta de Casa autorizada.
 
+**Consentimento em demonstração:** usar dados fictícios e uma janela que não chame a ponte, não leia arquivos e não conceda acesso ao computador. Exibir quem solicita, qual dispositivo e qual operação estão em teste. **Aprovado:** consentimento simulado para a operação exibida. **Recusado:** operação não autorizada. **Expirado:** o prazo terminou; um novo pedido é necessário. **Encerrado:** a autorização simulada foi revogada. Provar cada estado em ambiente isolado e registrar separadamente o teste da lógica e a observação visual. No fluxo real, exigir consentimento local explícito e vinculado à identidade verificada e ao escopo exibido. `DEMO != RUNTIME_PROVADO`.
+
 Primário canônico atual: **CentralDark Casa Commander** (serviço nativo CentralDark em `127.0.0.1:9101`, acessado pelo MCP CentralDark e transporte privado Tailscale/SSH quando autorizado). Ele reaproveita o motor DesktopCommanderMCP em `stdio` local, **não** o serviço remoto `mcp.desktopcommander.app`. O conector Remote Desktop Commander externo é legado e não deve ser acionado como fallback automático, especialmente sob ordem "sem Desktop Commander".
 
 ```text
