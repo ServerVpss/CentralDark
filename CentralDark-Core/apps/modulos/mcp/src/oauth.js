@@ -2,6 +2,7 @@
 import crypto from "node:crypto";
 import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
+import { DESKTOP_SURFACE, DESKTOP_ORIGIN, getDesktopPairingConfig } from "./desktop-pairing-config.js";
 import { isAdmin } from "./admin.js";
 import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 
@@ -27,12 +28,12 @@ function getAdminPassword() {
 }
 // Mesmo Supabase Auth e tabela user_roles do Cockpit: login não equivale a admin.
 // Reutiliza a mesma identidade do Cockpit para MCP e dispositivos; role admin e JWT validados no servidor.
-async function verifyRemoteBridgeSupabaseAdmin(req) {
+async function verifyRemoteBridgeSupabaseAdmin(req, desktopConfig = null) {
     const header = String(req.headers?.authorization || "");
     const match = /^Bearer\s+([A-Za-z0-9._-]{48,8192})$/.exec(header);
     if (!match) return false;
-    const base = String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
-    const apikey = String(
+    const base = desktopConfig?.supabaseUrl || String(process.env.HUB_SUPABASE_URL || process.env.SUPABASE_URL || "").replace(/\/$/, "");
+    const apikey = desktopConfig?.supabasePublishableKey || String(
         process.env.HUB_SUPABASE_PUBLISHABLE_KEY ||
         process.env.SUPABASE_PUBLISHABLE_KEY ||
         process.env.VITE_SUPABASE_PUBLISHABLE_KEY || ""
@@ -41,7 +42,7 @@ async function verifyRemoteBridgeSupabaseAdmin(req) {
         return false;
     const headers = { apikey, Authorization: "Bearer " + match[1], Accept: "application/json" };
     try {
-        const opts = { headers, signal: AbortSignal.timeout(6000) };
+        const opts = { headers, signal: AbortSignal.timeout(6000), ...(desktopConfig ? { redirect: "error" } : {}) };
         const userResponse = await fetch(base + "/auth/v1/user", opts);
         if (!userResponse.ok) return false;
         const user = await userResponse.json();
@@ -54,7 +55,7 @@ async function verifyRemoteBridgeSupabaseAdmin(req) {
         const roleResponse = await fetch(roles, opts);
         if (!roleResponse.ok) return false;
         const data = await roleResponse.json();
-        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin";
+        return Array.isArray(data) && data.length === 1 && data[0]?.role === "admin" ? (desktopConfig ? user.id : true) : false;
     } catch {
         return false;
     }
@@ -253,7 +254,7 @@ function sendOwnerConsentPage(res, input) {
             : { ok: false, error: input.error || "Sessão administrativa não autorizada." });
         return;
     }
-    const url = new URL("https://admin.centralldark.com/mcp-autorizar");
+    const url = new URL(input.desktopPairing ? DESKTOP_ORIGIN + "/mcp-autorizar" : "https://admin.centralldark.com/mcp-autorizar");
     const values = {
         client_id: input.client_id,
         client_name: input.client_name,
@@ -264,7 +265,7 @@ function sendOwnerConsentPage(res, input) {
         state: input.client_state,
         scope: input.scope,
         pair_id: input.device?.pairId,
-        pair_code: input.device?.code,
+        pair_code: input.desktopPairing ? undefined : input.device?.code,
         pair_nonce: input.device?.nonce,
         auth_method: input.authMethod,
         error: input.error,
@@ -348,11 +349,18 @@ export async function handleAuthorize(req, res) {
         // Somente o Cockpit envia consentimento JSON cross-origin.
         // O token Supabase segue no header, nunca no URL ou no HTML.
         const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
-        if (requestedJson && req.headers.origin !== "https://admin.centralldark.com")
+        const deviceClientId = param(req, "client_id");
+        const desktopPair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID &&
+            devicePairingStore?.pendingConsent(param(req,"pair_id"))?.surface === DESKTOP_SURFACE;
+        const desktopConfig = desktopPair ? getDesktopPairingConfig() : null;
+        if (desktopPair && !desktopConfig)
+            return oauthError(res, 503, "server_error", "Pareamento Desktop CentralDark indisponível.");
+        if (requestedJson && req.headers.origin !== (desktopPair ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
             return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
+        if (desktopPair && req.method === "POST" && !requestedJson)
+            return oauthError(res, 403, "access_denied", "Confirme pelo login Supabase do domínio MCP.");
         res.locals.cockpitConsentJson = requestedJson;
         // VS Code e Remote Bridge reutilizam o MESMO /authorize e o mesmo store.
-        const deviceClientId = param(req, "client_id");
         if (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID) {
             traceId = supportTrace(req.headers?.[SUPPORT_TRACE_HEADER]);
             if (traceId) {
@@ -378,6 +386,7 @@ export async function handleAuthorize(req, res) {
                 client_id: deviceClientId,
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
+                desktopPairing: Boolean(desktopPair),
                 isAdmin: isAdmin(req),
                 authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: {pairId: pair.pairId, code: pair.code, nonce: pair.nonce}
@@ -390,6 +399,16 @@ export async function handleAuthorize(req, res) {
             // ao solicitante que possui o segredo de posse, nunca ao navegador.
             // Confirmação por código exige login admin válido. Senha é fallback
             // explícito, nunca dispensa código + nonce de uma solicitação viva.
+            // A sessão web NÃO é copiada para o dispositivo. A prova é um token opaco exclusivo.
+            if (desktopPair) {
+                const ownerUserId = await verifyRemoteBridgeSupabaseAdmin(req, desktopConfig);
+                if (typeof ownerUserId !== "string" || !ownerUserId)
+                    return oauthError(res, 403, "access_denied", "Conta CentralDark sem autorização de administrador.");
+                const approved = devicePairingStore.approveWeb({pairId, code:param(req,"pair_code"), nonce:param(req,"pair_nonce"), ownerUserId});
+                if (!approved.ok) return oauthError(res, 403, "access_denied", "Código inválido, expirado ou já confirmado.");
+                sendOwnerConsentPage(res,{...details,success:true});
+                return;
+            }
             let ownerAuthenticated = isAdmin(req);
             if (!ownerAuthenticated && (deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID || requestedJson) && details.authMethod !== "password") {
                 ownerAuthenticated = await verifyRemoteBridgeSupabaseAdmin(req);
