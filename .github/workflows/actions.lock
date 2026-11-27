@@ -112,7 +112,7 @@ workflows:
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
     '.github/workflows/live-providers.yml':
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39'
+        - 'astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
     '.github/workflows/nix.yml':
         - 'cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342'
@@ -173,7 +173,7 @@ workflows:
     '.github/workflows/tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020'
-        - 'astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39'
+        - 'astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
     '.github/workflows/windows-bundle-sdk.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
@@ -252,9 +252,9 @@ dependencies:
         repo_id: 496012378
         uses:
             - 'actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f'
-    'astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39':
-        ref: 'v8.2.0'
-        commit: 'sha1-fac544c07dec837d0ccb6301d7b5580bf5edae39'
+    'astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d':
+        ref: 'v10.4.0'
+        commit: 'sha1-1db35dd8eee11c5894872e0b383ae6c406cf738d'
         owner_id: 115962839
         repo_id: 846733598
     'azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca':
