@@ -2,7 +2,7 @@
 
 RELEASE_VERSION=0.1.9
 RELEASE_STATUS=DRAFT_NOT_RELEASED
-RELEASE_LAST_UPDATED_UTC=2026-11-15T04:14:35.517Z
+RELEASE_LAST_UPDATED_UTC=2026-11-19T09:06:53.084Z
 SOURCE_MANIFEST_VERSION=0.1.8
 RELEASE_TAG=NOT_CREATED
 RELEASE_INSTALLER=NOT_BUILT
@@ -13,8 +13,8 @@ WINDOWS_TREE_NATIVE_MCP=NOT_IMPLEMENTED
 WINDOWS_TREE_APPDATA_MIGRATION=NOT_IMPLEMENTED
 WINDOWS_TREE_NSIS_DUAL_TEST=NOT_RUN
 WINDOWS_TREE_100_PERCENT_RUNTIME=NOT_PROVEN
-DOC_SCOPE_UPDATED=CHANGELOG.md,README.md,README_CN.md,SECURITY.md,docs/ARCHITECTURE.md,docs/INSTALLATION.md,docs/PRIVACY.md,docs/RELEASE.md,docs/RELEASE_NOTES_v0.1.9.md,docs/TROUBLESHOOTING.md
-DOC_SCOPE_REVIEW_UTC=2026-11-15T04:14:35.517Z
+DOC_SCOPE_UPDATED=docs/RELEASE.md,docs/RELEASE_NOTES_v0.1.9.md
+DOC_SCOPE_REVIEW_UTC=2026-11-19T09:06:53.084Z
 DOC_SCOPE_REVIEWED_NOOP=CONTRIBUTING.md,CODE_OF_CONDUCT.md,docs/RELEASE_NOTES_v0.1.8.md
 DOC_SCOPE_NOOP_REASON=contributing ja rege o writer, codigo de conduta sem mudanca, notas da release 0.1.8 historicas e congeladas.
 DOC_WRITER_OWNER=centraldark-halo-main (owner existente; metodo self-documentation)
@@ -83,3 +83,24 @@ TREE_CANONICAL=docs/INSTALLATION.md
 O contrato documental do target esta atualizado, mas o
 instalador, migracao e motor MCP Rust estao NOT_PROVEN.
 <!-- /CENTRALDARK_AGENT_WINDOWS_TREE_20261115 -->
+
+<!-- CENTRALDARK_HALO_FOCUS_CUA_20261119 -->
+## Nova capacidade candidata — foco por monitor/janela + cursor virtual
+
+RECORDED_UTC=2026-11-19T09:06:53.084Z
+CANDIDATE=0.1.9-DRAFT
+AUTHORITATIVE_SOURCE=centraldark-halo-main
+DOC_SCOPE_UPDATED=docs/RELEASE.md,docs/RELEASE_NOTES_v0.1.9.md
+DOC_SCOPE_REVIEWED_NOOP=docs/RELEASE_NOTES_v0.1.8.md
+RELEASE_INSTALLER=NOT_BUILT
+RELEASE_TAG=NOT_CREATED
+SOURCE_COMMIT=NOT_CREATED
+
+- Preservado o `working` legado em todos os monitores quando `target` esta ausente.
+- Adicionados `target.monitor` (bounds da topologia humana confirmada) e `target.window` (PID/HWND Win32 vivo, visivel e foreground); outras telas permanecem apagadas.
+- Cua blink 3 ciclos nativo acionado na mesma instancia via `blinkCursor`, sem Python e sem overlay Hermes. Nenhuma dependencia de copia do codigo do OpenBot.
+- Receita reproduzivel gravada em `scripts/windows/Test-State.ps1` e em `docs/RELEASE.md`.
+- Rust cargo check offline PASS depois de aplicar a LIB do MSVC OneCore da instalacao existente, 14 unit tests PASS; npm lint PASS; npm build PASS; parser PowerShell PASS; cargo build debug PASS.
+- Compilacao de release nativa, teste real de selecao de janela, readback do Cua, assentimento visual e sincronizacao Git ficam separadamente pendentes ate medicao real. Binario de tray aprovado nao foi sobrescrito.
+- NEXT_CURSOR: validar build de release, observar ALL/MONITOR/WINDOW e rollback; depois sincronizar delta no owner versionado com gates e SHA.
+<!-- /CENTRALDARK_HALO_FOCUS_CUA_20261119 -->

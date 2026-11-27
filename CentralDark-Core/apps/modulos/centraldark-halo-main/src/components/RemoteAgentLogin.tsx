@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useState, type FormEvent } from "react";
 const BridgePanel = lazy(() => import("./BridgePanel"));
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import "./RemoteAgentLogin.css";
+import { recordDiagnostic, observeDiagnostic } from "../agentDiagnostics";
 
 type AuthConfig = { url: string; publishableKey: string };
 type Mode = "login" | "signup";
@@ -39,6 +40,8 @@ function friendlyError(error: unknown): string {
     case "signup_disabled": return "O cadastro está desabilitado neste projeto.";
     case "over_email_send_rate_limit": case "over_request_rate_limit": return "Muitas tentativas. Aguarde alguns minutos.";
     case "weak_password": return "Escolha uma senha mais forte.";
+    case "SIGNUP_NAME_INVALID": return "O nome de usuário deve ter entre 3 e 60 caracteres.";
+    case "SIGNUP_PASSWORD_TOO_SHORT": return "A senha precisa ter pelo menos 8 caracteres.";
     case "invalid_credentials": return "E-mail ou senha incorretos.";
     case "email_not_confirmed": return "Confirme seu e-mail antes de entrar.";
     case "SUPABASE_AUTH_TIMEOUT": return "O Supabase demorou a responder. Verifique a conexão e tente novamente.";
@@ -104,10 +107,15 @@ export function RemoteAgentLogin() {
     let active = true;
     (async () => {
       try {
-        const session = await invoke<Record<string, unknown> | null>("load_agent_session");
+        void recordDiagnostic("restore", "start");
+        const session = await observeDiagnostic("vault-ipc", invoke<Record<string, unknown> | null>("load_agent_session"));
         if (!active) return;
         setVaultReady(true);
-        if (!session || typeof session.refresh_token !== "string") return;
+        if (!session) {
+          void recordDiagnostic("restore", "pending", "SESSION_NOT_FOUND");
+          return;
+        }
+        if (typeof session.refresh_token !== "string") throw new Error("INVALID_REFRESH_SESSION");
         const renewed = await authRequest("token?grant_type=refresh_token", {
           refresh_token: session.refresh_token,
         });
@@ -121,8 +129,10 @@ export function RemoteAgentLogin() {
         setSignedIn(true);
         setStatus("success");
         setMessage("Sessão recuperada e renovada pelo Supabase com proteção do Windows.");
-      } catch {
+        void recordDiagnostic("restore", "ok");
+      } catch (error) {
         if (!active) return;
+        void recordDiagnostic("restore", "error", error);
         // Falha de rede na renovação não autoriza apagar o cofre protegido.
         // Manter a sessão cifrada; nunca declarar autenticação sem refresh válido.
         setRemember(true);
@@ -145,13 +155,14 @@ export function RemoteAgentLogin() {
     if (busy) return;
     setMessage("");
     setStatus("pending");
+    void recordDiagnostic(mode, "start");
     try {
       if (createAccount) {
         const name = username.trim();
         if (name.length < 3 || name.length > 60)
-          throw new Error("O nome de usuário deve ter entre 3 e 60 caracteres.");
+          throw new Error("SIGNUP_NAME_INVALID");
         if (password.length < 8)
-          throw new Error("A senha precisa ter pelo menos 8 caracteres.");
+          throw new Error("SIGNUP_PASSWORD_TOO_SHORT");
         await authRequest("signup", {
           email: email.trim().toLowerCase(),
           password,
@@ -166,7 +177,7 @@ export function RemoteAgentLogin() {
           email: email.trim().toLowerCase(), password,
         });
         if (!result.user?.id || !result.access_token)
-          throw new Error("missing_session");
+          throw new Error("MISSING_SESSION");
         if (remember) {
           if (!isTauri() || !vaultReady) throw new Error("VAULT_NOT_READY");
           if (!result.refresh_token) throw new Error("INVALID_REFRESH_SESSION");
@@ -179,13 +190,11 @@ export function RemoteAgentLogin() {
         setStatus("success");
         setMessage("Conta autenticada. Pareamento e cofre de sessão nativos ainda não integrados.");
       }
+      void recordDiagnostic(mode, "ok");
     } catch (error) {
+      void recordDiagnostic(mode, "error", error);
       setStatus("idle");
-      const m = error instanceof Error && error.message.startsWith("O nome de usuário")
-        ? error.message
-        : error instanceof Error && error.message.startsWith("A senha precisa")
-          ? error.message : friendlyError(error);
-      setMessage(m);
+      setMessage(friendlyError(error));
     }
   }
 
@@ -215,16 +224,16 @@ export function RemoteAgentLogin() {
       }),
       getStatus: async () => {
         const health = native
-          ? await invoke<Record<string, unknown>>("local_bridge_health").catch(() => ({
+          ? await observeDiagnostic("bridge-ipc", invoke<Record<string, unknown>>("local_bridge_health")).catch(() => ({
               reachable: false, engineConnected: false, remoteVendor: false,
             }))
           : { reachable: false, engineConnected: false, remoteVendor: false };
         const pairing = native && remember
-          ? await invoke<Record<string, unknown>>("remote_pairing_status")
+          ? await observeDiagnostic("pairing-ipc", invoke<Record<string, unknown>>("remote_pairing_status"))
               .catch(() => ({ state: "LOCAL_TOKEN_UNVERIFIED" }))
           : { state: native ? "VAULT_NOT_ENABLED" : "DEV_WEB_PREVIEW" };
         const networking = native
-          ? await invoke<{ tailscale: Record<string, unknown>; mcp: Record<string, unknown> }>("remote_network_status")
+          ? await observeDiagnostic("network-ipc", invoke<{ tailscale: Record<string, unknown>; mcp: Record<string, unknown> }>("remote_network_status"))
               .catch(() => ({
                 tailscale: { available: false, state: "UNKNOWN" },
                 mcp: { reachable: false },
@@ -240,9 +249,10 @@ export function RemoteAgentLogin() {
       pairCasa: () => native && remember
         ? invoke("start_remote_pairing")
         : Promise.reject(new Error("PAREAMENTO_REQUER_TAURI_E_COFRE_NATIVO")),
-      confirmPair: () => native && remember
-        ? invoke("approve_remote_pairing")
+      confirmPair: (traceId: string) => native && remember
+        ? invoke("approve_remote_pairing", { traceId })
         : Promise.reject(new Error("AUTORIZACAO_REQUER_TAURI_E_COFRE_NATIVO")),
+      recordDiagnostic,
       startBridge: () => Promise.reject(new Error("MOTOR_REMOTO_AINDA_NAO_VINCULADO")),
       openCockpit: async () => {
         if (native) {
@@ -255,7 +265,7 @@ export function RemoteAgentLogin() {
       onPairingStatus: (callback: (value: unknown) => void) => {
         if (!native || !remember) return () => {};
         const interval = window.setInterval(() => {
-          void invoke("remote_pairing_status").then(callback).catch(() => {});
+          void observeDiagnostic("pairing-ipc", invoke("remote_pairing_status")).then(callback).catch(() => {});
         }, 5000);
         return () => window.clearInterval(interval);
       },

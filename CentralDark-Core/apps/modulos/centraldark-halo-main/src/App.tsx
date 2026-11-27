@@ -6,6 +6,7 @@ type ResizeDirection = "East" | "North" | "NorthEast" | "NorthWest" | "South" | 
 import { CentralOverlay } from "./components/CentralOverlay";
 import { useStateManager } from "./state/useStateManager";
 import { RemoteAgentLogin } from "./components/RemoteAgentLogin";
+import { recordDiagnostic, observeDiagnostic } from "./agentDiagnostics";
 
 /**
  * @rastro Janela interativa de atendimento dentro do unico WebView Tauri.
@@ -23,12 +24,12 @@ function AgentWindowChrome() {
     let mounted = true;
     let unlisten: (() => void) | null = null;
     const syncMaximized = () => {
-      void nativeWindow.isMaximized().then((value) => {
+      void observeDiagnostic("window-status", nativeWindow.isMaximized()).then((value) => {
         if (mounted) setMaximized(value);
       }).catch(() => {});
     };
     syncMaximized();
-    void nativeWindow.onResized(syncMaximized).then((stop) => {
+    void observeDiagnostic("window-listener", nativeWindow.onResized(syncMaximized)).then((stop) => {
       if (mounted) unlisten = stop;
       else stop();
     }).catch(() => {});
@@ -38,12 +39,16 @@ function AgentWindowChrome() {
     };
   }, []);
 
-  const control = (action: () => Promise<void>) => {
+  const control = (name: string, action: () => Promise<void>) => {
     setWindowError("");
-    void action().catch(() => setWindowError("Não foi possível controlar a janela. Tente novamente."));
+    void recordDiagnostic(name, "start");
+    void action().then(() => recordDiagnostic(name, "ok")).catch(() => {
+      void recordDiagnostic(name, "error", "WINDOW_CONTROL_FAILED");
+      setWindowError("Não foi possível controlar a janela. Tente novamente.");
+    });
   };
   const resize = (direction: ResizeDirection) => {
-    control(() => getCurrentWindow().startResizeDragging(direction));
+    control("window-resize", () => getCurrentWindow().startResizeDragging(direction));
   };
 
   const edges: { direction: ResizeDirection; className: string }[] = [
@@ -63,14 +68,14 @@ function AgentWindowChrome() {
         <div
           className="agent-titlebar-drag"
           data-tauri-drag-region
-          onDoubleClick={() => control(() => getCurrentWindow().toggleMaximize())}
+          onDoubleClick={() => control("window-maximize", () => getCurrentWindow().toggleMaximize())}
           title="Arraste para mover; dois cliques para maximizar"
         >
           <span className="agent-titlebar-icon" data-tauri-drag-region>
             <ShieldCheck size={17} strokeWidth={1.9} aria-hidden="true" />
           </span>
           <span className="agent-titlebar-wordmark" data-tauri-drag-region>
-            <span className="agent-titlebar-eyebrow" data-tauri-drag-region>CENTRALDARK</span>
+            <span className="agent-titlebar-eyebrow" data-tauri-drag-region>SEGREDO GSM SERVER</span>
             <strong data-tauri-drag-region>Agente Remoto</strong>
           </span>
 
@@ -78,18 +83,18 @@ function AgentWindowChrome() {
         {windowError && <span className="agent-titlebar-error" role="alert">{windowError}</span>}
         <div className="agent-titlebar-controls" aria-label="Controles da janela">
           <button type="button" className="agent-chrome-button" title="Minimizar"
-            aria-label="Minimizar janela" onClick={() => control(() => getCurrentWindow().minimize())}>
+            aria-label="Minimizar janela" onClick={() => control("window-minimize", () => getCurrentWindow().minimize())}>
             <Minus size={17} aria-hidden="true" />
           </button>
           <button type="button" className="agent-chrome-button" title={maximized ? "Restaurar" : "Maximizar"}
             aria-label={maximized ? "Restaurar janela" : "Maximizar janela"}
-            onClick={() => control(() => getCurrentWindow().toggleMaximize())}>
+            onClick={() => control("window-maximize", () => getCurrentWindow().toggleMaximize())}>
             {maximized ? <Copy size={15} aria-hidden="true" /> : <Square size={14} aria-hidden="true" />}
           </button>
           <button type="button" className="agent-chrome-button agent-chrome-close"
             title="Ocultar na bandeja (não encerra o agente)"
             aria-label="Ocultar janela na bandeja"
-            onClick={() => control(() => getCurrentWindow().hide())}>
+            onClick={() => control("window-hide", () => getCurrentWindow().hide())}>
             <X size={18} aria-hidden="true" />
           </button>
         </div>

@@ -1,9 +1,12 @@
 {
-  "$schema": "../gen/schemas/desktop-schema.json",
-  "identifier": "default",
-  "description": "Capability for per-display overlay windows",
-  "windows": ["overlay-*"],
-  "permissions": [
-    "core:default"
-  ]
+    "$schema":  "../gen/schemas/desktop-schema.json",
+    "identifier":  "default",
+    "description":  "Capability for per-display overlay windows",
+    "windows":  [
+                    "overlay-*",
+                    "agent-control"
+                ],
+    "permissions":  [
+                        "core:default"
+                    ]
 }

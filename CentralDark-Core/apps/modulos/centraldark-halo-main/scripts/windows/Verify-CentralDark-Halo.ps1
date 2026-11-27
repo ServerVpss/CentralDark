@@ -1,4 +1,6 @@
-$HaloDir = Join-Path $env:USERPROFILE ".codex-halo"
+$CanonicalDir = Join-Path $env:USERPROFILE ".centraldark-halo"
+$LegacyDir = Join-Path $env:USERPROFILE ".codex-halo"
+$HaloDir = if ((Test-Path $CanonicalDir) -or -not (Test-Path $LegacyDir)) { $CanonicalDir } else { $LegacyDir }
 $InstallDir = Join-Path $env:LOCALAPPDATA "CentralDark Halo"
 $AppExe = Join-Path $InstallDir "CentralDarkHalo.exe"
 $ConfigFile = Join-Path (Join-Path $env:USERPROFILE ".codex") "config.toml"
