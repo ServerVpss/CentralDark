@@ -1,0 +1,36 @@
+{
+  "name": "@centraldark/hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/generate-house-inventory.mjs",
+    "dev": "vite",
+    "inventory:generate": "node scripts/generate-house-inventory.mjs",
+    "prebuild": "node scripts/generate-house-inventory.mjs",
+    "build": "tsc -b && vite build",
+    "postbuild": "node scripts/normalize-dist-permissions.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "@tanstack/react-query": "^5.107.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.73.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^4.3.3",
+    "autoprefixer": "^10.6.2",
+    "postcss": "^8.5.33",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^5.5.3",
+    "vite": "^8.3.8"
+  }
+}

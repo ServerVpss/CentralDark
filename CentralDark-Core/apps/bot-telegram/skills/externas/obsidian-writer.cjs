@@ -1,0 +1,495 @@
+/**
+ * Skill: obsidian-writer
+ *
+ * Cria e edita notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos.
+ * Toda nota criada recebe frontmatter YAML e links injetados com base em
+ * um dicionário de termos do projeto CentralDark.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const BRAIN_DIR = path.resolve(__dirname, '../../../../docs/BRAIN');
+const DEFAULT_SEARCH_LIMIT = 20;
+const DEFAULT_SEARCH_HOPS = 1;
+const MAX_SEARCH_HOPS = 2;
+const DEFAULT_CONTEXT_CHARS = 12000;
+
+const TG_TOKEN   = process.env.SRVER1_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN || process.env.GUARDA_TELEGRAM_BOT_TOKEN || '';
+const ADMIN_ID   = process.env.ADMIN_CHAT_ID || '';
+const TG_API     = 'https://api.telegram.org';
+
+async function notifyAdmin(text) {
+  if (!TG_TOKEN || !ADMIN_ID) return;
+  try {
+    await fetch(`${TG_API}/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: ADMIN_ID, text, parse_mode: 'HTML', disable_web_page_preview: true }),
+    });
+  } catch (_) { /* silencioso — notificação é melhor-esforço */ }
+}
+
+// Dicionário de termos que viram [[links]] automaticamente
+const LINK_TERMS = [
+  'CentralDark', 'Telegram', 'WhatsApp', 'GitHub', 'Obsidian', 'Notion',
+  'Linear', 'Supabase', 'Caddy', 'MCP', 'Hub', 'VPS', 'PM2', 'Guardião',
+  'Guardiao', 'Claude', 'Anthropic', 'Bot', 'Bots', 'Skills', 'Skill',
+  'Gateway', 'Elite-Gateway', 'Webhook', 'Deploy', 'Painel', 'Dashboard',
+  'Consciencia', 'Consciência', 'BRAIN', 'Vault', 'Brainstorming',
+  'Memoria-Longa', 'Painel-Status', 'Obsidian-Writer',
+  'CentralDark-HubBot', 'CentralDark-MCP', 'CentralDark-GuardiaoConsciencia',
+  'CentralDark-WebhookDeploy', 'CentralDark-ContasAdmin', 'CentralDark-Respiracao',
+  'Zentinel', 'Lovable', 'Zettelkasten',
+];
+
+function escapeRegex(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Injeta [[links]] na primeira ocorrência de cada termo não linkado
+function injectLinks(content) {
+  let result = content;
+  for (const term of LINK_TERMS) {
+    if (result.includes(`[[${term}]]`)) continue;
+    const bare = new RegExp(`(?<!\\[\\[)\\b${escapeRegex(term)}\\b(?!\\]\\])`, '');
+    result = result.replace(bare, `[[${term}]]`);
+  }
+  return result;
+}
+
+
+const META_RSI_CATALOG_REL = '.agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md';
+function parseMetaRsiCatalog(markdown) {
+  const out = [];
+  for (const row of String(markdown).split('\n')) {
+    const cells = row.split('|').map(x => x.trim());
+    if (!/^\d{2}$/.test(cells[1] || '')) continue;
+    const link = (cells[4] || '').match(/\[skill\]\(([^)]+)\)/);
+    if (!link) continue;
+    out.push({ method: cells[2], group: cells[3],
+      skillPath: path.posix.normalize(path.posix.join(path.posix.dirname(META_RSI_CATALOG_REL), link[1])) });
+  }
+  return out.length === 40 && new Set(out.map(x => x.method)).size === 40 ? out : [];
+}
+function readMetaRsiCatalog() {
+  try { return parseMetaRsiCatalog(fs.readFileSync(path.resolve(BRAIN_DIR, '../..', META_RSI_CATALOG_REL), 'utf8')); }
+  catch (_) { return []; }
+}
+function chooseRelevantSelf(title, content, folderName) {
+  const all = readMetaRsiCatalog(), text = (title + ' ' + content.slice(0, 4000)).toLowerCase();
+  const terms = {
+    'Self-Memory': /mem[oó]ria|lembran|hist[oó]ria|sess[aã]o/,
+    'Self-Testing': /test|smoke|ci\b/,
+    'Self-Documentation': /document|nota|readme|cat[aá]logo/,
+    'Self-Discovery': /descob|garimpo|investig/,
+    'Self-Auditing': /audit|rastro|receipt|recibo/,
+    'Self-Learning': /aprend|kaizen/,
+    'Self-Correction': /corrig|erro|bug/,
+    'Self-Monitoring': /monitor|log|telemetria/,
+    'Self-Verification': /verific|prova|sha|fixed.point/,
+    'Self-Integration': /integr|conex|mcp|ponte/,
+    'Self-Optimization': /otimiz|performance|overclock/,
+    'Self-Healing': /cura|recuper|restaur/,
+    'Self-Planning': /plano|planej/,
+    'Self-Improvement Loop': /loop|ciclo|kaizen/,
+    'Recursive Self-Improvement': /rsi|recurs/,
+  };
+  const groups = { '01-OURO': 'aprendizado-evolucao', '02-SESSOES': 'raciocinio-reflexao',
+    '03-APRENDIZADOS': 'experimentacao-validacao', '04-MEMORIAS': 'aprendizado-evolucao' };
+  return all.map((x, i) => ({ x, i, score: (x.group === groups[folderName] ? 2 : 0)
+    + (terms[x.method]?.test(title.toLowerCase()) ? 10 : 0)
+    + (terms[x.method]?.test(text) ? 3 : 0) }))
+    .sort((a, b) => b.score - a.score || a.i - b.i).slice(0, 3).map(v => v.x);
+}
+function readSelfNoteMetadata(s) {
+  const end = s.startsWith('---\n') ? s.indexOf('\n---\n', 4) : -1;
+  const fm = end < 0 ? '' : s.slice(4, end);
+  const field = name => {
+    const line = fm.split('\n').find(x => x.startsWith(name + ': '));
+    if (!line) return null;
+    try { return JSON.parse(line.slice(name.length + 2)); } catch (_) { return null; }
+  };
+  return { self_primary: field('centraldark_self_primary'),
+    self_related: field('centraldark_self_related') || [],
+    self_skill_refs: field('centraldark_self_skill_refs') || [],
+    self_review: 'CANDIDATE_ONLY_APPLIED_OR_NOOP_JUSTIFIED' };
+}
+
+function buildFrontmatter(title, folderName, tags = [], noteContent = '') {
+  const date = new Date().toISOString().split('T')[0];
+  const autoTags = [folderName.replace(/^\d+ - /, '').toLowerCase().replace(/ /g, '-'), ...tags];
+  const brain07 = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(folderName);
+  const roleMap = {
+    '01-OURO': ['gojo-seis-olhos','whis-orientacao','vegetto-gogeta-convergencia','kaizen-continuo'],
+    '02-SESSOES': ['yuji-identidade-e-continuidade','gojo-seis-olhos','goku-instinto-superior','kaizen-continuo'],
+    '03-APRENDIZADOS': ['gojo-seis-olhos','whis-orientacao','vegeta-resiliencia','beerus-autolimpeza','kaizen-continuo'],
+    '04-MEMORIAS': ['yuji-identidade-e-continuidade','whis-orientacao','kaizen-continuo'],
+  };
+  const self = brain07 ? chooseRelevantSelf(title, noteContent, folderName) : [];
+  // Propriedades ligam a nota ao Kaizen; nao provam consumo automatico fora do writer.
+  const extra = brain07 ? [
+    'centraldark_note_schema: "brain07.v1"',
+    'centraldark_category: ' + JSON.stringify(folderName),
+    'centraldark_context_owner: "SEGREDO/CHEFE"',
+    'centraldark_intent_anchor: ' + JSON.stringify(title),
+    'centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"',
+    'centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"',
+    'centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"',
+    'centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"',
+    'centraldark_metabolic_roles: ' + JSON.stringify(roleMap[folderName]),
+    'centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"',
+    'centraldark_agent_recall: "Recuperar intencao, memoria, causa e NEXT_CURSOR sem reprocessar o que esta provado."',
+    'centraldark_self_catalog: ' + JSON.stringify(META_RSI_CATALOG_REL),
+    'centraldark_self_catalog_status: ' + JSON.stringify(self.length ? 'CANONICAL_40_FOUND' : 'CATALOG_UNAVAILABLE_OR_INVALID'),
+    'centraldark_self_primary: ' + JSON.stringify(self[0]?.method || null),
+    'centraldark_self_related: ' + JSON.stringify(self.slice(1).map(x => x.method)),
+    'centraldark_self_skill_refs: ' + JSON.stringify(self.map(x => x.skillPath)),
+    'centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"',
+  ].join('\n') + '\n' : '';
+  return '---\ntitle: ' + JSON.stringify(title) + '\ndate: ' + date +
+    '\ntags: [' + autoTags.map(t => JSON.stringify(t)).join(', ') + ']\n' + extra + '---\n\n';
+}
+
+function resolveFolder(folder) {
+  if (!folder) return BRAIN_DIR;
+  const requested = String(folder).trim();
+  const cat = /^(?:01-OURO|02-SESSOES|03-APRENDIZADOS|04-MEMORIAS)$/.test(requested) ? requested : null;
+  const selected = /^(?:07|07-APRENDIZADOS-MEMORIAS)$/i.test(requested) ? '02-SESSOES' : cat;
+  if (selected) {
+    const target = path.join(BRAIN_DIR, '07-APRENDIZADOS-MEMORIAS', selected);
+    fs.mkdirSync(target, { recursive: true });
+    return target;
+  }
+  const entries = fs.readdirSync(BRAIN_DIR, { withFileTypes: true })
+    .filter(e => e.isDirectory());
+  const match = entries.find(e =>
+    e.name.startsWith(folder) || e.name.toLowerCase().includes(folder.toLowerCase())
+  );
+  if (match) return path.join(BRAIN_DIR, match.name);
+  const newDir = path.join(BRAIN_DIR, folder);
+  fs.mkdirSync(newDir, { recursive: true });
+  return newDir;
+}
+
+function generateIndex() {
+  const lines = ['# 🗺️ ÍNDICE — docs/BRAIN/', '', `*Gerado automaticamente em ${new Date().toISOString().split('T')[0]}*`, ''];
+  function walk(dir, depth = 0) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      if (entry.name === 'INDEX.md' || entry.name.startsWith('.')) continue;
+      const indent = '  '.repeat(depth);
+      if (entry.isDirectory()) {
+        lines.push(`${indent}## 📁 ${entry.name}`);
+        walk(path.join(dir, entry.name), depth + 1);
+      } else if (entry.name.endsWith('.md')) {
+        const stem = entry.name.replace('.md', '');
+        lines.push(`${indent}- [[${stem}]]`);
+      }
+    }
+  }
+  walk(BRAIN_DIR);
+  const mapDir = path.join(BRAIN_DIR, '00 - Mapa do Sistema');
+  fs.mkdirSync(mapDir, { recursive: true });
+  const indexPath = path.join(mapDir, 'INDEX.md');
+  fs.writeFileSync(indexPath, lines.join('\n'), 'utf-8');
+  return { ok: true, op: 'index', file: 'docs/BRAIN/00 - Mapa do Sistema/INDEX.md', notes: lines.filter(l => l.includes('[[')).length };
+}
+
+function normalizeWikiTarget(value) {
+  return String(value || '')
+    .split('|', 1)[0]
+    .split('#', 1)[0]
+    .trim()
+    .replace(/\\/g, '/')
+    .replace(/^\.\//, '')
+    .replace(/\.md$/i, '')
+    .toLowerCase();
+}
+
+function extractWikiLinks(text) {
+  const links = [];
+  const seen = new Set();
+  const pattern = /\[\[([^\]]+)\]\]/g;
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    const target = normalizeWikiTarget(match[1]);
+    if (!target || seen.has(target)) continue;
+    seen.add(target);
+    links.push(target);
+  }
+  return links;
+}
+
+function listMarkdownFiles(rootDir) {
+  const files = [];
+  function walk(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(full);
+      } else if (entry.name.endsWith('.md')) {
+        files.push(full);
+      }
+    }
+  }
+  walk(rootDir);
+  return files;
+}
+
+function relativeNotePath(rootDir, filePath) {
+  return path.relative(rootDir, filePath).replace(/\\/g, '/');
+}
+
+function noteAliases(relFile) {
+  const withoutExt = relFile.replace(/\.md$/i, '');
+  const basename = path.posix.basename(withoutExt);
+  return [...new Set([normalizeWikiTarget(withoutExt), normalizeWikiTarget(basename)])];
+}
+
+function buildBrainGraph(rootDir) {
+  const notes = new Map();
+  const aliasIndex = new Map();
+
+  for (const full of listMarkdownFiles(rootDir)) {
+    const file = relativeNotePath(rootDir, full);
+    const text = fs.readFileSync(full, 'utf-8');
+    const note = {
+      file,
+      text,
+      lines: text.split('\n'),
+      links: extractWikiLinks(text),
+    };
+    notes.set(file, note);
+    for (const alias of noteAliases(file)) {
+      if (!aliasIndex.has(alias)) aliasIndex.set(alias, new Set());
+      aliasIndex.get(alias).add(file);
+    }
+  }
+
+  function resolveTarget(target) {
+    const normalized = normalizeWikiTarget(target);
+    const exact = aliasIndex.get(normalized);
+    if (exact && exact.size === 1) return [...exact][0];
+    return null;
+  }
+
+  const outgoing = new Map();
+  const backlinks = new Map();
+  for (const file of notes.keys()) {
+    outgoing.set(file, new Set());
+    backlinks.set(file, new Set());
+  }
+  for (const [file, note] of notes) {
+    for (const target of note.links) {
+      const resolved = resolveTarget(target);
+      if (!resolved || resolved === file) continue;
+      outgoing.get(file).add(resolved);
+      backlinks.get(resolved).add(file);
+    }
+  }
+
+  return { notes, outgoing, backlinks };
+}
+
+function countOccurrences(text, queryLower) {
+  if (!queryLower) return 0;
+  let count = 0;
+  let offset = 0;
+  const lower = text.toLowerCase();
+  while ((offset = lower.indexOf(queryLower, offset)) !== -1) {
+    count += 1;
+    offset += queryLower.length;
+  }
+  return count;
+}
+
+function directMatches(note, queryLower) {
+  const matches = [];
+  note.lines.forEach((line, index) => {
+    if (line.toLowerCase().includes(queryLower)) {
+      matches.push({ line: index + 1, text: line.trim().slice(0, 180) });
+    }
+  });
+  return matches;
+}
+
+function searchBrain(query, options = {}) {
+  const rootDir = options.brainDir || BRAIN_DIR;
+  const hops = Math.max(0, Math.min(MAX_SEARCH_HOPS, Number.isInteger(options.hops) ? options.hops : DEFAULT_SEARCH_HOPS));
+  const limit = Math.max(1, Number.isInteger(options.limit) ? options.limit : DEFAULT_SEARCH_LIMIT);
+  const maxChars = Math.max(500, Number.isInteger(options.maxChars) ? options.maxChars : DEFAULT_CONTEXT_CHARS);
+  const queryLower = String(query || '').trim().toLowerCase();
+  if (!queryLower) return { results: [], total: 0, direct_total: 0, hops, context_chars: 0 };
+
+  const graph = buildBrainGraph(rootDir);
+  const ranked = new Map();
+  const frontier = [];
+
+  for (const [file, note] of graph.notes) {
+    const occurrences = countOccurrences(note.text, queryLower);
+    const fileHit = file.toLowerCase().includes(queryLower);
+    if (!occurrences && !fileHit) continue;
+    const matches = directMatches(note, queryLower);
+    const score = 100 + Math.min(occurrences, 20) + (fileHit ? 20 : 0);
+    ranked.set(file, {
+      file: `docs/BRAIN/${file}`,
+      score,
+      distance: 0,
+      relation: 'DIRECT',
+      via: null,
+      matches: matches.slice(0, 5),
+      excerpt: (matches[0]?.text || note.lines.find(line => line.trim()) || '').slice(0, 240),
+      ...readSelfNoteMetadata(note.text),
+    });
+    frontier.push({ file, distance: 0 });
+  }
+
+  const visitedDistance = new Map(frontier.map(item => [item.file, 0]));
+  for (let cursor = 0; cursor < frontier.length; cursor += 1) {
+    const current = frontier[cursor];
+    if (current.distance >= hops) continue;
+    const neighbors = [
+      ...[...(graph.outgoing.get(current.file) || [])].map(file => ({ file, relation: 'WIKILINK' })),
+      ...[...(graph.backlinks.get(current.file) || [])].map(file => ({ file, relation: 'BACKLINK' })),
+    ];
+    for (const neighbor of neighbors) {
+      const distance = current.distance + 1;
+      const previousDistance = visitedDistance.get(neighbor.file);
+      if (previousDistance !== undefined && previousDistance <= distance) continue;
+      visitedDistance.set(neighbor.file, distance);
+      frontier.push({ file: neighbor.file, distance });
+      if (!ranked.has(neighbor.file)) {
+        const note = graph.notes.get(neighbor.file);
+        const score = 60 - (distance * 10);
+        ranked.set(neighbor.file, {
+          file: `docs/BRAIN/${neighbor.file}`,
+          score,
+          distance,
+          relation: neighbor.relation,
+          via: `docs/BRAIN/${current.file}`,
+          matches: [],
+          excerpt: (note.lines.find(line => line.trim()) || '').trim().slice(0, 240),
+          ...readSelfNoteMetadata(note.text),
+        });
+      }
+    }
+  }
+
+  const sorted = [...ranked.values()].sort((a, b) =>
+    b.score - a.score || a.distance - b.distance || a.file.localeCompare(b.file)
+  );
+
+  const results = [];
+  let contextChars = 0;
+  for (const item of sorted) {
+    if (results.length >= limit) break;
+    const itemChars = item.excerpt.length + item.matches.reduce((sum, match) => sum + match.text.length, 0);
+    if (results.length > 0 && contextChars + itemChars > maxChars) break;
+    results.push(item);
+    contextChars += itemChars;
+  }
+
+  return {
+    results,
+    total: sorted.length,
+    direct_total: [...ranked.values()].filter(item => item.distance === 0).length,
+    hops,
+    context_chars: contextChars,
+    truncated: results.length < sorted.length,
+  };
+}
+
+module.exports = {
+  name: 'obsidian-writer',
+  description: 'Cria notas Zettelkasten em docs/BRAIN/ com [[links]] automáticos',
+  category: 'memory',
+
+  async execute(params = {}) {
+    const { op = 'write', folder, title, content, from, to, query, hops, limit, maxChars } = params;
+
+    if (op === 'write') {
+      if (!title || !content) return { error: 'Informe title e content' };
+      const dir = resolveFolder(folder || '07 - Reuniões & Notas');
+      const folderName = path.basename(dir);
+      const enriched = injectLinks(content);
+      const frontmatter = buildFrontmatter(title, folderName, [], content);
+      const fullContent = frontmatter + enriched;
+      const filename = title.replace(/[^\w\s\-]/g, '').replace(/\s+/g, '-') + '.md';
+      const filepath = path.join(dir, filename);
+      fs.writeFileSync(filepath, fullContent, 'utf-8');
+      const linksCount = (fullContent.match(/\[\[/g) || []).length;
+      const relPath = filepath.replace(/.*docs\/BRAIN\//, 'docs/BRAIN/');
+      const ts = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
+      notifyAdmin(
+        `<b>🧠 NOTA GRAVADA NO CÉREBRO</b>\n\n` +
+        `<pre>📝 ${title}\n📁 ${folderName}\n🔗 ${linksCount} links injetados\n⏰ ${ts}</pre>\n\n` +
+        `✅ Persistido no BRAIN do repositório\n` +
+        `ℹ️ Sync físico com Obsidian: depende do canal local medido\n` +
+        `<i>Caminho: ${relPath}</i>`
+      );
+      return {
+        ok: true,
+        op: 'write',
+        file: relPath,
+        links_injected: linksCount,
+        message: `Nota criada: [[${title}]] em ${folderName}`,
+      };
+    }
+
+    if (op === 'link') {
+      if (!from || !to) return { error: 'Informe from e to' };
+      const fromPath = path.join(BRAIN_DIR, from.endsWith('.md') ? from : from + '.md');
+      if (!fs.existsSync(fromPath)) return { error: `Arquivo não encontrado: ${from}` };
+      fs.appendFileSync(fromPath, `\n**Relacionado:** [[${to}]]\n`);
+      return { ok: true, op: 'link', added: `[[${to}]] adicionado em ${from}` };
+    }
+
+    if (op === 'index') {
+      return generateIndex();
+    }
+
+    if (op === 'list') {
+      const items = [];
+      function walk(dir, prefix = '') {
+        for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+          if (entry.isDirectory()) {
+            items.push(`📁 ${prefix}${entry.name}/`);
+            walk(path.join(dir, entry.name), prefix + '  ');
+          } else if (entry.name.endsWith('.md')) {
+            items.push(`📄 ${prefix}${entry.name}`);
+          }
+        }
+      }
+      walk(BRAIN_DIR);
+      return { ok: true, op: 'list', items, total: items.filter(i => i.includes('📄')).length };
+    }
+
+    if (op === 'search') {
+      if (!query) return { error: 'Informe query' };
+      const search = searchBrain(query, { hops, limit, maxChars });
+      return {
+        ok: true,
+        op: 'search',
+        query,
+        graph_expanded: true,
+        ...search,
+      };
+    }
+
+    return { error: `Op inválida: ${op}. Use: write, link, index, list, search` };
+  },
+
+  _test: {
+    parseMetaRsiCatalog,
+    chooseRelevantSelf,
+    readSelfNoteMetadata,
+    buildFrontmatter,
+    extractWikiLinks,
+    buildBrainGraph,
+    searchBrain,
+  },
+};

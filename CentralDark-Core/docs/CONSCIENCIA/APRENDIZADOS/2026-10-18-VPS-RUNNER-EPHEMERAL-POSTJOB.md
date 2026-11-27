@@ -1,0 +1,79 @@
+---
+title: "Aprendizado operacional — runner efêmero, GitHub como fonte, limpeza pós-job"
+date: 2026-10-18
+tags: ["centraldark", "aprendizado", "vps", "runner", "git", "hermes", "limpeza", "post-job", "evidencia"]
+owner: "scripts/limpeza-autonoma.sh"
+related_owner: "scripts/vps/centraldark-runner-postjob-clean.sh"
+canonical_receipt: "docs/CONSCIENCIA/RECEIPTS/2026-10-18-vps-runner-postjob-faxina-prova.md"
+related_pr: 1807
+status: "PROVADO_NO_RUNNER_1"
+---
+
+# 🧠 Aprendizado — checkout do runner é descartável; código publicado não é
+
+**Identidade temática:** `VPS_RUNNER_EPHEMERAL_POSTJOB_20261018`.  
+**Âncora de origem:** PR [#1807](https://github.com/ServerVpss/CentralDark/pull/1807) (merged).  
+**Owner geral único:** `scripts/limpeza-autonoma.sh`; subowner pós-job `scripts/vps/centraldark-runner-postjob-clean.sh`.  
+**Prova detalhada:** [receipt 2026-10-18](../RECEIPTS/2026-10-18-vps-runner-postjob-faxina-prova.md).
+
+## Regra aprendida
+
+A VPS não deve armazenar permanentemente cópias de GitHub Actions como se fossem a fonte da verdade. O GitHub mantém o código versionado, as PRs, artefatos e receipts; a VPS executa o job e descarta o checkout temporário ao final. Hermes consulta owners/receitas e executa apenas rotas legitimadas por prova/autoridade, sem precisar de 49+ GiB de Git packs repetidos.
+
+**Separar quatro conceitos:** `GITHUB_CANONICAL` ≠ `/root/CentralDark_RUNTIME_DIRTY` ≠ `RUNNER_EPHEMERAL_CHECKOUT` ≠ `HERMES_MODELS_AND_SESSIONS`. A regra de descartar vale **apenas ao terceiro elemento**. Não significa apagar os dois últimos ou promover mudanças sujas em bloco.
+
+## Erros que viraram critérios
+
+1. **Não inferir que cron existe e funciona:** no histórico do PR #1807, o cron passou a enviar `pip-cache` que o script em produção não aceitava; acumulou 33 falhas. Verificar argumentos reais de crontab, versão de script e logs antes de declarar manutenção ativa.
+2. **Limpar objetos Git só quando são de checkout confirmado:** 984 arquivos de pack descartáveis medidos sob runner parado, com 49,2 GiB liberados. Não aplicar ao repo principal nem a worktrees com dirty/unpushed.
+3. **Falhar fechado inicialmente é acerto, não impedimento:** 6 `tmp_pack_*` foram recusados pelo filtro de extensões; só liberar os objetos depois de inventário e validação do diretório, runner inativo e tipo regular.
+4. **Hook nativo melhor que cron novo para esse evento:** `ACTIONS_RUNNER_HOOK_JOB_COMPLETED` dispara depois do job, sem agendamento paralelo. Ele complementa o limpador geral do #1807 e não o substitui para journal/gz/caches.
+5. **Não confundir code push com deploy:** `COMMITTED_MAIN` não era prova do gancho vivo; instalar a cópia idêntica (Git blob `62b9d215f2c2f2df0433f63a8d59b21dd9c48107`), reiniciar o runner e medir `/proc/<Runner.Listener>/environ` demonstrou carregamento.
+6. **Não confundir teste manual com automático:** journal registrou `START` / `OK` às 2026-10-18 16:33:44 UTC após um job real, além de dois testes manuais consecutivos que comprovaram idempotência.
+7. **Usar `df` como realidade:** espaço livre oscilou de 52 para 51 GiB depois de novos jobs; 0 GiB no início; números são temporais e devem ser medidos.
+8. **Proteção não é burocracia:** `--dry-run`, caminho fixo, symlink/mount guard, lock, timeout, verificação do runner parado em manutenção manual e preservar `_actions`/`_tool` evitam apagamentos fora do cone causal.
+
+## Aceite observado / limites
+
+- `HOOK_INSTALLED=true` runner VPS 1.
+- `HOOK_TRIGGERED_AFTER_REAL_JOB=true` (journal 16:33:44 UTC).
+- `RUNNER_RUNNING_AFTER_RESTART=true`, `NRestarts=0` na observação.
+- `MCP_NATIVE_ACTIVE=true` na mesma observação.
+- `OTHER_RUNNERS_HOOK_CONFIGURED=NOT_PROVED` (runners 2–4 não instalados pelo trabalho).
+- `TAILSCALE_401_FIXED=false` (outro escopo).
+- `DIRTY_REPO_MAIN_SYNCED=false/UNKNOWN`: nenhum `git reset --hard`, commit seletivo ou cherry-pick desses deltas feito nesta operação.
+- `CRON_RUNNER_WORK_ENABLED=false` no crontab observado; não adicionar segundo cron por reflexo.
+
+## Receita de reaproveitamento
+
+`CONSULTAR #1807 + SCRIPT + RECEIPT` → `MAPEAR df + runner process + checkout + mounts` → `SE job terminou, usar hook` → `CONTAR entries e ler journal` → `CONTRAPROVA df + serviços + PID` → `DOCUMENTAR NEXT_CURSOR`.
+
+**NEXT_CURSOR:** conferir pós-job em execução futura e se há corrida com `runner-work` do owner geral antes de habilitar novos serviços; manter distinção entre código de execução e arquivo permanente. Este aprendizado temático **não reivindica novo número L197 nem altera o manifesto NeuroLink**, para preservar a linhagem numerada existente; sua proveniência é PR #1807 + receipt + commit do hook.
+
+<!-- CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+## Atualizacao da sessao 2026-11-12: runner VMware e instalador por fases
+
+- **Intencao:** fechar circuito despacho/execucao/resultado com runners separados por sistema operacional e instalador portavel para VPS futura.
+- **Prova Windows:** `centraldark-casa-1` online/livre no GitHub; watchdog nativo Hermes em modo `no-agent`. Nao iniciar uma segunda instancia do mesmo runner.
+- **Prova Linux:** VM `CentralDark-OS` autenticada via SSH, Linux x86_64, aproximadamente 339 GiB livres em `/home`; pacote oficial `v2.338.2` baixado, hash oficial SHA-256 verificado, `config.sh` e `run.sh` executaveis. Na leitura inicial, `.runner` nao existia: `PACKAGE_READY != REGISTERED != ONLINE`.
+- **Isolamento:** Windows em `F:\_WORKER\CentralDark-Runners\CASA-1`; VM em `$HOME/actions-runner`; checkout de codigo em `$HOME/CentralDark`; CI em `actions-runner/_work`. VPS futura reexecuta receita com nova identidade e token, sem transportar credenciais.
+- **Bloqueio distinto:** `startup_failure` com zero jobs e orcamento Actions da organizacao em US$0 com `prevent_further_usage=true`. Runner online nao elimina gate administrativo. Nenhuma alteracao financeira autorizada.
+- **HUD:** `docs/HUD/README.md` exige PR equivalente e reconciliacao do #1977. Estava modificado por outro escritor; foi preservado. Workflow `pr-hud-live-remeasure.yml` exige Linux; regra documentada nao comprova PR atualizado.
+- **Kaizen:** ampliar `install.sh`, sem criar instalador ou scheduler paralelo; fases `--runner-linux-check`, `--runner-linux-install` e `--runner-linux-activate`, com dry-run, lock, hash e readback. Preservar o manifesto NeuroLink, sem criar numero cognitivo por inferencia.
+- **NEXT_CURSOR:** validar registro/service/online Linux, executar job real no SHA e verificar PR HUD; so entao avaliar FIXED_POINT. `DOCUMENTED != EXECUTED`.
+<!-- /CENTRALDARK_RUNNER_LINUX_PHASE_20261112 -->
+
+
+<!-- CENTRALDARK_VM_RUNNER_REGISTRATION_CONTRAPROOF_20261112 -->
+## Contraprova ampliada — autorizacao, registro e execucao sao gates distintos (2026-11-12)
+
+- **Owner de execucao:** `install.sh`, fase `--runner-linux-activate`; **owner do aprendizado:** este documento existente. Nao criar segundo instalador, runner, HUD ou receita.
+- **Historico de bloqueio:** tentativa anterior encontrou protecao de seguranca na etapa de registro. A mensagem exata/codigo HTTP daquela tentativa nao foi preservado nesta evidencia; portanto a causa raiz historica e **UNKNOWN**, nao "falta de notas" nem "falta de configuracao" comprovada.
+- **Contraprova nova (VM openKylin):** `gh auth status` confirmou conta `segredounlock`; `gh api repos/ServerVpss/CentralDark --jq '.permissions.admin'` retornou `true`; consulta `GET /actions/runners` retornou HTTP 200; `POST /actions/runners/registration-token` foi autorizado. Nao persistir nem publicar o token.
+- **Gate seguinte nao concluido:** `config.sh --unattended` iniciou para `centraldark-vm-1`, mas a leitura posterior ainda encontrou `.runner` ausente e `.service` ausente. O processo permanecia em execucao, sem recibo de sucesso ou erro conclusivo. `AUTHORIZED != REGISTERED != SERVICE_ACTIVE != GITHUB_ONLINE != JOB_COMPLETED`.
+- **Ambiente preservado:** checkout da VM em `4207576f4`, com 47 entradas no `git status --porcelain` durante a observacao. Nao fazer reset/pull destrutivo nem substituir o owner.
+- **Gate independente:** runs do PR #1977, HEAD `253ab540c5f60488ed3f514eb106a1def08a5efa`, apresentavam `startup_failure`; nao atribuir automaticamente ao runner nao registrado. O aprendizado anterior identificou bloqueio de orcamento Actions da organizacao, a ser remensurado antes de concluir causa atual.
+- **Lacuna operacional identificada:** a verificacao anterior parava na autorizacao e nao exigia prova posterior de registro, servico, online e dois jobs no mesmo HEAD. Toda afirmacao de PASS deve carregar comando, resposta, hora e SHA pertinente.
+- **Seguranca:** tokens de registro sao efemeros e sensiveis; nunca mostrar linha de comando integral com `--token`, nem gravar tokens em logs, documentos ou receipts. Caso tenham aparecido em output, tratar como exposicao e renovar/revogar conforme aplicavel.
+- **NEXT_CURSOR:** observar o termino do `config.sh` sem expor argumentos; medir `.runner`, `.service`, `Runner.Listener` e `gh api .../actions/runners`; diagnosticar timeout/erro real se persistir; so depois disparar dois jobs reais no PR, confrontar `startup_failure` e atualizar o HUD no PR vigente.
+<!-- /CENTRALDARK_VM_RUNNER_REGISTRATION_CONTRAPROOF_20261112 -->

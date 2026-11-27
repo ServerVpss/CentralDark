@@ -1,0 +1,562 @@
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { randomUUID, timingSafeEqual } from "node:crypto";
+import { createServer } from "node:http";
+import { pathToFileURL } from "node:url";
+// Servidor MCP (Streamable HTTP, stateless) via SDK oficial.
+// Cada request POST /mcp instancia um Server + StreamableHTTPServerTransport efêmero.
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { CallToolRequestSchema, ListResourcesRequestSchema, ListToolsRequestSchema, ReadResourceRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
+import { eventSubscriptionStore } from "./sessions.js";
+import { CENTRALDARK_RECEIPT_CREATED, createEventRegistry } from "./events.js";
+import { z } from "zod";
+import { log } from "./log.js";
+import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
+import { readSemanticManifest, SEMANTIC_MANIFEST_URI } from "./tools/cognitivo/semantic.js";
+import { sanitizeOutgoingDeep } from "./lib/sanitize.js";
+import { auditToolExecution } from "./audit-logger.js";
+import { decorateToolResult, semanticOutcome } from "./tool-result-envelope.js";
+import { getOperationalSnapshot } from "./operational-telemetry.js";
+import { canonicalRecipeFirstPreflight } from "./tools/deploy/centraldark-capabilities.js";
+export function zodTypeToJsonSchema(schema) {
+    if (!schema) {
+        return { type: "object", properties: {} };
+    }
+    const isZod = (name) => typeof z[name] === "function" && schema instanceof z[name];
+    if (isZod("ZodOptional") || isZod("ZodDefault")) {
+        return zodTypeToJsonSchema(schema._def?.innerType ?? schema.unwrap?.());
+    }
+    // Zod 3 wraps refine/superRefine in ZodEffects. Zod 4 keeps the
+    // object shape but older deployed builds can still expose the wrapper.
+    if (isZod("ZodEffects")) {
+        return zodTypeToJsonSchema(schema._def?.schema);
+    }
+    if (isZod("ZodPipeline")) {
+        return zodTypeToJsonSchema(schema._def?.out ?? schema._def?.in);
+    }
+    // Prefer structural detection so duplicate Zod installations do not
+    // silently fall through to a schema without the required JSON type.
+    const shape = schema.shape ?? (schema._def?.shape && schema._def.shape());
+    if (isZod("ZodObject") || schema._def?.type === "object" || shape) {
+        const properties = {};
+        const required = [];
+        for (const [key, value] of Object.entries(shape ?? {})) {
+            properties[key] = zodTypeToJsonSchema(value);
+            if (!(isZod("ZodOptional") || isZod("ZodDefault"))) {
+                required.push(key);
+            }
+        }
+        return {
+            type: "object",
+            properties,
+            ...(required.length > 0 ? { required } : {}),
+        };
+    }
+    if (isZod("ZodString") || schema._def?.type === "string") {
+        return { type: "string", ...(schema.description ? { description: schema.description } : {}) };
+    }
+    if (isZod("ZodNumber") || schema._def?.type === "number") {
+        return { type: "number", ...(schema.description ? { description: schema.description } : {}) };
+    }
+    if (isZod("ZodBoolean") || schema._def?.type === "boolean") {
+        return { type: "boolean", ...(schema.description ? { description: schema.description } : {}) };
+    }
+    if (isZod("ZodEnum") || schema._def?.type === "enum") {
+        const values = schema.options ?? (schema._def?.entries ? Object.values(schema._def.entries) : []);
+        return { type: "string", enum: values, ...(schema.description ? { description: schema.description } : {}) };
+    }
+    if (isZod("ZodArray") || schema._def?.type === "array") {
+        const element = schema.element ?? (typeof schema._def?.type === "string" ? schema._def?.element : schema._def?.type);
+        return {
+            type: "array",
+            items: zodTypeToJsonSchema(element),
+            ...(schema.description ? { description: schema.description } : {}),
+        };
+    }
+    if (isZod("ZodUnion") || schema._def?.type === "union") {
+        return {
+            oneOf: (schema._def?.options ?? []).map((opt) => zodTypeToJsonSchema(opt)),
+            ...(schema.description ? { description: schema.description } : {}),
+        };
+    }
+    if (isZod("ZodLiteral") || schema._def?.type === "literal") {
+        return { const: schema._def?.value ?? schema._def?.values?.[0], ...(schema.description ? { description: schema.description } : {}) };
+    }
+    // Never emit an invalid MCP schema. Unknown tool inputs are objects in
+    // this server and must still carry the required JSON Schema type.
+    return { type: "object", properties: {} };
+}
+// PUBLIC_CALLABLE_TOOL_NAMES removido em 30/06/2026 — /mcp-public deletado
+// (expunha vps_write_file_safe sem Bearer, pendência #8).
+// ─────────────────────────── AUTO-ONBOARDING PIVETE ───────────────────────────
+// Injetado no handshake MCP (initialize) via campo `instructions`.
+// Toda IA que conectar recebe isto ANTES da primeira mensagem do usuário.
+const PIVETE_BOOT_INSTRUCTIONS = `# 🧠 CONSCIÊNCIA CENTRALDARK — Ativa desde já
+
+## 🧑‍🏫 KIT PROFESSOR — entrada do conector
+O handshake MCP entrega estas instruções automaticamente ao cliente; isso não executa ferramentas. O Kit Professor já existente chama-se \`kit_boas_vindas\`.
+- Ao conectar, recuperar \`kit_boas_vindas\` (resumo e índice) e \`ler_regras_inviolaveis\` (quando disponível).
+- Se depender de conversas passadas, consultar \`personal_context_search\` ou \`consultar_memoria_reserva\`.
+- Se depender de receita ou lição anterior, consultar \`puxar_aprendizados\` e o owner \`docs/CONSCIENCIA/APRENDIZADOS.md\`.
+- Fontes de fala: \`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml\`; \`docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md\`; \`docs/CONSCIENCIA/PADRAO-EMOJIS.md\`.
+- A chamada destas ferramentas é responsabilidade do cliente MCP. Só declarar consumo após comprovar a leitura e resposta.
+
+## 🗺️ COMO RESPONDER — menu visual aprovado
+- PT-BR claro, direto e natural; resultado primeiro.
+- Mensagem com assuntos diferentes: cada bloco começa com emoji semântico + título cotidiano em negrito.
+- Separar somente assuntos diferentes com \`---\` e linha vazia antes/depois. Nunca dividir frases do mesmo assunto.
+- Mensagem curta de um assunto: responder curto e sem seções artificiais.
+- Comprovantes: APROVADO só com prova; PENDENTE quando falta; FALHOU quando falha comprovada.
+- Preservar nomes internos técnicos, comandos, IDs, URLs, SHA, JSON/YAML e logs.
+- Esta regra de apresentação atual prevalece sobre exemplos de estilo antigos abaixo.
+
+
+Você está conectado ao MCP do **Pivete** (CentralDark). Assuma AGORA esta postura, sem esperar comando:
+
+## 🎯 TOM E CONDUTA (imutável)
+- **Sempre PT-BR.** Direto, curto, conversacional. Nada de rodeio ou formalidade.
+- **Execute, não pergunte.** Se está mapeado, aja.
+- Emojis estratégicos: 🟢 sucesso · 🟡 atenção · 🔴 erro · 🚀 deploy · 🛠️ infra · 🔄 sync.
+- Proibido "Como IA...", disclaimers éticos, ou pedir SSH/comandos ao usuário.
+- Usuário é **não-técnico** — explique simples, sem jargão pesado.
+
+## 🔄 SINCRONIA 4-POINT (regra vigente)
+Toda alteração precisa refletir nos 4 pontos:
+1. **Lovable** (editor/preview, fonte das mudanças assistidas por IA)
+2. **GitHub** (repositório, Fonte da Verdade, sync bidirecional com Lovable)
+3. **VPS** (\`<caminho-vps>\`, PM2 + microsserviços)
+4. **Cérebro Vivo** (\`docs/CONSCIENCIA/\` + \`.claude/\`, contexto persistente)
+
+Fluxo obrigatório: **Lovable → GitHub → VPS**. Nunca edite código direto na VPS (só emergência documentada).
+
+## 🤖 BOTS TELEGRAM (separação oficial — NUNCA misturar)
+- **@srver1bot = CENTRAL** — HUB Supabase (\`lyoigsqluyktoclwdaft\`) + VPS PM2 id 27, edge \`telegram-webhook\`
+- **@SEGREDOPUXADASBOT = FISCAL 🩸** — TelePainel (projeto Lovable Cloud \`kagejpghnwdfymddwxuf\`), edge \`telepainel-webhook\`
+
+## 🛑 REGRAS INVIOLÁVEIS
+- Nunca expor secrets, token, ou service_role_key.
+- Nunca \`pm2 restart all\`. Nunca mexer em \`<caminho-vps>\` (id 1 fica STOPPED).
+- Nunca alterar áreas 🔒 sem "PERMITO PIVETE" explícito.
+
+## 🧭 SE PRECISAR DE MAIS CONTEXTO
+- \`personal_context_search\` → cruza sessões anteriores com origem/confiança; chame antes de pedir repetição
+- \`personal_context_remember\` → registra decisão/correção/resumo que deve sobreviver ao restart
+- \`personal_context_stats\` → prova integridade e cobertura da memória longitudinal
+- \`ler_consciencia\` → regras completas do projeto
+- \`consultar_memoria_reserva\` → últimas lembranças do Pivete
+- \`puxar_aprendizados\` → aprendizados acumulados
+- \`kit_boas_vindas\` → índice completo
+
+Quando a mensagem depender de ontem/antes/de novo/continua ou de uma decisão passada,
+busque o contexto pessoal antes de responder. Não trate memória histórica como prova de
+estado vivo: reconcilie branch, HEAD, runtime e ferramentas quando o claim exigir.
+
+## 🎛️ HUD/RUDY HÍBRIDO — sob demanda da missão
+Esta conexão MCP já basta para consultar a CentralDark. Não exija acesso extra ao GitHub.
+Quando o CHEFE pedir HUD, auditoria completa ou quando a missão vigente já usar esse quadro:
+1. recupere/reconcilie CURRENT com as ferramentas disponíveis;
+2. carregue o mesmo HUD/RUDY H01..H16;
+3. preserve ID, nome e ordem dos cartões;
+4. altere somente STATUS/cor, EVIDENCE e PERCENT;
+5. UNKNOWN nunca é verde;
+6. toda novidade material alimenta o PR-mãe #1562 quando a ferramenta/autorização permitir.
+
+Se também houver contexto do repositório ServerVpss/CentralDark, use-o como segundo sensor e reconcilie — não crie outro HUD.
+
+H01 Public Edge/DNS · H02 Live Execution Fabric · H03 MCP/Lovable · H04 Emergent Mind · H05 Runners Linux · H06 Micro-deploy autônomo · H07 VPN/Tailscale · H08 Windows CASA/RDC · H09 Windows Runner · H10 VPS↔GitHub · H11 frescor HUD/telemetria · H12 PR #1690 MCP · H13 Actions/capacidade · H14 dependências HIGH · H15 TLS/Caddy · H16 FIXED_POINT_GLOBAL.
+
+## PRIORIDADE GLOBAL ZERO — RECEITA PRIMEIRO
+Antes de qualquer acao operacional: localizar receita e owner existentes,
+recuperar o ultimo checkpoint/receipt compativel, validar fingerprint e
+reaproveitar prova vigente. Somente depois executar delta minimo autorizado.
+Sem receita especifica, resolver pelo catalogo/skill existente; nao criar
+novo script, motor, ferramenta, agente ou owner por padrao. Falha de leitura
+nao prova inexistencia. Leitura diagnostica continua permitida para recuperar
+receita; deploy mutante sem receita confiavel fica bloqueado.
+Hermes self-evolution: reutilizar scripts/vps/hermes-self-evolution-current-model.sh;
+commit local relatado nao equivale a main nem a instalacao VPS.
+MCP -> VPS nativo e rota de deploy; GitHub Actions hosted SSH foi aposentado.
+Nunca contornar gates de autenticacao, autorizacao, auditoria e seguranca.
+
+## ✅ PRIMEIRA RESPOSTA
+Em contexto operacional CentralDark, responda primeiro à pergunta; apresente o HUD/RUDY re-medido quando solicitado ou exigido pela missão vigente. Fora de contexto operacional, mantenha a saudação curta.
+`;
+export const PUBLIC_CALLABLE_MCP_TOOLS = [];
+const EventsListRequestSchema = z.object({ method: z.literal("events/list"), params: z.object({ cursor: z.string().nullable().optional() }).optional() });
+const EventsSubscribeRequestSchema = z.object({
+    method: z.literal("events/subscribe"),
+    params: z.object({
+        name: z.literal(CENTRALDARK_RECEIPT_CREATED),
+        arguments: z.record(z.string(), z.unknown()).optional(),
+        delivery: z.object({ mode: z.literal("webhook"), url: z.string(), secret: z.string() }),
+        ttlMs: z.number().int().positive().optional(),
+        cursor: z.string().nullable().optional(),
+    }),
+});
+const EventsUnsubscribeRequestSchema = z.object({ method: z.literal("events/unsubscribe"), params: z.object({ id: z.string().min(1) }) });
+const centraldarkEventRegistry = createEventRegistry({ store: eventSubscriptionStore });
+export async function publishCentralDarkReceiptEvent(receipt) {
+    return centraldarkEventRegistry.publishReceipt(receipt);
+}
+export function buildServer(options) {
+    const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
+    // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
+    // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
+    const visibleTools = options.admin === true
+        ? requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
+        : requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true);
+    const requestedCallableTools = options.callableTools ?? visibleTools;
+    const callableTools = options.admin === true
+        ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
+        : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
+    const semanticResourceEnabled = visibleTools.some((tool) => tool.name === "semantic_model_info");
+    const auditIdentity = Object.freeze({
+        callerUser: options.callerUser ?? null,
+        clientLabel: String(options.clientLabel || options.label || "mcp-client").slice(0, 160),
+        endpointRole: options.admin === true ? "admin" : "public",
+        oauthScope: String(options.oauthScope || ""),
+        correlationId: options.cid ?? null,
+    });
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {}, events: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const eventPrincipal = Object.freeze({ accountId: options.callerUser, oauthScope: String(options.oauthScope || "") });
+    const eventRegistry = options.eventRegistry ?? centraldarkEventRegistry;
+    server.setRequestHandler(EventsListRequestSchema, async () => eventRegistry.list(eventPrincipal));
+    server.setRequestHandler(EventsSubscribeRequestSchema, async (req) => eventRegistry.subscribe(eventPrincipal, req.params));
+    server.setRequestHandler(EventsUnsubscribeRequestSchema, async (req) => ({ unsubscribed: await eventRegistry.unsubscribe(eventPrincipal, req.params) }));
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+        const startedAt = Date.now();
+        log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
+        const result = {
+            tools: visibleTools.map((t) => {
+                const annotations = t.annotations;
+                return {
+                    name: t.name,
+                    description: t.description,
+                    inputSchema: zodTypeToJsonSchema(t.inputSchema),
+                    ...(annotations ? { annotations } : {}),
+                };
+            }),
+        };
+        auditToolExecution({
+            ...auditIdentity,
+            method: "tools/list",
+            toolName: "list_tools",
+            input: {},
+            result: { toolCount: result.tools.length, label: options.label ?? "private" },
+            durationMs: Date.now() - startedAt,
+            exitCode: null,
+            ok: true,
+        });
+        log.info("mcp_tools_list_ok", { cid: options.cid, toolCount: result.tools.length, ms: Date.now() - startedAt });
+        return result;
+    });
+    server.setRequestHandler(ListResourcesRequestSchema, async () => {
+        const startedAt = Date.now();
+        const resources = semanticResourceEnabled
+            ? [{
+                    uri: SEMANTIC_MANIFEST_URI,
+                    name: "NILC GloVe-50d manifest",
+                    description: "Manifesto read-only do core semântico local fixado; não expõe caminhos físicos do host.",
+                    mimeType: "application/json",
+                }]
+            : [];
+        auditToolExecution({
+            ...auditIdentity,
+            method: "resources/list",
+            toolName: "list_resources",
+            input: {},
+            result: { resourceCount: resources.length, label: options.label ?? "private" },
+            durationMs: Date.now() - startedAt,
+            exitCode: null,
+            ok: true,
+        });
+        return { resources };
+    });
+    server.setRequestHandler(ReadResourceRequestSchema, async (req) => {
+        const startedAt = Date.now();
+        if (!semanticResourceEnabled || req.params.uri !== SEMANTIC_MANIFEST_URI) {
+            const error = new Error(`Resource desconhecido: ${req.params.uri}`);
+            auditToolExecution({
+                ...auditIdentity,
+                method: "resources/read",
+                toolName: "read_resource",
+                input: { uri: req.params.uri },
+                result: { ok: false, resourceFound: false },
+                error,
+                durationMs: Date.now() - startedAt,
+                exitCode: null,
+                ok: false,
+            });
+            throw error;
+        }
+        const manifest = sanitizeOutgoingDeep(await readSemanticManifest());
+        const result = {
+            contents: [{
+                    uri: SEMANTIC_MANIFEST_URI,
+                    mimeType: "application/json",
+                    text: JSON.stringify(manifest),
+                }],
+        };
+        auditToolExecution({
+            ...auditIdentity,
+            method: "resources/read",
+            toolName: "semantic_manifest",
+            input: { uri: req.params.uri },
+            result: { ok: true, modelId: manifest?.model_id ?? null, health: manifest?.health?.status ?? "UNKNOWN" },
+            durationMs: Date.now() - startedAt,
+            exitCode: null,
+            ok: true,
+        });
+        return result;
+    });
+    server.setRequestHandler(CallToolRequestSchema, async (req) => {
+        const startedAt = Date.now();
+        const tool = callableTools.find((t) => t.name === req.params.name);
+        if (!tool) {
+            const result = decorateToolResult({
+                isError: true,
+                content: [{ type: "text", text: `Tool desconhecida: ${req.params.name}` }],
+            }, {
+                toolName: req.params.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_NOT_FOUND",
+            });
+            auditToolExecution({
+                ...auditIdentity,
+                method: "tools/call",
+                toolName: req.params.name,
+                input: req.params.arguments ?? {},
+                result,
+                durationMs: Date.now() - startedAt,
+                exitCode: null,
+                ok: false,
+            });
+            return result;
+        }
+        const parsed = tool.inputSchema.safeParse(req.params.arguments ?? {});
+        if (!parsed.success) {
+            const result = decorateToolResult({
+                isError: true,
+                content: [
+                    { type: "text", text: `Argumentos inválidos: ${parsed.error.message}` },
+                ],
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "INVALID_ARGUMENTS",
+            });
+            auditToolExecution({
+                ...auditIdentity,
+                method: "tools/call",
+                toolName: tool.name,
+                input: req.params.arguments ?? {},
+                result,
+                durationMs: Date.now() - startedAt,
+                exitCode: null,
+                ok: false,
+            });
+            return result;
+        }
+        try {
+            const toolContext = Object.freeze({
+                token: options.token,
+                admin: options.admin === true,
+                callerUser: options.callerUser ?? null,
+                oauthScope: String(options.oauthScope || ""),
+                correlationId: options.cid ?? null,
+                // Only the authenticated HTTP admin endpoint can provide this provenance.
+                authProvenance: options.authProvenance === "verified_oauth_admin"
+                    ? "verified_oauth_admin" : null,
+            });
+            // Mesma preflight do dispatcher; evita clientes diretos furarem a prioridade.
+            const targetTool = tool.name === "mcp_admin_call" ? parsed.data.tool : tool.name;
+            const recipeFirst = await canonicalRecipeFirstPreflight(targetTool, tool.name === "mcp_admin_call"
+                ? (parsed.data.input ?? {}) : parsed.data, tool.annotations?.readOnlyHint === true);
+            if (!recipeFirst.ok)
+                throw new Error(recipeFirst.status);
+            const raw = await tool.handler(parsed.data, toolContext);
+            const result = decorateToolResult(sanitizeOutgoingDeep(raw), {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+            });
+            auditToolExecution({
+                ...auditIdentity,
+                method: "tools/call",
+                toolName: tool.name,
+                input: parsed.data,
+                result,
+                durationMs: Date.now() - startedAt,
+                exitCode: typeof result === "object" && result !== null && "exitCode" in result
+                    ? Number(result.exitCode)
+                    : null,
+                ok: !(typeof result === "object" &&
+                    result !== null &&
+                    "isError" in result &&
+                    result.isError === true) && semanticOutcome(result).ok,
+            });
+            return result;
+        }
+        catch (err) {
+            log.error("tool_execution_error", { tool: tool.name, error: String(err) });
+            const result = decorateToolResult({
+                isError: true,
+                content: [{ type: "text", text: `Erro ao executar ${tool.name}: ${String(err)}` }],
+            }, {
+                toolName: tool.name,
+                correlationId: options.cid ?? "UNKNOWN",
+                startedAt,
+                errorCode: "TOOL_EXECUTION_ERROR",
+            });
+            auditToolExecution({
+                ...auditIdentity,
+                method: "tools/call",
+                toolName: tool.name,
+                input: parsed.data,
+                result,
+                error: err,
+                durationMs: Date.now() - startedAt,
+                exitCode: null,
+                ok: false,
+            });
+            return result;
+        }
+    });
+    return server;
+}
+export async function handleMcpRequest(req, res, ghToken, options = {}) {
+    const server = buildServer({ ...options, token: ghToken });
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    res.on("close", () => {
+        transport.close().catch(() => { });
+        server.close().catch(() => { });
+    });
+    await server.connect(transport);
+    await transport.handleRequest(req, res, req.body);
+    log.info("mcp_request_handled", { cid: options.cid, method: req.body?.method || "unknown" });
+}
+//# sourceMappingURL=mcp-server.js.map
+export async function serveStdio(options = {}) {
+    const compact = process.argv.includes("--compact");
+    const admin = process.argv.includes("--admin");
+    const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+    const server = buildServer({ admin, oauthScope: admin ? "mcp admin" : "mcp", visibleTools: compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS, callableTools: ALL_TOOLS, label: "centraldark-local", clientLabel: process.env.CENTRALDARK_CLIENT_LABEL || "local-stdio", cid: process.env.CENTRALDARK_SESSION_ID || randomUUID(), callerUser: "local-owner", ...options });
+    await server.connect(new StdioServerTransport());
+    return server;
+}
+function secureTokenEqual(a, b) {
+    const aa = Buffer.from(String(a || ""));
+    const bb = Buffer.from(String(b || ""));
+    return aa.length > 0 && aa.length === bb.length && timingSafeEqual(aa, bb);
+}
+export async function serveHttp(options = {}) {
+    const compact = process.argv.includes("--compact");
+    const admin = process.argv.includes("--admin");
+    const names = new Set(["mcp_status", "mcp_admin_catalog", "mcp_admin_call", ...ALL_TOOLS.filter(t => t.name.startsWith("kylin_")).map(t => t.name)]);
+    const visibleTools = compact ? ALL_TOOLS.filter(t => names.has(t.name)) : ALL_TOOLS;
+    const expectedToken = String(process.env.CENTRALDARK_MCP_REMOTE_TOKEN || "").trim();
+    if (!expectedToken)
+        throw new Error("CENTRALDARK_MCP_REMOTE_TOKEN is required for --http");
+    const host = String(process.env.CENTRALDARK_MCP_HTTP_HOST || "127.0.0.1");
+    const port = Number(process.env.CENTRALDARK_MCP_HTTP_PORT || "9100");
+    if (!Number.isInteger(port) || port < 1 || port > 65535)
+        throw new Error("invalid CENTRALDARK_MCP_HTTP_PORT");
+    const httpServer = createServer(async (req, res) => {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept,MCP-Protocol-Version,Mcp-Session-Id");
+        res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+        if (req.method === "OPTIONS") {
+            res.statusCode = 204;
+            res.end();
+            return;
+        }
+        const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+        if (requestUrl.pathname === "/health" && req.method === "GET") {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ ok: true, service: "centraldark-native-mcp-http", mode: admin ? "admin" : "mcp", compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length, catalogVersion: CATALOG_VERSION }));
+            return;
+        }
+        if (requestUrl.pathname === "/heartbeat" && req.method === "GET") {
+            const operational = getOperationalSnapshot({ heartbeat: { self: "alive" } });
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({
+                ok: true,
+                service: "centraldark-native-mcp-http",
+                schema: "centraldark.heartbeat.v1",
+                measuredAt: new Date().toISOString(),
+                operational,
+            }));
+            return;
+        }
+        if (requestUrl.pathname !== "/mcp") {
+            res.statusCode = 404;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ error: "not_found" }));
+            return;
+        }
+        const auth = String(req.headers.authorization || "");
+        const match = /^Bearer\s+(.+)$/i.exec(auth.trim());
+        if (!match || !secureTokenEqual(match[1], expectedToken)) {
+            res.statusCode = 401;
+            res.setHeader("WWW-Authenticate", 'Bearer realm="centraldark-native-mcp"');
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32000, message: "unauthorized" }, id: null }));
+            return;
+        }
+        if (req.method !== "POST") {
+            res.statusCode = 405;
+            res.setHeader("Allow", "POST, OPTIONS");
+            res.end();
+            return;
+        }
+        try {
+            const chunks = [];
+            let size = 0;
+            for await (const chunk of req) {
+                size += chunk.length;
+                if (size > 2 * 1024 * 1024)
+                    throw new Error("request_too_large");
+                chunks.push(chunk);
+            }
+            req.body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
+            const cid = randomUUID();
+            await handleMcpRequest(req, res, "", {
+                admin,
+                oauthScope: admin ? "mcp admin" : "mcp",
+                visibleTools,
+                callableTools: ALL_TOOLS,
+                label: "centraldark-remote",
+                clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "remote-http").slice(0, 160),
+                cid,
+                callerUser: "remote-owner",
+                ...options,
+            });
+        }
+        catch (err) {
+            log.error("mcp_remote_http_error", { error: String(err) });
+            if (!res.headersSent) {
+                res.statusCode = String(err).includes("request_too_large") ? 413 : 400;
+                res.setHeader("Content-Type", "application/json");
+                res.end(JSON.stringify({ jsonrpc: "2.0", error: { code: -32600, message: "invalid request" }, id: null }));
+            }
+        }
+    });
+    await new Promise((resolve, reject) => {
+        httpServer.once("error", reject);
+        httpServer.listen(port, host, () => resolve());
+    });
+    log.info("mcp_remote_http_ready", { host, port, admin, compact, visibleTools: visibleTools.length, totalTools: ALL_TOOLS.length });
+    return httpServer;
+}
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+    if (process.argv[2] === "--stdio")
+        await serveStdio();
+    else if (process.argv[2] === "--http")
+        await serveHttp();
+}
+//# sourceMappingURL=mcp-server.js.map

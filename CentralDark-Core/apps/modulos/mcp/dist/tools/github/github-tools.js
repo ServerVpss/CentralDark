@@ -1,0 +1,348 @@
+import { z } from "zod";
+import { assertNoRetiredCentralDarkHostedDeploy, GH_CLI_OWNER_MARKER, ghCliCall } from "./github.js";
+const API = "https://api.github.com";
+const ALLOWED_REPOS = new Set(["ServerVpss/CentralDark", "ServerVpss/clone-deck", "segredounlock/clone-deck"]);
+const CO_AUTHOR = "SegredoiDev <<conta-bot>>";
+const MAX_GITHUB_READ_BYTES = 120_000;
+const MAX_COMMIT_FILE_BYTES = 500_000;
+const MAX_COMMIT_FILES = 25;
+const DENY_PATH = /(^|\/)(\.env|secrets?|credenciais|tokens?|sessions?|sessao|sessão|cofre|\.ssh)(\/|$)|\.(pem|key|p12|pfx|sqlite|sqlite3|db|dump|bak|backup)$/i;
+class GitHubApiError extends Error {
+    constructor(status, apiPath, body = null) {
+        super(`GitHub ${status}: ${apiPath}`);
+        this.name = "GitHubApiError";
+        this.status = status;
+        this.apiPath = apiPath;
+        this.body = body;
+    }
+}
+function ok(data) {
+    return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
+}
+function effectiveToken(ctx) {
+    const token = ctx.token || process.env.GH_TOKEN || process.env.GITHUB_TOKEN || "";
+    if (!token)
+        throw new Error("Token GitHub ausente. Configure GH_TOKEN/GITHUB_TOKEN ou use OAuth.");
+    return token;
+}
+function pick(owner, repo) {
+    const o = owner ?? "ServerVpss";
+    const r = repo ?? "CentralDark";
+    const slug = `${o}/${r}`;
+    if (!ALLOWED_REPOS.has(slug))
+        throw new Error(`Repo nao permitido: ${slug}`);
+    return { owner: o, repo: r, slug };
+}
+function safePath(p) {
+    const clean = p.replace(/\\/g, "/").replace(/^\/+/, "");
+    if (!clean || clean.includes("..") || clean.startsWith("/") || DENY_PATH.test(clean)) {
+        throw new Error("Path bloqueado por seguranca.");
+    }
+    return clean;
+}
+async function gh(token, apiPath, init = {}) {
+    if (token === GH_CLI_OWNER_MARKER)
+        return ghCliCall(apiPath, init);
+    const res = await fetch(`${API}${apiPath}`, {
+        ...init,
+        headers: {
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${token}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+            "User-Agent": "MCP-CentralDark/github-tools-v2",
+            ...(init.headers ?? {}),
+        },
+    });
+    if (res.status === 204)
+        return null;
+    const text = await res.text();
+    let body = null;
+    try {
+        body = text ? JSON.parse(text) : null;
+    }
+    catch {
+        body = text.slice(0, 500);
+    }
+    if (!res.ok) {
+        throw new GitHubApiError(res.status, apiPath, body);
+    }
+    return body;
+}
+async function ghJson(token, method, apiPath, body) {
+    return gh(token, apiPath, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+    });
+}
+function encodePath(p) {
+    return encodeURIComponent(p).replace(/%2F/g, "/");
+}
+async function getBranchHead(token, owner, repo, branch) {
+    const ref = (await gh(token, `/repos/${owner}/${repo}/git/ref/heads/${encodeURIComponent(branch)}`));
+    const sha = ref.object?.sha;
+    if (!sha)
+        throw new Error(`Branch sem SHA: ${branch}`);
+    return sha;
+}
+async function ensureBranch(token, owner, repo, branch, createFrom) {
+    try {
+        return await getBranchHead(token, owner, repo, branch);
+    }
+    catch (err) {
+        if (!createFrom)
+            throw err;
+        const fromSha = await getBranchHead(token, owner, repo, createFrom);
+        await ghJson(token, "POST", `/repos/${owner}/${repo}/git/refs`, {
+            ref: `refs/heads/${branch}`,
+            sha: fromSha,
+        });
+        return fromSha;
+    }
+}
+async function getCommitTree(token, owner, repo, sha) {
+    const commit = (await gh(token, `/repos/${owner}/${repo}/git/commits/${sha}`));
+    const treeSha = commit.tree?.sha;
+    if (!treeSha)
+        throw new Error("Nao foi possivel obter tree do commit base.");
+    return treeSha;
+}
+export const githubTools = [
+    {
+        name: "github_read",
+        description: "Le arquivo do GitHub via API com limite de bytes. Default: ServerVpss/CentralDark. Nao retorna arquivo sensivel.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true, title: "GitHub read" },
+        inputSchema: z.object({
+            path: z.string().min(1),
+            owner: z.string().optional(),
+            repo: z.string().optional(),
+            ref: z.string().optional(),
+            maxBytes: z.number().int().min(1).max(MAX_GITHUB_READ_BYTES).optional(),
+        }),
+        handler: async (input, ctx) => {
+            const token = effectiveToken(ctx);
+            const { owner, repo } = pick(input.owner, input.repo);
+            const filePath = safePath(input.path);
+            const q = input.ref ? `?ref=${encodeURIComponent(input.ref)}` : "";
+            let out;
+            try {
+                out = await gh(token, `/repos/${owner}/${repo}/contents/${encodePath(filePath)}${q}`);
+            }
+            catch (error) {
+                if (error instanceof GitHubApiError && error.status === 404) {
+                    return ok({
+                        status: "NAO_ENCONTRADO_NO_GITHUB_REF",
+                        owner,
+                        repo,
+                        path: filePath,
+                        ref: input.ref ?? null,
+                        sourceScope: "GIT_COMMITTED_OBJECT_ONLY",
+                        worldAbsenceProven: false,
+                        runtimeLocalMayExist: true,
+                        alternateAuthorizedRoutes: [
+                            { tool: "read_file", root: "project", path: filePath },
+                            { tool: "search_files", root: "project", path: filePath.split("/").slice(0, -1).join("/") || ".", query: filePath.split("/").pop() },
+                        ],
+                        nextAction: "MEASURE_ALTERNATE_SENSOR_BEFORE_DECLARING_MISSING_OR_BLOCKED",
+                    });
+                }
+                throw error;
+            }
+            if (!out.content || out.encoding !== "base64") {
+                return ok({ status: "NAO_E_ARQUIVO_TEXTO", owner, repo, path: filePath, meta: out });
+            }
+            const maxBytes = input.maxBytes ?? 60_000;
+            const decoded = Buffer.from(out.content, "base64").toString("utf8");
+            const truncated = Buffer.byteLength(decoded, "utf8") > maxBytes;
+            return ok({
+                status: "OK",
+                owner,
+                repo,
+                path: filePath,
+                ref: input.ref ?? null,
+                sizeBytes: out.size ?? Buffer.byteLength(decoded, "utf8"),
+                sha: out.sha,
+                html_url: out.html_url,
+                truncated,
+                warning: truncated ? "Arquivo truncado por seguranca." : null,
+                content: decoded.slice(0, maxBytes),
+            });
+        },
+    },
+    {
+        name: "github_commit",
+        description: "Cria um commit GitHub multi-arquivo e atualiza a branch. Bloqueia secrets e paths sensiveis. Default: ServerVpss/CentralDark.",
+        annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, title: "GitHub commit" },
+        inputSchema: z.object({
+            message: z.string().min(1),
+            branch: z.string().min(1).optional(),
+            createBranchFrom: z.string().optional(),
+            owner: z.string().optional(),
+            repo: z.string().optional(),
+            files: z
+                .array(z.object({
+                path: z.string().min(1),
+                content: z.string().max(MAX_COMMIT_FILE_BYTES),
+            }))
+                .min(1)
+                .max(MAX_COMMIT_FILES),
+        }),
+        handler: async (input, ctx) => {
+            const token = effectiveToken(ctx);
+            const { owner, repo } = pick(input.owner, input.repo);
+            const branch = input.branch ?? "main";
+            const safeFiles = input.files.map((file) => ({
+                path: safePath(file.path),
+                content: file.content,
+            }));
+            const headSha = await ensureBranch(token, owner, repo, branch, input.createBranchFrom);
+            const baseTreeSha = await getCommitTree(token, owner, repo, headSha);
+            const tree = await Promise.all(safeFiles.map(async (file) => {
+                const blob = (await ghJson(token, "POST", `/repos/${owner}/${repo}/git/blobs`, {
+                    content: file.content,
+                    encoding: "utf-8",
+                }));
+                if (!blob.sha)
+                    throw new Error(`Falha ao criar blob: ${file.path}`);
+                return {
+                    path: file.path,
+                    mode: "100644",
+                    type: "blob",
+                    sha: blob.sha,
+                };
+            }));
+            const newTree = (await ghJson(token, "POST", `/repos/${owner}/${repo}/git/trees`, {
+                base_tree: baseTreeSha,
+                tree,
+            }));
+            if (!newTree.sha)
+                throw new Error("Falha ao criar tree Git.");
+            const commit = (await ghJson(token, "POST", `/repos/${owner}/${repo}/git/commits`, {
+                message: `${input.message}\n\nCo-authored-by: ${CO_AUTHOR}`,
+                tree: newTree.sha,
+                parents: [headSha],
+            }));
+            if (!commit.sha)
+                throw new Error("Falha ao criar commit Git.");
+            await ghJson(token, "PATCH", `/repos/${owner}/${repo}/git/refs/heads/${encodeURIComponent(branch)}`, {
+                sha: commit.sha,
+                force: false,
+            });
+            return ok({
+                status: "COMMIT_PUBLICADO",
+                owner,
+                repo,
+                branch,
+                files: safeFiles.map((file) => file.path),
+                commit_sha: commit.sha,
+                commit_url: commit.html_url ?? `https://github.com/${owner}/${repo}/commit/${commit.sha}`,
+            });
+        },
+    },
+    {
+        // Compatibilidade com o nome antigo. Esta tool e APENAS de leitura/plano:
+        // nao dispara GitHub Actions e nao chama handler destrutivo indiretamente.
+        name: "admin_ssh_microdeploy",
+        description: "Alias admin sem runner pago: status/probe informam a rota nativa; dry_run prepara um fileset causal validado para centraldark_deploy_micro_fallback, que continua o unico executor autorizado.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Plano de microdeploy MCP/VPS sem Actions" },
+        inputSchema: z.object({
+            mode: z.enum(["status", "probe", "dry_run"]).default("status"),
+            owner: z.enum(["mcp", "hub_bot", "hermes", "oauth_broker"]).default("mcp"),
+            file: z.string().max(1200).optional(),
+            sourceSha: z.string().regex(/^[0-9a-f]{40}$/i).optional(),
+        }),
+        handler: async (input, ctx) => {
+            const scopes = new Set(String(ctx?.oauthScope || "").split(/\s+/).filter(Boolean));
+            const proven = ctx?.authProvenance === "verified_oauth_admin"
+                || ctx?.authProvenance === "verified_hub_admin";
+            if (ctx?.admin !== true || !scopes.has("admin") || !proven
+                || !ctx?.callerUser || !ctx?.correlationId) {
+                return ok({ ok: false, status: "AUTHENTICATED_ADMIN_SESSION_REQUIRED" });
+            }
+            const route = {
+                controlPlane: "MCP_CENTRALDARK_VPS_DIRECT",
+                nativeExecutor: "centraldark_deploy_micro_fallback",
+                existingScript: "scripts/vps/main-pinned-microdeploy.sh",
+                githubActionsRequired: false,
+                hostedRunnerRequired: false,
+                legacyWorkflow: "DISABLED",
+                runtimeDeployProven: false,
+            };
+            if (input.mode !== "dry_run") {
+                return ok({
+                    ok: true,
+                    status: "NATIVE_ROUTE_CONFIGURED_NOT_EXECUTION_PROOF",
+                    mode: input.mode, ...route,
+                    note: "Consulta de rota, nao e prova de SSH ou deploy.",
+                });
+            }
+            const files = String(input.file ?? "").split(",").map(x => x.trim());
+            const allowedPrefixes = {
+                mcp: ["apps/modulos/mcp/"],
+                hub_bot: ["apps/bot-telegram/"],
+                hermes: ["apps/modulos/HERMES-CORE/", "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/", ".agents/skills/centraldark-operational-method/"],
+                oauth_broker: ["apps/modulos/oauth-broker/"],
+            };
+            const valid = Boolean(input.sourceSha)
+                && files.length > 0 && files.length <= 8
+                && files.length === new Set(files).size
+                && files.every(file => file.length > 0 && /^[A-Za-z0-9_./-]+$/.test(file)
+                    && !file.includes("..") && !file.startsWith("/")
+                    && (allowedPrefixes[input.owner].some(prefix => file.startsWith(prefix))
+                        || (input.owner === "mcp"
+                            && file === "docs/CONSCIENCIA/MICRO-DEPLOY/MAIN-PINNED-RUNTIME-FAST-PATH-FALLBACK.json")));
+            if (!valid)
+                return ok({ ok: false, status: "INVALID_CAUSAL_FILESET_OR_SOURCE_SHA" });
+            if (input.owner === "mcp") {
+                for (const unit of ["tools/github/github-tools", "tools/core/mcp-policy"]) {
+                    const src = "apps/modulos/mcp/src/" + unit + ".js";
+                    const dist = "apps/modulos/mcp/dist/" + unit + ".js";
+                    if ((files.includes(src) || files.includes(dist))
+                        && !(files.includes(src) && files.includes(dist))) {
+                        return ok({ ok: false, status: "MCP_SOURCE_DIST_PAIR_REQUIRED", unit });
+                    }
+                }
+            }
+            return ok({
+                ok: true, status: "NATIVE_PLAN_PREPARED_NOT_EXECUTED", ...route,
+                tool: "centraldark_deploy_micro_fallback",
+                input: { owner: input.owner, sourceSha: input.sourceSha, files, dryRun: true },
+                nextAction: "Somente o dispatcher MCP autorizado pode chamar o executor nativo; nao existe chamada GitHub Actions.",
+            });
+        },
+    },
+    {
+        name: "github_dispatch",
+        description: "Dispara workflow_dispatch genérico. Nao usar workflow SSH legado para deploy CentralDark: o executor e centraldark_deploy_micro_fallback via MCP.",
+        annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, title: "GitHub dispatch" },
+        inputSchema: z.object({
+            workflow: z.string().min(1),
+            ref: z.string().optional(),
+            owner: z.string().optional(),
+            repo: z.string().optional(),
+            inputs: z.record(z.union([z.string(), z.number(), z.boolean()])).optional(),
+        }),
+        handler: async (input, ctx) => {
+            const token = effectiveToken(ctx);
+            const { owner, repo } = pick(input.owner, input.repo);
+            assertNoRetiredCentralDarkHostedDeploy(owner, repo, input.workflow);
+            const inputs = input.inputs
+                ? Object.fromEntries(Object.entries(input.inputs).map(([key, value]) => [key, String(value)]))
+                : undefined;
+            await ghJson(token, "POST", `/repos/${owner}/${repo}/actions/workflows/${encodeURIComponent(input.workflow)}/dispatches`, {
+                ref: input.ref ?? "main",
+                inputs,
+            });
+            return ok({
+                status: "WORKFLOW_DISPATCHED",
+                owner,
+                repo,
+                workflow: input.workflow,
+                ref: input.ref ?? "main",
+                inputs: inputs ? Object.keys(inputs) : [],
+            });
+        },
+    },
+];
+//# sourceMappingURL=github-tools.js.map
+//# sourceMappingURL=github-tools.js.map

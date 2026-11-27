@@ -1,0 +1,41 @@
+param([string]$Version = "0.1.8")
+
+$ErrorActionPreference = "Stop"
+$Root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
+$Output = Join-Path $Root "dist\release"
+$Stage = Join-Path $Output "windows"
+$Zip = Join-Path $Output "CentralDark-Halo-Windows-x64-v$Version.zip"
+
+# #OBSERVACOES# @owner: centraldark-halo-main @doc_ref: docs/ARCHITECTURE.md
+# Guard the release stage before any destructive staging operation.
+$MissingTools = @("cargo", "pnpm") | Where-Object { -not (Get-Command $_ -ErrorAction SilentlyContinue) }
+if ($MissingTools.Count -gt 0) {
+    throw ("CENTRALDARK_HALO_BUILD_TOOLCHAIN_MISSING: " + ($MissingTools -join ", "))
+}
+
+Push-Location $Root
+try {
+    Write-Host "[1/3] Building Windows x64 binary..."
+    pnpm tauri build --no-bundle --target x86_64-pc-windows-msvc
+    if ($LASTEXITCODE -ne 0) { throw "Tauri build failed." }
+
+    Remove-Item $Stage -Recurse -Force -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force `
+        (Join-Path $Stage "hooks\windows"), (Join-Path $Stage "support") | Out-Null
+    Copy-Item (Join-Path $Root "src-tauri\target\x86_64-pc-windows-msvc\release\centraldark-halo-lite.exe") `
+        (Join-Path $Stage "CentralDarkHalo.exe")
+    Copy-Item (Join-Path $Root "scripts\windows\Install-CentralDark-Halo.ps1") $Stage
+    Copy-Item (Join-Path $Root "scripts\windows\Uninstall-CentralDark-Halo.ps1") $Stage
+    Copy-Item (Join-Path $Root "scripts\windows\Verify-CentralDark-Halo.ps1") $Stage
+    Copy-Item (Join-Path $Root "scripts\windows\Test-State.ps1") $Stage
+    Copy-Item (Join-Path $Root "hooks\windows\centraldark-halo-hook.ps1") (Join-Path $Stage "hooks\windows")
+    Copy-Item (Join-Path $Root "scripts\windows\Manage-CentralDark-HaloHooks.ps1") (Join-Path $Stage "support")
+    Copy-Item (Join-Path $Root "docs\RELEASE_README.txt") (Join-Path $Stage "README.txt")
+    Write-Host "[2/3] Self-contained installer staged"
+
+    Remove-Item $Zip -Force -ErrorAction SilentlyContinue
+    Compress-Archive -Path (Join-Path $Stage "*") -DestinationPath $Zip -CompressionLevel Optimal
+    Write-Host "[3/3] Created $Zip"
+} finally {
+    Pop-Location
+}

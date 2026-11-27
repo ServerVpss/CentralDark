@@ -1,0 +1,117 @@
+---
+centraldark_note_schema: "brain07.v1"
+centraldark_category: "01-OURO"
+centraldark_kind: "OURO_REUTILIZAVEL_COM_PROVA_CONTEXTUAL"
+centraldark_context_owner: "SEGREDO/CHEFE"
+centraldark_intent_anchor: "Flexibilidade do Sistema Dependabot"
+centraldark_agent_recall: "Reutilizar tecnica, autoria, limites e evidencia no owner; nao presumir runtime atual."
+centraldark_kaizen_policy: "docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md"
+centraldark_kaizen_skill: ".agents/skills/kaizen-sistema-um/SKILL.md"
+centraldark_kaizen_trigger: "MATERIAL_DELTA_WHEN_CONSUMED"
+centraldark_kaizen_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+centraldark_metabolic_roles: ["gojo-seis-olhos","whis-orientacao","vegetto-gogeta-convergencia","kaizen-continuo"]
+centraldark_metabolic_source: "apps/instinto-superior/src/components/central/MapaMetabolicoCristal.tsx"
+centraldark_previous_blob_sha: "ffe7a7a83f28f4be648faaa70184c03bc10dd6c0"
+centraldark_self_catalog: ".agents/skills/centraldark-operational-method/catalogo/META-RSI-40.md"
+centraldark_self_primary: "Self-Optimization"
+centraldark_self_related: ["Self-Adaptation","Self-Iteration"]
+centraldark_self_skill_refs: [".agents/skills/centraldark-operational-method/Skills/self-optimization/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-adaptation/SKILL.md",".agents/skills/centraldark-operational-method/Skills/self-iteration/SKILL.md"]
+centraldark_self_review: "APPLIED_OR_NOOP_JUSTIFIED_WHEN_RUNTIME_CONSUMES"
+centraldark_self_activation: "RECALL_AND_REVIEW_ONLY_NOT_AUTOPATCH"
+centraldark_self_runtime: "UNKNOWN_UNTIL_CONSUMER_READBACK"
+---
+# Flexibilidade do Sistema Dependabot
+
+## O Sistema é Flexível O suficiente
+
+### Para Mudanças de Configuração
+- dependabot.yml pode ser alterado sem tocar no workflow
+- Grupos podem ser adicionados/removidos conforme necessário
+- Labels podem ser atualizados sem impacto no fluxo
+
+### Para Mudanças no Workflow
+- dependabot-auto-merge.yml pode ser alterado independentemente
+- Novo steps podem ser adicionados
+- Logicas existentes podem ser modificadas
+
+### Para Mudanças nos Scripts
+- resolve-conflicts.sh pode ser atualizado
+- Novos scripts podem ser adicionados
+- Monitoramento pode ser expandido
+
+## Configurações Flexíveis
+
+### dependabot.yml
+```yaml
+- package-ecosystem: "npm"
+  directory: "/"
+  schedule:
+    interval: "weekly"  # Pode mudar para "daily", "monthly"
+  open-pull-requests-limit: 15  # Pode ajustar
+  labels:  # Pode adicionar/remover
+    - "🤖 AUTO"
+    - "🔄 GIT"
+    # ...
+  groups:  # Pode adicionar novos grupos
+    exemplo:
+      patterns:
+        - "exemplo/*"
+```
+
+### dependabot-auto-merge.yml
+- Pode adicionar novos steps sem quebrar fluxo existente
+- Pode modificar condições (if:) conforme necessário
+- Pode alterar métodos de merge (SQUASH, MERGE, REBASE)
+
+### resolve-conflicts.sh
+- Pode adicionar novos casos no case statement
+- Pode alterar semântica de resolução
+- Pode adicionar logging adicional
+
+## Como Expandir
+
+### Adicionar Novo Ecossistema
+1. Editar dependabot.yml
+2. Adicionar entrada com package-ecosystem, directory, schedule, labels, groups
+3. Sem alteração no workflow necessária
+
+### Adicionar Novo Grupo
+1. Editar dependabot.yml na seção groups
+2. Adicionar novo grupo com patterns e update-types
+3. Dependabot criará PRs agrupados automaticamente
+
+### Adicionar Novo Step ao Workflow
+1. Editar dependabot-auto-merge.yml
+2. Adicionar step com name, uses/run, condições if
+3. Testar YAML validity
+
+## Flexibilidade Demonstrada
+
+### Exemplo 1: PR #1351
+- 47 updates em uma única PR
+- Grupos funcionaram como esperado
+- Workflow lidou sem adaptação extra
+
+### Exemplo 2: Correção do Erro 422
+- Workflow foi modificado para remover passo problemático
+- Sem impacto no fluxo principal
+- Sistema permaneceu operacional
+
+### Exemplo 3: Adição do Monitor
+- Novo script adicionado sem alterar workflow existente
+- Pode ser executado independentemente
+- Pode ser agendado via cron separadamente
+
+## Recomendações de Flexibilidade
+
+- Sempre testar YAML validity após alterações
+- Manter resolve-conflicts.sh atualizado se regras de conflito mudarem
+- Documentar qualquer mudança significativa
+- Criar teste de integração para validar sistema completo
+
+## Resumo
+O sistema é flexível o suficiente para:
+- Adicionar novos ecossistemas sem alteração no workflow
+- Modificar grupos e labels sem impacto no fluxo
+- Adicionar novos scripts e monitoramentos
+- Corrigir problemas sem reescrever o sistema

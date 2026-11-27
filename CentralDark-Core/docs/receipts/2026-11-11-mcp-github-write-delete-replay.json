@@ -1,0 +1,19 @@
+{
+  "schema": "centraldark.rastro-session-replay.v1",
+  "repo": "ServerVpss/CentralDark",
+  "path": "docs/receipts/_tmp-mcp-auth-write-delete-20261111.txt",
+  "main_sha": "e594bc7c0122c665f94b49bf5129e316dae68122",
+  "create_sha": "15af9b30ce9e70731cacaa4beb88cadabe3c3ba9",
+  "update_sha": "6b8d9b7be9efb43211cc03e56869aba3e4df4bac",
+  "delete_sha": "dbb3a76c5a595bb1b90b16c7d8c0267fd37b1804",
+  "created_content": "CENTRALDARK-MCP TEST ephemeral write\nNo secrets\n",
+  "updated_content": "CENTRALDARK-MCP TEST ephemeral write\nphase=update\nNo secrets\n",
+  "evidence_scope": "HISTORICAL_GITHUB_REPLAY_ONLY",
+  "not_tested": [
+    "CURRENT_WRITE_PERMISSION",
+    "CENTRALDARK_MCP_DELETE",
+    "CURRENT_OAUTH_DISCOVERY",
+    "LOCAL_RUNTIME_SYNC"
+  ],
+  "next_cursor": "CLASSIFY_MCP_GITHUB_ERRORS_AND_PROVE_NATIVE_DELETE"
+}

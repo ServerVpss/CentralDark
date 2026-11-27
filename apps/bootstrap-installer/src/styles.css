@@ -1,0 +1,311 @@
+/*
+ * Hermes Setup — defer entirely to the desktop's styles.css.
+ *
+ * Rather than re-implement the Hermes design system (and inevitably drift
+ * from it), we import apps/desktop/src/styles.css wholesale. The desktop
+ * is the canonical source of truth for fonts, color tokens, button chrome,
+ * scrollbars, layout utilities, and animations. Any change to the
+ * Hermes look propagates here automatically with no copy-paste maintenance.
+ *
+ * Path resolution caveats:
+ *   - Tailwind v4's `@import` resolves relative to this file. The desktop's
+ *     `@source '../../../node_modules/...'` declarations therefore re-resolve
+ *     against apps/bootstrap-installer/src/. Since both apps live two levels
+ *     deep under the same repo root, `../../../node_modules` lands in the
+ *     same place. (Verify if either app ever moves.)
+ *   - The desktop's `@font-face url('@nous-research/ui/fonts/...')`
+ *     references are package specifiers, which Vite resolves through the
+ *     package's exports map, so they find the font from here too.
+ *
+ * Follows the OS appearance: the installer has no in-app theme switcher, so
+ * src/theme.ts tracks the Tauri window theme and toggles `.dark` on
+ * <html>. The desktop's runtime applyTheme() normally PAINTS the dark seed
+ * colors inline (its imported :root.dark below only flips the per-mode mix
+ * knobs + neutral chrome), so we supply the Nous *dark* seeds ourselves in the
+ * :root.dark block at the end of this file.
+ */
+@import '../../desktop/src/styles.css';
+
+/* Installer-only additions: a fade-in animation and a warm radial glow
+   for the welcome screen. Everything else inherits from the desktop. */
+@keyframes hermes-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hermes-fade-in {
+  animation: hermes-fade-in 0.45s ease-out both;
+}
+
+.hermes-glow {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--ui-warm) 18%, transparent) 0%,
+    transparent 60%
+  );
+}
+
+/*
+ * Dark appearance — Nous dark seeds.
+ *
+ * The imported desktop :root.dark only flips the per-mode mix knobs + neutral
+ * chrome; the seed COLORS are normally painted at runtime by the desktop's
+ * applyTheme(). The installer has no theme runtime, so we mirror them here from
+ * apps/desktop/src/themes/presets.ts (nousTheme.darkColors). The whole
+ * --ui-* / --dt-* chain in the imported stylesheet derives from these seeds, so
+ * flipping them is enough — we only additionally override the few tokens
+ * applyTheme() sets inline that DON'T derive from a seed (primary-foreground on
+ * the cream accent, destructive). Unlayered on purpose so it wins over the
+ * imported @layer base :root light seeds. Keep in sync with nousTheme.darkColors
+ * if that palette is retuned.
+ */
+:root.dark {
+  color-scheme: dark;
+
+  --theme-foreground: #ffe6cb;
+  --theme-primary: #ffe6cb;
+  --theme-secondary: #1b45a4;
+  --theme-accent-soft: #1540b1;
+  --theme-midground: #0053fd;
+  --theme-warm: #ffe6cb;
+  --theme-background-seed: #0d2f86;
+  --theme-sidebar-seed: #09286f;
+  --theme-card-seed: #12378f;
+  --theme-elevated-seed: #123a96;
+  --theme-bubble-seed: #143b91;
+
+  /* Non-derived shadcn tokens applyTheme() paints inline (Nous dark values). */
+  --dt-primary-foreground: #0d2f86;
+  --dt-destructive: #c0473a;
+  --dt-destructive-foreground: #fef2f2;
+}
+
+/* CentralDark · OS — mesma paleta visual do Segredo Agente Remoto.
+ * Reusa os tokens existentes do desktop; nao copia CSS, motor ou componentes.
+ * Vale para a aparencia clara/escura do sistema, pois esta pele e sempre escura.
+ */
+:root,
+:root.dark {
+  --theme-foreground: #f4f4f5;
+  --theme-primary: #d4a339;
+  --theme-secondary: #382d1d;
+  --theme-accent-soft: #292215;
+  --theme-midground: #d4a339;
+  --theme-warm: #cfaa53;
+  --theme-background-seed: #080b10;
+  --theme-sidebar-seed: #0b0e13;
+  --theme-card-seed: #10141b;
+  --theme-elevated-seed: #171d27;
+  --theme-bubble-seed: #171d27;
+  --theme-neutral-chrome: #080b10;
+  --theme-neutral-sidebar: #0b0e13;
+  --theme-neutral-card: #10141b;
+  --theme-mix-chrome: 100%;
+  --theme-mix-sidebar: 100%;
+  --theme-mix-card: 100%;
+  --theme-mix-elevated: 100%;
+  --theme-mix-bubble: 100%;
+  --ui-bg-input: #0b0e13;
+  --dt-primary-foreground: #080b10;
+  --dt-primary-solid-foreground: #080b10;
+  --stroke-nous: rgba(212, 163, 57, 0.25);
+}
+
+/* Aparencia da abertura: mesma superficie, borda e brilho do Agente Remoto. */
+.centraldark-install-screen {
+  background:
+    radial-gradient(circle at 50% 10%, rgba(212, 163, 57, 0.09), transparent 44%),
+    radial-gradient(circle at 80% 80%, rgba(85, 170, 105, 0.045), transparent 35%),
+    #080b10;
+  padding: clamp(16px, 4vw, 40px);
+}
+
+.centraldark-install-card {
+  border: 1px solid #27313b;
+  border-radius: 22px;
+  padding: clamp(22px, 5vw, 54px);
+  background:
+    linear-gradient(145deg, rgba(212, 163, 57, 0.045), transparent 45%),
+    #10141b;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.53);
+}
+
+/* Copia fiel do CSS ATIVO na pagina E:/CentralDark/.../ROV-CentralDark-Templates-2026-11-02/index.html:
+ * .mark {width:38px;height:38px;border:1px solid #7e643b;border-radius:11px;
+ *        display:grid;place-items:center;background:#221c14;color:var(--gold)}
+ * .mark svg {width:26px;height:26px}; --gold:#e6bd75.
+ * Nao usar o CSS .mark de dentro de outro template embutido.
+ */
+.centraldark-rov-mark {
+  box-sizing: border-box;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  max-width: 38px;
+  max-height: 38px;
+  flex: 0 0 38px;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #7e643b;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: #221c14;
+  color: #e6bd75;
+  box-shadow: none;
+}
+.centraldark-rov-eye {
+  width: 26px;
+  height: 26px;
+  flex: none;
+}
+.centraldark-install-mark {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+}
+
+.centraldark-install-title {
+  color: #e6bd75;
+  text-shadow: 0 0 28px rgba(212, 163, 57, 0.18);
+}
+
+.centraldark-install-button {
+  min-height: 46px;
+  padding-inline: 26px;
+  border-color: #856929;
+  border-radius: 10px;
+  color: #e6bd75;
+  background: rgba(212, 163, 57, 0.08);
+}
+
+.centraldark-install-button:hover {
+  border-color: #d4a339;
+  background: rgba(212, 163, 57, 0.16);
+}
+
+.centraldark-install-button:focus-visible {
+  outline: 2px solid #e6bd75;
+  outline-offset: 3px;
+}
+
+/* Moldura reutilizada do Agente Remoto: somente UI do instalador. */
+.centraldark-native-shell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  min-width: 320px;
+  overflow: hidden;
+  border: 1px solid rgba(194, 151, 68, .3);
+  border-radius: 10px;
+  background: #0c1017;
+  color: #e8ebef;
+  box-shadow: inset 0 1px rgba(255, 255, 255, .04);
+  font-family: "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
+}
+
+.centraldark-native-titlebar {
+  height: 48px;
+  min-height: 48px;
+  flex: 0 0 48px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #151b23, #15171c 56%, #17191d);
+  border-bottom: 1px solid rgba(204, 162, 76, .24);
+  user-select: none;
+  z-index: 5;
+}
+
+.centraldark-titlebar-drag {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 0 14px;
+  cursor: default;
+}
+
+.centraldark-titlebar-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  pointer-events: none;
+}
+
+.centraldark-titlebar-wordmark {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.centraldark-titlebar-eyebrow {
+  color: #cfac62;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  line-height: 1.1;
+}
+.centraldark-titlebar-wordmark strong {
+  color: #f0eef0;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.centraldark-titlebar-error {
+  align-self: center;
+  max-width: 28%;
+  color: #ffc7a6;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.centraldark-titlebar-controls { display: flex; align-items: stretch; flex: 0 0 auto; }
+.centraldark-chrome-button {
+  display: grid;
+  place-items: center;
+  width: 45px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #c5cbd2;
+  cursor: pointer;
+  outline-offset: -3px;
+}
+.centraldark-chrome-button:hover:not(:disabled) {
+  color: #fff;
+  background: rgba(203, 162, 73, .12);
+}
+.centraldark-chrome-button:focus-visible { outline: 2px solid #d6ad57; }
+.centraldark-chrome-button:disabled { opacity: .55; cursor: default; }
+.centraldark-chrome-close:hover:not(:disabled) { color: #fff; background: #b93540; }
+.centraldark-native-body { position: relative; flex: 1 1 auto; min-height: 0; min-width: 0; overflow: hidden; }
+.centraldark-resize-handle { position: absolute; z-index: 20; }
+.centraldark-resize-handle.north { top: 0; left: 10px; right: 10px; height: 5px; cursor: ns-resize; }
+.centraldark-resize-handle.south { bottom: 0; left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
+.centraldark-resize-handle.east { right: 0; top: 10px; bottom: 10px; width: 6px; cursor: ew-resize; }
+.centraldark-resize-handle.west { left: 0; top: 10px; bottom: 10px; width: 6px; cursor: ew-resize; }
+.centraldark-resize-handle.north-east { top: 0; right: 0; width: 12px; height: 12px; cursor: nesw-resize; }
+.centraldark-resize-handle.north-west { top: 0; left: 0; width: 12px; height: 12px; cursor: nwse-resize; }
+.centraldark-resize-handle.south-east { bottom: 0; right: 0; width: 12px; height: 12px; cursor: nwse-resize; }
+.centraldark-resize-handle.south-west { bottom: 0; left: 0; width: 12px; height: 12px; cursor: nesw-resize; }
+@media (max-width: 680px) {
+  .centraldark-chrome-button { width: 39px; }
+  .centraldark-titlebar-drag { gap: 7px; padding: 0 9px; }
+}

@@ -1,0 +1,1027 @@
+---
+name: centraldark-operational-method
+description: Capacidade operacional de todo o sistema CentralDark; uma Skill Mãe, uma biblioteca Skills/, um único organismo. SOL coordena e HERMES executa; PIVETE permanece vocativo/proveniência histórica.
+centraldark_autosync: true
+centraldark_autosync_policy: main-runtime-lock
+oracle_review_on_change: true
+---
+
+<!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+HUD UNIVERSAL: aplicar o contrato do topo de `AGENTS.md` ao receber `!HUD`, `#HUD` ou quando o CHEFE solicitar explicitamente o modo HUD. QUADRO FIXO COMPLETO apenas no modo HUD solicitado; conversa normal em PT-BR natural, sem recitar siglas e campos internos. Explicacao abaixo do quadro quando solicitado. Reutilizar `scripts/hermes/verified-checkpoint.py` como checkpoint provado, `scripts/hermes/centraldark-entry.py` como leitor e `docs/HUD/README.md` apenas para recibos documentais da missao atual e `scripts/centraldark-inventory-reconcile.sh` como reconciliador unico. Na mudanca de missao, preservar o historico e trocar a missao no mesmo quadro; status so muda com prova. Sem acesso ao owner: UNKNOWN, sem alegar sincronizacao global.
+<!-- /CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
+# CENTRALDARK — Capacidade Operacional de Todo o Sistema
+
+<!-- CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+**🏛️ Regra de apresentação herdada da SOUL:** nas telas humanas, mostrar `CentralDark · OS` para o produto completo, atualizador e instalador; `CentralDark · Agente` para tarefas do agente; `CentralDark · Terminal` para a interface CLI/TUI; `CentralDark · OS — Painel` para a Web. Preservar `Hermes` como motor/substrato técnico e marca de origem onde indispensável, sobretudo em `hermes update`, `hermes_cli`, `HERMES_HOME`, `.hermes/`, APIs, logs e documentação upstream. Cada consumidor só é declarado atualizado após readback e teste do runtime; reutilizar os owners da aplicação em vez de criar outro sistema de branding. Referência de protótipo: PR #2119; identidade canônica detalhada: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md`.
+<!-- /CENTRALDARK_OS_NOMES_PRODUTO_AGENTE_MOTOR_20261121 -->
+
+<!-- CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+**🗺️ Mapa visual semântico — 19/11/2026:** Herdar a Gramática SOL e os símbolos canônicos para explicar execuções; provas continuam técnicas. 👉 O QUE FAZER AGORA é rótulo visível, NEXT_CURSOR continua campo técnico. Aplicação em runtime depende de leitura e teste. Fonte de como formular: `docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml`; apresentação: `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`; símbolos: `docs/CONSCIENCIA/PADRAO-EMOJIS.md`. `UNKNOWN` não vira aprovação. Aplicar só as seções necessárias e preservar formatos técnicos.
+<!-- /CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119 -->
+
+<!-- CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+## 🗣️ Comunicação humana obrigatória — Gramática SOL + padrão visual (21/11/2026)
+
+**REGRA OBRIGATÓRIA PARA TODO AGENTE/BOT QUE CARREGAR ESTA SKILL MÃE E RESPONDER A UMA PESSOA:** herdar a [Gramática SOL](../../../docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml), o [padrão de resposta](../../../docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md) e o [mapa de emojis](../../../docs/CONSCIENCIA/PADRAO-EMOJIS.md). Método único existente: sem nova Skill, prompt independente, catálogo, cérebro, bot ou HUD.
+
+1. **Português brasileiro claro, natural e resultado primeiro.** Dizer o que aconteceu antes de detalhes técnicos; resposta simples é curta, sem cabeçalhos compulsórios.
+2. **Títulos de pessoas, não de máquinas.** Quando houver comprovante, preferir “Resultado: APROVADO / PENDENTE / FALHOU”, “Arquivo na versão principal” e “Código de verificação”, com valores reais. Traduzir rótulos visíveis; **não** renomear `main`, `PASS`, `FAILED`, `PENDING`, `SHA`, variáveis, caminhos, APIs, JSON/YAML, logs ou comandos.
+3. **Emojis que combinem com a palavra e o assunto**, escolhidos pelo contexto; paleta é guia semântico, não lista fechada. Preservar emojis/valores de comandos e estados de evidência. Emoji não prova execução.
+4. **Espaçamento com respiro e divisores proporcionais.** Separar assuntos em blocos legíveis, sem muralha de texto ou cada frase em linha independente. Usar `---` apenas entre temas distintos; não decorar todo parágrafo.
+5. **Adaptar ao pedido.** Um “sim/não” não vira relatório; Radar, atualização, execução e auditoria exibem itens, contagem, arquivo, commit e verificação só quando pertinentes e observados.
+6. **Prova preservada.** “APROVADO” apenas quando medido naquele escopo; “PENDENTE” quando faltar confirmação; “FALHOU” para falha demonstrada. Documento != carregamento, commit != consumo em runtime.
+7. **Persistência e consumidor.** Em nova sessão, recuperar dos owners canônicos as regras pertinentes; não confiar só na memória do chat. A aplicação por CentralDarkBot, Hermes, OpenBot, Telegram, CLI, Cockpit ou outro agente exige que aquela sessão carregue este método e que o comportamento seja testado. Em áudio, não narrar emojis.
+
+**Contraprovas de apresentação:** pergunta curta → resposta curta; Radar → seções compreensíveis e comprovante; status desconhecido → “PENDENTE”, sem falsa aprovação; saída de máquina → identificadores intactos; leitura sem emojis → ainda inteligível.
+<!-- /CENTRALDARK_COMUNICACAO_PTBR_VISUAL_OBRIGATORIA_20261121 -->
+
+
+**Uma Skill Mãe. Uma biblioteca de Skills. Um único organismo.**
+
+Toda Skill operacional da CentralDark, incluindo Hermes, Cockpit e demais funcionalidades, deve ser integrada em `centraldark-operational-method/Skills/` sem perda de conteúdo. Reconciliar antes de consolidar: nenhuma biblioteca paralela ou pasta de links como arquitetura final. SOL coordena, Hermes executa; Kimetsu orienta o método, Michelin exige contraprova. Esta regra define o destino canônico; a migração só é concluída quando os arquivos e o runtime forem verificados.
+
+<!-- CENTRALDARK_CONTINUIDADE_MULTIAGENTE_UNIVERSAL_20261127 -->
+## Continuidade universal — uma missão, DELTAs e handoff entre PRs (27/11/2026)
+
+**Aplicação obrigatória a todo consumidor autorizado desta Skill Mãe, não somente SOL, Hermes ou Dot:** carregar e aplicar o [contrato existente de orquestração, escritor único e DELTA](../../../docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md#53-um-escritor-por-escopo). O agente, modelo, interface e transporte são substituíveis; a continuidade pertence ao projeto. Usar o `!RASTRO`/`!HUD` ou ledger equivalente vigente e o PR da missão resolvidos pelo owner atual, sem fixar números históricos.
+
+**Método operacional:** recuperar o checkpoint e a intenção vigente → distribuir tarefas independentes pelo limite real da superfície → reconciliar recibos e preencher vagas liberadas quando a fila nativa autorizada permitir → contraprova → DELTAÚTIL → registrar e reler no rastro vigente → continuar o menor delta autorizado. Sem capacidade de delegação, executar diretamente; sem provas, manter UNKNOWN. Uma caneta por escopo, nenhum envio duplicado, nenhuma ampliação de permissões. **Quem efetuar o merge tem a obrigação de abrir o PR sucessor de continuidade do projeto no mesmo ciclo**, revalidando main e transferindo identificador do projeto, GOAL_ID ainda ativo, escopo, merge SHA, cadeia de provas, pendências, NEXT_CURSOR e handoff explícito do writer. Conferir o PR sucessor e vínculos no !RASTRO/!HUD vigente antes de concluir o ciclo; reconciliar sucessor da mesma transição já existente sem duplicá-lo. Mesmo quando uma missão atingir FIXED_POINT, preservar seu encerramento e registrar o handoff material da continuidade do projeto no owner existente, sem reabrir trabalho aprovado. Somente fechamento explícito autorizado do projeto encerra a cadeia; bloqueio objetivo mantém a obrigação e cursor de recuperação com o responsável pelo merge, sem transferir ao CHEFE. Não criar PR vazio, mudança artificial, ledger paralelo ou ampliar permissões. Merge não equivale a deploy nem a handoff confirmado.
+
+**Prova e limite:** o loop operacional de múltiplos DELTAs na mesma missão foi observado em [HUD #1977, RENDER-13–22](https://github.com/ServerVpss/CentralDark/pull/1977#issuecomment-7206523507); o exemplo não torna Dot ou Desktop Commander requisitos. Reposição automática de vagas, execução sem novos turnos, handoff automático de PRs e consumo por todos os runtimes ainda exigem prova própria. Aplicar este método nos turnos disponíveis; não afirmar execução em background nem criar scheduler por inferência. Preservar consentimento, revogação, orçamento, gates e limites do runtime. Sem novo dado ou delta material, não inventar trabalho. `DOCUMENTED != CONSUMED`; `MERGED != DEPLOYED != FIXED_POINT`.
+<!-- /CENTRALDARK_CONTINUIDADE_MULTIAGENTE_UNIVERSAL_20261127 -->
+
+## Biblioteca operacional centralizada (23 Skills)
+
+Toda receita operacional da CentralDark, inclusive a integracao visual Hermes, reside em Skills/<nome>/ com um unico owner. O plugin de Hermes pode permanecer na pasta de plugins exigida pelo runtime, mas nao existe segunda biblioteca de Skills.
+
+- [atendimento-whatsapp](Skills/atendimento-whatsapp/SKILL.md) — método operacional do atendimento WhatsApp, com contexto e aprendizados profissionais apontados para Meus-Trabalhos; execução e carregamento exigem prova.
+- [centraldark-auto-sync-vscode](Skills/centraldark-auto-sync-vscode/SKILL.md)
+- [centraldark-autonomous-conflict-costura](Skills/centraldark-autonomous-conflict-costura/SKILL.md)
+- [centraldark-boot](Skills/centraldark-boot/SKILL.md)
+- [centraldark-builder-destop](Skills/centraldark-builder-destop/SKILL.md)
+- [centraldark-capability-hud](Skills/centraldark-capability-hud/SKILL.md)
+- [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md)
+- [centraldark-esteira-motor](Skills/centraldark-esteira-motor/SKILL.md)
+- [centraldark-evidence-reconciliation](Skills/centraldark-evidence-reconciliation/SKILL.md)
+- [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md)
+- [centraldark-hermes-visual-computer-use](Skills/centraldark-hermes-visual-computer-use/SKILL.md)
+- [centraldark-hub-credential-control-plane](Skills/centraldark-hub-credential-control-plane/SKILL.md)
+- [centraldark-integration-verification](Skills/centraldark-integration-verification/SKILL.md)
+- [centraldark-intent-deploy-router](Skills/centraldark-intent-deploy-router/SKILL.md)
+- [centraldark-live-editing-fabric](Skills/centraldark-live-editing-fabric/SKILL.md)
+- [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md)
+- [centraldark-note-maintenance](Skills/centraldark-note-maintenance/SKILL.md)
+- [centraldark-ops](Skills/centraldark-ops/SKILL.md)
+- [centraldark-oracle-surface](Skills/centraldark-oracle-surface/SKILL.md)
+- [centraldark-reuse-runtime](Skills/centraldark-reuse-runtime/SKILL.md)
+- [centraldark-unified-surface-parity](Skills/centraldark-unified-surface-parity/SKILL.md)
+- [centraldark-vscode-log-bridge](Skills/centraldark-vscode-log-bridge/SKILL.md)
+- [michelin-3-estrelas](Skills/michelin-3-estrelas/SKILL.md)
+- [reconciliacao-diaria-centraldark](Skills/reconciliacao-diaria-centraldark/SKILL.md)
+
+<!-- CENTRALDARK_PROMPT_ENGINEER_CATALOG_20261115 -->
+### Capacidade vinculada — centraldark-prompt-engineer
+
+**Nome de catálogo:** `centraldark-prompt-engineer`. **Apresentação:** `CentralDark · Engenharia de Prompts`. **Owner de conteúdo existente:** [PROMPT-ENGINEER.md](../../../docs/BRAIN/03-DOCUMENTACAO/01-AGENTS-LIBRARY/02-AGENTES/PROMPT-ENGINEER.md). **Classificação:** `REUSE / DOCUMENTED / RUNTIME_UNPROVEN`.
+
+**Roteamento por intenção:** pedidos de criar, forjar, melhorar, comparar, testar ou otimizar prompts devem consultar esse mesmo owner, sem exigir comando ritual. **Chamadas manuais em português:** `forja esse prompt`, `melhora esse prompt` e `centraldark-prompt-engineer`. O nome antigo `PROMPT-ENGINEER` é referência documental de compatibilidade; não é o identificador preferido apresentado ao CHEFE.
+
+**Modos:** pedido simples → entregar prompt melhorado, preservando intenção e explicando o delta; pedido de avaliação/produção → baseline A/B, métricas, custos, segurança e contraprova, somente quando o escopo solicitar. Não executar benchmark em toda conversa. Nunca transformar exemplos de métricas em resultados reais.
+
+**Compatibilidade e prova:** esta entrada é um **ponteiro de catálogo**, não a vigésima quarta pasta em `Skills/`, nem uma skill nativa recém-instalada. Não renomear, mover ou duplicar o owner antigo por estética. Conferir o roteador/consumidor real antes de afirmar que Hermes, Telegram ou Cockpit invocam essa capacidade; catálogo `!=` carregamento `!=` execução. Uma implementação legada que direcione frases semelhantes para outra skill requer reconciliação do owner de roteamento e teste funcional específico antes de declarar acionamento automático.
+
+**NEXT_CURSOR:** `PROMPT_ENGINEER_CATALOG_READBACK → ROUTER_OWNER_MAPPING → LIVE_INVOCATION_TEST → A_B_BASELINE_IF_REQUESTED`.
+<!-- /CENTRALDARK_PROMPT_ENGINEER_CATALOG_20261115 -->
+
+<!-- CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+**🔐 Hermes pertence à CentralDark — distinção entre método e motor (09/11/2026).** O método e os aprendizados produzidos para a CentralDark pertencem aos owners da própria CentralDark, não a um catálogo paralelo do Hermes: aprendizado geral → `docs/CONSCIENCIA/APRENDIZADOS.md`; procedimento especializado → [centraldark-hermes-operations](Skills/centraldark-hermes-operations/SKILL.md), já indexado nesta Skill Mãe. Exemplo concreto: recuperar a janela interativa "Sudo Password Required" — ler a receita nessa Skill filha antes de responder genericamente. O código nativo do Hermes (`/opt/hermes/tools/terminal_tool_sudo.py`, quando presente) é **implementação/dependência de runtime**, não owner documental da CentralDark; pode continuar instalado no local que o pacote exige. Qualquer plugin ou cópia necessária para carregamento é **adaptador**, nunca segunda autoridade. Para absorver outras capacidades do Hermes: inventariar as existentes, verificar licença/versão/contratos/consumidores, classificar REUSE/EXTEND, registrar o menor delta na Skill Mãe/Skills/owner e provar recarga real. Não copiar tudo às cegas, não duplicar motor, não solicitar/gravar senha em chat. `DOCUMENTADO != CONSUMIDO`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_HERMES_NATIVE_CAPABILITY_BRIDGE_20261109 -->
+
+<!-- CENTRALDARK_SKILL_NAMING_20261109 -->
+### Nomes de Skills: identificador tecnico, owner e apresentacao (09/11/2026)
+
+**Conceito cristalizado:** nome da pasta, campo `name:` do `SKILL.md`, comando exibido pelo Hermes (`/...`) e titulo humano sao **camadas diferentes**. Prefixo `centraldark-` indica identidade no identificador em que realmente aparece; ausencia do prefixo na pasta **nao prova** Skill externa, duplicada, desconectada ou nao carregada. Compatibilidade do loader vem antes da estetica. Na lista desta Skill Mae, 21 das 23 pastas operacionais com link usam prefixo `centraldark-`; as outras sao `michelin-3-estrelas` e `reconciliacao-diaria-centraldark`. A matriz `catalogo/META-RSI-40.md` referencia 40 nomes de pastas SELF sem o prefixo, enquanto os manifestos podem declarar `name: centraldark-...`. Exemplo: comando Hermes `/centraldark-self-cognitive-amplification` **nao esta comprovado como a mesma implementacao** de `Skills/recursive-cognitive-amplification/SKILL.md` (capacidade 40/40) so por semelhanca semantica.
+
+**Regra:** manter os paths/comandos existentes ate mapear `pasta -> frontmatter name -> alias/comando -> loader -> consumidor -> hash/conteudo -> teste de invocacao`. Se o nome humano precisar de padronizacao, exibir CentralDark + titulo PT-BR na interface e no catalogo sem renomear paths ou alterar IDs tecnicos por inferencia. Um unico owner da Skill Mae; adaptadores nos locais exigidos por cada runtime nao viram segunda biblioteca. So depois de contraprova de compatibilidade, decidir menor delta de alias/renomeacao por owner com migracao de consumidores e readback. `CATALOGADA != CARREGADA != EXECUTADA`; `NOME_SEMELHANTE != IDENTIDADE_PROVADA`; `UNKNOWN != PASS`.
+<!-- /CENTRALDARK_SKILL_NAMING_20261109 -->
+
+<!-- CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+### UNKNOWN rastreável — META-START-LINK + DELTA_UTIL
+
+`UNKNOWN` não encerra a investigação quando existe uma rota legítima de leitura. Aplicar o elo canônico `META-START-LINK` em `.agents/skills/meta-lupa/KITS/METAGRILL-METALUPA/META-START-LINK/GANCHO.md` para preservar `POSIÇÃO → DIREÇÃO → PROVENIÊNCIA → DELTA → CONFIANÇA → CURSOR`, sem copiar memória nem criar segundo router.
+
+Sequência obrigatória para toda pendência rastreável:
+
+```text
+UNKNOWN_CLASSIFICADO
+→ DEFINIR_FATO_AUSENTE_E_CRITÉRIO_DISCRIMINANTE
+→ RECUPERAR_OWNER/CATALOGO/LEMBRANCA/RECEIPT_EXISTENTE
+→ MEDIR_ROTA_READ_ONLY_E_RUNTIME_ATUAL
+→ CONTRAPROVA_INDEPENDENTE
+→ DELTA_UTIL_NO_OWNER_EXISTENTE
+→ RECEIPT + NEXT_CURSOR
+→ FIXED_POINT OU PENDÊNCIA EXPLÍCITA
+```
+
+GPS, presença, logs, HUD, monitor, Start-Link e qualquer sensor são fontes de evidência ou direção; não são autoridade nem prova de execução. Não criar watcher, scheduler, agente ou loop contínuo por inferência. Para monitoramento contínuo, exigir intenção explícita, owner, scheduler/processo vivo, escopo, retenção e readback; sem isso, executar somente uma leitura pontual e registrar `SENSOR_PRESENT`, `ROUTE_REACHABLE`, `RUNTIME_PROVED` ou `UNKNOWN` separadamente. O `DELTA_UTIL` deve ser escrito no owner canônico somente quando sobreviver à contraprova; pesquisa, intenção, log recebido ou resposta de subagente sozinhos não promovem estado.
+<!-- /CENTRALDARK_UNKNOWN_TRACE_DELTA_UTIL_20261109 -->
+
+## Fallback de modelos — Gemini preservado como rota de retorno
+
+A indisponibilidade temporária de Gemini não autoriza removê-lo, substituí-lo permanentemente ou reordenar sua rota. `429`, cooldown, falta temporária de crédito ou falha transitória são estados de fallback, não prova de obsolescência. Manter Gemini configurado como fallback para leitura ampla, extração e pesquisa quando voltar a responder.
+
+Usar Codex, Nous ou outro provedor comprovado somente como rota temporária/alternativa durante a indisponibilidade observada. Registrar `PROVIDER`, `MODEL`, `FALLBACK_REASON`, `STATUS` e `VALIDATION`; não apagar credenciais, aliases ou entradas Gemini por inferência. Só alterar a política de fallback com ordem explícita do CHEFE e prova comparativa por classe de tarefa. `TEMPORARY_UNAVAILABLE != REPLACED`; `FALLBACK_USED != DEFAULT_CHANGED`; `UNKNOWN != PASS`.
+
+## Runtime preflight obrigatório
+
+O `RUNTIME_PREFLIGHT_LINT` é o gate comum antes de consumir uma rota material.
+Ele valida comando, shell, host, caminhos necessários e evidência de ownership
+da bridge. `PREFLIGHT_PASS != RUNTIME_PASS`: o preflight autoriza a medição, mas
+somente execução, efeito esperado e readback podem provar o runtime.
+
+Falha de parsing do wrapper não vira falha do alvo. Evidência ausente ou inválida
+permanece `UNKNOWN`/`BLOCKED`; não criar uma rota alternativa para forçar verde.
+
+**Linux Kingston + VMware (03/11/2026): GParted Live, SYSBOOT/SYSROOT/DATA/SWAP, NTFS VMWARE no mesmo SSD, conversao fullDevice -> partitionedDevice, GUI do VMware e prova simultanea do boot, SSH root e NTFS. Carregar a Skill propria [centraldark-linux-vmware-rawdisk](Skills/centraldark-linux-vmware-rawdisk/SKILL.md). Metodo hibrido CHEFE + SOL/Hermes, reuse-before-create e contraprova. Nao repetir particionamento concluido.**
+
+<!-- ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+**🍒+1 ROTA PRIORITÁRIA (nova contraprova 03/11/2026):** ao investigar Casa→VMware→VPS, **antes de consultar IP histórico, VMX D:/E: fixo, rede VPS ou novo gateway**, carregar [Skill VMware existente](Skills/centraldark-linux-vmware-rawdisk/SKILL.md#current-verificado--casa--vmware-nat--vm-vps-em-diagnostico) e sua [receita Kingston](Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). Na Casa foi comprovado: `SEGREDO` online → VMX corrente do processo `vmware-vmx.exe` em `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx` → `vmrun getGuestIPAddress` = `192.168.35.130` → SSH com override temporário do IP corrente e host key conferida = `CASA_VM_SSH=PASS`. O alias `openkylin-vm` em `C:\Users\Administrador\.ssh\config_openkylin` ainda apontava para `.128`; **nao alterar .ssh sem backup/gate**. Dentro da VM `tailscale status` = `Machine is not yet approved by tailnet admin`; VM→VPS ainda **não comprovado**. Current ≠ medições históricas; nenhuma mudança de disco/SSH/VPS foi feita. `NEXT_CURSOR=APPROVE_TAILNET_VM_THEN_REMEASURE_VM_VPS`.
+<!-- /ROUTE_PRIORITY_VMWARE_DHCP_20261103 -->
+
+## Diálogo Reflexivo da Intenção - continuidade entre falas
+
+**Em toda conversa CentralDark, carregar silenciosamente:** [centraldark-dialogo-reflexivo-da-intencao](Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md).
+Uma fala nova é DELTA da missão ativa por padrão. Diferenciar conversa, pergunta, correção, ensino e ordem. Preservar INTENT_PARENT, CURRENT, OWNER e NEXT_CURSOR; reparar mal-entendidos sem abandonar trabalho.
+**Na operação:** acompanha [Kimetsu Brainstorm Remix](../kimetsu-brainstorm/SKILL.md) e [Michelin 3 Estrelas](Skills/michelin-3-estrelas/SKILL.md), escolhendo técnica e contraprova proporcionais. **Na conversa:** linguagem humana, sem ritual. REGRA_RID_DELTA_CONTINUITY=TRUE.
+
+## Método único: contexto vivo, navegador, monitores e edição visual (05/11/2026)
+
+**Owner e entrada:** esta Skill Mãe coordena. O Hermes executa por rotas autorizadas existentes; CHEFE decide. Esta é a única receita de orquestração para pedidos como "olhe a tela", "veja as abas", "marque o monitor", "mostre o mouse", "clique", "edite", "salve", "programe na janela". Não criar segunda Skill, mouse, ponte, navegador, daemon ou catálogo. Reutilizar [Browser/UIA](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md) com [cursor nativo](Skills/centraldark-hermes-visual-computer-use/references/native-cursor.md).
+
+**POLÍTICA DE PARALELISMO:** vários **sensores somente de leitura** podem trabalhar ao mesmo tempo para manter o contexto atualizado: Browser `list_tabs/get_tab_context` nas abas que expõe; UIAutomation com título/PID/HWND/aba/controle acessível da janela Windows atual; mapa de monitores/posição/DPI e estado WGC; `cua-driver status`; saúde do MCP/Commander local (incluindo `engine_connected`, não apenas HTTP 200); estado Git/arquivo, e Screenpipe só quando já autorizado. Não esperar um sensor lento se outra rota já deu evidência suficiente. Reutilizar índices e observações cujo fingerprint da mesma janela/sessão ainda é válido. **Uma caneta por alvo:** ações de clique, digitação, foco, salvamento, commit ou publicação são serializadas por janela/aba/arquivo/escopo. Nunca disputar mouse com usuário nem fazer dois cliques concorrentes; fan-out de leitura não vira fan-out de escrita.
+
+**Gatilho administrativo:** quando a missão envolver EasyPanel, Cloudflare ou outro painel autenticado, carregar nesta sessão a [receita de navegador administrativo](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#navegador-administrativo). Usar primeiro o conector oficial para a operação que ele suporta. Quando o pedido for conferir a interface ou o conector não suportar a etapa, inspecionar a aba autorizada pelo DOM/acessibilidade; usar a rota visual existente só quando necessária. Se for promoção da Casa para a Contabo, carregar também [centraldark-ops](Skills/centraldark-ops/SKILL.md#easypanel-promover-da-casa-para-a-contabo). Não repetir uma ação sem reler o resultado e não trocar de rota para contornar aprovação negada.
+
+<!-- CENTRALDARK_BROWSER_COMMANDER_PARALLEL_VISUAL_20261113 -->
+**Receita canônica — Browser + Desktop Commander em paralelo (13/11/2026):** quando a missão envolver uma interface já aberta e o estado real do host/filesystem, iniciar as duas leituras independentes no mesmo ciclo: **Browser** reutiliza a aba existente com `list_tabs → get_tab_context` para inspecionar texto/DOM/estado visível sem clicar; **Desktop Commander** reutiliza o dispositivo autorizado para ler filesystem, Git, processo, serviço, terminal ou executar uma sonda somente de leitura no host real. Não abrir aba, navegador, terminal, sessão SSH, daemon ou cópia de repo se a superfície já existir. As duas rotas são sensores complementares: Browser prova o que a página expõe; Commander prova o estado operacional do host. Nenhuma substitui a outra.
+
+```text
+INTENÇÃO
+→ [PARALELO READ-ONLY]
+   ├─ BROWSER: TAB_ID → PAGE_CONTEXT → UI_STATE
+   └─ DESKTOP_COMMANDER: DEVICE → FILE/GIT/PROCESS/RUNTIME_STATE
+→ FUSÃO POR MESMO TARGET_ID / OWNER
+→ DELTA MÍNIMO
+→ UMA AÇÃO AUTORIZADA
+→ FEEDBACK
+→ [PARALELO READBACK]
+   ├─ BROWSER: reler a mesma aba/estado visual
+   └─ DESKTOP_COMMANDER: reler arquivo/processo/serviço/runtime
+→ COUNTERPROOF
+→ RECEIPT / NEXT_CURSOR
+```
+
+**Regra de prova:** `BROWSER_VISIBLE != RUNTIME_PROVEN`; `COMMANDER_COMMAND_OK != UI_EFFECT_PROVEN`. Para uma mudança de Cockpit, por exemplo, o Browser deve reler o card/estado da mesma aba e o Commander deve reler o arquivo/serviço/porta/PID pertinente. Só declarar PASS quando as duas metades exigidas pela intenção convergirem. Se uma fonte estiver indisponível, marcar somente aquela perna como `UNKNOWN` e continuar pelas demais rotas autorizadas; não criar arquitetura paralela. Para ações materiais, manter `ONE_WRITER_PER_RESOURCE`: leituras podem ser paralelas, escrita/clique/tecla/commit não.
+<!-- /CENTRALDARK_BROWSER_COMMANDER_PARALLEL_VISUAL_20261113 -->
+
+**Rota complementar Cockpit / RX 580 / monitores (08/11/2026, Casa):** reutilizar a seção existente `Sistema CentralDark → Runtime / Capabilities → Radeon RX 580` em `apps/instinto-superior/src/components/central/RuntimeSistema.tsx`, com leitura autenticada de `apps/instinto-superior/src/lib/maquina.functions.ts`. Seus owners são o coletor read-only `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (fonte MSI Afterburner / MAHMSharedMemory) e `scripts/casa/CentralDark-RtssOverlay.ps1` (estado e mapa dos monitores / DesktopOverlayHost RTSS existente). Referência de capacidades e provas: `docs/HUD/README.md`. Não criar outro plugin, agente, coletor, ponte, janela ou motor visual.
+
+**Seleção e fallback sem confundir capacidades:** Browser/UIAutomation inspecionam controles; WGC da Skill Hermes Visual captura pixels autorizados; Cua virtual + overlay Hermes são a única rota de mouse/clique visual já aprovada. Se WGC, Cua ou mapeamento de tela falhar, consultar o `status` RTSS, seus aliases físicos atuais, processos e sensores Radeon como **contraprova de monitor/topologia/telemetria**, e tentar reparar o owner visual original; RTSS/Afterburner NÃO capturam o conteúdo da janela, NÃO rolam Telegram, NÃO injetam clique e NÃO substituem WGC/Cua. Ações RTSS `open/move/close` continuam restritas ao owner e às permissões tipadas; usar `status` somente leitura durante diagnóstico e nunca abrir/mover host automaticamente como fallback de captura. Medir monitor humano pelo script existente `scripts/Identify-CentralDarkMonitors.ps1 -ListWindows`; o número humano não deriva de DISPLAYx.
+
+**Frescor e segurança:** `GPU=LIVE` exige leitura recente e autenticada no host Windows `SEGREDO`; feed em `%LOCALAPPDATA%\CentralDark\CENTRALDARK-AFTERBURNER-LIVE.js` ausente/antigo ou servidor fora da Casa = `STALE/UNKNOWN`, nunca valor antigo como telemetria atual. `RTSS running=false` não equivale a monitor desligado. Manter GPU, clocks e ventoinhas intocados. Anotar no mesmo receipt `MONITOR_MAP|WGC_CAPTURE|CUA_CURSOR|RTSS_STATUS|RX580_FRESHNESS|COCKPIT_AUTH|ACTION|AFTER_UI|COUNTERPROOF|NEXT_CURSOR`; distinguir `SOURCE_PRESENT`, `RUNTIME_PRESENT` e `VISUAL_EFFECT_PROVEN`. Preservar hierarquia/nomes dos owners, conforme o manual já vinculado em `docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.md`.
+
+**Contexto compacto para o executor:** antes de agir, reunir `INTENT|WINDOW_NAME|PID|HWND|MONITOR_NUMBER+RECT|BROWSER_PROFILE+VISIBLE_TABS|SELECTED_TAB+ORIGIN|CONTROL_NAME+BOUNDS|CUA_STATUS|WGC_STATUS|COMMANDER_ROUTE|GIT_DIRTY+SHA|AUTH_STATE|EVIDENCE_AT|NEXT_CURSOR`. Informação inacessível = UNKNOWN. A aba do Chrome de testes não representa automaticamente o Chrome pessoal; Browser lista somente as abas da sessão que alcança, e UIA `ControlType.TabItem` vê outras janelas sob a identidade atual. Enumerar ambos sem fechar, migrar perfis, copiar cookies ou adivinhar aba.
+
+**Seletor de execução, preferência por owner disponível:**
+1. Para entender navegador, ler a aba certa via Browser; cruzar com UIA de janelas e abas. Se Chrome DevTools MCP já enxergar **a mesma página**, reutilizar `snapshot -> uid atual -> click/fill -> snapshot`. Caso contrário usar UIA (`InvokePattern/ValuePattern/SelectionItemPattern`) pelo CentralDark Casa Commander nativo **somente se `engine_connected` e a ferramenta estiverem comprovados**, ou pelo Desktop Commander autorizado que de fato esteja conectado. `GET /health=200` sem engine é PARTIAL, não input pronto.
+2. Quando o CHEFE pedir mouse visual/overlay, preferir **Cua virtual existente** e WGC da Skill Hermes Visual. Consultar `cua-driver status`; se parado, iniciar **uma vez** `cua-driver serve` em modo standard sem `--no-overlay`, sem alterar permissões. Pode reaproveitar `cua-driver autostart` existente para persistência, sem iniciar daemon duplicado. `scripts/blink_cursor.py --monitor N --mode position` mostra prévia breve; `--mode blink` pisca; `--mode click --window-title 'JANELA_ATUAL' --control-name 'CONTROLE_UIA_EXATO'` descobre dinamicamente PID, HWND, monitor e centro do controle via `scripts/Identify-CentralDarkMonitors.ps1 -ResolveControl`, usando somente leitura UIAutomation. O mesmo `blink_cursor.py` executa o clique virtual Cua + overlay existente, com validacoes Win32/geometria antes do input; o formato anterior `--monitor N --pid PID_ATUAL --hwnd HWND_ATUAL --x X_ATUAL --y Y_ATUAL` continua disponivel para alvos ja medidos. Janela/controle ausente ou ambiguo = BLOCKED sem clique. Sem `SetCursorPos`, `mouse_event` ou mouse fisico. `CUA_CALL_OK != UI_EFFECT_PROVEN`: exigir readback independente. Nunca `scope=desktop`/mouse físico por substituição silenciosa.
+3. Se `WINDOWS_VISUAL_RUNTIME_NOT_BUILT`, procurar primeiro `native/bin/Release/.../HermesVisual.exe` e dependências da Skill instalada ou usar seu `scripts/Install.ps1` canônico: reparar apenas `runtime` esperado, sem novo overlay ou engine. Separar `WGC_PREVIEW`, `CUA_CURSOR` e `CUA_CLICK`; sucesso de um não prova os outros.
+4. Para editar código/documento **na tela**, encontrar editor e arquivo reais, preservar conteúdo não solicitado, alterações locais e rascunhos; preferir `ValuePattern` para texto, ou o cursor Cua e controle atual quando a interação visual for exigida. Salvar uma vez no mesmo arquivo, confirmar por leitura da interface **e** `git diff`/hash/resultado de build ou teste proporcional. Operações Git mantêm um escritor por escopo e só promovem o delta autorizado; clique/tecla enviados não provam arquivo salvo.
+5. Se navegador pedir autenticação, renovação de máquina, pagamento ou aprovação administrativa, verificar o estado real e não contornar a etapa humana. Não escolher plano pago nem publicar, alterar secrets ou autorizar outros dispositivos automaticamente. Desconexão Tailscale não implica queda do Cockpit Linux: medir porta e serviço independentemente.
+
+**Loop estável unificado:** `INTENÇÃO -> PARALELIZAR LEITURAS -> FUSÃO DO CONTEXTO -> TARGET_ID + OWNER_RELATIVE_PATH -> RUNTIME_TARGET_ID/PID/HWND -> MONITOR_MAP -> TARGET_MATCH -> MONITOR_MATCH -> TRAVA DE UM EXECUTOR -> OVERLAY_VISÍVEL NA TELA-ALVO -> CURSOR_VIRTUAL_CUA -> UMA AÇÃO -> READBACK UI + PROVA INDEPENDENTE -> RECEIPT -> FIXED_POINT|NEXT_CURSOR`. O overlay deixa de ser apenas ornamentação: quando a operação visual usar Cua, ele marca a tela/monitor resolvido e acompanha o cursor virtual na mesma trajetória. Se `TARGET_MATCH` ou `MONITOR_MATCH` não forem PASS, não clicar. Se não houver efeito comprovado, não repetir o clique; renovar a observação e mudar de rota autorizada somente quando não houver risco de duplicar a ação. Após troca de janela/aba, monitor ou render, renovar HWND, posição, UID e foco. Limpar overlay/sessão iniciados apenas para a operação; preservar os preexistentes. Se não houver efeito comprovado, não repetir o clique; renovar a observação e mudar de rota autorizada somente quando não houver risco de duplicar a ação. Após troca de janela/aba, monitor ou render, renovar HWND, posição, UID e foco. Limpar overlay/sessão iniciados apenas para a operação; preservar os preexistentes.
+
+### Observabilidade obrigatória na criação de ferramentas
+
+Integra a **Lei do Ciclo Completo**. Aplica-se a cada ferramenta nova, integração adicionada ou mudança de fluxo, mesmo quando a implementação for acionada por botão, CLI, agente ou MCP. Não criar outro logger, coletor ou canal por padrão. Antes de escrever, consultar o owner existente, [Aprendizados](../../../docs/CONSCIENCIA/APRENDIZADOS.md), [Lembranças](../../../docs/CONSCIENCIA/LEMBRANCAS/) e as referências aplicáveis.
+
+1. **Contrato antes do código.** Identificar owner, entrada, efeito esperado, dependências, limites e permissões. Mapear onde uma falha seria escondida: entrada, autorização/login, integração/pareamento, ação de interface, rede, persistência e erro interno. Marcar como não aplicável somente com motivo verificável.
+2. **Log seguro no logger existente.** Registrar horário, ferramenta/etapa, estado, código estável e, quando houver mais de uma camada, um identificador opaco de correlação que não possa autenticar. Distinguir solicitação, aguardando, sucesso verificado e falha. Não gravar senha, token, segredo, código de pareamento, dados pessoais, payload bruto ou mensagem de exceção sem filtragem. Definir acesso, retenção e rotação proporcionais; deduplicar sintomas periódicos idênticos sem ocultar transições ou recuperação.
+3. **Prova e contraprova.** Pela entrada oficial no alvo autorizado, comprovar um sucesso e uma falha controlada e reversível, ou marcar o que não foi comprovado. Fazer leitura independente do efeito, cruzar com o mesmo código seguro na interface e no log quando houver interface, e testar que segredos simulados não chegam ao log. Conexão verificada não é permissão; solicitação aceita não é efeito; teste isolado não é implantação. Nunca provocar falha disruptiva em produção para cumprir o teste.
+4. **Recibo e faxina.** No recibo canônico, guardar revisão, alvo, cenários, efeito observado, trechos filtrados e limites, sem anexar o log inteiro. Conferir o estado após a faxina. Sem prova aplicável, não marcar `CONCLUIDO` nem `FIXED_POINT`. Documentar a regra não prova aplicação pelo Bot CentralDark.
+
+**Regra de duas camadas.** Na interface, explique em PT-BR simples o que não terminou, a próxima ação segura e, se houver rastro persistido, ofereça a referência copiável. Não exiba código técnico, HTTP, stack ou caminho de arquivo. No logger existente, correlacione app e servidor com o mesmo identificador opaco, sem usá-lo como credencial. Registre componente, etapa, ação, horário, código, estado HTTP quando observado e, na origem da falha, causa, função, arquivo, linha e quadros sanitizados efetivamente capturados. Onde esse dado não existe, omita ou marque como desconhecido. Não proponha repetir uma escrita cujo efeito é incerto: ofereça verificação primeiro. Seguir o [Design System](../../../docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md).
+
+Exemplo observado: no Agente Remoto em DEV, o botão **Confirmar vínculo** mostrava apenas “Falha observada”. Após instrumentar a ação, a interface e o arquivo registraram `PAIRING_OWNER_APPROVAL_HTTP_500`. O log também distinguiu recuperação de sessão, saúde do MCP, pareamento pendente e atendimento remoto aguardando. Isso prova a observabilidade dessas etapas, não o sucesso do pareamento nem o reteste de todos os botões. [Recibo da missão #1977](https://github.com/ServerVpss/CentralDark/pull/1977#issuecomment-7199013723) para o contexto operacional; o código HTTP foi observado no teste DEV posterior, não atribuído àquele comentário.
+
+Referências: [Manual de Boas Práticas do TCU](../../../docs/BRAIN/03-DOCUMENTACAO/02-BIBLIOTECA/Boas-praticas-para-pastas-e-arquivos-digitais.pdf) para organização e recuperação dos recibos; [PDF Harness Self-Healing Core](../../../docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/PDF-HARNESS-SELF-HEALING-CORE.pdf) para verificar antes e depois, classificar falhas e guardar recibo. Nenhum dos PDFs substitui o teste no alvo.
+
+### Faxina após o teste
+
+Antes de executar, identificar os temporários criados pela missão e separá-los do checkout ativo, dos arquivos do usuário e dos serviços existentes. Ao encerrar, registrar primeiro a prova e a contraprova no recibo canônico (revisão, resultado e limite), sem copiar segredos ou logs integrais. Confirmar que nenhum processo ainda usa os temporários; validar o caminho real, o conteúdo e a ausência de links ou junções antes de remover somente os temporários identificados. Não remover arquivos preexistentes, nem usar limpeza ampla no checkout. Reler o estado final e registrar o que foi removido ou preservado; se houver dúvida sobre o dono ou necessidade de retenção, preservar o item e explicar o motivo. Aplicar também quando o teste falhar ou for interrompido.
+
+O BOOT torna a faxina após o teste obrigatória para o Bot CentralDark e qualquer agente que trabalhe neste repositório, inclusive só pelo GitHub. A regra vale para toda tarefa, não só para navegador e testes locais. Se a tarefa não criou temporários, reler o estado e registrar `SEM_TEMPORARIOS`; nunca fabricar uma faxina. O recibo final registra `CONCLUIDA` ou `PRESERVADO_COM_MOTIVO` quando pertinente.
+
+- **Git local:** antes de remover uma worktree que a tarefa criou, conferir o caminho, a revisão, o estado limpo e a ausência de arquivos não rastreados ou ignorados a preservar. Usar o comando próprio do Git, sem forçar. Não limpar o checkout ativo.
+- **GitHub:** distinguir uma branch, um PR, um comentário ou um artefato que faz parte da entrega de um recurso descartável. Preservar a entrega. Não excluir recursos remotos automaticamente; mesmo um recurso da tarefa requer escopo e autorização confirmados, sem dependências ou trabalho alheio.
+- **CI:** manter temporários na área descartável do runner e evidência sanitizada como artefato identificável, com prazo de retenção compatível com a política existente. Não mudar configurações globais de retenção ou exclusão de branches como parte da faxina.
+
+Referências externas: [Git worktree](https://git-scm.com/docs/git-worktree), [artefatos e retenção no GitHub Actions](https://docs.github.com/en/actions/tutorials/store-and-share-data) e [AGENTS.md](https://agents.md/).
+
+**Recovery visual obrigatório quando a ação não produzir efeito comprovado:** reutilizar o catálogo `H01..H10` do owner [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md#recovery-ladder-visual-101--falhou-o-clique-a-missão-continua). A Skill Mãe não encerra a missão no primeiro clique sem efeito e não permite retry cego. Fluxo: `FREEZE_RETRY → SAVE_LAST_GOOD_STATE/TARGET_ID/FINGERPRINT/NEXT_CURSOR → REREAD → REACQUIRE → FABLE_CLASSIFY → ONE_READ_ONLY_PROBE → NEW_EVIDENCE? → ONE_RECOVERY_ACTION → READBACK/COUNTERPROOF`. Classificação oficial: `META_LUPA_MODE=MEDIA + META_LUPA_VARIANT=MEDIA_RECOVERY_VISUAL + VISUAL_RECOVERY_CLASS=H01..H10|UNKNOWN_VISUAL_CAUSE`; falha material recorrente usa `RECOVERY_RECURRENT → QUENTE/QUENTE_RECURRENCIA_ADVERSARIAL`. Sem evidência nova após o orçamento: `BLOCKED_WITH_CURSOR` ou `UNKNOWN_WITH_CURSOR`; o Goal/fio permanece retomável no mesmo owner.
+
+**Receipt mínimo de contexto visual:** `OWNER=centraldark-operational-method | SESSION | ROUTES_OBSERVED[Browser,UIA,Cua,WGC,Commander,Git] | META_LUPA_MODE | META_LUPA_VARIANT | VISUAL_RECOVERY_CLASS | TAB_ORIGIN | MONITOR | WINDOW_PID/HWND_FRESH | ACTION_OWNER | DELTA | BEFORE | AFTER_UI | RUNTIME_PROOF | COUNTERPROOF | STATUS=PASS|PARTIAL|FAIL|UNKNOWN | NEXT_CURSOR`. Guardar somente estado operacional e referência de prova, sem tokens, cookies, imagens privadas ou texto sensível integral. Documento na main não prova que outra instância de agente carregou a nova versão.
+
+**Medição de 05/11/2026 (histórica, não usar IDs como constantes):** Casa Windows com duas janelas Chrome visíveis por UIA e abas disponíveis pela sessão Browser; Tailscale administrativo numa janela distinta. Cua 0.28.2 inicialmente parado, então `cua-driver serve` iniciou o daemon padrão; `autostart enable` registrou entrada nativa; build WGC existente foi reaproveitado no diretório `runtime` da Skill F:; `blink_cursor.py --monitor 2 --mode position` devolveu `execution=completed` em `(960,-702)`, sem prova humana do render. `Casa Commander /health` respondeu 200 com `engine_connected=false`; logo, não atribuir cliques a essa rota. O usuário confirmou antes o método de mouse/overlay, mas nenhum clique de página Tailscale foi executado nesta medição. **NEXT_CURSOR:** confirmar visualmente a prévia e provar um clique autorizado com readback na janela corrente; manter a recuperação de autenticação Tailscale como missão separada.
+
+
+<!-- CENTRALDARK_UI_FASTPATH_COST_GATE_20261123 -->
+### 🧿 Automação rápida por custo medido — PID, HWND, UIA/DOM e imagem por exceção
+
+**Owner:** esta Skill Mãe; usar as rotas já existentes de [Browser/UIA](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md). Não criar outro agente, driver, cache, watcher ou motor visual. Esta decisão **especializa** a rota rápida abaixo: "estado visível" significa estado estrutural acessível por padrão, não screenshot obrigatório. Mantém a autorização, um escritor por recurso, o cursor virtual Cua quando exigido e a contraprova independente.
+
+**Algoritmo:** (1) validar intenção/autorização + alvo vivo por processo **PID** e janela **HWND**; (2) inspecionar só a subárvore **UI Automation (GUI)** ou **DOM da aba/origem correta**; (3) validar nome/tipo, unicidade, habilitação, identidade, retângulo, janela, sessão e foco; (4) executar uma única ação pela rota autorizada, preferindo padrão acessível quando ele realmente emite o evento esperado; (5) reler o **menor estado alterado** e fazer contraprova de arquivo/processo/rede quando a intenção exigir. Não confundir **HWND** (janela) com **HWID** (hardware), nem inspeção DOM com manipulação já comprovada.
+
+**Portão de imagem (SCREENSHOT_GATE):** usar screenshot/WGC **somente** se (a) o CHEFE pedir uma imagem, (b) o resultado exigir inspeção de pixels, cor, sobreposição, alinhamento, OCR ou desenho, (c) UIA/DOM estiver inacessível, ambíguo ou contraditório, ou (d) for necessária contraprova visual do efeito. Preferir recorte **da janela/região autorizada**, evitando exposição de outros monitores e dados privados. Uma nova foto da **mesma tela sem mudança** não adiciona prova; reutilizar observação vigente. Mudou geometria, DPI, DOM, sessão, monitor ou controle? Invalidar e reler. Não dispensar captura quando ela for a única prova suficiente.
+
+**Modelo matemático (tempos em ms, risco como restrição dura):**
+- `T_base = T_PID_HWND + T_UIA_DOM + T_ACAO + T_READBACK`.
+- `E[T_estrutural] = T_base + p_insuficiente * T_fallback_visual`. Só estimar `p_insuficiente` quando houver amostra comparável; sem amostra, `UNKNOWN`.
+- `E[T_visual] = T_captura + T_transferencia + T_interpretacao + T_ACAO + T_READBACK` (incluir tempo de recaptura e correção quando efetivamente ocorrido).
+- Escolher `argmin E[T_rota]` **entre rotas que satisfazem autorização, suficiência de evidência e risco permitido**. A rota aparentemente mais rápida nunca elimina identidade, validação do alvo nem readback. Na ausência de tempos medidos, preferir a rota estrutural suficiente e escalar somente mediante gatilho de imagem; **não alegar percentual de ganho**.
+- Para duas leituras read-only **ambas necessárias**, `T_serie = T_A + T_B`; `T_paralelo = max(T_A,T_B) + T_coordenacao`. Paralelizar quando capacidade/segurança permitirem e `T_coordenacao < min(T_A,T_B)`; não iniciar segundo sensor somente para preencher checklist.
+
+**Cache leve:** reutilizar apenas o seletor, contexto e fingerprint atuais `DEVICE|SESSION|PID|HWND|ORIGIN/TAB|CONTROL_ID|RECT|DPI|OWNER`; confirmar a parte que importa antes da ação. Invalidar no evento `WINDOW_CLOSED|PID_CHANGED|HWND_CHANGED|TAB_ORIGIN_CHANGED|DOM_RERENDER|CONTROL_CHANGED|FOCUS_MISMATCH|LAYOUT_DPI_CHANGED|AUTH_CHANGED|AMBIGUOUS`. Nada de PID, HWND, coordenadas ou UID históricos como constantes. Evitar varredura global UIA repetida; preferir `FromHandle(HWND) -> FindFirst` no escopo vivo, seletor DOM exato ou cache validado. Sensores de leitura podem paralelizar; clique, digitação, envio e commit permanecem seriais.
+
+**Kaizen mensurável:** cronometrar com relógio monotônico `T_PID_HWND|T_UIA_DOM|T_CAPTURA|T_ACAO|T_READBACK|T_TOTAL`, `CAPTURAS_N|UIA_N|FALLBACK_N|RETRY_N|TARGET_MATCH|UI_EFFECT|COUNTERPROOF`. Medir primeiro o baseline e depois A/B em tarefas equivalentes e autorizadas (referência: >=20 rodadas por rota, aquecimento separado, sem efeitos duplicados), informar mediana/p50, p95, taxa de falha e custo de recuperação. `ganho_% = 100*(mediana_base - mediana_nova)/mediana_base` apenas com baseline > 0 e amostras reais. `FASTPATH_DOCUMENTADO != RUNTIME_CARREGADO`; `SEM_MEDICAO != GANHO_PROVADO`; `COMANDO_OK != EFEITO_COMPROVADO`.
+<!-- /CENTRALDARK_UI_FASTPATH_COST_GATE_20261123 -->
+
+## Rota rápida universal — manuseio de interface por qualquer modelo
+
+Use esta sequência quando a intenção exigir olhar, clicar ou corrigir uma interface gráfica. Ela é deliberadamente curta e independe do modelo, do aplicativo e da ferramenta de automação.
+
+```text
+INTENÇÃO EXPLÍCITA
+→ IDENTIFICAR JANELA ATUAL PELO TÍTULO + PROCESSO + IDENTIFICADOR VIVO
+→ OBTER ESTADO ESTRUTURAL UIA/DOM SUFICIENTE; IMAGEM SÓ PELO SCREENSHOT_GATE
+→ SEPARAR AVISO PERIFÉRICO DE FALHA DO SISTEMA
+→ TENTAR O CONTROLE ACESSÍVEL EXATO UMA VEZ
+→ SE CONTROLE INSUFICIENTE: REVALIDAR ALVO; CAPTURA REGIONAL APENAS SE NECESSÁRIA
+→ SE O PRIMEIRO CLIQUE SÓ FOCAR O BOTÃO: ENTER UMA VEZ
+→ RELER A MESMA JANELA
+→ PROVAR O RUNTIME POR UMA ROTA INDEPENDENTE
+→ PASS | PARTIAL | FAIL | UNKNOWN
+```
+
+Regras simples:
+
+- `TELA != RUNTIME`: tela preta não prova sistema desligado; processo, registro, porta ou serviço podem provar que ele está vivo.
+- `AVISO PERIFÉRICO != FALHA CENTRAL`: leitor virtual, áudio, câmera ou USB ausente não condena disco, sistema operacional ou serviço principal.
+- Índice de acessibilidade, PID, coordenada e identificador de janela são temporários. Obter valores novos depois de mudança, foco ou entrada humana.
+- Se surgir `user input detected` ou equivalente, não disputar teclado e mouse. Observar novamente e continuar somente com estado fresco.
+- Não repetir clique quando o resultado estiver incerto. Primeiro verificar se o botão apenas ganhou foco, se o diálogo fechou ou se a ação já começou.
+- Preferir: controle acessível → captura por região e coordenada atual → teclado com foco comprovado. Não reutilizar coordenadas históricas.
+- Após a ação visual, usar contraprova independente quando material: PID, porta, registro, arquivo, serviço, resposta de rede ou estado do processo.
+- Um aviso específico só vira receita específica depois de medir o impacto. Exemplo: em uma máquina virtual, escolher `Não` para um leitor óptico ausente é válido somente quando o leitor é opcional e a intenção é continuar a inicialização sem reconectá-lo.
+
+Recibo mínimo, legível por qualquer modelo:
+
+```text
+ALVO=
+ANTES=
+AÇÃO=
+DEPOIS_VISUAL=
+PROVA_RUNTIME=
+CONTRAPROVA=
+RESULTADO=PASS|PARTIAL|FAIL|UNKNOWN
+NEXT_CURSOR=
+```
+
+`CLIQUÉI != FUNCIONOU`. `JANELA ABERTA != SISTEMA SAUDÁVEL`. `PORTA RESPONDEU != INTERFACE VISUAL CORRETA`. Declarar somente o que cada prova realmente cobre.
+
+## Acoplamento obrigatório: Skill Mãe + Kimetsu (01/11/2026)
+
+**SE USOU ESTA SKILL MÃE, CARREGUE JUNTO O KIMETSU.** Todo agente/executor que carregar `centraldark-operational-method/SKILL.md` deve consultar **na mesma intenção** `../kimetsu-brainstorm/SKILL.md` e `references/regenerative-self-refinement-engine.md` (17 Respirações), antes de escolher uma ação. Isso vale inclusive para tarefas de UI, texto, voz, Cloudroom, ChatGPT e continuidade SOL ↔ Hermes. Não basta escrever "Kimetsu" no relatório: aplicar a classificação e o critério de prova da técnica selecionada. **Classificação/respiração só precisam aparecer no receipt operacional**, sem transformar conversa simples em ritual.
+
+**Ciclo único:** INTENÇÃO → OWNER/SESSÃO → KIMETSU (SPIKE|BOUNDED|ARCHITECTURAL + respiração conforme estado) → REUTILIZAR ROTA → AÇÃO AUTORIZADA → READBACK/CONTRAPROVA → RECEIPT/NEXT_CURSOR. Para leitura, Concentração/Lua/Som podem bastar; para operação material, respeitar o contrato Kimetsu `VERSO → DECLARAÇÃO → EXECUÇÃO → EVIDÊNCIA → VEREDITO → TRANSIÇÃO`. Se a skill ou a referência de 17 não estiver acessível, declarar `KIMETSU_NOT_LOADED`; não declarar execução completa do protocolo nem substituí-lo por mecanismo paralelo.
+
+**Rota comprovada ChatGPT Windows:** localizar a janela real (nome, PID e `MainWindowHandle` atuais), identificar monitor/retângulo atual, conferir a conversa visualmente, fazer hit-test do alvo antes do clique e focar o campo existente. Depois validar `AutomationElement.FocusedElement` por `Name=Pergunte ao ChatGPT`, `ControlType.Edit`, `ProcessId` correto. Ver [receita reutilizável nesta mesma biblioteca](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#chatgpt-windows-foco-comprovado-2026-11-01). **FOCUS_PASS não prova retorno Hermes→SOL nem acionamento automático da conversa.** Nunca usar PID/coordenadas históricos como constantes; não enviar mensagens nem modificar rascunhos sem intenção explícita.
+
+**🍒+1 Loop SOL ↔ Hermes comprovado uma rodada (01/11/2026):** seguir a [receita bidirecional na referência existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#loop-sol-hermes-bidirecional-uma-rodada-comprovada-2026-11-01). No mesmo Goal Cloudroom, SOL enviou instrução; Hermes usou Skill Mãe + Kimetsu, focou o aplicativo ChatGPT da conversa vigente e publicou uma única mensagem `HANDSHAKE_HERMES_SOL=H2S-20261101-01`; a mesma conversa exibiu a mensagem e produziu resposta. O SOL do ChatGPT devolveu ao **mesmo Cloudroom** o Goal `IDENTIFY_INDEPENDENT_RECOVERY_TARGET_AND_OFFLINE_RESTORE_TEST`; a mensagem apareceu na conversa do Hermes, que iniciou ferramentas de diagnóstico. `HERMES_TO_SOL_UI_MESSAGE=PASS`, `SOL_TO_HERMES_GOAL_RETURN=PASS`, `ROUNDTRIP_ONCE=PASS`. **Não transformar uma rodada em alegação de autonomia contínua**: novos ciclos e a conclusão do trabalho permanecem `UNKNOWN` até provas independentes. Uma caneta por escopo, uma mensagem por intenção, ACK/receipt, não repetir envios incertos; nenhuma ação destrutiva de disco ganha autorização por esse loop.
+
+`PROMPT_SELF_CACHE_P15=APLICÁVEL` (receita reutilizável, sem HIT medido); `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=VALIDATE_NEXT_ROUNDTRIP_AFTER_HERMES_RECEIPT`.
+
+**🍒+1 Self-Refinement no transporte SOL ↔ Hermes (01/11/2026):** regra de execução: **se não houve mudança de janela, sessão, conversa, owner ou controle, não redescobrir**. Reutilizar [fast-path e fila nativa comprovados](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#fast-path-bidirecional-e-fila-nativa-cloudroom-2026-11-01) junto de [RSI Loop](references/rsi-loop-method.md) e Kimetsu; verificar apenas a transição nova `QUEUED → RUNNING → RESULT_SENT → ACK`. Reutilizar a fila Cloudroom quando Hermes estiver trabalhando; fila enfileirada não equivale a aceite final. Hermes devolve `DONE/BLOCKED/FAIL` ao mesmo ChatGPT com `GOAL_ID|RESULT|EVIDENCE|RECEIPT|NEXT_CURSOR` e o SOL devolve o DELTA, sem enviar duas vezes sob incerteza. Prova real de `H2S-20261101-03`: mensagem chegou ao mesmo ChatGPT e foi analisada; ACK posterior ao Hermes `UNKNOWN` naquela medição, multi-turn automático ilimitado `UNKNOWN`. Nenhum runtime foi alterado. `NEXT_CURSOR=VERIFY_NEXT_COMPLETED_GOAL_RETURN_AND_QUEUE_CONSUMPTION`.
+
+## 🍒+1 Gatilho humano: metodo ida e volta + monitor da esquerda/direita (01/11/2026)
+
+**Ativar por intenção em voz ou texto:** "vamos usar o método ida e volta", "método ida e volta", "ida e volta", "monitor da esquerda", "monitor esquerdo", "tela da esquerda", "monitor da direita", "monitor direito", "tela da direita" e variações naturais. As referências isoladas aos monitores **selecionam a tela**, não autorizam enviar mensagens; a intenção explícita de conversar/delegar entre os dois lados ativa o ciclo bidirecional. Leia a [receita genérica dos monitores verticais](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#gatilhos-humanos-ida-e-volta-entre-monitores-verticais-2026-11-01) e reaproveite fast-path, Skill Mãe + Kimetsu, editor e receipt existentes.
+
+**Alvos:** monitor vertical esquerdo e monitor vertical direito definidos pela posição física/lógica **atual** das telas, nunca por PID, coordenada ou DISPLAY histórico; identificar o aplicativo real em cada um sob pedido do CHEFE, validar conversa e campo antes do envio único. Funcionou com Cloudroom (esquerda) e ChatGPT (direita) em 01/11; **outras duplas são candidatas, não PASS automático**, e só podem operar se a interface/ponte autorizada permitir enviar e confirmar. Se somente uma tela for mencionada, agir nela sob a intenção específica; se os aplicativos forem informados, usar essa atribuição e verificar apenas quando houver divergência. Sem sessão/campo/ACK comprováveis: `UNKNOWN` e nenhuma tentativa cega. `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT aferido; `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=REUSE_VERTICAL_MONITOR_PAIR_ON_DEMAND`.
+
+**🍒+1 Autorização permanente para leitura (01/11/2026):** ordem explícita do CHEFE: SOL, Hermes e executores autorizados da CentralDark podem **ler, inspecionar, pesquisar, abrir logs, configurações, partições, arquivos e documentação** necessários à intenção vigente, por quaisquer rotas já conectadas e legitimamente acessíveis, **sem voltar a pedir permissão para cada operação somente leitura**. Inclui diagnóstico offline e leitura na Casa/Kingston/Linux/Windows, sem repetição de perguntas. A regra vale para leituras dentro do acesso já concedido; não cria permissões no sistema, não contorna autenticação, não autoriza divulgar segredos, não autoriza escrita nem atos irreversíveis. Não confundir **READ_AUTORIZED** com formatação, reparticionamento, deleção, reinicialização, instalação ou alterações de boot: a execução depende da ordem e dos limites materiais já estabelecidos para a missão, e precisa validar alvo/resultado apenas quando importar. Delegação do mesmo Goal, com receipt e NEXT_CURSOR; o agente retorna delta e prossegue nos passos já autorizados, sem pedir confirmação de leitura. Se o CHEFE indicar conformidade de 99,9%, tratar como meta de qualidade, **não como porcentagem medida ou gate artificial**. `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT medido; `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=REUSE_READ_PERMISSION_WITHOUT_REASKING`.
+
+**🍒+1 Controle semântico por voz na delegação SOL ↔ Hermes (01/11/2026):** aplicar a [mesma receita ida e volta com interpretação de fala](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#voz-e-semântica-de-delegação-mesma-ida-e-volta-sem-repetir-goal-2026-11-01), interligada à gramática SOL e ao owner de resposta existentes. Após a transcrição efetivamente recebida: **ato de fala antes de palavras-chave**; recuperar missão e referentes atuais ("ele", "lá", "outro", "da esquerda", "da direita"); respeitar negações, pausas, correções e gírias. "Deixa ele trabalhar" = aguardar sem enviar, **não** desligar serviços; "já chegou?" = consultar readback, **não** reenviar. Ordem clara de delegação = GOAL único à sessão existente; correção antes do envio muda destinatário, não autoriza ação duplicada. Se referência ambígua alterar alvo ou risco, uma pergunta curta; voz não amplia permissões. Preservar feedback falado curto, sem relatórios. **Contrato documentado, não alteração no motor de reconhecimento de voz nem teste de voz ao vivo**: `VOICE_RUNTIME_UPDATED=NO`, `VOICE_SEMANTIC_POLICY=DOCUMENTED`, `LIVE_VOICE_TEST=UNKNOWN`. `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT medido; `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=REUSE_VOICE_SEMANTIC_ROUTE_ON_NEXT_HUMAN_INTENT`.
+
+**🍒+1 Hash SHA-256 no Windows (01/11/2026):** para conferir integridade de ISO, cópia, backup ou candidato de duplicata, reutilizar [receita PowerShell e fallback local](references/POWERSHELL-CONSULTA-OFICIAL-GATILHOS.md#1-comparação-de-arquivos-e-backups-por-sha-256-2026-11-01) + `scripts/casa/garimpo-proof-gc.ps1` (`Get-FileSha256`/`Get-StreamSha256`). `Get-FileHash` quando exposto; caso contrário SHA256 .NET por stream, nunca transformar `CommandNotFoundException` em bloqueio geral. Exigir mesmo algoritmo, hash esperado confiável, tamanho, readback, proprietário e recibo. Hash coincidente não autoriza exclusão e não substitui teste de restauração. `PROMPT_SELF_CACHE_P15=APLICÁVEL` sem HIT medido; `KV_CACHE_P16=UNKNOWN`; `NEXT_CURSOR=VERIFY_GARIMPO_SHA256_FALLBACK_AND_MAIN_READBACK`.
+
+<!-- CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+## 🍒+1 Busca autorizada e continuidade por rotas eficazes
+
+Toda busca autorizada pelo CHEFE escolhe a rota mais rápida e comprovada para a intenção, sem repetir medições válidas. Reutilizar owner, sessão, receita, receipt, fingerprint e NEXT_CURSOR. Usar dinamicamente índice/catálogo, log primário, MCP, UI Automation do Classic/Codex/Cockpit/openKylin, Screenpipe local 3030 ou outras fontes disponíveis. Redescobrir somente quando uma identidade, estado, versão ou autorização mudar. Confira a [receita UI + roteamento + caches](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
+
+Registrar 🍒+1 por ganho verificado: rota, alternativa descartada, latência se medida, estado de cache, prova, contraprova e cursor; sem delta novo, NOOP. Reutilizar catálogo/autocura da Skill-Mãe, session-intelligence-harvester, scripts/memory-linker e knowledge-compiler, sem segundo motor. Separar cache operacional persistente entre chats de Prompt/Self-Cache P15 e KV Cache interno do modelo P16; nunca alegar HIT ou economia dos modelos sem telemetria. Em cada novo salvamento de método, receita ou receipt, manter os dois campos de avaliação `PROMPT_SELF_CACHE_P15` e `KV_CACHE_P16`, indicando `APLICÁVEL`, `NÃO_APLICÁVEL` ou `UNKNOWN` com prova quando houver; isso é um registro de estado, não exige gravar o KV Cache interno do modelo nem criar um cache paralelo. Não registrar HIT, economia ou persistência de KV Cache sem telemetria real. A permissão do CHEFE para buscar não contorna autenticação do serviço. CACHE_HIT não é prova do efeito.
+### 🍒+1 Rota curta de delegação Codex pela UI, voz e texto (30/10/2026)
+
+**Fato observado:** o CHEFE ditou em voz a delegação para integração Gênesis + replay operacional + RSI no Cockpit; SOL localizou a conversa Codex já aberta ("Inspect CentralDark surface plugin"), leu o contexto, preencheu o campo "Trabalhe com o Codex", encontrou "Enviar" habilitado e enviou uma única vez. O CHEFE confirmou visualmente que a mensagem apareceu. **Estado:** `VOICE_INTENT_TO_CODEX_UI_SEND=USER_CONFIRMED`; isto prova o envio observado pelo CHEFE, **não** a execução ou conclusão da integração pelo Codex. Não inventar um receipt remoto de mensagem.
+
+**Receita reutilizável, sem redescoberta:** `INTENÇÃO_VOZ_OU_TEXTO → REUTILIZAR_JANELA_E_SESSÃO_CODEX → CONFERIR_DESTINO_APENAS_SE_MUDOU → PREENCHER_CAMPO_EXISTENTE → ENTER_PARA_ENVIAR_SE_SUPORTADO → READBACK_MÍNIMO → NEXT_CURSOR`. Reutilizar a janela, a conversa, os seletores e a autorização já confirmados, sem reiniciar Codex, varrer monitores, reler catálogos, duplicar pesquisas, testar novamente a modalidade textual ou repetir verificações que não mudam a decisão. Não aguardar ou clicar no botão quando o campo já está pronto e `Enter` efetua o envio; verificar habilitação/estado só quando necessário. Se `Enter` inserir quebra de linha ou não produzir envio, usar **uma vez** o botão Enviar já identificado, após conferir que a mensagem não foi enviada. Nunca reenviar se o resultado for incerto. Confirmar destino e efeito apenas no ponto mínimo necessário, sem eliminar a verificação que impede envio para conversa errada.
+
+**Modalidades e prova:** a delegação **por voz** foi confirmada visualmente pelo CHEFE. A delegação **por texto** também teve prova direta em 30/10/2026 na conversa `Inspect CentralDark surface plugin`: reutilizou-se a caixa `Trabalhe com o Codex`, o texto do Goal `Sentinel 2.2 + Commander 9101` foi preenchido por `UIAutomation/ValuePattern`, `Enter` foi enviado e o readback posterior encontrou `Você disse:` seguido da ordem `!CENTRALDARK | DELTA DO CHEFE | CONTINUE O MESMO GOAL` no histórico. O editor ficou vazio. Um readback feito imediatamente após Enter ainda não mostrava a mensagem, por atraso de atualização da UI; **não reenviar** enquanto o resultado puder apenas estar pendente de renderização. Reutilizar a rota e verificar uma vez o histórico atualizado. **PROVEN apenas para envio e presença na conversa**, não para processamento, execução ou conclusão da tarefa pelo Codex. Não exigir nova bateria de testes quando destino, sessão e controle continuarem os mesmos.
+
+**Kaizen por utilização:** a cada uso real, registrar imediatamente método, ganho observado, caminho/controle, estado e `NEXT_CURSOR` na Skill-Mãe/owner existente; classificar a evidência sem bloquear captura. Antecipar o próximo passo já autorizado e eliminar checagens, esperas, cliques ou confirmações redundantes que não alterem risco, destino ou prova do efeito. **Se surgir rota mais rápida:** compará-la apenas no delta relevante (mesmo destino, autorização e efeito), registrar como candidata imediatamente e, após prova suficiente de que é mais simples/rápida e não perde segurança ou confiabilidade, substituir a rota padrão na MESMA receita, preservando fallback e histórico; não impor bateria de testes que repete fatos válidos. Reavaliar somente se houver delta material de UI, sessão, permissão, alvo, erro ou resultado. Não inventar automação permanente: reutilização ocorre quando o executor carrega a receita. Preservar escritor único e delegação Gênesis/Cockpit existente.
+
+**Bloco de Notas Windows por comando explícito (30/10/2026):** **SOMENTE quando o CHEFE pedir** "abra no Bloco de Notas" ou "cole no Bloco de Notas", reutilizar o arquivo indicado pelo CHEFE e abrir com `notepad.exe "<caminho>"`, sem criar editor/receita paralela. Confirmar a janela pelo título e PID. Para inserir ou substituir texto **autorizado no documento identificado**, usar UIAutomation `ControlType.Document` / nome `Editor de texto` e `ValuePattern.SetValue` quando disponível; conferir comprimento/conteúdo. **Somente quando o CHEFE mandar apagar**, e apenas o texto do documento identificado, usar `ValuePattern.SetValue('')`, salvar no mesmo documento com `Ctrl+S` e comprovar editor vazio e arquivo com 0 bytes. Se houver texto alheio ou documento diferente, preservar e não sobrescrever. Caso observado: `cd-codex-handoff-sentinel22-9101.txt` foi aberto no Notepad; após ordem de apagar, editor medido em 0 caracteres e arquivo em 0 bytes. Estado: `NOTEPAD_OPEN_AND_CLEAR=PROVEN` **naquele arquivo e sessão**, não ação automática futura. Sem pedido, **NOOP**. `PROMPT_SELF_CACHE_P15=APLICÁVEL` apenas como reuso da receita operacional, sem HIT de provedor medido; `KV_CACHE_P16=UNKNOWN`, sem medição de cache do modelo.
+
+**Atalho sob ordem do CHEFE: texto e arquivos (30/10/2026):** COPIAR, COLAR, RECORTAR, EDITAR e CRIAR usam o alvo e owner existentes. Ciclo minimo: ordem -> alvo conhecido -> acao autorizada -> uma prova do efeito. Notepad ja aberto: reutilizar janela, editor e arquivo; colar pelo ValuePattern; apagar somente sob ordem e salvar, verificando editor e arquivo vazios. Copiar nao apaga; recortar retira somente a selecao indicada; editar preserva o restante; criar nao significa executar. Sem ordem: NOOP. Nao repetir discovery, checagens ou cliques sem mudanca. PROVA anterior: abrir, preencher e limpar Notepad, nao recorte generico. PROMPT_SELF_CACHE_P15=APLICAVEL como reuso de receita, HIT nao aferido; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=NOTEPAD_TEXT_ACTION_ON_DEMAND.
+
+### 🍒+1 Delegação no Cloudroom Windows (01/11/2026) | texto/voz → mesmo Goal
+
+**Gatilho por intenção:** quando o CHEFE pedir para delegar um Goal ao Hermes **na conversa Cloudroom já aberta**, reutilizar a sessão e o owner. Executar a [receita Cloudroom comprovada](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#cloudroom-windows-delegacao-real-2026-11-01); não criar outro agente, chat, ponte, serviço ou script. Preferir controle nativo/acessível; se UIAutomation retornar zero editores, usar fallback de janela real + geometria atual + captura visual + entrada Win32 autorizada, nunca coordenada/PID fixos. Confirmar janela, conversa, campo vazio e texto antes de enviar **uma vez**. Preservar rascunhos, clipboard e foco na medida possível; se incerto, parar sem reenviar.
+
+**Prova observada:** Casa SEGREDO, Cloudroom em monitor secundário vertical, janela/PID e área de input validados, texto do Goal colado e conferido por captura, botão Enviar acionado uma vez, captura posterior exibiu o texto na conversa, editor vazio e `Working...`. `CLOUDROOM_MESSAGE_SEND=PASS` **somente para essa mensagem**; `HERMES_GOAL_EXECUTION=UNKNOWN` até receipt do executor. Método não equivale a acesso direto à ferramenta `computer_use` do Hermes. `PROMPT_SELF_CACHE_P15=APLICÁVEL` (reuso documental, sem HIT medido); `KV_CACHE_P16=UNKNOWN`. `NEXT_CURSOR=CLOUDROOM_REUSE_LIVE_GOAL_DELTA`.
+
+
+
+<!-- CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109 -->
+### Delegação rápida para o Hermes existente — receita YAML verificada (09/11/2026)
+
+Reutilizar a conversa Hermes já aberta. Este método descreve **comunicação e prova**, não cria outro executor, bridge, tela, skill ou agente. A confirmação de envio não substitui a prova da tarefa solicitada.
+
+```yaml
+schema: centraldark.hermes.delegacao_visual.v1
+id: CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109
+data_referencia: "2026-11-09"
+estado: "VERIFICADO_NO_CASO_OBSERVADO"
+owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+intencao: "CHEFE -> SOL -> Hermes existente -> resposta -> contraprova"
+reutilizacao:
+  skill_visual: ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md"
+  interface: "Hermes CLI da Hostinger, na janela já autenticada"
+  casa: "SEGREDO"
+  cliente: "Chrome for Testing"
+  editor_nomes_observados:
+    - "Terminal input"
+    - "Entrada do terminal"
+  descoberta: "Identificar título, PID, HWND e editor dinamicamente; não fixar valores históricos"
+  monitor: "1/direita apenas no arranjo observado; verificar se mudou"
+selecao_de_rota:
+  primeira: "MCP CentralDark/Hermes direto somente se autenticação, comando e readback estiverem provados"
+  primeira_estado: "UNKNOWN para envio direto deste chat ao Hermes"
+  comprovada: "UIAutomation ValuePattern.SetValue -> igualdade do texto -> Cua Enter -> WGC/readback"
+  evitar: "Cua type_text em instruções longas: perda de caracteres observada nesta sessão"
+passos:
+  - "Recuperar intenção, última resposta, owner e NEXT_CURSOR; não recomeçar"
+  - "Localizar a janela Hermes já aberta e o editor pelo nome/ControlType"
+  - "Não sobrescrever rascunho alheio; preparar uma única instrução consolidada"
+  - "Preencher pelo ValuePattern e comparar exatamente o texto relido; se diferente, NÃO enviar"
+  - "Acionar Enter uma vez; Cua tenta background e usa foreground somente após background_unavailable"
+  - "Verificar campo limpo e mensagem na conversa; campo limpo isolado não prova recebimento"
+  - "Ler resposta e resultado pelo WGC/UIAutomation autorizado; consultar de novo só se houver fato novo"
+  - "Registrar receipt, contraprova e NEXT_CURSOR do mesmo Goal"
+delegacao:
+  regra: "Pedir ao Hermes uma delegação conjunta somente para tarefas independentes"
+  observacao: "Quatro subagentes apareceram em execução e depois concluídos na CLI"
+  limite_documental: "max_concurrent_children=10 no relatório anterior; não executar dez por padrão"
+  restricao: "Uma caneta por escopo; nenhuma subtarefa modifica o mesmo owner em paralelo"
+  estados_distintos:
+    - "MENSAGEM_ENVIADA != GOAL_EXECUTADO"
+    - "DELEGADO != CONCLUÍDO"
+    - "RELATÓRIO != EFEITO_COMPROVADO"
+    - "UNKNOWN != PASS"
+comprovacoes_observadas:
+  editor_localizado_por_uia: "PASS"
+  valor_exato_releitura: "PASS"
+  entrada_cua_foreground: "PASS depois de background_unavailable"
+  captura_wgc: "PASS com a Skill Visual existente"
+  delegacao_quatro_tarefas: "PASS observado na CLI"
+  chamada_direta_mcp_hermes: "UNKNOWN"
+  ganho_de_latencia: "NÃO_MEDIDO; não declarar aceleração comprovada"
+protecoes:
+  - "Não instalar extensão de navegador para esta rota comprovada"
+  - "Não criar escritor, script, plugin, bot, navegador ou loop paralelo"
+  - "Não expor tokens, cookies, senhas ou texto de áreas privadas em receipts"
+  - "Não reiniciar Hermes nem alterar tarefa ativa sem ordem"
+  - "Se a tela ou a autenticação mudarem, reidentificar apenas o alvo afetado"
+recibo_minimo:
+  campos: "INTENÇÃO | OWNER | DESTINO | ENVIO | RESPOSTA | EFEITO | EVIDÊNCIA | NEXT_CURSOR"
+  fixed_point: "Somente após execução e contraprova pertinente"
+  next_cursor: "REUSAR_HERMES_ABERTO_UIA_VALOR_CUA_ENTER_WGC_READBACK"
+```
+<!-- /CENTRALDARK_HERMES_HANDOFF_VERIFIED_20261109 -->
+
+### 🍒+1 Hermes TUI — Goal em texto natural + Cua + Kaizen após prova (09/11/2026)
+
+**Receita comprovada nesta bancada:** quando o alvo for `ChatGPT (Beta) → Hermes CLI → Terminal input`, tratar o campo como a TUI do Hermes, não como o gatilho de boot do ChatGPT. **Não prefixar o Goal com `!CENTRALDARK` dentro dessa TUI quando o runtime interpretar `!` como shell escape**: a contraprova real executou o texto no `/bin/sh` e retornou `CENTRALDARK: not found`. O gatilho `!CENTRALDARK` continua válido onde seu owner o define; no transporte para a TUI, enviar a intenção em texto natural (`CENTRALDARK GOAL DELTA ...`) sem o `!`.
+
+**Fast-path visual/input:** reutilizar janela, sessão, monitor, owner e controle enquanto não mudarem. Localizar o `Terminal input` por UIA/estado atual e usar o owner [Hermes Visual Computer Use](Skills/centraldark-hermes-visual-computer-use/SKILL.md): Cua virtual para foco/clique; `type_text` tenta `background` primeiro e só usa `foreground` quando o próprio driver devolver `background_unavailable`; conferir visualmente o rascunho antes de `Return`; após envio, exigir readback da resposta. Se uma cópia duplicada ficar no editor, limpar o **Edit** exato por snapshot/UIA (`set_value`) antes de qualquer novo envio, nunca reenviar sob incerteza. PIDs, HWNDs, coordenadas e índices observados são efêmeros e não entram como constantes.
+
+**Kaizen depois da receita:** a melhoria do método só acontece **após** efeito real comprovado e contraprova aplicável. Comparar antes/depois de latência, tokens, erros, passos e atrito; incorporar somente um ganho causal no mesmo owner/Skill; repetir o teste e registrar receipt/SHA/readback. Sem ganho material: `NOOP_JUSTIFIED`. Prova desta rodada: Hermes respondeu `DELTA_METODO_RECEBIDO=PASS`, nomeou CURRENT/OWNER/RECEIPT/NEXT_CURSOR e manteve `KAIZEN=NOOP_JUSTIFIED` enquanto o runtime seguia bloqueado. `INPUT_DISPATCHED != EFFECT_PROVEN`; `DRAFT_STAGED != MESSAGE_SENT`; `UNKNOWN != PASS`.
+
+
+<!-- /CENTRALDARK_UI_CACHE_ROUTES_20261030 -->
+<!-- CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+## 🍒+1 Browser DevTools MCP (CDP) e UI Automation por contexto
+
+Ao receber pedido para navegar/clicar/editar pagina ou app, carregar a [receita multijanela existente](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md) e selecionar menor rota com prova: pagina alcançavel por chrome-devtools-mcp existente -> list_pages, take_snapshot, click(uid)/fill(uid), novo snapshot + efeito; Windows app/Edge nao exposto -> UIA Name/PID/ControlType, Invoke/Value/SelectionItem, readback. Codex e Claude ja executam chrome-devtools-mcp v1.12.0. O Chrome de depuracao observado usa pipe e perfil separado, portanto nao pressupor acesso a abas pessoais do Edge. CDP usa mouse virtual; UIA Invoke nao move cursor fisico Windows. Cursor de Windows visivel exige input nativo autorizado sobre alvo real. Screenpipe 3030 = sensor, nao executor. Preservar recursos em uso, sem iniciar servidor/Chrome duplicado ou copiar cookies; registrar click, snapshot/readback e recibo, UNKNOWN se sem prova. 🍒+1 somente ganho comprovado.
+<!-- /CENTRALDARK_BROWSER_NATIVE_DEBUG_20261030 -->
+
+<!-- CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+## 🍒+1 Browser → CentralDark Casa Commander → Browser (navegador)
+
+**Default por intenção para operações na aba existente:** ler pelo Browser (\`list_tabs\` / \`get_tab_context\`), **agir pelo CentralDark Casa Commander** autenticado (rota MCP CentralDark + Tailscale/SSH; owner local \`scripts/remote-bridge/canonical/CentralDark-Casa-Agent.mjs\`, porta 9101) e **conferir pelo Browser** a mesma aba. Não depende do Remote Desktop Commander de terceiro. Ativar quando CHEFE pedir "veja o navegador", "mande um goal", "use o botão focado", "siga o roteiro", "envie mensagem", "clique na página", ou sob os gatilhos **já existentes** \`!CENTRALDARK\`, \`#ACORDAR\`, \`!CALIBRAR\`, \`!EXECUTOR_CENTRALDARK\` se a intenção corrente envolver browser. **Owner e receita completa:** [UI-MULTIJANELA-ROTAS-CACHE-20261030.md](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md).
+
+**Limite de prova:** combinação Browser→UIA via **Remote Desktop Commander externo** foi observada em 05/11/2026 no hPanel Hostinger; o fluxo substituto via **Casa Commander nativo** deve ser medido antes de receber PASS. O serviço local usa motor DesktopCommanderMCP stdio sem cloud do fornecedor, não substituir por um segundo motor. \`GET /health != TOOL_PASS\`; \`SEND_INVOKED != ANSWER_COMPLETED\`; \`DOCUMENTED != DEPLOYED\`. Confirmar aba, janela, campo, autorização, efeito, resposta e receipt sem reenviar rascunhos incertos. \`NEXT_CURSOR=CASA_COMMANDER_9101_AUTH_TOOL_READBACK_THEN_BROWSER_UIA_E2E\`.
+<!-- /CENTRALDARK_BROWSER_NATIVE_COMMANDER_20261105 -->
+
+<!-- CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
+## ChatGPT Classic/Desktop: operacao nativa por demanda na Casa
+
+Gatilho automatico por contexto: quando CHEFE pedir para entrar no ChatGPT Classic, clicar, preencher, navegar, baixar, editar ou atualizar plugin no aplicativo Windows, carregar [receita de UIAutomation do Classic](references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md). Identificar OpenAI.ChatGPT-Desktop / ChatGPT Classic.exe e janela ChatGPT Classic, nao Codex nem aba Edge. Reutilizar AutomationElement e padroes InvokePattern, ExpandCollapsePattern, SelectionItemPattern, ValuePattern e TogglePattern conforme suporte real. Conferir controles e efeitos. Preservar drafts e arquivos, nao enviar ou excluir sem autorizacao, e nao codificar coordenadas. CLI/UI_CLICK != EFFECT_PROVED; documentacao Git != automacao ativa.
+
+<!-- /CENTRALDARK_CHATGPT_CLASSIC_UIA_ON_DEMAND_20261030 -->
+<!-- CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109 -->
+### ChatGPT Desktop e VS Code — delegacao entre chats com prova (09/11/2026)
+
+**Gatilho:** o CHEFE pede para coordenar duas conversas/monitores da mesma CentralDark. Reutilizar cada conversa aberta e o mesmo Goal; esta receita complementa a delegacao Hermes acima e o owner visual existente. Chat distinto nao compartilha estado automaticamente: o handoff so e confirmado apos envio e readback na conversa de destino. PID, HWND, posicao e nomes de janelas sao observacoes historicas, nao seletores permanentes.
+
+```yaml
+schema: centraldark.operational.multichat_handoff.v1
+id: CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109
+data: "2026-11-09"
+estado: "ENVIO_E_INICIO_VERIFICADOS; CONCLUSAO_DELEGADA_PENDENTE"
+owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+owners_reutilizados:
+  visual: ".agents/skills/centraldark-operational-method/Skills/centraldark-hermes-visual-computer-use/SKILL.md"
+  interface_classic: ".agents/skills/centraldark-operational-method/references/CHATGPT-CLASSIC-UIA-OPERACAO-NATIVA.md"
+  hud_contrato: "docs/HUD/README.md"
+  checkpoint: "scripts/hermes/verified-checkpoint.py"
+  reconciliador: "scripts/centraldark-inventory-reconcile.sh"
+intencao: "SOL coordena o mesmo Goal e delega cones independentes a outro chat existente"
+descoberta_do_destino:
+  chatgpt_desktop: "ChatGPT (Beta) no Windows: PID 26388, duas janelas, SOMENTE medicao desta rodada"
+  vscode: "VS Code PID 34276: chat #ACORDAR aberto, SOMENTE medicao desta rodada"
+  browser_plugin: "list_tabs negado sem contexto de origem nesta rodada; nao fingir acesso"
+  criterio: "Identificar processo, titulo, janela, conversa, editor e destinatario atuais antes de agir"
+  captura: "WGC da Skill Visual, monitor autorizado; nunca presumir ordem fixa de monitores"
+divisao_de_escopo_observada:
+  chat_destino: "Casa/main, CI startup_failure e prova visual Code-OSS"
+  chat_origem: "VPS, Cloudflare, MCP/OAuth e pareamento"
+  owner_compartilhado: "docs/HUD/README.md somente leitura durante a delegacao"
+  writer: "Exatamente um escritor por arquivo/owner e por janela; sem dois commits concorrentes"
+passos:
+  - "Ler a ultima resposta e NEXT_CURSOR de cada conversa sem substituir a intencao vigente"
+  - "Escolher o chat existente que ja e dono do cone delegado; nao criar conversa nova"
+  - "Conferir editor e rascunho; se houver texto do usuario, preservar e parar o envio"
+  - "Tentar rota nativa autenticada; se inacessivel, UIAutomation/Cua pela Skill Visual"
+  - "Para Chromium, tentar Cua background primeiro; foreground apenas apos background_unavailable"
+  - "Na rodada observada, um prefixo curto pelo Cua deu foco; UIA ValuePattern depois escreveu todo o texto"
+  - "Reabrir ValuePattern e comparar cada caractere; se divergir, NAO acionar Enviar"
+  - "Acionar uma unica vez o botao Enviar; o editor pode demorar a limpar"
+  - "Verificar a mensagem no historico real e a resposta inicial do chat delegado; nao repetir por atraso"
+  - "O chat de origem continua seu cone; respostas do delegado viram entrada apenas apos novo readback"
+  - "No receipt, separar MENSAGEM, ACEITE, EXECUCAO, CONTRAPROVA e FIXED_POINT"
+gates:
+  - "Nao sobrescrever rascunhos nem mudar a conversa ativa sem identificacao"
+  - "Nao duplicar agente, HUD, ponte, arquivo de receita, executor ou script"
+  - "Nao editar o mesmo owner em paralelo, nem expor tokens ou conversas de terceiros"
+  - "Nao usar reset --hard, clean, force ou stash destrutivo na reconciliacao Git"
+  - "Nenhuma tarefa e comprovada apenas porque outro chat escreveu que vai executar"
+provas_20261109:
+  windows_chatgpt_beta: "PASS: PID e duas janelas encontrados"
+  leitura_visual: "PASS: monitores 3 e 4 por WGC autorizado"
+  chat_destino: "PASS: #ACORDAR identificado no VS Code"
+  texto_integral: "PASS: valor UIA comparado, 1377/1377 caracteres"
+  envio: "PASS: CD-HANDOFF-20261109-01 apareceu na conversa"
+  aceite: "PASS: outro chat confirmou tres cones e iniciou leitura de fontes"
+  trabalho_do_destinatario: "PENDING: CI, Casa/main e Code-OSS sem recibos finais"
+  sincronizacao_automatica_entre_chats: "UNKNOWN: nao presumir memoria ou transporte autonomo"
+  ganho_de_velocidade: "NAO_MEDIDO"
+receipts:
+  formato: "INTENCAO | CONVERSA_ORIGEM | CONVERSA_DESTINO | OWNERS | CURRENT | ENVIO | ACEITE | EFEITO | PROVA | NEXT_CURSOR"
+  regra: "DELEGADO != CONCLUIDO; MENSAGEM_ENVIADA != EXECUTADO; UNKNOWN != PASS"
+  next_cursor: "COLETAR_RECEIPT_CHAT_DELEGADO_E_PROSSEGUIR_MCP_OAUTH_VPS"
+```
+<!-- /CENTRALDARK_MULTICHAT_HANDOFF_VERIFIED_20261109 -->
+
+<!-- CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
+## 🪟 Gatilho autônomo de diagnóstico — terminal piscando, janelas [], Hermes/CLI :9119
+
+**Ativar por contexto, sem comando nominal do CHEFE:** durante uma missão ativa, reconhecer automaticamente prints/relatos de janelas `[]`, PowerShell/CMD que piscam, `conhost.exe` em rajada, suspeita de CLI/Hermes :9119 ou gateway reiniciando. Reutilizar [receita com critérios de causalidade](references/JANELAS-TRANSITORIAS-HERMES-TRACE.md) e [traçador pontual de processos+janelas](scripts/Trace-TransientConsoleWindows.ps1). Não criar outra skill/daemon nem procurar quando não houver sinal material.
+
+**Ordem:** owner de porta/PID/pai e scheduled tasks → WMI `Win32_ProcessStartTrace` (inícios) + Win32 `EnumWindows`/visibilidade/título/PID (janelas) → correlação com logs Hermes e atividades humanas → separar tool calls do próprio observador → emitir `OBSERVED|CORRELATED|CAUSE_PROVEN|UNKNOWN` com horário, recibo e `NEXT_CURSOR`. **Amostra sem janela não prova ausência; porta 9119 HTTP 200 não prova execução nem causa; previous_unclean_exit não prova falha espontânea.** Read-only e duração finita por padrão; nunca matar `conhost.exe`, reiniciar Hermes, alterar Task Scheduler/porta ou ocultar todas as janelas para 'consertar' um sintoma sem prova e autorização.
+
+**Escopo de autonomia:** o agente que carregou a Skill-Mãe escolhe quando aplicar a receita **na própria execução**. Texto persistido em Git não cria observação remota contínua nem garante adoção por agente que não lê a skill.
+<!-- /CENTRALDARK_TRANSIENT_CONSOLE_DIAGNOSTIC_ON_DEMAND_20261030 -->
+
+<!-- CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113 -->
+## 🔏 CRISTAL — Direct Main só termina com rastro no mesmo ciclo
+
+**Ferida generalizada:** um commit material pode existir e ter readback correto na `main`, mas a missão continuar com rastro incompleto se o agente deixar o ledger/HUD para depois. `COMMIT_PROVEN != WRITE_CYCLE_COMPLETE`.
+
+**Gate obrigatório para qualquer escrita material direta na `main`:**
+
+```text
+DIRECT_MAIN_INTENT
+→ OWNER/WRITER_LOCK
+→ MUTATION
+→ COMMIT
+→ REMOTE_MAIN_READBACK
+→ RESOLVE_ACTIVE_TRACE_DESTINATION
+→ WRITE_COMMIT_TO_LEDGER/HUD_IN_SAME_CYCLE
+→ LEDGER_READBACK
+→ CURRENT_OR_FIXED_POINT
+→ RETURN_TO_CHEFE
+```
+
+A escrita só pode ser anunciada como concluída quando o mesmo ciclo contém:
+
+1. **commit remoto comprovado** — SHA + owner/path + link + readback;
+2. **destino de rastro CURRENT resolvido dinamicamente** — receipt versionado e/ou PR da missão + funil ativo por marcador, nunca número histórico hardcoded;
+3. **mapa causal** — cada commit material deve aparecer como `COMMIT → DELTA → PROVA/STATUS`; se vários commits formaram uma única missão, enumerar a cadeia completa e identificar o HEAD final;
+4. **readback do ledger/HUD** — provar que os SHAs citados realmente aparecem no destino;
+5. **estado da missão** — `FIXED_POINT` ou `CURRENT + NEXT_CURSOR`.
+
+**Invariantes:**
+
+```text
+DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT
+COMMIT_READBACK != LEDGER_READBACK
+COMMIT_PROVEN != TRACE_COMPLETE
+PR_BODY_UPDATED != RUNTIME_PROVEN
+HISTORICAL_PR_NUMBER != ACTIVE_LEDGER_IDENTITY
+RETURN_BEFORE_TRACE_READBACK = METHOD_FAILURE
+```
+
+Se o commit já foi publicado mas o rastro falhou, **não repetir a mutação**. Entrar em `TRACE_RECOVERY`: preservar o SHA já provado, resolver o ledger vigente, registrar `COMMIT → DELTA → PROVA`, reler e somente então continuar. Falha de ledger não transforma o commit em inexistente; transforma o **fechamento da missão** em `PARTIAL/BLOCKED`.
+
+**Aplicação ao próprio método:** qualquer alteração desta Skill Mãe por direct-main também obedece a esse gate. A regra não é “documentar depois”; é parte da definição de conclusão da escrita.
+<!-- /CENTRALDARK_DIRECT_MAIN_TRACE_COMPLETION_GATE_20261113 -->
+
+<!-- CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
+## 🔎 RASTRO PRIMEIRO — TRACE-FIRST / Delta Útil (CHEFE, 2026-10-29)
+
+**Gatilho:** pedido para verificar, continuar, auditar ou diagnosticar uma missão que já está com Claude, Hermes, Codex ou outro executor conhecido. Antes de abrir busca geral, identificar a **sessão original e seu rastro primário**, no canal autorizado pelo CHEFE (por exemplo, **somente GH Casa** significa não chamar Desktop Commander, VPS nem fontes locais). Isto complementa o Delta Contínuo e a MetaLupa, sem nova skill, log, sensor, executor ou owner.
+
+**Procedimento mínimo:** INTENÇÃO VIGENTE → EXECUTOR/GOAL/SESSION_ID → LOG/JSONL ORIGINAL + TOOL_USE/TOOL_RESULT (timestamps, comandos, exit codes) → ÚLTIMO RECEIPT/NEXT_CURSOR → ESTADO ATUAL DO OWNER/HEAD → DELTA MATERIAL NÃO PROVADO → CONTRAPROVA DISCRIMINANTE (somente quando necessária) → VEREDITO (PASS/FAIL/BLOCKED/UNKNOWN) → MESMO OWNER/WRITER → PR/RECEIPT COMPATÍVEL ou NOOP.
+
+1. Priorizar fonte primária do executor: trilha de ferramentas e respostas, sobre resumo do assistente, narrativa de chat, screenshot ou descoberta por varredura. Resolver o último cursor antes de reabrir o sistema inteiro; usar busca ampla somente se a fonte primária for inacessível/incompleta, registrando o motivo.
+2. Correlacionar sessão, intenção, caminho do owner, SHA, momento, ferramenta, ação, resultado e recibo. **Mensagem de sucesso ≠ comando executado ≠ efeito observado**. Um log mostra o que seu executor registrou, não prova sozinho impacto no runtime; contraprovar com readback independente apropriado.
+3. Reutilizar testes e recibos válidos por identidade causal. Só medir novamente se HEAD, runtime, owner, claim, escopo ou validade da prova mudou. **UNKNOWN ≠ PASS; TESTES_FIXTURE ≠ TESTE_REAL; DOCUMENTED ≠ EXECUTED; MERGED ≠ DEPLOYED**.
+4. Preservar uma caneta por escopo e as restrições do CHEFE. Leitura de log não autoriza agir na UI, manipular disco, reexecutar comandos com efeitos ou vazar tokens; sanitizar segredos. Se só GitHub foi autorizado, **GH_ONLY** vale também para a contraprova.
+5. Retornar em formato compacto: `EXECUTOR | SESSION/TRACE | CURRENT | DELTA | EVIDÊNCIA | CONTRAPROVA | VEREDITO | NEXT_CURSOR`. Sem delta novo: `NO_NEW_INFORMATION → NOOP`; sem rastro acessível: `TRACE_UNAVAILABLE → UNKNOWN`, nunca inventar conclusão.
+
+**Caso motivador:** na auditoria do instalador openKylin, a leitura da sessão Claude `88b5c878-405d-47e0-a708-9da1b23da730` (2026-10-29) explicou rapidamente o bloqueio da ISO e o encerramento por limite de uso; a suíte de fixtures foi reexecutada independentemente (`236 PASS, 0 FAIL, 1 SKIP`) sem tocar nos originais K:. Esse caso valida o ganho de rota na **sessão observada**, não uma melhora universal medida. Não transformar o exemplo em obrigação de consultar dispositivo local em outras missões.
+
+**Reuso canônico:** `docs/CONSCIENCIA/REGRA-COMITE-DELTA-CONTINUO.md` (reuso de prova/Delta Útil), `docs/ARQUITETURA/JARVIS-ORQUESTRACAO-DELTA-E-ESCRITOR-UNICO.md` (cursor e único writer), `.agents/skills/meta-lupa/SKILL.md` (contraprova). `RANDOLPH.md` aparece como legado pendente de migração; não assumir que é owner vigente nem criar clone por grafia ambígua.
+<!-- /CENTRALDARK_TRACE_FIRST_EXECUTOR_20261029 -->
+
+<!-- CENTRALDARK_CUA_CODEX_HERMES_20261029 -->
+## 🖱️ Computer Use existente — Codex + Hermes + AI Andarilho (CHEFE, 2026-10-29)
+
+**Intenção:** navegar com mouse, clique, rolagem e readback pelo braço **já existente**, sem criar outro driver, agente, bridge, scheduler ou automação. Reusar `.agents/skills/autonomous-ai-agents/computer-use/SKILL.md` (vocabulário tipado de `computer_use` do Hermes) e `.agents/skills/autonomous-ai-agents/ai-andarilho/SKILL.md` (travessia e continuidade). Borda alaranjada vista no Codex é pista visual, **não** identificação comprovada da ferramenta que executou o clique.
+
+**Caminho preferido, quando a sessão Hermes expõe a ferramenta:** `computer_use(action="list_windows")` → `computer_use(action="capture", mode="som", app="<janela certa>")` → selecionar elemento pelo índice **do snapshot atual** → `computer_use(action="click", element=N, capture_after=True)` ou `computer_use(action="scroll", direction="down", amount=3, element=N)` → novo `capture` e readback do efeito. Primeiro tentar entrega em segundo plano pelo `cua-driver`; recapturar após mudança de janela; não reutilizar índice velho.
+
+**Contraprova medida na Casa SEGREDO (2026-10-29):** `codex-computer-use-swift.exe` estava rodando, mas **chamada direta à ferramenta nativa do Codex por este chat = UNKNOWN**. O comando já existente `hermes computer-use status` confirmou `cua-driver 0.21.0` instalado; `hermes computer-use doctor` confirmou sessão MCP ativa, UIAutomation acessível e captura D3D11 disponível. `DRIVER_HEALTH_PASS != HERMES_SESSION_ACTION_PASS`.
+
+**Fallback observado, não substituir o dono:** quando este chat não dispõe do `computer_use` direto, o Remote Desktop Commander autorizado acessou UIAutomation do Edge na Casa. Em quatro monitores, coordenadas podem ser negativas. O cursor físico foi movido e houve clique em **“Inspecionar rota GitHub para Casa”**, somente após conferir o botão no ponto; o readback mostrou a gaveta **“Inspeção de rota”**. **Clique físico com efeito na UI = PASS apenas nessa ação**, não é prova de invocação pelo Codex/Hermes. Esse fallback move o cursor real, ao contrário do modo em segundo plano da skill; requer intenção explícita do CHEFE e cuidado para não disputar foco.
+
+**Administrador, só quando precisar (CHEFE):** a Casa mostrou um terminal “Administrador” aberto e `whoami /groups` com integridade alta, mas o clique seguro do Cockpit **não exigiu** elevação. A permissão do CHEFE para usar administrador vale para a ação concreta, após identificar alvo, necessidade, efeito e contraprova; não trocar aplicativos, conceder acesso amplo ou instalar componentes por suposição visual. `ADMIN_ACCESS_IS_NOT_TARGET_PROOF=true`.
+
+**Limite medido:** eventos de rolagem física para baixo e para cima foram enviados, mas não houve deslocamento mensurável do texto da gaveta; `SCROLL_EFFECT=UNKNOWN`, nunca PASS por mero envio. Um comando “Voltar” da interface pode trocar a página/aba: confirmar alvo exato antes de fechar painéis. Quando o hit-test do cursor não identifica o botão esperado, **não clicar**. Não clicar em `Sincronizar Tudo`, VPS, permissões ou ações destrutivas como teste de mouse; `ACTION_DISPATCHED != EFFECT_OBSERVED`.
+
+**Continuidade:** `INTENÇÃO → JANELA/SESSÃO → SNAPSHOT ATUAL → AÇÃO MÍNIMA → READBACK → RECEIPT → MESMO OWNER OU NOOP`. Ensinar ao Hermes pela Skill-Mãe/owners citados; **publicado no Git != carregado na Casa/Hermes**. Se houver aprendizado novo comprovado, acrescentar **somente o delta útil** nesta Skill-Mãe e conservar a receita detalhada no owner `computer-use`, sem recomeçar a descoberta.
+
+**Achado do Cockpit (2026-10-29, CENTRALDARK_COCKPIT_DISPATCH_CONTRAPROVA_20261029):** a opção visual `Main Only (rápido) / Full (Casa/VPS/Main)` não era transmitida à função `solicitarPromocaoSegura`; o workflow `.github/workflows/autonomia-promocao.yml` expõe `workflow_dispatch` sem entrada de modo. Logo, `SELECTED_MODE != EXECUTION_MODE`. A imagem mostrou `DISPATCH_TOKEN_NOT_CONFIGURED`, que vem de `apps/instinto-superior/src/lib/admin.functions.ts`: além do papel `admin` no Supabase, a solicitação requer `CENTRALDARK_GITHUB_DISPATCH_TOKEN` **no servidor**. Administrador do Windows não substitui esse segredo, não autoriza burlar a sessão e não prova despacho. **Correção de clareza no owner do componente:** PR #1968, removendo modo fictício e traduzindo o bloqueio sem trocar promotor ou gates.
+
+**Estado do sync independente:** o botão `Main` faz `git fetch` + comparação de commits, **sem atualizar os arquivos da Casa**; no rastro medido havia `ahead 2 / behind 16` e o VHDX WSL ainda rastreado por commit local. Não disparar `Sincronizar Tudo` nem `push` até reconciliar o histórico sem publicar a imagem de disco. `DISPATCHED != MERGED != CASA_SYNCED != HERMES_LOADED`.
+
+**CENTRALDARK_COCKPIT_AUTH_REUSE_UI_READBACK_20261029 — Sala de Controle como superfície preferida, sem duplicar executor:** quando o CHEFE autorizar operar o Cockpit, localizar a janela viva correta, clicar primeiro no **controle de menor efeito** (ex.: `Medir agora`), conferir que mudou o texto/hora e então seguir ao `source` do mesmo controle somente se houver falha. Registro observado em `SEGREDO`: UIAutomation acessou Edge → botão `Medir agora` (um único alvo habilitado) → `Invoke()` despachado → rótulo atualizado para `agora mesmo`; isto prova **a ação e a reação do botão**, não prova todos os serviços verdes. Se a ferramenta nativa `computer_use` do Hermes/Codex não estiver exposta ao chat, não atribuir esse clique a ela. Recapturar janela/alvo antes de outro clique. Não clicar em `Sincronizar Tudo` ou deploy para testar navegação.
+
+**Rastro de autenticação já existente (Casa, sem expor valores):** `K:\\.env` e `K:\\.env.local` têm entradas `GITHUB_TOKEN` e `GH_TOKEN` preenchidas, **ignoradas pelo Git**. `apps/instinto-superior/vite.config.ts` já faz `loadEnv` de `GITHUB_TOKEN` da raiz K: para o processo servidor. O botão de promoção em `src/lib/admin.functions.ts` exigia apenas `CENTRALDARK_GITHUB_DISPATCH_TOKEN` e retornou `DISPATCH_TOKEN_NOT_CONFIGURED`. O caminho correto é reutilizar o token de servidor com o **mesmo middleware e `user_roles.admin` do Supabase**, não buscar/cadastrar senha alternativa, nem enviar segredo à UI. PR #1968 adicionou fallback servidor `CENTRALDARK_GITHUB_DISPATCH_TOKEN → GITHUB_TOKEN → GH_TOKEN`; `admin` Windows ≠ papel `admin` Supabase ≠ permissão GitHub Actions. Teste GET local autenticado ao recurso de workflow `autonomia-promocao.yml` retornou **HTTP 200**, sem imprimir token: **READ=PASS, DISPATCH_WRITE=UNKNOWN**. Não invocar POST como mera sonda.
+
+**Outros owners no mesmo compasso:** `src/lib/cockpit.functions.ts` já consome `GITHUB_TOKEN` para consultas; `src/components/central/AdminCofreSeguranca.tsx` usa o Vault Supabase para metadados e inclusão de credencial, mas **salvar no cofre não injeta por si só token no processo**; `src/integrations/supabase/auth-middleware.ts` requer `SUPABASE_URL`, chave pública e autorização válida, que não são substituídos por PAT GitHub. Investigar cada aviso na sua fonte antes de reutilizar identidade: `SECRET_PRESENT != ROLE_AUTHORIZED != WORKFLOW_DISPATCHED`. Privilégio administrativo dado pelo CHEFE não permite copiar ou publicar segredos; nunca enviar valores para Git, chat, logs ou receipts.
+
+**Receita curta de melhoria:** `PAINEL_VIVO → CLIQUE_SEGURO → EFEITO_LIDO → FUNÇÃO_SOURCE → ENV/ROLE/OWNER EXISTENTE → MENOR_FIX → TESTE_DO_MESMO_CONTRATO → RECIBO/PR → READBACK`. Mensagem humana clara primeiro; código de erro literal entre parênteses. Se a main e a Casa divergem, **não editar K: para forçar sincronização** nem declarar que PR/commit já está carregado no Hermes.
+
+**CENTRALDARK_OMNI_ROUTER_CASA_RECOVERY_20261029 — API local voltou, não criar outro roteador:** ao ver API CentralDark/Roteador/Sinal/Grafo/Confirmações amarelos, testar primeiro `127.0.0.1:8099`, **não** a porta `8080` (Vite), `9101` (Casa Commander) nem `3030` (Screenpipe). Owner existente: `apps/modulos/elite-gateway/scripts/centraldark_omni_router.py`; launcher canônico `scripts/launch_omni_router_direct.py`; Python isolado `apps/modulos/elite-gateway/.venv/Scripts/python.exe`. Contraprova Casa SEGREDO em 29/10/2026: porta `8099` sem listener e sete sondas falharam; launcher original iniciado **somente em 127.0.0.1:8099**, processo `python.exe` PID `42112`, após checar que não havia outro listener. `GET /health`, `/api/omni/status`, `/api/omni/models`, `/api/live-fabric/status`, `/api/live-fabric/graph`, `/api/microdeploy/receipts/index.json`, `/heartbeat` retornaram **HTTP 200**, o heartbeat declarou `self=alive`. Retorno da UI após `Medir agora`: API, roteador e sinal **Funcionando**, grafo **Conexão disponível / Uso recente ainda não verificado**, confirmações **Em andamento**.
+
+**Escopo exato:** grafo e recibos retornaram `proof_state=NOT_REVALIDATED`; `HTTP200 != EXECUCAO_COMPROVADA`. A tarefa Windows `CentralDark-Casa-Cockpit-Hermes-One` foi encontrada, mas **não foi comprovado autostart do Omni Router** após reboot. O processo atualmente ligado por sessão local não comprova persistência futura. Não criar gateway novo, redirecionar o Cockpit para Commander 9101, alterar porta padrão nem acionar VPS só para obter verde. Reusar `docs/ARQUITETURA/CENTRALDARK-LIVE-EXECUTION-FABRIC.md` e o receipt `docs/CONSCIENCIA/RECEIPTS/2026-10-28-popup-close-universal-e-sensores-casa.md`.
+
+**CENTRALDARK_CASA_WINDOWS_LOGIN_TASK_20261029 — executor nativo da inicialização, TRACE-FIRST:** na Casa `SEGREDO`, porta `8080` pertence a `node.exe` / `K:\apps\instinto-superior\node_modules\vite\bin\vite.js` (PID `15564`, criação 19:55:35). O Agendador Windows já tinha a tarefa **`CentralDark-Casa-Cockpit-Hermes-One`**: gatilho `AtLogOn` do usuário `Administrador` (não é gatilho de abertura do Hermes), último resultado `0` às 19:55:37, ações sequenciais originais `scripts/casa/instinto-cockpit-autostart.ps1` (Vite 8080), `scripts/casa/Hermes-One-Local.ps1 -Action start` (Hermes web 9119) e `scripts/casa/CENTRALDARK-CORPO-UNICO-HUD-LOGS.bat` (sensores sem duplicar HUD). Launcher 8080 é idempotente e responde `GET /sala-controle HTTP 200`. Seus logs originais: `F:\temp\centraldark-cockpit-8080-{stdout,stderr}.log`. A tarefa é **AtLogOn**, `RestartCount=0`, sem watchdog: `LOGIN_AUTOSTART != RESTART_AFTER_CRASH`. Sucesso do agendador não substitui health dos filhos.
+
+**Delta aplicado na MESMA tarefa (Casa, 29/10/2026):** foi exportada a configuração anterior para `F:\temp\CentralDark-Casa-Cockpit-Hermes-One-before-omni-20261029-231443.xml`. Mantidas as três ações e o trigger originais; adicionada **quarta ação** PowerShell que confere listener 8099 e, apenas se não houver, chama `K:\apps\modulos\elite-gateway\.venv\Scripts\python.exe -u K:\scripts\launch_omni_router_direct.py`, com trabalho em `K:\`, janela oculta e logs em `F:\temp\centraldark-omni-8099-{stdout,stderr}.log`. Contraprova prévia com porta 8099 ocupada: `OMNI_PORT_ALREADY_LISTENING`, exit `0`; `Set-ScheduledTask` confirmou **4 ações**, preservou as três anteriores e o único trigger `AtLogOn`. **Ainda não houve reboot/login novo nem simulação de falha real da 8099**; persistência após esse evento = `UNKNOWN`. Não criar outro scheduler ou iniciar segundo router.
+
+**Hermes medido:** `Hermes-One-Local.ps1 -Action status` inicialmente mostrou `9119 OFFLINE` e logs do Hermes Desktop pararam por volta de 19:50. Reuso explícito de `-Action start` retornou `LAUNCHED_REQUEST_PID=41828`; após o lançamento, `GET http://127.0.0.1:9119/` retornou HTTP `200` com listener `python.exe`, e `.local-web/web-stdout.log` trouxe `HERMES_DASHBOARD_READY port=9119`. `HERMES_WEB_200` não prova o gateway, o consumo da Skill-Mãe, a VPS nem invocação LLM. Estado final medido `8080=HTTP200`, `8099=HTTP200`, `9119=HTTP200`. `NEXT_CURSOR=RELOGIN_TASK_READBACK + CRASH_RECOVERY_SEPARATE_GATE + HERMES_RUNTIME_SKILL_HASH`.
+
+**CENTRALDARK_HERMES_TERMINAL_TAB_TRACE_20261029 — aba inesperada do Terminal (somente leitura):** foto do CHEFE mostra aba Windows Terminal com tooltip `Default: C:\\Users\\Administrador\\AppData\\Local\\hermes\\bin\\hermes.exe`. Leitura real Casa: `WindowsTerminal.exe` PID `12344` iniciado em **2026-10-29 19:55:37**; a tarefa já existente `CentralDark-Casa-Cockpit-Hermes-One` executou nesse exato segundo, e sua **segunda ação** é `Hermes-One-Local.ps1 -Action start`, que chama `hermes.exe dashboard`. Terminal padrão configurado é **PowerShell**, não um perfil Hermes; nenhuma entrada Hermes/Terminal detectada no Run/Startup e nas tarefas pesquisadas. Assim, a segunda ação é o **causador mais provável**, mas `CREATOR_PID_PROOF=UNKNOWN`: o Terminal aparece com pai `svchost.exe` por ativação do app, TaskScheduler/Operational estava desabilitado e evento de criação Security 4688 indisponível. O único `hermes.exe` vivo na leitura é o PID `41828` iniciado manualmente às **23:15:17** para recuperar a porta 9119, **não prova o processo da aba antiga**. `TAB_OPEN != HERMES_GATEWAY_RUNNING`; não matar janela, não mudar startup nem abrir outro Terminal por inferência. Próximo cursor: instrumentar execução do launcher existente com recibo PID/timestamp não secreto, se surgir necessidade real de eliminar a aba.
+
+**CENTRALDARK_HERMES_ONE_DUAL_INTERFACE_PROOF_20261029 — Hermes One Desktop real, duas interfaces; não simplificar por suposição (29/10/2026):** quatro frentes em `SEGREDO`. **Portas:** `127.0.0.1:56063` escuta no Python PID `44472`, filho de `pythonw` PID `43096` → PID `43148` → **`hermes-agent.exe` PID `40212`**, aplicativo Electron instalado em `C:\Users\Administrador\AppData\Local\Programs\hermes-desktop\hermes-agent.exe`, janela real **Hermes One**, iniciado às 23:21:32; porta 56063 começou às 23:22:04. **Outra entrada:** `127.0.0.1:9119` PID `16452` filho de `hermes.exe` PID `41828`, lançado separadamente via `scripts/casa/Hermes-One-Local.ps1` às 23:15. **História:** `K:\k\hermes-desktop-src\package.json` chama o aplicativo `hermes-desktop` versão `0.7.7`, igual ao ProductVersion do EXE (fathah); `docs/CONSCIENCIA/RELATORIO-HERMES-ONE-LOCAL-E-COCKPIT-20261025.md` diferencia o renderer Electron `window.hermesAPI` do iframe web em `apps/instinto-superior/src/components/central/HermesOneWebLocal.tsx` que aponta só para 9119.
+
+**Contraprova de identidade web:** `GET /` de ambas devolve título `Hermes Agent - Dashboard` e os **mesmos caminhos de assets**; GET `/assets/index-z7kl430D.js` foi **SHA-256 idêntico** nas duas portas (`0f40bccef6d330414e1c12e7e3cedcf6e9c67e44ac957d0dc2fbe36a2b7701fd`). `GET /api/status` retornou JSON de hash idêntico (`7dff19b1f8354157abedba33b3955d788cdbcf06bff2da321014854aa1791989`), `version=0.22.5`, `gateway_running=true`, `gateway_state=degraded`; `/api/health` também idêntico, `ok=true`. O gateway `8644` estava em PID `43748`, filho do Python da porta 56063. **Veredito:** duas instâncias HTTP do mesmo dashboard e um aplicativo desktop Electron distinto, **não dois agentes independentes**. Compartilhar status não prova identidade de sessão, autorizações ou todas as funções. **Não** renomear Hermes One, parar portas ou remover autostart sem pedido e prova de impacto; investigar `gateway_state=degraded` separadamente. Chromium está embutido no Electron; não exigir processo `chromium.exe` separado. A árvore do aplicativo mostra pai `explorer.exe`, sem provar qual clique iniciou a janela.
+
+<!-- CENTRALDARK_CASA_UI_CONTEXTUAL_RECIPE_20261030 -->
+### 🪟 Receita catalogada — Casa UI Contextual / janela aberta → ação autorizada (CHEFE, 30/10/2026)
+
+**Classificação do catálogo:** `RECEITA / AUTOMAÇÃO ASSISTIDA / CASA-WINDOWS / UI CONTEXTUAL SOB DEMANDA / CUA` · `RISK=BOUNDED` · `RECEIPT=REQUIRED` · `OWNER=.agents/skills/centraldark-operational-method/SKILL.md` · `EXECUTOR=computer-use EXISTENTE` · `TRAVESSIA=ai-andarilho EXISTENTE`. **Não** criar skill, agente, watcher, gatilho persistente, daemon, HUD, serviço, scheduler ou coleta de tela contínua. Catálogo visual é projeção dos owners já presentes no `apps/instinto-superior/docs/INSTINTO-MANIFESTO-INCREMENTAL.md`, não um novo sistema de execução.
+
+**Gatilhos linguísticos ilustrativos:** "olha a interface aberta do WSL", "fecha essa janela", "abre o painel do Hermes One", "clica em Mais tarde", "volta ao que estávamos vendo". Resolver **deíxis e continuidade da intenção** com a conversa atual + janela/snapshot **obtido após o pedido**; o simples fato de um aplicativo estar aberto não autoriza observação permanente nem clique. Revalidar quando houve troca de foco, múltiplas janelas homônimas ou mudança de sessão. O modelo **não** possui telepatia de intenção: `CONTEXT_INFERRED != TARGET_CONFIRMED != ACTION_AUTHORIZED`.
+
+**Contrato de resolução contextual (sem novo executor):**
+1. `INTENT_ID / UTTERANCE / ACTIVE_TOPIC`: última intenção humana vigente, alvo mencionado ("essa", "a do WSL"), sentido do verbo, ambiente autorizado. Preferir resolução sem perguntar quando título, PID, UIA e contexto convergem; havendo dois alvos plausíveis ou risco elevado, pedir confirmação do alvo/efeito.
+2. `LIVE_WINDOWS`: `computer_use(action="list_windows")` → `capture(mode="som", app=...)` no Hermes, se disponível. Fallback autorizado e identificado: Windows `Get-Process` com `MainWindowHandle` + `System.Windows.Automation.AutomationElement`/UIAutomation (`Name`, `ControlType`, `BoundingRectangle`, `ProcessId`); confirmar **janela + documento/diálogo/controle exato**, sem usar só coordenadas ou título textual. Acessibilidade pode expor controles ocultos/fora da tela: correlacionar retângulo, visibilidade, UI atual.
+3. `ACTION_CANDIDATE`: escolher **menor operação nativa e reversível** permitida pelo pedido, `InvokePattern`/seleção de elemento identificado e fresco; não reusar índice de captura anterior, não clicar por aproximação se o alvo estiver ambíguo. Preferir leitura sem alteração enquanto a intenção for investigativa. Fallback físico de mouse muda cursor/foco e requer superfície correta e autorização.
+4. `RISK_GATE`: `OBSERVE` leitura; `LOW` abrir painel/aba ou fechar **somente** janela comum explicitamente indicada, após conferir dados não salvos; `ELEVATED` encerrar processo, finalizar tarefa, alterar conexão, permissões, credenciais ou configurações persistentes; `HIGH` "Desligar o WSL agora", reinicializar SO, encerrar sessões, instalar, apagar, enviar mensagem, publicar ou fazer alterações amplas. ELEVATED/HIGH requer intenção explícita sobre **aquele efeito** e confirmação quando houver impacto, nunca inferir de "fecha essa janela". Não exibir valores de chaves/tokens nem capturar conversa fora do escopo.
+5. `READBACK / COUNTERPROOF`: nova captura/UIA depois da ação + estado independente quando material (por exemplo, `wsl --list --verbose` somente se autorizado; janela de configuração fechada ≠ WSL desligado; botão clicado ≠ parâmetro aplicado); recibo com `APP_TITLE, PID_IF_CURRENT, CONTROL, ACTION, BEFORE, AFTER, OWNER, EVIDENCE_TIME, COMPLIANCE, NEXT_CURSOR`. Não gerar "PASS" sem efeito observado.
+6. `CATALOG_REUSE`: preservar `RECIPE_ID=CASA_UI_CONTEXTUAL` como **identificador documental**, não um ID de job nem serviço agendado. Para WSL, Hermes, Claude, VS Code, Edge, Configurações Windows, usar a **mesma receita** parametrizada por `APP/SURFACE/CONTROL`, sem N scripts por aplicativo.
+
+**Caso de referência realmente observado (30/10/2026):** janela `Configurações do Subsistema do Windows para Linux`, PID Windows **16072** na medição, UIA mostrou `Desenvolvedor` → `Habilitar console de depuração`; diálogo `É necessário desligar o WSL` com texto `Habilitar console de depuração: Desligado` e botões `Desligar o WSL agora`, `Mais tarde`, `Fechar`. `UI_IDENTIFIED=PASS`, `PENDING_RESTART_IDENTIFIED=PASS`, `BUTTON_INVOKED=NO`, `CHANGE_APPLIED=UNKNOWN`. O WSL pode mostrar debug consoles quando `debugConsole=true`; desativar a opção precisa aplicar alterações, mas **não** prova solução para o SSH nem para os consoles Python do Hermes. PID é efêmero e **não é** identificador para reutilizar depois. Outro caso: `Hermes One` Electron, UI `Configurações → Conexão`, `Detect remote install` clicado e erro `banner exchange: Connection to UNKNOWN port -1: Connection refused` exibido; `CLICK=PASS`, `SSH_CONNECTED=FAIL`. A lógica de reconhecer janelas pelo assunto **não** foi homologada como automação universal.
+
+**Caso reutilizável observado — atualizar página já aberta do Cockpit sem abrir outra instância (12/11/2026):**
+- **Intenção:** CHEFE informou que o Cockpit já estava aberto na Casa e autorizou apenas atualizar a página existente.
+- **Descoberta de superfície:** primeiro tentar Browser/conector da sessão quando ele consegue enxergar a mesma aba. Nesta medição, o Browser respondeu que não tinha o contexto originador; portanto essa rota ficou `UNAVAILABLE` e **não** foi usada para agir.
+- **Fallback Casa realmente usado:** Remote Desktop Commander conectado ao dispositivo `SEGREDO` → PowerShell read-only `Get-Process` filtrando janelas com `MainWindowTitle` → localizar `Cockpit CentralDark - Sala de Controle - Google Chrome` e o PID corrente. Não reutilizar PID em outra sessão.
+- **Foco:** `WScript.Shell.AppActivate(<titulo>)` foi tentado primeiro e retornou `FAIL`; o método então voltou uma casa e usou `WScript.Shell.AppActivate(<PID corrente>)`, que retornou `PASS`.
+- **Ação mínima:** após foco confirmado, `WScript.Shell.SendKeys('{F5}')` enviou **uma única** atualização à janela já aberta. Não criou aba, navegador, janela ou processo paralelo.
+- **Receipt observado:** `APP_ACTIVATE_PID=PASS` e `REFRESH_SENT=F5`. Isso prova **foco + envio do comando de refresh**, não prova por si só que o conteúdo novo renderizou corretamente; UI/readback visual posterior continua necessário quando o objetivo depender do conteúdo.
+- **Receita geral:** `INTENCAO_ATUAL → ENUMERAR_JANELAS_REAIS → IDENTIFICAR_TITULO+PID_CURRENT → TENTAR_ROTA_NATIVA/FOCO → SE_TITULO_FALHAR_REVALIDAR_PID → APP_ACTIVATE_PID → ACAO_MINIMA_UNICA → READBACK → CONTRAPROVA → RECEIPT`.
+- **Ferramentas/owners usados:** Browser conectado somente para tentativa de leitura da aba; Remote Desktop Commander para alcançar a Casa; PowerShell/`Get-Process` para inventariar janelas; COM `WScript.Shell` para `AppActivate` e `SendKeys`. Nenhum script novo, nenhuma automação persistente e nenhuma captura contínua.
+- **Cadeados:** PID é efêmero; título sozinho pode falhar; `SEND_ACCEPTED != UI_EFFECT_PROVEN`; nunca repetir cegamente F5/clique quando a ação puder ser destrutiva; recapturar janela/PID após troca de sessão, reload do app ou múltiplas janelas homônimas.
+
+### ⌨️ CRISTAL — Casa → terminal SSH já aberto → Linux CentralDark-OS
+
+`RECIPE_ID=CASA_EXISTING_SSH_TERMINAL_TO_LINUX`
+
+Quando o CHEFE já abriu uma sessão SSH válida no Windows Terminal/terminal equivalente para o openKylin/CentralDark-OS, **reutilizar essa sessão visível** antes de abrir outro SSH, console ou executor. O Windows é superfície de entrada; o comando Linux só é considerado executado quando o efeito aparece na sessão remota correta.
+
+```text
+INTENT
+→ ENUMERAR_JANELAS/TABS_REAIS
+→ TARGET_ID=EXISTING_SSH_TERMINAL
+→ PID + WINDOW_TITLE + WINDOW_RECT CURRENT
+→ MONITOR_MATCH
+→ FOCUS_EXISTING_WINDOW
+→ PROBE_MINIMO_READ_ONLY (pwd; hostname)
+→ VISUAL_READBACK_DA_MESMA_ABA
+→ SSH_TARGET_MATCH
+→ COMANDO_LINUX_UNICO
+→ VISUAL_READBACK_DA_MESMA_ABA
+→ CONTRAPROVA_INDEPENDENTE_QUANDO_MATERIAL
+→ RECEIPT
+```
+
+**Leis:** `WINDOW_FOCUSED != CORRECT_TAB`; `SEND_ACCEPTED != COMMAND_VISIBLE`; `COMMAND_VISIBLE != LINUX_EFFECT_PROVEN`; `SSH_CONNECTED != TARGET_MATCH`; `WINDOW_PID/TITLE/GEOMETRY` são bindings efêmeros. Se uma tentativa cair em aba errada, nova aba, painel auxiliar ou superfície criada pela própria ferramenta: `FREEZE_RETRY → fechar somente a superfície criada pela operação quando seguro → REACQUIRE → PROBE_MINIMO → continuar no mesmo Goal`.
+
+**Target Match mínimo:** o probe deve retornar o host/raiz esperados na **mesma aba** antes de qualquer comando material. Exemplo de classe, não constante: `pwd; hostname`. Não persistir hostname, PID, coordenada ou drive letter como identidade eterna.
+
+**Segredos:** para comandos que consumam `.env`/EnvironmentFile, ler o valor somente dentro do processo remoto autorizado e não ecoá-lo. Preferir prova por nome de variável, status/HTTP/efeito e remover temporários. `ENV_FILE_PRESENT != AUTH_REQUEST_PROVEN`.
+
+**Caso observado em 12/11/2026:** uma tentativa desviou para uma aba `send-input`; o readback visual reprovou `COMMAND_SENT` como efeito. Após remover apenas a aba criada pela operação, o alvo foi reacquirido por PID/título, `pwd; hostname` apareceu na aba SSH correta e o comando seguinte retornou `ROOT=/home/CentralDark-OS/CentralDark` e `SUPABASE_LINUX_AUTH_HTTP=200`. Os valores de PID/host/path dessa medição são evidência histórica, não bindings permanentes.
+
+### 🎯 CRISTAL — Target Lock por coordenadas lógica, relativa e absoluta (CHEFE, 12/11/2026)
+
+Toda ação material deve resolver o **mesmo alvo** em camadas, sem confundir identidade com localização corrente:
+
+- `TARGET_ID`: identificador lógico estável quando existir — por exemplo `GOAL_ID`, UID, marcador `CENTRALDARK_HUD_FUNNEL_CONTINUITY`, AutomationId/control ID ou owner lógico. É a identidade preferida para continuidade.
+- `OWNER_RELATIVE_PATH`: caminho **relativo à raiz canônica do owner/repositório**. Ex.: `apps/instinto-superior/src/components/central/HudDeterministico.tsx`. É o formato preferido em docs, receipts e regras portáveis.
+- `RESOLVED_ABSOLUTE_PATH`: caminho físico absoluto **resolvido no ambiente corrente** quando o alvo for arquivo/diretório. Ex.: `F:\CentralDark\...` na Casa ou `/root/CentralDark/...` na VPS. Nunca herdar automaticamente de outro host.
+- `RUNTIME_TARGET_ID`: identidade efêmera da sessão — PID, HWND, RuntimeId UIA, tab id, job id transitório. Serve para agir **agora**, nunca como ponteiro permanente.
+- `RELATIVE_TRAJECTORY`: rota semântica portátil até o alvo: `OWNER → componente → controle/arquivo → ação`.
+- `ABSOLUTE_TRAJECTORY`: rota observada no runtime atual: `HOST → superfície/processo → PID/handle atual → controle/path resolvido → ação`.
+- `TARGET_MATCH`: prova de que as coordenadas lógica, relativa e absoluta apontam para o mesmo alvo pretendido. Sem convergência, `TARGET_MATCH=UNKNOWN|FAIL` e a mutação para.
+
+**Ordem padrão de resolução:** `INTENT → TARGET_ID → OWNER_RELATIVE_PATH → ENVIRONMENT_ROOT → RESOLVED_ABSOLUTE_PATH/RUNTIME_TARGET_ID → MONITOR_MAP → TARGET_MATCH → MONITOR_MATCH → OVERLAY → CUA_CURSOR → ACTION → READBACK`.
+
+### 📦 CRISTAL — Materialization Scope: trazer o owner ao ambiente sem falsificar raiz
+
+Quando o executor está em sandbox, container, runner, worktree ou host que **não possui fisicamente** o owner resolvido, `RESOLVED_ABSOLUTE_PATH` pode ser válido como trajetória e ainda assim `PATH_EXISTS=false`. Isso é `MATERIALIZATION_GAP`, não erro do owner.
+
+**Classificação obrigatória:**
+- `MINIMAL_DEPENDENCY_CONE`: usar para teste unitário/local de uma função, módulo ou receita quando o conjunto mínimo de arquivos/dependências é conhecido e suficiente para reproduzir o comportamento.
+- `REQUIRED_CHECKOUT_SCOPE`: usar para teste operacional/integração quando identidade Git, guards, imports relativos, arquivos irmãos, owners, schemas, config ou traversal do repositório participam da prova.
+- `FULL_CHECKOUT`: somente quando o escopo requerido não pode ser delimitado com segurança; não é default.
+- `NO_MATERIALIZATION_NEEDED`: alvo já existe e `TARGET_MATCH=PASS` no ambiente atual.
+
+**Sequência:**
+`TARGET_ID → OWNER_RELATIVE_PATH → DISCOVER_ENVIRONMENT_ROOT → RESOLVE_ABSOLUTE → PATH_EXISTS? → MATERIALIZATION_SCOPE → MATERIALIZE_FROM_AUTHORIZED_SOURCE → VERIFY_SOURCE_REF/BLOB → TARGET_MATCH → EXECUTE → READBACK`.
+
+**Leis:** `MATERIALIZED_PATH != CANONICAL_OWNER`; `ENVIRONMENT_ROOT != OWNER`; `PATH_RESOLVED != PATH_EXISTS`; `FILE_EXISTS != TARGET_MATCH`; `MINIMAL_DEPENDENCY_CONE != OPERATIONAL_INTEGRATION_PROOF`. Caminho físico materializado é binding efêmero daquele executor e nunca substitui o owner relativo. Se a fonte autorizada não puder ser materializada, manter `BLOCKED_MATERIALIZATION`/ `UNKNOWN`, sem inventar arquivo, pacote ou checkout.
+
+**Exemplo de sandbox:** owner `.agents/skills/meta-lupa/scripts/meta_lupa.py` pode resolver para `/mnt/data/CentralDark/.agents/...`; se o arquivo não existir, classificar `MATERIALIZATION_GAP`. Para testar apenas `evaluate()`, materializar o cone mínimo necessário; para validar a Meta-Lupa como organismo com `LEIA-ME-IA.md`, guards, Trigger Fabric e paths relativos, materializar `REQUIRED_CHECKOUT_SCOPE`.
+
+
+Para alvo visual, o Target Lock inclui também: `MONITOR_ID_HUMANO`, `MONITOR_RECT`, `WINDOW_RECT`, `CONTROL_BOUNDS`, `OVERLAY_STATE`, `CUA_SESSION`. O mesmo alvo só está pronto para ação quando identidade + janela/processo + controle + monitor convergem. O overlay deve marcar **o monitor resolvido** antes/durante a ação visual, e o cursor virtual Cua deve operar na mesma tela; `OVERLAY_VISIBLE_ON_OTHER_MONITOR` ou `CURSOR_TARGET_MISMATCH` bloqueiam a ação.
+
+**Regras:** preferir ID lógico + path relativo para persistência; resolver absoluto/PID/handle somente no runtime; redescobrir tudo após troca de host, sessão, janela, checkout ou processo; nunca transformar PID, drive letter, URL privada, índice visual ou coordenada de tela em owner canônico. Um recibo pode registrar o absoluto/PID observado como evidência histórica, mas a receita reutilizável permanece parametrizada.
+
+**Caso Cockpit 12/11/2026:** `TARGET_ID=Cockpit CentralDark/Sala de Controle`; `RUNTIME_TARGET_ID=PID 29728` apenas naquela sessão; título identificou o candidato, `AppActivate(title)=FAIL`, revalidação por PID corrente produziu `TARGET_MATCH=PASS`, então uma única ação `F5` foi enviada. `SEND_ACCEPTED != UI_EFFECT_PROVEN`.
+
+**Michelin/Kimetsu:** ⭐ Construir exige `TARGET_LOCK`; ⭐⭐ Integrar executa no alvo resolvido sem trocar trajetória silenciosamente; ⭐⭐⭐ Provar remede o mesmo alvo e contraprova vizinhos. Kimetsu usa Concentração/Névoa/Água enquanto `TARGET_MATCH` não converge; Trovão/Inseto só depois do lock; Chamas preserva o mesmo `TARGET_ID` ao longo das etapas.
+
+**Matriz de conformidade obrigatória:** `PASS` = identidade, autorização, efeito e readback confirmados no escopo; `PARTIAL` = subconjunto confirmado, com pendência declarada; `UNKNOWN` = falta de evidência/atribuição; `BLOCKED` = autorização, acesso ou segurança impedem avançar; `FAIL` = efeito esperado não ocorreu com contraprova. `TARGET_COMPLIANCE=100% DE AÇÕES AUDITADAS` é **objetivo**, não percentual medido; sem universo de testes, `NUMERIC_COMPLIANCE=UNMEASURED`. Homologar cada variante por replay controlado, sem sobreposição de writers, inclusive caso negativo de duas janelas semelhantes. `DOC_COMMITTED != MAIN_MERGED != HERMES_SKILL_LOADED != CONTEXT_ROUTING_DEPLOYED`.
+
+**NEXT_CURSOR:** incluir a receita documental na gaveta existente sem alterar runtime; mapear capacidade real do `computer_use` na sessão executora; testar por pedido humano "mostre a janela aberta do WSL", depois um clique de baixo impacto autorizado, readback e teste ambíguo; nenhum observador permanente por padrão.
+<!-- /CENTRALDARK_CASA_UI_CONTEXTUAL_RECIPE_20261030 -->
+
+
+<!-- CENTRALDARK_OPENKYLIN_CLAUDE_SSH_PROXY_TRACE_20261030 -->
+### 🔗 SSH openKylin no WSL2 — preservar rota comprovada do Claude (30/10/2026)
+
+**Intenção vigente:** CHEFE pediu SSH pelo **22** sem abrir 2222, reutilizando o sistema Windows e o openKylin no WSL2. **Fonte primária:** `C:\Users\Administrador\.claude\projects\E--VMs-CentralDark-Installer\88b5c878-405d-47e0-a708-9da1b23da730.jsonl`, tool_use/tool_result originais de 30/10/2026 **03:31–03:32 UTC**; o recibo positivo está no Bash `toolu_01Cyop2ZHceEuE9XgM1WKPww`, timestamp `2026-10-30T03:32:20.139Z`. Primeiro houve duas falhas por interpretação de caminho entre Git Bash/WSL; a correção no `config_openkylin` usou `ProxyCommand wsl.exe -d openKylin -u root --exec //usr/sbin/sshd -i`; o teste real do Claude executou `ssh.exe -F $cfg -o BatchMode=yes -o ConnectTimeout=40 openkylin 'echo OK_ALIAS; id -un; uname -r'` e retornou `OK_ALIAS / openkylin / 6.6.114.1-microsoft-standard-WSL2 / RESULTADO=PASS`. **Isto comprova SSH + execução remota na sessão medida, não prova Hermes remoto, nem GUI/RDP.**
+
+**Owner/entrada já existentes:** `%USERPROFILE%\.ssh\config_openkylin` (arquivo SSH separado) + `%USERPROFILE%\.ssh\openkylin-ssh.cmd` (atalho que usa aquele arquivo) + chave já autorizada `id_ed25519_openkylin`; nunca exibir a chave privada nem copiar credenciais. Arquivo principal `%USERPROFILE%\.ssh\config` é **protegido, somente leitura, com aviso NÃO TOCAR**; o Claude preservou-o. `ssh openkylin` sem `-F` **não foi comprovado**, apesar da abreviação no texto final do Claude. No Windows, porta 22 continua ocupada por `sshd.exe` do Windows; no openKylin há `sshd` interno na porta 22; 2222 não foi criada. WSL `Stopped` após o uso é compatível com acionamento sob demanda pelo ProxyCommand e não invalida o PASS histórico.
+
+**Contraprova atual:** tentativa anterior do Hermes One `Connect via SSH` usando IP WSL `172.29.96.181`, usuário e chave retornou `banner exchange: Connection to UNKNOWN port -1: Connection refused`; o formulário do Hermes One **não foi provado** capaz de consumir `config_openkylin` ou executar o `.cmd` automaticamente. `CLAUDE_SSH_PROXY_PASS != HERMES_ONE_CONNECTED`. Na Casa, `which hermes` no openKylin não encontrou binário no PATH na medição anterior; não afirmar que existe gateway Hermes remoto. **NEXT_CURSOR:** quando o CHEFE pedir "conecta o Hermes One ao openKylin", primeiro recuperar a receita de SSH existente, verificar capacidade nativa de selecionar arquivo SSH/host e presença de Hermes remoto; evitar nova porta, nova instância Hermes ou alteração do config protegido sem autorização explícita e prova de necessidade.
+<!-- /CENTRALDARK_OPENKYLIN_CLAUDE_SSH_PROXY_TRACE_20261030 -->
+
+<!-- /CENTRALDARK_CUA_CODEX_HERMES_20261029 -->
+
+
+<!-- CENTRALDARK_SKILL_MAE_CORPUS_INTEGRAL_20261030 -->
+## Mapa integral em leitura progressiva, sem perda
+
+**REGRA:** a Skill Mãe foi indexada por completo, nao reduzida por exclusao. Carregar primeiro este arquivo; consultar somente a referencia que corresponde a intencao e ao owner. A ausencia de uma secao no arquivo principal nao revoga seus contratos. Nunca atribuir PASS a historico.
+
+- [Nucleo operacional: identidade, Git, execucao, receitas, probes](references/CORPUS-01-NUCLEO-OPERACIONAL-20261030.md) (linhas originais 150-1369).
+- [Licoes e historico legado, incluindo repeticoes preservadas](references/CORPUS-02-LICOES-LEGADO-20261030.md) (1370-2751).
+- [Contratos, gates, aprendizados e protecoes](references/CORPUS-03-CONTRATOS-E-GATES-20261030.md) (2752-3440).
+- [Rotas recentes, Cockpit, Sentinel e Genesis](references/CORPUS-04-ROTAS-RECENTES-20261030.md) (3441-3945).
+- [Indice com TODOS os titulos e numeros originais](references/INDICE-INTEGRAL-SKILL-MAE-20261030.md).
+
+**Comando direto do CHEFE:** COPIAR/colar/recortar/editar/criar somente sob ordem, no alvo conhecido, com uma verificacao de efeito. Copiar nao apaga; recortar exige preservar destino antes de retirar a origem; editar nao substitui rascunhos alheios; criar texto nao o executa. No Notepad ja aberto usar UIA ValuePattern, salvar com Ctrl+S e verificar o documento. Nenhuma automacao continua so porque esta documentada.
+
+**FIXED_POINT:** apenas reorganizacao do texto e provas de integridade; execucao operacional, deployment e adocao por outros agentes permanecem UNKNOWN sem recibo. Alteracao local dirty, sem commit/push.
+<!-- /CENTRALDARK_SKILL_MAE_CORPUS_INTEGRAL_20261030 -->
+
+<!-- CENTRALDARK_SYNC_CONVERGENCE_METHOD_20261031 -->
+## 🍒+1 Sincronização contínua por convergência — Casa/Main e VPS sob escopo
+
+Esta é a receita geral para qualquer alteração autorizada no CentralDark.
+Ela reutiliza o executor existente do Cockpit, `executarSync`, e a função
+`syncCasaMain` em `apps/instinto-superior/src/lib/sync.functions.ts`. Não cria
+worker, watcher, gateway, fila, branch, cache ou painel paralelo.
+
+**Regra central:** leituras podem ocorrer em paralelo; mutações Git têm um único
+writer. "Paralelo" significa que Casa, Main e, quando autorizado, VPS são
+comparados no mesmo ciclo. Não significa executar dois writes concorrentes no
+mesmo checkout.
+
+```text
+INTENÇÃO
+→ IDENTIFICAR OWNER E ESCOPO (CASA/MAIN; VPS SOMENTE SE PEDIDA)
+→ FETCH origin/main
+→ LER HEAD, origin/main, dirty e divergência
+→ SE BEHIND E NÃO DIVERGENTE: merge --ff-only
+→ SE AHEAD OU DIRTY: commit da alteração autorizada
+→ PUSH origin/main
+→ FETCH NOVAMENTE
+→ READBACK HEAD == origin/main
+→ SE VPS NO ESCOPO: atualizar por fast-forward e ler SHA remoto
+→ RECEIPT + NEXT_CURSOR
+```
+
+**Condições de convergência:** o estado só é `PASS` quando `HEAD` local e
+`origin/main` retornam o mesmo SHA após o push. `git fetch` sozinho é leitura.
+`git push` sem readback não é prova final. Se `HEAD..origin/main` e
+`origin/main..HEAD` forem ambos maiores que zero, há divergência: marcar
+`CONFLICT`, preservar os dois lados e não fazer merge automático.
+
+**Escopo do botão:** `Sincronizar Tudo` do Cockpit estabiliza Casa/Main no
+mesmo SHA. A VPS continua manual por padrão. O modo `target=all` inclui a VPS
+somente quando a intenção pedir Casa/Main/VPS. Não usar o nome do botão para
+inferir deploy ou sincronização da VPS.
+
+**Redução de complexidade:** reutilizar `syncCasaMain`, `syncVps`, o launcher,
+o owner e o receipt existentes. Não criar uma segunda função para a mesma
+convergência. Não repetir testes que não mudam `HEAD`, owner, runtime,
+autorização ou resultado. Não usar `reset --hard`, sobrescrita cega ou stash
+para esconder conflito. Arquivos dirty de terceiros permanecem preservados e
+devem ser separados antes de qualquer commit.
+
+**Receipt mínimo:**
+
+```text
+INTENT_ID=
+OWNER=
+SCOPE=CASA_MAIN|CASA_MAIN_VPS
+HEAD_BEFORE=
+ORIGIN_BEFORE=
+DELTA=
+COMMIT=
+HEAD_AFTER=
+ORIGIN_AFTER=
+SAME_SHA=PASS|FAIL|UNKNOWN
+VPS_SHA=PASS|NOT_IN_SCOPE|UNKNOWN
+WORKTREE=
+COUNTERPROOF=
+NEXT_CURSOR=
+```
+
+`SAME_SHA=PASS` não prova deploy, runtime saudável, ferramenta MCP, Gateway,
+Hermes ou comportamento do Cockpit. Cada camada precisa de sua própria prova.
+`MERGED != DEPLOYED`, `REGISTERED != CONSUMED` e `UNKNOWN != PASS` continuam
+obrigatórios.
+<!-- /CENTRALDARK_SYNC_CONVERGENCE_METHOD_20261031 -->
+
+<!-- AUTOCATALOGO:INICIO -->
+## Melhorias comprovadas e incorporadas sem regressao
+
+Registros aditivos comprovados no Windows Casa pelo script verificador. Nao substituem receitas anteriores. Cada registro preserva sua origem, razoes e contraprova.
+
+### t_26e02a16 — excluir
+- Criado em: 10/24/2026 19:46:48; destino: C:\root\HERMES-KANBAN-TESTE.txt
+- Por que fazer: Eliminar somente o TXT temporario criado no teste anterior autorizado.
+- Por que nao fazer outra coisa: Nao apagar a pasta nem recorrer a exclusao direta; somente o Hermes Kanban deveria executar a intencao.
+- Por que usar: Reutilizar o Hermes da Casa, perfil default e mesmo comando kanban create ja comprovados.
+- Por que modificar: Trocar a intencao de criar para excluir sem modificar o metodo de delegacao.
+- O que mudou: O arquivo do teste deixou de existir apos a segunda missao Hermes; o metodo de delegacao permaneceu intacto.
+- Contraprova: Kanban DONE isolado nao prova exclusao; Test-Path do alvo retornou falso no Windows Casa.
+- Resultado: PROVADO na operacao/alvo avaliados. Recibo: catalogo/comprovacoes/t_26e02a16.json
+<!-- AUTOCATALOGO:FIM -->
+
+
+## Bancada numerada 1 a 4 — linguagem natural
+Para pedidos sobre monitor/tela um, dois, tres, quatro, posicao, arquivo ou chat aberto em uma tela e delegacao entre telas, carregar a secao Bancada por linguagem natural e borda de alvo em [UI-MULTIJANELA-ROTAS-CACHE-20261030.md](references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md). Executar [Identify-CentralDarkMonitors.ps1](scripts/Identify-CentralDarkMonitors.ps1) -Target 'monitor dois' -ListWindows; -Overlay -Seconds 5 apenas quando desejar previa visual. Binding confirmado da Casa: 1 direita, 2 superior, 3 esquerda, 4 inferior; DISPLAY nao e numero das Configuracoes. Revalidar arranjo alterado. Coordenar chats pela fila e Goal existentes; cursor/teclado fisicos serializados. Borda de previa nao certifica automacao nem resultado.
+
+
+## Hermes Visual Computer Use — WGC real
+**Comando operacional falado = monitor + acao, sem frase fixa.** "Posicione no monitor 2", "bota o cursor na tela dois", "leva o mouse virtual pro monitor de cima", "aponte pro monitor dois" e "mostra o mouse na tela 2" = selecionar monitor humano 2, posicionar cursor virtual Cua e exibir overlay Hermes simultaneamente. Usar a Skill visual existente: hermes-visual-computer-use/scripts/blink_cursor.py --monitor 2 --mode position (previa 5 segundos). "Pisca monitor 2" = --mode blink (3 ciclos). Interpretar numero 1-4, numero por extenso ou posicao confirmada: 1 direita, 2 superior, 3 esquerda, 4 inferior; revalidar apenas se geometria mudar. Mouse fisico so sob pedido explicito; captura apenas com autorizacao. Pergunta, negacao ou relato nao equivale a ordem. Receita comprovada 02/11/2026: daemon Cua ja aberto; start_session, set_agent_cursor_enabled, move_cursor(scope=window), end_session; o CHEFE confirmou visualmente o cursor virtual no monitor 2. A moldura usa o plugin visual.py existente. Nao criar parser, skill, segundo cursor ou processo paralelo. PROMPT_SELF_CACHE_P15=APLICAVEL; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=REUSE_EXISTING_SKILL_WITH_MONITOR_ACTION.
+
+Para identificar monitores dinamicamente, capturar um monitor com borda nativa e moldura esmeralda de atividade, carregar [hermes-visual-computer-use](../hermes-visual-computer-use/SKILL.md). Instala plugin oficial com seis ferramentas computer_*; preserva o computer_use/Cua e seu cursor. Usar esta skill para captura WGC por monitor; o Identify-CentralDarkMonitors.ps1 anterior permanece receita de inventario/previa historica, sem alegar WGC. Nao iniciar duas molduras para o mesmo alvo. Descoberta e testes ficam em references/validation.json e references/hermes-validation.json da nova skill.
+
+
+## Contraprova humana — Hermes Visual Computer Use (02/11/2026)
+
+- Intenção: validar visualmente mouse virtual e overlay nos quatro monitores, individualmente.
+- Prova técnica reportada na execução: captura WGC em quatro monitores, plugin Hermes com seis ferramentas registradas, overlay e três piscadas por monitor.
+- Contraprova humana: CHEFE confirmou ter visto perfeitamente o mouse virtual e a borda verde nas quatro telas, na ordem 1 → 2 → 3 → 4; satisfação declarada: **100%**.
+- Critério Michelin ⭐⭐⭐ + Kimetsu: executar → testar tecnicamente → apresentar prova → solicitar validação humana → registrar aprendizado → ponto fixo do escopo validado.
+- Limite: aprovação visual humana não comprova, por si só, futuras sessões, outras máquinas ou ausência de regressões.
+- Referência técnica: commit `a52c589906cef48c370c8c9936108be020829003`.
+- NEXT_CURSOR: encerrado para a contraprova humana desta execução; reabrir apenas mediante nova falha ou mudança de escopo.
+
+
+## Protocolo operacional aprovado pelo CHEFE — execução direta e contraprova (02/11/2026)
+
+- Intenção do CHEFE é o ponto de partida. Reutilizar owner e receitas existentes; não criar caminhos, Skills ou executores paralelos.
+- Executar diretamente quando autorizado, sem confirmações repetidas, micro-passos ou explicações antecipadas desnecessárias. Comunicar apenas achados materiais, impedimentos reais e decisões que dependam do CHEFE.
+- Após a execução, testar tecnicamente, observar o resultado e apresentar prova concreta. O CHEFE faz a contraprova humana da experiência real e informa se funcionou e se ficou satisfatório.
+- Aprovação humana não substitui testes técnicos; testes técnicos não substituem a aprovação humana quando esta for exigida. Registrar recibo, aprendizado e SHA/readback no owner existente após a confirmação.
+- Travas de segurança, permissões, proteção de dados e gates canônicos continuam válidos; eliminar burocracia redundante não significa contorná-los.
+- Critério de FIXED_POINT: intenção atendida + owner alinhado + prova técnica + contraprova independente + sem regressão + registro verificado + aceite do CHEFE quando exigido. UNKNOWN nunca vira PASS.
+- Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
+
+### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)
+
+**Decisão vigente:** na construção, manutenção, auditoria e documentação da CentralDark, SOL deve **navegar o código real** e verificar imports, owners, rotas, chamadas, contratos, dependências e fluxos, recorrendo aos scripts e validadores já existentes e a testes dirigidos ao cone afetado (por exemplo, sintaxe, lint, testes unitários/contratos, quando executáveis sem efeitos indevidos). **Não iniciar, reiniciar, movimentar ou testar ao vivo Hermes, suas janelas, mouse, overlay ou consumo de Skill automaticamente** como cerimônia de conclusão. Teste visual/interativo com Hermes fica para quando o CHEFE solicitar expressamente ou aprovar uma necessidade concreta; até lá, não gerar demanda por essa contraprova.
+
+**Critério proporcional:** `CODE_REVIEWED` e `STATIC_TEST_PASS` demonstram o que foi inspecionado/testado no código e com qual comando, SHA e resultado; **não** equivalem a `HERMES_RUNTIME_CONSUMED`, `DEPLOYED` nem a funcionamento futuro garantido. Se o objetivo era apenas escrever, integrar ou documentar código, registrar `FIXED_POINT` **do escopo documental/de código** com readback e testes pertinentes, deixando consumo vivo como `NOT_REQUESTED` ou `UNKNOWN` sem reabrir um cursor obrigatório. Quando o objetivo explícito exigir um efeito vivo ou quando um gate de publicação efetivamente o exigir, declarar a pendência específica em vez de fingir prova ou contornar o gate.
+
+**Fluxo curto:** `INTENÇÃO → OWNER EXISTENTE → INSPECIONAR CÓDIGO/ROTAS → MENOR DELTA → TESTAR SCRIPTS PERTINENTES → READBACK/SHA → RECEIPT/APRENDIZADO → CONCLUIR ESCOPO`. `HERMES_LIVE_TEST=ON_DEMAND_BY_CHEFE`. Não tornar a falta de teste vivo — que não foi solicitado — bloqueio fictício para o trabalho de código.
+
+**PROMPT_SELF_CACHE_P15=APLICÁVEL** para reuso desta receita, sem telemetria de HIT; **KV_CACHE_P16=UNKNOWN**; **NEXT_CURSOR=CODIGO_E_VALIDADORES_EXISTENTES_NO_PROXIMO_DELTA**.
+
+## WuzAPI / MultiZap / Hermes - entrada documental (05/11/2026)
+Quando a intenção citar WuzAPI, QR WhatsApp, grupos, foto de grupo, webhook, Gateway MultiZap ou ligação Hermes ↔ CRM, **abrir antes de operar** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md) e o [MAPA_EVENTOS_WUZAPI.md](../../../docs/MAPA_EVENTOS_WUZAPI.md). Reutilizar Docker Casa 127.0.0.1:8081, Gateway HTTPS multizap-mvp.centralldark.com, WuzAPI /webhook, Gateway /webhooks/wuzapi e CRM /api/public/wuzapi/webhook; não confundir destinos nem duplicar sessão. Autenticação por token usuário ou admin conforme rota; segredo nunca entra em recibo. Swagger vivo /api define payload; documentação não equivale a teste de entrega. OWNER: docs existentes e Skill-Mãe. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN. NEXT_CURSOR=CONTRATO_HERMES_MULTIZAP_COM_TESTE_REAL_SOB_INTENCAO.
+
+### WuzAPI + whatsmeow: regra de consulta aos donos (05/11/2026)
+Se a intenção envolver API WuzAPI, instâncias, QR, eventos, HMAC, proxy, webhook, mídia, grupos ou WhatsApp/Whatsmeow, ler **antes da operação** [WUZAPI-API-OPERACIONAL.md](../../../docs/WUZAPI-API-OPERACIONAL.md). Fontes upstream obrigatórias em dúvida ou divergência: [asternic/wuzapi](https://github.com/asternic/wuzapi) (API REST) e [tulir/whatsmeow](https://github.com/tulir/whatsmeow) (biblioteca/protocolo Go). **Método:** intenção → Swagger vivo Casa → dois repositórios oficiais conforme camada → comparar código, versão e configuração CentralDark → menor delta → contraprova → registrar receipt/owner. Reusar o Gateway e WuzAPI existentes; não misturar API REST, implementação Go ou estado de instância, nem criar proxy/chave ou parear telefone por mera inspeção. Capturas de 05/11 mostram formulário de instância com token, webhook/eventos, history, HMAC e opções proxy/S3, além de Add Proxy; são evidência de interface, não de sessões conectadas. PROMPT_SELF_CACHE_P15=APLICÁVEL sem HIT; KV_CACHE_P16=UNKNOWN; NEXT_CURSOR=UPSTREAM_COMPARE_BEFORE_CHANGE.
+
+<!-- CENTRALDARK_META_RSI_CATALOG_20261106 -->
+## META-RSI 40/40 integrado por metodo
+
+Consultar [META-RSI](Skills/meta-rsi/SKILL.md), [matriz 40/40](catalogo/META-RSI-40.md), [Kimetsu](Skills/kimetsu-brainstorm/SKILL.md). Todos os 40 recebem APPLIED ou NOOP_JUSTIFIED por rodada. O Hermes e o executor unico; as skills nao sao 40 processos. Os META preservam owners externos e entradas legadas ate teste de loader. RUNTIME_40_OF_40=UNKNOWN.
+
+<!-- CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+**Memorial contextual da sessão:** [TOP CLEAN CEREJAS, META-RSI e autonomia (2026-11-06)](references/MEMORIAL-SESSAO-TOP-CLEAN-CEREJAS-20261106.md). Preserva raciocínio, fatos, hipóteses, lições e NEXT_CURSOR; não é prova de runtime.
+
+
+## 🍒 TOP CLEAN CEREJAS — filtro de melhoria da Skill Mãe
+
+**Lei mestra:** Retém o bem. Elimina o atrito. Preserva o segredo. Automatiza o caminho.
+**Regra suprema:** Uma cereja só merece existir quando elimina mais complexidade do que acrescenta, preservando capacidades úteis.
+**Zero cerimônia:** Se o executor autorizado já sabe o próximo passo, não devolver trabalho repetitivo ao CHEFE. Intenção → reutilização → simplificação → execução → resultado → 🍒.
+**Michelin ⭐⭐⭐:** reutilizou, simplificou, preservou e entregou valor observável? Ganhou uma cereja. Não criar HUD, skill, daemon, executor ou biblioteca paralelos.
+**Autolimpeza:** incorporar, deduplicar ou retirar cerimônia obsoleta sem apagar capacidade nem alterar contratos superiores. Self-Pruning é critério transversal, não um 41º processo.
+
+**Interligados:** esta Skill Mãe coordena com o Kimetsu Brainstorm Remix e o método operacional CentralDark já referenciados acima. SOL interpreta intenção e coordena; Hermes é executor existente; CHEFE decide. Aplicar o menor delta útil no owner atual, respeitando escritor único e NEXT_CURSOR.
+
+**SELF 40/40:** reutilizar a matriz canônica [META-RSI 40/40](catalogo/META-RSI-40.md) e [META-RSI](Skills/meta-rsi/SKILL.md), sem gerar outra lista ou 40 agentes. Famílias de aplicação: consciência, aprendizado, recuperação, autonomia, organização, evolução, continuidade e inteligência. Cada variante é uma técnica candidata (APPLIED ou NOOP_JUSTIFIED), não obrigação de rodar. Self-Testing, Self-Healing, Self-Looping, Self-Provisioning e Self-Pruning só se aplicam quando reduzem atrito real.
+
+**MVP:** funcionalidade primeiro, correções incrementais depois. Auditoria ampla fica para fase posterior decidida pelo CHEFE; evitar transformar cada demonstração em exigência repetida de prova. Para credenciais, reutilizar cofre e autenticação existentes sem ecoar valores no chat, logs ou commits. Preservar autorizações e regras superiores.
+
+**Critério de saída:** menos esforço humano, mesma ou maior capacidade, nenhuma duplicação estrutural; se a melhoria acrescentar mais complexidade do que retirar, NOOP e seguir. Registrar mudanças materiais no receipt/owner existente.
+<!-- CENTRALDARK_RUNTIME_SOURCE_OF_TRUTH_20261109 -->
+## Fonte da verdade antes de responder — runtime
+
+Para toda intenção CentralDark que envolva estado, arquitetura, código, workflow, owner, integração ou runtime, recuperar primeiro o estado vigente do GitHub:
+
+```text
+GITHUB_REPO=https://github.com/ServerVpss/CentralDark
+GITHUB_REF=main
+SOURCE_OF_TRUTH=origin/main
+```
+
+Sequência obrigatória antes da resposta operacional:
+
+```text
+FETCH/READBACK origin/main quando a decisão depender de frescor
+→ HEAD_LOCAL × ORIGIN_MAIN × WORKTREE_DIRTY
+→ ler owner e histórico/commits do alvo
+→ medir runtime quando a afirmação for operacional
+→ responder com escopo, SHA e evidência
+```
+
+A memória, o resumo de conversa, a narrativa do CHEFE e um arquivo local dirty orientam a investigação, mas não substituem a `main` vigente. Dados arquiteturais fornecidos pelo CHEFE devem ser tratados como arquitetura candidata de alta prioridade — nunca descartados como simples pista — até a busca no repositório, histórico, owner, consumidor e runtime classificar `CURRENT`, `LEGACY`, `GENERATED`, `DEAD` ou `UNKNOWN`.
+
+```text
+NARRATIVA_DO_CHEFE = SINAL_DE_ALTA_PRIORIDADE
+GITHUB_MAIN = FONTE_ESTRUTURAL/HISTÓRICA
+RUNTIME_READBACK = FONTE_OPERACIONAL_ATUAL
+DOCUMENTADO != EXECUTADO
+OBSERVADO != PROVADO
+UNKNOWN != PASS
+```
+
+`FETCH` é leitura; não fazer pull, reset, clean ou sobrescrita automática para responder. Preservar trabalho dirty e separar `SOURCE_SHA`, `LOCAL_SHA`, `ORIGIN_SHA`, `RUNTIME_SHA` e `EVIDENCE_AT`. Se a fonte vigente não estiver acessível, responder `UNKNOWN/BLOCKED` com o próximo cursor; não preencher a lacuna com memória antiga.
+<!-- /CENTRALDARK_RUNTIME_SOURCE_OF_TRUTH_20261109 -->
+
+<!-- /CENTRALDARK_TOP_CLEAN_CEREJAS_20261106 -->
+
+<!-- CENTRALDARK_HERMES_ORACLE_AUTOMACAO_ROV_20261110 -->
+## CHEFE ativa automacao Hermes Desktop + Oraculo — receita unica reutilizavel
+
+**Comandos naturais:** `!CENTRALDARK USE AUTOMAÇÃO HERMES DESKTOP COM A SKILL ORÁCULO`, `USE A SKILL ORÁCULO PARA INICIARMOS A AUTOMAÇÃO` e equivalentes quando o CHEFE pedir automacao da CentralDark ou navegador autorizado. **Autor:** CHEFE; **coordenação/criterios:** SOL; **execucao e Goal:** Hermes original; **Oraculo:** conversa ChatGPT atual (consulta, sem caneta). Reutilizar o mesmo [ROV Michelin de Hermes Visual](references/ROV-MICHELIN-IA-MCP-HERMES-VISUAL.yml), bloco `AUTOMACAO_HERMES_ORACULO_ROV_20`. Nao criar segundo fluxo, skill, executor, pasta ou hook.
+
+**Primeiro uso da superficie:** reidratar Goal/receipt/NEXT_CURSOR; reconhecer monitor humano, PID/HWND, janela Hermes Desktop, documento/URL do ChatGPT ja aberto e composer por UIAutomation/Computer Use nativo. Reusar mapeamento conhecido enquanto atual; remapear se identidade ou geometria mudar. Exibir a PREVIA existente, sem captura continua, e **perguntar uma unica vez ao CHEFE**: "Voce esta vendo os contornos rosa/coloridos nos alvos certos?". Linhas rosa/coloridas pertencem ao mapeamento `drive_preview`; borda Hermes/Cua/WGC tem identidade e cor proprias. Perguntar sobre o efeito realmente mostrado, nao afirmar que uma cor apareceu sem prova. Apos confirmacao visual registrar `VISUAL_CONFIRMED`, declarar PRONTO e executar somente a operacao autorizada; nao pedir confirmacao redundante por rodada enquanto binding se mantiver. Confirmacao do overlay nao e autorizacao geral para outras mutacoes.
+
+**Ciclo de melhoria:** HERMES inicia contato no **mesmo chat**, envia mensagem material, le resposta completa e produz envelope real; SOL/oraculo diz `FICOU_BOM | DEFEITO_RESTANTE | MELHORIA_CANDIDATA | NEXT_CURSOR`. Aplicar teste, menor patch, contraprova e receita reutilizavel no owner existente. Em cada rodada consultar a matriz [META-RSI 40/40](catalogo/META-RSI-40.md): todos os 40 contratos classificados `APPLIED` ou `NOOP_JUSTIFIED` com motivo; executar apenas os pertinentes, nao 40 processos. Usar `delegate_task(background=true, role=leaf)` nativo somente quando houver patch material e writer disponivel; o worker de cristalizacao nao interrompe nem opera o chat do pai e nunca escreve concorrentemente no mesmo owner. Se loader/quarentena bloquear, manter `BLOCKED` no cone atingido e nao contornar.
+
+**Receita ROV verificavel:** envelope da rodada vai na conversa; conhecimento validado vai para as skills, scripts/hooks e YAML **existentes**, junto com SHA, antes/depois, tempos medidos, percentual calculado, testes e receipt. Prova `3` ciclos bidirecionais consecutivos antes de declarar transporte estavel; Goal de `20` turnos internos nao equivale a `20` rodadas correlacionadas. O proximo turno so herda ganhos realmente comprovados. Cada conta/ChatGPT so carrega este contrato se tiver acesso autenticado ao projeto e as ferramentas; um documento salvo nao produz compartilhamento automatico.
+
+**Publicacao:** delta local deve preservar staging/dirty preexistentes, sem commit ou push geral cego. `DOCUMENTED != EXECUTED`; fonte de aprendizado e receita: mesmo ROV e recibos dos owners anteriores.
+
+**Roteamento visual de tres papeis, ordem do CHEFE (10/11/2026):** pedidos como `!CENTRALDARK`, `use automacao Hermes Desktop`, `use skill Oraculo`, `automatize na CentralDark`, `opere o navegador` e continuacoes semanticamente equivalentes acionam o mesmo contrato, quando houver acesso autorizado ao runtime. SOL, com seu **HUD ja existente**, coordena intencao, criterio e prova; Hermes Desktop e o executor do Goal existente; a CLI/delegado existente executa operacoes pertinentes e devolve receipt a Hermes, que retorna para SOL no mesmo chat. Layout esquerda → meio → direita e apenas uma observacao da sessao e PODE MUDAR; descobrir cada papel pelo conteudo, ferramentas, compositor e controles reais, nao por titulo, aba ou coordenada historica. Nao abrir outro navegador/aba/chat/Goal/daemon. Mensagens curtas usam o compositor existente e envio unico quando habilitado; ordens persistentes entram em `Add criterion` do Goal atual. SOL atualiza apenas a projecao do HUD existente com `INTENT | OWNER | CURRENT | GREEN_STATE | RECEIPT | BLOQUEIO | NEXT_CURSOR`; sem receipt, VERDE=UNKNOWN. Reutilizar [mesma ROV](references/ROV-MICHELIN-IA-MCP-HERMES-VISUAL.yml) → `AUTOMACAO_HERMES_ORACULO_ROV_20.superficies.fluxo_tres_papeis`.
+
+**Incidente vivo nao e receita de sucesso:** a ultima verificacao em 10/11 viu queda do renderer Hermes no log `render-process-gone`, timeout recorrente de SSH para alias `Segredo-VPS:22` e aba que tentou `https://chatgpt/` e recebeu `ERR_NAME_NOT_RESOLVED`. Tratar como evidencias limitadas a essa sessao, NAO prova de comando causador. Ao ver falha: preservar rascunhos e Goal, parar repeticoes sem progresso, separar SSH/GUI/URL, reencontrar superficies por conteudo, utilizar somente URL exata verificada da conversa existente, e nunca inventar disponibilidade de rede. Prosseguir pelas rotas locais independentes enquanto a VPS estiver BLOCKED. Recuperacao visual, modificacao de tunel ou reinicio exigem owner e autorizacao. Aprendizado futuro somente apos teste + readback.
+<!-- /CENTRALDARK_HERMES_ORACLE_AUTOMACAO_ROV_20261110 -->
+
+<!-- CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+**Rota unica para clique visual:** usar `Skills/centraldark-hermes-visual-computer-use/scripts/blink_cursor.py --mode click`; escolher alvo por PID/HWND/ponto atual ja comprovado (rapido) ou UIA por janela/controle (descoberta). Ambos usam exclusivamente Cua virtual + overlay, nunca mouse fisico (`SetCursorPos`, `mouse_event`, `SendInput`, `scope=desktop`). Cua ausente bloqueia input; UIA/snapshot comprova efeito. Owner detalhado: [Hermes Visual](Skills/centraldark-hermes-visual-computer-use/SKILL.md).
+<!-- /CENTRALDARK_SINGLE_VIRTUAL_CLICK_FASTPATH_20261110 -->
+
+<!-- CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+### 2026-11-11 — Rota SSH VMware comprovada; distinta do WSL2
+
+- Intencao: reutilizar o owner SSH existente e evitar confundir rotas da VM VMware e do WSL2.
+- Ambiente: alias openkylin = WSL2 via ProxyCommand; alias openkylin-vm ou CentralDark-OS-VM = VMware guest CentralDark-OS, porta 22. SSH Windows e SSH guest sao servicos diferentes.
+- Fonte operacional: C:\Users\Administrador\.ssh\config_openkylin (ativo do usuario); espelho F:\CentralDark\.ssh\config_openkylin. Preservar config principal e credenciais.
+- Teste read-only provado: ssh -F 'C:\Users\Administrador\.ssh\config_openkylin' -o BatchMode=yes -o ConnectTimeout=8 -o ConnectionAttempts=1 openkylin-vm 'hostname; id -un; systemctl is-active ssh'
+- Contraprova 11/11/2026: CentralDark-OS / CentralDark-OS / active / SSH_EXIT=0. O IP 192.168.35.130 foi observado; preferir alias a IP codificado.
+- Timeout no banner foi intermitente. TCP 22 aberto nao prova SSH autenticado. IPQoS=none funcionou em um teste, mas a causalidade nao foi demonstrada. Nao alterar sshd, firewall ou IPQoS por hipotese.
+- Receita canônica existente: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md e references/RECEITA-KINGSTON-20261103.md. Preservar a historia do WSL2 de 30/10; nao converter prova WSL2 em prova VMware.
+- Limite de verdade: SSH_VMWARE=PASS; COCKPIT_HTTP_524=PENDING; OAUTH=UNTOUCHED; FIXED_POINT=PENDING.
+<!-- /CENTRALDARK_VMWARE_SSH_ROUTE_CONTRAPROVA_20261111 -->
+
+
+<!-- CENTRALDARK_FEEDBACK_READBACK_LOOP_20261113 -->
+## 🔁 Feedback + Readback — fechamento mínimo de toda ação material
+
+Toda ação material fecha no mesmo ciclo com **feedback imediato do executor + readback do efeito real**.
+
+```text
+ACTION_SINGLE
+→ FEEDBACK_EXECUTOR
+→ READBACK_TARGET
+→ COUNTERPROOF_WHEN_MATERIAL
+→ PASS | FAIL | UNKNOWN
+→ RECEIPT
+→ NEXT_CURSOR
+```
+
+- `FEEDBACK` = retorno imediato da ação: exit/result/status/erro observado. É sinal de execução, não prova suficiente do efeito.
+- `READBACK` = releitura posterior do alvo real por API, Git, arquivo, UI, runtime ou outra fonte pertinente.
+- Quando material, adicionar contraprova independente antes de declarar PASS.
+- Falha de uma rota autorizada é local; tentar a próxima rota existente antes de criar capability, bridge ou owner novo.
+- Não repetir ação com efeito incerto. Primeiro fazer readback.
+- GitHub: mutação de configuração → ler configuração; mutação de PR/ref → reler PR/ref/SHA.
+- `FEEDBACK_OK != EFFECT_PROVEN`; `ACTION != PROOF`; `UNKNOWN != PASS`.
+- Filosofia: `REUSE_BEFORE_CREATE + KAIZEN`.
+<!-- /CENTRALDARK_FEEDBACK_READBACK_LOOP_20261113 -->
+
+<!-- CENTRALDARK_INVARIANT_MATH_OPS_20261122_INDEX -->
+### 📐 Método matemático operacional — axiomas, eliminação, contraprova e ponto fixo (22/11/2026)
+
+Quando a intenção pedir execução verificável complexa (ex.: publicação Cloudflare) ou registro de aprendizado de método, carregar [Engenharia por invariantes, hipóteses, contraprova e ponto fixo](references/ENGENHARIA-POR-INVARIANTES-CONTRAPROVA-E-PONTO-FIXO.md), referência **desta mesma Skill Mãe**. Contratos: trivalência VERDADEIRO/FALSO/DESCONHECIDO; invariantes A1–A5 escopados; hipóteses com teste discriminante; grafo de dependências; menor delta; testes e contraprova; indução operacional parcial; recibo; FIXED_POINT escopado. Sem nova skill/gate, sem probabilidade inventada, sem ritual obrigatório para tarefa simples. `DEPLOY != PROOF`; `HTTP_200 != SITE_CORRETO`; `STATIC_ASSETS_EMBEDDED != STATIC_ASSETS_NATIVE`. Aplicação no runtime exige consumo e teste real.
+<!-- /CENTRALDARK_INVARIANT_MATH_OPS_20261122_INDEX -->

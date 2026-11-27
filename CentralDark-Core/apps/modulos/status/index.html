@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#29A664" />
+    <title>CentralDark · Mega Painel</title>
+    <link rel="stylesheet" href="./styles.css?v=20260629a" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <header class="hero">
+      <div class="hero__top">
+        <div>
+          <p class="eyebrow">CentralDark Intelligence</p>
+          <h1>
+            Mega Painel do Projeto
+          </h1>
+          <p class="subtitle" id="projectSummary">Carregando visão geral...</p>
+        </div>
+        <div class="status-card" id="globalStatus">
+          <span class="pulse"></span>
+          <div>
+            <strong>Sincronizando</strong>
+            <small>Atualização em tempo quase real</small>
+          </div>
+        </div>
+      </div>
+
+      <section class="hero__grid">
+        <article class="score-card">
+          <span>Progresso geral</span>
+          <strong id="overallProgress">--%</strong>
+          <div class="bar"><i id="overallBar"></i></div>
+        </article>
+        <article class="score-card">
+          <span>MCP público</span>
+          <strong id="mcpHealth">...</strong>
+          <small id="mcpDetail">Aguardando health</small>
+        </article>
+        <article class="score-card">
+          <span>Tools públicas</span>
+          <strong id="toolCount">--</strong>
+          <small>Conector CentralDark</small>
+        </article>
+        <article class="score-card">
+          <span>Última atualização</span>
+          <strong id="lastUpdated">--:--</strong>
+          <small id="lastUpdatedDate">--</small>
+        </article>
+        <article class="score-card">
+          <span>CPU VPS</span>
+          <strong id="vpsCpu">--%</strong>
+          <small id="vpsLoad">carregando</small>
+        </article>
+        <article class="score-card">
+          <span>RAM VPS</span>
+          <strong id="vpsRam">--%</strong>
+          <small id="vpsRamDetail">carregando</small>
+        </article>
+        <article class="score-card">
+          <span>Disco VPS</span>
+          <strong id="vpsDisco">--%</strong>
+          <small id="vpsTelemetryAt">sem dados</small>
+        </article>
+        <article class="score-card" style="display:flex;flex-direction:column;gap:8px;justify-content:space-between">
+          <span>CentralDark diário</span>
+          <strong style="font-size:clamp(24px,3vw,34px);margin:2px 0">BOOTs</strong>
+          <small>Memória fixa + pôster</small>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px">
+            <a href="./protocolos.html" style="border:1px solid hsl(var(--primary) / .35);border-radius:10px;padding:7px 8px;text-decoration:none;color:hsl(var(--primary));background:hsl(var(--primary) / .10);font-size:11px;font-weight:800;text-align:center">Econômico</a>
+            <a href="./protocolos.html" style="border:1px solid hsl(var(--primary) / .35);border-radius:10px;padding:7px 8px;text-decoration:none;color:hsl(var(--primary));background:hsl(var(--primary) / .10);font-size:11px;font-weight:800;text-align:center">Médio</a>
+            <a href="./protocolos.html" style="border:1px solid hsl(var(--yellow) / .45);border-radius:10px;padding:7px 8px;text-decoration:none;color:hsl(var(--yellow));background:hsl(var(--yellow) / .12);font-size:11px;font-weight:800;text-align:center">Completo</a>
+            <a href="./protocolos.html" style="border:1px solid hsl(var(--blue) / .45);border-radius:10px;padding:7px 8px;text-decoration:none;color:hsl(var(--blue));background:hsl(var(--blue) / .12);font-size:11px;font-weight:800;text-align:center">Pôster</a>
+          </div>
+        </article>
+      </section>
+    </header>
+
+    <main class="layout">
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa de evolução</p>
+            <h2>📊 Onde estamos agora</h2>
+          </div>
+          <span class="tag">Modo leigo</span>
+        </div>
+        <div class="maturity" id="maturityList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Multi-IA</p>
+            <h2>🤖 Quem faz o quê</h2>
+          </div>
+        </div>
+        <div class="agents" id="agentsList"></div>
+      <section class="panel wide" id="iasVivasPanel">
+        <div class="panel__head">
+          <div>
+            <h2>🧠 IAs Vivas — status agora</h2>
+            <p>Bolinha verde = online · vermelha = caiu · cinza = parado. Atualiza junto com o painel.</p>
+          </div>
+          <span class="tag" id="iasVivasTag">tempo real</span>
+        </div>
+        <div class="card-grid" id="iasVivasList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px"></div>
+      </section>
+
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Operação</p>
+            <h2>🛰️ Status ao vivo</h2>
+          </div>
+          <span class="tag" id="refreshTag">5s</span>
+        </div>
+        <div class="live" id="liveStatus"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Caminho até o fim</p>
+            <h2>🏁 Fases e marcos</h2>
+          </div>
+        </div>
+        <div class="timeline" id="milestones"></div>
+      </section>
+
+
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Codex / IA</p>
+            <h2>💡 Sugestões inteligentes</h2>
+          </div>
+          <span class="tag">Copiar e usar</span>
+        </div>
+        <div class="events" id="aiSuggestionsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa vivo</p>
+            <h2>📌 Últimos acontecimentos</h2>
+          </div>
+          <span class="tag">Atualizado pelo chat</span>
+        </div>
+        <div class="events" id="eventsList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Próximas ações</p>
+            <h2>✅ O que falta</h2>
+          </div>
+        </div>
+        <ol class="todo" id="nextSteps"></ol>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Proteção</p>
+            <h2>🛡️ Regras de segurança</h2>
+          </div>
+        </div>
+        <ul class="rules" id="safeRules"></ul>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Diagnóstico vivo</p>
+            <h2>🔌 MCP Teste (somente leitura)</h2>
+          </div>
+          <span class="tag">sem token · cliente</span>
+        </div>
+        <div class="mcp-test-buttons" id="mcpTestButtons"></div>
+        <pre class="mcp-test-output" id="mcpTestOutput">Clique num botão acima pra consultar o MCP ou ler docs públicas. Nada é gravado.</pre>
+      </section>
+
+      <section class="panel wide" id="mcpHealthPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Watchdog · atualizado a cada 1min</p>
+            <h2>🐕 MCP Health (24h)</h2>
+          </div>
+          <span class="tag" id="mcpHealthTag">carregando…</span>
+        </div>
+        <div class="mcp-health-grid" id="mcpHealthGrid">
+          <div class="mcp-health-tile"><span class="mh-label">Uptime</span><span class="mh-value" id="mhUptime">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Checks 24h</span><span class="mh-value" id="mhChecks">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Falhas 24h</span><span class="mh-value" id="mhFails">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Restarts auto</span><span class="mh-value" id="mhRestarts">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Último ping</span><span class="mh-value" id="mhLatency">—</span></div>
+          <div class="mcp-health-tile"><span class="mh-label">Última queda</span><span class="mh-value" id="mhLastFail">—</span></div>
+        </div>
+      </section>
+
+      <section class="panel wide" id="grafoVivoPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Mapa em tempo real · beta</p>
+            <h2>🕸️ Grafo Vivo — quem chama quem</h2>
+          </div>
+          <span class="tag" id="grafoTag">carregando…</span>
+        </div>
+        <div id="grafoVivoContainer" style="width:100%;height:clamp(360px,60vh,720px);background:#0a0d12;border-radius:12px;position:relative;overflow:hidden;touch-action:none;">
+          <div id="grafoVivoLoading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4a5568;font-size:14px;">
+            🔄 Carregando grafo…
+          </div>
+        </div>
+        <p class="hc-legend" style="margin-top:12px;">
+          <span style="color:#10b981;">●</span> IAs / agentes
+          <span style="color:#3b82f6;">●</span> Serviços
+          <span style="color:#f59e0b;">●</span> Bots
+          <span style="color:#8b5cf6;">●</span> Gateways
+          <span style="color:#6b7280;">●</span> Storage / infra
+        </p>
+      </section>
+
+
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Time multi-IA</p><h2>🧠 Cards por IA</h2></div>
+        </div>
+        <div class="card-grid" id="iaCardsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Time de bots</p><h2>🤖 Bots especialistas</h2></div>
+        </div>
+        <!-- Prévia somente visual: registros reais do histórico de agosto/2026.
+             Não representa saúde atual, não executa bots, não substitui o feed vivo. -->
+        <div style="margin:10px 0 16px;padding:12px 14px;border:1px solid #c9973b;border-radius:12px;background:rgba(201,151,59,.08)">
+          <strong style="display:block;margin-bottom:4px">📜 Como este setor aparecia · agosto/2026</strong>
+          <small>5 cartões do commit 9fce580e8b0d · status e progresso históricos, inclusive erros.
+          Nenhum estado abaixo comprova funcionamento atual.</small>
+        </div>
+        <div class="card-grid" id="botCardsHistoricalPreview" aria-label="Prévia histórica dos cinco bots">
+          <article class="av-card" data-historico-bot="bot-telegram">
+            <div class="av-head"><h3>CentralDark TelegramBot</h3><span class="av-badge p3">p3</span></div>
+            <p>@srver1bot online · polling · script restaurado do git + bootstrap Multizap removido (28/06)</p>
+            <div class="bar"><i style="width:98%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Telegram</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">98%</span>
+              <span class="av-badge">PM2: CentralDark-TelegramBot</span>
+            </div>
+            <p class="av-next">▶ Monitorar uptime via PM2</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-botserver">
+            <div class="av-head"><h3>CentralDark BotServer</h3><span class="av-badge p3">p3</span></div>
+            <p>Servidor de bot online. Lote 11 pendente (Issue #128).</p>
+            <div class="bar"><i style="width:90%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">API</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">90%</span>
+              <span class="av-badge">PM2: CentralDark-BotServer</span>
+            </div>
+            <p class="av-next">▶ Aplicar Lote 11 na VPS (Issue #128)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-multizap">
+            <div class="av-head"><h3>MultiZap-BOT</h3><span class="av-badge p1">p1</span></div>
+            <p>PM2 status: errored. Causa raiz não investigada (baixa prioridade — P4).</p>
+            <div class="bar"><i style="width:0%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-erro">erro</span>
+              <span class="av-badge">WhatsApp</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">0%</span>
+              <span class="av-badge">PM2: MultiZap-BOT</span>
+            </div>
+            <p class="av-next">▶ Investigar causa raiz — aguardar pedido do Pivete (P4)</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-deploy">
+            <div class="av-head"><h3>DEPLOY Webhook</h3><span class="av-badge p3">p3</span></div>
+            <p>Recebe push do GitHub via webhook e puxa código novo automaticamente.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">CI/CD</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: CentralDark-DEPLOY</span>
+            </div>
+            <p class="av-next">▶ Monitorar deploys</p>
+          </article>
+          <article class="av-card" data-historico-bot="bot-vigia">
+            <div class="av-head"><h3>Vigia (monitor_tarefas)</h3><span class="av-badge p3">p3</span></div>
+            <p>Monitora serviços e notifica canal Telegram em caso de alerta.</p>
+            <div class="bar"><i style="width:95%"></i></div>
+            <div class="av-meta">
+              <span class="av-badge status-rodando">rodando</span>
+              <span class="av-badge">Monitoramento</span>
+              <span class="av-badge">PM2</span>
+              <span class="av-badge">95%</span>
+              <span class="av-badge">PM2: monitor_tarefas</span>
+            </div>
+            <p class="av-next">▶ Monitorar alertas</p>
+          </article>
+        </div>
+        <details style="margin-top:16px">
+          <summary style="cursor:pointer;font-weight:600">🔎 Dados vivos deste setor (se disponíveis)</summary>
+          <p style="font-size:12px;opacity:.75;margin:8px 0">Esta lista continua recebendo painel-data.json; quando não houver botCards, a ausência permanece visível.</p>
+          <div class="card-grid" id="botCardsList"></div>
+        </details>
+      </section>
+
+      <section class="panel wide" id="healthcheckPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">VPS read-only · últimos 30 dias</p>
+            <h2>🩺 Histórico do vps-healthcheck</h2>
+          </div>
+          <div class="hc-summary" id="hcSummary"><span class="hc-loading">carregando…</span></div>
+        </div>
+        <div class="hc-legend">
+          <span class="hc-dot p0"></span> P0 crítico
+          <span class="hc-dot p1"></span> P1 alto
+          <span class="hc-dot p2"></span> P2 médio
+          <span class="hc-dot p3"></span> P3 ok
+        </div>
+        <div class="hc-bars" id="hcBars"></div>
+        <p class="hc-foot" id="hcFoot"></p>
+      </section>
+
+      <section class="panel wide" id="wuzapiPanel">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">MultiZap · WhatsApp read-only</p>
+            <h2>📡 Sessões do bot</h2>
+          </div>
+          <div class="wz-summary" id="wzSummary"><span class="hc-loading">carregando…</span></div>
+        </div>
+        <div class="wz-list" id="wzList"></div>
+        <p class="hc-foot" id="wzFoot"></p>
+      </section>
+
+
+
+
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Mapa por setor</p><h2>🧩 Cards por setor</h2></div>
+        </div>
+        <div class="card-grid" id="sectorCardsList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Pipeline CentralDark</p><h2>🏁 Tarefas por estágio</h2></div>
+          <span class="tag">Atualiza em cada PR</span>
+        </div>
+        <div class="pipeline-legend">
+          <span>📝 Local</span><span>☁️ GitHub</span><span>🔁 PR</span><span>🧪 Checks</span>
+          <span>✅ Aprovado</span><span>🟢 Mergeado</span><span>🚀 VPS</span><span>🌐 Produção</span><span>🏁 Consolidado</span>
+        </div>
+        <div id="tarefasAtivasList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Aprovação humana</p><h2>🚦 Central de revisão humana</h2></div>
+          <span class="tag">ação sensível</span>
+        </div>
+        <div class="card-grid" id="humanReviewList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Histórico vivo</p><h2>⏱️ Linha do tempo das IAs</h2></div>
+          <div class="filters">
+            <select id="timelineFilterIa"><option value="">Todas IAs</option></select>
+            <select id="timelineFilterStatus">
+              <option value="">Qualquer status</option>
+              <option value="sucesso">sucesso</option>
+              <option value="alerta">alerta</option>
+              <option value="erro">erro</option>
+              <option value="pendente">pendente</option>
+            </select>
+          </div>
+        </div>
+        <div class="timeline-ia" id="iaTimelineList"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Integração Linear</p><h2>📋 Linear Sync</h2></div>
+          <span class="tag" id="linearSyncStatusTag">desconectado</span>
+        </div>
+        <div id="linearSyncCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Sessão atual</p><h2>🤝 Handoff Atual</h2></div>
+        </div>
+        <div id="handoffAtualCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Proteção de produção</p><h2>🛡️ Áreas Protegidas</h2></div>
+          <span class="tag tag--alert">nunca sem confirmação</span>
+        </div>
+        <div id="segurancaAreaCard"></div>
+      </section>
+
+      <section class="panel wide">
+        <div class="section-title">
+          <div><p class="eyebrow">Caminho até o fim</p><h2>🏁 Fases do projeto</h2></div>
+        </div>
+        <div class="phases" id="phasesList"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>CentralDark / MultiZap · Painel estático com atualização automática</span>
+      <span id="footerClock">--</span>
+      <button id="adminBtn" onclick="adminOpen()" title="" style="background:none;border:none;cursor:pointer;opacity:0.15;font-size:0.75rem;color:inherit;padding:0 4px;margin-left:8px;transition:opacity 0.2s" onmouseenter="this.style.opacity=0.5" onmouseleave="this.style.opacity=0.15">⚙</button>
+    </footer>
+
+    <!-- Admin login modal -->
+    <div id="adminLoginModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:14px;padding:32px 28px;width:100%;max-width:360px;margin:16px">
+        <div style="font-size:1.5rem;margin-bottom:4px">🔐</div>
+        <h2 style="font-size:1rem;font-weight:700;color:#e6edf3;margin-bottom:20px">Acesso restrito</h2>
+        <div style="margin-bottom:12px">
+          <input id="adminUser" type="text" placeholder="Usuário" autocomplete="off"
+            style="width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:0.9rem;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('adminPass').focus()">
+        </div>
+        <div style="margin-bottom:20px">
+          <input id="adminPass" type="password" placeholder="Senha"
+            style="width:100%;background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:0.9rem;outline:none"
+            onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="adminLoginClose()" style="flex:1;background:none;border:1px solid #30363d;border-radius:8px;padding:9px;color:#7d8590;cursor:pointer;font-size:0.85rem">Cancelar</button>
+          <button onclick="adminLogin()" style="flex:2;background:#238636;border:1px solid #2ea043;border-radius:8px;padding:9px;color:#fff;cursor:pointer;font-weight:600;font-size:0.85rem">Entrar</button>
+        </div>
+        <div id="adminLoginErr" style="color:#f85149;font-size:0.78rem;margin-top:12px;display:none;text-align:center">Usuário ou senha incorretos</div>
+      </div>
+    </div>
+
+    <!-- Admin panel (drawer direito) -->
+    <div id="adminPanel" style="display:none;position:fixed;top:0;right:0;width:100%;max-width:420px;height:100vh;background:#0d1117;border-left:1px solid #30363d;z-index:999;overflow-y:auto;box-shadow:-4px 0 24px rgba(0,0,0,0.6)">
+      <div style="padding:20px 24px;border-bottom:1px solid #30363d;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em">CentralDark</div>
+          <div style="font-size:1rem;font-weight:700;color:#e6edf3">🔐 Painel Admin</div>
+        </div>
+        <button onclick="adminClose()" style="background:none;border:1px solid #30363d;border-radius:8px;padding:6px 10px;color:#7d8590;cursor:pointer;font-size:0.85rem">✕ Fechar</button>
+      </div>
+
+      <div style="padding:20px 24px">
+
+        <!-- PR Review IA -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">🤖 PR Review — IA</div>
+          <a href="./ai-review.html" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px 16px;color:#e6edf3;text-decoration:none;margin-bottom:8px;transition:border-color 0.15s" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+            <span style="font-size:1.2rem">✨</span>
+            <div><div style="font-weight:600;font-size:0.88rem">Trocar provedor de IA</div><div style="font-size:0.75rem;color:#7d8590">Gemini · Groq · Claude · OpenAI · Ollama</div></div>
+            <span style="margin-left:auto;color:#7d8590;font-size:0.8rem">→</span>
+          </a>
+        </div>
+
+        <!-- GitHub -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">⚙️ GitHub</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://github.com/ServerVpss/CentralDark/settings/secrets/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔑</span><span style="font-size:0.85rem">Secrets do repo</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/settings/variables/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>📦</span><span style="font-size:0.85rem">Variáveis (PR_REVIEW_PROVIDER)</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/actions" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔄</span><span style="font-size:0.85rem">GitHub Actions</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://github.com/ServerVpss/CentralDark/pulls" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔀</span><span style="font-size:0.85rem">Pull Requests</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- MCP -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">🔌 MCP & Serviços</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://mcp.centralldark.com/status" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🤖</span><span style="font-size:0.85rem">MCP Status</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://mcp.centralldark.com/tools.json" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🛠</span><span style="font-size:0.85rem">MCP Tools JSON</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://linear.app/segredo/team/SEG" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>📋</span><span style="font-size:0.85rem">Linear — Board SEG</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Elite Proxy -->
+        <div style="margin-bottom:24px">
+          <div style="font-size:0.72rem;color:#7d8590;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">⚡ Elite Proxy</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="https://status.centralldark.com/elite-proxy" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>📊</span><span style="font-size:0.85rem">Status em tempo real</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://status.centralldark.com/ai-review.html" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#58a6ff'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔐</span><span style="font-size:0.85rem">Painel de Contas</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+            <a href="https://status.centralldark.com/conselho.html" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px 16px;color:#e6edf3;text-decoration:none" onmouseenter="this.style.borderColor='#7ee787'" onmouseleave="this.style.borderColor='#30363d'">
+              <span>🔫</span><span style="font-size:0.85rem">Conselho Vivo (Arsenal + Hermes)</span><span style="margin-left:auto;font-size:0.75rem;color:#7d8590">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <button onclick="adminLogout()" style="width:100%;background:none;border:1px solid #30363d;border-radius:10px;padding:12px;color:#7d8590;cursor:pointer;font-size:0.85rem;margin-top:8px">
+          🔓 Sair do admin
+        </button>
+
+      </div>
+    </div>
+
+    <script src="./app.js?v=20260911-mcp-status"></script>
+    <script>
+    // Admin — auth via SHA-256 (sem texto puro no código)
+    const _AU = '0b428a60be553dd36d8fd6ad6ad67653c7747e8e87ad8fe7272b427e881e51c6';
+    const _AP = '072d786e030352270756cf88e35fccd8e1439feb376c5295fec54ab8d005af83';
+
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function adminOpen() {
+      if (sessionStorage.getItem('_aok') === '1') { showAdminPanel(); return; }
+      const m = document.getElementById('adminLoginModal');
+      m.style.display = 'flex';
+      setTimeout(() => document.getElementById('adminUser').focus(), 50);
+    }
+
+    function adminLoginClose() {
+      document.getElementById('adminLoginModal').style.display = 'none';
+      document.getElementById('adminLoginErr').style.display = 'none';
+      document.getElementById('adminUser').value = '';
+      document.getElementById('adminPass').value = '';
+    }
+
+    async function adminLogin() {
+      const u = document.getElementById('adminUser').value.trim();
+      const p = document.getElementById('adminPass').value;
+      const [hu, hp] = await Promise.all([sha256(u), sha256(p)]);
+      if (hu === _AU && hp === _AP) {
+        sessionStorage.setItem('_aok', '1');
+        adminLoginClose();
+        showAdminPanel();
+      } else {
+        document.getElementById('adminLoginErr').style.display = 'block';
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminPass').focus();
+      }
+    }
+
+    function showAdminPanel() {
+      document.getElementById('adminPanel').style.display = 'block';
+    }
+
+    function adminClose() {
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function adminLogout() {
+      sessionStorage.removeItem('_aok');
+      adminClose();
+    }
+
+    // Fechar com ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        adminLoginClose();
+        adminClose();
+      }
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+# CENTRALDARK OS — Receita canônica de deployment Docker (parametrizada)
+#
+# Uma única receita, dois destinos:
+#   - Hostinger  → ambiente PRINCIPAL (Docker Manager da plataforma)
+#   - Casa/VMware → ambiente RESERVA (Docker local)
+#
+# Princípios:
+#   - Mesmo código e config-base: GitHub ServerVpss/CentralDark@main.
+#   - Cada ambiente usa suas próprias credenciais, volumes, portas e recursos.
+#   - NENHUM segredo é versionado. Tudo vem de .env local (fora do Git).
+#   - Reutiliza o Dockerfile e os compose oficiais já presentes no repo:
+#       Dockerfile                  (blob 106a6d2...)
+#       docker-compose.yml          (blob 513cb8e...)
+#       docker-compose.windows.yml  (variante Casa/Windows)
+#
+# Uso:
+#   Hostinger:  cp .env.hostinger.example .env && docker compose -f docker-compose.yml up -d
+#   Casa:       cp .env.casa.example .env && docker compose -f docker-compose.yml up -d
+#
+# Healthchecks (sem HEALTHCHECK no imagem — sondar portas):
+#   gateway:  curl -fsS http://127.0.0.1:8642/health
+#   dashboard: curl -fsS http://127.0.0.1:18787/api/status
+#
+schema_version: 1
+canonical_repo: ServerVpss/CentralDark
+canonical_branch: main
+base_image: debian:trixie-20261020
+runtime_image: hermes-agent
+entrypoint: /opt/hermes/docker/entrypoint-dispatch.sh
+pid1: /init
+volume_persistente: /opt/data
+
+destinos:
+  hostinger:
+    papel: principal
+    gerenciamento: hPanel → Docker Manager (Compose from URL ou YAML manual)
+    imagem: nousresearch/hermes-agent:<tag>   # ou build local via Dockerfile
+    network_mode: host
+    volumes:
+      - "${HERMES_DATA_DIR:-/data/.hermes}:/opt/data"
+    uid_gid: "${HERMES_UID:-337}:${HERMES_GID:-337}"
+    portas:
+      gateway: 8642       # OpenAI-compatible (auth obrigatório)
+      dashboard: 18787    # localhost only
+      metrics: 8643
+    restart: unless-stopped
+    variaveis_obrigatorias:
+      - HERMES_UID
+      - HERMES_GID
+    variaveis_opcionais:
+      - API_SERVER_KEY     # NUNCA versionar; injetar via hPanel Environment
+      - API_SERVER_HOST
+    healthcheck: curl -fsS http://127.0.0.1:8642/health
+
+  casa:
+    papel: reserva
+    gerenciamento: Docker local (docker compose / Docker Desktop)
+    imagem: nousresearch/hermes-agent:<tag>
+    network_mode: bridge    # Docker Desktop não suporta network_mode: host
+    volumes:
+      - "${USERPROFILE}/.hermes:/opt/data"
+    uid_gid: "10000:10000"
+    portas:
+      gateway: "127.0.0.1:8642:8642"
+      dashboard: "127.0.0.1:9119:9119"
+    restart: unless-stopped
+    variaveis_obrigatorias:
+      - HERMES_UID
+      - HERMES_GID
+    healthcheck: curl -fsS http://127.0.0.1:8642/health
+
+# Diferenças específicas Hostinger vs Casa:
+#   1. network_mode: host (Hostinger/VPS Linux) vs bridge + portas explícitas (Casa Desktop).
+#   2. UID/GID: 337 (hermes na Hostinger) vs 10000 (padrão Docker Desktop).
+#   3. Volume: /data/.hermes (Hostinger) vs ${USERPROFILE}/.hermes (Casa).
+#   4. Credenciais: hPanel Environment (Hostinger) vs .env local (Casa). NUNCA no Git.
+#   5. Dashboard: 18787 (Hostinger, via túnel) vs 9119 mapeado (Casa).
+#
+# Nota de deployment Hostinger: "Compose from URL" puxa o compose e as imagens;
+# o docker-compose.yml raiz usa `build: .`, então para Compose-from-URL use uma
+# imagem publicada (nousresearch/hermes-agent:<tag>) em vez de build local.
+# Alternativa: Docker Manager → "Compose manual" colando o YAML com a imagem publicada.

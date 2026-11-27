@@ -1,0 +1,474 @@
+{
+  "schema": "centraldark.meta-rsi.catalog/1",
+  "owner": "centraldark-operational-method",
+  "review_rule": "ALL_40_APPLIED_OR_NOOP_JUSTIFIED",
+  "runtime": "UNKNOWN",
+  "methods": [
+    {
+      "id": 1,
+      "name": "Self-Focus",
+      "slug": "self-focus",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-focus/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 2,
+      "name": "Self-Orientation",
+      "slug": "self-orientation",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-orientation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 3,
+      "name": "Self-Monitoring",
+      "slug": "self-monitoring",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-monitoring/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 4,
+      "name": "Self-Discovery",
+      "slug": "self-discovery",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-discovery/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 5,
+      "name": "Self-Questioning",
+      "slug": "self-questioning",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-questioning/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 6,
+      "name": "Self-Diagnosis",
+      "slug": "self-diagnosis",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-diagnosis/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 7,
+      "name": "Self-Analysis",
+      "slug": "self-analysis",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-analysis/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 8,
+      "name": "Self-Modeling",
+      "slug": "self-modeling",
+      "group": "percepcao-direcao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-modeling/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 9,
+      "name": "Self-Reflection",
+      "slug": "self-reflection",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-reflection/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 10,
+      "name": "Self-Reasoning",
+      "slug": "self-reasoning",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-reasoning/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 11,
+      "name": "Self-Criticism",
+      "slug": "self-criticism",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-criticism/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 12,
+      "name": "Self-Consistency",
+      "slug": "self-consistency",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-consistency/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 13,
+      "name": "Self-Evaluation",
+      "slug": "self-evaluation",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-evaluation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 14,
+      "name": "Self-Assessment",
+      "slug": "self-assessment",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-assessment/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 15,
+      "name": "Self-Prediction",
+      "slug": "self-prediction",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-prediction/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 16,
+      "name": "Self-Planning",
+      "slug": "self-planning",
+      "group": "raciocinio-reflexao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-planning/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 17,
+      "name": "Self-Experimentation",
+      "slug": "self-experimentation",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-experimentation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 18,
+      "name": "Self-Simulation",
+      "slug": "self-simulation",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-simulation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 19,
+      "name": "Self-Testing",
+      "slug": "self-testing",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-testing/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 20,
+      "name": "Self-Verification",
+      "slug": "self-verification",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-verification/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 21,
+      "name": "Self-Validation",
+      "slug": "self-validation",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-validation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 22,
+      "name": "Self-Auditing",
+      "slug": "self-auditing",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-auditing/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 23,
+      "name": "Self-Calibration",
+      "slug": "self-calibration",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-calibration/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 24,
+      "name": "Self-Documentation",
+      "slug": "self-documentation",
+      "group": "experimentacao-validacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-documentation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 25,
+      "name": "Self-Correction",
+      "slug": "self-correction",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-correction/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 26,
+      "name": "Self-Healing",
+      "slug": "self-healing",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-healing/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 27,
+      "name": "Self-Recovery",
+      "slug": "self-recovery",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-recovery/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 28,
+      "name": "Self-Regulation",
+      "slug": "self-regulation",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-regulation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 29,
+      "name": "Self-Adaptation",
+      "slug": "self-adaptation",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-adaptation/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 30,
+      "name": "Self-Refactoring",
+      "slug": "self-refactoring",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-refactoring/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 31,
+      "name": "Self-Optimization",
+      "slug": "self-optimization",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-optimization/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 32,
+      "name": "Self-Integration",
+      "slug": "self-integration",
+      "group": "correcao-adaptacao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-integration/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 33,
+      "name": "Self-Learning",
+      "slug": "self-learning",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-learning/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 34,
+      "name": "Self-Memory",
+      "slug": "self-memory",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-memory/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 35,
+      "name": "Self-Iteration",
+      "slug": "self-iteration",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-iteration/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 36,
+      "name": "Self-Improvement",
+      "slug": "self-improvement",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-improvement/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 37,
+      "name": "Self-Evolution",
+      "slug": "self-evolution",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-evolution/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 38,
+      "name": "Self-Improvement Loop",
+      "slug": "self-improvement-loop",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/self-improvement-loop/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 39,
+      "name": "Recursive Self-Improvement",
+      "slug": "recursive-self-improvement",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/recursive-self-improvement/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    },
+    {
+      "id": 40,
+      "name": "Recursive Cognitive Amplification",
+      "slug": "recursive-cognitive-amplification",
+      "group": "aprendizado-evolucao",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/recursive-cognitive-amplification/SKILL.md",
+      "status": "CONTRACT_ONLY"
+    }
+  ],
+  "meta_adapters": [
+    {
+      "slug": "meta-lupa",
+      "name": "META-LUPA",
+      "source": ".agents/skills/meta-lupa/SKILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-lupa/SKILL.md"
+    },
+    {
+      "slug": "meta-grill",
+      "name": "META-GRILL",
+      "source": "docs/CONSCIENCIA/LEMBRANCAS/2026-10-07-CREDO-DOS-CINCO-E-AB-META-GRILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-grill/SKILL.md"
+    },
+    {
+      "slug": "meta-multibussola",
+      "name": "META-MULTIBUSSOLA",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-multibussola/SKILL.md"
+    },
+    {
+      "slug": "meta-menos-e-mais",
+      "name": "META MENOS E MAIS",
+      "source": "AGENTS.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-menos-e-mais/SKILL.md"
+    },
+    {
+      "slug": "meta-acordar",
+      "name": "META-ACORDAR",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-acordar/SKILL.md"
+    },
+    {
+      "slug": "meta-calibrar",
+      "name": "META-CALIBRAR",
+      "source": "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-calibrar/SKILL.md"
+    },
+    {
+      "slug": "meta-garimpo",
+      "name": "META-GARIMPO",
+      "source": "AGENTS.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-garimpo/SKILL.md"
+    },
+    {
+      "slug": "meta-temporal",
+      "name": "META-TEMPORAL",
+      "source": "AGENTS.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-temporal/SKILL.md"
+    },
+    {
+      "slug": "meta-espacial",
+      "name": "META-ESPACIAL",
+      "source": "AGENTS.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-espacial/SKILL.md"
+    },
+    {
+      "slug": "meta-orquestracao",
+      "name": "META-ORQUESTRACAO",
+      "source": "AGENTS.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-orquestracao/SKILL.md"
+    },
+    {
+      "slug": "meta-metacognicao",
+      "name": "META-METACOGNICAO",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-metacognicao/SKILL.md"
+    },
+    {
+      "slug": "fable-loop",
+      "name": "FABLE LOOP",
+      "source": ".agents/skills/fable-loop/SKILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/fable-loop/SKILL.md"
+    },
+    {
+      "slug": "cot-react-loop",
+      "name": "COT-REACT LOOP",
+      "source": ".agents/skills/cot-react-loop/SKILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/cot-react-loop/SKILL.md"
+    },
+    {
+      "slug": "kimetsu-brainstorm",
+      "name": "KIMETSU REMIX",
+      "source": ".agents/skills/kimetsu-brainstorm/SKILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/kimetsu-brainstorm/SKILL.md"
+    },
+    {
+      "slug": "grill-me",
+      "name": "GRILL-ME",
+      "source": ".agents/skills/grill-me/SKILL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/grill-me/SKILL.md"
+    },
+    {
+      "slug": "meta-expansao",
+      "name": "META-EXPANSAO",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-expansao/SKILL.md"
+    },
+    {
+      "slug": "meta-instinto-superior",
+      "name": "META-INSTINTO-SUPERIOR",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-instinto-superior/SKILL.md"
+    },
+    {
+      "slug": "meta-mineracao",
+      "name": "META-MINERACAO",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-mineracao/SKILL.md"
+    },
+    {
+      "slug": "meta-cognicao",
+      "name": "META-COGNICAO",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-cognicao/SKILL.md"
+    },
+    {
+      "slug": "meta-start-link",
+      "name": "META-START-LINK",
+      "source": "docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-start-link/SKILL.md"
+    },
+    {
+      "slug": "meta-self-application",
+      "name": "META-SELF-APPLICATION",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-self-application/SKILL.md"
+    },
+    {
+      "slug": "meta-materializacao",
+      "name": "META-MATERIALIZACAO",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-materializacao/SKILL.md"
+    },
+    {
+      "slug": "meta-regional",
+      "name": "META-REGIONAL",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-regional/SKILL.md"
+    },
+    {
+      "slug": "meta-teacher",
+      "name": "META-TEACHER",
+      "source": "docs/CONSCIENCIA/MULTIBUSSOLA.md",
+      "contract": ".agents/skills/centraldark-operational-method/Skills/meta-teacher/SKILL.md"
+    }
+  ]
+}
