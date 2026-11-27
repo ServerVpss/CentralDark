@@ -2221,10 +2221,11 @@
     },
     "windows_casa_location_policy": {
       "host": "SEGREDO",
-      "temporary_build_download_cache_root": "F:\\TEMP",
+      "temporary_build_download_cache_root": "F:\\.tmp",
       "git_worktree_root": "F:\\_worktrees",
       "existing_noncanonical_siblings_read_only": [
         "F:\\_temp",
+        "F:\\TEMP",
         "F:\\tmp"
       ],
       "canonical_creator": "scripts/centraldark/ephemeral-workspace.mjs",
