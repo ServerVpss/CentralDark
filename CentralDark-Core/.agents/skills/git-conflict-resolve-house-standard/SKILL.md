@@ -10,7 +10,8 @@ metadata:
 # Conflito de PR — padrão único da Casa
 
 Owner do motor: `scripts/dependabot/resolve-conflicts.sh`
-Gatilho: `.github/workflows/dependabot-auto-merge.yml`
+Gatilho do monorepo: `/.github/workflows/dependabot-auto-merge.yml` (raiz do repositório).
+O workflow histórico em `CentralDark-Core/.github/workflows/` não é descoberto pelo GitHub Actions. A entrada raiz reutiliza o motor e classificador com `COSTURA_RECONCILIATION_ONLY=1`: atualização nativa e composições BOTH/STRUCTURED comprovadas, somente em PRs elegíveis do mesmo repo; rascunhos e ledgers 1562/1757/1977 protegidos. Não aprova runs, não publica status de CI e não promove a main. O SHA antes do merge deve coincidir com a origem. O PR #2185 (commit 360efb8070ac6302b930046a1fb737890b6ccfec) demonstrou a atualização humana da branch preservando o diff de dois arquivos, não a execução automática. Primeiro run real e CI no novo HEAD continuam necessários.
 Registry estruturado de padrões recorrentes: `scripts/dependabot/known-conflict-patterns.json`
 
 Se aparecer um segundo resolvedor, ele é o errado. Este se **atualiza**; não se

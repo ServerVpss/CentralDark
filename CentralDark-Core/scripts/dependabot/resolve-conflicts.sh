@@ -446,6 +446,13 @@ echo "COSTURA_WRITER_LOCK=ACQUIRED"
 
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --prune origin main
 git "${GIT_AUTH[@]}" -C "$REPO_DIR" fetch --force origin "refs/pull/${PR_NUM}/head:${FETCH_REF}"
+if [[ "${COSTURA_COMPATIBLE_ONLY:-0}" == 1 ]]; then
+  if ! [[ "${COSTURA_EXPECTED_PR_SHA:-}" =~ ^[0-9a-f]{40}$ ]] ||
+     [[ "$(git -C "$REPO_DIR" rev-parse "$FETCH_REF")" != "$COSTURA_EXPECTED_PR_SHA" ]]; then
+    echo "BLOCKED_COSTURA_EXPECTED_HEAD_CHANGED"
+    exit 21
+  fi
+fi
 git -C "$REPO_DIR" worktree add --detach "$WORKTREE" "$FETCH_REF"
 
 cd "$WORKTREE"
@@ -558,6 +565,15 @@ for f in "${CONFLICTS[@]}"; do
   if [ -z "$PR_SOURCE" ] || [ -z "$MAIN_SOURCE" ] || [ "${HUNK_COUNT:-0}" -eq 0 ]; then
     ACTION=YELLOW
     REASON=PRIMARY_SOURCE_OR_HUNK_UNPROVEN
+  fi
+  # Auto reconciliation only publishes proven compositions of both sides.
+  if [[ "${COSTURA_COMPATIBLE_ONLY:-0}" == 1 ]]; then
+    if [[ "$f" != CentralDark-Core/* ]] ||
+       [[ "$ACTION" != BOTH && "$ACTION" != STRUCTURED ]] ||
+       [[ -z "$SOURCE_REF" || -z "$PRESERVE_RULE" ]]; then
+      ACTION=YELLOW
+      REASON=ROOT_AUTOMATION_REQUIRES_PROVEN_COMPATIBLE_COMPOSITION
+    fi
   fi
   echo "PRIMARY_INTENT path=$f registry_source=$SOURCE_REF preserve_rule=$PRESERVE_RULE"
   case "$ACTION" in
