@@ -265,7 +265,7 @@ jobs:
 
       - name: Set up locked Python and test dependencies
         if: inputs.skip-tests != true
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           extras: '[]'
           test-environment: 'true'

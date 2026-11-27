@@ -18,6 +18,7 @@ import type { DesktopRegistryConnection } from '@/global'
 import { useI18n } from '@/i18n'
 import {
   CONNECTION_SEARCH_THRESHOLD,
+  connectionLabelForDisplay,
   connectionMatchesQuery,
   connectionTooltip,
   sortConnectionsForDisplay
@@ -56,7 +57,12 @@ export function ConnectionSwitcher({ compact = false, onConnect }: { compact?: b
   }
 
   const displayedConnections = searchable
-    ? connections.filter(connection => connectionMatchesQuery(connection, searchQuery, [kindLabels[connection.kind]]))
+    ? connections.filter(connection =>
+        connectionMatchesQuery(connection, searchQuery, [
+          kindLabels[connection.kind],
+          ...(connection.kind === 'local' ? [t.catalog?.thisComputer ?? 'Este computador'] : [])
+        ])
+      )
     : connections
 
   useEffect(() => {
@@ -239,10 +245,16 @@ function ConnectionSwitcherTrigger({
   title,
   ...triggerProps
 }: ConnectionMenuProps & React.ComponentProps<'button'>) {
+  const { t } = useI18n()
+
   return (
     <Button
       {...triggerProps}
-      aria-label={activeConnection ? `${title}: ${activeConnection.label}` : title}
+      aria-label={
+        activeConnection
+          ? title + ': ' + connectionLabelForDisplay(activeConnection, t.catalog?.thisComputer ?? 'Este computador')
+          : title
+      }
       className={cn(
         'w-full min-w-0 justify-between overflow-hidden px-1 text-(--ui-text-secondary) data-[state=open]:bg-(--ui-control-active-background) data-[state=open]:text-foreground',
         compact && 'h-full min-h-0 rounded-none px-1.5 text-[0.6875rem] font-normal',
@@ -275,10 +287,16 @@ function ManageGatewaysLabel({ label }: { label: string }) {
 }
 
 function ConnectionLabel({ connection }: { connection: DesktopRegistryConnection }) {
+  const { t } = useI18n()
+  const label = connectionLabelForDisplay(connection, t.catalog?.thisComputer ?? 'Este computador')
+
   return (
-    <span className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden" title={connectionTooltip(connection)}>
+    <span
+      className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden"
+      title={connectionTooltip({ ...connection, label })}
+    >
       <ConnectionGlyph connection={connection} />
-      <span className="truncate">{connection.label}</span>
+      <span className="truncate">{label}</span>
     </span>
   )
 }

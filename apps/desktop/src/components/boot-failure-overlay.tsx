@@ -378,6 +378,15 @@ export function BootFailureOverlay() {
       ? { headline: sshFailureMessage(connectionConfig, boot.error, t.settings.gateway), rawDetail: null }
       : localBootFailureCopy(boot.error, t.boot.causes)
 
+  // Present a localized recovery hint while retaining the exact native error in Details.
+  const ticketFailure = failureCopy.headline.includes('Hermes gateway')
+
+  const displayFailure = ticketFailure ? copy.remoteFailureHint : failureCopy.headline
+
+  const diagnosticDetail = ticketFailure
+    ? [failureCopy.headline, failureCopy.rawDetail].filter(Boolean).join('\n')
+    : failureCopy.rawDetail
+
   const label = signInLabel(remoteReauth, {
     identityProvider: copy.identityProvider,
     remoteGateway: copy.signInToRemoteGateway,
@@ -548,15 +557,15 @@ export function BootFailureOverlay() {
 
         <div className="grid gap-4 p-5 pt-0">
           <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs text-destructive">
-            {failureCopy.headline}
-            {failureCopy.rawDetail ? (
+            {displayFailure}
+            {diagnosticDetail ? (
               <details className="mt-2 text-muted-foreground">
                 <summary className="cursor-pointer select-none font-medium">{copy.details}</summary>
                 <pre
                   className="mt-1 max-h-32 overflow-auto whitespace-pre-wrap wrap-break-word font-mono text-[0.6875rem] leading-relaxed"
                   data-selectable-text="true"
                 >
-                  {failureCopy.rawDetail}
+                  {diagnosticDetail}
                 </pre>
               </details>
             ) : null}

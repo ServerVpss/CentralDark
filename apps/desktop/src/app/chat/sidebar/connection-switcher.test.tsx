@@ -97,9 +97,9 @@ describe('ConnectionSwitcher', () => {
     )
     render(<ConnectionSwitcher onConnect={onConnect} />)
 
-    const trigger = screen.getByRole('button', { name: 'Registered gateways: This device' })
+    const trigger = screen.getByRole('button', { name: 'Registered gateways: Este computador' })
 
-    expect(trigger.textContent).toContain('This device')
+    expect(trigger.textContent).toContain('Este computador')
 
     fireEvent.pointerDown(trigger, { button: 0, pointerType: 'mouse' })
     fireEvent.click(screen.getByRole('menuitemradio', { name: 'Homelab' }))
@@ -131,12 +131,12 @@ describe('ConnectionSwitcher', () => {
     )
     render(<ConnectionSwitcher onConnect={onConnect} />)
 
-    const trigger = screen.getByRole('button', { name: 'Registered gateways: This device' })
+    const trigger = screen.getByRole('button', { name: 'Registered gateways: Este computador' })
     fireEvent.pointerDown(trigger, { button: 0, pointerType: 'mouse' })
 
     expect(screen.queryByPlaceholderText('Search gateways…')).toBeNull()
     expect(screen.getAllByRole('menuitemradio').map(item => item.textContent)).toEqual([
-      'This device',
+      'Este computador',
       'alpha',
       'Studio 2',
       'Studio 10',
@@ -159,7 +159,7 @@ describe('ConnectionSwitcher', () => {
     )
     render(<ConnectionSwitcher onConnect={onConnect} />)
 
-    const trigger = screen.getByRole('button', { name: 'Registered gateways: This device' })
+    const trigger = screen.getByRole('button', { name: 'Registered gateways: Este computador' })
     fireEvent.pointerDown(trigger, {
       button: 0,
       pointerType: 'mouse'
@@ -168,7 +168,7 @@ describe('ConnectionSwitcher', () => {
     const search = screen.getByPlaceholderText('Search gateways…')
     expect(screen.getByRole('menuitem', { name: 'Manage gateways…' })).toBeTruthy()
     expect(screen.getAllByRole('menuitemradio').map(item => item.textContent)).toEqual([
-      'This device',
+      'Este computador',
       'Alpha',
       'Cloud lab',
       'Homelab',
@@ -214,7 +214,7 @@ describe('ConnectionSwitcher', () => {
     )
     render(<ConnectionSwitcher onConnect={onConnect} />)
 
-    fireEvent.pointerDown(screen.getByRole('button', { name: 'Registered gateways: This device' }), {
+    fireEvent.pointerDown(screen.getByRole('button', { name: 'Registered gateways: Este computador' }), {
       button: 0,
       pointerType: 'mouse'
     })
@@ -237,7 +237,7 @@ describe('ConnectionSwitcher', () => {
     $connectionsRegistry.set(before)
     render(<ConnectionSwitcher onConnect={onConnect} />)
 
-    const trigger = screen.getByRole('button', { name: 'Registered gateways: This device' })
+    const trigger = screen.getByRole('button', { name: 'Registered gateways: Este computador' })
 
     fireEvent.pointerDown(trigger, { button: 0, pointerType: 'mouse' })
     expect(screen.queryByRole('menuitemradio', { name: 'W2Probe' })).toBeNull()

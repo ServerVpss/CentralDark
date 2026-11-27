@@ -48,20 +48,20 @@ export default function Success() {
           }
         >
           <span>
-            <span>Hermes is ready</span>
+            <span>CentralDark-OS está pronto</span>
           </span>
-          <span aria-hidden="true">Hermes is ready</span>
+          <span aria-hidden="true">CentralDark-OS está pronto</span>
         </p>
 
         <p className="m-0 text-center text-base leading-normal tracking-tight text-muted-foreground">
-          You can launch from here, or any time from your terminal with{' '}
-          <code className="font-mono text-sm text-foreground/80">hermes desktop</code>.
+          Você pode abrir o CentralDark-OS por aqui. O comando previsto para o terminal é{' '}
+          <code className="font-mono text-sm text-foreground/80">centraldark-os desktop</code>.
         </p>
       </div>
 
       <HackeryButton
         disabled={launching}
-        label={launching ? 'Launching' : 'Launch'}
+        label={launching ? 'Abrindo...' : 'Abrir'}
         loading={launching}
         onClick={() => void handleLaunch()}
       />

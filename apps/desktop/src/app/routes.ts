@@ -40,7 +40,7 @@ export type AppView =
   | 'settings'
   | 'starmap'
   | 'webhooks'
-
+  | 'cdos'
 export type AppRouteId =
   | 'session-import'
   | 'agents'
@@ -54,7 +54,7 @@ export type AppRouteId =
   | 'settings'
   | 'starmap'
   | 'webhooks'
-
+  | 'cdos'
 export interface AppRoute {
   id: AppRouteId
   path: string
@@ -73,7 +73,8 @@ export const APP_ROUTES = [
   { id: 'cron', path: CRON_ROUTE, view: 'cron' },
   { id: 'profiles', path: PROFILES_ROUTE, view: 'profiles' },
   { id: 'agents', path: AGENTS_ROUTE, view: 'agents' },
-  { id: 'starmap', path: STARMAP_ROUTE, view: 'starmap' }
+  { id: 'starmap', path: STARMAP_ROUTE, view: 'starmap' },
+  { id: 'cdos', path: '/cdos', view: 'cdos' }
 ] as const satisfies readonly AppRoute[]
 
 const APP_VIEW_BY_PATH = new Map<string, AppView>(APP_ROUTES.map(route => [route.path, route.view]))

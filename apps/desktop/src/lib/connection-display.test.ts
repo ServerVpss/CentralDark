@@ -4,6 +4,7 @@ import type { DesktopRegistryConnection } from '@/global'
 
 import {
   connectionEndpoint,
+  connectionLabelForDisplay,
   connectionMatchesQuery,
   connectionTooltip,
   sortConnectionsForDisplay
@@ -16,6 +17,16 @@ const connection = (
 ): DesktopRegistryConnection => ({ id, kind, label, tokenPreview: null, tokenSet: false })
 
 describe('connection display helpers', () => {
+  it('shows a localized name for the default local gateway without mutating the saved registry', () => {
+    const local = connection('local', 'This device', 'local')
+    const remote = connection('work', 'Work VPS', 'remote')
+
+    expect(connectionLabelForDisplay(local, 'Este computador')).toBe('Este computador')
+    expect(local.label).toBe('This device')
+    expect(connectionLabelForDisplay(remote, 'Este computador')).toBe('Work VPS')
+    expect(connectionLabelForDisplay(connection('local', 'Minha Casa', 'local'), 'Este computador')).toBe('Minha Casa')
+  })
+
   it('anchors local first and sorts labels case-insensitively with numeric order', () => {
     const sorted = sortConnectionsForDisplay([
       connection('remote-10', 'Studio 10'),

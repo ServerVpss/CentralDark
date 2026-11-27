@@ -2,7 +2,7 @@
 // Source: StudioCodeAI/hermes-lang-pt-br (MIT © 2026 StudioCodeAI); see PT-BR-LICENSE.txt.
 // The Desktop no longer depends on a gateway/plugin RPC to render its saved locale.
 import {
-  adaptStringOverrides, mergeTranslations, unflattenMessages, type TranslationOverride
+  adaptStringOverrides, mergeTranslations, type TranslationOverride, unflattenMessages
 } from '@hermes/shared/i18n'
 
 import { en } from './en'
@@ -17,6 +17,23 @@ const base = mergeTranslations<Translations>(en, overrides)
 
 export const ptBr: Translations = {
   ...base,
+  intro: {
+    ...base.intro,
+    stock: {
+      ...base.intro.stock,
+      none: [
+        'Envie uma tarefa, um arquivo ou uma ideia. Vou investigar, sugerir os próximos passos e preservar o que já funciona.',
+        'Descreva o que deseja construir. Vou analisar os arquivos antes de propor mudanças.',
+        'Pode começar com uma pergunta, um erro ou um caminho de arquivo. Vamos trabalhar com passos verificáveis.',
+        'Diga o objetivo. Vou conferir o contexto e indicar o próximo passo com clareza.',
+        'Traga o problema ou o projeto. Vou buscar uma solução sem alterar o que estiver fora do escopo.'
+      ]
+    },
+    custom: (personality: string) => [
+      'Descreva a tarefa ou compartilhe um arquivo. Vou seguir o modo ' + personality + ' com atenção ao contexto.',
+      'Qual é o próximo passo? Vou investigar antes de modificar qualquer coisa.'
+    ]
+  },
   // Text packs only carry string leaves; keep non-string UI copy translated here.
   composer: {
     ...base.composer,

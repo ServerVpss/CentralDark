@@ -9,10 +9,10 @@
 // the default `windows_subsystem = "console"` would do, so double-clicking
 // the .exe gives you ONLY the Tauri window.
 //
-// debug_assertions guard: dev builds keep the console so tracing output
-// is visible during `cargo tauri dev`.
+// On Windows, both Debug and Release must be GUI-only: no extra console
+// window when the CentralDark-OS installer opens. Logging remains on disk.
 
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(target_os = "windows", windows_subsystem = "windows")]
 
 fn main() {
     hermes_bootstrap_lib::run()

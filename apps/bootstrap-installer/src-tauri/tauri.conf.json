@@ -13,14 +13,14 @@
     "windows": [
       {
         "label": "main",
-        "title": "Hermes",
+        "title": "CentralDark-OS",
         "width": 880,
         "height": 620,
         "minWidth": 720,
         "minHeight": 520,
         "resizable": true,
         "fullscreen": false,
-        "decorations": true,
+        "decorations": false,
         "transparent": false,
         "center": true,
         "visible": false

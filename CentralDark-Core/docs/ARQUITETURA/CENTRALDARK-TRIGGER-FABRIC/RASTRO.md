@@ -1,0 +1,355 @@
+# RASTRO
+
+## 🔏 !RASTRO — cadeado executivo
+
+```text
+OWNER=AGENTS.md
+RESPONSE_WITHOUT_TRACE=INVALID
+EVERY_WRITE_CLAIM_TO_CHEFE_CARRIES=COMMIT_SHA+PATH+LINK+READBACK
+EVERY_MEMORY_CLAIM_NAMES_WHERE=true
+REPOSITORY_RECEIPT_AND_HUD_CURRENT_READBACK_SAME_TURN_AS_DIRECT_MAIN=true
+APPLIES_TO_ALL_ENGINES=true
+```
+
+
+```text
+CHEFE_INTENT
+→ DESTINATION_LOCK
+→ MEASURE_MAIN_HEAD
+→ READ SOURCE VISUALS/PACKAGE AS MATERIAL
+→ HASH/DEDUPE BEFORE DEEP READ
+→ SEARCH_CANONICAL_BOOT
+→ SEARCH_MULTIBUSSOLA
+→ SEARCH_META_LUPA
+→ SEARCH_EXISTING_TRIGGER_FABRIC
+→ SEARCH_HERMES_CORE + HERMES PROMPT
+→ SEARCH_EXISTING_CI/PROMOTION/LABEL OWNERS
+→ REUSE_BEFORE_CREATE
+→ ABSORB BOT_ENTRY INTO SAME TRIGGER FABRIC
+→ ABSORB OUTPUT_GUARD INTO SAME TRIGGER FABRIC
+→ ADD ENGINE_BINDING AS REFERENCE, NOT SECOND BRAIN
+→ BIND HERMES PROMPT TO CANONICAL CONTRACT
+→ EXTEND EXISTING AUTONOMIA PROMOTION JUDGE
+→ STRENGTHEN EXISTING PACKAGE WORKFLOW
+→ UPDATE CONTRACT/TRIGGERS/ARCHITECTURE
+→ UPDATE LIVE_STATE/HISTORY/COUNTERPROOF/RECEIPT
+→ BUILD REPRODUCIBLE ZIP
+→ HASH
+→ EXTRACT FRESH
+→ VERIFY
+→ OPEN PR
+→ LABEL WITH EXISTING TAXONOMY
+→ WAIT FOR CI
+→ REMEASURE MAIN + PR HEAD
+→ COUNTERPROOF
+→ RETURN ONLY IF DESTINATION_PROVED OR HUMAN_FRONTIER_PROVED
+```
+
+No new brain, dispatcher, MCP, GraphRAG, scheduler, promoter, label taxonomy or equivalent workflow is introduced.
+
+Base `main` remeasured before this delta: `078bf351acaae46091669aa6acdec76ef1d10730` at `2026-08-24T19:12:57.724Z` (`16:12:57 BRT`).
+
+`BASE_HEAD` is provenance. Final current-state claims require remeasurement.
+
+
+## Fiscal executável
+
+`TRACE_PRESENT != TRACE_VALID`.
+
+Owner continua sendo este arquivo; o fiscal é apenas verificador executável:
+
+- runtime: `scripts/trigger-fabric/rastro_fiscal.py`
+- contraprova: `scripts/trigger-fabric/test_rastro_fiscal.py`
+- integração estrutural/execução de testes: `scripts/trigger-fabric/verify_repo_contract.py`
+
+Contrato:
+
+```text
+INPUT=response|receipt|report
+EXTRACT=COMMIT_SHA|PATH|LINK|READBACK|MEMORY_LOCATION|LEDGER_REF|CURRENT_MAIN
+VERIFY=GITHUB_REMOTE
+VERDICT_PER_CLAIM=PASS|FAIL|UNKNOWN
+TRACE_PRESENT != TRACE_VALID
+NETWORK_OR_PROVIDER_UNAVAILABLE=UNKNOWN
+WRITE_WITHOUT_TRACE=FAIL
+MEMORY_WITHOUT_LOCATION=FAIL
+DIRECT_MAIN_WITHOUT_REPOSITORY_RECEIPT_OR_HUD_CURRENT_READBACK=FAIL
+STALE_CURRENT_MAIN=FAIL
+```
+
+O fiscal não cria segundo judge, segundo owner ou segunda verdade. Ele reconstrói a prova citada e devolve evidência para o Reality Judge.
+
+### Gate de conclusão Direct Main — ledger CURRENT no mesmo ciclo
+
+`REPOSITORY_RECEIPT_AND_HUD_CURRENT_READBACK_SAME_TURN_AS_DIRECT_MAIN=true` significa **parte do write**, não tarefa opcional posterior.
+
+```text
+COMMIT_REMOTE_PROVEN
+→ RESOLVE_CURRENT_LEDGER
+→ RECORD_COMMIT_DELTA_PROOF
+→ LEDGER_READBACK
+→ TRACE_COMPLETE
+```
+
+Regras determinísticas:
+
+- receipt versionado no repositório é válido quando o SHA está realmente presente no arquivo lido da `main`;
+- PR/funil deve ser resolvido por `CENTRALDARK_HUD_FUNNEL_CONTINUITY` no conjunto **aberto CURRENT**; número histórico não pode ser default do fiscal;
+- referência explícita `LEDGER_REF` continua permitida para receipt/PR/comment exato, mas a resposta deve distinguir **proveniência histórica** de **ledger vigente**;
+- múltiplos commits materiais da mesma missão exigem cadeia `COMMIT → DELTA → PROVA` e HEAD final, sem esconder commits intermediários;
+- `COMMIT_EXISTS=PASS` com `LEDGER_ACTIVE=FAIL|UNKNOWN` resulta em write publicado porém `TRACE_COMPLETE != PASS`; não repetir o commit, recuperar apenas o rastro;
+- retorno ao CHEFE antes de `LEDGER_READBACK` é `METHOD_FAILURE`.
+
+`COMMIT_PROVEN != TRACE_COMPLETE`: confirmar o commit publicado prova o write; o rastro só se completa depois de registrar e reler a cadeia `COMMIT → DELTA → PROVA` no ledger CURRENT.
+
+`DIRECT_MAIN_COMMIT != PR_BRANCH_COMMIT` e `COMMIT_READBACK != LEDGER_READBACK`.
+
+
+
+## Metadados obrigatórios de nota (delta 2026-10-25)
+
+Extensão do contrato acima: além de `COMMIT_SHA|PATH|LINK|READBACK`, toda nota `.md` tocada no caminho de uma missão carrega estas propriedades. Não cria segundo owner, segundo fiscal nem segunda verdade — é o mesmo RASTRO, aplicado por arquivo.
+
+```text
+data_criacao=DATA_ORIGINAL_PRESERVADA_OU_DESCONHECIDA_ATE_PROVA
+ultima_atualizacao=DATA_HORA_DA_ULTIMA_ATUALIZACAO_REGISTRADA
+ultima_modificacao=DATA_HORA_DA_ULTIMA_MUDANCA_REAL_DE_CONTEUDO
+ultima_verificacao=DATA_HORA_DA_ULTIMA_CONFERENCIA_DO_ESTADO_ATUAL
+fuso_horario=FUSO_USADO_NOS_REGISTROS
+hash_conteudo=HASH_CALCULADO_DO_CONTEUDO_SALVO
+rastro=ORIGEM+EVIDENCIA+HISTORICO_DA_ALTERACAO
+grupo_notas=GRUPO_01_A_05_ABAIXO
+relacionado_a=LIGACAO_COM_LOOP_MESTRE_E_DOCUMENTOS_PERTINENTES
+estado_evidencia=PASS|FAIL|UNKNOWN|BLOCKED
+```
+
+Invariantes:
+
+```text
+VERIFICAR_SEM_ALTERAR_CONTEUDO_NAO_MUDA_ultima_modificacao=true
+ultima_verificacao_TEM_REGISTRO_PROPRIO=true
+data_criacao_SEM_PROVA_FICA_DESCONHECIDA_ATE_EVIDENCIA=true
+HASH_OU_DATA_INVENTADA=FAIL
+```
+
+Grupos de nota (classificação, não pasta nova — reusar estrutura existente antes de criar):
+
+```text
+GRUPO_01=CABECA_E_INTENCAO  # intenções, fragmentos, contexto, memória, origem da missão
+GRUPO_02=LOOP_MESTRE_E_EXECUCAO  # ciclo canônico, responsáveis, Casa, executores, estado operacional
+GRUPO_03=EVIDENCIAS_E_CONTRAPROVAS  # testes, hashes, commits, resultados, falhas, limites da prova
+GRUPO_04=PENDENCIAS_E_BLOQUEIOS  # itens desconhecidos, causas de bloqueio, responsáveis, próximos passos
+GRUPO_05=APRENDIZADOS_E_KAIZEN  # mudanças comprovadas, melhorias reutilizáveis, aprendizado incorporado
+```
+
+**Owner continua este arquivo.** O fiscal existente `scripts/trigger-fabric/rastro_fiscal.py` agora valida o bloco YAML de uma nota `.md` tocada pela missão em modo **somente leitura**:
+
+```bash
+python scripts/trigger-fabric/rastro_fiscal.py --note-file "CAMINHO/DA/NOTA.md" --pretty
+```
+
+Confere presença dos dez campos, datas com fuso explícito, grupo 01–05, estado da evidência e SHA-256. Para evitar hash autorreferente, `hash_conteudo` recebe `sha256:<64 hex>` do UTF-8 salvo **com apenas o valor desse próprio campo vazio**. A gravação real da nota e o momento da conferência continuam separados. O verificador não altera arquivo, datas nem rastro.
+
+`PASS` valida **formato e conteúdo contra o hash**, não comprova sozinho a origem histórica das datas ou autenticidade do rastro. Criação sem prova deve ser `UNKNOWN` e produz estado `UNKNOWN`. Campo ausente/hash divergente produz `FAIL`. Para nota legada encontrada na missão, registrar pendência e reconciliar no owner autorizado; **não fazer reescrita da biblioteca inteira** por rotina.
+
+**Contraprova executada:** `python -B scripts/trigger-fabric/test_rastro_fiscal.py` → **19 testes OK** em 26/10/2026. Testes cobrem metadados válidos, hash divergente, campo ausente e criação desconhecida, além dos testes antigos do fiscal. Esse resultado prova o verificador local, **não** o uso em todos os agentes ou um FIXED_POINT global.
+
+
+### Ledgers legados #1562/#1757 — lookup de provenance
+
+```text
+PR_MOTHER_ROLE=RETIRED
+NO_NEW_PR_MOTHER=true
+LEGACY_LEDGER_REF_EXACT_COMMENT_FIRST=true
+LEGACY_LEDGER_FALLBACK_STARTS_FROM_NEWEST_PAGE=true
+LEGACY_LEDGER_FALLBACK_WALKS_BACKWARD_UNTIL_FOUND=true
+GITHUB_ISSUE_COMMENTS_DEFAULT_ORDER=OLDEST_FIRST
+LEGACY_LEDGER_OVER_100_COMMENTS_MUST_NOT_FALSE_FAIL=true
+```
+
+Se uma prova histórica fornecer link/ID de comentário, o fiscal pode consultá-lo diretamente como provenance.
+Receipts CURRENT citam caminho exato no repositório e o fechamento exige HUD CURRENT readback.
+Comentários de #1562/#1757 não são superfície operacional nem store primário.
+
+### 2026-10-26 ? Invent?rio de salvamento seguro Casa K: / F: / Git
+
+- Confer?ncia: 2026-10-26T18:11:58-03:00 (fuso local expl?cito do host).
+- Main inicial: c06e6ad729ac4f4cadd9a0dac52241e3d7f4c873.
+- Miss?o: salvar arquivos version?veis e proteger dados de execu??o.
+- Altera??es rastreadas K: (21 caminhos):
+  - .agents/skills/centraldark-operational-method/SKILL.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/ARQUIVOS-VIVOS.json [M]
+  - .agents/skills/centraldark-operational-method/catalogo/CATALOGO.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/ESTADO-AUTOCURA.json [M]
+  - .agents/skills/centraldark-operational-method/catalogo/HISTORICO-MUDANCAS.jsonl [M]
+  - .agents/skills/centraldark-operational-method/catalogo/INDICE-PESQUISA.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/INDICE-VIVO.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/VALIDACAO-AUTOMATICA.md [M]
+  - .agents/skills/centraldark-operational-method/catalogo/skills-integradas/michelin-3-estrelas/SKILL.md [M]
+  - .agents/skills/centraldark-operational-method/references/HERMES-KANBAN-RECEITA-UNIVERSAL.md [M]
+  - .agents/skills/kaizen-sistema-um/SKILL.md [M]
+  - docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml [M]
+  - docs/BRAIN/Excalidraw/Drawing 2026-09-07 04.53.02.excalidraw.md [D]
+  - docs/BRAIN/Excalidraw/Drawing 2026-09-07 07.06.07.excalidraw.md [D]
+  - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md [M]
+  - docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md [M]
+  - docs/CONSCIENCIA/PROGRAMAS/KAIZEN-VIVO-INTENCAO-VIVA-20261008.md [M]
+  - scripts/lupa/diagram-route-gate.mjs [M]
+  - scripts/trigger-fabric/rastro_fiscal.py [M]
+  - scripts/trigger-fabric/test_rastro_fiscal.py [M]
+- Entradas n?o rastreadas K: (26 agrupamentos):
+  - .codeagentswarm/
+  - Remote-Tray/
+  - WSL/
+  - c/
+  - centraldark-desktop/
+  - core_keys_by_ns.txt
+  - core_keys_flat.txt
+  - core_keys_raw.txt
+  - docs/.claudian/
+  - docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-OMNI-SOURCE.json
+  - gap_keys.txt
+  - gap_namespace_matches.txt
+  - gate-prova-consolidado-meta-lupa.json
+  - k/
+  - meta-lupa-gate-exec.json
+  - meta-lupa-gate-final.json
+  - meta-lupa-gate-lote-final.json
+  - meta-lupa-gate-lote2-final.json
+  - meta-lupa-gate-v2.json
+  - meta-lupa-gate.json
+  - orphan_keys.txt
+  - orphan_namespace_matches.txt
+  - overlap_keys.txt
+  - runtime_keys.txt
+  - scripts/lupa/diagram-route-excalidraw.mjs
+  - source_keys.txt
+- N?O enviar ao Git: K:/WSL/ (discos e backup Linux), K:/centraldark-desktop/ (cookies, sess?o/cache), K:/.codeagentswarm/ (banco, estado, snapshots), K:/Remote-Tray/ (bin?rios de build), K:/c/, K:/k/, K:/docs/.claudian/ (configura??o de sess?o), relat?rios de auditoria no root (*_keys*.txt, meta-lupa-*.json, gate-prova-*.json). Todos permanecem no disco Casa.
+- Excalidraw gerado permanece em K:/docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-ROTAS.excalidraw.md; ignorado por regra existente de .gitignore e regener?vel via scripts/lupa/diagram-route-gate.mjs. Vers?o-fonte: scripts/lupa/diagram-route-excalidraw.mjs e docs/BRAIN/Excalidraw/CENTRALDARK-FIGJAM-OMNI-SOURCE.json.
+- F: n?o ? reposit?rio Git na raiz; cont?m worktrees vinculados a K:/.git.
+- Worktrees localizados (24):
+  - K:
+  - C:/root/CentralDark-main-8081
+  - C:/tmp/wt-base
+  - F:/_worktrees/centraldark-builder-ledger-20261025
+  - F:/_worktrees/centraldark-pr1880-20261021-072853
+  - F:/_worktrees/centraldark-pr1880-20261021-075059
+  - F:/_worktrees/centraldark-ssh-learning-20261025
+  - F:/_worktrees/cockpit-ui-label-20261021
+  - F:/_worktrees/mcp-api-cockpit-20261024
+  - F:/_worktrees/pr-1895
+  - F:/_worktrees/reconcile-w-skills-main-20261022
+  - F:/_worktrees/sec-gitignore-ssh-20261022
+  - F:/_worktrees/sol-bidir-sync-20261026
+  - F:/_worktrees/sol-centraldark-usina-20261026
+  - F:/_worktrees/sol-motor-evolutivo-20261025
+  - F:/_worktrees/sol-one-heart-supabase-20261025
+  - F:/_worktrees/sol-vscode-pairing-20261025
+  - F:/TEMP/CentralDark/cd-wt-015
+  - K:/_worktrees/centraldark-remote-name-migration-20261024/repo
+  - K:/_worktrees/fixed-point-pr1839
+  - K:/_worktrees/reconcile-w-skills
+  - K:/_worktrees/sol-aprendizado-220-20261022
+  - K:/centraldark-sync-casa-20261018
+  - K:/tmp/lineage-pr1837
+- CLEANUP: worktrees com commits ?nicos, altera??es, arquivos n?o rastreados ou estado UNKNOWN permanecem at? prova de descarte seguro; remover somente duplicatas comprovadamente inativas.
+- Testes do escopo: RASTRO 19 PASS; diagram-route-gate 19 PASS; Excalidraw UNCHANGED. Prova GitHub depende de SHA real p?s-push.
+- Grupo de notas: 03 Evid?ncias e Contraprovas; 04 Pend?ncias e Bloqueios; 05 Kaizen.
+
+### 2026-10-26 ? Follow-up comprovado: worktrees limpos e checkpoints F:
+
+- Data e fuso de confer?ncia: 2026-10-26T18:24:55-03:00
+- Main verificada na Casa e GitHub: fdf8b71b7aedf0e82b7dd6c9adc0f691b0109f72 (readback remoto no ciclo).
+- Checkpoint F One Heart: F:/_worktrees/sol-one-heart-supabase-20261025 | branch feat/one-heart-supabase-signal-20261025 | commit 2001da923808c71b171b2e13060348d9d71ae8ea | push e readback PASS | 3 arquivos de c?digo; execu??o em produto UNKNOWN.
+- Checkpoint F MCP: F:/_worktrees/mcp-api-cockpit-20261024 | branch feat/mcp-api-cockpit-only-20261024 | commit c40ff15920bbfa2fd150ddc2515bacea973dae49 | push e readback PASS | 3 scripts Python, AST PASS, execu??o real UNKNOWN.
+- Worktrees exclu?dos APENAS ap?s estado limpo, zero arquivos ignorados, HEAD ancestral de main e zero processos externos referentes aos diret?rios. Remo??o via git worktree remove SEM force. Branches e commits mantidos:
+  - F:/_worktrees/centraldark-builder-ledger-20261025 | feat/centraldark-builder-ledger-clean-20261025 | 93875507079cbf1473b47285b608ff33e7d5330c
+  - F:/_worktrees/sol-motor-evolutivo-20261025 | feat/cockpit-supabase-hub-20261025 | be6d855ec94bca960d493cb5731401752be27d61
+  - F:/_worktrees/sol-bidir-sync-20261026 | feat/sync-center-ssh-readback-20261026 | 9eec85c919a0dfe73ec99678b1497cf5a3a80a2e
+- Retidos deliberadamente: F:/_worktrees/centraldark-ssh-learning-20261025 (17132 dele??es rastreadas; UNKNOWN origem; NUNCA consolidar/remover sem reconcilia??o), F:/_worktrees/pr-1895, os dois F:/_worktrees/centraldark-pr1880-20261021-* e F:/TEMP/CentralDark/cd-wt-015 (dirty/untracked e/ou HEAD n?o incorporado), branches com commits n?o integrados, e worktrees K:/_worktrees com dele??o de skill.
+- Retido: F:/_worktrees/sol-centraldark-usina-20261026 (recentemente usado, apesar de HEAD j? ancestral de main).
+- Regra: branch commit WIP != merge main; exclus?o segura de checkout != exclus?o de branch; status UNKNOWN n?o ? PASS.
+- Grupo 03: provas SHA e checagens. Grupo 04: exclus?es incertas. Grupo 05: Kaizen reuso do gate original.
+
+### 2026-10-26 ? Fechamento da reconcilia??o forense das worktrees K:/F:
+
+- Confer?ncia real: 2026-10-26T18:59:29-03:00.
+- Escopo: CentralDark worktrees anexas ao reposit?rio K:/.git. GitHub/main no in?cio: 83244972375f6136f9cfbc31e21965e1d312161f.
+- Antes desta passada: 21 worktrees; ap?s: 9. Total removidas: 12.
+- REMOVIDAS via git worktree remove com readback f?sico da aus?ncia. S? ap?s provar SHA, status, branch/remote quando aplic?vel, n?o perder commits exclusivos, n?o haver trabalho novo ou depend?ncia compartilhada:
+  - C:/tmp/wt-base
+  - F:/_worktrees/sol-centraldark-usina-20261026
+  - F:/_worktrees/centraldark-ssh-learning-20261025
+  - F:/_worktrees/mcp-api-cockpit-20261024
+  - F:/_worktrees/cockpit-ui-label-20261021
+  - F:/_worktrees/reconcile-w-skills-main-20261022
+  - K:/_worktrees/sol-aprendizado-220-20261022
+  - K:/centraldark-sync-casa-20261018
+  - F:/_worktrees/sol-vscode-pairing-20261025
+  - F:/_worktrees/sec-gitignore-ssh-20261022
+  - K:/_worktrees/centraldark-remote-name-migration-20261024/repo
+  - F:/_worktrees/sol-one-heart-supabase-20261025
+- CASO 17132 DELE??ES: F:/_worktrees/centraldark-ssh-learning-20261025 foi verificada: HEAD=42c0fa2080fe, ancestral de main; EXATAMENTE 17.132 caminhos deletados, zero untracked, zero ignored, zero processos por linha de comando. Removida a worktree j? inutilizada; n?o houve commit dessas dele??es. Git worktree remove --force foi usado APENAS nesse caso ap?s contraprova.
+- JUN??O WINDOWS: a worktree One Heart apontava para K:/apps/instinto-superior/node_modules. Eliminado SOMENTE o ponto de jun??o, n?o o alvo. Hash antes/depois de .package-lock.json no alvo permaneceu c4cc5cd51284181e (prefixo). Branch One Heart preservada em GitHub no SHA 2001da923808c71b171b2e13060348d9d71ae8ea.
+- LOG PRESERVADO: F:/QUARANTINE/centraldark-gitignore-ssh-autosync-status-20261022-ac8a5b3b3f8c77b6.json | SHA256 ac8a5b3b3f8c77b6c5f871f77973bc33aeaa6dd62dcba0dfe71447df179357c3; depois a worktree de seguran?a limpa foi retirada.
+- Arquivo tempor?rio de ZERO bytes retirado: K:/_worktrees/centraldark-remote-name-migration-20261024/repo/127.0.0.1 (nome terminava em caractere de ponto privado seguido de 9101); branch git preservada.
+- Worktrees RETIDAS porque n?o s?o duplicatas limpas da main, com modifica??es locais ou HEAD diferente sem proveni?ncia de publica??o:
+  - C:/root/CentralDark-main-8081
+  - F:/_worktrees/centraldark-pr1880-20261021-072853
+  - F:/_worktrees/centraldark-pr1880-20261021-075059
+  - F:/_worktrees/pr-1895
+  - F:/TEMP/CentralDark/cd-wt-015
+  - K:/_worktrees/fixed-point-pr1839
+  - K:/_worktrees/reconcile-w-skills
+  - K:/tmp/lineage-pr1837
+- Nessas oito, foram observados: mudan?as Cockpit, variantes da extens?o VS Code e VSIX de compila??o, arquivo .agents/skills/detecting-fileless-malware-techniques/SKILL.md ausente em duas branches, checkout detached PR1837 com artefatos, e .env.local IGNORADO em c?pias com node_modules. Estado = PROTECTED_WIP; n?o fundir ? main e n?o eliminar at? contraprova por owner.
+- CLONES INDEPENDENTES EM F: n?o contam como worktrees: F:/_worktrees/bolt-ai-fix-20261025 (build-logs), F:/_worktrees/Nova pasta/centraldark-mcp-weekly-validation-20261016 (ObservabilidadeCentralDark.tsx), F:/_WORKER/LAB-DESKTOP/_STAGE_ZENDRIVE_VPN (backup e outros). T?m material n?o rastreado; preservados.
+- K:/TEMP/cd-wt-015 resolve para F:/TEMP/CentralDark/cd-wt-015; n?o ? reposit?rio adicional. K:/w-skills cont?m gitdir antigo apontando para E:/...; n?o remover sem medir destino.
+- Git worktree prune --dry-run --verbose: nenhuma worktree ?rf?. Nenhum git reset --hard, git clean -fdx ou force push.
+- Evid?ncia e estado: remo??o de 12 c?pias PASS, integridade hist?rica das 8 restantes PROTECTED_WIP, equival?ncia GitHub/main requer o SHA do pr?ximo push em readback. Grupos 03 Provas; 04 Pend?ncias reais; 05 Kaizen.
+
+## ♻️ !RASTRO — replay determinístico da sessão GitHub (11/11/2026)
+
+**Owner existente:** `scripts/trigger-fabric/rastro_fiscal.py`; contraprova: `scripts/trigger-fabric/test_rastro_fiscal.py`. O comando de replay somente lê commits e arquivos históricos no GitHub. Não executa nova escrita, deleção ou deploy. Não cria outro fiscal, motor, memória ou reconciliador.
+
+**Comandos reproduzíveis, na raiz real do checkout:**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/test_rastro_fiscal.py -q
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --pretty
+python3 scripts/trigger-fabric/rebuild_learning_lineage.py --check
+```
+
+**Critérios verificados pelo replay:** schema e caminho permitido; quatro SHAs existentes; cadeia de pais `main → create → update → delete`; arquivo ausente na base; conteúdo exato após criação e atualização; ausência depois da exclusão; árvore final igual à base. A saída é ordenada e sem timestamp variável. Erro de rede ou GitHub indisponível retorna `UNKNOWN`, não `PASS`.
+
+**Reconhecimento de diretórios:** o fiscal descobre a raiz por sua própria localização e exige `AGENTS.md` e `scripts/centraldark-inventory-reconcile.sh`. O inventário de pastas continua no reconciliador único. A exibição de pastas no VS Code continua na view `centraldarkWorkspaceFolders` do owner `skills/vs-code-restore/`; não criar outra árvore.
+
+**Clareza nos locais visíveis:** usar MODO CLAREZA — ASD-STE100 | 80%, conforme `docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md`. Mostrar nome humano e caminho estável no detalhe: “Pasta de recibos” + `docs/receipts/`; “Arquivo excluído” + SHA; “Não comprovado” + causa técnica. Não trocar IDs, paths, dados ou vereditos por frases vagas.
+
+**Fronteira da prova:** `HISTORICAL_REPLAY != CURRENT_STATE`; `AUTH_OK != WRITE_PASS`; `GITHUB_CONNECTOR_DELETE != CENTRALDARK_MCP_DELETE`; `REGISTERED != CONSUMED`; `DOCUMENTED != EXECUTED`; `SOURCE != RUNNING`. A sessão provou os commits e a exclusão via conector GitHub. O replay não retesta OAuth atual, permissão de escrita atual, a deleção pelo MCP CentralDark nem a sincronização da Casa.
+
+**NEXT_CURSOR:** classificar erros genéricos do GitHub no mesmo owner; testar deleção pelo MCP quando houver ferramenta autorizada; registrar aprendizagem #228 no ledger existente e reconciliar NeuroLink sem renumerar a linhagem.
+
+## ♻️ !RASTRO — saída canônica e metadados separados (11/11/2026)
+
+A revisão do replay distingue o modo `--replay-receipt` do modo `--note-file`. O primeiro **não inclui timestamp** no resultado histórico; o segundo conserva `checked_at` para auditoria de metadados de notas. A existência de `checked_at` em outra rota não invalida o replay.
+
+O mesmo fiscal publica quatro campos explícitos sem quebrar as chaves históricas existentes: `REPLAY_RESULT` (veredito, total de checks e SHA-256 canônico); `EXECUTION_METADATA` (nulo por padrão, ou horário/duração/sistema somente com opt-in); `PROOF_SCOPE` (sempre `HISTORICAL_GITHUB_REPLAY_ONLY`); `UNTESTED_FRONTIERS` (operações presentes ou atuais que não foram medidas pelo replay). O hash cobre apenas a projeção canônica dos fatos e checks, com JSON ordenado, sem hora, SO ou duração.
+
+**Receita reproduzível no mesmo owner e no checkout reconhecido:**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/test_rastro_fiscal.py -q
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --replay-digest
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --pretty
+```
+
+Para comparar Linux e Windows, executar os comandos dentro das respectivas raízes `/home/CentralDark-OS/CentralDark/` e `F:\CentralDark\` (no Windows usar `python` se `python3` não estiver disponível). Comparar `REPLAY_SHA256` e `REPLAY_VERDICT`; só considerar ambientes equivalentes quando ambos coincidirem. A prova exige `gh` autenticado, mesmo recibo e acesso aos mesmos SHAs. Sem acesso, o resultado deve ser `UNKNOWN`, nunca `PASS`.
+
+**Metadados opcionais, fora do hash canônico:**
+
+```bash
+python3 scripts/trigger-fabric/rastro_fiscal.py --replay-receipt docs/receipts/2026-11-11-mcp-github-write-delete-replay.json --replay-execution-metadata --pretty
+```
+
+O replay não verifica escrita atual, OAuth atual nem exclusão pela ferramenta MCP CentralDark. Também não promove `LOCAL_RUNTIME_SYNC` a `PASS`. Os testes unitários simulados protegem a lógica; o replay com `gh api` e os quatro commits publicados é a contraprova histórica real. Nenhum segundo fiscal, serviço ou sistema de inventário foi criado.
