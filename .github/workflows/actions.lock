@@ -57,7 +57,7 @@ workflows:
         - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
-        - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+        - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'useblacksmith/build-push-action@9b0579bbec7a6cad2f171596c57e7ac1e7658850'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
         - 'useblacksmith/setup-docker-builder@19215110ab936351210feebdfa5b440b4493e184'
@@ -142,7 +142,7 @@ workflows:
         - 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
-        - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+        - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'useblacksmith/build-push-action@9b0579bbec7a6cad2f171596c57e7ac1e7658850'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
         - 'useblacksmith/setup-docker-builder@19215110ab936351210feebdfa5b440b4493e184'
@@ -157,12 +157,12 @@ workflows:
     '.github/workflows/stable-release-publication.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
-        - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+        - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
     '.github/workflows/stable-release.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
-        - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+        - 'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069'
         - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
     '.github/workflows/termux-verify.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
@@ -272,9 +272,9 @@ dependencies:
         commit: 'sha1-4907a6ddec9925e35a0a9e82d7399ccc52663121'
         owner_id: 5429470
         repo_id: 287743349
-    'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f':
-        ref: 'v3.12.0'
-        commit: 'sha1-8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
+    'docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069':
+        ref: 'v4.4.1'
+        commit: 'sha1-f87e5991a6d7451dcb8d9637bfbc97413f497069'
         owner_id: 5429470
         repo_id: 288485773
     'ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38':
