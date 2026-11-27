@@ -1,16 +1,17 @@
+mod halo_focus;
 mod logging;
-mod session_vault;
 mod platform;
+mod session_vault;
 mod settings;
 mod state;
 mod tray;
 mod watcher;
 
 use settings::AppSettings;
-use state::{unix_time_ms, HaloEvent, HaloState};
+use state::{HaloEvent, HaloState, HaloTarget, unix_time_ms};
 use std::collections::HashSet;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::{mpsc, Arc, Mutex};
+use std::sync::{Arc, Mutex, mpsc};
 use std::time::{Duration, Instant};
 use tauri::{
     AppHandle, Emitter, Manager, Monitor, WebviewUrl, WebviewWindow, WebviewWindowBuilder,
@@ -29,30 +30,38 @@ const CONTROL_LABEL: &str = "agent-control";
 pub(crate) fn show_agent_control(app: &AppHandle) -> Result<(), String> {
     let window = match app.get_webview_window(CONTROL_LABEL) {
         Some(existing) => existing,
-        None => WebviewWindowBuilder::new(
-            app, CONTROL_LABEL, WebviewUrl::App("index.html".into()),
-        )
-        .title("CentralDark Agente Remoto")
-        // Barra nativa substituida pela UI React; overlays preservados.
-        .decorations(false)
-        .resizable(true)
-        .inner_size(1020.0, 760.0)
-        .min_inner_size(540.0, 620.0)
-        .visible(false)
-        .build()
-        .map_err(|_| "AGENT_WINDOW_CREATE_FAILED")?,
+        None => WebviewWindowBuilder::new(app, CONTROL_LABEL, WebviewUrl::App("index.html".into()))
+            .title("Segredo Agente Remoto")
+            // Barra nativa substituida pela UI React; overlays preservados.
+            .decorations(false)
+            .resizable(true)
+            .inner_size(1020.0, 760.0)
+            .min_inner_size(540.0, 620.0)
+            .visible(false)
+            .build()
+            .map_err(|_| "AGENT_WINDOW_CREATE_FAILED")?,
     };
+    // O mesmo olho dourado da bandeja tambem identifica a janela na barra de tarefas.
+    // Reaproveita o rasterizador existente, sem segundo asset nem outro processo.
+    if let Err(error) = window.set_icon(tray::halo_tray_icon(0.0)) {
+        log::warn!("Nao foi possivel atualizar o icone da janela: {error}");
+    }
     if window.is_minimized().unwrap_or(false) {
-        window.unminimize().map_err(|_| "AGENT_WINDOW_RESTORE_FAILED")?;
+        window
+            .unminimize()
+            .map_err(|_| "AGENT_WINDOW_RESTORE_FAILED")?;
     }
     window.show().map_err(|_| "AGENT_WINDOW_SHOW_FAILED")?;
-    window.set_focus().map_err(|_| "AGENT_WINDOW_FOCUS_FAILED")?;
+    window
+        .set_focus()
+        .map_err(|_| "AGENT_WINDOW_FOCUS_FAILED")?;
     Ok(())
 }
 
 #[derive(Debug)]
 pub struct RuntimeState {
     pub state: HaloState,
+    pub target: HaloTarget,
     pub revision: u64,
 }
 
@@ -66,6 +75,7 @@ pub struct AppState {
     pub current: Arc<Mutex<RuntimeState>>,
     pub settings: Arc<Mutex<AppSettings>>,
     pub demo_mode: Arc<AtomicBool>,
+    pub cursor_active: Arc<AtomicBool>,
     timeout_tx: mpsc::Sender<TimeoutSchedule>,
 }
 
@@ -81,25 +91,26 @@ fn create_overlay(
     let logical_size = monitor.size().to_logical::<f64>(scale);
     let logical_position = monitor.position().to_logical::<f64>(scale);
 
-    let window = WebviewWindowBuilder::new(app, label, WebviewUrl::App("index.html#overlay".into()))
-        .title("CentralDark Halo")
-        .decorations(false)
-        .transparent(true)
-        .always_on_top(true)
-        .visible_on_all_workspaces(true)
-        .skip_taskbar(true)
-        .visible(false)
-        .resizable(false)
-        .maximizable(false)
-        .minimizable(false)
-        .closable(false)
-        .focused(false)
-        .focusable(false)
-        .shadow(false)
-        .inner_size(logical_size.width, logical_size.height)
-        .position(logical_position.x, logical_position.y)
-        .build()
-        .map_err(|error| error.to_string())?;
+    let window =
+        WebviewWindowBuilder::new(app, label, WebviewUrl::App("index.html#overlay".into()))
+            .title("Segredo Agente Remoto")
+            .decorations(false)
+            .transparent(true)
+            .always_on_top(true)
+            .visible_on_all_workspaces(true)
+            .skip_taskbar(true)
+            .visible(false)
+            .resizable(false)
+            .maximizable(false)
+            .minimizable(false)
+            .closable(false)
+            .focused(false)
+            .focusable(false)
+            .shadow(false)
+            .inner_size(logical_size.width, logical_size.height)
+            .position(logical_position.x, logical_position.y)
+            .build()
+            .map_err(|error| error.to_string())?;
     window
         .set_ignore_cursor_events(true)
         .map_err(|error| error.to_string())?;
@@ -135,7 +146,7 @@ fn sync_overlays(app: &AppHandle) -> Result<Vec<WebviewWindow>, String> {
             None => {
                 let window = create_overlay(app, label.clone(), monitor)?;
                 log::info!(
-                    "Created overlay {label} for display {}x{} at {},{}",
+                    "Sobreposição {label} criada para o monitor {}x{} na posição {},{}",
                     monitor.size().width,
                     monitor.size().height,
                     monitor.position().x,
@@ -144,26 +155,38 @@ fn sync_overlays(app: &AppHandle) -> Result<Vec<WebviewWindow>, String> {
                 window
             }
         };
+        // !RASTRO: restaura a cobertura integral apos um alvo de janela.
+        let scale = monitor.scale_factor();
+        let logical_size = monitor.size().to_logical::<f64>(scale);
+        let logical_pos = monitor.position().to_logical::<f64>(scale);
+        let _ = window.set_size(tauri::LogicalSize::new(
+            logical_size.width,
+            logical_size.height,
+        ));
+        let _ = window.set_position(tauri::LogicalPosition::new(logical_pos.x, logical_pos.y));
         windows.push(window);
     }
 
     for (label, window) in app.webview_windows() {
         if label.starts_with(OVERLAY_PREFIX) && !expected.contains(&label) {
             if let Err(error) = window.destroy() {
-                log::warn!("Could not remove stale overlay {label}: {error}");
+                log::warn!("Não foi possível remover a sobreposição antiga {label}: {error}");
             } else {
-                log::info!("Removed stale overlay {label}");
+                log::info!("Sobreposição antiga {label} removida");
             }
         }
     }
     Ok(windows)
 }
 
-fn render_state(app: &AppHandle, state: HaloState) {
+/// !RASTRO: estado legado ilumina todos; alvo explicito limita a unica janela/superficie.
+/// @owner centraldark-halo-main @doc_ref docs/RELEASE.md
+/// @last_updated 2026-11-19T08:55:00Z
+fn render_state(app: &AppHandle, state: HaloState, target: &HaloTarget) {
     let windows = match sync_overlays(app) {
         Ok(windows) => windows,
         Err(error) => {
-            log::error!("Could not synchronize overlay windows: {error}");
+            log::error!("Não foi possível sincronizar as janelas de sobreposição: {error}");
             return;
         }
     };
@@ -173,7 +196,7 @@ fn render_state(app: &AppHandle, state: HaloState) {
         for window in windows {
             let _ = window.emit("halo-state", payload.clone());
             if let Err(error) = window.hide() {
-                log::warn!("Could not hide {}: {error}", window.label());
+                log::warn!("Não foi possível ocultar {}: {error}", window.label());
             }
         }
         let _ = app.emit("halo-state", payload);
@@ -181,12 +204,39 @@ fn render_state(app: &AppHandle, state: HaloState) {
     }
 
     let payload = serde_json::json!({ "state": state.to_string() });
-    for window in windows {
+    let selected = if matches!(target, HaloTarget::All) {
+        None
+    } else {
+        let mut monitors = match app.available_monitors() {
+            Ok(monitors) => monitors,
+            Err(_) => Vec::new(),
+        };
+        monitors.sort_by_key(|m| {
+            (
+                m.position().x,
+                m.position().y,
+                m.size().width,
+                m.size().height,
+            )
+        });
+        halo_focus::selection(&monitors, target)
+    };
+    for (i, window) in windows.into_iter().enumerate() {
+        let allowed = matches!(target, HaloTarget::All)
+            || selected.as_ref().is_some_and(|(wanted, _)| *wanted == i);
+        if !allowed {
+            let _ = window.hide();
+            continue;
+        }
+        if let Some((_, Some(rect))) = selected {
+            let _ = window.set_position(tauri::PhysicalPosition::new(rect.x, rect.y));
+            let _ = window.set_size(tauri::PhysicalSize::new(rect.width, rect.height));
+        }
         let _ = window.set_always_on_top(true);
         let _ = window.set_ignore_cursor_events(true);
         let _ = window.emit("halo-state", payload.clone());
         if let Err(error) = window.show() {
-            log::warn!("Could not show {}: {error}", window.label());
+            log::warn!("Não foi possível exibir {}: {error}", window.label());
         }
     }
     let _ = app.emit("halo-state", payload);
@@ -196,11 +246,11 @@ fn notify(app: &AppHandle, body: &str) {
     if let Err(error) = app
         .notification()
         .builder()
-        .title("CentralDark Halo")
+        .title("Segredo Agente Remoto")
         .body(body)
         .show()
     {
-        log::warn!("Could not send system notification: {error}");
+        log::warn!("Não foi possível enviar a notificação do sistema: {error}");
     }
 }
 
@@ -209,6 +259,7 @@ fn apply_state(
     current: &Arc<Mutex<RuntimeState>>,
     timeout_tx: &mpsc::Sender<TimeoutSchedule>,
     state: HaloState,
+    target: HaloTarget,
     remaining: Option<Duration>,
 ) {
     let (previous, revision) = {
@@ -217,19 +268,20 @@ fn apply_state(
             .unwrap_or_else(|poisoned| poisoned.into_inner());
         let previous = runtime.state;
         runtime.state = state;
+        runtime.target = target.clone();
         runtime.revision = runtime.revision.wrapping_add(1);
         (previous, runtime.revision)
     };
 
     let delay = remaining.or_else(|| state.timeout_ms().map(Duration::from_millis));
     let _ = timeout_tx.send(TimeoutSchedule { revision, delay });
-    render_state(app, state);
+    render_state(app, state, &target);
 
     if state != previous {
-        log::info!("State: {previous} -> {state}");
+        log::info!("Estado: {previous} -> {state}");
         match state {
-            HaloState::Attention => notify(app, "A CentralDark precisa da sua atenção"),
-            HaloState::Completed => notify(app, "A CentralDark concluiu a etapa"),
+            HaloState::Attention => notify(app, "O Segredo Agente precisa da sua atenção"),
+            HaloState::Completed => notify(app, "O Segredo Agente concluiu a etapa"),
             HaloState::Idle | HaloState::Working => {}
         }
     }
@@ -258,8 +310,15 @@ fn apply_real_event(app: &AppHandle, app_state: &AppState, event: HaloEvent) {
         &app_state.current,
         &app_state.timeout_tx,
         event.state,
+        event.target.clone(),
         remaining,
     );
+    if event.state == HaloState::Working && event.blink_cursor {
+        match halo_focus::cursor_point(app, &event.target) {
+            Some(point) => halo_focus::start_cua_blink(point, app_state.cursor_active.clone()),
+            None => log::warn!("Segredo Agente: alvo não disponível; cursor não acionado"),
+        }
+    }
 }
 
 /// !RASTRO: restaura o ultimo estado Halo validado sem inventar evento ativo.
@@ -273,6 +332,7 @@ pub fn restore_latest_state(app: &AppHandle) {
             &state.current,
             &state.timeout_tx,
             HaloState::Idle,
+            HaloTarget::All,
             None,
         );
         return;
@@ -284,6 +344,7 @@ pub fn restore_latest_state(app: &AppHandle) {
             &state.current,
             &state.timeout_tx,
             HaloState::Idle,
+            HaloTarget::All,
             None,
         ),
     }
@@ -323,7 +384,7 @@ fn start_timeout_worker(
                             .unwrap_or_else(|poisoned| poisoned.into_inner());
                         if runtime.revision == expected_revision && runtime.state != HaloState::Idle
                         {
-                            log::info!("State timeout: {} -> idle", runtime.state);
+                            log::info!("Tempo limite do estado: {} -> idle", runtime.state);
                             runtime.state = HaloState::Idle;
                             runtime.revision = runtime.revision.wrapping_add(1);
                             true
@@ -332,7 +393,7 @@ fn start_timeout_worker(
                         }
                     };
                     if should_hide {
-                        render_state(&app, HaloState::Idle);
+                        render_state(&app, HaloState::Idle, &HaloTarget::All);
                     }
                 }
                 Err(mpsc::RecvTimeoutError::Disconnected) => break,
@@ -349,7 +410,7 @@ pub fn run_demo(app: AppHandle) -> Result<(), String> {
         .unwrap_or_else(|poisoned| poisoned.into_inner())
         .enabled;
     if !enabled {
-        return Err("Ative o Halo antes de iniciar a demonstração".to_owned());
+        return Err("Ative o Segredo Agente antes de iniciar a demonstração".to_owned());
     }
     state
         .demo_mode
@@ -366,10 +427,24 @@ pub fn run_demo(app: AppHandle) -> Result<(), String> {
             (HaloState::Attention, 3_000),
             (HaloState::Completed, 2_000),
         ] {
-            apply_state(&app, &current, &timeout_tx, halo_state, None);
+            apply_state(
+                &app,
+                &current,
+                &timeout_tx,
+                halo_state,
+                HaloTarget::All,
+                None,
+            );
             std::thread::sleep(Duration::from_millis(duration_ms));
         }
-        apply_state(&app, &current, &timeout_tx, HaloState::Idle, None);
+        apply_state(
+            &app,
+            &current,
+            &timeout_tx,
+            HaloState::Idle,
+            HaloTarget::All,
+            None,
+        );
         demo_mode.store(false, Ordering::Release);
         log::info!("Demonstração concluída");
         restore_latest_state(&app);
@@ -383,10 +458,18 @@ pub fn run_demo(app: AppHandle) -> Result<(), String> {
 /// PROVA: inicio nativo, um tray, overlays e comandos do agent-control.
 pub fn run() {
     if let Err(error) = logging::init() {
-        eprintln!("CentralDark Halo logging could not start: {error}");
+        eprintln!("Não foi possível iniciar os registros do Segredo Agente Remoto: {error}");
     }
+    std::panic::set_hook(Box::new(|info| {
+        // Source line only, never the panic payload or local filesystem paths.
+        if let Some(location) = info.location() {
+            log::error!("AGENT_DIAG stage=native_runtime state=error code=RUST_PANIC line={}", location.line());
+        } else {
+            logging::diag("native_runtime", "error", "RUST_PANIC");
+        }
+    }));
     log::info!(
-        "CentralDark Halo v{} starting on {} {}",
+        "Segredo Agente Remoto versão {} iniciando no sistema {} ({})",
         env!("CARGO_PKG_VERSION"),
         std::env::consts::OS,
         std::env::consts::ARCH
@@ -398,6 +481,7 @@ pub fn run() {
     let settings = Arc::new(Mutex::new(AppSettings::load()));
     let current = Arc::new(Mutex::new(RuntimeState {
         state: HaloState::Idle,
+        target: HaloTarget::All,
         revision: 0,
     }));
     let demo_mode = Arc::new(AtomicBool::new(false));
@@ -406,17 +490,18 @@ pub fn run() {
         current: current.clone(),
         settings: settings.clone(),
         demo_mode: demo_mode.clone(),
+        cursor_active: Arc::new(AtomicBool::new(false)),
         timeout_tx: timeout_tx.clone(),
     };
 
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|_, _, _| {
-            log::info!("Ignored a second CentralDark Halo launch");
+            log::info!("Uma segunda inicialização do Segredo Agente Remoto foi ignorada");
         }))
         .plugin(tauri_plugin_notification::init())
         .plugin(
             tauri_plugin_autostart::Builder::new()
-                .app_name("CentralDark Halo")
+                .app_name("Segredo Agente Remoto")
                 .build(),
         )
         .on_window_event(|window, event| {
@@ -432,7 +517,7 @@ pub fn run() {
                 .set_activation_policy(tauri::ActivationPolicy::Accessory)?;
 
             let overlays = sync_overlays(app.handle()).map_err(std::io::Error::other)?;
-            log::info!("Overlay coverage ready for {} display(s)", overlays.len());
+            log::info!("Sobreposições prontas para {} monitor(es)", overlays.len());
             tray::create_tray(app.handle())?;
             // O DEV abre a MESMA janela React automaticamente para personalização;
             // o release mantém o fluxo original de bandeja, sem segunda interface.
@@ -441,6 +526,17 @@ pub fn run() {
                 log::warn!("Agente Remoto DEV: janela indisponível: {error}");
             }
             start_timeout_worker(app.handle().clone(), current.clone(), timeout_rx);
+            // !RASTRO: mesma janela Halo acompanha a aplicacao (sem novo processo).
+            let focus_app = app.handle().clone();
+            let focus_state = current.clone();
+            std::thread::spawn(move || loop {
+                std::thread::sleep(Duration::from_millis(350));
+                let (active, target) = {
+                    let guard = focus_state.lock().unwrap_or_else(|e| e.into_inner());
+                    (guard.state != HaloState::Idle, guard.target.clone())
+                };
+                if active { halo_focus::refresh_window(&focus_app, &target); }
+            });
 
             if let Some(state_file) = platform::state_file_path() {
                 let handle = app.handle().clone();
@@ -449,7 +545,7 @@ pub fn run() {
                     apply_real_event(&handle, &state, event);
                 });
             } else {
-                log::error!("State directory is unavailable; file integration is disabled");
+                log::error!("Diretório de estado indisponível; integração por arquivos desativada");
             }
             if let Some(sessions_dir) = platform::codex_sessions_dir() {
                 let handle = app.handle().clone();
@@ -469,12 +565,13 @@ pub fn run() {
                         &app_state.current,
                         &app_state.timeout_tx,
                         activity.halo_state(),
+                        HaloTarget::All,
                         None,
                     );
                 });
             } else {
                 log::debug!(
-                    "Codex session directory is unavailable; hook integration remains active"
+                    "Diretório de sessões do Codex indisponível; a integração por eventos continua ativa"
                 );
             }
             Ok(())
@@ -487,6 +584,7 @@ pub fn run() {
             session_vault::remote_pairing_status,
             session_vault::start_remote_pairing,
             session_vault::approve_remote_pairing,
+            session_vault::record_remote_diagnostic,
             session_vault::local_bridge_health,
             session_vault::remote_network_status,
             session_vault::open_cockpit_in_browser,
@@ -497,12 +595,12 @@ pub fn run() {
             quit_app
         ])
         .build(tauri::generate_context!())
-        .expect("error while building CentralDark Halo");
+        .expect("Erro ao iniciar o Segredo Agente Remoto");
 
     app.run(|app_handle, event| {
         if let tauri::RunEvent::ExitRequested { .. } = event {
-            render_state(app_handle, HaloState::Idle);
-            log::info!("CentralDark Halo exited");
+            render_state(app_handle, HaloState::Idle, &HaloTarget::All);
+            log::info!("Segredo Agente Remoto encerrado");
         }
     });
 }
@@ -538,6 +636,6 @@ fn open_logs() -> Result<(), String> {
 
 #[tauri::command]
 fn quit_app(app: AppHandle) {
-    render_state(&app, HaloState::Idle);
+    render_state(&app, HaloState::Idle, &HaloTarget::All);
     app.exit(0);
 }

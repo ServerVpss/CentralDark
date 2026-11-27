@@ -56,6 +56,25 @@ class DynamicTargetTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "WINDOW_CONTROL_DISCOVERY_INVALID_RESPONSE"):
                 BLINK.resolve_target("Agente Hermes", "Novo bate-papo")
 
+    def test_click_binds_exact_window(self):
+        with patch.object(BLINK, "call", return_value={"delivery": {"mode": "background"}}) as c:
+            BLINK.dispatch_window_click("driver", "session", 42, 101, 5, 9)
+        c.assert_called_once_with("driver", "session", "click", {
+            "scope": "window", "pid": 42, "window_id": 101,
+            "x": 5, "y": 9, "delivery_mode": "background",
+        })
+
+    def test_rejected_click_is_not_dispatched_or_retried(self):
+        with patch.object(BLINK, "call", return_value={"code": "background_unavailable"}) as c:
+            with self.assertRaisesRegex(RuntimeError, "CUA_CLICK_BACKGROUND_UNAVAILABLE"):
+                BLINK.dispatch_window_click("driver", "session", 42, 101, 5, 9)
+        self.assertEqual(c.call_count, 1)
+
+    def test_unknown_click_error_fails_closed(self):
+        with patch.object(BLINK, "call", return_value={"code": "target_stale"}):
+            with self.assertRaisesRegex(RuntimeError, "CUA_CLICK_NOT_DISPATCHED"):
+                BLINK.dispatch_window_click("driver", "session", 42, 101, 5, 9)
+
     def test_stale_ids_block(self):
         with patch.object(BLINK.subprocess, "run",
                           return_value=self.fake({**TARGET, "hwnd": 0})):

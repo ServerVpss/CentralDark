@@ -3,7 +3,9 @@ param([switch]$Silent)
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $InstallDir = Join-Path $env:LOCALAPPDATA "CentralDark Halo"
-$HaloDir = Join-Path $env:USERPROFILE ".codex-halo"
+$HaloDir = Join-Path $env:USERPROFILE ".centraldark-halo"
+$LegacyHaloDir = Join-Path $env:USERPROFILE ".codex-halo"
+$LegacyAppDir = Join-Path $env:LOCALAPPDATA "Codex Halo"
 $CodexDir = Join-Path $env:USERPROFILE ".codex"
 $ConfigFile = Join-Path $CodexDir "config.toml"
 $LegacyHooksFile = Join-Path $CodexDir "hooks.json"
@@ -59,6 +61,17 @@ if (Test-Path $LegacyHooksFile) {
 }
 
 Get-Process CentralDarkHalo, CodexHalo -ErrorAction SilentlyContinue | Stop-Process -Force
+# Migracao nao destrutiva, somente apos encerrar a versao anterior.
+$OldState = Join-Path $LegacyHaloDir "state.json"
+$NewState = Join-Path $HaloDir "state.json"
+if ((Test-Path $OldState) -and -not (Test-Path $NewState)) {
+    Copy-Item -LiteralPath $OldState -Destination $NewState
+}
+$OldSettings = Join-Path $LegacyAppDir "settings.json"
+$NewSettings = Join-Path $InstallDir "settings.json"
+if ((Test-Path $OldSettings) -and -not (Test-Path $NewSettings)) {
+    Copy-Item -LiteralPath $OldSettings -Destination $NewSettings
+}
 Copy-Item $AppSource $AppDest -Force
 Write-Host "[PASS] Installed $AppDest" -ForegroundColor Green
 
