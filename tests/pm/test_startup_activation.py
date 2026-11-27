@@ -130,3 +130,8 @@ def test_startup_uses_one_verdict(checked_store, monkeypatch, capsys, caplog, su
     else:
         assert all(str(binary.parent) in os.environ["PATH"].split(os.pathsep) for binary in binaries)
         assert "install out of sync" not in diagnostics
+
+
+def test_pnpm_is_optional_at_runtime():
+    """The Docker runtime ships prebuilt JS products and must not report pnpm drift."""
+    assert registry.get_package("pnpm").optional is True

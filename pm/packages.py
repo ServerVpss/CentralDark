@@ -811,6 +811,10 @@ class Pnpm(BinaryPackage):
     (or none) would build them."""
 
     name = "pnpm"
+    # pnpm is a build-time tool. Runtime images intentionally ship the prebuilt
+    # TUI/web products without pnpm, so startup drift checks must not require it.
+    # Explicit build/install callers still use ensure("pnpm", explicit=True).
+    optional = True
     # Lifecycle scripts and node-gyp run on the node pm installs.
     deps = ("node",)
     binary_rel = {"win32": "pnpm.exe", "posix": "pnpm"}
