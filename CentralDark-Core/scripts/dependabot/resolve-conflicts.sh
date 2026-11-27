@@ -654,6 +654,8 @@ fi
 # The WindowsApps python3 alias may launch an incomplete Python distribution.
 # Do not bind COSTURA to Hermes venv; probe a healthy Python before syntax checks.
 # An explicit CENTRALDARK_COSTURA_PYTHON override is validated, never trusted blindly.
+# Probe and validators run inside the PR worktree. Isolate Python so PR modules,
+# PYTHONPATH and user site packages cannot execute with writer credentials.
 costura_python() {
   if [[ -z "${COSTURA_VALIDATED_PYTHON:-}" ]]; then
     local candidate
@@ -663,7 +665,7 @@ costura_python() {
     fi
     for candidate in "${candidates[@]}"; do
       if command -v "$candidate" >/dev/null 2>&1 &&
-        "$candidate" -c 'import ast,enum,pathlib,sys; assert sys.version_info >= (3, 8)' >/dev/null 2>&1; then
+        "$candidate" -I -c 'import ast,enum,pathlib,sys; assert sys.version_info >= (3, 8)' >/dev/null 2>&1; then
         COSTURA_VALIDATED_PYTHON="$candidate"
         break
       fi
@@ -674,7 +676,7 @@ costura_python() {
     fi
     echo "COSTURA_PYTHON_SELECTED=$(command -v "$COSTURA_VALIDATED_PYTHON")"
   fi
-  "$COSTURA_VALIDATED_PYTHON" "$@"
+  "$COSTURA_VALIDATED_PYTHON" -I "$@"
 }
 
 for f in "${CONFLICTS[@]}"; do

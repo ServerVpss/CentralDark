@@ -30,6 +30,11 @@
 #   GIT_AUTHOR_NAME   default CentralDark Bot
 #   GIT_AUTHOR_EMAIL  default bot@centralldark.com
 #   SOURCE_ROOT       raiz com payload ja gerado (default: cwd)
+#   PAYLOAD_BASE_SHA  commit usado para preparar o payload (default: HEAD inicial);
+#                     imutavel durante retries; mudanca remota no escopo bloqueia
+#   PYTHON_BIN        Python comprovado para gates (default: python)
+#   WRITER_SPARSE     1 = materializar somente contrato + escopo no worktree
+#   WRITER_SPARSE_PATHS paths extras para dependencias dos gates, separados por espaco
 # =============================================================================
 set -euo pipefail
 
@@ -44,8 +49,24 @@ MAX_TRIES="${MAX_TRIES:-3}"
 GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-CentralDark Bot}"
 GIT_AUTHOR_EMAIL="${GIT_AUTHOR_EMAIL:-bot@centralldark.com}"
 SOURCE_ROOT="${SOURCE_ROOT:-$(pwd)}"
+PAYLOAD_BASE_SHA="${PAYLOAD_BASE_SHA:-$(git rev-parse HEAD)}"
+PYTHON_BIN="${PYTHON_BIN:-python}"
+WRITER_SPARSE="${WRITER_SPARSE:-0}"
+WRITER_SPARSE_PATHS="${WRITER_SPARSE_PATHS:-}"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 cd "$REPO_ROOT"
+
+if ! [[ "$WRITER_TAG" =~ ^[A-Za-z0-9_-]+$ && "$MAX_TRIES" =~ ^[1-9][0-9]*$ ]] ||
+   ! [[ "$WRITER_SPARSE" == 0 || "$WRITER_SPARSE" == 1 ]]; then
+  echo "WRITER_ARGUMENT_INVALID=1" >&2
+  exit 2
+fi
+if ! [[ "$PAYLOAD_BASE_SHA" =~ ^[0-9a-fA-F]{40}$|^[0-9a-fA-F]{64}$ ]] ||
+   ! git cat-file -e "$PAYLOAD_BASE_SHA^{commit}" 2>/dev/null; then
+  echo "${WRITER_TAG}_PAYLOAD_BASE_INVALID=1" >&2
+  exit 2
+fi
+readonly PAYLOAD_BASE_SHA
 
 # shellcheck disable=SC2206
 if [ "$AUTO_DISCOVER" = "1" ]; then
@@ -138,10 +159,38 @@ if [ -z "$REGENERATE_CMD" ] && ! has_payload; then
   exit 0
 fi
 
+TASK_TEMP="$(mktemp -d "${RUNNER_TEMP:-${TMPDIR:-/tmp}}/writer-${WRITER_TAG}.XXXXXX")"
+WORKTREE=""
+cleanup_worktree() {
+  [ -n "$WORKTREE" ] || return 0
+  if git worktree remove --force "$WORKTREE" 2>/dev/null; then
+    WORKTREE=""
+    return 0
+  fi
+  echo "${WRITER_TAG}_WORKTREE_PRESERVED=$WORKTREE" >&2
+  return 1
+}
+cleanup_writer() {
+  local result=$?
+  trap - EXIT
+  if ! cleanup_worktree; then
+    echo "${WRITER_TAG}_TEMP_PRESERVED=$TASK_TEMP" >&2
+    exit 1
+  fi
+  # mktemp created this exact private directory; never prune other worktrees.
+  if ! rm -rf -- "$TASK_TEMP"; then
+    echo "${WRITER_TAG}_TEMP_CLEANUP_FAILED=$TASK_TEMP" >&2
+    exit 1
+  fi
+  exit "$result"
+}
+trap cleanup_writer EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
 PAYLOAD_DIR=""
 if [ -z "$REGENERATE_CMD" ]; then
-  PAYLOAD_DIR="${RUNNER_TEMP:-/tmp}/writer-payload-${WRITER_TAG}-$$"
-  rm -rf "$PAYLOAD_DIR"
+  PAYLOAD_DIR="$TASK_TEMP/payload"
   mkdir -p "$PAYLOAD_DIR"
   for p in "${PATH_ARR[@]}"; do
     if [ -e "$SOURCE_ROOT/$p" ]; then
@@ -155,14 +204,52 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   echo "🔄 ${WRITER_TAG} tentativa $TRY/$MAX_TRIES"
   git fetch --no-tags origin refs/heads/main
   BASE_SHA="$(git rev-parse FETCH_HEAD)"
-  WORKTREE="${RUNNER_TEMP:-/tmp}/writer-wt-${WRITER_TAG}-${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-0}-${TRY}-$$"
+  # Scope CAS: a fresh checkout alone cannot make an old whole-file payload safe.
+  # Keep the preparation base fixed across retries; unrelated main advances are OK.
+  if ! git diff --quiet "$PAYLOAD_BASE_SHA" "$BASE_SHA" -- "${PATH_ARR[@]}"; then
+    echo "${WRITER_TAG}_BLOCKED_SCOPED_DRIFT payload_base=$PAYLOAD_BASE_SHA remote=$BASE_SHA" >&2
+    exit 21
+  fi
+  if git cat-file -e "$BASE_SHA:CentralDark-Core/CENTRALDARK_AI_BOOT.yaml" 2>/dev/null; then
+    CONTRACT_PREFIX="CentralDark-Core/"
+  else
+    CONTRACT_PREFIX=""
+  fi
+  WORKTREE="$TASK_TEMP/worktree-$TRY"
 
   if [ -e "$WORKTREE" ]; then
     echo "❌ WORKTREE_TEMP_JA_EXISTE=$WORKTREE"
     exit 1
   fi
 
-  git worktree add --detach "$WORKTREE" "$BASE_SHA"
+  if [ "$WRITER_SPARSE" = "1" ]; then
+    git worktree add --detach --no-checkout "$WORKTREE" "$BASE_SHA"
+    # info/sparse-checkout belongs to this linked worktree. Per-command config
+    # avoids changing core.sparseCheckout or extensions.worktreeConfig for Casa.
+    SPARSE_FILE="$(git -C "$WORKTREE" rev-parse --path-format=absolute --git-path info/sparse-checkout)"
+    mkdir -p "$(dirname "$SPARSE_FILE")"
+    {
+      printf '/*\n!/*/\n/.github/\n'
+      if [ -n "$CONTRACT_PREFIX" ]; then
+        printf '/CentralDark-Core/*\n!/CentralDark-Core/*/\n'
+      fi
+      for p in docs scripts .agents .github .claude skills; do
+        printf '/%s%s/\n' "$CONTRACT_PREFIX" "$p"
+      done
+      for p in "${PATH_ARR[@]}"; do printf '/%s\n' "$p"; done
+      read -r -a SPARSE_EXTRA_ARR <<< "$WRITER_SPARSE_PATHS"
+      for p in "${SPARSE_EXTRA_ARR[@]}"; do
+        if ! [[ "$p" =~ ^[[:alnum:]_.@/-]+$ ]] || [[ "$p" == /* || "$p" == *..* ]]; then
+          echo "${WRITER_TAG}_SPARSE_PATH_INVALID=1" >&2
+          exit 2
+        fi
+        printf '/%s\n' "$p"
+      done
+    } > "$SPARSE_FILE"
+    git -C "$WORKTREE" -c core.sparseCheckout=true -c core.sparseCheckoutCone=false read-tree -mu HEAD
+  else
+    git worktree add --detach "$WORKTREE" "$BASE_SHA"
+  fi
 
   # Não execute o corpo dentro de `if ( ... )`: Bash desativa `errexit`
   # para comandos usados como condição, o que pode transformar gate vermelho
@@ -172,8 +259,7 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   (
     set -euo pipefail
     cd "$WORKTREE"
-    git config user.name "$GIT_AUTHOR_NAME"
-    git config user.email "$GIT_AUTHOR_EMAIL"
+    CONTRACT_ROOT="$WORKTREE/${CONTRACT_PREFIX%/}"
 
     if [ -n "$REGENERATE_CMD" ]; then
       # Não carregar perfil/rc/BASH_ENV aqui. Bootstrap de shell pode executar `cd` e tirar
@@ -206,15 +292,15 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
       exit 0
     fi
 
-    git commit -m "$COMMIT_MESSAGE"
+    git -c user.name="$GIT_AUTHOR_NAME" -c user.email="$GIT_AUTHOR_EMAIL" commit -m "$COMMIT_MESSAGE"
 
     HEAD_SHA="$(git rev-parse HEAD)"
     echo "🚪 Gate global pré-main tag=$WRITER_TAG base=${BASE_SHA:0:12} head=${HEAD_SHA:0:12}"
-    if [ -f scripts/trigger-fabric/verify_repo_contract.py ]; then
-      python scripts/trigger-fabric/verify_repo_contract.py .
+    if [ -f "$CONTRACT_ROOT/scripts/trigger-fabric/verify_repo_contract.py" ]; then
+      (cd "$CONTRACT_ROOT" && "$PYTHON_BIN" scripts/trigger-fabric/verify_repo_contract.py .)
     fi
 
-    RESPONSE_CONTRACT="docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
+    RESPONSE_CONTRACT="$CONTRACT_ROOT/docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
     test -f "$RESPONSE_CONTRACT" || {
       echo "CHEFE_SYSTEMATIC_PROOF_CONTRACT=FAIL reason=MISSING_OWNER"
       exit 1
@@ -241,8 +327,11 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
     done
     echo "CHEFE_SYSTEMATIC_PROOF_CONTRACT=PASS"
 
-    node scripts/lupa/validar-continuidade-global.mjs
-    node scripts/lupa/validar-porta-de-entrada.mjs
+    (
+      cd "$CONTRACT_ROOT"
+      node scripts/lupa/validar-continuidade-global.mjs --repo-root .
+      node scripts/lupa/validar-porta-de-entrada.mjs --repo-root .
+    )
 
     if git push origin HEAD:main; then
       REMOTE_HEAD="$(git ls-remote origin refs/heads/main | cut -f1)"
@@ -261,24 +350,18 @@ for TRY in $(seq 1 "$MAX_TRIES"); do
   STATUS=$?
   set -e
 
-  if ! git worktree remove --force "$WORKTREE" 2>/dev/null; then
-    rm -rf "$WORKTREE" || true
-    git worktree prune || true
-  fi
+  cleanup_worktree || exit 1
 
   if [ "$STATUS" -eq 0 ]; then
-    [ -n "$PAYLOAD_DIR" ] && rm -rf "$PAYLOAD_DIR" || true
     exit 0
   fi
   if [ "$STATUS" -ne 75 ]; then
     echo "❌ ${WRITER_TAG}_FAIL status=$STATUS (nao concorrencial)"
-    [ -n "$PAYLOAD_DIR" ] && rm -rf "$PAYLOAD_DIR" || true
     exit "$STATUS"
   fi
 
   sleep 2
 done
 
-[ -n "$PAYLOAD_DIR" ] && rm -rf "$PAYLOAD_DIR" || true
 echo "${WRITER_TAG}_BLOCKED_DIVERGENCE apos ${MAX_TRIES} tentativas"
 exit 1

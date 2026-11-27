@@ -11,7 +11,7 @@
     "ONE_CLOCK": true,
     "ONE_DISPATCHER": true,
     "FAMILY_COUNT": 7,
-    "WORKFLOW_COUNT_BASELINE": 73,
+    "WORKFLOW_COUNT_BASELINE": 74,
     "SCHEDULE_OUTSIDE_CLOCK": "FORBIDDEN",
     "UNREGISTERED_WORKFLOW": "FAIL",
     "CAPABILITY_LOSS_ALLOWED": false,
@@ -103,9 +103,10 @@
       ]
     },
     "SENTINELA_OBSERVABILIDADE": {
-      "count": 11,
+      "count": 12,
       "workflows": [
         ".github/workflows/capsula-observavel.yml",
+        ".github/workflows/ci-failed-run-watchdog.yml",
         ".github/workflows/hermes-core-signal-watch.yml",
         ".github/workflows/lupa-drift-guard.yml",
         ".github/workflows/painel-vivo.yml",
@@ -433,6 +434,20 @@
           "arm": "GITHUB_REPOSITORY_DISPATCH",
           "event_type": "centraldark_update_branch_reconcile",
           "idempotent_same_target": true
+        }
+      ]
+    },
+    {
+      "cron": "*/5 * * * *",
+      "workflow": ".github/workflows/ci-failed-run-watchdog.yml",
+      "family": "SENTINELA_OBSERVABILIDADE",
+      "dispatch": "workflow_dispatch",
+      "ref": "main",
+      "capability": "CI_FAILED_RUN_WATCHDOG",
+      "target_ref": "main",
+      "arms": [
+        {
+          "arm": "GITHUB_WORKFLOW_DISPATCH"
         }
       ]
     }

@@ -299,7 +299,7 @@ jobs:
         # receivers need it, and so does a stable-branded channel before any
         # stable release has published a channel record to copy.
         if: (inputs.disposable_channel != '' && inputs.disposable_receivers) || inputs.branding == 'stable'
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: node
           cache-python: false
@@ -487,7 +487,7 @@ jobs:
 
       - name: Restore desktop dependency inputs
         id: build-cache
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: restore
           source: ${{ github.workspace }}
@@ -511,7 +511,7 @@ jobs:
 
       - name: Save dependency inputs before building
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' && inputs.build_commit == '' && inputs.channel == '' }}
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: save
           source: ${{ github.workspace }}
@@ -873,7 +873,7 @@ jobs:
 
       - name: Restore desktop dependency inputs
         id: build-cache
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: restore
           source: ${{ github.workspace }}
@@ -897,7 +897,7 @@ jobs:
 
       - name: Save dependency inputs before building
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' && inputs.build_commit == '' && inputs.channel == '' }}
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: save
           source: ${{ github.workspace }}
@@ -1241,7 +1241,7 @@ jobs:
       # Workspace-relative: in a job container github.workspace and runner.temp name host paths.
       - name: Restore desktop dependency inputs
         id: build-cache
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: restore
           source: .
@@ -1266,7 +1266,7 @@ jobs:
 
       - name: Save dependency inputs before building
         if: ${{ !cancelled() && steps.prepare.outcome == 'success' && inputs.build_commit == '' && inputs.channel == '' }}
-        uses: ./.github/actions/desktop-build-cache
+        uses: $/.github/actions/desktop-build-cache
         with:
           phase: save
           source: .
@@ -1392,7 +1392,7 @@ jobs:
           fetch-depth: 0
           filter: blob:none
           fetch-tags: true
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - id: receipt
@@ -1563,7 +1563,7 @@ jobs:
         run: python -m scripts.releases.channel_publish request --out "$RUNNER_TEMP/channel-request.json"
 
       - name: Set up the locked build toolchain
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           archive-inputs: ${{ inputs.disposable_run == '' && inputs.disposable_channel == '' }}
@@ -1784,7 +1784,7 @@ jobs:
 
       - name: Set up the locked build toolchain
         id: pm
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: python
           # scripts/termux/build.py installs and builds the TUI on this host with pnpm.
@@ -2176,7 +2176,7 @@ jobs:
       - uses: useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a  # v1
         with:
           ref: ${{ needs.validate.outputs.sha }}
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - run: python -m scripts.bundles.release_artifacts publish --root verified
@@ -2212,7 +2212,7 @@ jobs:
       - uses: useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a  # v1
         with:
           ref: ${{ needs.validate.outputs.sha }}
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - name: Retrieve the exact Store candidate

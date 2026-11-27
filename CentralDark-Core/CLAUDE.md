@@ -469,7 +469,7 @@ Quando a intenção envolver conector, provider, OAuth, API key, modelo, Abacus,
 MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.md
 MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.json
 MODULES/HUB/CENTRALDARK-HUB-CREDENTIAL-CONTROL-PLANE.yml
-.agents/skills/centraldark-hub-credential-control-plane/SKILL.md
+.agents/skills/centraldark-operational-method/Skills/centraldark-hub-credential-control-plane/SKILL.md
 ```
 
 Fluxo:

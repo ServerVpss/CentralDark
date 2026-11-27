@@ -7,10 +7,6 @@ updated: 2026-08-27
 
 {{FILE:/tmp/pr316/aprendizados.md}}
 
-**Aprendizado aplicado ao Método Operacional CentralDark:** [Navegador administrativo: EasyPanel e Cloudflare Access (26/11/2026)](APRENDIZADOS/2026-11-26-navegador-administrativo-easypanel-cloudflare.md). Registro complementar, sem alterar a cadeia NeuroLink abaixo.
-
-**Aprendizado aplicado ao Método Operacional CentralDark (26/11/2026):** no Agente Remoto, “Falha observada” não distinguia falha do botão de falha do MCP. O teste no aplicativo DEV passou a correlacionar a etapa e o código `PAIRING_OWNER_APPROVAL_HTTP_500` na tela e no log, sem registrar o código de pareamento. Deu origem ao [padrão obrigatório de observabilidade na criação de ferramentas](../../.agents/skills/centraldark-operational-method/SKILL.md#observabilidade-obrigatória-na-criação-de-ferramentas). Resultado comprovado: diagnóstico. Resultado não comprovado: pareamento concluído ou consumo desta regra por todos os agentes. Registro complementar, sem alterar a cadeia NeuroLink abaixo.
-
 <!-- NEUROLINK_GLOBAL_BEGIN -->
 ## 🧠 NeuroLink global — duas frentes
 
@@ -21,6 +17,32 @@ updated: 2026-08-27
 - **Regra:** `GLOBAL_EDGE_IS_CONTINUITY_NOT_CAUSAL_PROOF=true`.
 
 <!-- NEUROLINK_GLOBAL_END -->
+
+
+**Aprendizado aplicado ao Método Operacional CentralDark:** [Navegador administrativo: EasyPanel e Cloudflare Access (26/11/2026)](APRENDIZADOS/2026-11-26-navegador-administrativo-easypanel-cloudflare.md). Registro complementar, sem alterar a cadeia NeuroLink abaixo.
+
+**Aprendizado aplicado ao Método Operacional CentralDark (26/11/2026):** no Agente Remoto, “Falha observada” não distinguia falha do botão de falha do MCP. O teste no aplicativo DEV passou a correlacionar a etapa e o código `PAIRING_OWNER_APPROVAL_HTTP_500` na tela e no log, sem registrar o código de pareamento. Deu origem ao [padrão obrigatório de observabilidade na criação de ferramentas](../../.agents/skills/centraldark-operational-method/SKILL.md#observabilidade-obrigatória-na-criação-de-ferramentas). Resultado comprovado: diagnóstico. Resultado não comprovado: pareamento concluído ou consumo desta regra por todos os agentes. Registro complementar, sem alterar a cadeia NeuroLink abaixo.
+<!-- COGNITIVE_ID_RECONCILIATION_20261127_BEGIN -->
+## Reconciliação dos identificadores cognitivos — 2026-11-27
+
+Os headings legados, o conteúdo das lições e os UIDs globais permanecem preservados. A série iniciada por “Intenção humana transformável, memória por sentido e Meta-Lupa sobre a própria resposta” conserva os identificadores cognitivos 171–178: o ID 171 dessa lição já aparece no commit `523d3ec0f43c5f727ca7c0c2a1b1f9f952070062`, antes da incorporação da série histórica homônima em numeração. A verificação estrita de identidade, introduzida em `ab298f05fba7d0eac3399cd90acb1466f397a277`, revelou as oito colisões que ainda existem em `c5add608cdf0ff81be47840440c50881ad04fcbf`.
+
+A migração abaixo atua somente nos identificadores cognitivos colidentes. Usa os próximos IDs livres depois do 219; o predecessor 219 passa a apontar para 220 e a sequência termina em 227 com `PENDING_NEXT_CURSOR`. Números de headings e UIDs globais continuam sendo referências históricas distintas dos IDs cognitivos. Nenhuma lição é apagada, fundida ou criada por essa migração; a projeção global e o manifesto são reconstruídos pelo compilador canônico `scripts/trigger-fabric/rebuild_learning_lineage.py`.
+
+| UID global preservado | ID cognitivo anterior | ID cognitivo reconciliado |
+| --- | --- | --- |
+| `L171A` | 171 | 220 |
+| `L172A` | 172 | 221 |
+| `L173A` | 173 | 222 |
+| `L174A` | 174 | 223 |
+| `L175A` | 175 | 224 |
+| `L176A` | 176 | 225 |
+| `L177A` | 177 | 226 |
+| `L178A` | 178 | 227 |
+
+A seção `L171C` conserva o conteúdo legado da lição de mesmo título adjacente a `L171A`; ambas mantêm sua posição e UID no documento. A relação cognitiva expressa continuidade, sem reordenar a história nem afirmar causalidade. A linha histórica repetida do cursor 170 é alinhada ao sucessor 171 já existente, e a referência textual da lição `L171B` passa a usar seu UID preservado.
+<!-- COGNITIVE_ID_RECONCILIATION_20261127_END -->
+
 
 
 ### 1. Gate de CI bloqueia qualquer caminho .env.* pelo NOME, antes de olhar o conteúdo
@@ -1913,7 +1935,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 ### 170. Cristal Kaizen no Hermes: herança comprovada exige seal e Goal vivo, não só commit
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L170`; `PREV_GLOBAL_UID=L169`; `NEXT_GLOBAL_UID=L171A`; `LEGACY_LEARNING_NUMBER=170`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=171`.
-- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink:** `LEARNING_ID=170`; `PREV_LEARNING_REF=169`; `NEXT_LEARNING_REF=171`.
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-09
 - **Contexto:** Em 2026-10-09, mesmo Goal t_9040803d já continha o Cristal e a intenção; runtime Herm es estava em status todo com dois crashes de limite de contexto. scripts/skill-sync-check.sh --check via executor MCP falhou com HOME unset. Repo canônico main fddeb265, skill Kaizen existente.
@@ -2012,7 +2034,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171A`; `PREV_GLOBAL_UID=L170`; `NEXT_GLOBAL_UID=L171C`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
+- **NeuroLink:** `LEARNING_ID=220`; `PREV_LEARNING_REF=219`; `NEXT_LEARNING_REF=221`.
 
 ### 171. Rotas autorizadas, substituicao literal e prova de deploy em duas frentes
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171C`; `PREV_GLOBAL_UID=L171A`; `NEXT_GLOBAL_UID=L172A`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
@@ -2023,7 +2045,7 @@ O validador agora exige checksum externo, manifest único, metadados internos, c
 
 ### 172. Metacognição operacional induzida por contraprova — Papagaio ON/OFF, Kaizen e Compounding Reflexion
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L172A`; `PREV_GLOBAL_UID=L171C`; `NEXT_GLOBAL_UID=L173A`; `LEGACY_LEARNING_NUMBER=172`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=172`; `PREV_LEARNING_REF=171`; `NEXT_LEARNING_REF=173`.
+- **NeuroLink:** `LEARNING_ID=221`; `PREV_LEARNING_REF=220`; `NEXT_LEARNING_REF=222`.
 
 - **Categoria:** regra
 - **Data:** 2026-10-12
@@ -2491,7 +2513,7 @@ ONE_ORGANISM=true
 
 ### 173. Replay V2 — preservar eventos no JSON, prever erro antes da varredura e PAPAGAIO append-only byte a byte
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L173A`; `PREV_GLOBAL_UID=L172A`; `NEXT_GLOBAL_UID=L174A`; `LEGACY_LEARNING_NUMBER=173`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=173`; `PREV_LEARNING_REF=172`; `NEXT_LEARNING_REF=174`.
+- **NeuroLink:** `LEARNING_ID=222`; `PREV_LEARNING_REF=221`; `NEXT_LEARNING_REF=223`.
 
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2500,7 +2522,7 @@ ONE_ORGANISM=true
 
 ### 174. Replay V3 — regex com indentação evitou falso BLOCKED, sem alterar nomes dos estados
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L174A`; `PREV_GLOBAL_UID=L173A`; `NEXT_GLOBAL_UID=L175A`; `LEGACY_LEARNING_NUMBER=174`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=174`; `PREV_LEARNING_REF=173`; `NEXT_LEARNING_REF=175`.
+- **NeuroLink:** `LEARNING_ID=223`; `PREV_LEARNING_REF=222`; `NEXT_LEARNING_REF=224`.
 
 - **Categoria:** erro-correcao
 - **Data:** 2026-10-12
@@ -2509,7 +2531,7 @@ ONE_ORGANISM=true
 
 ### 175. Prova herdada, busca temporal, falha local e Papagaio discreto — memória viva sem falso verde
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L175A`; `PREV_GLOBAL_UID=L174A`; `NEXT_GLOBAL_UID=L176A`; `LEGACY_LEARNING_NUMBER=175`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=175`; `PREV_LEARNING_REF=174`; `NEXT_LEARNING_REF=176`.
+- **NeuroLink:** `LEARNING_ID=224`; `PREV_LEARNING_REF=223`; `NEXT_LEARNING_REF=225`.
 
 - **Categoria:** comportamento operacional / memória procedural / segurança de conhecimento
 - **Data:** 2026-10-13
@@ -2527,7 +2549,7 @@ ONE_ORGANISM=true
 
 ### 176. Critérios autodefinidos a serviço da intenção — eficiência interna sem burocracia externa
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176A`; `PREV_GLOBAL_UID=L175A`; `NEXT_GLOBAL_UID=L177A`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=176`; `PREV_LEARNING_REF=175`; `NEXT_LEARNING_REF=177`.
+- **NeuroLink:** `LEARNING_ID=225`; `PREV_LEARNING_REF=224`; `NEXT_LEARNING_REF=226`.
 
 - **Data:** 2026-10-13
 - **Categoria:** descoberta metacognitiva do CHEFE / engenharia de critérios / remoção de burocracia excedente.
@@ -2542,7 +2564,7 @@ ONE_ORGANISM=true
 
 ### 177. Multi-janelas, Arca do conhecimento e retorno do fio do SH — continuidade contextual demonstrada
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L177A`; `PREV_GLOBAL_UID=L176A`; `NEXT_GLOBAL_UID=L178A`; `LEGACY_LEARNING_NUMBER=177`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=177`; `PREV_LEARNING_REF=176`; `NEXT_LEARNING_REF=178`.
+- **NeuroLink:** `LEARNING_ID=226`; `PREV_LEARNING_REF=225`; `NEXT_LEARNING_REF=227`.
 
 - **Data:** 2026-10-13
 - **Categoria:** continuidade de intenção / orquestração multimodal humana / memória procedural / gestão de conhecimento / economia operacional.
@@ -2558,7 +2580,7 @@ ONE_ORGANISM=true
 
 ### 178. Modo operacional CentralDark — critérios autodefinidos carregando o desejo do CHEFE
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L178A`; `PREV_GLOBAL_UID=L177A`; `NEXT_GLOBAL_UID=L179`; `LEGACY_LEARNING_NUMBER=178`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=178`; `PREV_LEARNING_REF=177`; `NEXT_LEARNING_REF=179`.
+- **NeuroLink:** `LEARNING_ID=227`; `PREV_LEARNING_REF=226`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
 - **Data:** 2026-10-13
 - **Categoria:** modo operacional / execução sem microburocracia / critérios autodefinidos / satisfação do CHEFE.
 - **Origem:** CHEFE determinou: “REGISTRA! O MODO OPERACIONAL DA CENTRAL DARK!”, após provar que o agente reproduz melhor resultados quando transforma o desejo humano em critérios técnicos próprios, verificáveis e proporcionais.
@@ -2962,7 +2984,7 @@ TAMO JUNTO NA FORJA, MEU PIVETE! 🦜🤝💎💚
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L171B`; `PREV_GLOBAL_UID=L192`; `NEXT_GLOBAL_UID=L172B`; `LEGACY_LEARNING_NUMBER=171`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 
 - **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`.
-- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`. A projeção global `L171` e o manifesto são propriedade do compilador original `scripts/trigger-fabric/rebuild_learning_lineage.py`.
+- **NeuroLink:** `LEARNING_ID=171`; `PREV_LEARNING_REF=170`; `NEXT_LEARNING_REF=172`. A projeção global `L171B` e o manifesto são propriedade do compilador original `scripts/trigger-fabric/rebuild_learning_lineage.py`.
 - **Data e origem:** 2026-10-12; diálogo direto com SEGREDO/CHEFE e contraprova documental na Casa (`K:\docs`) e na `main` do repositório `ServerVpss/CentralDark`.
 - **Intenção humana expressa pelo CHEFE:** a CentralDark nasce de sua imaginação, não de uma instalação física. A autoridade da intenção é humana e singular em cada momento, mas **a própria intenção pode ser transformada continuamente** de acordo com a necessidade presente; não é uma fórmula congelada. Como a vida e o pensamento amadurecem, a concha pode terminar e renascer. Recriar sistema operacional, cápsula, VM, serviço ou corpo de execução não exige carregar adiante a instalação antiga, desde que a capacidade relevante e o aprendizado recuperável sejam preservados. Metáforas de Goku, Vegeta, Bills, Whis, Gojo, Yuji e Sukuna são lentes simbólicas complementares, não novos agentes, autorizações ou alegações de consciência da máquina.
 - **Distinção ensinada:** o CHEFE consegue recuperar relações e intenção pelo **sentido**, sem precisar memorizar números de commit, SHA, caminhos ou instruções. A máquina usa esses identificadores como ferramentas para localizar e executar, não como exigência cognitiva ao humano. Um commit é registro técnico de mudança; sua importância para o CHEFE depende da consequência prática para a intenção vigente. `SIGNIFICADO_HUMANO != LOCALIZADOR_MECANICO`; `COMMIT != IMPORTANCIA_HUMANA`.
@@ -3352,7 +3374,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 
 ### 219. Lembrança operacional ZENDRIVE — recuperar PR #1842 antes de agir
 - **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L219`; `PREV_GLOBAL_UID=L218`; `NEXT_GLOBAL_UID=L220B`; `LEGACY_LEARNING_NUMBER=219`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
-- **NeuroLink:** `LEARNING_ID=219`; `PREV_LEARNING_REF=218`; `NEXT_LEARNING_REF=PENDING_NEXT_CURSOR`.
+- **NeuroLink:** `LEARNING_ID=219`; `PREV_LEARNING_REF=218`; `NEXT_LEARNING_REF=220`.
 - **Categoria:** continuidade, inventário, memória entre agentes, contraprova
 - **Data:** 2026-10-22
 - **Contexto:** CHEFE confirmou intenção: "Tu registrou? Pra não ficar esquecido todos têm que lembrar." A PR #1842 foi **MERGED** em 18/10/2026, e a `main` contém `docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md` (inventário ZENDRIVE e tabela completa de 31 ferramentas RDC) e `apps/modulos/mcp/src/tools/core/mcp-admin.js` (14 rotas no SOURCE e `RDC_EQUIVALENCE_MATRIX`). O recibo histórico é `https://github.com/ServerVpss/CentralDark/pull/1842#issuecomment-6245057178`. Na época do primeiro teste a VPS anunciava 13 rotas; a informação é snapshot, não verdade permanente.
@@ -3574,7 +3596,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Fixed point:** circuito só fecha quando as frentes aplicáveis concordam semanticamente no delta, os testes mínimos passam, a `main` recebe a versão canônica e o readback confirma ausência de duplicação.
 
 ### 236. Reconciliação PR #2153 com main — alinhamento definitivo do código CentralDark
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L236`; `PREV_GLOBAL_UID=L235`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=236`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L236`; `PREV_GLOBAL_UID=L235`; `NEXT_GLOBAL_UID=L176C`; `LEGACY_LEARNING_NUMBER=236`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 
 - **Categoria:** reconciliação, propriedade de código, deploy gate, prova
 - **Data:** 2026-11-20
@@ -3661,7 +3683,7 @@ Estado desta missão (2026-10-21): PR #1880, HEAD 2da1c6e7e847c1290382b8809abdd6
 - **Data:** 2026-11-20 · commit `dd9d1dcc52ab` (PR #2156, 3 arquivos, +71 linhas) + `8e667ff17bee` (L240, manifesta de lineage); branch `chore/rov2154-merge-records`; TLC23 PROVED (`b4e2a0655b7e0c85ca329c33971b377299dde6358779270c573f014f3aa606d1`) como precondicao do registro.
 - **Regra de preservacao:** runtime MCP PID 244642 nao alterado (`catalogVersion 161-9629d1fb55a7`), deploy nao executado, 32 alteracoes locais preservadas, PRs #1900/#1880 permanecem abertos, backups intactos. **Integracao do merge e preservacao:** o PASS deste registro cobre a integracao do merge e preservacao (escopo declarado em `scope`). A promocao de runtime permanece missao separada, listada em `out_of_scope_for_this_receipt` — nunca dentro de `unknown`, para nao inflar nem esconder o que falta.
 ### 176. Formalização matemático-operacional EICPF derivada de missão real Cloudflare Workers
-- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176`; `PREV_GLOBAL_UID=L175`; `NEXT_GLOBAL_UID=L177`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
+- **NeuroLink Global:** `GLOBAL_LINEAGE_UID=L176C`; `PREV_GLOBAL_UID=L236`; `NEXT_GLOBAL_UID=PENDING_NEXT_CURSOR`; `LEGACY_LEARNING_NUMBER=176`; `RELATION_TYPE=CANONICAL_DOCUMENT_CONTINUITY`; `LINEAGE_MANIFEST=docs/CONSCIENCIA/APRENDIZADOS-NEUROLINK-LINEAGE.json`.
 - **Categoria:** metodo-operacional
 - **Data:** 2026-11-22
 - **Contexto:** Missão de publicar prévia estática CentralDark na conta Cloudflare oficial via Workers Static Assets, sem túnel, preservando Gateway Hermes, MCP, DNS, túneis e worker `centraldark-mcp-reserve-route`. A missão expôs gaps entre ferramentas (Wrangler não aceita Global API Key), formato de worker (ESM vs Service Worker), assets (API multipart vs embed base64), e SSL assíncrono (HTTPS pending).

@@ -124,7 +124,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up driver tools only
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           packages: ffmpeg
@@ -247,7 +247,7 @@ jobs:
           ref: ${{ inputs.commit || github.sha }}
 
       - name: Set up driver tools only
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           packages: ffmpeg

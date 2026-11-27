@@ -27,7 +27,7 @@ jobs:
           ref: ${{ inputs.commit }}
       - name: Set up the locked JS build toolchain
         id: node
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           # Desktop checks also run Python payload and icon build helpers, and
           # the electron contracts drive real hermes_cli/pm code through
