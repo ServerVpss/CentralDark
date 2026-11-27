@@ -3,7 +3,7 @@ param([switch]$Purge)
 $ErrorActionPreference = "Stop"
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $InstallDir = Join-Path $env:LOCALAPPDATA "CentralDark Halo"
-$HaloDir = Join-Path $env:USERPROFILE ".codex-halo"
+$HaloDir = Join-Path $env:USERPROFILE ".centraldark-halo"
 $ConfigFile = Join-Path (Join-Path $env:USERPROFILE ".codex") "config.toml"
 $LegacyHooksFile = Join-Path (Join-Path $env:USERPROFILE ".codex") "hooks.json"
 $Manager = Join-Path $HaloDir "Manage-CentralDark-HaloHooks.ps1"

@@ -10,6 +10,10 @@ Receita operacional unica: [centraldark-builder-destop](../Skills/centraldark-bu
 
 [Reflective Intent Dialogue](../Skills/centraldark-dialogo-reflexivo-da-intencao/SKILL.md): escuta reflexiva, reparo conversacional, metacomunicação e continuidade da intenção. Seleção: qualquer conversa CentralDark, correção, nova ideia lateral, ou observação que não deve interromper missão ativa. Sempre conectado à Skill Mãe; operacionalmente junto de Kimetsu Remix + Michelin 3 Estrelas. Skill catalogada não comprova consumo do Hermes.
 
+## Navegador administrativo
+
+Gatilhos: conferir painel, botão, formulário, configuração, EasyPanel ou Cloudflare. Carregar o [Método único da Skill-Mãe](../SKILL.md#método-único-contexto-vivo-navegador-monitores-e-edição-visual-05112026) e a [receita de navegador administrativo](../references/UI-MULTIJANELA-ROTAS-CACHE-20261030.md#navegador-administrativo). Para promoção entre ambientes, seguir [centraldark-ops](../Skills/centraldark-ops/SKILL.md#easypanel-promover-da-casa-para-a-contabo).
+
 ## Roteamento por intenção
 
 1. Ler o pedido atual: **AÇÃO**, **ALVO**, **AMBIENTE**, **CRITÉRIO DE ACEITE**.
@@ -95,6 +99,22 @@ A skill Michelin é uma operacionalização de uma Lembrança histórica preserv
 | [centraldark-oracle-surface](../Skills/centraldark-oracle-surface/SKILL.md) | Consultar a superfície Oracle já existente | `SKILL.md` |
 
 **Sincronização deliberada e preservação:** executar `scripts/atualizar-catalogo-self-healing.ps1 -SincronizarSkillsCentralDark` a partir desta Skill-Mãe. Importa **somente** as pastas CentralDark conhecidas, preserva arquivos originais e exige destino sem edição local antes de atualizar cópias divergentes. O atualizador já existente registra SHA, datas e histórico no índice vivo. Não mover o owner original nem eliminar caminhos usados pelos loaders até que exista prova de substituição funcional.
+
+
+## Demonstração comercial — CURSOR_MOUSE coordenado
+
+**Receita:** `CENTRALDARK_CURSOR_MOUSE_DEMO`. Os comandos `!CENTRALDARK iniciar teste do mouse`, `!CENTRALDARK iniciar teste do mause`, `!CENTRALDARK iniciar teste do cursor` e `!CENTRALDARK iniciar teste do cursor_mouse` são aliases da mesma intenção.
+
+Owner: [centraldark-hermes-visual-computer-use](../Skills/centraldark-hermes-visual-computer-use/SKILL.md). Executor: [demo_cursor_mouse.py](../Skills/centraldark-hermes-visual-computer-use/scripts/demo_cursor_mouse.py). A receita mantém **um writer**, cria quatro sessões Cua efêmeras, deixa quatro cursores virtuais visíveis, percorre a rota humana `4 → 2 → 1 → 3 → 4` e encerra todas as sessões no final. O mouse físico permanece intocado porque `move_cursor` usa `scope=window`.
+
+No Windows, os quatro cursores podem permanecer visíveis ao mesmo tempo, mas o daemon despacha os movimentos em ordem subsequente; isso é **paralelismo visual coordenado**, não quatro inputs físicos concorrentes. A tentativa de quatro writers concorrentes em 25/11/2026 gerou timeouts e foi rejeitada. A rota aprovada preserva `ONE_WRITER_PER_SCOPE`.
+
+Prova da Casa em 25/11/2026: replay dinâmico resolveu `DISPLAY1..4` pelo binding humano atual, criou quatro sessões, completou cinco estágios, retornou `completed=true` e `cleanup=true`. A confirmação humana da demonstração anterior do mesmo método foi positiva; cada replay novo continua exigindo prova própria antes de afirmar visibilidade humana.
+
+
+### Presets de velocidade comprovados
+
+A mesma receita `CENTRALDARK_CURSOR_MOUSE_DEMO` possui níveis verificados: **30% = DEMONSTRATIVO**, **50% = FLUIDO** e **100% = RÁPIDO**. O executor converte esses nomes/percentuais nos timings medidos; nenhum deles cria outro método ou outro writer. Prova: [cursor-mouse-speed-presets-20261125.json](comprovacoes/cursor-mouse-speed-presets-20261125.json).
 
 ## Descoberta e auditoria
 

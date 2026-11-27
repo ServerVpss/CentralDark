@@ -1,0 +1,82 @@
+{
+  "schema": "centraldark.cursor_mouse_speed_presets.receipt.v1",
+  "date": "2026-11-25",
+  "device": "SEGREDO",
+  "recipe_id": "CENTRALDARK_CURSOR_MOUSE_DEMO",
+  "invariant": {
+    "writer": "ONE_WRITER",
+    "cursors": 4,
+    "route_human_monitors": [
+      4,
+      2,
+      1,
+      3,
+      4
+    ],
+    "physical_mouse": "UNTOUCHED",
+    "dispatch": "ORDERED_SUBSEQUENT",
+    "windows_true_concurrent_input": false
+  },
+  "presets": {
+    "30": {
+      "label": "DEMONSTRATIVO",
+      "glide_ms": 1000,
+      "stage_pause_ms": 700,
+      "hold_seconds": 1.5,
+      "run_id": "805578b8",
+      "stage_seconds": [
+        7.32,
+        7.65,
+        7.478,
+        7.319,
+        7.37
+      ],
+      "mean_stage_seconds": 7.427,
+      "process_runtime_seconds": 62.81,
+      "completed": true,
+      "cleanup": true
+    },
+    "50": {
+      "label": "FLUIDO",
+      "glide_ms": 600,
+      "stage_pause_ms": 400,
+      "hold_seconds": 1,
+      "run_id": "f6851b04",
+      "stage_seconds": [
+        5.877,
+        6.121,
+        5.855,
+        5.521,
+        5.62
+      ],
+      "mean_stage_seconds": 5.799,
+      "process_runtime_seconds": 52.22,
+      "completed": true,
+      "cleanup": true
+    },
+    "100": {
+      "label": "RAPIDO",
+      "glide_ms": 180,
+      "stage_pause_ms": 100,
+      "hold_seconds": 0.5,
+      "run_id": "effefb90",
+      "stage_seconds": [
+        3.887,
+        4.224,
+        4.102,
+        3.815,
+        3.937
+      ],
+      "mean_stage_seconds": 3.993,
+      "process_runtime_seconds": 40.4,
+      "completed": true,
+      "cleanup": true
+    }
+  },
+  "aliases": {
+    "fluido": 50,
+    "rapido": 100
+  },
+  "human_visual_confirmation_of_each_specific_replay": "PENDENTE",
+  "verification_policy": "Only 30, 50 and 100 are verified presets; other percentages require test before promotion."
+}

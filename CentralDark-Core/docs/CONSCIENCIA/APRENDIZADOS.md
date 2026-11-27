@@ -7,6 +7,10 @@ updated: 2026-08-27
 
 {{FILE:/tmp/pr316/aprendizados.md}}
 
+**Aprendizado aplicado ao Método Operacional CentralDark:** [Navegador administrativo: EasyPanel e Cloudflare Access (26/11/2026)](APRENDIZADOS/2026-11-26-navegador-administrativo-easypanel-cloudflare.md). Registro complementar, sem alterar a cadeia NeuroLink abaixo.
+
+**Aprendizado aplicado ao Método Operacional CentralDark (26/11/2026):** no Agente Remoto, “Falha observada” não distinguia falha do botão de falha do MCP. O teste no aplicativo DEV passou a correlacionar a etapa e o código `PAIRING_OWNER_APPROVAL_HTTP_500` na tela e no log, sem registrar o código de pareamento. Deu origem ao [padrão obrigatório de observabilidade na criação de ferramentas](../../.agents/skills/centraldark-operational-method/SKILL.md#observabilidade-obrigatória-na-criação-de-ferramentas). Resultado comprovado: diagnóstico. Resultado não comprovado: pareamento concluído ou consumo desta regra por todos os agentes. Registro complementar, sem alterar a cadeia NeuroLink abaixo.
+
 <!-- NEUROLINK_GLOBAL_BEGIN -->
 ## 🧠 NeuroLink global — duas frentes
 

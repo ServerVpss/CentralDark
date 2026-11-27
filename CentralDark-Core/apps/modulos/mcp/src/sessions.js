@@ -42,6 +42,8 @@ function saveNow() {
         accessTokens: Array.from(accessTokens.values()),
         refreshTokens: Array.from(refreshTokens.values()),
         sessions: Array.from(sessions.values()),
+        eventSubscriptions: Array.from(eventSubscriptions.values()),
+        eventDeliveries: Array.from(eventDeliveries.values()),
     };
     const dir = path.dirname(STATE_FILE);
     fs.mkdirSync(dir, { recursive: true });
@@ -69,6 +71,8 @@ function loadState() {
         (data.accessTokens ?? []).forEach((t) => accessTokens.set(t.token, t));
         (data.refreshTokens ?? []).forEach((t) => refreshTokens.set(t.token, t));
         (data.sessions ?? []).forEach((s) => sessions.set(s.id, s));
+        (data.eventSubscriptions ?? []).forEach((s) => eventSubscriptions.set(s.id, s));
+        (data.eventDeliveries ?? []).forEach((d) => eventDeliveries.set(d.event_id, d));
         log.info("state_loaded", {
             path: STATE_FILE,
             clients: clients.size,
@@ -190,6 +194,8 @@ export function consumeRefreshToken(token, clientId = "") {
     return t;
 }
 const sessions = new Map();
+const eventSubscriptions = new Map();
+const eventDeliveries = new Map();
 const pendingStates = new Map();
 const SESSION_TTL_MS = 1000 * 60 * 60 * 12;
 const STATE_TTL_MS = 1000 * 60 * 10;
@@ -234,6 +240,28 @@ export function getSession(id) {
     }
     return s;
 }
+
+// MCP Events reuse the same 0600 atomic state file as OAuth sessions. The
+// subscription secret is necessarily persistent, while delivery IDs prevent
+// duplicate side effects after process restart.
+export const eventSubscriptionStore = Object.freeze({
+    listSubscriptions: () => Array.from(eventSubscriptions.values()),
+    getSubscription: (id) => eventSubscriptions.get(id),
+    putSubscription: (subscription) => {
+        eventSubscriptions.set(subscription.id, subscription);
+        scheduleSave();
+    },
+    deleteSubscription: (id) => {
+        const removed = eventSubscriptions.delete(id);
+        if (removed) scheduleSave();
+    },
+    hasDelivery: (eventId) => eventDeliveries.has(eventId),
+    putDelivery: (eventId, delivery) => {
+        eventDeliveries.set(eventId, delivery);
+        while (eventDeliveries.size > 10_000) eventDeliveries.delete(eventDeliveries.keys().next().value);
+        scheduleSave();
+    },
+});
 // ─────────────────────────────── Stats ───────────────────────────────────
 export function getStateStats() {
     const now = Date.now();

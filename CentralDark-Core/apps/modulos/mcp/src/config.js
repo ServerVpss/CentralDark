@@ -26,49 +26,53 @@ function csv(name) {
 }
 
 /**
- * Resolve a raiz do repositório CentralDark de forma canônica e sem depender
- * de caminhos fixos de VPS (ex.: /root/CentralDark) que falham em contêineres
- * onde o checkout operacional vive em outro diretório (ex.: /data/CentralDark).
- *
- * Ordem de resolucao:
- *   1. `VPS_REPO_PATH` (sobrevive a deploy/host; fallback explicito).
- *   2. Descoberta a partir do modulo `config.js`: sobe ate achar o diretorio
- *      que contem `.git`.
- *   3. Fallback: `process.cwd()/CentralDark` (compatibilidade com servidores antigos).
+ * Resolve a raiz real do produto, ancorada no modulo e nos marcadores do Core.
+ * VPS_REPO_PATH continua aceito como alias legado. Nunca depende do cwd.
  */
-function repoRootFromEnv() {
-    const explicit = opt("VPS_REPO_PATH");
-    if (explicit) {
-        return path.resolve(explicit);
-    }
-    // CENTRALDARK_REPO_ROOT (definido no .env do HOSTINGER) como alternativa
-    // ao VPS_REPO_PATH. Evita depender de /root/CentralDark em contêineres
-    // onde o checkout opera em outro diretório.
-    const repoRootEnv = opt("CENTRALDARK_REPO_ROOT");
-    if (repoRootEnv) {
-        return path.resolve(repoRootEnv);
-    }
-    const discovered = discoverCentralDarkRoot();
-    if (discovered) {
-        return discovered;
-    }
-    return path.resolve(process.cwd(), "CentralDark");
+function isCentralDarkRoot(dir) {
+    return ["agent", "gateway", "CentralDark-Core/CENTRALDARK_AI_BOOT.yaml",
+        "CentralDark-Core/LEIA-ME-IA.md"].every(marker => existsSync(path.join(dir, marker)));
 }
 
-function discoverCentralDarkRoot() {
-    let dir = _moduleDir;
-    for (;;) {
-        if (existsSync(path.join(dir, ".git"))) {
-            return path.resolve(dir);
-        }
-        const parent = path.dirname(dir);
-        if (parent === dir) {
-            break;
-        }
-        dir = parent;
+function normalizeRoot(candidate) {
+    const resolved = path.resolve(candidate);
+    if (isCentralDarkRoot(resolved)) return resolved;
+    if (path.basename(resolved) === "CentralDark-Core" && isCentralDarkRoot(path.dirname(resolved))) {
+        return path.dirname(resolved);
     }
     return null;
 }
+
+function discoverCentralDarkRoot(start = _moduleDir) {
+    let dir = path.resolve(start);
+    for (;;) {
+        const root = normalizeRoot(dir);
+        if (root) return root;
+        const parent = path.dirname(dir);
+        if (parent === dir) return null;
+        dir = parent;
+    }
+}
+
+function repoRootFromEnv() {
+    const discovered = discoverCentralDarkRoot();
+    for (const name of ["CENTRALDARK_REPO_ROOT", "VPS_REPO_PATH"]) {
+        const value = opt(name, "");
+        if (!value || value.toLowerCase() === "auto") continue;
+        // A Windows drive path is not a relative Linux path, or vice versa.
+        if (!path.isAbsolute(value) && (path.win32.isAbsolute(value) || path.posix.isAbsolute(value))) continue;
+        const candidate = path.isAbsolute(value) ? value : discovered && path.resolve(discovered, value);
+        if (candidate) {
+            const root = normalizeRoot(candidate);
+            if (root) return root;
+        }
+    }
+    if (discovered) return discovered;
+    throw new Error("CENTRALDARK_REPO_ROOT_NOT_FOUND: use a validated CentralDark checkout or explicit root");
+}
+
+const repoRoot = repoRootFromEnv();
+const coreRoot = path.join(repoRoot, "CentralDark-Core");
 
 export const config = {
     port: Number(opt("MCP_PORT", "9100")),
@@ -83,12 +87,13 @@ export const config = {
     },
     sessionSecret: req("MCP_SESSION_SECRET"),
     vps: {
-        repoPath: repoRootFromEnv(),
+        repoPath: repoRoot,
+        corePath: coreRoot,
         allowedRestart: Array.from(new Set(["MCP-CentralDark", ...csv("PM2_ALLOWED_RESTART")])),
     },
     log: {
         level: opt("LOG_LEVEL", "info"),
-        dir: path.join(repoRootFromEnv(), "logs"),
+        dir: path.join(repoRoot, "logs"),
     },
 };
 //# sourceMappingURL=config.js.map

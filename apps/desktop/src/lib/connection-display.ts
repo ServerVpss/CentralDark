@@ -2,6 +2,14 @@ import type { DesktopRegistryConnection } from '@/global'
 
 export const CONNECTION_SEARCH_THRESHOLD = 8
 
+/** Translate only the local display label; preserve the saved registry and connection ID. */
+export function connectionLabelForDisplay(
+  connection: Pick<DesktopRegistryConnection, 'kind' | 'label'>,
+  thisComputer: string
+): string {
+  return connection.kind === 'local' && connection.label === 'This device' ? thisComputer : connection.label
+}
+
 const connectionLabelCollator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: 'base'

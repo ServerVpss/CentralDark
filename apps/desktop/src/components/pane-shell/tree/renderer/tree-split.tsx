@@ -824,16 +824,13 @@ function Sash({
       onPointerDown={disabled ? undefined : onPointerDown}
       role="separator"
     >
-      {/* Persistent hairline: same token as PaneShell's divider sash
-          (--ui-stroke-secondary) so every seam — vertical or horizontal —
-          reads identically. Sits at 0.1 so seams recede into the surface,
-          and comes up to full on hover alongside the thicker grab band. */}
-      <span
-        className={cn(
-          'absolute bg-(--ui-stroke-secondary) opacity-10 transition-opacity duration-100 group-hover:opacity-100',
-          horizontal ? 'inset-y-0 left-[1px] w-px -translate-x-1/2' : 'inset-x-0 top-[1px] h-px -translate-y-1/2'
-        )}
-      />
+      {/* Keep the faint full-length gray seam behind the grip, including on hover. */}
+      <span className={horizontal
+        ? 'absolute inset-y-0 left-[1px] w-px -translate-x-1/2 bg-[#c4c8cf] opacity-30'
+        : 'absolute inset-x-0 top-[1px] h-px -translate-y-1/2 bg-(--ui-stroke-secondary) opacity-10 group-hover:opacity-100'
+      } />
+      {/* Same 2 x 34 px idle grip as CentralDark; the gold hover band is untouched. */}
+      {horizontal && <span className="absolute top-1/2 left-[1px] h-[34px] w-[2px] -translate-x-1/2 -translate-y-1/2 rounded-[3px] bg-[#c4c8cf] opacity-70" />}
       {!disabled && (
         <span
           className={cn(

@@ -1,0 +1,606 @@
+/* Original dashboard styles ported from source_remote_bridge/ui/src/styles.css.
+   Scoped to avoid touching the Hermes layout, sessions or native sidebar. */
+.cdos-agent-bridge {
+  --vscode-editor-background: oklch(0.12 0.012 260);
+  --vscode-editor-foreground: oklch(0.95 0.008 90);
+  --surface: oklch(0.165 0.016 265);
+  --surface-strong: oklch(0.2 0.02 268);
+  --line: oklch(0.32 0.02 265 / 55%);
+  --gold: oklch(0.82 0.15 88);
+  --gold-soft: oklch(0.68 0.12 84);
+  --green: oklch(0.79 0.19 155);
+  --neon-green: var(--green);
+  --red: oklch(0.65 0.21 25);
+  --muted: oklch(0.72 0.015 265);
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  color: var(--vscode-editor-foreground);
+  background: var(--vscode-editor-background);
+  font-family: "Segoe UI Variable", "Segoe UI", sans-serif;
+}
+@scope (.cdos-agent-bridge) {
+button {
+  font: inherit;
+}
+
+.bridge-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
+  padding: 0 34px 20px;
+}
+
+.bridge-topbar {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-right: 150px; /* Windows titleBarOverlay native min/max/close controls */
+  -webkit-app-region: drag;
+}
+
+.bridge-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  flex: 0 0 auto;
+  -webkit-app-region: no-drag;
+}
+
+.bridge-top-actions .icon-button {
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.bridge-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bridge-brand-mark {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #7e643b;
+  border-radius: 11px;
+  background: #221c14;
+  color: var(--gold);
+}
+.bridge-brand-mark svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.bridge-brand div:last-child {
+  display: grid;
+  line-height: 1.05;
+}
+
+.bridge-brand span {
+  color: var(--gold-soft);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.23em;
+}
+
+.bridge-brand strong {
+  margin-top: 5px;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: #deddd5;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.icon-button:hover {
+  border-color: rgba(214, 173, 75, 0.36);
+  background: rgba(214, 173, 75, 0.08);
+}
+
+.bridge-hero {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  padding: 34px 36px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    linear-gradient(130deg, rgba(255, 255, 255, 0.04), transparent 58%),
+    var(--surface);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26);
+  backdrop-filter: blur(18px);
+}
+
+.bridge-hero h1 {
+  max-width: 600px;
+  margin: 18px 0 10px;
+  font-size: clamp(34px, 4vw, 56px);
+  font-weight: 670;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.bridge-hero p {
+  max-width: 660px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.bridge-orbit {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  flex: 0 0 170px;
+  display: grid;
+  place-items: center;
+  color: var(--gold-soft);
+}
+
+.bridge-orbit-ring {
+  position: absolute;
+  border: 1px solid rgba(214, 173, 75, 0.3);
+  border-radius: 50%;
+}
+
+.bridge-orbit-one {
+  inset: 8px;
+  animation: breathe 3.6s ease-in-out infinite;
+}
+
+.bridge-orbit-two {
+  inset: 30px;
+  border-style: dashed;
+  animation: spin 12s linear infinite;
+}
+
+.bridge-pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  white-space: nowrap;
+}
+
+.bridge-pill.pass {
+  color: #aaf0b9;
+  background: rgba(98, 209, 125, 0.12);
+  border: 1px solid rgba(98, 209, 125, 0.24);
+}
+
+.bridge-pill.pending {
+  color: var(--gold-soft);
+  background: rgba(214, 173, 75, 0.1);
+  border: 1px solid rgba(214, 173, 75, 0.22);
+}
+
+.bridge-pill.fail {
+  color: #ffb2ac;
+  background: rgba(255, 117, 107, 0.1);
+  border: 1px solid rgba(255, 117, 107, 0.22);
+}
+
+.bridge-actions {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.bridge-actions button {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+  border-radius: 15px;
+  color: #efeee7;
+  cursor: pointer;
+  text-align: left;
+}
+
+.bridge-actions span {
+  display: grid;
+  gap: 3px;
+}
+
+.bridge-actions strong {
+  font-size: 14px;
+}
+
+.bridge-actions small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.bridge-action-primary {
+  border: 1px solid rgba(214, 173, 75, 0.5);
+  background: linear-gradient(135deg, rgba(214, 173, 75, 0.24), rgba(214, 173, 75, 0.08));
+}
+
+.bridge-action {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* Single, restrained success cue; only the pairing surface changes. */
+.bridge-actions button.pairing-verified,
+.bridge-actions button.pairing-verified:disabled {
+  color: #bff4c9;
+  border-color: rgba(121, 211, 144, 0.55);
+  background: linear-gradient(115deg, rgba(84, 171, 111, 0.20), rgba(84, 171, 111, 0.07));
+  box-shadow: inset 0 0 0 1px rgba(144, 231, 160, 0.05), 0 0 16px rgba(83, 186, 108, 0.08);
+  cursor: default;
+  opacity: 1;
+  animation: pairing-confirmed-glow 900ms ease-out 1;
+}
+.bridge-actions button.pairing-verified:hover { transform: none; border-color: rgba(121, 211, 144, 0.55); }
+.bridge-receipt.pairing-success {
+  color: #bff4c9;
+  border-color: rgba(121, 211, 144, 0.24);
+  background: rgba(69, 157, 91, 0.075);
+}
+@keyframes pairing-confirmed-glow {
+  0% { box-shadow: 0 0 0 0 rgba(111, 213, 136, 0.28); }
+  100% { box-shadow: 0 0 16px rgba(83, 186, 108, 0.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bridge-actions button.pairing-verified { animation: none; }
+}
+
+.bridge-actions button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(245, 223, 154, 0.52);
+}
+
+.bridge-pairing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid rgba(214, 173, 75, 0.38);
+  border-radius: 14px;
+  background: rgba(214, 173, 75, 0.06);
+}
+.bridge-pairing strong { color: var(--gold-soft); font-size: 15px; }
+.bridge-pairing code { font-size: 19px; letter-spacing: 0.07em; }
+.bridge-pairing p { margin: 6px 0 0; color: var(--muted); font-size: 12px; max-width: 450px; }
+.bridge-pairing-options { display: flex; gap: 8px; flex-wrap: wrap; }
+.bridge-pairing-options button {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 12px; cursor: pointer; border-radius: 9px;
+  color: var(--gold-soft); border: 1px solid var(--line); background: var(--surface-strong);
+}
+.bridge-pairing-options button:hover { border-color: var(--gold); }
+
+.bridge-receipt {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 18px;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+}
+
+.bridge-receipt.pass {
+  color: #aaf0b9;
+}
+
+.bridge-receipt.fail {
+  color: #ffb2ac;
+}
+
+.bridge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.bridge-card {
+  min-height: 170px;
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.bridge-card-icon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--gold-soft);
+  background: rgba(214, 173, 75, 0.09);
+}
+
+.bridge-card-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.bridge-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.bridge-card-heading .bridge-pill {
+  margin-left: auto;
+  margin-right: 9px;
+  flex: 0 0 auto;
+}
+
+.bridge-card-heading h3 {
+  min-width: 0;
+  margin: 0;
+  color: #c4c4ba;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.bridge-card-copy > strong {
+  display: block;
+  margin-top: 24px;
+  overflow: hidden;
+  font-size: 16px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bridge-card-copy p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.bridge-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: auto;
+  padding: 18px 14px 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.bridge-footer-last,
+.bridge-footer-session,
+.bridge-footer-refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.bridge-footer-session { white-space: nowrap; }
+.bridge-footer-session svg { color: var(--gold); }
+.bridge-footer-session strong {
+  color: var(--vscode-editor-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.bridge-footer-refresh { margin-left: auto; }
+.bridge-footer-last strong {
+  color: var(--vscode-editor-foreground);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.bridge-footer-last svg { color: var(--gold); }
+.bridge-footer-separator { opacity: 0.45; }
+.bridge-live-dot {
+  flex: 0 0 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.bridge-live-dot.online { background: var(--green); box-shadow: 0 0 0 3px oklch(0.79 0.19 155 / 12%); }
+.bridge-live-dot.busy { background: var(--gold); }
+.bridge-live-dot.idle { background: var(--muted); }
+
+/* Choreografia original do Cockpit: styles.css cd-port-breathe / cd-done-*.
+   Mesmo contrato visual, classes reutilizadas sem novo componente de tema. */
+@keyframes cd-port-breathe {
+  0%, 100% { transform: scale(0.82); box-shadow: 0 0 0 0 color-mix(in oklab, var(--neon-green) 0%, transparent); }
+  50% { transform: scale(1.12); box-shadow: 0 0 0 4px color-mix(in oklab, var(--neon-green) 18%, transparent); }
+}
+.cd-port-dot--pass { animation: cd-port-breathe 2.6s ease-in-out infinite; }
+
+.bridge-pill.pass::before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: cd-port-breathe 2.6s ease-in-out infinite;
+}
+
+/* Confirmação DONE: primeiro fecha círculo, depois desenha o visto. */
+@keyframes cd-done-ring {
+  from { stroke-dashoffset: 63; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes cd-done-check {
+  from { stroke-dashoffset: 24; opacity: 0; }
+  1% { opacity: 1; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+.cd-done-ring {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: cd-done-ring 520ms cubic-bezier(.65, 0, .35, 1) forwards;
+}
+.cd-done-check {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  opacity: 0;
+  animation: cd-done-check 320ms cubic-bezier(.65, 0, .35, 1) 520ms forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-done-ring, .cd-done-check {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  .cd-port-dot--pass, .bridge-pill.pass::before { animation: none; }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+.pulse {
+  animation: breathe 1.4s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.42;
+    transform: scale(0.94);
+  }
+}
+
+@media (max-width: 930px) {
+  .bridge-dashboard {
+    padding-inline: 22px;
+  }
+
+  .bridge-orbit {
+    display: none;
+  }
+
+  .bridge-actions,
+  .bridge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body {
+    overflow: auto;
+  }
+
+  .bridge-dashboard {
+    height: auto;
+  }
+}
+.bridge-os-entry { display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid rgba(214,173,75,.3); border-radius: 15px; padding: 16px 18px; margin: 14px 0 18px; background: linear-gradient(105deg, rgba(214,173,75,.09), rgba(255,255,255,.02)); }
+.bridge-os-entry-copy { display: grid; gap: 5px; }
+.bridge-os-entry-copy span { font-size: 10px; font-weight: 700; letter-spacing: .13em; color: var(--muted); }
+.bridge-os-entry-copy strong { font-size: 19px; letter-spacing: .02em; }
+.bridge-os-entry-copy small { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.bridge-os-entry-button { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 12px 18px; border-radius: 10px; white-space: nowrap; font-weight: 700; cursor: pointer; }
+.bridge-os-entry-button:disabled { opacity: .6; cursor: progress; }
+.bridge-os-entry-feedback { color: #f3e8bd; font-size: 12px; margin: -7px 0 15px; }
+.bridge-os-entry-feedback.pass { color: #bff4c9; }
+.bridge-os-entry-feedback.fail { color: #ffb2ac; }
+@media (max-width: 680px) { .bridge-os-entry { flex-direction: column; align-items: stretch; } .bridge-os-entry-button { white-space: normal; } }
+  .bridge-dashboard { height: 100%; min-height: 100%; width: 100%; max-width: 100%; overflow: visible; }
+  .bridge-topbar { padding-right: 156px; min-height: 72px; }
+  .bridge-top-actions { display: flex; gap: 10px; align-items: center; }
+  .bridge-top-actions button { display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px;
+    background: rgba(255,255,255,.04); color: #deddd5; cursor: pointer; -webkit-app-region: no-drag; }
+  .bridge-action { border: 1px solid var(--line); background: rgba(255,255,255,.035); }
+  .bridge-action-primary { border: 1px solid rgba(214,173,75,.5);
+    background: linear-gradient(135deg,rgba(214,173,75,.24),rgba(214,173,75,.08)); }
+  .bridge-actions button:disabled, .bridge-top-actions button:disabled,
+  .bridge-pairing button:disabled { opacity: .58; cursor: not-allowed; }
+  .bridge-actions button:disabled:hover { transform: none; }
+  .bridge-os-entry > div { display: grid; gap: 5px; }
+  .bridge-os-entry > div span { font-size: 10px; letter-spacing: .13em; color: var(--muted); font-weight: 800; }
+  .bridge-os-entry > div strong { font-size: 19px; }
+  .bridge-os-entry > div small { font-size: 12px; color: var(--muted); }
+  .bridge-os-entry > button { display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 18px; border: 1px solid rgba(214,173,75,.5); border-radius: 10px;
+    background: linear-gradient(130deg,rgba(214,173,75,.34),rgba(214,173,75,.14));
+    color: #e8d0a1; font-weight: 700; cursor: pointer; }
+  .bridge-card-icon { color: var(--gold-soft); }
+  /* In the Hermes content pane the original three cards are narrower. */
+  .bridge-card-heading { flex-wrap: wrap; justify-content: flex-start; gap: 7px 9px; }
+  .bridge-card-heading h3 { flex: 1 1 94px; }
+  .bridge-card-heading .bridge-pill { margin: 0; max-width: 100%; }
+  .bridge-card-copy > strong { margin-top: 13px; white-space: normal; }
+  .bridge-footer > span { display: inline-flex; align-items: center; gap: 7px; }
+  .bridge-footer strong { color: var(--vscode-editor-foreground); }
+  .bridge-footer svg { color: var(--gold); }
+  .bridge-footer small { color: var(--muted); }
+  .bridge-live-dot { display: inline-block; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--muted); }
+  .bridge-live-dot.active { background: var(--green); animation: cd-port-breathe 2.6s ease-in-out infinite; }
+  .bridge-contract-notice { padding: 12px 14px; margin: 14px 0;
+    background: rgba(214,173,75,.05); color: var(--muted);
+    border: 1px solid rgba(214,173,75,.25); border-radius: 12px;
+    font-size: 12px; line-height: 1.5; }
+  .bridge-receipt { display: flex; align-items: center; gap: 8px; }
+  .bridge-receipt.fail { color: #ffb2ac; }
+  .bridge-receipt.pass { color: #aaf0b9; }
+  .bridge-pairing { display: flex; justify-content: space-between; gap: 16px;
+    border: 1px solid var(--line); border-radius: 13px; padding: 14px; }
+  .bridge-pairing button { display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--line); background: transparent; color: var(--gold-soft);
+    padding: 8px 12px; border-radius: 8px; }
+  .bridge-orbit { position: relative; }
+  .bridge-orbit > span { position: absolute; inset: 8px;
+    border: 1px solid rgba(214,173,75,.3); border-radius: 50%; }
+  .bridge-orbit > span:nth-child(2) { inset: 30px; border-style: dashed; }
+  @media(max-width: 930px) {
+    .bridge-dashboard { height: 100%; }
+    .bridge-actions, .bridge-grid { grid-template-columns: 1fr; }
+    .bridge-orbit { display: none; }
+  }
+  @media(max-width: 680px) {
+    .bridge-os-entry { flex-direction: column; align-items: stretch; }
+  }
+}

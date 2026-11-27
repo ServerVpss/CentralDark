@@ -1418,12 +1418,15 @@ const WINDOW_BUTTON_POSITION = {
 // The ladder is BUILT once here but each window factory RE-RESOLVES through
 // resolveAppIcon (decoding probe): existence alone is not proof the bytes
 // decode, and an undecodable icon must never take the main process down.
-const APP_ICON_PATHS = appIconCandidates({
-  isWindows: IS_WINDOWS,
-  appRoot: APP_ROOT,
-  resourcesPath: process.resourcesPath,
-  unpackedPathFor
-})
+const APP_ICON_PATHS = [
+  ...(IS_WINDOWS ? [path.join(APP_ROOT, 'assets', 'centraldark.png')] : []),
+  ...appIconCandidates({
+    isWindows: IS_WINDOWS,
+    appRoot: APP_ROOT,
+    resourcesPath: process.resourcesPath,
+    unpackedPathFor
+  })
+]
 
 let rendererTitleBarTheme = null
 
@@ -13179,7 +13182,7 @@ function createWindow() {
     ),
     minWidth: WINDOW_MIN_WIDTH,
     minHeight: WINDOW_MIN_HEIGHT,
-    title: 'Hermes',
+    title: 'CENTRALDARK · OS',
     // Frameless title bar on every platform so the renderer can paint the
     // "hide sidebar" button (and other left-side titlebar tools) flush with
     // the top edge — matching the macOS layout where the traffic lights sit
@@ -13204,6 +13207,14 @@ function createWindow() {
   })
 
   const createdMainWindow = mainWindow
+  // Windows DEV runs under Electron.exe. Set the branded icon on the native HWND.
+  if (IS_WINDOWS && icon) {
+    try {
+      createdMainWindow.setIcon(icon)
+    } catch (error) {
+      rememberLog(`[icon] Windows icon unavailable: ${error}`)
+    }
+  }
   minimizeToTray.registerWindow(createdMainWindow, { closeToTray: true })
   registerChatWindow(createdMainWindow)
   const defaultRoute = desktopProfilePreferences.getDefault()

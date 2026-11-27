@@ -1,7 +1,7 @@
 # Hermes Agent - Development Guide
 
 <!-- CENTRALDARK_CANONICAL_SYNC_RULE_20261121 -->
-**Canonical (`ServerVpss/CentralDark@main`):** read live `ServerVpss/CentralDark@main` (SOUL/RULES/AGENTS/owners/skills) before edits; it governs identity, method and architecture. Reuse owners; NO parallel architecture, rules, skills, agents or services. Compare main/runtime; preserve dirty. Code: test + counterproof + `!RASTRO`/`!HUD`; commit changed files only, push main if allowed (else PR/gates), verify SHA/readback; commit != deploy. Never commit runtime config, secrets or `/app/u4s-hermes-native`. ACP: editor stdio; no idle daemon. Fork legado (`CentralDark-hermes-agent`) consolidado em 2026-11-21; repositório canônico único.
+**Canonical (`ServerVpss/CentralDark@main`):** read live `ServerVpss/CentralDark@main` (SOUL/RULES/AGENTS/owners/skills) before edits; it governs identity, method and architecture. Reuse owners; no parallel rules, architecture, skills, agents or services. BOOT: faxina após o teste. Compare main/runtime; preserve dirty. Code: test + counterproof + `!RASTRO`/`!HUD`; commit changed files only, push main if allowed (else PR/gates), verify SHA/readback; commit != deploy. Never commit runtime config, secrets or `/app/u4s-hermes-native`. ACP: editor stdio; no idle daemon. `CentralDark-hermes-agent`: fork legado consolidado em 2026-11-21.
 <!-- /CENTRALDARK_CANONICAL_SYNC_RULE_20261121 -->
 
 This root file is a hub: what applies everywhere, then a routing table. Each area's `AGENTS.md`
