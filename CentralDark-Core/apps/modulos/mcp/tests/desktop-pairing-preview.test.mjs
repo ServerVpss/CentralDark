@@ -95,6 +95,31 @@ test("HTTP local: mesma store, origin MCP e Supabase mock, sem rede externa",asy
     assert.equal((await post("/device/desktop/session/check",{device_id:auth.device_id},{Authorization:"Bearer "+auth.token})).status,200);
     assert.equal((await post("/device/devices/self/revoke",{device_id:auth.device_id},{Authorization:"Bearer "+auth.token})).status,200);
     assert.equal((await post("/device/desktop/session/check",{device_id:auth.device_id},{Authorization:"Bearer "+auth.token})).status,401);
+    // Compatibility: the already deployed mcp-v1 route selects the new consent
+    // origin for legacy Remote Bridge only, never grants authorization itself.
+    const legacy=await (await post("/device/pair/start",{device_name:"legacy",executor:"remote-bridge",surface:"remote-bridge"})).json();
+    const legacyUrl=base+"/authorize?"+new URLSearchParams({client_id:"centraldark.remote-bridge",pair_id:legacy.pair_id});
+    const oldPage=await originalFetch(legacyUrl,{redirect:"manual"});
+    assert.equal(new URL(oldPage.headers.get("location")).origin,"https://admin.centralldark.com");
+    const nativePage=await originalFetch(legacyUrl,{redirect:"manual",headers:{"x-centraldark-pairing-route":"mcp-v1"}});
+    const nativeTarget=new URL(nativePage.headers.get("location"));
+    assert.equal(nativeTarget.origin,DESKTOP_ORIGIN);
+    assert.equal(nativeTarget.searchParams.has("pair_code"),false);
+    assert.equal(nativeTarget.searchParams.has("pair_secret"),false);
+    const legacyBody={client_id:"centraldark.remote-bridge",pair_id:legacy.pair_id,pair_code:legacy.code,pair_nonce:nativeTarget.searchParams.get("pair_nonce")};
+    role="member";
+    assert.equal((await post("/authorize",legacyBody,headers)).status,403);
+    role="admin";
+    assert.equal((await post("/authorize",{...legacyBody,pair_nonce:"wrong"},headers)).status,403);
+    assert.equal((await post("/authorize",legacyBody,{...headers,Origin:"https://untrusted.example"})).status,403);
+    delete process.env.CENTRALDARK_DESKTOP_PAIRING_ENABLED;
+    assert.equal((await post("/authorize",legacyBody,headers)).status,503);
+    process.env.CENTRALDARK_DESKTOP_PAIRING_ENABLED="1";
+    assert.equal((await post("/authorize",legacyBody,headers)).status,200);
+    const legacyAuth=await (await post("/device/pair/status",{id:legacy.pair_id,secret:legacy.pair_secret})).json();
+    assert.ok(legacyAuth.token);
+    assert.equal((await post("/device/desktop/session/check",{device_id:legacyAuth.device_id},{Authorization:"Bearer "+legacyAuth.token})).status,401);
+    assert.equal((await post("/device/devices/self/revoke",{device_id:legacyAuth.device_id},{Authorization:"Bearer "+legacyAuth.token})).status,200);
   } finally {
     globalThis.fetch=originalFetch;
     if(server)await new Promise(resolve=>server.close(resolve));
