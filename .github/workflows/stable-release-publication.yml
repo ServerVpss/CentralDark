@@ -59,7 +59,7 @@ jobs:
           fetch-depth: 0
           filter: blob:none
           persist-credentials: false
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           toolchain: node
           cache-python: false

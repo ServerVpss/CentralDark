@@ -65,7 +65,7 @@ jobs:
 
       - name: Prepare Hermes from the PR's own checkout
         if: steps.changed.outputs.files != ''
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: python
           extras: '[]'

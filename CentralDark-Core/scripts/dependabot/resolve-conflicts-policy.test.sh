@@ -41,6 +41,16 @@ git checkout -b dependabot/test-bump >/dev/null 2>&1
 printf '{"name":"root","version":"1.0.1"}\n' > package.json
 printf 'pr-change\n' > CENTRALDARK_AI_BOOT.yaml
 printf 'gateway-pr-change\n' > docs/ARQUITETURA/CENTRALDARK-REMOTE-MCP-GATEWAY.md
+export COSTURA_PYTHON_SHADOW_SENTINEL="$TMP_ROOT/python-shadow-imported"
+# A PR may shadow stdlib modules used by both the runtime probe and validators.
+# This fixture must never execute during privileged syntax validation.
+cat > enum.py <<'PY'
+with open(__import__('os').environ['COSTURA_PYTHON_SHADOW_SENTINEL'], 'a', encoding='utf-8') as marker:
+    marker.write('PR_CWD_MODULE_EXECUTED\n')
+raise RuntimeError('COSTURA_PR_PYTHON_SHADOW_EXECUTED')
+PY
+cp enum.py pathlib.py
+git add -- enum.py pathlib.py
 git commit -am "dependabot bump and unsafe operational drift" >/dev/null
 git push origin HEAD:refs/pull/1/head >/dev/null 2>&1
 git push origin HEAD:dependabot/test-bump >/dev/null 2>&1
@@ -92,11 +102,20 @@ test "$(git ls-remote "$REMOTE" refs/heads/dependabot/test-bump | awk '{print $1
 rmdir "$WORKTREES/.costura-repo-writer.lock"
 echo "COSTURA_SINGLE_WRITER_LOCK=PASS"
 
-PR_HEAD_REF='dependabot/test-bump' \
+if PR_HEAD_REF='dependabot/test-bump' \
 REPO_DIR="$SOURCE" \
 CENTRALDARK_DEPENDABOT_WORKTREES="$WORKTREES" \
 KNOWN_CONFLICTS_FILE='scripts/dependabot/known-conflict-patterns.json' \
-bash "$RESOLVER" --apply 1 > "$TMP_ROOT/resolver.log"
+bash "$RESOLVER" --apply 1 > "$TMP_ROOT/resolver.log"; then
+  test ! -e "$COSTURA_PYTHON_SHADOW_SENTINEL"
+  echo 'COSTURA_PYTHON_IGNORES_PR_CWD=PASS'
+else
+  if [[ -e "$COSTURA_PYTHON_SHADOW_SENTINEL" ]]; then
+    echo 'BLOCKED_COSTURA_PYTHON_PR_MODULE_EXECUTED' >&2
+  fi
+  cat "$TMP_ROOT/resolver.log" >&2
+  exit 1
+fi
 # Git stderr changes by locale; conflict evidence comes from the unmerged index.
 grep -F "CONFLICT_DETECTED_INDEX_PROVEN" "$TMP_ROOT/resolver.log" >/dev/null
 grep -F "COSTURA_WRITER_LOCK=ACQUIRED" "$TMP_ROOT/resolver.log" >/dev/null

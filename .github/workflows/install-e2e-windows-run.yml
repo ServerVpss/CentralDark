@@ -119,7 +119,7 @@ jobs:
         with:
           ref: ${{ inputs.commit || github.sha }}
       - name: Set up driver tools only
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           packages: ffmpeg
@@ -208,7 +208,7 @@ jobs:
       # Old installers refresh PATH after winget installs ripgrep, dropping the
       # process-only uv path. Supply the tool before running those shipped scripts.
       - name: Set up driver tools only
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           packages: ffmpeg,ripgrep
