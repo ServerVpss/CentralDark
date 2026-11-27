@@ -1,0 +1,55 @@
+# Active root entry point; reuses the existing CentralDark-Core COSTURA owner.
+# Reconciliation only: no workflow approval, CI status publication or PR promotion.
+name: COSTURA — reconciliar conflitos
+run-name: "COSTURA · ${{ inputs.reconciliation_request_id || github.run_id }}"
+on:
+  push:
+    branches: [main]
+  pull_request_target:
+    branches: [main]
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      target_pr:
+        description: 'PR alvo (vazio = todos os elegíveis)'
+        required: false
+        type: string
+      reconciliation_request_id:
+        description: 'Recibo do job de reconciliação existente'
+        required: false
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: centraldark-costura-reconciliation
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    if: >-
+      github.repository == 'ServerVpss/CentralDark' &&
+      github.ref == 'refs/heads/main' &&
+      (github.event_name != 'pull_request_target' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout main confiável
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Executar owner COSTURA existente
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TARGET_PR: ${{ github.event.pull_request.number || inputs.target_pr || '' }}
+          PROTECTED_PRS: '1562,1757,1977'
+          REPO_DIR: ${{ github.workspace }}
+          RESOLVER: CentralDark-Core/scripts/dependabot/resolve-conflicts.sh
+          COSTURA_RECONCILIATION_ONLY: '1'
+        run: node CentralDark-Core/scripts/dependabot/reconcile-open-prs.mjs

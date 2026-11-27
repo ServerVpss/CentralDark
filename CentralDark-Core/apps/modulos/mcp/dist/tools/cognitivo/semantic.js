@@ -27,13 +27,16 @@ function textResult(payload, isError = false) {
     };
 }
 function repoRoot() {
-    return process.env.CENTRALDARK_REPO_ROOT || config?.vps?.repoPath || process.cwd();
+    return config?.vps?.repoPath || process.cwd();
+}
+function coreRoot() {
+    return config?.vps?.corePath || repoRoot();
 }
 function pythonExecutable() {
     return process.env.SEMANTIC_PYTHON || (process.platform === "win32" ? "python" : "python3");
 }
-function bridgePath() {
-    return process.env.SEMANTIC_BRIDGE_PATH || path.join(repoRoot(), "infra", "mcp", "semantic_bridge.py");
+export function semanticBridgePath() {
+    return process.env.SEMANTIC_BRIDGE_PATH || path.join(coreRoot(), "infra", "mcp", "semantic_bridge.py");
 }
 function rejectAll(error) {
     for (const { reject, timer } of pending.values()) {
@@ -54,8 +57,8 @@ function stopBridge() {
 function ensureBridge() {
     if (bridge && !bridge.killed)
         return bridge;
-    const child = spawn(pythonExecutable(), [bridgePath(), "--serve"], {
-        cwd: repoRoot(),
+    const child = spawn(pythonExecutable(), [semanticBridgePath(), "--serve"], {
+        cwd: coreRoot(),
         env: process.env,
         stdio: ["pipe", "pipe", "pipe"],
         windowsHide: true,

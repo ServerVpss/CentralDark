@@ -45,6 +45,8 @@ CENTRALDARK_AI_BOOT:
       - "MEASURE_GITHUB_MAIN_AND_CURRENT_WITH_EXISTING_HUD_ENTRY_GATE"
       - "REUSE_OWNER_AND_EXECUTE_ONLY_AUTHORIZED_DELTA"
       - "TEST_AND_COUNTERPROVE"
+      - "RECORD_CANONICAL_PROOF"
+      - "APPLY_MANDATORY_FAXINA_APOS_TESTE"
       - "PRESENT_REAL_RECEIPT_AND_NEXT_STEP"
     existing_boot_reader: "scripts/trigger-fabric/centraldark_full_trigger_boot.py"
     existing_boot_reader_command: "github-entry"
@@ -53,6 +55,36 @@ CENTRALDARK_AI_BOOT:
     tool_calls_must_be_made_by_consumer: true
     github_connector_cannot_be_reconfigured_by_repo_document_only: true
     github_connection_is_not_runtime_proof: true
+  lei_do_ciclo_completo:
+    obrigatoria: true
+    escopo: "Bot CentralDark e qualquer agente que operar no repositório, inclusive apenas pelo GitHub."
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md"
+    criterio: "Não encerrar como CONCLUIDO por plano, edição, commit, merge, deploy ou resposta do Bot isoladamente."
+    provas_obrigatorias: [LEITURA_DO_ALVO, EFEITO_NO_ALVO, CONTRAPROVA, RECIBO_CANONICO, CONFERENCIA_APOS_FAXINA]
+    alvo: "Usar a instalação real e a revisão efetivamente consumida quando a missão envolver execução; cópia isolada prova só o ensaio, não implantação geral. Em leitura, comprovar o recurso lido e registrar SEM_TEMPORARIOS quando aplicável."
+    continuidade: "Resolver as etapas possíveis no escopo autorizado, inclusive recuperar falhas reversíveis. Se houver bloqueio externo comprovado, registrar prova, motivo e próxima ação; não declarar CONCLUIDO."
+    autorizacao: "Não contornar aprovação, não ampliar escrita, não repetir ação de efeito incerto nem usar limpeza geral para concluir."
+  observabilidade_ferramentas:
+    obrigatoria: true
+    gatilhos: [CRIAR_FERRAMENTA, ALTERAR_FLUXO, ADICIONAR_INTEGRACAO]
+    escopo: "Todo o repositório, inclusive app, botão, CLI, conector e ferramenta MCP."
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md#observabilidade-obrigatória-na-criação-de-ferramentas"
+    criterios: [OWNER_E_CONTRATO, LOG_SEGURO, ESTADOS_DISTINTOS, SUCESSO_NO_ALVO, FALHA_CONTROLADA, CONTRAPROVA, RECIBO_CANONICO]
+    provas: "Correlacionar ação na interface ou chamada oficial, evento do logger existente e leitura independente do efeito; testar redaction e ausência de falso sucesso."
+    sem_prova: "Não marcar CONCLUIDO ou FIXED_POINT; indicar a etapa não comprovada."
+  faxina_apos_teste:
+    obrigatoria: true
+    escopo: "Todo o repositório ServerVpss/CentralDark, inclusive operações só pelo GitHub, Bot CentralDark, Casa e CI."
+    owner: ".agents/skills/centraldark-operational-method/SKILL.md#faxina-após-o-teste"
+    encerramentos: [CONCLUIDO, FALHOU, INTERROMPIDO]
+    ordem: [INVENTARIAR_TEMPORARIOS_DA_TAREFA, REGISTRAR_PROVA, VALIDAR_DONO_E_CAMINHO, REMOVER_APENAS_TEMPORARIOS_AUTORIZADOS, CONFERIR_ESTADO_FINAL]
+    estados: [CONCLUIDA, SEM_TEMPORARIOS, PRESERVADO_COM_MOTIVO]
+    sem_temporarios: "Verificar e registrar SEM_TEMPORARIOS; leitura não autoriza criar ou remover recursos."
+    preservar: [ARQUIVOS_DO_USUARIO, TRABALHO_DE_TERCEIROS, EVIDENCIA_NECESSARIA, RECURSOS_PREEXISTENTES]
+    exclusivo_e_autorizado: true
+    sem_limpeza_geral_ou_exclusao_automatica_remota: true
+    so_concluir_com_leitura_de_confirmacao: true
+    nao_e_gatilho_nativo_do_github: true
   human_communication_bridge:
     owner: "docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md"
     # CENTRALDARK_MAPA_VISUAL_SEMANTICO_20261119

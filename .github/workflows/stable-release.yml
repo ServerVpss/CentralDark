@@ -77,7 +77,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           filter: blob:none
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - id: admit
@@ -347,7 +347,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           filter: blob:none
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - id: plan
@@ -383,7 +383,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           filter: blob:none
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - id: plan
@@ -435,7 +435,7 @@ jobs:
           fetch-depth: 0
           filter: blob:none
           fetch-tags: true
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - id: manifest
@@ -527,7 +527,7 @@ jobs:
       - uses: useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a  # v1
         with:
           ref: ${{ github.sha }}
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - run: python -m scripts.releases.stable gate admit ci docker nix pm-bundle termux-checks windows-live install-e2e candidates-darwin-arm64 candidates-win32-arm64 candidates-win32-x64 candidates-win32-bundle candidates-termux candidate-manifest transitions-darwin-arm64 transitions-win32 windows-packaged macos-packaged-arm64 bootstrap-version
@@ -621,11 +621,11 @@ jobs:
           fetch-depth: 0
           filter: blob:none
           fetch-tags: true
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - name: Set up the native identity reader
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: node
           cache-python: false
@@ -660,7 +660,7 @@ jobs:
       - uses: useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a  # v1
         with:
           ref: ${{ github.sha }}
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - run: python -m scripts.releases.stable gate acceptance publish-docker publish-bundles publish-canary
@@ -689,11 +689,11 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           filter: blob:none
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         with:
           cache-python: false
       - name: Set up the native identity reader
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: node
           cache-python: false

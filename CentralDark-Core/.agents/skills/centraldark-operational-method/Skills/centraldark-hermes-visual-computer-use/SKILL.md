@@ -146,6 +146,46 @@ O Python confere identidade da janela com `GetWindowThreadProcessId`, retangulo 
 **Resposta recebida do painel direito:** Hermes relatou `HERMES_LOCAL=PASS`, `HOSTINGER_MCP=PASS`, `CENTRALDARK_MCP=BLOCKED_OAUTH`, `CLOUDFLARE_MCP=BLOCKED_OAUTH` e `CASA=UNKNOWN/BLOCKED` na sess├úo dele. Indicou Casa Agent/rota/autentica├º├úo e teste remoto real como pend├¬ncias. Essas s├úo declara├º├Áes do pr├│prio painel e n├úo substituem medi├º├Áes independentes em cada ambiente.
 <!-- /CENTRALDARK_HERMES_DASHBOARD_CUA_FOREGROUND_FALLBACK_20261110 -->
 
+
+<!-- CENTRALDARK_CURSOR_MOUSE_DEMO_20261125 -->
+## Demonstração canônica — Cursor/Mouse coordenado
+
+`RECIPE_ID=CENTRALDARK_CURSOR_MOUSE_DEMO`
+
+**Gatilhos equivalentes:**
+- `!CENTRALDARK iniciar teste do mouse`
+- `!CENTRALDARK iniciar teste do mause`
+- `!CENTRALDARK iniciar teste do cursor`
+- `!CENTRALDARK iniciar teste do cursor_mouse`
+
+Todos resolvem para a mesma receita. Não criar outro cursor, daemon, overlay, agente ou writer.
+
+**Executor existente evoluído:** `scripts/demo_cursor_mouse.py`. Ele lê `default.json`, mede a geometria atual dos quatro monitores Windows, aplica o binding humano já aprovado e usa o `cua-driver` já ativo.
+
+**Sequência:** `ONE_WRITER → 4 SESSIONS CUA → ENABLE CURSORS → COMET_SWOOOP + TRAIL + GLOW → rota 4→2→1→3→4 → CLEANUP`. As sessões são efêmeras e ganham ID novo por execução. Não catalogar PID/HWND/coordenada histórica como identidade permanente.
+
+**Semântica do paralelismo no Windows:** os quatro cursores ficam visíveis ao mesmo tempo, porém o writer único envia `move_cursor(scope=window)` em ordem subsequente. A tentativa com quatro writers concorrentes causou timeout no daemon e não é a receita. Portanto: `PARALELISMO_VISUAL_COORDENADO=true`, `WINDOWS_TRUE_CONCURRENT_INPUT=false`, `PHYSICAL_MOUSE=UNTOUCHED`.
+
+**Prova Casa 25/11/2026:** replay dinâmico do executor completou a rota `4 → 2 → 1 → 3 → 4`, quatro sessões, cinco estágios e encerrou com `completed=true` + `cleanup=true`. A demonstração anterior do mesmo método foi confirmada visualmente pelo CHEFE. Um replay futuro deve produzir recibo próprio; execução anterior não prova visibilidade futura.
+<!-- /CENTRALDARK_CURSOR_MOUSE_DEMO_20261125 -->
+
+<!-- CENTRALDARK_CURSOR_MOUSE_SPEED_PRESETS_20261125 -->
+### Velocidades verificadas da mesma demonstração
+
+A receita `CENTRALDARK_CURSOR_MOUSE_DEMO` tem três níveis comprovados na Casa SEGREDO em 25/11/2026. Eles alteram somente tempo de movimento/pausa; writer, quatro sessões Cua, rota, estilo, mouse físico e cleanup permanecem iguais.
+
+| Entrada humana | Percentual | glide_ms | stage_pause_ms | hold_seconds | Média medida por etapa |
+|---|---:|---:|---:|---:|---:|
+| `30%` | 30 | 1000 | 700 | 1.5 | 7.43 s |
+| `FLUIDO` ou `50%` | 50 | 600 | 400 | 1.0 | 5.80 s |
+| `RÁPIDO` ou `100%` | 100 | 180 | 100 | 0.5 | 3.99 s |
+
+O executor aceita `--speed-percent 30|50|100`, `--preset fluido` ou `--preset rapido`. Percentuais fora desses três níveis não são chamados de verificados. Timing manual legado continua disponível quando nenhum preset é solicitado.
+
+Recibo técnico: `catalogo/comprovacoes/cursor-mouse-speed-presets-20261125.json`. `30%/50%/100%` tiveram `completed=true` e `cleanup=true`; a confirmação visual humana de cada replay específico não é inferida pelo script.
+<!-- /CENTRALDARK_CURSOR_MOUSE_SPEED_PRESETS_20261125 -->
+
+
 <!-- CENTRALDARK_EXISTING_SSH_TERMINAL_VISUAL_RECIPE_20261112 -->
 ## Terminal SSH existente na Casa ÔåÆ Linux CentralDark-OS
 
@@ -280,3 +320,53 @@ ACTION_WITHOUT_PROVEN_EFFECT
 
 **Kaizen/NEXT_CURSOR:** uma sessao por operacao autorizada; avisar monitor/efeito antes; perguntar sobre visibilidade apenas se a confirmacao ainda nao foi recebida; manter recibo tecnico e prova humana distintos; validar cone, commit, push conforme gate e readback sem levar mutacoes de outros owners.
 <!-- /CENTRALDARK_WORKING_CURSOR_MOTION_VISUAL_PASS_20261114 -->
+
+
+## 26/11/2026 - Fluxo compacto de automacao visual
+
+Reutilizar o alvo vivo (PID/HWND, conversa, monitor, geometria) e a mesma sessao Cua durante uma operacao autorizada. Nao repetir leitura integral da Skill, enumeracao dos quatro monitores, nem pedir nova confirmacao da mesma intencao. Redescobrir apenas quando janela, conversa, geometria, foco do controle ou permissao mudarem, ou o alvo ficar ambiguo.
+
+Agrupar em uma chamada remota quando possivel: validar alvo e campo livre (preservar rascunho alheio), digitar, reler o valor exato, enviar uma vez, confirmar a nova mensagem na conversa e encerrar a sessao. Usar o overlay e cursor existentes quando houver acao visual. Nao enviar de novo se a resposta for incerta; consultar o estado antes de qualquer tentativa. Se background for recusado expressamente, usar somente o fallback autorizado do driver, verificando o alvo; nao contornar autorizacoes. Resposta do agente nao prova efeito externo.
+
+Separar preparacao, entrega e efeito: DRAFT_VERIFIED, SENT_VERIFIED, ACK_VERIFIED e EFFECT_PROVED. Usar recibo compacto com alvo, estado, tempo monotonic e motivo de bloqueio, sem segredos. Nao confundir espera da resposta com falha de envio. Acompanhar tarefas por dependencia; um escritor por escopo. Nao criar daemon, watcher, driver ou Skill paralelos.
+
+Delta do codigo: o clique Cua usa HWND explicito e falha fechado quando o driver recusa background, em vez de registrar despacho falso. O agrupamento de envio acima e uma receita operacional; ainda requer implementacao/teste integrado antes de declarar automatizacao permanente. Medir chamadas remotas e tempo real em cenarios equivalentes antes de divulgar ganho percentual.
+
+
+<!-- CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->
+## 26/11/2026 - Halo nativo oficial da Skill Mae (confirmacao humana)
+
+Owner de renderizacao: centraldark-halo-main, aplicativo ja em execucao.
+A Skill Mae e os agentes reutilizam a entrada de estado existente do Halo;
+Cua e o atuador de mouse virtual e input; Blink e a sinalizacao do alvo.
+Nao criar outro aplicativo, renderer, cursor, daemon ou API concorrente.
+Nao sobrepor HermesVisual e Halo na mesma tela.
+
+Receita aprovada no ambiente Casa (build DEV do Segredo Agente Remoto):
+`scripts/windows/Test-State.ps1 -State working -Monitor 1 -BlinkCursor`;
+depois `-State attention -Monitor 1`, `-State completed -Monitor 1`
+e `-State idle` no encerramento. Reutilizar o mesmo alvo vivo; usar
+PID/HWND ou monitor confirmado e redescobrir somente se mudar.
+A rota existente grava atomicamente o evento de ciclo de vida em state.json,
+no diretorio .centraldark-halo ou fallback .codex-halo ja selecionado.
+Preservar writer ativo, rascunhos, permissoes e mouse fisico; nao fabricar
+estados ou escrever sobre operacao de outro agente. Azul = trabalho real;
+amarelo = atencao realmente necessaria; verde = etapa comprovada; idle =
+fim da propria operacao. A sequencia completa de cores e apenas teste,
+nao uma simulacao de atividade para cada operacao real.
+
+Recibo tecnico do teste 26/11: monitor humano 1, processo
+centraldark-halo-lite PID 25260; log UTC 21:38:06.686 idle -> working,
+21:38:10.769 working -> attention, 21:38:12.798 attention -> completed,
+21:38:14.767 completed -> idle. Exit 0, runtime 10.27 s, state final idle.
+O CHEFE confirmou visualmente a sequencia de cores no monitor 1.
+VISUAL_STATES=PASS; CUA_BLINK_VISIBLE=UNKNOWN (nao foi confirmado
+separadamente neste teste). Nenhum servico reiniciado.
+
+Limite: o executavel testado pertence ao checkout DEV em C: e sua fonte
+diverge da arvore F:; nesta ainda falta halo_focus.rs. Este registro nao
+prova paridade, build, deploy ou integracao com o envio compacto.
+Proximo passo: reconciliar o owner nativo do Halo, preservar os gates e
+testar o fluxo de envio compacto integrado ao mesmo Halo, sem renderer
+duplicado. Medir latencia real; nao extrapolar ganho percentual.
+<!-- /CENTRALDARK_HALO_CANONICAL_VISUAL_20261126 -->

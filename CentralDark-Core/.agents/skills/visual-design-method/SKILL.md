@@ -220,6 +220,8 @@ position), and any theme/token system already in place. Only extend.
   duplicate it elsewhere)
 - Structural/aesthetic lessons that survive contact with real use →
   `knowledge-compiler` for crystallization
+- Session-proven Tauri/WebView presentation recipes →
+  `docs/RECEITAS-TAURI-APRESENTACAO-2026-11-25.md`
 - This skill governs the **decision process**, not delivery mechanics —
   those still belong to whatever engine/tool renders or publishes the page
 

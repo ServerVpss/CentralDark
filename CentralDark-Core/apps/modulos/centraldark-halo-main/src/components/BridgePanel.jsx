@@ -129,7 +129,11 @@ export default function BridgePanel({ centralDark }) {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      setStatus(await centralDark.getStatus());
+      const next = await centralDark.getStatus();
+      setStatus(next);
+      setClockNow(Date.now());
+      void centralDark.recordDiagnostic("monitor-refresh", "ok");
+      return next;
     } finally {
       setLoading(false);
     }
@@ -147,10 +151,11 @@ export default function BridgePanel({ centralDark }) {
 
   useEffect(() => {
     if (!auth.authenticated) return;
-    const kickoff = window.setTimeout(() => { void refresh().catch(() => {}); }, 0);
-    const timer = window.setInterval(() => { void refresh().catch(() => {}); }, 10000);
+    const refreshInBackground = () => { void refresh().catch((error) => centralDark.recordDiagnostic("monitor-refresh", "error", error)); };
+    const kickoff = window.setTimeout(refreshInBackground, 0);
+    const timer = window.setInterval(refreshInBackground, 10000);
     return () => { window.clearTimeout(kickoff); window.clearInterval(timer); };
-  }, [refresh, auth.authenticated]);
+  }, [refresh, auth.authenticated, centralDark]);
 
   // IPC notifica mudanças do pareamento imediatamente; a leitura periódica
   // existente continua sendo a contraprova de saúde e rede.
@@ -179,22 +184,53 @@ export default function BridgePanel({ centralDark }) {
    * EFEITO: chama operation() uma vez, informa erro e refaz leitura depois.
    */
   async function runAction(name, operation) {
+    const traceId = globalThis.crypto.randomUUID().replaceAll("-", "");
     setAction({ name, state: "running", text: "Executando…" });
+    void centralDark.recordDiagnostic(name, "start");
     try {
-      const result = await operation();
+      const result = (await operation(traceId)) || {};
+      const pairingAction = name === "pair" || name === "confirmar-codigo";
+      const complete = !pairingAction || result.state === "PAIRED_VERIFIED";
+      void centralDark.recordDiagnostic(name, complete ? "ok" : "pending", result.state);
       setAction({
         name,
-        state: result.state === "PAIRED_VERIFIED" ? "pass" : "running",
-        text: result.code
-          ? `Código ${result.code} · clique em Confirmar pareamento nesta janela.`
-          : (result.state || "Ação iniciada"),
+        state: complete ? "pass" : "running",
+        text: result.state === "AUTH_RESULT_PENDING" ? "Estamos verificando o vínculo."
+          : result.code ? "Confira o código e confirme o vínculo nesta janela."
+          : result.state === "LOCAL_TOKEN_UNVERIFIED" ? "Estamos verificando o dispositivo."
+          : result.state === "PAIRED_VERIFIED" ? "Dispositivo vinculado." : complete ? "Ação concluída." : "Aguardando confirmação.",
       });
-      window.setTimeout(refresh, 1500);
+      if (pairingAction) window.setTimeout(() => {
+        void refresh().catch((error) => centralDark.recordDiagnostic("monitor-refresh", "error", error));
+      }, 1500);
     } catch (error) {
-      setAction({
-        name,
-        state: "fail",
-        text: error.message || "Falha observada",
+      const code = await centralDark.recordDiagnostic(name, "error", error, traceId);
+      const pairing = name === "pair" || name === "confirmar-codigo";
+      // Um POST interrompido pode ter sido aceito. Não mandar confirmar de novo sem verificar.
+      const mayRetry = name === "pair" && code === "MCP_HTTP_CLIENT_UNAVAILABLE";
+      const text = pairing ? "Não foi possível vincular seu dispositivo."
+        : name === "refresh" ? "Não foi possível atualizar o estado da conexão."
+        : name === "open-panel" ? "Não foi possível abrir o painel."
+        : name === "logout" ? "Não foi possível sair da conta."
+        : "Não foi possível concluir esta ação.";
+      setAction({ name, state: "fail", text, reference: code ? `CD-${traceId}` : null,
+        details: mayRetry ? "Tente novamente. Se continuar, fale com o suporte."
+          : name === "confirmar-codigo" ? "Verifique se o vínculo foi concluído. Se o problema continuar, fale com o suporte."
+          : "Se o problema continuar, fale com o suporte.",
+        retry: mayRetry ? () => runAction(name, operation) : null,
+        verify: name === "confirmar-codigo" ? async () => {
+          const reference = code ? `CD-${traceId}` : null;
+          let message;
+          try {
+            const current = await refresh();
+            message = current.pairing?.state === "PAIRED_VERIFIED" ? "Dispositivo vinculado." : "Vínculo ainda não confirmado.";
+          } catch (error) {
+            await centralDark.recordDiagnostic("refresh", "error", error, traceId);
+            message = "Não foi possível verificar o vínculo agora.";
+          }
+          setAction((active) => active?.state === "fail" && active?.reference === reference
+            ? { ...active, verificationStatus: message } : active);
+        } : null,
       });
     }
   }
@@ -210,6 +246,11 @@ export default function BridgePanel({ centralDark }) {
   const observedAt = status.observedAt ? Date.parse(status.observedAt) : NaN;
   const monitoringActive = Number.isFinite(observedAt) &&
     clockNow - observedAt >= 0 && clockNow - observedAt < 25000;
+
+  useEffect(() => {
+    if (!auth.authenticated) return;
+    void centralDark.recordDiagnostic("monitor", monitoringActive ? "ok" : "pending", "STATUS_STALE");
+  }, [auth.authenticated, centralDark, monitoringActive]);
 
   return (
     <main className="app-shell">
@@ -227,13 +268,13 @@ export default function BridgePanel({ centralDark }) {
             </svg>
           </div>
           <div>
-            <span>CENTRALDARK</span>
+            <span>SEGREDO GSM SERVER</span>
             <strong>Agente Remoto</strong>
           </div>
         </div>
         <div className="topbar-actions">
-          <button className="icon-button" onClick={logout} title={auth.user?.email || ""}>Sair da conta</button>
-          <button className="icon-button" onClick={refresh} disabled={loading} aria-label="Atualizar status">
+          <button className="icon-button" onClick={() => void runAction("logout", logout)} title={auth.user?.email || ""}>Sair da conta</button>
+          <button className="icon-button" onClick={() => void runAction("refresh", refresh)} disabled={loading} aria-label="Atualizar status">
             <RefreshCw size={16} className={loading ? "spin" : ""} />
             {loading ? "Atualizando" : "Atualizar"}
           </button>
@@ -245,10 +286,9 @@ export default function BridgePanel({ centralDark }) {
           <StatusPill state={bridgeState}>
             {!centralDark.isNative ? "PRÉVIA DEV" : health.reachable ? "CASA CONECTADA" : "CASA SEM RESPOSTA"}
           </StatusPill>
-          <h1>Uma ponte. Um estado real.</h1>
+          <h1>Segredo GSM Server.</h1>
           <p>
-            Controle a conexão deste computador, confirme autorizações
-            e acompanhe a rede em um só lugar.
+            Conecte o seu computador e acompanhe cada etapa com segurança.
           </p>
         </div>
         <div className="hero-orbit">
@@ -290,7 +330,7 @@ export default function BridgePanel({ centralDark }) {
         </button>
         <button
           className="secondary-action"
-          onClick={() => centralDark.openCockpit()}
+          onClick={() => void runAction("open-panel", centralDark.openCockpit)}
         >
           <ExternalLink size={20} />
           <span>
@@ -304,9 +344,9 @@ export default function BridgePanel({ centralDark }) {
         <div className={`action-receipt ${pairingVerified ? "pairing-success" : ""}`} role="status">
           {pairingVerified ? <AnimatedDoneIcon size={18} /> : <KeyRound size={18} />}
           <span>
-            {pairingVerified ? "Pareamento verificado com sucesso" : ["WAITING_OWNER_CONSENT", "PAIRING_PENDING"].includes(status.pairing.state) ? "Aguardando sua confirmação" : "Verificando pareamento"}
+            {pairingVerified ? "Pareamento verificado com sucesso" : status.pairing.state === "DEVICE_REPAIR_REQUIRED" ? "Vínculo anterior rejeitado. Clique em Vincular dispositivo para confirmar um novo vínculo." : status.pairing.state === "LOCAL_TOKEN_UNVERIFIED" ? "Verificação do dispositivo pendente" : ["WAITING_OWNER_CONSENT", "PAIRING_PENDING"].includes(status.pairing.state) ? "Aguardando sua confirmação" : "Verificando pareamento"}
             {!pairingVerified && status.pairing.code ? ` · código ${status.pairing.code}` : ""}
-            {!pairingVerified && status.pairing.error ? ` · ${status.pairing.error}` : ""}
+            {!pairingVerified && status.pairing.error && status.pairing.error !== status.pairing.state ? ` · ${status.pairing.error === "LOCAL_TOKEN_UNVERIFIED" ? "Verificação do dispositivo pendente" : status.pairing.error}` : ""}
           </span>
         </div>
       )}
@@ -317,7 +357,7 @@ export default function BridgePanel({ centralDark }) {
             <strong>Seu código: <code>{status.pairing.code}</code></strong>
             <p>Confira o código e confirme para vincular este computador à sua conta.</p>
           </div>
-          <div className="pairing-option-buttons"><button disabled={!centralDark.canPair} onClick={() => runAction("confirmar-codigo", () => centralDark.confirmPair())}><ShieldCheck size={17} /> Confirmar vínculo</button></div>
+          <div className="pairing-option-buttons"><button disabled={!centralDark.canPair} onClick={() => runAction("confirmar-codigo", (traceId) => centralDark.confirmPair(traceId))}><ShieldCheck size={17} /> Confirmar vínculo</button></div>
         </section>
       )}
 
@@ -330,7 +370,24 @@ export default function BridgePanel({ centralDark }) {
           ) : (
             <Activity size={18} className="pulse" />
           )}
-          <span>{action.text}</span>
+          <div role={action.state === "fail" ? "alert" : "status"}>
+            <strong>{action.text}</strong>
+            {action.details && <div>{action.details}</div>}
+            {action.reference && <div>Referência do atendimento: <code style={{ overflowWrap: "anywhere" }}>{action.reference}</code></div>}
+            {action.state === "fail" && <div className="pairing-option-buttons">
+              {action.retry && <button type="button" onClick={action.retry}>Tentar novamente</button>}
+              {action.verify && <button type="button" onClick={action.verify}>Verificar vínculo</button>}
+              {action.reference && <button type="button" onClick={async () => {
+                const reference = action.reference;
+                let copied = false;
+                try { await window.navigator.clipboard.writeText(reference); copied = true; } catch { /* leitura manual disponível */ }
+                setAction((previous) => previous?.reference === reference
+                  ? { ...previous, copyStatus: copied ? "Referência copiada." : "Selecione e copie a referência acima." } : previous);
+              }}>Copiar referência</button>}
+            </div>}
+            {action.copyStatus && <div role="status">{action.copyStatus}</div>}
+            {action.verificationStatus && <div role="status">{action.verificationStatus}</div>}
+          </div>
         </div>
       )}
 

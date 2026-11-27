@@ -7,6 +7,8 @@ import { pathToFileURL } from "node:url";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { CallToolRequestSchema, ListResourcesRequestSchema, ListToolsRequestSchema, ReadResourceRequestSchema, } from "@modelcontextprotocol/sdk/types.js";
+import { eventSubscriptionStore } from "./sessions.js";
+import { CENTRALDARK_RECEIPT_CREATED, createEventRegistry } from "./events.js";
 import { z } from "zod";
 import { log } from "./log.js";
 import { ALL_TOOLS, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
@@ -186,6 +188,25 @@ Nunca contornar gates de autenticacao, autorizacao, auditoria e seguranca.
 Em contexto operacional CentralDark, responda primeiro à pergunta; apresente o HUD/RUDY re-medido quando solicitado ou exigido pela missão vigente. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
+
+const EventsListRequestSchema = z.object({ method: z.literal("events/list"), params: z.object({ cursor: z.string().nullable().optional() }).optional() });
+const EventsSubscribeRequestSchema = z.object({
+    method: z.literal("events/subscribe"),
+    params: z.object({
+        name: z.literal(CENTRALDARK_RECEIPT_CREATED),
+        arguments: z.record(z.string(), z.unknown()).optional(),
+        delivery: z.object({ mode: z.literal("webhook"), url: z.string(), secret: z.string() }),
+        ttlMs: z.number().int().positive().optional(),
+        cursor: z.string().nullable().optional(),
+    }),
+});
+const EventsUnsubscribeRequestSchema = z.object({ method: z.literal("events/unsubscribe"), params: z.object({ id: z.string().min(1) }) });
+const centraldarkEventRegistry = createEventRegistry({ store: eventSubscriptionStore });
+
+export async function publishCentralDarkReceiptEvent(receipt) {
+    return centraldarkEventRegistry.publishReceipt(receipt);
+}
+
 export function buildServer(options) {
     const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
     // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
@@ -205,7 +226,12 @@ export function buildServer(options) {
         oauthScope: String(options.oauthScope || ""),
         correlationId: options.cid ?? null,
     });
-    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {}, events: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const eventPrincipal = Object.freeze({ accountId: options.callerUser, oauthScope: String(options.oauthScope || "") });
+    const eventRegistry = options.eventRegistry ?? centraldarkEventRegistry;
+    server.setRequestHandler(EventsListRequestSchema, async () => eventRegistry.list(eventPrincipal));
+    server.setRequestHandler(EventsSubscribeRequestSchema, async (req) => eventRegistry.subscribe(eventPrincipal, req.params));
+    server.setRequestHandler(EventsUnsubscribeRequestSchema, async (req) => ({ unsubscribed: await eventRegistry.unsubscribe(eventPrincipal, req.params) }));
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
         log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
@@ -535,7 +561,7 @@ export async function serveHttp(options = {}) {
   return httpServer;
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (process.argv[2] === "--stdio") await serveStdio();
   else if (process.argv[2] === "--http") await serveHttp();
 }

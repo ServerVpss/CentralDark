@@ -15,6 +15,15 @@ def check(path, needles=(), classification='PROVEN_IN_REPO'):
         ok=ok and not missing
     checks.append({'path':path,'classification':classification,'ok':ok,'missing':missing})
 
+def check_patterns(path, patterns=(), classification='PROVEN_PATTERN_IN_REPO'):
+    """Require the semantic declaration while tolerating layout-only changes."""
+    p=ROOT/path
+    text=p.read_text(encoding='utf-8',errors='replace') if p.exists() else ''
+    missing=[pattern for pattern in patterns if not re.search(pattern,text)]
+    checks.append({'path':path,'classification':classification,
+                   'ok':p.exists() and not missing,
+                   'missing':missing if p.exists() else ['FILE_MISSING']})
+
 def check_command(name, argv, classification='EXECUTABLE_CONTRACT_TEST'):
     try:
         proc=subprocess.run(argv,cwd=ROOT,text=True,capture_output=True,timeout=60,check=False)
@@ -1327,8 +1336,10 @@ check('apps/modulos/HERMES-CORE/prompts/hermes-core.md',[
  'EPHEMERAL_HELPER_IS_CANONICAL_ASSET=false','SAFE_TEMP_CLEANUP_AFTER_PROOF=true',
  'MEANINGFUL_DISCOVERY_COMPARE_CANONICAL_OWNER=true'
 ])
+check_patterns('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
+ r'(?m)^[ \t]*const[ \t]+INTERVAL[ \t]*=[ \t]*5000[ \t]*;',
+], classification='HERMES_ORCHESTRATOR_LOOP_INTERVAL')
 check('apps/modulos/HERMES-CORE/core/orchestrator.mjs',[
- 'const INTERVAL  = 5000',
  'const RETOMAR_INTERVALO = 45_000',
  'const GRAFO_INTERVAL = 30 * 60_000',
  'atualizarGrafo()',
@@ -1872,7 +1883,7 @@ check('docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/WORKFLOW-FAMILIES.json',[
  '"ONE_CLOCK": true',
  '"ONE_DISPATCHER": true',
  '"FAMILY_COUNT": 7',
- '"WORKFLOW_COUNT_BASELINE": 73',
+ '"WORKFLOW_COUNT_BASELINE": 74',
  '"ARM_ROUTER": true',
  '"FALLBACK_BEFORE_NEW_CAPABILITY": true',
  '"ARM_FAILURE_IS_CAPABILITY_FAILURE": false',

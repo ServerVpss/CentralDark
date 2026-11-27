@@ -1819,6 +1819,43 @@ slash:
   quit:
     description: "Exit the CLI (use --delete to also remove session history)"
 cli:
+  turn_summary:
+    verb:
+      edited: "edited"
+      read: "read"
+      ran: "ran"
+      searched: "searched"
+      searched_the_web: "searched the web"
+      searched_sessions: "searched sessions"
+      browsed: "browsed"
+      updated: "updated"
+      listed_skills: "listed skills"
+      delegated: "delegated"
+      called: "called"
+      more: "more"
+    noun:
+      file: "file"
+      files: "files"
+      page: "page"
+      pages: "pages"
+      command: "command"
+      commands: "commands"
+      script: "script"
+      scripts: "scripts"
+      path: "path"
+      paths: "paths"
+      time: "time"
+      times: "times"
+      skill: "skill"
+      skills: "skills"
+      task_list: "task list"
+      task_lists: "task lists"
+      task: "task"
+      tasks: "tasks"
+      memory: "memory"
+      memories: "memories"
+      tool: "tool"
+      tools: "tools"
   backtrack:
     title: "↺ Transcript — pick a prompt to edit"
     keys_hint: "Browsing transcript · ↑↓/jk scroll · ←→/hl prompts · ↵ edit · f fork · esc back"
@@ -3350,6 +3387,8 @@ cli:
     header: "🧠 Context Usage — {model}"
     compute_failed: "(._.) Could not compute context breakdown: {error}"
   error:
+    gateway_disconnected: "Gateway disconnected; turn outcome is unknown. Resume the printed session ID to check whether it completed or was interrupted; do not resend the work."
+    gateway_not_sent: "Gateway disconnected before the request was sent; nothing was sent."
     # Chat-panel copy for a failed model request (hermes_cli/cli_chat_error_copy.py).
     auth: "Your {provider} key was rejected. Run `hermes model` to re-enter it."
     billing: "Your {provider} account is out of credit. Top up at the provider, or run /model to switch."

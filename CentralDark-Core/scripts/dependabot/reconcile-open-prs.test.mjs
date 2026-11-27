@@ -79,3 +79,63 @@ test('existing approval owner requires authorized human, same repo, current scop
   assert.equal(candidate({...pr, authorized: true, head: {...pr.head, repo: {full_name: 'other/fork'}}}), false);
   assert.equal(candidate({...pr, user: {login: 'dependabot[bot]'}}), true);
 });
+
+async function reconcileOnlyCase({initial = pr, afterUpdate = initial, updatedHead = null, update = 422, childStatus = 0, env = {}} = {}) {
+  const calls = [], children = [];
+  let live = initial;
+  const response = (status, data) => ({status, ok: status >= 200 && status < 300, text: async () => JSON.stringify(data)});
+  const fetch = async (url, options) => {
+    const path = url.replace('https://api.github.com/repos/ServerVpss/CentralDark', '');
+    calls.push({path, method: options.method, body: options.body && JSON.parse(options.body)});
+    if (path.startsWith('/pulls?')) return response(200, [initial]);
+    if (path === '/pulls/' + initial.number) return response(200, live);
+    if (path.endsWith('/update-branch')) { live = afterUpdate; return response(update, {}); }
+    throw new Error('Unexpected side effect: ' + path);
+  };
+  let exit = 0;
+  try {
+    await execute({cwd:()=>'/fixture', stdout:{write(){}}, stderr:{write(){}},
+      env: {GITHUB_TOKEN:'fixture', GITHUB_REPOSITORY:'ServerVpss/CentralDark', COSTURA_RECONCILIATION_ONLY:'1', ...env},
+      exit: code => { throw new Error('EXIT_' + code); }}, {log(){},error(){}}, fetch,
+      (command,args,opts) => {
+        children.push({command,args,env:opts.env});
+        if (updatedHead) live = {...live,head:{...live.head,sha:updatedHead}};
+        return {status:childStatus, stdout:updatedHead ? 'RESOLVED_AND_PUSHED pr=10 head_ref=fix head='+updatedHead : ''};
+      }, DEFAULT_REQUIRED_WORKFLOWS, greenDecision, runBelongsToPullHead, selectLatestRun);
+  } catch (e) {
+    if (!/^EXIT_\d+$/.test(e.message)) throw e;
+    exit = Number(e.message.slice(5));
+  }
+  return {calls,children,exit};
+}
+test('root COSTURA protects draft, ledger, forks, and clean PRs', async () => {
+  for (const initial of [pr,{...pr,draft:true},{...pr,number:1977},{...pr,user:{login:'external'}},
+    {...pr,head:{...pr.head,repo:{full_name:'other/fork'}}}]) {
+    const r=await reconcileOnlyCase({initial});
+    assert.equal(r.calls.filter(c=>c.method!=='GET').length,0);
+    assert.equal(r.children.length,0);
+  }
+});
+test('root COSTURA requests native update without status or promotion', async () => {
+  const r=await reconcileOnlyCase({initial:{...pr,mergeable_state:'behind'},update:202});
+  assert.equal(r.calls.filter(c=>c.method!=='GET').length,1);
+  assert.equal(r.children.length,0);
+});
+test('root COSTURA pins SHA and compatible-only guard; verifies changed head', async () => {
+  const dirty={...pr,mergeable:false,mergeable_state:'dirty'};
+  const r=await reconcileOnlyCase({initial:dirty,updatedHead:'b'.repeat(40)});
+  assert.equal(r.exit,0);
+  assert.equal(r.children.length,1);
+  assert.equal(r.children[0].env.COSTURA_EXPECTED_PR_SHA,head);
+  assert.equal(r.children[0].env.COSTURA_COMPATIBLE_ONLY,'1');
+  assert.equal(r.calls.filter(c=>c.method!=='GET').length,1);
+});
+test('root COSTURA does not apply stale or unverified resolution', async () => {
+  const dirty={...pr,mergeable:false,mergeable_state:'dirty'};
+  const stale=await reconcileOnlyCase({initial:dirty,afterUpdate:{...dirty,head:{...dirty.head,sha:'c'.repeat(40)}}});
+  assert.equal(stale.children.length,0);
+  const unverified=await reconcileOnlyCase({initial:dirty});
+  assert.equal(unverified.exit,2);
+  const unknown=await reconcileOnlyCase({initial:dirty,childStatus:20});
+  assert.equal(unknown.exit,2);
+});

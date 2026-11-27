@@ -25,6 +25,9 @@ env_logger = "0.11"
 notify = { version = "7", default-features = false, features = ["macos_fsevent"] }
 dirs = "6"
 
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging"] }
+
 [features]
 default = ["custom-protocol"]
 custom-protocol = ["tauri/custom-protocol"]

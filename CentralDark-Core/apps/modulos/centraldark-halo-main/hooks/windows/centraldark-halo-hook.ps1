@@ -23,7 +23,9 @@ if (-not $HaloState) {
     exit 0
 }
 
-$HaloDir = Join-Path $env:USERPROFILE ".codex-halo"
+$CanonicalDir = Join-Path $env:USERPROFILE ".centraldark-halo"
+$LegacyDir = Join-Path $env:USERPROFILE ".codex-halo"
+$HaloDir = if ((Test-Path $CanonicalDir) -or -not (Test-Path $LegacyDir)) { $CanonicalDir } else { $LegacyDir }
 $StateFile = Join-Path $HaloDir "state.json"
 $Timestamp = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
 $TempFile = Join-Path $HaloDir ("state.json.{0}.{1}.tmp" -f $PID, [Guid]::NewGuid().ToString("N"))

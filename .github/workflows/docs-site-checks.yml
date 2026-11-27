@@ -21,7 +21,7 @@ jobs:
           ref: ${{ inputs.commit }}
 
       - name: Set up the locked site toolchain
-        uses: ./.github/actions/setup-pm
+        uses: $/.github/actions/setup-pm
         with:
           toolchain: all
           node-package-manager: npm

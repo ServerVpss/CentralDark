@@ -1,5 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   CLOCK_OWNER,
   dueBindings,
@@ -11,11 +15,15 @@ import {
   verifyWorkflowFamilyContract,
 } from "./workflow-family-dispatcher.mjs";
 
-test("73 workflows pertencem exatamente a 7 familias", () => {
+test("74 workflows pertencem exatamente a 7 familias", () => {
   const registry = loadRegistry();
   const registered = registeredWorkflowSet(registry);
   assert.equal(Object.keys(registry.families).length, 7);
-  assert.equal(registered.size, 73);
+  assert.equal(registered.size, 74);
+  assert.equal(registry.invariants.WORKFLOW_COUNT_BASELINE, 74);
+  for (const family of Object.values(registry.families)) {
+    assert.equal(family.count, family.workflows.length);
+  }
 });
 
 test("cron automatico permanece pausado por ordem do CHEFE, com owner unico e dispatch manual", () => {
@@ -40,12 +48,12 @@ test("clock sem owner correto ou pausa nao comprovada continua reprovado", () =>
   }
 });
 
-test("19 capabilities declaram ARM_ROUTER sem criar segundo relogio", () => {
+test("20 capabilities declaram ARM_ROUTER sem criar segundo relogio", () => {
   const registry = loadRegistry();
   const report = verifyWorkflowFamilyContract(undefined, registry);
   assert.equal(report.ok, true, report.errors.join("\n"));
-  assert.equal(report.schedule_bindings, 19);
-  assert.equal(report.capability_count, 19);
+  assert.equal(report.schedule_bindings, 20);
+  assert.equal(report.capability_count, 20);
   for (const binding of registry.schedule_bindings) {
     const arms = resolveCapabilityArms(binding, registry);
     assert.ok(arms.length >= 1, binding.capability);
@@ -54,6 +62,47 @@ test("19 capabilities declaram ARM_ROUTER sem criar segundo relogio", () => {
         assert.ok(field in arm, `${binding.capability}:${arm.id}:${field}`);
       }
     }
+  }
+});
+
+test("watchdog preserva a cadencia no binding do clock pausado", () => {
+  const registry = loadRegistry();
+  const due = dueBindings("*/5 * * * *", registry);
+  assert.equal(due.length, 1);
+  assert.equal(due[0].workflow, ".github/workflows/ci-failed-run-watchdog.yml");
+  assert.equal(due[0].capability, "CI_FAILED_RUN_WATCHDOG");
+  assert.equal(due[0].family, "SENTINELA_OBSERVABILIDADE");
+  assert.equal(registry.clock_mode, "MANUAL_PAUSED_BY_CHEFE");
+  assert.equal(verifyWorkflowFamilyContract(undefined, registry).clock_scheduler_active, false);
+});
+
+test("watchdog sem registro continua reprovado por identidade e denominador", () => {
+  const registry = loadRegistry();
+  registry.families.SENTINELA_OBSERVABILIDADE.workflows =
+    registry.families.SENTINELA_OBSERVABILIDADE.workflows.filter((path) => !path.endsWith("/ci-failed-run-watchdog.yml"));
+  const report = verifyWorkflowFamilyContract(undefined, registry);
+  assert.equal(report.ok, false);
+  assert.ok(report.errors.includes("UNREGISTERED_WORKFLOW:.github/workflows/ci-failed-run-watchdog.yml"));
+  assert.ok(report.errors.includes("WORKFLOW_DENOMINATOR:live=74:declared=73"));
+});
+
+test("cron autonomo reintroduzido no watchdog continua bloqueado", () => {
+  const root = resolve(fileURLToPath(new URL("../..", import.meta.url)));
+  const fixture = mkdtempSync(resolve(tmpdir(), "centraldark-workflow-clock-"));
+  const workflowDir = resolve(fixture, ".github/workflows");
+  mkdirSync(workflowDir, { recursive: true });
+  try {
+    for (const name of readdirSync(resolve(root, ".github/workflows")).filter((name) => /\.ya?ml$/i.test(name))) {
+      copyFileSync(resolve(root, ".github/workflows", name), resolve(workflowDir, name));
+    }
+    const watchdog = resolve(workflowDir, "ci-failed-run-watchdog.yml");
+    writeFileSync(watchdog, readFileSync(watchdog, "utf8").replace(/^on:\s*$/m, 'on:\n  schedule:\n    - cron: "*/5 * * * *"'));
+    const report = verifyWorkflowFamilyContract(fixture);
+    assert.equal(report.ok, false);
+    assert.ok(report.errors.includes("CLOCK_OWNER_VIOLATION:.github/workflows/ci-failed-run-watchdog.yml"));
+    assert.equal(report.clock_scheduler_active, false);
+  } finally {
+    rmSync(fixture, { recursive: true, force: true });
   }
 });
 

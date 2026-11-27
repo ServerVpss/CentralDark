@@ -91,7 +91,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 scripts/release.py --prune-canaries --publish --remote origin
-      - uses: ./.github/actions/setup-pm
+      - uses: $/.github/actions/setup-pm
         if: env.CLOUDFLARE_R2_ACCOUNT_ID != ''
         with:
           cache-python: false

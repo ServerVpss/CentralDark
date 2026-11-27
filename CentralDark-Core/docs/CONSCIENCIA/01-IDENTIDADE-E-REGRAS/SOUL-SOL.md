@@ -1214,7 +1214,7 @@ ANCHOR_UPDATE_AFTER_REVIEW_ONLY=true
 ```
 
 ```text
-SOUL_SYNC_ANCHOR_BEGIN
+HISTORICAL_OWNER_BLOBS_20261007
 AGENTS.md=09b372f4aa82f492f50387523862f1f727fe935c
 LEIA-ME-IA.md=be6a48a64c0321f4b0390fa0acd222bf039e2212
 CLAUDE.md=4611c71aa4d73616974d8dbb66875cf3a5f91ce4
@@ -1272,12 +1272,12 @@ apenas repondo a ancora para os blobs atuais. `LEIA-ME-IA.md`, `CLAUDE.md`
 e `CONTRACT.yml` nao mudaram desde a revisao anterior.
 
 SOUL_SYNC_ANCHOR_BEGIN
-AGENTS.md=3909a76d740840e010790e77ca0e8f51b154d76a
-LEIA-ME-IA.md=077f732974dd536a4c8e7a5afef87fc6ef4009ae
-CLAUDE.md=6b0e20ae3cea0e92fc51c462bb5f58db124afa5a
-CENTRALDARK_AI_BOOT.yaml=151150229091ad3a14b45e1bacf756f90f558ab8
-docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=d16bfb8540e29db3417c56366832de5bd18ce74d
-CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-10-27T12:25:24.166Z
+AGENTS.md=cb53975c4b2c7d6f1416f8086bcb591c55391cf7
+LEIA-ME-IA.md=91709048f35e9d20c55257872d260718efd0a881
+CLAUDE.md=79d98de6524aa26abe48865b5c879364bc91d8f3
+CENTRALDARK_AI_BOOT.yaml=bfe8f48a06e1f6876c65b2bf4524fee0ec353547
+docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/CONTRACT.yml=a05fe34648d66c44036d98530b1726879d6f9162
+CROSS_SURFACE_CONTINUOUS_CONTRACT_SYNC=2026-11-27
 SOUL_SYNC_ANCHOR_END
 
 Revisão 2026-10-27 — ancoragem causal dos cinco owners, após diff de blobs:
@@ -1304,6 +1304,53 @@ atualiza somente a impressão dos cinco owners CURRENT após leitura causal.
 
 ```
 
+
+Revisão 2026-11-27 — sincronia causal após comparação dos cinco owners da
+`main` em `c5add608cdf0ff81be47840440c50881ad04fcbf` com seus blobs
+anteriormente ancorados. Os caminhos da âncora são relativos a
+`CentralDark-Core/` neste monorepo; os valores são hashes de conteúdo Git,
+não prova de execução ou de sincronização física da Casa.
+
+- `AGENTS.md` passou a exigir raiz descoberta pelo arquivo executado e identidade
+  Git validada, preservando caminhos históricos como proveniência. O menor delta
+  útil segue publicação autorizada, teste e readback; checkout isolado aprovado
+  não equivale à Casa sincronizada. Trabalho local, índices, locks e recursos de
+  terceiros permanecem preservados. DEV-FIRST, correção causal vizinha e aceite
+  humano quando exigido continuam nos owners existentes, sem criar outro executor.
+- `LEIA-ME-IA.md` e `CENTRALDARK_AI_BOOT.yaml` vinculam a entrada GitHub a duas
+  leituras reais, BOOT primeiro e LEIA depois, com SHA e resultado explícitos.
+  O agente assume leitura, teste e registro do aprendizado útil no owner existente.
+  O ciclo só fecha com efeito no alvo, contraprova, recibo e conferência após a
+  faxina dos temporários próprios; observabilidade usa o logger existente,
+  distingue falha de sucesso e preserva segredos. Documento publicado não instala
+  gatilho nem comprova consumo no runtime.
+- A continuidade privada pertence ao usuário e ao runtime medidos: Casa, VPS e
+  outra instalação não compartilham estado por presunção. Recuperar a mesma
+  intenção e missão; sem acesso ao estado vivo, manter o claim dependente
+  PENDENTE. A rota de navegador segue leitura, ação autorizada e releitura da
+  mesma aba, sem declarar paridade de uma ferramenta ainda não medida.
+- `CLAUDE.md` recebeu comunicação PT-BR, mapa visual e separação entre conversa
+  humana e campos técnicos, já absorvidos nas cláusulas de 12, 19 e 21/11 desta
+  SOUL. Isso não altera gates, evidências ou identificadores. A apresentação
+  pedida pelo CHEFE prevalece; nenhuma segunda gramática ou HUD é criada.
+- `CONTRACT.yml` mudou somente os dois ponteiros da skill de paridade para
+  `.agents/skills/centraldark-operational-method/Skills/centraldark-unified-surface-parity/SKILL.md`.
+  BOOT e AGENTS também apontam às receitas reunidas na mesma Skill Mãe.
+  Identidade, autoridade e política de prova permanecem nos mesmos donos.
+
+Reparo causal do mesmo ciclo: AGENTS e README apontam agora ao componente
+HudDeterministico que o carregador de BOOT já usa; o HTML retirado da árvore
+continua acessível pelo commit fixado no inventário, sem afirmar paridade
+integral da migração. Espelhos físicos exigem configuração explícita e
+readback. CLAUDE aponta à skill de credenciais no destino já consolidado
+da Skill Mãe. A menção genérica a documentos, recibos e histórico foi
+distinguida de um caminho executável. As âncoras incluem estes deltas
+revisados; nenhuma mudança de runtime ou permissão é inferida deles.
+
+O snapshot de 07/10 permanece identificado como histórico. Há um único bloco
+`SOUL_SYNC_ANCHOR_BEGIN` ativo, atualizado depois desta revisão. A sincronia é
+documental; testes e readback do consumidor continuam necessários antes de
+qualquer alegação de FIXED_POINT da missão.
 
 ### 2.5 Grafo Vivo no BRAIN — projeção derivada com freshness verificável (2026-10-01)
 
