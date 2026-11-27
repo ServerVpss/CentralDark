@@ -31,6 +31,19 @@ def call(driver, sid, name, payload=None):
         raise RuntimeError("CUA_CLI_LOGICAL_ERROR " + name + ": " + str(result)[:450])
     return result
 
+def dispatch_window_click(driver, sid, pid, hwnd, x, y):
+    """Bind the exact window and fail closed on rejected background input."""
+    result = call(driver, sid, "click", {
+        "scope": "window", "pid": pid, "window_id": hwnd,
+        "x": x, "y": y, "delivery_mode": "background",
+    })
+    if result.get("code") == "background_unavailable" or result.get("escalation"):
+        raise RuntimeError("CUA_CLICK_BACKGROUND_UNAVAILABLE: no automatic retry")
+    if result.get("code") and not result.get("delivery"):
+        raise RuntimeError("CUA_CLICK_NOT_DISPATCHED: " + str(result.get("code")))
+    return result
+
+
 def resolve_window(pid, hwnd):
     """Valida a janela viva antes de qualquer clique do Cua (sem mouse fisico)."""
     user32 = ctypes.windll.user32
@@ -223,10 +236,8 @@ def main():
                     call(driver, sid, "move_cursor",
                          {"scope": "window", "x": x, "y": y})
                     time.sleep(.8)
-                    clicked = call(driver, sid, "click",
-                        {"scope": "window", "pid": pid,
-                         "x": x - rect.left, "y": y - rect.top,
-                         "delivery_mode": "background"})
+                    clicked = dispatch_window_click(driver, sid, pid, hwnd,
+                                                    x - rect.left, y - rect.top)
                     time.sleep(1.2)
                 finally:
                     hidden = visual.request("hide_overlay", session=sid)

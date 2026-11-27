@@ -48,6 +48,18 @@ impl HaloState {
     }
 }
 
+/// !RASTRO: escopo fisico exclusivo do Halo. Sem alvo explicito, ALL legado.
+/// @owner centraldark-halo-main @doc_ref docs/RELEASE.md
+/// @last_updated 2026-11-19T08:55:00Z
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum HaloTarget {
+    #[default]
+    All,
+    Monitor { x: i32, y: i32, width: u32, height: u32 },
+    Window { pid: u32, hwnd: u64 },
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct StateFile {
@@ -58,12 +70,18 @@ pub struct StateFile {
     pub session_id: Option<String>,
     #[serde(default)]
     pub event: Option<String>,
+    #[serde(default)]
+    pub target: HaloTarget,
+    #[serde(rename = "blinkCursor", default)]
+    pub blink_cursor: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct HaloEvent {
     pub state: HaloState,
     pub updated_at: u64,
+    pub target: HaloTarget,
+    pub blink_cursor: bool,
 }
 
 impl StateFile {
@@ -77,9 +95,16 @@ impl StateFile {
                 return Err("state is expired");
             }
         }
+        match &self.target {
+            HaloTarget::Monitor { width, height, .. } if *width == 0 || *height == 0 => return Err("invalid monitor bounds"),
+            HaloTarget::Window { pid, hwnd } if *pid == 0 || *hwnd == 0 => return Err("invalid window identity"),
+            _ => {}
+        }
         Ok(HaloEvent {
             state,
             updated_at: self.updated_at,
+            target: self.target,
+            blink_cursor: self.blink_cursor,
         })
     }
 }
@@ -103,6 +128,8 @@ mod tests {
             updated_at,
             session_id: None,
             event: None,
+            target: HaloTarget::All,
+            blink_cursor: false,
         }
     }
 
@@ -125,5 +152,31 @@ mod tests {
     #[test]
     fn rejects_unknown_state() {
         assert!(state_file("success", 10_000).validate(10_000).is_err());
+    }
+
+    #[test]
+    fn legacy_event_keeps_all_monitors_and_no_cursor() {
+        let f: StateFile = serde_json::from_str(r#"{"state":"working","updatedAt":10000}"#).unwrap();
+        let e = f.validate(10_000).unwrap();
+        assert_eq!(e.target, HaloTarget::All);
+        assert!(!e.blink_cursor);
+    }
+
+    #[test]
+    fn monitor_and_window_targets_fail_closed_when_invalid() {
+        let mut monitor = state_file("working", 10_000);
+        monitor.target = HaloTarget::Monitor { x:1920,y:-840,width:0,height:1920 };
+        assert!(monitor.validate(10_000).is_err());
+        let mut window = state_file("working", 10_000);
+        window.target = HaloTarget::Window { pid:0,hwnd:1 };
+        assert!(window.validate(10_000).is_err());
+    }
+
+    #[test]
+    fn targeted_window_round_trips_with_cua_marker() {
+        let f: StateFile = serde_json::from_str(r#"{"state":"working","updatedAt":10000,"target":{"kind":"window","pid":42,"hwnd":202},"blinkCursor":true}"#).unwrap();
+        let e = f.validate(10_000).unwrap();
+        assert_eq!(e.target, HaloTarget::Window {pid:42,hwnd:202});
+        assert!(e.blink_cursor);
     }
 }
