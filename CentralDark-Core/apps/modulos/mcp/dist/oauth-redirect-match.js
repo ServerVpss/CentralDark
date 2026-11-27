@@ -18,13 +18,26 @@ function parsedLoopback(uri) {
             return null;
         // Comparar texto cru da URI (fora a porta), sem normalizar /a/../b.
         return { host: match[1], port, suffix: match[3] ?? "" };
-    } catch {
+    }
+    catch {
         return null;
     }
 }
-
+/**
+ * Igualdade literal por padrao. Cliente publico nativo pode variar SOMENTE
+ * a porta no redirect de loopback IP; host, caminho e query sao exatos.
+ * Em /token segue obrigatorio o redirect_uri literal usado no /authorize.
+ */
 export function redirectUriRegistered(client, requested) {
-    // Prompt do Claude Code usa client_id nao-https e callback localhost.
+    if (!client || !Array.isArray(client.redirect_uris) ||
+        typeof requested !== "string")
+        return false;
+    if (client.redirect_uris.includes(requested))
+        return true;
+    if (client.token_endpoint_auth_method !== "none")
+        return false;
+    // Claude Code usa Client ID Metadata Document com localhost e porta dinamica.
+    // So esse client_id validado via /authorize ganha a excecao de callback.
     if (client.client_id === "https://claude.ai/oauth/claude-code-client-metadata" &&
         client.redirect_uris.includes("http://localhost/callback")) {
         const match = /^http:\/\/localhost:([0-9]{1,5})\/callback$/.exec(requested);
@@ -36,7 +49,12 @@ export function redirectUriRegistered(client, requested) {
     const incoming = parsedLoopback(requested);
     if (!incoming)
         return false;
-    if (client.token_endpoint_auth_method !== "none")
-        return false;
-    return true;
+    return client.redirect_uris.some((registered) => {
+        const known = parsedLoopback(registered);
+        return !!known &&
+            known.host === incoming.host &&
+            known.suffix === incoming.suffix &&
+            known.port !== incoming.port;
+    });
 }
+//# sourceMappingURL=oauth-redirect-match.js.map

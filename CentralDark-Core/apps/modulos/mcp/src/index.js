@@ -9,6 +9,7 @@ import { ALL_TOOLS } from "./tools/core/tools-catalog.js";
 import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
 import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
+import { getDesktopPairingConfig } from "./desktop-pairing-config.js";
 import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
 import { getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
@@ -636,6 +637,12 @@ app.get("/.well-known/oauth-authorization-server/mcp", getAuthorizationServerMet
 app.get("/mcp/.well-known/oauth-authorization-server", getAuthorizationServerMetadata);
 app.get("/.well-known/oauth-authorization-server/admin", getAuthorizationServerMetadata);
 // Uma store de registro, consumida pelo mesmo /authorize e pela API de dispositivo.
+app.get("/api/mcp-info", (_req,res) => {
+    res.setHeader("Cache-Control","no-store");
+    const info = getDesktopPairingConfig();
+    if (!info) return res.status(503).json({ok:false,error:"desktop_pairing_disabled"});
+    return res.json(info);
+});
 const oauthDeviceStore = createDevicePairingStore();
 configureDevicePairingForOAuth(oauthDeviceStore);
 app.use("/device", createDevicePairingRouter({ store: oauthDeviceStore, cookieAdmin: isCockpitAdmin }));

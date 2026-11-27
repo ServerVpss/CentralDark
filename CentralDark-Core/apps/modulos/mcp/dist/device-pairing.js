@@ -3,6 +3,7 @@ import { chmodSync, existsSync, mkdirSync, readFileSync, renameSync, statSync, w
 import { homedir } from "node:os";
 import { dirname, isAbsolute, join } from "node:path";
 import express from "express";
+import { DESKTOP_SURFACE, getDesktopPairingConfig } from "./desktop-pairing-config.js";
 const DEFAULT_TTL_MS = 2 * 60_000;
 const DEFAULT_STALE_MS = 45_000;
 const DEFAULT_DEVICE_TOKEN_TTL_MS = Number(process.env.CENTRALDARK_DEVICE_TOKEN_TTL_MS || 30 * 24 * 60 * 60_000);
@@ -110,8 +111,12 @@ export function createDevicePairingStore(options = {}) {
         const item = pending.get(String(pairId));
         if (!item || item.expiresAt <= now())
             return { ok: false, error: "pair_expired_or_missing" };
+        const desktop = item.meta.surface === DESKTOP_SURFACE;
+        if (desktop && (!ownerUserId || item.deviceId))
+            return { ok: false, error: "desktop_owner_required_or_completed" };
         if (!safeEqual(item.code, String(code || "").toUpperCase()))
             return { ok: false, error: "pair_code_mismatch" };
+        const tokenTtl = desktop ? Math.min(deviceTokenTtlMs, 5 * 60_000) : deviceTokenTtlMs;
         const token = randomBytes(32).toString("base64url");
         const refreshToken = randomBytes(40).toString("base64url");
         const deviceId = randomUUID();
@@ -124,7 +129,7 @@ export function createDevicePairingStore(options = {}) {
             surface: cleanText(surface, item.meta.surface),
             token_hash: sha256(token),
             refresh_token_hash: sha256(refreshToken),
-            token_expires_at: new Date(now() + deviceTokenTtlMs).toISOString(),
+            token_expires_at: new Date(now() + tokenTtl).toISOString(),
             paired_at: new Date(now()).toISOString(),
             last_heartbeat: null,
             capabilities: {},
@@ -133,7 +138,7 @@ export function createDevicePairingStore(options = {}) {
         item.deviceId = deviceId;
         item.token = token;
         item.refreshToken = refreshToken;
-        item.tokenExpiresAt = now() + deviceTokenTtlMs;
+        item.tokenExpiresAt = now() + tokenTtl;
         item.approvedAt = now();
         return { ok: true, deviceId };
     }
@@ -155,11 +160,23 @@ export function createDevicePairingStore(options = {}) {
         item.refreshToken = "";
         return { status: "approved", device_id: item.deviceId, token, refresh_token: refreshToken, token_expires_at: new Date(item.tokenExpiresAt).toISOString() };
     }
+    // Pairing proof only. Do not mark online or grant a tool capability.
+    function checkDesktopSession({ token, deviceId }) {
+        if (typeof token !== "string" || !token || typeof deviceId !== "string")
+            return { ok: false };
+        const hash = sha256(token);
+        const device = readRegistry().devices.find(entry => entry.device_id === deviceId && entry.surface === DESKTOP_SURFACE &&
+            entry.owner_user_id && safeEqual(entry.token_hash || "", hash));
+        if (!device || !Number.isFinite(Date.parse(device.token_expires_at)) ||
+            Date.parse(device.token_expires_at) <= now())
+            return { ok: false };
+        return { ok: true, device_id: deviceId, pairing_only: true };
+    }
     function heartbeat({ token, capabilities = {} }) {
         const tokenHash = sha256(token || "");
         const registry = readRegistry();
         const device = registry.devices.find((entry) => safeEqual(entry.token_hash || "", tokenHash));
-        if (!device)
+        if (!device || device.surface === DESKTOP_SURFACE)
             return { ok: false, error: "invalid_device_token" };
         if (device.token_expires_at && Date.parse(device.token_expires_at) <= now())
             return { ok: false, error: "device_token_expired" };
@@ -172,7 +189,7 @@ export function createDevicePairingStore(options = {}) {
         const refreshHash = sha256(refreshToken || "");
         const registry = readRegistry();
         const device = registry.devices.find((entry) => safeEqual(entry.refresh_token_hash || "", refreshHash));
-        if (!device)
+        if (!device || device.surface === DESKTOP_SURFACE)
             return { ok: false, error: "invalid_refresh_token" };
         const token = randomBytes(32).toString("base64url");
         device.token_hash = sha256(token);
@@ -210,7 +227,7 @@ export function createDevicePairingStore(options = {}) {
             status: device.last_heartbeat && t - Date.parse(device.last_heartbeat) <= staleMs ? "online" : "offline",
         }));
     }
-    return { start, approve, pendingConsent, approveWeb, status, heartbeat, refresh, revoke, revokeSelf, listDevices, registryPath };
+    return { start, approve, pendingConsent, approveWeb, status, checkDesktopSession, heartbeat, refresh, revoke, revokeSelf, listDevices, registryPath };
 }
 export function createDevicePairingRouter(options = {}) {
     const router = express.Router();
@@ -238,18 +255,40 @@ export function createDevicePairingRouter(options = {}) {
         entry.count++;
         return true;
     };
+    router.use((_req, res, next) => { res.setHeader("Cache-Control", "no-store"); next(); });
+    // Reserved surface can only start through the explicitly enabled desktop flow.
+    router.post("/desktop/start", (req, res) => {
+        if (!getDesktopPairingConfig())
+            return res.status(503).json({ ok: false, error: "desktop_pairing_disabled" });
+        if (!allowStart(req))
+            return res.status(429).json({ ok: false, error: "pair_rate_limited" });
+        const pair = store.start({ deviceName: req.body?.device_name, executor: "remote-bridge", surface: DESKTOP_SURFACE });
+        return res.status(201).json({ ok: true, pair_id: pair.pairId, pair_secret: pair.pairSecret, code: pair.code, expires_at: new Date(pair.expiresAt).toISOString() });
+    });
+    router.post("/desktop/session/check", (req, res) => {
+        if (!getDesktopPairingConfig())
+            return res.status(503).json({ ok: false, error: "desktop_pairing_disabled" });
+        const result = store.checkDesktopSession({ token: bearerFrom(req), deviceId: req.body?.device_id });
+        return res.status(result.ok ? 200 : 401).json(result);
+    });
     router.post("/pair/start", (req, res) => {
+        if (cleanText(req.body?.surface) === DESKTOP_SURFACE)
+            return res.status(400).json({ ok: false, error: "reserved_surface" });
         if (!allowStart(req))
             return res.status(429).json({ ok: false, error: "pair_rate_limited" });
         const pair = store.start({ deviceName: req.body?.device_name, executor: req.body?.executor, surface: req.body?.surface });
         res.status(201).json({ ok: true, pair_id: pair.pairId, pair_secret: pair.pairSecret, code: pair.code, expires_at: new Date(pair.expiresAt).toISOString() });
     });
     router.get("/pair/status", (req, res) => {
+        if (store.pendingConsent(req.query.id)?.surface === DESKTOP_SURFACE)
+            return res.status(405).json({ ok: false, error: "post_required" });
         const result = store.status({ pairId: req.query.id, pairSecret: req.query.secret });
         res.status(result.status === "denied" ? 403 : 200).json(result);
     });
     // Use POST para que o segredo de posse nao apareca em URL, referrer e access logs.
     router.post("/pair/status", (req, res) => {
+        if (store.pendingConsent(req.body?.id)?.surface === DESKTOP_SURFACE && !getDesktopPairingConfig())
+            return res.status(503).json({ ok: false, error: "desktop_pairing_disabled" });
         const result = store.status({ pairId: req.body?.id, pairSecret: req.body?.secret });
         res.status(result.status === "denied" ? 403 : 200).json(result);
     });
