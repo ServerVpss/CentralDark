@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "centraldark-unified-surface-parity",
-  "version": "0.1.4",
-  "description": "CentralDark: a single MCP distribution adapter for the canonical Hermes/SOL/Reality capability fabric, with Text/Voice/Work/Desktop binding and evidence-first dispatch.",
+  "version": "0.1.5",
+  "description": "Conecte o ChatGPT aos recursos e computadores autorizados da CentralDark. Use as ferramentas disponíveis na sua conta, com resultados verificados.",
   "author": {
     "name": "CentralDark"
   },
@@ -19,15 +19,16 @@
     "parity",
     "screenpipe",
     "tools",
-    "voice"
+    "voice",
+    "remote-support"
   ],
   "repository": "https://github.com/ServerVpss/CentralDark",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "CentralDark Unified Surface",
-        "shortDescription": "One CentralDark MCP; existing tools, runtime evidence and continuity.",
-        "longDescription": "A single CentralDark distribution plugin for the existing canonical ServerVpss/CentralDark runtime: CHEFE intent, SOL routing, Hermes execution, MCP Admin, Casa, VPS, GitHub, Tailscale, Obsidian, AionUi and Screenpipe. Tools are discovered and authorized at runtime; no parallel brain or blanket tool-access claim. Voice access requires live tool-call proof.",
+        "shortDescription": "Conecte sua conta e use os recursos autorizados da CentralDark.",
+        "longDescription": "Conecte sua conta CentralDark para consultar informações e executar tarefas autorizadas nas ferramentas disponíveis. O atendimento remoto exige um computador conectado, permissão válida e suporte confirmado pelo servidor. O plugin reutiliza o MCP existente da CentralDark; não instala um novo motor no computador e não concede acesso por si só.",
         "developerName": "CentralDark",
         "category": "Developer Tools",
         "capabilities": [
@@ -35,9 +36,9 @@
           "Write"
         ],
         "defaultPrompt": [
-          "CentralDark diagnostique as ferramentas reais deste cliente, confira MCP status e catálogo, sem mutação.",
-          "CentralDark continue do último NEXT_CURSOR provado; preserve arquivos e traga receipt e contraprova.",
-          "CentralDark execute apenas a alteração autorizada pelo owner, valide e reporte SHA/caminho/readback."
+          "CentralDark, verifique se minha conexão está funcionando.",
+          "CentralDark, mostre os computadores que minha conta está autorizada a acessar, se essa função estiver disponível.",
+          "CentralDark, continue a tarefa autorizada e confira o resultado."
         ]
       }
     }
