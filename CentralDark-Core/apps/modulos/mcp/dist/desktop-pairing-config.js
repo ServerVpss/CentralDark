@@ -3,8 +3,10 @@ export const DESKTOP_ORIGIN = "https://mcp.centralldark.com";
 export const SUPABASE_ORIGIN = "https://lyoigsqluyktoclwdaft.supabase.co";
 export const DESKTOP_PROTOCOL = "centraldark-device-v1";
 export function getDesktopPairingConfig(env = process.env) {
-    if (env.CENTRALDARK_DESKTOP_PAIRING_ENABLED !== "1")
-        return null;
+    if (env.CENTRALDARK_DESKTOP_PAIRING_ENABLED !== "1") return null;
+    return getCentralDarkSupabaseAuthConfig(env);
+}
+export function getCentralDarkSupabaseAuthConfig(env = process.env) {
     const url = String(env.HUB_SUPABASE_URL || env.SUPABASE_URL || "").replace(/\/$/, "");
     const key = String(env.HUB_SUPABASE_PUBLISHABLE_KEY || env.SUPABASE_PUBLISHABLE_KEY || env.VITE_SUPABASE_PUBLISHABLE_KEY || "");
     if (url !== SUPABASE_ORIGIN || !key || key.length > 4096)

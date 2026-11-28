@@ -1,0 +1,28 @@
+# Contabo Hermes — paridade de fonte e proveniência de build (28/11/2026)
+
+- **Intenção autorizada:** conferir a instalação Hermes real da Contabo, identificar a revisão, corrigir a origem do install-stamp no build EasyPanel, manter o motor e o gestor existentes; sem transferir backup ou reinstalar.
+- **Fonte:** ServerVpss/CentralDark@main. BOOT `5046b5f4794fed7df40a810397606c26a5bc7de2`, LEIA `3bfc1242697317fdce9f505dc0c62d4fde026df2`. Referência de código verificada: [5c96fd8944a48594d116fdcd6c03d6f5ca22fad1](https://github.com/ServerVpss/CentralDark/commit/5c96fd8944a48594d116fdcd6c03d6f5ca22fad1), commit de 26/11/2026 16:18:27 UTC. Main consultada antes deste registro: `e5797d4a2f58b0ba77343f7d1da502b2cdc6266c`, posterior à fonte implantada.
+- **Owner de reuso:** [receita EasyPanel existente](../../../.agents/skills/centraldark-operational-method/Skills/centraldark-ops/SKILL.md#easypanel-promover-da-casa-para-a-contabo); `Dockerfile`, `scripts/write_install_stamp.py` e `hermes_cli/version_info.py` na raiz do fork. Nenhum novo empacotador.
+
+## Diagnóstico efetivamente executado
+
+O SSH da Casa chegou à Contabo (hostname vmi3790535). O contêiner do motor é `centraldark_centraldark-agent` (ID curto `b653076a0830`, imagem `easypanel/centraldark/centraldark-agent:latest`, image ID `sha256:dca8723a6908ddcef75bfb73f6d60ffde25a338f31ed1f57f9e686b8bdd58737`). A fonte do serviço status e o Python do host não são o runtime do motor.
+
+- Executável ativo: `/opt/hermes/bin/hermes`; Python 3.14.9; OpenAI SDK 2.54.0; Node v26.12.1; instalação Docker; versão exibida `vunknown (2026.9.24)`.
+- O stamp ativo tem commit de 40 zeros, source fallback, distribution docker, updateMechanism external. O marcador `/etc/hermes/image-provenance.json` reporta revision null e version 0.0.0. A imagem não fornece revision OCI. O Dockerfile incorpora um stamp válido se presente e gera fallback quando o contexto não o possui; não havia stamp no contexto EasyPanel.
+- Comparação inicial com `c5add608cdf0ff81be47840440c50881ad04fcbf`: 2.735/2.739 exatos, 4 diferenças; três arquivos (`agent/turn_summary.py`, `hermes_cli/cli_chat_error_copy.py`, `hermes_cli/cli_status_bar_mixin.py`) correspondem à revisão anterior à localização PT-BR do commit `71672e424c978266b733562f0757e169a6e62ad3`. A quarta diferença, `scripts/build/windows-deps.ps1`, é final de linha. Não é uma prova de paridade com a main atual.
+- Fonte inteira no EasyPanel (`/etc/easypanel/projects/centraldark/centraldark-agent/code`): comparação dos blobs Git dos 44.805 caminhos de 5c96fd8. 44.693 exatos, 111 equivalentes após CRLF→LF, 1 diferença restante resolvida por normalizar ambos os lados (PowerShell `CentralDark-Core/scripts/remote-bridge/canonical/CENTRALDARK-VPS-UPDATE.ps1`, originalmente finais mistos); zero arquivos ausentes e zero extras antes da gravação do stamp. Total 44.805/44.805 com equivalência de conteúdo após a normalização explicitada, não igualdade byte a byte de todos os arquivos.
+- Runtime no mesmo commit: 2.774 arquivos inspecionados por Git blob hash (CLI 896 exatos, TUI 662 exatos, core 1.215 exatos e 1 com final de linha); zero divergências materiais e zero ausências no escopo. Bundle TUI `ui-tui/dist/entry.js`: 4.220.314 bytes, `node --check` PASS. `hermes --help` PASS. Foi observada advertência de instalação fora de sincronia por pnpm ausente/desatualizado; não foi suprimida nem tratada como PASS. Não houve execução interativa de TUI ou inferência.
+
+## Delta executado e contraprova
+
+1. Testado o gerador nativo da fonte em arquivo temporário e o leitor nativo (stamp parser). Referência real `5c96fd8944a48594d116fdcd6c03d6f5ca22fad1`, commitDate `1795709907`, branch main, source docker, distribution docker, updateMechanism external, baseVersion null, displayVersion `git.5c96fd8`. Não atribuir versão v0.23.1 sem tag/base comprovada.
+2. Após revalidar as três divergências discriminantes e ausência do stamp, gerado e publicado atomicamente o `install-stamp.json` no contexto existente do serviço EasyPanel, sem sobrescrever arquivo preexistente.
+3. **SHA-256 do stamp gravado:** `d9cad8ba7d150d8ff13e798f986794c27ad9b60de5ea885425202dd03e35f063`; modo 0644 root:root. Parser nativo PASS e comparação do hash na gravação PASS. Temporário de preparação removido pelo trap.
+4. Contraprova: mesmo contêiner b653076a0830, running true, início 2026-11-27T19:48:35.763291626Z preservado; `hermes --version` segue vunknown porque a imagem ativa não foi reconstruída. Volume /opt/data, Docker, EasyPanel e serviços existentes preservados; nenhuma transferência de backup, reinicialização ou implantação nesta rodada.
+
+## Limites e continuidade
+
+- Paridade com o contêiner local do outro executor não foi medida diretamente: rota SSH legado recusou chave, segunda rota expirou e openkylin não forneceu contêiner Hermes. Os números local v0.23.1, Python 3.14.9 e OpenAI SDK 2.54.0 vieram do relatório apresentado pelo usuário; não constituem prova de igualdade entre os dois ambientes. O resultado independente desta rodada é a identificação da fonte e paridade do cone medido da Contabo com a revisão Git indicada.
+- **APROVADO:** identificação da fonte, escopo de código do runtime, geração e leitura do stamp no contexto de build. **PENDENTE:** nova construção e readback da imagem em execução, compatibilidade com a main posterior, comparação direta com o outro contêiner, pnpm e TUI interativa.
+- **Próximo passo:** reconstruir e promover pelo EasyPanel existente dentro do escopo autorizado; verificar o stamp da nova imagem, health, CLI/TUI, pnpm e preservação do volume. Não confundir contexto preparado com runtime atualizado. A sincronização da Casa com a main não foi alterada nem comprovada. FIXED_POINT global permanece PENDENTE.

@@ -34,5 +34,38 @@
   "voice_functional_account_evidence": "2026-10-12T03:16:54.647Z mcp_status runtimeTools=141 routeCount=13",
   "desktop_tool_call_visible_receipt_owner": "docs/ARQUITETURA/CENTRALDARK-TOOL-CALL-VISIBLE-RECEIPT-ECHO-01.md",
   "desktop_native_renderer_fixed": "UNPROVEN_PLATFORM_OWNED",
-  "desktop_web_tab_opened": "USER_HOME_SEGREDO_EDGE_CURRENT_SESSION"
+  "desktop_web_tab_opened": "USER_HOME_SEGREDO_EDGE_CURRENT_SESSION",
+  "portable_candidate_20261128": {
+    "version": "0.1.5",
+    "status": "GITHUB_PRERELEASE_DISTRIBUTED_CHATGPT_IMPORT_PENDING",
+    "archive": "CentralDark-Plugin.zip",
+    "archive_sha256": "58a984d1d379ebfa0f62171404ece94a8693bdc462a2a2bbed10158e7a1f4175",
+    "endpoint": "https://mcp.centralldark.com/api/mcp",
+    "manifest_blob": "938ad0b71bbc06cfb69594e001bf67d5ddb74eb2",
+    "mcp_blob": "0ee2b51ee8ec7b38cd9172a89ef8d797aa94aa8b",
+    "skill_blob": "40deaea8b9c46f7acecdf8b8994d4f3c4dafb327",
+    "prior_identity_readback": "PLUGIN_NOT_FOUND_CURRENT_ACCOUNT",
+    "new_plugin_created": false,
+    "release_updated": false,
+    "live_oauth_and_tools": "PENDING",
+    "next_step": "Baixar release do fork, importar/atualizar na conta autorizada e comprovar OAuth e tools/list; não duplicar identidade de plugin silenciosamente. NPX persistente e atendimento multicliente continuam pendentes.",
+    "github_release": {
+      "repository": "ServerVpss/CentralDarkDesktopCommanderMCP",
+      "tag": "plugin-v0.1.5",
+      "target_commit": "7d41836afcd6758c4c6b302699e4768563b5de02",
+      "published_at": "2026-11-28T05:42:07Z",
+      "visibility": "PUBLIC",
+      "prerelease": true,
+      "url": "https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/releases/tag/plugin-v0.1.5",
+      "asset_url": "https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/releases/download/plugin-v0.1.5/CentralDark-Plugin.zip",
+      "asset_id": 803400827,
+      "asset_bytes": 8224,
+      "asset_sha256": "571c8eca73d0aa17993a6c95a31697411714e897ac9130c404efd133b1c55393",
+      "all_three_source_blobs_identical": true,
+      "download_sha256_verified": true,
+      "archive_repacked": "Casa Python zlib-ng; bytes internos idênticos, compactação/sha do ZIP diferente do candidato original",
+      "chatgpt_release_updated": false,
+      "npm_published": false
+    }
+  }
 }
