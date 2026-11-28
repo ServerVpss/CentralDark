@@ -3,7 +3,7 @@
   "mcpServers": {
     "centraldark": {
       "type": "streamable-http",
-      "url": "https://mcp.centralldark.com/mcp"
+      "url": "https://mcp.centralldark.com/api/mcp"
     }
   }
 }

@@ -571,6 +571,30 @@ EXECUTION_FIRST_PROTOCOL:
 
 **Aplicação real registrada (28/11/2026):** [Contabo HTTPS — receita operacional e diálogo integral](docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). Caso de execução direta com o Traefik e MCP existentes, frentes independentes, menor delta, prova proporcional e preservação. O recibo original é o commit `a5f152a`; OAuth e pareamento continuam separados. Esta referência é aprendizado subordinado ao protocolo vigente, não uma regra, gate ou skill adicional.
 
+**Evolução conjunta da distribuição (28/11/2026):** quando uma mudança afetar a integração CentralDark, aplicar o [contrato de evolução do conjunto completo](docs/DOMINIOS/API-CENTRALDARK.md#evolucao-conjunta-da-distribuicao). Evoluir os consumidores afetados, gerar artefatos completos e compatíveis, publicar as versões autorizadas no release do fork e conferir download/readback. Preservar identidade, motor único e versões já distribuídas. A regra vale para o plugin inteiro e pacote inteiro, não só login; não obriga alterações em componentes comprovadamente inalterados. O owner da receita permanece no domínio API, sem gate paralelo.
+
+<!-- CENTRALDARK_LITERAL_GRADUAL_DELIBERATE_MICHELIN_20261128 -->
+<a id="literalmente-gradualmente-deliberadamente"></a>
+#### Literalmente, gradualmente e deliberadamente — Michelin (28/11/2026)
+
+**Formulação do usuário, consolidada no EXECUTION_FIRST_PROTOCOL existente (referência Lovable Build Mode de 27/11/2026):** a ordem clara do usuário autoriza os passos necessários dentro do alvo e dos limites definidos. O agente executa sem pedir confirmação redundante a cada microetapa, sem transferir ao usuário trabalho que pode realizar e verificar. Pergunta, avaliação ou planejamento não autorizam mutação por si sós; consentimento real, autorizações externas, proteções obrigatórias e decisões materiais não delegadas permanecem exigidos.
+
+- **Literalmente:** seguir exatamente a intenção, alvo, resultado e limites do usuário; escolher a rota autorizada que resolve, sem inventar objetivos ou expandir o escopo.
+- **Gradualmente:** avançar pelas etapas necessárias, na ordem das dependências, recuperando o último checkpoint comprovado e reutilizando owners, ferramentas e integrações existentes. Corrigir e prosseguir dentro do mesmo fio; não reiniciar trabalho válido nem converter uma decomposição interna em sucessivos pedidos de aprovação.
+- **Deliberadamente:** cada ação tem finalidade, efeito esperado e verificação proporcional. Resolver a causa concreta de falhas, aplicar o menor delta útil, testar e continuar. Se uma rota falhar, usar alternativa legítima já autorizada, sem contornar recusas, consentimento ou controles de acesso. Não repetir indefinidamente a estratégia fracassada.
+
+**Michelin acompanha as três etapas, sem constituir um gate paralelo:**
+1. **Construir (⭐):** materializar o que falta no owner existente, com prova de construção aplicável.
+2. **Integrar (⭐⭐):** conectar o delta ao que já existe, preservar compatibilidade e verificar a integração no alvo.
+3. **Provar (⭐⭐⭐):** comprovar o efeito no destino correto, com teste, contraprova e recibo proporcionais ao escopo.
+
+As estrelas dependem das evidências reais de cada etapa. Para software e deploy, preservar os critérios técnicos já vigentes de fonte/testes/lint/build/auth, CI/integração e deploy/experiência autenticada/recibos no SHA correspondente. Não atribuir estrelas por plano, documentação, contagem de ações, teste isolado ou HTTP 200. Esta formulação orienta a execução e não modifica os critérios existentes nem exige CI ou deploy irrelevantes para uma tarefa meramente documental ou de arquivo.
+
+**Impedimento irredutível:** se a correção e as alternativas autorizadas não resolverem, registrar o ponto exato, causa observada, programa/serviço, arquivo e linha quando verificáveis (ou declarar não disponíveis), prova já obtida, pendência localizada e próximo passo executável. Preservar o último verde; continuar as frentes independentes autorizadas. Não inventar localização, diagnóstico, recibo ou aprovação.
+
+**Vínculo operacional:** [Michelin 3 Estrelas existente](.agents/skills/centraldark-operational-method/Skills/michelin-3-estrelas/SKILL.md), [AGENTS — régua de qualidade](AGENTS.md) e [receita real Contabo HTTPS](docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). A presente regra complementa o método vigente; não cria outra skill, identidade, workflow, executor ou método de integração.
+<!-- /CENTRALDARK_LITERAL_GRADUAL_DELIBERATE_MICHELIN_20261128 -->
+
 <!-- /CENTRALDARK_EXECUTION_FIRST_PROTOCOL -->
 
 ---

@@ -10,7 +10,7 @@ import { handleMcpRequest, PUBLIC_CALLABLE_MCP_TOOLS } from "./mcp-server.js";
 import { getAccessToken, getSession, getStateStats } from "./sessions.js";
 import { createDevicePairingRouter, createDevicePairingStore } from "./device-pairing.js";
 import { getDesktopPairingConfig } from "./desktop-pairing-config.js";
-import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, } from "./oauth.js";
+import { getAuthorizationServerMetadata, getProtectedResourceMetadata, handleAuthorize, handleIssueKey, handleOAuthCallback, handleOAuthStart, postRegister, postToken, configureDevicePairingForOAuth, isAccountGrant, revalidateAccountGrant, getOwnerToolToken, } from "./oauth.js";
 import { getStatusJson } from "./tools/status.js";
 import { getCatalogSummary, CATALOG_VERSION } from "./tools/core/tools-catalog.js";
 import { handleSkillsList, handleSkillManifest, handleSkillRaw, handleSkillInstaller, } from "./skills-public.js";
@@ -738,7 +738,7 @@ function extractBearer(req) {
 function getInternalGhToken() {
     return process.env.GITHUB_TOKEN || process.env.GH_TOKEN || "";
 }
-function resolveGhToken(req) {
+async function resolveGhToken(req) {
     const l = withCid(req.cid);
     const rawAuth = findHeaderCaseInsensitive(req, "authorization") ??
         findHeaderCaseInsensitive(req, "x-forwarded-authorization") ??
@@ -786,6 +786,15 @@ function resolveGhToken(req) {
             logAuth("not_found_or_expired");
             return { error: "Access token inválido ou expirado." };
         }
+        if (isAccountGrant(at)) {
+            const account = await revalidateAccountGrant(at);
+            if (!account) return { error: "Sessao CentralDark expirada ou permissoes alteradas." };
+            const scope = String(at.oauth_scope || "");
+            const admin = account.account_role === "admin" && scope.split(/\s+/).includes("admin");
+            logAuth("account_verified", { role: account.account_role });
+            return { token: admin ? getOwnerToolToken() : "", callerUser: account.account_id,
+                oauthScope: scope, account: Object.freeze({ user_id: account.account_id, role: account.account_role }) };
+        }
         logAuth("found_in_store", { ttl_ms: at.expiresAt - Date.now(), gh_login: at.gh_login });
         return {
             token: at.gh_scope === "owner-admin" && at.gh_login === "centraldark-admin"
@@ -812,9 +821,9 @@ function resolveGhToken(req) {
     logAuth(hasAuthHeader ? "bad_scheme" : "missing_header");
     return { error: "Authorization Bearer ausente." };
 }
-app.post(["/api/mcp", "/mcp"], (req, res) => {
+app.post(["/api/mcp", "/mcp"], async (req, res) => {
     const l = withCid(req.cid);
-    const r = resolveGhToken(req);
+    const r = await resolveGhToken(req);
     if ("error" in r) {
         l.warn("mcp_unauthorized", { reason: r.error });
         unauthorized(req, res, r.error);
@@ -826,6 +835,13 @@ app.post(["/api/mcp", "/mcp"], (req, res) => {
         admin: /(?:^|\s)admin(?:\s|$)/.test(String(r.oauthScope || "")),
         authProvenance: /(?:^|\s)admin(?:\s|$)/.test(String(r.oauthScope || "")) ? "verified_oauth_admin" : null,
         callerUser: r.callerUser,
+        account: r.account,
+        // The caller cannot supply another owner's id. Project only display fields from the existing registry.
+        listOwnedDevices: r.account ? () => oauthDeviceStore.listDevices()
+            .filter(device => device.owner_user_id === r.account.user_id)
+            .map(({device_id, device_name, executor, surface, status, paired_at, last_heartbeat, token_expires_at}) =>
+                ({device_id, device_name, executor, surface, status, paired_at, last_heartbeat,
+                    session_expires_at: token_expires_at, remote_execution: "not_verified"})) : undefined,
         clientLabel: String(req.headers["x-mcp-client"] || req.headers["user-agent"] || "mcp-public").slice(0, 160),
         oauthScope: r.oauthScope,
     }).catch((err) => {
