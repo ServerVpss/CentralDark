@@ -8,7 +8,7 @@ https://api.centralldark.com
 
 **Regra de grafia (errata 2026-10-21):** a identidade do produto e `CentralDark`; o dominio publico e `centralldark.com`, com **dois Ls**. Enderecos de acesso devem usar `*.centralldark.com` (por exemplo `api.centralldark.com` e `admin.centralldark.com`). A grafia do nome do produto nao e um hostname valido para os endpoints oficiais. Preservar grafias anteriores apenas como exemplos explicitamente marcados de erro ou evidencias historicas.
 
-## Estado vivo — setor MCP (28/11/2026 03:34 UTC)
+## Estado inicial comprovado — setor MCP (28/11/2026 03:34 UTC)
 
 `api.centralldark.com` tem o setor MCP publicado por HTTPS normal, sem dependência de túnel nessa rota. A configuração canônica de domínio permanece nesta documentação; o roteamento vivo está no Traefik existente da Contabo (`vmi3790535`), e não em um segundo proxy.
 
@@ -22,7 +22,7 @@ https://api.centralldark.com
 <!-- CENTRALDARK_OAUTH_ROUTING_PREPARED_20261128 -->
 ## Continuidade OAuth — diagnóstico e alteração preparada (28/11/2026)
 
-**Estado: PREPARED_NOT_DEPLOYED.** A revisão automática da plataforma rejeitou a tentativa de alterar o Traefik em produção antes de enviá-la à VPS: considerou insuficiente a autorização específica para publicar as rotas OAuth/pareamento. Não houve nova tentativa por outra rota. O readback manteve o SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`, `cd-api-mcp-auth` ausente e backup ainda inexistente. Cloudflare, variáveis, containers e autenticação não foram alterados nesta etapa.
+**Estado histórico anterior à autorização: PREPARED_NOT_DEPLOYED.** A revisão automática da plataforma rejeitou a tentativa de alterar o Traefik em produção antes de enviá-la à VPS: considerou insuficiente a autorização específica para publicar as rotas OAuth/pareamento. Não houve nova tentativa por outra rota. O readback manteve o SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`, `cd-api-mcp-auth` ausente e backup ainda inexistente. Cloudflare, variáveis, containers e autenticação não foram alterados nesta etapa.
 
 **Causa medida:** o backend local responde às duas rotas de discovery com 200 JSON, mas o Traefik público devolve 418. No domínio MCP, as mesmas rotas entregam 200 HTML da SPA. O challenge MCP anuncia metadata em `mcp.centralldark.com`, coerente com `MCP_PUBLIC_URL`, mas esse endereço ainda não encaminha discovery ao backend. `/api/mcp-info` responde localmente 503 `desktop_pairing_disabled`. TLS aprovado não resolve esse encaminhamento.
 
@@ -70,7 +70,7 @@ Adicionar apenas `http.routers.cd-api-mcp-auth` em `/etc/easypanel/traefik/confi
 }
 ```
 
-### Aplicação e reversão pendentes
+### Plano de aplicação e reversão (histórico da preparação)
 
 1. Obter a autorização específica exigida pela revisão automática para este patch no Traefik e para publicar o mesmo Worker nas rotas MCP da tabela.
 2. Revalidar o hash de origem, dono `root:root`, modo `0644` e ausência do router candidato. Se houver drift, reconciliar apenas o delta. Preservar snapshot do script e das rotas Cloudflare atuais antes da aplicação.
@@ -79,8 +79,61 @@ Adicionar apenas `http.routers.cd-api-mcp-auth` em `/etc/easypanel/traefik/confi
 5. Para reversão, remover somente as novas associações MCP e restaurar o script preservado; conferir o hash aplicado antes de restaurar o backup Traefik. Revalidar o estado anterior. Não excluir o Worker.
 6. Registrar SHAs, IDs e resultados observados neste owner e no rastro vigente. Só depois tratar a flag e o pareamento real: o preview Desktop permanece desabilitado e seu token de teste `pairing_only` não equivale à sessão persistente do Agente Remoto.
 
-**Próximo passo:** aprovação específica para aplicar a alteração preparada. **FIXED_POINT do registro do método: APROVADO; OAuth/pareamento: PENDENTE.**
+**Cursor histórico:** a aprovação específica era o próximo passo; a execução subsequente está registrada abaixo.
 <!-- /CENTRALDARK_OAUTH_ROUTING_PREPARED_20261128 -->
+
+<!-- CENTRALDARK_OAUTH_ROUTING_APPLIED_20261128 -->
+## Estado vivo — publicação do roteamento OAuth (28/11/2026, 04:21–04:23 UTC)
+
+**Estado: ROUTING_DEPLOYED; DISCOVERY_VERIFIED; AUTHENTICATED_PAIRING_PENDING.** Autorização específica recebida: aplicar a correção preparada no Traefik da Contabo e no Worker Cloudflare existente. O registro de preparação acima é histórico, não o estado atual. Não houve alteração da flag Desktop, autorização de dispositivo, emissão de token, reconstrução ou reinicialização do Hermes/MCP.
+
+- **Traefik existente:** adicionado exclusivamente o router `cd-api-mcp-auth` da receita acima. Configuração ativa `/etc/easypanel/traefik/config/centraldark-api.yaml`, SHA-256 `677d7a697086d40b8127e9db2a1ded1437126ab0412d35ec1c934a9057e4ef7a`, modo 0644 root:root. Backup exclusivo `centraldark-api.yaml.before-oauth-routing-20261128`, SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`. O firewall `/etc/centraldark/contabo-private.nft` permaneceu com SHA-256 `b3cf9e59800a013ae11d8a0f5283488e34d348d52232e7df972180a701c3f060`.
+- **Worker existente:** `centraldark-mcp-reserve-route`, código publicado idêntico ao blob Git `9356c5eb691d5e9457eec0552bcb1598e7aff3b0`, conferido por GET após upload. Deploy `637ae250-8c5d-4cd6-88f6-e843c275f382`, versão ativa 100% `bde297e4-80b5-4312-a9d3-55cc3bd7d309`; versão anterior preservada para rollback `17abb84d-ef52-4499-9d9f-cc53768726f2` (deploy anterior `355cdb13-64b9-4488-9682-a196ef853ace`). Sem criar Worker ou backend adicional.
+- **Rotas:** 14/14 associações MCP confirmadas por leitura independente da API Cloudflare, com `request_limit_fail_open=false`. A associação nula `api.centralldark.com/api/mcp` (ID `cda0d066e8cd482f99725698faa3d91d`) permaneceu intacta. UI/Pages e regras DNS/origem não foram modificadas.
+
+| Caminho MCP (padrão HTTPS com `*`) | ID da associação |
+| --- | --- |
+| `/.well-known/oauth-authorization-server` | `60cb6d266fcd49b9bcac488db86d8ebf` |
+| `/.well-known/oauth-protected-resource` | `489864b0373f4c4293927f1e716391a2` |
+| `/api/mcp` | `722b68d3b9d1431b8d01b8b7fc7f9786` |
+| `/api/mcp-info` | `96df6972b97c43f3a24ca7b148e6656d` |
+| `/authorize` | `012b4575d7ff4b0aa3c05354ed7a2749` |
+| `/register` | `74062e37d7a54744b013aecf86cc7de3` |
+| `/token` | `e7c7c81a37214200ac461e23b448a9ff` |
+| `/device/pair/start` | `42afafdec23d47ceab9552d4887095da` |
+| `/device/pair/status` | `bcb041cf761342758ee88f2c07f81c1e` |
+| `/device/token/refresh` | `9cd7c0bc19f54eaea2b069b4e29f4432` |
+| `/device/heartbeat` | `2368308a056f432dae39458e50ac396f` |
+| `/device/devices/self/revoke` | `00d0eb1908d749a79d0f729af5954b52` |
+| `/device/desktop/start` | `54ec0223689943aca0106c0f0a8ba7b4` |
+| `/device/desktop/session/check` | `28880f3158c84884a7b456857bfdfa16` |
+
+### Contraprovas públicas pela Casa
+
+| Prova | Resultado medido |
+| --- | --- |
+| API: discovery OAuth (HEAD, dois caminhos) | 200 JSON nos dois |
+| MCP: discovery OAuth (GET, dois caminhos) | 200 JSON; issuer, resource e endpoints coerentes com `https://mcp.centralldark.com`; CF-Rays `a616962c0b7cb998-GRU`, `a61697028cf18ea4-CWB` |
+| MCP: GET /api/mcp sem token | 401 JSON e WWW-Authenticate com metadata correta; CF-Ray `a61697166f691713-GRU` |
+| API: HEAD /api/mcp sem token | 401 JSON; CF-Ray `a616987538d14d30-GRU` |
+| API: GET /mcp/health | 200 JSON, MCP 0.4.0, 162 ferramentas declaradas; CF-Ray `a616973e5b6d5a8d-CWB` |
+| MCP: HEAD /auth e /mcp-autorizar | 200 HTML, CSP preservada; CF-Rays `a61697674f7fc9fb-CWB`, `a6169778c864f250-GRU` |
+| MCP: GET /authorize sem cliente | 400 JSON invalid_client; CF-Ray `a61698b6caef02f3-GRU` |
+| MCP: GET /token (método fora da lista) | 405 JSON method_not_allowed; CF-Ray `a61698a42acd255e-GRU` |
+| MCP: GET /authorize-extra | 404 JSON route_not_forwarded; CF-Ray `a6169789bab41920-CWB` |
+| API: /admin/catalog e / | 418; CF-Rays `a61697500a9ac15f-CWB`, `a61698cbb9735a8d-CWB` |
+| EasyPanel (HEAD /) | 302 com Cloudflare Access; CF-Ray `a61698886dabc15f-CWB` |
+| MCP: GET /api/mcp-info | 503 JSON desktop_pairing_disabled; CF-Ray `a616972c6f31c15f-CWB` |
+| MCP: POST /device/pair/start, fixture sem aprovação | 403; não houve ID/consentimento confirmado, nem token. Origem do 403 não identificada nesta rodada; não alterar WAF/autorização por hipótese. |
+
+A primeira sondagem agregada pela Casa foi bloqueada pelo antivírus local antes da execução. As provas HTTP acima vieram de consultas públicas independentes; a sondagem externa via ferramenta web não retornou conteúdo. Não foi desativada nenhuma proteção. Readback SSH confirmou os hashes e os mesmos contêineres Traefik, MCP, Hermes e serviços auxiliares ativos; Traefik Up 50 minutos, MCP Up 6 horas, Hermes Up 9 horas (sem restart nesta intervenção).
+
+**Limite:** publicação e discovery do roteamento APROVADOS. As 14 associações foram lidas de volta, não foram 14 testes funcionais autenticados. O redirect de consentimento 302 com solicitação válida, emissão de token, initialize, tools/list e vínculo real continuam PENDENTES. O preview Desktop continua desabilitado. O teste de fixture não aprovou dispositivo e não expôs credenciais. O estado global do Hermes e a versão do stamp não foram alterados.
+
+**Reversão:** remover somente as 14 associações registradas, preservando a rota nula da API; restaurar a versão anterior do Worker (100%) sem excluí-lo; conferir SHA da configuração aplicada antes de restaurar atomicamente o backup Traefik de hash anterior. Revalidar health, 401, 418 e UI. Não reiniciar Hermes/MCP.
+
+**Próximo passo:** correlacionar o 403 do POST com os logs/Cloudflare e o contrato de pareamento, distinguir preview da sessão persistente, concluir a autorização real com a conta e o consentimento apropriados, medir initialize/tools/list e comunicação ponta a ponta. **FIXED_POINT do delta de publicação: APROVADO; FIXED_POINT OAuth/Agente Remoto: PENDENTE.**
+<!-- /CENTRALDARK_OAUTH_ROUTING_APPLIED_20261128 -->
 
 ## Regra
 
