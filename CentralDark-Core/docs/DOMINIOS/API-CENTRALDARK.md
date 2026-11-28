@@ -145,6 +145,33 @@ A primeira sondagem agregada pela Casa foi bloqueada pelo antivírus local antes
 - **Próximo passo:** identificar a origem do bloqueio pelo Ray ID, corrigir somente o componente causal dentro do escopo autorizado, depois reconciliar a configuração Desktop e o contrato de sessão persistente do Agente Remoto. A flag desabilitada e o token pairing_only do preview não equivalem à sessão persistente. Nenhuma alteração de infraestrutura, configuração de segurança, sessão ou credencial nesta rodada. FIXED_POINT do pareamento permanece PENDENTE.
 <!-- /CENTRALDARK_PAIRING_DIAG_20261128 -->
 
+<!-- CENTRALDARK_PAIRING_BIC_CONFIRMED_20261128 -->
+### Causa confirmada — bloqueio BIC da sondagem e contraprova de leitura (28/11/2026)
+
+**Resultado: causa dos 403 identificada; pareamento real ainda PENDENTE.** Consulta somente de leitura à API GraphQL da Cloudflare, dataset `firewallEventsAdaptive`, zona `6986cded70ab6bec23a765496807b614`, correlacionou o host `mcp.centralldark.com` e o caminho `/device/pair/start` aos eventos abaixo. A hipótese anterior sobre Bot Fight Mode não deve ser promovida a causa: o evento que tomou a decisão informa explicitamente `source=bic`, `ruleId=bic` e `action=block`.
+
+| Momento UTC | Ray ID | User-Agent observado | Decisão |
+| --- | --- | --- | --- |
+| 28/11/2026 04:23:34 | `a6169919788232c4` | `Python-urllib/3.14` | `block / bic` |
+| 28/11/2026 04:51:46 | `a616c2690c7000f1` | `Python-urllib/3.14` | `block / bic` |
+
+Os dois eventos pertencem à sondagem Python, não constituem um teste do cliente nativo ou de uma sessão Supabase. Eventos `link_maze_injected` apareceram com os mesmos Rays; a atribuição do bloqueio acima vem dos eventos `block`. A [documentação oficial do Browser Integrity Check](https://developers.cloudflare.com/waf/tools/browser-integrity-check/) explica que a proteção avalia cabeçalhos HTTP, inclusive User-Agent ausente ou fora do padrão.
+
+**Contraprova externa sem criar pareamento:** duas requisições **GET**, à mesma URL `https://mcp.centralldark.com/device/pair/start`, diferiram somente no User-Agent. Nenhum corpo, credencial, código ou consentimento foi enviado.
+
+| User-Agent declarado | Resposta observada | CF-Ray |
+| --- | --- | --- |
+| `Python-urllib/3.14` | 403, `text/plain` | `a616c440bd5400ae-GRU` |
+| `CentralDark-Readback/1.0` | 405, JSON, `Allow: POST, OPTIONS` | `a616c44218041fb4-GRU` |
+
+O 405 confirma que a segunda leitura chegou à validação de método do Worker existente; **não comprova POST, autenticação ou vínculo**. O identificador usado na contraprova declara o cliente de diagnóstico; não imita um navegador ou o Agente Remoto. A leitura do log JSONL do MCP percorreu 1.330 linhas e não encontrou eventos desses caminhos após 04:15 UTC; esse dado é corroborativo, não substitui a decisão registrada na borda.
+
+**Limite de execução desta rodada:** a revisão automática da plataforma recusou o POST de teste por possível criação de estado de pareamento e exposição de código na resposta. A chamada recusada não foi executada. O diagnóstico prosseguiu por GraphQL e GET, sem repetir o POST por outra rota. Nenhuma regra Cloudflare, flag Desktop, credencial, sessão, registro de dispositivo ou serviço foi alterado.
+
+**Continuidade:** reutilizar o cliente legítimo e sua identificação HTTP, conferir o contrato do pareamento persistente e executar uma solicitação real com resposta secreta mantida no cliente após a autorização específica exigida pela revisão. Depois comprovar login/consentimento, vínculo e chamadas autenticadas. Não desativar BIC/Bot Fight Mode nem habilitar o preview Desktop para corrigir por hipótese uma sondagem Python. `FIXED_POINT_DIAGNOSTICO_403=APROVADO`; `FIXED_POINT_PAREAMENTO=PENDENTE`.
+<!-- /CENTRALDARK_PAIRING_BIC_CONFIRMED_20261128 -->
+
+
 ## Regra
 
 A documentação, os contratos internos e os catálogos de rotas devem usar `api.centralldark.com` como domínio público oficial da API CentralDark/MultiZap.
