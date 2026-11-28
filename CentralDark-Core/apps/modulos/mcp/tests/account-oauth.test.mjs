@@ -74,12 +74,21 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
         const response=await form("/authorize",data,{Origin:origin,Accept:"application/json",...(a?{Authorization:"Bearer "+a.bearer}:{}),...headers});
         return {response,data,verifier};
     };
+    const receiptStatus=(receipt,a,originHeader=origin)=>form("/authorize",{action:"consent_status",receipt},{Origin:originHeader,Accept:"application/json",...(a?{Authorization:"Bearer "+a.bearer}:{})});
     const authorize=async(client,a,scope="mcp")=>{
         const {response,data,verifier}=await consent(client,a,scope);
         assert.equal(response.status,200,"consent status");
         const reply=await response.json();
         assert.equal(reply.ok,true);
         assert.equal(JSON.stringify(reply).includes(a.bearer),false);
+        assert.match(reply.consent_receipt,/^[a-f0-9]{64}$/);
+        assert.ok(reply.consent_expires_at > Date.now() && reply.consent_expires_at <= exp*1000 && reply.consent_expires_at <= Date.now()+300000);
+        const pending=await receiptStatus(reply.consent_receipt,a);
+        assert.equal(pending.status,200);
+        { const value=await pending.json(); assert.equal(value.ok,true); assert.equal(value.status,"pending"); assert.ok(Object.keys(value).every(key=>["ok","status","cid","requestId","spanId","traceId"].includes(key))); }
+        assert.equal((await receiptStatus(reply.consent_receipt,null)).status,401);
+        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id))).status,404);
+        assert.equal((await receiptStatus(reply.consent_receipt,a,"https://other.invalid")).status,403);
         const back=new URL(reply.redirect_to);
         assert.equal(back.origin,base);
         assert.equal(back.pathname,"/callback");
@@ -92,6 +101,11 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
         assert.equal(pair.scope,scope);
         assert.ok(pair.expires_in>0&&pair.expires_in<=300);
         assert.equal(JSON.stringify(pair).includes(a.bearer),false);
+        const completed=await receiptStatus(reply.consent_receipt,a);
+        assert.equal(completed.status,200);
+        assert.equal(completed.headers.get("cache-control"),"no-store");
+        { const value=await completed.json(); assert.equal(value.ok,true); assert.equal(value.status,"authenticated"); assert.ok(Object.keys(value).every(key=>["ok","status","cid","requestId","spanId","traceId"].includes(key))); }
+        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id))).status,404);
         const replay=await form("/token",{grant_type:"authorization_code",client_id:client,redirect_uri:data.redirect_uri,code:back.searchParams.get("code"),code_verifier:verifier});
         assert.equal(replay.status,400);
         return pair;
@@ -130,6 +144,17 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
             assert.equal((await consent(client,accounts[0],"mcp",{}, {Origin:"https://other.invalid"})).response.status,403);
             assert.equal((await consent(client,accounts[0],"mcp",{redirect_uri:"https://other.invalid"})).response.status,400);
             assert.equal((await consent(client,accounts[0],"mcp",{code_challenge_method:"plain"})).response.status,400);
+        });
+        await t.test("failed PKCE exchange cannot authenticate a completion receipt",async()=>{
+            const {response,data}=await consent(client,accounts[0]);
+            assert.equal(response.status,200);
+            const reply=await response.json();
+            const back=new URL(reply.redirect_to);
+            const denied=await form("/token",{grant_type:"authorization_code",client_id:client,redirect_uri:data.redirect_uri,code:back.searchParams.get("code"),code_verifier:"invalid"});
+            assert.equal(denied.status,400);
+            const status=await receiptStatus(reply.consent_receipt,accounts[0]);
+            assert.equal(status.status,404);
+            assert.equal((await status.json()).status,"unknown");
         });
         let user,moderator,admin,adminPersonal;
         await t.test("no owner credential: user, moderator and admin exchange scoped grants",async()=>{

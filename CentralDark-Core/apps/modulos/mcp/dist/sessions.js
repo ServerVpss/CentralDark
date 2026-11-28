@@ -166,6 +166,22 @@ export function issueTokenPair(input) {
     scheduleSave();
     return { access, refresh };
 }
+// Receipt is only a short-lived observation of an existing account grant.
+// Never use it as authentication, never expose the code or either token.
+export function getAccountConsentStatus(receipt, account) {
+    if (!/^[a-f0-9]{64}$/.test(receipt || "") || !account) return "unknown";
+    const hash = crypto.createHash("sha256").update(receipt).digest("hex");
+    const now = Date.now();
+    const matches = grant => grant.gh_scope === "centraldark-account" &&
+        grant.consent_receipt_hash === hash && grant.consent_receipt_expires_at > now &&
+        grant.account_expires_at > now && grant.account_id === account.account_id &&
+        grant.account_session_id === account.account_session_id && grant.account_role === account.account_role;
+    for (const grant of accessTokens.values())
+        if (grant.expiresAt > now && matches(grant)) return "authenticated";
+    for (const grant of authCodes.values())
+        if (now - grant.createdAt <= AUTH_CODE_TTL_MS && matches(grant)) return "pending";
+    return "unknown";
+}
 export function getAccessToken(token) {
     const t = accessTokens.get(token);
     if (!t)

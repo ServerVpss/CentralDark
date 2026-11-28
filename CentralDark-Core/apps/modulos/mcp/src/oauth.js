@@ -20,7 +20,7 @@ export function configureDevicePairingForOAuth(store) {
 }
 import { log } from "./log.js";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
-import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, } from "./sessions.js";
+import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, getAccountConsentStatus, } from "./sessions.js";
 const CLIENT_METADATA_TTL_MS = 1000 * 60 * 10;
 const clientMetadataCache = new Map();
 function getAdminPassword() {
@@ -112,10 +112,21 @@ export async function revalidateAccountGrant(grant) {
         account.account_expires_at !== grant.account_expires_at || !accountScopeAllowed(grant.oauth_scope, account.account_role)) return null;
     return account;
 }
+function isLoopbackCallback(value) {
+    try {
+        const url = new URL(value);
+        return url.protocol === "http:" && ["127.0.0.1", "[::1]", "localhost"].includes(url.hostname) &&
+            !url.username && !url.password && !url.hash;
+    } catch { return false; }
+}
 function accountGrantFields(grant) {
     return isAccountGrant(grant) ? { account_id: grant.account_id, account_role: grant.account_role,
         account_session_id: grant.account_session_id, account_expires_at: grant.account_expires_at,
-        account_bearer: grant.account_bearer } : {};
+        account_bearer: grant.account_bearer,
+        ...(grant.consent_receipt_hash && grant.consent_receipt_expires_at > Date.now() ? {
+            consent_receipt_hash: grant.consent_receipt_hash,
+            consent_receipt_expires_at: grant.consent_receipt_expires_at
+        } : {}) } : {};
 }
 export function getOwnerToolToken() {
     // Reutiliza sessao gh somente apos OAuth admin autorizado; nao expor credencial.
@@ -406,6 +417,21 @@ export async function handleAuthorize(req, res) {
         // A UI de consentimento MCP e o Cockpit legado enviam consentimento JSON.
         // O token Supabase segue no header, nunca no URL ou no HTML.
         const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
+        // Use the existing /authorize route: no new public callback, credential store or Worker.
+        if (req.method === "POST" && param(req, "action") === "consent_status") {
+            res.setHeader("Cache-Control", "no-store");
+            res.setHeader("Referrer-Policy", "no-referrer");
+            if (!requestedJson || req.headers.origin !== DESKTOP_ORIGIN)
+                return oauthError(res, 403, "access_denied", "Origem de consulta invalida.");
+            const receipt = param(req, "receipt");
+            if (!/^[a-f0-9]{64}$/.test(receipt))
+                return oauthError(res, 400, "invalid_request", "Recibo de consentimento invalido.");
+            const account = await verifySupabaseAccount(req.headers.authorization);
+            if (!account) return oauthError(res, 401, "access_denied", "Sessao CentralDark invalida.");
+            const status = getAccountConsentStatus(receipt, account);
+            if (status === "unknown") return res.status(404).json({ok:false, status});
+            return res.json({ok:true, status});
+        }
         const deviceClientId = param(req, "client_id");
         const pendingPair = devicePairingStore?.pendingConsent(param(req,"pair_id"));
         const bridgePair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID && pendingPair?.executor === "remote-bridge";
@@ -579,6 +605,8 @@ export async function handleAuthorize(req, res) {
                 return;
             }
         }
+        const consentReceipt = account && isLoopbackCallback(redirect_uri) ? crypto.randomBytes(32).toString("hex") : null;
+        const receiptExpires = consentReceipt ? Math.min(account.account_expires_at, Date.now() + 5 * 60_000) : 0;
         const authReq = createAuthRequest({ client_id: client.client_id, redirect_uri, client_state, code_challenge, code_challenge_method, scope });
         const ac = issueAuthCode({
             client_id: authReq.client_id,
@@ -589,6 +617,10 @@ export async function handleAuthorize(req, res) {
             gh_scope: account ? "centraldark-account" : "owner-admin",
             gh_login: account ? "centraldark-account:" + account.account_id : "centraldark-admin",
             ...(account || {}),
+            ...(consentReceipt ? {
+                consent_receipt_hash: crypto.createHash("sha256").update(consentReceipt).digest("hex"),
+                consent_receipt_expires_at: receiptExpires
+            } : {}),
             oauth_scope: authReq.scope || "mcp admin",
         });
         const back = new URL(authReq.redirect_uri);
@@ -605,7 +637,8 @@ export async function handleAuthorize(req, res) {
         if (requestedJson) {
             res.setHeader("Cache-Control", "no-store");
             res.setHeader("Referrer-Policy", "no-referrer");
-            res.json({ ok: true, redirect_to: back.toString() });
+            res.json({ ok: true, redirect_to: back.toString(),
+                ...(consentReceipt ? { consent_receipt: consentReceipt, consent_expires_at: receiptExpires } : {}) });
         } else {
             res.redirect(302, back.toString());
         }
