@@ -571,6 +571,8 @@ EXECUTION_FIRST_PROTOCOL:
 
 **Aplicação real registrada (28/11/2026):** [Contabo HTTPS — receita operacional e diálogo integral](docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). Caso de execução direta com o Traefik e MCP existentes, frentes independentes, menor delta, prova proporcional e preservação. O recibo original é o commit `a5f152a`; OAuth e pareamento continuam separados. Esta referência é aprendizado subordinado ao protocolo vigente, não uma regra, gate ou skill adicional.
 
+**Evolução conjunta da distribuição (28/11/2026):** quando uma mudança afetar a integração CentralDark, aplicar o [contrato de evolução do conjunto completo](docs/DOMINIOS/API-CENTRALDARK.md#evolucao-conjunta-da-distribuicao). Evoluir os consumidores afetados, gerar artefatos completos e compatíveis, publicar as versões autorizadas no release do fork e conferir download/readback. Preservar identidade, motor único e versões já distribuídas. A regra vale para o plugin inteiro e pacote inteiro, não só login; não obriga alterações em componentes comprovadamente inalterados. O owner da receita permanece no domínio API, sem gate paralelo.
+
 <!-- /CENTRALDARK_EXECUTION_FIRST_PROTOCOL -->
 
 ---
