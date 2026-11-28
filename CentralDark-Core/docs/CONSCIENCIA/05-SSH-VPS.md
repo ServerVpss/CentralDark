@@ -7,6 +7,14 @@ updated: 2026-06-29
 
 # 05 — SSH na VPS
 
+
+<!-- CURRENT_VMWARE_LINK_SSH_REUSE_20261103 -->
+## 🍒+1 SSH Casa→VMware (não confundir com a VPS e com SFTP AkyronHost)
+
+A fonte operacional da VM está na [Skill VMware existente](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md) e na [receita Kingston](../../.agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/references/RECEITA-KINGSTON-20261103.md). **Não partir de `Segredo-VPS` para localizar a VM**. Prova atual: processo VMX em `E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`; `vmrun` = `192.168.35.130`; alias `openkylin-vm` ainda em `192.168.35.128` (timeout), SSH Casa→VM usando override pontual e host key previamente verificada = **PASS**. VM Tailscale sem aprovação do administrador; VM→VPS não comprovado. Nenhuma configuração SSH foi alterada, e o acesso SFTP à AkyronHost descrito mais abaixo é **outro servidor e outra finalidade**. `CURRENT > HISTORY`; `NEXT_CURSOR=REMEASURE_VMWARE_DHCP_BEFORE_VPS_PROBE`.
+<!-- /CURRENT_VMWARE_LINK_SSH_REUSE_20261103 -->
+
+
 ## Regra inviolável
 
 **NUNCA** usar `$VPS_SSH_KEY_LOVABLE` direto com `printf` / `echo` + `ssh`.
@@ -196,3 +204,21 @@ Não mascarar essa incompletude com instalação de outro desktop. A marca
 - [[00-LEIA-PRIMEIRO]] — portão de entrada
 - [[MAPA-DO-CEREBRO]] — visão geral
 - [[CONSCIENCIA]] — documento mestre
+
+<!-- AKYRON_SFTP_ONLY_20261103 -->
+## 🪬 AkyronHost ADAMANTITA — conexão de arquivos (SFTP; SSH remoto não comprovado)
+
+Evidência de leitura do painel AkyronHost em 03/11/2026, sem acesso ao shell:
+
+- Host SFTP: `akh-0.akyronhost.com`
+- Porta SFTP: `2022`
+- URI: `sftp://akh-0.akyronhost.com:2022`
+- Usuário/senha: consultar o painel autenticado; **não versionar**.
+- Estado observado do servidor ADAMANTITA #335: **offline**.
+- SFTP transfere arquivos. **Não equivale a console SSH com execução de comandos** nem prova que GitHub Actions runner possa ser instalado.
+- A configuração SSH canônica `.ssh/config` está protegida: **não alterar**. Nenhuma chave privada, senha, token, cookie ou fingerprint presumida deve entrar em GitHub.
+
+**Prova para promoção de `SFTP_ONLY` → `SSH_SHELL`:** console/PTY realmente autorizado, comando benigno e readback, identidade e diretório observados; sem inferência pela porta 2022. Desktop remoto SEGREDO estava offline na medição. `SSH_ACCESS=UNKNOWN`, `SFTP_AUTH=UNKNOWN`, `RUNNER_AVAILABLE=UNKNOWN`.
+
+**NEXT_CURSOR:** quando houver executor conectado, testar primeiro uma leitura SFTP sem transferência destrutiva, verificar se shell existe e só então vincular a rota ao owner operacional existente; jamais transformar SFTP em alias SSH automaticamente.
+<!-- /AKYRON_SFTP_ONLY_20261103 -->

@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+// #OBSERVACOES#
+// @owner: skills/pretty-mermaid/scripts/render.mjs
+// @doc_ref: docs/CONSCIENCIA/VISUALIZACAO-MERMAID-PADRAO.md
+// @last_updated: 2026-11-03T19:54:29.061Z
+// @implementado: renderização local SVG PNG ASCII; CI evita npm install implícito.
+// @pendente: executar artefatos do PR em runner com dependência do lockfile.
+// @estado: SOURCE_ONLY; NO_IMPLICIT_PR_INSTALL
+// @next_cursor: smoke dos três formatos no HEAD final.
 
 import { execSync } from 'child_process';
 import { dirname, join } from 'path';
@@ -35,6 +43,10 @@ async function loadBeautifulMermaid() {
     return await import('beautiful-mermaid');
   } catch {}
 
+  // GitHub PR runner usa lockfile com npm ci; não instalar nada silenciosamente.
+  if (process.env.CENTRALDARK_RENDER_NO_INSTALL === '1') {
+    throw new Error('PRETTY_MERMAID_DEPENDENCY_MISSING: executar npm ci no owner existente');
+  }
   console.error('[beautiful-mermaid] Dependency not found. Installing automatically...');
   try {
     execSync('npm install --no-fund --no-audit', {

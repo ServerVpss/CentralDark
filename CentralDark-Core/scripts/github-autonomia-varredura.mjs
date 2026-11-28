@@ -1,5 +1,15 @@
 #!/usr/bin/env node
 /**
+ * #OBSERVACOES#
+ * @owner: scripts/github-autonomia-varredura.mjs
+ * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+ * @last_updated: 2026-11-03T19:19:46.131Z
+ * @implementado: trilha pós-push main com associação exata do merge commit e aviso contextual.
+ * @pendente: GitHub Actions no HEAD final; auditoria não substitui branch protection.
+ * @estado: SOURCE_ONLY; PUSH_AUDIT_OBSERVATIONAL; MAIN_NOT_MODIFIED
+ * @next_cursor: testar classificador puro e conferir workflow de push em main.
+ */
+/**
  * Varredura eventual da promoção autônoma.
  *
  * Um único motor canônico:
@@ -21,7 +31,7 @@
  * ✅ PR CONFIRMADO e 🟢 SUCESSO são RESULTADO (pós-merge), nunca input.
  */
 import { spawnSync } from "node:child_process";
-import { mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, readdir, rename, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DEFAULT_REQUIRED_WORKFLOWS, isProtectedLedgerPr, authorizationFor, verifySealedReceipt } from "./github-autonomia-promocao.mjs";
@@ -602,8 +612,56 @@ export async function guardSweep(sweepDir) {
   return deferred;
 }
 
+/** Auditoria pós-push: sem branch protection nativa, isto é observação, não veto. */
+export function classifyMainPush({ headSha, associatedPulls, truncated = false } = {}) {
+  if (!/^[0-9a-f]{40}$/i.test(String(headSha || "")) ||
+      !Array.isArray(associatedPulls) || truncated) {
+    return { status: "UNKNOWN", pr: null };
+  }
+  const linked = associatedPulls.find((pull) =>
+    pull?.merge_commit_sha === headSha && pull?.merged_at && pull?.base?.ref === "main");
+  return linked
+    ? { status: "PR_MERGE_COMMIT_LINKED", pr: Number(linked.number) }
+    : { status: "UNLINKED_MAIN_PUSH_REVIEW", pr: null };
+}
+
+/** Só registra evidência de push na main; nunca apaga, reverte ou bloqueia o push. */
+async function auditMainPush(env = process.env) {
+  if (env.GITHUB_EVENT_NAME !== "push" || env.GITHUB_REF !== "refs/heads/main") {
+    console.log("MAIN_PUSH_AUDIT=NOT_APPLICABLE");
+    return;
+  }
+  const sha = String(env.GITHUB_SHA || "");
+  const repo = String(env.GITHUB_REPOSITORY || "");
+  const token = String(env.GITHUB_TOKEN || "");
+  let report = { status: "UNKNOWN", pr: null };
+  if (/^[0-9a-f]{40}$/i.test(sha) &&
+      /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo) && token) {
+    try {
+      const pulls = await api(token, "GET", `/repos/${repo}/commits/${sha}/pulls?per_page=100`);
+      report = classifyMainPush({ headSha: sha, associatedPulls: pulls, truncated: pulls.length >= 100 });
+    } catch {
+      report = { status: "UNKNOWN", pr: null };
+    }
+  }
+  const code = report.status;
+  console.log(`MAIN_PUSH_AUDIT=${code} SHA=${sha || "UNKNOWN"} PR=${report.pr || "UNKNOWN"}`);
+  if (code === "UNLINKED_MAIN_PUSH_REVIEW") {
+    console.log(`::warning title=MAIN_PUSH_ORIGIN_NEEDS_REVIEW::Commit ${sha.slice(0, 12)} entrou na main sem PR de merge correspondente comprovado; conferir writer, escopo e receipt. Não é prova automática de violação.`);
+  } else if (code === "UNKNOWN") {
+    console.log("::warning title=MAIN_PUSH_AUDIT_UNKNOWN::Não foi possível comprovar a origem do push na main; revisar evento/associação, sem bloquear PR alheio.");
+  } else {
+    console.log(`::notice title=MAIN_PR_MERGE_LINKED::HEAD ${sha.slice(0, 12)} associado ao PR #${report.pr}; checks e readback continuam prova separada.`);
+  }
+  if (env.GITHUB_STEP_SUMMARY) {
+    const summary = `\n### 🧿 Auditoria da main (somente observação)\n| SHA | Estado de origem | PR |\n|---|---|---|\n| \`${sha || "UNKNOWN"}\` | \`${code}\` | ${report.pr ? "#" + report.pr : "UNKNOWN"} |\n\nPush direto possível sem proteção nativa; esta verificação é **pós-push**, não bloqueio de escrita.\n`;
+    await appendFile(env.GITHUB_STEP_SUMMARY, summary).catch(() => {});
+  }
+}
+
 export async function main(argv = process.argv.slice(2)) {
   const mode = argv[0] || "";
+  if (mode === "audit-main-push") return auditMainPush();
   if (mode === "normalize") return normalizeDraftSweep();
   if (mode === "judge") return judgeSweep();
   if (mode === "guard") return guardSweep(config().sweepDir);

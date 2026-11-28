@@ -1,0 +1,1137 @@
+# 🪬 CentralDark — Funil único das 891 branches | snapshot 2026-11-03
+
+<!-- CODE_FIRST_NO_RUNTIME_TOP_20261103 -->
+> 🍒 **REGRA ZERO DA MISSÃO:** **SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** Alinhar o código diretamente no GitHub, promover à `main` somente com proof de source, e preservar **todas** as 891 branches do snapshot e quaisquer novas. Nenhuma exclusão autorizada.
+>
+> ⭐⭐⭐ **Michelin existente:** construir pelo menor delta → integrar código no owner atual → provar por diff, revisão, gates estáticos e SHA/readback, proporcional ao alvo do GitHub. 🪡 **Costura existente:** classificar conflitos (`CURRENT/INCOMING/BOTH/STRUCTURED/YELLOW`) e preservar material útil, sem criar resolvedor novo. `RUNTIME=NOT_TESTED_BY_SCOPE` **não impede** a conclusão de código; `SOURCE_ALIGNED != RUNTIME_VERIFIED`.
+
+<!-- /CODE_FIRST_NO_RUNTIME_TOP_20261103 -->
+
+<!-- INSTALLER_SAME_SOURCE_20261103 -->
+> 🍒 **REGRA ACOPLADA AO HUD:** `INSTALLER_FOLLOWS_SOURCE=REQUIRED`. Se o Electron/cockpit ou pacote Windows/Linux evoluir, o **mesmo `install.sh`** e seu documento `docs/INSTALADOR/32-builder-multiplataforma-centraldark.md` evoluem junto, no diff do mesmo PR. **Sem segundo instalador, sem VPS/deploy/runtime nesta missão.**
+>
+> **Conferência de source do builder híbrido:** `win32-x64` NSIS, `linux-x64` AppImage/deb, `desktopName=com.centraldark.desktop`, `linux.executableName=centraldark-desktop`, seleção de entrypoints no manifesto e hashes no ledger; `install.sh` ganhou `--desktop-check`, `--desktop-build`, `--desktop-install-deb --yes`. **Nenhum build ou install executado. `BUILD=NOT_PROVEN`.**
+
+<!-- /INSTALLER_SAME_SOURCE_20261103 -->
+
+
+> **Natureza:** recibo de inventário CURRENT e fila operacional do owner histórico [BRANCHES-ESTACIONADAS-PR-MAE.md](../BRANCHES-ESTACIONADAS-PR-MAE.md).
+> **Fonte:** pesquisa paginada de refs remotas de `ServerVpss/CentralDark`; fotografia anterior à criação da branch desta missão.
+> **Integridade:** 892 refs distintas, incluindo `main`; 891 branches secundárias; inventário histórico com 569 entradas de 15/09/2026; 16 PRs abertos no momento da leitura.
+> **Fronteira:** relatório e checklist; nenhum branch deletado, nenhum deploy, nenhuma afirmação de CI verde. Revisões posteriores devem atualizar o CURRENT sem destruir o snapshot histórico.
+
+## 🎮 HUD — placar inicial
+
+| 🎮 Indicador | Valor | Prova |
+|---|---:|---|
+| 🧭 Ref principal `main` | 1 | protegida, fora da fila |
+| 📚 Branches em triagem | **891** | 891 refs únicas |
+| 🔒 P0 PR aberto: preservar | **16** | correspondência exata com heads dos PRs abertos |
+| 🟠 P1 PR fechado sem merge (hist.) | **66** | classificada em 15/09; exige releitura |
+| 🟡 P2 sem PR / status antigo (hist.) | **96** | exige descoberta atual |
+| 🔵 P3 fora do inventário de 15/09 | **321** | UNKNOWN, não presumir dispensável |
+| ⚪ P4 PR mergeado (hist.) | **392** | fonte preservada para estudo; **não descartável** |
+| 🟢 Exclusões comprovadas nesta missão | **0** | nenhuma mutação de ref |
+| ✅ Ondas concluídas | **0/18** | checkboxes abaixo |
+
+**HUD G1 82/891 · G2 66/891 ·** `[■■□□□□□□□□□□□□□□□□]` (vínculo PR verificado; não implica conclusão) · **0/891 com decisão final**.
+
+
+<!-- NO_BRANCH_IS_DISPOSABLE_20261103 -->
+## 🔒 Trava permanente desta missão — preservar todas as branches
+
+**REGRA DO CHEFE:** `NO_BRANCH_IS_DISPOSABLE=true` · `BRANCH_DELETE_ALLOWED=false` · `ALL_891_SNAPSHOT_REFS=HOLD` · `NEW_REFS_INCLUDING_PR_1977=HOLD`.
+
+Todas as 891 branches deste inventário são **trabalho de estudo/implementação potencialmente incompleto**, especialmente nas dependências entre **Hermes, Corpo Único e Instinto Superior**. **Nenhuma** está autorizada para exclusão, incluindo as 392 marcadas como mergeadas no inventário antigo, as 2 `ahead=0` e as 4 `diverged/files=0`. `P0…P4` são categorias de **investigação**; **não** são lotes de descarte. `G5` significa preservar/reconciliar com prova, **não** deletar. Apenas nova decisão explícita do CHEFE pode revogar esta trava, em missão separada e após provar que tudo foi absorvido e consumido. Nenhuma operação de `delete`, `prune` destrutivo, `force push`, reset ou limpeza de worktree é autorizada por este PR.
+
+## 🔔 Rastreio obrigatório de alertas, reviews e dívida pós-merge
+
+- [x] **Regra escrita no owner** — toda revisão, comentário, thread inline, CI/gate ou alerta anterior deve ser procurado antes de classificar o trabalho da branch/PR como completo.
+- [x] **Exemplo medido** — [#1973: P1 não resolvido, linha 258](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463), HEAD revisado `af009c9fa1bf64acf441f6789da76617a0ce9b43`, código `apps/instinto-superior/src/data/painel-unico.ts`, motivo `CODE_DOC_NOT_UPDATED_IN_SAME_DIFF`, pendentes `#OBSERVACOES#` e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`. PR já mergeado em `55db287f203d3208bc92d50e1a21b7250a827d21`; o thread retornou `is_resolved=false` nesta inspeção. **DÍVIDA DOCUMENTAL PÓS-MERGE=OPEN/UNKNOWN_FIX**, não bloqueio atual de merge.
+- [ ] **G3/REVIEW_HISTORY individual** — consultar comentários de Conversation, reviews de código, threads `resolved` e `outdated`, checks de CI e recibos para cada PR referenciado. Um comentário antigo pode continuar relevante após o merge.
+- [ ] **G3/DOC_READBACK** — para cada achado, registrar **PR, URL, prioridade, HEAD revisado, arquivo/linha, owner, documento ou teste citado, resultado após abrir o arquivo atual e evidência de correção**. `is_resolved=true` ou merge por si só não provam reparo; comparar source e recibo.
+- [ ] **G4/DECISION** — marcar `RESOLVED` somente após correção material + readback; senão `OPEN_POST_MERGE`, `NEEDS_DOCS`, `NEEDS_CODE`, `UNKNOWN`, mantendo a branch.
+
+**Regras:** `MERGED != REVIEW_CLEARED` · `OUTDATED != FIXED` · `COMMENT_EXISTS != VERIFIED` · `NO_DIFF != WORK_COMPLETE`. O caso #1973 foi verificado; **não** há varredura completa de revisões dos demais PRs ainda. O levantamento dos 891 itens continua em progresso.
+
+### 🔍 G3 — seis PRs históricos com histórico de comentários consultado
+
+<!-- G3_REVIEW_SIX_REFS_20261103 -->
+**Fontes:** threads inline + comentários do PR consultados individualmente para #1337, #1369, #736, #1484, #724 e #921. **Ainda não foi provado uso atual/proteção de branch em worktrees, VPS, Casa ou runners.** `G3=PARTIAL`; `RESOLVED=NOT_PROVEN` para correções de código/documentação.
+
+| ID | PR | Threads inline | Comentários de PR | Alerta histórico significativo | Juízo |
+|---|---|---:|---:|---|---|
+| 0031 | [#1337](https://github.com/ServerVpss/CentralDark/pull/1337) | 0 | 3 | [Artefato de aprendizado](https://github.com/ServerVpss/CentralDark/pull/1337#issuecomment-5455659685) `SUPPORT_REQUIRED`; revisão consultiva `NEEDS_HUMAN` | PRESERVE / OWNER_USE_UNKNOWN |
+| 0077 | [#1369](https://github.com/ServerVpss/CentralDark/pull/1369) | 0 | 4 | [Recibo](https://github.com/ServerVpss/CentralDark/pull/1369#issuecomment-5473043516): `SUPERADO por #1381`, **não** absorvido byte a byte | PRESERVE / VERIFY_1381_AND_CASA |
+| 0046 | [#736](https://github.com/ServerVpss/CentralDark/pull/736) | 0 | 8 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/736#issuecomment-5234575379): `SUPERSEDED_BY=#733` | PRESERVE / VERIFY_733 |
+| 0059 | [#1484](https://github.com/ServerVpss/CentralDark/pull/1484) | 0 | 7 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/1484#issuecomment-5610254473): revisão Codex final `[ ]`, `SUPPORT_REQUIRED` em artifact | PRESERVE / REVIEW_UNKNOWN |
+| 0075 | [#724](https://github.com/ServerVpss/CentralDark/pull/724) | **33 (33 resolved/outdated)** | **134** | [P1 Judge independente](https://github.com/ServerVpss/CentralDark/pull/724#discussion_r3740255810) entre revisões; **resolvido/outdated não prova código corrigido** | PRESERVE / REVIEW_CONTENT |
+| 0082 | [#921](https://github.com/ServerVpss/CentralDark/pull/921) | 0 | 5 | [Comentário](https://github.com/ServerVpss/CentralDark/pull/921#issuecomment-5304814458): `SUPERSEDED_PREDEPLOY_PROOF`; resíduo funcional ainda vinculado a #918 | PRESERVE / VERIFY_918 |
+
+**Não inferir** que `0 threads` significa `0 pendências`: comentários de Conversation, limitações de revisão e evidências em PR sucessor também são parte do histórico. `is_resolved=true` e `is_outdated=true` são estados da thread, não prova de alteração efetiva da `main`. **Todas as seis branches seguem sob `BRANCH_DELETE_ALLOWED=false`.**
+
+**Próximo cone:** examinar owners/consumidores nos PRs sucessores #733, #918, #1381, conferir os arquivos de review do #724, e verificar proteção/uso real de IDs 0031 e 0077 via acessos apropriados. Só após isso medir G3 completo; nenhuma caixa G3 fechada.
+<!-- /G3_REVIEW_SIX_REFS_20261103 -->
+
+<!-- /NO_BRANCH_IS_DISPOSABLE_20261103 -->
+
+<!-- SOURCE_ONLY_RECONCILIATION_20261103 -->
+## 🧬 CURRENT — alinhamento no código, sem VPS/deploy
+
+**SOURCE_ONLY=true · VPS_REQUIRED=false · DEPLOY_REQUIRED=false · BRANCH_DELETE_ALLOWED=false.** A intenção atual é identificar as partes do **Hermes + Corpo Único + Instinto Superior** ausentes, parciais ou não reconciliadas e alinhar os owners existentes por source/PR. Não exigir medição da VPS nem deploy para marcar a prova de **código**; também não declarar integração funcional em runtime.
+
+**Menor delta aplicado nesta branch de missão:** `scripts/farm-pr.sh` sem deleção de branches e sem `reset --hard`; guias Git existentes e skill de merge corrigidos; `apps/instinto-superior/src/data/painel-unico.ts` com `#OBSERVACOES#` no cabeçalho, e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md` atualizado pelo P1 do #1973. A dívida de revisão continua `REVIEW_OPEN` até prova do gate e aceite do reviewer.
+
+**Pré-checagem baseada na lógica `validateDiffCoverage`:** nos 10 arquivos atualmente alterados do PR, os dois fontes executáveis (`painel-unico.ts`, `farm-pr.sh`) apresentam o rastro dentro das primeiras 65 linhas, `@owner`, `@doc_ref`, `@last_updated`, documento modificado e `@code_ref` literal do source. `CODE_DOC_PREFLIGHT=2/2`; não é execução do gate `scripts/lupa/diagram-route-gate.mjs`. `CI_STATUS=UNKNOWN`.
+
+**NEXT_CURSOR SOURCE_ONLY:** inspecionar o diff de #733/#918/#1381 e os arquivos/reviews citados pelos IDs 0031/0077 e 0046/0059/0075/0082; reconciliar no **mesmo source owner** que realmente faltar, testar estaticamente e registrar SHA/readback no #1977. Não requer comandos VPS, containers, SSH, PM2, browser ou ações na Casa. Todas as refs permanecem.
+
+
+### 🪡 Auditoria source #1381 · correções de P1/P2 na mesma branch (03/11/2026)
+
+@last_updated: 2026-11-03T18:45:59.211Z
+**Escopo:** GitHub SOURCE_ONLY; não houve conexão VPS, deploy nem execução de runtime. **Método:** Michelin + Costura, no PR #1977; branches intactas.
+
+**Código confrontado com `main` e corrigido para review:** P1 de HMAC vazio em `probes/vps.py` (bloqueio antes da rede); P1 de symlink externo em `codec.py`; P1 de configuração que aceitava `required_stable_samples=1` em `config.py`; P1 de path de import do teste no `scripts/package.sh`. P2 de workflow fantasma em `docs/PLUG-INTO-CENTRALDARK.md`: aponta para `trigger-fabric-package.yml`. Testes de regressão adicionados ao teste **já existente**, sem executá-los nesta gravação.
+
+**Contraprova documental:** P1 de lease não atômica do PR #1381 foi confrontado com a `main` CURRENT: `store.py:301–328` já usa `BEGIN IMMEDIATE` + token exclusivo e liberação condicionada; **source já corrigido**, mas thread histórica continua aberta até aceite/revisão. Outros P1 do #1381 não foram marcados como resolvidos sem readback e gate.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/codec.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/config.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/vps.py
+@code_ref: apps/modulos/fixed-point-fabric/scripts/package.sh
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
+
+**Prova pendente:** readback do HEAD exato, checks de source e confrontação dos alertas históricos restantes; `RUNTIME=NOT_TESTED_BY_SCOPE` e `MAIN_MERGE=PENDING` até prova independente.
+
+
+### 🧿 Revisão adicional P1 #1381 · engine/source
+
+Code readback mostrou três lacunas em `engine.py`: exceção de probe, evidence persistida sem redaction e falta de `verify_chain()` interno. Código desta branch passa a tratar exceções como `BLOCKED`, redigir evidence antes de salvar e bloquear a decisão se o ledger for inválido; `redaction.py` cobre também `credential` e `authorization`. Três testes de contraprova adicionados a `test_core.py` existente. Sem execução de runtime, CI source ainda pendente.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/engine.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/redaction.py
+
+
+### 🪡 #1381 · Webhook SQLite e selo sem autocontaminação (SOURCE_ONLY)
+
+- Verificado `webhook.py`: usava `ThreadingHTTPServer` compartilhando uma única conexão `EventStore` criada fora dos handlers. Fonte alterada para `HTTPServer`, igual ao dashboard existente; serializa chamadas sem segundo writer.
+- Verificado `cli.py`: `seal` aceitava saída dentro dos próprios caminhos protegidos. A fonte agora rejeita arquivo de saída que coincida com um arquivo protegido ou fique sob diretório selado.
+- Contraprovas de source adicionadas a `test_state_library.py` existente; ainda sem execução e sem alegar runtime verde. Revisões antigas do #1381 permanecem registradas até aceite.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/webhook.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/cli.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_state_library.py
+
+
+### 🧠 #1381 P1 · Fail-closed da partitura obrigatória Hermes
+
+Na `main` do PR legado, `GraphRAG-Master/agent.mjs` convertia partitura inválida em texto `FAIL_CLOSED=true`, mas `core/decisor.mjs` podia continuar pelo cache, modelo local e fallback sem nenhum bloqueio. No delta de source do PR #1977, `contextoPartitura` agora rejeita falhas estruturadamente; `decidir` verifica `carregarPartitura()` **antes do cache e dos modelos** e retorna `BLOCKED` determinístico ao falhar. `selfTest` existente recebe contraprova de erro da partitura. Nenhuma decisão de modelo foi executada nesta missão.
+
+@code_ref: apps/modulos/HERMES-CORE/agents/GraphRAG-Master/agent.mjs
+@code_ref: apps/modulos/HERMES-CORE/core/decisor.mjs
+
+
+### 🧿 P1 #1381 · Mesmo commit obrigatório entre domínios
+
+**Readback de source em 03/11/2026:** `policy.py` conferia apenas estado PASS/idade dos receipts, sem ligar `local.head`, `github.main_head` e um SHA VPS. `vps_agent.py` não emitia SHA e `probes/vps.py` não o expunha como evidência. **Menor delta:** política agora exige os três SHA completos e idênticos quando domínios requeridos; não há FIXED_POINT por três PASS em commits diferentes nem por SHA ausente. VPS observa `git rev-parse HEAD` via checkout, e assina o SHA no payload HMAC; ausência da referência vira bloqueio. `screenpipe` segue sensor sem SHA. `test_core.py` ganhou contraprovas de SHA divergente/ausente e round-trip do payload assinado. `test_counterproof.py` usa fixtures com commit comum para preservar testes de transição de estados. *Sem VPS, deploy ou teste de runtime executado.*
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/policy.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/vps_agent.py
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/vps.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
+
+**STATE:** SOURCE_PATCHED_IN_PR_1977; CI_SAME_HEAD=UNKNOWN; review #1381 não marcado como resolvido automaticamente. 
+
+
+### 🧪 P1 #1381 · Check-runs do candidato GitHub antes de PASS
+
+Na fonte corrente, `probes/github.py` aceitava `Status.PASS` sem consultar os checks do SHA. O delta no próprio owner chama a API GitHub `/commits/{head}/check-runs` e falha fechado para lista ausente/parcial, check ainda em fila, conclusão falha, SHA divergente ou zero checks com sucesso. Apenas SOURCE: `test_core.py` ganhou contraprova com checks sucesso, pendência e SHA divergente mockados. Não foi atribuída execução de CI ao teste local nem declarado merge.
+
+@code_ref: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/probes/github.py
+@code_ref: apps/modulos/fixed-point-fabric/tests/test_core.py
+
+<!-- /SOURCE_ONLY_RECONCILIATION_20261103 -->
+
+## 🧿 Regras de combate — critérios obrigatórios
+
+1. **MAIN é sagrada.** `main`, branches protegidas e branches usadas por PR aberto não são eliminadas.
+2. **CURRENT acima do histórico:** consultar ref, PR atual, estado aberto/mergeado/fechado, commit SHA e comparação com `main`. O rótulo de setembro nunca autoriza mutação.
+3. **Preservação de exclusividade:** se o branch tiver delta não absorvido, owner ativo, worktree em uso, release/tag dependente, handoff ou artefato pendente, registrar `KEEP/ESCALATE`; não excluir.
+4. **Squash não é ancestralidade:** branch pode conter commits exclusivos mesmo após squash; examinar diff/patch-equivalência, recibo, PR merge commit e prova SAME_HEAD antes de recomendar apagar a referência.
+5. **Estado individual:** `TODO → READ → CLASSIFIED → REVIEW_HISTORY → DOC_READBACK → DECIDED_KEEP_OR_PROMOTE → RECEIPT`. Nenhum `UNKNOWN` vira `PASS`.
+6. **Uma caneta/owner:** o inventário histórico continua em `docs/CONSCIENCIA/BRANCHES-ESTACIONADAS-PR-MAE.md`; esta fotografia é anexo e HUD do **mesmo PR**, não um segundo sistema nem script de limpeza.
+7. **Exclusão desabilitada por decisão do CHEFE:** `BRANCH_DELETE_ALLOWED=false`. Conferir tudo sem apagar nada. Revogação da trava requer uma nova autorização explícita; merge, diff zero ou check verde não autorizam exclusão.
+8. **Periodicidade futura:** apenas proposta: reconciliar semanalmente no owner existente. **Não existe monitor automático novo ligado por este documento**.
+
+### ⚔️ Ordem obrigatória
+
+`G0 SNAPSHOT → G1 VÍNCULO PR → G2 DIFF+OWNERS → G3 CONTRAPROVA → G4 DECISÃO → G5 AÇÃO AUTORIZADA → G6 READBACK → G7 KAIZEN`
+
+**Prioridade de fila por risco:** `P0 (blindar ativos) → P1 (resgatar unmerged) → P2 (verificar órfãos históricos) → P3 (classificar novos) → P4 (revisar histórico de merge e dívidas sem excluir)`. Todas as cinco filas permanecem preservadas.
+
+## 🧩 Ondas marcáveis — grupos de 50
+
+- [ ] **Onda 01** · refs 0001–0050 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 02** · refs 0051–0100 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 03** · refs 0101–0150 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 04** · refs 0151–0200 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 05** · refs 0201–0250 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 06** · refs 0251–0300 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 07** · refs 0301–0350 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 08** · refs 0351–0400 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 09** · refs 0401–0450 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 10** · refs 0451–0500 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 11** · refs 0501–0550 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 12** · refs 0551–0600 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 13** · refs 0601–0650 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 14** · refs 0651–0700 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 15** · refs 0701–0750 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 16** · refs 0751–0800 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 17** · refs 0801–0850 · 50 branches · INSPECIONAR → JULGAR → REGISTRAR
+- [ ] **Onda 18** · refs 0851–0891 · 41 branches · INSPECIONAR → JULGAR → REGISTRAR
+
+Ao concluir uma onda: registrar links de PR, SHA de base/head, status de cada referência, decisão `KEEP`/`DELETE` e recibo. Marcar `[x]` **somente depois do readback**. Checkboxes são edição de Markdown, não monitor ao vivo.
+
+<!-- CHECKPOINT_G1_PR_STATE_20261103 -->
+## 🎯 CHECKPOINT 02 · G1 vínculos 82/891 · G2 Git 66/891
+
+**CURRENT lido individualmente no GitHub:** G1 (16 PRs abertos + 66 fechados sem merge) e G2 (66 chamadas `compare main...branch` nas 66 refs P1). **Base:** `main@55db287f203d3208bc92d50e1a21b7250a827d21`; estado documental medido em 03/11/2026.
+
+| Marcador | Prova | Situação |
+|---|---:|---|
+| P0 PR aberto compatível com branch | 16/16 | 🔒 KEEP_OPEN_PR; branch #1977 criada após baseline também preservada |
+| P1 PR fechado e não mergeado | 66/66 | 🔎 Todas checadas por metadados `state=closed`, `merged=false` |
+| P1 Git compare executado | 66/66 | 🔎 64 `diverged` + 2 `behind` |
+| P1 divergentes com diff de arquivos | 60 | 🔴 Conteúdo ancestralmente divergente; exigir análise por owner |
+| P1 divergentes, diff de arquivos zero | 4 | 🟠 HEAD com commits não ancestrais, mas sem arquivos no compare (merge-base→head) |
+| P1 estritamente atrás da main | 2 | 🟡 `ahead=0`, `behind>0`, sem diff; **candidatas a G3**, não aprovação |
+| Owner/worktree/proteção/dependência verificados | 0/66 | ⬜ UNKNOWN |
+| DELETE_ELIGIBLE / DELETE_EXECUTED | 0 / 0 | ⛔ nenhuma mutação de branch |
+| Ondas fechadas até G7 | 0/18 | 🔎 Onda 01 com todos os 50 vínculos PR verificados; continua aberta |
+
+### 🟡 G3 prioritário — refs sem delta de árvore no compare
+
+| ID | Ref | PR fechado | Compare | Próxima contraprova |
+|---|---|---|---|---|
+| 0031 | `docs/vps-scripts-readme` | [#1337](https://github.com/ServerVpss/CentralDark/pull/1337) | `behind, ahead=0, files=0` | branch protegida? usada? worktree? commits documentados? |
+| 0077 | `reconciliacao/casa-20260829-consolidacao` | [#1369](https://github.com/ServerVpss/CentralDark/pull/1369) | `behind, ahead=0, files=0` | branch protegida? usada? worktree? histórico não incorporado? |
+| 0046 | `fix/ci-yaml-duplicate-keys-porta-codex` | [#736](https://github.com/ServerVpss/CentralDark/pull/736) | `diverged, ahead=2, files=0` | commits não ancestrais; não confundir diff zero com ancestralidade |
+| 0059 | `fix/restore-autolupa-canonical-20260909` | [#1484](https://github.com/ServerVpss/CentralDark/pull/1484) | `diverged, ahead=3, files=0` | conferir identidade do trabalho original |
+| 0075 | `program/centraldark-convergencia-omniroute-722` | [#724](https://github.com/ServerVpss/CentralDark/pull/724) | `diverged, ahead=18, files=0` | conferir identidade do trabalho original |
+| 0082 | `verify/house-inventory-predeploy-20260815` | [#921](https://github.com/ServerVpss/CentralDark/pull/921) | `diverged, ahead=1, files=0` | conferir identidade do trabalho original |
+
+### 🔴 Preservação reforçada
+
+- **0078** — `rescue-vps-housekeeping-and-memory-fixes` ([PR #1227](https://github.com/ServerVpss/CentralDark/pull/1227)): `diverged, ahead=3221, behind=4810, files=182`. Não classificar como dispensável.
+- **0018** — `docs/acorda-rebuilder-20260801`: `ahead=137, behind=5602, files=32`. Preservar até reconciliation de owner.
+- **0060** — `fix/sincronizar-painel-20260709-0803`: `ahead=2427, behind=9295, files=33`. Preservar até reconciliation de owner.
+
+### ⚖️ Regra de prova
+
+`behind + ahead0` comprova ausência de commits Git exclusivos da branch em relação à `main`, mas ainda não comprova ausência de referência ativa. `diverged + files0` **não comprova árvore idêntica à main**, só a ausência de diferenças no compare desde o merge-base. Sem verificar worktrees, dependências, releases, proteção e relevância, `DELETE_ELIGIBLE=0`. Onda 01 continua `[ ]` até G2–G7. `UNKNOWN != PASS`.
+
+<!-- /CHECKPOINT_G1_PR_STATE_20261103 -->
+
+## 📋 Lista integral numerada — 891/891
+
+A coluna `⬜` significa **não auditada individualmente nesta missão**. O número é a ordem operacional determinística da fotografia. Categorias P1–P4 são **prioridades para investigar**, não estados atuais confirmados.
+
+| ID | Fila | Etapa | Branch remota | PR vinculado ou referência histórica | Motivo da fila |
+|---:|:---:|:---:|---|---|---|
+| 0001 | P0 | 🛡️ G1:PR_ABERTO | [`aprendizado/hermes-duas-contraprovas-20261020`](https://github.com/ServerVpss/CentralDark/tree/aprendizado/hermes-duas-contraprovas-20261020) | [#1879](https://github.com/ServerVpss/CentralDark/pull/1879) | PR_ABERTO_PROTEGER |
+| 0002 | P0 | 🛡️ G1:PR_ABERTO | [`docs/gabarito-endereco-ausencia-presenca-20261023`](https://github.com/ServerVpss/CentralDark/tree/docs/gabarito-endereco-ausencia-presenca-20261023) | [#1926](https://github.com/ServerVpss/CentralDark/pull/1926) | PR_ABERTO_PROTEGER |
+| 0003 | P0 | 🛡️ G1:PR_ABERTO | [`feat/casa-hermes-pid-catalog-20261021`](https://github.com/ServerVpss/CentralDark/tree/feat/casa-hermes-pid-catalog-20261021) | [#1900](https://github.com/ServerVpss/CentralDark/pull/1900) | PR_ABERTO_PROTEGER |
+| 0004 | P0 | 🛡️ G1:PR_ABERTO | [`feat/casa-native-commander-mcp-20261024`](https://github.com/ServerVpss/CentralDark/tree/feat/casa-native-commander-mcp-20261024) | [#1945](https://github.com/ServerVpss/CentralDark/pull/1945) | PR_ABERTO_PROTEGER |
+| 0005 | P0 | 🛡️ G1:PR_ABERTO | [`feat/genesis-regression-dispatch-20261017`](https://github.com/ServerVpss/CentralDark/tree/feat/genesis-regression-dispatch-20261017) | [#1843](https://github.com/ServerVpss/CentralDark/pull/1843) | PR_ABERTO_PROTEGER |
+| 0006 | P0 | 🛡️ G1:PR_ABERTO | [`feat/instinto-hud-genesis-selos-zone-20261015`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-hud-genesis-selos-zone-20261015) | [#1839](https://github.com/ServerVpss/CentralDark/pull/1839) | PR_ABERTO_PROTEGER |
+| 0007 | P0 | 🛡️ G1:PR_ABERTO | [`feat/instinto-pwa-offline-shell-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-pwa-offline-shell-20261016) | [#1840](https://github.com/ServerVpss/CentralDark/pull/1840) | PR_ABERTO_PROTEGER |
+| 0008 | P0 | 🛡️ G1:PR_ABERTO | [`feat/mcp-runtime-proof-in-existing-cockpit-20261018`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-runtime-proof-in-existing-cockpit-20261018) | [#1860](https://github.com/ServerVpss/CentralDark/pull/1860) | PR_ABERTO_PROTEGER |
+| 0009 | P0 | 🛡️ G1:PR_ABERTO | [`feat/mcp-vscode-terminal-existing-pid-20261020`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-vscode-terminal-existing-pid-20261020) | [#1880](https://github.com/ServerVpss/CentralDark/pull/1880) | PR_ABERTO_PROTEGER |
+| 0010 | P0 | 🛡️ G1:PR_ABERTO | [`feat/metacognitive-metabolism-50-20261027`](https://github.com/ServerVpss/CentralDark/tree/feat/metacognitive-metabolism-50-20261027) | [#1962](https://github.com/ServerVpss/CentralDark/pull/1962) | PR_ABERTO_PROTEGER |
+| 0011 | P0 | 🛡️ G1:PR_ABERTO | [`feat/one-heart-supabase-signal-20261025`](https://github.com/ServerVpss/CentralDark/tree/feat/one-heart-supabase-signal-20261025) | [#1958](https://github.com/ServerVpss/CentralDark/pull/1958) | PR_ABERTO_PROTEGER |
+| 0012 | P0 | 🛡️ G1:PR_ABERTO | [`fix/f11-painel-json-history-canary-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/f11-painel-json-history-canary-20261022) | [#1905](https://github.com/ServerVpss/CentralDark/pull/1905) | PR_ABERTO_PROTEGER |
+| 0013 | P0 | 🛡️ G1:PR_ABERTO | [`fix/mcp-admin-confirmation-loop-20261024`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-admin-confirmation-loop-20261024) | [#1931](https://github.com/ServerVpss/CentralDark/pull/1931) | PR_ABERTO_PROTEGER |
+| 0014 | P0 | 🛡️ G1:PR_ABERTO | [`fix/mcp-pairing-vscode-corpo-unico-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-pairing-vscode-corpo-unico-20261022) | [#1911](https://github.com/ServerVpss/CentralDark/pull/1911) | PR_ABERTO_PROTEGER |
+| 0015 | P0 | 🛡️ G1:PR_ABERTO | [`fix/mcp-skill-catalog-native-microdeploy-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-skill-catalog-native-microdeploy-20261022) | [#1904](https://github.com/ServerVpss/CentralDark/pull/1904) | PR_ABERTO_PROTEGER |
+| 0016 | P0 | 🛡️ G1:PR_ABERTO | [`wt/centraldark-remote-name-migration-20261024`](https://github.com/ServerVpss/CentralDark/tree/wt/centraldark-remote-name-migration-20261024) | [#1951](https://github.com/ServerVpss/CentralDark/pull/1951) | PR_ABERTO_PROTEGER |
+| 0017 | P1 | 🟠 G1+G2:DIVERGED | [`chore/auto-registro-castelo-20260716`](https://github.com/ServerVpss/CentralDark/tree/chore/auto-registro-castelo-20260716) | [#228](https://github.com/ServerVpss/CentralDark/pull/228) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0018 | P1 | 🟠 G1+G2:DIVERGED | [`docs/acorda-rebuilder-20260801`](https://github.com/ServerVpss/CentralDark/tree/docs/acorda-rebuilder-20260801) | [#611](https://github.com/ServerVpss/CentralDark/pull/611) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0019 | P1 | 🟠 G1+G2:DIVERGED | [`docs/aprendizado-seguranca-pacote-sessao-20260806`](https://github.com/ServerVpss/CentralDark/tree/docs/aprendizado-seguranca-pacote-sessao-20260806) | [#677](https://github.com/ServerVpss/CentralDark/pull/677) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0020 | P1 | 🟠 G1+G2:DIVERGED | [`docs/aprendizado-sessao-evidencia-contraprova-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/aprendizado-sessao-evidencia-contraprova-20260817) | [#1024](https://github.com/ServerVpss/CentralDark/pull/1024) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0021 | P1 | 🟠 G1+G2:DIVERGED | [`docs/arsenal-multi-ia-20260707`](https://github.com/ServerVpss/CentralDark/tree/docs/arsenal-multi-ia-20260707) | [#121](https://github.com/ServerVpss/CentralDark/pull/121) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0022 | P1 | 🟠 G1+G2:DIVERGED | [`docs/baianes-giria-contextual-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/baianes-giria-contextual-20260817) | [#1033](https://github.com/ServerVpss/CentralDark/pull/1033) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0023 | P1 | 🟠 G1+G2:DIVERGED | [`docs/card-mestre-analise-percentual-honesta`](https://github.com/ServerVpss/CentralDark/tree/docs/card-mestre-analise-percentual-honesta) | [#658](https://github.com/ServerVpss/CentralDark/pull/658) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0024 | P1 | 🟠 G1+G2:DIVERGED | [`docs/cristal-zero-trust-turbulencia-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/cristal-zero-trust-turbulencia-20260818) | [#1031](https://github.com/ServerVpss/CentralDark/pull/1031) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0025 | P1 | 🟠 G1+G2:DIVERGED | [`docs/cristalizar-reconcile-3camadas`](https://github.com/ServerVpss/CentralDark/tree/docs/cristalizar-reconcile-3camadas) | [#1153](https://github.com/ServerVpss/CentralDark/pull/1153) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0026 | P1 | 🟠 G1+G2:DIVERGED | [`docs/entrega-sagrada-reality-judge-20260829`](https://github.com/ServerVpss/CentralDark/tree/docs/entrega-sagrada-reality-judge-20260829) | [#1373](https://github.com/ServerVpss/CentralDark/pull/1373) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0027 | P1 | 🟠 G1+G2:DIVERGED | [`docs/ouro-inventario-cards-anexo-20260717`](https://github.com/ServerVpss/CentralDark/tree/docs/ouro-inventario-cards-anexo-20260717) | [#254](https://github.com/ServerVpss/CentralDark/pull/254) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0028 | P1 | 🟠 G1+G2:DIVERGED | [`docs/pelo-certo-sempre-20260810`](https://github.com/ServerVpss/CentralDark/tree/docs/pelo-certo-sempre-20260810) | [#746](https://github.com/ServerVpss/CentralDark/pull/746) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0029 | P1 | 🟠 G1+G2:DIVERGED | [`docs/pombo-anti-papagaio-checksum-20260824`](https://github.com/ServerVpss/CentralDark/tree/docs/pombo-anti-papagaio-checksum-20260824) | [#1140](https://github.com/ServerVpss/CentralDark/pull/1140) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0030 | P1 | 🟠 G1+G2:DIVERGED | [`docs/registrar-ouro-dupla-pivete-gpt-20260805`](https://github.com/ServerVpss/CentralDark/tree/docs/registrar-ouro-dupla-pivete-gpt-20260805) | [#659](https://github.com/ServerVpss/CentralDark/pull/659) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0031 | P1 | 🟡 G1+G2:BEHIND_0_AHEAD | [`docs/vps-scripts-readme`](https://github.com/ServerVpss/CentralDark/tree/docs/vps-scripts-readme) | [#1337](https://github.com/ServerVpss/CentralDark/pull/1337) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0032 | P1 | 🟠 G1+G2:DIVERGED | [`feat/codex-final-review-agent`](https://github.com/ServerVpss/CentralDark/tree/feat/codex-final-review-agent) | [#236](https://github.com/ServerVpss/CentralDark/pull/236) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0033 | P1 | 🟠 G1+G2:DIVERGED | [`feat/engine-gap-closure-skill-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/engine-gap-closure-skill-20260825) | [#1168](https://github.com/ServerVpss/CentralDark/pull/1168) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0034 | P1 | 🟠 G1+G2:DIVERGED | [`feat/installer-deterministic-core-20260909`](https://github.com/ServerVpss/CentralDark/tree/feat/installer-deterministic-core-20260909) | [#1479](https://github.com/ServerVpss/CentralDark/pull/1479) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0035 | P1 | 🟠 G1+G2:DIVERGED | [`feat/meta-forja-sre-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/meta-forja-sre-20260816) | [#986](https://github.com/ServerVpss/CentralDark/pull/986) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0036 | P1 | 🟠 G1+G2:DIVERGED | [`feat/meta-lupa-gate-final-adversarial-20260804`](https://github.com/ServerVpss/CentralDark/tree/feat/meta-lupa-gate-final-adversarial-20260804) | [#646](https://github.com/ServerVpss/CentralDark/pull/646) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0037 | P1 | 🟠 G1+G2:DIVERGED | [`feat/operational-score-partitura-main-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/operational-score-partitura-main-20260815) | [#913](https://github.com/ServerVpss/CentralDark/pull/913) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0038 | P1 | 🟠 G1+G2:DIVERGED | [`feat/semantic-triggers-graphrag-fixedpoint-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/semantic-triggers-graphrag-fixedpoint-20260825) | [#1167](https://github.com/ServerVpss/CentralDark/pull/1167) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0039 | P1 | 🟠 G1+G2:DIVERGED | [`feat/semantic-triggers-graphrag-fixedpoint-main90c4`](https://github.com/ServerVpss/CentralDark/tree/feat/semantic-triggers-graphrag-fixedpoint-main90c4) | [#1166](https://github.com/ServerVpss/CentralDark/pull/1166) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0040 | P1 | 🟠 G1+G2:DIVERGED | [`feat/semantic-triggers-meta-lupa-grafo-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/semantic-triggers-meta-lupa-grafo-20260825) | [#1170](https://github.com/ServerVpss/CentralDark/pull/1170) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0041 | P1 | 🟠 G1+G2:DIVERGED | [`feat/settlement-fort-alpha`](https://github.com/ServerVpss/CentralDark/tree/feat/settlement-fort-alpha) | [#457](https://github.com/ServerVpss/CentralDark/pull/457) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0042 | P1 | 🟠 G1+G2:DIVERGED | [`fix/actions-supabase-painel-paths`](https://github.com/ServerVpss/CentralDark/tree/fix/actions-supabase-painel-paths) | [#109](https://github.com/ServerVpss/CentralDark/pull/109) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0043 | P1 | 🟠 G1+G2:DIVERGED | [`fix/autoload-resposta-pivete-20260729`](https://github.com/ServerVpss/CentralDark/tree/fix/autoload-resposta-pivete-20260729) | [#499](https://github.com/ServerVpss/CentralDark/pull/499) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0044 | P1 | 🟠 G1+G2:DIVERGED | [`fix/autonomia-workflow-canonico-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-workflow-canonico-20260730) | [#573](https://github.com/ServerVpss/CentralDark/pull/573) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0045 | P1 | 🟠 G1+G2:DIVERGED | [`fix/ci-external-source-sanitize`](https://github.com/ServerVpss/CentralDark/tree/fix/ci-external-source-sanitize) | [#1378](https://github.com/ServerVpss/CentralDark/pull/1378) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0046 | P1 | 🔎 G1+G2:DIVERGED_FILES0 | [`fix/ci-yaml-duplicate-keys-porta-codex`](https://github.com/ServerVpss/CentralDark/tree/fix/ci-yaml-duplicate-keys-porta-codex) | [#736](https://github.com/ServerVpss/CentralDark/pull/736) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0047 | P1 | 🟠 G1+G2:DIVERGED | [`fix/critic-mutation-attempts-estado-fato`](https://github.com/ServerVpss/CentralDark/tree/fix/critic-mutation-attempts-estado-fato) | [#737](https://github.com/ServerVpss/CentralDark/pull/737) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0048 | P1 | 🟠 G1+G2:DIVERGED | [`fix/docs-grafo-vivo-repo-audit-20260910`](https://github.com/ServerVpss/CentralDark/tree/fix/docs-grafo-vivo-repo-audit-20260910) | [#1488](https://github.com/ServerVpss/CentralDark/pull/1488) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0049 | P1 | 🟠 G1+G2:DIVERGED | [`fix/gate-porta-lupa-padrao-20260911`](https://github.com/ServerVpss/CentralDark/tree/fix/gate-porta-lupa-padrao-20260911) | [#1492](https://github.com/ServerVpss/CentralDark/pull/1492) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0050 | P1 | 🟠 G1+G2:DIVERGED | [`fix/gateway-fallback-clean`](https://github.com/ServerVpss/CentralDark/tree/fix/gateway-fallback-clean) | [#235](https://github.com/ServerVpss/CentralDark/pull/235) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0051 | P1 | 🟠 G1+G2:DIVERGED | [`fix/gateway-tool-call-id-sanitize`](https://github.com/ServerVpss/CentralDark/tree/fix/gateway-tool-call-id-sanitize) | [#142](https://github.com/ServerVpss/CentralDark/pull/142) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0052 | P1 | 🟠 G1+G2:DIVERGED | [`fix/hermes-temp-watch-20260827`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-temp-watch-20260827) | [#1237](https://github.com/ServerVpss/CentralDark/pull/1237) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0053 | P1 | 🟠 G1+G2:DIVERGED | [`fix/hub-control-plane-execution-bridge-20260809`](https://github.com/ServerVpss/CentralDark/tree/fix/hub-control-plane-execution-bridge-20260809) | [#734](https://github.com/ServerVpss/CentralDark/pull/734) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0054 | P1 | 🟠 G1+G2:DIVERGED | [`fix/hub-inventory-ledger-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/hub-inventory-ledger-20260815) | [#915](https://github.com/ServerVpss/CentralDark/pull/915) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0055 | P1 | 🟠 G1+G2:DIVERGED | [`fix/meta-cristalizacao-incidentes-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-cristalizacao-incidentes-20260816) | [#954](https://github.com/ServerVpss/CentralDark/pull/954) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0056 | P1 | 🟠 G1+G2:DIVERGED | [`fix/meta-lupa-mandatory-gate-20260728`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-lupa-mandatory-gate-20260728) | [#455](https://github.com/ServerVpss/CentralDark/pull/455) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0057 | P1 | 🟠 G1+G2:DIVERGED | [`fix/no-false-green-fast-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/no-false-green-fast-20260818) | [#1032](https://github.com/ServerVpss/CentralDark/pull/1032) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0058 | P1 | 🟠 G1+G2:DIVERGED | [`fix/pombo-checksum-anti-papagaio-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/pombo-checksum-anti-papagaio-20260824) | [#1142](https://github.com/ServerVpss/CentralDark/pull/1142) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0059 | P1 | 🔎 G1+G2:DIVERGED_FILES0 | [`fix/restore-autolupa-canonical-20260909`](https://github.com/ServerVpss/CentralDark/tree/fix/restore-autolupa-canonical-20260909) | [#1484](https://github.com/ServerVpss/CentralDark/pull/1484) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0060 | P1 | 🟠 G1+G2:DIVERGED | [`fix/sincronizar-painel-20260709-0803`](https://github.com/ServerVpss/CentralDark/tree/fix/sincronizar-painel-20260709-0803) | [#141](https://github.com/ServerVpss/CentralDark/pull/141) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0061 | P1 | 🟠 G1+G2:DIVERGED | [`fix/test-adapter-optional-20260831`](https://github.com/ServerVpss/CentralDark/tree/fix/test-adapter-optional-20260831) | [#1387](https://github.com/ServerVpss/CentralDark/pull/1387) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0062 | P1 | 🟠 G1+G2:DIVERGED | [`fix/trigger-fabric-exact-pr-head`](https://github.com/ServerVpss/CentralDark/tree/fix/trigger-fabric-exact-pr-head) | [#1169](https://github.com/ServerVpss/CentralDark/pull/1169) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0063 | P1 | 🟠 G1+G2:DIVERGED | [`fix/vocabulario-original-chefe-20260822`](https://github.com/ServerVpss/CentralDark/tree/fix/vocabulario-original-chefe-20260822) | [#1112](https://github.com/ServerVpss/CentralDark/pull/1112) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0064 | P1 | 🟠 G1+G2:DIVERGED | [`fix/vps-reconcile-orfao-dependabot-thrash`](https://github.com/ServerVpss/CentralDark/tree/fix/vps-reconcile-orfao-dependabot-thrash) | [#1499](https://github.com/ServerVpss/CentralDark/pull/1499) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0065 | P1 | 🟠 G1+G2:DIVERGED | [`fix/writer-safe-push-standard-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/writer-safe-push-standard-20260824) | [#1130](https://github.com/ServerVpss/CentralDark/pull/1130) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0066 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/adapter-auth-audit-fix`](https://github.com/ServerVpss/CentralDark/tree/pivete/adapter-auth-audit-fix) | [#147](https://github.com/ServerVpss/CentralDark/pull/147) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0067 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/adapter-catalogo-dinamico`](https://github.com/ServerVpss/CentralDark/tree/pivete/adapter-catalogo-dinamico) | [#155](https://github.com/ServerVpss/CentralDark/pull/155) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0068 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/adapter-v1messages-1783653476`](https://github.com/ServerVpss/CentralDark/tree/pivete/adapter-v1messages-1783653476) | [#150](https://github.com/ServerVpss/CentralDark/pull/150) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0069 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/hub-login-models`](https://github.com/ServerVpss/CentralDark/tree/pivete/hub-login-models) | [#146](https://github.com/ServerVpss/CentralDark/pull/146) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0070 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/ouro-consolidado`](https://github.com/ServerVpss/CentralDark/tree/pivete/ouro-consolidado) | [#269](https://github.com/ServerVpss/CentralDark/pull/269) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0071 | P1 | 🟠 G1+G2:DIVERGED | [`pivete/vps-sync-auth-audit`](https://github.com/ServerVpss/CentralDark/tree/pivete/vps-sync-auth-audit) | [#149](https://github.com/ServerVpss/CentralDark/pull/149) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0072 | P1 | 🟠 G1+G2:DIVERGED | [`plan/hermes-casa-mente-estendida-20260730`](https://github.com/ServerVpss/CentralDark/tree/plan/hermes-casa-mente-estendida-20260730) | [#554](https://github.com/ServerVpss/CentralDark/pull/554) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0073 | P1 | 🟠 G1+G2:DIVERGED | [`plan/intencao-sistema-unico-deskcomm-20260730`](https://github.com/ServerVpss/CentralDark/tree/plan/intencao-sistema-unico-deskcomm-20260730) | [#576](https://github.com/ServerVpss/CentralDark/pull/576) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0074 | P1 | 🟠 G1+G2:DIVERGED | [`pr-1144`](https://github.com/ServerVpss/CentralDark/tree/pr-1144) | [#1211](https://github.com/ServerVpss/CentralDark/pull/1211) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0075 | P1 | 🔎 G1+G2:DIVERGED_FILES0 | [`program/centraldark-convergencia-omniroute-722`](https://github.com/ServerVpss/CentralDark/tree/program/centraldark-convergencia-omniroute-722) | [#724](https://github.com/ServerVpss/CentralDark/pull/724) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0076 | P1 | 🟠 G1+G2:DIVERGED | [`promote/codex-kit-main`](https://github.com/ServerVpss/CentralDark/tree/promote/codex-kit-main) | [#293](https://github.com/ServerVpss/CentralDark/pull/293) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0077 | P1 | 🟡 G1+G2:BEHIND_0_AHEAD | [`reconciliacao/casa-20260829-consolidacao`](https://github.com/ServerVpss/CentralDark/tree/reconciliacao/casa-20260829-consolidacao) | [#1369](https://github.com/ServerVpss/CentralDark/pull/1369) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0078 | P1 | 🟠 G1+G2:DIVERGED | [`rescue-vps-housekeeping-and-memory-fixes`](https://github.com/ServerVpss/CentralDark/tree/rescue-vps-housekeeping-and-memory-fixes) | [#1227](https://github.com/ServerVpss/CentralDark/pull/1227) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0079 | P1 | 🟠 G1+G2:DIVERGED | [`sol/generalizar-erros-comprovados-20260822`](https://github.com/ServerVpss/CentralDark/tree/sol/generalizar-erros-comprovados-20260822) | [#1109](https://github.com/ServerVpss/CentralDark/pull/1109) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0080 | P1 | 🟠 G1+G2:DIVERGED | [`sol/pombo-checksum-operational-contract`](https://github.com/ServerVpss/CentralDark/tree/sol/pombo-checksum-operational-contract) | [#1143](https://github.com/ServerVpss/CentralDark/pull/1143) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0081 | P1 | 🟠 G1+G2:DIVERGED | [`test/lupa-inventario-readonly`](https://github.com/ServerVpss/CentralDark/tree/test/lupa-inventario-readonly) | [#257](https://github.com/ServerVpss/CentralDark/pull/257) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0082 | P1 | 🔎 G1+G2:DIVERGED_FILES0 | [`verify/house-inventory-predeploy-20260815`](https://github.com/ServerVpss/CentralDark/tree/verify/house-inventory-predeploy-20260815) | [#921](https://github.com/ServerVpss/CentralDark/pull/921) *hist.* | LEGADO_PR_FECHADO_NAO_MERGEADO |
+| 0083 | P2 | ⬜ | [`chore/rastro-lovable-ssh-20260709`](https://github.com/ServerVpss/CentralDark/tree/chore/rastro-lovable-ssh-20260709) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0084 | P2 | ⬜ | [`claude/session-a-3zgga8`](https://github.com/ServerVpss/CentralDark/tree/claude/session-a-3zgga8) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0085 | P2 | ⬜ | [`codex/centraldark-standard-flow-20260831`](https://github.com/ServerVpss/CentralDark/tree/codex/centraldark-standard-flow-20260831) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0086 | P2 | ⬜ | [`codex/reviewer-global-issues-prs-20260915`](https://github.com/ServerVpss/CentralDark/tree/codex/reviewer-global-issues-prs-20260915) | [#1541](https://github.com/ServerVpss/CentralDark/pull/1541) *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0087 | P2 | ⬜ | [`cristal/issues-main-umbrella-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/issues-main-umbrella-20260915) | [#1539](https://github.com/ServerVpss/CentralDark/pull/1539) *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0088 | P2 | ⬜ | [`cristal/pr-mae-issues-abertas-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/pr-mae-issues-abertas-20260915) | [#1540](https://github.com/ServerVpss/CentralDark/pull/1540) *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0089 | P2 | ⬜ | [`cristal/tlc23-runtime-reconcile-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/tlc23-runtime-reconcile-20260915) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0090 | P2 | ⬜ | [`docs/calibrar-reload-fio-missao`](https://github.com/ServerVpss/CentralDark/tree/docs/calibrar-reload-fio-missao) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0091 | P2 | ⬜ | [`docs/mapa-bots-setor-receptor`](https://github.com/ServerVpss/CentralDark/tree/docs/mapa-bots-setor-receptor) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0092 | P2 | ⬜ | [`docs/pendencias-numeradas-mcp`](https://github.com/ServerVpss/CentralDark/tree/docs/pendencias-numeradas-mcp) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0093 | P2 | ⬜ | [`docs/registrar-adaptacao-pivete-20260720`](https://github.com/ServerVpss/CentralDark/tree/docs/registrar-adaptacao-pivete-20260720) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0094 | P2 | ⬜ | [`docs/registrar-intencao-segredo-chefe-20260810`](https://github.com/ServerVpss/CentralDark/tree/docs/registrar-intencao-segredo-chefe-20260810) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0095 | P2 | ⬜ | [`draft/terca-feira-seguranca-futura`](https://github.com/ServerVpss/CentralDark/tree/draft/terca-feira-seguranca-futura) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0096 | P2 | ⬜ | [`feat/caracol-aureola-skill-route-20260911`](https://github.com/ServerVpss/CentralDark/tree/feat/caracol-aureola-skill-route-20260911) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0097 | P2 | ⬜ | [`feat/centraldark-master-cycle-graph-sync-20260826`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-master-cycle-graph-sync-20260826) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0098 | P2 | ⬜ | [`feat/copy-paste-exact-output-20260826`](https://github.com/ServerVpss/CentralDark/tree/feat/copy-paste-exact-output-20260826) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0099 | P2 | ⬜ | [`feat/elite-recon-ia`](https://github.com/ServerVpss/CentralDark/tree/feat/elite-recon-ia) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0100 | P2 | ⬜ | [`feat/executor-fanout-isolated`](https://github.com/ServerVpss/CentralDark/tree/feat/executor-fanout-isolated) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0101 | P2 | ⬜ | [`feat/global-quantification-crystallization-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/global-quantification-crystallization-20260816) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0102 | P2 | ⬜ | [`feat/hub-boot-studio-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-boot-studio-20260816) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0103 | P2 | ⬜ | [`feat/lovable-bridge-responses-clean`](https://github.com/ServerVpss/CentralDark/tree/feat/lovable-bridge-responses-clean) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0104 | P2 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909-cleanbase`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909-cleanbase) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0105 | P2 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909-deltautil`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909-deltautil) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0106 | P2 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909-final`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909-final) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0107 | P2 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909-reconciled`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909-reconciled) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0108 | P2 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909-samehead`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909-samehead) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0109 | P2 | ⬜ | [`feat/multibussola-oficial-20260817`](https://github.com/ServerVpss/CentralDark/tree/feat/multibussola-oficial-20260817) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0110 | P2 | ⬜ | [`feat/obsidian-github-mobile-sync-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/obsidian-github-mobile-sync-20260816) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0111 | P2 | ⬜ | [`feat/operational-score-partitura-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/operational-score-partitura-20260815) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0112 | P2 | ⬜ | [`feat/pombo-receipt-check`](https://github.com/ServerVpss/CentralDark/tree/feat/pombo-receipt-check) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0113 | P2 | ⬜ | [`feat/reality-follows-function-global-20260816-copy`](https://github.com/ServerVpss/CentralDark/tree/feat/reality-follows-function-global-20260816-copy) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0114 | P2 | ⬜ | [`feat/reality-follows-function-global-20260816-copy2`](https://github.com/ServerVpss/CentralDark/tree/feat/reality-follows-function-global-20260816-copy2) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0115 | P2 | ⬜ | [`feat/reality-follows-function-global-20260816-copy3`](https://github.com/ServerVpss/CentralDark/tree/feat/reality-follows-function-global-20260816-copy3) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0116 | P2 | ⬜ | [`feat/sol-appcentraldark-absorcao-20260829`](https://github.com/ServerVpss/CentralDark/tree/feat/sol-appcentraldark-absorcao-20260829) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0117 | P2 | ⬜ | [`feature/sol-miniapp-voice-poc-20260731`](https://github.com/ServerVpss/CentralDark/tree/feature/sol-miniapp-voice-poc-20260731) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0118 | P2 | ⬜ | [`fix/abacus-via-omni-router-fabric`](https://github.com/ServerVpss/CentralDark/tree/fix/abacus-via-omni-router-fabric) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0119 | P2 | ⬜ | [`fix/autonomia-sweep-artefato-sempre-presente-20260806`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-sweep-artefato-sempre-presente-20260806) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0120 | P2 | ⬜ | [`fix/claude-md-adapter-v2`](https://github.com/ServerVpss/CentralDark/tree/fix/claude-md-adapter-v2) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0121 | P2 | ⬜ | [`fix/docs-canonical-stable-nodes-20260910`](https://github.com/ServerVpss/CentralDark/tree/fix/docs-canonical-stable-nodes-20260910) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0122 | P2 | ⬜ | [`fix/fast-same-head-green-guard-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/fast-same-head-green-guard-20260818) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0123 | P2 | ⬜ | [`fix/fixed-point-authority-dist-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/fixed-point-authority-dist-20260817) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0124 | P2 | ⬜ | [`fix/gate-deterministico-sempre`](https://github.com/ServerVpss/CentralDark/tree/fix/gate-deterministico-sempre) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0125 | P2 | ⬜ | [`fix/gates-combinados`](https://github.com/ServerVpss/CentralDark/tree/fix/gates-combinados) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0126 | P2 | ⬜ | [`fix/guardiao-config-cache-safe`](https://github.com/ServerVpss/CentralDark/tree/fix/guardiao-config-cache-safe) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0127 | P2 | ⬜ | [`fix/guardiao-threshold-cache-v3`](https://github.com/ServerVpss/CentralDark/tree/fix/guardiao-threshold-cache-v3) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0128 | P2 | ⬜ | [`fix/incidente-regra-menos-e-mais-20260810`](https://github.com/ServerVpss/CentralDark/tree/fix/incidente-regra-menos-e-mais-20260810) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0129 | P2 | ⬜ | [`fix/labels-operacionais-maiusculas-20260808`](https://github.com/ServerVpss/CentralDark/tree/fix/labels-operacionais-maiusculas-20260808) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0130 | P2 | ⬜ | [`fix/mcp-admin-ui-esmeralda`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-admin-ui-esmeralda) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0131 | P2 | ⬜ | [`fix/mcp-dist-admin-regex-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-dist-admin-regex-20260816) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0132 | P2 | ⬜ | [`fix/meta-lupa-identity-gate-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-lupa-identity-gate-20260730) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0133 | P2 | ⬜ | [`fix/obsidian-casa-vault-continuity-20260909`](https://github.com/ServerVpss/CentralDark/tree/fix/obsidian-casa-vault-continuity-20260909) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0134 | P2 | ⬜ | [`fix/ontologia-sinais-tecnicos-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/ontologia-sinais-tecnicos-20260816) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0135 | P2 | ⬜ | [`fix/painel-auto-update-safe-retry-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/painel-auto-update-safe-retry-20260818) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0136 | P2 | ⬜ | [`fix/painel-auto-update-sha-safe-git-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/painel-auto-update-sha-safe-git-20260818) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0137 | P2 | ⬜ | [`fix/pombo-checksum-reconciled-main-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/pombo-checksum-reconciled-main-20260824) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0138 | P2 | ⬜ | [`fix/reconcile-session-crystal-20260826`](https://github.com/ServerVpss/CentralDark/tree/fix/reconcile-session-crystal-20260826) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0139 | P2 | ⬜ | [`fix/remove-dead-issue-noise-producers-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/remove-dead-issue-noise-producers-20260815) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0140 | P2 | ⬜ | [`fix/runtime-proof-same-target-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/runtime-proof-same-target-20260815) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0141 | P2 | ⬜ | [`fix/sensitive-guardrail-contract-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/sensitive-guardrail-contract-20260814) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0142 | P2 | ⬜ | [`fix/writer-safe-push-on-main-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/writer-safe-push-on-main-20260824) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0143 | P2 | ⬜ | [`lovable-sync-1782397744`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1782397744) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0144 | P2 | ⬜ | [`lovable-sync-1782421078`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1782421078) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0145 | P2 | ⬜ | [`lovable-sync-1783013058`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783013058) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0146 | P2 | ⬜ | [`lovable-sync-1783013359`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783013359) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0147 | P2 | ⬜ | [`lovable-sync-1783013795`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783013795) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0148 | P2 | ⬜ | [`lovable-sync-1783032574`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783032574) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0149 | P2 | ⬜ | [`lovable-sync-1783072946`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783072946) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0150 | P2 | ⬜ | [`lovable-sync-1783146779`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783146779) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0151 | P2 | ⬜ | [`lovable-sync-1783160722`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783160722) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0152 | P2 | ⬜ | [`lovable-sync-1783280748`](https://github.com/ServerVpss/CentralDark/tree/lovable-sync-1783280748) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0153 | P2 | ⬜ | [`pivete/auditoria`](https://github.com/ServerVpss/CentralDark/tree/pivete/auditoria) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0154 | P2 | ⬜ | [`pivete/hub-provider-grok`](https://github.com/ServerVpss/CentralDark/tree/pivete/hub-provider-grok) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0155 | P2 | ⬜ | [`pivete/mega-pacotao-grok-integration`](https://github.com/ServerVpss/CentralDark/tree/pivete/mega-pacotao-grok-integration) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0156 | P2 | ⬜ | [`pivete/work/pem-drift-rootcause`](https://github.com/ServerVpss/CentralDark/tree/pivete/work/pem-drift-rootcause) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0157 | P2 | ⬜ | [`plan/sol-voice-first-pivete-hermes-lab-frozen-20260731`](https://github.com/ServerVpss/CentralDark/tree/plan/sol-voice-first-pivete-hermes-lab-frozen-20260731) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0158 | P2 | ⬜ | [`pr-1228-head`](https://github.com/ServerVpss/CentralDark/tree/pr-1228-head) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0159 | P2 | ⬜ | [`pr-1444`](https://github.com/ServerVpss/CentralDark/tree/pr-1444) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0160 | P2 | ⬜ | [`pr1393`](https://github.com/ServerVpss/CentralDark/tree/pr1393) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0161 | P2 | ⬜ | [`reconcile-temp-ignore`](https://github.com/ServerVpss/CentralDark/tree/reconcile-temp-ignore) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0162 | P2 | ⬜ | [`registro/marco-humano-segredo-20260810`](https://github.com/ServerVpss/CentralDark/tree/registro/marco-humano-segredo-20260810) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0163 | P2 | ⬜ | [`revert-735-fix/hub-control-plane-execution-bridge-20260809`](https://github.com/ServerVpss/CentralDark/tree/revert-735-fix/hub-control-plane-execution-bridge-20260809) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0164 | P2 | ⬜ | [`snapshot/lovable-telepainel-completo-20260710`](https://github.com/ServerVpss/CentralDark/tree/snapshot/lovable-telepainel-completo-20260710) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0165 | P2 | ⬜ | [`sol/pdf-harness-self-healing-20260909`](https://github.com/ServerVpss/CentralDark/tree/sol/pdf-harness-self-healing-20260909) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0166 | P2 | ⬜ | [`sol/pdf-harness-self-healing-20260909b`](https://github.com/ServerVpss/CentralDark/tree/sol/pdf-harness-self-healing-20260909b) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0167 | P2 | ⬜ | [`sol/pr1463-fix-title-reachability-20260909`](https://github.com/ServerVpss/CentralDark/tree/sol/pr1463-fix-title-reachability-20260909) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0168 | P2 | ⬜ | [`sol/session-crystal-bots-resilience-20260909`](https://github.com/ServerVpss/CentralDark/tree/sol/session-crystal-bots-resilience-20260909) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0169 | P2 | ⬜ | [`sol/soul-reanchor-protocol-20260901`](https://github.com/ServerVpss/CentralDark/tree/sol/soul-reanchor-protocol-20260901) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0170 | P2 | ⬜ | [`staging/meta-lupa-gate-final-bundle-20260804`](https://github.com/ServerVpss/CentralDark/tree/staging/meta-lupa-gate-final-bundle-20260804) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0171 | P2 | ⬜ | [`stop-accidental-branches`](https://github.com/ServerVpss/CentralDark/tree/stop-accidental-branches) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0172 | P2 | ⬜ | [`tmp-codeql-private-integration`](https://github.com/ServerVpss/CentralDark/tree/tmp-codeql-private-integration) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0173 | P2 | ⬜ | [`tmp-noop`](https://github.com/ServerVpss/CentralDark/tree/tmp-noop) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0174 | P2 | ⬜ | [`tmp-noop-ignore`](https://github.com/ServerVpss/CentralDark/tree/tmp-noop-ignore) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0175 | P2 | ⬜ | [`tmp-noop2`](https://github.com/ServerVpss/CentralDark/tree/tmp-noop2) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0176 | P2 | ⬜ | [`tmp-placeholder-should-not-create`](https://github.com/ServerVpss/CentralDark/tree/tmp-placeholder-should-not-create) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0177 | P2 | ⬜ | [`unused-should-not-create`](https://github.com/ServerVpss/CentralDark/tree/unused-should-not-create) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0178 | P2 | ⬜ | [`zz-do-not-use`](https://github.com/ServerVpss/CentralDark/tree/zz-do-not-use) | — *hist.* | LEGADO_SEM_PR_OU_PR_ANTIGO |
+| 0179 | P3 | ⬜ | [`agent/aureola-exame-retencao-20261002`](https://github.com/ServerVpss/CentralDark/tree/agent/aureola-exame-retencao-20261002) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0180 | P3 | ⬜ | [`agent/centraldark-cockpit-autoupdate`](https://github.com/ServerVpss/CentralDark/tree/agent/centraldark-cockpit-autoupdate) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0181 | P3 | ⬜ | [`agent/centraldark-cockpit-vivo`](https://github.com/ServerVpss/CentralDark/tree/agent/centraldark-cockpit-vivo) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0182 | P3 | ⬜ | [`agent/cockpit-sistema-convergencia-20260927`](https://github.com/ServerVpss/CentralDark/tree/agent/cockpit-sistema-convergencia-20260927) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0183 | P3 | ⬜ | [`agent/hermes-passeio-tres-superficies`](https://github.com/ServerVpss/CentralDark/tree/agent/hermes-passeio-tres-superficies) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0184 | P3 | ⬜ | [`agent/hud-genealogy-metabolism`](https://github.com/ServerVpss/CentralDark/tree/agent/hud-genealogy-metabolism) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0185 | P3 | ⬜ | [`agent/hud-hermes-juiz-powershell`](https://github.com/ServerVpss/CentralDark/tree/agent/hud-hermes-juiz-powershell) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0186 | P3 | ⬜ | [`agent/meta-lupa-realidade-distribuida-20260924`](https://github.com/ServerVpss/CentralDark/tree/agent/meta-lupa-realidade-distribuida-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0187 | P3 | ⬜ | [`audit/garimpo-byte-assay-20260915`](https://github.com/ServerVpss/CentralDark/tree/audit/garimpo-byte-assay-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0188 | P3 | ⬜ | [`audit/lovable-centraldark-delta-20260921`](https://github.com/ServerVpss/CentralDark/tree/audit/lovable-centraldark-delta-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0189 | P3 | ⬜ | [`audit/post-merge-proof-review-20261016`](https://github.com/ServerVpss/CentralDark/tree/audit/post-merge-proof-review-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0190 | P3 | ⬜ | [`automation/status-badge-fabric`](https://github.com/ServerVpss/CentralDark/tree/automation/status-badge-fabric) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0191 | P3 | ⬜ | [`canon/centraldark-universal-contract-20260919`](https://github.com/ServerVpss/CentralDark/tree/canon/centraldark-universal-contract-20260919) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0192 | P3 | ⬜ | [`casa/cockpit-marca-cta-20261021`](https://github.com/ServerVpss/CentralDark/tree/casa/cockpit-marca-cta-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0193 | P3 | ⬜ | [`casa/lembrancas-canonica-20261023`](https://github.com/ServerVpss/CentralDark/tree/casa/lembrancas-canonica-20261023) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0194 | P3 | ⬜ | [`casa/paths-k-20261024`](https://github.com/ServerVpss/CentralDark/tree/casa/paths-k-20261024) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0195 | P3 | ⬜ | [`casa/validate-main-fix-20261023`](https://github.com/ServerVpss/CentralDark/tree/casa/validate-main-fix-20261023) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0196 | P3 | ⬜ | [`centraldark-unified-surface-parity-grammar-20260927`](https://github.com/ServerVpss/CentralDark/tree/centraldark-unified-surface-parity-grammar-20260927) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0197 | P3 | ⬜ | [`chatgpt/unified-surface-command-grammar-20260927`](https://github.com/ServerVpss/CentralDark/tree/chatgpt/unified-surface-command-grammar-20260927) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0198 | P3 | ⬜ | [`chatgpt/unified-surface-command-grammar-20260927-commit-anchor`](https://github.com/ServerVpss/CentralDark/tree/chatgpt/unified-surface-command-grammar-20260927-commit-anchor) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0199 | P3 | ⬜ | [`chatgpt/unified-surface-command-grammar-20260927-safe`](https://github.com/ServerVpss/CentralDark/tree/chatgpt/unified-surface-command-grammar-20260927-safe) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0200 | P3 | ⬜ | [`chatgpt/unified-surface-command-grammar-20260927-tree-anchor`](https://github.com/ServerVpss/CentralDark/tree/chatgpt/unified-surface-command-grammar-20260927-tree-anchor) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0201 | P3 | ⬜ | [`checkpoint/cockpit-hermes-watchdog-20261027-41960db37b`](https://github.com/ServerVpss/CentralDark/tree/checkpoint/cockpit-hermes-watchdog-20261027-41960db37b) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0202 | P3 | ⬜ | [`checkpoint/cockpit-player-20261027-cd7948f595`](https://github.com/ServerVpss/CentralDark/tree/checkpoint/cockpit-player-20261027-cd7948f595) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0203 | P3 | ⬜ | [`chore/caminho-provado-receita-20260925`](https://github.com/ServerVpss/CentralDark/tree/chore/caminho-provado-receita-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0204 | P3 | ⬜ | [`chore/clickup-github-roundtrip-20261007`](https://github.com/ServerVpss/CentralDark/tree/chore/clickup-github-roundtrip-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0205 | P3 | ⬜ | [`chore/comunicacao-humana-20261012`](https://github.com/ServerVpss/CentralDark/tree/chore/comunicacao-humana-20261012) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0206 | P3 | ⬜ | [`claude/wizardly-darwin-llkuuj`](https://github.com/ServerVpss/CentralDark/tree/claude/wizardly-darwin-llkuuj) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0207 | P3 | ⬜ | [`codex/aureola-trigger-debugger`](https://github.com/ServerVpss/CentralDark/tree/codex/aureola-trigger-debugger) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0208 | P3 | ⬜ | [`codex/corrigir-erro-de-construcao-do-npm/2026-09-25/10-42-45`](https://github.com/ServerVpss/CentralDark/tree/codex/corrigir-erro-de-construcao-do-npm/2026-09-25/10-42-45) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0209 | P3 | ⬜ | [`codex/github-mention-kylin-current-cristaliza-binding,-triton-/2026-10-21/09-10-44`](https://github.com/ServerVpss/CentralDark/tree/codex/github-mention-kylin-current-cristaliza-binding%2C-triton-/2026-10-21/09-10-44) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0210 | P3 | ⬜ | [`codex/guardiao-hermes-boot-route`](https://github.com/ServerVpss/CentralDark/tree/codex/guardiao-hermes-boot-route) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0211 | P3 | ⬜ | [`codex/instinto-api-mcp-one-heart-e2e-20261009`](https://github.com/ServerVpss/CentralDark/tree/codex/instinto-api-mcp-one-heart-e2e-20261009) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0212 | P3 | ⬜ | [`codex/local-ai-runtime-panel-20261002`](https://github.com/ServerVpss/CentralDark/tree/codex/local-ai-runtime-panel-20261002) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0213 | P3 | ⬜ | [`codex/proven-path-executable-recipe-contract-20260926`](https://github.com/ServerVpss/CentralDark/tree/codex/proven-path-executable-recipe-contract-20260926) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0214 | P3 | ⬜ | [`cristal/auto-ingestao-delta-util-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/auto-ingestao-delta-util-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0215 | P3 | ⬜ | [`cristal/daily-checklist-finalizer-gate-20260918`](https://github.com/ServerVpss/CentralDark/tree/cristal/daily-checklist-finalizer-gate-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0216 | P3 | ⬜ | [`cristal/direct-centraldark-mcp-bridge-20260918`](https://github.com/ServerVpss/CentralDark/tree/cristal/direct-centraldark-mcp-bridge-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0217 | P3 | ⬜ | [`cristal/forja-viva-artifacts-4k-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/forja-viva-artifacts-4k-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0218 | P3 | ⬜ | [`cristal/forja-viva-continuity-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/forja-viva-continuity-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0219 | P3 | ⬜ | [`cristal/persistent-operational-regime-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/persistent-operational-regime-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0220 | P3 | ⬜ | [`cristal/plug-play-identidade-hash-revision-20260921`](https://github.com/ServerVpss/CentralDark/tree/cristal/plug-play-identidade-hash-revision-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0221 | P3 | ⬜ | [`cristal/reconciliacao-checklist-hud-20260923`](https://github.com/ServerVpss/CentralDark/tree/cristal/reconciliacao-checklist-hud-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0222 | P3 | ⬜ | [`cristal/reconciliacao-diaria-2026-10-02`](https://github.com/ServerVpss/CentralDark/tree/cristal/reconciliacao-diaria-2026-10-02) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0223 | P3 | ⬜ | [`cristal/reconciliacao-diaria-2026-10-05`](https://github.com/ServerVpss/CentralDark/tree/cristal/reconciliacao-diaria-2026-10-05) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0224 | P3 | ⬜ | [`cristal/reconciliacao-diaria-20260924`](https://github.com/ServerVpss/CentralDark/tree/cristal/reconciliacao-diaria-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0225 | P3 | ⬜ | [`cristal/session-provada-20260918-pr-mae-1562`](https://github.com/ServerVpss/CentralDark/tree/cristal/session-provada-20260918-pr-mae-1562) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0226 | P3 | ⬜ | [`cristal/sol-gabinete-fixo-cockpit-pets-20260921`](https://github.com/ServerVpss/CentralDark/tree/cristal/sol-gabinete-fixo-cockpit-pets-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0227 | P3 | ⬜ | [`cristalizar/timezone-display-source-utc`](https://github.com/ServerVpss/CentralDark/tree/cristalizar/timezone-display-source-utc) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0228 | P3 | ⬜ | [`crystal/bridge-oneshot-tray-route-20260924`](https://github.com/ServerVpss/CentralDark/tree/crystal/bridge-oneshot-tray-route-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0229 | P3 | ⬜ | [`crystal/centraldark-persistent-intelligence-20260930`](https://github.com/ServerVpss/CentralDark/tree/crystal/centraldark-persistent-intelligence-20260930) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0230 | P3 | ⬜ | [`crystal/continuous-mission-prmother-1562-20260922`](https://github.com/ServerVpss/CentralDark/tree/crystal/continuous-mission-prmother-1562-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0231 | P3 | ⬜ | [`crystal/global-secret-reuse-20260923`](https://github.com/ServerVpss/CentralDark/tree/crystal/global-secret-reuse-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0232 | P3 | ⬜ | [`crystal/google-drive-hud-ingest-20260924`](https://github.com/ServerVpss/CentralDark/tree/crystal/google-drive-hud-ingest-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0233 | P3 | ⬜ | [`crystal/hermes-human-complexity-absorption-20260920`](https://github.com/ServerVpss/CentralDark/tree/crystal/hermes-human-complexity-absorption-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0234 | P3 | ⬜ | [`crystal/hermes-semantic-reconcile-all-20260921`](https://github.com/ServerVpss/CentralDark/tree/crystal/hermes-semantic-reconcile-all-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0235 | P3 | ⬜ | [`crystal/hermes-typed-core-script-first-20261013`](https://github.com/ServerVpss/CentralDark/tree/crystal/hermes-typed-core-script-first-20261013) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0236 | P3 | ⬜ | [`crystal/intencao-devolvida-loop-mestre-20260923`](https://github.com/ServerVpss/CentralDark/tree/crystal/intencao-devolvida-loop-mestre-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0237 | P3 | ⬜ | [`crystal/interligados-all-skills-20260917`](https://github.com/ServerVpss/CentralDark/tree/crystal/interligados-all-skills-20260917) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0238 | P3 | ⬜ | [`crystal/kylin-current-triton-session-20261006`](https://github.com/ServerVpss/CentralDark/tree/crystal/kylin-current-triton-session-20261006) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0239 | P3 | ⬜ | [`crystal/measure-before-creation-1ts521-20260921`](https://github.com/ServerVpss/CentralDark/tree/crystal/measure-before-creation-1ts521-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0240 | P3 | ⬜ | [`crystal/measure-before-creation-operational-method-20260921`](https://github.com/ServerVpss/CentralDark/tree/crystal/measure-before-creation-operational-method-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0241 | P3 | ⬜ | [`crystal/pattern-chefe-intent-20260923`](https://github.com/ServerVpss/CentralDark/tree/crystal/pattern-chefe-intent-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0242 | P3 | ⬜ | [`crystal/registra-mvp-jewel-flow-20260921`](https://github.com/ServerVpss/CentralDark/tree/crystal/registra-mvp-jewel-flow-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0243 | P3 | ⬜ | [`crystal/remeasure-before-create-20260924`](https://github.com/ServerVpss/CentralDark/tree/crystal/remeasure-before-create-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0244 | P3 | ⬜ | [`crystal/tlc23-scoped-unknown-20260930`](https://github.com/ServerVpss/CentralDark/tree/crystal/tlc23-scoped-unknown-20260930) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0245 | P3 | ⬜ | [`crystal/um-coracao-watchdog-watchers-20260919`](https://github.com/ServerVpss/CentralDark/tree/crystal/um-coracao-watchdog-watchers-20260919) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0246 | P3 | ⬜ | [`delta/multi-account-hybrid-capability-routing-20261001`](https://github.com/ServerVpss/CentralDark/tree/delta/multi-account-hybrid-capability-routing-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0247 | P3 | ⬜ | [`docs/alerta-futuro-workspace-hermes-disco-20260923`](https://github.com/ServerVpss/CentralDark/tree/docs/alerta-futuro-workspace-hermes-disco-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0248 | P3 | ⬜ | [`docs/aprendizado-220-terminal-visivel-20261022`](https://github.com/ServerVpss/CentralDark/tree/docs/aprendizado-220-terminal-visivel-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0249 | P3 | ⬜ | [`docs/aureola-one-house-michelin-20261017`](https://github.com/ServerVpss/CentralDark/tree/docs/aureola-one-house-michelin-20261017) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0250 | P3 | ⬜ | [`docs/bind-chat-delta-persistence-20260922`](https://github.com/ServerVpss/CentralDark/tree/docs/bind-chat-delta-persistence-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0251 | P3 | ⬜ | [`docs/canonical-centralldark-references-20261021`](https://github.com/ServerVpss/CentralDark/tree/docs/canonical-centralldark-references-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0252 | P3 | ⬜ | [`docs/casa-remote-bridge-current-route`](https://github.com/ServerVpss/CentralDark/tree/docs/casa-remote-bridge-current-route) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0253 | P3 | ⬜ | [`docs/casa-vps-owner-proof-20261022`](https://github.com/ServerVpss/CentralDark/tree/docs/casa-vps-owner-proof-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0254 | P3 | ⬜ | [`docs/ci-remediation-report-1562`](https://github.com/ServerVpss/CentralDark/tree/docs/ci-remediation-report-1562) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0255 | P3 | ⬜ | [`docs/clareza-status-humano-20261029`](https://github.com/ServerVpss/CentralDark/tree/docs/clareza-status-humano-20261029) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0256 | P3 | ⬜ | [`docs/coderabbit-legendas-ptbr-20261101`](https://github.com/ServerVpss/CentralDark/tree/docs/coderabbit-legendas-ptbr-20261101) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0257 | P3 | ⬜ | [`docs/consciencia-casa-jea`](https://github.com/ServerVpss/CentralDark/tree/docs/consciencia-casa-jea) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0258 | P3 | ⬜ | [`docs/cristal-centraldark-continua-20260922`](https://github.com/ServerVpss/CentralDark/tree/docs/cristal-centraldark-continua-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0259 | P3 | ⬜ | [`docs/cristal-sessao-20260921`](https://github.com/ServerVpss/CentralDark/tree/docs/cristal-sessao-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0260 | P3 | ⬜ | [`docs/design-pen-mvp-cadence-20260924`](https://github.com/ServerVpss/CentralDark/tree/docs/design-pen-mvp-cadence-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0261 | P3 | ⬜ | [`docs/forja-k-f-mapa-mental-intencao-chefe-20261021`](https://github.com/ServerVpss/CentralDark/tree/docs/forja-k-f-mapa-mental-intencao-chefe-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0262 | P3 | ⬜ | [`docs/forja-reconciliacao-casa-main-vps-20261018`](https://github.com/ServerVpss/CentralDark/tree/docs/forja-reconciliacao-casa-main-vps-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0263 | P3 | ⬜ | [`docs/friday-role-existing-days-20261020`](https://github.com/ServerVpss/CentralDark/tree/docs/friday-role-existing-days-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0264 | P3 | ⬜ | [`docs/garimpo-chefe-fontes-one-drive-20261016`](https://github.com/ServerVpss/CentralDark/tree/docs/garimpo-chefe-fontes-one-drive-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0265 | P3 | ⬜ | [`docs/github-api-first-no-runner-20261024`](https://github.com/ServerVpss/CentralDark/tree/docs/github-api-first-no-runner-20261024) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0266 | P3 | ⬜ | [`docs/hermes-local-loop-receipt-20261007`](https://github.com/ServerVpss/CentralDark/tree/docs/hermes-local-loop-receipt-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0267 | P3 | ⬜ | [`docs/hud-health-route-plaque-20261009`](https://github.com/ServerVpss/CentralDark/tree/docs/hud-health-route-plaque-20261009) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0268 | P3 | ⬜ | [`docs/hud-oracle-surface-e2e-20261007`](https://github.com/ServerVpss/CentralDark/tree/docs/hud-oracle-surface-e2e-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0269 | P3 | ⬜ | [`docs/jarvis-critical-intent-voice-20261018`](https://github.com/ServerVpss/CentralDark/tree/docs/jarvis-critical-intent-voice-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0270 | P3 | ⬜ | [`docs/learning-137-multipath-route-auth-20261002`](https://github.com/ServerVpss/CentralDark/tree/docs/learning-137-multipath-route-auth-20261002) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0271 | P3 | ⬜ | [`docs/learning-148-openkylin-qwen-sdk-route-20261002`](https://github.com/ServerVpss/CentralDark/tree/docs/learning-148-openkylin-qwen-sdk-route-20261002) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0272 | P3 | ⬜ | [`docs/openai-frontier-math-swarm-20261007`](https://github.com/ServerVpss/CentralDark/tree/docs/openai-frontier-math-swarm-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0273 | P3 | ⬜ | [`docs/openkylin-3-discovery-20261021`](https://github.com/ServerVpss/CentralDark/tree/docs/openkylin-3-discovery-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0274 | P3 | ⬜ | [`docs/papagaio-on-provas-forja-20261014`](https://github.com/ServerVpss/CentralDark/tree/docs/papagaio-on-provas-forja-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0275 | P3 | ⬜ | [`docs/pr1852-sessao-forense-rastro-az-20261018`](https://github.com/ServerVpss/CentralDark/tree/docs/pr1852-sessao-forense-rastro-az-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0276 | P3 | ⬜ | [`docs/registro-forja-corpo-unico-papagaio-on-20261014`](https://github.com/ServerVpss/CentralDark/tree/docs/registro-forja-corpo-unico-papagaio-on-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0277 | P3 | ⬜ | [`docs/skill-mae-cua-codex-hermes-trace-20261029`](https://github.com/ServerVpss/CentralDark/tree/docs/skill-mae-cua-codex-hermes-trace-20261029) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0278 | P3 | ⬜ | [`docs/soul-intent-runtime-flow-20261024`](https://github.com/ServerVpss/CentralDark/tree/docs/soul-intent-runtime-flow-20261024) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0279 | P3 | ⬜ | [`docs/trace-first-rastro-executor-20261029`](https://github.com/ServerVpss/CentralDark/tree/docs/trace-first-rastro-executor-20261029) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0280 | P3 | ⬜ | [`docs/user-tour-operational-status-20260922`](https://github.com/ServerVpss/CentralDark/tree/docs/user-tour-operational-status-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0281 | P3 | ⬜ | [`evidence/vps-route-census-20261022`](https://github.com/ServerVpss/CentralDark/tree/evidence/vps-route-census-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0282 | P3 | ⬜ | [`feat/admin-centraldark-pattern-monitor-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/admin-centraldark-pattern-monitor-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0283 | P3 | ⬜ | [`feat/admin-operational-hud-20260922`](https://github.com/ServerVpss/CentralDark/tree/feat/admin-operational-hud-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0284 | P3 | ⬜ | [`feat/ai-andarilho-skill-20261014`](https://github.com/ServerVpss/CentralDark/tree/feat/ai-andarilho-skill-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0285 | P3 | ⬜ | [`feat/aionui-cockpit-home-20261022`](https://github.com/ServerVpss/CentralDark/tree/feat/aionui-cockpit-home-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0286 | P3 | ⬜ | [`feat/anaximandro-formalismo-167`](https://github.com/ServerVpss/CentralDark/tree/feat/anaximandro-formalismo-167) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0287 | P3 | ⬜ | [`feat/api-consolidacao-gateway-hub-webhook-20261023`](https://github.com/ServerVpss/CentralDark/tree/feat/api-consolidacao-gateway-hub-webhook-20261023) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0288 | P3 | ⬜ | [`feat/boot-delta-util-tlc23-20260915`](https://github.com/ServerVpss/CentralDark/tree/feat/boot-delta-util-tlc23-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0289 | P3 | ⬜ | [`feat/builder-delegacao-terminais-20261019`](https://github.com/ServerVpss/CentralDark/tree/feat/builder-delegacao-terminais-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0290 | P3 | ⬜ | [`feat/casa-vps-root-mirror-transition-20261019`](https://github.com/ServerVpss/CentralDark/tree/feat/casa-vps-root-mirror-transition-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0291 | P3 | ⬜ | [`feat/catalog-federated-bindings-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/catalog-federated-bindings-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0292 | P3 | ⬜ | [`feat/centraldark-builder-ledger-clean-20261025`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-builder-ledger-clean-20261025) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0293 | P3 | ⬜ | [`feat/centraldark-unified-hud-inventory-20260916`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-unified-hud-inventory-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0294 | P3 | ⬜ | [`feat/cockpit-autosync-one-button-20261019`](https://github.com/ServerVpss/CentralDark/tree/feat/cockpit-autosync-one-button-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0295 | P3 | ⬜ | [`feat/cockpit-browser-tab-discovery-20261020`](https://github.com/ServerVpss/CentralDark/tree/feat/cockpit-browser-tab-discovery-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0296 | P3 | ⬜ | [`feat/cockpit-cofre-adm-secret-metadata-20261019`](https://github.com/ServerVpss/CentralDark/tree/feat/cockpit-cofre-adm-secret-metadata-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0297 | P3 | ⬜ | [`feat/cockpit-esmeralda-metalica-inplace-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/cockpit-esmeralda-metalica-inplace-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0298 | P3 | ⬜ | [`feat/cockpit-process-observability`](https://github.com/ServerVpss/CentralDark/tree/feat/cockpit-process-observability) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0299 | P3 | ⬜ | [`feat/coderabbit-fast-autonomia-webhook-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/coderabbit-fast-autonomia-webhook-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0300 | P3 | ⬜ | [`feat/congregacao-moltbook-radar-20261004`](https://github.com/ServerVpss/CentralDark/tree/feat/congregacao-moltbook-radar-20261004) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0301 | P3 | ⬜ | [`feat/costura-primary-source-20261024`](https://github.com/ServerVpss/CentralDark/tree/feat/costura-primary-source-20261024) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0302 | P3 | ⬜ | [`feat/cristal-hermes-conselho-cognitivo-20261013`](https://github.com/ServerVpss/CentralDark/tree/feat/cristal-hermes-conselho-cognitivo-20261013) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0303 | P3 | ⬜ | [`feat/forja-total-drive-vps-20260915`](https://github.com/ServerVpss/CentralDark/tree/feat/forja-total-drive-vps-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0304 | P3 | ⬜ | [`feat/github-event-router-sensors-20260930`](https://github.com/ServerVpss/CentralDark/tree/feat/github-event-router-sensors-20260930) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0305 | P3 | ⬜ | [`feat/harness-absorve-mcp-admin-20261022`](https://github.com/ServerVpss/CentralDark/tree/feat/harness-absorve-mcp-admin-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0306 | P3 | ⬜ | [`feat/harness-casa-jea-registro`](https://github.com/ServerVpss/CentralDark/tree/feat/harness-casa-jea-registro) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0307 | P3 | ⬜ | [`feat/hereditary-criterion-dna`](https://github.com/ServerVpss/CentralDark/tree/feat/hereditary-criterion-dna) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0308 | P3 | ⬜ | [`feat/hermes-autoconfig-runtime-20260918`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-autoconfig-runtime-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0309 | P3 | ⬜ | [`feat/hermes-centraldark-pet-proof-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-centraldark-pet-proof-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0310 | P3 | ⬜ | [`feat/hermes-centraldark-runtime-guard-20260916`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-centraldark-runtime-guard-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0311 | P3 | ⬜ | [`feat/hermes-graphrag-alignment-eval-20260915`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-graphrag-alignment-eval-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0312 | P3 | ⬜ | [`feat/hermes-native-skill-catalog-rastro-20261018`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-native-skill-catalog-rastro-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0313 | P3 | ⬜ | [`feat/hermes-official-auto-update-core-20260920`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-official-auto-update-core-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0314 | P3 | ⬜ | [`feat/hub-one-login-hybrid-code-auth-20260915`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-one-login-hybrid-code-auth-20260915) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0315 | P3 | ⬜ | [`feat/hud-hermes-operational-motion-20260922`](https://github.com/ServerVpss/CentralDark/tree/feat/hud-hermes-operational-motion-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0316 | P3 | ⬜ | [`feat/instinto-hud-papagaio-on-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-hud-papagaio-on-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0317 | P3 | ⬜ | [`feat/instinto-jarvis-womic-input-20261018`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-jarvis-womic-input-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0318 | P3 | ⬜ | [`feat/instinto-observabilidade-usuarios-setores-20261020`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-observabilidade-usuarios-setores-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0319 | P3 | ⬜ | [`feat/instinto-superior-nomes-metabolismo-20261008`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-superior-nomes-metabolismo-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0320 | P3 | ⬜ | [`feat/instinto-unigram-native-surface-20261015`](https://github.com/ServerVpss/CentralDark/tree/feat/instinto-unigram-native-surface-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0321 | P3 | ⬜ | [`feat/linear-admin-cockpit-route-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/linear-admin-cockpit-route-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0322 | P3 | ⬜ | [`feat/main-first-change-guard`](https://github.com/ServerVpss/CentralDark/tree/feat/main-first-change-guard) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0323 | P3 | ⬜ | [`feat/mcp-api-cockpit-only-20261024`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-api-cockpit-only-20261024) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0324 | P3 | ⬜ | [`feat/mcp-tailscale-bridge-20260926`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-tailscale-bridge-20260926) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0325 | P3 | ⬜ | [`feat/meta-lupa-evidence-first-agent-science-20261020`](https://github.com/ServerVpss/CentralDark/tree/feat/meta-lupa-evidence-first-agent-science-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0326 | P3 | ⬜ | [`feat/michelin-gate-master-loop-20261021`](https://github.com/ServerVpss/CentralDark/tree/feat/michelin-gate-master-loop-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0327 | P3 | ⬜ | [`feat/narrated-tool-call-trace-20260916`](https://github.com/ServerVpss/CentralDark/tree/feat/narrated-tool-call-trace-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0328 | P3 | ⬜ | [`feat/obsidian-hud-live-view-1006`](https://github.com/ServerVpss/CentralDark/tree/feat/obsidian-hud-live-view-1006) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0329 | P3 | ⬜ | [`feat/one-soul-many-capabilities-app-site-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/one-soul-many-capabilities-app-site-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0330 | P3 | ⬜ | [`feat/papagaio-deterministico-fiel-hud-20261014`](https://github.com/ServerVpss/CentralDark/tree/feat/papagaio-deterministico-fiel-hud-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0331 | P3 | ⬜ | [`feat/pr-advisory-vps-runtime-hybrid-20261007`](https://github.com/ServerVpss/CentralDark/tree/feat/pr-advisory-vps-runtime-hybrid-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0332 | P3 | ⬜ | [`feat/pr-review-runtime-envelope-20260916`](https://github.com/ServerVpss/CentralDark/tree/feat/pr-review-runtime-envelope-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0333 | P3 | ⬜ | [`feat/rastro-inline-doc-sync-gate-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/rastro-inline-doc-sync-gate-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0334 | P3 | ⬜ | [`feat/receipt-addressed-evidence`](https://github.com/ServerVpss/CentralDark/tree/feat/receipt-addressed-evidence) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0335 | P3 | ⬜ | [`feat/runtime-analytics-memoria-20261021`](https://github.com/ServerVpss/CentralDark/tree/feat/runtime-analytics-memoria-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0336 | P3 | ⬜ | [`feat/same-head-green-total-deploy-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/same-head-green-total-deploy-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0337 | P3 | ⬜ | [`feat/sentinel-fixed-route-api-20260924`](https://github.com/ServerVpss/CentralDark/tree/feat/sentinel-fixed-route-api-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0338 | P3 | ⬜ | [`feat/sentinel-fixed-route-api-20260925-clean`](https://github.com/ServerVpss/CentralDark/tree/feat/sentinel-fixed-route-api-20260925-clean) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0339 | P3 | ⬜ | [`feat/skill-workshop-delegacao-catalogo-20261016`](https://github.com/ServerVpss/CentralDark/tree/feat/skill-workshop-delegacao-catalogo-20261016) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0340 | P3 | ⬜ | [`feat/sync-center-ssh-readback-20261026`](https://github.com/ServerVpss/CentralDark/tree/feat/sync-center-ssh-readback-20261026) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0341 | P3 | ⬜ | [`feat/telegram-e2e-mock-proof`](https://github.com/ServerVpss/CentralDark/tree/feat/telegram-e2e-mock-proof) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0342 | P3 | ⬜ | [`feat/tik-tak-goal-clauses-loop-20261018`](https://github.com/ServerVpss/CentralDark/tree/feat/tik-tak-goal-clauses-loop-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0343 | P3 | ⬜ | [`feat/tlc23-core-proof-reuse-20260921`](https://github.com/ServerVpss/CentralDark/tree/feat/tlc23-core-proof-reuse-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0344 | P3 | ⬜ | [`feat/trigger-fabric-7-familias-clock-dispatcher-20261007`](https://github.com/ServerVpss/CentralDark/tree/feat/trigger-fabric-7-familias-clock-dispatcher-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0345 | P3 | ⬜ | [`feat/universal-direct-operational-contract-20260920`](https://github.com/ServerVpss/CentralDark/tree/feat/universal-direct-operational-contract-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0346 | P3 | ⬜ | [`feat/universal-method-mandatory-gate-20260917`](https://github.com/ServerVpss/CentralDark/tree/feat/universal-method-mandatory-gate-20260917) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0347 | P3 | ⬜ | [`feat/voice-semantic-classifier-merge-patterns`](https://github.com/ServerVpss/CentralDark/tree/feat/voice-semantic-classifier-merge-patterns) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0348 | P3 | ⬜ | [`feat/vscode-restore-fast-focus-pid-20261015`](https://github.com/ServerVpss/CentralDark/tree/feat/vscode-restore-fast-focus-pid-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0349 | P3 | ⬜ | [`feat/zendrive-context-handoff-20261018`](https://github.com/ServerVpss/CentralDark/tree/feat/zendrive-context-handoff-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0350 | P3 | ⬜ | [`feat/zendrive-hermes-live`](https://github.com/ServerVpss/CentralDark/tree/feat/zendrive-hermes-live) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0351 | P3 | ⬜ | [`feat/zendrive-native-ssh-mcp-route-20261017`](https://github.com/ServerVpss/CentralDark/tree/feat/zendrive-native-ssh-mcp-route-20261017) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0352 | P3 | ⬜ | [`feature/ai-cli-runtime-kernel`](https://github.com/ServerVpss/CentralDark/tree/feature/ai-cli-runtime-kernel) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0353 | P3 | ⬜ | [`feature/rota-viva-trigger-1710`](https://github.com/ServerVpss/CentralDark/tree/feature/rota-viva-trigger-1710) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0354 | P3 | ⬜ | [`fix/action-required-workflow-approve`](https://github.com/ServerVpss/CentralDark/tree/fix/action-required-workflow-approve) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0355 | P3 | ⬜ | [`fix/admin-contas-oauth-microdeploy-20260919`](https://github.com/ServerVpss/CentralDark/tree/fix/admin-contas-oauth-microdeploy-20260919) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0356 | P3 | ⬜ | [`fix/admin-operational-flow-card-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/admin-operational-flow-card-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0357 | P3 | ⬜ | [`fix/ai-andarilho-casa-bridge`](https://github.com/ServerVpss/CentralDark/tree/fix/ai-andarilho-casa-bridge) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0358 | P3 | ⬜ | [`fix/ai-andarilho-casa-bridge-v2`](https://github.com/ServerVpss/CentralDark/tree/fix/ai-andarilho-casa-bridge-v2) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0359 | P3 | ⬜ | [`fix/api-heartbeat-one-heart-20260919`](https://github.com/ServerVpss/CentralDark/tree/fix/api-heartbeat-one-heart-20260919) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0360 | P3 | ⬜ | [`fix/artifact-properties-trigger-fabric-20260917`](https://github.com/ServerVpss/CentralDark/tree/fix/artifact-properties-trigger-fabric-20260917) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0361 | P3 | ⬜ | [`fix/auto-conflict-all-prs-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/auto-conflict-all-prs-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0362 | P3 | ⬜ | [`fix/autonomia-export-contract`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-export-contract) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0363 | P3 | ⬜ | [`fix/autonomia-routes-no-reask-20260925`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-routes-no-reask-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0364 | P3 | ⬜ | [`fix/autonomy-restore-20260929`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomy-restore-20260929) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0365 | P3 | ⬜ | [`fix/bolt-ai-createDataStream-20261025`](https://github.com/ServerVpss/CentralDark/tree/fix/bolt-ai-createDataStream-20261025) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0366 | P3 | ⬜ | [`fix/boot-main-before-resume`](https://github.com/ServerVpss/CentralDark/tree/fix/boot-main-before-resume) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0367 | P3 | ⬜ | [`fix/casa-tailscale-primary-rdc-fallback-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/casa-tailscale-primary-rdc-fallback-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0368 | P3 | ⬜ | [`fix/centraldark-single-route-evidence-20261015`](https://github.com/ServerVpss/CentralDark/tree/fix/centraldark-single-route-evidence-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0369 | P3 | ⬜ | [`fix/claude-stop-notify-portable-20261014`](https://github.com/ServerVpss/CentralDark/tree/fix/claude-stop-notify-portable-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0370 | P3 | ⬜ | [`fix/cockpit-main-dispatch-clarity-20261029`](https://github.com/ServerVpss/CentralDark/tree/fix/cockpit-main-dispatch-clarity-20261029) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0371 | P3 | ⬜ | [`fix/cockpit-owner-conformance-layout-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/cockpit-owner-conformance-layout-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0372 | P3 | ⬜ | [`fix/cockpit-tabs-wrap-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/cockpit-tabs-wrap-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0373 | P3 | ⬜ | [`fix/cockpitshell-jsx`](https://github.com/ServerVpss/CentralDark/tree/fix/cockpitshell-jsx) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0374 | P3 | ⬜ | [`fix/conflict-pattern-id-unification-20261015`](https://github.com/ServerVpss/CentralDark/tree/fix/conflict-pattern-id-unification-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0375 | P3 | ⬜ | [`fix/conflict-pattern-identity-20261015`](https://github.com/ServerVpss/CentralDark/tree/fix/conflict-pattern-identity-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0376 | P3 | ⬜ | [`fix/conflict-registry-conflict-id-20261015`](https://github.com/ServerVpss/CentralDark/tree/fix/conflict-registry-conflict-id-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0377 | P3 | ⬜ | [`fix/context-before-judgment-no-papagaio-20260921`](https://github.com/ServerVpss/CentralDark/tree/fix/context-before-judgment-no-papagaio-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0378 | P3 | ⬜ | [`fix/converge-ci-root-contract-20260925`](https://github.com/ServerVpss/CentralDark/tree/fix/converge-ci-root-contract-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0379 | P3 | ⬜ | [`fix/dependabot-schedule-unico-20261019`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-schedule-unico-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0380 | P3 | ⬜ | [`fix/dependabot-workflow-expression-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-workflow-expression-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0381 | P3 | ⬜ | [`fix/desktop-commander-pid-census-20260916`](https://github.com/ServerVpss/CentralDark/tree/fix/desktop-commander-pid-census-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0382 | P3 | ⬜ | [`fix/deterministic-green-squash-reality-20260924`](https://github.com/ServerVpss/CentralDark/tree/fix/deterministic-green-squash-reality-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0383 | P3 | ⬜ | [`fix/embed-grafo-celestial-admin-20260921`](https://github.com/ServerVpss/CentralDark/tree/fix/embed-grafo-celestial-admin-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0384 | P3 | ⬜ | [`fix/ephemeral-cleanup-and-update-branch-graph-20261001`](https://github.com/ServerVpss/CentralDark/tree/fix/ephemeral-cleanup-and-update-branch-graph-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0385 | P3 | ⬜ | [`fix/exact-component-naming-global-20260924`](https://github.com/ServerVpss/CentralDark/tree/fix/exact-component-naming-global-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0386 | P3 | ⬜ | [`fix/failure-discriminant-master-triggers-20261008`](https://github.com/ServerVpss/CentralDark/tree/fix/failure-discriminant-master-triggers-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0387 | P3 | ⬜ | [`fix/fixed-point-writer-lease-atomic-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/fixed-point-writer-lease-atomic-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0388 | P3 | ⬜ | [`fix/forja-screenpipe-sidecar-status-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/forja-screenpipe-sidecar-status-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0389 | P3 | ⬜ | [`fix/forja-vscode-ssh-hermes-shell-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/forja-vscode-ssh-hermes-shell-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0390 | P3 | ⬜ | [`fix/github-email-human-first-20260923`](https://github.com/ServerVpss/CentralDark/tree/fix/github-email-human-first-20260923) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0391 | P3 | ⬜ | [`fix/gitignore-wsl-vhdx-20261029`](https://github.com/ServerVpss/CentralDark/tree/fix/gitignore-wsl-vhdx-20261029) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0392 | P3 | ⬜ | [`fix/global-brasilia-human-time-20261001`](https://github.com/ServerVpss/CentralDark/tree/fix/global-brasilia-human-time-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0393 | P3 | ⬜ | [`fix/graph-vivo-bootstrap-20261006`](https://github.com/ServerVpss/CentralDark/tree/fix/graph-vivo-bootstrap-20261006) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0394 | P3 | ⬜ | [`fix/guardiaocasa-profile-binding-20260924`](https://github.com/ServerVpss/CentralDark/tree/fix/guardiaocasa-profile-binding-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0395 | P3 | ⬜ | [`fix/harness-admin-oauth-sem-frase-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/harness-admin-oauth-sem-frase-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0396 | P3 | ⬜ | [`fix/hermes-core-calibration-dir-guard`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-core-calibration-dir-guard) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0397 | P3 | ⬜ | [`fix/hermes-core-postura-evidencia-20261015`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-core-postura-evidencia-20261015) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0398 | P3 | ⬜ | [`fix/hermes-main-vps-gate-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-main-vps-gate-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0399 | P3 | ⬜ | [`fix/hermes-state-driven-narration-20260916`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-state-driven-narration-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0400 | P3 | ⬜ | [`fix/horn-gate-real-facts`](https://github.com/ServerVpss/CentralDark/tree/fix/horn-gate-real-facts) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0401 | P3 | ⬜ | [`fix/hub-postgrest-profile-20260918`](https://github.com/ServerVpss/CentralDark/tree/fix/hub-postgrest-profile-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0402 | P3 | ⬜ | [`fix/instinto-auth-livebase-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/instinto-auth-livebase-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0403 | P3 | ⬜ | [`fix/instinto-auth-vite-supabase-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/instinto-auth-vite-supabase-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0404 | P3 | ⬜ | [`fix/instinto-receipts-import-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/instinto-receipts-import-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0405 | P3 | ⬜ | [`fix/internal-artifact-not-delivery-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/internal-artifact-not-delivery-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0406 | P3 | ⬜ | [`fix/learning-continuity-index-20261002`](https://github.com/ServerVpss/CentralDark/tree/fix/learning-continuity-index-20261002) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0407 | P3 | ⬜ | [`fix/limpeza-autonoma-retention-audit`](https://github.com/ServerVpss/CentralDark/tree/fix/limpeza-autonoma-retention-audit) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0408 | P3 | ⬜ | [`fix/lupa-validators-spawn-sync`](https://github.com/ServerVpss/CentralDark/tree/fix/lupa-validators-spawn-sync) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0409 | P3 | ⬜ | [`fix/lupa-validators-spawn-sync-v2`](https://github.com/ServerVpss/CentralDark/tree/fix/lupa-validators-spawn-sync-v2) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0410 | P3 | ⬜ | [`fix/mcp-admin-compat-alias-20260925`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-admin-compat-alias-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0411 | P3 | ⬜ | [`fix/mcp-aprendizado-read-fail-closed-20261019`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-aprendizado-read-fail-closed-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0412 | P3 | ⬜ | [`fix/mcp-catalog-canary-runtime-scope-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-catalog-canary-runtime-scope-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0413 | P3 | ⬜ | [`fix/mcp-confirm-provenance-readonly-exec`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-confirm-provenance-readonly-exec) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0414 | P3 | ⬜ | [`fix/mcp-health-telegram-owner-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-health-telegram-owner-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0415 | P3 | ⬜ | [`fix/mcp-native-tailscale-dist-fallback-20261018`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-native-tailscale-dist-fallback-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0416 | P3 | ⬜ | [`fix/mcp-oauth-refresh-client-binding-20261020`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-oauth-refresh-client-binding-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0417 | P3 | ⬜ | [`fix/mcp-toolcall-intent-receipt-regression-20260916`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-toolcall-intent-receipt-regression-20260916) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0418 | P3 | ⬜ | [`fix/mvp-secret-operating-rule-20260930`](https://github.com/ServerVpss/CentralDark/tree/fix/mvp-secret-operating-rule-20260930) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0419 | P3 | ⬜ | [`fix/neurolink-lineage-sync-20261023`](https://github.com/ServerVpss/CentralDark/tree/fix/neurolink-lineage-sync-20261023) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0420 | P3 | ⬜ | [`fix/notificacoes-humanas-chefe-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/notificacoes-humanas-chefe-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0421 | P3 | ⬜ | [`fix/operational-telemetry-heartbeat-admin-mcp-20260920`](https://github.com/ServerVpss/CentralDark/tree/fix/operational-telemetry-heartbeat-admin-mcp-20260920) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0422 | P3 | ⬜ | [`fix/parity-validator-current-plugin-metadata-20261014`](https://github.com/ServerVpss/CentralDark/tree/fix/parity-validator-current-plugin-metadata-20261014) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0423 | P3 | ⬜ | [`fix/post-pr-fast-path-continuation-gap-20260921`](https://github.com/ServerVpss/CentralDark/tree/fix/post-pr-fast-path-continuation-gap-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0424 | P3 | ⬜ | [`fix/pr-dos-red-cline-toolcall-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-dos-red-cline-toolcall-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0425 | P3 | ⬜ | [`fix/pr-dos-red-expression-close-20261028`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-dos-red-expression-close-20261028) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0426 | P3 | ⬜ | [`fix/pr-mother-funnel-1562-20260918`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-mother-funnel-1562-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0427 | P3 | ⬜ | [`fix/remote-bridge-desktop-commander-optional-20261019`](https://github.com/ServerVpss/CentralDark/tree/fix/remote-bridge-desktop-commander-optional-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0428 | P3 | ⬜ | [`fix/restaurar-aprendizados-pre-pr316-e-criterios-claude`](https://github.com/ServerVpss/CentralDark/tree/fix/restaurar-aprendizados-pre-pr316-e-criterios-claude) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0429 | P3 | ⬜ | [`fix/run-pr-selo-on-vps-20261004003514`](https://github.com/ServerVpss/CentralDark/tree/fix/run-pr-selo-on-vps-20261004003514) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0430 | P3 | ⬜ | [`fix/same-head-aureola-canonical-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/same-head-aureola-canonical-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0431 | P3 | ⬜ | [`fix/screenpipe-casa-private-health-20261020`](https://github.com/ServerVpss/CentralDark/tree/fix/screenpipe-casa-private-health-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0432 | P3 | ⬜ | [`fix/selo-brasilia-hud-20261001`](https://github.com/ServerVpss/CentralDark/tree/fix/selo-brasilia-hud-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0433 | P3 | ⬜ | [`fix/semantic-conflict-routing-contract-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/semantic-conflict-routing-contract-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0434 | P3 | ⬜ | [`fix/sentinel-observed-pass`](https://github.com/ServerVpss/CentralDark/tree/fix/sentinel-observed-pass) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0435 | P3 | ⬜ | [`fix/single-promotion-owner-20260925`](https://github.com/ServerVpss/CentralDark/tree/fix/single-promotion-owner-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0436 | P3 | ⬜ | [`fix/stall-continuity-crystal-20260918015828`](https://github.com/ServerVpss/CentralDark/tree/fix/stall-continuity-crystal-20260918015828) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0437 | P3 | ⬜ | [`fix/status-badge-fabric-universal-gate-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/status-badge-fabric-universal-gate-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0438 | P3 | ⬜ | [`fix/supabase-config-plugin-release-20261007`](https://github.com/ServerVpss/CentralDark/tree/fix/supabase-config-plugin-release-20261007) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0439 | P3 | ⬜ | [`fix/tlc23-deploy-binding-followup-1549`](https://github.com/ServerVpss/CentralDark/tree/fix/tlc23-deploy-binding-followup-1549) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0440 | P3 | ⬜ | [`fix/tlc23-deploy-binding-mainline-20260917`](https://github.com/ServerVpss/CentralDark/tree/fix/tlc23-deploy-binding-mainline-20260917) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0441 | P3 | ⬜ | [`fix/universal-adapters-obsidian-sync-20260918`](https://github.com/ServerVpss/CentralDark/tree/fix/universal-adapters-obsidian-sync-20260918) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0442 | P3 | ⬜ | [`fix/universal-method-chefe-stop-contract-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/universal-method-chefe-stop-contract-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0443 | P3 | ⬜ | [`fix/vault-secrets-grants-20261019`](https://github.com/ServerVpss/CentralDark/tree/fix/vault-secrets-grants-20261019) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0444 | P3 | ⬜ | [`fix/verify-hud-testes-truncados-20261022`](https://github.com/ServerVpss/CentralDark/tree/fix/verify-hud-testes-truncados-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0445 | P3 | ⬜ | [`fix/voice-acordar-parity-20260927`](https://github.com/ServerVpss/CentralDark/tree/fix/voice-acordar-parity-20260927) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0446 | P3 | ⬜ | [`fix/voice-capability-preflight`](https://github.com/ServerVpss/CentralDark/tree/fix/voice-capability-preflight) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0447 | P3 | ⬜ | [`fix/voice-intent-clause-role-20261001`](https://github.com/ServerVpss/CentralDark/tree/fix/voice-intent-clause-role-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0448 | P3 | ⬜ | [`fix/voice-tool-discovery-20260921`](https://github.com/ServerVpss/CentralDark/tree/fix/voice-tool-discovery-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0449 | P3 | ⬜ | [`fix/vps-deploy-unbound-runtime-contract-20260919`](https://github.com/ServerVpss/CentralDark/tree/fix/vps-deploy-unbound-runtime-contract-20260919) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0450 | P3 | ⬜ | [`fix/vps-exec-ephemeral-auth-includeif-20260925`](https://github.com/ServerVpss/CentralDark/tree/fix/vps-exec-ephemeral-auth-includeif-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0451 | P3 | ⬜ | [`fix/vps-exec-screenpipe-path-trigger`](https://github.com/ServerVpss/CentralDark/tree/fix/vps-exec-screenpipe-path-trigger) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0452 | P3 | ⬜ | [`fix/vps-selfhosted-ephemeral-git-auth-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/vps-selfhosted-ephemeral-git-auth-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0453 | P3 | ⬜ | [`fix/vscode-cline-receipt-metadata-20261020`](https://github.com/ServerVpss/CentralDark/tree/fix/vscode-cline-receipt-metadata-20261020) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0454 | P3 | ⬜ | [`fix/vscode-mcp-pairing-single-store-20261025`](https://github.com/ServerVpss/CentralDark/tree/fix/vscode-mcp-pairing-single-store-20261025) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0455 | P3 | ⬜ | [`fix/vscode-remote-combined-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/vscode-remote-combined-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0456 | P3 | ⬜ | [`fix/vscode-remote-ssh-canonical-route-20261021`](https://github.com/ServerVpss/CentralDark/tree/fix/vscode-remote-ssh-canonical-route-20261021) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0457 | P3 | ⬜ | [`fix/webhook-async-ack-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/webhook-async-ack-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0458 | P3 | ⬜ | [`fix/webhook-deploy-always-on-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/webhook-deploy-always-on-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0459 | P3 | ⬜ | [`fix/webhook-generated-dirty-gate-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/webhook-generated-dirty-gate-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0460 | P3 | ⬜ | [`fix/webhook-private-fetch-auth-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/webhook-private-fetch-auth-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0461 | P3 | ⬜ | [`fix/webhook-runtime-memory-dirty-20260922`](https://github.com/ServerVpss/CentralDark/tree/fix/webhook-runtime-memory-dirty-20260922) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0462 | P3 | ⬜ | [`fix/webui-sol-persona-canonical-20260921`](https://github.com/ServerVpss/CentralDark/tree/fix/webui-sol-persona-canonical-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0463 | P3 | ⬜ | [`fix/workflows-vps-runner-24x7-20261004003734`](https://github.com/ServerVpss/CentralDark/tree/fix/workflows-vps-runner-24x7-20261004003734) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0464 | P3 | ⬜ | [`hud/voz-consulta-visualizacao-20260924`](https://github.com/ServerVpss/CentralDark/tree/hud/voz-consulta-visualizacao-20260924) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0465 | P3 | ⬜ | [`kaizen/sistema-um-erros-visiveis-20261008`](https://github.com/ServerVpss/CentralDark/tree/kaizen/sistema-um-erros-visiveis-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0466 | P3 | ⬜ | [`learn/measure-before-creation-20260921`](https://github.com/ServerVpss/CentralDark/tree/learn/measure-before-creation-20260921) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0467 | P3 | ⬜ | [`ledger/pr-mae-rendezvous-current`](https://github.com/ServerVpss/CentralDark/tree/ledger/pr-mae-rendezvous-current) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0468 | P3 | ⬜ | [`micro/figma-hub-connector-20260925`](https://github.com/ServerVpss/CentralDark/tree/micro/figma-hub-connector-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0469 | P3 | ⬜ | [`micro/notion-sync-nonblocking-20260925`](https://github.com/ServerVpss/CentralDark/tree/micro/notion-sync-nonblocking-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0470 | P3 | ⬜ | [`micro/pr-agent-timeout-20260925`](https://github.com/ServerVpss/CentralDark/tree/micro/pr-agent-timeout-20260925) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0471 | P3 | ⬜ | [`ops/notebook-openkylin-kit-20261018`](https://github.com/ServerVpss/CentralDark/tree/ops/notebook-openkylin-kit-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0472 | P3 | ⬜ | [`ops/pause-house-reconcile-20261004`](https://github.com/ServerVpss/CentralDark/tree/ops/pause-house-reconcile-20261004) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0473 | P3 | ⬜ | [`pr-1895`](https://github.com/ServerVpss/CentralDark/tree/pr-1895) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0474 | P3 | ⬜ | [`preservacao/casa-arquivos-20260926`](https://github.com/ServerVpss/CentralDark/tree/preservacao/casa-arquivos-20260926) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0475 | P3 | ⬜ | [`preservacao/casa-c-main-20260926`](https://github.com/ServerVpss/CentralDark/tree/preservacao/casa-c-main-20260926) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0476 | P3 | ⬜ | [`preservacao/casa-danda-arqueologia-20260926`](https://github.com/ServerVpss/CentralDark/tree/preservacao/casa-danda-arqueologia-20260926) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0477 | P3 | ⬜ | [`preserve/mcp-runtime-history-20261008`](https://github.com/ServerVpss/CentralDark/tree/preserve/mcp-runtime-history-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0478 | P3 | ⬜ | [`preserve/primary-local-20261008`](https://github.com/ServerVpss/CentralDark/tree/preserve/primary-local-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0479 | P3 | ⬜ | [`proof/goal-clause-e2e-20261008`](https://github.com/ServerVpss/CentralDark/tree/proof/goal-clause-e2e-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0480 | P3 | ⬜ | [`prototype/aionui-centraldark-instinto-superior-20261003`](https://github.com/ServerVpss/CentralDark/tree/prototype/aionui-centraldark-instinto-superior-20261003) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0481 | P3 | ⬜ | [`prototype/centraldark-instinto-superior-os`](https://github.com/ServerVpss/CentralDark/tree/prototype/centraldark-instinto-superior-os) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0482 | P3 | ⬜ | [`receipt/centraldark-os-offhost-20261001`](https://github.com/ServerVpss/CentralDark/tree/receipt/centraldark-os-offhost-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0483 | P3 | ⬜ | [`reconcile/e-drive-receipt-20261102`](https://github.com/ServerVpss/CentralDark/tree/reconcile/e-drive-receipt-20261102) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0484 | P3 | ⬜ | [`reconcile/preserve-local-20261008`](https://github.com/ServerVpss/CentralDark/tree/reconcile/preserve-local-20261008) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0485 | P3 | ⬜ | [`reconcile/w-skills-main-20261022`](https://github.com/ServerVpss/CentralDark/tree/reconcile/w-skills-main-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0486 | P3 | ⬜ | [`refactor/retire-stale-cockpit-status-copy-20261102`](https://github.com/ServerVpss/CentralDark/tree/refactor/retire-stale-cockpit-status-copy-20261102) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0487 | P3 | ⬜ | [`revert-1558-prototype/centraldark-instinto-superior-os`](https://github.com/ServerVpss/CentralDark/tree/revert-1558-prototype/centraldark-instinto-superior-os) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0488 | P3 | ⬜ | [`sec/gitignore-ssh-autosync-20261022`](https://github.com/ServerVpss/CentralDark/tree/sec/gitignore-ssh-autosync-20261022) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0489 | P3 | ⬜ | [`sol/hud-selo-hosted-runner-20261001`](https://github.com/ServerVpss/CentralDark/tree/sol/hud-selo-hosted-runner-20261001) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0490 | P3 | ⬜ | [`sol/meta-lupa-corpo-operacional-20260917`](https://github.com/ServerVpss/CentralDark/tree/sol/meta-lupa-corpo-operacional-20260917) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0491 | P3 | ⬜ | [`sol/meta-lupa-corpo-operacional-20260917-current`](https://github.com/ServerVpss/CentralDark/tree/sol/meta-lupa-corpo-operacional-20260917-current) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0492 | P3 | ⬜ | [`sync/instinto-contas-conexoes-20260929`](https://github.com/ServerVpss/CentralDark/tree/sync/instinto-contas-conexoes-20260929) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0493 | P3 | ⬜ | [`temp-commit-from-hermes`](https://github.com/ServerVpss/CentralDark/tree/temp-commit-from-hermes) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0494 | P3 | ⬜ | [`test/elite-gateway-zendrive-legacy-mock-proof-20261018`](https://github.com/ServerVpss/CentralDark/tree/test/elite-gateway-zendrive-legacy-mock-proof-20261018) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0495 | P3 | ⬜ | [`test/michelin-puppeteer-smoke-20261017`](https://github.com/ServerVpss/CentralDark/tree/test/michelin-puppeteer-smoke-20261017) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0496 | P3 | ⬜ | [`tmp-placeholder-do-not-use`](https://github.com/ServerVpss/CentralDark/tree/tmp-placeholder-do-not-use) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0497 | P3 | ⬜ | [`vps-local-fixes-preserve-20260928`](https://github.com/ServerVpss/CentralDark/tree/vps-local-fixes-preserve-20260928) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0498 | P3 | ⬜ | [`work/api-mcp-oneheart-current-20261010`](https://github.com/ServerVpss/CentralDark/tree/work/api-mcp-oneheart-current-20261010) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0499 | P3 | ⬜ | [`work/metabolism-catalog-hermes-screenpipe`](https://github.com/ServerVpss/CentralDark/tree/work/metabolism-catalog-hermes-screenpipe) | — | NOVO_SEM_CLASSIFICACAO_HISTORICA |
+| 0500 | P4 | ⬜ | [`agent/acordar-calibrar-10-frentes`](https://github.com/ServerVpss/CentralDark/tree/agent/acordar-calibrar-10-frentes) | [#1002](https://github.com/ServerVpss/CentralDark/pull/1002) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0501 | P4 | ⬜ | [`canon/cot17-all-sessions-20260913`](https://github.com/ServerVpss/CentralDark/tree/canon/cot17-all-sessions-20260913) | [#1512](https://github.com/ServerVpss/CentralDark/pull/1512) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0502 | P4 | ⬜ | [`canon/reuse-runtime-skill-20260913`](https://github.com/ServerVpss/CentralDark/tree/canon/reuse-runtime-skill-20260913) | [#1513](https://github.com/ServerVpss/CentralDark/pull/1513) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0503 | P4 | ⬜ | [`canon/same-sha-micro-deploy-20260913`](https://github.com/ServerVpss/CentralDark/tree/canon/same-sha-micro-deploy-20260913) | [#1516](https://github.com/ServerVpss/CentralDark/pull/1516) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0504 | P4 | ⬜ | [`canon/security-capability-analysis-20260913`](https://github.com/ServerVpss/CentralDark/tree/canon/security-capability-analysis-20260913) | [#1515](https://github.com/ServerVpss/CentralDark/pull/1515) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0505 | P4 | ⬜ | [`chore/actions-node24-modernize`](https://github.com/ServerVpss/CentralDark/tree/chore/actions-node24-modernize) | [#1060](https://github.com/ServerVpss/CentralDark/pull/1060) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0506 | P4 | ⬜ | [`chore/card-mapa-tempo-real-20260824`](https://github.com/ServerVpss/CentralDark/tree/chore/card-mapa-tempo-real-20260824) | [#1138](https://github.com/ServerVpss/CentralDark/pull/1138) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0507 | P4 | ⬜ | [`chore/card-rodada-20260824`](https://github.com/ServerVpss/CentralDark/tree/chore/card-rodada-20260824) | [#1137](https://github.com/ServerVpss/CentralDark/pull/1137) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0508 | P4 | ⬜ | [`chore/close-external-security-outreach-20260816`](https://github.com/ServerVpss/CentralDark/tree/chore/close-external-security-outreach-20260816) | [#970](https://github.com/ServerVpss/CentralDark/pull/970) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0509 | P4 | ⬜ | [`chore/eliminar-duplicatas-consciencia-brain-20260727`](https://github.com/ServerVpss/CentralDark/tree/chore/eliminar-duplicatas-consciencia-brain-20260727) | [#421](https://github.com/ServerVpss/CentralDark/pull/421) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0510 | P4 | ⬜ | [`chore/live-state-remeasure-20260824`](https://github.com/ServerVpss/CentralDark/tree/chore/live-state-remeasure-20260824) | [#1135](https://github.com/ServerVpss/CentralDark/pull/1135) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0511 | P4 | ⬜ | [`chore/remove-elite-gateway-bak`](https://github.com/ServerVpss/CentralDark/tree/chore/remove-elite-gateway-bak) | [#903](https://github.com/ServerVpss/CentralDark/pull/903) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0512 | P4 | ⬜ | [`chore/remove-fable-method-artifacts-20260816`](https://github.com/ServerVpss/CentralDark/tree/chore/remove-fable-method-artifacts-20260816) | [#969](https://github.com/ServerVpss/CentralDark/pull/969) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0513 | P4 | ⬜ | [`chore/remove-oauth-broker-residue`](https://github.com/ServerVpss/CentralDark/tree/chore/remove-oauth-broker-residue) | [#902](https://github.com/ServerVpss/CentralDark/pull/902) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0514 | P4 | ⬜ | [`claude/multi-agent-semantic-rules-7etunk`](https://github.com/ServerVpss/CentralDark/tree/claude/multi-agent-semantic-rules-7etunk) | [#218](https://github.com/ServerVpss/CentralDark/pull/218) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0515 | P4 | ⬜ | [`codex/corrigir-logica-de-calibragem`](https://github.com/ServerVpss/CentralDark/tree/codex/corrigir-logica-de-calibragem) | [#1204](https://github.com/ServerVpss/CentralDark/pull/1204) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0516 | P4 | ⬜ | [`codex/delta4-connector-boundary-20260831`](https://github.com/ServerVpss/CentralDark/tree/codex/delta4-connector-boundary-20260831) | [#1382](https://github.com/ServerVpss/CentralDark/pull/1382) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0517 | P4 | ⬜ | [`codex/mapa-unico-travas-alertas`](https://github.com/ServerVpss/CentralDark/tree/codex/mapa-unico-travas-alertas) | [#296](https://github.com/ServerVpss/CentralDark/pull/296) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0518 | P4 | ⬜ | [`codex/remove-linear-pendencias-sync-capability`](https://github.com/ServerVpss/CentralDark/tree/codex/remove-linear-pendencias-sync-capability) | [#1464](https://github.com/ServerVpss/CentralDark/pull/1464) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0519 | P4 | ⬜ | [`cristal/bot-operational-contract-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/bot-operational-contract-20260915) | [#1535](https://github.com/ServerVpss/CentralDark/pull/1535) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0520 | P4 | ⬜ | [`cristal/capability-nonblocking-20260914`](https://github.com/ServerVpss/CentralDark/tree/cristal/capability-nonblocking-20260914) | [#1523](https://github.com/ServerVpss/CentralDark/pull/1523) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0521 | P4 | ⬜ | [`cristal/delta-util-canais-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/delta-util-canais-20260915) | [#1538](https://github.com/ServerVpss/CentralDark/pull/1538) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0522 | P4 | ⬜ | [`cristal/tlc23-master-fixed-point-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/tlc23-master-fixed-point-20260915) | [#1534](https://github.com/ServerVpss/CentralDark/pull/1534) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0523 | P4 | ⬜ | [`cristal/tlc23-source-provenance-20260915`](https://github.com/ServerVpss/CentralDark/tree/cristal/tlc23-source-provenance-20260915) | [#1536](https://github.com/ServerVpss/CentralDark/pull/1536) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0524 | P4 | ⬜ | [`crystal/caracol-skill-architecture-20260911`](https://github.com/ServerVpss/CentralDark/tree/crystal/caracol-skill-architecture-20260911) | [#1502](https://github.com/ServerVpss/CentralDark/pull/1502) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0525 | P4 | ⬜ | [`dependabot/npm_and_yarn/typescript-5.9.3`](https://github.com/ServerVpss/CentralDark/tree/dependabot/npm_and_yarn/typescript-5.9.3) | [#1193](https://github.com/ServerVpss/CentralDark/pull/1193) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0526 | P4 | ⬜ | [`docs/admin-security-universal-command-20260905`](https://github.com/ServerVpss/CentralDark/tree/docs/admin-security-universal-command-20260905) | [#1438](https://github.com/ServerVpss/CentralDark/pull/1438) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0527 | P4 | ⬜ | [`docs/antecipacao-intencao-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/antecipacao-intencao-20260814) | [#839](https://github.com/ServerVpss/CentralDark/pull/839) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0528 | P4 | ⬜ | [`docs/aprendizado-limites-ia-20260809`](https://github.com/ServerVpss/CentralDark/tree/docs/aprendizado-limites-ia-20260809) | [#732](https://github.com/ServerVpss/CentralDark/pull/732) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0529 | P4 | ⬜ | [`docs/aprendizado-sessao-completa-20260806`](https://github.com/ServerVpss/CentralDark/tree/docs/aprendizado-sessao-completa-20260806) | [#678](https://github.com/ServerVpss/CentralDark/pull/678) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0530 | P4 | ⬜ | [`docs/autonomia-loop-continuo-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/autonomia-loop-continuo-20260814) | [#837](https://github.com/ServerVpss/CentralDark/pull/837) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0531 | P4 | ⬜ | [`docs/autonomia-operacional-comprovada-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/autonomia-operacional-comprovada-20260818) | [#1028](https://github.com/ServerVpss/CentralDark/pull/1028) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0532 | P4 | ⬜ | [`docs/baianes-giria-contextual-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/baianes-giria-contextual-20260818) | [#1034](https://github.com/ServerVpss/CentralDark/pull/1034) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0533 | P4 | ⬜ | [`docs/chatgpt-pre-response-triad-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/chatgpt-pre-response-triad-20260818) | [#1065](https://github.com/ServerVpss/CentralDark/pull/1065) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0534 | P4 | ⬜ | [`docs/chefe-squash-fastpath-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/chefe-squash-fastpath-20260816) | [#934](https://github.com/ServerVpss/CentralDark/pull/934) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0535 | P4 | ⬜ | [`docs/contexto-nao-reinicia-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/contexto-nao-reinicia-20260814) | [#838](https://github.com/ServerVpss/CentralDark/pull/838) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0536 | P4 | ⬜ | [`docs/cristal-200-janelas-uma-direcao-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/cristal-200-janelas-uma-direcao-20260817) | [#1022](https://github.com/ServerVpss/CentralDark/pull/1022) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0537 | P4 | ⬜ | [`docs/cristal-sessao-prova-viva-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/cristal-sessao-prova-viva-20260817) | [#1023](https://github.com/ServerVpss/CentralDark/pull/1023) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0538 | P4 | ⬜ | [`docs/cristalizar-multi-canetas-juiz-final-20260907`](https://github.com/ServerVpss/CentralDark/tree/docs/cristalizar-multi-canetas-juiz-final-20260907) | [#1447](https://github.com/ServerVpss/CentralDark/pull/1447) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0539 | P4 | ⬜ | [`docs/evidence-ontology-forced-colors-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/evidence-ontology-forced-colors-20260816) | [#956](https://github.com/ServerVpss/CentralDark/pull/956) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0540 | P4 | ⬜ | [`docs/fluxo-operacional-papagaio-off-pombo-on-20260824`](https://github.com/ServerVpss/CentralDark/tree/docs/fluxo-operacional-papagaio-off-pombo-on-20260824) | [#1145](https://github.com/ServerVpss/CentralDark/pull/1145) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0541 | P4 | ⬜ | [`docs/hermes-decode-before-interpret-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/hermes-decode-before-interpret-20260814) | [#865](https://github.com/ServerVpss/CentralDark/pull/865) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0542 | P4 | ⬜ | [`docs/hermes-direct-source-meta-mining-20260815`](https://github.com/ServerVpss/CentralDark/tree/docs/hermes-direct-source-meta-mining-20260815) | [#875](https://github.com/ServerVpss/CentralDark/pull/875) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0543 | P4 | ⬜ | [`docs/incidente-escopo-menos-e-mais-20260810`](https://github.com/ServerVpss/CentralDark/tree/docs/incidente-escopo-menos-e-mais-20260810) | [#758](https://github.com/ServerVpss/CentralDark/pull/758) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0544 | P4 | ⬜ | [`docs/jarvis-orquestracao-delta-20260730`](https://github.com/ServerVpss/CentralDark/tree/docs/jarvis-orquestracao-delta-20260730) | [#552](https://github.com/ServerVpss/CentralDark/pull/552) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0545 | P4 | ⬜ | [`docs/jarvis-work-discovery-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/jarvis-work-discovery-20260814) | [#866](https://github.com/ServerVpss/CentralDark/pull/866) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0546 | P4 | ⬜ | [`docs/lei-do-juiz-secao-20`](https://github.com/ServerVpss/CentralDark/tree/docs/lei-do-juiz-secao-20) | [#237](https://github.com/ServerVpss/CentralDark/pull/237) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0547 | P4 | ⬜ | [`docs/mapa-mental-intencao-comprimida-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/mapa-mental-intencao-comprimida-20260817) | [#1019](https://github.com/ServerVpss/CentralDark/pull/1019) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0548 | P4 | ⬜ | [`docs/mapa-rotas-vps`](https://github.com/ServerVpss/CentralDark/tree/docs/mapa-rotas-vps) | [#1354](https://github.com/ServerVpss/CentralDark/pull/1354) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0549 | P4 | ⬜ | [`docs/memoria-viver-em-paz-20260730`](https://github.com/ServerVpss/CentralDark/tree/docs/memoria-viver-em-paz-20260730) | [#550](https://github.com/ServerVpss/CentralDark/pull/550) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0550 | P4 | ⬜ | [`docs/merge-conflict-arqueologia-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/merge-conflict-arqueologia-20260814) | [#847](https://github.com/ServerVpss/CentralDark/pull/847) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0551 | P4 | ⬜ | [`docs/meta-recursive-crystallization-20260815`](https://github.com/ServerVpss/CentralDark/tree/docs/meta-recursive-crystallization-20260815) | [#876](https://github.com/ServerVpss/CentralDark/pull/876) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0552 | P4 | ⬜ | [`docs/metacognicao-tempo-escopo-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/metacognicao-tempo-escopo-20260814) | [#841](https://github.com/ServerVpss/CentralDark/pull/841) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0553 | P4 | ⬜ | [`docs/modo-operacional-loop-evidencia-20260731`](https://github.com/ServerVpss/CentralDark/tree/docs/modo-operacional-loop-evidencia-20260731) | [#585](https://github.com/ServerVpss/CentralDark/pull/585) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0554 | P4 | ⬜ | [`docs/monitoramento24h-cleanup-20260730`](https://github.com/ServerVpss/CentralDark/tree/docs/monitoramento24h-cleanup-20260730) | [#565](https://github.com/ServerVpss/CentralDark/pull/565) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0555 | P4 | ⬜ | [`docs/oficializar-deploy-sob-comando-chefe-20260815`](https://github.com/ServerVpss/CentralDark/tree/docs/oficializar-deploy-sob-comando-chefe-20260815) | [#925](https://github.com/ServerVpss/CentralDark/pull/925) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0556 | P4 | ⬜ | [`docs/operational-icons-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/operational-icons-20260818) | [#1056](https://github.com/ServerVpss/CentralDark/pull/1056) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0557 | P4 | ⬜ | [`docs/ouro-aliases-chefe-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/ouro-aliases-chefe-20260816) | [#981](https://github.com/ServerVpss/CentralDark/pull/981) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0558 | P4 | ⬜ | [`docs/padrao-parceiro-delta-judge-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/padrao-parceiro-delta-judge-20260814) | [#836](https://github.com/ServerVpss/CentralDark/pull/836) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0559 | P4 | ⬜ | [`docs/padrao-promocao-delta-fechado-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/padrao-promocao-delta-fechado-20260816) | [#993](https://github.com/ServerVpss/CentralDark/pull/993) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0560 | P4 | ⬜ | [`docs/papagaio-off-pombo-checksum-on-20260824`](https://github.com/ServerVpss/CentralDark/tree/docs/papagaio-off-pombo-checksum-on-20260824) | [#1141](https://github.com/ServerVpss/CentralDark/pull/1141) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0561 | P4 | ⬜ | [`docs/partitura-attack-recover-drain-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/partitura-attack-recover-drain-20260816) | [#938](https://github.com/ServerVpss/CentralDark/pull/938) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0562 | P4 | ⬜ | [`docs/pm2-fail2ban-divergencia-20260805`](https://github.com/ServerVpss/CentralDark/tree/docs/pm2-fail2ban-divergencia-20260805) | [#660](https://github.com/ServerVpss/CentralDark/pull/660) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0563 | P4 | ⬜ | [`docs/pombo-checksum-generalizacao-fixa-20260824`](https://github.com/ServerVpss/CentralDark/tree/docs/pombo-checksum-generalizacao-fixa-20260824) | [#1136](https://github.com/ServerVpss/CentralDark/pull/1136) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0564 | P4 | ⬜ | [`docs/pombo-correio-checksum-selo`](https://github.com/ServerVpss/CentralDark/tree/docs/pombo-correio-checksum-selo) | [#1125](https://github.com/ServerVpss/CentralDark/pull/1125) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0565 | P4 | ⬜ | [`docs/production-guardrails-contract-20260805`](https://github.com/ServerVpss/CentralDark/tree/docs/production-guardrails-contract-20260805) | [#661](https://github.com/ServerVpss/CentralDark/pull/661) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0566 | P4 | ⬜ | [`docs/prova-secreta-bob-casa-fundamentos-20260824`](https://github.com/ServerVpss/CentralDark/tree/docs/prova-secreta-bob-casa-fundamentos-20260824) | [#1146](https://github.com/ServerVpss/CentralDark/pull/1146) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0567 | P4 | ⬜ | [`docs/register-electron-40-10-2-receipt-20260826`](https://github.com/ServerVpss/CentralDark/tree/docs/register-electron-40-10-2-receipt-20260826) | [#1206](https://github.com/ServerVpss/CentralDark/pull/1206) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0568 | P4 | ⬜ | [`docs/registra-sessao-1-centraldark-20260826`](https://github.com/ServerVpss/CentralDark/tree/docs/registra-sessao-1-centraldark-20260826) | [#1207](https://github.com/ServerVpss/CentralDark/pull/1207) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0569 | P4 | ⬜ | [`docs/registrar-pacotao-centraldark-20260710`](https://github.com/ServerVpss/CentralDark/tree/docs/registrar-pacotao-centraldark-20260710) | [#657](https://github.com/ServerVpss/CentralDark/pull/657) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0570 | P4 | ⬜ | [`docs/registrar-padrao-operacional-observado-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/registrar-padrao-operacional-observado-20260814) | [#817](https://github.com/ServerVpss/CentralDark/pull/817) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0571 | P4 | ⬜ | [`docs/registro-autoral-ouro-20260810`](https://github.com/ServerVpss/CentralDark/tree/docs/registro-autoral-ouro-20260810) | [#752](https://github.com/ServerVpss/CentralDark/pull/752) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0572 | P4 | ⬜ | [`docs/registro-linguagem-polimento-20260821`](https://github.com/ServerVpss/CentralDark/tree/docs/registro-linguagem-polimento-20260821) | [#1102](https://github.com/ServerVpss/CentralDark/pull/1102) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0573 | P4 | ⬜ | [`docs/regra-conflito-semantico-20260814`](https://github.com/ServerVpss/CentralDark/tree/docs/regra-conflito-semantico-20260814) | [#843](https://github.com/ServerVpss/CentralDark/pull/843) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0574 | P4 | ⬜ | [`docs/resumo-semantico-historia-chefe-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/resumo-semantico-historia-chefe-20260816) | [#977](https://github.com/ServerVpss/CentralDark/pull/977) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0575 | P4 | ⬜ | [`docs/seco-default-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/seco-default-20260817) | [#999](https://github.com/ServerVpss/CentralDark/pull/999) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0576 | P4 | ⬜ | [`docs/segredo-reliquia-hud-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/segredo-reliquia-hud-20260816) | [#998](https://github.com/ServerVpss/CentralDark/pull/998) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0577 | P4 | ⬜ | [`docs/session-learning-20260817`](https://github.com/ServerVpss/CentralDark/tree/docs/session-learning-20260817) | [#1025](https://github.com/ServerVpss/CentralDark/pull/1025) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0578 | P4 | ⬜ | [`docs/sol-autonomia-confirmacao-20260818`](https://github.com/ServerVpss/CentralDark/tree/docs/sol-autonomia-confirmacao-20260818) | [#1057](https://github.com/ServerVpss/CentralDark/pull/1057) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0579 | P4 | ⬜ | [`docs/trajectory-control-sinfonia-20260816`](https://github.com/ServerVpss/CentralDark/tree/docs/trajectory-control-sinfonia-20260816) | [#939](https://github.com/ServerVpss/CentralDark/pull/939) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0580 | P4 | ⬜ | [`docs/trusted-access-evidence-20260806`](https://github.com/ServerVpss/CentralDark/tree/docs/trusted-access-evidence-20260806) | [#676](https://github.com/ServerVpss/CentralDark/pull/676) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0581 | P4 | ⬜ | [`evol/meta-lupa-falso-verde-20260727`](https://github.com/ServerVpss/CentralDark/tree/evol/meta-lupa-falso-verde-20260727) | [#409](https://github.com/ServerVpss/CentralDark/pull/409) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0582 | P4 | ⬜ | [`f1-mcp-catalog-walking-skeleton`](https://github.com/ServerVpss/CentralDark/tree/f1-mcp-catalog-walking-skeleton) | [#62](https://github.com/ServerVpss/CentralDark/pull/62) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0583 | P4 | ⬜ | [`feat/add-grill-me-skill`](https://github.com/ServerVpss/CentralDark/tree/feat/add-grill-me-skill) | [#1059](https://github.com/ServerVpss/CentralDark/pull/1059) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0584 | P4 | ⬜ | [`feat/admin-command-center-20260817`](https://github.com/ServerVpss/CentralDark/tree/feat/admin-command-center-20260817) | [#1013](https://github.com/ServerVpss/CentralDark/pull/1013) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0585 | P4 | ⬜ | [`feat/admin-provider-control-plane-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/admin-provider-control-plane-20260815) | [#874](https://github.com/ServerVpss/CentralDark/pull/874) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0586 | P4 | ⬜ | [`feat/agent-adapter-canonical-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/agent-adapter-canonical-20260816) | [#965](https://github.com/ServerVpss/CentralDark/pull/965) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0587 | P4 | ⬜ | [`feat/any-input-ore-chrome-devtools-mcp-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/any-input-ore-chrome-devtools-mcp-20260815) | [#919](https://github.com/ServerVpss/CentralDark/pull/919) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0588 | P4 | ⬜ | [`feat/artifacts-universal-schema-20260808`](https://github.com/ServerVpss/CentralDark/tree/feat/artifacts-universal-schema-20260808) | [#721](https://github.com/ServerVpss/CentralDark/pull/721) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0589 | P4 | ⬜ | [`feat/auditoria-pr-ouro-simplify-20260814`](https://github.com/ServerVpss/CentralDark/tree/feat/auditoria-pr-ouro-simplify-20260814) | [#840](https://github.com/ServerVpss/CentralDark/pull/840) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0590 | P4 | ⬜ | [`feat/biblioteca-logica-prova-ian-20260907`](https://github.com/ServerVpss/CentralDark/tree/feat/biblioteca-logica-prova-ian-20260907) | [#1454](https://github.com/ServerVpss/CentralDark/pull/1454) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0591 | P4 | ⬜ | [`feat/bolt-error-classifier-20260727`](https://github.com/ServerVpss/CentralDark/tree/feat/bolt-error-classifier-20260727) | [#395](https://github.com/ServerVpss/CentralDark/pull/395) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0592 | P4 | ⬜ | [`feat/bolt-ligar-classificador-20260727`](https://github.com/ServerVpss/CentralDark/tree/feat/bolt-ligar-classificador-20260727) | [#396](https://github.com/ServerVpss/CentralDark/pull/396) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0593 | P4 | ⬜ | [`feat/bolt-lovable-bridge-2026-07-26`](https://github.com/ServerVpss/CentralDark/tree/feat/bolt-lovable-bridge-2026-07-26) | [#384](https://github.com/ServerVpss/CentralDark/pull/384) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0594 | P4 | ⬜ | [`feat/bolt-vendor-restore-20260727`](https://github.com/ServerVpss/CentralDark/tree/feat/bolt-vendor-restore-20260727) | [#394](https://github.com/ServerVpss/CentralDark/pull/394) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0595 | P4 | ⬜ | [`feat/boot-universal-ias-delta-20260730`](https://github.com/ServerVpss/CentralDark/tree/feat/boot-universal-ias-delta-20260730) | [#553](https://github.com/ServerVpss/CentralDark/pull/553) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0596 | P4 | ⬜ | [`feat/capability-contract-router-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/capability-contract-router-20260825) | [#1162](https://github.com/ServerVpss/CentralDark/pull/1162) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0597 | P4 | ⬜ | [`feat/capsula-observavel-instinto-superior-20260806`](https://github.com/ServerVpss/CentralDark/tree/feat/capsula-observavel-instinto-superior-20260806) | [#667](https://github.com/ServerVpss/CentralDark/pull/667) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0598 | P4 | ⬜ | [`feat/casco-vivo-arquitetura-integrada-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/casco-vivo-arquitetura-integrada-20260825) | [#1158](https://github.com/ServerVpss/CentralDark/pull/1158) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0599 | P4 | ⬜ | [`feat/centraldark-capability-contract-router-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-capability-contract-router-20260825) | [#1163](https://github.com/ServerVpss/CentralDark/pull/1163) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0600 | P4 | ⬜ | [`feat/centraldark-master-cycle-reconcile-20260826`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-master-cycle-reconcile-20260826) | [#1172](https://github.com/ServerVpss/CentralDark/pull/1172) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0601 | P4 | ⬜ | [`feat/centraldark-omni-router-20260825`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-omni-router-20260825) | [#1157](https://github.com/ServerVpss/CentralDark/pull/1157) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0602 | P4 | ⬜ | [`feat/centraldark-trigger-fabric-full-package-20260824`](https://github.com/ServerVpss/CentralDark/tree/feat/centraldark-trigger-fabric-full-package-20260824) | [#1126](https://github.com/ServerVpss/CentralDark/pull/1126) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0603 | P4 | ⬜ | [`feat/coderabbit-bridge`](https://github.com/ServerVpss/CentralDark/tree/feat/coderabbit-bridge) | [#1406](https://github.com/ServerVpss/CentralDark/pull/1406) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0604 | P4 | ⬜ | [`feat/comando-oficial-multibussola-20260817`](https://github.com/ServerVpss/CentralDark/tree/feat/comando-oficial-multibussola-20260817) | [#1010](https://github.com/ServerVpss/CentralDark/pull/1010) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0605 | P4 | ⬜ | [`feat/compiled-knowledge-route-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/compiled-knowledge-route-20260816) | [#985](https://github.com/ServerVpss/CentralDark/pull/985) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0606 | P4 | ⬜ | [`feat/cooperative-credit-provenance-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/cooperative-credit-provenance-20260815) | [#888](https://github.com/ServerVpss/CentralDark/pull/888) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0607 | P4 | ⬜ | [`feat/distinct-engineering-compiler`](https://github.com/ServerVpss/CentralDark/tree/feat/distinct-engineering-compiler) | [#1160](https://github.com/ServerVpss/CentralDark/pull/1160) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0608 | P4 | ⬜ | [`feat/error-correction-auto-healing-20260814`](https://github.com/ServerVpss/CentralDark/tree/feat/error-correction-auto-healing-20260814) | [#822](https://github.com/ServerVpss/CentralDark/pull/822) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0609 | P4 | ⬜ | [`feat/expansao-dominio-canonica-20260814`](https://github.com/ServerVpss/CentralDark/tree/feat/expansao-dominio-canonica-20260814) | [#835](https://github.com/ServerVpss/CentralDark/pull/835) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0610 | P4 | ⬜ | [`feat/fixed-point-fabric-proof-20260831`](https://github.com/ServerVpss/CentralDark/tree/feat/fixed-point-fabric-proof-20260831) | [#1381](https://github.com/ServerVpss/CentralDark/pull/1381) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0611 | P4 | ⬜ | [`feat/gatilhos-execucao-reversivel-remediacao`](https://github.com/ServerVpss/CentralDark/tree/feat/gatilhos-execucao-reversivel-remediacao) | [#1091](https://github.com/ServerVpss/CentralDark/pull/1091) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0612 | P4 | ⬜ | [`feat/git-state-safety-crystal-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/git-state-safety-crystal-20260816) | [#984](https://github.com/ServerVpss/CentralDark/pull/984) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0613 | P4 | ⬜ | [`feat/global-no-reprocess-delta-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/global-no-reprocess-delta-20260816) | [#988](https://github.com/ServerVpss/CentralDark/pull/988) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0614 | P4 | ⬜ | [`feat/global-quantification-crystallization-20260816-r1`](https://github.com/ServerVpss/CentralDark/tree/feat/global-quantification-crystallization-20260816-r1) | [#982](https://github.com/ServerVpss/CentralDark/pull/982) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0615 | P4 | ⬜ | [`feat/global-skill-catalog-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/global-skill-catalog-20260816) | [#980](https://github.com/ServerVpss/CentralDark/pull/980) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0616 | P4 | ⬜ | [`feat/grafo-vivo-delta-artifact-20260814`](https://github.com/ServerVpss/CentralDark/tree/feat/grafo-vivo-delta-artifact-20260814) | [#864](https://github.com/ServerVpss/CentralDark/pull/864) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0617 | P4 | ⬜ | [`feat/hermes-casa-obsidian-sync-20260803`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-casa-obsidian-sync-20260803) | [#637](https://github.com/ServerVpss/CentralDark/pull/637) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0618 | P4 | ⬜ | [`feat/hermes-cot-react-loop`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-cot-react-loop) | [#648](https://github.com/ServerVpss/CentralDark/pull/648) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0619 | P4 | ⬜ | [`feat/hermes-four-angle-perception-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-four-angle-perception-20260815) | [#916](https://github.com/ServerVpss/CentralDark/pull/916) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0620 | P4 | ⬜ | [`feat/hermes-routing-strategy`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-routing-strategy) | [#899](https://github.com/ServerVpss/CentralDark/pull/899) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0621 | P4 | ⬜ | [`feat/hermes-strategy-runtime`](https://github.com/ServerVpss/CentralDark/tree/feat/hermes-strategy-runtime) | [#900](https://github.com/ServerVpss/CentralDark/pull/900) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0622 | P4 | ⬜ | [`feat/hub-boot-studio-20260816-r1`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-boot-studio-20260816-r1) | [#978](https://github.com/ServerVpss/CentralDark/pull/978) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0623 | P4 | ⬜ | [`feat/hub-contabo-gmail-delta`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-contabo-gmail-delta) | [#898](https://github.com/ServerVpss/CentralDark/pull/898) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0624 | P4 | ⬜ | [`feat/hub-control-plane-2026-07-22-1032`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-control-plane-2026-07-22-1032) | [#302](https://github.com/ServerVpss/CentralDark/pull/302) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0625 | P4 | ⬜ | [`feat/hub-inventory-operational-map-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-inventory-operational-map-20260816) | [#976](https://github.com/ServerVpss/CentralDark/pull/976) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0626 | P4 | ⬜ | [`feat/hub-result-work-candidate-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-result-work-candidate-20260815) | [#871](https://github.com/ServerVpss/CentralDark/pull/871) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0627 | P4 | ⬜ | [`feat/hub-screenshot-shelf-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/hub-screenshot-shelf-20260816) | [#979](https://github.com/ServerVpss/CentralDark/pull/979) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0628 | P4 | ⬜ | [`feat/inventario-metodos-hermes-20260817`](https://github.com/ServerVpss/CentralDark/tree/feat/inventario-metodos-hermes-20260817) | [#1000](https://github.com/ServerVpss/CentralDark/pull/1000) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0629 | P4 | ⬜ | [`feat/ipnames-external-network-reference-20260822`](https://github.com/ServerVpss/CentralDark/tree/feat/ipnames-external-network-reference-20260822) | [#1117](https://github.com/ServerVpss/CentralDark/pull/1117) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0630 | P4 | ⬜ | [`feat/lupa-auto-registro-fonte-verdade-2026-07-22-1600`](https://github.com/ServerVpss/CentralDark/tree/feat/lupa-auto-registro-fonte-verdade-2026-07-22-1600) | [#308](https://github.com/ServerVpss/CentralDark/pull/308) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0631 | P4 | ⬜ | [`feat/lupa-bayesiana-canon-2026-07-22-1430`](https://github.com/ServerVpss/CentralDark/tree/feat/lupa-bayesiana-canon-2026-07-22-1430) | [#307](https://github.com/ServerVpss/CentralDark/pull/307) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0632 | P4 | ⬜ | [`feat/lupa-conformance-tests-2026-07-22-2130`](https://github.com/ServerVpss/CentralDark/tree/feat/lupa-conformance-tests-2026-07-22-2130) | [#316](https://github.com/ServerVpss/CentralDark/pull/316) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0633 | P4 | ⬜ | [`feat/mandatory-simple-final-layer-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/mandatory-simple-final-layer-20260815) | [#884](https://github.com/ServerVpss/CentralDark/pull/884) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0634 | P4 | ⬜ | [`feat/mcp-horn-reuse-fixed-point-20260909`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-horn-reuse-fixed-point-20260909) | [#1482](https://github.com/ServerVpss/CentralDark/pull/1482) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0635 | P4 | ⬜ | [`feat/mcp-toolcall-lens-20260911`](https://github.com/ServerVpss/CentralDark/tree/feat/mcp-toolcall-lens-20260911) | [#1494](https://github.com/ServerVpss/CentralDark/pull/1494) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0636 | P4 | ⬜ | [`feat/menos-e-mais-cristal-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/menos-e-mais-cristal-20260816) | [#967](https://github.com/ServerVpss/CentralDark/pull/967) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0637 | P4 | ⬜ | [`feat/meta-irreducible-crystal-contract-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/meta-irreducible-crystal-contract-20260815) | [#897](https://github.com/ServerVpss/CentralDark/pull/897) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0638 | P4 | ⬜ | [`feat/micro-deploy-proof-20260909`](https://github.com/ServerVpss/CentralDark/tree/feat/micro-deploy-proof-20260909) | [#1480](https://github.com/ServerVpss/CentralDark/pull/1480) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0639 | P4 | ⬜ | [`feat/musical-ontology-judge-ternary`](https://github.com/ServerVpss/CentralDark/tree/feat/musical-ontology-judge-ternary) | [#1156](https://github.com/ServerVpss/CentralDark/pull/1156) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0640 | P4 | ⬜ | [`feat/obsidian-brain-graph-map-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/obsidian-brain-graph-map-20260816) | [#994](https://github.com/ServerVpss/CentralDark/pull/994) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0641 | P4 | ⬜ | [`feat/olho-bionico-anti-flash-20260824`](https://github.com/ServerVpss/CentralDark/tree/feat/olho-bionico-anti-flash-20260824) | [#1152](https://github.com/ServerVpss/CentralDark/pull/1152) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0642 | P4 | ⬜ | [`feat/omniroute-capability-surface-722`](https://github.com/ServerVpss/CentralDark/tree/feat/omniroute-capability-surface-722) | [#1445](https://github.com/ServerVpss/CentralDark/pull/1445) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0643 | P4 | ⬜ | [`feat/perfil-segredo-banner-canonico`](https://github.com/ServerVpss/CentralDark/tree/feat/perfil-segredo-banner-canonico) | [#1151](https://github.com/ServerVpss/CentralDark/pull/1151) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0644 | P4 | ⬜ | [`feat/personal-context-cross-session-20260821`](https://github.com/ServerVpss/CentralDark/tree/feat/personal-context-cross-session-20260821) | [#1100](https://github.com/ServerVpss/CentralDark/pull/1100) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0645 | P4 | ⬜ | [`feat/portable-kernel-condensed-dna-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/portable-kernel-condensed-dna-20260815) | [#882](https://github.com/ServerVpss/CentralDark/pull/882) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0646 | P4 | ⬜ | [`feat/pr-confirmado-checksum-label`](https://github.com/ServerVpss/CentralDark/tree/feat/pr-confirmado-checksum-label) | [#1127](https://github.com/ServerVpss/CentralDark/pull/1127) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0647 | P4 | ⬜ | [`feat/pr-learning-artifact-autobot-20260806`](https://github.com/ServerVpss/CentralDark/tree/feat/pr-learning-artifact-autobot-20260806) | [#668](https://github.com/ServerVpss/CentralDark/pull/668) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0648 | P4 | ⬜ | [`feat/radar-all-prs-sync-vps1`](https://github.com/ServerVpss/CentralDark/tree/feat/radar-all-prs-sync-vps1) | [#1498](https://github.com/ServerVpss/CentralDark/pull/1498) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0649 | P4 | ⬜ | [`feat/reality-follows-function-global-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/reality-follows-function-global-20260816) | [#966](https://github.com/ServerVpss/CentralDark/pull/966) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0650 | P4 | ⬜ | [`feat/regra-global-frequencias-sol-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/regra-global-frequencias-sol-20260815) | [#911](https://github.com/ServerVpss/CentralDark/pull/911) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0651 | P4 | ⬜ | [`feat/remote-mcp-bridge-gateway`](https://github.com/ServerVpss/CentralDark/tree/feat/remote-mcp-bridge-gateway) | [#1452](https://github.com/ServerVpss/CentralDark/pull/1452) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0652 | P4 | ⬜ | [`feat/repo-native-memory-retrieval-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/repo-native-memory-retrieval-20260816) | [#989](https://github.com/ServerVpss/CentralDark/pull/989) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0653 | P4 | ⬜ | [`feat/security-private-foundation-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/security-private-foundation-20260815) | [#873](https://github.com/ServerVpss/CentralDark/pull/873) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0654 | P4 | ⬜ | [`feat/self-tuning-thinking-route-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/self-tuning-thinking-route-20260815) | [#920](https://github.com/ServerVpss/CentralDark/pull/920) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0655 | P4 | ⬜ | [`feat/semantic-core-nilc-glove-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/semantic-core-nilc-glove-20260815) | [#880](https://github.com/ServerVpss/CentralDark/pull/880) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0656 | P4 | ⬜ | [`feat/sentinela-eventos-hermes-20260808`](https://github.com/ServerVpss/CentralDark/tree/feat/sentinela-eventos-hermes-20260808) | [#725](https://github.com/ServerVpss/CentralDark/pull/725) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0657 | P4 | ⬜ | [`feat/session-harvest-causal-nav-tracking-20260823`](https://github.com/ServerVpss/CentralDark/tree/feat/session-harvest-causal-nav-tracking-20260823) | [#1119](https://github.com/ServerVpss/CentralDark/pull/1119) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0658 | P4 | ⬜ | [`feat/skill-workshop-claude-skills-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/skill-workshop-claude-skills-20260816) | [#962](https://github.com/ServerVpss/CentralDark/pull/962) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0659 | P4 | ⬜ | [`feat/sol-frequencias-globais-casa-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/sol-frequencias-globais-casa-20260815) | [#910](https://github.com/ServerVpss/CentralDark/pull/910) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0660 | P4 | ⬜ | [`feat/sol-visual-grammar-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/sol-visual-grammar-20260816) | [#972](https://github.com/ServerVpss/CentralDark/pull/972) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0661 | P4 | ⬜ | [`feat/soul-casa-funcional-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/soul-casa-funcional-20260815) | [#868](https://github.com/ServerVpss/CentralDark/pull/868) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0662 | P4 | ⬜ | [`feat/source-delta-autonomous-improvement-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/source-delta-autonomous-improvement-20260815) | [#904](https://github.com/ServerVpss/CentralDark/pull/904) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0663 | P4 | ⬜ | [`feat/status-badge-fabric-20260905`](https://github.com/ServerVpss/CentralDark/tree/feat/status-badge-fabric-20260905) | [#1431](https://github.com/ServerVpss/CentralDark/pull/1431) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0664 | P4 | ⬜ | [`feat/teto-util-convergencia-organograma-20260822`](https://github.com/ServerVpss/CentralDark/tree/feat/teto-util-convergencia-organograma-20260822) | [#1115](https://github.com/ServerVpss/CentralDark/pull/1115) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0665 | P4 | ⬜ | [`feat/trigger-fabric-camisa-forca-operacional`](https://github.com/ServerVpss/CentralDark/tree/feat/trigger-fabric-camisa-forca-operacional) | [#1131](https://github.com/ServerVpss/CentralDark/pull/1131) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0666 | P4 | ⬜ | [`feat/unified-porta-hub-ruby-brain-20260822`](https://github.com/ServerVpss/CentralDark/tree/feat/unified-porta-hub-ruby-brain-20260822) | [#1104](https://github.com/ServerVpss/CentralDark/pull/1104) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0667 | P4 | ⬜ | [`feat/universal-agent-call-20260810`](https://github.com/ServerVpss/CentralDark/tree/feat/universal-agent-call-20260810) | [#759](https://github.com/ServerVpss/CentralDark/pull/759) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0668 | P4 | ⬜ | [`feat/visual-design-method-skill`](https://github.com/ServerVpss/CentralDark/tree/feat/visual-design-method-skill) | [#1121](https://github.com/ServerVpss/CentralDark/pull/1121) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0669 | P4 | ⬜ | [`feat/vps-housekeeping`](https://github.com/ServerVpss/CentralDark/tree/feat/vps-housekeeping) | [#1171](https://github.com/ServerVpss/CentralDark/pull/1171) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0670 | P4 | ⬜ | [`feat/vps-rebuild-deterministico-20260816`](https://github.com/ServerVpss/CentralDark/tree/feat/vps-rebuild-deterministico-20260816) | [#964](https://github.com/ServerVpss/CentralDark/pull/964) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0671 | P4 | ⬜ | [`feat/webui-modo-quente-semantico-20260810`](https://github.com/ServerVpss/CentralDark/tree/feat/webui-modo-quente-semantico-20260810) | [#761](https://github.com/ServerVpss/CentralDark/pull/761) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0672 | P4 | ⬜ | [`feat/work-study-teach-school-layer-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/work-study-teach-school-layer-20260815) | [#887](https://github.com/ServerVpss/CentralDark/pull/887) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0673 | P4 | ⬜ | [`feat/zerar-issues-centraldark-2026-07-22-1700`](https://github.com/ServerVpss/CentralDark/tree/feat/zerar-issues-centraldark-2026-07-22-1700) | [#309](https://github.com/ServerVpss/CentralDark/pull/309) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0674 | P4 | ⬜ | [`feat/zero-silent-learning-house-invariant-20260815`](https://github.com/ServerVpss/CentralDark/tree/feat/zero-silent-learning-house-invariant-20260815) | [#908](https://github.com/ServerVpss/CentralDark/pull/908) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0675 | P4 | ⬜ | [`feat/zords-megazord-global-boot-20260829`](https://github.com/ServerVpss/CentralDark/tree/feat/zords-megazord-global-boot-20260829) | [#1370](https://github.com/ServerVpss/CentralDark/pull/1370) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0676 | P4 | ⬜ | [`fix/absorver-ouro-prs-fechados-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/absorver-ouro-prs-fechados-20260814) | [#846](https://github.com/ServerVpss/CentralDark/pull/846) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0677 | P4 | ⬜ | [`fix/actions-node24-gitmodules-2026-07-24`](https://github.com/ServerVpss/CentralDark/tree/fix/actions-node24-gitmodules-2026-07-24) | [#341](https://github.com/ServerVpss/CentralDark/pull/341) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0678 | P4 | ⬜ | [`fix/adapter-test-relax-forbidden-paths`](https://github.com/ServerVpss/CentralDark/tree/fix/adapter-test-relax-forbidden-paths) | [#1241](https://github.com/ServerVpss/CentralDark/pull/1241) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0679 | P4 | ⬜ | [`fix/admin-administrable-gate-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/admin-administrable-gate-20260817) | [#1014](https://github.com/ServerVpss/CentralDark/pull/1014) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0680 | P4 | ⬜ | [`fix/api-claim-wrapper-20260913`](https://github.com/ServerVpss/CentralDark/tree/fix/api-claim-wrapper-20260913) | [#1511](https://github.com/ServerVpss/CentralDark/pull/1511) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0681 | P4 | ⬜ | [`fix/aprendizado-informacional-ouro-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/aprendizado-informacional-ouro-20260814) | [#821](https://github.com/ServerVpss/CentralDark/pull/821) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0682 | P4 | ⬜ | [`fix/arqueologia-total-absorcao-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/arqueologia-total-absorcao-20260814) | [#858](https://github.com/ServerVpss/CentralDark/pull/858) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0683 | P4 | ⬜ | [`fix/authority-owner-dedupe-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/authority-owner-dedupe-20260818) | [#1026](https://github.com/ServerVpss/CentralDark/pull/1026) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0684 | P4 | ⬜ | [`fix/authority-receipt-transport-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/authority-receipt-transport-20260817) | [#1008](https://github.com/ServerVpss/CentralDark/pull/1008) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0685 | P4 | ⬜ | [`fix/authority-writers-block-preserve-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/authority-writers-block-preserve-20260817) | [#1020](https://github.com/ServerVpss/CentralDark/pull/1020) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0686 | P4 | ⬜ | [`fix/automation-recurrence-evidence-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/automation-recurrence-evidence-20260816) | [#955](https://github.com/ServerVpss/CentralDark/pull/955) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0687 | P4 | ⬜ | [`fix/autonomia-artifact-empty-marker`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-artifact-empty-marker) | [#1099](https://github.com/ServerVpss/CentralDark/pull/1099) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0688 | P4 | ⬜ | [`fix/autonomia-artifact-vazio`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-artifact-vazio) | [#1003](https://github.com/ServerVpss/CentralDark/pull/1003) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0689 | P4 | ⬜ | [`fix/autonomia-canonical-contract-receipt`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-canonical-contract-receipt) | [#1128](https://github.com/ServerVpss/CentralDark/pull/1128) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0690 | P4 | ⬜ | [`fix/autonomia-delegada-sem-friccao-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-delegada-sem-friccao-20260817) | [#1009](https://github.com/ServerVpss/CentralDark/pull/1009) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0691 | P4 | ⬜ | [`fix/autonomia-fail-closed-20260805`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-fail-closed-20260805) | [#663](https://github.com/ServerVpss/CentralDark/pull/663) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0692 | P4 | ⬜ | [`fix/autonomia-fast-path-runner-latency-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-fast-path-runner-latency-20260824) | [#1133](https://github.com/ServerVpss/CentralDark/pull/1133) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0693 | P4 | ⬜ | [`fix/autonomia-gates-universais-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-gates-universais-20260730) | [#569](https://github.com/ServerVpss/CentralDark/pull/569) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0694 | P4 | ⬜ | [`fix/autonomia-green-guard-page-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-green-guard-page-20260816) | [#968](https://github.com/ServerVpss/CentralDark/pull/968) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0695 | P4 | ⬜ | [`fix/autonomia-promocao-absorver-intencao-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-promocao-absorver-intencao-20260814) | [#813](https://github.com/ServerVpss/CentralDark/pull/813) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0696 | P4 | ⬜ | [`fix/autonomia-promocao-segura-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-promocao-segura-20260730) | [#568](https://github.com/ServerVpss/CentralDark/pull/568) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0697 | P4 | ⬜ | [`fix/autonomia-promotion-token-canonico-20260731`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-promotion-token-canonico-20260731) | [#584](https://github.com/ServerVpss/CentralDark/pull/584) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0698 | P4 | ⬜ | [`fix/autonomia-trigger-push-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-trigger-push-20260730) | [#572](https://github.com/ServerVpss/CentralDark/pull/572) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0699 | P4 | ⬜ | [`fix/autonomia-varredura-fallback-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/autonomia-varredura-fallback-20260730) | [#571](https://github.com/ServerVpss/CentralDark/pull/571) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0700 | P4 | ⬜ | [`fix/autoridade-chefe-denominador-incidente-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/autoridade-chefe-denominador-incidente-20260816) | [#949](https://github.com/ServerVpss/CentralDark/pull/949) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0701 | P4 | ⬜ | [`fix/bind-resilient-autonomy-crystal-gate-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/bind-resilient-autonomy-crystal-gate-20260824) | [#1149](https://github.com/ServerVpss/CentralDark/pull/1149) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0702 | P4 | ⬜ | [`fix/boot-mermaid-ptbr-20260827`](https://github.com/ServerVpss/CentralDark/tree/fix/boot-mermaid-ptbr-20260827) | [#1222](https://github.com/ServerVpss/CentralDark/pull/1222) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0703 | P4 | ⬜ | [`fix/boot-soul-autonomia-contexto-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/boot-soul-autonomia-contexto-20260814) | [#812](https://github.com/ServerVpss/CentralDark/pull/812) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0704 | P4 | ⬜ | [`fix/bounded-context-runtime-20260913`](https://github.com/ServerVpss/CentralDark/tree/fix/bounded-context-runtime-20260913) | [#1518](https://github.com/ServerVpss/CentralDark/pull/1518) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0705 | P4 | ⬜ | [`fix/calibracao-evidencia-chefe-sem-ruido-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/calibracao-evidencia-chefe-sem-ruido-20260817) | [#1007](https://github.com/ServerVpss/CentralDark/pull/1007) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0706 | P4 | ⬜ | [`fix/canonical-entry-reachability-20260821`](https://github.com/ServerVpss/CentralDark/tree/fix/canonical-entry-reachability-20260821) | [#1101](https://github.com/ServerVpss/CentralDark/pull/1101) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0707 | P4 | ⬜ | [`fix/canonical-map-consumers-live-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/canonical-map-consumers-live-20260824) | [#1134](https://github.com/ServerVpss/CentralDark/pull/1134) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0708 | P4 | ⬜ | [`fix/casa-historico-ce-identidade-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/casa-historico-ce-identidade-20260814) | [#818](https://github.com/ServerVpss/CentralDark/pull/818) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0709 | P4 | ⬜ | [`fix/centraldark-contract-authority-consolidation`](https://github.com/ServerVpss/CentralDark/tree/fix/centraldark-contract-authority-consolidation) | [#1490](https://github.com/ServerVpss/CentralDark/pull/1490) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0710 | P4 | ⬜ | [`fix/centraldark-desktop-windows-build-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/centraldark-desktop-windows-build-20260824) | [#1122](https://github.com/ServerVpss/CentralDark/pull/1122) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0711 | P4 | ⬜ | [`fix/centraldark-intent-memory-properties-20260826`](https://github.com/ServerVpss/CentralDark/tree/fix/centraldark-intent-memory-properties-20260826) | [#1189](https://github.com/ServerVpss/CentralDark/pull/1189) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0712 | P4 | ⬜ | [`fix/centraldark-single-operational-owner-20260829`](https://github.com/ServerVpss/CentralDark/tree/fix/centraldark-single-operational-owner-20260829) | [#1368](https://github.com/ServerVpss/CentralDark/pull/1368) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0713 | P4 | ⬜ | [`fix/chatgpt-self-counterproof-reachability-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/chatgpt-self-counterproof-reachability-20260818) | [#1038](https://github.com/ServerVpss/CentralDark/pull/1038) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0714 | P4 | ⬜ | [`fix/chefe-dual-register-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/chefe-dual-register-20260815) | [#892](https://github.com/ServerVpss/CentralDark/pull/892) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0715 | P4 | ⬜ | [`fix/ci-decisor-aplicarGatePercepcao`](https://github.com/ServerVpss/CentralDark/tree/fix/ci-decisor-aplicarGatePercepcao) | [#1379](https://github.com/ServerVpss/CentralDark/pull/1379) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0716 | P4 | ⬜ | [`fix/ci-memory-link-baseline-pr-debt-20260907`](https://github.com/ServerVpss/CentralDark/tree/fix/ci-memory-link-baseline-pr-debt-20260907) | [#1457](https://github.com/ServerVpss/CentralDark/pull/1457) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0717 | P4 | ⬜ | [`fix/ci-porta-sha-empty`](https://github.com/ServerVpss/CentralDark/tree/fix/ci-porta-sha-empty) | [#1076](https://github.com/ServerVpss/CentralDark/pull/1076) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0718 | P4 | ⬜ | [`fix/close-external-source-gate-20260831`](https://github.com/ServerVpss/CentralDark/tree/fix/close-external-source-gate-20260831) | [#1389](https://github.com/ServerVpss/CentralDark/pull/1389) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0719 | P4 | ⬜ | [`fix/codex-sensitive-guardrail-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/codex-sensitive-guardrail-20260814) | [#826](https://github.com/ServerVpss/CentralDark/pull/826) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0720 | P4 | ⬜ | [`fix/convergir-canario-autonomia-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/convergir-canario-autonomia-20260814) | [#816](https://github.com/ServerVpss/CentralDark/pull/816) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0721 | P4 | ⬜ | [`fix/cristalizar-fronteira-capacidade-intencao-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/cristalizar-fronteira-capacidade-intencao-20260816) | [#951](https://github.com/ServerVpss/CentralDark/pull/951) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0722 | P4 | ⬜ | [`fix/cristalizar-protecao-humana-artefatos-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/cristalizar-protecao-humana-artefatos-20260816) | [#952](https://github.com/ServerVpss/CentralDark/pull/952) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0723 | P4 | ⬜ | [`fix/cross-chat-existing-errors-20260915`](https://github.com/ServerVpss/CentralDark/tree/fix/cross-chat-existing-errors-20260915) | [#1532](https://github.com/ServerVpss/CentralDark/pull/1532) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0724 | P4 | ⬜ | [`fix/dependabot-all-prs-fair-cursor-20260915`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-all-prs-fair-cursor-20260915) | [#1537](https://github.com/ServerVpss/CentralDark/pull/1537) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0725 | P4 | ⬜ | [`fix/dependabot-ci-verde-suprema-20260904`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-ci-verde-suprema-20260904) | [#1407](https://github.com/ServerVpss/CentralDark/pull/1407) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0726 | P4 | ⬜ | [`fix/dependabot-live-score-bridge-receipts-20260915`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-live-score-bridge-receipts-20260915) | [#1530](https://github.com/ServerVpss/CentralDark/pull/1530) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0727 | P4 | ⬜ | [`fix/dependabot-radar-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-radar-20260905) | [#1425](https://github.com/ServerVpss/CentralDark/pull/1425) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0728 | P4 | ⬜ | [`fix/dependabot-single-open-pr-proof-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/dependabot-single-open-pr-proof-20260818) | [#1067](https://github.com/ServerVpss/CentralDark/pull/1067) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0729 | P4 | ⬜ | [`fix/dispatcher-pr-permission-fallback-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/dispatcher-pr-permission-fallback-20260815) | [#894](https://github.com/ServerVpss/CentralDark/pull/894) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0730 | P4 | ⬜ | [`fix/explicacao-tecnico-chefe-inline-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/explicacao-tecnico-chefe-inline-20260816) | [#940](https://github.com/ServerVpss/CentralDark/pull/940) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0731 | P4 | ⬜ | [`fix/fixed-point-authority-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/fixed-point-authority-20260817) | [#1021](https://github.com/ServerVpss/CentralDark/pull/1021) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0732 | P4 | ⬜ | [`fix/four-angle-evidence-gate-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/four-angle-evidence-gate-20260815) | [#923](https://github.com/ServerVpss/CentralDark/pull/923) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0733 | P4 | ⬜ | [`fix/gate-determinístico-sempre`](https://github.com/ServerVpss/CentralDark/tree/fix/gate-determin%C3%ADstico-sempre) | [#1108](https://github.com/ServerVpss/CentralDark/pull/1108) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0734 | P4 | ⬜ | [`fix/git-conflict-padrao-unico`](https://github.com/ServerVpss/CentralDark/tree/fix/git-conflict-padrao-unico) | [#1343](https://github.com/ServerVpss/CentralDark/pull/1343) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0735 | P4 | ⬜ | [`fix/github-control-plane-hosted-runner-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/github-control-plane-hosted-runner-20260815) | [#906](https://github.com/ServerVpss/CentralDark/pull/906) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0736 | P4 | ⬜ | [`fix/gitlink-telepainel-orfao-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/gitlink-telepainel-orfao-20260730) | [#574](https://github.com/ServerVpss/CentralDark/pull/574) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0737 | P4 | ⬜ | [`fix/global-continuity-policy-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/global-continuity-policy-20260818) | [#1037](https://github.com/ServerVpss/CentralDark/pull/1037) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0738 | P4 | ⬜ | [`fix/global-execution-gate-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/global-execution-gate-20260818) | [#1039](https://github.com/ServerVpss/CentralDark/pull/1039) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0739 | P4 | ⬜ | [`fix/global-functional-contour-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/global-functional-contour-20260815) | [#931](https://github.com/ServerVpss/CentralDark/pull/931) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0740 | P4 | ⬜ | [`fix/global-github-label-contract-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/global-github-label-contract-20260816) | [#946](https://github.com/ServerVpss/CentralDark/pull/946) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0741 | P4 | ⬜ | [`fix/global-horn-gate-fixed-point-20260915`](https://github.com/ServerVpss/CentralDark/tree/fix/global-horn-gate-fixed-point-20260915) | [#1533](https://github.com/ServerVpss/CentralDark/pull/1533) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0742 | P4 | ⬜ | [`fix/glossario-github-boot-obrigatorio-20260731`](https://github.com/ServerVpss/CentralDark/tree/fix/glossario-github-boot-obrigatorio-20260731) | [#581](https://github.com/ServerVpss/CentralDark/pull/581) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0743 | P4 | ⬜ | [`fix/governanca-canonica-repo-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/governanca-canonica-repo-20260730) | [#566](https://github.com/ServerVpss/CentralDark/pull/566) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0744 | P4 | ⬜ | [`fix/green-first-autonomia-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/green-first-autonomia-20260816) | [#958](https://github.com/ServerVpss/CentralDark/pull/958) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0745 | P4 | ⬜ | [`fix/guardiao-usar-pode-20260914`](https://github.com/ServerVpss/CentralDark/tree/fix/guardiao-usar-pode-20260914) | [#1522](https://github.com/ServerVpss/CentralDark/pull/1522) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0746 | P4 | ⬜ | [`fix/guardiao-xai-hermes-pool-20260914`](https://github.com/ServerVpss/CentralDark/tree/fix/guardiao-xai-hermes-pool-20260914) | [#1521](https://github.com/ServerVpss/CentralDark/pull/1521) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0747 | P4 | ⬜ | [`fix/hermes-finalization-gate-20260808`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-finalization-gate-20260808) | [#704](https://github.com/ServerVpss/CentralDark/pull/704) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0748 | P4 | ⬜ | [`fix/hermes-wire-routing-strategy`](https://github.com/ServerVpss/CentralDark/tree/fix/hermes-wire-routing-strategy) | [#901](https://github.com/ServerVpss/CentralDark/pull/901) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0749 | P4 | ⬜ | [`fix/horario-brasilia-central-20260911`](https://github.com/ServerVpss/CentralDark/tree/fix/horario-brasilia-central-20260911) | [#1493](https://github.com/ServerVpss/CentralDark/pull/1493) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0750 | P4 | ⬜ | [`fix/hub-inventory-ledger-residual-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/hub-inventory-ledger-residual-20260815) | [#918](https://github.com/ServerVpss/CentralDark/pull/918) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0751 | P4 | ⬜ | [`fix/identidade-segredo-hermes-semantica-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/identidade-segredo-hermes-semantica-20260814) | [#811](https://github.com/ServerVpss/CentralDark/pull/811) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0752 | P4 | ⬜ | [`fix/identity-gate-syntax-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/identity-gate-syntax-20260815) | [#879](https://github.com/ServerVpss/CentralDark/pull/879) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0753 | P4 | ⬜ | [`fix/identity-validator-false-signals-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/identity-validator-false-signals-20260815) | [#881](https://github.com/ServerVpss/CentralDark/pull/881) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0754 | P4 | ⬜ | [`fix/incidente-seguranca-mensuravel-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/incidente-seguranca-mensuravel-20260816) | [#948](https://github.com/ServerVpss/CentralDark/pull/948) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0755 | P4 | ⬜ | [`fix/integracao-hub-hermes-pr-mae-20260809`](https://github.com/ServerVpss/CentralDark/tree/fix/integracao-hub-hermes-pr-mae-20260809) | [#733](https://github.com/ServerVpss/CentralDark/pull/733) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0756 | P4 | ⬜ | [`fix/inventory-meta-mineracao-residual-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/inventory-meta-mineracao-residual-20260816) | [#936](https://github.com/ServerVpss/CentralDark/pull/936) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0757 | P4 | ⬜ | [`fix/issue-205-hermes-extend-doctrine-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/issue-205-hermes-extend-doctrine-20260815) | [#909](https://github.com/ServerVpss/CentralDark/pull/909) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0758 | P4 | ⬜ | [`fix/issues-labels-fixed-point-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/issues-labels-fixed-point-20260815) | [#905](https://github.com/ServerVpss/CentralDark/pull/905) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0759 | P4 | ⬜ | [`fix/jarvis-work-candidate-state-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/jarvis-work-candidate-state-20260814) | [#872](https://github.com/ServerVpss/CentralDark/pull/872) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0760 | P4 | ⬜ | [`fix/knowledge-compiler-deterministic-skill-authoring-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/knowledge-compiler-deterministic-skill-authoring-20260818) | [#1035](https://github.com/ServerVpss/CentralDark/pull/1035) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0761 | P4 | ⬜ | [`fix/label-gate-converged-state-20260822`](https://github.com/ServerVpss/CentralDark/tree/fix/label-gate-converged-state-20260822) | [#1107](https://github.com/ServerVpss/CentralDark/pull/1107) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0762 | P4 | ⬜ | [`fix/labels-operacionais-uppercase-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/labels-operacionais-uppercase-20260817) | [#1017](https://github.com/ServerVpss/CentralDark/pull/1017) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0763 | P4 | ⬜ | [`fix/longitudinal-receipt-recorder-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/longitudinal-receipt-recorder-20260816) | [#935](https://github.com/ServerVpss/CentralDark/pull/935) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0764 | P4 | ⬜ | [`fix/lupa-detached-branch-675`](https://github.com/ServerVpss/CentralDark/tree/fix/lupa-detached-branch-675) | [#705](https://github.com/ServerVpss/CentralDark/pull/705) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0765 | P4 | ⬜ | [`fix/lupa-drift-guard-allow-compat-alias`](https://github.com/ServerVpss/CentralDark/tree/fix/lupa-drift-guard-allow-compat-alias) | [#1231](https://github.com/ServerVpss/CentralDark/pull/1231) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0766 | P4 | ⬜ | [`fix/lupa-drift-guard-mensagem-precisa-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/lupa-drift-guard-mensagem-precisa-20260814) | [#842](https://github.com/ServerVpss/CentralDark/pull/842) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0767 | P4 | ⬜ | [`fix/main-recurring-ci-residue`](https://github.com/ServerVpss/CentralDark/tree/fix/main-recurring-ci-residue) | [#1124](https://github.com/ServerVpss/CentralDark/pull/1124) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0768 | P4 | ⬜ | [`fix/mcp-admin-tools-list-false-red`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-admin-tools-list-false-red) | [#1491](https://github.com/ServerVpss/CentralDark/pull/1491) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0769 | P4 | ⬜ | [`fix/mcp-deploy-atomic-dist`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-atomic-dist) | [#292](https://github.com/ServerVpss/CentralDark/pull/292) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0770 | P4 | ⬜ | [`fix/mcp-deploy-pm2-diagnostic`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-pm2-diagnostic) | [#294](https://github.com/ServerVpss/CentralDark/pull/294) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0771 | P4 | ⬜ | [`fix/mcp-deploy-safe-main-switch`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-safe-main-switch) | [#290](https://github.com/ServerVpss/CentralDark/pull/290) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0772 | P4 | ⬜ | [`fix/mcp-deploy-sanitized-dirty-inventory`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-sanitized-dirty-inventory) | [#291](https://github.com/ServerVpss/CentralDark/pull/291) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0773 | P4 | ⬜ | [`fix/mcp-deploy-status-proof`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-status-proof) | [#288](https://github.com/ServerVpss/CentralDark/pull/288) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0774 | P4 | ⬜ | [`fix/mcp-deploy-status-run-url`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-deploy-status-run-url) | [#289](https://github.com/ServerVpss/CentralDark/pull/289) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0775 | P4 | ⬜ | [`fix/mcp-dist-admin-sync-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-dist-admin-sync-20260816) | [#963](https://github.com/ServerVpss/CentralDark/pull/963) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0776 | P4 | ⬜ | [`fix/mcp-dist-sync-agi-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-dist-sync-agi-20260816) | [#950](https://github.com/ServerVpss/CentralDark/pull/950) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0777 | P4 | ⬜ | [`fix/mcp-dist-trace-context-missing`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-dist-trace-context-missing) | [#1123](https://github.com/ServerVpss/CentralDark/pull/1123) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0778 | P4 | ⬜ | [`fix/mcp-live-boot-skills-observability-20260810`](https://github.com/ServerVpss/CentralDark/tree/fix/mcp-live-boot-skills-observability-20260810) | [#760](https://github.com/ServerVpss/CentralDark/pull/760) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0779 | P4 | ⬜ | [`fix/memory-dream-consolidation-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/memory-dream-consolidation-20260814) | [#834](https://github.com/ServerVpss/CentralDark/pull/834) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0780 | P4 | ⬜ | [`fix/memory-git-push-killswitch-20260907`](https://github.com/ServerVpss/CentralDark/tree/fix/memory-git-push-killswitch-20260907) | [#1456](https://github.com/ServerVpss/CentralDark/pull/1456) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0781 | P4 | ⬜ | [`fix/memory-recall-route-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/memory-recall-route-20260816) | [#990](https://github.com/ServerVpss/CentralDark/pull/990) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0782 | P4 | ⬜ | [`fix/menos-e-mais-cadeado-evidencial-20260810`](https://github.com/ServerVpss/CentralDark/tree/fix/menos-e-mais-cadeado-evidencial-20260810) | [#751](https://github.com/ServerVpss/CentralDark/pull/751) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0783 | P4 | ⬜ | [`fix/meta-compressao-cognitiva-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-compressao-cognitiva-20260815) | [#930](https://github.com/ServerVpss/CentralDark/pull/930) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0784 | P4 | ⬜ | [`fix/meta-lupa-o3-essence-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-lupa-o3-essence-20260816) | [#987](https://github.com/ServerVpss/CentralDark/pull/987) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0785 | P4 | ⬜ | [`fix/meta-lupa-proof-ownership-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-lupa-proof-ownership-20260814) | [#827](https://github.com/ServerVpss/CentralDark/pull/827) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0786 | P4 | ⬜ | [`fix/meta-lupa-recibo-xp-20260727`](https://github.com/ServerVpss/CentralDark/tree/fix/meta-lupa-recibo-xp-20260727) | [#410](https://github.com/ServerVpss/CentralDark/pull/410) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0787 | P4 | ⬜ | [`fix/model-import-response-style`](https://github.com/ServerVpss/CentralDark/tree/fix/model-import-response-style) | [#1390](https://github.com/ServerVpss/CentralDark/pull/1390) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0788 | P4 | ⬜ | [`fix/multibussola-voz-pronuncia-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/multibussola-voz-pronuncia-20260817) | [#1016](https://github.com/ServerVpss/CentralDark/pull/1016) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0789 | P4 | ⬜ | [`fix/nao-corrigir-fala-do-chefe`](https://github.com/ServerVpss/CentralDark/tree/fix/nao-corrigir-fala-do-chefe) | [#1113](https://github.com/ServerVpss/CentralDark/pull/1113) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0790 | P4 | ⬜ | [`fix/notion-estrutura-db-20260810`](https://github.com/ServerVpss/CentralDark/tree/fix/notion-estrutura-db-20260810) | [#750](https://github.com/ServerVpss/CentralDark/pull/750) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0791 | P4 | ⬜ | [`fix/obsidian-sync-claim-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/obsidian-sync-claim-20260817) | [#1015](https://github.com/ServerVpss/CentralDark/pull/1015) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0792 | P4 | ⬜ | [`fix/one-identity-one-name-pr-hud-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/one-identity-one-name-pr-hud-20260816) | [#947](https://github.com/ServerVpss/CentralDark/pull/947) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0793 | P4 | ⬜ | [`fix/ontology-portable-closure-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/ontology-portable-closure-20260816) | [#957](https://github.com/ServerVpss/CentralDark/pull/957) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0794 | P4 | ⬜ | [`fix/operational-backups-outside-map`](https://github.com/ServerVpss/CentralDark/tree/fix/operational-backups-outside-map) | [#297](https://github.com/ServerVpss/CentralDark/pull/297) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0795 | P4 | ⬜ | [`fix/operational-claim-enforcement-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/operational-claim-enforcement-20260818) | [#1027](https://github.com/ServerVpss/CentralDark/pull/1027) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0796 | P4 | ⬜ | [`fix/operational-score-partitura-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/operational-score-partitura-20260815) | [#912](https://github.com/ServerVpss/CentralDark/pull/912) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0797 | P4 | ⬜ | [`fix/optional-integrations-nonblocking-20260911`](https://github.com/ServerVpss/CentralDark/tree/fix/optional-integrations-nonblocking-20260911) | [#1503](https://github.com/ServerVpss/CentralDark/pull/1503) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0798 | P4 | ⬜ | [`fix/ouro-proof-architecture-boot`](https://github.com/ServerVpss/CentralDark/tree/fix/ouro-proof-architecture-boot) | [#1212](https://github.com/ServerVpss/CentralDark/pull/1212) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0799 | P4 | ⬜ | [`fix/painel-auto-update-safe-retry-v2-20260818`](https://github.com/ServerVpss/CentralDark/tree/fix/painel-auto-update-safe-retry-v2-20260818) | [#1066](https://github.com/ServerVpss/CentralDark/pull/1066) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0800 | P4 | ⬜ | [`fix/painel-git-push-killswitch-20260907`](https://github.com/ServerVpss/CentralDark/tree/fix/painel-git-push-killswitch-20260907) | [#1455](https://github.com/ServerVpss/CentralDark/pull/1455) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0801 | P4 | ⬜ | [`fix/partitura-unica-self-distillation-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/partitura-unica-self-distillation-20260815) | [#932](https://github.com/ServerVpss/CentralDark/pull/932) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0802 | P4 | ⬜ | [`fix/perception-runtime-gate-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/perception-runtime-gate-20260815) | [#924](https://github.com/ServerVpss/CentralDark/pull/924) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0803 | P4 | ⬜ | [`fix/permito-deploy-classes-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/permito-deploy-classes-20260905) | [#1430](https://github.com/ServerVpss/CentralDark/pull/1430) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0804 | P4 | ⬜ | [`fix/persistent-sweep-hub-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/persistent-sweep-hub-20260905) | [#1439](https://github.com/ServerVpss/CentralDark/pull/1439) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0805 | P4 | ⬜ | [`fix/persistent-trigger-lock-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/persistent-trigger-lock-20260905) | [#1434](https://github.com/ServerVpss/CentralDark/pull/1434) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0806 | P4 | ⬜ | [`fix/pin-caddy-telepainel-checkout`](https://github.com/ServerVpss/CentralDark/tree/fix/pin-caddy-telepainel-checkout) | [#1497](https://github.com/ServerVpss/CentralDark/pull/1497) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0807 | P4 | ⬜ | [`fix/placar-longitudinal-evidencial-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/placar-longitudinal-evidencial-20260816) | [#937](https://github.com/ServerVpss/CentralDark/pull/937) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0808 | P4 | ⬜ | [`fix/pm2-snapshot-mem-followup-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/pm2-snapshot-mem-followup-20260814) | [#844](https://github.com/ServerVpss/CentralDark/pull/844) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0809 | P4 | ⬜ | [`fix/pombo-checksum-canonical-handoff-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/pombo-checksum-canonical-handoff-20260824) | [#1144](https://github.com/ServerVpss/CentralDark/pull/1144) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0810 | P4 | ⬜ | [`fix/porta-canonico-orfao-20260911`](https://github.com/ServerVpss/CentralDark/tree/fix/porta-canonico-orfao-20260911) | [#1500](https://github.com/ServerVpss/CentralDark/pull/1500) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0811 | P4 | ⬜ | [`fix/portable-kernel-mutant-residual-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/portable-kernel-mutant-residual-20260815) | [#893](https://github.com/ServerVpss/CentralDark/pull/893) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0812 | P4 | ⬜ | [`fix/post-merge-race-singleton-guard-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/post-merge-race-singleton-guard-20260814) | [#845](https://github.com/ServerVpss/CentralDark/pull/845) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0813 | P4 | ⬜ | [`fix/postmerge-deploy-hardening-20260811`](https://github.com/ServerVpss/CentralDark/tree/fix/postmerge-deploy-hardening-20260811) | [#769](https://github.com/ServerVpss/CentralDark/pull/769) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0814 | P4 | ⬜ | [`fix/pr-1445-artifact-properties-20260907`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-1445-artifact-properties-20260907) | [#1451](https://github.com/ServerVpss/CentralDark/pull/1451) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0815 | P4 | ⬜ | [`fix/pr-review-centraldark-api-fallback-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-review-centraldark-api-fallback-20260815) | [#896](https://github.com/ServerVpss/CentralDark/pull/896) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0816 | P4 | ⬜ | [`fix/pr-secret-scanner-env-ref-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-secret-scanner-env-ref-20260730) | [#567](https://github.com/ServerVpss/CentralDark/pull/567) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0817 | P4 | ⬜ | [`fix/pr-title-contract-auth-header-20260915`](https://github.com/ServerVpss/CentralDark/tree/fix/pr-title-contract-auth-header-20260915) | [#1531](https://github.com/ServerVpss/CentralDark/pull/1531) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0818 | P4 | ⬜ | [`fix/privacy-minimization-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/privacy-minimization-20260816) | [#953](https://github.com/ServerVpss/CentralDark/pull/953) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0819 | P4 | ⬜ | [`fix/promocao-selo-canonico-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/promocao-selo-canonico-20260816) | [#983](https://github.com/ServerVpss/CentralDark/pull/983) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0820 | P4 | ⬜ | [`fix/promocao-verde-delta-fechado-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/promocao-verde-delta-fechado-20260816) | [#991](https://github.com/ServerVpss/CentralDark/pull/991) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0821 | P4 | ⬜ | [`fix/proof-ownership-post-827-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/proof-ownership-post-827-20260814) | [#833](https://github.com/ServerVpss/CentralDark/pull/833) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0822 | P4 | ⬜ | [`fix/realtime-feedback-persistent-sweep-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/realtime-feedback-persistent-sweep-20260905) | [#1435](https://github.com/ServerVpss/CentralDark/pull/1435) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0823 | P4 | ⬜ | [`fix/reconcile-724-historical-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/reconcile-724-historical-20260814) | [#862](https://github.com/ServerVpss/CentralDark/pull/862) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0824 | P4 | ⬜ | [`fix/reconcile-controlled-dissonance-canonical-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/reconcile-controlled-dissonance-canonical-20260815) | [#922](https://github.com/ServerVpss/CentralDark/pull/922) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0825 | P4 | ⬜ | [`fix/reconcile-live-state-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/reconcile-live-state-20260905) | [#1414](https://github.com/ServerVpss/CentralDark/pull/1414) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0826 | P4 | ⬜ | [`fix/referente-claro-resposta-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/referente-claro-resposta-20260816) | [#942](https://github.com/ServerVpss/CentralDark/pull/942) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0827 | P4 | ⬜ | [`fix/remote-bridge-public-oauth-20260913`](https://github.com/ServerVpss/CentralDark/tree/fix/remote-bridge-public-oauth-20260913) | [#1519](https://github.com/ServerVpss/CentralDark/pull/1519) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0828 | P4 | ⬜ | [`fix/remove-orphan-grok-build-gitlink-20260912`](https://github.com/ServerVpss/CentralDark/tree/fix/remove-orphan-grok-build-gitlink-20260912) | [#1509](https://github.com/ServerVpss/CentralDark/pull/1509) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0829 | P4 | ⬜ | [`fix/remove-unscannable-home-ledgers`](https://github.com/ServerVpss/CentralDark/tree/fix/remove-unscannable-home-ledgers) | [#1485](https://github.com/ServerVpss/CentralDark/pull/1485) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0830 | P4 | ⬜ | [`fix/repo-boundary-deterministic-workflows-20260808`](https://github.com/ServerVpss/CentralDark/tree/fix/repo-boundary-deterministic-workflows-20260808) | [#709](https://github.com/ServerVpss/CentralDark/pull/709) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0831 | P4 | ⬜ | [`fix/resposta-estado-menos-e-mais-20260816`](https://github.com/ServerVpss/CentralDark/tree/fix/resposta-estado-menos-e-mais-20260816) | [#945](https://github.com/ServerVpss/CentralDark/pull/945) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0832 | P4 | ⬜ | [`fix/restore-self-hosted-control-plane-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/restore-self-hosted-control-plane-20260815) | [#907](https://github.com/ServerVpss/CentralDark/pull/907) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0833 | P4 | ⬜ | [`fix/runtime-proof-same-target-20260815-clean`](https://github.com/ServerVpss/CentralDark/tree/fix/runtime-proof-same-target-20260815-clean) | [#885](https://github.com/ServerVpss/CentralDark/pull/885) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0834 | P4 | ⬜ | [`fix/runtime-scope-canonic-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/runtime-scope-canonic-20260815) | [#886](https://github.com/ServerVpss/CentralDark/pull/886) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0835 | P4 | ⬜ | [`fix/safe-git-fetch-refmap-20260817`](https://github.com/ServerVpss/CentralDark/tree/fix/safe-git-fetch-refmap-20260817) | [#1012](https://github.com/ServerVpss/CentralDark/pull/1012) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0836 | P4 | ⬜ | [`fix/segredo-sol-pivete-authority-20260805`](https://github.com/ServerVpss/CentralDark/tree/fix/segredo-sol-pivete-authority-20260805) | [#662](https://github.com/ServerVpss/CentralDark/pull/662) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0837 | P4 | ⬜ | [`fix/self-distillation-longitudinal-proof-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/self-distillation-longitudinal-proof-20260815) | [#933](https://github.com/ServerVpss/CentralDark/pull/933) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0838 | P4 | ⬜ | [`fix/semantic-closure-chefe-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/semantic-closure-chefe-20260815) | [#895](https://github.com/ServerVpss/CentralDark/pull/895) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0839 | P4 | ⬜ | [`fix/sentinela-dedupe-index-lag-20260814`](https://github.com/ServerVpss/CentralDark/tree/fix/sentinela-dedupe-index-lag-20260814) | [#863](https://github.com/ServerVpss/CentralDark/pull/863) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0840 | P4 | ⬜ | [`fix/sentinela-drift-github-vps-20260730`](https://github.com/ServerVpss/CentralDark/tree/fix/sentinela-drift-github-vps-20260730) | [#551](https://github.com/ServerVpss/CentralDark/pull/551) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0841 | P4 | ⬜ | [`fix/session-intelligence-harvester-skill-cleanup`](https://github.com/ServerVpss/CentralDark/tree/fix/session-intelligence-harvester-skill-cleanup) | [#1120](https://github.com/ServerVpss/CentralDark/pull/1120) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0842 | P4 | ⬜ | [`fix/setup-node24-selfhosted-fast`](https://github.com/ServerVpss/CentralDark/tree/fix/setup-node24-selfhosted-fast) | [#1164](https://github.com/ServerVpss/CentralDark/pull/1164) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0843 | P4 | ⬜ | [`fix/soul-human-input-boundary-20260822`](https://github.com/ServerVpss/CentralDark/tree/fix/soul-human-input-boundary-20260822) | [#1106](https://github.com/ServerVpss/CentralDark/pull/1106) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0844 | P4 | ⬜ | [`fix/soul-menos-e-mais-20260815`](https://github.com/ServerVpss/CentralDark/tree/fix/soul-menos-e-mais-20260815) | [#870](https://github.com/ServerVpss/CentralDark/pull/870) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0845 | P4 | ⬜ | [`fix/source-coverage-proof-20260822`](https://github.com/ServerVpss/CentralDark/tree/fix/source-coverage-proof-20260822) | [#1111](https://github.com/ServerVpss/CentralDark/pull/1111) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0846 | P4 | ⬜ | [`fix/trigger-fabric-artifact-dir-race-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/trigger-fabric-artifact-dir-race-20260824) | [#1139](https://github.com/ServerVpss/CentralDark/pull/1139) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0847 | P4 | ⬜ | [`fix/varredura-branches-orfas`](https://github.com/ServerVpss/CentralDark/tree/fix/varredura-branches-orfas) | [#1095](https://github.com/ServerVpss/CentralDark/pull/1095) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0848 | P4 | ⬜ | [`fix/varredura-convergencia-resiliente`](https://github.com/ServerVpss/CentralDark/tree/fix/varredura-convergencia-resiliente) | [#1097](https://github.com/ServerVpss/CentralDark/pull/1097) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0849 | P4 | ⬜ | [`fix/varredura-runner-selfhosted`](https://github.com/ServerVpss/CentralDark/tree/fix/varredura-runner-selfhosted) | [#1096](https://github.com/ServerVpss/CentralDark/pull/1096) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0850 | P4 | ⬜ | [`fix/workflow-startup-failures-20260905`](https://github.com/ServerVpss/CentralDark/tree/fix/workflow-startup-failures-20260905) | [#1437](https://github.com/ServerVpss/CentralDark/pull/1437) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0851 | P4 | ⬜ | [`fix/writer-portavel-fallback-20260808`](https://github.com/ServerVpss/CentralDark/tree/fix/writer-portavel-fallback-20260808) | [#727](https://github.com/ServerVpss/CentralDark/pull/727) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0852 | P4 | ⬜ | [`fix/writer-safe-push-reconcile-20260824`](https://github.com/ServerVpss/CentralDark/tree/fix/writer-safe-push-reconcile-20260824) | [#1132](https://github.com/ServerVpss/CentralDark/pull/1132) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0853 | P4 | ⬜ | [`fix/writer-unico-gate-deterministico-20260806`](https://github.com/ServerVpss/CentralDark/tree/fix/writer-unico-gate-deterministico-20260806) | [#664](https://github.com/ServerVpss/CentralDark/pull/664) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0854 | P4 | ⬜ | [`fix/zero-trust-material-nao-e-autoridade`](https://github.com/ServerVpss/CentralDark/tree/fix/zero-trust-material-nao-e-autoridade) | [#1006](https://github.com/ServerVpss/CentralDark/pull/1006) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0855 | P4 | ⬜ | [`governance/zero-regression-planning-20260821`](https://github.com/ServerVpss/CentralDark/tree/governance/zero-regression-planning-20260821) | [#1103](https://github.com/ServerVpss/CentralDark/pull/1103) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0856 | P4 | ⬜ | [`learn/brain-verde-delta-fechado-20260816`](https://github.com/ServerVpss/CentralDark/tree/learn/brain-verde-delta-fechado-20260816) | [#995](https://github.com/ServerVpss/CentralDark/pull/995) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0857 | P4 | ⬜ | [`memory/viver-em-paz-recall-20260817`](https://github.com/ServerVpss/CentralDark/tree/memory/viver-em-paz-recall-20260817) | [#1018](https://github.com/ServerVpss/CentralDark/pull/1018) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0858 | P4 | ⬜ | [`ops/memory-linker-inbox-20260913054341`](https://github.com/ServerVpss/CentralDark/tree/ops/memory-linker-inbox-20260913054341) | [#1510](https://github.com/ServerVpss/CentralDark/pull/1510) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0859 | P4 | ⬜ | [`pivete-dev-mcp-admin-guard`](https://github.com/ServerVpss/CentralDark/tree/pivete-dev-mcp-admin-guard) | [#285](https://github.com/ServerVpss/CentralDark/pull/285) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0860 | P4 | ⬜ | [`pivete/dev`](https://github.com/ServerVpss/CentralDark/tree/pivete/dev) | [#157](https://github.com/ServerVpss/CentralDark/pull/157) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0861 | P4 | ⬜ | [`pr1189`](https://github.com/ServerVpss/CentralDark/tree/pr1189) | [#1190](https://github.com/ServerVpss/CentralDark/pull/1190) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0862 | P4 | ⬜ | [`pr1198`](https://github.com/ServerVpss/CentralDark/tree/pr1198) | [#1210](https://github.com/ServerVpss/CentralDark/pull/1210) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0863 | P4 | ⬜ | [`promote/mcp-admin-guard-daeef967`](https://github.com/ServerVpss/CentralDark/tree/promote/mcp-admin-guard-daeef967) | [#286](https://github.com/ServerVpss/CentralDark/pull/286) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0864 | P4 | ⬜ | [`promover-mae-meta-lupa-20260727`](https://github.com/ServerVpss/CentralDark/tree/promover-mae-meta-lupa-20260727) | [#385](https://github.com/ServerVpss/CentralDark/pull/385) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0865 | P4 | ⬜ | [`reconcile/garimpo-one-site-one-mcp-admin-20260906`](https://github.com/ServerVpss/CentralDark/tree/reconcile/garimpo-one-site-one-mcp-admin-20260906) | [#1444](https://github.com/ServerVpss/CentralDark/pull/1444) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0866 | P4 | ⬜ | [`refactor/sol-agent-core-router`](https://github.com/ServerVpss/CentralDark/tree/refactor/sol-agent-core-router) | [#1114](https://github.com/ServerVpss/CentralDark/pull/1114) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0867 | P4 | ⬜ | [`refine/arquitetura-padrao-multi-percepcao-20260814`](https://github.com/ServerVpss/CentralDark/tree/refine/arquitetura-padrao-multi-percepcao-20260814) | [#867](https://github.com/ServerVpss/CentralDark/pull/867) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0868 | P4 | ⬜ | [`release/local-owner-test-20260905`](https://github.com/ServerVpss/CentralDark/tree/release/local-owner-test-20260905) | [#1416](https://github.com/ServerVpss/CentralDark/pull/1416) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0869 | P4 | ⬜ | [`research/triple-convergence-formula-20260816`](https://github.com/ServerVpss/CentralDark/tree/research/triple-convergence-formula-20260816) | [#944](https://github.com/ServerVpss/CentralDark/pull/944) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0870 | P4 | ⬜ | [`security/bloqueio-fonte-externa`](https://github.com/ServerVpss/CentralDark/tree/security/bloqueio-fonte-externa) | [#1098](https://github.com/ServerVpss/CentralDark/pull/1098) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0871 | P4 | ⬜ | [`skill/centraldark-esteira-motor`](https://github.com/ServerVpss/CentralDark/tree/skill/centraldark-esteira-motor) | [#1165](https://github.com/ServerVpss/CentralDark/pull/1165) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0872 | P4 | ⬜ | [`skill/openai-docs-on-demand`](https://github.com/ServerVpss/CentralDark/tree/skill/openai-docs-on-demand) | [#1501](https://github.com/ServerVpss/CentralDark/pull/1501) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0873 | P4 | ⬜ | [`sol/casco-vivo-counterproof-20260824`](https://github.com/ServerVpss/CentralDark/tree/sol/casco-vivo-counterproof-20260824) | [#1148](https://github.com/ServerVpss/CentralDark/pull/1148) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0874 | P4 | ⬜ | [`sol/ci-menos-e-mais-juiz-porta-20260908`](https://github.com/ServerVpss/CentralDark/tree/sol/ci-menos-e-mais-juiz-porta-20260908) | [#1462](https://github.com/ServerVpss/CentralDark/pull/1462) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0875 | P4 | ⬜ | [`sol/claude-precompact-continuity-20260908`](https://github.com/ServerVpss/CentralDark/tree/sol/claude-precompact-continuity-20260908) | [#1465](https://github.com/ServerVpss/CentralDark/pull/1465) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0876 | P4 | ⬜ | [`sol/contraprova-papagaio-casco-vivo`](https://github.com/ServerVpss/CentralDark/tree/sol/contraprova-papagaio-casco-vivo) | [#1150](https://github.com/ServerVpss/CentralDark/pull/1150) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0877 | P4 | ⬜ | [`sol/cristaliza-provider-access-lease-20260907`](https://github.com/ServerVpss/CentralDark/tree/sol/cristaliza-provider-access-lease-20260907) | [#1458](https://github.com/ServerVpss/CentralDark/pull/1458) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0878 | P4 | ⬜ | [`sol/global-continuity-root-crystal-20260909`](https://github.com/ServerVpss/CentralDark/tree/sol/global-continuity-root-crystal-20260909) | [#1483](https://github.com/ServerVpss/CentralDark/pull/1483) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0879 | P4 | ⬜ | [`sol/modelos-todos-tem-lugar-20260825`](https://github.com/ServerVpss/CentralDark/tree/sol/modelos-todos-tem-lugar-20260825) | [#1155](https://github.com/ServerVpss/CentralDark/pull/1155) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0880 | P4 | ⬜ | [`sol/preanswer-github-gate-20260908`](https://github.com/ServerVpss/CentralDark/tree/sol/preanswer-github-gate-20260908) | [#1463](https://github.com/ServerVpss/CentralDark/pull/1463) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0881 | P4 | ⬜ | [`sol/resiliencia-perturbacao-liberdade-fronteira-20260824`](https://github.com/ServerVpss/CentralDark/tree/sol/resiliencia-perturbacao-liberdade-fronteira-20260824) | [#1147](https://github.com/ServerVpss/CentralDark/pull/1147) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0882 | P4 | ⬜ | [`sol/soul-reanchor-bootstrap-20260901`](https://github.com/ServerVpss/CentralDark/tree/sol/soul-reanchor-bootstrap-20260901) | [#1393](https://github.com/ServerVpss/CentralDark/pull/1393) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0883 | P4 | ⬜ | [`sol/tailscale-mcp-pairing-20260913`](https://github.com/ServerVpss/CentralDark/tree/sol/tailscale-mcp-pairing-20260913) | [#1520](https://github.com/ServerVpss/CentralDark/pull/1520) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0884 | P4 | ⬜ | [`sol/traceabilidade-causal-20260822`](https://github.com/ServerVpss/CentralDark/tree/sol/traceabilidade-causal-20260822) | [#1110](https://github.com/ServerVpss/CentralDark/pull/1110) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0885 | P4 | ⬜ | [`test/autonomia-auto-squash-e2e-2-20260814`](https://github.com/ServerVpss/CentralDark/tree/test/autonomia-auto-squash-e2e-2-20260814) | [#815](https://github.com/ServerVpss/CentralDark/pull/815) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0886 | P4 | ⬜ | [`test/autonomia-auto-squash-e2e-20260814`](https://github.com/ServerVpss/CentralDark/tree/test/autonomia-auto-squash-e2e-20260814) | [#814](https://github.com/ServerVpss/CentralDark/pull/814) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0887 | P4 | ⬜ | [`test/autonomia-canario-20260803-final`](https://github.com/ServerVpss/CentralDark/tree/test/autonomia-canario-20260803-final) | [#636](https://github.com/ServerVpss/CentralDark/pull/636) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0888 | P4 | ⬜ | [`test/autonomia-promocao-canario-20260730`](https://github.com/ServerVpss/CentralDark/tree/test/autonomia-promocao-canario-20260730) | [#570](https://github.com/ServerVpss/CentralDark/pull/570) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0889 | P4 | ⬜ | [`test/brain-retrieval-ci-20260816`](https://github.com/ServerVpss/CentralDark/tree/test/brain-retrieval-ci-20260816) | [#992](https://github.com/ServerVpss/CentralDark/pull/992) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0890 | P4 | ⬜ | [`test/conflict-b-1787900873`](https://github.com/ServerVpss/CentralDark/tree/test/conflict-b-1787900873) | [#1348](https://github.com/ServerVpss/CentralDark/pull/1348) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+| 0891 | P4 | ⬜ | [`test/micro-deploy-gate-20260913`](https://github.com/ServerVpss/CentralDark/tree/test/micro-deploy-gate-20260913) | [#1517](https://github.com/ServerVpss/CentralDark/pull/1517) *hist.* | LEGADO_MERGEADO_REVALIDAR |
+
+## 🎯 NEXT_CURSOR
+
+Anexar este snapshot ao PR único; executar G1/G2 em lotes, começando pela proteção das 16 branches com PR aberto e conferindo os 66 fechamentos sem merge históricos; atualizar o HUD do PR e o mesmo inventário canônico mediante evidências. **NO_BRANCH_IS_DISPOSABLE=true; BRANCH_DELETE_ALLOWED=false**. Toda revisão e pendência documental deve ser revisitada, mesmo após merge.

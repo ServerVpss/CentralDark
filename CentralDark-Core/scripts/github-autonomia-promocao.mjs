@@ -1,5 +1,15 @@
 #!/usr/bin/env node
 /**
+ * #OBSERVACOES#
+ * @owner: scripts/github-autonomia-promocao.mjs
+ * @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+ * @last_updated: 2026-11-03T18:45:43.918Z
+ * @implementado: revisão pendente bloqueia FAST/ADVERSARIAL; squash exige preservação confirmada no repo.
+ * @pendente: testes source e CI em HEAD exato; não declarar promoção sem checks verdes.
+ * @estado: SOURCE_ONLY; BRANCH_DELETE_ALLOWED=false; CI_PENDING
+ * @next_cursor: testar scripts/github-autonomia-promocao.test.mjs, conferir same-head e readback.
+ */
+/**
  * Promoção autônoma e fail-closed de pull requests do CentralDark.
  *
  * Um único motor, dois modos:
@@ -37,6 +47,15 @@ export const DEFAULT_REQUIRED_WORKFLOWS = Object.freeze([
   "⚙️ PR auto-review CentralDark — checklist determinístico",
   "⚙️ Pipeline — Telegram + Painel",
 ]);
+
+// O REST do GitHub fornece delete_branch_on_merge; ausência do campo é UNKNOWN, não PASS.
+// Guarda universal anterior ao PUT /merge; não tenta corrigir configurações silenciosamente.
+export function repositoryMergeSafety(settings) {
+  const reasons = [];
+  if (settings?.allow_squash_merge !== true) reasons.push("SQUASH_NOT_ENABLED");
+  if (settings?.delete_branch_on_merge !== false) reasons.push("BRANCH_PRESERVATION_UNVERIFIED_OR_ENABLED");
+  return { ready: reasons.length === 0, reasons };
+}
 
 export const BLOCKING_LABELS = Object.freeze([
   "do-not-merge",
@@ -566,11 +585,10 @@ export function evaluateCandidate({
   }
 
   if (blockingReview) reasons.push("CHANGES_REQUESTED");
-  // Full review-thread convergence is adversarial; it is not a routine fast-path gate.
-  if (!fastPath) {
-    if (reviewThreadsOverflow) reasons.push("REVIEW_THREADS_OVERFLOW");
-    if (unresolvedThreads > 0) reasons.push(`UNRESOLVED_REVIEW_THREADS:${unresolvedThreads}`);
-  }
+  // P1/P2 e comentários antigos não viram resolvidos por estar na lane FAST.
+  // Proteção de reviews é global: FAST reduz deliberação opcional, não elimina dívida material.
+  if (reviewThreadsOverflow) reasons.push("REVIEW_THREADS_OVERFLOW");
+  if (unresolvedThreads > 0) reasons.push(`UNRESOLVED_REVIEW_THREADS:${unresolvedThreads}`);
 
   for (const finding of securityFindings) reasons.push(`SECURITY_FINDING:${finding}`);
 
@@ -811,8 +829,6 @@ async function baseUpdateRequired(client, repository, pr) {
 
 async function inspectCandidate(client, repository, number, trustedAuthors, requiredWorkflows) {
   const pr = await fetchPull(client, repository, number);
-  const auth = authorizationFor(pr);
-  const fastPath = auth.merge_policy === FAST_MERGE_POLICY && auth.viaBody;
   const headSnapshot = snapshotReader(client, repository, pr.head.sha);
   const baseSnapshot = snapshotReader(client, repository, pr.base.sha);
   const trustedMapFile = await baseSnapshot(CANONICAL_MAP_PATH);
@@ -836,9 +852,7 @@ async function inspectCandidate(client, repository, number, trustedAuthors, requ
 
   const [workflowRuns, threadState] = await Promise.all([
     fetchWorkflowRuns(client, repository, pr.head.sha),
-    fastPath
-      ? Promise.resolve({ unresolved: 0, overflow: false })
-      : fetchReviewThreadState(client, repository, number),
+    fetchReviewThreadState(client, repository, number),
   ]);
 
   return evaluateCandidate({
@@ -1003,6 +1017,19 @@ async function runPromote() {
           reasons: [...(live.reasons || []), "SQUASH_FIXED_POINT_NOT_PROVED"],
         });
       }
+      continue;
+    }
+
+    // Não presume que a flag da UI ficou desligada; reconsulta imediatamente antes do squash.
+    const repositorySettings = await client.request("GET", `/repos/${repository}`);
+    const preservation = repositoryMergeSafety(repositorySettings);
+    if (!preservation.ready) {
+      await upsertBlockComment(client, repository, {
+        ...live,
+        decision: "BLOCKED",
+        reasons: [...(live.reasons || []), ...preservation.reasons],
+      });
+      console.log(`PR=${pr.number} PRESERVE_BRANCH_GUARD=BLOCKED ${preservation.reasons.join(",")}`);
       continue;
     }
 

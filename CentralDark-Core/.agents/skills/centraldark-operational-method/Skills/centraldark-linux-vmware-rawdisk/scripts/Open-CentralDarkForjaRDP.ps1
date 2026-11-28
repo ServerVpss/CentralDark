@@ -1,12 +1,23 @@
 #Requires -Version 5.1
+# #OBSERVACOES#
+# @owner: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/scripts/Open-CentralDarkForjaRDP.ps1
+# @doc_ref: .agents/skills/centraldark-operational-method/Skills/centraldark-linux-vmware-rawdisk/SKILL.md
+# @last_updated: 2026-11-03T23:04:19.608Z
+# @implementado: resolver config F: funcional ou perfil Windows autenticado sem mutar aliases.
+# @pendente: validar handshake XRDP do launcher atualizado na Casa.
+# @estado: SOURCE_ONLY; SSH_CONFIG_RESOLVER_FAIL_CLOSED
+# @next_cursor: parser PowerShell, prova de alias real e readback GitHub.
 <#
 .SYNOPSIS
   CentralDark | Entrar graficamente no openKylin VMware pelo SSH existente.
 .DESCRIPTION
-  Reutiliza o alias openkylin-vm, sem senha, sem VPN extra e sem expor a
+  Resolve o arquivo de config SSH pelo mesmo alias: F: comprovado primeiro,
+  perfil Windows como fallback SOMENTE se autenticado e host verificado.
+  Reutiliza openkylin-vm, sem senha, sem VPN extra e sem expor a
   porta 3389 fora do Linux. Abre o XRDP pela conexao local 127.0.0.1:13390.
   Nao instala programas, nao reconfigura o SSH e nao altera discos/particoes.
   A senha do usuario Linux e solicitada diretamente na tela XRDP.
+  -CheckOnly verifica apenas o tunel existente, sem abrir novo SSH/RDP.
 .EXAMPLE
   .\Open-CentralDarkForjaRDP.ps1 -CheckOnly
 .EXAMPLE
@@ -17,7 +28,12 @@ param([switch]$CheckOnly)
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
 
-$sshConfig='F:\CentralDark\.ssh\config_openkylin'
+# Config local do mesmo alias: priorizar F: comprovado, aceitar perfil Windows como fallback.
+# Nao editar os arquivos SSH existentes nem aceitar chaves de host novas silenciosamente.
+$sshConfigCandidates=@(
+    'F:\CentralDark\.ssh\config_openkylin'
+    (Join-Path $env:USERPROFILE '.ssh\config_openkylin')
+) | Select-Object -Unique
 $sshAlias='openkylin-vm'
 $bind='127.0.0.1'
 $listenPort=13390
@@ -44,8 +60,29 @@ function Test-RdpHandshake {
         $client.Dispose()
     }
 }
-if(-not(Test-Path -LiteralPath $sshConfig -PathType Leaf)){throw 'SSH_CONFIG_NOT_FOUND'}
 $ssh=(Get-Command ssh.exe -ErrorAction Stop).Source
+function Resolve-WorkingSshConfig {
+    $found=$false
+    foreach($candidate in $sshConfigCandidates){
+        if(-not(Test-Path -LiteralPath $candidate -PathType Leaf)){continue}
+        $found=$true
+        # A rota só é elegível quando a identidade de host já confiada e o
+        # usuário normal autenticam; StrictHostKeyChecking=yes não aceita host novo.
+        try {
+            $result=@(& $ssh -F $candidate -o BatchMode=yes -o ConnectTimeout=5 `
+                -o StrictHostKeyChecking=yes -o NumberOfPasswordPrompts=0 $sshAlias 'hostname' 2>$null)
+            if($LASTEXITCODE -ne 0){continue}
+        }catch{
+            # Uma config falha nao impede testar outra existente; nao altera credenciais.
+            continue
+        }
+        if(($result -join '').Trim() -ceq 'CentralDark-OS'){
+            return $candidate
+        }
+    }
+    if(-not $found){throw 'SSH_CONFIG_NOT_FOUND'}
+    throw 'SSH_OPENKYLIN_ALIAS_UNREACHABLE_OR_IDENTITY_UNVERIFIED'
+}
 if(-not(Test-Path -LiteralPath $rdpExe -PathType Leaf)){throw 'WINDOWS_RDP_CLIENT_NOT_FOUND'}
 $ports=@(Get-NetTCPConnection -LocalPort $listenPort -ErrorAction SilentlyContinue |
     Where-Object { $_.LocalAddress -eq $bind })
@@ -61,6 +98,8 @@ if($ports.Count -gt 0){
     }
     Write-Receipt 'TUNNEL' 'REUSED_EXISTING'
 }elseif(-not $CheckOnly){
+    $sshConfig=Resolve-WorkingSshConfig
+    Write-Receipt 'SSH_CONFIG_SELECTED' $sshConfig
     $args='-N -T -o BatchMode=yes -o ExitOnForwardFailure=yes ' +
           '-o ServerAliveInterval=30 -o ServerAliveCountMax=3 ' +
           '-F "'+$sshConfig+'" -L 127.0.0.1:13390:127.0.0.1:3389 '+$sshAlias

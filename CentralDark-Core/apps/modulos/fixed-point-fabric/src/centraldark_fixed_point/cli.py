@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/src/centraldark_fixed_point/cli.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:26:02.893Z
+# @implementado: seal não escreve arquivo de prova dentro das fontes protegidas.
+# @pendente: gates estaticos no HEAD vigente; nenhum teste de runtime.
+# @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: gates de source e revisoes ainda abertas no PR #1381.
+
 import argparse
 import json
 import os
@@ -42,6 +51,16 @@ def build_engine(config: dict) -> FixedPointEngine:
         sample_interval_seconds=float(policy_config.get("sample_interval_seconds", 10)),
         max_rounds=int(policy_config.get("max_rounds", 12)),
     )
+
+
+def _seal_output_overlaps(root: Path, protected_paths: list[str], output: Path) -> bool:
+    canonical_root = root.resolve()
+    canonical_output = output.resolve()
+    for relative in protected_paths:
+        protected = (canonical_root / relative).resolve()
+        if canonical_output == protected or (protected.is_dir() and canonical_output.is_relative_to(protected)):
+            return True
+    return False
 
 
 def main(argv=None) -> int:
@@ -147,6 +166,9 @@ def main(argv=None) -> int:
         print(json.dumps(compact_project(Path(args.source), Path(args.destination)), indent=2))
         return 0
     elif args.command == "seal":
+        if _seal_output_overlaps(Path(args.root), args.paths, Path(args.output)):
+            print("SEAL_OUTPUT_OVERLAPS_PROTECTED_PATH", file=sys.stderr)
+            return 2
         seal_payload = build_seal(Path(args.root), args.paths)
         Path(args.output).write_text(json.dumps(seal_payload, indent=2), encoding="utf-8")
         print(json.dumps(seal_payload, indent=2))

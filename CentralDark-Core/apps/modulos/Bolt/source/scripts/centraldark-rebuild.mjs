@@ -1,8 +1,16 @@
 #!/usr/bin/env node
+// #OBSERVACOES#
+// @owner: apps/modulos/Bolt/source/scripts/centraldark-rebuild.mjs
+// @doc_ref: docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md
+// @last_updated: 2026-11-03T18:19:00.000Z
+// @implementado: receita unica Windows x64 e Linux x64, preservando hash e ledger.
+// @pendente: executar gates de source; BUILD/RUNTIME NAO EXECUTADOS neste PR.
+// @estado: SOURCE_ONLY; BUILD_NOT_TESTED; NO_VPS; NO_DEPLOY
+// @next_cursor: validar o diff com os testes existentes e conferir SAME_HEAD.
 // Receita canonica: construir apenas em worktree limpa, contar somente BUILD_RC=0 com hashes.
 // Nao instala, nao faz merge/push/deploy, e nao declara runtime PASS sem smoke separado.
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, openSync, closeSync, readFileSync, writeFileSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, openSync, closeSync, readFileSync, readdirSync, writeFileSync, rmSync, statSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -42,7 +50,7 @@ async function main() {
     return;
   }
   if (!process.argv.includes('--execute')) throw new Error('USE_--verify_OR_--execute');
-  if (process.platform !== 'win32') throw new Error('WINDOWS_BUILD_ONLY');
+  if (!['win32', 'linux'].includes(process.platform) || process.arch !== 'x64') throw new Error('UNSUPPORTED_BUILD_PLATFORM');
   if (!latest) throw new Error('NO_SUCCESSFUL_BASELINE');
   // Impede duas sessoes no mesmo workspace e descarta checkout sujo.
   if (git('status', '--porcelain', '--untracked-files=normal')) throw new Error('WORKTREE_DIRTY_USE_DEDICATED_CLEAN_WORKTREE');
@@ -61,12 +69,34 @@ async function main() {
     const updated = originalPackage.replace(/("version"\s*:\s*")\d+\.\d+\.\d+(")/, (_match, before, after) => before + next + after);
     if (updated === originalPackage || JSON.parse(updated).version !== next) throw new Error('VERSION_WRITE_PRECHECK_FAILED');
     writeFileSync(packageFile, updated, 'utf8');
-    const install = await runLogged('cmd.exe', ['/d', '/s', '/c', 'pnpm.cmd install --frozen-lockfile --prod=false'], logfile);
+    const windows = process.platform === 'win32';
+    const command = windows ? 'cmd.exe' : 'pnpm';
+    const installArgs = windows
+      ? ['/d', '/s', '/c', 'pnpm.cmd install --frozen-lockfile --prod=false']
+      : ['install', '--frozen-lockfile', '--prod=false'];
+    const buildArgs = windows
+      ? ['/d', '/s', '/c', 'pnpm.cmd centraldark:build:win']
+      : ['electron:build:linux'];
+    const install = await runLogged(command, installArgs, logfile);
     if (install.code !== 0) throw new Error('INSTALL_FAILED_EXIT_' + install.code + '_LOG_' + logfile);
-    const result = await runLogged('cmd.exe', ['/d', '/s', '/c', 'pnpm.cmd centraldark:build:win'], logfile);
+    const result = await runLogged(command, buildArgs, logfile);
     if (result.code !== 0) throw new Error('BUILD_FAILED_EXIT_' + result.code + '_LOG_' + logfile);
-    const installer = path.join(sourceDir, 'dist', 'CentralDark-Setup-' + next + '-x64.exe');
-    const exe = path.join(sourceDir, 'dist', 'win-unpacked', 'CentralDark.exe');
+    const dist = path.join(sourceDir, 'dist');
+    // A configuracao electron-builder.yml existente produz AppImage e deb no Linux.
+    // Sem inferir sucesso por nome: ambos os formatos exigem arquivo novo e SHA256.
+    const linuxFiles = windows ? [] : (existsSync(dist) ? readdirSync(dist) : [])
+      .filter((file) => file.startsWith(pkg.name + '-' + next + '-linux-'));
+    const selectLinux = (extension) => {
+      const matches = linuxFiles.filter((file) => file.endsWith(extension));
+      if (matches.length !== 1) throw new Error('BUILD_ARTIFACT_AMBIGUOUS_OR_MISSING_' + extension);
+      return path.join(dist, matches[0]);
+    };
+    const installer = windows
+      ? path.join(dist, 'CentralDark-Setup-' + next + '-x64.exe')
+      : selectLinux('.deb');
+    const exe = windows
+      ? path.join(dist, 'win-unpacked', 'CentralDark.exe')
+      : selectLinux('.AppImage');
     if (!existsSync(installer) || !existsSync(exe)) throw new Error('BUILD_ARTIFACTS_MISSING');
     if (statSync(installer).mtimeMs < startedAt - 10000 || statSync(exe).mtimeMs < startedAt - 10000) {
       throw new Error('STALE_ARTIFACTS_NOT_A_NEW_BUILD');
@@ -76,14 +106,14 @@ async function main() {
     const entry = {
       id: 'builder-' + next + '-' + commit.slice(0, 7),
       builder_version: next, app_version: next, built_at: setupProof.mtime, validated_at: null,
-      source_commit: commit, source_pr: null, platform: 'win32-x64',
+      source_commit: commit, source_pr: null, platform: windows ? 'win32-x64' : 'linux-x64',
       build_status: 'PASS', runtime_status: 'NOT_PROVEN', deploy_status: 'NOT_PROVEN',
       artifacts: {
         installer: { file: setupProof.file, bytes: setupProof.bytes, sha256: setupProof.sha256 },
-        executable: { file: 'win-unpacked/' + exeProof.file, bytes: exeProof.bytes, sha256: exeProof.sha256 },
+        executable: { file: windows ? 'win-unpacked/' + exeProof.file : exeProof.file, bytes: exeProof.bytes, sha256: exeProof.sha256 },
       },
-      proof: { build: 'pnpm centraldark:build:win exit 0; hashes + fresh output verified', runtime: 'NOT_TESTED', evidence_workspace: logfile },
-      caveats: ['BUILD_PASS nao certifica renderer, instalacao externa, merge nem deploy. Validar exe com --enable-logging em gate separado.'],
+      proof: { build: (windows ? 'pnpm centraldark:build:win' : 'pnpm electron:build:linux') + ' exit 0; hashes + fresh output verified', runtime: 'NOT_TESTED', evidence_workspace: logfile },
+      caveats: ['BUILD_PASS nao certifica renderer, instalacao externa, merge nem deploy. Validar aplicativo em gate separado.'],
     };
     const updatedLedger = appendSuccessful(ledger, entry);
     writeLedgerAtomic(ledgerFile, updatedLedger);

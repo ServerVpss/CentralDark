@@ -1,5 +1,121 @@
 # Branches → PR-mãe #1540
 
+<!-- CURRENT_BRANCH_FUNNEL_891_20261103 -->
+## 🎮 CURRENT · Funil das 891 branches — PR #1977
+
+<!-- UNIVERSAL_PR_DIAGRAM_TRIPLE_20261103 -->
+### 🎨+1 Diagramas derivados em todos os PRs — um motor, três formatos
+
+Reuso de owners já existentes: `scripts/lupa/diagram-route-gate.mjs` lê a explicação do PR, preserva Mermaid explícito e, sem Mermaid, utiliza `scripts/grafo-vivo/mermaid-core.mjs` para projeção auditável do fluxo **de revisão**. `scripts/lupa/diagram-route-excalidraw.mjs` e seu desenho Obsidian continuam preservados. O renderizador `skills/mermaid_render.py` reusa `skills/pretty-mermaid/scripts/render.mjs`, produzindo **SVG + PNG + ASCII** e fonte `.mmd` num artifact de `.github/workflows/porta-de-entrada.yml`. Tema/saída preferida são adaptativos, mas o trio é sempre requisitado.
+
+**Independência de modelo:** qualquer assistente pode fornecer Mermaid ou imagens autorizadas no PR, sem API nova, sem writers paralelos, sem permissão para transmitir diagrama privado para serviço remoto. Somente fonte local por padrão; Kroki exige opt-in. Check summary apresenta Mermaid e artifact contém recibo com HEAD e SHA-256. Isso é evidência, não prova de execução ou runtime.
+
+**CURRENT:** Mermaid explícito inserido na descrição do [#1977](https://github.com/ServerVpss/CentralDark/pull/1977); código, teste, documentação e workflow no mesmo PR. **Renderer CI ainda queued/pending**, então `SVG_FILE/PNG_FILE/ASCII_FILE=NOT_YET_PROVEN`. Não bloquear branches por falha da apresentação; `BRANCH_DELETE_ALLOWED=false` segue vigente.
+
+<!-- /UNIVERSAL_PR_DIAGRAM_TRIPLE_20261103 -->
+
+
+<!-- PUSH_AUDIT_VISUAL_PR_TRACE_20261103 -->
+### 🍒+1 Auditoria global sem gate cego
+
+**Intenção recuperada do CHEFE:** o GitHub é o caderno de commits/PRs/anotações; o PR deve exibir **arquivo + linha + erro + SHA** quando a localização for comprovável. O código/UI precisa de teste visual **somente quando o delta for visual**, reaproveitando `apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs` e `.github/workflows/test.yml`. Nenhum teste visual vira certificação de instalação em openKylin ou VPS.
+
+**Push direto na `main`:** a regra local `scripts/lupa/writer-safe-push-main.sh` já protege writers cooperativos, mas proteção remota da `main` não foi comprovada. O owner `scripts/github-autonomia-varredura.mjs`, via o `push` já existente em `.github/workflows/porta-de-entrada.yml`, ganha o modo **read-only** `audit-main-push`. Ele relaciona o SHA de merge a um PR quando confirmado; caso contrário registra `UNLINKED_MAIN_PUSH_REVIEW` ou `UNKNOWN`, como `::warning` e resumo, **sem reverter, bloquear ou eliminar branch**. Isso é auditoria **pós-push**, não server-side branch protection.
+
+**Lupa com erro localizado:** `scripts/lupa/diagram-route-gate.mjs` continua emitindo JSON e passa a emitir annotations GitHub Actions para erros com arquivo e linha comprováveis. Sem linha identificável, mantém código e mensagem sem inventar posição. Testes nos mesmos owners `diagram-route-gate.test.mjs` e `github-autonomia-varredura.test.mjs`; não afirmar suite verde antes da execução.
+
+**P1 e GitHub:** revisão material não resolvida exige reconciliação, mas eventos de push, screenshots e anotações são **evidência**, não novos gates globais que possam bloquear trabalhos sem relação. O PR #1977 ainda não foi integrado à `main`; mudanças e recibos permanecem na branch. **`SOURCE_ONLY=true`, `VPS_REQUIRED=false`, `DELETED=0`.**
+
+<!-- /PUSH_AUDIT_VISUAL_PR_TRACE_20261103 -->
+
+
+<!-- TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
+**🍒 REGRA ZERO — SEM VPS · SEM DEPLOY · SEM TESTES DE RUNTIME.** A única meta de integração é manter source coerente, revisado e alinhado no GitHub e depois `main`, preservando **todas** as branches. O código bem feito, incluindo contratos, imports, owners, rastros e gates estáticos, é o critério de prontidão nesta missão; `RUNTIME=NOT_TESTED_BY_SCOPE` não bloqueia a promoção do source, mas tampouco pode ser relatado como funcionando já comprovado.
+
+**Reuso obrigatório sem duplicação:** `.agents/skills/centraldark-operational-method/Skills/michelin-3-estrelas/SKILL.md` (⭐ construir, ⭐⭐ integrar, ⭐⭐⭐ provar proporcionalmente ao **source**) e `.agents/skills/centraldark-operational-method/Skills/centraldark-autonomous-conflict-costura/SKILL.md` (owner primário `.agents/skills/git-conflict-resolve-house-standard/SKILL.md`, `CURRENT|INCOMING|BOTH|STRUCTURED|YELLOW`). Para cada ramo, buscar trabalho pendente do Hermes, Corpo Único e Instinto Superior antes de classificar como completo; `MERGED != REVIEW_CLEARED` e `UNKNOWN != PASS`.
+
+<!-- /TOP_HUD_CODE_FIRST_MICHELIN_COSTURA_20261103 -->
+
+<!-- CURRENT_GREEN_P1_SQUASH_GATE_20261103 -->
+### 🎯 CURRENT — P1 → 8 gates SAME_HEAD → squash sem apagar branches
+
+**OWNER DO PROMOTOR:** `scripts/github-autonomia-promocao.mjs` + `.github/workflows/autonomia-promocao.yml` + `scripts/github-autonomia-green-guard.mjs`; contrato/documentação existentes em [03-PR-MERGE-DEPLOYMENT.md](./03-PR-MERGE-DEPLOYMENT.md). **O GitHub é o caderno da intenção, código, avaliações e recibos; `main` é a fonte do código integrado.**
+
+**Condições de promoção:** `PR_AUTHORIZED ∧ NOT_DRAFT ∧ MERGEABLE ∧ SAME_HEAD ∧ SAME_BASE ∧ P1/P2_REVIEW_THREADS_CLEARED ∧ ALL_8_REQUIRED_WORKFLOWS_SUCCESS ∧ CANONICAL_PASS ∧ SQUASH_ENABLED ∧ DELETE_BRANCH_ON_MERGE_FALSE`. Sem qualquer componente comprovado, `SQUASH_READY=false`; `QUEUED != PASS` e `MERGED != REVIEW_CLEARED`.
+
+**P1 causal no código corrigido na branch deste PR (não na main):**
+- `evaluateCandidate` agora bloqueia threads pendentes e overflow **em FAST e ADVERSARIAL**, sem caminho `Promise.resolve({unresolved:0})` em FAST.
+- `runPromote` consulta `GET /repos/{owner}/{repo}` antes do `PUT /merge`, exigindo `allow_squash_merge=true` e `delete_branch_on_merge=false`; ausência da flag também bloqueia. **Nenhum ajuste silencioso de configuração.**
+- A lista de obrigatórios do workflow foi corrigida para o nome real `⚙️ PR auto-review CentralDark — checklist determinístico`.
+- `scripts/farm-pr.sh` não realiza mais squash direto; somente despacha recheck ao **promotor canônico**, sem apagar branch. O teste existente de autonomia foi estendido para regressão de reviews e retenção.
+- P1 pós-merge de [#1973](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463) ainda apresenta thread não resolvida; correção documental no #1977 não comprova resolução até passar gates/estar na main.
+
+**Contraprova de 03/11/2026 antes desta edição:** no HEAD `564d2fdd6d24036e30ffcd7542731f24570ef645`, **0/8 obrigatórios success**, com `1 missing`, `1 skipped` e `6 queued/pending`; PR em Draft. O conector atual não expõe `delete_branch_on_merge` (valor UNKNOWN), mas o novo promotor fail-closed pode obter a flag no REST bruto quando executado. **Apenas source alterado**, sem teste CI, sem merge, sem excluir branch, sem VPS.
+
+**NEXT_CURSOR:** concluir demais achados P1 por owner, executar suíte de source e confirmar GitHub Actions `success` no HEAD final; confirmar retenção no repo; tirar de Draft quando os critérios de revisão forem atendidos; só então squash com SHA exato e readback de branch preservada. Não induzir verde alterando checks ou removendo gate.
+
+<!-- /CURRENT_GREEN_P1_SQUASH_GATE_20261103 -->
+
+
+<!-- INSTALLER_COHERENCE_20261103 -->
+**🍒+1 CONTRATO ACOPLADO:** `INSTALLER_FOLLOWS_SOURCE=REQUIRED`. Qualquer evolução do source Electron/cockpit/Hermes embutido, builder, targets de sistema ou cápsula exige revisar e versionar o **mesmo `install.sh`** com seus documentos/testes no PR ativo. O source Linux/openKylin precisa manter `.deb`, `.AppImage`, identidade KDE, entrypoint e ledger SHA coerentes; Windows NSIS é preservado. Nenhuma ação da VPS ou runtime é pré-requisito deste trabalho de source; nenhum instalador foi executado.
+
+**Patch atual:** `install.sh` recebeu `--desktop-check`, `--desktop-build`, `--desktop-install-deb --yes`; `centraldark-rebuild.mjs` e a ponte Electron usam o builder único em Windows/Linux; `electron-builder.yml`, `package.json` e `resources/runtime/manifest.json` mapeiam pacotes/entrypoints; `docs/INSTALADOR/32-builder-multiplataforma-centraldark.md` contém o mesmo delta. **Não confundir código versionado com build/deb instalado; BUILD=NOT_PROVEN.**
+
+<!-- /INSTALLER_COHERENCE_20261103 -->
+
+
+
+<!-- SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
+### 🧬 Escopo atual — integração somente no código GitHub
+
+**SOURCE_ONLY=true · VPS_REQUIRED=false · DEPLOY_REQUIRED=false · RUNTIME_GATE_FOR_THIS_MISSION=false.**
+
+Decisão vigente do CHEFE: reconciliar **no código fonte da mesma CentralDark** (owners existentes, receitas, metadata, documentação e review debts) e comprovar a diferença por SHA/readback no GitHub. **Não executar VPS, Casa, serviços, Docker, instalação ou deploy**; esses setores não são pré-requisitos desta missão. Isso não equivale a alegar que algum runtime foi testado.
+
+**Ajustes no PR #1977 (source):** `scripts/farm-pr.sh` preserva as referências remotas/locais e não executa `reset --hard`; quatro receitas Git espelhadas e a skill `.claude/skills/pr-merge-autonomous/SKILL.md` não instruem `--delete-branch`; `apps/instinto-superior/src/data/painel-unico.ts` agora apresenta o `#OBSERVACOES#` no cabeçalho, vinculado ao receipt `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`. A pendência P1 do PR #1973 só passa a **DOC_SOURCE_PATCHED_IN_PR**, não a `RESOLVED`, enquanto o gate de validação e revisão não comprovarem a correção.
+
+**Pré-validação estática do diff do PR #1977:** 10 arquivos alterados; os 2 arquivos executáveis (`painel-unico.ts` e `farm-pr.sh`) atendem às condições de metadados das primeiras 65 linhas e `@code_ref`/timestamp/doc alterado na mesma proposta. **Validador completo ainda não executado.** O critério de conclusão é alinhamento de source no GitHub com revisão comprovada, não deploy.
+
+<!-- /SOURCE_ONLY_CODE_ALIGNMENT_20261103 -->
+
+<!-- BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
+@code_ref: scripts/farm-pr.sh
+@last_updated: 2026-11-03T17:53:58.872Z
+@estado: SOURCE_ONLY; BRANCH_DELETE_ALLOWED=false; RUNTIME_UNKNOWN
+@next_cursor: validar lint e diff no PR #1977; sem VPS nem deploy neste escopo.
+
+**Correção do executor de PRs no source:** `scripts/farm-pr.sh` removeu os argumentos de exclusão de branch em `gh pr merge` e o `reset --hard` posterior. Agora tenta sincronizar `main` apenas por fast-forward e informa quando o merge não foi comprovado. A documentação das receitas Git/Claude também foi alinhada para não recomendar limpeza de refs. **Este recibo prova alteração de source, não execução do script nem adoção universal por executores.**
+
+### 🔒 Regra vigente do CHEFE — nenhuma branch descartável
+
+**BRANCH_DELETE_ALLOWED=FALSE · BRANCH_DISPOSABLE=NONE · PRESERVE_ALL_REFS=TRUE.**
+
+Por decisão explícita do CHEFE, as **891 branches do snapshot** (mais a branch do próprio PR #1977 e quaisquer refs posteriores) são **patrimônio de estudo e trabalho ainda potencialmente necessário** ao código do **Hermes, Corpo Único e Instinto Superior**. Nenhuma pode ser rotulada como descartável ou excluída somente por estar atrás da `main`, ter PR mergeado/fechado, não apresentar diff ou ter pouca atividade. **Não fazer delete remoto/local, prune destrutivo, force-push ou faxina de worktrees por inferência de redundância.** O funil é auditoria e reconciliação, não mutação/exclusão. Só uma **nova autorização explícita do CHEFE que revogue esta trava**, após prova de preservação completa, poderá mudar a política; não antecipar a autorização.
+
+**Achados/revisões são dívida rastreável:** para **cada branch e PR vinculado**, consultar o histórico de comentários (Conversation), reviews, threads inline inclusive `is_resolved`/`is_outdated`, CI/gates e recibos prévios. Registrar **URL do comentário, PR, SHA revisado, arquivo/linha, severidade, owner/documento, estado atual e contraprova**. Revisão antiga, comentário P1/P2, alerta mesmo após squash/merge ou thread outdated **não equivale a RESOLVED**. Pode deixar dívida documental **PÓS-MERGE**; verificar os arquivos apontados no source **atual**, as seções `#OBSERVACOES#`, receipts e os gates, antes de marcar `RESOLVED`. `MERGED != REVIEW_CLEARED`; `COMMENT_EXISTS != ISSUE_FIXED`; `NO_DIFF != NO_WORK`.
+
+**Caso inicial PROVADO:** [PR #1973 — review P1 ainda sem resolução](https://github.com/ServerVpss/CentralDark/pull/1973#discussion_r4458129463), commit revisado `af009c9fa1bf64acf441f6789da76617a0ce9b43`, source `apps/instinto-superior/src/data/painel-unico.ts:258`, `CODE_DOC_NOT_UPDATED_IN_SAME_DIFF`. A revisão exige `#OBSERVACOES#` e `docs/receipts/2026-10-22-COCKPIT-UI-OWNERS.md`; [#1973 foi integrado](https://github.com/ServerVpss/CentralDark/pull/1973) no merge `55db287f203d3208bc92d50e1a21b7250a827d21`, mas o thread está **`is_resolved=false`** no readback de 03/11. **REVIEW_DEBT=OPEN · POST_MERGE_DOCS=UNVERIFIED**. Este funil apenas registra a pendência; não declara correção nem abre outro owner de código.
+
+**Hud:** a fila P0–P4 mantém prioridade de **investigação**, nunca preferência de exclusão. Decisões permitidas sob a trava: `KEEP`, `REVIEW_DEBT_OPEN`, `NEEDS_CODE_COMPLETION`, `PROMOTE_AFTER_PROOF`, `UNKNOWN`; `DELETE` e `DELETE_ELIGIBLE` **desabilitados**. A prova de revisão entra em **G3/G4 antes de qualquer `[x]` individual**, inclusive quando o PR já estiver fechado/mergeado.
+
+<!-- /BRANCH_REVIEW_DEBT_PRESERVATION_20261103 -->
+
+**Missão viva e HUD principal:** [PR #1977 — 18 ondas marcáveis](https://github.com/ServerVpss/CentralDark/pull/1977) · **snapshot integral:** [891 branches enumeradas com prioridade P0–P4](./RECEIPTS/2026-11-03-branches-891-funil-hud.md).
+
+- Medição: 892 refs remotas distintas incluindo `main` = **891 secundárias**, antes da criação da branch do próprio PR #1977.
+- Categorias iniciais: **P0 16** refs de PR aberto; **P1 66** refs marcadas como PR fechado sem merge no histórico; **P2 96** sem PR/status antigo; **P3 321** não documentadas no inventário anterior; **P4 392** historicamente mergeadas. Esses rótulos são ordens de inspeção, não autorização para apagar.
+- Owner continua sendo **este arquivo**; o anexo é fotografia e lista de trabalho, não segundo inventário autoritativo. O conteúdo de 15/09 abaixo foi mantido intacto.
+- **Zero exclusões nesta abertura.** Exige PR, SHA, comparação com `main`, preservação de delta útil, contraprova, decisão individual e readback.
+<!-- CHECKPOINT_G1_82_G2_10 -->
+- **Checkpoint G1 parcial (03/11/2026):** 16/16 branches do snapshot ligadas a PRs abertos (proteger), mais a branch nova do #1977 fora do baseline; 66/66 branches com PR histórico fechado sem merge reconsultadas e confirmadas `merged=false`. Total de vínculos PR verificados **82/891**.
+- **Checkpoint G2 parcial (03/11/2026):** **66/66** refs P1 comparadas com `main@55db287f203d3208bc92d50e1a21b7250a827d21`: 60 divergem com arquivos alterados, 4 divergem mas compare lista 0 arquivos, 2 são ancestrais da `main` (`ahead=0`, IDs 0031/0077). Dependências e equivalência pós-squash continuam `UNKNOWN`; nenhum `DELETE_ELIGIBLE` comprovado.
+- **HUD vivo:** [PR #1977](https://github.com/ServerVpss/CentralDark/pull/1977) contém o progresso; [anexo nominal](./RECEIPTS/2026-11-03-branches-891-funil-hud.md) possui 891 refs com estado e 66 comparações Git auditáveis. `DELETE_ELIGIBLE=0`, `DELETED=0`, ondas `0/18` concluídas; nenhuma ref eliminada.
+<!-- /CHECKPOINT_G1_82_G2_10 -->
+- **NEXT_CURSOR:** monitorar as etapas `[ ]` no corpo do PR #1977 e atualizar o CURRENT deste owner conforme resultados comprovados.
+
+<!-- /CURRENT_BRANCH_FUNNEL_891_20261103 -->
+
 Inventário canônico e individual das refs remotas. Gerado em 2026-09-15.
 
 Owner: [PR #1540](https://github.com/ServerVpss/CentralDark/pull/1540)

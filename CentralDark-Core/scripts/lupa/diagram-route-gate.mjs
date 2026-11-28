@@ -3,16 +3,18 @@
  * #OBSERVACOES# | CENTRALDARK.FLOW.REGISTRY.DOC_SYNC
  * @owner: scripts/lupa/diagram-route-gate.mjs
  * @doc_ref: docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md
- * @last_updated: 2026-10-16T10:26:40.796Z
+ * @last_updated: 2026-11-03T20:05:38.266Z
  * @scope: gate existente; incremental sobre arquivos alterados, sem varredura destrutiva.
- * @status: CODE_GATE_IMPLEMENTED; GLOBAL_ENFORCEMENT_PENDING_MAIN_AND_CI
+ * @status: SOURCE_ONLY; PR_DIAGRAM_THREE_FORMATS_ADDED; MAIN_AND_CI_PENDING
  * @next_cursor: validar gate e contraprova no HEAD/branch protection.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { syncObsidian } from "./diagram-route-excalidraw.mjs";
+import { buildGraphProjection } from "../grafo-vivo/mermaid-core.mjs";
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, "../..");
@@ -20,8 +22,173 @@ const REGISTRY_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/FLOW-REGISTRY
 const DIAGRAM_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/ARCHITECTURE.mmd";
 const TRIGGERS_PATH = "docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/TRIGGERS.yml";
 
+
+/**
+ * Diagrama de PR é projeção derivada, nunca altera ARCHITECTURE.mmd.
+ * Mermaid explícito é prioridade; o fallback só descreve o processo de revisão.
+ */
+export function buildPrDiagramPreview({ number, title, body = "", headSha = "", files = [] } = {}) {
+  const label = (value, limit = 76) => String(value || "")
+    .replace(/[\r\n\t]+/g, " ").replace(/["\\<>{}[\]|]/g, "'")
+    .replace(/\s+/g, " ").trim().slice(0, limit);
+  const fence = String.fromCharCode(96).repeat(3);
+  const blockPattern = new RegExp("(?:^|\\n)[ \\t]*" + fence +
+    "[ \\t]*mermaid[^\\n]*\\n([\\s\\S]*?)(?:\\n[ \\t]*" + fence + ")", "i");
+  const explicit = String(body || "").match(blockPattern);
+  const preferred = files.some((file) => /\.(?:tsx|jsx|vue|svelte|css|scss)$/i.test(file))
+    ? "png" : files.some((file) => /\.(?:sh|py|go|rs|mjs|cjs)$/i.test(file))
+      ? "ascii" : "svg";
+  if (explicit && explicit[1].trim().length <= 12000 &&
+      /^(?:flowchart|graph|sequenceDiagram|stateDiagram(?:-v2)?|classDiagram|erDiagram|gantt|journey|pie|mindmap|timeline)\b/i.test(explicit[1].trim())) {
+    return { kind: "PR_MERMAID_EXPLICIT", preferred, mermaid: explicit[1].trim() + "\n" };
+  }
+  const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "UNKNOWN";
+  const prTitle = label(title || "Revisar alteracao");
+  const sha = /^[0-9a-f]{40}$/i.test(String(headSha || "")) ? headSha.slice(0, 12) : "HEAD_UNKNOWN";
+  // Grafo Vivo existente fornece a projeção, fingerprint e verificação de arestas.
+  // Este grafo explica o PR: não é a topologia material do sistema nem altera o MMD canônico.
+  const labels = [
+    ["PR", "PR #" + id + ": " + prTitle],
+    ["SOURCE", "Código/Docs: comparar diffs"],
+    ["HEAD", "HEAD: " + sha],
+    ["CHECK", "Revisar: código, comentários e gates"],
+    ["DIAGRAM", "Mermaid: projeção derivada"],
+    ["SVG", "SVG: leitura no GitHub"],
+    ["PNG", "PNG: visualização"],
+    ["ASCII", "ASCII: terminal/chat"],
+    ["RECEIPT", "Recibo no PR / SHA"],
+  ];
+  const edges = [
+    ["PR", "SOURCE"], ["SOURCE", "HEAD"], ["HEAD", "CHECK"],
+    ["CHECK", "DIAGRAM"], ["DIAGRAM", "SVG"], ["DIAGRAM", "PNG"],
+    ["DIAGRAM", "ASCII"], ["SVG", "RECEIPT"], ["PNG", "RECEIPT"],
+    ["ASCII", "RECEIPT"],
+  ];
+  const graph = buildGraphProjection({
+    nodes: labels.map(([id, label]) => ({ id, label, group: "core" })),
+    edges: edges.map(([from, to]) => ({ from, to })),
+  });
+  if (!graph.validation.ok || graph.audit.dangling_edges.length || graph.audit.duplicate_edges.length || graph.audit.self_loops.length) {
+    throw new Error("PR_DIAGRAM_GRAPH_AUDIT_FAILED");
+  }
+  return {
+    kind: "PR_EXPLANATION_DERIVED", preferred,
+    mermaid: graph.mermaid + "\n", graph_fingerprint: graph.fingerprint,
+  };
+}
+
+export function prDiagramArtifactNames(number) {
+  const id = Number.isInteger(Number(number)) && Number(number) > 0 ? String(number) : "unknown";
+  const base = "centraldark-pr-" + id + "-mermaid";
+  return { mmd: base + ".mmd", svg: base + ".svg", png: base + ".png", ascii: base + ".txt" };
+}
+
+function renderPrDiagramPreview() {
+  const index = process.argv.indexOf("--out-dir");
+  const output = index >= 0 ? process.argv[index + 1] : null;
+  if (!output || !process.env.GITHUB_EVENT_PATH) throw new Error("PR_DIAGRAM_EVENT_OR_OUT_DIR_MISSING");
+  const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
+  if (!event.pull_request?.number || !event.pull_request?.head?.sha) {
+    throw new Error("PR_DIAGRAM_REQUIRES_PULL_REQUEST");
+  }
+  const pr = event.pull_request;
+  let files = String(process.env.CENTRALDARK_CHANGED_FILES || "").split("\n").filter(Boolean);
+  if (files.length === 0 && /^[0-9a-f]{40}$/i.test(String(event.pull_request.base?.sha || ""))) {
+    try {
+      files = git(["diff", "--name-only", event.pull_request.base.sha, pr.head.sha, "--"])
+        .split(/\r?\n/).filter(Boolean);
+    } catch { files = []; }
+  }
+  const diagram = buildPrDiagramPreview({
+    number: pr.number, title: pr.title, body: pr.body, headSha: pr.head.sha, files,
+  });
+  const names = prDiagramArtifactNames(pr.number);
+  fs.mkdirSync(output, { recursive: true });
+  const sourcePath = path.join(output, names.mmd);
+  fs.writeFileSync(sourcePath, diagram.mermaid, "utf8");
+  const svg = path.join(output, names.svg);
+  const png = path.join(output, names.png);
+  const ascii = path.join(output, names.ascii);
+  execFileSync("python3", [
+    path.join(REPO, "skills/mermaid_render.py"), sourcePath,
+    "--svg", svg, "--png", png, "--ascii", ascii, "--theme", "tokyo-night",
+  ], { cwd: REPO, stdio: "inherit", timeout: 180000 });
+  const proofs = {};
+  for (const [format, filename] of Object.entries({ svg, png, ascii })) {
+    if (!fs.existsSync(filename) || fs.statSync(filename).size <= 0) {
+      throw new Error("PR_DIAGRAM_ARTIFACT_NOT_PROVEN:" + filename);
+    }
+    const bytes = fs.readFileSync(filename);
+    const svgStart = bytes.toString("utf8", 0, 150).trimStart();
+    if (format === "svg" && !/^(?:<svg\b|<\?xml\b)/i.test(svgStart)) {
+      throw new Error("PR_DIAGRAM_SVG_INVALID");
+    }
+    if (format === "png" && !bytes.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))) {
+      throw new Error("PR_DIAGRAM_PNG_INVALID");
+    }
+    proofs[format] = { bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") };
+  }
+  const mmdBytes = fs.readFileSync(sourcePath);
+  proofs.mmd = { bytes: mmdBytes.length, sha256: createHash("sha256").update(mmdBytes).digest("hex") };
+  const receipt = {
+    status: "ARTIFACTS_RENDERED", owner: "scripts/lupa/diagram-route-gate.mjs",
+    pr: pr.number, sha: pr.head.sha, source_kind: diagram.kind,
+    graph_fingerprint: diagram.graph_fingerprint || null,
+    preferred: diagram.preferred, formats: ["svg", "png", "ascii"], names, proofs,
+    runtime: "NOT_TESTED_BY_SCOPE",
+  };
+  fs.writeFileSync(path.join(output, "receipt.json"), JSON.stringify(receipt, null, 2) + "\n");
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    const fence = String.fromCharCode(96).repeat(3);
+    const escaped = diagram.mermaid.replaceAll(fence, "'''");
+    const lines = [
+      "### 🪬 Diagrama derivado — PR #" + pr.number,
+      "SHA: " + fence.slice(0, 1) + pr.head.sha + fence.slice(0, 1) +
+        " · preferido: **" + diagram.preferred.toUpperCase() + "**",
+      "Fonte: " + diagram.kind + " · Todos os formatos: SVG, PNG e ASCII no artifact do job.",
+      "Abrir artefatos: https://github.com/" +
+        String(process.env.GITHUB_REPOSITORY || "").replace(/[^A-Za-z0-9_.\/-]/g, "") +
+        "/actions/runs/" + String(process.env.GITHUB_RUN_ID || "").replace(/[^0-9]/g, ""),
+      fence + "mermaid", escaped.trimEnd(), fence,
+      "#### Texto ASCII acessível a agentes e terminais",
+      fence + "text", fs.readFileSync(ascii, "utf8").slice(0, 7500).replaceAll(fence, "'''").trimEnd(), fence,
+      "A imagem não é fonte da verdade; confirmar código e comentários do PR.", "",
+    ];
+    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+  }
+  console.log(JSON.stringify(receipt));
+}
+
 export function normalizePath(value) {
   return String(value || "").replaceAll("\\", "/").replace(/^\.\//, "");
+}
+
+/** Visualize erros no PR sem alterar o JSON original: file/line somente quando comprováveis. */
+export function githubIssueAnnotations(errors = [], readSource = () => null) {
+  const escape = (value) => String(value).replaceAll("%", "%25")
+    .replaceAll("\r", "%0D").replaceAll("\n", "%0A");
+  return errors.map((raw) => {
+    const message = String(raw);
+    const [code, candidate] = message.split(":");
+    const safeCode = /^[A-Z0-9_]+$/.test(code || "") ? code : "CENTRALDARK_GATE_ERROR";
+    const relative = String(candidate || "");
+    const isSource = /^(?:apps|src|scripts|docs|\.github|\.agents)\/[A-Za-z0-9_./-]+\.(?:ts|tsx|js|jsx|mjs|cjs|json|yml|yaml|md|mmd|sh|py)$/.test(relative)
+      && !relative.split("/").includes("..");
+    const content = isSource ? readSource(relative) : null;
+    let location = "";
+    if (typeof content === "string") {
+      const lines = content.split(/\r?\n/);
+      const prefer = /^(?:CODE_DOC_|DOC_CODE_|CODE_TIMESTAMP_|CODE_OWNER_|CODE_TRACE_)/.test(safeCode)
+        ? ["@doc_ref:", "#OBSERVACOES#", "@owner:"] : [];
+      let idx = -1;
+      for (const marker of prefer) {
+        idx = lines.findIndex((line) => line.includes(marker));
+        if (idx >= 0) break;
+      }
+      location = `file=${relative}${idx >= 0 ? ",line=" + (idx + 1) : ""},`;
+    }
+    return `::error ${location}title=${safeCode}::${escape(message)}`;
+  });
 }
 
 export function git(args, options = {}) {
@@ -688,7 +855,9 @@ export function runGate({ baseRef, headRef }) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  if (process.argv.includes("--sync-obsidian") || process.argv.includes("--check-obsidian")) {
+  if (process.argv.includes("--pr-preview")) {
+    renderPrDiagramPreview();
+  } else if (process.argv.includes("--sync-obsidian") || process.argv.includes("--check-obsidian")) {
     const check = process.argv.includes("--check-obsidian");
     const receipt = syncObsidian({check});
     console.log(JSON.stringify(receipt, null, 2));
@@ -705,6 +874,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   });
 
   console.log(JSON.stringify(report, null, 2));
+  // STDERR: anotações GitHub nativas; STDOUT JSON é preservado para consumidores.
+  if (!report.ok && process.env.GITHUB_ACTIONS === "true") {
+    for (const annotation of githubIssueAnnotations(report.errors, (file) => showAt(report.head_ref, file))) {
+      console.error(annotation);
+    }
+  }
   if (!report.ok) process.exit(1);
   console.log("DIAGRAM_ROUTE_GATE=PASS");
   }

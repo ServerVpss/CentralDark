@@ -1,19 +1,47 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/tests/test_state_library.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:26:02.893Z
+# @implementado: contraprovas do webhook serial e do destino do seal.
+# @pendente: gates estaticos no HEAD vigente; nenhum teste de runtime.
+# @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: gates de source e revisoes ainda abertas no PR #1381.
+
 import hashlib
 import hmac
 import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from centraldark_fixed_point.cli import _seal_output_overlaps
 from centraldark_fixed_point.codec import IntegrityError, decode_bytes, encode_bytes
+from centraldark_fixed_point.webhook import serve as serve_webhook
 from centraldark_fixed_point.github_state import GitHubStateLibrary, WebhookRejected
 from centraldark_fixed_point.seal import build_seal, verify_seal
 from centraldark_fixed_point.store import EventStore
 
 
 class StateLibraryTests(unittest.TestCase):
+    def test_webhook_serializes_sqlite_ingest_on_main_thread(self):
+        with patch("centraldark_fixed_point.webhook.HTTPServer") as server:
+            serve_webhook(GitHubStateLibrary(None, "secret"))
+        server.assert_called_once()
+        server.return_value.serve_forever.assert_called_once()
+
+    def test_seal_destination_rejects_inside_protected_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            protected = root / "protected"
+            protected.mkdir()
+            (protected / "code.txt").write_text("source", encoding="utf-8")
+            self.assertTrue(_seal_output_overlaps(root, ["protected"], protected / "seal.json"))
+            self.assertTrue(_seal_output_overlaps(root, ["protected/code.txt"], protected / "code.txt"))
+            self.assertFalse(_seal_output_overlaps(root, ["protected"], root / "seal.json"))
+
     def test_webhook_signature_dedupe_and_recovery(self):
         with tempfile.TemporaryDirectory() as directory:
             store = EventStore(Path(directory) / "state.db")

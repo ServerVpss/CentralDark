@@ -1,5 +1,21 @@
 # Receita comprovada: Kingston + openKylin + VMware Workstation (2026-11-03)
 
+
+<!-- ROTA_NAT_SSH_ATUAL_20261103 -->
+## Delta de rede comprovado no mesmo dia — separar HISTÓRICO de CURRENT
+
+**Esta receita registra um fixed point histórico em D:\\; nao renomear nem eliminar o receipt original.** Em nova consulta da Casa o processo `vmware-vmx.exe` (PID 20892) apontou para **`E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`**, com `vmrun getGuestIPAddress` = **`192.168.35.130`**. `VMnet8=192.168.35.1/24`; DHCP/NAT em execução. `192.168.35.128` era DHCP de outro instante, **não binding permanente**.
+
+**Causa exata do erro de procura:** o alias local `openkylin-vm` em `C:\Users\Administrador\.ssh\config_openkylin` ainda tinha `HostName 192.168.35.128`, então `ssh ... openkylin-vm` deu timeout. A prova SSH usando `-o HostName=192.168.35.130`, `BatchMode=yes` e `StrictHostKeyChecking=yes` devolveu `VM_OKCentralDark-OS / Linux / CentralDark-OS`. Nesta sessão foi reaproveitada a confiança da chave de host antiga **somente para o mesmo host comprovado** via `HostKeyAlias`, sem trocar config/known_hosts. Nao pular verificacao de identidade num replay.
+
+**Rota reproduzível somente leitura:** processo VMX real → `C:\Program Files\VMware\VMware Workstation\vmrun.exe -T ws getGuestIPAddress <VMX_ATUAL>` → IP NAT atual → confirmar `config_openkylin` efetivamente escolhido → verificar porta 22 e identidade SSH → comando `hostname; uname -s; id -un` → `tailscale status` dentro do guest → testar VPS por endpoint separado. A `SKILL.md` irmã contém os detalhes operacionais. Nenhum script/alias/serviço precisa ser recriado.
+
+**Contraprova de fronteira:** `tailscale0=100.81.207.32` existe, porém status: `Machine is not yet approved by tailnet admin.`; Windows `Segredo-VPS` em `100.90.199.124:22` timeout e VM→VPS público `89.117.78.124:22` timeout. `VM_SSH=PASS` ≠ `TAILNET_PEER_APPROVED` ≠ `VM_TO_VPS=PASS`; nao concluir que VPS está desligada.
+
+**CURRENT=CASA_VM_SSH_PASS / TAILSCALE_APPROVAL_PENDING / VM_VPS_UNPROVEN**. `CONFIG_CHANGED=NO`, `DISK_CHANGED=NO`; manter o receipt Kingston original integralmente como prova histórica. `NEXT_CURSOR=TAILNET_DEVICE_APPROVAL_THEN_VM_VPS_READONLY_RECHECK`.
+<!-- /ROTA_NAT_SSH_ATUAL_20261103 -->
+
+
 ## Escopo e propriedade
 Operacao HIBRIDA, realizada pela Casa, com CHEFE responsavel pelo GParted Live e SOL/Hermes responsavel pela verificacao e migracao GUI/CLI. E um RECEIPT HISTORICO com FIXED_POINT naquela sessao, nao licenca para reparticionar outra maquina. VMware Workstation 26.0.1, fisico Kingston SA400S37480G 480103981056 bytes (447.1 GiB). Windows Disk 1 / \\.\PhysicalDrive1, Linux /dev/sda, MBR/dos. NUNCA derivar nome do disco somente do numero; revalidar modelo.
 

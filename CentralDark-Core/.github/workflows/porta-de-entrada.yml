@@ -1,3 +1,11 @@
+# #OBSERVACOES#
+# @owner: .github/workflows/porta-de-entrada.yml
+# @doc_ref: docs/CONSCIENCIA/03-PR-MERGE-DEPLOYMENT.md
+# @last_updated: 2026-11-03T20:09:24.082Z
+# @implementado: alertas por linha, audit push main e preview PR em SVG PNG ASCII no gate existente.
+# @pendente: runner/CI SAME_HEAD e eventos reais para comprovar receipt.
+# @estado: SOURCE_ONLY; MAIN_PUSH_AUDIT_OBSERVATIONAL
+# @next_cursor: validar o workflow sem transformar aviso de push em gate de PR.
 name: ⚙️ porta-de-entrada
 
 # Gate canônico: atualiza o mecanismo existente em vez de criar workflows
@@ -6,7 +14,7 @@ name: ⚙️ porta-de-entrada
 
 on:
   pull_request:
-    branches: [main, program/centraldark-convergencia-omniroute-722]
+    branches: ['**']
     types: [opened, reopened, synchronize, ready_for_review, edited, labeled, unlabeled]
   push:
     branches: ['**']
@@ -14,13 +22,78 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
   group: porta-de-entrada-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # Projeção universal. Mesmo motor do gate, job visual independente e não bloqueante.
+  pr-diagram-preview:
+    name: 🎨 Mermaid do PR — SVG PNG ASCII (não bloqueante)
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository }}
+    continue-on-error: true
+    runs-on: [self-hosted, Linux]
+    timeout-minutes: 8
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: 🔹 Checkout preso ao HEAD do PR, sem credenciais persistentes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+          submodules: false
+
+      - name: 🔹 Setup Node 24 (owner já existente)
+        uses: ./.github/actions/setup-node24-selfhosted
+
+      - name: 🔹 Provar mesmo HEAD antes da imagem
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+
+      - name: 🪡 Render source Mermaid + Grafo Vivo + Excalidraw read-only
+        id: render
+        continue-on-error: true
+        shell: bash
+        env:
+          CENTRALDARK_RENDER_NO_INSTALL: "1"
+        run: |
+          set -euo pipefail
+          node --test scripts/grafo-vivo/mermaid-core.test.mjs || \
+            echo "::warning title=GRAFO_VIVO_TEST_PENDING::Verificar o cone do grafo sem bloquear PR"
+          node scripts/lupa/diagram-route-gate.mjs --check-obsidian || \
+            echo "::warning title=EXCALIDRAW_SOURCE_STALE::Reconciliação Excalidraw pendente; sem alterar fonte"
+          npm ci --prefix skills/pretty-mermaid --ignore-scripts --no-audit --no-fund --prefer-offline
+          node scripts/lupa/diagram-route-gate.mjs --pr-preview --out-dir "$RUNNER_TEMP/centraldark-pr-diagrams"
+
+      - name: 📎 Arquivar Mermaid + SVG + PNG + ASCII + recibo SHA256
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: centraldark-pr-diagrams-${{ github.event.pull_request.number }}-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/centraldark-pr-diagrams/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: 🧾 Resultado visual, separado do status de integração
+        if: always()
+        shell: bash
+        run: |
+          if test -f "$RUNNER_TEMP/centraldark-pr-diagrams/receipt.json"; then
+            echo "MERMAID_ARTIFACTS=RENDERED" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "MERMAID_ARTIFACTS=UNKNOWN — sem prova SVG/PNG/ASCII; verificar log do renderer." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   validar:
+    # Preservar escopo anterior dos gates globais; não endurecer PRs de outras bases.
+    if: ${{ github.event_name != 'pull_request' || github.base_ref == 'main' || github.base_ref == 'program/centraldark-convergencia-omniroute-722' }}
     name: 🧩 Porta, identidade e governança canônica estão íntegras?
     runs-on: [self-hosted, Linux]
     timeout-minutes: 8
@@ -67,6 +140,14 @@ jobs:
 
       - name: 🔹 Setup Node 24 (fast path self-hosted)
         uses: ./.github/actions/setup-node24-selfhosted
+
+      # push main pode vir de squash via PR ou de writer direto previamente autorizado.
+      # O auditor observa e documenta a origem, nunca altera main nem bloqueia PR.
+      - name: 🧾 Auditar origem do push na main (read-only, sem veto)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/github-autonomia-varredura.mjs audit-main-push
 
       - name: 🔹 Testar fonte autenticada de autorização
         run: node --test scripts/lupa/authority-approval.test.mjs

@@ -15,6 +15,44 @@ related_skills: [centraldark-hermes-visual-computer-use, centraldark-hermes-oper
 
 # CentralDark | Linux no SSD fisico + VMware Raw Disk
 
+
+<!-- REVALIDACAO_CASA_VMWARE_VPS_20261103 -->
+## CURRENT verificado — Casa → VMware NAT → VM; VPS em diagnostico
+
+**Regra antes de tentar SSH:** nao confiar em IP, caminho VMX, PID ou endereco Tailscale de receipts antigos. Ler primeiro o processo `vmware-vmx.exe` corrente na Casa, obter seu **VMX real**, consultar `vmrun.exe -T ws getGuestIPAddress <VMX_CORRENTE>` e so entao consultar o alias SSH protegido. Nao reabrir GParted nem repetir particionamento.
+
+**Medição viva em 03/11/2026, nova sessão:**
+- `SEGREDO`: Remote Desktop Commander 0.3.1 ONLINE; `vmware-vmx.exe` PID 20892 respondeu com VMX **`E:\VMs\CENTRALDARK-OS\CENTRALDARK-OSh.vmx`**. A receita antiga com VMX `D:\CENTRALDARK-OSh\CENTRALDARK-OSh.vmx` continua válida como **receipt HISTÓRICO**, nao deve ser tratada como VM ativa automaticamente.
+- Casa VMnet8 `192.168.35.1/24`; NAT/DHCP VMware executando. `vmrun getGuestIPAddress` respondeu **`192.168.35.130`**, enquanto `C:\Users\Administrador\.ssh\config_openkylin` (alias `openkylin-vm`) ainda apontava para **`192.168.35.128`**; a primeira tentativa por alias retornou **timeout**, nao `SSH_AUTH_FAIL`.
+- **Contraprova PASS**: teste TCP `192.168.35.130:22=True`; `ssh.exe` com `-F C:\Users\Administrador\.ssh\config_openkylin -o HostName=192.168.35.130 -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes`, usando temporariamente o **HostKeyAlias confiado da rota antiga** nesta prova, retornou `VM_OK`, hostname `CentralDark-OS`, `Linux`, usuário `CentralDark-OS`. HostKeyAlias nao deve ser transplantado para outra VM sem identidade de host validada. Nenhuma chave privada foi copiada, nenhum `StrictHostKeyChecking=no`.
+- Dentro da VM: `ens33=192.168.35.130/24`; `tailscale0=100.81.207.32/32`, mas `tailscale status` retornou **`Machine is not yet approved by tailnet admin.`**. IP Tailscale atribuído nao significa peer autorizado.
+- `Segredo-VPS` Windows tentou `100.90.199.124:22` e deu timeout; VM → VPS público `89.117.78.124:22` deu `PUBLIC_VPS_TCP22_UNREACHABLE` no limite de 5 s. **VPS_RUNTIME=UNKNOWN**, pois timeout nao prova serviço parado.
+- A VM foi acessada por SSH **sem alterar** `config_openkylin`, `.ssh/config`, `known_hosts`, firewall, VPN, disco ou serviço.
+
+**Receita mínima (somente leitura, antes de qualquer fallback):**
+1. Selecionar VMX **pelo processo `vmware-vmx.exe` atual**, nao por caminho D:/E: histórico; confirmar resultado com `vmrun list` quando necessário.
+2. `& 'C:\Program Files\VMware\VMware Workstation\vmrun.exe' -T ws getGuestIPAddress <VMX_ATUAL>` → `IP_ATUAL`; comparar com `HostName` de `C:\Users\Administrador\.ssh\config_openkylin` e `F:\CentralDark\.ssh\config_openkylin` se essa segunda cópia existir no host. Escolher **arquivo realmente lido pelo SSH**, sem trocar aliases protegidos.
+3. `Test-NetConnection -ComputerName <IP_ATUAL> -Port 22`; verificar a identidade SSH de host já confiada, depois invocar `ssh -F <CONFIG_CONFIRMADO> -o HostName=<IP_ATUAL> -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes openkylin-vm 'hostname; uname -s; id -un'`. Na prova desta sessão foi usado `HostKeyAlias=192.168.35.128` para a chave de host **previamente confiada**; nao impor como política universal.
+4. Se Casa→VM passar, testar `tailscale status` **dentro da VM** antes de concluir que a ponte VM→VPS funciona. Se `Machine is not yet approved`, classificar **TAILSCALE_APPROVAL=PENDING**, sem fazer login novo ou autorizar a máquina automaticamente. Testar endpoint da VPS separadamente e anotar a rota.
+5. Guardar saída, HEAD da receita e `NEXT_CURSOR`; nunca converter `VM_SSH=PASS` em `VM_VPS=PASS`.
+
+**Resultado atual:** `CASA_VM_SSH=PASS`; `VMWARE_IP_DRIFT=FOUND`; `VM_VPS=BLOCKED/UNPROVEN`; `TAILSCALE_APPROVAL=PENDING`; `CONFIG_MUTATIONS=0`; `VMWARE_DISK_MUTATIONS=0`. Próximo passo: aprovar a VM na tailnet pelo controle autorizado, então remedir VM→VPS; reconciliar alias somente com backup, gate de host key e readback.
+<!-- /REVALIDACAO_CASA_VMWARE_VPS_20261103 -->
+
+<!-- LAUNCHER_PATH_CORRECTED_20261103 -->
+### Corrigido: seleção de configuração do launcher XRDP
+
+Readback na Casa: os dois caminhos existem. A configuração em F: resolve o alias `openkylin-vm` para `192.168.35.130` e autenticou com sucesso; a cópia do perfil Windows ainda resolve para `.128`. Logo, substituir F por C causaria regressão.
+
+No owner `scripts/Open-CentralDarkForjaRDP.ps1`, o seletor mantém F como primeira opção e verifica a conexão antes de aceitá-la. A configuração do perfil Windows é fallback condicionado à verificação SSH. Não houve alteração dos arquivos de configuração na Casa. `-CheckOnly` e reutilização do túnel existente foram preservados.
+
+Provas: `PARSER_ERRORS=0` no PowerShell Windows; `SELECTED=F:\CentralDark\.ssh\config_openkylin` na execução isolada do seletor. A execução em memória de `-CheckOnly` também foi medida: `CENTRALDARK_FORJA_RDP_HANDSHAKE=FAIL_OR_NOT_RUNNING` (exit 2). Significa que não havia túnel XRDP validado naquele momento; **não é falha do seletor SSH**. O launcher não abriu novo túnel, GUI ou sessão XRDP neste delta.
+
+`NEXT_CURSOR=VALIDATE_XRDP_HANDSHAKE_WITH_EXISTING_LAUNCHER_WHEN_GUI_NEEDED`.
+<!-- /LAUNCHER_PATH_CORRECTED_20261103 -->
+
+
+
 ## Acionamento
 CHEFE fala "Linux no Kingston", "VMware no proprio SSD", "particao VMWARE", "GParted", "SWAP", "fullDevice", "PhysicalDrive", "boot + SSH", "partitionedDevice" ou solicita replay da operacao concluida em 2026-11-03. Esta Skill propria fica na biblioteca da Skill Mae existente, sem segundo executor, driver, plugin ou organismo. Sempre reutilizar Skill Mae, Kimetsu, Michelin, Hermes Visual Computer Use/Cua e os owners reais.
 

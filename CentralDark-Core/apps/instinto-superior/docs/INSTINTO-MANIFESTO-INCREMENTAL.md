@@ -1,5 +1,18 @@
 # 🪬 Instinto Superior — Manifesto incremental do harness privado CentralDark
 
+@code_ref: apps/instinto-superior/scripts/puppeteer-michelin-smoke.mjs
+@last_updated: 2026-11-03T19:23:13.131Z
+
+<!-- PR_HEAD_VISUAL_PROOF_20261103 -->
+### 🍒 Regra visual por PR, sem falso selo de runtime
+
+O owner existente `.github/workflows/test.yml` passa a aceitar `pull_request` para mudanças visuais do Instinto Superior, preservando seu job e seus artifacts atuais. A etapa de checkout é fixada em `github.event.pull_request.head.sha` e o script Puppeteer prioriza `CENTRALDARK_SOURCE_SHA` para vincular os screenshots desktop/mobile, DOM, overflow e erros de página ao **HEAD exato**. Não iniciar navegador na Casa/VPS nesta edição: somente **código** de teste CI versionado.
+
+**Prova visual = artefato de CI quando o runner executar**, não selo de instalação, não prova de autenticação, nem substituto dos erros por arquivo/linha do `diagram-route-gate.mjs`. Ausência do runner, do Chrome ou do preview mantém `VISUAL=UNKNOWN`, nunca PASS. GitHub/PR guarda as capturas e recibos; sem HUD ou executor paralelo.
+
+<!-- /PR_HEAD_VISUAL_PROOF_20261103 -->
+
+
 > **Owner visual:** `apps/instinto-superior` no repositório `ServerVpss/CentralDark`. **Não é segundo executor, nem segundo cérebro.** O cockpit projeta capacidades de owners existentes. Este manifesto registra intenção, contratos, deltas e evidências; não executa deploy, altera permissões ou transforma snapshots em telemetria.
 
 ## Identidade e cadeia de autoridade

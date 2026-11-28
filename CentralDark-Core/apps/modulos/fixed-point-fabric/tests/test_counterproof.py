@@ -1,5 +1,14 @@
 from __future__ import annotations
 
+# #OBSERVACOES#
+# @owner: apps/modulos/fixed-point-fabric/tests/test_counterproof.py
+# @doc_ref: docs/CONSCIENCIA/RECEIPTS/2026-11-03-branches-891-funil-hud.md
+# @last_updated: 2026-11-03T18:44:11.351Z
+# @implementado: fixtures de cenários fornecem SHA idêntico; regressão continua fail-closed.
+# @pendente: CI e verificação unitária no mesmo HEAD; runtime não solicitado.
+# @estado: SOURCE_PATCHED; CI=UNKNOWN; RUNTIME=NOT_TESTED_BY_SCOPE
+# @next_cursor: obter PASS da suíte no PR e ler checks do mesmo SHA.
+
 import tempfile
 import unittest
 from pathlib import Path
@@ -21,7 +30,11 @@ class SequenceProbe:
             self.last = next(self.statuses)
         except StopIteration:
             pass
-        return ProbeReceipt(self.domain, self.last, self.domain, (Evidence(self.domain, "status", self.last.value),))
+        head_claim = {"local": "head", "vps": "head_sha", "github": "main_head"}.get(self.domain)
+        evidence = (Evidence(self.domain, "status", self.last.value),)
+        if head_claim:
+            evidence += (Evidence(self.domain, head_claim, "a" * 40),)
+        return ProbeReceipt(self.domain, self.last, self.domain, evidence)
 
 
 def probes_with_scenario(target_domain: str, statuses: list[Status], rounds: int = 3):
