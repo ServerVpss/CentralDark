@@ -567,6 +567,10 @@ EXECUTION_FIRST_PROTOCOL:
   motto: ["REUSE BEFORE CREATION.","NEVER CREATION BEFORE REUSE.","MENOS BUROCRACIA, MAIS EXECUCAO."]
   final_rule: "O usuário determina a intenção. O coordenador atual organiza. O executor atual materializa. A realidade comprova. Nenhum nome, identidade ou metáfora possui autoridade operacional própria. Verificações servem ao resultado, jamais substituem a execução. Auditorias opcionais não podem sequestrar a missão principal."
 ```
+
+
+**Aplicação real registrada (28/11/2026):** [Contabo HTTPS — receita operacional e diálogo integral](docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). Caso de execução direta com o Traefik e MCP existentes, frentes independentes, menor delta, prova proporcional e preservação. O recibo original é o commit `a5f152a`; OAuth e pareamento continuam separados. Esta referência é aprendizado subordinado ao protocolo vigente, não uma regra, gate ou skill adicional.
+
 <!-- /CENTRALDARK_EXECUTION_FIRST_PROTOCOL -->
 
 ---
