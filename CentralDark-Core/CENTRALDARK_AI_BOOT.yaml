@@ -21,6 +21,30 @@ CENTRALDARK_AI_BOOT:
     read_order_mandatory:
       - "CENTRALDARK_AI_BOOT.yaml"
       - "LEIA-ME-IA.md"
+    # Caminhos GitHub relativos a raiz do monorepo, nao a raiz local do Core.
+    core_root: "CentralDark-Core/"
+    relative_core_paths_are_relative_to: "CentralDark-Core/"
+    github_repository_paths:
+      boot: "CentralDark-Core/CENTRALDARK_AI_BOOT.yaml"
+      leia: "CentralDark-Core/LEIA-ME-IA.md"
+      rules: "CentralDark-Core/RULES.md"
+      skill: "CentralDark-Core/.agents/skills/centraldark-operational-method/SKILL.md"
+      agents: "CentralDark-Core/AGENTS.md"
+      soul: "CentralDark-Core/docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+      root_agents: "AGENTS.md"
+    github_repository_read_order: ["CentralDark-Core/CENTRALDARK_AI_BOOT.yaml","CentralDark-Core/LEIA-ME-IA.md"]
+    on_404_relative_core_path: "RESOLVER_COM_CORE_ROOT_E_REPETIR_UMA_VEZ; NAO_PEDIR_PATH_JA_MAPEADO"
+    canonical_context_triggers: ["PROJETO_PRINCIPAL_DO_USUARIO","NOSSO_METODO_PADRAO","ORDEM_OPERACIONAL_CENTRALDARK","CONTINUIDADE_DA_MISSAO_CENTRALDARK"]
+    explicit_keyword_required: false
+    on_relevant_intent_with_github_access: "LER_CURRENT_BOOT_DEPOIS_LEIA_ANTES_DE_AFIRMAR_METODO_VIGENTE; RESOLVER_RULES_E_SKILL_MAE_PELOS_PATHS_ACIMA_QUANDO_PERTINENTES"
+    memory_role: "LOCALIZAR_CONTEXTO; NAO_SUBSTITUIR_CURRENT_MAIN_NEM_PROVA_DE_LEITURA"
+    memory_fallback_when_no_access: "RESPONDER_COM_CONTEXTO_DISPONIVEL_MARCADO_NAO_REVALIDADO_SEM_INVENTAR_SHA"
+    active_execution_method: "EXECUCAO_DIRETA"
+    active_execution_owner_path: "CentralDark-Core/RULES.md"
+    active_execution_owner_marker: "CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+    optional_security_audit: "SOB_DEMANDA_DO_USUARIO"
+    prior_method_is_not_current_if_conflicting: true
+    canonical_paths_are_not_new_loader_or_native_chat_trigger: true
     require_fresh_repo_read: true
     do_not_use_memory_as_read_proof: true
     validate_each: [PATH, NONEMPTY_CONTENT, SOURCE_COMMIT_OR_BLOB_SHA, ORDER, READ_RESULT]
@@ -133,6 +157,32 @@ CENTRALDARK_AI_BOOT:
     one_system_only: true
     multi_role: true
     multi_surface: true
+    # Identidade tecnica consolidada: produto, motor e instalacoes nao sao projetos distintos.
+    product_source_identity:
+      product: "CentralDark · OS"
+      canonical_fork: "ServerVpss/CentralDark@main"
+      upstream: "NousResearch/hermes-agent"
+      legacy_fork: "CentralDark-hermes-agent CONSOLIDADO_EM_2026_11_21"
+      engine: "HERMES_CORE_NATIVO_DO_MESMO_REPOSITORIO"
+      desktop_source: "apps/desktop/"
+      core_sources: ["agent/","gateway/","hermes_cli/"]
+      surfaces: ["DESKTOP_ELECTRON","CLI","TUI","WEB","GATEWAY","ACP","MESSAGING"]
+      environments: ["CASA","VPS_CONTABO","VPS_HOSTINGER","OUTROS_HOSTS_AUTORIZADOS"]
+      desktop_and_vps_same_project: true
+      separate_runtime_instances_do_not_mean_separate_projects: true
+      native_upstream_evolution_preserved: true
+      source_update_owner: "hermes update; scripts/centraldark-fork-auto-update.sh"
+      packaged_desktop_update_owner: "MECANISMO_NATIVO_DO_ARTEFATO_INSTALADO"
+      local_or_remote_backend: "CONEXAO_ATIVA; NAO_INVENTAR_TOPOLOGIA"
+      rule_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+      source_of_truth_refs: ["../AGENTS.md#what-hermes-is","../apps/desktop/README.md","../scripts/centraldark-fork-auto-update.sh","docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"]
+      reuse_known_project_identity_without_rediscovery: true
+      repeat_question_about_same_project: false
+      reopen_identity_only_on_material_counterevidence: true
+      measure_only_installation_state_relevant_to_requested_effect: true
+      same_source_does_not_prove_same_running_revision_or_session: true
+      no_second_loader_engine_backend_or_update_system_by_assumption: true
+      consumer_obligation: "ANTES_DE_RECOMENDAR_ARQUITETURA_OU_ATUALIZACAO_HERMES_DESKTOP_VPS_RECONHECER_ESTA_IDENTIDADE; CONSULTAR_REFERENCIAS_PERTINENTES_SOMENTE_SE_NECESSARIO; EXECUTAR_DELTA_DIRETO"
     role_on_demand: true
     screen_is_agent: false
     terminal_is_agent: false
@@ -176,13 +226,49 @@ CENTRALDARK_AI_BOOT:
     next_authorized_route_auto_continue: true
     reality_is_effect_verifier_not_permission: true
     ask_human_only_for_irreducible_human_choice: true
+    # Lei de reconciliacao documental permanente por encontro (27/11/2026).
+    execution_first_document_reconciliation:
+      default_mode: "EXECUCAO_DIRETA"
+      permanent_default: true
+      owner_file: "RULES.md"
+      owner_marker: "CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+      owner_resolution: "CURRENT_MAIN"
+      automatic_reconciliation_on_encounter: true
+      scope: "DOCUMENTACAO_OPERACIONAL_DO_REPOSITORIO_LIDA_DURANTE_A_MISSAO"
+      trigger: "DIVERGENCIA_MATERIAL_COM_O_METODO_VIGENTE"
+      optional_security_audit: "SOB_DEMANDA_DO_USUARIO"
+      full_repository_scan_required: false
+      block_main_mission_for_optional_review: false
+      on_encounter: ["IDENTIFICAR_TRECHO_EXATO_E_OWNER_DOCUMENTAL","COMPARAR_COM_RULES_EXECUTION_FIRST_PROTOCOL_VIGENTE","DISTINGUIR_REGRA_OBSOLETA_DE_LIMITE_OBRIGATORIO_E_REGISTRO_HISTORICO","REMOVER_OU_RECONCILIAR_APENAS_A_INSTRUCAO_OPERACIONAL_OBSOLETA","REFERENCIAR_O_OWNER_CANONICO_SEM_DUPLICAR_METODO","APLICAR_MENOR_DELTA_NO_DOCUMENTO_EXISTENTE_SEM_CONFIRMACAO_REDUNDANTE","TESTAR_APENAS_O_TRECHO_AFETADO_E_CONFERIR_READBACK","REGISTRAR_CAMINHO_COMMIT_SHA_PROVA_E_APRENDIZADO_NO_OWNER_EXISTENTE","CONTINUAR_A_INTENCAO_ORIGINAL"]
+      correct_when: ["AUDITORIA_OPCIONAL_IMPOSTA_COMO_PRECONDICAO_UNIVERSAL","VERIFICACAO_REPETIDA_SEM_MUDANCA_MATERIAL","CONFIRMACAO_REDUNDANTE_PARA_ESCOPO_JA_AUTORIZADO","PLANEJAMENTO_SUBSTITUI_EXECUCAO_AUTORIZADA","IDENTIDADE_OU_METAFORA_TRATADA_COMO_AUTORIDADE","OUTRA_EXIGENCIA_OPERACIONAL_OBSOLETA_QUE_CRIA_FRICCAO_COMPROVADA"]
+      preserve: ["SOUL_E_RULES_CANONICAS_VIGENTES","GATES_OBRIGATORIOS_APLICAVEIS","AUTORIZACAO_CONSENTIMENTO_E_PERMISSOES_REAIS","PROTECAO_DE_DADOS_SEGREDOS_E_TRABALHO_DE_TERCEIROS","HISTORICO_RECIBOS_E_EVIDENCIAS_IMUTAVEIS","ONE_WRITER_BRANCH_PROTECTION_E_OWNER_EXISTENTE"]
+      historical_records: "PRESERVAR_ORIGINAL_E_REFERENCIAR_SUPERSESSAO_QUANDO_NECESSARIO"
+      specialized_constraints: "PRESERVAR_LIMITES_MATERIAIS; RECONCILIAR_SOMENTE_CERIMONIAS_OPCIONAIS"
+      ambiguous_conflict: "ISOLAR_TRECHO_E_RECONCILIAR_PELO_OWNER; NAO_APAGAR_LIMITE_OBRIGATORIO_NEM_BLOQUEAR_ESCOPO_INDEPENDENTE"
+      on_missing_write_access: "PENDENTE_COM_CAMINHO_E_DIVERGENCIA_EXATA; CONTINUAR_ACOES_AUTORIZADAS"
+      write_authority: "CORRECAO_DOCUMENTAL_PERTINENTE_AUTORIZADA_PELO_USUARIO_EM_27_11_2026; NAO_CONCEDE_NOVAS_PERMISSOES_NEM_ALTERA_RUNTIME"
+      no_new_governance_owner: true
+      no_new_parser_or_background_scanner: true
+      document_commit_is_not_runtime_consumption: true
+      acceptance: ["DOC_OBSOLETO_ENCONTRADO_E_CORRIGIDO_NO_OWNER","REFERENCIA_CANONICA_PRESENTE","HISTORICO_E_LIMITES_OBRIGATORIOS_PRESERVADOS","SEM_AUDITORIA_GLOBAL_OU_REPETICAO_INUTIL","READBACK_REAL_DO_DELTA","MISSAO_ORIGINAL_RETOMADA"]
+
+  execution_first_recorded_recipe:
+    marker: "CENTRALDARK_EXECUTION_FIRST_HTTPS_RECIPE_20261128"
+    method_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+    recipe_owner: ".agents/skills/centraldark-operational-method/SKILL.md#receita-aplicada-execucao-direta-https"
+    learning_owner: "docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md"
+    evidence_owner: "docs/DOMINIOS/API-CENTRALDARK.md"
+    evidence_commit: "a5f152abb9c70807382ae07fb4d4dfa73224fbec"
+    evidence_scope: "HTTPS_TRANSPORT_AND_ANONYMOUS_MCP_BARRIER"
+    reuse: "RECOVER_SAME_MISSION_CHECKPOINT; COMPARE_RELEVANT_FINGERPRINT; REVALIDATE_AFFECTED_CONE_ONLY"
+    automatic_runtime_consumption: "NOT_PROVEN"
 
   # Contrato compacto e portátil para qualquer chat/superfície.
   # Identidade e invariantes são fixas; HEADs, writer, rotas e evidência são resolvidos no boot.
   portable_operation_contract:
     status: "CANONICAL_REQUIRED"
     purpose: "BOOTSTRAP_ANY_CHAT_OR_SURFACE_WITHOUT_RETEACHING_CENTRALDARK"
-    canonical_source: "ServerVpss/CentralDark@main:CENTRALDARK_AI_BOOT.yaml"
+    canonical_source: "ServerVpss/CentralDark@main:CentralDark-Core/CENTRALDARK_AI_BOOT.yaml"
     pasted_copy_role: "HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH"
     current_over_pasted_snapshot: true
     load_mode: "RESOLVE_CANON_AT_BOOT"
@@ -227,6 +313,14 @@ CENTRALDARK_AI_BOOT:
 
     operation:
       default_mode: "CANONICAL_SELF_GRILL"
+      # Campo legado consumido por verify_repo_contract.py: tecnica cognitiva, nao modo de execucao.
+      default_mode_scope: "LEGACY_COGNITIVE_METHOD_ONLY"
+      effective_execution_mode: "EXECUCAO_DIRETA"
+      effective_execution_mode_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+      legacy_self_grill_is_proportional_not_universal_audit: true
+      legacy_default_operation_mode_in_other_docs_is_cognitive_not_execution_mode: true
+      optional_audit_mode: "SOB_DEMANDA_DO_USUARIO"
+      method_is_identity_independent: true
       role: "COORDINATOR|EXECUTOR_AS_REQUIRED_BY_CAPABILITY"
       writer: "RESOLVE_AND_LOCK_PER_SCOPE"
       frequency: "ADAPTIVE"
