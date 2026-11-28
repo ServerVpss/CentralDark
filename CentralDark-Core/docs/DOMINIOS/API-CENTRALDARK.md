@@ -222,6 +222,42 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 <!-- /CENTRALDARK_DESKTOP_FORK_BUILD_PARITY_20261128 -->
 
 
+<!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
+### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
+
+**Resultado: motor local existente conectado e uma chamada de leitura comprovada.** A recuperação reutilizou o Casa Commander da porta `127.0.0.1:9101`, sem substituir o executor pelo fork compilado nem ampliar o preview de pareamento. Owner ativo `CentralDark-Casa-Agent.mjs`, blob `04bb9adc5cddc40d196bc1d6673f02d1908b224d`, igual à fonte canônica; listener PID 16256 conferido antes da ativação. O serviço não foi reiniciado por esta operação.
+
+**Falha medida e causa:** o primeiro `tools/list` local autenticado retornou HTTP 200 com erro JSON-RPC `-32603`; o filho encerrou com código 1 às 05:03:31 UTC, antes de `MCP_INITIALIZE`. Em ensaio isolado, a mesma entrada e o mesmo Node 26.12.1 demonstraram `MODULE_NOT_FOUND: ajv`. Recuperar apenas esse módulo revelou outra ausência, `es-abstract/2025/Get`. A árvore do cache estava incompleta. O launcher também aponta por padrão para `F:\cache\npm`, ausente; esse drift não explica sozinho a queda da entrada direta e não foi alterado.
+
+**Recuperação aplicada:**
+
+- Mantido `@wonderwhy-er/desktop-commander@0.2.48`. A tentativa inicial de restaurar somente `ajv` reutilizou a cópia 8.20.0 já presente no SDK do mesmo cache, com 466 arquivos e hashes de árvore iguais; não foi suficiente para inicializar o motor.
+- O `dry-run` do npm propôs 34 adições, 571 alterações e 6 remoções; não foi aplicado sobre a árvore ativa. A instalação isolada que reutilizou o cache global falhou por `ENOENT` de conteúdo do próprio npm. A recuperação completa usou diretório e cache de downloads exclusivos, versão do motor exata, `--ignore-scripts --no-audit --no-fund`; terminou com exit 0.
+- A árvore isolada respondeu a `initialize` e `tools/list` com 26 ferramentas no mesmo Node 26.12.1; o processo de ensaio encerrou com código 0. Manifesto, lockfile e shim local foram conferidos. As dependências foram resolvidas novamente: isso não prova versões idênticas às da árvore antiga.
+- Após confirmar identidade do serviço, `engine_connected=false` e ausência de consumidor usando o cache, a árvore antiga foi renomeada para backup exclusivo e a árvore aprovada ocupou **o mesmo caminho** `%LOCALAPPDATA%\npm-cache\_npx\81cb1ab08343aa85`. A receita previa restaurar o primeiro nome se o segundo rename falhasse. Os hashes conferiram após a troca. Nenhum novo launcher, tarefa, serviço, token ou vínculo foi criado.
+
+| Evidência no alvo | Resultado |
+| --- | --- |
+| `POST /mcp` local autenticado, `tools/list` | HTTP 200, sem erro JSON-RPC, 10 ferramentas permitidas pela bridge |
+| `POST /mcp` local autenticado, `tools/call: list_directory` | HTTP 200, `isError=false`; leitura da pasta Casa-Commander encontrou o arquivo esperado `CentralDark-Casa-Agent.mjs` |
+| `GET /health` após a leitura e após a limpeza | HTTP 200, `engine_connected=true`, recibo `list_directory / READ_ONLY / verified=true` |
+| `GET /mcp` sem credencial | HTTP 401, erro JSON-RPC `-32001` |
+| Logger existente | `MCP_INITIALIZE PASS` às 05:17:09.715 UTC; `MCP_TOOLS_LIST PASS` às 05:17:09.767; `TOOL_RESULT list_directory PASS` às 05:18:08.698 |
+
+A credencial da bridge foi reutilizada pelo mecanismo DPAPI existente, somente em memória, sem imprimir seu valor. Nenhum POST de pareamento recusado foi repetido por outra rota. As consultas autenticadas acima pertencem à bridge local e não emitem credenciais de dispositivo.
+
+**Readback da árvore ativada (SHA-256):**
+
+- Manifesto raiz: `1ef6be05693bf281c0ea5a81c34ff75383159c461391525b53834bec4b8eec3d`.
+- Lockfile: `6ca46863c026c1c206535cdb2729de1ed4104d515a57437b3caf5c5e3dbfb6af`.
+- Manifesto do motor: `d40e9b7da3a027eacdee3e0232507395991037749317ef145c7c68713e4ca0d9`.
+- Entrada `dist/index.js`: `a4145198dc75cd34e7c7452c2054b4cc0d29e199ae1459961a17e4da25a13500`.
+
+**Reversão e faxina:** backup preservado em `%LOCALAPPDATA%\npm-cache\_npx\81cb1ab08343aa85.centraldark-before-recovery-20261128`; ele também conserva a cópia anterior ao reparo parcial de ajv. Para reverter, primeiro comprovar que nenhum filho usa a árvore ativa, preservar a árvore recuperada e devolver o backup ao nome original. O cache exclusivo de downloads foi removido; a pasta de stage deixou de existir após a ativação. Saúde, recibo e lockfile foram relidos após a limpeza. Logs de prova e backup permanecem preservados. A pasta de ensaio antiga do executor indisponível `/workspace/scratch/e774bf64c555/centraldark_recipe_review` segue `PRESERVADO_COM_MOTIVO`; não foi simulada sua remoção.
+
+**Limite e continuidade:** esta prova cobre o motor local, seu catálogo filtrado e uma ferramenta de leitura pela bridge existente. Não comprova todas as ferramentas, atendimento/acesso à tela, associação Supabase do vínculo legado (`owner_bound=false` na leitura anterior), transporte remoto do fork ou chamada pelo novo NPX/Tauri. Preservar o vínculo vivo e completar esses contratos no owner existente, sem acessar o entrypoint upstream para contornar a CLI restrita do fork. `FIXED_POINT_CASA_ENGINE_READ=APROVADO`; `FIXED_POINT_EXECUCAO_REMOTA=PENDENTE`.
+<!-- /CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
+
 ## Regra
 
 A documentação, os contratos internos e os catálogos de rotas devem usar `api.centralldark.com` como domínio público oficial da API CentralDark/MultiZap.
