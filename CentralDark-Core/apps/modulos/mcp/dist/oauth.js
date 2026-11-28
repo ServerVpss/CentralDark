@@ -19,7 +19,7 @@ export function configureDevicePairingForOAuth(store) {
 }
 import { log } from "./log.js";
 import { getCatalogSummary } from "./tools/core/tools-catalog.js";
-import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, getAccountConsentStatus, } from "./sessions.js";
+import { consumeAuthCode, consumeRefreshToken, createAuthRequest, getClient, issueAuthCode, issueTokenPair, registerClient, getAccountConsentStatus, accountPersistenceReady, peekRefreshToken, rotateAccountTokenPair, revokeOAuthToken, revokeOwnAccountSession, revokeAccountFamily, accountGrantIsActive, } from "./sessions.js";
 const CLIENT_METADATA_TTL_MS = 1000 * 60 * 10;
 const clientMetadataCache = new Map();
 function getAdminPassword() {
@@ -63,7 +63,8 @@ async function verifyRemoteBridgeSupabaseAdmin(req, desktopConfig = null) {
     }
 }
 // Account OAuth uses the same project and role table, never the owner's identity.
-// The upstream access credential lives only in memory and is never returned to a client.
+// An optional dedicated session validator permits durable grants without copying
+// the browser's rotating refresh token. Without it, the original JWT bound remains.
 const ACCOUNT_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const ACCOUNT_ROLES = ["admin", "moderator", "user"];
 export function isAccountGrant(grant) {
@@ -105,13 +106,54 @@ function accountScopeAllowed(scope, role) {
     return scopes.length > 0 && scopes.every(s => s === "mcp" || s === "admin") &&
         (!scopes.includes("admin") || role === "admin");
 }
+const ACCOUNT_GRANT_TTL_MS = 30 * 24 * 60 * 60_000;
+function accountValidatorKey() {
+    const key = String(process.env.CENTRALDARK_MCP_SESSION_VALIDATOR_KEY || "").trim();
+    return /^[a-f0-9]{64}$/.test(key) ? key : null;
+}
+async function validateAccountBinding(grant) {
+    const key = accountValidatorKey();
+    const conf = getCentralDarkSupabaseAuthConfig();
+    if (!key || !conf) throw new Error("ACCOUNT_VALIDATOR_NOT_CONFIGURED");
+    const response = await fetch(conf.supabaseUrl + "/functions/v1/mcp-session-validate", {
+        method: "POST", redirect: "error", signal: AbortSignal.timeout(6000),
+        headers: { apikey: conf.supabasePublishableKey, "Content-Type": "application/json",
+            "X-CentralDark-MCP-Proof": key, Accept:"application/json" },
+        body: JSON.stringify({user_id:grant.account_id,session_id:grant.account_session_id})
+    });
+    if (!response.ok) throw new Error("ACCOUNT_VALIDATOR_UNAVAILABLE");
+    const body = await response.json();
+    if (body?.valid === false) return null;
+    if (body?.valid !== true || !ACCOUNT_ROLES.includes(body.role) ||
+        body.user_id !== grant.account_id || body.session_id !== grant.account_session_id)
+        throw new Error("ACCOUNT_VALIDATOR_RESPONSE_INVALID");
+    const notAfter = body.not_after === null ? Infinity : Date.parse(body.not_after);
+    if (Number.isNaN(notAfter)) throw new Error("ACCOUNT_VALIDATOR_EXPIRY_INVALID");
+    return {role:body.role, notAfter};
+}
 export async function revalidateAccountGrant(grant) {
+    if (isAccountGrant(grant) && grant.account_authority === "session-v1") {
+        if (!Number.isFinite(grant.account_grant_expires_at) || grant.account_grant_expires_at <= Date.now() ||
+            !accountGrantIsActive(grant)) return null;
+        let binding;
+        try { binding = await validateAccountBinding(grant); }
+        catch { return null; } // Unavailability denies the call, but doesn't burn refresh.
+        if (!binding || binding.role !== grant.account_role || binding.notAfter <= Date.now() ||
+            !accountScopeAllowed(grant.oauth_scope, binding.role)) {
+            try { revokeAccountFamily(grant); } catch { /* Deny even if disk unavailable. */ }
+            return null;
+        }
+        if (!accountGrantIsActive(grant)) return null;
+        return { account_id:grant.account_id, account_role:binding.role,
+            account_session_id:grant.account_session_id, account_expires_at:grant.account_expires_at };
+    }
     if (!isAccountGrant(grant) || typeof grant.account_bearer !== "string" ||
         !Number.isFinite(grant.account_expires_at) || grant.account_expires_at <= Date.now()) return null;
     const account = await verifySupabaseAccount("Bearer " + grant.account_bearer);
     if (!account || account.account_id !== grant.account_id || account.account_role !== grant.account_role ||
         account.account_session_id !== grant.account_session_id ||
-        account.account_expires_at !== grant.account_expires_at || !accountScopeAllowed(grant.oauth_scope, account.account_role)) return null;
+        account.account_expires_at !== grant.account_expires_at || !accountScopeAllowed(grant.oauth_scope, account.account_role) ||
+        !accountGrantIsActive(grant)) return null;
     return account;
 }
 function isLoopbackCallback(value) {
@@ -124,7 +166,10 @@ function isLoopbackCallback(value) {
 function accountGrantFields(grant) {
     return isAccountGrant(grant) ? { account_id: grant.account_id, account_role: grant.account_role,
         account_session_id: grant.account_session_id, account_expires_at: grant.account_expires_at,
-        account_bearer: grant.account_bearer,
+        account_grant_id: grant.account_grant_id,
+        ...(grant.account_authority === "session-v1" ? {
+            account_authority:grant.account_authority, account_grant_expires_at:grant.account_grant_expires_at
+        } : {account_bearer: grant.account_bearer}),
         ...(grant.consent_receipt_hash && grant.consent_receipt_expires_at > Date.now() ? {
             consent_receipt_hash: grant.consent_receipt_hash,
             consent_receipt_expires_at: grant.consent_receipt_expires_at
@@ -290,6 +335,8 @@ export function getAuthorizationServerMetadata(_req, res) {
         issuer: config.publicUrl,
         authorization_endpoint: `${config.publicUrl}/authorize`,
         token_endpoint: `${config.publicUrl}/token`,
+        revocation_endpoint: `${config.publicUrl}/token?action=revoke`,
+        revocation_endpoint_auth_methods_supported: ["none"],
         registration_endpoint: `${config.publicUrl}/register`,
         client_id_metadata_document_supported: true,
         response_types_supported: ["code"],
@@ -438,6 +485,15 @@ export async function handleAuthorize(req, res) {
             if (status === "unknown") return res.status(404).json({ok:false, status});
             return res.json({ok:true, status});
         }
+        if (req.method === "POST" && param(req, "action") === "revoke_session") {
+            res.setHeader("Cache-Control","no-store");
+            if (!requestedJson || req.headers.origin !== DESKTOP_ORIGIN)
+                return oauthError(res,403,"access_denied","Origem de revogacao invalida.");
+            const account = await verifySupabaseAccount(req.headers.authorization);
+            if (!account) return oauthError(res,401,"access_denied","Sessao CentralDark invalida.");
+            try { return res.json({ok:true,revoked:revokeOwnAccountSession(account)}); }
+            catch { return oauthError(res,503,"temporarily_unavailable","Revogacao ainda nao persistida."); }
+        }
         const deviceClientId = param(req, "client_id");
         const pendingPair = devicePairingStore?.pendingConsent(param(req, "pair_id"));
         const bridgePair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID && pendingPair?.executor === "remote-bridge";
@@ -584,6 +640,21 @@ export async function handleAuthorize(req, res) {
             if (!account) return oauthError(res, 401, "access_denied", "Conta CentralDark sem sessao ou papel valido.");
             if (!accountScopeAllowed(scope, account.account_role))
                 return oauthError(res, 403, "access_denied", "Escopo nao permitido para esta conta.");
+            // Optional durable authority must be explicitly configured; never
+            // silently fall back to short JWT grants when a configured validator fails.
+            if (process.env.CENTRALDARK_MCP_SESSION_VALIDATOR_KEY) {
+                if (!accountValidatorKey() || !accountPersistenceReady())
+                    return oauthError(res,503,"server_error","Persistencia MCP indisponivel.");
+                let binding;
+                try { binding = await validateAccountBinding(account); }
+                catch { return oauthError(res,503,"server_error","Validador de sessao indisponivel."); }
+                if (!binding || binding.role !== account.account_role || binding.notAfter <= Date.now())
+                    return oauthError(res,403,"access_denied","Sessao CentralDark revogada ou papel alterado.");
+                account = {...account, account_authority:"session-v1",
+                    account_grant_expires_at:Math.min(Date.now()+ACCOUNT_GRANT_TTL_MS,binding.notAfter)};
+                // Only the verified identity/session binding is needed thereafter.
+                delete account.account_bearer;
+            }
         } else {
             // O logado no Cockpit já provou identidade: não pedir senha de novo.
             // A senha segue apenas como fallback para quem não tem sessão admin.
@@ -668,6 +739,17 @@ export async function handleOAuthCallback(req, res) {
 }
 export async function postToken(req, res) {
     const body = (req.body ?? {});
+    res.setHeader("Cache-Control","no-store");
+    if (req.query?.action === "revoke") {
+        const token = typeof body.token === "string" ? body.token : "";
+        const clientId = tokenClientId(req,body);
+        if (!token || token.length > 512 || !clientId)
+            return oauthError(res,400,"invalid_request","token e client_id obrigatorios.");
+        // RFC 7009: unknown tokens and wrong client bindings disclose nothing.
+        try { revokeOAuthToken(token,clientId); }
+        catch { return oauthError(res,503,"temporarily_unavailable","Revogacao ainda nao persistida."); }
+        return res.status(200).send("");
+    }
     const grant_type = String(body.grant_type ?? "");
     if (grant_type === "authorization_code") {
         const code = String(body.code ?? "");
@@ -721,7 +803,8 @@ export async function postToken(req, res) {
     if (grant_type === "refresh_token") {
         const refresh_token = String(body.refresh_token ?? "");
         const client_id = tokenClientId(req, body);
-        const rt = consumeRefreshToken(refresh_token, client_id);
+        const accountRefresh = peekRefreshToken(refresh_token, client_id);
+        const rt = accountRefresh || consumeRefreshToken(refresh_token, client_id);
         if (!rt) {
             log.warn("oauth_refresh_invalid", { cid: req.cid, client_id_present: Boolean(client_id) });
             res.status(400).json({ error: "invalid_grant", error_description: "refresh_token inválido ou expirado" });
@@ -735,14 +818,16 @@ export async function postToken(req, res) {
         if (isAccountGrant(rt) && !await revalidateAccountGrant(rt)) {
             return oauthError(res, 400, "invalid_grant", "Sessao CentralDark expirada ou permissoes alteradas.");
         }
-        const pair = issueTokenPair({
+        const input = {
             client_id: rt.client_id,
             gh_token: rt.gh_token,
             gh_scope: rt.gh_scope,
             gh_login: rt.gh_login,
             oauth_scope: rt.oauth_scope || "mcp",
             ...accountGrantFields(rt),
-        });
+        };
+        const pair = accountRefresh ? rotateAccountTokenPair(rt,input) : issueTokenPair(input);
+        if (!pair) return oauthError(res,400,"invalid_grant","Refresh token ja consumido ou revogado.");
         log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login, oauth_scope: rt.oauth_scope });
         res.json({
             access_token: pair.access.token,
