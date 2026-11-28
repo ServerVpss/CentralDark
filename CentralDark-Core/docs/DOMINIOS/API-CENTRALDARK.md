@@ -194,6 +194,19 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 **Reversão:** conferir hashes do Compose atual e backup, restaurar exclusivamente esse arquivo e recriar somente MCP pela mesma receita, preservando imagem e volume. **Próximo passo:** testar o vínculo legítimo no cliente oficial com consentimento do responsável, sem contornar os limites da execução anterior. FIXED_POINT da ativação: APROVADO; integração: PENDENTE.
 <!-- /CENTRALDARK_DESKTOP_PAIRING_ENABLED_20261128 -->
 
+<!-- CENTRALDARK_CASA_PAIRING_READBACK_20261128 -->
+### Contraprova na Casa — vínculo persistente verificado (28/11/2026)
+
+**Intenção:** conferir diretamente a janela e a funcionalidade demonstradas pelo CHEFE, pelo Método Operacional/Skill Mãe. BOOT `5046b5f4794fed7df40a810397606c26a5bc7de2`, LEIA `3bfc1242697317fdce9f505dc0c62d4fde026df2`, Skill Mãe `0d712f5f8fbf1dfc5eaeac4ed1cabf580dafb4d2`, Skill visual `fa6f0b06286635678836a6ea4f5f9b24b5d2c482`. Rota: Remote Desktop Commander na Casa SEGREDO, PowerShell + UIAutomation, sem input.
+
+- Janela viva `Segredo Agente Remoto`, processo `centraldark-halo-lite` PID 37500, HWND 660130 (efêmeros), executável DEV `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander\centraldark-halo-main\src-tauri\target\debug\centraldark-halo-lite.exe`. UIA encontrou CASA CONECTADA, Pareamento verificado com sucesso, Serviço local disponível. Conexão central AGUARDANDO, acesso à tela ainda não ativado e botão Iniciar atendimento desabilitado.
+- Logger existente em `%LOCALAPPDATA%\Codex Halo\logs\centraldark-halo.log`: transição às 04:22:00.055 UTC de `mcp_heartbeat/ok/HTTP_2XX` e `pairing/ok/DEVICE_HEARTBEAT_VERIFIED`. A primeira extração filtrada retornou campos nulos; corrigida a leitura com regex, sem expor payloads. A transição antecede a ativação posterior da flag de preview Desktop.
+- Contraprova independente no registro persistente do MCP Contabo: um dispositivo SEGREDO do executor remote-bridge, superfície tauri-windows-tray, vínculo original 26/11/2026 18:19:11.509 UTC. Heartbeats observados em duas leituras: 28/11/2026 04:58:53.171 e 04:59:08.826 UTC, idade de 0 e 2 segundos respectivamente; validade temporal do token positiva. O registro legado tem `owner_bound=false`; portanto não prova novo consentimento ou associação persistida ao ID da conta Supabase. Nenhum token, hash de token, código ou ID de conta exibido. `runtime=tauri-rust`, `remote_execution=not_verified`.
+- GET local `http://127.0.0.1:9101/health`: ok=true, engine_connected=false. O contrato de `session_vault.rs` (blob `8ae240caea69f28a710b22fe0184acdd36d84419`) distingue PAIRED_VERIFIED por heartbeat autenticado de PENDING_EXECUTION_PROOF.
+
+**Conclusão:** vínculo persistente legado e heartbeat vivo Casa→MCP comprovados. Não confundir recuperação desse vínculo com criação de dispositivo novo ou efeito causal exclusivo da flag Desktop. Acesso à tela, motor remoto, atendimento e chamada MCP autenticada de ferramenta continuam pendentes. Não se iniciou atendimento, alterou sessão ou clicou em controles. **FIXED_POINT do vínculo/heartbeat medido: APROVADO; associação de owner e execução ponta a ponta: PENDENTE.** Próximo passo: identificar a causa de engine_connected=false e reconciliar o contrato de associação do dispositivo, mantendo o vínculo atual.
+<!-- /CENTRALDARK_CASA_PAIRING_READBACK_20261128 -->
+
 
 ## Regra
 
