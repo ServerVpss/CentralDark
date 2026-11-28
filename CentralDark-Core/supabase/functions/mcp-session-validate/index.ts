@@ -26,7 +26,7 @@ Deno.serve(async (req:Request) => {
     const url=(Deno.env.get("SUPABASE_URL") || "").replace(/\/$/,"");
     const service=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
     if(url!==project || !service) return json(503,{error:"VALIDATOR_NOT_CONFIGURED"});
-    const headers:Record<string,string>={apikey:service,"Content-Type":"application/json",Accept:"application/json"};
+    const headers:Record<string,string>={apikey:service,"Content-Type":"application/json","Content-Profile":"public",Accept:"application/json"};
     if(!service.startsWith("sb_secret_")) headers.Authorization="Bearer "+service;
     const res=await fetch(url+"/rest/v1/rpc/mcp_validate_session_binding",{
       method:"POST",headers,body:JSON.stringify({p_user_id:body.user_id,p_session_id:body.session_id}),
