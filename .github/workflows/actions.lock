@@ -4,36 +4,36 @@
 version: 'v0.0.3'
 workflows:
     '.github/workflows/archive-inputs.yml':
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/bootstrap-installer-build.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/bootstrap-installer.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/canary-e2e.yml': []
     '.github/workflows/canary-release.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/catalog-core-imports.yml':
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/catalog-dead-repos.yml':
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/catalog-tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/ci-review-comment.yml':
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/ci.yaml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/dependabot-auto-merge.yml':
         - 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1'
     '.github/workflows/deploy-site.yml':
@@ -41,54 +41,54 @@ workflows:
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
         - 'actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346'
         - 'actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/desktop-bundle-smoke.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/desktop-bundled-release.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca'
+        - 'azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906'
         - 'microsoft/microsoft-store-apppublisher@cc9910a8d59f2eb55cbb83df0a3800cf3b5300e0'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/docker.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
+        - 'actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
+        - 'docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550'
         - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
         - 'useblacksmith/build-push-action@9b0579bbec7a6cad2f171596c57e7ac1e7658850'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
-        - 'useblacksmith/setup-docker-builder@19215110ab936351210feebdfa5b440b4493e184'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
+        - 'useblacksmith/setup-docker-builder@9657a6e02ca6445e6d6ce5ffaf370f4828dea50d'
     '.github/workflows/docs-search-monitor.yml':
         - 'actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a'
-        - 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020'
+        - 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1'
     '.github/workflows/docs-site-checks.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/e2e-desktop-core.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/e2e-desktop-update.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/e2e-desktop.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/install-e2e-macos-run.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/install-e2e-red.yml':
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/install-e2e-run.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/install-e2e-windows-run.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a'
@@ -96,99 +96,99 @@ workflows:
     '.github/workflows/install-e2e.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/js-autofix.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
-        - 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c'
+        - 'actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333'
         - 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/js-tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/label-rerun.yml': []
     '.github/workflows/lint.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/live-providers.yml':
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         - 'astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/nix.yml':
         - 'cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342'
         - 'nix-community/cache-nix-action@7df957e333c1e5da7721f60227dbba6d06080569'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/osv-scanner.yml': []
     '.github/workflows/plugin-catalog-ci.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/pm-bundle.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/remote-backends.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/repo-guards.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
         - 'ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/rust-tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/sandbox-image.yml':
-        - 'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c'
+        - 'actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
+        - 'docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550'
         - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
         - 'useblacksmith/build-push-action@9b0579bbec7a6cad2f171596c57e7ac1e7658850'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
-        - 'useblacksmith/setup-docker-builder@19215110ab936351210feebdfa5b440b4493e184'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
+        - 'useblacksmith/setup-docker-builder@9657a6e02ca6445e6d6ce5ffaf370f4828dea50d'
     '.github/workflows/skills-index-freshness.yml':
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/skills-index.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/stable-release-publication.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
+        - 'docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550'
         - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/stable-release.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121'
+        - 'docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550'
         - 'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/termux-verify.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/tests-os.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/tests.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020'
+        - 'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1'
         - 'astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/windows-bundle-sdk.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/windows-desktop-attach-e2e.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/windows-install-update-e2e.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
         - 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
     '.github/workflows/windows-venv-e2e.yml':
         - 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9'
-        - 'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a'
+        - 'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8'
 dependencies:
     'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9':
         ref: 'v6.1.0'
@@ -215,19 +215,19 @@ dependencies:
         commit: 'sha1-368f82528645a54fb793d4d04e342629a3f51346'
         owner_id: 44036562
         repo_id: 438112499
-    'actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c':
-        ref: 'v8.0.1'
-        commit: 'sha1-3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c'
+    'actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333':
+        ref: 'v8.0.2'
+        commit: 'sha1-9000827ccba6bdab643e8b6fd33ac0654aef8333'
         owner_id: 44036562
         repo_id: 192626254
-    'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020':
-        ref: 'v7.0.0'
-        commit: 'sha1-820762786026740c76f36085b0efc47a31fe5020'
+    'actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1':
+        ref: 'v7.1.0'
+        commit: 'sha1-949feb2413d6458794dcd2491c4babbbce0c15c1'
         owner_id: 44036562
         repo_id: 189476904
-    'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97':
-        ref: 'v7.0.0'
-        commit: 'sha1-5fda3b95a4ea91299a34e894583c3862153e4b97'
+    'actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0':
+        ref: 'v7.1.0'
+        commit: 'sha1-6d4fd22b20465ccc0f7354476588e8df7c9ca0e0'
         owner_id: 44036562
         repo_id: 192625525
     'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a':
@@ -257,9 +257,9 @@ dependencies:
         commit: 'sha1-fac544c07dec837d0ccb6301d7b5580bf5edae39'
         owner_id: 115962839
         repo_id: 846733598
-    'azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca':
-        ref: 'v3.0.1'
-        commit: 'sha1-f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca'
+    'azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906':
+        ref: 'v3.1.0'
+        commit: 'sha1-a641126d1b8aa4d1fa005f4f92df94a3a4c4c906'
         owner_id: 6844498
         repo_id: 210798615
     'cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342':
@@ -267,9 +267,9 @@ dependencies:
         commit: 'sha1-630ae543ea3a38a9a4166f03376c02c50f408342'
         owner_id: 36824654
         repo_id: 212301524
-    'docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121':
-        ref: 'v4.1.0'
-        commit: 'sha1-4907a6ddec9925e35a0a9e82d7399ccc52663121'
+    'docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550':
+        ref: 'v4.8.0'
+        commit: 'sha1-8aa5831fb8d48d8f76594c7ddde61ae58019f550'
         owner_id: 5429470
         repo_id: 287743349
     'docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f':
@@ -297,13 +297,13 @@ dependencies:
         commit: 'sha1-9b0579bbec7a6cad2f171596c57e7ac1e7658850'
         owner_id: 156274793
         repo_id: 855945457
-    'useblacksmith/checkout@25227e61ff9dafe400e22fa487b673eac4e4409a':
-        ref: 'v1.8.1'
-        commit: 'sha1-25227e61ff9dafe400e22fa487b673eac4e4409a'
+    'useblacksmith/checkout@75c49b6ed30ce59336e9252425796cfcfac155f8':
+        ref: 'v1.8.3'
+        commit: 'sha1-75c49b6ed30ce59336e9252425796cfcfac155f8'
         owner_id: 156274793
         repo_id: 1107788336
-    'useblacksmith/setup-docker-builder@19215110ab936351210feebdfa5b440b4493e184':
-        ref: 'v2.2.0'
-        commit: 'sha1-19215110ab936351210feebdfa5b440b4493e184'
+    'useblacksmith/setup-docker-builder@9657a6e02ca6445e6d6ce5ffaf370f4828dea50d':
+        ref: 'v2.4.0'
+        commit: 'sha1-9657a6e02ca6445e6d6ce5ffaf370f4828dea50d'
         owner_id: 156274793
         repo_id: 1030038037
