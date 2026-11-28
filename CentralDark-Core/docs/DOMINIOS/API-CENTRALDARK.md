@@ -278,6 +278,24 @@ Sequência subordinada ao EXECUTION_FIRST_PROTOCOL: mudança → identificar con
 **Base atual:** [pré-release plugin-v0.1.5](https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/releases/tag/plugin-v0.1.5), asset `CentralDark-Plugin.zip`, SHA-256 `571c8eca73d0aa17993a6c95a31697411714e897ac9130c404efd133b1c55393`, com download conferido. Fonte do pacote: `.agents/plugins/centraldark-unified-surface-parity/` e seu `SOURCE.json`. A distribuição GitHub está aprovada; instalação/OAuth pelo plugin, NPX persistente e atendimento remoto próprio continuam pendentes. Esta decisão documental não publica outro release, não altera runtime e não instala automação.
 <!-- /CENTRALDARK_AUTH_EVOLUCAO_CONJUNTA -->
 
+<!-- CENTRALDARK_MCP_OAUTH_CONSENT_DOMAIN_20261128 -->
+### OAuth ChatGPT — consentimento no domínio MCP (28/11/2026)
+
+**Evidência inicial:** captura do usuário mostra plugin CentralDark Unified Surface selecionável e tentativa de OAuth redirecionada a `admin.centralldark.com/mcp-autorizar`, com Bad Gateway. Isso não prova a versão instalada, a autorização OAuth ou ferramentas autenticadas. O MCP comum usava o destino administrativo antigo, enquanto o pareamento Desktop já usava o domínio MCP.
+
+**Correção em main:** commit `bf985aad91313134499f131e7a2ab7cd19e8bab4` (src e dist de `apps/modulos/mcp/*/oauth.js`, regressão `tests/pairing-consent-flow.test.mjs`). O OAuth comum encaminha para a interface MCP existente; POST JSON do domínio MCP exige a validação JWT/role admin existente. A origem legada do Cockpit e os seletores de pareamento VS Code/Bridge permanecem compatíveis. PKCE, callback registrado, consentimento humano e autorização continuam exigidos. Não foi alterado Supabase, DNS, Worker, Cloudflare Pages, pacote ZIP ou NPX.
+
+**Teste isolado:** 10/10 testes dirigidos usando a imagem anterior em contêiner descartável sem rede externa, arquivos de teste temporários e fixtures de autenticação; validação de origem, JWT/role, PKCE, redirect, nonce, expiração, pareamento legado e Desktop. Sintaxe src/dist aprovada. As verificações estáticas de outros artefatos não foram executadas por não integrarem este cone.
+
+**Deploy e contraprova:** imagem anterior `centraldark/mcp:da49b5e9-desktop-pairing-preview`, nova `centraldark/mcp:bf985aad-oauth-mcp-consent` (mesma base, troca exclusiva de dist/oauth.js e label de revisão). Contêiner `1b99ad3507bd` → `8e8ad1cebfed`, SHA-256 do arquivo `c6ec22abb336e15cef448cb959d9f13afd1a569d8d2630609ffd317abe6363b7`. Compose efetivo difere apenas pela imagem; ambiente, volume /data/mcp, redes e porta preservados. Backup 0600 `docker-compose.yml.before-oauth-mcp-consent-bf985aad` SHA-256 `3167b71ffd3f0cb94e8133e52d5e77291dc25be1714e7aa5d4af0381a4bf1d21`; novo Compose SHA-256 `481a398191d5d1b9e471338242bf9111d0373baf9781484c1f6a6b25e05c83cd`. Mesmo serviço MCP na Contabo: /health local 200; /api/mcp anônimo local e público 401.
+
+**Readback público pela Casa:** documento CIMD oficial `https://chatgpt.com/oauth/client.json?token_endpoint_auth_method=none` HTTP 200, callback registrado `https://chatgpt.com/connector_platform_oauth_redirect`. GET legítimo /authorize com state e PKCE de teste, sem credencial e sem confirmar consentimento, retornou 302 para `https://mcp.centralldark.com/mcp-autorizar`, preservando state, challenge e callback; nenhum código/token emitido. Página MCP 200 HTML, metadata OAuth 200 JSON e /api/mcp-info 200 JSON. A consulta pública /mcp/health não produziu JSON parseável e não foi usada como prova de saúde; /health local medido 200.
+
+**Compatibilidade da distribuição:** o pré-release `plugin-v0.1.5` continua usando o mesmo endpoint /api/mcp, sem alteração dos três arquivos internos; não gerar outro pacote só por correção interna compatível. Não afirmar execução de plugin por descoberta HTTP. Próxima ação humana: iniciar nova tentativa de conexão pelo ChatGPT, entrar na conta se necessário, confirmar consentimento e retornar ao cliente. Em seguida, comprovar token exchange, initialize/tools/list e uma chamada MCP autorizada de leitura. NPX persistente e atendimento multicliente continuam pendentes.
+
+`FIXED_POINT_OAUTH_CONSENT_ROUTE=APROVADO`; `FIXED_POINT_PLUGIN_AUTHENTICATED_TOOL_CALL=PENDENTE`.
+<!-- /CENTRALDARK_MCP_OAUTH_CONSENT_DOMAIN_20261128 -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
