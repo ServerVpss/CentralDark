@@ -334,10 +334,10 @@ test('Cockpit Supabase: consentimento JSON exige admin, origem e PKCE; sem senha
     assert.match((await nonAdmin.json()).error,/administrador/);
     const missingMcp=await request('/authorize',post('https://mcp.centralldark.com',''));
     assert.equal(missingMcp.status,401);
-    assert.equal((await missingMcp.json()).ok,false);
+    assert.equal((await missingMcp.json()).error,"access_denied");
     const nonAdminMcp=await request('/authorize',post('https://mcp.centralldark.com'));
     assert.equal(nonAdminMcp.status,401);
-    assert.equal((await nonAdminMcp.json()).ok,false);
+    assert.equal((await nonAdminMcp.json()).error,"access_denied");
     role='admin';
     const otherOrigin=await request('/authorize',post('https://outro.invalid'));
     assert.equal(otherOrigin.status,403);
@@ -364,16 +364,7 @@ test('Cockpit Supabase: consentimento JSON exige admin, origem e PKCE; sem senha
     assert.equal(callback.searchParams.get('state'),'STATE_JSON');
     assert.ok(callback.searchParams.get('code'));
     assert.equal(valid.headers.get('cache-control'),'no-store');
-    const validMcp=await request('/authorize',post('https://mcp.centralldark.com'));
-    assert.equal(validMcp.status,200);
-    const mcpResponse=await validMcp.json();
-    assert.equal(mcpResponse.ok,true);
-    const mcpCallback=new URL(mcpResponse.redirect_to);
-    assert.equal(mcpCallback.origin,new URL(base).origin);
-    assert.equal(mcpCallback.pathname,'/cb-json');
-    assert.equal(mcpCallback.searchParams.get('state'),'STATE_JSON');
-    assert.ok(mcpCallback.searchParams.get('code'));
-    assert.equal(validMcp.headers.get('cache-control'),'no-store');
+    // New account-bound JWT consent is exercised through the real HTTP entrypoint in account-oauth.test.mjs.
     const invalidMcpPkce=await request('/authorize',{...invalidPkceOpts,headers:{...invalidPkceOpts.headers,Origin:'https://mcp.centralldark.com'}});
     assert.equal(invalidMcpPkce.status,400);
     assert.equal(invalidMcpPkce.headers.get('location'),null);

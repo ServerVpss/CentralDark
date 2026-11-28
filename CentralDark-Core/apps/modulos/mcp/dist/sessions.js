@@ -38,9 +38,9 @@ function saveNow() {
         version: 1,
         savedAt: Date.now(),
         clients: Array.from(clients.values()),
-        authCodes: Array.from(authCodes.values()),
-        accessTokens: Array.from(accessTokens.values()),
-        refreshTokens: Array.from(refreshTokens.values()),
+        authCodes: Array.from(authCodes.values()).filter(v => v.gh_scope !== "centraldark-account"),
+        accessTokens: Array.from(accessTokens.values()).filter(v => v.gh_scope !== "centraldark-account"),
+        refreshTokens: Array.from(refreshTokens.values()).filter(v => v.gh_scope !== "centraldark-account"),
         sessions: Array.from(sessions.values()),
         eventSubscriptions: Array.from(eventSubscriptions.values()),
         eventDeliveries: Array.from(eventDeliveries.values()),
@@ -67,9 +67,9 @@ function loadState() {
         const raw = fs.readFileSync(STATE_FILE, "utf-8");
         const data = JSON.parse(raw);
         (data.clients ?? []).forEach((c) => clients.set(c.client_id, c));
-        (data.authCodes ?? []).forEach((c) => authCodes.set(c.code, c));
-        (data.accessTokens ?? []).forEach((t) => accessTokens.set(t.token, t));
-        (data.refreshTokens ?? []).forEach((t) => refreshTokens.set(t.token, t));
+        (data.authCodes ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((c) => authCodes.set(c.code, c));
+        (data.accessTokens ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((t) => accessTokens.set(t.token, t));
+        (data.refreshTokens ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((t) => refreshTokens.set(t.token, t));
         (data.sessions ?? []).forEach((s) => sessions.set(s.id, s));
         (data.eventSubscriptions ?? []).forEach((s) => eventSubscriptions.set(s.id, s));
         (data.eventDeliveries ?? []).forEach((d) => eventDeliveries.set(d.event_id, d));
@@ -152,13 +152,13 @@ export function issueTokenPair(input) {
         token: "at_" + crypto.randomBytes(32).toString("hex"),
         ...input,
         createdAt: now,
-        expiresAt: now + ACCESS_TOKEN_TTL_MS,
+        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + ACCESS_TOKEN_TTL_MS, input.account_expires_at) : now + ACCESS_TOKEN_TTL_MS,
     };
     const refresh = {
         token: "rt_" + crypto.randomBytes(32).toString("hex"),
         ...input,
         createdAt: now,
-        expiresAt: now + REFRESH_TOKEN_TTL_MS,
+        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + REFRESH_TOKEN_TTL_MS, input.account_expires_at) : now + REFRESH_TOKEN_TTL_MS,
     };
     accessTokens.set(access.token, access);
     refreshTokens.set(refresh.token, refresh);
@@ -187,7 +187,7 @@ export function consumeRefreshToken(token, clientId = "") {
         scheduleSave();
         return undefined;
     }
-    if (clientId && t.client_id !== clientId)
+    if ((t.gh_scope === "centraldark-account" || clientId) && t.client_id !== clientId)
         return undefined;
     refreshTokens.delete(token);
     scheduleSave();

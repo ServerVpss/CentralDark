@@ -113,6 +113,29 @@ async function readRecentLogDirs(limit) {
 }
 export const mcpPolicyTools = [
     {
+        name: "mcp_account_info",
+        description: "Mostra somente a identidade, o papel e o escopo OAuth da conta CentralDark autenticada nesta sessao.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Minha conta" },
+        inputSchema: z.object({}).strict(),
+        handler: async (_input, ctx) => {
+            if (!ctx?.account) return { isError: true, content: [{ type: "text", text: "Sessao de conta CentralDark necessaria." }] };
+            return ok({ ok: true, user_id: ctx.account.user_id, role: ctx.account.role,
+                oauth_scope: ctx.oauthScope, admin_authorized: ctx.admin === true });
+        },
+    },
+    {
+        name: "mcp_my_devices",
+        description: "Lista os vinculos de dispositivos pertencentes exclusivamente a conta autenticada no registro MCP existente. Nao executa comandos.",
+        annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Meus dispositivos" },
+        inputSchema: z.object({}).strict(),
+        handler: async (_input, ctx) => {
+            if (!ctx?.account || typeof ctx.listOwnedDevices !== "function")
+                return { isError: true, content: [{ type: "text", text: "Sessao de conta CentralDark necessaria." }] };
+            return ok({ ok: true, devices: ctx.listOwnedDevices(), source: "mcp-device-registry",
+                remote_execution: "not_verified" });
+        },
+    },
+    {
         name: "mcp_policy_summary",
         description: "Mostra a política de segurança MCP: níveis de risco, confirmações literais e paths bloqueados.",
         annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false, title: "Política MCP" },

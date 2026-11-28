@@ -182,6 +182,9 @@ Nunca contornar gates de autenticacao, autorizacao, auditoria e seguranca.
 Em contexto operacional CentralDark, responda primeiro à pergunta; apresente o HUD/RUDY re-medido quando solicitado ou exigido pela missão vigente. Fora de contexto operacional, mantenha a saudação curta.
 `;
 export const PUBLIC_CALLABLE_MCP_TOOLS = [];
+// Authenticated account catalog, distinct from anonymous public calls.
+export const ACCOUNT_SCOPED_MCP_TOOLS = Object.freeze(["mcp_account_info", "mcp_my_devices"]);
+
 const EventsListRequestSchema = z.object({ method: z.literal("events/list"), params: z.object({ cursor: z.string().nullable().optional() }).optional() });
 const EventsSubscribeRequestSchema = z.object({
     method: z.literal("events/subscribe"),
@@ -199,30 +202,38 @@ export async function publishCentralDarkReceiptEvent(receipt) {
     return centraldarkEventRegistry.publishReceipt(receipt);
 }
 export function buildServer(options) {
-    const requestedVisibleTools = options.visibleTools ?? ALL_TOOLS;
+    const adminAllowed = options.admin === true && (!options.account ||
+        (options.account.role === "admin" && String(options.oauthScope || "").split(/\s+/).includes("admin")));
+    const accountOnly = Boolean(options.account) && !adminAllowed;
+    const accountNames = new Set(ACCOUNT_SCOPED_MCP_TOOLS);
+    const accountTools = ALL_TOOLS.filter(tool => accountNames.has(tool.name));
+    const requestedVisibleTools = accountOnly ? accountTools : (options.visibleTools ?? ALL_TOOLS);
     // Endpoint comum nunca anuncia nem executa destrutivas. No endpoint admin,
     // toda destrutiva passa exclusivamente pelo dispatcher auditado mcp_admin_call.
-    const visibleTools = options.admin === true
+    const visibleTools = adminAllowed
         ? requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedVisibleTools.filter((tool) => tool.annotations?.destructiveHint !== true);
-    const requestedCallableTools = options.callableTools ?? visibleTools;
-    const callableTools = options.admin === true
+    const requestedCallableTools = accountOnly ? accountTools : (options.callableTools ?? visibleTools);
+    const callableTools = adminAllowed
         ? requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true || tool.name === "mcp_admin_call")
         : requestedCallableTools.filter((tool) => tool.annotations?.destructiveHint !== true);
     const semanticResourceEnabled = visibleTools.some((tool) => tool.name === "semantic_model_info");
     const auditIdentity = Object.freeze({
         callerUser: options.callerUser ?? null,
         clientLabel: String(options.clientLabel || options.label || "mcp-client").slice(0, 160),
-        endpointRole: options.admin === true ? "admin" : "public",
+        endpointRole: adminAllowed ? "admin" : "public",
         oauthScope: String(options.oauthScope || ""),
         correlationId: options.cid ?? null,
     });
-    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {}, events: {} }, instructions: PIVETE_BOOT_INSTRUCTIONS });
+    const server = new Server({ name: options.label ?? "mcp-centraldark", version: `0.4.0+${CATALOG_VERSION}` }, { capabilities: { tools: {}, resources: {}, ...(!options.account ? { events: {} } : {}) },
+          instructions: accountOnly ? "CentralDark: use apenas os recursos autorizados da conta. Consulte mcp_account_info e mcp_my_devices; pareamento nao comprova execucao remota." : PIVETE_BOOT_INSTRUCTIONS });
     const eventPrincipal = Object.freeze({ accountId: options.callerUser, oauthScope: String(options.oauthScope || "") });
     const eventRegistry = options.eventRegistry ?? centraldarkEventRegistry;
-    server.setRequestHandler(EventsListRequestSchema, async () => eventRegistry.list(eventPrincipal));
-    server.setRequestHandler(EventsSubscribeRequestSchema, async (req) => eventRegistry.subscribe(eventPrincipal, req.params));
-    server.setRequestHandler(EventsUnsubscribeRequestSchema, async (req) => ({ unsubscribed: await eventRegistry.unsubscribe(eventPrincipal, req.params) }));
+    if (!options.account) {
+        server.setRequestHandler(EventsListRequestSchema, async () => eventRegistry.list(eventPrincipal));
+        server.setRequestHandler(EventsSubscribeRequestSchema, async (req) => eventRegistry.subscribe(eventPrincipal, req.params));
+        server.setRequestHandler(EventsUnsubscribeRequestSchema, async (req) => ({ unsubscribed: await eventRegistry.unsubscribe(eventPrincipal, req.params) }));
+    }
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         const startedAt = Date.now();
         log.info("mcp_tools_list_start", { cid: options.cid, label: options.label ?? "private" });
@@ -362,12 +373,14 @@ export function buildServer(options) {
         try {
             const toolContext = Object.freeze({
                 token: options.token,
-                admin: options.admin === true,
+                admin: adminAllowed,
                 callerUser: options.callerUser ?? null,
+                account: options.account,
+                listOwnedDevices: options.listOwnedDevices,
                 oauthScope: String(options.oauthScope || ""),
                 correlationId: options.cid ?? null,
                 // Only the authenticated HTTP admin endpoint can provide this provenance.
-                authProvenance: options.authProvenance === "verified_oauth_admin"
+                authProvenance: adminAllowed && options.authProvenance === "verified_oauth_admin"
                     ? "verified_oauth_admin" : null,
             });
             // Mesma preflight do dispatcher; evita clientes diretos furarem a prioridade.

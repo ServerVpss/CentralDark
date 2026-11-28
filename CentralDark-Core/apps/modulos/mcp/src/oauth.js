@@ -2,7 +2,7 @@
 import crypto from "node:crypto";
 import { redirectUriRegistered } from "./oauth-redirect-match.js";
 import { config } from "./config.js";
-import { DESKTOP_SURFACE, DESKTOP_ORIGIN, getDesktopPairingConfig } from "./desktop-pairing-config.js";
+import { DESKTOP_SURFACE, DESKTOP_ORIGIN, getDesktopPairingConfig, getCentralDarkSupabaseAuthConfig } from "./desktop-pairing-config.js";
 import { isAdmin } from "./admin.js";
 import { ghCliAvailable, GH_CLI_OWNER_MARKER } from "./tools/github/github.js";
 
@@ -60,7 +60,64 @@ async function verifyRemoteBridgeSupabaseAdmin(req, desktopConfig = null) {
         return false;
     }
 }
-function getOwnerToolToken() {
+// Account OAuth uses the same project and role table, never the owner's identity.
+// The upstream access credential lives only in memory and is never returned to a client.
+const ACCOUNT_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const ACCOUNT_ROLES = ["admin", "moderator", "user"];
+export function isAccountGrant(grant) {
+    return grant?.gh_scope === "centraldark-account";
+}
+export async function verifySupabaseAccount(authorization) {
+    const config = getCentralDarkSupabaseAuthConfig();
+    const match = /^Bearer\s+([A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)$/.exec(String(authorization || ""));
+    if (!config || !match || match[1].length > 8192) return null;
+    const bearer = match[1];
+    const base = config.supabaseUrl;
+    const headers = { apikey: config.supabasePublishableKey, Authorization: "Bearer " + bearer, Accept: "application/json" };
+    const opts = { headers, signal: AbortSignal.timeout(6000), redirect: "error" };
+    try {
+        // Auth server verifies the JWT; parsed claims alone never establish identity.
+        const response = await fetch(base + "/auth/v1/user", opts);
+        if (!response.ok) return null;
+        const user = await response.json();
+        const claims = JSON.parse(Buffer.from(bearer.split(".")[1], "base64url").toString("utf8"));
+        if (!ACCOUNT_ID.test(user?.id || "") || user.is_anonymous === true || claims.sub !== user.id ||
+            claims.iss !== base + "/auth/v1" || claims.role !== "authenticated" ||
+            !ACCOUNT_ID.test(claims.session_id || "") || !Number.isFinite(claims.exp) ||
+            claims.exp * 1000 <= Date.now()) return null;
+        const roles = new URL(base + "/rest/v1/user_roles");
+        roles.searchParams.set("user_id", "eq." + user.id);
+        roles.searchParams.set("select", "role");
+        const roleResponse = await fetch(roles, opts);
+        if (!roleResponse.ok) return null;
+        const rows = await roleResponse.json();
+        if (!Array.isArray(rows)) return null;
+        const role = ACCOUNT_ROLES.find(r => rows.some(row => row?.role === r));
+        if (!role) return null;
+        return { account_id: user.id, account_role: role, account_session_id: claims.session_id,
+            account_expires_at: claims.exp * 1000, account_bearer: bearer };
+    } catch { return null; }
+}
+function accountScopeAllowed(scope, role) {
+    const scopes = String(scope || "").split(/\s+/).filter(Boolean);
+    return scopes.length > 0 && scopes.every(s => s === "mcp" || s === "admin") &&
+        (!scopes.includes("admin") || role === "admin");
+}
+export async function revalidateAccountGrant(grant) {
+    if (!isAccountGrant(grant) || typeof grant.account_bearer !== "string" ||
+        !Number.isFinite(grant.account_expires_at) || grant.account_expires_at <= Date.now()) return null;
+    const account = await verifySupabaseAccount("Bearer " + grant.account_bearer);
+    if (!account || account.account_id !== grant.account_id || account.account_role !== grant.account_role ||
+        account.account_session_id !== grant.account_session_id ||
+        account.account_expires_at !== grant.account_expires_at || !accountScopeAllowed(grant.oauth_scope, account.account_role)) return null;
+    return account;
+}
+function accountGrantFields(grant) {
+    return isAccountGrant(grant) ? { account_id: grant.account_id, account_role: grant.account_role,
+        account_session_id: grant.account_session_id, account_expires_at: grant.account_expires_at,
+        account_bearer: grant.account_bearer } : {};
+}
+export function getOwnerToolToken() {
     // Reutiliza sessao gh somente apos OAuth admin autorizado; nao expor credencial.
     if (ghCliAvailable()) return GH_CLI_OWNER_MARKER;
     return (process.env.GITHUB_TOKEN ?? process.env.GH_TOKEN ?? process.env.MCP_OWNER_TOOL_TOKEN ?? "").trim();
@@ -484,34 +541,43 @@ export async function handleAuthorize(req, res) {
             sendOwnerConsentPage(res, payload);
             return;
         }
-        // O logado no Cockpit já provou identidade: não pedir senha de novo.
-        // A senha segue apenas como fallback para quem não tem sessão admin.
-        const sessaoCockpit = standardOAuthFromMcp && requestedJson
-            ? await verifyRemoteBridgeSupabaseAdmin(req)
-            : isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
-        if (!sessaoCockpit && requestedJson) {
-            sendOwnerConsentPage(res, { ...payload, error: "Sessão do Cockpit ausente ou sem permissão de administrador." });
-            return;
-        }
-        if (!sessaoCockpit) {
-            const configuredPassword = getAdminPassword();
-            const submittedPassword = param(req, "password");
-            if (!configuredPassword) {
-                log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
-                sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+        let account = null;
+        let sessaoCockpit = false;
+        let ownerToken = "";
+        if (standardOAuthFromMcp) {
+            if (!requestedJson) return oauthError(res, 403, "access_denied", "Confirme pelo login CentralDark.");
+            account = await verifySupabaseAccount(req.headers.authorization);
+            if (!account) return oauthError(res, 401, "access_denied", "Conta CentralDark sem sessao ou papel valido.");
+            if (!accountScopeAllowed(scope, account.account_role))
+                return oauthError(res, 403, "access_denied", "Escopo nao permitido para esta conta.");
+        } else {
+            // O logado no Cockpit já provou identidade: não pedir senha de novo.
+            // A senha segue apenas como fallback para quem não tem sessão admin.
+            sessaoCockpit = isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
+            if (!sessaoCockpit && requestedJson) {
+                sendOwnerConsentPage(res, { ...payload, error: "Sessão do Cockpit ausente ou sem permissão de administrador." });
                 return;
             }
-            if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
-                log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
-                sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+            if (!sessaoCockpit) {
+                const configuredPassword = getAdminPassword();
+                const submittedPassword = param(req, "password");
+                if (!configuredPassword) {
+                    log.error("oauth_admin_password_missing", { cid: req.cid, client_id: client.client_id });
+                    sendOwnerConsentPage(res, { ...payload, error: "MCP_ADMIN_PASSWORD ausente no servidor." });
+                    return;
+                }
+                if (!submittedPassword || !timingSafeEqualText(submittedPassword, configuredPassword)) {
+                    log.warn("oauth_admin_password_invalid", { cid: req.cid, client_id: client.client_id });
+                    sendOwnerConsentPage(res, { ...payload, error: "Senha inválida." });
+                    return;
+                }
+            }
+            ownerToken = getOwnerToolToken();
+            if (!ownerToken) {
+                log.error("oauth_owner_tool_token_missing", { cid: req.cid, client_id: client.client_id });
+                sendOwnerConsentPage(res, { ...payload, error: "Token interno do dono ausente no servidor." });
                 return;
             }
-        }
-        const ownerToken = getOwnerToolToken();
-        if (!ownerToken) {
-            log.error("oauth_owner_tool_token_missing", { cid: req.cid, client_id: client.client_id });
-            sendOwnerConsentPage(res, { ...payload, error: "Token interno do dono ausente no servidor." });
-            return;
         }
         const authReq = createAuthRequest({ client_id: client.client_id, redirect_uri, client_state, code_challenge, code_challenge_method, scope });
         const ac = issueAuthCode({
@@ -519,9 +585,10 @@ export async function handleAuthorize(req, res) {
             redirect_uri: authReq.redirect_uri,
             code_challenge: authReq.code_challenge,
             code_challenge_method: authReq.code_challenge_method,
-            gh_token: ownerToken,
-            gh_scope: "owner-admin",
-            gh_login: "centraldark-admin",
+            gh_token: account ? "" : ownerToken,
+            gh_scope: account ? "centraldark-account" : "owner-admin",
+            gh_login: account ? "centraldark-account:" + account.account_id : "centraldark-admin",
+            ...(account || {}),
             oauth_scope: authReq.scope || "mcp admin",
         });
         const back = new URL(authReq.redirect_uri);
@@ -533,7 +600,7 @@ export async function handleAuthorize(req, res) {
             cid: req.cid,
             client_id: client.client_id,
             redirect_uri,
-            mode: sessaoCockpit ? "cockpit_session" : "owner_password",
+            mode: account ? "account_session" : sessaoCockpit ? "cockpit_session" : "owner_password",
         });
         if (requestedJson) {
             res.setHeader("Cache-Control", "no-store");
@@ -557,7 +624,7 @@ export async function handleAuthorize(req, res) {
 export async function handleOAuthCallback(req, res) {
     res.status(410).type("text/plain").send("OAuth via GitHub foi removido. Use /authorize do MCP CentralDark.");
 }
-export function postToken(req, res) {
+export async function postToken(req, res) {
     const body = (req.body ?? {});
     const grant_type = String(body.grant_type ?? "");
     if (grant_type === "authorization_code") {
@@ -587,12 +654,16 @@ export function postToken(req, res) {
             res.status(400).json({ error: "invalid_grant", error_description: "PKCE verifier inválido" });
             return;
         }
+        if (isAccountGrant(ac) && !await revalidateAccountGrant(ac)) {
+            return oauthError(res, 400, "invalid_grant", "Sessao CentralDark expirada ou permissoes alteradas.");
+        }
         const pair = issueTokenPair({
             client_id: ac.client_id,
             gh_token: ac.gh_token,
             gh_scope: ac.gh_scope,
             gh_login: ac.gh_login,
             oauth_scope: ac.oauth_scope || "mcp admin",
+            ...accountGrantFields(ac),
         });
         log.info("oauth_token_issued", { cid: req.cid, client_id, gh_login: ac.gh_login, oauth_scope: ac.oauth_scope });
 
@@ -620,12 +691,16 @@ export function postToken(req, res) {
             res.status(400).json({ error: "invalid_grant", error_description: "client_id não bate" });
             return;
         }
+        if (isAccountGrant(rt) && !await revalidateAccountGrant(rt)) {
+            return oauthError(res, 400, "invalid_grant", "Sessao CentralDark expirada ou permissoes alteradas.");
+        }
         const pair = issueTokenPair({
             client_id: rt.client_id,
             gh_token: rt.gh_token,
             gh_scope: rt.gh_scope,
             gh_login: rt.gh_login,
             oauth_scope: rt.oauth_scope || "mcp",
+            ...accountGrantFields(rt),
         });
         log.info("oauth_token_refreshed", { cid: req.cid, client_id: rt.client_id, gh_login: rt.gh_login, oauth_scope: rt.oauth_scope });
 
