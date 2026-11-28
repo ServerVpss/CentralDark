@@ -1,0 +1,5 @@
+name = "centraldark-mcp"
+main = "src/index.ts"
+compatibility_date = "2026-11-24"
+compatibility_flags = ["nodejs_compat"]
+routes = ["centraldark-mcp.centraldark.workers.dev/mcp"]
