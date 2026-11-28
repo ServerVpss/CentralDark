@@ -21,6 +21,30 @@ CENTRALDARK_AI_BOOT:
     read_order_mandatory:
       - "CENTRALDARK_AI_BOOT.yaml"
       - "LEIA-ME-IA.md"
+    # Caminhos GitHub relativos a raiz do monorepo, nao a raiz local do Core.
+    core_root: "CentralDark-Core/"
+    relative_core_paths_are_relative_to: "CentralDark-Core/"
+    github_repository_paths:
+      boot: "CentralDark-Core/CENTRALDARK_AI_BOOT.yaml"
+      leia: "CentralDark-Core/LEIA-ME-IA.md"
+      rules: "CentralDark-Core/RULES.md"
+      skill: "CentralDark-Core/.agents/skills/centraldark-operational-method/SKILL.md"
+      agents: "CentralDark-Core/AGENTS.md"
+      soul: "CentralDark-Core/docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"
+      root_agents: "AGENTS.md"
+    github_repository_read_order: ["CentralDark-Core/CENTRALDARK_AI_BOOT.yaml","CentralDark-Core/LEIA-ME-IA.md"]
+    on_404_relative_core_path: "RESOLVER_COM_CORE_ROOT_E_REPETIR_UMA_VEZ; NAO_PEDIR_PATH_JA_MAPEADO"
+    canonical_context_triggers: ["PROJETO_PRINCIPAL_DO_USUARIO","NOSSO_METODO_PADRAO","ORDEM_OPERACIONAL_CENTRALDARK","CONTINUIDADE_DA_MISSAO_CENTRALDARK"]
+    explicit_keyword_required: false
+    on_relevant_intent_with_github_access: "LER_CURRENT_BOOT_DEPOIS_LEIA_ANTES_DE_AFIRMAR_METODO_VIGENTE; RESOLVER_RULES_E_SKILL_MAE_PELOS_PATHS_ACIMA_QUANDO_PERTINENTES"
+    memory_role: "LOCALIZAR_CONTEXTO; NAO_SUBSTITUIR_CURRENT_MAIN_NEM_PROVA_DE_LEITURA"
+    memory_fallback_when_no_access: "RESPONDER_COM_CONTEXTO_DISPONIVEL_MARCADO_NAO_REVALIDADO_SEM_INVENTAR_SHA"
+    active_execution_method: "EXECUCAO_DIRETA"
+    active_execution_owner_path: "CentralDark-Core/RULES.md"
+    active_execution_owner_marker: "CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+    optional_security_audit: "SOB_DEMANDA_DO_USUARIO"
+    prior_method_is_not_current_if_conflicting: true
+    canonical_paths_are_not_new_loader_or_native_chat_trigger: true
     require_fresh_repo_read: true
     do_not_use_memory_as_read_proof: true
     validate_each: [PATH, NONEMPTY_CONTENT, SOURCE_COMMIT_OR_BLOB_SHA, ORDER, READ_RESULT]
@@ -233,7 +257,7 @@ CENTRALDARK_AI_BOOT:
   portable_operation_contract:
     status: "CANONICAL_REQUIRED"
     purpose: "BOOTSTRAP_ANY_CHAT_OR_SURFACE_WITHOUT_RETEACHING_CENTRALDARK"
-    canonical_source: "ServerVpss/CentralDark@main:CENTRALDARK_AI_BOOT.yaml"
+    canonical_source: "ServerVpss/CentralDark@main:CentralDark-Core/CENTRALDARK_AI_BOOT.yaml"
     pasted_copy_role: "HANDOFF_POINTER_NOT_SOURCE_OF_TRUTH"
     current_over_pasted_snapshot: true
     load_mode: "RESOLVE_CANON_AT_BOOT"
