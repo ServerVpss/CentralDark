@@ -260,6 +260,24 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 **Estado:** levantamento e comparação APROVADOS; execução remota própria PENDENTE. Nenhuma alteração de processos, arquivos do checkout, sessão, backend ou publicação realizada neste delta.
 <!-- /CENTRALDARK_NPX_UPSTREAM_RUNTIME_PARITY_20261128 -->
 
+<!-- CENTRALDARK_AUTH_EVOLUCAO_CONJUNTA -->
+<a id="evolucao-conjunta-da-distribuicao"></a>
+## Evolução conjunta da distribuição CentralDark
+
+**Decisão do responsável — 28/11/2026:** o conjunto completo de integração e distribuição deve evoluir como um produto único, não como arquivos ou aplicativos independentes. A alteração no login foi o exemplo inicial; a regra se aplica a qualquer mudança de contrato, funcionalidade, configuração ou dependência que afete o conjunto.
+
+- **Escopo:** MCP/API, autenticação (login, cadastro, recuperação, callbacks, renovação, logout e revogação), consentimento e pareamento, página web, plugin ChatGPT completo, conexão HTTPS direta, pacote NPX completo e Agente Remoto/instalador. Incluir outros consumidores existentes quando efetivamente afetados.
+- **Reuso e menor delta:** localizar os owners e dependências do contrato; alterar apenas os componentes que precisam mudar; verificar compatibilidade do conjunto inteiro. Reutilizar motor, serviços, sessão válida e infraestrutura existente. Não criar login, motor, backend ou distribuição paralelos, nem exigir reautenticação sem necessidade. Não confundir sessão de usuário, cliente MCP e dispositivo.
+- **Entrega íntegra:** quando houver mudança distribuível, atualizar os fontes e manifestos afetados, preservar a identidade do plugin, gerar o ZIP completo e os pacotes/instaladores afetados a partir da revisão registrada, com todas as dependências, recursos e arquivos necessários. Nunca distribuir somente um fragmento de um pacote como atualização completa. Versões dos componentes podem ser diferentes; a compatibilidade e a origem de cada versão devem ser explícitas.
+- **Publicação coordenada:** usar os Releases do fork [ServerVpss/CentralDarkDesktopCommanderMCP](https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/releases), com novas tags/versões dos artefatos modificados, changelog, links, SHA-256 e revisão fonte de cada pacote. Reaproveitar artefatos inalterados cuja compatibilidade esteja comprovada. Preservar versões históricas; não sobrescrever binários antigos silenciosamente. Atualizar o README da branch de entrega e o índice da main. Publicação NPM ou no diretório ChatGPT segue a autorização e a disponibilidade de cada canal.
+- **Teste de entrega:** validar arquivos internos/manifestos do pacote completo, instalação/atualização e os fluxos compartilhados afetados. Quando o delta tocar autenticação ou execução, testar login/consentimento com sessão válida e sem sessão, pareamento, reconexão, logout/revogação, isolamento e chamada autorizada de leitura conforme a capacidade entregue. Manter a confirmação humana aplicável. Conferir o release e o hash após baixar. Se uma superfície ainda não foi implementada ou provada, explicitar a pendência; não apresentar o conjunto como pronto nem transformar uma entrega de desenvolvimento em release estável.
+- **Linguagem:** interface do cliente em português natural; NPX e diagnósticos com o termo técnico seguido de explicação humana, por exemplo `[OAuth] Conta autenticada`, `[MQTT] Canal de mensagens ativo`, somente quando medidos. Preservar identificadores e protocolos internos. Logs não podem anunciar sucesso inexistente nem expor credenciais.
+
+Sequência subordinada ao EXECUTION_FIRST_PROTOCOL: mudança → identificar cone de impacto → evoluir fontes afetados → reconstruir artefatos completos → verificar compatibilidade do conjunto → publicar as versões autorizadas → baixar/conferir → registrar README, owner e continuidade. Não é novo workflow, serviço, gate global ou obrigação de reconstruir componentes comprovadamente inalterados por uma mudança meramente documental.
+
+**Base atual:** [pré-release plugin-v0.1.5](https://github.com/ServerVpss/CentralDarkDesktopCommanderMCP/releases/tag/plugin-v0.1.5), asset `CentralDark-Plugin.zip`, SHA-256 `571c8eca73d0aa17993a6c95a31697411714e897ac9130c404efd133b1c55393`, com download conferido. Fonte do pacote: `.agents/plugins/centraldark-unified-surface-parity/` e seu `SOURCE.json`. A distribuição GitHub está aprovada; instalação/OAuth pelo plugin, NPX persistente e atendimento remoto próprio continuam pendentes. Esta decisão documental não publica outro release, não altera runtime e não instala automação.
+<!-- /CENTRALDARK_AUTH_EVOLUCAO_CONJUNTA -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
