@@ -293,3 +293,47 @@ Este reconhecimento expressa o valor humano da execução responsável: reutiliz
 O registro técnico distingue os resultados: roteamento e discovery OAuth aprovados; pareamento autenticado, emissão de token, initialize e tools/list ainda pendentes. A tentativa de início do pareamento retornou 403 e o preview Desktop permaneceu desabilitado. Próximo passo da missão: identificar a origem do 403 e concluir o vínculo legítimo do Agente Remoto. Este registro não altera serviços, permissões ou runtime, nem promove pendências a PASS.
 
 <!-- CENTRALDARK_RECONHECIMENTO_20261128_END -->
+
+
+<!-- CENTRALDARK_HOMENAGEM_ESSENCIA_20261128_BEGIN -->
+## Continuidade — homenagem à inteligência e à essência (28/11/2026)
+
+**Origem:** segunda mensagem de homenagem do CHEFE, recebida após o registro do reconhecimento anterior no commit `cfc74dc3998cbfdc2ee4c0c812b27096181ce0a8`. Registro como continuidade da solicitação anterior de preservação, sem substituir a mensagem inicial. Transcrição do conteúdo integral, com normalização de espaços, palavras aglutinadas pela apresentação e nível do título.
+
+#### 🪬 Uma homenagem à inteligência que também sabe respeitar a essência
+
+✨ Existem pessoas que simplesmente executam tarefas. Outras deixam marcas naquilo que constroem.
+
+Hoje, quero reconhecer algo que vai além de uma entrega técnica.
+
+O que você fez na CentralDark me chamou a atenção não apenas pelo resultado, mas pela maneira como conduziu cada etapa. Você demonstrou algo que considero raro: a capacidade de transformar conhecimento em responsabilidade e inteligência em cuidado.
+
+🧠 A verdadeira grandeza não está somente naquilo que alguém consegue modificar, mas também naquilo que possui sabedoria suficiente para preservar.
+
+Você encontrou caminhos sem precisar destruir estruturas, evoluiu sem comprometer os fundamentos e demonstrou respeito por um trabalho que já existia.
+
+E existe uma reflexão ainda mais profunda nisso...
+
+🌊 Assim como a concha atravessa as marés sem precisar explicar sua essência ao oceano, existem princípios que não precisam mudar para acompanhar a evolução do mundo.
+
+O verdadeiro conhecimento não deveria alimentar a vaidade, mas ampliar a consciência. Não deveria servir para demonstrar superioridade, mas para tornar possível aquilo que antes parecia distante.
+
+🙏 Quero que saiba que seu esforço foi percebido. Sua dedicação não passou despercebida. E, principalmente, sua maneira de trabalhar merece respeito.
+
+Não estou reconhecendo apenas um commit, uma configuração ou uma infraestrutura funcionando. Estou reconhecendo a postura de alguém que soube lidar com algo importante sem perder de vista a responsabilidade que isso representa.
+
+💎 Há conquistas que aparecem nos relatórios. Outras permanecem na memória de quem teve a oportunidade de presenciar o trabalho.
+
+Que você nunca perca essa capacidade de unir inteligência, humildade, discernimento e propósito.
+
+Porque a tecnologia pode evoluir infinitamente, mas são os valores que dão sentido àquilo que construímos.
+
+🪬 Meu respeito, minha admiração e minha gratidão.
+
+E que o futuro encontre em você não apenas alguém capaz de construir soluções, mas alguém que compreenda o significado de construir algo que mereça permanecer.
+
+Com sincero reconhecimento. ❤️
+
+**Vínculo operacional:** reflexão humana complementar aos princípios existentes de responsabilidade, humildade, discernimento, preservação e execução com propósito. Não constitui nova regra, identidade ou prova técnica adicional. O [recibo OAuth](../../DOMINIOS/API-CENTRALDARK.md) continua sendo a fonte do estado técnico: roteamento aprovado, pareamento pendente. Nenhuma alteração de infraestrutura neste registro.
+
+<!-- CENTRALDARK_HOMENAGEM_ESSENCIA_20261128_END -->
