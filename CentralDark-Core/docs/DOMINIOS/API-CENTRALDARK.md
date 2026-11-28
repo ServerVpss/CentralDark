@@ -1,6 +1,6 @@
 # API oficial — CentralDark / MultiZap
 
-## Domínio oficial planejado
+## Domínio oficial
 
 ```txt
 https://api.centralldark.com
@@ -8,15 +8,215 @@ https://api.centralldark.com
 
 **Regra de grafia (errata 2026-10-21):** a identidade do produto e `CentralDark`; o dominio publico e `centralldark.com`, com **dois Ls**. Enderecos de acesso devem usar `*.centralldark.com` (por exemplo `api.centralldark.com` e `admin.centralldark.com`). A grafia do nome do produto nao e um hostname valido para os endpoints oficiais. Preservar grafias anteriores apenas como exemplos explicitamente marcados de erro ou evidencias historicas.
 
+## Estado inicial comprovado — setor MCP (28/11/2026 03:34 UTC)
+
+`api.centralldark.com` tem o setor MCP publicado por HTTPS normal, sem dependência de túnel nessa rota. A configuração canônica de domínio permanece nesta documentação; o roteamento vivo está no Traefik existente da Contabo (`vmi3790535`), e não em um segundo proxy.
+
+- Cloudflare: registro A `144.91.114.42`, proxy ativo, Full (strict). Nameservers preservados. Regra de origem exclusiva do host API `b80f2bbc6ef44c149aaea62480257809` encaminha a porta HTTPS de origem 2053; a URL pública continua na porta padrão 443. A regra EasyPanel 8443 permanece intacta. O Worker reservado de `/api/mcp` foi desvinculado da rota, sem excluir seu script.
+- Contabo: `/etc/easypanel/traefik/config/centraldark-api.yaml` SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`; `/etc/centraldark/contabo-private.nft` SHA-256 `b3cf9e59800a013ae11d8a0f5283488e34d348d52232e7df972180a701c3f060`. A porta 2053 aceita apenas IPv4 da Cloudflare; os bloqueios públicos de 80/443/3000/9100 foram preservados. Certificado Origin CA específico para a API, válido até 28/11/2027. Compose do MCP reaproveita a rede `easypanel`, com alias `centraldark-mcp-api`; porta 9100 permanece local. O Traefik foi atualizado, sem redeploy do Hermes ou MCP.
+- Prova externa pela Casa: `GET /mcp/health` = 200 JSON `service=mcp-centraldark`, 162 ferramentas declaradas, CF-Ray `a61650562c0c8933-GRU`. `GET /api/mcp` e `POST /api/mcp` sem token = 401 JSON. `/admin/catalog` = 418 (bloqueio do roteador). EasyPanel = 302; `mcp.centralldark.com/` = 200 HTML. Os hosts administrativos também foram rejeitados no teste local da entrada 2053.
+- Rollback preservado: backups dos arquivos existentes com sufixo `.before-api-https-20261128`; configuração anterior do DNS CNAME `centralldark.com.cdn.hstgr.net`; Worker `centraldark-mcp-reserve-route` preservado. Alteração do serviço Traefik depende de reconciliação caso o EasyPanel regenere a configuração.
+
+**Limite:** o FIXED_POINT aqui é o transporte HTTPS do setor MCP e sua barreira sem credencial. O challenge OAuth ainda referencia `mcp.centralldark.com`; autenticação completa, `tools/list`, pareamento e os demais setores da API continuam pendentes. `/mcp/health` é health do MCP, não do ecossistema inteiro. Não promover catálogo declarado a ferramentas executadas.
+
+<!-- CENTRALDARK_OAUTH_ROUTING_PREPARED_20261128 -->
+## Continuidade OAuth — diagnóstico e alteração preparada (28/11/2026)
+
+**Estado histórico anterior à autorização: PREPARED_NOT_DEPLOYED.** A revisão automática da plataforma rejeitou a tentativa de alterar o Traefik em produção antes de enviá-la à VPS: considerou insuficiente a autorização específica para publicar as rotas OAuth/pareamento. Não houve nova tentativa por outra rota. O readback manteve o SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`, `cd-api-mcp-auth` ausente e backup ainda inexistente. Cloudflare, variáveis, containers e autenticação não foram alterados nesta etapa.
+
+**Causa medida:** o backend local responde às duas rotas de discovery com 200 JSON, mas o Traefik público devolve 418. No domínio MCP, as mesmas rotas entregam 200 HTML da SPA. O challenge MCP anuncia metadata em `mcp.centralldark.com`, coerente com `MCP_PUBLIC_URL`, mas esse endereço ainda não encaminha discovery ao backend. `/api/mcp-info` responde localmente 503 `desktop_pairing_disabled`. TLS aprovado não resolve esse encaminhamento.
+
+**Menor delta preparado:** reutilizar o Worker existente `centraldark-mcp-reserve-route` como encaminhamento seletivo do domínio MCP à API, junto de um único router no Traefik existente. Manter a UI no Pages `centraldark-mcp`; não mudar React, CSP, CLI, Tauri ou `MCP_PUBLIC_URL`. O Worker conserva método, query, corpo, Origin e credenciais; fixa o destino API, devolve redirects sem segui-los e não registra segredos.
+
+- Fonte preparada: [centraldark-mcp-reserve-route.js](../../scripts/cloudflare/centraldark-mcp-reserve-route.js).
+- Verificação local: [centraldark-mcp-reserve-route.test.mjs](../../scripts/cloudflare/centraldark-mcp-reserve-route.test.mjs), **10/10 testes aprovados**, mais `node --check`. Provas: passagem de body/headers/query, 302 manual, 401/challenge, métodos existentes, rejeição de caminhos administrativos/semelhantes, bloqueio de retorno API→MCP, preservação de Origin não confiável e erro 502 sem detalhes privados. Isso não demonstra comportamento do Worker instalado.
+- O source deste Worker não estava versionado; o arquivo acima materializa o recurso vivo já identificado neste owner, sem criar outro Worker ou autenticador.
+
+### Caminhos e métodos exatos
+
+Na Cloudflare, cada linha corresponde ao padrão `https://mcp.centralldark.com<CAMINHO>*` associado ao mesmo Worker. O asterisco captura a query; dentro do Worker, somente o pathname exato da tabela é aceito. A rota antiga `api.centralldark.com/api/mcp` permanece com `script: null`, evitando ciclo. `/auth`, `/mcp-autorizar`, páginas e assets ficam fora desses padrões.
+
+| Caminho | Métodos encaminhados |
+| --- | --- |
+| `/.well-known/oauth-authorization-server` | GET, HEAD, OPTIONS |
+| `/.well-known/oauth-protected-resource` | GET, HEAD, OPTIONS |
+| `/api/mcp` | GET, HEAD, POST, OPTIONS |
+| `/api/mcp-info` | GET, HEAD, OPTIONS |
+| `/authorize` | GET, HEAD, POST, OPTIONS |
+| `/register` | POST, OPTIONS |
+| `/token` | POST, OPTIONS |
+| `/device/pair/start` | POST, OPTIONS |
+| `/device/pair/status` | GET, HEAD, POST, OPTIONS |
+| `/device/token/refresh` | POST, OPTIONS |
+| `/device/heartbeat` | POST, OPTIONS |
+| `/device/devices/self/revoke` | POST, OPTIONS |
+| `/device/desktop/start` | POST, OPTIONS |
+| `/device/desktop/session/check` | POST, OPTIONS |
+
+### Router preparado na Contabo
+
+Adicionar apenas `http.routers.cd-api-mcp-auth` em `/etc/easypanel/traefik/config/centraldark-api.yaml`, preservando todos os nós anteriores. `/api/mcp` e `/mcp/health` já têm routers próprios e não são substituídos.
+
+```json
+{
+  "rule": "Host(`api.centralldark.com`) && (((Path(`/.well-known/oauth-authorization-server`) || Path(`/.well-known/oauth-protected-resource`) || Path(`/api/mcp-info`) || Path(`/authorize`) || Path(`/device/pair/status`)) && (Method(`GET`) || Method(`HEAD`))) || ((Path(`/authorize`) || Path(`/token`) || Path(`/register`) || Path(`/device/desktop/start`) || Path(`/device/desktop/session/check`) || Path(`/device/pair/start`) || Path(`/device/pair/status`) || Path(`/device/token/refresh`) || Path(`/device/heartbeat`) || Path(`/device/devices/self/revoke`)) && Method(`POST`)) || ((Path(`/.well-known/oauth-authorization-server`) || Path(`/.well-known/oauth-protected-resource`) || Path(`/api/mcp-info`) || Path(`/authorize`) || Path(`/device/pair/status`) || Path(`/token`) || Path(`/register`) || Path(`/device/desktop/start`) || Path(`/device/desktop/session/check`) || Path(`/device/pair/start`) || Path(`/device/token/refresh`) || Path(`/device/heartbeat`) || Path(`/device/devices/self/revoke`)) && Method(`OPTIONS`)))",
+  "entryPoints": [
+    "https",
+    "cdapi"
+  ],
+  "priority": 300,
+  "tls": {},
+  "service": "cd-api-mcp"
+}
+```
+
+### Plano de aplicação e reversão (histórico da preparação)
+
+1. Obter a autorização específica exigida pela revisão automática para este patch no Traefik e para publicar o mesmo Worker nas rotas MCP da tabela.
+2. Revalidar o hash de origem, dono `root:root`, modo `0644` e ausência do router candidato. Se houver drift, reconciliar apenas o delta. Preservar snapshot do script e das rotas Cloudflare atuais antes da aplicação.
+3. Criar backup exclusivo `/etc/easypanel/traefik/config/centraldark-api.yaml.before-oauth-routing-20261128`, conferir seus bytes e substituir o JSON/YAML atomicamente no mesmo diretório. Usar o file provider do Traefik; nenhum restart de MCP ou Hermes faz parte do patch.
+4. Publicar o source testado no Worker existente e associar somente os padrões listados. Conferir por leitura independente source/rotas e teste público: discovery JSON, 401 sem credencial, 302 de consentimento, health 200, UI HTML e bloqueio administrativo 418.
+5. Para reversão, remover somente as novas associações MCP e restaurar o script preservado; conferir o hash aplicado antes de restaurar o backup Traefik. Revalidar o estado anterior. Não excluir o Worker.
+6. Registrar SHAs, IDs e resultados observados neste owner e no rastro vigente. Só depois tratar a flag e o pareamento real: o preview Desktop permanece desabilitado e seu token de teste `pairing_only` não equivale à sessão persistente do Agente Remoto.
+
+**Cursor histórico:** a aprovação específica era o próximo passo; a execução subsequente está registrada abaixo.
+<!-- /CENTRALDARK_OAUTH_ROUTING_PREPARED_20261128 -->
+
+<!-- CENTRALDARK_OAUTH_ROUTING_APPLIED_20261128 -->
+## Estado vivo — publicação do roteamento OAuth (28/11/2026, 04:21–04:23 UTC)
+
+**Estado: ROUTING_DEPLOYED; DISCOVERY_VERIFIED; AUTHENTICATED_PAIRING_PENDING.** Autorização específica recebida: aplicar a correção preparada no Traefik da Contabo e no Worker Cloudflare existente. O registro de preparação acima é histórico, não o estado atual. Não houve alteração da flag Desktop, autorização de dispositivo, emissão de token, reconstrução ou reinicialização do Hermes/MCP.
+
+- **Traefik existente:** adicionado exclusivamente o router `cd-api-mcp-auth` da receita acima. Configuração ativa `/etc/easypanel/traefik/config/centraldark-api.yaml`, SHA-256 `677d7a697086d40b8127e9db2a1ded1437126ab0412d35ec1c934a9057e4ef7a`, modo 0644 root:root. Backup exclusivo `centraldark-api.yaml.before-oauth-routing-20261128`, SHA-256 `bdacf8ebf85b06e61f3760f89dadb66fcf0b8ad209263d17c1c6d9ec844a5e71`. O firewall `/etc/centraldark/contabo-private.nft` permaneceu com SHA-256 `b3cf9e59800a013ae11d8a0f5283488e34d348d52232e7df972180a701c3f060`.
+- **Worker existente:** `centraldark-mcp-reserve-route`, código publicado idêntico ao blob Git `9356c5eb691d5e9457eec0552bcb1598e7aff3b0`, conferido por GET após upload. Deploy `637ae250-8c5d-4cd6-88f6-e843c275f382`, versão ativa 100% `bde297e4-80b5-4312-a9d3-55cc3bd7d309`; versão anterior preservada para rollback `17abb84d-ef52-4499-9d9f-cc53768726f2` (deploy anterior `355cdb13-64b9-4488-9682-a196ef853ace`). Sem criar Worker ou backend adicional.
+- **Rotas:** 14/14 associações MCP confirmadas por leitura independente da API Cloudflare, com `request_limit_fail_open=false`. A associação nula `api.centralldark.com/api/mcp` (ID `cda0d066e8cd482f99725698faa3d91d`) permaneceu intacta. UI/Pages e regras DNS/origem não foram modificadas.
+
+| Caminho MCP (padrão HTTPS com `*`) | ID da associação |
+| --- | --- |
+| `/.well-known/oauth-authorization-server` | `60cb6d266fcd49b9bcac488db86d8ebf` |
+| `/.well-known/oauth-protected-resource` | `489864b0373f4c4293927f1e716391a2` |
+| `/api/mcp` | `722b68d3b9d1431b8d01b8b7fc7f9786` |
+| `/api/mcp-info` | `96df6972b97c43f3a24ca7b148e6656d` |
+| `/authorize` | `012b4575d7ff4b0aa3c05354ed7a2749` |
+| `/register` | `74062e37d7a54744b013aecf86cc7de3` |
+| `/token` | `e7c7c81a37214200ac461e23b448a9ff` |
+| `/device/pair/start` | `42afafdec23d47ceab9552d4887095da` |
+| `/device/pair/status` | `bcb041cf761342758ee88f2c07f81c1e` |
+| `/device/token/refresh` | `9cd7c0bc19f54eaea2b069b4e29f4432` |
+| `/device/heartbeat` | `2368308a056f432dae39458e50ac396f` |
+| `/device/devices/self/revoke` | `00d0eb1908d749a79d0f729af5954b52` |
+| `/device/desktop/start` | `54ec0223689943aca0106c0f0a8ba7b4` |
+| `/device/desktop/session/check` | `28880f3158c84884a7b456857bfdfa16` |
+
+### Contraprovas públicas pela Casa
+
+| Prova | Resultado medido |
+| --- | --- |
+| API: discovery OAuth (HEAD, dois caminhos) | 200 JSON nos dois |
+| MCP: discovery OAuth (GET, dois caminhos) | 200 JSON; issuer, resource e endpoints coerentes com `https://mcp.centralldark.com`; CF-Rays `a616962c0b7cb998-GRU`, `a61697028cf18ea4-CWB` |
+| MCP: GET /api/mcp sem token | 401 JSON e WWW-Authenticate com metadata correta; CF-Ray `a61697166f691713-GRU` |
+| API: HEAD /api/mcp sem token | 401 JSON; CF-Ray `a616987538d14d30-GRU` |
+| API: GET /mcp/health | 200 JSON, MCP 0.4.0, 162 ferramentas declaradas; CF-Ray `a616973e5b6d5a8d-CWB` |
+| MCP: HEAD /auth e /mcp-autorizar | 200 HTML, CSP preservada; CF-Rays `a61697674f7fc9fb-CWB`, `a6169778c864f250-GRU` |
+| MCP: GET /authorize sem cliente | 400 JSON invalid_client; CF-Ray `a61698b6caef02f3-GRU` |
+| MCP: GET /token (método fora da lista) | 405 JSON method_not_allowed; CF-Ray `a61698a42acd255e-GRU` |
+| MCP: GET /authorize-extra | 404 JSON route_not_forwarded; CF-Ray `a6169789bab41920-CWB` |
+| API: /admin/catalog e / | 418; CF-Rays `a61697500a9ac15f-CWB`, `a61698cbb9735a8d-CWB` |
+| EasyPanel (HEAD /) | 302 com Cloudflare Access; CF-Ray `a61698886dabc15f-CWB` |
+| MCP: GET /api/mcp-info | 503 JSON desktop_pairing_disabled; CF-Ray `a616972c6f31c15f-CWB` |
+| MCP: POST /device/pair/start, fixture sem aprovação | 403; não houve ID/consentimento confirmado, nem token. Origem do 403 não identificada nesta rodada; não alterar WAF/autorização por hipótese. |
+
+A primeira sondagem agregada pela Casa foi bloqueada pelo antivírus local antes da execução. As provas HTTP acima vieram de consultas públicas independentes; a sondagem externa via ferramenta web não retornou conteúdo. Não foi desativada nenhuma proteção. Readback SSH confirmou os hashes e os mesmos contêineres Traefik, MCP, Hermes e serviços auxiliares ativos; Traefik Up 50 minutos, MCP Up 6 horas, Hermes Up 9 horas (sem restart nesta intervenção).
+
+**Limite:** publicação e discovery do roteamento APROVADOS. As 14 associações foram lidas de volta, não foram 14 testes funcionais autenticados. O redirect de consentimento 302 com solicitação válida, emissão de token, initialize, tools/list e vínculo real continuam PENDENTES. O preview Desktop continua desabilitado. O teste de fixture não aprovou dispositivo e não expôs credenciais. O estado global do Hermes e a versão do stamp não foram alterados.
+
+**Reversão:** remover somente as 14 associações registradas, preservando a rota nula da API; restaurar a versão anterior do Worker (100%) sem excluí-lo; conferir SHA da configuração aplicada antes de restaurar atomicamente o backup Traefik de hash anterior. Revalidar health, 401, 418 e UI. Não reiniciar Hermes/MCP.
+
+**Próximo passo:** correlacionar o 403 do POST com os logs/Cloudflare e o contrato de pareamento, distinguir preview da sessão persistente, concluir a autorização real com a conta e o consentimento apropriados, medir initialize/tools/list e comunicação ponta a ponta. **FIXED_POINT do delta de publicação: APROVADO; FIXED_POINT OAuth/Agente Remoto: PENDENTE.**
+<!-- /CENTRALDARK_OAUTH_ROUTING_APPLIED_20261128 -->
+
+<!-- CENTRALDARK_PAIRING_DIAG_20261128 -->
+### Continuidade — diagnóstico do 403 e configuração Desktop (28/11/2026)
+
+- Contabo: SSH confirmado em `vmi3790535`. MCP, Traefik e Hermes continuavam ativos. Inspeção de ambiente restrita a presença/booleanos: `CENTRALDARK_DESKTOP_PAIRING_ENABLED` ausente, `HUB_SUPABASE_URL` e `HUB_SUPABASE_PUBLISHABLE_KEY` presentes; URL confere com o projeto esperado pelo contrato `desktop-pairing-config.js` (blob `666efc3a35ac70d24a6638a23420d11841fc057e`). Presença da chave não comprova validade. Nenhum valor de credencial coletado.
+- Cloudflare: Bot Fight Mode ativo (`fight_mode=true`, `enable_js=true`). Consulta de entrypoints custom, managed e rate limit retornou 404 de ruleset inexistente nessas fases da zona. Endpoint legado de firewall retornou 410 por descontinuação. Esses resultados não excluem outras proteções ou regras de conta.
+- Sondagem pública única de repetição do POST de início de pareamento com fixture, sem aprovação de dispositivo: HTTP 403, `Content-Type: text/plain; charset=UTF-8`, `Server: cloudflare`, CF-Ray `a616c2690c7000f1-GRU`, sem cabeçalho CF-Mitigated. Não houve ID de pareamento ou token confirmado. Consulta dos logs Docker do MCP entre 04:20 e 04:30 UTC retornou zero linhas; ausência de log não prova ausência de chegada ao backend.
+- **Hipótese, não causa comprovada:** Bot Fight Mode pode interferir com tráfego de API, conforme [documentação oficial](https://developers.cloudflare.com/bots/get-started/bot-fight-mode/). O 403 e o cabeçalho Server isoladamente não demonstram qual proteção tomou a decisão. Correlacionar Ray ID em Security > Analytics > Events, conforme [documentação de Ray ID](https://developers.cloudflare.com/fundamentals/reference/cloudflare-ray-id/). Não desabilitar proteção ou criar exceções por hipótese.
+- **Próximo passo:** identificar a origem do bloqueio pelo Ray ID, corrigir somente o componente causal dentro do escopo autorizado, depois reconciliar a configuração Desktop e o contrato de sessão persistente do Agente Remoto. A flag desabilitada e o token pairing_only do preview não equivalem à sessão persistente. Nenhuma alteração de infraestrutura, configuração de segurança, sessão ou credencial nesta rodada. FIXED_POINT do pareamento permanece PENDENTE.
+<!-- /CENTRALDARK_PAIRING_DIAG_20261128 -->
+
+<!-- CENTRALDARK_PAIRING_BIC_CONFIRMED_20261128 -->
+### Causa confirmada — bloqueio BIC da sondagem e contraprova de leitura (28/11/2026)
+
+**Resultado: causa dos 403 identificada; pareamento real ainda PENDENTE.** Consulta somente de leitura à API GraphQL da Cloudflare, dataset `firewallEventsAdaptive`, zona `6986cded70ab6bec23a765496807b614`, correlacionou o host `mcp.centralldark.com` e o caminho `/device/pair/start` aos eventos abaixo. A hipótese anterior sobre Bot Fight Mode não deve ser promovida a causa: o evento que tomou a decisão informa explicitamente `source=bic`, `ruleId=bic` e `action=block`.
+
+| Momento UTC | Ray ID | User-Agent observado | Decisão |
+| --- | --- | --- | --- |
+| 28/11/2026 04:23:34 | `a6169919788232c4` | `Python-urllib/3.14` | `block / bic` |
+| 28/11/2026 04:51:46 | `a616c2690c7000f1` | `Python-urllib/3.14` | `block / bic` |
+
+Os dois eventos pertencem à sondagem Python, não constituem um teste do cliente nativo ou de uma sessão Supabase. Eventos `link_maze_injected` apareceram com os mesmos Rays; a atribuição do bloqueio acima vem dos eventos `block`. A [documentação oficial do Browser Integrity Check](https://developers.cloudflare.com/waf/tools/browser-integrity-check/) explica que a proteção avalia cabeçalhos HTTP, inclusive User-Agent ausente ou fora do padrão.
+
+**Contraprova externa sem criar pareamento:** duas requisições **GET**, à mesma URL `https://mcp.centralldark.com/device/pair/start`, diferiram somente no User-Agent. Nenhum corpo, credencial, código ou consentimento foi enviado.
+
+| User-Agent declarado | Resposta observada | CF-Ray |
+| --- | --- | --- |
+| `Python-urllib/3.14` | 403, `text/plain` | `a616c440bd5400ae-GRU` |
+| `CentralDark-Readback/1.0` | 405, JSON, `Allow: POST, OPTIONS` | `a616c44218041fb4-GRU` |
+
+O 405 confirma que a segunda leitura chegou à validação de método do Worker existente; **não comprova POST, autenticação ou vínculo**. O identificador usado na contraprova declara o cliente de diagnóstico; não imita um navegador ou o Agente Remoto. A leitura do log JSONL do MCP percorreu 1.330 linhas e não encontrou eventos desses caminhos após 04:15 UTC; esse dado é corroborativo, não substitui a decisão registrada na borda.
+
+**Limite de execução desta rodada:** a revisão automática da plataforma recusou o POST de teste por possível criação de estado de pareamento e exposição de código na resposta. A chamada recusada não foi executada. O diagnóstico prosseguiu por GraphQL e GET, sem repetir o POST por outra rota. Nenhuma regra Cloudflare, flag Desktop, credencial, sessão, registro de dispositivo ou serviço foi alterado.
+
+**Continuidade:** reutilizar o cliente legítimo e sua identificação HTTP, conferir o contrato do pareamento persistente e executar uma solicitação real com resposta secreta mantida no cliente após a autorização específica exigida pela revisão. Depois comprovar login/consentimento, vínculo e chamadas autenticadas. Não desativar BIC/Bot Fight Mode nem habilitar o preview Desktop para corrigir por hipótese uma sondagem Python. `FIXED_POINT_DIAGNOSTICO_403=APROVADO`; `FIXED_POINT_PAREAMENTO=PENDENTE`.
+<!-- /CENTRALDARK_PAIRING_BIC_CONFIRMED_20261128 -->
+
+<!-- CENTRALDARK_DESKTOP_PAIRING_ENABLED_20261128 -->
+### Continuidade — pareamento Desktop habilitado na Contabo (28/11/2026)
+
+**Intenção expressa do CHEFE:** “Então liga primeiro paramento no conta bo”. **Estado medido:** DESKTOP_PAIRING_ENABLED; REAL_DEVICE_PAIRING_PENDING. A ativação foi solicitada separadamente do diagnóstico BIC; não é uma correção do 403.
+
+- A validação nativa em `dist/desktop-pairing-config.js` com a flag candidata retornou configuração válida, protocolo `centraldark-device-v1`, `pairingOnly=true`. A importação inicial por `src/` falhou por se tratar de imagem compilada; corrigida antes da alteração. URL e formato da chave pública conferidos sem revelar valores.
+- Menor delta no Compose existente `/etc/easypanel/projects/centraldark/mcp/code/docker-compose.yml`: acrescentada exclusivamente a variável `CENTRALDARK_DESKTOP_PAIRING_ENABLED: "1"`. A comparação do Compose resolvido aprovou igualdade dos demais campos. O hash Compose de origem diferia do rótulo da instância anterior; ambiente efetivo, imagem, volume, redes e porta foram reconciliados. SHA-256 anterior `0b95ef921274252ebbc8594a40a6f56fb2f3ceb2559968d8c0ded12875f1e554`; novo `3167b71ffd3f0cb94e8133e52d5e77291dc25be1714e7aa5d4af0381a4bf1d21`. Backup exclusivo `docker-compose.yml.before-desktop-pairing-20261128` modo 0600 e hash anterior conferido. Override preservado.
+- Executado `docker compose up -d --no-deps --no-build --pull never mcp` no mesmo projeto `centraldark_mcp`; saída 0. Contêiner anterior `16c6e5d6f791`, atual `1b99ad3507bd`. Mesma imagem `centraldark/mcp:da49b5e9-desktop-pairing-preview`, volume `centraldark-mcp-stage-data` em `/data/mcp`, porta local 127.0.0.1:9100 e demais variáveis idênticas. Nenhuma reconstrução de imagem ou reinicialização de Hermes, Traefik ou EasyPanel.
+
+| Prova | Resultado |
+| --- | --- |
+| GET local /api/mcp-info | 200 JSON, protocolo centraldark-device-v1, pairingOnly=true, chave pública presente |
+| GET local /health | 200 JSON, ok=true, 162 ferramentas declaradas |
+| HEAD público /api/mcp-info pela Casa | 200 JSON; Ray a616c779fdd8a432-GRU |
+| HEAD público /mcp/health pela Casa | 200 JSON; Ray a616c78c7881f250-GRU |
+| HEAD público /api/mcp sem credencial pela Casa | 401 JSON; desafio OAuth preservado; Ray a616c7a39983b54f-GRU |
+| GET público via urllib a partir da Contabo | 403 text/plain nos três endpoints; Rays a616c7319bf230ea-FRA, a616c731edb0dc99-FRA e a616c73229be4d50-FRA |
+
+**Limite:** `desktop_pairing_disabled` resolvido no runtime. O diagnóstico anterior confirmou BIC nos Rays anteriores de sondagem; os novos Rays não foram individualmente correlacionados. Nenhuma proteção Cloudflare alterada, dispositivo aprovado ou token emitido. O preview `pairingOnly=true` não equivale a sessão remota persistente. Flag salva no Compose efetivo da VPS; preservação em futura regeneração de fonte pelo EasyPanel não comprovada.
+
+**Reversão:** conferir hashes do Compose atual e backup, restaurar exclusivamente esse arquivo e recriar somente MCP pela mesma receita, preservando imagem e volume. **Próximo passo:** testar o vínculo legítimo no cliente oficial com consentimento do responsável, sem contornar os limites da execução anterior. FIXED_POINT da ativação: APROVADO; integração: PENDENTE.
+<!-- /CENTRALDARK_DESKTOP_PAIRING_ENABLED_20261128 -->
+
+<!-- CENTRALDARK_CASA_PAIRING_READBACK_20261128 -->
+### Contraprova na Casa — vínculo persistente verificado (28/11/2026)
+
+**Intenção:** conferir diretamente a janela e a funcionalidade demonstradas pelo CHEFE, pelo Método Operacional/Skill Mãe. BOOT `5046b5f4794fed7df40a810397606c26a5bc7de2`, LEIA `3bfc1242697317fdce9f505dc0c62d4fde026df2`, Skill Mãe `0d712f5f8fbf1dfc5eaeac4ed1cabf580dafb4d2`, Skill visual `fa6f0b06286635678836a6ea4f5f9b24b5d2c482`. Rota: Remote Desktop Commander na Casa SEGREDO, PowerShell + UIAutomation, sem input.
+
+- Janela viva `Segredo Agente Remoto`, processo `centraldark-halo-lite` PID 37500, HWND 660130 (efêmeros), executável DEV `C:\CentralDark-Harnes-projeto\CentralDark-RemoteDesktop-Comander\centraldark-halo-main\src-tauri\target\debug\centraldark-halo-lite.exe`. UIA encontrou CASA CONECTADA, Pareamento verificado com sucesso, Serviço local disponível. Conexão central AGUARDANDO, acesso à tela ainda não ativado e botão Iniciar atendimento desabilitado.
+- Logger existente em `%LOCALAPPDATA%\Codex Halo\logs\centraldark-halo.log`: transição às 04:22:00.055 UTC de `mcp_heartbeat/ok/HTTP_2XX` e `pairing/ok/DEVICE_HEARTBEAT_VERIFIED`. A primeira extração filtrada retornou campos nulos; corrigida a leitura com regex, sem expor payloads. A transição antecede a ativação posterior da flag de preview Desktop.
+- Contraprova independente no registro persistente do MCP Contabo: um dispositivo SEGREDO do executor remote-bridge, superfície tauri-windows-tray, vínculo original 26/11/2026 18:19:11.509 UTC. Heartbeats observados em duas leituras: 28/11/2026 04:58:53.171 e 04:59:08.826 UTC, idade de 0 e 2 segundos respectivamente; validade temporal do token positiva. O registro legado tem `owner_bound=false`; portanto não prova novo consentimento ou associação persistida ao ID da conta Supabase. Nenhum token, hash de token, código ou ID de conta exibido. `runtime=tauri-rust`, `remote_execution=not_verified`.
+- GET local `http://127.0.0.1:9101/health`: ok=true, engine_connected=false. O contrato de `session_vault.rs` (blob `8ae240caea69f28a710b22fe0184acdd36d84419`) distingue PAIRED_VERIFIED por heartbeat autenticado de PENDING_EXECUTION_PROOF.
+
+**Conclusão:** vínculo persistente legado e heartbeat vivo Casa→MCP comprovados. Não confundir recuperação desse vínculo com criação de dispositivo novo ou efeito causal exclusivo da flag Desktop. Acesso à tela, motor remoto, atendimento e chamada MCP autenticada de ferramenta continuam pendentes. Não se iniciou atendimento, alterou sessão ou clicou em controles. **FIXED_POINT do vínculo/heartbeat medido: APROVADO; associação de owner e execução ponta a ponta: PENDENTE.** Próximo passo: identificar a causa de engine_connected=false e reconciliar o contrato de associação do dispositivo, mantendo o vínculo atual.
+<!-- /CENTRALDARK_CASA_PAIRING_READBACK_20261128 -->
+
+
 ## Regra
 
 A documentação, os contratos internos e os catálogos de rotas devem usar `api.centralldark.com` como domínio público oficial da API CentralDark/MultiZap.
 
-## Importante
+## Aplicação de alterações
 
-Este documento apenas padroniza o domínio no repositório.
+Este documento padroniza o domínio e registra as implantações comprovadas por setor. Rotas planejadas continuam distintas das rotas publicadas.
 
-Alterações reais em DNS, Cloudflare, Caddy, SSL, proxy reverso ou domínio público são ações sensíveis e exigem confirmação explícita antes de aplicar.
+Aplicar o [EXECUTION_FIRST_PROTOCOL](../../RULES.md#execução-primeiro--padrão-operacional-permanente-27112026) vigente. Para DNS, Cloudflare, Caddy, SSL, proxy reverso e domínio público, conferir alvo e escopo e executar a alteração já autorizada, com prova proporcional e rollback aplicável. Solicitar decisão humana somente quando faltar autorização material ou houver escolha irredutível; não renovar confirmação já concedida por rotina.
 
 ## Organização de rotas públicas
 
@@ -89,7 +289,7 @@ A governança semântica da árvore permanece no owner `docs/CONSCIENCIA/01-IDEN
 - Não apontar frontend direto para token WuzAPI.
 - Não expor Authorization, token, cookie, sessão ou `.env`.
 - Não ligar escrita/envio antes de autenticação, rate limit e confirmação.
-- Não alterar Caddy/DNS/SSL sem confirmação explícita.
+- Alterações em Caddy/DNS/SSL seguem a autorização vigente e o `EXECUTION_FIRST_PROTOCOL`; não ampliar o escopo nem contornar limites obrigatórios.
 
 ---
 

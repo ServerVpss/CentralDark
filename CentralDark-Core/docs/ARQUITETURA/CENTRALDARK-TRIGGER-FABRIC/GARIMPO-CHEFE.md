@@ -4,7 +4,7 @@ Papel: reservatório físico de minério bruto do Chefe. **Destino novo medido n
 
 **Atalho físico:** `F:\GARIMPO-CHEFE` · link `file:///F:/GARIMPO-CHEFE` (navegador pode bloquear URLs `file:` em páginas HTTP; o Cockpit oferece também botão de copiar caminho para abrir no Explorador).
 
-**Lei do minério:** bruto pesado e fontes únicas pertencem ao Garimpo em F:, mas **não são temporários nem descartáveis**. `F:\TEMP` destina-se exclusivamente a temporários, caches e logs transitórios; não limpar o bruto do Garimpo por inferência. Destilação só promove delta útil para owner correto na Forja `K:\`. Código e scripts comprovados seguem Casa ⇄ `main`, nunca peso bruto, modelos e sessões privadas.
+**Lei do minério:** bruto pesado e fontes únicas pertencem ao Garimpo em F:, mas **não são temporários nem descartáveis**. `F:\.tmp` destina-se exclusivamente a temporários, caches e logs transitórios; não limpar o bruto do Garimpo por inferência. Destilação só promove delta útil para owner correto na Forja `K:\`. Código e scripts comprovados seguem Casa ⇄ `main`, nunca peso bruto, modelos e sessões privadas.
 
 Não é autoridade, não é segundo cérebro e não cria sistema paralelo.
 

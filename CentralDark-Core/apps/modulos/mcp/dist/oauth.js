@@ -257,7 +257,7 @@ function sendOwnerConsentPage(res, input) {
             : { ok: false, error: input.error || "Sessão administrativa não autorizada." });
         return;
     }
-    const url = new URL(input.desktopPairing ? DESKTOP_ORIGIN + "/mcp-autorizar" : "https://admin.centralldark.com/mcp-autorizar");
+    const url = new URL(input.nativeMcpConsent ? DESKTOP_ORIGIN + "/mcp-autorizar" : "https://admin.centralldark.com/mcp-autorizar");
     const values = {
         client_id: input.client_id,
         client_name: input.client_name,
@@ -268,7 +268,7 @@ function sendOwnerConsentPage(res, input) {
         state: input.client_state,
         scope: input.scope,
         pair_id: input.device?.pairId,
-        pair_code: input.desktopPairing ? undefined : input.device?.code,
+        pair_code: input.nativeMcpConsent ? undefined : input.device?.code,
         pair_nonce: input.device?.nonce,
         auth_method: input.authMethod,
         error: input.error,
@@ -356,12 +356,19 @@ export async function handleAuthorize(req, res) {
         // O token Supabase segue no header, nunca no URL ou no HTML.
         const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
         const deviceClientId = param(req, "client_id");
-        const desktopPair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID &&
-            devicePairingStore?.pendingConsent(param(req, "pair_id"))?.surface === DESKTOP_SURFACE;
-        const desktopConfig = desktopPair ? getDesktopPairingConfig() : null;
-        if (desktopPair && !desktopConfig)
+        const pendingPair = devicePairingStore?.pendingConsent(param(req, "pair_id"));
+        const bridgePair = deviceClientId === REMOTE_BRIDGE_DEVICE_CLIENT_ID && pendingPair?.executor === "remote-bridge";
+        const desktopPair = bridgePair && pendingPair.surface === DESKTOP_SURFACE;
+        // Preserve the deployed legacy bridge route selector. Origin/header selects presentation,
+        // not authority: native POST still requires a live pair, Supabase admin, nonce and code.
+        const legacyNativePair = bridgePair && !desktopPair &&
+            ((req.method !== "POST" && req.headers["x-centraldark-pairing-route"] === "mcp-v1") ||
+                (requestedJson && req.headers.origin === DESKTOP_ORIGIN));
+        const nativeMcpConsent = desktopPair || legacyNativePair;
+        const desktopConfig = nativeMcpConsent ? getDesktopPairingConfig() : null;
+        if ((desktopPair || (legacyNativePair && req.method === "POST")) && !desktopConfig)
             return oauthError(res, 503, "server_error", "Pareamento Desktop CentralDark indisponível.");
-        if (requestedJson && req.headers.origin !== (desktopPair ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
+        if (requestedJson && req.headers.origin !== (nativeMcpConsent ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
             return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
         if (desktopPair && req.method === "POST" && !requestedJson)
             return oauthError(res, 403, "access_denied", "Confirme pelo login Supabase do domínio MCP.");
@@ -392,7 +399,7 @@ export async function handleAuthorize(req, res) {
                 client_id: deviceClientId,
                 client_name: deviceClientId === VSCODE_DEVICE_CLIENT_ID ? "CentralDark · Vibe Coding" : "CentralDark Remote Bridge",
                 scope: "mcp",
-                desktopPairing: Boolean(desktopPair),
+                nativeMcpConsent: Boolean(nativeMcpConsent),
                 isAdmin: isAdmin(req),
                 authMethod: param(req, "auth_method") === "password" ? "password" : "code",
                 device: { pairId: pair.pairId, code: pair.code, nonce: pair.nonce }
@@ -406,7 +413,7 @@ export async function handleAuthorize(req, res) {
             // Confirmação por código exige login admin válido. Senha é fallback
             // explícito, nunca dispensa código + nonce de uma solicitação viva.
             // A sessão web NÃO é copiada para o dispositivo. A prova é um token opaco exclusivo.
-            if (desktopPair) {
+            if (nativeMcpConsent) {
                 const ownerUserId = await verifyRemoteBridgeSupabaseAdmin(req, desktopConfig);
                 if (typeof ownerUserId !== "string" || !ownerUserId)
                     return oauthError(res, 403, "access_denied", "Conta CentralDark sem autorização de administrador.");

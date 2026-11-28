@@ -6,9 +6,12 @@ Este caminho existe apenas para consumidores históricos que ainda procuram `doc
 
 Antes de qualquer ação, carregar nesta ordem:
 
-1. `/LEIA-ME-IA.md`
-2. `/AGENTS.md`
-3. `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json`
+1. `CentralDark-Core/CENTRALDARK_AI_BOOT.yaml` na raiz GitHub.
+2. `CentralDark-Core/LEIA-ME-IA.md` na raiz GitHub.
+3. Resolver `AGENTS.md` e os demais owners pelo mapa vigente do BOOT.
+4. Consultar `docs/CONSCIENCIA/CONTRATO-RECONCILIACAO-ANTES-DE-CRIAR.json` somente no contexto pertinente.
+
+Os caminhos relativos de documentação deste arquivo continuam relativos ao Core. A ordem BOOT → LEIA e o método de execução pertencem aos owners atuais, sem entrada concorrente.
 
 Este arquivo **não** define uma segunda identidade, segundo fluxo de deploy ou segundo contrato de agentes.
 

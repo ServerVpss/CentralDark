@@ -972,6 +972,15 @@ Para identificar monitores dinamicamente, capturar um monitor com borda nativa e
 - Critério de FIXED_POINT: intenção atendida + owner alinhado + prova técnica + contraprova independente + sem regressão + registro verificado + aceite do CHEFE quando exigido. UNKNOWN nunca vira PASS.
 - Exemplo aprovado: Hermes Visual Computer Use, quatro monitores, satisfação humana de 100%, registrado no commit a8912ecce04062e0942f2adc973121dde4ec22f5.
 
+<!-- CENTRALDARK_EXECUTION_FIRST_HTTPS_RECIPE_20261128 -->
+<a id="receita-aplicada-execucao-direta-https"></a>
+### Receita aplicada — execução direta HTTPS (28/11/2026)
+
+Ao continuar uma execução já diagnosticada ou recuperar o método aprovado na Contabo, carregar o [registro integral existente](../../../docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). Aplicar a sequência e o YAML da receita sob o [EXECUTION_FIRST_PROTOCOL](../../../RULES.md#execução-primeiro--padrão-operacional-permanente-27112026): checkpoint da mesma missão, reuso, frentes independentes, escritor único, menor delta, efeito, contraprova, registro/readback e continuidade. Reutilizar autorização e prova ainda válidas; mudança de fingerprint exige apenas a verificação do componente afetado.
+
+Os bindings e a prova histórica ficam no [owner da API](../../../docs/DOMINIOS/API-CENTRALDARK.md), commit `a5f152abb9c70807382ae07fb4d4dfa73224fbec`. FIXED_POINT do transporte HTTPS e da barreira sem credencial não comprova OAuth, `tools/list`, pareamento, replay integral em outro ambiente nem consumo automático do método. Preservar o histórico e aplicar o menor delta autorizado; não duplicar receita, executor ou gate.
+<!-- /CENTRALDARK_EXECUTION_FIRST_HTTPS_RECIPE_20261128 -->
+
 ### 🍒+1 Verificação por código, sem acionar Hermes por rotina (CHEFE, 02/11/2026)
 
 **Decisão vigente:** na construção, manutenção, auditoria e documentação da CentralDark, SOL deve **navegar o código real** e verificar imports, owners, rotas, chamadas, contratos, dependências e fluxos, recorrendo aos scripts e validadores já existentes e a testes dirigidos ao cone afetado (por exemplo, sintaxe, lint, testes unitários/contratos, quando executáveis sem efeitos indevidos). **Não iniciar, reiniciar, movimentar ou testar ao vivo Hermes, suas janelas, mouse, overlay ou consumo de Skill automaticamente** como cerimônia de conclusão. Teste visual/interativo com Hermes fica para quando o CHEFE solicitar expressamente ou aprovar uma necessidade concreta; até lá, não gerar demanda por essa contraprova.

@@ -285,6 +285,8 @@ CHEFE_TRAZ_INTUICAO|ORDEM|DELTA
 
 Este ciclo reentra a cada decisão material durante a caminhada pelo código. O executor não usa seu prior genérico para substituir o método canônico do projeto quando o owner aplicável já responde à questão.
 
+**Vigência operacional — reconciliação com o [EXECUTION_FIRST_PROTOCOL](../../RULES.md#execução-primeiro--padrão-operacional-permanente-27112026) e o [BOOT](../../CENTRALDARK_AI_BOOT.yaml), 27/11/2026:** o modo de execução vigente é `EXECUCAO_DIRETA`. `CANONICAL_SELF_GRILL` é a técnica cognitiva proporcional à decisão material, não uma etapa universal de auditoria ou um bloqueio antes da execução autorizada. O marcador legado abaixo permanece por compatibilidade com o validador existente. Reutilizar provas válidas, corrigir divergências concretas e não repetir verificações sem causa material. Auditoria aprofundada opcional depende da intenção do usuário; limites obrigatórios continuam aplicáveis. Esta clarificação remete ao owner vigente em vez de criar outro protocolo.
+
 ```text
 DEFAULT_OPERATION_MODE=CANONICAL_SELF_GRILL
 CANONICAL_DOCS_BEFORE_QUESTION_OR_CONTRADICTION=true
