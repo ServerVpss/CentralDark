@@ -75,6 +75,8 @@
   },
   "global_continuity_policy": {
     "marker": "GLOBAL_CONTINUITY_NON_BLOCKING",
+    "motto": "REUSE BEFORE CREATION. NEVER CREATION BEFORE REUSE.",
+    "motto_meaning": "Antes de criar, recuperar lembranças, aprendizados, receitas, commits e históricos pertinentes; pesquisar documentação técnica e soluções equivalentes quando houver dúvida. Reutilizar ou estender o owner existente; criar somente quando a lacuna material estiver comprovada, conforme creation_gate.",
     "scope": "GLOBAL",
     "temporal_scope": "CONTINUOUS",
     "default_action": "CONTINUE_EXISTING",
@@ -2221,10 +2223,11 @@
     },
     "windows_casa_location_policy": {
       "host": "SEGREDO",
-      "temporary_build_download_cache_root": "F:\\TEMP",
+      "temporary_build_download_cache_root": "F:\\.tmp",
       "git_worktree_root": "F:\\_worktrees",
       "existing_noncanonical_siblings_read_only": [
         "F:\\_temp",
+        "F:\\TEMP",
         "F:\\tmp"
       ],
       "canonical_creator": "scripts/centraldark/ephemeral-workspace.mjs",
