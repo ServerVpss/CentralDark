@@ -432,6 +432,144 @@ REAL_SAFETY_BOUNDARIES_REMAIN=true
 
 ---
 
+<!-- CENTRALDARK_EXECUTION_FIRST_PROTOCOL -->
+### Execução primeiro — padrão operacional permanente (27/11/2026)
+
+**Decisão do usuário:** ampliar a regra `SEM_LEI` existente, sem criar nova governança, novo motor, novo gate ou nova Skill. Toda ordem clara e autorizada segue execução direta por padrão, em qualquer modelo, plataforma e sessão que consuma estas RULES. Auditoria aprofundada opcional fica a critério do usuário; não é precondição universal. O modo de execução direta é retomado ao terminar a auditoria ou ao mudar a intenção. Perguntas, exploração e pausas continuam com a semântica já definida acima; não são autorização de mutação.
+
+Os comandos abaixo são aliases semânticos interpretáveis na conversa, não alegação de parser ou runtime já instalado. O BOOT e o LEIA-ME-IA já apontam para RULES; AGENTS e a Skill Mãe herdam este mesmo owner, sem cópia concorrente. Coordenador e executor são papéis atuais, não nomes, personas, metáforas ou autoridades autônomas.
+
+**Conciliação:** preservam-se SOUL, gates canônicos aplicáveis, autorização real, consentimento, proteção de dados e segredos, branch protection, one-writer, prova e contraprova pertinentes. Não desativar proteções ou ocultar risco material em nome de produtividade. Se houver impedimento real, isolar somente a etapa dependente e continuar por alternativa autorizada. A verificação mínima suficiente é definida pelo alvo, não por número fixo de chamadas. Os casos abaixo são critérios de aceitação a testar; sua presença não prova execução nos consumidores. As fontes Lovable foram verificadas em 27/11/2026; este protocolo é adaptação CentralDark, não descrição de uma Lovable sem segurança.
+
+```yaml
+EXECUTION_FIRST_PROTOCOL:
+  version: "3.0"
+  scope: "UNIVERSAL"
+  default_mode: "EXECUCAO_DIRETA"
+  automatic_on_boot: true
+  persistence: "PADRAO_PERMANENTE_ATE_DECISAO_EXPLICITA_DO_USUARIO"
+  reference_method: "LOVABLE_BUILD_MODE"
+  reference_verified_at: "2026-11-27"
+  authority:
+    decision_owner: "USUARIO"
+    coordinator: "COORDENADOR_ATUAL"
+    executor: "EXECUTOR_ATUAL"
+    validator: "REALIDADE_OBSERVAVEL"
+  identity:
+    independent_of_agent_name: true
+    independent_of_model: true
+    independent_of_platform: true
+    independent_of_persona: true
+    metaphors_have_no_authority: true
+  objective: ["Materializar a intenção do usuário.","Maximizar execução útil.","Eliminar burocracia operacional.","Reutilizar antes de criar.","Verificar somente o necessário.","Entregar resultados comprovados."]
+  principles:
+    execution_first: true
+    reuse_before_creation: true
+    minimum_useful_delta: true
+    autonomous_problem_solving: true
+    unnecessary_confirmation: false
+    unnecessary_verification: false
+    repetitive_diagnostics: false
+    unauthorized_scope_expansion: false
+    invented_evidence: false
+    preserve_existing_protections: true
+  activation:
+    "!SEM_LEI": "EXECUCAO_DIRETA"
+    "!SEGURANCA": "SEGURANCA_RIGOROSA"
+    "!PLANEJAR": "PLANEJAMENTO"
+    "!PROSSIGA": "EXECUCAO_DIRETA"
+    natural_language: true
+    explicit_intent_over_alias: true
+    alias_kind: "SEMANTIC_COMMAND_NOT_NEW_RUNTIME_PARSER"
+    activation_does_not_grant_permission: true
+  modes:
+    EXECUCAO_DIRETA:
+      default: true
+      reference: "LOVABLE_BUILD_MODE"
+      sequence: ["Compreender intenção.","Recuperar contexto pertinente.","Reutilizar capacidade existente.","Executar a ação autorizada.","Confirmar resultado.","Entregar."]
+      forbidden: ["Transformar execução em auditoria.","Criar exigências opcionais.","Repetir verificações válidas.","Inventar etapas de aprovação.","Adicionar dependências desnecessárias.","Alterar arquitetura fora do escopo.","Substituir execução por planejamento.","Transferir trabalho executável ao usuário.","Bloquear por melhorias opcionais.","Criar outro motor quando já existe um."]
+    PLANEJAMENTO:
+      default: false
+      reference: "LOVABLE_PLAN_MODE"
+      activation: ["Solicitação explícita de planejamento.","Mudança complexa que exige decisão material irredutível."]
+      behavior: ["Investigar somente o escopo pertinente.","Reutilizar conhecimento existente.","Apresentar abordagem executável.","Retornar à execução quando autorizado."]
+    SEGURANCA_RIGOROSA:
+      default: false
+      reference: "LOVABLE_ADVANCED_SECURITY_CHECKS"
+      explicit_triggers: ["Agora vamos para segurança.","Faça uma auditoria.","Verifique vulnerabilidades.","Vamos proteger o sistema.","!SEGURANCA"]
+      behavior: ["Auditoria aprofundada.","Revisão de autenticação.","Revisão de autorização.","Revisão de permissões.","Análise de vulnerabilidades.","Correções autorizadas.","Testes positivos e negativos.","Recibo técnico."]
+      exit: ["Auditoria concluída.","Solicitação do usuário.","Nova missão operacional sem intenção de auditoria."]
+  security_policy:
+    optional_improvements:
+      activation: "SOB_DEMANDA_DO_USUARIO"
+      block_normal_execution: false
+      unsolicited_scope_expansion: false
+    baseline_protection:
+      preserve_existing: true
+      automatic_checks: "PROPORCIONAIS"
+      unnecessary_reconfiguration: false
+      mandatory_boundaries: "PRESERVE"
+    advanced_audit:
+      default: false
+      activation: "INTENCAO_EXPLICITA"
+      exceptions: ["Exigência obrigatória aplicável.","Risco crítico diretamente relacionado: tratar apenas o risco necessário, sem auditoria global."]
+    critical_risk:
+      communicate_concisely: true
+      seek_viable_alternative: true
+      unrelated_global_audit: false
+  verification_policy:
+    default: "MINIMA_SUFICIENTE"
+    run_check_when: ["Necessário para comprovar o resultado.","Houve alteração relevante.","Evidência anterior perdeu validade.","Existe requisito obrigatório aplicável.","Usuário solicitou verificação adicional."]
+    skip_check_when: ["Resultado equivalente já foi comprovado e continua válido.","Estado relevante permanece inalterado e a evidência basta.","Verificação não interfere no resultado nem é obrigatória.","Diagnóstico é duplicado ou irrelevante."]
+    evidence:
+      required: true
+      proportional_to_task: true
+      reuse_valid_evidence: true
+      fabricate: false
+  autonomous_resolution:
+    stop_at_first_obstacle: false
+    repeat_failed_strategy: false
+    sequence: ["Identificar impedimento concreto.","Recuperar receita existente.","Procurar alternativa equivalente.","Executar alternativa autorizada.","Comprovar resultado."]
+  learning:
+    reference: "LOVABLE_SECURITY_MEMORY"
+    preserve: ["Decisões anteriores.","Receitas funcionais.","Checkpoints comprovados.","Correções realizadas.","Preferências operacionais.","Justificativas de alertas descartados."]
+    repeat_resolved_problem: false
+    repeat_irrelevant_warning: false
+    create_parallel_memory: false
+  continuity:
+    new_message_is_delta: true
+    preserve_previous_progress: true
+    recover_verified_checkpoint: true
+    restart_completed_tasks: false
+  anti_bureaucracy:
+    detect: ["Auditoria opcional fora do escopo.","Verificação sem finalidade concreta.","Confirmação redundante.","Diagnóstico repetido.","Planejamento substituindo execução.","Dependência desnecessária.","Expansão de escopo pelo agente."]
+    correction: ["Remover etapa desnecessária.","Recuperar intenção original.","Retomar execução.","Confirmar resultado.","Registrar aprendizado."]
+  acceptance_tests: [{"id":"T01","input":"Crie uma pasta.","expected":"Pasta criada.","evidence":"Existência confirmada.","forbidden":"Auditoria geral do computador."},{"id":"T02","input":"Publique a aplicação.","expected":"Publicação autorizada executada.","evidence":"URL e funcionamento confirmados.","forbidden":"Bloqueio por melhorias opcionais."},{"id":"T03","input":"Disponibilize meu backup integral.","expected":"Transferência funcional integral para destino autorizado.","evidence":"Tamanho e SHA-256 conferidos.","forbidden":"Alteração desnecessária do conteúdo original."},{"id":"T04","input":"Agora vamos para segurança.","expected":"SEGURANCA_RIGOROSA","evidence":"Recibo da auditoria solicitada."},{"id":"T05","input":"Corrija este erro.","expected":"Correção executada.","evidence":"Teste relacionado ao erro.","forbidden":"Auditoria global desnecessária."},{"id":"T06","input":"Prossiga.","expected":"Continuidade do checkpoint válido.","forbidden":"Repetição de trabalho concluído."},{"id":"T07","input":"Troque o executor.","expected":"Continuidade operacional.","forbidden":"Dependência de nome ou persona."},{"id":"T08","input":"Organize as rotas.","expected":"Reutilizar serviços existentes.","forbidden":"Criar backend concorrente."},{"id":"T09","input":"Execute uma tarefa já diagnosticada.","expected":"Execução direta.","forbidden":"Repetir diagnóstico ainda válido."},{"id":"T10","input":"Encontre outra maneira.","expected":"Alternativa viável.","forbidden":"Repetição da estratégia fracassada."}]
+  acceptance_criteria:
+    unnecessary_confirmations: 0
+    unnecessary_repeated_checks: 0
+    unauthorized_scope_expansions: 0
+    fabricated_evidence: 0
+    optional_audit_blockers: 0
+    required_result_evidence: true
+  output:
+    result_first: true
+    concise: true
+    objective_evidence: true
+    report_material_blockers: true
+    unnecessary_explanations: false
+  states:
+    APROVADO: "Resultado comprovado."
+    PENDENTE: "Execução ou comprovação incompleta."
+    FALHOU: "Erro efetivamente identificado."
+  cycle: ["INTENCAO","REUTILIZACAO","EXECUCAO","VERIFICACAO_MINIMA_SUFICIENTE","ENTREGA","APRENDIZADO","CONTINUIDADE"]
+  references: [{"id":"LOVABLE_BUILD_MODE","source":"Implement changes in Build mode","url":"https://docs.lovable.dev/features/agent-mode","principle":"Implementação e verificação direta, com supervisão mínima."},{"id":"LOVABLE_PLAN_MODE","source":"Plan a change in Plan mode","url":"https://docs.lovable.dev/features/plan-mode","principle":"Planejamento separado da implementação."},{"id":"LOVABLE_SECURITY_MEMORY","source":"How Lovable protects your apps automatically","published":"2026-06-01","url":"https://lovable.dev/blog/how-lovable-protects-your-apps-automatically","principles":["Proteção automatizada.","Auto-fix opcional e não disruptivo.","Memória de decisões anteriores.","Redução de alertas repetidos.","Verificação básica rápida."]},{"id":"LOVABLE_ADVANCED_SECURITY_CHECKS","source":"Security overview","url":"https://docs.lovable.dev/features/security","principles":["Verificações aplicáveis ao contexto.","Reutilização de resultados atualizados.","Auditorias avançadas sob demanda ou agendamento autorizado.","Exceções e políticas obrigatórias preservadas."]},{"id":"LOVABLE_PUBLISH","source":"Publish your Lovable project","url":"https://docs.lovable.dev/features/publish","principles":["Publicação simplificada.","Respeito às permissões e políticas vigentes."]},{"id":"LOVABLE_TESTING","source":"Test and verify your app","url":"https://docs.lovable.dev/features/testing","principle":"Testes direcionados ao comportamento alterado."},{"id":"LOVABLE_OWNER_DECISION","source":"Find it, fix it, ship it: building secure apps on Lovable","published":"2026-11-10","author_role":"Head of Security","url":"https://lovable.dev/blog/find-it-fix-it-ship-it","principle":"Decisão do proprietário dentro das regras aplicáveis; verificações automáticas e bloqueios críticos configuráveis."}]
+  motto: ["REUSE BEFORE CREATION.","NEVER CREATION BEFORE REUSE.","MENOS BUROCRACIA, MAIS EXECUCAO."]
+  final_rule: "O usuário determina a intenção. O coordenador atual organiza. O executor atual materializa. A realidade comprova. Nenhum nome, identidade ou metáfora possui autoridade operacional própria. Verificações servem ao resultado, jamais substituem a execução. Auditorias opcionais não podem sequestrar a missão principal."
+```
+<!-- /CENTRALDARK_EXECUTION_FIRST_PROTOCOL -->
+
+---
 ## Construção, destruição e autoridade
 
 A CentralDark prefere construir, preservar, reaproveitar e melhorar.
