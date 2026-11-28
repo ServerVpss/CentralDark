@@ -221,6 +221,19 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 **Próximo delta:** completar sessão de dispositivo restrita e transporte autenticado no owner existente, reutilizando o motor compilado e a sessão do Agente Remoto sem duplicar backend/launcher; medir chamada de leitura legítima, revogação e isolamento antes de publicar. Revisar dependências de configuração/telemetria/feature flags do upstream antes de colocar o motor próprio em runtime. `FIXED_POINT_BUILD_CASA=APROVADO`; `FIXED_POINT_EXECUCAO_REMOTA=PENDENTE`. Não substituir o processo ativo por uma versão sem contrato de sessão validado.
 <!-- /CENTRALDARK_DESKTOP_FORK_BUILD_PARITY_20261128 -->
 
+<!-- CENTRALDARK_NPX_PAIRING_PREFILL_20261128 -->
+### Continuidade — NPX: código preenchido, consentimento explícito (28/11/2026)
+
+**Intenção:** a página de pareamento abre com o código do terminal já preenchido; o responsável apenas confere e clica Confirmar. O aviso anterior de solicitação incompleta confundia campo de código vazio com pedido estruturalmente incompleto.
+
+- Owner único do delta: `ServerVpss/CentralDarkDesktopCommanderMCP@centraldark/remote-pairing-web`, checkout existente `F:\CentralDark-DesktopCommanderMCP-main`. Commit inicial `a895c31283764a20bae5e71e55f3c61832c33195`, commit aplicado e push/readback `7d41836afcd6758c4c6b302699e4768563b5de02`. Alteração em CLI, rota React, retorno após login, testes e READMEs existentes, sem nova store ou backend. 
+- Após verificar o redirect oficial e os campos do pedido, o NPX abre o navegador com fragmento local `#pair_code=...`. Código continua visível no terminal, nunca é aceito em query nem no redirect recebido do servidor. O navegador aceita somente formato de código, cliente Bridge, scope MCP, ID e nonce compatíveis, sem duplicidade; retira o fragmento da barra de endereço. O mecanismo de retorno após login já existente preserva o pedido validado na sessão da aba e consome-o uma vez. Fallback manual mantido. A lógica segue a otimização de verificação sem digitação da [RFC 8628 §3.3.1](https://www.rfc-editor.org/rfc/rfc8628.html#section-3.3.1), sem alegar implementação integral dessa RFC.
+- Nenhuma aprovação automática, alteração de JWT/admin, nonce, TTL, revogação, token, segredo de posse, Supabase, Traefik ou MCP. A mesma validação server-side permanece obrigatória. O preview continua pairing-only, sem liberação de execução remota. Código de exemplo em testes fictício; não registrar código da sessão real.
+- Provas na Casa: CLI 8/8, Web 7/7, TypeScript e Vite build aprovados, `git diff --check` aprovado, push ao branch existente conferido. O primeiro comando de edição excedeu o limite de tamanho do shell; refeito por arquivo com SHA de origem e substituição exata. Wrangler 4.164.0 offline falhou por cache incompleto, instalação normal do mesmo pin e whoami aprovaram conta existente; não alteradas permissões.
+- Pages `centraldark-mcp` produção, branch existente, deployment `4e7497af-23da-4a51-8767-167590a6dbb0`, commit `7d41836afcd6758c4c6b302699e4768563b5de02`, status success, `commit_dirty=false`. Deploy anterior `b7211c7b-c2ab-487f-8780-f26f9afb775f` preservado como referência. GET público /mcp-autorizar e asset JS 200; asset `/assets/index-BJsU6j8B.js` idêntico ao build da Casa (SHA-256 `de1bea07839a07f6850f83aa1aeb3dc8cb8005919a5fa382d56483d993b95d79`), marcador de prefill presente, Referrer-Policy no-referrer. A primeira sonda falhou por quoting do PowerShell; a leitura corrigida passou.
+- FIXED_POINT do código/build/deploy: APROVADO. Consentimento humano real, prova de revogação e execução remota: PENDENTES. Próximo passo: nova tentativa NPX, conferir código preenchido e clique explícito do responsável; confirmar recibo da CLI e revogação antes de avançar.
+<!-- /CENTRALDARK_NPX_PAIRING_PREFILL_20261128 -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
