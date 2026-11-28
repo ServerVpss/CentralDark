@@ -135,6 +135,16 @@ A primeira sondagem agregada pela Casa foi bloqueada pelo antivírus local antes
 **Próximo passo:** correlacionar o 403 do POST com os logs/Cloudflare e o contrato de pareamento, distinguir preview da sessão persistente, concluir a autorização real com a conta e o consentimento apropriados, medir initialize/tools/list e comunicação ponta a ponta. **FIXED_POINT do delta de publicação: APROVADO; FIXED_POINT OAuth/Agente Remoto: PENDENTE.**
 <!-- /CENTRALDARK_OAUTH_ROUTING_APPLIED_20261128 -->
 
+<!-- CENTRALDARK_PAIRING_DIAG_20261128 -->
+### Continuidade — diagnóstico do 403 e configuração Desktop (28/11/2026)
+
+- Contabo: SSH confirmado em `vmi3790535`. MCP, Traefik e Hermes continuavam ativos. Inspeção de ambiente restrita a presença/booleanos: `CENTRALDARK_DESKTOP_PAIRING_ENABLED` ausente, `HUB_SUPABASE_URL` e `HUB_SUPABASE_PUBLISHABLE_KEY` presentes; URL confere com o projeto esperado pelo contrato `desktop-pairing-config.js` (blob `666efc3a35ac70d24a6638a23420d11841fc057e`). Presença da chave não comprova validade. Nenhum valor de credencial coletado.
+- Cloudflare: Bot Fight Mode ativo (`fight_mode=true`, `enable_js=true`). Consulta de entrypoints custom, managed e rate limit retornou 404 de ruleset inexistente nessas fases da zona. Endpoint legado de firewall retornou 410 por descontinuação. Esses resultados não excluem outras proteções ou regras de conta.
+- Sondagem pública única de repetição do POST de início de pareamento com fixture, sem aprovação de dispositivo: HTTP 403, `Content-Type: text/plain; charset=UTF-8`, `Server: cloudflare`, CF-Ray `a616c2690c7000f1-GRU`, sem cabeçalho CF-Mitigated. Não houve ID de pareamento ou token confirmado. Consulta dos logs Docker do MCP entre 04:20 e 04:30 UTC retornou zero linhas; ausência de log não prova ausência de chegada ao backend.
+- **Hipótese, não causa comprovada:** Bot Fight Mode pode interferir com tráfego de API, conforme [documentação oficial](https://developers.cloudflare.com/bots/get-started/bot-fight-mode/). O 403 e o cabeçalho Server isoladamente não demonstram qual proteção tomou a decisão. Correlacionar Ray ID em Security > Analytics > Events, conforme [documentação de Ray ID](https://developers.cloudflare.com/fundamentals/reference/cloudflare-ray-id/). Não desabilitar proteção ou criar exceções por hipótese.
+- **Próximo passo:** identificar a origem do bloqueio pelo Ray ID, corrigir somente o componente causal dentro do escopo autorizado, depois reconciliar a configuração Desktop e o contrato de sessão persistente do Agente Remoto. A flag desabilitada e o token pairing_only do preview não equivalem à sessão persistente. Nenhuma alteração de infraestrutura, configuração de segurança, sessão ou credencial nesta rodada. FIXED_POINT do pareamento permanece PENDENTE.
+<!-- /CENTRALDARK_PAIRING_DIAG_20261128 -->
+
 ## Regra
 
 A documentação, os contratos internos e os catálogos de rotas devem usar `api.centralldark.com` como domínio público oficial da API CentralDark/MultiZap.
