@@ -34,5 +34,20 @@
   "voice_functional_account_evidence": "2026-10-12T03:16:54.647Z mcp_status runtimeTools=141 routeCount=13",
   "desktop_tool_call_visible_receipt_owner": "docs/ARQUITETURA/CENTRALDARK-TOOL-CALL-VISIBLE-RECEIPT-ECHO-01.md",
   "desktop_native_renderer_fixed": "UNPROVEN_PLATFORM_OWNED",
-  "desktop_web_tab_opened": "USER_HOME_SEGREDO_EDGE_CURRENT_SESSION"
+  "desktop_web_tab_opened": "USER_HOME_SEGREDO_EDGE_CURRENT_SESSION",
+  "portable_candidate_20261128": {
+    "version": "0.1.5",
+    "status": "ARTIFACT_VERIFIED_NOT_PUBLISHED",
+    "archive": "CentralDark-Plugin.zip",
+    "archive_sha256": "58a984d1d379ebfa0f62171404ece94a8693bdc462a2a2bbed10158e7a1f4175",
+    "endpoint": "https://mcp.centralldark.com/api/mcp",
+    "manifest_blob": "938ad0b71bbc06cfb69594e001bf67d5ddb74eb2",
+    "mcp_blob": "0ee2b51ee8ec7b38cd9172a89ef8d797aa94aa8b",
+    "skill_blob": "40deaea8b9c46f7acecdf8b8994d4f3c4dafb327",
+    "prior_identity_readback": "PLUGIN_NOT_FOUND_CURRENT_ACCOUNT",
+    "new_plugin_created": false,
+    "release_updated": false,
+    "live_oauth_and_tools": "PENDING",
+    "next_step": "Reabrir a identidade privada existente na conta autorizada; importar/atualizar o pacote na superfície permitida e comprovar OAuth e tools/list. Não duplicar plugin."
+  }
 }
