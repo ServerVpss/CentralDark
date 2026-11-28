@@ -20,6 +20,51 @@ const STATE_FILE = (process.env.MCP_STATE_FILE && process.env.MCP_STATE_FILE.tri
     "/root/CentralDark/secrets/mcp-state.json";
 let saveTimer = null;
 let lastSaveAt = 0;
+// Account grants use the existing persistent store, but never persist upstream
+// credentials or MCP account tokens in cleartext. No second session store.
+const secret = String(process.env.MCP_SESSION_SECRET || "").trim();
+const accountStateKey = secret.length >= 32
+    ? crypto.createHash("sha256").update("centraldark-mcp-account-state-v1\0").update(secret).digest()
+    : null;
+const accountAad = Buffer.from("centraldark-mcp-account-state-v1");
+function sealAccountGrants() {
+    if (!accountStateKey) return undefined;
+    const now = Date.now();
+    const valid = v => v.gh_scope === "centraldark-account" && v.expiresAt > now;
+    const entries = { access: Array.from(accessTokens.values()).filter(valid),
+        refresh: Array.from(refreshTokens.values()).filter(valid) };
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv("aes-256-gcm", accountStateKey, iv);
+    cipher.setAAD(accountAad);
+    const ciphertext = Buffer.concat([cipher.update(JSON.stringify(entries), "utf8"), cipher.final()]);
+    return { version: 1, iv: iv.toString("base64"), tag: cipher.getAuthTag().toString("base64"),
+        ciphertext: ciphertext.toString("base64") };
+}
+function restoreAccountGrants(envelope) {
+    if (!envelope || !accountStateKey) return;
+    try {
+        if (envelope.version !== 1) throw new Error("ACCOUNT_STATE_VERSION");
+        const decipher = crypto.createDecipheriv("aes-256-gcm", accountStateKey, Buffer.from(envelope.iv,"base64"));
+        decipher.setAAD(accountAad);
+        decipher.setAuthTag(Buffer.from(envelope.tag,"base64"));
+        const decoded = JSON.parse(Buffer.concat([decipher.update(Buffer.from(envelope.ciphertext,"base64")),decipher.final()]).toString("utf8"));
+        const now = Date.now();
+        for (const [items,store,prefix] of [[decoded.access,accessTokens,"at_"],[decoded.refresh,refreshTokens,"rt_"]]) {
+            if (!Array.isArray(items)) throw new Error("ACCOUNT_STATE_FORMAT");
+            for (const grant of items) {
+                if (grant?.gh_scope === "centraldark-account" && typeof grant.token === "string" &&
+                    grant.token.startsWith(prefix) && typeof grant.account_grant_id === "string" &&
+                    Number.isFinite(grant.expiresAt) && grant.expiresAt > now) store.set(grant.token,grant);
+            }
+        }
+    } catch {
+        // Fail closed on a changed key, malformed or tampered state. Do not log it.
+        for (const store of [accessTokens,refreshTokens])
+            for (const [key,grant] of store) if (grant.gh_scope === "centraldark-account") store.delete(key);
+        log.error("account_state_restore_failed");
+    }
+}
+export function accountPersistenceReady() { return accountStateKey !== null; }
 function scheduleSave() {
     if (saveTimer)
         return;
@@ -41,15 +86,28 @@ function saveNow() {
         authCodes: Array.from(authCodes.values()).filter(v => v.gh_scope !== "centraldark-account"),
         accessTokens: Array.from(accessTokens.values()).filter(v => v.gh_scope !== "centraldark-account"),
         refreshTokens: Array.from(refreshTokens.values()).filter(v => v.gh_scope !== "centraldark-account"),
+        accountGrants: sealAccountGrants(),
         sessions: Array.from(sessions.values()),
         eventSubscriptions: Array.from(eventSubscriptions.values()),
         eventDeliveries: Array.from(eventDeliveries.values()),
     };
     const dir = path.dirname(STATE_FILE);
     fs.mkdirSync(dir, { recursive: true });
-    const tmp = STATE_FILE + ".tmp";
-    fs.writeFileSync(tmp, JSON.stringify(payload), { mode: 0o600 });
-    fs.renameSync(tmp, STATE_FILE);
+    const tmp = STATE_FILE + "." + crypto.randomBytes(8).toString("hex") + ".tmp";
+    try {
+        const fd = fs.openSync(tmp, "wx", 0o600);
+        try {
+            fs.writeFileSync(fd, JSON.stringify(payload));
+            fs.fsyncSync(fd);
+        } finally { fs.closeSync(fd); }
+        fs.renameSync(tmp, STATE_FILE);
+        if (process.platform !== "win32") {
+            const directoryFd = fs.openSync(dir,"r");
+            try { fs.fsyncSync(directoryFd); } finally { fs.closeSync(directoryFd); }
+        }
+    } finally {
+        try { fs.unlinkSync(tmp); } catch (err) { if (err.code !== "ENOENT") throw err; }
+    }
     try {
         fs.chmodSync(STATE_FILE, 0o600);
     }
@@ -70,6 +128,7 @@ function loadState() {
         (data.authCodes ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((c) => authCodes.set(c.code, c));
         (data.accessTokens ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((t) => accessTokens.set(t.token, t));
         (data.refreshTokens ?? []).filter(v => v.gh_scope !== "centraldark-account").forEach((t) => refreshTokens.set(t.token, t));
+        restoreAccountGrants(data.accountGrants);
         (data.sessions ?? []).forEach((s) => sessions.set(s.id, s));
         (data.eventSubscriptions ?? []).forEach((s) => eventSubscriptions.set(s.id, s));
         (data.eventDeliveries ?? []).forEach((d) => eventDeliveries.set(d.event_id, d));
@@ -148,22 +207,33 @@ const ACCESS_TOKEN_TTL_MS = 1000 * 60 * 60; // 1h
 const REFRESH_TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30d
 export function issueTokenPair(input) {
     const now = Date.now();
+    const account = input.gh_scope === "centraldark-account";
+    if (account) {
+        input = { ...input, account_grant_id: input.account_grant_id || crypto.randomUUID() };
+        if (input.account_authority === "session-v1" && !accountPersistenceReady())
+            throw new Error("ACCOUNT_PERSISTENCE_NOT_CONFIGURED");
+    }
+    const limit = input.account_authority === "session-v1" ? input.account_grant_expires_at : input.account_expires_at;
     const access = {
         token: "at_" + crypto.randomBytes(32).toString("hex"),
         ...input,
         createdAt: now,
-        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + ACCESS_TOKEN_TTL_MS, input.account_expires_at) : now + ACCESS_TOKEN_TTL_MS,
+        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + ACCESS_TOKEN_TTL_MS, limit) : now + ACCESS_TOKEN_TTL_MS,
     };
     const refresh = {
         token: "rt_" + crypto.randomBytes(32).toString("hex"),
         ...input,
         createdAt: now,
-        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + REFRESH_TOKEN_TTL_MS, input.account_expires_at) : now + REFRESH_TOKEN_TTL_MS,
+        expiresAt: input.gh_scope === "centraldark-account" ? Math.min(now + REFRESH_TOKEN_TTL_MS, limit) : now + REFRESH_TOKEN_TTL_MS,
     };
     accessTokens.set(access.token, access);
     refreshTokens.set(refresh.token, refresh);
     cleanup();
-    scheduleSave();
+    if (account && accountStateKey) {
+        // Persist before acknowledging tokens to the client.
+        try { saveNow(); }
+        catch (err) { accessTokens.delete(access.token); refreshTokens.delete(refresh.token); throw err; }
+    } else scheduleSave();
     return { access, refresh };
 }
 // Receipt is only a short-lived observation of an existing account grant.
@@ -192,6 +262,64 @@ export function getAccessToken(token) {
         return undefined;
     }
     return t;
+}
+export function peekRefreshToken(token, clientId) {
+    const grant = refreshTokens.get(token);
+    return grant?.gh_scope === "centraldark-account" && grant.client_id === clientId &&
+        grant.expiresAt > Date.now() ? grant : undefined;
+}
+export function accountGrantIsActive(grant) {
+    return !grant.token || (grant.expiresAt > Date.now() && (accessTokens.get(grant.token) === grant || refreshTokens.get(grant.token) === grant));
+}
+function removeAccountFamily(grant) {
+    if (!grant?.account_grant_id) return false;
+    let changed = false;
+    for (const store of [accessTokens,refreshTokens])
+        for (const [key,value] of store)
+            if (value.gh_scope === "centraldark-account" && value.account_grant_id === grant.account_grant_id &&
+                value.client_id === grant.client_id && value.account_id === grant.account_id &&
+                value.account_session_id === grant.account_session_id) { store.delete(key); changed = true; }
+    return changed;
+}
+export function revokeAccountFamily(grant) {
+    if (!removeAccountFamily(grant)) return false;
+    if (accountStateKey) saveNow(); else scheduleSave();
+    return true;
+}
+export function revokeOAuthToken(token, clientId) {
+    const grant = refreshTokens.get(token) || accessTokens.get(token);
+    if (!grant || grant.client_id !== clientId) return false;
+    if (grant.gh_scope === "centraldark-account") return revokeAccountFamily(grant);
+    // Preserve legacy scope and revoke only the exact client-bound token.
+    refreshTokens.delete(token); accessTokens.delete(token);
+    saveNow();
+    return true;
+}
+export function revokeOwnAccountSession(account) {
+    let count = 0;
+    const grants = [...refreshTokens.values(),...accessTokens.values()];
+    for (const grant of grants) if (grant.gh_scope === "centraldark-account" &&
+        grant.account_id === account.account_id && grant.account_session_id === account.account_session_id &&
+        removeAccountFamily(grant)) count++;
+    // Pending consent codes for this session are invalid too.
+    for (const [key,grant] of authCodes) if (grant.gh_scope === "centraldark-account" &&
+        grant.account_id === account.account_id && grant.account_session_id === account.account_session_id) authCodes.delete(key);
+    if (accountStateKey) saveNow(); else scheduleSave();
+    return count;
+}
+export function rotateAccountTokenPair(previous, input) {
+    if (!accountGrantIsActive(previous) || refreshTokens.get(previous.token) !== previous ||
+        previous.expiresAt <= Date.now()) return undefined;
+    // The old refresh AND its access tokens are invalidated before issuance.
+    // No await occurs between compare and mutation; a concurrent replay loses.
+    removeAccountFamily(previous);
+    try { return issueTokenPair(input); }
+    catch (err) {
+        // Do not restore consumed grants after an uncertain write. Flush denial
+        // if possible, then return an error instead of acknowledging new tokens.
+        if (accountStateKey) { try { saveNow(); } catch {} }
+        throw err;
+    }
 }
 export function consumeRefreshToken(token, clientId = "") {
     const t = refreshTokens.get(token);

@@ -12,6 +12,8 @@ const origin = "https://mcp.centralldark.com";
 const supabase = "https://lyoigsqluyktoclwdaft.supabase.co";
 const ids = ["00000000-0000-4000-8000-000000000001","00000000-0000-4000-8000-000000000002","00000000-0000-4000-8000-000000000003"];
 const target = process.env.CD_ACCOUNT_TEST_TARGET || "src";
+const durable = process.env.CD_TEST_DURABLE === "1";
+const proofKey = "a".repeat(64); // fixture only
 assert.ok(["src","dist"].includes(target));
 if (process.env.CD_ACCOUNT_TEST_CHILD === "1") {
     globalThis.fetch = async (input, options = {}) => {
@@ -19,6 +21,17 @@ if (process.env.CD_ACCOUNT_TEST_CHILD === "1") {
         if (url.origin !== supabase) throw Error("FIXTURE_EXTERNAL_NETWORK_DENIED");
         assert.equal(options.redirect, "error");
         const fixture = JSON.parse(readFileSync(process.env.CD_ACCOUNT_FIXTURE, "utf8"));
+        if (url.pathname === "/functions/v1/mcp-session-validate") {
+            assert.equal(options.headers["X-CentralDark-MCP-Proof"],proofKey);
+            assert.equal(options.method,"POST");
+            assert.equal(options.headers.Authorization,undefined);
+            if (fixture.validatorUnavailable) return Response.json({}, {status:503});
+            const binding = JSON.parse(options.body);
+            const account = fixture.accounts.find(a=>a.id===binding.user_id && a.active &&
+                JSON.parse(Buffer.from(a.bearer.split(".")[1],"base64url")).session_id===binding.session_id);
+            const role = account && ["admin","moderator","user"].find(role=>account.roles.includes(role));
+            return Response.json(role?{valid:true,user_id:account.id,session_id:binding.session_id,role,not_after:null}:{valid:false});
+        }
         const bearer = String(options.headers?.Authorization || "").replace(/^Bearer /,"");
         const account = fixture.accounts.find(a => a.bearer === bearer && a.active);
         if (!account) return Response.json({}, {status:401});
@@ -55,16 +68,34 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
     const base = "http://127.0.0.1:"+port;
     // Explicit test-only credentials; do not inherit service or GH tokens.
     const env = {PATH:dir,HOME:dir,USERPROFILE:dir,NODE_ENV:"test",MCP_HOST:"127.0.0.1",MCP_PORT:String(port),
-        MCP_PUBLIC_URL:origin,CENTRALDARK_ADMIN_KEY:"fixture_admin_key",MCP_SESSION_SECRET:"fixture_session_secret",
+        MCP_PUBLIC_URL:origin,CENTRALDARK_ADMIN_KEY:"fixture_admin_key",MCP_SESSION_SECRET:"fixture_session_secret_for_account_state_tests_only_32_chars",
         MCP_ADMIN_COOKIE_SECRET:"fixture_cookie_secret",MCP_ADMIN_PASSWORD:"fixture_admin_password",
         HUB_SUPABASE_URL:supabase,HUB_SUPABASE_PUBLISHABLE_KEY:"sb_publishable_fixture",
         MCP_STATE_FILE:statePath,CENTRALDARK_DEVICE_REGISTRY_PATH:registryPath,CENTRALDARK_DESKTOP_PAIRING_ENABLED:"1",
-        CD_ACCOUNT_TEST_CHILD:"1",CD_ACCOUNT_TEST_TARGET:target,CD_ACCOUNT_FIXTURE:fixturePath};
-    const child=spawn(process.execPath,[fileURLToPath(import.meta.url)],{env,stdio:["ignore","pipe","pipe"]});
-    let childOutput="";
-    child.stdout.on("data",d=>{childOutput=(childOutput+d.toString()).slice(-12000)});
-    child.stderr.on("data",d=>{childOutput=(childOutput+d.toString()).slice(-12000)});
+        CD_ACCOUNT_TEST_CHILD:"1",CD_ACCOUNT_TEST_TARGET:target,CD_ACCOUNT_FIXTURE:fixturePath,
+        ...(durable?{CENTRALDARK_MCP_SESSION_VALIDATOR_KEY:proofKey}:{})};
+    let child, childOutput="";
     const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+    function startChild(){
+        childOutput="";
+        child=spawn(process.execPath,[fileURLToPath(import.meta.url)],{env,stdio:["ignore","pipe","pipe"]});
+        child.stdout.on("data",d=>{childOutput=(childOutput+d.toString()).slice(-12000)});
+        child.stderr.on("data",d=>{childOutput=(childOutput+d.toString()).slice(-12000)});
+    }
+    async function stopChild(){
+        if(child && child.exitCode===null && child.signalCode===null){
+            const exited=new Promise(r=>child.once("exit",r));child.kill("SIGKILL");await Promise.race([exited,pause(3000)]);
+        }
+    }
+    async function waitReady(){
+        for(let i=0;i<100;i++){
+            if(child.exitCode!==null||child.signalCode!==null)break;
+            try{if((await fetch(base+"/api/mcp-info",{signal:AbortSignal.timeout(1000)})).status===200)return;}catch{}
+            await pause(150);
+        }
+        assert.fail("entrypoint not ready: "+childOutput.slice(-1500));
+    }
+    startChild();
     const post=async(path,body,headers={})=>fetch(base+path,{method:"POST",redirect:"manual",signal:AbortSignal.timeout(10000),headers:{"content-type":"application/json",...headers},body:JSON.stringify(body)});
     const form=async(path,body,headers={})=>fetch(base+path,{method:"POST",redirect:"manual",signal:AbortSignal.timeout(10000),headers:{"content-type":"application/x-www-form-urlencoded",...headers},body:new URLSearchParams(body)});
     const consent=async(client,a,scope="mcp",overrides={},headers={})=>{
@@ -87,7 +118,7 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
         assert.equal(pending.status,200);
         { const value=await pending.json(); assert.equal(value.ok,true); assert.equal(value.status,"pending"); assert.ok(Object.keys(value).every(key=>["ok","status","cid","requestId","spanId","traceId"].includes(key))); }
         assert.equal((await receiptStatus(reply.consent_receipt,null)).status,401);
-        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id))).status,404);
+        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id && x.active))).status,404);
         assert.equal((await receiptStatus(reply.consent_receipt,a,"https://other.invalid")).status,403);
         const back=new URL(reply.redirect_to);
         assert.equal(back.origin,base);
@@ -99,13 +130,13 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
         assert.match(pair.access_token,/^at_/);
         assert.match(pair.refresh_token,/^rt_/);
         assert.equal(pair.scope,scope);
-        assert.ok(pair.expires_in>0&&pair.expires_in<=300);
+        assert.ok(pair.expires_in>0&&pair.expires_in<=(durable?3600:300));
         assert.equal(JSON.stringify(pair).includes(a.bearer),false);
         const completed=await receiptStatus(reply.consent_receipt,a);
         assert.equal(completed.status,200);
         assert.equal(completed.headers.get("cache-control"),"no-store");
         { const value=await completed.json(); assert.equal(value.ok,true); assert.equal(value.status,"authenticated"); assert.ok(Object.keys(value).every(key=>["ok","status","cid","requestId","spanId","traceId"].includes(key))); }
-        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id))).status,404);
+        assert.equal((await receiptStatus(reply.consent_receipt,accounts.find(x=>x.id!==a.id && x.active))).status,404);
         const replay=await form("/token",{grant_type:"authorization_code",client_id:client,redirect_uri:data.redirect_uri,code:back.searchParams.get("code"),code_verifier:verifier});
         assert.equal(replay.status,400);
         return pair;
@@ -125,13 +156,7 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
     const call=async(pair,name,args={})=>rpc(pair,"tools/call",{name,arguments:args});
     const decode=r=>JSON.parse(r.body.result.content[0].text);
     try {
-        let ready=false;
-        for(let i=0;i<100;i++){
-            if(child.exitCode!==null)break;
-            try{if((await fetch(base+"/api/mcp-info",{signal:AbortSignal.timeout(1000)})).status===200){ready=true;break;}}catch{}
-            await pause(150);
-        }
-        assert.ok(ready,"entrypoint not ready: "+childOutput.slice(-1500));
+        await waitReady();
         const register=await post("/register",{client_name:"Account fixture",redirect_uris:[base+"/callback"],token_endpoint_auth_method:"none"});
         assert.equal(register.status,201);
         const client=(await register.json()).client_id;
@@ -198,7 +223,7 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
             const renewed=await form("/token",{grant_type:"refresh_token",refresh_token:user.refresh_token,client_id:client});
             assert.equal(renewed.status,200);
             const pair=await renewed.json();
-            assert.ok(pair.expires_in>0&&pair.expires_in<=300);
+            assert.ok(pair.expires_in>0&&pair.expires_in<=(durable?3600:300));
             assert.equal(decode(await call(pair,"mcp_account_info")).user_id,ids[0]);
             accounts[2].roles=["user"];save();
             assert.equal((await rpc(admin,"tools/list")).status,401);
@@ -206,18 +231,79 @@ test("OAuth accounts on the actual HTTP entrypoint: role, scope, token exchange,
             accounts[0].active=false;save();
             assert.equal((await rpc(pair,"tools/list")).status,401);
         });
-        await t.test("upstream and account MCP grants are not persisted",async()=>{
+        await t.test("own session revocation requires identity and preserves other accounts",async()=>{
+            accounts[0].active=true;save();
+            const pair=await authorize(client,accounts[0]);
+            const otherPair=await authorize(client,accounts[1]);
+            const revoke=(account,requestOrigin=origin)=>form("/authorize",{action:"revoke_session"},
+                {Origin:requestOrigin,Accept:"application/json",...(account?{Authorization:"Bearer "+account.bearer}:{})});
+            assert.equal((await revoke(null)).status,401);
+            assert.equal((await revoke(accounts[0],"https://wrong.invalid")).status,403);
+            assert.equal((await rpc(pair,"tools/list")).status,200);
+            assert.equal((await revoke(accounts[0])).status,200);
+            assert.equal((await rpc(pair,"tools/list")).status,401);
+            assert.equal((await rpc(otherPair,"tools/list")).status,200);
+        });
+        await t.test("upstream and account MCP grants are not persisted in cleartext",async()=>{
             await pause(900);
             const saved=readFileSync(statePath,"utf8");
+            assert.equal(JSON.parse(saved).accountGrants.version,1);
+            assert.ok(JSON.parse(saved).accountGrants.ciphertext.length>0);
             for(const a of accounts) assert.ok(!saved.includes(a.bearer));
             for(const p of [user,moderator,admin,adminPersonal]) {
                 assert.ok(!saved.includes(p.access_token));
                 assert.ok(!saved.includes(p.refresh_token));
             }
         });
+        await t.test("encrypted grants survive abrupt restart and refresh rotates exactly once",async()=>{
+            let live=accounts[1];
+            if(durable){
+                const claims=JSON.parse(Buffer.from(live.bearer.split(".")[1],"base64url"));
+                claims.exp=Math.floor(Date.now()/1000)+5;
+                live.bearer=encoded({alg:"HS256",typ:"JWT"})+"."+encoded(claims)+".fixture_short_jwt";
+                save();
+            }
+            const pair=await authorize(client,live);
+            const original=readFileSync(statePath,"utf8");
+            assert.ok(!original.includes(pair.access_token)&&!original.includes(pair.refresh_token)&&!original.includes(live.bearer));
+            if(durable) await pause(5500);
+            await stopChild();startChild();await waitReady();
+            assert.equal(decode(await call(pair,"mcp_account_info")).user_id,live.id);
+            const refresh=()=>form("/token",{grant_type:"refresh_token",refresh_token:pair.refresh_token,client_id:client});
+            if(durable){
+                fixture.validatorUnavailable=true;save();
+                assert.equal((await refresh()).status,400);
+                fixture.validatorUnavailable=false;save();
+            }
+            const results=await Promise.all([refresh(),refresh()]);
+            assert.deepEqual(results.map(r=>r.status).sort(),[200,400]);
+            const renewed=await results.find(r=>r.status===200).json();
+            assert.equal((await rpc(pair,"tools/list")).status,401);
+            assert.equal(decode(await call(renewed,"mcp_account_info")).user_id,live.id);
+            // Wrong-client revocation is non-disclosing and has no effect.
+            assert.equal((await form("/token?action=revoke",{token:renewed.refresh_token,client_id:second})).status,200);
+            assert.equal((await rpc(renewed,"tools/list")).status,200);
+            assert.equal((await form("/token?action=revoke",{token:renewed.refresh_token,client_id:client})).status,200);
+            assert.equal((await rpc(renewed,"tools/list")).status,401);
+            await stopChild();startChild();await waitReady();
+            assert.equal((await rpc(renewed,"tools/list")).status,401);
+            assert.equal((await form("/token",{grant_type:"refresh_token",refresh_token:renewed.refresh_token,client_id:client})).status,400);
+        });
+        await t.test("tampered encrypted account state is rejected, legacy clients remain registered",async()=>{
+            await stopChild();
+            const state=JSON.parse(readFileSync(statePath,"utf8"));
+            state.accountGrants.tag=Buffer.alloc(16,1).toString("base64");
+            writeFileSync(statePath,JSON.stringify(state),{mode:0o600});
+            startChild();await waitReady();
+            assert.equal((await rpc(moderator,"tools/list")).status,401);
+            const a=accounts[1];
+            const claims=JSON.parse(Buffer.from(a.bearer.split(".")[1],"base64url"));
+            claims.exp=Math.floor(Date.now()/1000)+60;
+            a.bearer=encoded({alg:"HS256",typ:"JWT"})+"."+encoded(claims)+".fixture_post_tamper";save();
+            assert.equal((await consent(client,a)).response.status,200);
+        });
     } finally {
-        if(child.exitCode===null){child.kill("SIGTERM");await Promise.race([new Promise(r=>child.once("exit",r)),pause(2000)]);}
-        if(child.exitCode===null)child.kill("SIGKILL");
+        await stopChild();
         rmSync(dir,{recursive:true,force:true});
     }
 });
