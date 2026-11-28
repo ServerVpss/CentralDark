@@ -234,6 +234,17 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 - FIXED_POINT do código/build/deploy: APROVADO. Consentimento humano real, prova de revogação e execução remota: PENDENTES. Próximo passo: nova tentativa NPX, conferir código preenchido e clique explícito do responsável; confirmar recibo da CLI e revogação antes de avançar.
 <!-- /CENTRALDARK_NPX_PAIRING_PREFILL_20261128 -->
 
+<!-- CENTRALDARK_NPX_PAIRING_REAL_PASS_20261128 -->
+### Contraprova real — NPX aprovado pelo responsável (28/11/2026)
+
+- Foto enviada pelo CHEFE após a tentativa iniciada no terminal da Casa: página CentralDark informa “Confirmação enviada”; CLI informa “APROVADO: pareamento autenticado e sessão de teste revogada” e `RESULTADO_NPX_EXIT=0`. Fonte da prova visual: fotografia fornecida pelo responsável, não captura independente do terminal. Código, identificador de tentativa e nonce não reproduzidos.
+- Checkout na Casa confirmado no commit `7d41836afcd6758c4c6b302699e4768563b5de02`. O contrato da CLI somente declara APROVADO após verificar a sessão pairing-only, obter resposta positiva de revogação e confirmar HTTP 401 na nova tentativa de verificar a sessão revogada. A fotografia comprova o retorno da CLI; não representa uma captura independente de cada resposta HTTP.
+- Contraprova de leitura do registro persistente do MCP Contabo: zero dispositivos da superfície centraldark-desktop-commander; dispositivo legado SEGREDO, tauri-windows-tray, mantém paired_at 2026-11-26T18:19:11.509Z, heartbeat 2026-11-28T05:22:08.248Z, idade 0 s, validade temporal positiva, remote_execution=not_verified. A ausência do registro preview é compatível com a revogação (revokeSelf remove o registro).
+- GET local /health na porta 9101: ok=true, engine_connected=true, mudança observada em relação à medição anterior false. Causa da transição e identidade do motor ativo não verificadas; não atribuir à implementação NPX nem declarar execução remota aprovada. Nenhuma alteração de runtime ou autorização adicional feita nesta conferência.
+
+**Estado:** FIXED_POINT_NPX_PAIRING_PREVIEW=APROVADO. A sessão de teste foi revogada por desenho; não é um vínculo NPX persistente. Execução de ferramenta autenticada e publicação NPM continuam PENDENTES. Próximo delta: reaproveitar o contrato de sessão de dispositivo próprio e completar transporte autenticado do NPX, preservando o consentimento simplificado e o vínculo existente. Cobrança fora do escopo.
+<!-- /CENTRALDARK_NPX_PAIRING_REAL_PASS_20261128 -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
