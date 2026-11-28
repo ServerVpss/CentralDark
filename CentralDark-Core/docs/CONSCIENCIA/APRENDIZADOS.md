@@ -19,6 +19,8 @@ updated: 2026-08-27
 <!-- NEUROLINK_GLOBAL_END -->
 
 
+**Aprendizado aplicado ao Método Operacional CentralDark (28/11/2026):** [Contabo Hermes: paridade e proveniência real do build EasyPanel](APRENDIZADOS/2026-11-28-contabo-hermes-proveniencia-build.md). Comparar contêiner com contêiner, provar fonte antes de gerar stamp; 44.805 arquivos da fonte reconciliados e 2.774 do runtime verificados. Stamp preparado no contexto existente, imagem ativa ainda não reconstruída. Registro complementar, sem renumerar NeuroLink.
+
 **Aprendizado aplicado ao EXECUTION_FIRST_PROTOCOL (28/11/2026):** [Contabo HTTPS — método, recibo e diálogo integral](APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md). Receita prática de execução direta com reutilização, paralelismo independente, menor delta, testes proporcionais, preservação e continuidade; proveniência: commit `a5f152a`. Registro complementar, sem alterar a cadeia NeuroLink abaixo.
 
 **Aprendizado aplicado ao Método Operacional CentralDark:** [Navegador administrativo: EasyPanel e Cloudflare Access (26/11/2026)](APRENDIZADOS/2026-11-26-navegador-administrativo-easypanel-cloudflare.md). Registro complementar, sem alterar a cadeia NeuroLink abaixo.
