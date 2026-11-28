@@ -530,6 +530,14 @@ EXECUTION_FIRST_PROTOCOL:
     stop_at_first_obstacle: false
     repeat_failed_strategy: false
     sequence: ["Identificar impedimento concreto.","Recuperar receita existente.","Procurar alternativa equivalente.","Executar alternativa autorizada.","Comprovar resultado."]
+  handoff_humano_proativo:
+    activation: "Impedimento humano indispensável dentro da intenção vigente, alvo confirmado e autorização aplicável."
+    sequence: ["Recuperar checkpoint, intenção e receita pertinente.","Resolver autonomamente os passos delegáveis.","Reutilizar a superfície correta já aberta; abrir o painel exato autorizado somente se necessário.","Conferir aplicativo, conta, destino e controle atuais sem expor segredo.","Solicitar somente a ação humana indelegável.","Conferir o efeito e continuar até o ponto fixo aplicável."]
+    unnecessary_confirmation: false
+    preserve_human_consent: true
+    context_read_scope: "Somente fontes autorizadas e pertinentes; Harvester e roteador existentes; sem varredura contínua."
+    cache_evidence: "P15 aplicável como receita reutilizada; P16 UNKNOWN sem telemetria; cache nunca substitui prova."
+    acceptance: ["Não pedir localização manual de painel conhecido e acessível.","Não criar nova janela quando a superfície existente satisfaz.","Não extrair, preencher ou publicar credencial para contornar autorização.","Não confundir abertura, clique, confirmação humana e efeito."]
   learning:
     reference: "LOVABLE_SECURITY_MEMORY"
     preserve: ["Decisões anteriores.","Receitas funcionais.","Checkpoints comprovados.","Correções realizadas.","Preferências operacionais.","Justificativas de alertas descartados."]
