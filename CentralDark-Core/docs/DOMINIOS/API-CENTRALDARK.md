@@ -171,6 +171,29 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 **Continuidade:** reutilizar o cliente legítimo e sua identificação HTTP, conferir o contrato do pareamento persistente e executar uma solicitação real com resposta secreta mantida no cliente após a autorização específica exigida pela revisão. Depois comprovar login/consentimento, vínculo e chamadas autenticadas. Não desativar BIC/Bot Fight Mode nem habilitar o preview Desktop para corrigir por hipótese uma sondagem Python. `FIXED_POINT_DIAGNOSTICO_403=APROVADO`; `FIXED_POINT_PAREAMENTO=PENDENTE`.
 <!-- /CENTRALDARK_PAIRING_BIC_CONFIRMED_20261128 -->
 
+<!-- CENTRALDARK_DESKTOP_PAIRING_ENABLED_20261128 -->
+### Continuidade — pareamento Desktop habilitado na Contabo (28/11/2026)
+
+**Intenção expressa do CHEFE:** “Então liga primeiro paramento no conta bo”. **Estado medido:** DESKTOP_PAIRING_ENABLED; REAL_DEVICE_PAIRING_PENDING. A ativação foi solicitada separadamente do diagnóstico BIC; não é uma correção do 403.
+
+- A validação nativa em `dist/desktop-pairing-config.js` com a flag candidata retornou configuração válida, protocolo `centraldark-device-v1`, `pairingOnly=true`. A importação inicial por `src/` falhou por se tratar de imagem compilada; corrigida antes da alteração. URL e formato da chave pública conferidos sem revelar valores.
+- Menor delta no Compose existente `/etc/easypanel/projects/centraldark/mcp/code/docker-compose.yml`: acrescentada exclusivamente a variável `CENTRALDARK_DESKTOP_PAIRING_ENABLED: "1"`. A comparação do Compose resolvido aprovou igualdade dos demais campos. O hash Compose de origem diferia do rótulo da instância anterior; ambiente efetivo, imagem, volume, redes e porta foram reconciliados. SHA-256 anterior `0b95ef921274252ebbc8594a40a6f56fb2f3ceb2559968d8c0ded12875f1e554`; novo `3167b71ffd3f0cb94e8133e52d5e77291dc25be1714e7aa5d4af0381a4bf1d21`. Backup exclusivo `docker-compose.yml.before-desktop-pairing-20261128` modo 0600 e hash anterior conferido. Override preservado.
+- Executado `docker compose up -d --no-deps --no-build --pull never mcp` no mesmo projeto `centraldark_mcp`; saída 0. Contêiner anterior `16c6e5d6f791`, atual `1b99ad3507bd`. Mesma imagem `centraldark/mcp:da49b5e9-desktop-pairing-preview`, volume `centraldark-mcp-stage-data` em `/data/mcp`, porta local 127.0.0.1:9100 e demais variáveis idênticas. Nenhuma reconstrução de imagem ou reinicialização de Hermes, Traefik ou EasyPanel.
+
+| Prova | Resultado |
+| --- | --- |
+| GET local /api/mcp-info | 200 JSON, protocolo centraldark-device-v1, pairingOnly=true, chave pública presente |
+| GET local /health | 200 JSON, ok=true, 162 ferramentas declaradas |
+| HEAD público /api/mcp-info pela Casa | 200 JSON; Ray a616c779fdd8a432-GRU |
+| HEAD público /mcp/health pela Casa | 200 JSON; Ray a616c78c7881f250-GRU |
+| HEAD público /api/mcp sem credencial pela Casa | 401 JSON; desafio OAuth preservado; Ray a616c7a39983b54f-GRU |
+| GET público via urllib a partir da Contabo | 403 text/plain nos três endpoints; Rays a616c7319bf230ea-FRA, a616c731edb0dc99-FRA e a616c73229be4d50-FRA |
+
+**Limite:** `desktop_pairing_disabled` resolvido no runtime. O diagnóstico anterior confirmou BIC nos Rays anteriores de sondagem; os novos Rays não foram individualmente correlacionados. Nenhuma proteção Cloudflare alterada, dispositivo aprovado ou token emitido. O preview `pairingOnly=true` não equivale a sessão remota persistente. Flag salva no Compose efetivo da VPS; preservação em futura regeneração de fonte pelo EasyPanel não comprovada.
+
+**Reversão:** conferir hashes do Compose atual e backup, restaurar exclusivamente esse arquivo e recriar somente MCP pela mesma receita, preservando imagem e volume. **Próximo passo:** testar o vínculo legítimo no cliente oficial com consentimento do responsável, sem contornar os limites da execução anterior. FIXED_POINT da ativação: APROVADO; integração: PENDENTE.
+<!-- /CENTRALDARK_DESKTOP_PAIRING_ENABLED_20261128 -->
+
 
 ## Regra
 
