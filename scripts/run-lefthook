@@ -46,4 +46,10 @@ if [ -z "$found" ]; then
     echo "git hooks skipped: lefthook is not installed (run pnpm install at the repo root)" >&2
     exit 0
 fi
+scripts="$top/scripts"
+if command -v cygpath >/dev/null 2>&1; then
+    scripts="$(cygpath -u "$scripts")" || exit 1
+fi
+PATH="$scripts${PATH:+:$PATH}"
+export PATH
 exec "$found" "$@"
