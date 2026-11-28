@@ -296,6 +296,34 @@ Sequência subordinada ao EXECUTION_FIRST_PROTOCOL: mudança → identificar con
 `FIXED_POINT_OAUTH_CONSENT_ROUTE=APROVADO`; `FIXED_POINT_PLUGIN_AUTHENTICATED_TOOL_CALL=PENDENTE`.
 <!-- /CENTRALDARK_MCP_OAUTH_CONSENT_DOMAIN_20261128 -->
 
+<!-- CENTRALDARK_ACCOUNT_OAUTH_ROLE_CATALOG_20261128 -->
+### OAuth por conta e catálogo por papel/escopo (28/11/2026)
+
+**Intenção:** integrar a autenticação MCP ao `auth.users` e `public.user_roles.role` (enum app_role: admin, moderator, user) existentes, sem credencial de proprietário como precondição para a conta. Checkpoint anterior: consentimento no domínio MCP aprovado, erro "Token interno do dono ausente no servidor" em OAuth. A Contabo não tinha token de proprietário/GitHub nem chave Supabase privilegiada configurados; nenhuma dessas credenciais foi adicionada. Sem alteração de papéis, tabelas, políticas RLS ou dados Supabase.
+
+**Fonte:** [commit c4714450b19f3c289104d372dbe4825686b63dcf](https://github.com/ServerVpss/CentralDark/commit/c4714450b19f3c289104d372dbe4825686b63dcf), main, seis módulos existentes src/dist (`desktop-pairing-config.js`, `oauth.js`, `sessions.js`, `index.js`, `mcp-server.js`, `tools/core/mcp-policy.js`), atualização da regressão de consentimento e teste `tests/account-oauth.test.mjs`. Quatorze arquivos conferidos por blob após commit sem force.
+
+**Contrato:** consentimento OAuth padrão do domínio MCP usa JWT verificado por Auth /user e consulta de papel da própria identidade no projeto Supabase fixado, rejeita sessão inválida, papel ausente e escopos não autorizados. Papel deriva do banco, não do cliente. Prioridade admin > moderator > user quando houver mais de um papel. PKCE, callback registrado, estado e consentimento humano permanecem. A sessão opaca MCP reutiliza o store existente e mantém user_id, role, session_id e limite de validade do JWT; papel e identidade são revalidados no exchange, refresh e chamada. Refresh exige mesmo client_id e não estende validade além do JWT original. Token de acesso Supabase e grants novos ficam em memória e não são persistidos/retornados ao cliente. Assim, reinício ou expiração do JWT exige nova autorização neste delta; não há renovação Supabase persistente nem prova de revogação imediata em logout web antes da expiração. Não confundir esta entrega com solução final de sessão persistente.
+
+**Catálogo e execução:** escopo mcp de conta vinculada permite somente `mcp_account_info` e `mcp_my_devices`; moderator permanece nessa mesma capacidade até existir contrato específico. O catálogo administrativo existente só é liberado para papel admin validado + escopo admin consentido, conservando guardas existentes. Ferramentas dependentes de credencial interna ainda exigem essa credencial na própria operação, não no login. Bloqueio no dispatcher, não apenas na apresentação. Recursos e eventos internos não são liberados aos usuários comuns. Lista de dispositivos usa o registro MCP existente, filtro owner_user_id da identidade autenticada e projeção de campos de exibição; exclui vínculo legado sem dono e dispositivos de outros usuários. Não implica pareamento de cliente comum, execução remota ou ativação das tabelas Supabase mcp_devices/mcp_remote_calls. Fluxos legados admin/VS Code/Bridge/Desktop preservados.
+
+**Testes:** 17/17 (10 regressões + 7 contagens node:test, incluindo 6 subtestes da entrada HTTP) na base real e 17/17 na candidata canônica com o módulo events.js existente. Contêineres descartáveis sem rede externa e fixtures, sem credenciais de produção. Provaram consentimento/exchange sem token do dono, três papéis, negação de escopo admin a user/moderator, catálogo e chamada direta bloqueada, identidade própria, isolamento de dispositivos, refresh por cliente, mudança de papel, rejeição de conta inativa e ausência de grants de conta no JSON persistido. O primeiro ensaio canônico falhou com ERR_MODULE_NOT_FOUND em dist/events.js: a imagem instalada era anterior à evolução de eventos. Recuperação: adaptar exclusivamente as mesmas mudanças de sessões e dispatcher aos dois arquivos medidos da base ativa, sem introduzir o módulo de eventos em produção. Ensaio canônico usou dist/events.js existente (blob ae416d573cf1b8b2ab3303c404ec1217863aaba6) apenas na cópia isolada. Não declarar build integral da main, CI concluída ou certificação Michelin de mesmo SHA.
+
+**Deploy localizado na Contabo:** base `centraldark/mcp:bf985aad-oauth-mcp-consent`, nova `centraldark/mcp:c4714450-account-oauth`, image ID sha256:f50c87ea0b3e4ac1421f385b989381c1a8a66a6de538784e82de57c994a37dac, contêiner 8e8ad1cebfed → 4ba41e778d3b. Troca exclusiva de seis arquivos dist, labels de fonte e base; sem deploy de eventos. SHA-256 runtime:
+- desktop-pairing-config.js: 6a2beecf107e9be122a49712397e6a69e2289f989f94ee7d13fcebde575abc29
+- oauth.js: 2bb94cec4f171ba77f948a3e44d3c3ada8cdc89c17887e2d4554441e9c74afee
+- sessions.js: 0ea5c0218827e1d19148d2793980f860d365d4ecbd115c329922a3646d7e64bb
+- index.js: 86f73316deb5bd34d84fcf0d19597b461086cc7255e8b6a2341c4d724fc54e0d
+- mcp-server.js: 160ddcb66d31e8788770aa252f135749f6cfc4920989fe5ecafb9947709337c0
+- tools/core/mcp-policy.js: 994f5dbca5c36e626d293ad5e9eac21a34261b3951f3f034fb31b6b0b81aeab5
+
+Compose efetivo difere somente pela imagem; ambiente, volume /data/mcp, porta e redes preservados. Backup `docker-compose.yml.before-account-oauth-c4714450` 0600, SHA-256 481a398191d5d1b9e471338242bf9111d0373baf9781484c1f6a6b25e05c83cd; novo Compose a98bb519b5fb1530afe654f00a3b5af2820a659341e9d201fbf3463b970024ec. Saúde local 200, MCP anônimo local 401, seis hashes conferidos. Publicamente pela Casa: página de consentimento 200 HTML; /api/mcp 401 com challenge; metadata OAuth e /api/mcp-info 200 JSON. Sem mudança DNS/Pages, NPX, Agente Remoto ou ZIP: mesmo endpoint e contrato de consentimento; compatibilidade de protocolo não prova instalação real. Não repacotar sem alteração dos arquivos do pacote.
+
+**Continuidade:** usuário pode iniciar/retomar a autorização pelo plugin ou Codex; confirmar consentimento real, executar `mcp_account_info` e `mcp_my_devices`, testar conta comum e admin com escopo admin explicitamente autorizado. Não simular autorização humana. Prova autenticada em produção e atendimento remoto próprio permanecem PENDENTES.
+
+`ACCOUNT_OAUTH_HTTP_FIXTURE_TEST=APROVADO`; `ACCOUNT_OAUTH_RUNTIME_DEPLOY_READBACK=APROVADO`; `FIXED_POINT_PLUGIN_AUTHENTICATED_TOOL_CALL=PENDENTE`.
+<!-- /CENTRALDARK_ACCOUNT_OAUTH_ROLE_CATALOG_20261128 -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
