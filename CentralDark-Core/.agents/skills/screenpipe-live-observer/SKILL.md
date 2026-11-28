@@ -126,6 +126,46 @@ SCREENPIPE_MCP_HTTP_HEALTH=http://localhost:3031/health
 
 `3030` é o daemon/API local. `3031` é transporte MCP HTTP opcional. O modo stdio expõe o conjunto completo de ferramentas; o transporte HTTP pode ter superfície menor e deve ser medido antes de presumir paridade.
 
+## Autenticação local da Casa — reuso nas próximas sessões do agente remoto
+
+No Windows SEGREDO, `SCREENPIPE_LOCAL_API_KEY` pode estar configurada no
+escopo User, mas ausente no ambiente Process do Node/PowerShell já aberto.
+Não reiniciar Screenpipe, Chrome, a conexão remota ou o Windows apenas por isso.
+Não gerar outra chave, copiar a chave da extensão, registrar o valor ou
+transformar a porta 3030 em serviço público.
+
+O owner existente `scripts/remote-bridge/CentralDark-Context-Sidecar.ps1`
+oferece modos one-shot, sem iniciar sidecar contínuo ou escrever histórico:
+
+```powershell
+# Relativo à raiz CentralDark-Core do checkout da Casa:
+& .\scripts\remote-bridge\CentralDark-Context-Sidecar.ps1 -AuthStatus
+# Somente quando houver autorização para a consulta específica:
+& .\scripts\remote-bridge\CentralDark-Context-Sidecar.ps1 -ReadPath '/search?content_type=accessibility&limit=1&fields=type'
+```
+
+A resolução automática usa Process, depois User do próprio usuário Windows.
+O diagnóstico retorna somente origem da configuração, HTTP e contagem de itens;
+nunca chave nem conteúdo de tela/áudio. `-ReadPath` usa somente GET nas rotas
+locais health, vision/list, audio/list, audio/device/status e search com limite
+explícito de 1 a 20; não redireciona nem grava respostas.
+Para consultas de conteúdo, restringir app/período/campos conforme a intenção;
+não usar o sensor como autoridade de execução. O loop legado mantém fallback
+da CLI já instalada, sem baixar `@latest` implicitamente. A API autenticada
+permanece no loopback da porta 3030. O agente remoto continua sendo o transporte
+já autorizado; não se instala outro MCP, daemon ou scheduler.
+
+**Recibo Casa SEGREDO, 28/11/2026:** antes: Process ausente, User presente,
+API /search 403 sem autenticação. Depois: sessão PowerShell -NoProfile sem
+variável Process, resolução User, cinco rotas HTTP 200 (OCR, áudio,
+accessibility, monitores, dispositivos de áudio), consulta one-shot UI com
+um item; somente metadados observados. Oito contraprovas de destino/rota/limite
+inválidos recusadas, acesso anônimo continua 403. Parser Windows PowerShell
+aprovado (default Workdir corrigido). Script testado blob
+7a4e4fd8adbfe0e04552378ec0bddfacbeba119c. Nenhuma credencial exibida, gravada
+ou alterada; nenhum serviço reiniciado. Este recibo não prova consumo por
+todos os clientes MCP nem ativa ingestão contínua. Para próxima sessão,
+reutilizar o owner e a consulta autenticada, sem repetir diagnóstico válido.
 ## Capacidades operacionais
 
 Quando disponíveis no runtime, podem ser usadas:
