@@ -352,7 +352,7 @@ function oauthFailureDetails(error) {
 export async function handleAuthorize(req, res) {
     let traceId = null;
     try {
-        // Somente o Cockpit envia consentimento JSON cross-origin.
+        // A UI de consentimento MCP e o Cockpit legado enviam consentimento JSON.
         // O token Supabase segue no header, nunca no URL ou no HTML.
         const requestedJson = req.method === "POST" && String(req.headers.accept || "").includes("application/json");
         const deviceClientId = param(req, "client_id");
@@ -365,10 +365,14 @@ export async function handleAuthorize(req, res) {
             ((req.method !== "POST" && req.headers["x-centraldark-pairing-route"] === "mcp-v1") ||
                 (requestedJson && req.headers.origin === DESKTOP_ORIGIN));
         const nativeMcpConsent = desktopPair || legacyNativePair;
+        // Standard OAuth uses the MCP consent page; keep the existing Cockpit origin
+        // for in-flight legacy requests. Origin selects presentation, never authority.
+        const standardOAuthFromMcp = deviceClientId !== VSCODE_DEVICE_CLIENT_ID &&
+            deviceClientId !== REMOTE_BRIDGE_DEVICE_CLIENT_ID && req.headers.origin === DESKTOP_ORIGIN;
         const desktopConfig = nativeMcpConsent ? getDesktopPairingConfig() : null;
         if ((desktopPair || (legacyNativePair && req.method === "POST")) && !desktopConfig)
             return oauthError(res, 503, "server_error", "Pareamento Desktop CentralDark indisponível.");
-        if (requestedJson && req.headers.origin !== (nativeMcpConsent ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
+        if (requestedJson && req.headers.origin !== ((nativeMcpConsent || standardOAuthFromMcp) ? DESKTOP_ORIGIN : "https://admin.centralldark.com"))
             return oauthError(res, 403, "access_denied", "Origem de consentimento não autorizada.");
         if (desktopPair && req.method === "POST" && !requestedJson)
             return oauthError(res, 403, "access_denied", "Confirme pelo login Supabase do domínio MCP.");
@@ -483,14 +487,16 @@ export async function handleAuthorize(req, res) {
             redirectWithOAuthError(res, redirect_uri, "invalid_request", client_state, "PKCE S256 é obrigatório");
             return;
         }
-        const payload = { client_id, redirect_uri, response_type, code_challenge, code_challenge_method, client_state, scope, client_name: client.client_name };
+        const payload = { client_id, redirect_uri, response_type, code_challenge, code_challenge_method, client_state, scope, client_name: client.client_name, nativeMcpConsent: true };
         if (req.method !== "POST") {
             sendOwnerConsentPage(res, payload);
             return;
         }
         // O logado no Cockpit já provou identidade: não pedir senha de novo.
         // A senha segue apenas como fallback para quem não tem sessão admin.
-        const sessaoCockpit = isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
+        const sessaoCockpit = standardOAuthFromMcp && requestedJson
+            ? await verifyRemoteBridgeSupabaseAdmin(req)
+            : isAdmin(req) || (requestedJson && await verifyRemoteBridgeSupabaseAdmin(req));
         if (!sessaoCockpit && requestedJson) {
             sendOwnerConsentPage(res, { ...payload, error: "Sessão do Cockpit ausente ou sem permissão de administrador." });
             return;
