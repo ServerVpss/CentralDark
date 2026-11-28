@@ -133,3 +133,14 @@ Após cada **delta material** realmente concluído ou bloqueado, registrar:
 **Atalho Windows:** `Hermes.lnk` da barra fixada foi ajustado **somente no campo IconLocation** para o ícone do disco F. O TargetPath continua apontando para a instalação antiga Hermes.exe; nunca alterar o alvo sem autorização.
 
 **Registro da conformidade:** conforme o gate deste LEIA-ME, versionar o código aprovado e estes dois documentos na branch do PR #2119, conferir hashes e comentar o recibo no PR. Não fazer commit direto na `main`, merge nem deploy. Último SHA deve ser consultado no PR, evitando referência circular.
+
+
+## 10. Continuação após merge do PR #2119 — 24/11/2026
+**Esta seção atualiza as referências operacionais anteriores ao PR #2119 sem apagar o histórico.** O PR #2119 foi mesclado em `main` no commit `aba7a68775bf44a2e8a7c8af8e47b750657be53f`. O CHEFE solicitou continuar as integrações em um novo PR sucessor, mantendo o mesmo produto e owner.
+
+- **Bancada sucessora:** `feat/centraldark-os-continuacao-2119-20261124`, baseada exatamente no commit de merge do #2119; futuro número do PR deve ser confirmado pelo GitHub.
+- **Owner do aplicativo real:** `apps/desktop`; o protótipo `native-react/ui` permanece referência histórica, sem promover um segundo aplicativo.
+- **Preservar:** interface, visual e funcionamento já aprovados; não refazer o merge, não alterar `CentralDark-Core`, não publicar instalador sem prova.
+- **Próximos deltas em escopo:** verificar a janela correta na Casa; conectar o chat ao motor Hermes efetivo; validar ações de Bridge/IPC, pareamento e autenticação; testar `Ctrl+Shift+S`, integração Halo/MCP e atalho de instalação antiga, cada qual com prova.
+- **Regra de execução:** selecionar o menor delta autorizado, executar e testar, apresentar mudanças visuais para conformidade e registrar no mesmo PR sucessor com readback. `MERGED != DEPLOYED` e `DOCUMENTED != EXECUTED`.
+- **Espelho Casa:** sincronização e execução locais ainda **PENDENTES**, não afirmadas por esta alteração no GitHub.

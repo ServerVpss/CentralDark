@@ -101,6 +101,12 @@ O handshake MCP entrega estas instruções automaticamente ao cliente; isso não
 - Fontes de fala: \`docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOL-GRAMATICA-DE-ENSINO.yml\`; \`docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md\`; \`docs/CONSCIENCIA/PADRAO-EMOJIS.md\`.
 - A chamada destas ferramentas é responsabilidade do cliente MCP. Só declarar consumo após comprovar a leitura e resposta.
 
+## 🎨 DESIGN SYSTEM — lei herdada, sem duplicar regra
+- Quando a intenção envolver interface, janela, instalador, atualizador, login, splash ou componente visual, consultar o owner canônico CentralDark-Core/docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md.
+- Aplicar a receita existente CentralDark-Core/.agents/skills/visual-design-method/SKILL.md e os tokens/componentes reais do aplicativo; no desktop, consultar apps/desktop/DESIGN.md.
+- Herdar o tema/pele ativo, não inventar uma paleta, segunda janela ou segundo sistema. Preservar compatibilidade técnica do Hermes e o comportamento dos serviços.
+- Uma leitura de README ou instrução no handshake não comprova aplicação no runtime: exigir build, render e teste funcional no mesmo SHA. Só afirmar consumo quando o cliente realmente consultar a fonte.
+
 ## 🗺️ COMO RESPONDER — menu visual aprovado
 - PT-BR claro, direto e natural; resultado primeiro.
 - Mensagem com assuntos diferentes: cada bloco começa com emoji semântico + título cotidiano em negrito.

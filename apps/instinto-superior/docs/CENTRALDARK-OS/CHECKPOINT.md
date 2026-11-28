@@ -143,3 +143,23 @@ As horas dos arquivos vêm da última modificação do sistema de arquivos; a ho
 **Comprovante da publicação:** consultar último commit e comentário no PR #2119 para SHA/link real. **Não declarar** código conectado a `apps/desktop`, entregue em produção, mergeado ou deployado.
 
 **Próximo passo:** conferir código versionado, igualdade dos dois Markdown Casa↔GitHub e comentário do PR; depois retomar menor pendência autorizada.
+
+
+## 🪬 !HUD — CONTINUAÇÃO APÓS MERGE | 24/11/2026
+**Evento confirmado no GitHub:** PR [#2119](https://github.com/ServerVpss/CentralDark/pull/2119) encerrado como **MERGED**; `main` conferida idêntica ao commit `aba7a68775bf44a2e8a7c8af8e47b750657be53f`.
+
+**🎯 Intenção atualizada pelo CHEFE:** manter o que foi aprovado na `main` e abrir um PR de continuação para integrar mais funções, sem recriar o desktop.
+
+**🟢 APROVADO:** código do #2119 incorporado ao projeto principal; base da continuação fixada no SHA do merge.
+
+**🟡 PENDENTE:** conectar chat à sessão real do Hermes; verificar motor, pareamento e autenticação; testar ações IPC do Bridge, Halo/MCP ponta a ponta e `Ctrl+Shift+S`; corrigir somente mediante prova o atalho instalado antigo; validar desktop `apps/desktop` em execução na Casa; sincronizar espelhos locais. Os IDs P-20261122-01..03 e P-20261123-01..03 acima permanecem válidos.
+
+**⚪ NÃO VERIFICADO:** testes de integração e instalação após o merge; nenhuma execução remota é afirmada por este registro.
+
+**📂 PR sucessor:** branch `feat/centraldark-os-continuacao-2119-20261124`, criada do commit de merge #2119. Registrar o número/link após criação do PR.
+
+**👣 !RASTRO:** início de continuidade documental na branch sucessora; nenhuma mudança no `apps/desktop` neste delta. Referências antigas no histórico acima descrevem o estado anterior ao merge.
+
+**🔒 FIXED_POINT:** merge do #2119 confirmado; continuação operacional ainda não concluída.
+
+**➡️ Próximo passo:** abrir o PR sucessor e, assim que o runtime Casa estiver acessível, conferir janela/processo do `apps/desktop` antes do primeiro delta de integração.

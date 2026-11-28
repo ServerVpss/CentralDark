@@ -155,6 +155,7 @@ renderer and Electron's first window paint.
 | `--ui-text-primary / -secondary / -tertiary` | text hierarchy |
 | `--ui-bg-quaternary` | soft control fill (secondary button) |
 | `--ui-widget-surface-background` | fill for inline chat widgets (`WIDGET_SHELL_CLASS`) |
+| `--ui-terminal-surface-background` / `--cdos-bg` | the persistent xterm canvas and terminal rail inherit the active CENTRALDARK · OS surface when `.cdos-shell` is mounted; otherwise retain the legacy theme. `native-os/native-shell.css` owns that mapping; the xterm color probe resolves it from `document.body`, outside the React shell. Do not force a new terminal palette or change PTY behavior. |
 | `--chrome-action-hover` | hover fill for quiet controls |
 | `--theme-primary`, `--ui-accent` | brand/accent |
 

@@ -4,7 +4,7 @@ import { test } from 'vitest'
 
 import { buildRendererLoadErrorPage, loadRendererLoadErrorPage } from './renderer-load-error-page'
 
-test('error page names the failure and carries a Reload button', () => {
+test('error page names the failure and carries a translated reload button', () => {
   const html = buildRendererLoadErrorPage({
     errorCode: -6,
     errorDescription: 'The desktop renderer bundle is incomplete after the last update (2 missing file(s)).',
@@ -18,6 +18,16 @@ test('error page names the failure and carries a Reload button', () => {
   assert.match(html, /assets\/shiki-block-DeadBeef\.js/)
   assert.match(html, /hermes desktop --force-build/)
   assert.match(html, /location\.reload\(\)/)
+  assert.match(html, /<html lang="pt-BR">/)
+  assert.match(html, />Recarregar<\/button>/)
+  assert.match(html, /Se o problema persistir/)
+})
+
+test('default error page uses Portuguese and Instinto Superior', () => {
+  const html = buildRendererLoadErrorPage()
+  assert.match(html, /O Instinto Superior não conseguiu iniciar a interface gráfica/)
+  assert.match(html, /Não foi possível carregar a interface gráfica/)
+  assert.doesNotMatch(html, /Hermes couldn/)
 })
 
 test('error page reload button targets the real renderer URL when provided', () => {

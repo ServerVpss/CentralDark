@@ -10,6 +10,19 @@ updated: 2026-08-27
 <!-- NEUROLINK_GLOBAL_BEGIN -->
 ## 🧠 NeuroLink global — duas frentes
 
+
+<!-- CENTRALDARK_VISUAL_HERANCA_20261124 -->
+## 🪬 !DELTAÚTIL — interface principal moderna não atualiza automaticamente todas as janelas (24/11/2026)
+
+- **Contexto observado:** CENTRALDARK · OS já possui `NativeShell` no desktop e diálogo interno de atualização, mas a janela de progresso externa `scripts/desktop-update/ui.html` ainda é uma superfície independente. O visual do instalador `apps/bootstrap-installer` também possui seu próprio consumidor de estilo. O merge da interface não comprova qual binário está instalado na Casa.
+- **Decisão do CHEFE:** qualquer projeto novo ou atualizado herda a modernidade do Design System, com paridade nas janelas auxiliares; preservar o tema/pele ativo, e não inventar paletas, duplicar aplicativo ou converter automaticamente o tema Forja/Ouro para Esmeralda.
+- **Owner único:** `docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`; método de consumo `.agents/skills/visual-design-method/SKILL.md`; owners de implementação no aplicativo (`apps/desktop/DESIGN.md` quando se tratar do desktop).
+- **Lição operacional:** a inspeção deve cobrir shell, updater externo, instalador, login, splash, notificações e erros; comparar tokens, componentes, aspecto renderizado, acessibilidade e comportamento real. `DOCUMENTED != EXECUTED`, `MERGED != DEPLOYED`.
+- **Prova desta entrada:** registro documental na branch de continuidade do PR #2172; testes visuais e funcionamento das janelas continuam **PENDENTES** até execução e contraprova. Este aprendizado não é adicionado à cadeia numerada NeuroLink nem altera seu manifesto sem o reconciliador próprio.
+<!-- /CENTRALDARK_VISUAL_HERANCA_20261124 -->
+
+
+
 - **Gênese histórica:** `L000` = aprendizado legado `#0 — Conhecimento só existe se está no repo ou no Mega Painel`, preservado em `docs/RELATORIOS/notion-sync/2026-07-03T17-29-45.md`.
 - **Frente A — histórico completo:** cada seção deste arquivo possui `GLOBAL_LINEAGE_UID`, `PREV_GLOBAL_UID` e `NEXT_GLOBAL_UID`; números legados duplicados não são renumerados e lacunas antigas não são preenchidas com conteúdo inventado.
 - **Frente B — cognitivo determinístico:** do `#115` em diante, além da linhagem global, vale a cadeia estrita `N-1 ← N → N+1` do NeuroLink cognitivo.

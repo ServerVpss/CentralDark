@@ -70,6 +70,19 @@ Este contrato vale para Claude, GPT/Codex, Gemini, Hermes e todos os agentes que
 
 > **Para agentes e motores:** a única porta de boot da IA é [`LEIA-ME-IA.md`](LEIA-ME-IA.md), com `AGENTS.md` e os contratos da `main`. Este README organiza a identidade do produto; **não substitui os contratos operacionais**.
 
+<!-- CENTRALDARK_VISUAL_README_POINTER_20261124 -->
+### 🎨 Modernidade visual herdada — onde consultar
+
+**Toda interface CentralDark**, inclusive instalador, atualizador externo, janelas auxiliares, login e futuros projetos, deve **herdar o tema ativo e os componentes já aprovados**, sem criar outro sistema visual nem alterar as funções por estética.
+
+- **Lei / Design System canônico:** [Design System — Sistema 3D Tátil e temas oficiais](docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md).
+- **Método que as IAs seguem:** [Visual Design Method](.agents/skills/visual-design-method/SKILL.md).
+- **Entrada técnica do agente:** [LEIA-ME-IA](LEIA-ME-IA.md); para o desktop, consultar também o [DESIGN.md da aplicação](../apps/desktop/DESIGN.md).
+
+**Este README é só o mapa:** o contrato e os tokens permanecem em seus owners; ler o documento não comprova que o conector, a janela instalada ou o runtime aplicou a regra. Exigir prova de build, render e comportamento.
+<!-- /CENTRALDARK_VISUAL_README_POINTER_20261124 -->
+
+
 
 ## Navegação operacional — Casa, Forja 1, GitHub e VPS
 

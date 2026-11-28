@@ -5,6 +5,33 @@ description: Method for producing any visual deliverable (poster, dashboard, pag
 
 # Visual Design Method
 
+
+<!-- CENTRALDARK_VISUAL_HERANCA_20261124 -->
+## Mandatory visual inheritance across projects
+
+For EVERY new or modified CentralDark UI surface (including installer, external updater,
+splash, login, modal, notification, desktop shell and future projects), first load
+`docs/CONSCIENCIA/ARQUITETURA/DESIGN-SISTEMA.md`, the owning application's
+design specification and the real design tokens/components. Reuse the **active official
+theme/skin**, not an invented palette, new app or duplicated component framework.
+The Core design document is the single cross-project visual contract; implementation
+stays with its existing component owner (e.g. `apps/desktop/DESIGN.md`).
+
+Do not conflate the three global theme IDs with the four Cockpit skins or force the
+Esmeralda palette on a Forja/Ouro surface. Maintain semantics, accessibility, keyboard,
+responsive layouts, motion preferences and existing functionality; technical Hermes
+identifiers/upstream attribution remain for compatibility. Use a small adapter for
+different UI technologies when needed.
+
+**Operational sequence:** discover owner → read tokens and approved skin →
+compare main/current UI → reuse primitives → smallest scoped delta →
+build/lint + rendered visual inspection across windows/themes →
+functional counterproof → receipt and readback. A README mention or merged code
+alone does not mean a running installer/updater inherits the style.
+See the 24/11/2026 design-system law; this is a method binding, not a second owner.
+<!-- /CENTRALDARK_VISUAL_HERANCA_20261124 -->
+
+
 This documents the **method**, not a tool. It does not depend on any specific
 model, editor, or publishing mechanism. Any engine capable of writing
 HTML/CSS/SVG (or an equivalent styling system) can follow it.
