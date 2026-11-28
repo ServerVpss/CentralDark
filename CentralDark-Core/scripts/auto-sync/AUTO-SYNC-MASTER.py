@@ -19,6 +19,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import time
 from enum import Enum
 
 try:
@@ -29,6 +30,7 @@ except ImportError:
 
 SAFE_RECONCILER_VERSION = "cd40.v1"
 ONE_WRITER_LOCK = True
+ONE_WRITER_TIMEOUT_S = 10.0
 
 class SyncTarget(Enum):
     WINDOWS = "windows"
@@ -60,17 +62,43 @@ class AutoSyncMaster:
 
     @contextmanager
     def _one_writer(self):
+        """Non-blocking single-writer lock with bounded timeout (C1).
+
+        Fail-closed: if another writer holds the lock beyond ONE_WRITER_TIMEOUT_S,
+        raise instead of blocking forever. Preserves worktree/index/HEAD.
+        """
         self.lock_file.parent.mkdir(parents=True, exist_ok=True)
+        deadline = time.monotonic() + ONE_WRITER_TIMEOUT_S
         with self.lock_file.open("a+b") as handle:
             if fcntl is not None:
-                fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+                while True:
+                    try:
+                        fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                        break
+                    except OSError:
+                        if time.monotonic() >= deadline:
+                            raise TimeoutError(
+                                f"one_writer: lock busy > {ONE_WRITER_TIMEOUT_S}s "
+                                f"({self.lock_file}); aborting fail-closed"
+                            )
+                        time.sleep(0.05)
             else:
                 handle.seek(0, os.SEEK_END)
                 if handle.tell() == 0:
                     handle.write(b"0")
                     handle.flush()
                 handle.seek(0)
-                msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
+                while True:
+                    try:
+                        msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+                        break
+                    except OSError:
+                        if time.monotonic() >= deadline:
+                            raise TimeoutError(
+                                f"one_writer: lock busy > {ONE_WRITER_TIMEOUT_S}s "
+                                f"({self.lock_file}); aborting fail-closed"
+                            )
+                        time.sleep(0.05)
             try:
                 yield
             finally:
@@ -134,7 +162,7 @@ class AutoSyncMaster:
     def _blob(self, ref: str, path: str) -> bytes | None:
         probe = subprocess.run(
             ["git", "-C", str(self.repo_root), "cat-file", "-e", f"{ref}:{path}"],
-            capture_output=True
+            capture_output=True, check=False
         )
         if probe.returncode != 0:
             return None
@@ -180,7 +208,7 @@ class AutoSyncMaster:
             rp.write_bytes(remote)
             result = subprocess.run(
                 ["git", "merge-file", "-p", str(local), str(bp), str(rp)],
-                capture_output=True
+                capture_output=True, check=False
             )
         if result.returncode == 0:
             return ("AUTO_MERGEABLE", 0)
@@ -285,7 +313,7 @@ class AutoSyncMaster:
             plan = self.plan_main(fetch=True)
             if plan["dirty_total"]:
                 self._write_status({
-                    "last_sync": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                    "last_sync": datetime.datetime.now(datetime.UTC).isoformat(),
                     "status": SyncStatus.CONFLICT.value,
                     "details": plan,
                 })
@@ -299,7 +327,7 @@ class AutoSyncMaster:
             after = self._git("rev-parse", "HEAD").stdout.strip()
             ok = after == plan["origin_main"] or plan["ahead"] > 0
             self._write_status({
-                "last_sync": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                "last_sync": datetime.datetime.now(datetime.UTC).isoformat(),
                 "status": SyncStatus.SUCCESS.value if ok else SyncStatus.FAILED.value,
                 "details": {"state": plan["state"], "head": after, "origin_main": plan["origin_main"]},
             })
@@ -326,7 +354,7 @@ class AutoSyncMaster:
     def run_cycle(self, target: SyncTarget = SyncTarget.ALL) -> bool:
         status = self._read_status()
         status["status"] = SyncStatus.SYNCING.value
-        status["last_sync"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        status["last_sync"] = datetime.datetime.now(datetime.UTC).isoformat()
         self._write_status(status)
         success = True
         if target in (SyncTarget.WINDOWS, SyncTarget.ALL):
@@ -353,7 +381,7 @@ class AutoSyncMaster:
     def _format_timestamp(iso_str: str | None) -> str:
         if not iso_str:
             return "Nunca sincronizado"
-        dt = datetime.datetime.fromisoformat(iso_str.replace("Z", "+00:00"))
+        dt = datetime.datetime.fromisoformat(iso_str)
         return f"{dt.strftime('%H:%M:%S')} · {dt.strftime('%d/%m/%Y')}"
 
 if __name__ == "__main__":
