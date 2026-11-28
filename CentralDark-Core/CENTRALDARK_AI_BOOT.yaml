@@ -133,6 +133,32 @@ CENTRALDARK_AI_BOOT:
     one_system_only: true
     multi_role: true
     multi_surface: true
+    # Identidade tecnica consolidada: produto, motor e instalacoes nao sao projetos distintos.
+    product_source_identity:
+      product: "CentralDark · OS"
+      canonical_fork: "ServerVpss/CentralDark@main"
+      upstream: "NousResearch/hermes-agent"
+      legacy_fork: "CentralDark-hermes-agent CONSOLIDADO_EM_2026_11_21"
+      engine: "HERMES_CORE_NATIVO_DO_MESMO_REPOSITORIO"
+      desktop_source: "apps/desktop/"
+      core_sources: ["agent/","gateway/","hermes_cli/"]
+      surfaces: ["DESKTOP_ELECTRON","CLI","TUI","WEB","GATEWAY","ACP","MESSAGING"]
+      environments: ["CASA","VPS_CONTABO","VPS_HOSTINGER","OUTROS_HOSTS_AUTORIZADOS"]
+      desktop_and_vps_same_project: true
+      separate_runtime_instances_do_not_mean_separate_projects: true
+      native_upstream_evolution_preserved: true
+      source_update_owner: "hermes update; scripts/centraldark-fork-auto-update.sh"
+      packaged_desktop_update_owner: "MECANISMO_NATIVO_DO_ARTEFATO_INSTALADO"
+      local_or_remote_backend: "CONEXAO_ATIVA; NAO_INVENTAR_TOPOLOGIA"
+      rule_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+      source_of_truth_refs: ["../AGENTS.md#what-hermes-is","../apps/desktop/README.md","../scripts/centraldark-fork-auto-update.sh","docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md"]
+      reuse_known_project_identity_without_rediscovery: true
+      repeat_question_about_same_project: false
+      reopen_identity_only_on_material_counterevidence: true
+      measure_only_installation_state_relevant_to_requested_effect: true
+      same_source_does_not_prove_same_running_revision_or_session: true
+      no_second_loader_engine_backend_or_update_system_by_assumption: true
+      consumer_obligation: "ANTES_DE_RECOMENDAR_ARQUITETURA_OU_ATUALIZACAO_HERMES_DESKTOP_VPS_RECONHECER_ESTA_IDENTIDADE; CONSULTAR_REFERENCIAS_PERTINENTES_SOMENTE_SE_NECESSARIO; EXECUTAR_DELTA_DIRETO"
     role_on_demand: true
     screen_is_agent: false
     terminal_is_agent: false
@@ -252,6 +278,14 @@ CENTRALDARK_AI_BOOT:
 
     operation:
       default_mode: "CANONICAL_SELF_GRILL"
+      # Campo legado consumido por verify_repo_contract.py: tecnica cognitiva, nao modo de execucao.
+      default_mode_scope: "LEGACY_COGNITIVE_METHOD_ONLY"
+      effective_execution_mode: "EXECUCAO_DIRETA"
+      effective_execution_mode_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+      legacy_self_grill_is_proportional_not_universal_audit: true
+      legacy_default_operation_mode_in_other_docs_is_cognitive_not_execution_mode: true
+      optional_audit_mode: "SOB_DEMANDA_DO_USUARIO"
+      method_is_identity_independent: true
       role: "COORDINATOR|EXECUTOR_AS_REQUIRED_BY_CAPABILITY"
       writer: "RESOLVE_AND_LOCK_PER_SCOPE"
       frequency: "ADAPTIVE"
