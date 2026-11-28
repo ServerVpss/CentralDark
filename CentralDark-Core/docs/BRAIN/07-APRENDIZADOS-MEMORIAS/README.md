@@ -88,6 +88,17 @@ WHERE file.name != "README"
 SORT file.mtime DESC
 ```
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+## Índice do cristal YAML + HUD — 24/11/2026
+
+Este BRAIN **somente aponta**: aprendizado L229B em docs/CONSCIENCIA/APRENDIZADOS.md, memória em mem/index.md, lembranças em docs/CONSCIENCIA/LEMBRANCAS/README.md e handoff em docs/CONTINUIDADE/proxima-ia.md. A regra executável está em BOOT/LEIA, AGENTS.md e padrão de resposta, e o estado presente no PR da missão e checkpoint verificado do Hermes. Não criar cérebro paralelo.
+
+Missão de referência histórica: MISSION_ID=CENTRALDARK_BOOT_HUD_ATOMIC_20261124, PR #2171. Revalidar HEAD e prova atual antes de repetir bolinha verde. ChatGPT usa HUD rico quando suportado; Hermes/CLI tabela Markdown equivalente.
+
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+
 ## Ligações existentes
 
 - [[BRAIN]] e [[MAPA-OBSIDIAN-BRAIN]]: navegação semântica.

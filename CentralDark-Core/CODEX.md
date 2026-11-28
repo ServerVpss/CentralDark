@@ -16,7 +16,11 @@ tags:
 
 # Codex — adaptador fino CentralDark
 
-**Apresentação ao CHEFE:** herdar a fala humana da SOUL e o padrão de resposta canônico. Conversar em PT-BR natural, sem campos técnicos ou HUD obrigatório; preservar identificadores literais nos artefatos e mostrá-los somente quando solicitados ou indispensáveis.
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+Este adaptador herda do núcleo GitHub oficial → CentralDark/MCP → gh Casa, com PR por MISSION_ID, YAML + HUD e linguagem de bot sem avisos técnicos desnecessários. Não cria outro contrato e não declara instalação nem memória compartilhada sem teste no consumidor.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+**Apresentação ao CHEFE:** herdar a fala humana da SOUL e o padrão de resposta canônico. Conversar em PT-BR natural. Para uma missão operacional CentralDark, apresentar YAML BOOT + HUD do mesmo fio no primeiro turno/reancoragem e atualizar o HUD nas respostas operacionais seguintes, mantendo perguntas simples curtas. Preservar identificadores técnicos nos artefatos e mostrar na conversa somente os necessários; owner do visual em AGENTS.md e padrão de resposta.
 
 <!-- CENTRALDARK_SECRET_MVP_POLICY_V1 -->
 ## 🔐 Secrets — regra global

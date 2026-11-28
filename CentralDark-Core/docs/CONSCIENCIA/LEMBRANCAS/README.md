@@ -13,6 +13,19 @@ updated: 2026-08-21
 
 ---
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+## 🪬 Lembrança cruzada da missão — 24/11/2026
+
+O CHEFE aprovou a fórmula YAML + HUD na primeira resposta de missão/reancoragem e o mesmo HUD durante todo trabalho operacional, com dimensões numeradas, bolinhas 🟢🟡🔴⚪, progresso verdadeiro, MISSION_ID, último ponto comprovado e Próximo passo. Perguntas simples continuam curtas, sem apagar o fio.
+
+A retomada procura GitHub oficial, depois CentralDark/MCP, depois gh Casa, valida leitura/SHAs e PR por MISSION_ID, e confronta checkpoint Hermes. Não escolher PR só por ser o mais novo nem considerar comentário como prova. Avisos em português simples de bot.
+
+Esta lembrança serve apenas de contexto: regra em AGENTS.md, BOOT/LEIA, SOUL-SOL e padrão de resposta; aprendizado L229B, índice mem/index.md e rastro PR #2171. Não instalar outra memória ou alegar que ChatGPT/Hermes carregaram a versão sem teste na própria superfície.
+
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+
 ## Por que isso existe (em 1 parágrafo)
 
 O SEGREDO/CHEFE usa diferentes inteligências artificiais (Claude, Grok, ChatGPT, Gemini e

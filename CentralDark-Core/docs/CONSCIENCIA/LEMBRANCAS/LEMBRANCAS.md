@@ -14,6 +14,10 @@ tags:
 
 # Lembranças — índice histórico
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+**Rota de lembrança (24/11/2026):** a escolha humana de YAML + HUD + checkpoints e a recuperação GitHub oficial → CentralDark/MCP → gh Casa estão explicadas em docs/CONSCIENCIA/LEMBRANCAS/README.md e no aprendizado L229B em docs/CONSCIENCIA/APRENDIZADOS.md. Este arquivo continua HISTORICAL_REDIRECT e não deve ser carregado inteiro como instrução operacional presente.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
 As entradas antigas de curto prazo foram preservadas no histórico Git e continuam úteis como proveniência. Este arquivo **não deve mais ser carregado como memória operacional atual em massa**.
 
 ## Regra atual

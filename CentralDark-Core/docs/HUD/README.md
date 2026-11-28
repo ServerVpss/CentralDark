@@ -1,3 +1,9 @@
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+**YAML E HUD DA MESMA MISSAO:** primeira resposta/reancoragem = YAML BOOT (readback real, SHA, ordem) imediatamente acompanhado do HUD da missao (checkpoints, dimensoes, cores e proximo passo). Subsequentemente manter o HUD na conversa operacional, atualizando somente o delta do mesmo `MISSION_ID`; sempre preservar `LAST_PROVEN` e `NEXT_CURSOR`. Nenhuma missao muda por PR mais recente sozinho. A origem/estado sempre visivel mesmo sem comprovante (PENDENTE). Este e o mesmo HUD, nao segundo ledger. O renderizador de ChatGPT usa cartao/tabela quando suportado; Hermes/CLI usam Markdown equivalente.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+<!-- CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124 -->
+Fallback da mesma fonte: conector GitHub oficial → CentralDark MCP → gh Casa. No Hermes/CLI, o comando github-hybrid-hud do carregador existente recupera BOOT/LEIA da main, PR e comentário da missão informada pelo MISSION_ID; só leitura. Apresentar YAML + HUD e avisos naturais, nunca nomes de exceção ao usuário. Não interpretar checkbox como etapa provada; não escolher último PR por data sozinha. Falta de acesso vira PENDENTE, sem apagar último checkpoint.
+<!-- /CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124 -->
 <!-- CENTRALDARK_MISSION_HUD_FIXED_PROTOCOL -->
 # 👑🪬 CentralDark — continuidade da missão e HUD
 
@@ -12,7 +18,7 @@
 | PR vigente da mesma missão e PR vigente do funil | Descubra ambos pelo escopo, owner e marcadores no GitHub CURRENT; não fixe o número de nenhum PR. Mantenha o quadro no corpo do PR da missão e o resumo/link no funil vigente. O #1977 é apenas exemplo histórico do funil das 891 branches, não ponteiro permanente. |
 | [Histórico integral deste README](https://github.com/ServerVpss/CentralDark/blob/1377ffcc62ae693ae48568afa07d46d1e0e82506/docs/HUD/README.md) | Consulte os recibos e quadros anteriores pelo commit fixado. |
 
-Sem PR equivalente, retome pelo checkpoint e pelo owner existente. O HUD técnico é exibido apenas quando solicitado; na conversa normal, responda em linguagem natural conforme a SOUL e `AGENTS.md`. Este README recebe mudanças de arquitetura e apontamentos.
+Sem PR equivalente, retome pelo checkpoint e pelo owner existente. Ao comunicar estado, retomada, andamento, testes ou conclusão de missão, exibir automaticamente o HUD humano conforme `AGENTS.md#CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124`, mesmo sem `!HUD`; o quadro técnico monoespaçado continua disponível sob pedido. Pergunta curta fora de status operacional continua direta e breve. Este README recebe mudanças de arquitetura e apontamentos.
 
 ## Atualização obrigatória da missão e do funil
 
@@ -140,7 +146,7 @@ Classificador executável: `scripts/trigger-fabric/centraldark_full_trigger_boot
 - **Loop Mestre.** Preserve C01–C20/A01–A20 e os owners documentados. CHEFE_INTENT → CONTEXT_RETRIEVAL → META-GRILL → GOAL/cláusulas → CURRENT → GREEN_STATE → APRENDIZADOS → OWNER EXISTENTE → menor DELTA → HERMES/EXECUTE → OBSERVE → COUNTERPROOF → RECEIPT → FIXED_POINT → GREEN_STATE → KAIZEN → NEXT_CURSOR. Ao errar, volte uma casa, corrija e reteste o cone afetado. Confirme o objetivo pelo efeito observado.
 - **Execução e publicação.** Modifique o owner existente no ambiente autorizado, inclusive VPS quando a missão exigir. Preserve o estado, obtenha teste, contraprova e aceite do CHEFE, e publique conforme as proteções e gates da `main`. Confirme caminho, SHA, link e readback antes de declarar gravação. `DOCUMENTED ≠ EXECUTED`, `MERGED ≠ DEPLOYED`, `REGISTERED ≠ CONSUMED`, `UNKNOWN ≠ PASS`.
 - **Inventário e diagramas.** Reutilize o [reconciliador único](../../scripts/centraldark-inventory-reconcile.sh). O Instinto Superior opera como cockpit. Preserve nós, setas, subgraphs e textos nos diagramas e siga o [gate existente](../../scripts/lupa/diagram-route-gate.mjs). Cada botão ou função nova precisa de rota, owner e prova.
-- **Resposta operacional.** Responda em PT-BR natural, começando pelo resultado, sem cabeçalhos nem campos internos por obrigação. Use o quadro completo somente quando o CHEFE pedir HUD ou auditoria; mantenha os campos e provas no registro técnico. Em caso de desvio, pare, indique o desvio em uma linha, descarte a parte incorreta, releia o owner e retome a intenção original.
+- **Resposta operacional.** Resultado em PT-BR e HUD da missão automático quando houver progresso, retomada, estado, testes, execução, auditoria ou próximo passo: intenção, PR/commit, tabela numerada com semáforo, barra se houver total real, ponto de continuidade e FIXED_POINT. Em conversa simples sem estado da missão, resposta curta. Quadro monoespaçado detalhado somente se solicitado. Não anunciar consumo pelo ChatGPT/Hermes/Cockpit sem teste real no próprio consumidor.
 - **Baianês.** Quando usar a interjeição, escreva **ÔCHENTE**, com pronúncia *ô-CHEN-te*. Preserve o sotaque natural.
 
 ---

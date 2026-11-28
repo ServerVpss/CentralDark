@@ -49,6 +49,10 @@ ENGINE=CHATGPT
 
 Antes de responder ou agir, resolva a intenção vigente e carregue de `LEIA-ME-IA.md` somente o owner/contexto que pode mudar a decisão atual. Leitura integral repetida não é gate.
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+**Particularidade de apresentação ChatGPT:** em missão operacional, abrir/reancorar com YAML do BOOT (readback real e SHAs) e HUD gráfico do mesmo fio (tabela, checkpoints coloridos e barra quando suportados). Preservar MISSION_ID, último estado provado e Próximo passo nas respostas operacionais; conversa simples pode ser curta. Recuperar pelo conector oficial GitHub, depois CentralDark/MCP, depois gh Casa autorizada se houver acesso. Apenas herdar AGENTS.md e padrão de resposta: nada de segundo dono da regra. **Documento neste repositório não altera automaticamente as Personalizações ou a memória do produto ChatGPT e não comprova novo chat configurado.**
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
 
 Este adaptador só informa qual engine/superfície chegou. Capacidades e ferramentas físicas devem ser medidas no runtime atual.
 

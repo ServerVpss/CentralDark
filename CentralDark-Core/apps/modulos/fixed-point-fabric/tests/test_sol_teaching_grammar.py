@@ -19,6 +19,77 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         cls.entry_boot = (cls.repo / "CENTRALDARK_AI_BOOT.yaml").read_text(encoding="utf-8")
         cls.metacognition = (cls.repo / "docs/CONSCIENCIA/METACOGNICAO-OPERACIONAL.md").read_text(encoding="utf-8")
 
+    def test_auto_mission_hud_required_in_all_existing_owners(self):
+        """Contrato visual unico: verifica o mesmo HUD em todas as entradas operacionais."""
+        marker = "CENTRALDARK_MISSION_HUD_AUTO_PRESENTATION_20261124"
+        agents = (self.repo / "AGENTS.md").read_text(encoding="utf-8")
+        hud = (self.repo / "docs/HUD/README.md").read_text(encoding="utf-8")
+        self.assertEqual(agents.count("<!-- " + marker + " -->"), 1)
+        self.assertEqual(self.response.count("<!-- " + marker + " -->"), 1)
+        agent_block = agents.split("<!-- " + marker + " -->", 1)[1].split("<!-- /" + marker + " -->", 1)[0]
+        response_block = self.response.split("<!-- " + marker + " -->", 1)[1].split("<!-- /" + marker + " -->", 1)[0]
+        for required in (
+            "automaticamente", "🪬 CENTRALDARK — HUD DA MISSÃO",
+            "🎯 INTENÇÃO", "🧵 FIO DA MISSÃO", "📊 DIMENSÕES E CHECKPOINTS",
+            "📈 ANDAMENTO", "🧭 PONTO DE CONTINUIDADE",
+            "➡️ PRÓXIMO PASSO", "FIXED_POINT", "🟢 PROVADO",
+            "🟡 PENDENTE", "🔴 FALHOU", "⚪ FUTURO",
+            "MISSION_ID", "CURRENT_MEDIDO", "HISTORICO",
+        ):
+            self.assertIn(required, agent_block, required)
+        for required in ("automaticamente", "ChatGPT", "Hermes", "Markdown", "12", "FIXED_POINT"):
+            self.assertIn(required, response_block, required)
+        self.assertIn(marker, self.method)
+        self.assertIn(marker, hud)
+        self.assertIn("Em pergunta factual curta sem status de missão, responder curto.", self.method)
+        self.assertIn("A quantidade de linhas é descoberta na missão", response_block)
+        self.assertIn("Commit/PR != ChatGPT global configurado", agent_block)
+        self.assertNotIn("HUD completo apenas no modo solicitado", agent_block)
+
+    def test_hybrid_sources_and_bot_messages_bound_to_canonical_owners(self):
+        agents = (self.repo / "AGENTS.md").read_text(encoding="utf-8")
+        hud = (self.repo / "docs/HUD/README.md").read_text(encoding="utf-8")
+        self.assertIn("hybrid_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]", self.entry_boot)
+        self.assertIn("python_cannot_call_chatgpt_connector_directly: true", self.entry_boot)
+        for text in (agents, hud, self.method, self.response):
+            self.assertIn("CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124", text)
+        self.assertIn("AVISOS HUMANOS DE BOT", agents)
+        self.assertIn("github-hybrid-hud", hud)
+        self.assertIn("conector oficial GitHub", agents)
+
+    def test_crystal_memory_learning_remembrance_and_core_are_one_contract(self):
+        marker = 'CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124'
+        paths = {
+            'learning': 'docs/CONSCIENCIA/APRENDIZADOS.md',
+            'memory': 'mem/index.md',
+            'remembrance': 'docs/CONSCIENCIA/LEMBRANCAS/README.md',
+            'history': 'docs/CONSCIENCIA/LEMBRANCAS/LEMBRANCAS.md',
+            'brain': 'docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md',
+            'map': 'docs/CONSCIENCIA/MAPA-DO-CEREBRO.md',
+            'soul': 'docs/CONSCIENCIA/01-IDENTIDADE-E-REGRAS/SOUL-SOL.md',
+            'handoff': 'docs/CONTINUIDADE/proxima-ia.md',
+            'chatgpt': 'CHATGPT.md',
+            'codex': 'CODEX.md',
+            'agents': 'AGENTS.md',
+            'leia': 'LEIA-ME-IA.md',
+        }
+        docs = {key: (self.repo / path).read_text(encoding='utf-8') for key,path in paths.items()}
+        for key, content in docs.items():
+            self.assertEqual(content.count('<!-- '+marker+' -->'), 1, key)
+        self.assertIn('L229B', docs['learning'])
+        self.assertIn('13/13', docs['learning'])
+        self.assertIn('HISTORICAL_REDIRECT', docs['history'])
+        self.assertIn('não deve mais ser carregado como memória operacional atual em massa', docs['history'])
+        self.assertIn('BOOT', docs['handoff'])
+        self.assertIn('GitHub oficial', docs['soul'])
+        self.assertIn('YAML BOOT + HUD', docs['codex'])
+        self.assertIn('não altera automaticamente as Personalizações', docs['chatgpt'])
+        self.assertIn('prova', docs['memory'])
+        self.assertIn('PR #2171', docs['brain'])
+        self.assertIn('mission_first_response_gate: BOOT_YAML_PLUS_MISSION_HUD',
+            (self.repo / 'docs/ARQUITETURA/CENTRALDARK-TRIGGER-FABRIC/MASTER-CYCLE.yml').read_text(encoding='utf-8'))
+        self.assertIn('hybrid_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]', self.entry_boot)
+        self.assertIn('GITHUB_OFICIAL', self.method)
     def test_mcp_professor_menu_visual_and_memory_are_bound_to_canonical_boot(self):
         mcp = (self.repo / "apps/modulos/mcp/src/mcp-server.js").read_text(encoding="utf-8")
         self.assertIn("menu_style_telegram_for_multi_subject_messages: true", self.grammar)
@@ -43,11 +114,21 @@ class SolTeachingGrammarContractTest(unittest.TestCase):
         self.assertIn("centraldark_github_entry:", run.stdout)
         self.assertIn("read_order: BOOT_THEN_LEIA", run.stdout)
         self.assertIn("read_status: APROVADO", run.stdout)
+        self.assertIn("presentation_gate: BOOT_YAML_PLUS_MISSION_HUD", run.stdout)
+        self.assertIn("mission_hud_required: true", run.stdout)
+        self.assertIn("mission_hud_source: ", run.stdout)
         self.assertLess(run.stdout.index('file_1: "CENTRALDARK_AI_BOOT.yaml"'),
                         run.stdout.index('file_2: "LEIA-ME-IA.md"'))
         self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.boot)
         self.assertIn("CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122", self.entry_boot)
         self.assertIn("github_connector_entry:", self.entry_boot)
+        self.assertIn("presentation_gate: BOOT_YAML_PLUS_MISSION_HUD", self.entry_boot)
+        self.assertIn("first_mission_response_requires: [BOOT_READBACK_YAML, CURRENT_MISSION_HUD]", self.entry_boot)
+        self.assertIn("hud_must_not_be_skipped_on_first_chat: true", self.entry_boot)
+        self.assertIn("CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124", self.boot)
+        self.assertIn("CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124", self.method)
+        self.assertIn("CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124", self.response)
+        self.assertIn("CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124", (self.repo / "AGENTS.md").read_text(encoding="utf-8"))
         self.assertIn("github_connector_cannot_be_reconfigured_by_repo_document_only: true", self.entry_boot)
         self.assertIn("read_status", self.boot)
         self.assertIn("never_delegate_available_readback_or_tests_to_chefe: true", self.entry_boot)

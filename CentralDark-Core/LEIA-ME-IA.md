@@ -25,6 +25,25 @@ updated: 2026-09-28
 
 <!-- /CENTRALDARK_GITHUB_ENTRY_TWO_FILE_READBACK_20261122 -->
 
+<!-- CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+## 🔒 YAML + HUD inseparaveis na retomada de missao
+
+**Gate obrigatorio do MESMO BOOT:** ao iniciar uma conversa/sessao sobre a CentralDark ou receber `!CENTRALDARK`, a primeira resposta operacional e a primeira resposta apos reancoragem devem apresentar **dois componentes juntos, nessa ordem**: (1) YAML do BOOT com `repository/ref`, os dois arquivos lidos na ordem `BOOT → LEIA`, SHAs reais e estado de leitura; (2) **🪬 CENTRALDARK — HUD DA MISSÃO** com intencao, fio/`MISSION_ID`, PR/commit correspondentes quando identificados, tabela de dimensoes e semaforo 🟢🟡🔴⚪, progresso somente com total verificavel, ultimo estado provado, próximo passo e `FIXED_POINT`. `YAML_SEM_HUD` e `HUD_SEM_BOOT_VALIDO` reprovam a entrada da missao.
+
+**O HUD acompanha o restante da conversa de missao:** novas mensagens sao DELTAs da missao atual; nao zerar o fio, trocar de PR por data, perder o `NEXT_CURSOR` ou omitir pendencias. Atualizar o quadro da mesma missao a cada resposta operacional; se a fala for uma pergunta simples que nao pedir estado, responder breve mas **preservar internamente o mesmo fio** para a proxima resposta. Ao mudar a missao, exigir identidade nova e recompor a dupla YAML + HUD.
+
+**Fontes:** primeiro `ServerVpss/CentralDark@main` para o contrato; PR vigente da intencao (corpo, commits e comentarios por `MISSION_ID`); checkpoint local verificado (`verified-checkpoint.py`) quando acessivel. Nao confundir ultimo PR editado com missao automaticamente. Sem comprovante, mostrar **🟡 PENDENTE** com origem; nao preencher SHA, checkpoint ou porcentagem por adivinhacao. O conteudo do YAML/Markdown pode ser apresentado em cartao/tabela quando o ambiente suportar.
+
+**Alcance real:** isto e obrigacao de cada agente que carregou a entrada. Documento no Git nao instala por si so um gatilho nativo em qualquer chat do ChatGPT ou no motor do Hermes; consumo precisa ser testado separadamente por superficie. Nao criar outro HUD/BOOT/estado.
+<!-- /CENTRALDARK_BOOT_YAML_HUD_ATOMIC_HANDOFF_20261124 -->
+
+**Recuperação por três caminhos, na ordem:** GitHub oficial → CentralDark/MCP → gh autenticado da Casa. Ao falhar uma conexão, procurar a próxima, sem confundir o PR mais recente com a missão vigente. O mesmo carregador oferece github-hybrid-hud --pr NUMERO --mission-id ID para consulta pela Casa/Hermes. Manter YAML + HUD e avisos simples de bot. Fonte detalhada: AGENTS.md#CENTRALDARK_GITHUB_HYBRID_FALLBACK_AND_BOT_TEXT_20261124.
+
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+Rota de memoria e nucleo para esta formula: docs/CONSCIENCIA/APRENDIZADOS.md#L229B; mem/index.md; docs/CONSCIENCIA/LEMBRANCAS/README.md; docs/CONTINUIDADE/proxima-ia.md; docs/BRAIN/07-APRENDIZADOS-MEMORIAS/README.md. Recuperar apenas o contexto pertinente sem reler a historia toda; regras operacionais continuam AGENTS.md + padrao de resposta + Skill Mae; nao declarar consumo ChatGPT/Hermes so por commit.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
+
 <!-- CENTRALDARK_SKILL_MAE_SINGLE_OWNER_20261102 -->
 ## 🪬 Capacidade operacional única — Skill Mãe
 

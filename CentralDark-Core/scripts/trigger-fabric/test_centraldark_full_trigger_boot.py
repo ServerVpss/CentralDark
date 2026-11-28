@@ -807,6 +807,125 @@ def test_hud_failure_keeps_canonical_readback_and_skips_resume():
     continuity.assert_not_called()
 
 
+
+def test_github_entry_continuity_reuses_verified_checkpoint_only():
+    valid = {"status": "RECOVERED", "integrity": "HASH_CHAIN_PASS",
+             "mission": "test-mission", "last_step": "ok",
+             "next_cursor": "NEXT_OK", "receipt_sha256": "a" * 64,
+             "verified_steps": 1}
+    with patch.object(mod, "hermes_continuity_preflight", return_value=valid):
+        result = mod.github_entry_continuity(REPO)
+    assert result["status"] == "APROVADO"
+    assert result["proof_reuse"] == "VERIFIED_CHECKPOINT"
+    assert result["next_cursor"] == "NEXT_OK"
+
+    for invalid in (
+        {**valid, "integrity": "FAILED"},
+        {**valid, "receipt_sha256": "garbage"},
+        {"status": "BLOCKED", "reason": "NO_VERIFIED_CHECKPOINT"},
+    ):
+        with patch.object(mod, "hermes_continuity_preflight", return_value=invalid):
+            result = mod.github_entry_continuity(REPO)
+        assert result["status"] == "PENDENTE"
+        assert result["proof_reuse"] == "NOT_VERIFIED"
+
+
+def test_github_entry_yaml_preserves_read_order_and_optional_continuity():
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        (root / "CENTRALDARK_AI_BOOT.yaml").write_text("CENTRALDARK_AI_BOOT:\n", encoding="utf-8")
+        (root / "LEIA-ME-IA.md").write_text('title: "LEIA-ME-IA"\n', encoding="utf-8")
+        with patch.object(mod, "discover_boot_repo", return_value=root), \
+             patch.object(mod, "hermes_continuity_preflight", return_value={
+                 "status": "BLOCKED", "reason": "NO_VERIFIED_CHECKPOINT"
+             }):
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                result = mod.cmd_github_entry(argparse.Namespace(repo=None))
+        printed = output.getvalue()
+        assert result == 0, printed
+        assert "read_order: BOOT_THEN_LEIA" in printed
+        assert "read_status: APROVADO" in printed
+        assert "continuity_status: PENDENTE" in printed
+        assert "proof_reuse: NOT_VERIFIED" in printed
+        assert "document_fingerprint: " in printed
+        assert "presentation_gate: BOOT_YAML_PLUS_MISSION_HUD" in printed
+        assert "mission_hud_required: true" in printed
+        assert "mission_hud_source: PENDENTE_RESOLVE_MISSION_PR" in printed
+        assert "mission_hud_next_cursor: " in printed
+
+        (root / "LEIA-ME-IA.md").unlink()
+        with patch.object(mod, "discover_boot_repo", return_value=root), \
+             patch.object(mod, "hermes_continuity_preflight") as pending:
+            output = io.StringIO()
+            with contextlib.redirect_stdout(output):
+                result = mod.cmd_github_entry(argparse.Namespace(repo=None))
+        assert result == 9
+        assert "read_status: PENDENTE" in output.getvalue()
+        pending.assert_not_called()
+
+
+def test_hybrid_fallback_order():
+    log=[]
+    def item(path,ref):
+        assert ref=="main"
+        content="CENTRALDARK_AI_BOOT:\n" if path.endswith(".yaml") else 'title: "LEIA-ME-IA"\n'
+        return {"path":path,"sha":mod.hybrid_git_sha(content.encode()),"content":content}
+    def ok(label):
+        def read(path,ref):
+            log.append(label)
+            return item(path,ref)
+        return read
+    def fail(label):
+        def read(path,ref):
+            log.append(label)
+            raise ValueError("DOWN")
+        return read
+    a=mod.hybrid_readback({"GITHUB_OFICIAL":ok("official"),"CENTRALDARK_MCP":ok("mcp")},
+                          gh_reader=ok("gh"))
+    assert a["source"]=="GITHUB_OFICIAL" and log==["official","official"]
+    log.clear()
+    b=mod.hybrid_readback({"GITHUB_OFICIAL":fail("official"),"CENTRALDARK_MCP":ok("mcp")},
+                          gh_reader=ok("gh"))
+    assert b["source"]=="CENTRALDARK_MCP" and log==["official","mcp","mcp"]
+    log.clear()
+    c=mod.hybrid_readback({"GITHUB_OFICIAL":fail("official"),"CENTRALDARK_MCP":fail("mcp")},
+                          gh_reader=ok("gh"))
+    assert c["source"]=="GH_CLI" and log==["official","mcp","gh","gh"]
+    log.clear()
+    def bad(path,ref):
+        return {"path":path,"sha":"0"*40,"content":"CENTRALDARK_AI_BOOT:\n"}
+    d=mod.hybrid_readback({"GITHUB_OFICIAL":bad,"CENTRALDARK_MCP":fail("mcp")},
+                          gh_reader=fail("gh"))
+    assert d["status"]=="PENDENTE" and d["source"]=="NONE"
+    assert "Não consegui conferir" in mod.hybrid_bot_text(d,{"status":"PENDENTE"})
+    assert "DOWN" not in mod.hybrid_bot_text(d,{"status":"PENDENTE"})
+
+
+def test_hybrid_mission_scope_and_bot_text():
+    mission="CENTRALDARK_BOOT_HUD_ATOMIC_20261124"
+    def api(endpoint):
+        if "/pulls/" in endpoint:
+            return {"state":"open","title":"BOOT e HUD","head":{"sha":"a"*40}}
+        return [
+            {"id":1,"created_at":"2026-11-24T09:00:00Z","body":
+             "<!-- CENTRALDARK_HUD_MISSION_ID:"+mission+" -->\n"
+             "- [x] Etapa comprovada\n- [ ] Conferir o Hermes"},
+            {"id":2,"created_at":"2026-11-24T10:00:00Z","body":
+             "<!-- CENTRALDARK_HUD_MISSION_ID:OUTRA_MISSAO -->\n- [x] Outra tarefa"}]
+    current=mod.hybrid_pr_hud(2171,mission,api=api)
+    assert current["status"]=="PR_LIDO" and current["mission_id"]==mission
+    assert len(current["dimensions"])==2
+    assert mod.hybrid_pr_hud(2171,"MISSAO_AUSENTE",api=api)["status"]=="PENDENTE"
+    view=mod.hybrid_bot_text({"status":"APROVADO","source":"GH_CLI","files":[]},current)
+    assert "🪬 BOOT CENTRALDARK" in view and "🪬 CENTRALDARK — HUD DA MISSÃO" in view
+    assert "📂 PR: #2171" in view and "registrado, conferir prova" in view
+    assert "Encontrei seu trabalho pelo computador da Casa." in view
+    view_mcp=mod.hybrid_bot_text({"status":"APROVADO","source":"CENTRALDARK_MCP","files":[]},current)
+    assert "Encontrei seu trabalho pela CentralDark." in view_mcp
+    view_official=mod.hybrid_bot_text({"status":"APROVADO","source":"GITHUB_OFICIAL","files":[]},current)
+    assert "Encontrei seu trabalho pelo GitHub." in view_official
+
 if __name__ == "__main__":
     tests = [
         test_normalization_variants,
@@ -851,6 +970,10 @@ if __name__ == "__main__":
         test_hud_gate_rejects_normalized_content_drift,
         test_missing_checkpoint_blocks_resume_after_canonical_main_read,
         test_hud_failure_keeps_canonical_readback_and_skips_resume,
+        test_github_entry_continuity_reuses_verified_checkpoint_only,
+        test_github_entry_yaml_preserves_read_order_and_optional_continuity,
+        test_hybrid_fallback_order,
+        test_hybrid_mission_scope_and_bot_text,
     ]
     for test in tests:
         test()

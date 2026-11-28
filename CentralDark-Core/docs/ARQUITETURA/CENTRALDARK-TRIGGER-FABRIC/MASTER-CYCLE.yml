@@ -40,6 +40,16 @@ fix_point_reference_pack:
     - docs/CONSCIENCIA/MAPA-DO-CEREBRO.md
   presentation:
     compact_hud: "🪬 CENTRALDARK — !MICHELIN ⭐⭐⭐"
+    # CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 - referencia ao mesmo gate, sem segundo master
+    mission_first_response_gate: BOOT_YAML_PLUS_MISSION_HUD
+    mission_followup: SAME_MISSION_HUD_ON_OPERATIONAL_TURNS
+    mission_source_priority: [GITHUB_OFICIAL, CENTRALDARK_MCP, GH_CLI_CASA]
+    mission_resolution: MISSION_ID_AND_INTENT_PR_COMMENTS_PLUS_VERIFIED_CHECKPOINT
+    mission_status_vocabulary: [APROVADO, PENDENTE, FALHOU, FUTURO]
+    mission_human_notices: PTBR_SIMPLE_BOT
+    mission_visual_owner: docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md
+    mission_memory_routing: [mem/index.md, docs/CONSCIENCIA/APRENDIZADOS.md, docs/CONSCIENCIA/LEMBRANCAS/README.md]
+    mission_consumer_test_required: true
     show_for_active_master_session: true
     stars_awarded_by_trigger: 0
     quality_gate_owner: RULES.md

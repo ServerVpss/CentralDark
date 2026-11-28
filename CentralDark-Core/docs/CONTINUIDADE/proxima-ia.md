@@ -52,6 +52,16 @@ REALIDADE = juiz
 → ⚖️ REALIDADE
 ```
 
+<!-- CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+## 🔒 Primeiro turno da missão e continuidade
+
+Em novo chat de missão/reancoragem ou !CENTRALDARK: verificar BOOT e LEIA em ordem com fonte/SHAs, apresentar **YAML + HUD na mesma resposta**. O HUD acompanha todas as respostas operacionais posteriores: intenção, MISSION_ID, PR, commit, dimensões numeradas 🟢🟡🔴⚪, barra apenas com progresso demonstrável, LAST_PROVEN, Próximo passo e FIXED_POINT. Pergunta simples é curta sem perder o fio.
+
+Procurar a origem por ordem GitHub oficial → CentralDark/MCP → gh CLI autorizado da Casa. PR mais recentemente editado só é candidato; confronte a intenção e MISSION_ID com os comentários/commits e checkpoint verificado. Marcação [x] não comprova execução. Avisos humanos sem códigos de erro, no português natural de bot.
+
+Owners: AGENTS.md + docs/CONSCIENCIA/PADRAO-RESPOSTA-SEGREDO-CHEFE.md; memória em mem/index.md e LEMBRANCAS/README.md; lição L229B no APRENDIZADOS.md. O mesmo método não instala uma regra no ChatGPT ou no Hermes sem consumo observado.
+<!-- /CENTRALDARK_CRISTAL_YAML_HUD_HYBRID_20261124 -->
+
 ## 🧾 O que transportar
 
 - intenção vigente do SEGREDO/CHEFE;
