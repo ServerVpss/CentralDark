@@ -245,6 +245,21 @@ O 405 confirma que a segunda leitura chegou à validação de método do Worker 
 **Estado:** FIXED_POINT_NPX_PAIRING_PREVIEW=APROVADO. A sessão de teste foi revogada por desenho; não é um vínculo NPX persistente. Execução de ferramenta autenticada e publicação NPM continuam PENDENTES. Próximo delta: reaproveitar o contrato de sessão de dispositivo próprio e completar transporte autenticado do NPX, preservando o consentimento simplificado e o vínculo existente. Cobrança fora do escopo.
 <!-- /CENTRALDARK_NPX_PAIRING_REAL_PASS_20261128 -->
 
+<!-- CENTRALDARK_NPX_UPSTREAM_RUNTIME_PARITY_20261128 -->
+### Continuidade — NPX: paridade medida com o original em execução na Casa (28/11/2026)
+
+**Intenção:** reproduzir a experiência do terminal do Desktop Commander original com identidade CentralDark e português, reaproveitando a arquitetura existente, sem substituir o executor ativo por uma variante não validada.
+
+- BOOT `5046b5f4794fed7df40a810397606c26a5bc7de2`, LEIA `3bfc1242697317fdce9f505dc0c62d4fde026df2`, Skill Mãe `0d712f5f8fbf1dfc5eaeac4ed1cabf580dafb4d2`. Checkout `F:\CentralDark-DesktopCommanderMCP-main`, branch `centraldark/remote-pairing-web`, HEAD `7d41836afcd6758c4c6b302699e4768563b5de02`, limpo.
+- Runtime original v0.3.4 em `C:\Users\Administrador\AppData\Local\npm-cache\_npx\4b4c857f6efdfb61\node_modules\@wonderwhy-er\desktop-commander`. Cadeia observada: PowerShell PID 31652 → NPX Node 45072 → cmd 45600 → Node remote 43428 → motor stdio `dist/index.js` PID 38628. PIDs efêmeros. Fotos mostram sessão restaurada, canal inscrito e presença online do serviço original, não do nosso NPX.
+- Comparação direta de oito arquivos compilados original 0.3.4 × fork 0.3.3, normalizando apenas CRLF/LF: 7/8 iguais (`dist/index.js`, `dist/npm-scripts/remote.js`, `dist/remote-device/{device,device-authenticator,remote-utils,desktop-commander-integration}.js`, `dist/utils/terminal-timestamps.js`). `dist/remote-device/remote-channel.js` diverge (87.015 contra 85.444 bytes); não presumir paridade integral do canal nem substituir pelo cache NPM. 
+- Owners fonte no fork: `src/npm-scripts/remote.ts` (banner, timestamps, opções e ciclo de execução, blob `876bcdeb7faf693fca45d588ded78e127b00ad59`); `src/remote-device/device.ts` (ciclo de vida, sessão, presença, status, blob `ebb5fab1d6cf32c0c9897b7e3fbaeda2ff64d8fa`); `device-authenticator.ts`, `remote-channel.ts`, `remote-utils.ts`, `desktop-commander-integration.ts` existentes. A entrada NPM efetiva do fork é `centraldark/cli.mjs`, blob `184ab398b7af8ca209c35992a10c2c9075daeac6`; ainda oferece apenas check/pair-test. O fluxo upstream mantém domínios, contexto Supabase, telemetria, sessão e protocolo remoto próprios do fornecedor: não é suficiente traduzir nem apontar o domínio. Reutilizar componentes e separar a identidade/sessão CentralDark, não carregar sessão upstream no nosso serviço.
+- Casa Commander porta 9101: health ok=true, engine_connected=true, processo Node PID 16256 em `%LOCALAPPDATA%\CentralDark\Casa-Commander\CentralDark-Casa-Agent.mjs`; filho cmd PID 27112 contém referência ao pacote original, não ao fork F:. A versão/entrypoint final do filho não foi medido neste delta; não atribuir health=true ao motor próprio. Preservada a conexão original utilizada para operar a Casa.
+- **Menor delta seguinte:** adaptar o ciclo de sessão persistente e o canal existente ao backend CentralDark com o contrato próprio de dispositivo; expor na entrada `centraldark/cli.mjs` os estados reais em português e banner CentralDark, reutilizando o motor stdio compilado, timestamps e ciclo de vida existentes. Não imprimir online antes de comprovar sessão, inscrição/canal e chamada autorizada. Antes da distribuição NPM, contraprovar reconexão, logout e leitura remota pelo próprio serviço. Sem cobrança.
+
+**Estado:** levantamento e comparação APROVADOS; execução remota própria PENDENTE. Nenhuma alteração de processos, arquivos do checkout, sessão, backend ou publicação realizada neste delta.
+<!-- /CENTRALDARK_NPX_UPSTREAM_RUNTIME_PARITY_20261128 -->
+
 
 <!-- CENTRALDARK_CASA_ENGINE_RECOVERED_20261128 -->
 ### Motor local recuperado — catálogo e leitura reais na Casa (28/11/2026)
