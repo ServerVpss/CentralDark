@@ -252,6 +252,17 @@ CENTRALDARK_AI_BOOT:
       document_commit_is_not_runtime_consumption: true
       acceptance: ["DOC_OBSOLETO_ENCONTRADO_E_CORRIGIDO_NO_OWNER","REFERENCIA_CANONICA_PRESENTE","HISTORICO_E_LIMITES_OBRIGATORIOS_PRESERVADOS","SEM_AUDITORIA_GLOBAL_OU_REPETICAO_INUTIL","READBACK_REAL_DO_DELTA","MISSAO_ORIGINAL_RETOMADA"]
 
+  execution_first_recorded_recipe:
+    marker: "CENTRALDARK_EXECUTION_FIRST_HTTPS_RECIPE_20261128"
+    method_owner: "RULES.md#CENTRALDARK_EXECUTION_FIRST_PROTOCOL"
+    recipe_owner: ".agents/skills/centraldark-operational-method/SKILL.md#receita-aplicada-execucao-direta-https"
+    learning_owner: "docs/CONSCIENCIA/APRENDIZADOS/2026-11-28-execution-first-contabo-https-registro-integral.md"
+    evidence_owner: "docs/DOMINIOS/API-CENTRALDARK.md"
+    evidence_commit: "a5f152abb9c70807382ae07fb4d4dfa73224fbec"
+    evidence_scope: "HTTPS_TRANSPORT_AND_ANONYMOUS_MCP_BARRIER"
+    reuse: "RECOVER_SAME_MISSION_CHECKPOINT; COMPARE_RELEVANT_FINGERPRINT; REVALIDATE_AFFECTED_CONE_ONLY"
+    automatic_runtime_consumption: "NOT_PROVEN"
+
   # Contrato compacto e portátil para qualquer chat/superfície.
   # Identidade e invariantes são fixas; HEADs, writer, rotas e evidência são resolvidos no boot.
   portable_operation_contract:

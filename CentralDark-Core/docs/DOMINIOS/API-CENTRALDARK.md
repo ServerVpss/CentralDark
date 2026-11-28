@@ -1,6 +1,6 @@
 # API oficial — CentralDark / MultiZap
 
-## Domínio oficial planejado
+## Domínio oficial
 
 ```txt
 https://api.centralldark.com
@@ -23,11 +23,11 @@ https://api.centralldark.com
 
 A documentação, os contratos internos e os catálogos de rotas devem usar `api.centralldark.com` como domínio público oficial da API CentralDark/MultiZap.
 
-## Importante
+## Aplicação de alterações
 
-Este documento apenas padroniza o domínio no repositório.
+Este documento padroniza o domínio e registra as implantações comprovadas por setor. Rotas planejadas continuam distintas das rotas publicadas.
 
-Alterações reais em DNS, Cloudflare, Caddy, SSL, proxy reverso ou domínio público são ações sensíveis e exigem confirmação explícita antes de aplicar.
+Aplicar o [EXECUTION_FIRST_PROTOCOL](../../RULES.md#execução-primeiro--padrão-operacional-permanente-27112026) vigente. Para DNS, Cloudflare, Caddy, SSL, proxy reverso e domínio público, conferir alvo e escopo e executar a alteração já autorizada, com prova proporcional e rollback aplicável. Solicitar decisão humana somente quando faltar autorização material ou houver escolha irredutível; não renovar confirmação já concedida por rotina.
 
 ## Organização de rotas públicas
 
@@ -100,7 +100,7 @@ A governança semântica da árvore permanece no owner `docs/CONSCIENCIA/01-IDEN
 - Não apontar frontend direto para token WuzAPI.
 - Não expor Authorization, token, cookie, sessão ou `.env`.
 - Não ligar escrita/envio antes de autenticação, rate limit e confirmação.
-- Não alterar Caddy/DNS/SSL sem confirmação explícita.
+- Alterações em Caddy/DNS/SSL seguem a autorização vigente e o `EXECUTION_FIRST_PROTOCOL`; não ampliar o escopo nem contornar limites obrigatórios.
 
 ---
 
